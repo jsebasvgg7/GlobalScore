@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import MatchCard from "../components/MatchCard";
 import RankingSidebar from "../components/RankingSidebar";
+import UserModal from "../components/UserModal";
 import AdminModal from "../components/AdminModal";
 import { supabase } from "../utils/supabaseClient";
 import "../index.css";
@@ -11,6 +12,7 @@ export default function VegaScorePage() {
   const [matches, setMatches] = useState([]);
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [showUserModal, setShowUserModal] = useState(false);
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -23,22 +25,21 @@ export default function VegaScorePage() {
         if (authError) throw authError;
 
         if (!authUser?.user) {
-          // Redirigir al login si no hay sesión
           window.location.href = "/login";
           return;
         }
 
-        // 2️⃣ Perfil del usuario
+        // 2️⃣ Perfil del usuario autenticado
         const { data: profile, error: profileError } = await supabase
           .from("users")
           .select("*")
           .eq("id", authUser.user.id)
           .single();
-
         if (profileError) throw profileError;
+
         setCurrentUser(profile);
 
-        // 3️⃣ Ranking de usuarios
+        // 3️⃣ Listado de todos los usuarios
         const { data: userList } = await supabase
           .from("users")
           .select("*")
@@ -79,33 +80,23 @@ export default function VegaScorePage() {
 
   const addMatch = async (match) => {
     await supabase.from("matches").insert(match);
-    const { data } = await supabase
-      .from("matches")
-      .select("*, predictions(*)");
+    const { data } = await supabase.from("matches").select("*, predictions(*)");
     setMatches(data);
   };
 
   const setMatchResult = async (matchId, homeScore, awayScore) => {
     await supabase
       .from("matches")
-      .update({
-        result_home: homeScore,
-        result_away: awayScore,
-        status: "finished",
-      })
+      .update({ result_home: homeScore, result_away: awayScore, status: "finished" })
       .eq("id", matchId);
 
-    const { data } = await supabase
-      .from("matches")
-      .select("*, predictions(*)");
-
+    const { data } = await supabase.from("matches").select("*, predictions(*)");
     setMatches(data);
     calculatePoints(data);
   };
 
   const calculatePoints = async (matchesData) => {
     const updates = {};
-
     users.forEach((u) => {
       updates[u.id] = { points: 0, predictions: 0, correct: 0 };
     });
@@ -117,7 +108,6 @@ export default function VegaScorePage() {
         if (!user) return;
 
         user.predictions++;
-
         const realDiff = Math.sign(m.result_home - m.result_away);
         const predDiff = Math.sign(p.home_score - p.away_score);
 
@@ -131,7 +121,6 @@ export default function VegaScorePage() {
       });
     });
 
-    // Guardar en Supabase
     for (const userId in updates) {
       await supabase.from("users").update(updates[userId]).eq("id", userId);
     }
@@ -156,6 +145,7 @@ export default function VegaScorePage() {
       <Header
         currentUser={currentUser}
         users={users}
+        onOpenUserModal={() => setShowUserModal(true)}
         onOpenAdmin={() => setShowAdminModal(true)}
       />
 
@@ -235,6 +225,17 @@ export default function VegaScorePage() {
           </aside>
         </section>
       </main>
+
+      {showUserModal && (
+        <UserModal
+          users={users}
+          onSelect={(u) => {
+            setCurrentUser(u);
+            setShowUserModal(false);
+          }}
+          onClose={() => setShowUserModal(false)}
+        />
+      )}
 
       {showAdminModal && (
         <AdminModal onAdd={addMatch} onClose={() => setShowAdminModal(false)} />
