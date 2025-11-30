@@ -24,17 +24,17 @@ export default function Header({ currentUser, users = [], onProfileClick }) { //
         </div>
       </div>
 
-      <div className="header-right">
-        {/* ========== NUEVO: BOTÓN DE PERFIL ========== */}
+     <div className="header-right">
+        {/* Botón de perfil */}
         <button 
           className="icon-btn profile-btn" 
           onClick={onProfileClick}
           aria-label="Ver perfil"
-          title="Mi Perfil"
         >
           <User2 size={18} />
         </button>
-        {/* ============================================= */}
+        
+        {/* =========================== */}
 
         <div className="user-bubble">
           <div className="avatar">
