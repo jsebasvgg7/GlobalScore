@@ -2,7 +2,7 @@ import React from 'react';
 import { Loader2 } from 'lucide-react';
 import "../styles/LoadingStates.css";
 
-export const Spinner = ({ size = 40, color = '#ff8a00' }) => {
+export const Spinner = ({ size = 40, color = '#60519b' }) => {
   return (
     <div className="spinner-wrapper">
       <Loader2 size={size} color={color} className="spinner-icon" />
@@ -10,14 +10,14 @@ export const Spinner = ({ size = 40, color = '#ff8a00' }) => {
   );
 };
 
-// Loading de página completa
+// Loading de página completa mejorado
 export const PageLoader = () => {
   return (
     <div className="page-loader">
       <div className="page-loader-content">
-        <div className="logo-loader">⚽</div>
-        <Spinner size={48} />
-        <p className="loader-text">Cargando...</p>
+        <div className="logo-loader"></div>
+        <p className="loader-text">Cargando</p>
+        <div className="loader-progress"></div>
       </div>
     </div>
   );
@@ -114,12 +114,12 @@ export const RankingListSkeleton = ({ count = 5 }) => {
   );
 };
 
-// Loading Overlay para acciones
-export const LoadingOverlay = ({ message = "Procesando..." }) => {
+// Loading Overlay mejorado para acciones
+export const LoadingOverlay = ({ message = "Procesando" }) => {
   return (
     <div className="loading-overlay">
       <div className="loading-overlay-content">
-        <Spinner size={48} />
+        <div className="spinner-wrapper"></div>
         <p className="loading-overlay-text">{message}</p>
       </div>
     </div>
