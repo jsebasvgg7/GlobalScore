@@ -376,3 +376,11 @@
 .auth-card::-webkit-scrollbar-thumb:hover {
   background: rgba(139, 127, 199, 0.5);
 }
+
+.success-message {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #16a34a;     /* verde */
+  text-align: center;
+  font-weight: 500;
+}
