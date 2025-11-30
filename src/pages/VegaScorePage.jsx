@@ -5,6 +5,8 @@ import Header from "../components/Header";
 import MatchCard from "../components/MatchCard";
 import RankingSidebar from "../components/RankingSidebar";
 import AdminModal from "../components/AdminModal";
+import { PageLoader, MatchListSkeleton, StatCardSkeleton, LoadingOverlay } from "../components/LoadingStates";
+import { ToastContainer, useToast } from "../components/Toast";
 import { supabase } from "../utils/supabaseClient";
 import "../index.css";
 
@@ -14,6 +16,8 @@ export default function VegaScorePage() {
   const [currentUser, setCurrentUser] = useState(null);
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(false);
+  const toast = useToast();
 
   // --- CARGA INICIAL DE DATOS ---
   useEffect(() => {
@@ -39,7 +43,7 @@ export default function VegaScorePage() {
 
         if (profileError) {
           console.error("Error al cargar perfil:", profileError);
-          alert(`Error al cargar perfil: ${profileError.message}`);
+          toast.error("Error al cargar tu perfil");
           return;
         }
 
@@ -61,12 +65,13 @@ export default function VegaScorePage() {
 
           if (createError) {
             console.error("Error al crear perfil:", createError);
-            alert(`No se pudo crear tu perfil: ${createError.message}`);
+            toast.error("No se pudo crear tu perfil");
             return;
           }
 
           console.log("Perfil creado:", newProfile);
           setCurrentUser(newProfile);
+          toast.success("¡Bienvenido! Tu perfil ha sido creado");
         } else {
           console.log("Perfil encontrado:", profile);
           setCurrentUser(profile);
@@ -87,7 +92,7 @@ export default function VegaScorePage() {
 
       } catch (err) {
         console.error("Error en loadData:", err);
-        alert(`Error al cargar datos: ${err.message}`);
+        toast.error(`Error al cargar datos: ${err.message}`);
       } finally {
         setLoading(false);
       }
@@ -100,6 +105,7 @@ export default function VegaScorePage() {
   const makePrediction = async (matchId, homeScore, awayScore) => {
     if (!currentUser) return;
 
+    setActionLoading(true);
     try {
       const { error } = await supabase.from("predictions").upsert({
         match_id: matchId,
@@ -117,27 +123,33 @@ export default function VegaScorePage() {
         .select("*, predictions(*)");
       setMatches(matchList);
 
-      alert("¡Predicción guardada exitosamente!");
+      toast.success("¡Predicción guardada exitosamente! 🎯");
     } catch (err) {
       console.error("Error al guardar predicción:", err);
-      alert(`Error: ${err.message}`);
+      toast.error(`Error al guardar: ${err.message}`);
+    } finally {
+      setActionLoading(false);
     }
   };
 
   const addMatch = async (match) => {
+    setActionLoading(true);
     try {
       const { error } = await supabase.from("matches").insert(match);
       if (error) throw error;
 
       const { data } = await supabase.from("matches").select("*, predictions(*)");
       setMatches(data);
-      alert("¡Partido agregado!");
+      toast.success("¡Partido agregado correctamente! ⚽");
     } catch (err) {
-      alert(`Error: ${err.message}`);
+      toast.error(`Error: ${err.message}`);
+    } finally {
+      setActionLoading(false);
     }
   };
 
   const setMatchResult = async (matchId, homeScore, awayScore) => {
+    setActionLoading(true);
     try {
       console.log(`🎯 Finalizando partido ${matchId}: ${homeScore}-${awayScore}`);
 
@@ -165,26 +177,26 @@ export default function VegaScorePage() {
       console.log(`📊 Partido encontrado con ${match.predictions.length} predicciones`);
 
       // 3️⃣ Calcular puntos para cada predicción
-      const resultDiff = Math.sign(homeScore - awayScore); // 1=local, 0=empate, -1=visitante
+      const resultDiff = Math.sign(homeScore - awayScore);
+      let exactPredictions = 0;
+      let correctResults = 0;
 
       for (const prediction of match.predictions) {
         const predDiff = Math.sign(prediction.home_score - prediction.away_score);
         let pointsEarned = 0;
 
-        // Resultado exacto = 5 puntos
         if (prediction.home_score === homeScore && prediction.away_score === awayScore) {
           pointsEarned = 5;
+          exactPredictions++;
           console.log(`✅ Usuario ${prediction.user_id}: Resultado exacto (+5 pts)`);
-        } 
-        // Acertó ganador/empate = 3 puntos
-        else if (resultDiff === predDiff) {
+        } else if (resultDiff === predDiff) {
           pointsEarned = 3;
+          correctResults++;
           console.log(`✅ Usuario ${prediction.user_id}: Acertó resultado (+3 pts)`);
         } else {
           console.log(`❌ Usuario ${prediction.user_id}: No acertó (0 pts)`);
         }
 
-        // 4️⃣ Obtener estadísticas actuales del usuario
         const { data: userData, error: userError } = await supabase
           .from("users")
           .select("points, predictions, correct")
@@ -196,18 +208,10 @@ export default function VegaScorePage() {
           continue;
         }
 
-        // 5️⃣ Calcular nuevas estadísticas
         const newPoints = (userData.points || 0) + pointsEarned;
         const newPredictions = (userData.predictions || 0) + 1;
         const newCorrect = (userData.correct || 0) + (pointsEarned > 0 ? 1 : 0);
 
-        console.log(`📈 Actualizando usuario ${prediction.user_id}:`, {
-          points: `${userData.points} → ${newPoints}`,
-          predictions: `${userData.predictions} → ${newPredictions}`,
-          correct: `${userData.correct} → ${newCorrect}`
-        });
-
-        // 6️⃣ Actualizar estadísticas del usuario
         const { error: updateUserError } = await supabase
           .from("users")
           .update({
@@ -222,7 +226,7 @@ export default function VegaScorePage() {
         }
       }
 
-      // 7️⃣ Recargar todos los datos actualizados
+      // 7️⃣ Recargar datos
       const { data: updatedUsers } = await supabase
         .from("users")
         .select("*")
@@ -235,28 +239,31 @@ export default function VegaScorePage() {
       setUsers(updatedUsers || []);
       setMatches(updatedMatches || []);
       
-      // Actualizar el usuario actual
       const updatedCurrentUser = updatedUsers?.find(u => u.id === currentUser.id);
       if (updatedCurrentUser) {
         setCurrentUser(updatedCurrentUser);
       }
 
-      console.log("✅ Partido finalizado y estadísticas actualizadas");
-      alert("¡Partido finalizado! Los puntos han sido calculados y actualizados.");
+      console.log("✅ Partido finalizado");
+      
+      // Toast con estadísticas
+      if (exactPredictions > 0 || correctResults > 0) {
+        toast.success(`¡Partido finalizado! ${exactPredictions} exactas, ${correctResults} acertadas 🎉`);
+      } else {
+        toast.info("Partido finalizado. No hubo predicciones correctas.");
+      }
 
     } catch (err) {
       console.error("Error al finalizar partido:", err);
-      alert(`Error: ${err.message}`);
+      toast.error(`Error: ${err.message}`);
+    } finally {
+      setActionLoading(false);
     }
   };
 
   // --- RENDER ---
   if (loading) {
-    return (
-      <div className="centered">
-        <div>Cargando...</div>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   if (!currentUser) {
@@ -271,235 +278,241 @@ export default function VegaScorePage() {
   const pendingMatches = matches.filter((m) => m.status === "pending");
 
   return (
-    <div className="vega-root">
-      <Header
-        currentUser={currentUser}
-        users={sortedUsers}
-      />
+    <>
+      <div className="vega-root">
+        <Header
+          currentUser={currentUser}
+          users={sortedUsers}
+        />
 
-      <main className="container">
-        {/* --- Stats --- */}
-        <section className="stats-row">
-          <div className="stat-card">
-            <Trophy className="stat-icon" size={24} color="#ff8a00" />
-            <div className="stat-label">Posición</div>
-            <div className="stat-value">
-              #{sortedUsers.findIndex((u) => u.id === currentUser?.id) + 1}
-            </div>
-          </div>
-
-          <div className="stat-card">
-            <TrendingUp className="stat-icon" size={24} color="#ff8a00" />
-            <div className="stat-label">Puntos</div>
-            <div className="stat-value">{currentUser?.points ?? 0}</div>
-          </div>
-
-          <div className="stat-card">
-            <Target className="stat-icon" size={24} color="#ff8a00" />
-            <div className="stat-label">Aciertos</div>
-            <div className="stat-value">
-              {currentUser?.correct ?? 0}/{currentUser?.predictions ?? 0}
-            </div>
-          </div>
-
-          <div className="stat-card">
-            <Percent className="stat-icon" size={24} color="#ff8a00" />
-            <div className="stat-label">Precisión</div>
-            <div className="stat-value">
-              {currentUser?.predictions > 0
-                ? Math.round((currentUser.correct / currentUser.predictions) * 100) + "%"
-                : "0%"}
-            </div>
-          </div>
-        </section>
-
-        {/* --- Main Grid --- */}
-        <section className="main-grid">
-          <div className="left-col">
-            <div className="matches-section-premium">
-              {/* Header de la sección */}
-              <div className="matches-header-premium">
-                <div className="matches-title-section">
-                  <div className="matches-icon-wrapper">
-                    <Trophy size={22} />
-                  </div>
-                  <div>
-                    <h2 className="matches-title-premium">Próximos Partidos</h2>
-                    <p className="matches-subtitle-premium">Haz tus predicciones y gana puntos</p>
-                  </div>
-                </div>
-                <div className="matches-badge">
-                  <Target size={14} />
-                  <span>{pendingMatches.length} disponibles</span>
-                </div>
-              </div>
-
-              {/* Contenedor de partidos */}
-              <div className="matches-container">
-                {pendingMatches.length === 0 ? (
-                  <div className="matches-empty-state">
-                    <div className="matches-empty-icon">⚽</div>
-                    <div className="matches-empty-text">No hay partidos disponibles</div>
-                    <div className="matches-empty-subtext">Los nuevos partidos aparecerán aquí</div>
-                  </div>
-                ) : (
-                  pendingMatches.map((m) => (
-                    <MatchCard
-                      key={m.id}
-                      match={m}
-                      userPred={m.predictions?.find(
-                        (p) => p.user_id === currentUser?.id
-                      )}
-                      onPredict={makePrediction}
-                    />
-                  ))
-                )}
+        <main className="container">
+          {/* --- Stats --- */}
+          <section className="stats-row">
+            <div className="stat-card">
+              <Trophy className="stat-icon" size={24} color="#ff8a00" />
+              <div className="stat-label">Posición</div>
+              <div className="stat-value">
+                #{sortedUsers.findIndex((u) => u.id === currentUser?.id) + 1}
               </div>
             </div>
-          </div>
 
-          <aside className="right-col">
-            <RankingSidebar users={sortedUsers} />
-            
-            {/* Panel de administración Premium */}
-            {currentUser?.is_admin && (
-              <div className="admin-panel-premium">
-                {/* Header del panel */}
-                <div className="admin-header">
-                  <div className="admin-title-section">
-                    <div className="admin-icon-wrapper">
-                      <Shield size={20} />
+            <div className="stat-card">
+              <TrendingUp className="stat-icon" size={24} color="#ff8a00" />
+              <div className="stat-label">Puntos</div>
+              <div className="stat-value">{currentUser?.points ?? 0}</div>
+            </div>
+
+            <div className="stat-card">
+              <Target className="stat-icon" size={24} color="#ff8a00" />
+              <div className="stat-label">Aciertos</div>
+              <div className="stat-value">
+                {currentUser?.correct ?? 0}/{currentUser?.predictions ?? 0}
+              </div>
+            </div>
+
+            <div className="stat-card">
+              <Percent className="stat-icon" size={24} color="#ff8a00" />
+              <div className="stat-label">Precisión</div>
+              <div className="stat-value">
+                {currentUser?.predictions > 0
+                  ? Math.round((currentUser.correct / currentUser.predictions) * 100) + "%"
+                  : "0%"}
+              </div>
+            </div>
+          </section>
+
+          {/* --- Main Grid --- */}
+          <section className="main-grid">
+            <div className="left-col">
+              <div className="matches-section-premium">
+                {/* Header de la sección */}
+                <div className="matches-header-premium">
+                  <div className="matches-title-section">
+                    <div className="matches-icon-wrapper">
+                      <Trophy size={22} />
                     </div>
                     <div>
-                      <h3 className="admin-title">Panel Admin</h3>
-                      <p className="admin-subtitle">Gestión de partidos</p>
+                      <h2 className="matches-title-premium">Próximos Partidos</h2>
+                      <p className="matches-subtitle-premium">Haz tus predicciones y gana puntos</p>
                     </div>
                   </div>
-                  <div className="admin-badge-active">
-                    <Zap size={14} />
-                    <span>Activo</span>
-                  </div>
-                </div>
-
-                {/* Estadísticas rápidas del admin */}
-                <div className="admin-stats-grid">
-                  <div className="admin-stat-item">
-                    <div className="admin-stat-icon pending">
-                      <Settings size={16} />
-                    </div>
-                    <div className="admin-stat-info">
-                      <span className="admin-stat-label">Pendientes</span>
-                      <span className="admin-stat-value">
-                        {matches.filter(m => m.status === 'pending').length}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="admin-stat-item">
-                    <div className="admin-stat-icon finished">
-                      <CheckCircle size={16} />
-                    </div>
-                    <div className="admin-stat-info">
-                      <span className="admin-stat-label">Finalizados</span>
-                      <span className="admin-stat-value">
-                        {matches.filter(m => m.status === 'finished').length}
-                      </span>
-                    </div>
+                  <div className="matches-badge">
+                    <Target size={14} />
+                    <span>{pendingMatches.length} disponibles</span>
                   </div>
                 </div>
 
-                {/* Botones de acción */}
-                <div className="admin-actions">
-                  <button 
-                    className="admin-btn primary"
-                    onClick={() => setShowAdminModal(true)}
-                  >
-                    <Plus size={18} />
-                    <span>Agregar Partido</span>
-                    <div className="btn-shine"></div>
-                  </button>
-
-                  <button
-                    className="admin-btn secondary"
-                    onClick={() => {
-                      const id = prompt("ID del partido a finalizar:");
-                      if (!id) return;
-                      
-                      const h = prompt("Goles equipo local:");
-                      if (h === null) return;
-                      
-                      const a = prompt("Goles equipo visitante:");
-                      if (a === null) return;
-                      
-                      const homeScore = parseInt(h);
-                      const awayScore = parseInt(a);
-                      
-                      if (isNaN(homeScore) || isNaN(awayScore)) {
-                        alert("Por favor ingresa números válidos");
-                        return;
-                      }
-                      
-                      setMatchResult(id, homeScore, awayScore);
-                    }}
-                  >
-                    <CheckCircle size={18} />
-                    <span>Finalizar Partido</span>
-                  </button>
-                </div>
-
-                {/* Lista rápida de partidos pendientes */}
-                <div className="admin-quick-matches">
-                  <div className="admin-section-title">
-                    <span>Acciones Rápidas</span>
-                  </div>
-                  {matches.filter(m => m.status === 'pending').slice(0, 3).map(match => (
-                    <div key={match.id} className="admin-match-quick">
-                      <div className="admin-match-info">
-                        <span className="admin-match-teams">
-                          {match.home_team_logo} vs {match.away_team_logo}
-                        </span>
-                        <span className="admin-match-id">{match.id}</span>
-                      </div>
-                      <button
-                        className="admin-quick-btn"
-                        onClick={() => {
-                          const h = prompt(`Goles ${match.home_team}:`);
-                          if (h === null) return;
-                          
-                          const a = prompt(`Goles ${match.away_team}:`);
-                          if (a === null) return;
-                          
-                          const homeScore = parseInt(h);
-                          const awayScore = parseInt(a);
-                          
-                          if (isNaN(homeScore) || isNaN(awayScore)) {
-                            alert("Por favor ingresa números válidos");
-                            return;
-                          }
-                          
-                          setMatchResult(match.id, homeScore, awayScore);
-                        }}
-                      >
-                        <CheckCircle size={16} />
-                      </button>
+                {/* Contenedor de partidos */}
+                <div className="matches-container">
+                  {pendingMatches.length === 0 ? (
+                    <div className="matches-empty-state">
+                      <div className="matches-empty-icon">⚽</div>
+                      <div className="matches-empty-text">No hay partidos disponibles</div>
+                      <div className="matches-empty-subtext">Los nuevos partidos aparecerán aquí</div>
                     </div>
-                  ))}
-
-                  {matches.filter(m => m.status === 'pending').length === 0 && (
-                    <div className="admin-empty-state">
-                      <span>No hay partidos pendientes</span>
-                    </div>
+                  ) : (
+                    pendingMatches.map((m) => (
+                      <MatchCard
+                        key={m.id}
+                        match={m}
+                        userPred={m.predictions?.find(
+                          (p) => p.user_id === currentUser?.id
+                        )}
+                        onPredict={makePrediction}
+                      />
+                    ))
                   )}
                 </div>
               </div>
-            )}
-          </aside>
-        </section>
-      </main>
+            </div>
 
-      {showAdminModal && (
-        <AdminModal onAdd={addMatch} onClose={() => setShowAdminModal(false)} />
-      )}
-    </div>
+            <aside className="right-col">
+              <RankingSidebar users={sortedUsers} />
+              
+              {/* Panel de administración Premium */}
+              {currentUser?.is_admin && (
+                <div className="admin-panel-premium">
+                  {/* Header del panel */}
+                  <div className="admin-header">
+                    <div className="admin-title-section">
+                      <div className="admin-icon-wrapper">
+                        <Shield size={20} />
+                      </div>
+                      <div>
+                        <h3 className="admin-title">Panel Admin</h3>
+                        <p className="admin-subtitle">Gestión de partidos</p>
+                      </div>
+                    </div>
+                    <div className="admin-badge-active">
+                      <Zap size={14} />
+                      <span>Activo</span>
+                    </div>
+                  </div>
+
+                  {/* Estadísticas rápidas del admin */}
+                  <div className="admin-stats-grid">
+                    <div className="admin-stat-item">
+                      <div className="admin-stat-icon pending">
+                        <Settings size={16} />
+                      </div>
+                      <div className="admin-stat-info">
+                        <span className="admin-stat-label">Pendientes</span>
+                        <span className="admin-stat-value">
+                          {matches.filter(m => m.status === 'pending').length}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="admin-stat-item">
+                      <div className="admin-stat-icon finished">
+                        <CheckCircle size={16} />
+                      </div>
+                      <div className="admin-stat-info">
+                        <span className="admin-stat-label">Finalizados</span>
+                        <span className="admin-stat-value">
+                          {matches.filter(m => m.status === 'finished').length}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Botones de acción */}
+                  <div className="admin-actions">
+                    <button 
+                      className="admin-btn primary"
+                      onClick={() => setShowAdminModal(true)}
+                    >
+                      <Plus size={18} />
+                      <span>Agregar Partido</span>
+                      <div className="btn-shine"></div>
+                    </button>
+
+                    <button
+                      className="admin-btn secondary"
+                      onClick={() => {
+                        const id = prompt("ID del partido a finalizar:");
+                        if (!id) return;
+                        
+                        const h = prompt("Goles equipo local:");
+                        if (h === null) return;
+                        
+                        const a = prompt("Goles equipo visitante:");
+                        if (a === null) return;
+                        
+                        const homeScore = parseInt(h);
+                        const awayScore = parseInt(a);
+                        
+                        if (isNaN(homeScore) || isNaN(awayScore)) {
+                          toast.warning("Por favor ingresa números válidos");
+                          return;
+                        }
+                        
+                        setMatchResult(id, homeScore, awayScore);
+                      }}
+                    >
+                      <CheckCircle size={18} />
+                      <span>Finalizar Partido</span>
+                    </button>
+                  </div>
+
+                  {/* Lista rápida de partidos pendientes */}
+                  <div className="admin-quick-matches">
+                    <div className="admin-section-title">
+                      <span>Acciones Rápidas</span>
+                    </div>
+                    {matches.filter(m => m.status === 'pending').slice(0, 3).map(match => (
+                      <div key={match.id} className="admin-match-quick">
+                        <div className="admin-match-info">
+                          <span className="admin-match-teams">
+                            {match.home_team_logo} vs {match.away_team_logo}
+                          </span>
+                          <span className="admin-match-id">{match.id}</span>
+                        </div>
+                        <button
+                          className="admin-quick-btn"
+                          onClick={() => {
+                            const h = prompt(`Goles ${match.home_team}:`);
+                            if (h === null) return;
+                            
+                            const a = prompt(`Goles ${match.away_team}:`);
+                            if (a === null) return;
+                            
+                            const homeScore = parseInt(h);
+                            const awayScore = parseInt(a);
+                            
+                            if (isNaN(homeScore) || isNaN(awayScore)) {
+                              toast.warning("Por favor ingresa números válidos");
+                              return;
+                            }
+                            
+                            setMatchResult(match.id, homeScore, awayScore);
+                          }}
+                        >
+                          <CheckCircle size={16} />
+                        </button>
+                      </div>
+                    ))}
+
+                    {matches.filter(m => m.status === 'pending').length === 0 && (
+                      <div className="admin-empty-state">
+                        <span>No hay partidos pendientes</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </aside>
+          </section>
+        </main>
+
+        {showAdminModal && (
+          <AdminModal onAdd={addMatch} onClose={() => setShowAdminModal(false)} />
+        )}
+
+        {actionLoading && <LoadingOverlay message="Procesando..." />}
+      </div>
+      
+      <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
+    </>
   );
 }
