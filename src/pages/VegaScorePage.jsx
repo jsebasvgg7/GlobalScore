@@ -1,10 +1,10 @@
-// src/pages/VegaScorePage.jsx
 import React, { useEffect, useState } from "react";
 import { Trophy, TrendingUp, Target, Percent, Plus, CheckCircle, Shield, Settings, Zap } from "lucide-react";
 import Header from "../components/Header";
 import MatchCard from "../components/MatchCard";
 import RankingSidebar from "../components/RankingSidebar";
 import AdminModal from "../components/AdminModal";
+import ProfilePage from "./ProfilePage"; 
 import { PageLoader, MatchListSkeleton, StatCardSkeleton, LoadingOverlay } from "../components/LoadingStates";
 import { ToastContainer, useToast } from "../components/Toast";
 import { supabase } from "../utils/supabaseClient";
@@ -16,6 +16,7 @@ export default function VegaScorePage() {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [showAdminModal, setShowAdminModal] = useState(false);
+  const [showProfile, setShowProfile] = useState(false); 
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const toast = useToast();
@@ -57,6 +58,7 @@ export default function VegaScorePage() {
             .insert({
               auth_id: authUser.user.id,
               name: authUser.user.email?.split('@')[0] || "Usuario",
+              email: authUser.user.email, // ← AGREGAR EMAIL
               points: 0,
               predictions: 0,
               correct: 0
@@ -275,6 +277,20 @@ export default function VegaScorePage() {
     );
   }
 
+  // ========== NUEVO: MOSTRAR PERFIL ==========
+  if (showProfile) {
+    return (
+      <>
+        <ProfilePage 
+          currentUser={currentUser} 
+          onBack={() => setShowProfile(false)} 
+        />
+        <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
+      </>
+    );
+  }
+  // ==========================================
+
   const sortedUsers = [...users].sort((a, b) => b.points - a.points);
   const pendingMatches = matches.filter((m) => m.status === "pending");
 
@@ -284,6 +300,7 @@ export default function VegaScorePage() {
         <Header
           currentUser={currentUser}
           users={sortedUsers}
+          onProfileClick={() => setShowProfile(true)} // ← NUEVA PROP
         />
 
         <main className="container">
@@ -373,7 +390,7 @@ export default function VegaScorePage() {
               {/* Panel de administración Premium */}
               {currentUser?.is_admin && (
                 <div className="admin-panel-premium">
-                  {/* Header del panel */}
+                  {/* ... código de admin existente ... */}
                   <div className="admin-header">
                     <div className="admin-title-section">
                       <div className="admin-icon-wrapper">
@@ -390,7 +407,6 @@ export default function VegaScorePage() {
                     </div>
                   </div>
 
-                  {/* Estadísticas rápidas del admin */}
                   <div className="admin-stats-grid">
                     <div className="admin-stat-item">
                       <div className="admin-stat-icon pending">
@@ -417,7 +433,6 @@ export default function VegaScorePage() {
                     </div>
                   </div>
 
-                  {/* Botones de acción */}
                   <div className="admin-actions">
                     <button 
                       className="admin-btn primary"
@@ -456,7 +471,6 @@ export default function VegaScorePage() {
                     </button>
                   </div>
 
-                  {/* Lista rápida de partidos pendientes */}
                   <div className="admin-quick-matches">
                     <div className="admin-section-title">
                       <span>Acciones Rápidas</span>

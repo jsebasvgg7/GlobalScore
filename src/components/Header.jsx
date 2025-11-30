@@ -1,9 +1,9 @@
 import React from "react";
-import { Trophy, User, LogOut } from "lucide-react";
+import { Trophy, User, LogOut, User2 } from "lucide-react"; // ← AGREGAR User2
 import { supabase } from "../utils/supabaseClient";
 import "../styles/Header.css";
 
-export default function Header({ currentUser, users = [] }) {
+export default function Header({ currentUser, users = [], onProfileClick }) { // ← AGREGAR onProfileClick
   const position = currentUser ? users.findIndex((u) => u.id === currentUser.id) + 1 : 0;
 
   const handleLogout = async () => {
@@ -24,6 +24,17 @@ export default function Header({ currentUser, users = [] }) {
       </div>
 
       <div className="header-right">
+        {/* ========== NUEVO: BOTÓN DE PERFIL ========== */}
+        <button 
+          className="icon-btn profile-btn" 
+          onClick={onProfileClick}
+          aria-label="Ver perfil"
+          title="Mi Perfil"
+        >
+          <User2 size={18} />
+        </button>
+        {/* ============================================= */}
+
         <div className="user-bubble">
           <div className="avatar">
             <User size={20} />
