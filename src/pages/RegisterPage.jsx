@@ -1,6 +1,6 @@
 // src/pages/RegisterPage.jsx
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
 
 export default function RegisterPage() {
@@ -8,33 +8,67 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const register = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // 1. Crear cuenta en auth
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    try {
+      // 1️⃣ Crear cuenta en auth
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+      });
 
-    if (error) {
-      alert(error.message);
+      if (signUpError) throw signUpError;
+
+      if (!data.user) {
+        throw new Error("No se pudo crear el usuario");
+      }
+
+      console.log("Usuario auth creado:", data.user.id);
+
+      // 2️⃣ Crear perfil en users
+      const { error: insertError } = await supabase.from("users").insert({
+        auth_id: data.user.id,
+        name: name.trim(),
+        points: 0,
+        predictions: 0,
+        correct: 0
+      });
+
+      if (insertError) {
+        console.error("Error al insertar en users:", insertError);
+        throw insertError;
+      }
+
+      console.log("Perfil creado exitosamente");
+
+      // 3️⃣ Verificar que se creó correctamente
+      const { data: verifyUser, error: verifyError } = await supabase
+        .from("users")
+        .select("*")
+        .eq("auth_id", data.user.id)
+        .single();
+
+      if (verifyError) {
+        console.error("Error al verificar usuario:", verifyError);
+      } else {
+        console.log("Usuario verificado:", verifyUser);
+      }
+
+      alert("¡Cuenta creada exitosamente! Iniciando sesión...");
+      
+      // Redirigir automáticamente a la app
+      navigate("/app");
+
+    } catch (error) {
+      console.error("Error en registro:", error);
+      alert(`Error: ${error.message}`);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    // 2. Crear perfil en users
-    const { user } = data;
-
-    await supabase.from("users").insert({
-      auth_id: user.id,
-      name: name,
-    });
-
-    alert("Cuenta creada. Verifica tu correo.");
-    setLoading(false);
   };
 
   return (
@@ -48,6 +82,7 @@ export default function RegisterPage() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          minLength={3}
         />
 
         <input
@@ -64,10 +99,11 @@ export default function RegisterPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          minLength={6}
         />
 
         <button className="btn" disabled={loading}>
-          {loading ? "Cargando..." : "Registrarse"}
+          {loading ? "Creando cuenta..." : "Registrarse"}
         </button>
 
         <p className="auth-alt">

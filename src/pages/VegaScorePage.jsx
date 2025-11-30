@@ -25,18 +25,25 @@ export default function VegaScorePage() {
         if (authError) throw authError;
 
         if (!authUser?.user) {
-          window.location.href = "/login";
+          window.location.href = "/";
           return;
         }
 
-        // 2️⃣ Perfil del usuario autenticado
+        console.log("Auth User ID:", authUser.user.id); // Para debug
+
+        // 2️⃣ Perfil del usuario autenticado (BUSCAR POR auth_id)
         const { data: profile, error: profileError } = await supabase
           .from("users")
           .select("*")
-          .eq("id", authUser.user.id)
+          .eq("auth_id", authUser.user.id)  // ✅ Cambiado: busca por auth_id
           .single();
-        if (profileError) throw profileError;
 
+        if (profileError) {
+          console.error("Error al cargar perfil:", profileError);
+          throw profileError;
+        }
+
+        console.log("Perfil encontrado:", profile); // Para debug
         setCurrentUser(profile);
 
         // 3️⃣ Listado de todos los usuarios
@@ -46,13 +53,15 @@ export default function VegaScorePage() {
           .order("points", { ascending: false });
         setUsers(userList || []);
 
-        // 4️⃣ Cargar partidos
+        // 4️⃣ Cargar partidos con sus predicciones
         const { data: matchList } = await supabase
           .from("matches")
           .select("*, predictions(*)");
         setMatches(matchList || []);
+
       } catch (err) {
-        console.error(err);
+        console.error("Error en loadData:", err);
+        alert(`Error al cargar datos: ${err.message}`);
       } finally {
         setLoading(false);
       }
@@ -65,34 +74,62 @@ export default function VegaScorePage() {
   const makePrediction = async (matchId, homeScore, awayScore) => {
     if (!currentUser) return;
 
-    await supabase.from("predictions").upsert({
-      match_id: matchId,
-      user_id: currentUser.id,
-      home_score: homeScore,
-      away_score: awayScore,
-    });
+    try {
+      const { error } = await supabase.from("predictions").upsert({
+        match_id: matchId,
+        user_id: currentUser.id,  // ✅ Usa el id de la tabla users (no auth_id)
+        home_score: homeScore,
+        away_score: awayScore,
+      }, {
+        onConflict: 'match_id,user_id'  // Evita duplicados
+      });
 
-    const { data: matchList } = await supabase
-      .from("matches")
-      .select("*, predictions(*)");
-    setMatches(matchList);
+      if (error) throw error;
+
+      // Recargar partidos
+      const { data: matchList } = await supabase
+        .from("matches")
+        .select("*, predictions(*)");
+      setMatches(matchList);
+
+      alert("¡Predicción guardada exitosamente!");
+    } catch (err) {
+      console.error("Error al guardar predicción:", err);
+      alert(`Error: ${err.message}`);
+    }
   };
 
   const addMatch = async (match) => {
-    await supabase.from("matches").insert(match);
-    const { data } = await supabase.from("matches").select("*, predictions(*)");
-    setMatches(data);
+    try {
+      const { error } = await supabase.from("matches").insert(match);
+      if (error) throw error;
+
+      const { data } = await supabase.from("matches").select("*, predictions(*)");
+      setMatches(data);
+      alert("¡Partido agregado!");
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+    }
   };
 
   const setMatchResult = async (matchId, homeScore, awayScore) => {
-    await supabase
-      .from("matches")
-      .update({ result_home: homeScore, result_away: awayScore, status: "finished" })
-      .eq("id", matchId);
+    try {
+      await supabase
+        .from("matches")
+        .update({ 
+          result_home: homeScore, 
+          result_away: awayScore, 
+          status: "finished" 
+        })
+        .eq("id", matchId);
 
-    const { data } = await supabase.from("matches").select("*, predictions(*)");
-    setMatches(data);
-    calculatePoints(data);
+      const { data } = await supabase.from("matches").select("*, predictions(*)");
+      setMatches(data);
+      await calculatePoints(data);
+      alert("¡Partido finalizado y puntos calculados!");
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+    }
   };
 
   const calculatePoints = async (matchesData) => {
@@ -135,7 +172,21 @@ export default function VegaScorePage() {
   };
 
   // --- RENDER ---
-  if (loading) return <div className="centered">Cargando...</div>;
+  if (loading) {
+    return (
+      <div className="centered">
+        <div>Cargando...</div>
+      </div>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <div className="centered">
+        <div>Error: No se pudo cargar el usuario</div>
+      </div>
+    );
+  }
 
   const sortedUsers = [...users].sort((a, b) => b.points - a.points);
   const pendingMatches = matches.filter((m) => m.status === "pending");
@@ -161,13 +212,13 @@ export default function VegaScorePage() {
 
           <div className="stat-card">
             <div className="stat-label">Puntos</div>
-            <div className="stat-value">{currentUser?.points}</div>
+            <div className="stat-value">{currentUser?.points ?? 0}</div>
           </div>
 
           <div className="stat-card">
             <div className="stat-label">Aciertos</div>
             <div className="stat-value">
-              {currentUser?.correct}/{currentUser?.predictions}
+              {currentUser?.correct ?? 0}/{currentUser?.predictions ?? 0}
             </div>
           </div>
 
