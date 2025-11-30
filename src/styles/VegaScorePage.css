@@ -1,6 +1,9 @@
 /* ============================================
    VEGA SCORE PAGE - Purple Theme
 ============================================ */
+.main-grid{display:grid; grid-template-columns: 2fr 1fr; gap:24px; margin-top:24px}
+.right-col{display:grid; grid-template-columns: 1fr 1fr; gap:18px;}
+.right-col.single-column {grid-template-columns: 1fr;}
 
 .vega-root {
   min-height: 100vh;
@@ -364,3 +367,18 @@
     font-size: 16px;
   }
 }
+/* Main grid */
+
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+  .right-col {
+    order: -1;
+    grid-template-columns: 1fr;
+  }
+  .right-col.single-column {
+    grid-template-columns: 1fr;
+  }
+}
+
