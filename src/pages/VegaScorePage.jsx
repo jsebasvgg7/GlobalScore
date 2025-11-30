@@ -1,13 +1,17 @@
+
 import React, { useEffect, useState } from "react";
-import { Trophy, TrendingUp, Target, Percent, Plus, CheckCircle, Shield, Settings, Zap } from "lucide-react";
+import { Trophy, TrendingUp, Target, Percent, Plus, CheckCircle, Shield, Settings, Zap, Star, Award as AwardIcon } from "lucide-react";
 import Header from "../components/Header";
 import MatchCard from "../components/MatchCard";
 import LeagueCard from "../components/LeagueCard";
+import AwardCard from "../components/AwardCard";
 import RankingSidebar from "../components/RankingSidebar";
 import NavigationTabs from "../components/NavigationTabs";
 import AdminModal from "../components/AdminModal";
 import AdminLeagueModal from "../components/AdminLeagueModal";
+import AdminAwardModal from "../components/AdminAwardModal";
 import FinishLeagueModal from "../components/FinishLeagueModal";
+import FinishAwardModal from "../components/FinishAwardModal";
 import ProfilePage from "./ProfilePage";
 import { PageLoader, MatchListSkeleton, StatCardSkeleton, LoadingOverlay } from "../components/LoadingStates";
 import { ToastContainer, useToast } from "../components/Toast";
@@ -18,14 +22,18 @@ import "../styles/AdminPanel.css";
 export default function VegaScorePage() {
   const [matches, setMatches] = useState([]);
   const [leagues, setLeagues] = useState([]);
+  const [awards, setAwards] = useState([]);
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [showAdminLeagueModal, setShowAdminLeagueModal] = useState(false);
+  const [showAdminAwardModal, setShowAdminAwardModal] = useState(false);
   const [showFinishLeagueModal, setShowFinishLeagueModal] = useState(false);
+  const [showFinishAwardModal, setShowFinishAwardModal] = useState(false);
   const [leagueToFinish, setLeagueToFinish] = useState(null);
+  const [awardToFinish, setAwardToFinish] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
-  const [activeTab, setActiveTab] = useState('matches'); // 'matches' o 'leagues'
+  const [activeTab, setActiveTab] = useState('matches'); // 'matches' | 'leagues' | 'awards'
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const toast = useToast();
@@ -61,7 +69,7 @@ export default function VegaScorePage() {
         // Si no existe el perfil, crearlo automáticamente
         if (!profile) {
           console.log("Perfil no encontrado, creando uno nuevo...");
-          
+
           const { data: newProfile, error: createError } = await supabase
             .from("users")
             .insert({
@@ -107,6 +115,12 @@ export default function VegaScorePage() {
           .from("leagues")
           .select("*, league_predictions(*)");
         setLeagues(leagueList || []);
+
+        // 6️⃣ Cargar premios individuales con sus predicciones
+        const { data: awardList } = await supabase
+          .from("awards")
+          .select("*, award_predictions(*)");
+        setAwards(awardList || []);
 
       } catch (err) {
         console.error("Error en loadData:", err);
@@ -256,14 +270,14 @@ export default function VegaScorePage() {
 
       setUsers(updatedUsers || []);
       setMatches(updatedMatches || []);
-      
+
       const updatedCurrentUser = updatedUsers?.find(u => u.id === currentUser.id);
       if (updatedCurrentUser) {
         setCurrentUser(updatedCurrentUser);
       }
 
       console.log("✅ Partido finalizado");
-      
+
       if (exactPredictions > 0 || correctResults > 0) {
         toast.success(`¡Partido finalizado! ${exactPredictions} exactas, ${correctResults} acertadas 🎉`);
       } else {
@@ -425,7 +439,7 @@ export default function VegaScorePage() {
 
       setUsers(updatedUsers || []);
       setLeagues(updatedLeagues || []);
-      
+
       const updatedCurrentUser = updatedUsers?.find(u => u.id === currentUser.id);
       if (updatedCurrentUser) {
         setCurrentUser(updatedCurrentUser);
@@ -437,6 +451,151 @@ export default function VegaScorePage() {
 
     } catch (err) {
       console.error("Error al finalizar liga:", err);
+      toast.error(`Error: ${err.message}`);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // --- FUNCIONES DE PREMIOS ---
+  const makeAwardPrediction = async (awardId, predictedWinner) => {
+    if (!currentUser) return;
+
+    setActionLoading(true);
+    try {
+      const { error } = await supabase.from("award_predictions").upsert({
+        award_id: awardId,
+        user_id: currentUser.id,
+        predicted_winner: predictedWinner,
+      }, {
+        onConflict: 'award_id,user_id'
+      });
+
+      if (error) throw error;
+
+      const { data: awardList } = await supabase
+        .from("awards")
+        .select("*, award_predictions(*)");
+      setAwards(awardList);
+
+      toast.success("¡Predicción guardada exitosamente! 🏆");
+    } catch (err) {
+      console.error("Error al guardar predicción de premio:", err);
+      toast.error(`Error al guardar: ${err.message}`);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const addAward = async (award) => {
+    setActionLoading(true);
+    try {
+      const { error } = await supabase.from("awards").insert(award);
+      if (error) throw error;
+
+      const { data } = await supabase.from("awards").select("*, award_predictions(*)");
+      setAwards(data);
+      toast.success("¡Premio agregado correctamente! 🥇");
+    } catch (err) {
+      toast.error(`Error: ${err.message}`);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const finishAward = async (awardId, winner) => {
+    setActionLoading(true);
+    try {
+      console.log(`🏅 Finalizando premio ${awardId} - ganador: ${winner}`);
+
+      // 1️⃣ Actualizar el premio con el ganador y estado
+      const { error: updateError } = await supabase
+        .from("awards")
+        .update({ status: "finished", winner })
+        .eq("id", awardId);
+
+      if (updateError) throw updateError;
+
+      // 2️⃣ Obtener el premio con todas sus predicciones
+      const { data: award, error: awardError } = await supabase
+        .from("awards")
+        .select("*, award_predictions(*)")
+        .eq("id", awardId)
+        .single();
+
+      if (awardError) throw awardError;
+
+      // 3️⃣ Repartir puntos (10 puntos por acierto)
+      for (const prediction of award.award_predictions) {
+        let pointsEarned = 0;
+
+        if (prediction.predicted_winner?.toLowerCase() === winner.toLowerCase()) {
+          pointsEarned = 10;
+        }
+
+        // Actualizar points_earned en la predicción
+        const { error: updatePredError } = await supabase
+          .from("award_predictions")
+          .update({ points_earned: pointsEarned })
+          .eq("id", prediction.id);
+
+        if (updatePredError) {
+          console.error("Error al actualizar predicción:", updatePredError);
+        }
+
+        // Actualizar puntos y contadores del usuario
+        const { data: userData, error: userError } = await supabase
+          .from("users")
+          .select("points, predictions, correct")
+          .eq("id", prediction.user_id)
+          .single();
+
+        if (userError) {
+          console.error(`Error al obtener usuario ${prediction.user_id}:`, userError);
+          continue;
+        }
+
+        const newPoints = (userData.points || 0) + pointsEarned;
+        const newPredictions = (userData.predictions || 0) + 1;
+        const newCorrect = (userData.correct || 0) + (pointsEarned > 0 ? 1 : 0);
+
+        const { error: updateUserError } = await supabase
+          .from("users")
+          .update({
+            points: newPoints,
+            predictions: newPredictions,
+            correct: newCorrect
+          })
+          .eq("id", prediction.user_id);
+
+        if (updateUserError) {
+          console.error(`Error al actualizar usuario ${prediction.user_id}:`, updateUserError);
+        }
+      }
+
+      // 4️⃣ Recargar datos
+      const { data: updatedUsers } = await supabase
+        .from("users")
+        .select("*")
+        .order("points", { ascending: false });
+
+      const { data: updatedAwards } = await supabase
+        .from("awards")
+        .select("*, award_predictions(*)");
+
+      setUsers(updatedUsers || []);
+      setAwards(updatedAwards || []);
+
+      const updatedCurrentUser = updatedUsers?.find(u => u.id === currentUser.id);
+      if (updatedCurrentUser) {
+        setCurrentUser(updatedCurrentUser);
+      }
+
+      toast.success("¡Premio finalizado! Puntos distribuidos 🥇");
+      setShowFinishAwardModal(false);
+      setAwardToFinish(null);
+    } catch (err) {
+      console.error("Error al finalizar premio:", err);
       toast.error(`Error: ${err.message}`);
     } finally {
       setActionLoading(false);
@@ -483,6 +642,7 @@ export default function VegaScorePage() {
   const sortedUsers = [...users].sort((a, b) => b.points - a.points);
   const pendingMatches = matches.filter((m) => m.status === "pending");
   const activeLeagues = leagues.filter((l) => l.status === "active");
+  const activeAwards = awards.filter((a) => a.status === "active");
 
   return (
     <>
@@ -578,7 +738,7 @@ export default function VegaScorePage() {
                     )}
                   </div>
                 </div>
-              ) : (
+              ) : activeTab === 'leagues' ? (
                 <div className="matches-section-premium">
                   <div className="matches-header-premium">
                     <div className="matches-title-section">
@@ -617,12 +777,52 @@ export default function VegaScorePage() {
                     )}
                   </div>
                 </div>
+              ) : (
+                // AWARDS TAB
+                <div className="matches-section-premium">
+                  <div className="matches-header-premium">
+                    <div className="matches-title-section">
+                      <div className="matches-icon-wrapper">
+                        <Trophy size={22} />
+                      </div>
+                      <div>
+                        <h2 className="matches-title-premium">Premios Individuales</h2>
+                        <p className="matches-subtitle-premium">Predice ganadores y gana puntos</p>
+                      </div>
+                    </div>
+                    <div className="matches-badge">
+                      <Star size={14} />
+                      <span>{activeAwards.length} activos</span>
+                    </div>
+                  </div>
+
+                  <div className="matches-container">
+                    {awards.length === 0 ? (
+                      <div className="matches-empty-state">
+                        <div className="matches-empty-icon">🥇</div>
+                        <div className="matches-empty-text">No hay premios disponibles</div>
+                        <div className="matches-empty-subtext">Los nuevos premios aparecerán aquí</div>
+                      </div>
+                    ) : (
+                      awards.map((award) => (
+                        <AwardCard
+                          key={award.id}
+                          award={award}
+                          userPrediction={award.award_predictions?.find(
+                            (p) => p.user_id === currentUser?.id
+                          )}
+                          onPredict={makeAwardPrediction}
+                        />
+                      ))
+                    )}
+                  </div>
+                </div>
               )}
             </div>
 
             <aside className="right-col">
               <RankingSidebar users={sortedUsers} />
-              
+
               {/* Panel de administración */}
               {currentUser?.is_admin && (
                 <div className="admin-panel-premium">
@@ -666,6 +866,18 @@ export default function VegaScorePage() {
                         </span>
                       </div>
                     </div>
+
+                    <div className="admin-stat-item">
+                      <div className="admin-stat-icon awards">
+                        <AwardIcon size={16} />
+                      </div>
+                      <div className="admin-stat-info">
+                        <span className="admin-stat-label">Premios</span>
+                        <span className="admin-stat-value">
+                          {awards.filter(a => a.status === 'active').length}
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="admin-actions">
@@ -687,26 +899,35 @@ export default function VegaScorePage() {
                       <div className="btn-shine"></div>
                     </button>
 
+                    <button 
+                      className="admin-btn primary"
+                      onClick={() => setShowAdminAwardModal(true)}
+                    >
+                      <Plus size={18} />
+                      <span>Agregar Premio</span>
+                      <div className="btn-shine"></div>
+                    </button>
+
                     <button
                       className="admin-btn secondary"
                       onClick={() => {
                         const id = prompt("ID del partido a finalizar:");
                         if (!id) return;
-                        
+
                         const h = prompt("Goles equipo local:");
                         if (h === null) return;
-                        
+
                         const a = prompt("Goles equipo visitante:");
                         if (a === null) return;
-                        
+
                         const homeScore = parseInt(h);
                         const awayScore = parseInt(a);
-                        
+
                         if (isNaN(homeScore) || isNaN(awayScore)) {
                           toast.warning("Por favor ingresa números válidos");
                           return;
                         }
-                        
+
                         setMatchResult(id, homeScore, awayScore);
                       }}
                     >
@@ -745,6 +966,37 @@ export default function VegaScorePage() {
                       </div>
                     )}
                   </div>
+
+                  <div className="admin-quick-matches" style={{ marginTop: 12 }}>
+                    <div className="admin-section-title">
+                      <span>Premios Activos</span>
+                    </div>
+                    {awards.filter(a => a.status === 'active').slice(0, 3).map(a => (
+                      <div key={a.id} className="admin-match-quick">
+                        <div className="admin-match-info">
+                          <span className="admin-match-teams">
+                            {a.logo} {a.name}
+                          </span>
+                          <span className="admin-match-id">{a.season}</span>
+                        </div>
+                        <button
+                          className="admin-quick-btn"
+                          onClick={() => {
+                            setAwardToFinish(a);
+                            setShowFinishAwardModal(true);
+                          }}
+                        >
+                          <CheckCircle size={16} />
+                        </button>
+                      </div>
+                    ))}
+
+                    {awards.filter(a => a.status === 'active').length === 0 && (
+                      <div className="admin-empty-state">
+                        <span>No hay premios activos</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </aside>
@@ -762,6 +1014,13 @@ export default function VegaScorePage() {
           />
         )}
 
+        {showAdminAwardModal && (
+          <AdminAwardModal 
+            onAdd={addAward}
+            onClose={() => setShowAdminAwardModal(false)}
+          />
+        )}
+
         {showFinishLeagueModal && leagueToFinish && (
           <FinishLeagueModal 
             league={leagueToFinish}
@@ -773,9 +1032,20 @@ export default function VegaScorePage() {
           />
         )}
 
+        {showFinishAwardModal && awardToFinish && (
+          <FinishAwardModal
+            award={awardToFinish}
+            onFinish={finishAward}
+            onClose={() => {
+              setShowFinishAwardModal(false);
+              setAwardToFinish(null);
+            }}
+          />
+        )}
+
         {actionLoading && <LoadingOverlay message="Procesando..." />}
       </div>
-      
+
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
     </>
   );
