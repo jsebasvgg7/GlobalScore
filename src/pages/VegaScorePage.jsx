@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Trophy, TrendingUp, Target, Percent, Plus, CheckCircle, Shield, Settings, Zap } from "lucide-react";
 import Header from "../components/Header";
 import MatchCard from "../components/MatchCard";
+import LeagueCard from "../components/LeagueCard";
 import RankingSidebar from "../components/RankingSidebar";
+import NavigationTabs from "../components/NavigationTabs";
 import AdminModal from "../components/AdminModal";
-import ProfilePage from "./ProfilePage"; // ← NUEVO IMPORT
+import AdminLeagueModal from "../components/AdminLeagueModal";
+import FinishLeagueModal from "../components/FinishLeagueModal";
+import ProfilePage from "./ProfilePage";
 import { PageLoader, MatchListSkeleton, StatCardSkeleton, LoadingOverlay } from "../components/LoadingStates";
 import { ToastContainer, useToast } from "../components/Toast";
 import { supabase } from "../utils/supabaseClient";
@@ -13,10 +17,15 @@ import "../styles/AdminPanel.css";
 
 export default function VegaScorePage() {
   const [matches, setMatches] = useState([]);
+  const [leagues, setLeagues] = useState([]);
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [showAdminModal, setShowAdminModal] = useState(false);
-  const [showProfile, setShowProfile] = useState(false); // ← NUEVO ESTADO
+  const [showAdminLeagueModal, setShowAdminLeagueModal] = useState(false);
+  const [showFinishLeagueModal, setShowFinishLeagueModal] = useState(false);
+  const [leagueToFinish, setLeagueToFinish] = useState(null);
+  const [showProfile, setShowProfile] = useState(false);
+  const [activeTab, setActiveTab] = useState('matches'); // 'matches' o 'leagues'
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const toast = useToast();
@@ -36,7 +45,7 @@ export default function VegaScorePage() {
 
         console.log("Auth User ID:", authUser.user.id);
 
-        // 2️⃣ Perfil del usuario autenticado (BUSCAR POR auth_id)
+        // 2️⃣ Perfil del usuario autenticado
         const { data: profile, error: profileError } = await supabase
           .from("users")
           .select("*")
@@ -58,7 +67,7 @@ export default function VegaScorePage() {
             .insert({
               auth_id: authUser.user.id,
               name: authUser.user.email?.split('@')[0] || "Usuario",
-              email: authUser.user.email, // ← AGREGAR EMAIL
+              email: authUser.user.email,
               points: 0,
               predictions: 0,
               correct: 0
@@ -93,6 +102,12 @@ export default function VegaScorePage() {
           .select("*, predictions(*)");
         setMatches(matchList || []);
 
+        // 5️⃣ Cargar ligas con sus predicciones
+        const { data: leagueList } = await supabase
+          .from("leagues")
+          .select("*, league_predictions(*)");
+        setLeagues(leagueList || []);
+
       } catch (err) {
         console.error("Error en loadData:", err);
         toast.error(`Error al cargar datos: ${err.message}`);
@@ -104,7 +119,7 @@ export default function VegaScorePage() {
     loadData();
   }, []);
 
-  // --- FUNCIONES DE INTERACCIÓN ---
+  // --- FUNCIONES DE PARTIDOS ---
   const makePrediction = async (matchId, homeScore, awayScore) => {
     if (!currentUser) return;
 
@@ -229,7 +244,7 @@ export default function VegaScorePage() {
         }
       }
 
-      // 7️⃣ Recargar datos
+      // 4️⃣ Recargar datos
       const { data: updatedUsers } = await supabase
         .from("users")
         .select("*")
@@ -249,7 +264,6 @@ export default function VegaScorePage() {
 
       console.log("✅ Partido finalizado");
       
-      // Toast con estadísticas
       if (exactPredictions > 0 || correctResults > 0) {
         toast.success(`¡Partido finalizado! ${exactPredictions} exactas, ${correctResults} acertadas 🎉`);
       } else {
@@ -258,6 +272,171 @@ export default function VegaScorePage() {
 
     } catch (err) {
       console.error("Error al finalizar partido:", err);
+      toast.error(`Error: ${err.message}`);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // --- FUNCIONES DE LIGAS ---
+  const makeLeaguePrediction = async (leagueId, champion, topScorer, topAssist, mvp) => {
+    if (!currentUser) return;
+
+    setActionLoading(true);
+    try {
+      const { error } = await supabase.from("league_predictions").upsert({
+        league_id: leagueId,
+        user_id: currentUser.id,
+        predicted_champion: champion,
+        predicted_top_scorer: topScorer,
+        predicted_top_assist: topAssist,
+        predicted_mvp: mvp,
+      }, {
+        onConflict: 'league_id,user_id'
+      });
+
+      if (error) throw error;
+
+      const { data: leagueList } = await supabase
+        .from("leagues")
+        .select("*, league_predictions(*)");
+      setLeagues(leagueList);
+
+      toast.success("¡Predicción de liga guardada exitosamente! 🏆");
+    } catch (err) {
+      console.error("Error al guardar predicción de liga:", err);
+      toast.error(`Error al guardar: ${err.message}`);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const addLeague = async (league) => {
+    setActionLoading(true);
+    try {
+      const { error } = await supabase.from("leagues").insert(league);
+      if (error) throw error;
+
+      const { data } = await supabase.from("leagues").select("*, league_predictions(*)");
+      setLeagues(data);
+      toast.success("¡Liga agregada correctamente! 🏆");
+    } catch (err) {
+      toast.error(`Error: ${err.message}`);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const finishLeague = async (leagueId, results) => {
+    setActionLoading(true);
+    try {
+      console.log(`🏆 Finalizando liga ${leagueId}`);
+
+      // 1️⃣ Actualizar la liga con los resultados
+      const { error: updateError } = await supabase
+        .from("leagues")
+        .update({ 
+          status: "finished",
+          champion: results.champion,
+          top_scorer: results.top_scorer,
+          top_scorer_goals: results.top_scorer_goals,
+          top_assist: results.top_assist,
+          top_assist_count: results.top_assist_count,
+          mvp_player: results.mvp_player
+        })
+        .eq("id", leagueId);
+
+      if (updateError) throw updateError;
+
+      // 2️⃣ Obtener la liga con todas sus predicciones
+      const { data: league, error: leagueError } = await supabase
+        .from("leagues")
+        .select("*, league_predictions(*)")
+        .eq("id", leagueId)
+        .single();
+
+      if (leagueError) throw leagueError;
+
+      console.log(`📊 Liga encontrada con ${league.league_predictions.length} predicciones`);
+
+      // 3️⃣ Calcular puntos para cada predicción (5 puntos por cada predicción correcta)
+      for (const prediction of league.league_predictions) {
+        let pointsEarned = 0;
+
+        // Verificar cada predicción
+        if (prediction.predicted_champion?.toLowerCase() === results.champion.toLowerCase()) {
+          pointsEarned += 5;
+        }
+        if (prediction.predicted_top_scorer?.toLowerCase() === results.top_scorer.toLowerCase()) {
+          pointsEarned += 5;
+        }
+        if (prediction.predicted_top_assist?.toLowerCase() === results.top_assist.toLowerCase()) {
+          pointsEarned += 5;
+        }
+        if (prediction.predicted_mvp?.toLowerCase() === results.mvp_player.toLowerCase()) {
+          pointsEarned += 5;
+        }
+
+        console.log(`Usuario ${prediction.user_id}: ${pointsEarned} puntos`);
+
+        // Actualizar points_earned en la predicción de liga
+        const { error: updatePredError } = await supabase
+          .from("league_predictions")
+          .update({ points_earned: pointsEarned })
+          .eq("id", prediction.id);
+
+        if (updatePredError) {
+          console.error(`Error al actualizar predicción:`, updatePredError);
+        }
+
+        // Actualizar puntos del usuario
+        const { data: userData, error: userError } = await supabase
+          .from("users")
+          .select("points")
+          .eq("id", prediction.user_id)
+          .single();
+
+        if (userError) {
+          console.error(`Error al obtener usuario ${prediction.user_id}:`, userError);
+          continue;
+        }
+
+        const newPoints = (userData.points || 0) + pointsEarned;
+
+        const { error: updateUserError } = await supabase
+          .from("users")
+          .update({ points: newPoints })
+          .eq("id", prediction.user_id);
+
+        if (updateUserError) {
+          console.error(`Error al actualizar usuario:`, updateUserError);
+        }
+      }
+
+      // 4️⃣ Recargar datos
+      const { data: updatedUsers } = await supabase
+        .from("users")
+        .select("*")
+        .order("points", { ascending: false });
+
+      const { data: updatedLeagues } = await supabase
+        .from("leagues")
+        .select("*, league_predictions(*)");
+
+      setUsers(updatedUsers || []);
+      setLeagues(updatedLeagues || []);
+      
+      const updatedCurrentUser = updatedUsers?.find(u => u.id === currentUser.id);
+      if (updatedCurrentUser) {
+        setCurrentUser(updatedCurrentUser);
+      }
+
+      toast.success("¡Liga finalizada! Puntos distribuidos 🏆");
+      setShowFinishLeagueModal(false);
+      setLeagueToFinish(null);
+
+    } catch (err) {
+      console.error("Error al finalizar liga:", err);
       toast.error(`Error: ${err.message}`);
     } finally {
       setActionLoading(false);
@@ -277,7 +456,7 @@ export default function VegaScorePage() {
     );
   }
 
-  // ========== NUEVO: MOSTRAR PERFIL ==========
+  // Mostrar perfil si está activo
   if (showProfile) {
     return (
       <>
@@ -285,7 +464,6 @@ export default function VegaScorePage() {
           currentUser={currentUser} 
           onBack={() => {
             setShowProfile(false);
-            // Recargar datos actualizados
             const loadData = async () => {
               const { data: updatedUser } = await supabase
                 .from("users")
@@ -301,10 +479,10 @@ export default function VegaScorePage() {
       </>
     );
   }
-  // ==========================================
 
   const sortedUsers = [...users].sort((a, b) => b.points - a.points);
   const pendingMatches = matches.filter((m) => m.status === "pending");
+  const activeLeagues = leagues.filter((l) => l.status === "active");
 
   return (
     <>
@@ -312,7 +490,7 @@ export default function VegaScorePage() {
         <Header
           currentUser={currentUser}
           users={sortedUsers}
-          onProfileClick={() => setShowProfile(true)} // ← NUEVA PROP
+          onProfileClick={() => setShowProfile(true)}
         />
 
         <main className="container">
@@ -354,55 +532,100 @@ export default function VegaScorePage() {
           {/* --- Main Grid --- */}
           <section className="main-grid">
             <div className="left-col">
-              <div className="matches-section-premium">
-                {/* Header de la sección */}
-                <div className="matches-header-premium">
-                  <div className="matches-title-section">
-                    <div className="matches-icon-wrapper">
-                      <Trophy size={22} />
-                    </div>
-                    <div>
-                      <h2 className="matches-title-premium">Próximos Partidos</h2>
-                      <p className="matches-subtitle-premium">Haz tus predicciones y gana puntos</p>
-                    </div>
-                  </div>
-                  <div className="matches-badge">
-                    <Target size={14} />
-                    <span>{pendingMatches.length} disponibles</span>
-                  </div>
-                </div>
+              {/* Tabs de navegación */}
+              <NavigationTabs 
+                activeTab={activeTab} 
+                onTabChange={setActiveTab} 
+              />
 
-                {/* Contenedor de partidos */}
-                <div className="matches-container">
-                  {pendingMatches.length === 0 ? (
-                    <div className="matches-empty-state">
-                      <div className="matches-empty-icon">⚽</div>
-                      <div className="matches-empty-text">No hay partidos disponibles</div>
-                      <div className="matches-empty-subtext">Los nuevos partidos aparecerán aquí</div>
+              {/* Contenido según tab activo */}
+              {activeTab === 'matches' ? (
+                <div className="matches-section-premium">
+                  <div className="matches-header-premium">
+                    <div className="matches-title-section">
+                      <div className="matches-icon-wrapper">
+                        <Trophy size={22} />
+                      </div>
+                      <div>
+                        <h2 className="matches-title-premium">Próximos Partidos</h2>
+                        <p className="matches-subtitle-premium">Haz tus predicciones y gana puntos</p>
+                      </div>
                     </div>
-                  ) : (
-                    pendingMatches.map((m) => (
-                      <MatchCard
-                        key={m.id}
-                        match={m}
-                        userPred={m.predictions?.find(
-                          (p) => p.user_id === currentUser?.id
-                        )}
-                        onPredict={makePrediction}
-                      />
-                    ))
-                  )}
+                    <div className="matches-badge">
+                      <Target size={14} />
+                      <span>{pendingMatches.length} disponibles</span>
+                    </div>
+                  </div>
+
+                  <div className="matches-container">
+                    {pendingMatches.length === 0 ? (
+                      <div className="matches-empty-state">
+                        <div className="matches-empty-icon">⚽</div>
+                        <div className="matches-empty-text">No hay partidos disponibles</div>
+                        <div className="matches-empty-subtext">Los nuevos partidos aparecerán aquí</div>
+                      </div>
+                    ) : (
+                      pendingMatches.map((m) => (
+                        <MatchCard
+                          key={m.id}
+                          match={m}
+                          userPred={m.predictions?.find(
+                            (p) => p.user_id === currentUser?.id
+                          )}
+                          onPredict={makePrediction}
+                        />
+                      ))
+                    )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="matches-section-premium">
+                  <div className="matches-header-premium">
+                    <div className="matches-title-section">
+                      <div className="matches-icon-wrapper">
+                        <Trophy size={22} />
+                      </div>
+                      <div>
+                        <h2 className="matches-title-premium">Competiciones</h2>
+                        <p className="matches-subtitle-premium">Predice campeones y goleadores</p>
+                      </div>
+                    </div>
+                    <div className="matches-badge">
+                      <Trophy size={14} />
+                      <span>{activeLeagues.length} activas</span>
+                    </div>
+                  </div>
+
+                  <div className="matches-container">
+                    {leagues.length === 0 ? (
+                      <div className="matches-empty-state">
+                        <div className="matches-empty-icon">🏆</div>
+                        <div className="matches-empty-text">No hay ligas disponibles</div>
+                        <div className="matches-empty-subtext">Las nuevas ligas aparecerán aquí</div>
+                      </div>
+                    ) : (
+                      leagues.map((league) => (
+                        <LeagueCard
+                          key={league.id}
+                          league={league}
+                          userPrediction={league.league_predictions?.find(
+                            (p) => p.user_id === currentUser?.id
+                          )}
+                          onPredict={makeLeaguePrediction}
+                        />
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             <aside className="right-col">
               <RankingSidebar users={sortedUsers} />
               
-              {/* Panel de administración Premium */}
+              {/* Panel de administración */}
               {currentUser?.is_admin && (
                 <div className="admin-panel-premium">
-                  {/* ... código de admin existente ... */}
                   <div className="admin-header">
                     <div className="admin-title-section">
                       <div className="admin-icon-wrapper">
@@ -410,7 +633,7 @@ export default function VegaScorePage() {
                       </div>
                       <div>
                         <h3 className="admin-title">Panel Admin</h3>
-                        <p className="admin-subtitle">Gestión de partidos</p>
+                        <p className="admin-subtitle">Gestión completa</p>
                       </div>
                     </div>
                     <div className="admin-badge-active">
@@ -425,7 +648,7 @@ export default function VegaScorePage() {
                         <Settings size={16} />
                       </div>
                       <div className="admin-stat-info">
-                        <span className="admin-stat-label">Pendientes</span>
+                        <span className="admin-stat-label">Partidos</span>
                         <span className="admin-stat-value">
                           {matches.filter(m => m.status === 'pending').length}
                         </span>
@@ -437,9 +660,9 @@ export default function VegaScorePage() {
                         <CheckCircle size={16} />
                       </div>
                       <div className="admin-stat-info">
-                        <span className="admin-stat-label">Finalizados</span>
+                        <span className="admin-stat-label">Ligas</span>
                         <span className="admin-stat-value">
-                          {matches.filter(m => m.status === 'finished').length}
+                          {leagues.filter(l => l.status === 'active').length}
                         </span>
                       </div>
                     </div>
@@ -452,6 +675,15 @@ export default function VegaScorePage() {
                     >
                       <Plus size={18} />
                       <span>Agregar Partido</span>
+                      <div className="btn-shine"></div>
+                    </button>
+
+                    <button 
+                      className="admin-btn primary"
+                      onClick={() => setShowAdminLeagueModal(true)}
+                    >
+                      <Plus size={18} />
+                      <span>Agregar Liga</span>
                       <div className="btn-shine"></div>
                     </button>
 
@@ -485,34 +717,21 @@ export default function VegaScorePage() {
 
                   <div className="admin-quick-matches">
                     <div className="admin-section-title">
-                      <span>Acciones Rápidas</span>
+                      <span>Ligas Activas</span>
                     </div>
-                    {matches.filter(m => m.status === 'pending').slice(0, 3).map(match => (
-                      <div key={match.id} className="admin-match-quick">
+                    {leagues.filter(l => l.status === 'active').slice(0, 3).map(league => (
+                      <div key={league.id} className="admin-match-quick">
                         <div className="admin-match-info">
                           <span className="admin-match-teams">
-                            {match.home_team_logo} vs {match.away_team_logo}
+                            {league.logo} {league.name}
                           </span>
-                          <span className="admin-match-id">{match.id}</span>
+                          <span className="admin-match-id">{league.season}</span>
                         </div>
                         <button
                           className="admin-quick-btn"
                           onClick={() => {
-                            const h = prompt(`Goles ${match.home_team}:`);
-                            if (h === null) return;
-                            
-                            const a = prompt(`Goles ${match.away_team}:`);
-                            if (a === null) return;
-                            
-                            const homeScore = parseInt(h);
-                            const awayScore = parseInt(a);
-                            
-                            if (isNaN(homeScore) || isNaN(awayScore)) {
-                              toast.warning("Por favor ingresa números válidos");
-                              return;
-                            }
-                            
-                            setMatchResult(match.id, homeScore, awayScore);
+                            setLeagueToFinish(league);
+                            setShowFinishLeagueModal(true);
                           }}
                         >
                           <CheckCircle size={16} />
@@ -520,9 +739,9 @@ export default function VegaScorePage() {
                       </div>
                     ))}
 
-                    {matches.filter(m => m.status === 'pending').length === 0 && (
+                    {leagues.filter(l => l.status === 'active').length === 0 && (
                       <div className="admin-empty-state">
-                        <span>No hay partidos pendientes</span>
+                        <span>No hay ligas activas</span>
                       </div>
                     )}
                   </div>
@@ -534,6 +753,24 @@ export default function VegaScorePage() {
 
         {showAdminModal && (
           <AdminModal onAdd={addMatch} onClose={() => setShowAdminModal(false)} />
+        )}
+
+        {showAdminLeagueModal && (
+          <AdminLeagueModal 
+            onAdd={addLeague} 
+            onClose={() => setShowAdminLeagueModal(false)} 
+          />
+        )}
+
+        {showFinishLeagueModal && leagueToFinish && (
+          <FinishLeagueModal 
+            league={leagueToFinish}
+            onFinish={finishLeague}
+            onClose={() => {
+              setShowFinishLeagueModal(false);
+              setLeagueToFinish(null);
+            }}
+          />
         )}
 
         {actionLoading && <LoadingOverlay message="Procesando..." />}
