@@ -13,7 +13,7 @@ export default function AdminModal({ onAdd, onClose }) {
     date: "",
     time: "",
     deadLine: "",
-    deadLine_time:""
+    deadLine_time: ""
   });
 
   const handleChange = (e) => {
@@ -21,13 +21,24 @@ export default function AdminModal({ onAdd, onClose }) {
   };
 
   const submit = () => {
-    if (!form.id || !form.home_team || !form.away_team || !form.date || !form.time) {
+    if (!form.id || !form.home_team || !form.away_team || !form.date || !form.time || !form.deadLine || !form.deadLine_time) {
       alert("Todos los campos son obligatorios");
       return;
     }
 
+    // Combinar fecha y hora del deadline en formato ISO
+    const deadlineISO = `${form.deadLine}T${form.deadLine_time}:00`;
+
     onAdd({
-      ...form,
+      id: form.id,
+      league: form.league,
+      home_team: form.home_team,
+      away_team: form.away_team,
+      home_team_logo: form.home_team_logo,
+      away_team_logo: form.away_team_logo,
+      date: form.date,
+      time: form.time,
+      deadline: deadlineISO,
       status: "pending",
     });
 
@@ -158,12 +169,12 @@ export default function AdminModal({ onAdd, onClose }) {
             </div>
           </div>
 
-          {/* Fecha y hora */}
+          {/* Fecha y hora del partido */}
           <div className="datetime-grid-premium">
             <div className="form-group-premium">
               <label className="form-label-premium">
                 <Calendar size={14} />
-                <span>Fecha</span>
+                <span>Fecha del Partido</span>
                 <span className="required">*</span>
               </label>
               <input 
@@ -178,7 +189,7 @@ export default function AdminModal({ onAdd, onClose }) {
             <div className="form-group-premium">
               <label className="form-label-premium">
                 <Clock size={14} />
-                <span>Hora</span>
+                <span>Hora del Partido</span>
                 <span className="required">*</span>
               </label>
               <input 
@@ -189,6 +200,43 @@ export default function AdminModal({ onAdd, onClose }) {
                 onChange={handleChange}
               />
             </div>
+          </div>
+
+          {/* Fecha límite para predicciones */}
+          <div className="datetime-grid-premium">
+            <div className="form-group-premium">
+              <label className="form-label-premium">
+                <Calendar size={14} />
+                <span>Fecha Límite Predicciones</span>
+                <span className="required">*</span>
+              </label>
+              <input 
+                className="form-input-premium" 
+                name="deadLine" 
+                type="date" 
+                value={form.deadLine}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-group-premium">
+              <label className="form-label-premium">
+                <Clock size={14} />
+                <span>Hora Límite Predicciones</span>
+                <span className="required">*</span>
+              </label>
+              <input 
+                className="form-input-premium" 
+                name="deadLine_time" 
+                type="time" 
+                value={form.deadLine_time}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-hint" style={{ marginTop: '-10px', marginBottom: '10px' }}>
+            Fecha y hora hasta la cual se pueden hacer predicciones
           </div>
         </div>
 
