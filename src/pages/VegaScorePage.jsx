@@ -958,6 +958,40 @@ export default function VegaScorePage() {
 
                   <div className="admin-quick-matches">
                     <div className="admin-section-title">
+                      <span>Partidos Pendientes</span>
+                    </div>
+                    {pendingMatches.slice(0, 3).map(match => (
+                      <div key={match.id} className="admin-match-quick">
+                        <div className="admin-match-info">
+                          <span className="admin-match-teams">
+                            {match.home_team} vs {match.away_team}
+                          </span>
+                          <span className="admin-match-id">{new Date(match.date).toLocaleDateString()}</span>
+                        </div>
+                        <button
+                          className="admin-quick-btn"
+                          onClick={() => {
+                            const h = prompt("Goles equipo local:");
+                            if (h === null) return;
+                            const a = prompt("Goles equipo visitante:");
+                            if (a === null) return;
+                            setMatchResult(match.id, parseInt(h), parseInt(a));
+                          }}
+                        >
+                          <CheckCircle size={16} />
+                        </button>
+                      </div>
+                    ))}
+
+                    {pendingMatches.length === 0 && (
+                      <div className="admin-empty-state">
+                        <span>No hay partidos pendientes</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="admin-quick-matches">
+                    <div className="admin-section-title">
                       <span>Ligas Activas</span>
                     </div>
                     {leagues.filter(l => l.status === 'active').slice(0, 3).map(league => (
