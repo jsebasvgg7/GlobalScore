@@ -229,278 +229,278 @@ export default function ProfilePage({ currentUser, onBack }) {
     : 0;
 
   return (
-    <div className="profile-page">
-      {/* Notificación simple */}
-      {notification && (
-        <div className={`simple-notification ${notification.type}`}>
-          {notification.type === 'success' && <CheckCircle2 size={20} />}
-          {notification.type === 'error' && <XCircle size={20} />}
-          <span>{notification.message}</span>
-        </div>
-      )}
-
-      {/* Header */}
-      <div className="profile-header">
-        <button className="back-button" onClick={onBack}>
-          <ArrowLeft size={20} />
-          <span>Volver</span>
-        </button>
-        <h1 className="profile-page-title">Mi Perfil</h1>
-      </div>
-
-      <div className="profile-container">
-        {/* Tarjeta de Perfil */}
-        <div className="profile-card">
-          <div className="profile-card-header">
-            <div className="profile-avatar-large">
-              {userData.name.charAt(0).toUpperCase()}
+        <div className="profile-page">
+          {/* Notificación simple */}
+          {notification && (
+            <div className={`simple-notification ${notification.type}`}>
+              {notification.type === 'success' && <CheckCircle2 size={20} />}
+              {notification.type === 'error' && <XCircle size={20} />}
+              <span>{notification.message}</span>
             </div>
-            <button 
-              className={`edit-button ${isEditing ? 'active' : ''}`}
-              onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-              disabled={loading}
-            >
-              {loading ? (
-                <Activity size={18} className="spinner" />
-              ) : isEditing ? (
-                <>
-                  <Save size={18} />
-                  <span>Guardar</span>
-                </>
-              ) : (
-                <>
-                  <Edit2 size={18} />
-                  <span>Editar</span>
-                </>
-              )}
+          )}
+
+          {/* Header */}
+          <div className="profile-header">
+            <button className="back-button" onClick={onBack}>
+              <ArrowLeft size={20} />
+              <span>Volver</span>
             </button>
-            {isEditing && (
-              <button 
-                className="cancel-button"
-                onClick={() => {
-                  setIsEditing(false);
-                  loadUserData();
-                }}
-              >
-                <X size={18} />
-              </button>
-            )}
+            <h1 className="profile-page-title">Mi Perfil</h1>
           </div>
 
-          <div className="profile-info-grid">
-            <div className="profile-field">
-              <label className="profile-label">
-                <User size={16} />
-                <span>Nombre</span>
-              </label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  className="profile-input"
-                  value={userData.name}
-                  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-                  placeholder="Tu nombre"
-                />
-              ) : (
-                <div className="profile-value">{userData.name}</div>
-              )}
-            </div>
-
-            <div className="profile-field">
-              <label className="profile-label">
-                <Trophy size={16} />
-                <span>Equipo Favorito</span>
-              </label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  className="profile-input"
-                  value={userData.favorite_team}
-                  onChange={(e) => setUserData({ ...userData, favorite_team: e.target.value })}
-                  placeholder="Ej: Real Madrid"
-                />
-              ) : (
-                <div className="profile-value">
-                  {userData.favorite_team || 'No especificado'}
+          <div className="profile-container">
+            {/* Tarjeta de Perfil */}
+            <div className="profile-card">
+              <div className="profile-card-header">
+                <div className="profile-avatar-large">
+                  {userData.name.charAt(0).toUpperCase()}
                 </div>
-              )}
-            </div>
+                <button 
+                  className={`edit-button ${isEditing ? 'active' : ''}`}
+                  onClick={() => isEditing ? handleSave() : setIsEditing(true)}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Activity size={18} className="spinner" />
+                  ) : isEditing ? (
+                    <>
+                      <Save size={18} />
+                      <span>Guardar</span>
+                    </>
+                  ) : (
+                    <>
+                      <Edit2 size={18} />
+                      <span>Editar</span>
+                    </>
+                  )}
+                </button>
+                {isEditing && (
+                  <button 
+                    className="cancel-button"
+                    onClick={() => {
+                      setIsEditing(false);
+                      loadUserData();
+                    }}
+                  >
+                    <X size={18} />
+                  </button>
+                )}
+              </div>
 
-            <div className="profile-field full-width">
-              <label className="profile-label">
-                <Star size={16} />
-                <span>Biografía</span>
-              </label>
-              {isEditing ? (
-                <textarea
-                  className="profile-textarea"
-                  value={userData.bio}
-                  onChange={(e) => setUserData({ ...userData, bio: e.target.value })}
-                  placeholder="Cuéntanos sobre ti..."
-                  rows={3}
-                />
-              ) : (
-                <div className="profile-value">
-                  {userData.bio || 'Sin descripción'}
+              <div className="profile-info-grid">
+                <div className="profile-field">
+                  <label className="profile-label">
+                    <User size={16} />
+                    <span>Nombre</span>
+                  </label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      className="profile-input"
+                      value={userData.name}
+                      onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                      placeholder="Tu nombre"
+                    />
+                  ) : (
+                    <div className="profile-value">{userData.name}</div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            <div className="profile-field">
-              <label className="profile-label">
-                <Calendar size={16} />
-                <span>Miembro desde</span>
-              </label>
-              <div className="profile-value">{formatDate(userData.joined_date)}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Estadísticas */}
-        <div className="profile-stats-grid">
-          <div className="profile-stat-card primary">
-            <div className="stat-icon-wrapper">
-              <TrendingUp size={24} />
-            </div>
-            <div className="stat-content">
-              <div className="stat-label">Puntos Totales</div>
-              <div className="stat-value">{currentUser?.points || 0}</div>
-            </div>
-          </div>
-
-          <div className="profile-stat-card success">
-            <div className="stat-icon-wrapper">
-              <Target size={24} />
-            </div>
-            <div className="stat-content">
-              <div className="stat-label">Aciertos</div>
-              <div className="stat-value">
-                {currentUser?.correct || 0}/{currentUser?.predictions || 0}
-              </div>
-            </div>
-          </div>
-
-          <div className="profile-stat-card warning">
-            <div className="stat-icon-wrapper">
-              <Percent size={24} />
-            </div>
-            <div className="stat-content">
-              <div className="stat-label">Precisión</div>
-              <div className="stat-value">{accuracy}%</div>
-            </div>
-          </div>
-
-          <div className="profile-stat-card fire">
-            <div className="stat-icon-wrapper">
-              <Flame size={24} />
-            </div>
-            <div className="stat-content">
-              <div className="stat-label">Racha Actual</div>
-              <div className="stat-value">{streakData.current_streak}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Rachas */}
-        <div className="streaks-section">
-          <h2 className="section-title">
-            <Flame size={22} />
-            Rachas
-          </h2>
-          <div className="streaks-grid">
-            <div className="streak-card current">
-              <div className="streak-icon">
-                <Flame size={32} />
-              </div>
-              <div className="streak-info">
-                <div className="streak-label">Racha Actual</div>
-                <div className="streak-value">{streakData.current_streak}</div>
-                <div className="streak-sublabel">predicciones seguidas</div>
-              </div>
-            </div>
-
-            <div className="streak-card best">
-              <div className="streak-icon">
-                <Medal size={32} />
-              </div>
-              <div className="streak-info">
-                <div className="streak-label">Mejor Racha</div>
-                <div className="streak-value">{streakData.best_streak}</div>
-                <div className="streak-sublabel">tu récord personal</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Historial de Predicciones */}
-        <div className="history-section">
-          <h2 className="section-title">
-            <Activity size={22} />
-            Historial de Predicciones
-          </h2>
-
-          {historyLoading ? (
-            <div className="history-loading">
-              <Activity size={32} className="spinner" />
-              <p>Cargando historial...</p>
-            </div>
-          ) : predictionHistory.length === 0 ? (
-            <div className="history-empty">
-              <Target size={48} />
-              <p>Aún no has hecho predicciones</p>
-              <span>¡Comienza a predecir resultados para ver tu historial!</span>
-            </div>
-          ) : (
-            <div className="history-list">
-              {predictionHistory.map((pred) => {
-                const result = getPredictionResult(pred);
-                const match = pred.matches;
-
-                return (
-                  <div key={pred.id} className={`history-item ${result.status}`}>
-                    <div className="history-match-info">
-                      <div className="history-league">{match?.league}</div>
-                      <div className="history-teams">
-                        <span className="history-team">
-                          {match?.home_team_logo} {match?.home_team}
-                        </span>
-                        <span className="history-vs">vs</span>
-                        <span className="history-team">
-                          {match?.away_team} {match?.away_team_logo}
-                        </span>
-                      </div>
-                      <div className="history-date">
-                        <Clock size={14} />
-                        {match?.date} • {match?.time}
-                      </div>
+                <div className="profile-field">
+                  <label className="profile-label">
+                    <Trophy size={16} />
+                    <span>Equipo Favorito</span>
+                  </label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      className="profile-input"
+                      value={userData.favorite_team}
+                      onChange={(e) => setUserData({ ...userData, favorite_team: e.target.value })}
+                      placeholder="Ej: Real Madrid"
+                    />
+                  ) : (
+                    <div className="profile-value">
+                      {userData.favorite_team || 'No especificado'}
                     </div>
+                  )}
+                </div>
 
-                    <div className="history-prediction">
-                      <div className="history-label">Tu predicción</div>
-                      <div className="history-score">
-                        {pred.home_score} - {pred.away_score}
-                      </div>
+                <div className="profile-field full-width">
+                  <label className="profile-label">
+                    <Star size={16} />
+                    <span>Biografía</span>
+                  </label>
+                  {isEditing ? (
+                    <textarea
+                      className="profile-textarea"
+                      value={userData.bio}
+                      onChange={(e) => setUserData({ ...userData, bio: e.target.value })}
+                      placeholder="Cuéntanos sobre ti..."
+                      rows={3}
+                    />
+                  ) : (
+                    <div className="profile-value">
+                      {userData.bio || 'Sin descripción'}
                     </div>
+                  )}
+                </div>
 
-                    {match?.status === 'finished' && (
-                      <div className="history-result-box">
-                        <div className="history-label">Resultado final</div>
-                        <div className="history-score">
-                          {match.result_home} - {match.result_away}
+                <div className="profile-field">
+                  <label className="profile-label">
+                    <Calendar size={16} />
+                    <span>Miembro desde</span>
+                  </label>
+                  <div className="profile-value">{formatDate(userData.joined_date)}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Estadísticas */}
+            <div className="profile-stats-grid">
+              <div className="profile-stat-card primary">
+                <div className="stat-icon-wrapper">
+                  <TrendingUp size={24} />
+                </div>
+                <div className="stat-content">
+                  <div className="stat-label">Puntos Totales</div>
+                  <div className="stat-value">{currentUser?.points || 0}</div>
+                </div>
+              </div>
+
+              <div className="profile-stat-card success">
+                <div className="stat-icon-wrapper">
+                  <Target size={24} />
+                </div>
+                <div className="stat-content">
+                  <div className="stat-label">Aciertos</div>
+                  <div className="stat-value">
+                    {currentUser?.correct || 0}/{currentUser?.predictions || 0}
+                  </div>
+                </div>
+              </div>
+
+              <div className="profile-stat-card warning">
+                <div className="stat-icon-wrapper">
+                  <Percent size={24} />
+                </div>
+                <div className="stat-content">
+                  <div className="stat-label">Precisión</div>
+                  <div className="stat-value">{accuracy}%</div>
+                </div>
+              </div>
+
+              <div className="profile-stat-card fire">
+                <div className="stat-icon-wrapper">
+                  <Flame size={24} />
+                </div>
+                <div className="stat-content">
+                  <div className="stat-label">Racha Actual</div>
+                  <div className="stat-value">{streakData.current_streak}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Rachas */}
+            <div className="streaks-section">
+              <h2 className="section-title">
+                <Flame size={22} />
+                Rachas
+              </h2>
+              <div className="streaks-grid">
+                <div className="streak-card current">
+                  <div className="streak-icon">
+                    <Flame size={32} />
+                  </div>
+                  <div className="streak-info">
+                    <div className="streak-label">Racha Actual</div>
+                    <div className="streak-value">{streakData.current_streak}</div>
+                    <div className="streak-sublabel">predicciones seguidas</div>
+                  </div>
+                </div>
+
+                <div className="streak-card best">
+                  <div className="streak-icon">
+                    <Medal size={32} />
+                  </div>
+                  <div className="streak-info">
+                    <div className="streak-label">Mejor Racha</div>
+                    <div className="streak-value">{streakData.best_streak}</div>
+                    <div className="streak-sublabel">tu récord personal</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Historial de Predicciones */}
+            <div className="history-section">
+              <h2 className="section-title">
+                <Activity size={22} />
+                Historial de Predicciones
+              </h2>
+
+              {historyLoading ? (
+                <div className="history-loading">
+                  <Activity size={32} className="spinner" />
+                  <p>Cargando historial...</p>
+                </div>
+              ) : predictionHistory.length === 0 ? (
+                <div className="history-empty">
+                  <Target size={48} />
+                  <p>Aún no has hecho predicciones</p>
+                  <span>¡Comienza a predecir resultados para ver tu historial!</span>
+                </div>
+              ) : (
+                <div className="history-list">
+                  {predictionHistory.map((pred) => {
+                    const result = getPredictionResult(pred);
+                    const match = pred.matches;
+
+                    return (
+                      <div key={pred.id} className={`history-item ${result.status}`}>
+                        <div className="history-match-info">
+                          <div className="history-league">{match?.league}</div>
+                          <div className="history-teams">
+                            <span className="history-team">
+                              {match?.home_team_logo} {match?.home_team}
+                            </span>
+                            <span className="history-vs">vs</span>
+                            <span className="history-team">
+                              {match?.away_team} {match?.away_team_logo}
+                            </span>
+                          </div>
+                          <div className="history-date">
+                            <Clock size={14} />
+                            {match?.date} • {match?.time}
+                          </div>
                         </div>
-                      </div>
-                    )}
 
-                    <div className={`history-status ${result.status}`}>
-                      {result.status === 'exact' && <CheckCircle2 size={18} />}
-                      {result.status === 'correct' && <CheckCircle2 size={18} />}
-                      {result.status === 'wrong' && <XCircle size={18} />}
-                      {result.status === 'pending' && <Clock size={18} />}
-                      <div className="status-content">
-                        <span className="status-label">{result.label}</span>
-                        {result.points > 0 && (
-                          <span className="status-points">+{result.points} pts</span>
+                        <div className="history-prediction">
+                          <div className="history-label">Tu predicción</div>
+                          <div className="history-score">
+                            {pred.home_score} - {pred.away_score}
+                          </div>
+                        </div>
+
+                        {match?.status === 'finished' && (
+                          <div className="history-result-box">
+                            <div className="history-label">Resultado final</div>
+                            <div className="history-score">
+                              {match.result_home} - {match.result_away}
+                            </div>
+                          </div>
                         )}
+
+                        <div className={`history-status ${result.status}`}>
+                          {result.status === 'exact' && <CheckCircle2 size={18} />}
+                          {result.status === 'correct' && <CheckCircle2 size={18} />}
+                          {result.status === 'wrong' && <XCircle size={18} />}
+                          {result.status === 'pending' && <Clock size={18} />}
+                          <div className="status-content">
+                            <span className="status-label">{result.label}</span>
+                            {result.points > 0 && (
+                              <span className="status-points">+{result.points} pts</span>
+                            )}
                       </div>
                     </div>
                   </div>
