@@ -510,7 +510,8 @@ export default function ProfilePage({ currentUser, onBack }) {
             {/* Mini logros destacados */}
             <div className="mini-achievements">
               <div className="mini-achievement-item">
-                <div className="mini-achievement-icon">🏆</div>
+                <div className="mini-achievement-icon"> 
+                  <TrendingUp size={18} /></div>
                 <div className="mini-achievement-info">
                   <span className="mini-achievement-label">Total Puntos</span>
                   <span className="mini-achievement-value">{currentUser?.points || 0}</span>
