@@ -3,11 +3,13 @@ import {
   User, Calendar, Trophy, TrendingUp, Target, Flame, 
   Star, Award, Edit2, Save, X, ArrowLeft, Activity, Percent,
   CheckCircle2, XCircle, Clock, Medal, Globe, Heart, Zap,
-  Crown, Shield, Rocket, Sparkles, TrendingDown, BarChart3,
+  Crown, Shield, Rocket, Sparkles, BarChart3,
   Gamepad2, Award as AwardIcon, Target as TargetIcon,
-  Clock as ClockIcon, Users, MapPin, Flag, ScrollText, BookOpen, Layers, BadgeCheck, Gem,
-  Trophy as TrophyIcon, Zap as ZapIcon, Target as TargetIcon,
-  CheckCircle, XCircle, Star as StarIcon
+  Clock as ClockIcon, Users, MapPin, Flag, ScrollText, 
+  BookOpen, Layers, BadgeCheck, Gem, Trophy as TrophyIcon,
+  Zap as ZapIcon, CheckCircle, Bookmark, TrendingDown,
+  BarChart as BarChartIcon, Package, Award as AwardLucide,
+  Star as StarLucide, Target as TargetLucide, Home
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import AvatarUpload from '../components/AvatarUpload';
@@ -37,11 +39,20 @@ export default function ProfilePage({ currentUser, onBack }) {
     best_streak: 0,
     last_prediction_date: null
   });
+
+  // Nuevos estados para logros, títulos y ranking
   const [userAchievements, setUserAchievements] = useState([]);
   const [userTitles, setUserTitles] = useState([]);
   const [availableAchievements, setAvailableAchievements] = useState([]);
   const [availableTitles, setAvailableTitles] = useState([]);
   const [achievementsLoading, setAchievementsLoading] = useState(true);
+  const [userRanking, setUserRanking] = useState({
+    position: 0,
+    totalUsers: 0,
+    pointsToNext: 0,
+    pointsToLeader: 0,
+    pointsFromPrev: 0
+  });
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
@@ -49,135 +60,104 @@ export default function ProfilePage({ currentUser, onBack }) {
   };
 
   useEffect(() => {
-  const loadAchievementsAndTitles = async () => {
-    if (!currentUser) return;
-    
-    try {
-      setAchievementsLoading(true);
-      
-      // 1. Cargar logros disponibles
-      const { data: achievementsData, error: achievementsError } = await supabase
-        .from('available_achievements')
-        .select('*')
-        .order('requirement_value', { ascending: true });
-
-      if (achievementsError) throw achievementsError;
-      setAvailableAchievements(achievementsData || []);
-
-      // 2. Cargar títulos disponibles
-      const { data: titlesData, error: titlesError } = await supabase
-        .from('available_titles')
-        .select('*');
-
-      if (titlesError) throw titlesError;
-      setAvailableTitles(titlesData || []);
-
-      // 3. Calcular logros obtenidos (basado en stats del usuario)
-      const calculatedAchievements = calculateAchievements(
-        achievementsData || [],
-        {
-          points: currentUser?.points || 0,
-          predictions: currentUser?.predictions || 0,
-          correct: currentUser?.correct || 0,
-          current_streak: streakData.current_streak
-        }
-      );
-      setUserAchievements(calculatedAchievements);
-
-      // 4. Calcular títulos obtenidos (basado en logros obtenidos)
-      const calculatedTitles = calculateTitles(
-        titlesData || [],
-        calculatedAchievements
-      );
-      setUserTitles(calculatedTitles);
-
-    } catch (err) {
-      console.error('Error loading achievements:', err);
-    } finally {
-      setAchievementsLoading(false);
-    }
-  };
-
-  loadAchievementsAndTitles();
-}, [currentUser, streakData]);
-
-// Funciones helper para calcular logros y títulos
-const calculateAchievements = (availableAchievements, userStats) => {
-  if (!availableAchievements || !userStats) return [];
-
-  return availableAchievements.filter(achievement => {
-    switch (achievement.requirement_type) {
-      case 'points':
-        return userStats.points >= achievement.requirement_value;
-      case 'predictions':
-        return userStats.predictions >= achievement.requirement_value;
-      case 'correct':
-        return userStats.correct >= achievement.requirement_value;
-      case 'streak':
-        return userStats.current_streak >= achievement.requirement_value;
-      default:
-        return false;
-    }
-  });
-};
-
-const calculateTitles = (availableTitles, userAchievements) => {
-  if (!availableTitles || !userAchievements) return [];
-  
-  return availableTitles.filter(title => {
-    const requiredAchievementId = title.requirement_achievement_id;
-    return userAchievements.some(achievement => achievement.id === requiredAchievementId);
-  });
-};
-
-// Función para obtener el emoji del ícono
-const getIconEmoji = (iconText) => {
-  const emojiMap = {
-    '🎯': '🎯',
-    '🌟': '🌟',
-    '⭐': '⭐',
-    '✨': '✨',
-    '💫': '💫',
-    '🎪': '🎪',
-    '🎭': '🎭',
-    '🎨': '🎨',
-    '🔥': '🔥',
-    '🌋': '🌋',
-    '☄️': '☄️'
-  };
-  return emojiMap[iconText] || '🏆';
-};
-
-// Función para determinar el color basado en la categoría
-const getCategoryColor = (category) => {
-  switch(category) {
-    case 'Inicio': return 'var(--primary-purple)';
-    case 'Progreso': return 'var(--info)';
-    case 'Precisión': return 'var(--success)';
-    case 'Racha': return 'var(--danger)';
-    default: return 'var(--primary-purple)';
-  }
-};
-
-// Función para determinar el título activo (el más alto obtenido)
-const getActiveTitle = () => {
-  if (userTitles.length === 0) return null;
-  
-  // Ordenar títulos por "valor" (puedes ajustar esta lógica)
-  const sortedTitles = [...userTitles].sort((a, b) => {
-    const order = ['leyenda', 'oráculo', 'visionario', 'pronosticador', 'novato'];
-    return order.indexOf(b.id) - order.indexOf(a.id);
-  });
-  
-  return sortedTitles[0];
-};
-
-const activeTitle = getActiveTitle();
-
-  useEffect(() => {
     loadUserData();
     loadPredictionHistory();
     calculateStreaks();
+  }, [currentUser]);
+
+  useEffect(() => {
+    const loadAchievementsAndTitles = async () => {
+      if (!currentUser) return;
+      
+      try {
+        setAchievementsLoading(true);
+        
+        // 1. Cargar logros disponibles
+        const { data: achievementsData, error: achievementsError } = await supabase
+          .from('available_achievements')
+          .select('*')
+          .order('requirement_value', { ascending: true });
+
+        if (achievementsError) throw achievementsError;
+        setAvailableAchievements(achievementsData || []);
+
+        // 2. Cargar títulos disponibles
+        const { data: titlesData, error: titlesError } = await supabase
+          .from('available_titles')
+          .select('*');
+
+        if (titlesError) throw titlesError;
+        setAvailableTitles(titlesData || []);
+
+        // 3. Calcular logros obtenidos
+        const calculatedAchievements = calculateAchievements(
+          achievementsData || [],
+          {
+            points: currentUser?.points || 0,
+            predictions: currentUser?.predictions || 0,
+            correct: currentUser?.correct || 0,
+            current_streak: streakData.current_streak
+          }
+        );
+        setUserAchievements(calculatedAchievements);
+
+        // 4. Calcular títulos obtenidos
+        const calculatedTitles = calculateTitles(
+          titlesData || [],
+          calculatedAchievements
+        );
+        setUserTitles(calculatedTitles);
+
+      } catch (err) {
+        console.error('Error loading achievements:', err);
+      } finally {
+        setAchievementsLoading(false);
+      }
+    };
+
+    if (currentUser) {
+      loadAchievementsAndTitles();
+    }
+  }, [currentUser, streakData]);
+
+  useEffect(() => {
+    const loadUserRanking = async () => {
+      try {
+        // Obtener todos los usuarios ordenados por puntos
+        const { data: allUsers, error } = await supabase
+          .from('users')
+          .select('id, points')
+          .order('points', { ascending: false });
+
+        if (error) throw error;
+        if (!allUsers || allUsers.length === 0) return;
+
+        // Encontrar posición del usuario actual
+        const userIndex = allUsers.findIndex(user => user.id === currentUser?.id);
+        const userPosition = userIndex !== -1 ? userIndex + 1 : 0;
+
+        // Calcular diferencias de puntos
+        const leaderPoints = allUsers[0]?.points || 0;
+        const userPoints = currentUser?.points || 0;
+        const nextUser = userIndex > 0 ? allUsers[userIndex - 1] : null;
+        const prevUser = userIndex < allUsers.length - 1 ? allUsers[userIndex + 1] : null;
+
+        setUserRanking({
+          position: userPosition,
+          totalUsers: allUsers.length,
+          pointsToLeader: leaderPoints - userPoints,
+          pointsToNext: nextUser ? userPoints - nextUser.points : 0,
+          pointsFromPrev: prevUser ? prevUser.points - userPoints : 0
+        });
+
+      } catch (err) {
+        console.error('Error loading ranking:', err);
+      }
+    };
+
+    if (currentUser?.id) {
+      loadUserRanking();
+    }
   }, [currentUser]);
 
   const loadUserData = async () => {
@@ -231,8 +211,7 @@ const activeTitle = getActiveTitle();
           )
         `)
         .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: false })
-        .limit(10);
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       setPredictionHistory(data || []);
@@ -380,6 +359,73 @@ const activeTitle = getActiveTitle();
     });
   };
 
+  // Funciones helper para logros y títulos
+  const calculateAchievements = (availableAchievements, userStats) => {
+    if (!availableAchievements || !userStats) return [];
+
+    return availableAchievements.filter(achievement => {
+      switch (achievement.requirement_type) {
+        case 'points':
+          return userStats.points >= achievement.requirement_value;
+        case 'predictions':
+          return userStats.predictions >= achievement.requirement_value;
+        case 'correct':
+          return userStats.correct >= achievement.requirement_value;
+        case 'streak':
+          return userStats.current_streak >= achievement.requirement_value;
+        default:
+          return false;
+      }
+    });
+  };
+
+  const calculateTitles = (availableTitles, userAchievements) => {
+    if (!availableTitles || !userAchievements) return [];
+    
+    return availableTitles.filter(title => {
+      const requiredAchievementId = title.requirement_achievement_id;
+      return userAchievements.some(achievement => achievement.id === requiredAchievementId);
+    });
+  };
+
+  const getIconEmoji = (iconText) => {
+    const emojiMap = {
+      '🎯': '🎯',
+      '🌟': '🌟',
+      '⭐': '⭐',
+      '✨': '✨',
+      '💫': '💫',
+      '🎪': '🎪',
+      '🎭': '🎭',
+      '🎨': '🎨',
+      '🔥': '🔥',
+      '🌋': '🌋',
+      '☄️': '☄️'
+    };
+    return emojiMap[iconText] || '🏆';
+  };
+
+  const getCategoryColor = (category) => {
+    switch(category) {
+      case 'Inicio': return '#8B5CF6';
+      case 'Progreso': return '#3B82F6';
+      case 'Precisión': return '#10B981';
+      case 'Racha': return '#EF4444';
+      default: return '#8B5CF6';
+    }
+  };
+
+  const getActiveTitle = () => {
+    if (userTitles.length === 0) return null;
+    
+    const sortedTitles = [...userTitles].sort((a, b) => {
+      const order = ['leyenda', 'oráculo', 'visionario', 'pronosticador', 'novato'];
+      return order.indexOf(b.id) - order.indexOf(a.id);
+    });
+    
+    return sortedTitles[0];
+  };
+
   const accuracy = currentUser?.predictions > 0 
     ? Math.round((currentUser.correct / currentUser.predictions) * 100) 
     : 0;
@@ -392,7 +438,7 @@ const activeTitle = getActiveTitle();
   const pointsToNextLevel = nextLevelPoints - currentPoints;
   const levelProgress = (pointsInLevel / 20) * 100;
 
-
+  const activeTitle = getActiveTitle();
 
   return (
     <div className="profile-page">
@@ -530,13 +576,18 @@ const activeTitle = getActiveTitle();
                 </div>
               </div>
 
-              <div className="stat-item accent">
+              <div className="stat-item accent ranking">
                 <div className="stat-icon">
-                  <Medal size={20} />
+                  <Trophy size={20} />
                 </div>
                 <div className="stat-info">
-                  <div className="stat-label">Mejor Racha</div>
-                  <div className="stat-value">{streakData.best_streak}</div>
+                  <div className="stat-label">Ranking Global</div>
+                  <div className="stat-value">#{userRanking.position || '--'}</div>
+                  <div className="stat-sublabel">
+                    {userRanking.totalUsers > 0 
+                      ? `Top ${Math.round((userRanking.position / userRanking.totalUsers) * 100)}%`
+                      : 'Sin ranking'}
+                  </div>
                 </div>
               </div>
             </div>
@@ -586,7 +637,7 @@ const activeTitle = getActiveTitle();
               <div className="mini-achievements-grid">
                 <div className="mini-achievement">
                   <div className="achievement-icon">
-                    <TargetIcon size={18} />
+                    <TargetLucide size={18} />
                   </div>
                   <div className="achievement-info">
                     <div className="achievement-label">Aciertos</div>
@@ -612,9 +663,7 @@ const activeTitle = getActiveTitle();
                   </div>
                   <div className="achievement-info">
                     <div className="achievement-label">Ranking</div>
-                    <div className="achievement-value">
-                      #{(currentUser?.rank || '--')}
-                      </div>
+                    <div className="achievement-value">#{userRanking.position || '--'}</div>
                   </div>
                 </div>
 
@@ -675,6 +724,7 @@ const activeTitle = getActiveTitle();
             </div>
           </div>
         </div>
+
         {/* ========== SECCIÓN DE TÍTULOS Y LOGROS ========== */}
         <div className="titles-achievements-section">
           {/* Título Activo */}
@@ -763,7 +813,7 @@ const activeTitle = getActiveTitle();
                     key={title.id} 
                     className={`title-card ${title.id === activeTitle?.id ? 'active' : ''}`}
                     style={{ 
-                      borderLeft: `4px solid ${title.color || 'var(--primary-purple)'}`,
+                      borderLeft: `4px solid ${title.color || '#8B5CF6'}`,
                       background: title.id === activeTitle?.id 
                         ? `linear-gradient(135deg, ${title.color}15, transparent)` 
                         : 'var(--card-gradient)'
@@ -856,7 +906,7 @@ const activeTitle = getActiveTitle();
                 {userAchievements.length === 0 && (
                   <div className="no-achievements">
                     <div className="no-achievements-icon">
-                      <TargetIcon size={40} />
+                      <TargetLucide size={40} />
                     </div>
                     <div className="no-achievements-text">
                       <h4>Sin logros aún</h4>
@@ -865,7 +915,7 @@ const activeTitle = getActiveTitle();
                   </div>
                 )}
                 
-                {/* Mostrar logros no obtenidos (bloqueados) */}
+                {/* Mostrar logros no obtenidos */}
                 {userAchievements.length < availableAchievements.length && (
                   <div className="locked-achievements-info">
                     <div className="locked-icon">
@@ -884,7 +934,7 @@ const activeTitle = getActiveTitle();
 
         {/* SECCIÓN INFERIOR: Formulario de Edición e Historial */}
         <div className="profile-bottom-section">
-          {/* Formulario de Edición (solo visible en modo edición) */}
+          {/* Formulario de Edición */}
           {isEditing && (
             <div className="edit-form-card">
               <div className="form-header">
@@ -1118,18 +1168,6 @@ const activeTitle = getActiveTitle();
             )}
           </div>
         </div>
-
-        {/* Componente de Logros Completos */}
-        <AchievementsSection 
-          userId={currentUser.id}
-          userStats={{
-            points: currentUser?.points || 0,
-            predictions: currentUser?.predictions || 0,
-            correct: currentUser?.correct || 0,
-            best_streak: streakData.best_streak,
-            accuracy: accuracy
-          }}
-        />
       </div>
     </div>
   );
