@@ -402,7 +402,7 @@ export default function ProfilePage({ currentUser, onBack }) {
       '🌋': '🌋',
       '☄️': '☄️'
     };
-    return emojiMap[iconText] || '🏆';
+    return emojiMap[iconText] || '';
   };
 
   const getCategoryColor = (category) => {
@@ -495,10 +495,6 @@ export default function ProfilePage({ currentUser, onBack }) {
               <h2 className="user-name">{userData.name}</h2>
               <div className="user-meta">
                 <span className="user-email">{userData.email}</span>
-                <div className="user-joined">
-                  <Calendar size={14} />
-                  <span>{formatDate(userData.joined_date)}</span>
-                </div>
               </div>
               
               <div className="user-favorites">
@@ -514,6 +510,10 @@ export default function ProfilePage({ currentUser, onBack }) {
                     <span>{userData.favorite_player}</span>
                   </div>
                 )}
+                <div className="user-joined">
+                  <Calendar size={14} />
+                  <span>{formatDate(userData.joined_date)}</span>
+                </div>
               </div>
               
               <button 
