@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Trophy, TrendingUp, Target, Percent, Plus, CheckCircle, Shield, Settings, Zap, Star, Award as AwardIcon } from "lucide-react";
 import Header from "../components/Header";
@@ -830,10 +829,9 @@ export default function VegaScorePage() {
               )}
             </div>
 
-            <aside className="right-col">
+            <aside className={`right-col ${!currentUser?.is_admin ? 'single-column' : ''}`}>
               <RankingSidebar users={sortedUsers} />
 
-              {/* Panel de administración */}
               {currentUser?.is_admin && (
                 <div className="admin-panel-premium">
                   <div className="admin-header">
