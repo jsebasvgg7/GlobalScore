@@ -569,6 +569,89 @@ button { font: inherit; }
   .team-name { font-size:12px; }
   .vs { font-size:12px; padding:0 6px; }
 }
+/* -------------------------
+  PATCH: estilos faltantes y correcciones rápidas para JSX
+  (añadir al final de ProfilePage.css)
+   ------------------------- */
+
+/* 1) Notificaciones simples */
+.simple-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  background: #111827;
+  color: #fff;
+  opacity: 0.98;
+  min-width: 220px;
+}
+.simple-notification.success { background: linear-gradient(90deg, #10B981, #06b6a4); }
+.simple-notification.error   { background: linear-gradient(90deg, #EF4444, #DC2626); }
+
+/* 2) Spinner util (aparece en botones cuando loading) */
+.spinner { display:inline-block; animation:spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 3) Cancel edit circular button (usado en JSX) */
+.cancel-edit-button {
+  width:48px; height:48px; border-radius:50%; background:#F3F4F6; border:2px solid #E5E7EB;
+  color:#6B7280; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  transition: all .18s ease; flex-shrink:0;
+}
+.cancel-edit-button:hover { background:#EF4444; color:#fff; border-color:#EF4444; transform: rotate(90deg); }
+
+/* 4) AvatarUpload wrapper (cuando está en modo edición) */
+.avatar-upload-wrapper {
+  width:140px; height:140px; display:flex; align-items:center; justify-content:center;
+  border-radius:50%; border:6px solid #fff; box-shadow:0 12px 24px rgba(91,33,182,0.18); overflow:hidden;
+}
+
+/* 5) Clase util que se usa en botones con flecha */
+.rotate-180 { transform: rotate(180deg); display:inline-block; }
+
+/* 6) Asegurar que profile-bottom-section pueda contener dos hijos sin romper layout */
+.profile-bottom-section { display:flex; flex-direction:column; gap:24px; }
+
+/* 7) Evitar overflow por iconos/grids en pantallas muy pequeñas */
+.profile-top-section, .profile-middle-section, .titles-achievements-section {
+  width:100%;
+  min-width:0; /* importante para que children hagan shrink correctamente */
+}
+
+/* 8) Pequeña mejora: asegurar que .stat-item no haga overflow */
+.stat-item { min-width:0; }
+
+/* 9) Forzar word-breaks en títulos largos */
+.team-name, .title-name, .title-card-name {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* 10) Mobile fix: que .avatar-badge no se salga cuando avatar sea más pequeño */
+@media (max-width: 768px) {
+  .avatar-badge { left: 50%; transform: translateX(-50%); bottom: -6px; }
+}
+
+/* 11) Evitar que .achievement-card cause horizontales por bordes grandes */
+.achievement-card { box-sizing: border-box; }
+
+/* 12) Accessibility: color contrast fallback for badges with dynamic color */
+.title-active-badge, .count-badge {
+  color: #fff !important;
+}
+
+/* 13) Seguridad: si animaciones están presentes, que no bloqueen layout */
+.progress-fill { min-width:2px; }
+
+/* Fin del parche CSS */
 
 /* -------------------------
    End of file
