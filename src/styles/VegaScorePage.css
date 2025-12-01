@@ -1,9 +1,15 @@
 /* ============================================
    VEGA SCORE PAGE - Purple Theme
 ============================================ */
-.main-grid{display:grid; grid-template-columns: 2fr 1fr; gap:24px; margin-top:24px}
-.right-col{display:grid; grid-template-columns: 1fr 1fr; gap:18px;}
-.right-col.single-column {grid-template-columns: 1fr;}
+.main-grid {
+  display:grid; 
+  grid-template-columns: 2fr 1fr; gap:24px; 
+  margin-top:24px
+}
+.right-col{
+  display:flex; 
+  flex-direction: 
+  column; gap:18px;}
 
 .vega-root {
   min-height: 100vh;
