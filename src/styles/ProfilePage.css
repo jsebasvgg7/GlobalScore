@@ -1637,3 +1637,73 @@ to{box-shadow: 0 0 30px rgba(124, 58, 237, 0.2);}
 .achievement-category{font-size: 10px;}
 
 }
+/* ----------------------------------------------------
+   FIX 1 — Alinear sección de títulos y logros
+   ---------------------------------------------------- */
+
+/* Fuerza un grid consistente */
+.titles-achievements-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* siempre dos columnas */
+  gap: 24px;
+  align-items: start; /* evita que un contenedor empuje al otro */
+  width: 100%;
+}
+
+/* La tarjeta del título activo ocupa toda la fila */
+.active-title-card {
+  grid-column: 1 / -1;
+}
+
+/* Mantener los contenedores alineados */
+.titles-container,
+.achievements-container {
+  width: 100%;
+  min-width: 0; /* MUY IMPORTANTE: evita overflow del grid */
+}
+
+/* ----------------------------------------------------
+   FIX 2 — Alinear tarjetas internas de títulos
+   ---------------------------------------------------- */
+.titles-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Mantener alineación interna */
+.title-card {
+  width: 100%;
+  box-sizing: border-box;  /* previene corrimientos */
+}
+
+/* ----------------------------------------------------
+   FIX 3 — Alinear las tarjetas de logros
+   ---------------------------------------------------- */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 por fila */
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Evita desbordes */
+.achievement-card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ----------------------------------------------------
+   FIX RESPONSIVE — Tablets y móviles
+   ---------------------------------------------------- */
+@media (max-width: 900px) {
+  .titles-achievements-section {
+    grid-template-columns: 1fr; /* una sola columna */
+  }
+
+  .achievements-grid {
+    grid-template-columns: 1fr; /* logros uno por fila */
+  }
+}
