@@ -6,9 +6,10 @@ import {
   ChevronUp, ChevronDown, Minus, Filter, Search
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
+import Header from '../components/Header';
 import '../styles/RankingPage.css';
 
-export default function RankingPage({ currentUser, onBack }) {
+export default function RankingPage({ currentUser, users, onBack }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -116,6 +117,14 @@ export default function RankingPage({ currentUser, onBack }) {
   return (
     <div className="ranking-page">
       {/* Header */}
+      <Header 
+        currentUser={currentUser}
+        users={users}
+        onProfileClick={() => {
+          // Navegar a perfil si es necesario
+          window.location.href = '/app';
+        }}
+      />
       <div className="ranking-page-header">
         <h1 className="ranking-page-title">
           <Trophy size={36} />
