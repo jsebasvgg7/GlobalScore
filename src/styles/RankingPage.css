@@ -1,0 +1,104 @@
+@import "./_core.css";
+
+.ranking-root {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+/* =================== SIDEBAR =================== */
+
+.ranking-sidebar-desktop {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .ranking-sidebar-desktop {
+    display: block;
+    width: 260px;
+  }
+}
+
+/* =================== CONTENT =================== */
+
+.ranking-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.ranking-title {
+  font-size: var(--font-xl);
+  color: var(--white);
+  font-weight: 700;
+}
+
+/* =================== FILTROS =================== */
+
+.ranking-filters {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.filter {
+  padding: 8px 14px;
+  background: var(--gray-800);
+  border-radius: var(--radius-lg);
+  color: var(--gray-300);
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
+}
+
+.filter.active {
+  background: var(--primary);
+  color: var(--white);
+}
+
+/* =================== LISTA =================== */
+
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.ranking-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background: var(--gray-800);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+}
+
+.ranking-position {
+  font-size: var(--font-lg);
+  width: 40px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.ranking-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.ranking-info h4 {
+  color: var(--white);
+  font-size: var(--font-md);
+}
+
+.ranking-info p {
+  color: var(--gray-300);
+  margin-top: 2px;
+}
+
+/* =================== STATES =================== */
+
+.ranking-loading,
+.ranking-empty {
+  color: var(--gray-300);
+}

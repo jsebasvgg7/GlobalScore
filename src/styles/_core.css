@@ -1,0 +1,132 @@
+/* -----------------------------------------------------------
+   🎨 VEGA SCORE — CORE STYLE SYSTEM (VERSIÓN MORADA)
+   ----------------------------------------------------------- */
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: "Inter", sans-serif;
+  background: #111111;
+  color: #ffffff;
+}
+
+/* -----------------------------------------------------------
+   🌈 VARIABLES GLOBALES — COLORES REALES DEL PROYECTO
+   ----------------------------------------------------------- */
+
+:root {
+  /* 🎨 Colores principales */
+  --primary: #7c3aed;          /* Morado brillante */
+  --primary-light: #a78bfa;    /* Morado suave */
+  --primary-dark: #5b21b6;     /* Morado profundo */
+
+  /* 🎭 Neutros */
+  --black: #0d0d0d;
+  --dark: #1a1a1a;
+  --dark-soft: #2a2a2a;
+  --gray: #444444;
+  --gray-light: #bbbbbb;
+  --white: #ffffff;
+
+  /* 🌫 Sombras */
+  --shadow-soft: 0 2px 6px rgba(0,0,0,0.25);
+  --shadow-medium: 0 4px 12px rgba(0,0,0,0.35);
+  --shadow-strong: 0 8px 18px rgba(0,0,0,0.45);
+
+  /* 🧱 Bordes */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 50px;
+
+  /* 📏 Espaciado */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+}
+
+/* -----------------------------------------------------------
+   TIPOGRAFÍA
+   ----------------------------------------------------------- */
+
+h1, h2, h3, h4 {
+  font-weight: 600;
+  color: var(--white);
+}
+
+p {
+  color: var(--gray-light);
+}
+
+/* -----------------------------------------------------------
+   BOTONES
+   ----------------------------------------------------------- */
+
+.button, .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  padding: 10px 16px;
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  font-weight: 500;
+  box-shadow: var(--shadow-soft);
+}
+
+.button:hover, .btn:hover {
+  background: var(--primary-dark);
+}
+
+/* Secundarios */
+.btn-secondary {
+  background: var(--dark-soft);
+  color: var(--gray-light);
+}
+
+.btn-secondary:hover {
+  background: var(--gray);
+}
+
+/* -----------------------------------------------------------
+   CARD GLOBAL
+   ----------------------------------------------------------- */
+
+.card {
+  background: var(--dark-soft);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-medium);
+}
+
+/* -----------------------------------------------------------
+   UTILIDADES RESPONSIVE
+   ----------------------------------------------------------- */
+
+.hide-mobile {
+  display: block;
+}
+
+.hide-desktop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+  .hide-desktop {
+    display: block !important;
+  }
+}

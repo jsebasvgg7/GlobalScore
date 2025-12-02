@@ -3,9 +3,19 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "./utils/supabaseClient";
 
+// Auth
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import VegaScorePage from "./pages/VegaScorePage";
+
+// Layout principal
+import VegaLayout from "./pages/layout/VegaLayout";
+
+// Pages nuevas
+import HomePage from "./pages/HomePage";
+import RankingPage from "./pages/RankingPage";
+import HistoricalPage from "./pages/HistoricalPage";
+import ProfilePage from "./pages/ProfilePage";
+import ConfigPage from "./pages/ConfigPage";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -23,7 +33,6 @@ export default function App() {
       (_event, session) => setSession(session)
     );
 
-    // Limpiar el listener al desmontar
     return () => {
       listener.subscription.unsubscribe();
     };
@@ -42,23 +51,30 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Si está logueado → redirigir a /app */}
+        {/* LOGIN */}
         <Route
           path="/"
           element={session ? <Navigate to="/app" /> : <LoginPage />}
         />
 
-        {/* Si está logueado → no mostrar registro */}
+        {/* REGISTER */}
         <Route
           path="/register"
           element={session ? <Navigate to="/app" /> : <RegisterPage />}
         />
 
-        {/* Página principal protegida */}
+        {/* RUTAS PROTEGIDAS CON LAYOUT */}
         <Route
           path="/app"
-          element={session ? <VegaScorePage /> : <Navigate to="/" />}
-        />
+          element={session ? <VegaLayout /> : <Navigate to="/" />}
+        >
+          <Route index element={<HomePage />} />
+          <Route path="home" element={<HomePage />} />
+          <Route path="ranking" element={<RankingPage />} />
+          <Route path="historical" element={<HistoricalPage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="config" element={<ConfigPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

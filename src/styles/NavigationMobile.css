@@ -1,0 +1,75 @@
+/* src/styles/NavigationMobile.css
+   Barra inferior mobile redondeada (estilo iOS)
+*/
+
+@import "./_core.css";
+
+nav.mobile-nav {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  height: 64px;
+  background: linear-gradient(180deg, rgba(16,8,30,0.92), rgba(8,4,18,0.9));
+  border-radius: 999px;
+  display: none; /* visible only on mobile */
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 12px;
+  box-shadow: var(--shadow-strong);
+  z-index: 1100;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* show on mobile */
+@media (max-width: 767px) {
+  nav.mobile-nav {
+    display: flex;
+  }
+}
+
+/* nav-item */
+nav.mobile-nav .nav-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  color: var(--gray-light);
+  text-decoration: none;
+  transition: transform 120ms ease, background 120ms;
+}
+
+/* center button style (bigger) */
+nav.mobile-nav .center-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-top: -8px;
+  box-shadow: 0 8px 20px rgba(124,58,237,0.24);
+}
+
+/* active */
+nav.mobile-nav .nav-item.active,
+nav.mobile-nav .nav-item:hover {
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+/* icon sizes */
+nav.mobile-nav svg {
+  display: block;
+}
+
+/* when on large screens, hide the mobile nav */
+@media (min-width: 768px) {
+  nav.mobile-nav {
+    display: none;
+  }
+}

@@ -1,0 +1,67 @@
+@import "./_core.css";
+
+.history-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.history-title {
+  font-size: var(--font-xl);
+  color: var(--white);
+  font-weight: 700;
+}
+
+.history-loading,
+.history-empty {
+  color: var(--gray-300);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.history-card {
+  background: var(--gray-800);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.history-info h4 {
+  font-size: var(--font-md);
+  color: var(--white);
+}
+
+.history-info .history-date {
+  font-size: var(--font-sm);
+  color: var(--gray-400);
+}
+
+.history-result {
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.history-result.correct {
+  background: var(--primary-dark);
+  color: var(--primary-light);
+}
+
+.history-result.wrong {
+  background: #632323;
+  color: #ff8c8c;
+}
+
+.history-points {
+  font-size: var(--font-md);
+  font-weight: 700;
+  color: var(--primary-light);
+}

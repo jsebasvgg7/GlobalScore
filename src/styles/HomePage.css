@@ -1,0 +1,47 @@
+@import "./_core.css";
+
+.home-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding-bottom: 120px; /* para la mobile nav */
+}
+
+.home-title {
+  color: var(--white);
+  font-size: var(--font-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+}
+
+.home-section {
+  padding: var(--space-md);
+  background: var(--gray-800);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.loading-text,
+.empty-text {
+  color: var(--gray-300);
+  font-size: var(--font-sm);
+}
+
+.grid-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .grid-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

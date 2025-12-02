@@ -1,0 +1,40 @@
+@import "./_core.css";
+
+.vega-layout-root {
+  display: flex;
+  min-height: 100vh;
+  background: var(--black);
+  color: var(--white);
+  transition: margin-left 220ms ease;
+}
+
+/* MAIN */
+.vega-main {
+  flex: 1;
+  min-height: 100vh;
+  padding: var(--space-md);
+  padding-bottom: calc(var(--space-lg) + 80px); /* para la mobile nav */
+  transition: margin-left 220ms ease;
+}
+
+/* 📌 Sidebar abierto → empuja al main 260px */
+@media (min-width: 768px) {
+  .vega-layout-root.sidebar-open .vega-main {
+    margin-left: 260px;
+  }
+}
+
+/* 📌 Sidebar colapsado → empuja al main 70px */
+@media (min-width: 768px) {
+  .vega-layout-root.sidebar-collapsed .vega-main {
+    margin-left: 70px;
+  }
+}
+
+/* 📱 En mobile nunca empuja */
+@media (max-width: 767px) {
+  .vega-main {
+    margin-left: 0 !important;
+    padding-bottom: 100px;
+  }
+}
