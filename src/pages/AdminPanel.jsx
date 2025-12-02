@@ -15,6 +15,9 @@ import FinishMatchModal from "../components/FinishMatchModal"; // Asumo que tien
 import FinishLeagueModal from "../components/FinishLeagueModal";
 import FinishAwardModal from "../components/FinishAwardModal";
 import { PageLoader, LoadingOverlay } from "../components/LoadingStates";
+import "../styles/AdminPanel.css"; // Estilos específicos para el panel de administración
+import "../styles/VegaScorePage.css"; // Reutilizamos estilos generales
+import "../styles/AdminPanel.css"; // Reutilizamos estilos de modals
 
 export default function AdminPanel() {
   const { profile: currentUser, loading: authLoading, isAdmin } = useAuth();
