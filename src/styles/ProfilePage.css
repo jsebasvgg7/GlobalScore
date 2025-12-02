@@ -2115,21 +2115,3 @@ to{box-shadow: 0 0 30px rgba(124, 58, 237, 0.2);}
   color: #ffffff !important;
   stroke: #ffffff !important;
 }
-/* Centrar texto dentro del stat-info */
-.stat-info {
-  text-align: center;
-}
-@media (max-width: 768px) {
-  .stat-item {
-    padding: 20px;
-    border-radius: 18px;
-  }
-
-  .stat-value {
-    font-size: 28px;
-  }
-
-  .stat-label {
-    font-size: 12px;
-  }
-}
