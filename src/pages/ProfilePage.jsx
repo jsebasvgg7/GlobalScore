@@ -9,7 +9,7 @@ import {
   BookOpen, Layers, BadgeCheck, Gem, Trophy as TrophyIcon,
   Zap as ZapIcon, CheckCircle, Bookmark, TrendingDown,
   BarChart as BarChartIcon, Package, Award as AwardLucide,
-  Star as StarLucide, Target as TargetLucide, Home
+  Star as StarLucide, Target as TargetLucide, Home, Plus
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import AvatarUpload from '../components/AvatarUpload';
