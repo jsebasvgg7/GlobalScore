@@ -6,6 +6,7 @@ import { supabase } from "./utils/supabaseClient";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import VegaScorePage from "./pages/VegaScorePage";
+import RankingPage from "./pages/RankingPage";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -58,6 +59,12 @@ export default function App() {
         <Route
           path="/app"
           element={session ? <VegaScorePage /> : <Navigate to="/" />}
+        />
+
+        {/* Página de Ranking */}
+        <Route
+          path="/ranking"
+          element={session ? <RankingPage /> : <Navigate to="/" />}
         />
       </Routes>
     </BrowserRouter>
