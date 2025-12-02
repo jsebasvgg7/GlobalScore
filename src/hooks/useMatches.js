@@ -11,7 +11,8 @@ export const useMatches = (currentUser) => {
 
     setLoading(true);
     try {
-      const { error } = await supabase
+      // IMPORTANTE: Agregar .select() para obtener los datos insertados/actualizados
+      const { data: predictionData, error } = await supabase
         .from("predictions")
         .upsert({
           match_id: matchId,
@@ -20,17 +21,21 @@ export const useMatches = (currentUser) => {
           away_score: awayScore,
         }, {
           onConflict: 'match_id,user_id'
-        });
+        })
+        .select(); // ← FIX: Agregar .select() para obtener los datos
 
       if (error) throw error;
 
+      console.log('✅ Predicción guardada:', predictionData);
+
+      // Recargar lista de partidos
       const { data: matchList } = await supabase
         .from("matches")
         .select("*, predictions(*)");
 
       onSuccess?.(matchList);
     } catch (err) {
-      console.error("Error al guardar predicción:", err);
+      console.error("❌ Error al guardar predicción:", err);
       onError?.(err.message);
     } finally {
       setLoading(false);
@@ -60,7 +65,7 @@ export const useMatches = (currentUser) => {
     try {
       console.log(`🎯 Finalizando partido ${matchId}: ${homeScore}-${awayScore}`);
 
-      // 1. Actualizar resultado
+      // 1. Actualizar resultado del partido
       const { error: updateError } = await supabase
         .from("matches")
         .update({ 
@@ -72,7 +77,7 @@ export const useMatches = (currentUser) => {
 
       if (updateError) throw updateError;
 
-      // 2. Obtener partido con predicciones
+      // 2. Obtener partido con todas sus predicciones
       const { data: match, error: matchError } = await supabase
         .from("matches")
         .select("*, predictions(*)")
@@ -92,41 +97,68 @@ export const useMatches = (currentUser) => {
         const predDiff = Math.sign(prediction.home_score - prediction.away_score);
         let pointsEarned = 0;
 
+        // Resultado exacto: 5 puntos
         if (prediction.home_score === homeScore && prediction.away_score === awayScore) {
           pointsEarned = 5;
           exactPredictions++;
           console.log(`✅ Usuario ${prediction.user_id}: Resultado exacto (+5 pts)`);
-        } else if (resultDiff === predDiff) {
+        } 
+        // Resultado correcto (ganador/empate): 3 puntos
+        else if (resultDiff === predDiff) {
           pointsEarned = 3;
           correctResults++;
           console.log(`✅ Usuario ${prediction.user_id}: Acertó resultado (+3 pts)`);
-        } else {
+        } 
+        // Incorrecto: 0 puntos
+        else {
           console.log(`❌ Usuario ${prediction.user_id}: No acertó (0 pts)`);
         }
 
+        // Obtener puntos actuales del usuario
         const { data: userData, error: userError } = await supabase
           .from("users")
-          .select("points, predictions, correct")
+          .select("points, predictions, correct, best_streak, current_streak")
           .eq("id", prediction.user_id)
           .single();
 
         if (userError) {
-          console.error(`Error al obtener usuario ${prediction.user_id}:`, userError);
+          console.error(`❌ Error al obtener usuario ${prediction.user_id}:`, userError);
           continue;
         }
 
+        // Calcular nuevas estadísticas
         const newPoints = (userData.points || 0) + pointsEarned;
         const newPredictions = (userData.predictions || 0) + 1;
         const newCorrect = (userData.correct || 0) + (pointsEarned > 0 ? 1 : 0);
+        
+        // Actualizar racha
+        let newCurrentStreak = userData.current_streak || 0;
+        let newBestStreak = userData.best_streak || 0;
+        
+        if (pointsEarned > 0) {
+          newCurrentStreak = newCurrentStreak + 1;
+          newBestStreak = Math.max(newBestStreak, newCurrentStreak);
+        } else {
+          newCurrentStreak = 0;
+        }
 
-        await supabase
+        // Actualizar usuario con TODAS las estadísticas
+        const { error: updateUserError } = await supabase
           .from("users")
           .update({
             points: newPoints,
             predictions: newPredictions,
-            correct: newCorrect
+            correct: newCorrect,
+            current_streak: newCurrentStreak,
+            best_streak: newBestStreak
           })
           .eq("id", prediction.user_id);
+
+        if (updateUserError) {
+          console.error(`❌ Error actualizando usuario ${prediction.user_id}:`, updateUserError);
+        } else {
+          console.log(`✅ Usuario ${prediction.user_id} actualizado: ${newPoints} pts, ${newCorrect}/${newPredictions} correctas`);
+        }
       }
 
       // 4. Recargar datos actualizados
@@ -139,7 +171,8 @@ export const useMatches = (currentUser) => {
         .from("matches")
         .select("*, predictions(*)");
 
-      console.log("✅ Partido finalizado");
+      console.log("✅ Partido finalizado exitosamente");
+      console.log(`📈 Resultados: ${exactPredictions} exactos, ${correctResults} resultados correctos`);
 
       onSuccess?.({
         users: updatedUsers || [],
@@ -148,7 +181,7 @@ export const useMatches = (currentUser) => {
       });
 
     } catch (err) {
-      console.error("Error al finalizar partido:", err);
+      console.error("❌ Error al finalizar partido:", err);
       onError?.(err.message);
     } finally {
       setLoading(false);
