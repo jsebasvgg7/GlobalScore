@@ -554,10 +554,6 @@ const handleDeleteTitle = async (titleId) => {
       )}
 
       <div className="profile-header">
-        <button className="back-button" onClick={onBack}>
-          <ArrowLeft size={20} />
-          <span>Volver</span>
-        </button>
         <h1 className="profile-page-title">Mi Perfil</h1>
       </div>
 

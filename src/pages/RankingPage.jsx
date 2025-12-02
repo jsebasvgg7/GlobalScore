@@ -117,10 +117,6 @@ export default function RankingPage({ currentUser, onBack }) {
     <div className="ranking-page">
       {/* Header */}
       <div className="ranking-page-header">
-        <button className="back-button" onClick={onBack}>
-          <ArrowLeft size={20} />
-          <span>Volver</span>
-        </button>
         <h1 className="ranking-page-title">
           <Trophy size={36} />
           Ranking Global
