@@ -6,10 +6,9 @@ import {
   ChevronUp, ChevronDown, Minus, Filter, Search
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
-import Header from '../components/Header';
 import '../styles/RankingPage.css';
 
-export default function RankingPage({ currentUser, users, onBack }) {
+export default function RankingPage({ currentUser, onBack }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
