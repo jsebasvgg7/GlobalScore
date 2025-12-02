@@ -78,10 +78,7 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete }) {
 
     setUploading(true);
     try {
-      // Asume que la URL contiene el path del archivo, lo cual es complejo de hacer aquí.
-      // Para simplificar y solo enfocarnos en la UI:
-      
-      // 1. Quitar de la BD
+
       const { error: updateError } = await supabase
         .from('users')
         .update({ avatar_url: null })
@@ -154,7 +151,6 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete }) {
             ) : (
               <Upload size={16} />
             )}
-            <span>{preview ? '' : ''}</span>
           </button>
           
           {/* Botón de Eliminar (solo si hay una foto) */}
@@ -165,7 +161,6 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete }) {
               disabled={uploading}
             >
               <X size={16} />
-              <span></span>
             </button>
           )}
         </div>
