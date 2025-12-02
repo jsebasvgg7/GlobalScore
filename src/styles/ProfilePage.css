@@ -23,6 +23,23 @@
   --shadow-glow: 0 0 30px rgba(124, 58, 237, 0.2);}
 
 /* ========== BASE STYLES ========== */
+.title-card {
+  min-height: 80px; 
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  align-items: center; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+.title-info {
+  flex-grow: 1; 
+  margin-left: 10px;
+}
+
 .profile-page{min-height: 100vh;
   background: var(--bg-gradient);
   padding: 32px 24px;
@@ -2205,3 +2222,4 @@ to{box-shadow: 0 0 30px rgba(124, 58, 237, 0.2);}
     padding: 3px 6px;
   }
 }
+
