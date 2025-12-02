@@ -1030,9 +1030,6 @@ export default function ProfilePage({ currentUser, onBack }) {
                     }}
                   ></div>
                 </div>
-                <span className="progress-text">
-                  {Math.round((userAchievements.length / availableAchievements.length) * 100)}%
-                </span>
               </div>
             </div>
             
