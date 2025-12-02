@@ -1,39 +1,45 @@
+/* src/styles/HomePage.css */
 @import "./_core.css";
 
 .home-wrapper {
   display: flex;
   flex-direction: column;
   gap: var(--space-xl);
-  padding-bottom: 120px; /* para la mobile nav */
+  padding-bottom: 120px; /* espacio para mobile nav */
+}
+
+.home-section {
+  padding: var(--space-lg);
+  background: var(--dark-soft);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-medium);
 }
 
 .home-title {
   color: var(--white);
-  font-size: var(--font-lg);
+  font-size: 24px;
   font-weight: 700;
   margin-bottom: var(--space-md);
-}
-
-.home-section {
-  padding: var(--space-md);
-  background: var(--gray-800);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .loading-text,
 .empty-text {
-  color: var(--gray-300);
-  font-size: var(--font-sm);
+  color: var(--gray-light);
+  font-size: 14px;
+  text-align: center;
+  padding: var(--space-lg);
 }
 
 .grid-list {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-md);
+  gap: var(--space-lg);
 }
 
-/* Desktop */
+/* Responsive */
 @media (min-width: 768px) {
   .grid-list {
     grid-template-columns: repeat(2, 1fr);

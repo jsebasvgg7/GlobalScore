@@ -1,79 +1,68 @@
+/* src/styles/LeagueCard.css - ACTUALIZADO */
+
 .league-card-premium {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: 0.25s ease;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 24px;
+  padding: 0;
+  border: 1px solid rgba(96, 81, 155, 0.1);
+  box-shadow: 0 4px 20px rgba(96, 81, 155, 0.12);
+  overflow: hidden;
+  transition: all 0.3s;
 }
 
-.league-card-premium:hover {
-  background: var(--card-bg-hover);
-  transform: translateY(-2px);
+.league-header-premium {
+  background: linear-gradient(135deg, #1e202c 0%, #31323e 100%);
+  padding: 20px 24px;
 }
 
-.league-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.league-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.league-logo {
-  width: 40px;
-  height: 40px;
-  background: var(--card-bg-light);
-  border-radius: 50%;
-  padding: 5px;
-}
-
-.league-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.league-season {
-  font-size: 13px;
-  color: var(--text-dim);
-}
-
-.league-form {
+.league-predictions-form {
+  padding: 28px 24px;
   display: grid;
-  gap: 10px;
-  margin-top: 15px;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-.league-input {
-  background: #111114;
-  border: 1px solid #3c3c48;
-  border-radius: var(--radius-sm);
-  padding: 8px 10px;
-  font-size: 13px;
-  color: var(--text);
+.prediction-field.full-width {
+  grid-column: 1 / -1;
 }
 
-.league-input:focus {
+.prediction-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 2px solid #e5e5e5;
+  background: #fafafa;
+  transition: all 0.2s;
+}
+
+.prediction-input:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: #60519b;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(96, 81, 155, 0.15);
 }
 
-.league-submit-btn {
-  margin-top: 10px;
-  background: var(--primary-dark);
-  padding: 10px;
-  border-radius: var(--radius);
+.predict-league-btn {
+  margin: 0 24px 24px;
+  padding: 14px 24px;
   border: none;
-  font-weight: 600;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
   color: white;
-  transition: 0.25s;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-.league-submit-btn:hover {
-  background: var(--primary-light);
+.predict-league-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(96, 81, 155, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .league-predictions-form {
+    grid-template-columns: 1fr;
+    padding: 20px 18px;
+  }
 }

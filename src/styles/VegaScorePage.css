@@ -1,0 +1,73 @@
+/* src/styles/VegaScorePage.css */
+.main-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.right-col.single-column {
+  grid-template-columns: 1fr;
+}
+
+/* Stats Section */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 20px;
+  padding: 26px;
+  box-shadow: 0 4px 14px rgba(96, 81, 155, 0.1);
+  text-align: center;
+  border: 1px solid rgba(96, 81, 155, 0.1);
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(96, 81, 155, 0.15);
+}
+
+.stat-value {
+  font-size: 24px;
+  margin-top: 8px;
+  font-weight: 700;
+  color: #60519b;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .right-col {
+    order: -1;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 18px 14px;
+  }
+}

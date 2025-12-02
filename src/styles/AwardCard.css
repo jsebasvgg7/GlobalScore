@@ -1,73 +1,77 @@
+/* src/styles/AwardCard.css - ACTUALIZADO */
+
 .award-card-premium {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: 0.25s ease;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 24px;
+  padding: 0;
+  border: 1px solid rgba(96, 81, 155, 0.1);
+  box-shadow: 0 4px 20px rgba(96, 81, 155, 0.12);
+  overflow: hidden;
+  transition: all 0.3s;
 }
 
 .award-card-premium:hover {
-  background: var(--card-bg-hover);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(96, 81, 155, 0.18);
 }
 
-.award-header {
+.award-header-premium {
+  background: linear-gradient(135deg, #1e202c 0%, #31323e 100%);
+  padding: 20px 24px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
 
-.award-info {
+.award-logo-big {
+  font-size: 56px;
+  animation: award-logo-float 3s ease-in-out infinite;
+}
+
+@keyframes award-logo-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.award-name-premium {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.predict-award-btn {
+  margin: 0 24px 24px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #1e202c;
+  font-weight: 700;
+  cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
+  transition: all 0.3s;
 }
 
-.award-icon {
-  width: 40px;
-  height: 40px;
-  background: var(--card-bg-light);
-  border-radius: 50%;
-  padding: 6px;
+.predict-award-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.5);
 }
 
-.award-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-}
+/* Responsive */
+@media (max-width: 768px) {
+  .award-card-premium {
+    border-radius: 20px;
+  }
 
-.award-season {
-  font-size: 13px;
-  color: var(--text-dim);
-}
-
-.award-input {
-  width: 100%;
-  margin-top: 14px;
-  padding: 10px;
-  background: #111114;
-  border: 1px solid #3c3c48;
-  border-radius: var(--radius-sm);
-  color: var(--text);
-}
-
-.award-input:focus {
-  border-color: var(--primary);
-}
-
-.award-btn {
-  margin-top: 14px;
-  background: var(--primary-dark);
-  padding: 10px;
-  border-radius: var(--radius);
-  border: none;
-  color: white;
-  font-weight: 600;
-  transition: 0.25s;
-}
-
-.award-btn:hover {
-  background: var(--primary-light);
+  .award-header-premium {
+    padding: 16px 18px;
+    flex-direction: column;
+    gap: 12px;
+  }
 }
