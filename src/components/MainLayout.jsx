@@ -1,20 +1,22 @@
+// src/components/MainLayout.jsx (Actualizado)
+
 import { Outlet } from "react-router-dom";
-import Header from "./Header"; // Tu Header existente
+import Header from "./Header";
 import { useAuth } from "../context/AuthContext";
-import { PageLoader } from "./LoadingStates"; // Tu loader existente
+import { PageLoader } from "./LoadingStates";
 
 export default function MainLayout() {
-  const { profile, loading } = useAuth();
+  // Usamos useAuth para obtener el perfil y el estado de admin
+  const { profile, loading, isAdmin } = useAuth(); 
 
   if (loading) return <PageLoader />;
 
   return (
     <div className="vega-root">
-      {/* El Header recibe el perfil directamente del Contexto */}
-      <Header currentUser={profile} /> 
+      {/* Pasamos isAdmin al Header */}
+      <Header currentUser={profile} isAdmin={isAdmin} /> 
       
       <main className="container">
-        {/* Outlet renderiza la página que corresponda (Ranking, Home, etc.) */}
         <Outlet /> 
       </main>
     </div>

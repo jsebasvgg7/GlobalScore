@@ -1,24 +1,28 @@
+// src/pages/Dashboard.jsx (Código COMPLETO)
+
 import React, { useState } from "react";
-import { Trophy, TrendingUp, Target, Percent, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // <-- Nuevo: para la navegación
+import { Trophy, TrendingUp, Target, Percent } from "lucide-react";
 
 // Componentes y hooks
 import MatchCard from "../components/MatchCard";
 import LeagueCard from "../components/LeagueCard";
 import AwardCard from "../components/AwardCard";
 import NavigationTabs from "../components/NavigationTabs";
-import ProfilePage from "./ProfilePage";
 import { ToastContainer, useToast } from "../components/Toast";
-import { PageLoader, StatCardSkeleton } from "../components/LoadingStates"; // Para el loading interno
+import { PageLoader, StatCardSkeleton } from "../components/LoadingStates";
 import { useAuth } from "../context/AuthContext";
 import { useDashboardData } from "../hooks/useDashboardData";
-import { usePredictionActions } from "../hooks/usePredictionActions"; // NUEVO: Hook de Acciones
+import { usePredictionActions } from "../hooks/usePredictionActions";
 
-// Importar estilos
+// Estilos
 import "../styles/VegaScorePage.css"; 
 
 export default function Dashboard() {
   // 1. OBTENER DATOS DE CONTEXTO Y CARGA
   const { profile: currentUser, loading: authLoading } = useAuth();
+  const navigate = useNavigate(); // Inicializar hook de navegación
+
   const { 
     matches, leagues, awards, users, loading: dataLoading, 
     setMatches, setLeagues, setAwards, refreshData 
@@ -26,37 +30,24 @@ export default function Dashboard() {
   
   // 2. OBTENER TOAST Y ACCIONES
   const toast = useToast();
-  // Se inicializa el hook de acciones con las dependencias necesarias
   const { 
     actionLoading, makePrediction, makeLeaguePrediction, makeAwardPrediction 
-    // Las funciones de Admin (setMatchResult, addMatch, etc.) ya no son necesarias aquí
   } = usePredictionActions(currentUser, toast, refreshData); 
 
   // --- ESTADOS DE LA VISTA ---
-  const [showProfile, setShowProfile] = useState(false);
   const [activeTab, setActiveTab] = useState('matches');
 
+  // Si el usuario no está cargado, mostramos el loader.
   if (authLoading || !currentUser) {
-    // Si la autenticación está cargando o el usuario no está, esperamos (aunque MainLayout ya lo maneja)
     return <PageLoader />; 
   }
-
-  if (showProfile) {
-    return (
-      <ProfilePage 
-        currentUser={currentUser} 
-        onBack={() => setShowProfile(false)} 
-      />
-    );
-  }
-
+  
   // --- LÓGICA DE FILTRADO ---
-  const sortedUsers = [...users].sort((a, b) => b.points - a.points);
   const pendingMatches = matches.filter((m) => m.status === "pending");
   const activeLeagues = leagues.filter((l) => l.status === "active");
   const activeAwards = awards.filter((a) => a.status === "active");
   
-  // Función que usa el hook de acciones
+  // Funciones que usan el hook de acciones
   const handleMatchPrediction = (matchId, homeScore, awayScore) => {
     makePrediction(matchId, homeScore, awayScore, matches, setMatches);
   };
@@ -74,7 +65,6 @@ export default function Dashboard() {
     <>
       <section className="stats-row">
         {dataLoading ? (
-          // Usar Skeletons mientras cargan los datos
           <StatCardSkeleton count={4} />
         ) : (
           <>
@@ -83,8 +73,15 @@ export default function Dashboard() {
               <h3>{currentUser.points}</h3>
               <p>Puntos Acumulados</p>
             </div>
-            {/* Otros stat-cards... */}
-            <div className="stat-card" onClick={() => setShowProfile(true)}>
+            <div className="stat-card">
+              <Percent size={24} className="icon-main" />
+              <h3>{currentUser.predictions > 0 ? ((currentUser.correct / currentUser.predictions) * 100).toFixed(1) : 0}%</h3>
+              <p>Efectividad</p>
+            </div>
+            {/* ... otros stat-cards que tenías ... */}
+            
+            {/* BOTÓN DE PERFIL: Ahora usa navigate para ir a /profile */}
+            <div className="stat-card" onClick={() => navigate('/profile')}> 
               <div className="avatar-placeholder">
                 <p>{currentUser.name?.charAt(0) || 'U'}</p>
               </div>
@@ -95,13 +92,12 @@ export default function Dashboard() {
         )}
       </section>
 
-      {/* Main Grid: Ahora solo incluye la columna izquierda (Contenido) */}
       <section className="main-grid">
         <div className="left-col">
           <NavigationTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
           {dataLoading ? (
-            <p>Cargando partidos...</p> // Podrías usar MatchListSkeleton aquí
+            <p className="loading-message">Cargando datos...</p>
           ) : (
             <div className="matches-section-premium">
               {/* Pestaña de Partidos */}
@@ -118,9 +114,7 @@ export default function Dashboard() {
                       />
                     ))
                   ) : (
-                    <div className="empty-state">
-                      <span>No hay partidos pendientes</span>
-                    </div>
+                    <div className="empty-state"><span>No hay partidos pendientes</span></div>
                   )}
                 </div>
               )}
@@ -139,9 +133,7 @@ export default function Dashboard() {
                       />
                     ))
                   ) : (
-                    <div className="empty-state">
-                      <span>No hay ligas activas</span>
-                    </div>
+                    <div className="empty-state"><span>No hay ligas activas</span></div>
                   )}
                 </div>
               )}
@@ -160,9 +152,7 @@ export default function Dashboard() {
                       />
                     ))
                   ) : (
-                    <div className="empty-state">
-                      <span>No hay premios activos</span>
-                    </div>
+                    <div className="empty-state"><span>No hay premios activos</span></div>
                   )}
                 </div>
               )}
@@ -170,18 +160,13 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* ¡IMPORTANTE! El Ranking y el Admin Panel han sido removidos de aquí. */}
-        {/* Serán creados en las páginas /ranking y /admin. */}
+        {/* Columna derecha vacía o con información ligera */}
         <div className="right-col">
-           {/* Este espacio puede quedar vacío o usarse para publicidad/noticias ligeras */}
-           <p className="sidebar-note">El Ranking se ha movido a su propia página.</p>
+           <p className="sidebar-note">Usa la barra de navegación superior para ver el Ranking y el Panel Admin.</p>
         </div>
       </section>
       
       {/* Ya no hay Modals de Admin aquí */}
-
-      {/* El componente LoadingOverlay que usaste antes */}
-      {/* {actionLoading && <LoadingOverlay message="Procesando..." />} */}
 
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
     </>
