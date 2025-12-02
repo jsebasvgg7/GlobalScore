@@ -147,15 +147,16 @@
 }
 
 /* ================================
-   ICON BUTTONS BASE
+   ICON BUTTONS BASE - TODOS IGUALES
 ================================ */
 
 .icon-btn {
+  width: 44px;
+  height: 44px;
   background: rgba(96, 81, 155, 0.15);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(96, 81, 155, 0.3);
   color: white;
-  padding: 11px 12px;
   border-radius: 14px;
   cursor: pointer;
   display: flex;
@@ -163,6 +164,7 @@
   justify-content: center;
   transition: all 0.3s ease;
   position: relative;
+  padding: 0;
 }
 
 .icon-btn:hover {
@@ -197,7 +199,7 @@
 }
 
 /* ================================
-   AMDMINISTRADOR BUTTON (Azul)
+   ADMIN BUTTON (Rojo) - MISMO TAMAÑO
 ================================ */
 
 .icon-btn.admin-btn {
@@ -215,6 +217,7 @@
 .icon-btn.admin-btn:active {
   transform: translateY(0) scale(0.98);
 }
+
 /* ================================
    PROFILE BUTTON (Púrpura)
 ================================ */
@@ -280,6 +283,11 @@
   .app-title {
     font-size: 20px;
   }
+
+  .icon-btn {
+    width: 42px;
+    height: 42px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -311,7 +319,8 @@
   }
 
   .icon-btn {
-    padding: 10px 11px;
+    width: 40px;
+    height: 40px;
     border-radius: 12px;
   }
 }
@@ -341,7 +350,8 @@
   }
 
   .icon-btn {
-    padding: 9px 10px;
+    width: 38px;
+    height: 38px;
     border-radius: 10px;
   }
 }
