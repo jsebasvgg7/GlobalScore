@@ -44,7 +44,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             aria-label="Panel de administración"
             title="Panel de Administración"
           >
-            <Shield size={28} />
+            <Shield size={18} />
           </button>
         )}
 

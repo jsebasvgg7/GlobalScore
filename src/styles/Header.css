@@ -74,6 +74,11 @@
   overflow: hidden;
 }
 
+.logo-box svg {
+  width: 28px;
+  height: 28px;
+}
+
 .logo-box::before {
   content: '';
   position: absolute;
@@ -167,6 +172,13 @@
   padding: 0;
 }
 
+/* FIX: Asegurar que los SVG tomen el tamaño correcto */
+.icon-btn svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
 .icon-btn:hover {
   background: rgba(96, 81, 155, 0.25);
   border-color: rgba(96, 81, 155, 0.5);
@@ -186,6 +198,11 @@
   background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
   border-color: transparent;
   color: white;
+}
+
+.icon-btn.ranking-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 .icon-btn.ranking-btn:hover {
@@ -208,6 +225,11 @@
   color: white;
 }
 
+.icon-btn.admin-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
 .icon-btn.admin-btn:hover {
   background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
   box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
@@ -226,6 +248,11 @@
   background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
   border-color: transparent;
   color: white;
+}
+
+.icon-btn.profile-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 .icon-btn.profile-btn:hover {
@@ -280,6 +307,11 @@
     font-size: 26px;
   }
 
+  .logo-box svg {
+    width: 26px;
+    height: 26px;
+  }
+
   .app-title {
     font-size: 20px;
   }
@@ -287,6 +319,11 @@
   .icon-btn {
     width: 42px;
     height: 42px;
+  }
+
+  .icon-btn svg {
+    width: 19px;
+    height: 19px;
   }
 }
 
@@ -306,6 +343,11 @@
     border-radius: 14px;
   }
 
+  .logo-box svg {
+    width: 24px;
+    height: 24px;
+  }
+
   .app-title {
     font-size: 18px;
   }
@@ -322,6 +364,11 @@
     width: 40px;
     height: 40px;
     border-radius: 12px;
+  }
+
+  .icon-btn svg {
+    width: 18px;
+    height: 18px;
   }
 }
 
@@ -341,6 +388,11 @@
     border-radius: 12px;
   }
 
+  .logo-box svg {
+    width: 22px;
+    height: 22px;
+  }
+
   .app-title {
     font-size: 16px;
   }
@@ -353,5 +405,10 @@
     width: 38px;
     height: 38px;
     border-radius: 10px;
+  }
+
+  .icon-btn svg {
+    width: 17px;
+    height: 17px;
   }
 }
