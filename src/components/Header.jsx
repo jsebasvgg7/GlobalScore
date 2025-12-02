@@ -44,10 +44,10 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             aria-label="Panel de administración"
             title="Panel de Administración"
           >
-            <Shield size={18} />
+            <Shield size={28} />
           </button>
         )}
-        
+
         {/* Botón de ranking con badge de posición */}
         <button 
           className="icon-btn ranking-btn" 
