@@ -158,6 +158,13 @@
   flex-direction: column;
   gap: 16px;
 }
+.matches-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
 
 .matches-empty-state {
   text-align: center;
@@ -335,6 +342,24 @@
 
   .matches-container {
     padding: 14px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .matches-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .matches-container {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .matches-container {
     gap: 12px;
   }
 }

@@ -80,6 +80,12 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
+  transition: all 0.2s;
+}
+
+.team-box:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
 }
 
 .team-color-indicator {
@@ -126,6 +132,11 @@
   font-size: 32px;
   flex-shrink: 0;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: transform 0.2s;
+}
+
+.team-box:hover .team-logo {
+  transform: scale(1.1);
 }
 
 .team-details {
@@ -197,6 +208,17 @@
   cursor: not-allowed;
 }
 
+/* Ocultar flechas de number input */
+.score-input::-webkit-outer-spin-button,
+.score-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.score-input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .vs-text {
   font-size: 18px;
   font-weight: 900;
@@ -208,17 +230,21 @@
   padding: 12px 16px;
   background: #fafafa;
   border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .prediction-status {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 6px;
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 8px;
   font-size: 12px;
   font-weight: 700;
+  flex: 1;
 }
 
 .prediction-status.saved {
@@ -228,7 +254,6 @@
 }
 
 .predict-button-modern {
-  width: 100%;
   padding: 10px 20px;
   border: none;
   border-radius: 10px;
@@ -239,6 +264,7 @@
   cursor: pointer;
   transition: all 0.3s;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  white-space: nowrap;
 }
 
 .predict-button-modern:hover {
@@ -288,6 +314,20 @@
     height: 40px;
     font-size: 18px;
   }
+
+  .match-footer-modern {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .prediction-status {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .predict-button-modern {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -326,5 +366,19 @@
 
   .vs-text {
     font-size: 16px;
+  }
+
+  .match-footer-modern {
+    padding: 10px 12px;
+  }
+
+  .prediction-status {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .predict-button-modern {
+    padding: 9px 16px;
+    font-size: 12px;
   }
 }

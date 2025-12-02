@@ -5,7 +5,6 @@ import "../styles/MatchCard.css";
 export default function MatchCard({ match, userPred, onPredict }) {
   const [homeScore, setHomeScore] = useState(userPred?.home_score ?? "");
   const [awayScore, setAwayScore] = useState(userPred?.away_score ?? "");
-  const [isHovered, setIsHovered] = useState(false);
 
   const handleSubmit = () => {
     if (homeScore === "" || awayScore === "") {
@@ -22,11 +21,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
   const isDisabled = isPastDeadline || match.status !== "pending";
 
   return (
-    <div 
-      className="match-card-modern"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="match-card-modern">
       {/* Header Compacto */}
       <div className="match-header-modern">
         <div className="match-league-info">
@@ -97,18 +92,19 @@ export default function MatchCard({ match, userPred, onPredict }) {
         </div>
       </div>
 
-      {/* Footer con Estado */}
+      {/* Footer con Estado y Botón */}
       <div className="match-footer-modern">
-        {hasPrediction && !isDisabled ? (
+        {hasPrediction && (
           <div className="prediction-status saved">
             <CheckCircle2 size={14} />
             <span>Predicción guardada</span>
           </div>
-        ) : (
+        )}
+        
+        {!isDisabled && (
           <button 
             className="predict-button-modern" 
             onClick={handleSubmit}
-            disabled={isDisabled}
           >
             <span>{hasPrediction ? "Actualizar" : "Guardar"}</span>
           </button>
