@@ -146,95 +146,9 @@
   z-index: 1;
 }
 
-.user-bubble {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  background: rgba(96, 81, 155, 0.15);
-  backdrop-filter: blur(10px);
-  padding: 10px 18px;
-  border-radius: 20px;
-  cursor: pointer;
-  border: 1px solid rgba(96, 81, 155, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.user-bubble::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, 
-    rgba(96, 81, 155, 0.2) 0%, 
-    rgba(139, 127, 199, 0.2) 100%
-  );
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.user-bubble:hover {
-  background: rgba(96, 81, 155, 0.25);
-  border-color: rgba(96, 81, 155, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.3);
-}
-
-.user-bubble:hover::before {
-  opacity: 1;
-}
-
-.avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
-  color: white;
-  font-weight: 700;
-  font-size: 16px;
-  box-shadow: 
-    0 4px 12px rgba(96, 81, 155, 0.4),
-    0 0 0 3px rgba(96, 81, 155, 0.15);
-  transition: all 0.3s;
-  position: relative;
-}
-
-.user-bubble:hover .avatar {
-  transform: scale(1.1);
-  box-shadow: 
-    0 6px 16px rgba(96, 81, 155, 0.5),
-    0 0 0 3px rgba(96, 81, 155, 0.25);
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.user-name {
-  font-weight: 700;
-  font-size: 15px;
-  color: white;
-  letter-spacing: -0.2px;
-}
-
-.user-meta {
-  font-size: 12px;
-  color: #bfc0d1;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.user-meta::before {
-  content: '🏆';
-  font-size: 11px;
-}
+/* ================================
+   ICON BUTTONS BASE
+================================ */
 
 .icon-btn {
   background: rgba(96, 81, 155, 0.15);
@@ -249,16 +163,7 @@
   justify-content: center;
   transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
-}
-
-.icon-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(96, 81, 155, 0.3), rgba(139, 127, 199, 0.3));
-  opacity: 0;
-  transition: opacity 0.3s;
+  overflow: visible; /* Cambiado para permitir badges */
 }
 
 .icon-btn:hover {
@@ -268,15 +173,130 @@
   box-shadow: 0 6px 20px rgba(96, 81, 155, 0.3);
 }
 
-.icon-btn:hover::before {
-  opacity: 1;
-}
-
 .icon-btn:active {
   transform: translateY(0);
 }
 
-/* Responsive */
+/* ================================
+   RANKING BUTTON
+================================ */
+
+.icon-btn.ranking-btn {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.icon-btn.ranking-btn:hover {
+  background: linear-gradient(135deg, #DC8E08 0%, #B45309 100%);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.icon-btn.ranking-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Badge de posición */
+.position-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+  border: 2px solid white;
+  animation: badge-pulse 2s ease-in-out infinite;
+  z-index: 10;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: scale(1.1); 
+  }
+}
+
+/* ================================
+   PROFILE BUTTON
+================================ */
+
+.icon-btn.profile-btn {
+  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.icon-btn.profile-btn:hover {
+  background: linear-gradient(135deg, #4f3f85 0%, #7366b3 100%);
+  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.5);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.icon-btn.profile-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ================================
+   ANIMATIONS
+================================ */
+
+@keyframes header-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.app-header {
+  animation: header-slide-down 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes ranking-btn-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotate(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.icon-btn.ranking-btn {
+  animation: ranking-btn-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+}
+
+@keyframes profile-btn-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotate(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.icon-btn.profile-btn {
+  animation: profile-btn-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
 @media (max-width: 1024px) {
   .app-header {
     padding: 18px 24px;
@@ -321,36 +341,16 @@
     gap: 10px;
   }
 
-  .user-bubble {
-    padding: 12px;
-    border-radius: 16px;
-    gap: 10px;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .avatar {
-    width: 44px;
-    height: 44px;
-    font-size: 16px;
-  }
-
-  .user-info {
-    align-items: center;
-  }
-
-  .user-name {
-    font-size: 14px;
-  }
-
-  .user-meta {
-    font-size: 11px;
-  }
-
   .icon-btn {
     padding: 10px 11px;
     border-radius: 12px;
+  }
+
+  .position-badge {
+    font-size: 9px;
+    padding: 2px 5px;
+    top: -6px;
+    right: -6px;
   }
 }
 
@@ -378,356 +378,13 @@
     font-size: 11px;
   }
 
-  .user-bubble {
-    padding: 10px;
-    gap: 8px;
-    border-radius: 14px;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .avatar {
-    width: 40px;
-    height: 40px;
-    font-size: 15px;
-  }
-
-  .user-info {
-    align-items: center;
-  }
-
-  .user-name {
-    font-size: 13px;
-  }
-
-  .user-meta {
-    font-size: 10px;
-  }
-
   .icon-btn {
     padding: 9px 10px;
     border-radius: 10px;
-  }
-}
-
-@keyframes header-slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.app-header {
-  animation: header-slide-down 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-* Botón de perfil destacado con gradiente púrpura */
-.icon-btn.profile-btn {
-  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
-  border-color: transparent;
-  color: white;
-  position: relative;
-  overflow: hidden;
-}
-
-.icon-btn.profile-btn::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(45deg, #60519b, #8b7fc7, #60519b);
-  background-size: 200% 200%;
-  border-radius: 14px;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s;
-  animation: profile-gradient 3s ease infinite;
-}
-/* ===============================================
-   HEADER - Ranking Button Styles (Agregar a Header.css)
-=============================================== */
-
-/* Botón de ranking con badge de posición */
-.icon-btn.ranking-btn {
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-  border-color: transparent;
-  color: white;
-  position: relative;
-  overflow: visible;
-}
-
-.icon-btn.ranking-btn::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(45deg, #F59E0B, #D97706, #F59E0B);
-  background-size: 200% 200%;
-  border-radius: 14px;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s;
-  animation: ranking-gradient 3s ease infinite;
-}
-
-@keyframes ranking-gradient {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.icon-btn.ranking-btn:hover::before {
-  opacity: 1;
-}
-
-.icon-btn.ranking-btn:hover {
-  background: linear-gradient(135deg, #DC8E08 0%, #B45309 100%);
-  border-color: transparent;
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
-  transform: translateY(-2px) scale(1.05);
-}
-
-.icon-btn.ranking-btn:active {
-  transform: translateY(0) scale(0.98);
-}
-
-/* Badge de posición en el botón */
-.position-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: linear-gradient(135deg, #EF4444, #DC2626);
-  color: white;
-  padding: 2px 6px;
-  border-radius: 8px;
-  font-size: 10px;
-  font-weight: 800;
-  line-height: 1;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
-  border: 2px solid white;
-  animation: badge-pulse 2s ease-in-out infinite;
-}
-
-@keyframes badge-pulse {
-  0%, 100% { 
-    transform: scale(1); 
-  }
-  50% { 
-    transform: scale(1.1); 
-  }
-}
-
-/* Efecto de brillo al pasar el mouse */
-.icon-btn.ranking-btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.6s;
-}
-
-.icon-btn.ranking-btn:hover::after {
-  transform: translateX(100%);
-}
-
-/* Tooltip para el botón de ranking */
-.icon-btn.ranking-btn[title]::before {
-  content: attr(title);
-  position: absolute;
-  bottom: -36px;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  background: #1e202c;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s;
-  z-index: 1000;
-}
-
-.icon-btn.ranking-btn:hover[title]::before {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* Responsive para botón de ranking */
-@media (max-width: 768px) {
-  .icon-btn.ranking-btn {
-    padding: 10px 11px;
-  }
-
-  .position-badge {
-    font-size: 9px;
-    padding: 2px 5px;
-    top: -6px;
-    right: -6px;
-  }
-
-  /* Ocultar tooltip en móvil */
-  .icon-btn.ranking-btn[title]::before {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .icon-btn.ranking-btn {
-    padding: 9px 10px;
   }
 
   .position-badge {
     font-size: 8px;
     padding: 1px 4px;
   }
-}
-
-/* Animación de entrada del botón */
-@keyframes ranking-btn-appear {
-  from {
-    opacity: 0;
-    transform: scale(0.8) rotate(-10deg);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-}
-
-.icon-btn.ranking-btn {
-  animation: ranking-btn-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
-}
-
-/* Estado activo cuando estás en la página de ranking */
-.icon-btn.ranking-btn.active {
-  background: linear-gradient(135deg, #DC8E08 0%, #B45309 100%);
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.6), 0 0 0 4px rgba(245, 158, 11, 0.2);
-}
-
-@keyframes profile-gradient {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.icon-btn.profile-btn:hover::before {
-  opacity: 1;
-}
-
-.icon-btn.profile-btn:hover {
-  background: linear-gradient(135deg, #4f3f85 0%, #7366b3 100%);
-  border-color: transparent;
-  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.5);
-  transform: translateY(-2px) scale(1.05);
-}
-
-.icon-btn.profile-btn:active {
-  transform: translateY(0) scale(0.98);
-}
-
-/* Indicador de "nuevo" o badge en el botón de perfil (opcional) */
-.icon-btn.profile-btn::after {
-  content: '';
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 8px;
-  height: 8px;
-  background: #22c55e;
-  border-radius: 50%;
-  border: 2px solid white;
-  opacity: 0; /* Cambiar a 1 para mostrar */
-  animation: profile-pulse 2s ease-in-out infinite;
-}
-
-@keyframes profile-pulse {
-  0%, 100% { 
-    transform: scale(1); 
-    opacity: 1;
-  }
-  50% { 
-    transform: scale(1.2); 
-    opacity: 0.8;
-  }
-}
-
-/* Tooltip para el botón de perfil */
-.icon-btn.profile-btn[title]::before {
-  content: attr(title);
-  position: absolute;
-  bottom: -36px;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  background: #1e202c;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s;
-  z-index: 1000;
-}
-
-.icon-btn.profile-btn:hover[title]::before {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* Flecha del tooltip */
-.icon-btn.profile-btn[title]::after {
-  content: '';
-  position: absolute;
-  bottom: -24px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-bottom-color: #1e202c;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-}
-
-.icon-btn.profile-btn:hover[title]::after {
-  opacity: 1;
-}
-
-/* Responsive para botón de perfil */
-@media (max-width: 768px) {
-  .icon-btn.profile-btn {
-    padding: 10px 11px;
-  }
-
-  /* Ocultar tooltip en móvil */
-  .icon-btn.profile-btn[title]::before,
-  .icon-btn.profile-btn[title]::after {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .icon-btn.profile-btn {
-    padding: 9px 10px;
-  }
-}
-
-/* Animación de entrada del botón */
-@keyframes profile-btn-appear {
-  from {
-    opacity: 0;
-    transform: scale(0.8) rotate(-10deg);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-}
-
-.icon-btn.profile-btn {
-  animation: profile-btn-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards;
 }
