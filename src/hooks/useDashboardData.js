@@ -1,4 +1,4 @@
-// src/hooks/useDashboardData.js (Versión Final y Funcional)
+// src/hooks/useDashboardData.js (Código FINAL Sincronizado)
 
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "../utils/supabaseClient";
@@ -14,17 +14,18 @@ export function useDashboardData() {
 
   const [loading, setLoading] = useState(true);
 
-  // Función de mapeo para inyectar la predicción del usuario
+  // Mapea la predicción del usuario logueado
   const mapPredictions = (data, predictionKey, userId) => {
     return data.map(item => {
+      // Usamos optional chaining (?) por si el array de predicciones es nulo
       const userPrediction = item[predictionKey]?.find(
-        // NOTA: Usamos optional chaining (?) por si el array es nulo
         (pred) => pred.user_id === userId 
       );
 
       return {
         ...item,
         prediction: userPrediction || null,
+        // Eliminamos el array completo de predicciones
         [predictionKey]: undefined, 
       };
     });
@@ -41,7 +42,9 @@ export function useDashboardData() {
 
     try {
       
+      // =========================================================
       // ---- A. PARTIDOS (Tabla: predictions) ----
+      // =========================================================
       const { data: matchesData, error: matchesError } = await supabase
         .from('matches')
         .select(`
@@ -57,13 +60,21 @@ export function useDashboardData() {
       setMatches(processedMatches);
 
 
+      // =========================================================
       // ---- B. LIGAS (Tabla: league_predictions) ----
+      // AJUSTANDO COLUMNAS CON EL ESQUEMA QUE ENVIASTE
+      // =========================================================
       const { data: leaguesData, error: leaguesError } = await supabase
         .from('leagues')
         .select(`
           *,
           league_predictions!league_predictions_league_id_fkey( 
-            id, user_id, predicted_champion, predicted_top_scorer, predicted_top_assist, predicted_mvp, points_earned
+            id, user_id, 
+            predicted_champion, 
+            predicted_top_scorer, 
+            predicted_top_assist, 
+            predicted_mvp, 
+            points_earned // <-- Columna Corregida
           )
         `)
         .order('name', { ascending: true });
@@ -73,13 +84,17 @@ export function useDashboardData() {
       setLeagues(processedLeagues);
 
 
+      // =========================================================
       // ---- C. PREMIOS (Tabla: award_predictions) ----
+      // Asumimos que también usa 'points_earned'
+      // =========================================================
       const { data: awardsData, error: awardsError } = await supabase
         .from('awards')
         .select(`
           *,
           award_predictions!award_predictions_award_id_fkey( 
-            id, user_id, winner_pred, status, points
+            id, user_id, winner_pred, status, 
+            points_earned // <-- Columna Asumida
           )
         `)
         .order('name', { ascending: true });
@@ -101,7 +116,6 @@ export function useDashboardData() {
 
     } catch (error) {
       console.error("Error al cargar los datos del Dashboard y Predicciones:", error);
-      // Mantener throw error para ver claramente cualquier otro fallo.
       throw error; 
     } finally {
       setLoading(false);
