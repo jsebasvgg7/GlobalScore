@@ -1,6 +1,6 @@
 // src/components/Header.jsx
 import React from "react";
-import { Trophy, LogOut, User2, Award } from "lucide-react";
+import { Trophy, LogOut, User2, Award, Shield } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import "../styles/Header.css";
@@ -16,6 +16,10 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
 
   const handleRankingClick = () => {
     navigate("/ranking");
+  };
+
+  const handleAdminClick = () => {
+    navigate("/admin");
   };
 
   return (
@@ -41,16 +45,17 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           <Award size={18} />
           {position > 0 && <span className="position-badge">#{position}</span>}
         </button>
-        {/* Botón de admin si es admin */}
+
+        {/* Botón de admin - Solo si es administrador */}
         {currentUser?.is_admin && (
-        <button 
-          className="icon-btn admin-btn" 
-          onClick={() => navigate('/admin')} 
-          aria-label="Panel de administración"
-          title="Panel de Administración"
-        >
-          <Shield size={18} />
-        </button>
+          <button 
+            className="icon-btn admin-btn" 
+            onClick={handleAdminClick} 
+            aria-label="Panel de administración"
+            title="Panel de Administración"
+          >
+            <Shield size={18} />
+          </button>
         )}
 
         {/* Botón de perfil */}
