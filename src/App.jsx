@@ -121,7 +121,7 @@ function AppRoutes() {
     <Routes>
       {/* Si está logueado → redirigir a /app */}
       <Route
-        path="/"
+        path="/login"
         element={session ? <Navigate to="/app" replace /> : <LoginPage />}
       />
 
