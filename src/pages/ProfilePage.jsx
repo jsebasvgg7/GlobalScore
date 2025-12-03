@@ -588,11 +588,13 @@ const handleDeleteTitle = async (titleId) => {
                 <div className="avatar-section-new">
                   <div className="avatar-container-new">
                     {isEditing ? (
+                      <div className="avatar-display-new">
                       <AvatarUpload
                         currentUrl={userData.avatar_url}
                         userId={currentUser.id}
                         onUploadComplete={handleAvatarUpload}
                       />
+                      </div>
                     ) : (
                       <div className="avatar-display-new">
                         {userData.avatar_url ? (
