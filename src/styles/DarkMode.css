@@ -1,9 +1,9 @@
 /* ==========================================
-   DARK MODE STYLES
+   DARK MODE VARIABLES & TRANSITIONS
 ========================================== */
 
 :root {
-  /* Light Mode Colors (default) */
+  /* Light Mode Colors */
   --bg-primary: #F8FAFC;
   --bg-secondary: #F1F5F9;
   --bg-card: #FFFFFF;
@@ -48,11 +48,23 @@
   --purple-light: #C4B5FD;
 }
 
-/* Aplicar colores a elementos globales */
+/* Smooth Transitions */
+.dark-mode-transition,
+.dark-mode-transition * {
+  transition: 
+    background-color 0.3s ease, 
+    border-color 0.3s ease, 
+    color 0.3s ease,
+    box-shadow 0.3s ease !important;
+}
+
+/* ==========================================
+   GLOBAL ELEMENTS
+========================================== */
+
 body {
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  background: var(--bg-primary);
   color: var(--text-primary);
-  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Cards */
@@ -74,11 +86,12 @@ body {
 .ranking-table-container,
 .admin-stat-card,
 .admin-content-area,
-.your-position-card {
+.your-position-card,
+.matches-section-premium,
+.ranking-premium {
   background: var(--bg-card) !important;
   border-color: var(--border-primary) !important;
   box-shadow: var(--shadow-md) !important;
-  transition: all 0.3s ease;
 }
 
 /* Text Colors */
@@ -91,6 +104,9 @@ body {
 .ranking-page-title,
 .admin-page-title,
 .profile-page-title,
+.matches-title-premium,
+.podium-name,
+.rank-name-text,
 h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary) !important;
 }
@@ -101,104 +117,58 @@ h1, h2, h3, h4, h5, h6 {
 .streak-label,
 .achievement-desc,
 .user-stats-mini,
-.rank-stats-text {
+.rank-stats-text,
+.matches-subtitle-premium {
   color: var(--text-secondary) !important;
 }
 
-/* Borders */
+/* Borders & Inputs */
 .form-input,
 .form-textarea,
 .search-bar,
 .filter-buttons,
-.sort-buttons {
+.sort-buttons,
+.score-input-inline,
+.prediction-input,
+.prediction-input-award {
   border-color: var(--border-primary) !important;
   background: var(--bg-card) !important;
   color: var(--text-primary) !important;
 }
 
-.form-input:focus,
-.form-textarea:focus {
-  background: var(--bg-card) !important;
-}
-
-/* Inputs placeholders */
 .form-input::placeholder,
 .form-textarea::placeholder,
-.search-bar input::placeholder {
+.search-bar input::placeholder,
+.score-input-inline::placeholder,
+.prediction-input::placeholder {
   color: var(--text-tertiary) !important;
 }
 
-/* Match Card */
-.match-header-modern {
-  background: linear-gradient(135deg, var(--bg-card-secondary) 0%, var(--bg-card) 100%) !important;
-}
-
-.match-teams-container {
-  background: var(--bg-card-secondary) !important;
-}
-
-.team-box {
-  background: var(--bg-card) !important;
-}
-
-.team-name {
-  color: var(--text-primary) !important;
-}
-
-.team-label {
-  color: var(--text-secondary) !important;
-}
-
-.score-input-inline {
-  background: var(--bg-card-secondary) !important;
-  border-color: var(--border-primary) !important;
-  color: var(--text-primary) !important;
-}
-
-/* League & Award Cards */
+/* Headers */
+.match-header-modern,
 .league-header-premium,
-.award-header-premium {
+.award-header-premium,
+.matches-header-premium,
+.ranking-header-premium {
   background: linear-gradient(135deg, var(--bg-card-secondary) 0%, var(--bg-card) 100%) !important;
 }
 
+/* Teams & Content */
+.match-teams-container,
+.team-box {
+  background: var(--bg-card-secondary) !important;
+}
+
+.team-name,
 .league-name-premium,
 .award-name-premium {
   color: var(--text-primary) !important;
 }
 
+.team-label,
 .league-season,
 .award-season {
   color: var(--text-secondary) !important;
-}
-
-.prediction-input,
-.prediction-input-award {
-  background: var(--bg-card) !important;
-  border-color: var(--border-primary) !important;
-  color: var(--text-primary) !important;
-}
-
-/* Profile Page Specific */
-.avatar-card.premium-layout .card-banner {
-  background: linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-dark) 100%) !important;
-}
-
-.badge-text .badge-value {
-  color: var(--text-primary) !important;
-}
-
-.info-badge {
-  background: var(--bg-card) !important;
-  border-color: var(--border-primary) !important;
-}
-
-.mini-achievement {
-  background: var(--bg-card) !important;
-  border-color: var(--border-primary) !important;
-}
-
-.streak-item {
-  background: var(--bg-card) !important;
 }
 
 /* History Items */
@@ -215,7 +185,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary) !important;
 }
 
-/* Ranking Page */
+/* Ranking Table */
 .ranking-table-row {
   border-color: var(--border-secondary) !important;
 }
@@ -229,7 +199,7 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--border-primary) !important;
 }
 
-/* Admin Page */
+/* Admin Items */
 .admin-item-card {
   background: var(--bg-card-secondary) !important;
   border-color: var(--border-primary) !important;
@@ -246,19 +216,65 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Titles & Achievements */
-.title-card {
-  background: var(--bg-card) !important;
-  border-color: var(--border-primary) !important;
-}
-
+.title-card,
 .achievement-card {
   background: var(--bg-card) !important;
   border-color: var(--border-primary) !important;
 }
 
-/* Dark Mode Toggle Animation */
-.dark-mode-transition * {
-  transition: background-color 0.3s ease, 
-              border-color 0.3s ease, 
-              color 0.3s ease !important;
+/* Mini Achievements */
+.mini-achievement {
+  background: var(--bg-card) !important;
+  border-color: var(--border-primary) !important;
+}
+
+.info-badge {
+  background: var(--bg-card) !important;
+  border-color: var(--border-primary) !important;
+}
+
+/* Profile Specific */
+.avatar-card.premium-layout .card-banner {
+  background: linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-dark) 100%) !important;
+}
+
+.badge-value {
+  color: var(--text-primary) !important;
+}
+
+/* Dark Mode Button */
+.icon-btn.darkmode-btn {
+  background: rgba(96, 81, 155, 0.15);
+  border-color: rgba(96, 81, 155, 0.3);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.icon-btn.darkmode-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #FDB813 0%, #F59E0B 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dark-mode .icon-btn.darkmode-btn::before {
+  opacity: 1;
+}
+
+.icon-btn.darkmode-btn svg {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.icon-btn.darkmode-btn:hover svg {
+  transform: rotate(20deg) scale(1.1);
+}
+
+.dark-mode .icon-btn.darkmode-btn {
+  background: rgba(253, 184, 19, 0.2);
+  border-color: rgba(253, 184, 19, 0.4);
 }

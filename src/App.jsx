@@ -12,7 +12,7 @@ import AdminPage from "./pages/AdminPage";
 export default function App() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { isDark, toggleDarkMode } = useDarkMode(); 
+  const { isDark, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
     // Obtener sesión inicial
@@ -31,6 +31,15 @@ export default function App() {
       listener.subscription.unsubscribe();
     };
   }, []);
+
+  // NUEVO: Aplicar/remover clase dark-mode en el documento
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark-mode');
+    } else {
+      document.documentElement.classList.remove('dark-mode');
+    }
+  }, [isDark]);
 
   if (loading) {
     return (

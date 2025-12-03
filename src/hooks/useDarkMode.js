@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react';
 
 export const useDarkMode = () => {
   const [isDark, setIsDark] = useState(() => {
-    // Verificar si hay una preferencia guardada
     const saved = localStorage.getItem('darkMode');
     if (saved !== null) {
       return saved === 'true';
     }
-    // Si no hay preferencia guardada, usar la preferencia del sistema
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
@@ -15,12 +13,23 @@ export const useDarkMode = () => {
     // Guardar preferencia
     localStorage.setItem('darkMode', isDark);
     
-    // Aplicar clase al documento
+    // Aplicar clase al HTML root
+    const root = document.documentElement;
+    
     if (isDark) {
-      document.documentElement.classList.add('dark-mode');
+      root.classList.add('dark-mode');
     } else {
-      document.documentElement.classList.remove('dark-mode');
+      root.classList.remove('dark-mode');
     }
+    
+    // Añadir clase de transición temporal
+    root.classList.add('dark-mode-transition');
+    
+    const timer = setTimeout(() => {
+      root.classList.remove('dark-mode-transition');
+    }, 300);
+    
+    return () => clearTimeout(timer);
   }, [isDark]);
 
   const toggleDarkMode = () => {
