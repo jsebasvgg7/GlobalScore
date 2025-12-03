@@ -21,8 +21,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
   const handleAdminClick = () => {
     navigate("/admin");
   };
-  const handleProfileClick = () => {
-    navigate("/profile");
 
   return (
     <header className="app-header">
@@ -65,7 +63,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
         {/* Botón de perfil */}
         <button 
           className="icon-btn profile-btn" 
-          onClick={handleProfileClick} 
+          onClick={onProfileClick} 
           aria-label="Ver perfil"
           title="Ver Perfil"
         >
@@ -85,4 +83,3 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
     </header>
   );
 }
-};
