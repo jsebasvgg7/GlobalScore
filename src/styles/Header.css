@@ -132,17 +132,6 @@
   gap: 6px;
 }
 
-.app-sub::before {
-  content: '⚽';
-  font-size: 12px;
-  animation: ball-spin 4s linear infinite;
-}
-
-@keyframes ball-spin {
-  0%, 100% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 .header-right {
   display: flex;
   gap: 12px;
