@@ -2,7 +2,7 @@ import React from "react";
 import { Trophy, LogOut, User2, Award, Shield, Moon, Sun } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
-import { useDarkMode } from "../hooks/useDarkmode";
+import { useDarkMode } from "../hooks/useDarkMode";
 import "../styles/Header.css";
 
 export default function Header({ currentUser, users = [], onProfileClick }) {
