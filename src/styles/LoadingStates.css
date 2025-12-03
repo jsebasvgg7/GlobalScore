@@ -1,5 +1,5 @@
 /* ============================================
-   LOADING STATES & SKELETONS - Modern Premium
+   LOADING STATES & SKELETONS - Minimalista
 ============================================ */
 
 /* Spinner principal con anillo */
@@ -19,7 +19,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* Page Loader Premium */
+/* Page Loader Minimalista */
 .page-loader {
   position: fixed;
   inset: 0;
@@ -34,28 +34,33 @@
 .page-loader::before {
   content: '';
   position: absolute;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(96, 81, 155, 0.2) 0%, transparent 70%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(96, 81, 155, 0.15) 0%, transparent 70%);
   border-radius: 50%;
-  animation: pulse-glow 3s ease-in-out infinite;
+  animation: pulse-glow 4s ease-in-out infinite;
 }
 
 @keyframes pulse-glow {
-  0%, 100% { transform: scale(1); opacity: 0.3; }
-  50% { transform: scale(1.3); opacity: 0.6; }
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 0.2; 
+  }
+  50% { 
+    transform: scale(1.2); 
+    opacity: 0.4; 
+  }
 }
 
 .page-loader-content {
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 32px;
+  justify-content: center;
   z-index: 1;
 }
 
-/* Logo loader moderno con anillo */
+/* Logo loader minimalista con doble anillo */
 .logo-loader {
   width: 80px;
   height: 80px;
@@ -65,107 +70,32 @@
   justify-content: center;
 }
 
+/* Anillo exterior */
 .logo-loader::before {
-  content: '';
-  font-size: 48px;
-  animation: bounce-float 2s ease-in-out infinite;
-  filter: drop-shadow(0 8px 24px rgba(96, 81, 155, 0.6));
-  z-index: 2;
-  position: relative;
-}
-
-.logo-loader::after {
   content: '';
   position: absolute;
   width: 80px;
   height: 80px;
   border: 3px solid transparent;
   border-top-color: #60519b;
-  border-right-color: #8b7fc7;
+  border-right-color: #60519b;
   border-radius: 50%;
-  animation: spin 1.5s linear infinite;
+  animation: spin 1.2s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(96, 81, 155, 0.4));
 }
 
-@keyframes bounce-float {
-  0%, 100% { 
-    transform: translateY(0) scale(1); 
-  }
-  50% { 
-    transform: translateY(-15px) scale(1.1); 
-  }
-}
-
-/* Anillos adicionales */
-.logo-loader-rings {
-  width: 80px;
-  height: 80px;
-  position: relative;
-}
-
-.logo-loader-rings::before,
-.logo-loader-rings::after {
+/* Anillo interior */
+.logo-loader::after {
   content: '';
   position: absolute;
-  border-radius: 50%;
-  border: 2px solid transparent;
-}
-
-.logo-loader-rings::before {
-  width: 100%;
-  height: 100%;
-  border-top-color: #60519b;
-  animation: spin 1.5s linear infinite;
-}
-
-.logo-loader-rings::after {
-  width: 60px;
-  height: 60px;
-  top: 10px;
-  left: 10px;
+  width: 50px;
+  height: 50px;
+  border: 3px solid transparent;
   border-bottom-color: #8b7fc7;
-  animation: spin 2s linear infinite reverse;
-}
-
-.loader-text {
-  color: #bfc0d1;
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
-  animation: fade-pulse 2s ease-in-out infinite;
-  letter-spacing: 1px;
-}
-
-@keyframes fade-pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
-}
-
-/* Progress bar debajo del texto */
-.loader-progress {
-  width: 200px;
-  height: 4px;
-  background: rgba(96, 81, 155, 0.2);
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-}
-
-.loader-progress::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 40%;
-  background: linear-gradient(90deg, #60519b, #8b7fc7);
-  border-radius: 10px;
-  animation: progress-slide 1.5s ease-in-out infinite;
-  box-shadow: 0 0 10px rgba(139, 127, 199, 0.6);
-}
-
-@keyframes progress-slide {
-  0% { left: -40%; }
-  100% { left: 100%; }
+  border-left-color: #8b7fc7;
+  border-radius: 50%;
+  animation: spin 1s linear infinite reverse;
+  filter: drop-shadow(0 0 6px rgba(139, 127, 199, 0.4));
 }
 
 /* Skeleton base mejorado */
@@ -312,17 +242,17 @@
   border-radius: 6px;
 }
 
-/* Loading Overlay Premium */
+/* Loading Overlay Minimalista */
 .loading-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9998;
-  animation: overlay-fade-in 0.3s ease;
+  animation: overlay-fade-in 0.2s ease;
 }
 
 @keyframes overlay-fade-in {
@@ -331,45 +261,15 @@
 }
 
 .loading-overlay-content {
-  background: linear-gradient(135deg, #3a3a3d 0%, #2d2d30 100%);
-  padding: 40px 56px;
-  border-radius: 24px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 20px;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(96, 81, 155, 0.2) inset;
-  border: 1px solid rgba(96, 81, 155, 0.1);
-  position: relative;
-  overflow: hidden;
+  justify-content: center;
 }
 
-.loading-overlay-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(96, 81, 155, 0.1), 
-    transparent
-  );
-  animation: overlay-shine 2s ease-in-out infinite;
-}
-
-@keyframes overlay-shine {
-  0% { left: -100%; }
-  100% { left: 200%; }
-}
-
-/* Spinner para overlay */
+/* Spinner para overlay con doble anillo */
 .loading-overlay-content .spinner-wrapper {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   position: relative;
 }
 
@@ -380,9 +280,10 @@
   height: 100%;
   border: 4px solid rgba(96, 81, 155, 0.2);
   border-top-color: #60519b;
-  border-right-color: #8b7fc7;
+  border-right-color: #60519b;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 1.2s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(96, 81, 155, 0.5));
 }
 
 .loading-overlay-content .spinner-wrapper::after {
@@ -394,32 +295,10 @@
   left: 15%;
   border: 4px solid transparent;
   border-bottom-color: #8b7fc7;
+  border-left-color: #8b7fc7;
   border-radius: 50%;
-  animation: spin 1.5s linear infinite reverse;
-}
-
-.loading-overlay-text {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #bfc0d1;
-  letter-spacing: 0.5px;
-  position: relative;
-  z-index: 1;
-}
-
-/* Puntos animados después del texto */
-.loading-overlay-text::after {
-  content: '';
-  display: inline-block;
-  animation: dots 1.5s steps(4) infinite;
-}
-
-@keyframes dots {
-  0%, 20% { content: ''; }
-  40% { content: '.'; }
-  60% { content: '..'; }
-  80%, 100% { content: '...'; }
+  animation: spin 1s linear infinite reverse;
+  filter: drop-shadow(0 0 6px rgba(139, 127, 199, 0.5));
 }
 
 /* Button Spinner mejorado */
@@ -431,25 +310,18 @@
 /* Skeleton responsive */
 @media (max-width: 768px) {
   .logo-loader {
-    width: 64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
   }
 
   .logo-loader::before {
-    font-size: 40px;
+    width: 72px;
+    height: 72px;
   }
 
   .logo-loader::after {
-    width: 64px;
-    height: 64px;
-  }
-
-  .loader-text {
-    font-size: 14px;
-  }
-
-  .loader-progress {
-    width: 160px;
+    width: 46px;
+    height: 46px;
   }
 
   .skeleton-team-name {
@@ -464,69 +336,46 @@
   .skeleton-datetime {
     width: 130px;
   }
-
-  .loading-overlay-content {
-    padding: 32px 48px;
-  }
 }
 
 @media (max-width: 480px) {
   .page-loader::before {
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
   }
 
   .logo-loader {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
   }
 
   .logo-loader::before {
-    font-size: 32px;
+    width: 64px;
+    height: 64px;
   }
 
   .logo-loader::after {
-    width: 56px;
-    height: 56px;
-  }
-
-  .loader-text {
-    font-size: 13px;
-  }
-
-  .loader-progress {
-    width: 140px;
-    height: 3px;
-  }
-
-  .loading-overlay-content {
-    padding: 28px 40px;
-    border-radius: 20px;
+    width: 40px;
+    height: 40px;
   }
 
   .loading-overlay-content .spinner-wrapper {
-    width: 48px;
-    height: 48px;
-  }
-
-  .loading-overlay-text {
-    font-size: 14px;
+    width: 56px;
+    height: 56px;
   }
 }
 
 /* Animación de entrada suave para todos los loaders */
 .page-loader,
 .loading-overlay {
-  animation: loader-appear 0.3s ease;
+  animation: loader-appear 0.25s ease;
 }
 
 @keyframes loader-appear {
   from {
     opacity: 0;
-    transform: scale(0.95);
   }
   to {
     opacity: 1;
-    transform: scale(1);
   }
 }

@@ -10,14 +10,12 @@ export const Spinner = ({ size = 40, color = '#60519b' }) => {
   );
 };
 
-// Loading de página completa mejorado
+// Loading de página completa minimalista
 export const PageLoader = () => {
   return (
     <div className="page-loader">
       <div className="page-loader-content">
         <div className="logo-loader"></div>
-        <p className="loader-text">Cargando</p>
-        <div className="loader-progress"></div>
       </div>
     </div>
   );
@@ -114,13 +112,12 @@ export const RankingListSkeleton = ({ count = 5 }) => {
   );
 };
 
-// Loading Overlay mejorado para acciones
+// Loading Overlay minimalista para acciones
 export const LoadingOverlay = ({ message = "Procesando" }) => {
   return (
     <div className="loading-overlay">
       <div className="loading-overlay-content">
         <div className="spinner-wrapper"></div>
-        <p className="loading-overlay-text">{message}</p>
       </div>
     </div>
   );
