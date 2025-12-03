@@ -1,9 +1,7 @@
-// src/components/Header.jsx
 import React, { useState } from "react";
 import { Trophy, LogOut, User2, Award, Shield, Info, X } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
-import "../styles/Header.css";
 
 export default function Header({ currentUser, users = [], onProfileClick }) {
   const navigate = useNavigate();
@@ -64,11 +62,11 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             className="icon-btn ranking-btn" 
             onClick={handleRankingClick} 
             aria-label="Ver ranking"
-            title="Ver Ranking Global"
-          >
-            <Award size={18} />
-            {position > 0 && <span className="position-badge">#{position}</span>}
-          </button>
+              title="Ver Ranking Global"
+            >
+              <Award size={18} />
+              {position > 0 && <span className="position-badge">#{position}</span>}
+            </button>
 
           {/* Botón de perfil */}
           <button 
