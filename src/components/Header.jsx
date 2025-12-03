@@ -30,6 +30,10 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
     navigate("/profile");
   };
 
+  const handleNotificationsClick = () => {
+  navigate("/notifications");
+  };
+
   return (
     <header className="app-header">
       <div className="header-left">
@@ -48,11 +52,21 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             {location.pathname === '/ranking' && 'Ranking'}
             {location.pathname === '/admin' && 'Administración'}
             {location.pathname === '/profile' && 'Perfil'}
+            {location.pathname === '/notifications' && 'Notificaciones'}
           </div>
         </div>
       </div>
 
       <div className="header-right">
+        <button 
+          className="icon-btn notifications-btn" 
+          onClick={handleNotificationsClick} 
+          aria-label="Ver notificaciones"
+          title="Notificaciones"
+         >
+          <Bell size={18} />
+        </button>
+
         {currentUser?.is_admin && (
           <button 
             className="icon-btn admin-btn" 

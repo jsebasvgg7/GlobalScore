@@ -178,6 +178,26 @@
 .icon-btn:active {
   transform: translateY(0);
 }
+/* ================================
+   NOTIFICATIONS BUTTON (Azul)
+================================ */
+.icon-btn.notifications-btn {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  border-color: transparent;
+  color: white;
+}
+.icon-btn.notifications-btn svg {
+  width: 20px;
+  height: 20px;
+}
+.icon-btn.notifications-btn:hover {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+  transform: translateY(-2px) scale(1.05);
+}
+.icon-btn.notifications-btn:active {
+  transform: translateY(0) scale(0.98);
+}
 
 /* ================================
    RANKING BUTTON (Naranja)

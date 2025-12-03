@@ -9,6 +9,7 @@ import VegaScorePage from "./pages/VegaScorePage";
 import RankingPage from "./pages/RankingPage";
 import AdminPage from "./pages/AdminPage";
 import ProfilePage from "./pages/ProfilePage";
+import NotificationsPage from "./pages/NotificationsPage";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -126,6 +127,10 @@ export default function App() {
         <Route
           path="/app"
           element={session ? <VegaScorePage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/notifications"
+          element={session ? <NotificationsPage currentUser={currentUser} /> : <Navigate to="/" />}
         />
         <Route
           path="/ranking"
