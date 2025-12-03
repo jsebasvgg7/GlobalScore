@@ -10,6 +10,7 @@ import RankingPage from "./pages/RankingPage";
 import AdminPage from "./pages/AdminPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotificationsPage from "./pages/NotificationsPage";
+import { PageLoader } from "./components/LoadingStates";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -92,13 +93,7 @@ export default function App() {
   };
 
   if (loading) {
-    return (
-      <div className="auth-wrapper">
-        <div className="auth-card" style={{ textAlign: "center" }}>
-          <p style={{ color: "#fff" }}>Cargando...</p>
-        </div>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   return (
