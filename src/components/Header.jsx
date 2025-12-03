@@ -63,7 +63,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
         {/* Botón de perfil */}
         <button 
           className="icon-btn profile-btn" 
-          onClick={onProfileClick} 
+          onClick={handleRankingClick} 
           aria-label="Ver perfil"
           title="Ver Perfil"
         >
