@@ -26,8 +26,6 @@ export default function LoginPage() {
       <div className="auth-card">
         {/* TITULO MOTIVACIONAL */}
         <h2>Login</h2> 
-        <p className="auth-subtitle">Welcome back! Ready to make your predictions?
-        </p>
 
         <input
           type="email"
