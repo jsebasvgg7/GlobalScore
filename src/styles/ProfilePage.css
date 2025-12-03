@@ -2391,3 +2391,41 @@ border: 1px solid #ccc;
   justify-content: center;
 }
 
+/* Level Badge - Siempre relativo a su contenedor padre */
+.level-badge-floating {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary-gradient);
+  border: 3px solid var(--bg-card);
+  border-radius: 20px;
+  padding: clamp(3px, 1vw, 4px) clamp(8px, 2vw, 12px);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: clamp(0.65rem, 2vw, 0.75rem);
+  font-weight: 700;
+  color: white;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+}
+
+/* Contenedores relativos */
+.avatar-display-new {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-container-new {
+  position: relative;
+}
+
+/* Cuando está editando, el badge sigue al avatar en el grupo horizontal */
+.avatar-upload-horizontal-group {
+  position: relative;
+}
+
+.avatar-preview-wrapper {
+  position: relative;
+}
