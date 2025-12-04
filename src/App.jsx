@@ -5,6 +5,8 @@ import { supabase } from "./utils/supabaseClient";
 import Header from "./components/Header";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VegaScorePage from "./pages/VegaScorePage";
 import RankingPage from "./pages/RankingPage";
 import AdminPage from "./pages/AdminPage";
@@ -148,6 +150,14 @@ export default function App() {
         <Route
           path="/register"
           element={session ? <Navigate to="/app" replace /> : <RegisterPage />}
+        />
+        <Route
+          path="/forgot-password"
+          element={session ? <Navigate to="/app" replace /> : <ForgotPasswordPage />}
+        />
+        <Route
+          path="/reset-password"
+          element={<ResetPasswordPage />}
         />
 
         {/* Rutas protegidas */}
