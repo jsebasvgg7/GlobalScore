@@ -140,10 +140,10 @@ export default function App() {
           path="/profile"
           element={session ? <ProfilePage currentUser={currentUser} onBack={() => window.history.back()} /> : <Navigate to="/" />}
         />
-      </Routes>
-        <route path="/stats"
+        <Route path="/stats"
           element={session ? <StatsPage currentUser={currentUser} /> : <Navigate to="/" />}
         />
+      </Routes>
 
     </BrowserRouter>
   );
