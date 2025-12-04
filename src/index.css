@@ -91,3 +91,143 @@ body {
     margin: 12px auto;
   }
 }
+/* ================================
+   AJUSTES GLOBALES PARA BOTTOM NAV
+================================ */
+
+@media (max-width: 768px) {
+  /* Asegurar que el body tenga padding inferior */
+  body {
+    padding-bottom: 0 !important; /* Resetear el padding del body */
+  }
+
+  /* Contenedor principal de la app */
+  #root {
+    padding-bottom: 0;
+  }
+
+  /* TODOS los contenedores principales de páginas */
+  .page-container,
+  .vega-score-page,
+  .ranking-page,
+  .admin-page,
+  .profile-page,
+  .notifications-page,
+  .profile-container,
+  .ranking-container,
+  .admin-container {
+    padding-bottom: 100px !important;
+    min-height: calc(100vh - 140px); /* Header + Bottom Nav */
+  }
+
+  /* Contenedores de listas scrolleables */
+  .matches-container,
+  .ranking-list-premium,
+  .admin-content,
+  .profile-bottom-section,
+  .history-card,
+  .notifications-list {
+    padding-bottom: 40px !important;
+  }
+
+  /* Botones de acción que están al final */
+  .floating-action-btn,
+  .save-predictions-btn,
+  .submit-button,
+  .save-button,
+  .action-button,
+  .form-actions,
+  .button-group,
+  .match-actions {
+    margin-bottom: 30px !important;
+  }
+
+  /* Cards individuales de match */
+  .match-card-premium:last-child,
+  .ranking-item-premium:last-child,
+  .history-item:last-child {
+    margin-bottom: 30px !important;
+  }
+
+  /* Modales y overlays */
+  .modal-content,
+  .overlay-content {
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+  }
+
+  /* Asegurar que los scrolls funcionen bien */
+  .scrollable-content {
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container,
+  .vega-score-page,
+  .ranking-page,
+  .admin-page,
+  .profile-page,
+  .notifications-page,
+  .profile-container,
+  .ranking-container,
+  .admin-container {
+    padding-bottom: 90px !important;
+    min-height: calc(100vh - 130px);
+  }
+
+  .matches-container,
+  .ranking-list-premium,
+  .admin-content,
+  .profile-bottom-section,
+  .history-card,
+  .notifications-list {
+    padding-bottom: 35px !important;
+  }
+
+  .floating-action-btn,
+  .save-predictions-btn,
+  .submit-button,
+  .save-button,
+  .action-button,
+  .form-actions,
+  .button-group,
+  .match-actions {
+    margin-bottom: 25px !important;
+  }
+
+  .match-card-premium:last-child,
+  .ranking-item-premium:last-child,
+  .history-item:last-child {
+    margin-bottom: 25px !important;
+  }
+}
+
+/* ================================
+   SCROLL SUAVE Y PERFORMANCE
+================================ */
+
+@media (max-width: 768px) {
+  /* Mejorar el scroll en móviles */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevenir que la barra inferior bloquee contenido */
+  .bottom-nav {
+    pointer-events: auto;
+  }
+
+  /* Asegurar que el contenido debajo sea clickeable */
+  .bottom-nav ~ * {
+    position: relative;
+    z-index: 1;
+  }
+}
