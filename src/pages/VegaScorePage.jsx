@@ -225,7 +225,6 @@ export default function VegaScorePage() {
 
   return (
     <>
-    <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       <div className="vega-root">
         <main className="container">
           {/* --- Main Content (Sin Sidebar) --- */}
