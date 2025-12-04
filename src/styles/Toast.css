@@ -333,18 +333,3 @@
   }
 }
 
-/* ============================================
-   DEBUGGING - Remover después de confirmar
-============================================ */
-.toast-notification {
-  /* Forzar visibilidad máxima */
-  visibility: visible !important;
-  opacity: 1;
-  display: flex !important;
-}
-
-.toast-container {
-  /* Asegurar que siempre sea visible */
-  visibility: visible !important;
-  display: flex !important;
-}
