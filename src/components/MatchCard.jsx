@@ -92,7 +92,6 @@ export default function MatchCard({ match, userPred, onPredict }) {
             <Clock size={12} />
             {match.time}
           </span>
-          <Edit2 size={16} className="edit-icon" /> {/* Icono de editar al final */}
         </div>
       </div>
 
@@ -109,24 +108,6 @@ export default function MatchCard({ match, userPred, onPredict }) {
         {/* Controles de Predicción Centrales */}
         <div className="prediction-controls">
           
-          {/* Botones de incremento (HOME) */}
-          <div className="score-button-set">
-            <button 
-              className="action-button-light" 
-              onClick={() => incrementScore('home')}
-              disabled={isDisabled}
-            >
-              <Plus size={14} />
-            </button>
-            <button 
-              className="action-button-light" 
-              onClick={() => incrementScore('away')}
-              disabled={isDisabled}
-            >
-              <Plus size={14} />
-            </button>
-          </div>
-          
           {/* Marcador */}
           <div className="score-display-light">
             <div className={`score-cell-light ${isSaved ? 'has-prediction' : ''}`}>
@@ -138,25 +119,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
               {isSaved && <div className="prediction-check-light"><CheckCircle2 size={12} /></div>}
             </div>
           </div>
-          
-          {/* Botones de decremento (MINUS) */}
-          <div className="score-button-set">
-            <button 
-              className="action-button-light" 
-              onClick={() => decrementScore('home')}
-              disabled={isDisabled}
-            >
-              <Minus size={14} />
-            </button>
-            <button 
-              className="action-button-light" 
-              onClick={() => decrementScore('away')}
-              disabled={isDisabled}
-            >
-              <Minus size={14} />
-            </button>
-          </div>
-          
+           
           {/* Botón de Guardar/Actualizar si se requiere */}
           {showSaveButton && (
             <button
