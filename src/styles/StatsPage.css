@@ -644,251 +644,17 @@
     width: 150px;
   }
 }
-/* Points Distribution - Mobile Fix */
-@media (max-width: 768px) {
-  .points-distribution {
-    gap: 12px;
-  }
 
-  .distribution-item {
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    padding: 10px;
-    background: #F9FAFB;
-    border-radius: 10px;
-  }
-
-  .distribution-label {
-    min-width: 70px;
-    font-size: 12px;
-    flex-shrink: 0;
-  }
-
-  .distribution-label svg {
-    width: 14px;
-    height: 14px;
-  }
-
-  .distribution-bar {
-    flex: 1;
-    height: 8px;
-    min-width: 60px;
-  }
-
-  .distribution-value {
-    text-align: right;
-    font-size: 13px;
-    font-weight: 700;
-    min-width: 50px;
-    flex-shrink: 0;
-  }
-}
-/* League Stats - Mobile Fix */
-@media (max-width: 768px) {
-  .league-stats-list {
-    gap: 12px;
-  }
-
-  .league-stat-item {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 14px;
-  }
-
-  .league-stat-top {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .league-rank {
-    width: 36px;
-    height: 36px;
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-
-  .league-info {
-    flex: 1;
-  }
-
-  .league-name {
-    font-size: 14px;
-    margin-bottom: 4px;
-  }
-
-  .league-details {
-    font-size: 12px;
-  }
-
-  .league-stat-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .league-accuracy {
-    flex-shrink: 0;
-  }
-
-  .accuracy-circle {
-    width: 50px;
-    height: 50px;
-  }
-
-  .accuracy-circle svg {
-    width: 50px;
-    height: 50px;
-  }
-
-  .accuracy-circle svg circle {
-    r: 19;
-    cx: 25;
-    cy: 25;
-  }
-
-  .accuracy-value {
-    font-size: 12px;
-  }
-
-  .league-points {
-    padding: 6px 14px;
-    font-size: 13px;
-  }
-
-  .league-points svg {
-    width: 14px;
-    height: 14px;
-  }
+.accuracy-circle {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background: transparent;
 }
 
-@media (max-width: 480px) {
-  .league-stat-item {
-    padding: 12px;
-  }
-
-  .league-rank {
-    width: 32px;
-    height: 32px;
-    font-size: 12px;
-  }
-
-  .league-name {
-    font-size: 13px;
-  }
-
-  .league-details {
-    font-size: 11px;
-  }
-
-  .accuracy-circle {
-    width: 45px;
-    height: 45px;
-  }
-
-  .accuracy-circle svg {
-    width: 45px;
-    height: 45px;
-  }
-
-  .accuracy-circle svg circle {
-    r: 17;
-    cx: 22.5;
-    cy: 22.5;
-    stroke-width: 4;
-  }
-
-  .accuracy-value {
-    font-size: 11px;
-  }
-
-  .league-points {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
-}
-
-/* Time Range Selector - Mobile Fix */
-@media (max-width: 768px) {
-  .time-range-selector {
-    width: 100%;
-    padding: 4px;
-  }
-
-  .time-btn {
-    flex: 1;
-    padding: 8px 12px;
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .distribution-label {
-    min-width: 60px;
-    font-size: 11px;
-  }
-
-  .distribution-label svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .distribution-bar {
-    height: 6px;
-  }
-
-  .distribution-value {
-    font-size: 12px;
-    min-width: 45px;
-  }
-
-  .league-rank {
-    width: 28px;
-    height: 28px;
-    font-size: 12px;
-  }
-
-  .league-name {
-    font-size: 12px;
-  }
-
-  .league-details {
-    font-size: 10px;
-  }
-
-  .accuracy-circle {
-    width: 40px;
-    height: 40px;
-  }
-
-  .accuracy-circle svg {
-    width: 40px;
-    height: 40px;
-  }
-
-  .accuracy-circle svg circle {
-    r: 16;
-    cx: 20;
-    cy: 20;
-    stroke-width: 4;
-  }
-
-  .accuracy-value {
-    font-size: 10px;
-  }
-
-  .league-points {
-    padding: 3px 8px;
-    font-size: 11px;
-  }
-
-  .time-btn {
-    padding: 7px 10px;
-    font-size: 11px;
-  }
+.accuracy-circle svg {
+  display: block;
+  background: transparent;
 }
 /* Responsive Mobile - 768px */
 @media (max-width: 768px) {
@@ -1014,24 +780,56 @@
     margin-bottom: 8px;
   }
 
+  /* LEAGUE STATS - CORRECCIÓN */
   .league-stat-item {
+    display: flex;
     flex-wrap: wrap;
-    padding: 12px;
-    gap: 10px;
+    padding: 14px;
+    gap: 12px;
+    align-items: center;
   }
 
   .league-rank {
     width: 36px;
     height: 36px;
     font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .league-info {
+    flex: 1;
+    min-width: 0;
   }
 
   .league-name {
     font-size: 14px;
+    margin-bottom: 4px;
   }
 
   .league-details {
     font-size: 12px;
+  }
+
+  .league-stat-metrics {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 48px;
+  }
+
+  .league-points {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+
+  .league-points svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .league-accuracy {
+    flex-shrink: 0;
   }
 
   .accuracy-circle {
@@ -1046,16 +844,6 @@
 
   .accuracy-value {
     font-size: 12px;
-  }
-
-  .league-accuracy {
-    order: 4;
-    margin-top: 8px;
-  }
-
-  .league-points {
-    padding: 6px 12px;
-    font-size: 13px;
   }
 
   .additional-stats-grid {
@@ -1183,14 +971,51 @@
     font-size: 16px;
   }
 
+  /* LEAGUE STATS - PANTALLAS PEQUEÑAS */
+  .league-stat-item {
+    padding: 12px;
+  }
+
   .league-rank {
     width: 32px;
     height: 32px;
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .league-name {
     font-size: 13px;
+  }
+
+  .league-details {
+    font-size: 11px;
+  }
+
+  .league-stat-metrics {
+    margin-left: 44px;
+  }
+
+  .league-points {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .league-points svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .accuracy-circle {
+    width: 45px;
+    height: 45px;
+  }
+
+  .accuracy-circle svg {
+    width: 45px;
+    height: 45px;
+  }
+
+  .accuracy-value {
+    font-size: 11px;
   }
 
   .additional-stats-grid {
@@ -1257,6 +1082,7 @@
     margin-bottom: 25px;
   }
 }
+
 .accuracy-circle {
   position: relative;
   width: 60px;
