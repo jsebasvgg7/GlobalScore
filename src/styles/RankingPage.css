@@ -1331,40 +1331,151 @@
    RESPONSIVE DESIGN - COMPACTO MANTENIENDO DISEÑO ORIGINAL
 ========================================== */
 
+/* Tablet y Escritorio Compacto (<= 1200px) */
 @media (max-width: 1200px) {
+  .stats-grid-modern {
+    /* Mantenemos 4 columnas, pero con menos espacio */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px; 
+  }
+  
+  .stat-card-modern {
+    padding: 20px;
+  }
+  
+  .stat-value-modern {
+    font-size: 28px;
+  }
+  
+  /* Se ajustan un poco las columnas de la tabla */
+  .list-header-modern,
+  .list-row-modern {
+    grid-template-columns: 70px 1fr 120px 120px 160px;
+    gap: 12px;
+    padding: 18px 20px;
+  }
+}
+
+/* Tablet Vertical o Pantallas Grandes Compactas (<= 900px) */
+@media (max-width: 900px) {
+  .ranking-page {
+    padding: 24px 16px;
+  }
+
+  /* Mantener el grid de 4 para pantallas relativamente amplias en tablet */
   .stats-grid-modern {
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
   }
   
   .stat-card-modern {
-    padding: 18px;
+    padding: 16px;
   }
   
+  .stat-icon-modern {
+    width: 52px;
+    height: 52px;
+  }
+  
+  .stat-value-modern {
+    font-size: 24px;
+  }
+
+  .your-rank-content {
+    /* Permite que el badge y las stats se apilen mejor si es necesario */
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+  }
+  
+  .rank-stats-modern {
+    flex: 1; /* Asegura que ocupe el espacio restante */
+    justify-content: space-around;
+  }
+
+  .podium-ultra {
+    padding: 36px 24px;
+  }
+  
+  .podium-title-ultra {
+    font-size: 28px;
+  }
+
+  .controls-modern {
+    /* Permite que los controles se apilen si no caben */
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .search-modern {
+    flex: 1 1 100%; /* El buscador siempre ocupa el 100% arriba */
+    min-width: 100%;
+  }
+  
+  .filters-modern,
+  .sorts-modern {
+    /* Distribuye filtros y ordenación a lo ancho */
+    flex: 1 1 auto; 
+    justify-content: center;
+  }
+
+  /* Se ajustan un poco más las columnas de la tabla */
   .list-header-modern,
   .list-row-modern {
-    grid-template-columns: 70px 1fr 110px 110px 150px;
-    gap: 12px;
-    padding: 16px 20px;
+    grid-template-columns: 60px 1fr 100px 100px 140px;
+    gap: 10px;
+    padding: 14px 16px;
   }
 }
 
-@media (max-width: 900px) {
+/* Teléfonos y Tablet Pequeña (<= 768px) */
+@media (max-width: 768px) {
   .ranking-page {
-    padding: 20px 12px;
+    padding: 20px 10px;
+  }
+  
+  .ranking-page-container {
+    gap: 24px;
   }
 
   .stats-grid-modern {
+    /* Cambia a 2 columnas para un mejor uso vertical */
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
   
   .stat-card-modern {
-    padding: 18px;
+    padding: 20px; /* Restaurar a un padding más grande */
+  }
+  
+  .stat-icon-modern {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .stat-value-modern {
+    font-size: 32px; /* Restaurar tamaño de escritorio */
+  }
+  
+  .stat-label-modern {
+    font-size: 13px; /* Restaurar tamaño de escritorio */
   }
 
-  .your-rank-modern {
-    padding: 24px;
+  .your-rank-content {
+    /* Forzar apilamiento del badge y las stats */
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .rank-badge-modern {
+    flex-shrink: 0;
+  }
+  
+  .rank-stats-modern {
+    flex: none;
+    justify-content: center; /* Centrar estadísticas */
+    gap: 24px; /* Espacio de escritorio */
   }
 
   .podium-ultra {
@@ -1375,10 +1486,28 @@
     font-size: 26px;
   }
 
+  /* PODIO: Se mantienen las 3 columnas, pero se reduce el tamaño */
   .podium-stage {
     gap: 16px;
   }
+  
+  .place-height {
+    /* Ajustar las alturas del podio */
+    height: 80px !important; 
+  }
+  
+  .place-2 {
+    height: 100px !important;
+  }
+  
+  .place-1 {
+    height: 120px !important; 
+  }
 
+  .player-card {
+    padding: 24px 16px;
+  }
+  
   .player-avatar-ultra {
     width: 70px;
     height: 70px;
@@ -1390,170 +1519,18 @@
     height: 90px;
     font-size: 36px;
   }
-  
-  .place-1 {
-    height: 100px;
-  }
-
-  .place-2 {
-    height: 75px;
-  }
-
-  .place-3 {
-    height: 50px;
-  }
-
-  .controls-modern {
-    gap: 12px;
-  }
-
-  .search-modern {
-    flex: 1 1 100%;
-    min-width: 100%;
-  }
-  
-  .filters-modern,
-  .sorts-modern {
-    flex: 1 1 auto;
-  }
-
-  .list-header-modern,
-  .list-row-modern {
-    grid-template-columns: 60px 1fr 100px 100px 140px;
-    gap: 10px;
-    padding: 14px 16px;
-  }
-}
-
-@media (max-width: 768px) {
-  .ranking-page {
-    padding: 16px 10px;
-  }
-  
-  .ranking-page-container {
-    gap: 20px;
-  }
-
-  .stats-grid-modern {
-    gap: 10px;
-  }
-  
-  .stat-card-modern {
-    padding: 16px;
-  }
-  
-  .stat-icon-modern {
-    width: 48px;
-    height: 48px;
-  }
-  
-  .stat-value-modern {
-    font-size: 26px;
-  }
-  
-  .stat-label-modern {
-    font-size: 12px;
-  }
-
-  .your-rank-modern {
-    padding: 20px;
-  }
-  
-  .badge-inner {
-    padding: 20px 28px;
-  }
-  
-  .position-num {
-    font-size: 40px;
-  }
-  
-  .rank-stats-modern {
-    gap: 20px;
-  }
-  
-  .stat-num {
-    font-size: 22px;
-  }
-
-  .podium-ultra {
-    padding: 28px 16px;
-  }
-  
-  .podium-title-ultra {
-    font-size: 24px;
-  }
-
-  .podium-stage {
-    gap: 14px;
-  }
-
-  .player-avatar-ultra {
-    width: 65px;
-    height: 65px;
-    font-size: 26px;
-  }
-
-  .champion-avatar {
-    width: 85px;
-    height: 85px;
-    font-size: 34px;
-  }
-  
-  .champion-crown {
-    width: 65px;
-    height: 65px;
-  }
-  
-  .place-medal {
-    width: 55px;
-    height: 55px;
-  }
-  
-  .player-name-ultra {
-    font-size: 15px;
-  }
-  
-  .champion-name {
-    font-size: 17px;
-  }
-  
-  .stat-value-ultra {
-    font-size: 16px;
-  }
-  
-  .champion-stat {
-    font-size: 17px;
-  }
-  
-  .place-1 {
-    height: 90px;
-  }
-
-  .place-2 {
-    height: 70px;
-  }
-
-  .place-3 {
-    height: 50px;
-  }
 
   .controls-modern {
     gap: 10px;
   }
   
-  .search-modern {
-    padding: 12px 16px;
-  }
-
+  /* La tabla es el mayor reto, la re-diseñamos para ser más compacta, 
+     pero manteniendo todas las columnas visibles. */
   .list-header-modern,
   .list-row-modern {
-    grid-template-columns: 55px 1fr 95px 90px 130px;
-    gap: 8px;
+    grid-template-columns: 55px 1fr 90px 85px 120px; /* Ajuste fino */
+    gap: 6px;
     padding: 12px 14px;
-  }
-  
-  .header-cell {
-    font-size: 11px;
   }
   
   .user-avatar-small {
@@ -1561,283 +1538,161 @@
     height: 40px;
   }
   
-  .user-name-small {
-    font-size: 14px;
-  }
-  
-  .points-num {
-    font-size: 15px;
-  }
-  
-  .preds-num {
-    font-size: 14px;
-  }
-  
-  .acc-percent {
-    font-size: 13px;
+  .points-display {
+    padding: 8px 12px;
   }
 }
 
+/* Teléfonos Pequeños (<= 480px) */
 @media (max-width: 480px) {
   .ranking-page {
-    padding: 14px 8px;
+    padding: 16px 8px;
   }
   
   .ranking-page-container {
-    gap: 18px;
-  }
-
-  .stats-grid-modern {
-    gap: 8px;
-  }
-  
-  .stat-card-modern {
-    padding: 14px;
-  }
-  
-  .stat-icon-modern {
-    width: 44px;
-    height: 44px;
-  }
-  
-  .stat-value-modern {
-    font-size: 22px;
-  }
-  
-  .stat-label-modern {
-    font-size: 11px;
+    gap: 16px;
   }
 
   .hero-title {
-    font-size: 32px;
+    font-size: 40px;
   }
   
   .hero-subtitle {
-    font-size: 15px;
+    font-size: 16px;
+  }
+
+  .stats-grid-modern {
+    /* Forzar 1 columna para maximizar el espacio vertical */
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
   
+  .stat-card-inner {
+    justify-content: center; /* Centrar contenido de la tarjeta */
+  }
+
   .your-rank-modern {
-    padding: 18px;
-  }
-  
-  .badge-inner {
-    padding: 18px 24px;
-  }
-  
-  .position-num {
-    font-size: 36px;
+    padding: 16px;
   }
   
   .rank-stats-modern {
+    /* Forzar apilamiento de las estadísticas de rango */
+    flex-direction: column;
+    align-items: center;
     gap: 16px;
   }
   
-  .stat-icon-circle {
-    width: 44px;
-    height: 44px;
-  }
-  
-  .stat-num {
-    font-size: 20px;
+  .stat-divider-modern {
+    display: none; /* Ocultar el divisor vertical */
   }
 
   .podium-ultra {
-    padding: 24px 12px;
+    padding: 20px 10px;
   }
   
   .podium-header-ultra {
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-  
-  .podium-icon-ultra {
-    width: 28px;
-    height: 28px;
+    margin-bottom: 24px;
   }
   
   .podium-title-ultra {
-    font-size: 22px;
-  }
-  
-  .podium-sparkle {
-    width: 22px;
-    height: 22px;
+    font-size: 20px;
   }
 
+  /* PODIO: Permite que los jugadores se apilen en una sola columna para ahorrar espacio. 
+     Esto es un gran cambio respecto a PC, pero necesario para la usabilidad. */
   .podium-stage {
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
+  .first-place,
+  .second-place,
+  .third-place {
+    order: 0; /* Desactiva la ordenación del podio para el modo apilado */
+    animation-delay: 0s;
+  }
+  
+  .place-height {
+    display: none; /* Ocultar las "alturas" del podio, ya que están apilados */
+  }
+  
   .player-card {
-    padding: 22px 16px;
-  }
-
-  .player-avatar-ultra {
-    width: 60px;
-    height: 60px;
-    font-size: 24px;
-    border-width: 3px;
-  }
-
-  .champion-avatar {
-    width: 78px;
-    height: 78px;
-    font-size: 32px;
-    border-width: 4px;
+    padding: 20px 16px;
   }
   
-  .champion-crown {
-    width: 60px;
-    height: 60px;
-  }
-  
-  .place-medal {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .medal-rank {
-    font-size: 16px;
-  }
-  
-  .player-name-ultra {
-    font-size: 14px;
-    margin-bottom: 14px;
-  }
-  
-  .champion-name {
-    font-size: 16px;
+  .player-avatar-wrap {
+    margin: 0 auto 16px;
   }
   
   .player-stats-ultra {
-    gap: 12px;
-    padding-top: 14px;
+    justify-content: space-around;
   }
   
-  .stat-ultra {
-    gap: 6px;
-  }
-  
-  .stat-icon-color {
-    width: 14px;
-    height: 14px;
-  }
-  
-  .stat-value-ultra {
-    font-size: 15px;
-  }
-  
-  .champion-stat {
-    font-size: 16px;
-  }
-  
-  .place-1 {
-    height: 80px;
-  }
-
-  .place-2 {
-    height: 60px;
-  }
-
-  .place-3 {
-    height: 45px;
-  }
-
   .controls-modern {
-    gap: 8px;
-  }
-  
-  .search-modern {
-    padding: 11px 14px;
-  }
-  
-  .search-input-modern {
-    font-size: 14px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
   }
   
   .filters-modern,
   .sorts-modern {
-    padding: 5px;
-  }
-  
-  .filter-modern,
-  .sort-modern {
-    padding: 9px 13px;
-    font-size: 13px;
-    gap: 6px;
+    flex: 1 1 100%;
+    justify-content: space-around;
   }
 
+  /* TABLA: Se simplifica forzando que la fila sea más compacta o haciendo que la lista sea de desplazamiento horizontal */
   .list-header-modern,
   .list-row-modern {
-    grid-template-columns: 50px 1fr 88px 80px 120px;
-    gap: 6px;
-    padding: 11px 12px;
+    /* Se mantiene el grid original, pero se envuelve en un contenedor con scroll horizontal */
+    grid-template-columns: 50px 1.5fr 80px 70px 100px;
+    gap: 4px;
+    padding: 10px 12px;
+    min-width: 500px; /* Establece un ancho mínimo forzado */
   }
   
+  .ranking-list-modern {
+    overflow-x: auto; /* Permite el scroll horizontal en la lista */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Asegurarse de que el encabezado también tenga scroll */
+  .list-header-modern {
+    min-width: 500px;
+  }
+  
+  .list-body-modern {
+    overflow-x: hidden; /* Mantenemos el scroll vertical en el body */
+  }
+  
+  /* Ajustes de tipografía para mantener la tabla en una sola línea */
   .header-cell {
-    font-size: 10px;
+    font-size: 9px;
   }
   
   .pos-number {
-    font-size: 15px;
-  }
-  
-  .pos-number.top-three {
-    font-size: 16px;
-  }
-  
-  .rank-icon {
-    width: 16px;
-    height: 16px;
+    font-size: 14px;
   }
   
   .user-avatar-small {
-    width: 36px;
-    height: 36px;
-    font-size: 14px;
-    border-width: 2px;
-  }
-  
-  .user-display {
-    gap: 10px;
-  }
-  
-  .user-name-small {
+    width: 32px;
+    height: 32px;
     font-size: 13px;
   }
   
   .user-correct-small {
-    font-size: 11px;
-  }
-  
-  .you-tag {
-    padding: 3px 7px;
-    font-size: 9px;
-  }
-  
-  .points-display {
-    padding: 6px 11px;
-  }
-  
-  .points-icon-small {
-    width: 14px;
-    height: 14px;
+    font-size: 10px;
   }
   
   .points-num {
-    font-size: 14px;
-  }
-  
-  .preds-num {
     font-size: 13px;
   }
   
-  .acc-bar-modern {
-    height: 7px;
+  .preds-num {
+    font-size: 12px;
   }
   
   .acc-percent {
-    font-size: 12px;
-    min-width: 42px;
+    font-size: 11px;
+    min-width: 38px;
   }
 }
