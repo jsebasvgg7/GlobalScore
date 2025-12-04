@@ -10,7 +10,7 @@ import NavigationTabs from "../components/NavigationTabs";
 import ProfilePage from "./ProfilePage";
 import RankingPage from "./RankingPage";
 import AdminPage from "./AdminPage";
-import NotificationsPage from "./NotificationsPage"; // AÑADIR ESTA 
+import NotificationsPage from "./NotificationsPage";
 import StatsPage from "./StatsPage";
 import { PageLoader, LoadingOverlay } from "../components/LoadingStates";
 import { ToastContainer, useToast } from "../components/Toast";
@@ -360,9 +360,9 @@ export default function VegaScorePage() {
         </main>
 
         {isLoading && <LoadingOverlay message="Procesando..." />}
+        <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       </div>
 
-      <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
     </>
   );
 }
