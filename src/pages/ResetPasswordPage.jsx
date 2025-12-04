@@ -5,6 +5,7 @@ import "../styles/Auth.css";
 
 export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
+  const [checkingToken, setCheckingToken] = useState(true);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -13,14 +14,28 @@ export default function ResetPasswordPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Verificar si hay una sesión de recuperación activa
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setIsValidToken(true);
-      } else {
-        setError("Invalid or expired reset link. Please request a new one.");
-      }
-    });
+    // Supabase usa hash (#) para los tokens de recuperación
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    const type = hashParams.get('type');
+
+    console.log("Hash params:", { accessToken, type });
+
+    if (type === 'recovery' && accessToken) {
+      // Verificar que la sesión está activa
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        console.log("Session:", session);
+        if (session?.user) {
+          setIsValidToken(true);
+        } else {
+          setError("Invalid or expired reset link. Please request a new one.");
+        }
+        setCheckingToken(false);
+      });
+    } else {
+      setError("Invalid or expired reset link. Please request a new one.");
+      setCheckingToken(false);
+    }
   }, []);
 
   const handleResetPassword = async (e) => {
@@ -67,6 +82,19 @@ export default function ResetPasswordPage() {
       setLoading(false);
     }
   };
+
+  if (checkingToken) {
+    return (
+      <div className="auth-wrapper">
+        <div className="auth-card">
+          <h2>Verifying...</h2>
+          <p style={{ textAlign: "center", color: "rgba(255, 255, 255, 0.6)" }}>
+            Please wait while we verify your reset link.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (!isValidToken && error) {
     return (
