@@ -1,410 +1,752 @@
-/*
-   =====================================================================
-   STATS PAGE - Diseño Moderno y Responsivo (Modo Claro)
-   =====================================================================
-*/
+/* ==========================================
+   STATS PAGE - Complete Statistics
+========================================== */
 
-/* --- Variables de Diseño --- */
-:root {
-    --color-primary: #5B21B6;      /* Púrpura Profundo - Énfasis principal */
-    --color-primary-light: #7C3AED; /* Púrpura Claro - Hover/Fondo suave */
-    --color-background: #F9FAFB;   /* Fondo general muy claro */
-    --color-card-background: #FFFFFF; /* Fondo de tarjetas */
-    --color-text-primary: #1F2937; /* Texto principal oscuro */
-    --color-text-secondary: #4B5563; /* Texto secundario/etiquetas */
-    --color-success-exact: #10B981; /* Verde esmeralda para Exacto */
-    --color-success-result: #FBBF24; /* Amarillo para Resultado Correcto */
-    --color-error: #F87171;        /* Rojo suave para Fallo */
-    --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-    --border-radius-large: 16px;
-    --border-radius-card: 12px;
-}
-
-/* --- Estructura Principal y Fondo --- */
 .stats-page {
-    min-height: 100vh;
-    background-color: var(--color-background);
-    padding: 24px 16px; /* Padding ajustado para móvil */
-    position: relative;
-    font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+  padding: 32px 24px;
+  position: relative;
 }
 
 .stats-page::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    /* Un ligero toque de color degradado en la parte superior */
-    height: 300px;
-    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
-    border-radius: 0 0 30px 30px;
-    z-index: 0;
-    opacity: 0.04; /* Muy sutil */
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 400px;
+  background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+  border-radius: 0 0 40px 40px;
+  z-index: 0;
+  opacity: 0.05;
 }
 
 .stats-page-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 30px; /* Espaciado más generoso */
-    position: relative;
-    z-index: 10;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+  z-index: 10;
 }
 
-/* --- Encabezado y Selector de Tiempo --- */
+/* Header */
 .stats-page-header {
-    display: flex;
-    flex-direction: column; /* Apilado en móvil */
-    gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.stats-header-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-icon {
+  color: #7C3AED;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
 }
 
 .stats-page-title {
-    font-size: 2rem; /* Más grande para impacto */
-    font-weight: 800;
-    color: var(--color-text-primary);
+  font-size: 32px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #7C3AED, #5B21B6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 0;
 }
 
 .stats-page-subtitle {
-    font-size: 0.9rem;
-    color: var(--color-text-secondary);
-    margin-bottom: 15px;
+  font-size: 14px;
+  color: #6B7280;
+  margin: 4px 0 0 0;
 }
 
+/* Time Range Selector */
 .time-range-selector {
-    display: flex;
-    background-color: var(--color-card-background);
-    padding: 4px;
-    border-radius: var(--border-radius-card);
-    box-shadow: var(--shadow-soft);
-    width: 100%;
-    max-width: 350px; /* Limitar ancho en desktop */
+  display: flex;
+  gap: 8px;
+  background: white;
+  padding: 6px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.time-range-button {
-    flex-grow: 1;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: none;
-    background-color: transparent;
-    color: var(--color-text-secondary);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
+.time-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #6B7280;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.time-range-button:hover:not(.active) {
-    background-color: #F3F4F6;
+.time-btn:hover {
+  background: #F3F4F6;
+  color: #374151;
 }
 
-.time-range-button.active {
-    background-color: var(--color-primary);
-    color: var(--color-card-background);
-    box-shadow: var(--shadow-soft);
+.time-btn.active {
+  background: linear-gradient(135deg, #7C3AED, #5B21B6);
+  color: white;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
 }
 
-/* --- Sección General de Estadísticas --- */
-.stats-section {
-    background-color: var(--color-card-background);
-    padding: 20px;
-    border-radius: var(--border-radius-large);
-    box-shadow: var(--shadow-soft);
-    transition: box-shadow 0.3s ease;
-}
-
-.stats-section:hover {
-    box-shadow: var(--shadow-hover);
-}
-
-.stats-section-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-text-primary);
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #E5E7EB;
-}
-
-/* --- Sección Principal de Resumen (Overview) --- */
+/* Overview Grid */
 .stats-overview-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Una columna en móvil */
-    gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 
 .overview-card {
-    background-color: var(--color-card-background);
-    padding: 20px;
-    border-radius: var(--border-radius-card);
-    border: 1px solid #E5E7EB;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    transition: transform 0.2s ease;
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
 }
 
 .overview-card:hover {
-    transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-.card-icon-container {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--color-card-background);
-    flex-shrink: 0;
+.overview-card.primary {
+  border-color: rgba(124, 58, 237, 0.2);
 }
 
-/* Estilos de Icono Específicos */
-.overview-card:nth-child(1) .card-icon-container { background-color: #3B82F6; } /* Azul - Total */
-.overview-card:nth-child(2) .card-icon-container { background-color: #F59E0B; } /* Amarillo - Pendiente */
-.overview-card:nth-child(3) .card-icon-container { background-color: var(--color-success-exact); } /* Verde - Acierto */
-.overview-card:nth-child(4) .card-icon-container { background-color: var(--color-primary); } /* Púrpura - Tasa */
+.overview-card.primary:hover {
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
+}
 
+.overview-card.success {
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.overview-card.success:hover {
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+}
+
+.overview-card.warning {
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.overview-card.warning:hover {
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.15);
+}
+
+.overview-card.info {
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.overview-card.info:hover {
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+}
 
 .card-icon {
-    width: 24px;
-    height: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.overview-card.primary .card-icon {
+  background: rgba(124, 58, 237, 0.15);
+  color: #7C3AED;
+}
+
+.overview-card.success .card-icon {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10B981;
+}
+
+.overview-card.warning .card-icon {
+  background: rgba(245, 158, 11, 0.15);
+  color: #F59E0B;
+}
+
+.overview-card.info .card-icon {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3B82F6;
 }
 
 .card-content {
-    display: flex;
-    flex-direction: column;
-}
-
-.card-value {
-    font-size: 2.2rem;
-    font-weight: 800;
-    line-height: 1;
-    color: var(--color-text-primary);
+  flex: 1;
 }
 
 .card-label {
-    font-size: 0.9rem;
-    color: var(--color-text-secondary);
-    font-weight: 500;
-    margin-top: 4px;
+  font-size: 13px;
+  color: #6B7280;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
+.card-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: #1F2937;
+  line-height: 1;
+  margin-bottom: 4px;
+}
 
-/* --- Resultados de Predicción (Barras de Progreso) --- */
+.card-subtitle {
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+/* Stats Section */
+.stats-section {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(124, 58, 237, 0.1);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: #7C3AED;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+/* Results Breakdown */
+.results-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .result-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    gap: 15px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
 }
 
-.result-item-label {
-    width: 150px;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
+.result-item:hover {
+  border-color: rgba(124, 58, 237, 0.2);
+  background: white;
 }
 
-.result-item-value {
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--color-text-primary);
-    width: 60px;
-    text-align: right;
-    flex-shrink: 0;
+.result-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.result-bar-container {
-    flex-grow: 1;
-    height: 10px;
-    background-color: #E5E7EB;
-    border-radius: 5px;
-    overflow: hidden;
+.result-item.exact .result-icon {
+  background: rgba(245, 158, 11, 0.15);
+  color: #F59E0B;
+}
+
+.result-item.correct .result-icon {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10B981;
+}
+
+.result-item.wrong .result-icon {
+  background: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+}
+
+.result-info {
+  flex: 1;
+}
+
+.result-label {
+  font-size: 14px;
+  color: #6B7280;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.result-value {
+  font-size: 28px;
+  font-weight: 900;
+  color: #1F2937;
+  line-height: 1;
+}
+
+.result-points {
+  font-size: 12px;
+  color: #7C3AED;
+  font-weight: 700;
+  margin-top: 4px;
 }
 
 .result-bar {
-    height: 100%;
-    transition: width 0.8s ease-out;
+  width: 200px;
+  height: 8px;
+  background: #F3F4F6;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
-/* Colores de las Barras */
-.result-item.exact .result-bar {
-    background-color: var(--color-success-exact);
-}
-.result-item.correctResult .result-bar {
-    background-color: var(--color-success-result);
-}
-.result-item.wrong .result-bar {
-    background-color: var(--color-error);
+.result-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
 }
 
-/* --- Estadísticas por Día (Micro-Grid) --- */
+.exact-fill {
+  background: linear-gradient(90deg, #F59E0B, #D97706);
+}
+
+.correct-fill {
+  background: linear-gradient(90deg, #10B981, #059669);
+}
+
+.wrong-fill {
+  background: linear-gradient(90deg, #EF4444, #DC2626);
+}
+
+/* League Stats */
+.league-stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.league-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.league-stat-item:hover {
+  border-color: rgba(124, 58, 237, 0.2);
+  background: white;
+}
+
+.league-rank {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7C3AED, #5B21B6);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.league-info {
+  flex: 1;
+}
+
+.league-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1F2937;
+  margin-bottom: 4px;
+}
+
+.league-details {
+  font-size: 13px;
+  color: #6B7280;
+}
+
+.league-accuracy {
+  position: relative;
+}
+
+.accuracy-circle {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.accuracy-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  font-weight: 900;
+  color: #7C3AED;
+}
+
+.league-points {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(245, 158, 11, 0.15);
+  border-radius: 12px;
+  color: #D97706;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Day Stats */
 .day-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
-    gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
 }
 
 .day-stat-card {
-    background-color: var(--color-card-background);
-    padding: 15px;
-    border-radius: var(--border-radius-card);
-    border: 1px solid #E5E7EB;
-    text-align: center;
+  background: #F9FAFB;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.day-stat-value {
-    font-size: 1.8rem;
-    font-weight: 800;
-    line-height: 1.2;
-    color: var(--color-primary);
-    margin-top: 5px;
+.day-stat-card:hover {
+  border-color: rgba(124, 58, 237, 0.2);
+  background: white;
 }
 
-.day-stat-label {
-    font-size: 0.85rem;
-    color: var(--color-text-secondary);
-    margin-top: 5px;
+.day-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6B7280;
+  margin-bottom: 8px;
 }
 
-/* --- Estadísticas Adicionales (Grid de Iconos) --- */
+.day-accuracy {
+  font-size: 24px;
+  font-weight: 900;
+  color: #7C3AED;
+  margin-bottom: 4px;
+}
+
+.day-details {
+  font-size: 11px;
+  color: #9CA3AF;
+  margin-bottom: 12px;
+}
+
+.day-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #F3F4F6;
+}
+
+.day-fill {
+  width: 100%;
+  background: linear-gradient(90deg, #7C3AED, #5B21B6);
+  transition: height 0.6s ease;
+}
+
+/* Points Distribution */
+.points-distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.distribution-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.distribution-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6B7280;
+}
+
+.distribution-bar {
+  flex: 1;
+  height: 12px;
+  background: #F3F4F6;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.distribution-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.6s ease;
+}
+
+.distribution-fill.matches {
+  background: linear-gradient(90deg, #3B82F6, #2563EB);
+}
+
+.distribution-fill.leagues {
+  background: linear-gradient(90deg, #F59E0B, #D97706);
+}
+
+.distribution-fill.awards {
+  background: linear-gradient(90deg, #EF4444, #DC2626);
+}
+
+.distribution-value {
+  min-width: 80px;
+  text-align: right;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+/* Additional Stats Grid */
 .additional-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
-    gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
 }
 
 .additional-stat-card {
-    background-color: var(--color-card-background);
-    padding: 15px;
-    border-radius: var(--border-radius-card);
-    border: 1px solid #E5E7EB;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    transition: transform 0.2s ease;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(124, 58, 237, 0.1);
+  transition: all 0.3s ease;
 }
 
 .additional-stat-card:hover {
-    transform: translateY(-2px);
-    border-color: var(--color-primary-light);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
 }
 
 .additional-stat-icon {
-    color: var(--color-primary);
-    /* Fondo circular sutil para el icono */
-    background-color: #F3E8FF; 
-    padding: 8px;
-    border-radius: 50%;
-    display: flex;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  border-radius: 12px;
+  background: rgba(124, 58, 237, 0.15);
+  color: #7C3AED;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .additional-stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--color-text-primary);
+  font-size: 28px;
+  font-weight: 900;
+  color: #1F2937;
+  margin-bottom: 8px;
 }
 
 .additional-stat-label {
-    font-size: 0.8rem;
-    color: var(--color-text-secondary);
-    font-weight: 500;
+  font-size: 12px;
+  color: #6B7280;
+  font-weight: 600;
 }
 
-/* --- Media Queries para PC/Tablet (Diseño Desktop) --- */
-@media (min-width: 640px) {
-    .stats-page {
-        padding: 30px 24px;
-    }
-    
-    .stats-page-header {
-        flex-direction: row; /* Volver a horizontal */
-        justify-content: space-between;
-        align-items: flex-end;
-    }
-
-    .header-text-group {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .stats-overview-grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablet */
-        gap: 20px;
-    }
-
-    .day-stats-grid {
-        grid-template-columns: repeat(4, 1fr); /* 4 columnas */
-    }
-
-    .additional-stats-grid {
-        grid-template-columns: repeat(3, 1fr); /* 3 columnas */
-    }
-
-    .time-range-selector {
-        width: auto;
-    }
+/* Loading & Empty States */
+.stats-page-loading,
+.stats-page-empty {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: #6B7280;
 }
 
-@media (min-width: 1024px) {
-    .stats-overview-grid {
-        grid-template-columns: repeat(4, 1fr); /* 4 columnas en desktop */
-    }
-
-    .additional-stats-grid {
-        grid-template-columns: repeat(4, 1fr); /* 4 columnas grandes */
-    }
-
-    .result-item-label {
-        width: 180px;
-    }
+.stats-page-loading .spinner {
+  animation: spin 1s linear infinite;
 }
 
-/* Asegurar que el scroll del contenedor principal no sea visible si no se necesita */
-.stats-page-container {
-    overflow: hidden;
-}
-
-/* Estilo para los textos que muestran si la carga ha fallado o si no hay datos */
-.loading-message, .error-message, .no-data-message {
-    text-align: center;
-    padding: 40px 20px;
-    background-color: var(--color-card-background);
-    border-radius: var(--border-radius-large);
-    box-shadow: var(--shadow-soft);
-    font-size: 1.1rem;
-    color: var(--color-text-secondary);
-    margin-top: 30px;
-}
-
-.loading-message {
-    color: var(--color-primary);
-    font-weight: 600;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-
-.error-message {
-    color: var(--color-error);
-}
-
-/* Animación de giro para el indicador de carga */
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
 
-.loading-message .lucide-icon {
-    animation: spin 1s linear infinite;
+.stats-page-empty svg {
+  opacity: 0.3;
+  color: #7C3AED;
+}
+
+.stats-page-empty h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #374151;
+  margin: 0;
+}
+
+.stats-page-empty p {
+  font-size: 14px;
+  color: #9CA3AF;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .stats-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .additional-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .result-bar {
+    width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-page {
+    padding: 20px 16px;
+  }
+
+  .stats-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats-page-title {
+    font-size: 24px;
+  }
+
+  .stats-page-subtitle {
+    font-size: 13px;
+  }
+
+  .time-range-selector {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .stats-overview-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .overview-card {
+    padding: 16px;
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .card-value {
+    font-size: 28px;
+  }
+
+  .stats-section {
+    padding: 16px;
+  }
+
+  .result-item {
+    flex-wrap: wrap;
+  }
+
+  .result-bar {
+    width: 100%;
+    order: 4;
+    margin-top: 12px;
+  }
+
+  .day-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .league-stat-item {
+    flex-wrap: wrap;
+  }
+
+  .league-accuracy {
+    order: 4;
+    margin-top: 12px;
+  }
+
+  .additional-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .distribution-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .distribution-label {
+    min-width: auto;
+  }
+
+  .distribution-value {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-page {
+    padding: 16px 12px;
+  }
+
+  .stats-page-title {
+    font-size: 20px;
+  }
+
+  .day-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card-value {
+    font-size: 24px;
+  }
+
+  .result-value {
+    font-size: 24px;
+  }
+
+  .additional-stat-value {
+    font-size: 24px;
+  }
 }
