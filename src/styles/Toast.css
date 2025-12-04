@@ -1,19 +1,18 @@
 /* ============================================
-   TOAST NOTIFICATIONS SYSTEM - Z-INDEX FIXED
+   TOAST NOTIFICATIONS SYSTEM - OPTIMIZADO
 ============================================ */
 
 .toast-container {
   position: fixed;
   top: 100px;
   right: 24px;
-  z-index: 999999999 !important; /* CRÍTICO: Más alto que cualquier elemento */
+  z-index: 99999 !important; /* Suficientemente alto pero razonable */
   display: flex;
   flex-direction: column;
   gap: 12px;
   pointer-events: none !important;
   max-width: 420px;
   isolation: isolate;
-  transform: translateZ(1000px); /* NUEVO: Fuerza capa superior en móviles */
 }
 
 .toast-notification {
@@ -36,8 +35,6 @@
   will-change: transform, opacity;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transform: translate3d(0, 0, 1000px); /* NUEVO: Fuerza capa superior */
-  -webkit-transform: translate3d(0, 0, 1000px); /* NUEVO: Safari */
 }
 
 .toast-notification.toast-exit {
@@ -47,22 +44,22 @@
 @keyframes toast-slide-in {
   from {
     opacity: 0;
-    transform: translateX(100%) scale(0.8) translateZ(1000px);
+    transform: translateX(100%) scale(0.8);
   }
   to {
     opacity: 1;
-    transform: translateX(0) scale(1) translateZ(1000px);
+    transform: translateX(0) scale(1);
   }
 }
 
 @keyframes toast-slide-out {
   from {
     opacity: 1;
-    transform: translateX(0) scale(1) translateZ(1000px);
+    transform: translateX(0) scale(1);
   }
   to {
     opacity: 0;
-    transform: translateX(100%) scale(0.8) translateZ(1000px);
+    transform: translateX(100%) scale(0.8);
   }
 }
 
@@ -167,30 +164,27 @@
     align-items: center;
     max-width: 600px;
     margin: 0 auto;
-    transform: translateZ(1000px);
   }
 
   .toast-notification {
     min-width: auto;
     max-width: 100%;
     width: 100%;
-    transform: translate3d(0, 0, 1000px);
   }
 }
 
 /* ============================================
-   RESPONSIVE - MOBILE
+   RESPONSIVE - MOBILE (CRÍTICO)
 ============================================ */
 @media (max-width: 768px) {
   .toast-container {
-    top: 20px !important; /* NUEVO: Posición más visible en móviles */
+    /* POSICIÓN AJUSTADA: Debajo del header móvil */
+    top: 90px !important; /* Header ~70px + 20px margen */
     right: 12px;
     left: 12px;
     gap: 10px;
-    z-index: 999999999 !important;
+    z-index: 99999 !important;
     max-width: calc(100vw - 24px);
-    transform: translateZ(1000px);
-    -webkit-transform: translateZ(1000px);
   }
 
   .toast-notification {
@@ -200,11 +194,9 @@
     min-width: 0;
     width: 100%;
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.4), /* NUEVO: Sombra más visible */
+      0 8px 32px rgba(0, 0, 0, 0.4),
       0 4px 16px rgba(96, 81, 155, 0.35),
-      0 0 0 2px rgba(96, 81, 155, 0.2); /* NUEVO: Borde más visible */
-    transform: translate3d(0, 0, 1000px);
-    -webkit-transform: translate3d(0, 0, 1000px);
+      0 0 0 2px rgba(96, 81, 155, 0.2);
   }
 
   .toast-icon {
@@ -232,7 +224,7 @@
 ============================================ */
 @media (max-width: 480px) {
   .toast-container {
-    top: 16px !important;
+    top: 80px !important; /* Header más pequeño en móviles pequeños */
     right: 10px;
     left: 10px;
     gap: 8px;
@@ -269,7 +261,7 @@
 ============================================ */
 @media (max-height: 600px) and (orientation: landscape) {
   .toast-container {
-    top: 12px;
+    top: 80px !important; /* Ajustado para landscape */
     gap: 6px;
     right: 10px;
     left: auto;
@@ -306,13 +298,13 @@
 ============================================ */
 @supports (-webkit-touch-callout: none) {
   .toast-notification {
-    transform: translate3d(0, 0, 1000px);
-    -webkit-transform: translate3d(0, 0, 1000px);
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
   }
   
   .toast-container {
-    -webkit-transform: translateZ(1000px);
-    transform: translateZ(1000px);
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 }
 
