@@ -572,13 +572,21 @@
     justify-content: center;
   }
 
-  .notifications-filters {
-    flex-direction: column;
+    .notifications-filters {
+    flex-direction: row;
     gap: 8px;
+    padding: 6px;
   }
 
   .filter-chip {
-    width: 100%;
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .chip-count {
+    padding: 2px 6px;
+    font-size: 11px;
   }
 
   /* Notificaciones compactas estilo móvil */
