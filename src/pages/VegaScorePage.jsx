@@ -227,41 +227,6 @@ export default function VegaScorePage() {
     <>
       <div className="vega-root">
         <main className="container">
-          {/* --- Stats --- */}
-          <section className="stats-row">
-            <div className="stat-card">
-              <Trophy className="stat-icon" size={24} color="#ff8a00" />
-              <div className="stat-label">Posición</div>
-              <div className="stat-value">
-                #{sortedUsers.findIndex((u) => u.id === currentUser?.id) + 1}
-              </div>
-            </div>
-
-            <div className="stat-card">
-              <TrendingUp className="stat-icon" size={24} color="#ff8a00" />
-              <div className="stat-label">Puntos</div>
-              <div className="stat-value">{currentUser?.points ?? 0}</div>
-            </div>
-
-            <div className="stat-card">
-              <Target className="stat-icon" size={24} color="#ff8a00" />
-              <div className="stat-label">Aciertos</div>
-              <div className="stat-value">
-                {currentUser?.correct ?? 0}/{currentUser?.predictions ?? 0}
-              </div>
-            </div>
-
-            <div className="stat-card">
-              <Percent className="stat-icon" size={24} color="#ff8a00" />
-              <div className="stat-label">Precisión</div>
-              <div className="stat-value">
-                {currentUser?.predictions > 0
-                  ? Math.round((currentUser.correct / currentUser.predictions) * 100) + "%"
-                  : "0%"}
-              </div>
-            </div>
-          </section>
-
           {/* --- Main Content (Sin Sidebar) --- */}
           <section className="main-content-full">
             <NavigationTabs 
