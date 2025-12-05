@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { X, Plus, Calendar, Clock, Shield, Zap, Home, Plane } from "lucide-react";
+import { getLogoUrlByTeamName } from "../utils/logoHelper.js";
 import "../styles/AdminModal.css";
 
 export default function AdminModal({ onAdd, onClose }) {
@@ -17,7 +18,35 @@ export default function AdminModal({ onAdd, onClose }) {
   });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    
+    // Auto-generar las URLs de logos cuando se ingresen los nombres de equipos
+    if (name === 'home_team' && value && form.league) {
+      const logoUrl = getLogoUrlByTeamName(value, form.league);
+      if (logoUrl) {
+        setForm(prev => ({ ...prev, home_team_logo_url: logoUrl }));
+      }
+    }
+    
+    if (name === 'away_team' && value && form.league) {
+      const logoUrl = getLogoUrlByTeamName(value, form.league);
+      if (logoUrl) {
+        setForm(prev => ({ ...prev, away_team_logo_url: logoUrl }));
+      }
+    }
+    
+    // Si cambia la liga, recalcular ambos logos
+    if (name === 'league' && value) {
+      if (form.home_team) {
+        const homeLogo = getLogoUrlByTeamName(form.home_team, value);
+        if (homeLogo) setForm(prev => ({ ...prev, home_team_logo_url: homeLogo }));
+      }
+      if (form.away_team) {
+        const awayLogo = getLogoUrlByTeamName(form.away_team, value);
+        if (awayLogo) setForm(prev => ({ ...prev, away_team_logo_url: awayLogo }));
+      }
+    }
   };
 
   const submit = () => {
@@ -29,13 +58,19 @@ export default function AdminModal({ onAdd, onClose }) {
     // Combinar fecha y hora del deadline en formato ISO
     const deadlineISO = `${form.deadLine}T${form.deadLine_time}:00`;
 
+    // Generar URLs de logos automáticamente
+    const homeLogoUrl = getLogoUrlByTeamName(form.home_team, form.league);
+    const awayLogoUrl = getLogoUrlByTeamName(form.away_team, form.league);
+
     onAdd({
       id: form.id,
       league: form.league,
       home_team: form.home_team,
       away_team: form.away_team,
-      home_team_logo: form.home_team_logo,
-      away_team_logo: form.away_team_logo,
+      home_team_logo: form.home_team_logo, // Mantener emoji como fallback
+      away_team_logo: form.away_team_logo, // Mantener emoji como fallback
+      home_team_logo_url: homeLogoUrl,     // Nueva URL del logo real
+      away_team_logo_url: awayLogoUrl,     // Nueva URL del logo real
       date: form.date,
       time: form.time,
       deadline: deadlineISO,
@@ -97,6 +132,7 @@ export default function AdminModal({ onAdd, onClose }) {
               value={form.league}
               onChange={handleChange}
             />
+            <span className="form-hint">Los logos se asignarán automáticamente según la liga</span>
           </div>
 
           {/* Equipos en grid */}
@@ -132,11 +168,33 @@ export default function AdminModal({ onAdd, onClose }) {
             </div>
           </div>
 
-          {/* Logos */}
-          <div className="logos-grid-premium">
+          {/* Vista previa de logos (opcional) */}
+          {form.home_team && form.away_team && form.league && (
+            <div className="logo-preview-section">
+              <div className="logo-preview-item">
+                <span className="logo-preview-label">Logo Local:</span>
+                {form.home_team_logo_url ? (
+                  <img src={form.home_team_logo_url} alt="Home" className="logo-preview-img" />
+                ) : (
+                  <span className="logo-preview-emoji">{form.home_team_logo}</span>
+                )}
+              </div>
+              <div className="logo-preview-item">
+                <span className="logo-preview-label">Logo Visitante:</span>
+                {form.away_team_logo_url ? (
+                  <img src={form.away_team_logo_url} alt="Away" className="logo-preview-img" />
+                ) : (
+                  <span className="logo-preview-emoji">{form.away_team_logo}</span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Logos (ahora solo como fallback, opcional mantener o quitar) */}
+          <div className="logos-grid-premium" style={{ display: 'none' }}>
             <div className="form-group-premium">
               <label className="form-label-premium">
-                <span>Logo Local</span>
+                <span>Logo Local (Fallback)</span>
               </label>
               <div className="logo-input-wrapper">
                 <input 
@@ -153,7 +211,7 @@ export default function AdminModal({ onAdd, onClose }) {
 
             <div className="form-group-premium">
               <label className="form-label-premium">
-                <span>Logo Visitante</span>
+                <span>Logo Visitante (Fallback)</span>
               </label>
               <div className="logo-input-wrapper">
                 <input 
