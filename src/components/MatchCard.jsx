@@ -1,10 +1,10 @@
 // src/components/MatchCard.jsx
 import React, { useState, useEffect } from "react";
-import { 
-  Zap, 
+import {  
   Clock, 
   CheckCircle2,
-  Calendar
+  Calendar,
+  Trophy
 } from "lucide-react";
 import "../styles/MatchCard.css"; 
 
@@ -130,15 +130,10 @@ export default function MatchCard({ match, userPred, onPredict }) {
     <div className="match-card-light">
       
       <div className="match-header-light">
-        {/* Liga y Hora */}
+        {/* Liga */}
         <div className="match-league-info-light">
-          <Zap size={14} className="league-icon" />
+          <Trophy size={14} className="league-icon" />
           <span className="league-name">{match.league}</span>
-          <span className="match-datetime-separator">•</span>
-          <span className="match-time">
-            <Clock size={12} />
-            {match.time}
-          </span>
         </div>
         
         {/* Fecha del partido en la esquina */}
@@ -192,6 +187,12 @@ export default function MatchCard({ match, userPred, onPredict }) {
               />
               {isSaved && <div className="prediction-check-light"><CheckCircle2 size={12} /></div>}
             </div>
+          </div>
+          
+          {/* Hora debajo de los controles */}
+          <div className="match-time-center">
+            <Clock size={13} />
+            <span>{match.time}</span>
           </div>
            
           {showSaveButton && (
