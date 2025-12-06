@@ -1760,10 +1760,11 @@ button {
     0 6px 16px -6px rgba(0, 0, 0, 0.4);
 }
 
-/* Formularios - mismo color que el card */
+/* Formularios - mismo color que el card, sin degradado */
 [data-theme="dark"] .league-predictions-container,
 [data-theme="dark"] .award-prediction-form {
   background: var(--card) !important;
+  background-image: none !important;
 }
 
 /* Header */
