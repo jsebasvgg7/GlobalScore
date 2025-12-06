@@ -9,6 +9,7 @@ import { supabase } from '../utils/supabaseClient';
 import AdminModal from '../components/AdminModal';
 import AdminLeagueModal from '../components/AdminLeagueModal';
 import AdminAwardModal from '../components/AdminAwardModal';
+import FinishMatchModal from '../components/FinishMatchModal';
 import AdminAchievementsModal from '../components/AdminAchievementsModal';
 import AdminTitlesModal from '../components/AdminTitlesModal';
 import FinishLeagueModal from '../components/FinishLeagueModal';
@@ -24,6 +25,7 @@ export default function AdminPage({ currentUser, onBack }) {
   const [achievements, setAchievements] = useState([]);
   const [titles, setTitles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showFinishMatchModal, setShowFinishMatchModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
 
@@ -74,37 +76,37 @@ export default function AdminPage({ currentUser, onBack }) {
       const { error } = await supabase.from('matches').insert(match);
       if (error) throw error;
       await loadData();
-      toast.success('¡Partido agregado correctamente!');
+      toast.success(`✅ Partido ${match.home_team} vs ${match.away_team} agregado`, 4000);
       setShowMatchModal(false);
     } catch (err) {
       console.error('Error adding match:', err);
-      toast.error('Error al agregar partido');
+      toast.error('❌ Error al agregar el partido. Verifica los datos.');
     }
   };
 
-  const handleFinishMatch = async (matchId) => {
-    const homeScore = prompt('Goles equipo local:');
-    if (homeScore === null) return;
-    const awayScore = prompt('Goles equipo visitante:');
-    if (awayScore === null) return;
-
-    try {
+  const handleFinishMatch = async (matchId, homeScore, awayScore) => {
+   try {
       // Actualizar resultado
-      await supabase
+      const { error } = await supabase
         .from('matches')
         .update({ 
-          result_home: parseInt(homeScore), 
-          result_away: parseInt(awayScore), 
+          result_home: homeScore, 
+          result_away: awayScore, 
           status: 'finished' 
         })
         .eq('id', matchId);
 
+      if (error) throw error;
+
       // Calcular puntos (lógica simplificada - deberías usar tu hook useMatches)
       await loadData();
-      toast.success('¡Partido finalizado!');
+      toast.success(`⚽ Partido finalizado: ${homeScore} - ${awayScore}`, 4000);
+      setShowFinishMatchModal(false);
+      setItemToFinish(null);
     } catch (err) {
       console.error('Error finishing match:', err);
-      toast.error('Error al finalizar partido');
+      toast.error('❌ Error al finalizar el partido. Intenta de nuevo.');
+      throw err; // Para que el modal maneje el loading
     }
   };
 
@@ -115,10 +117,10 @@ export default function AdminPage({ currentUser, onBack }) {
       const { error } = await supabase.from('matches').delete().eq('id', matchId);
       if (error) throw error;
       await loadData();
-      toast.success('Partido eliminado');
+      toast.success('🗑️ Partido eliminado correctamente', 3000);
     } catch (err) {
       console.error('Error deleting match:', err);
-      toast.error('Error al eliminar partido');
+      toast.error('❌ Error al eliminar el partido');
     }
   };
 
@@ -128,11 +130,11 @@ export default function AdminPage({ currentUser, onBack }) {
       const { error } = await supabase.from('leagues').insert(league);
       if (error) throw error;
       await loadData();
-      toast.success('¡Liga agregada correctamente!');
+      toast.success(`🏆 Liga "${league.name}" agregada exitosamente`, 4000);
       setShowLeagueModal(false);
     } catch (err) {
       console.error('Error adding league:', err);
-      toast.error('Error al agregar liga');
+      toast.error('❌ Error al agregar la liga. Verifica los datos.');
     }
   };
 
@@ -147,12 +149,12 @@ export default function AdminPage({ currentUser, onBack }) {
         .eq('id', leagueId);
 
       await loadData();
-      toast.success('¡Liga finalizada!');
+      toast.success('🏆 Liga finalizada y resultados guardados', 4000);
       setShowFinishLeagueModal(false);
       setItemToFinish(null);
     } catch (err) {
       console.error('Error finishing league:', err);
-      toast.error('Error al finalizar liga');
+      toast.error('❌ Error al finalizar la liga. Intenta de nuevo.');
     }
   };
 
@@ -163,24 +165,24 @@ export default function AdminPage({ currentUser, onBack }) {
       const { error } = await supabase.from('leagues').delete().eq('id', leagueId);
       if (error) throw error;
       await loadData();
-      toast.success('Liga eliminada');
+      toast.success('🗑️ Liga eliminada correctamente', 3000);
     } catch (err) {
       console.error('Error deleting league:', err);
-      toast.error('Error al eliminar liga');
+      toast.error('❌ Error al eliminar la liga');
     }
   };
 
-  // ========== HANDLERS - AWARDS ==========
+    // ========== HANDLERS - AWARDS ==========
   const handleAddAward = async (award) => {
     try {
       const { error } = await supabase.from('awards').insert(award);
       if (error) throw error;
       await loadData();
-      toast.success('¡Premio agregado correctamente!');
+      toast.success(`🏅 Premio "${award.name}" agregado exitosamente`, 4000);
       setShowAwardModal(false);
     } catch (err) {
       console.error('Error adding award:', err);
-      toast.error('Error al agregar premio');
+      toast.error('❌ Error al agregar el premio. Verifica los datos.');
     }
   };
 
@@ -192,12 +194,12 @@ export default function AdminPage({ currentUser, onBack }) {
         .eq('id', awardId);
 
       await loadData();
-      toast.success('¡Premio finalizado!');
+      toast.success(`🏅 Premio finalizado. Ganador: ${winner}`, 4000);
       setShowFinishAwardModal(false);
       setItemToFinish(null);
     } catch (err) {
       console.error('Error finishing award:', err);
-      toast.error('Error al finalizar premio');
+      toast.error('❌ Error al finalizar el premio. Intenta de nuevo.');
     }
   };
 
@@ -208,10 +210,10 @@ export default function AdminPage({ currentUser, onBack }) {
       const { error } = await supabase.from('awards').delete().eq('id', awardId);
       if (error) throw error;
       await loadData();
-      toast.success('Premio eliminado');
+      toast.success('🗑️ Premio eliminado correctamente', 3000);
     } catch (err) {
       console.error('Error deleting award:', err);
-      toast.error('Error al eliminar premio');
+      toast.error('❌ Error al eliminar el premio');
     }
   };
 
@@ -223,12 +225,12 @@ export default function AdminPage({ currentUser, onBack }) {
         .upsert(achievement, { onConflict: 'id' });
       if (error) throw error;
       await loadData();
-      toast.success('¡Logro guardado!');
+      toast.success(`⭐ Logro "${achievement.name}" guardado exitosamente`, 3000);
       setShowAchievementModal(false);
       setEditingItem(null);
     } catch (err) {
       console.error('Error saving achievement:', err);
-      toast.error('Error al guardar logro');
+      toast.error('❌ Error al guardar el logro');
     }
   };
 
@@ -240,12 +242,12 @@ export default function AdminPage({ currentUser, onBack }) {
         .eq('id', achievementId);
       if (error) throw error;
       await loadData();
-      toast.success('Logro eliminado');
+      toast.success('🗑️ Logro eliminado correctamente', 3000);
       setShowAchievementModal(false);
       setEditingItem(null);
     } catch (err) {
       console.error('Error deleting achievement:', err);
-      toast.error('Error al eliminar logro');
+      toast.error('❌ Error al eliminar el logro');
     }
   };
 
@@ -256,32 +258,31 @@ export default function AdminPage({ currentUser, onBack }) {
         .upsert(title, { onConflict: 'id' });
       if (error) throw error;
       await loadData();
-      toast.success('¡Título guardado!');
+      toast.success(`👑 Título "${title.name}" guardado exitosamente`, 3000);
       setShowTitleModal(false);
       setEditingItem(null);
     } catch (err) {
       console.error('Error saving title:', err);
-      toast.error('Error al guardar título');
+      toast.error('❌ Error al guardar el título');
     }
   };
 
-  const handleDeleteTitle = async (titleId) => {
-    try {
-      const { error } = await supabase
-        .from('available_titles')
-        .delete()
-        .eq('id', titleId);
-      if (error) throw error;
-      await loadData();
-      toast.success('Título eliminado');
-      setShowTitleModal(false);
-      setEditingItem(null);
-    } catch (err) {
-      console.error('Error deleting title:', err);
-      toast.error('Error al eliminar título');
-    }
-  };
-
+const handleDeleteTitle = async (titleId) => {
+  try {
+    const { error } = await supabase
+      .from('available_titles')
+      .delete()
+      .eq('id', titleId);
+    if (error) throw error;
+    await loadData();
+    toast.success('🗑️ Título eliminado correctamente', 3000);
+    setShowTitleModal(false);
+    setEditingItem(null);
+  } catch (err) {
+    console.error('Error deleting title:', err);
+    toast.error('❌ Error al eliminar el título');
+  }
+};
   // ========== FILTERS ==========
   const getFilteredItems = () => {
     let items = [];
@@ -540,19 +541,22 @@ export default function AdminPage({ currentUser, onBack }) {
                         </div>
                       </div>
                       <div className={`item-status ${match.status}`}>
-                        {match.status === 'pending' ? 'Pendiente' : 'Finalizado'}
+                        {match.status === 'pending' && (
+                          <button 
+                            className="action-btn finish"
+                            onClick={() => {
+                              setItemToFinish(match);
+                              setShowFinishMatchModal(true);
+                            }}
+                          >
+                            <CheckCircle size={16} />
+                            <span>Finalizar</span>
+                          </button>
+                        )}
+                        {match.status === 'finished' ? 'Finalizado' : 'Pendiente'}
                       </div>
                     </div>
                     <div className="item-actions">
-                      {match.status === 'pending' && (
-                        <button 
-                          className="action-btn finish"
-                          onClick={() => handleFinishMatch(match.id)}
-                        >
-                          <CheckCircle size={16} />
-                          <span>Finalizar</span>
-                        </button>
-                      )}
                       <button 
                         className="action-btn delete"
                         onClick={() => handleDeleteMatch(match.id)}
@@ -797,12 +801,12 @@ export default function AdminPage({ currentUser, onBack }) {
         />
       )}
 
-      {showFinishAwardModal && itemToFinish && (
-        <FinishAwardModal
-          award={itemToFinish}
-          onFinish={handleFinishAward}
+      {showFinishMatchModal && itemToFinish && (
+        <FinishMatchModal 
+          match={itemToFinish}
+          onFinish={handleFinishMatch}
           onClose={() => {
-            setShowFinishAwardModal(false);
+            setShowFinishMatchModal(false);
             setItemToFinish(null);
           }}
         />
