@@ -26,11 +26,12 @@
 =================================== */
 
 .league-header-light {
-  padding: 12px 16px 0;
+  padding: 20px 20px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  min-height: 90px;
 }
 
 .league-info-section {
@@ -42,8 +43,8 @@
 }
 
 .league-logo-container {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,7 +63,7 @@
 
 /* Logo como emoji (fallback) */
 .league-logo-emoji-display {
-  font-size: 40px;
+  font-size: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,7 +86,7 @@
 
 .league-name-light {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   color: #1f2937;
   overflow: hidden;
@@ -97,37 +98,6 @@
   font-size: 12px;
   color: #6b7280;
   font-weight: 500;
-}
-
-.league-deadline-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 5px 12px;
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border: 1px solid #fcd34d;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
-  color: #92400e;
-  white-space: nowrap;
-  box-shadow: 0 1px 3px rgba(252, 211, 77, 0.2);
-  flex-shrink: 0;
-}
-
-.league-status-badge.finished {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 5px 12px;
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-  border: 1px solid #6ee7b7;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
-  color: #065f46;
-  box-shadow: 0 1px 3px rgba(110, 231, 183, 0.2);
-  flex-shrink: 0;
 }
 
 /* ===================================
