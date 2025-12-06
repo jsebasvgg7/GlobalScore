@@ -1034,7 +1034,347 @@ button {
 /* ==========================================
    RANKING PAGE - DETALLES ADICIONALES
 ========================================== */
+/* ==========================================
+   RANKING PAGE - MODO OSCURO RELAJADO
+========================================== */
 
+/* Fondo principal más claro y relajado */
+[data-theme="dark"] .ranking-page {
+  background: linear-gradient(135deg, #2a2f3f 0%, #353b4d 50%, #3f4556 100%) !important;
+}
+
+[data-theme="dark"] .ranking-page-loading {
+  background: linear-gradient(135deg, #2a2f3f 0%, #353b4d 100%) !important;
+}
+
+/* Orbs de fondo más suaves */
+[data-theme="dark"] .orb {
+  opacity: 0.08;
+}
+
+/* Cards y contenedores */
+[data-theme="dark"] .stat-card-modern,
+[data-theme="dark"] .your-rank-modern,
+[data-theme="dark"] .podium-ultra,
+[data-theme="dark"] .ranking-list-modern,
+[data-theme="dark"] .search-modern,
+[data-theme="dark"] .filters-modern,
+[data-theme="dark"] .sorts-modern {
+  background: rgba(53, 59, 77, 0.6) !important;
+  backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Player cards del podio */
+[data-theme="dark"] .player-card {
+  background: rgba(53, 59, 77, 0.5) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="dark"] .gold-card {
+  background: linear-gradient(135deg, rgba(252, 211, 77, 0.2) 0%, rgba(245, 158, 11, 0.15) 100%) !important;
+  border-color: rgba(252, 211, 77, 0.4) !important;
+}
+
+[data-theme="dark"] .silver-card {
+  border-color: rgba(229, 231, 235, 0.3) !important;
+}
+
+[data-theme="dark"] .bronze-card {
+  border-color: rgba(245, 158, 11, 0.25) !important;
+}
+
+/* Textos principales */
+[data-theme="dark"] .hero-title,
+[data-theme="dark"] .podium-title-ultra {
+  background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 50%, #D97706 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+}
+
+[data-theme="dark"] .hero-subtitle {
+  color: #c5c9d9;
+}
+
+/* Stats values */
+[data-theme="dark"] .stat-value-modern,
+[data-theme="dark"] .stat-num,
+[data-theme="dark"] .points-num,
+[data-theme="dark"] .preds-num {
+  color: #f5f6fa;
+}
+
+[data-theme="dark"] .stat-label-modern,
+[data-theme="dark"] .stat-lab {
+  color: #c5c9d9;
+}
+
+/* Player names */
+[data-theme="dark"] .player-name-ultra,
+[data-theme="dark"] .user-name-small {
+  color: #f5f6fa;
+}
+
+[data-theme="dark"] .champion-name {
+  background: linear-gradient(135deg, #FCD34D, #F59E0B);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Stat values en player cards */
+[data-theme="dark"] .stat-value-ultra {
+  color: #f5f6fa;
+}
+
+[data-theme="dark"] .champion-stat {
+  background: linear-gradient(135deg, #FCD34D, #F59E0B);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Secondary text */
+[data-theme="dark"] .user-correct-small,
+[data-theme="dark"] .badge-total {
+  color: #c5c9d9;
+}
+
+/* Position numbers */
+[data-theme="dark"] .pos-number {
+  color: #c5c9d9;
+}
+
+[data-theme="dark"] .pos-number.top-three {
+  color: #F59E0B;
+}
+
+/* Search input */
+[data-theme="dark"] .search-input-modern {
+  color: #f5f6fa;
+}
+
+[data-theme="dark"] .search-input-modern::placeholder {
+  color: #9ca3b8;
+}
+
+[data-theme="dark"] .search-icon-modern {
+  color: #c5c9d9;
+}
+
+/* Filters y sorts */
+[data-theme="dark"] .filter-modern:not(.active),
+[data-theme="dark"] .sort-modern:not(.active) {
+  color: #c5c9d9;
+}
+
+[data-theme="dark"] .filter-modern:not(.active):hover,
+[data-theme="dark"] .sort-modern:not(.active):hover {
+  color: #f5f6fa;
+  background: rgba(139, 127, 199, 0.15);
+}
+
+[data-theme="dark"] .filter-modern.active,
+[data-theme="dark"] .sort-modern.active {
+  background: linear-gradient(135deg, #8b7fc7, #a599d9);
+  color: white;
+}
+
+/* List header */
+[data-theme="dark"] .header-cell {
+  color: #c5c9d9;
+}
+
+/* List rows */
+[data-theme="dark"] .list-row-modern {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .list-row-modern:hover {
+  background: rgba(53, 59, 77, 0.4);
+}
+
+[data-theme="dark"] .list-row-modern.is-current {
+  background: linear-gradient(90deg,
+    rgba(139, 127, 199, 0.2) 0%,
+    rgba(165, 153, 217, 0.15) 50%,
+    transparent 100%
+  );
+  border-left-color: #8b7fc7;
+}
+
+[data-theme="dark"] .list-row-modern.is-podium {
+  background: linear-gradient(90deg,
+    rgba(245, 158, 11, 0.1) 0%,
+    transparent 100%
+  );
+}
+
+/* Place heights */
+[data-theme="dark"] .place-height {
+  background: linear-gradient(180deg, rgba(53, 59, 77, 0.6) 0%, rgba(53, 59, 77, 0.4) 100%);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Progress bars */
+[data-theme="dark"] .acc-bar-modern {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Points display */
+[data-theme="dark"] .points-display {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.15));
+}
+
+/* Loading text */
+[data-theme="dark"] .loading-text {
+  color: #c5c9d9;
+}
+
+/* No results */
+[data-theme="dark"] .no-results-text {
+  color: #c5c9d9;
+}
+
+[data-theme="dark"] .no-results-icon {
+  color: #9ca3b8;
+}
+
+/* Scrollbar para ranking list */
+[data-theme="dark"] .list-body-modern::-webkit-scrollbar-track {
+  background: rgba(53, 59, 77, 0.4);
+}
+
+[data-theme="dark"] .list-body-modern::-webkit-scrollbar-thumb {
+  background: rgba(139, 127, 199, 0.6);
+}
+
+[data-theme="dark"] .list-body-modern::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 127, 199, 0.8);
+}
+
+/* Header cells del ranking */
+[data-theme="dark"] .list-header-modern {
+  background: rgba(42, 47, 63, 0.6);
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Clear button */
+[data-theme="dark"] .clear-search-btn {
+  background: linear-gradient(135deg, #8b7fc7, #a599d9);
+}
+
+[data-theme="dark"] .clear-search-btn:hover {
+  box-shadow: 0 8px 20px rgba(139, 127, 199, 0.4);
+}
+
+/* Badge inner */
+[data-theme="dark"] .badge-inner {
+  background: rgba(42, 47, 63, 0.6);
+}
+
+[data-theme="dark"] .rank-badge-modern {
+  background: linear-gradient(135deg, #8b7fc7, #a599d9);
+  box-shadow: 0 10px 30px rgba(139, 127, 199, 0.4);
+}
+
+/* Stat separators */
+[data-theme="dark"] .stat-divider-modern,
+[data-theme="dark"] .stat-separator {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Position badge in rank modern */
+[data-theme="dark"] .badge-position {
+  color: white;
+}
+
+[data-theme="dark"] .position-hash {
+  opacity: 0.8;
+}
+
+/* Icons colors mantener iguales pero asegurar visibilidad */
+[data-theme="dark"] .badge-icon {
+  color: white;
+}
+
+/* You tag */
+[data-theme="dark"] .you-tag {
+  background: linear-gradient(135deg, #8b7fc7, #a599d9);
+  color: white;
+}
+
+/* Champion badge */
+[data-theme="dark"] .champion-badge {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  color: white;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
+}
+
+/* Rank stats modern - secondary text */
+[data-theme="dark"] .rank-stats-text {
+  color: #c5c9d9;
+}
+
+/* Asegurar que los iconos mantengan sus colores originales */
+[data-theme="dark"] .rank-icon.gold {
+  color: #FCD34D;
+}
+
+[data-theme="dark"] .rank-icon.silver {
+  color: #E5E7EB;
+}
+
+[data-theme="dark"] .rank-icon.bronze {
+  color: #F59E0B;
+}
+
+[data-theme="dark"] .points-icon-small {
+  color: #F59E0B;
+}
+
+[data-theme="dark"] .acc-percent {
+  color: #10B981;
+}
+
+/* Stat icon colors en cards */
+[data-theme="dark"] .stat-icon-color.points-color {
+  color: #F59E0B;
+}
+
+[data-theme="dark"] .stat-icon-color.accuracy-color {
+  color: #10B981;
+}
+
+/* Medal colors mantener vibrantes */
+[data-theme="dark"] .champion-crown {
+  background: linear-gradient(135deg, #FCD34D, #F59E0B);
+  color: #78350F;
+  box-shadow: 0 15px 40px rgba(245, 158, 11, 0.6);
+}
+
+[data-theme="dark"] .silver-medal {
+  background: linear-gradient(135deg, #E5E7EB, #9CA3AF);
+  box-shadow: 0 10px 30px rgba(156, 163, 175, 0.5);
+}
+
+[data-theme="dark"] .bronze-medal {
+  background: linear-gradient(135deg, #F59E0B, #CD7F32);
+  box-shadow: 0 10px 30px rgba(205, 127, 50, 0.5);
+}
+
+/* Mobile - asegurar fondo blanco */
+@media (max-width: 768px) {
+  [data-theme="light"] .ranking-page {
+    background: #ffffff !important;
+  }
+  
+  [data-theme="light"] .ranking-page-loading {
+    background: #ffffff !important;
+  }
+}
 /* Texto general */
 [data-theme="dark"] .hero-subtitle,
 [data-theme="dark"] .stat-label-modern,
