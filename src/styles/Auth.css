@@ -27,22 +27,6 @@
   z-index: 0;
 }
 
-/* Esquinas decorativas SUPERIORES */
-.auth-wrapper::after {
-  content: '';
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border: 2px solid rgba(96, 81, 155, 0.25);
-  pointer-events: none;
-  top: 30px;
-  right: 30px;
-  border-left: none;
-  border-bottom: none;
-  border-radius: 0 20px 0 0;
-  z-index: 0;
-}
-
 .auth-card {
   position: relative;
   width: 100%;
@@ -66,6 +50,13 @@
   color: #ffffff;
   text-align: center;
   letter-spacing: 1px;
+}
+.auth-card p {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #dddddd;
+  text-align: center;
 }
 
 .auth-card input {
