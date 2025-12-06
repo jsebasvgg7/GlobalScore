@@ -554,14 +554,6 @@ button {
   border-top-color: var(--border);
 }
 
-[data-theme="dark"] .bottom-nav-btn {
-  color: var(--light-text);
-}
-
-[data-theme="dark"] .bottom-nav-btn.active {
-  color: var(--accent-light);
-}
-
 /* ==========================================
    HEADER - Botón de Tema con Color
 ========================================== */
@@ -1887,14 +1879,6 @@ button {
   border-top-color: var(--border);
 }
 
-[data-theme="dark"] .bottom-nav-btn {
-  color: var(--light-text);
-}
-
-[data-theme="dark"] .bottom-nav-btn.active {
-  color: var(--accent-light);
-  background: rgba(124, 107, 184, 0.15);
-}
 
 /* ==========================================
    FILTROS Y NOTIFICACIONES - FALTANTES
