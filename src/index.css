@@ -526,6 +526,12 @@ button {
   color: var(--text-primary);
 }
 
+[data-theme="dark"] .search-modern input[type="text"] {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
 [data-theme="dark"] .card,
 [data-theme="dark"] .stats-card,
 [data-theme="dark"] .level-card,
