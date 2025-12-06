@@ -2721,3 +2721,547 @@ button {
 [data-theme="dark"] .ranking-divider span {
   color: var(--text-secondary);
 }
+/* ==========================================
+   USER PROFILE MODAL - RESPONSIVE
+========================================== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  [data-theme="dark"] .user-modal-container,
+  [data-theme="light"] .user-modal-container {
+    max-width: 700px;
+  }
+
+  [data-theme="dark"] .user-modal-stats-grid,
+  [data-theme="light"] .user-modal-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  [data-theme="dark"] .user-modal-overlay,
+  [data-theme="light"] .user-modal-overlay {
+    padding: 12px;
+  }
+
+  [data-theme="dark"] .user-modal-container,
+  [data-theme="light"] .user-modal-container {
+    max-height: 95vh;
+    border-radius: 20px;
+  }
+
+  [data-theme="dark"] .user-modal-header,
+  [data-theme="light"] .user-modal-header {
+    padding: 18px;
+  }
+
+  [data-theme="dark"] .user-modal-title-section h2,
+  [data-theme="light"] .user-modal-title-section h2 {
+    font-size: 18px;
+  }
+
+  [data-theme="dark"] .user-modal-body,
+  [data-theme="light"] .user-modal-body {
+    padding: 18px;
+    gap: 18px;
+  }
+
+  [data-theme="dark"] .user-modal-banner,
+  [data-theme="light"] .user-modal-banner {
+    height: 90px;
+  }
+
+  [data-theme="dark"] .user-modal-avatar,
+  [data-theme="light"] .user-modal-avatar {
+    width: 90px;
+    height: 90px;
+    font-size: 36px;
+  }
+
+  [data-theme="dark"] .user-modal-level-badge,
+  [data-theme="light"] .user-modal-level-badge {
+    right: calc(50% - 55px);
+  }
+
+  [data-theme="dark"] .user-modal-name,
+  [data-theme="light"] .user-modal-name {
+    font-size: 22px;
+  }
+
+  [data-theme="dark"] .user-modal-badges-grid,
+  [data-theme="light"] .user-modal-badges-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  [data-theme="dark"] .user-modal-stats-grid,
+  [data-theme="light"] .user-modal-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  [data-theme="dark"] .user-modal-stat-item,
+  [data-theme="light"] .user-modal-stat-item {
+    padding: 14px;
+  }
+
+  [data-theme="dark"] .user-modal-stat-item .stat-icon,
+  [data-theme="light"] .user-modal-stat-item .stat-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  [data-theme="dark"] .user-modal-stat-item .stat-value,
+  [data-theme="light"] .user-modal-stat-item .stat-value {
+    font-size: 22px;
+  }
+
+  [data-theme="dark"] .user-modal-level-card,
+  [data-theme="light"] .user-modal-level-card {
+    padding: 18px;
+  }
+
+  [data-theme="dark"] .user-modal-level-card .level-header,
+  [data-theme="light"] .user-modal-level-card .level-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  [data-theme="dark"] .user-modal-level-card .level-points,
+  [data-theme="light"] .user-modal-level-card .level-points {
+    align-items: flex-start;
+  }
+
+  [data-theme="dark"] .user-modal-streaks,
+  [data-theme="light"] .user-modal-streaks {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  [data-theme="dark"] .streak-item,
+  [data-theme="light"] .streak-item {
+    padding: 14px;
+  }
+
+  [data-theme="dark"] .streak-item .streak-icon,
+  [data-theme="light"] .streak-item .streak-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  [data-theme="dark"] .streak-item .streak-value,
+  [data-theme="light"] .streak-item .streak-value {
+    font-size: 24px;
+  }
+
+  [data-theme="dark"] .user-modal-active-title,
+  [data-theme="light"] .user-modal-active-title {
+    padding: 18px;
+  }
+
+  [data-theme="dark"] .current-title-display,
+  [data-theme="light"] .current-title-display {
+    padding: 14px;
+  }
+
+  [data-theme="dark"] .title-icon-large,
+  [data-theme="light"] .title-icon-large {
+    width: 48px;
+    height: 48px;
+  }
+
+  [data-theme="dark"] .title-details h5,
+  [data-theme="light"] .title-details h5 {
+    font-size: 16px;
+  }
+
+  [data-theme="dark"] .user-modal-achievements,
+  [data-theme="light"] .user-modal-achievements {
+    padding: 18px;
+  }
+
+  [data-theme="dark"] .achievements-grid,
+  [data-theme="light"] .achievements-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  [data-theme="dark"] .achievement-card,
+  [data-theme="light"] .achievement-card {
+    padding: 12px;
+  }
+
+  [data-theme="dark"] .achievement-emoji,
+  [data-theme="light"] .achievement-emoji {
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+  }
+
+  /* Clickeable avatars responsive */
+  [data-theme="dark"] .user-avatar-small[style*="cursor: pointer"]:hover,
+  [data-theme="light"] .user-avatar-small[style*="cursor: pointer"]:hover,
+  [data-theme="dark"] .player-avatar-ultra[style*="cursor: pointer"]:hover,
+  [data-theme="light"] .player-avatar-ultra[style*="cursor: pointer"]:hover {
+    transform: scale(1.08);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  [data-theme="dark"] .user-modal-overlay,
+  [data-theme="light"] .user-modal-overlay {
+    padding: 10px;
+  }
+
+  [data-theme="dark"] .user-modal-container,
+  [data-theme="light"] .user-modal-container {
+    border-radius: 18px;
+  }
+
+  [data-theme="dark"] .user-modal-header,
+  [data-theme="light"] .user-modal-header {
+    padding: 16px;
+  }
+
+  [data-theme="dark"] .user-modal-title-section h2,
+  [data-theme="light"] .user-modal-title-section h2 {
+    font-size: 16px;
+  }
+
+  [data-theme="dark"] .user-modal-title-section svg,
+  [data-theme="light"] .user-modal-title-section svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  [data-theme="dark"] .user-modal-close,
+  [data-theme="light"] .user-modal-close {
+    width: 32px;
+    height: 32px;
+  }
+
+  [data-theme="dark"] .user-modal-body,
+  [data-theme="light"] .user-modal-body {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  [data-theme="dark"] .user-modal-banner,
+  [data-theme="light"] .user-modal-banner {
+    height: 80px;
+  }
+
+  [data-theme="dark"] .user-modal-avatar,
+  [data-theme="light"] .user-modal-avatar {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+    border-width: 3px;
+  }
+
+  [data-theme="dark"] .user-modal-level-badge,
+  [data-theme="light"] .user-modal-level-badge {
+    right: calc(50% - 50px);
+    padding: 3px 10px;
+    font-size: 11px;
+    border-width: 2px;
+  }
+
+  [data-theme="dark"] .user-modal-level-badge svg,
+  [data-theme="light"] .user-modal-level-badge svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  [data-theme="dark"] .user-modal-name,
+  [data-theme="light"] .user-modal-name {
+    font-size: 20px;
+  }
+
+  [data-theme="dark"] .user-modal-email,
+  [data-theme="light"] .user-modal-email {
+    font-size: 13px;
+  }
+
+  [data-theme="dark"] .user-modal-bio,
+  [data-theme="light"] .user-modal-bio {
+    font-size: 13px;
+  }
+
+  [data-theme="dark"] .user-modal-badge,
+  [data-theme="light"] .user-modal-badge {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  [data-theme="dark"] .user-modal-badge .badge-icon,
+  [data-theme="light"] .user-modal-badge .badge-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  [data-theme="dark"] .user-modal-badge .badge-label,
+  [data-theme="light"] .user-modal-badge .badge-label {
+    font-size: 9px;
+  }
+
+  [data-theme="dark"] .user-modal-badge .badge-value,
+  [data-theme="light"] .user-modal-badge .badge-value {
+    font-size: 12px;
+  }
+
+  [data-theme="dark"] .user-modal-stat-item,
+  [data-theme="light"] .user-modal-stat-item {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  [data-theme="dark"] .user-modal-stat-item .stat-icon,
+  [data-theme="light"] .user-modal-stat-item .stat-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  [data-theme="dark"] .user-modal-stat-item .stat-icon svg,
+  [data-theme="light"] .user-modal-stat-item .stat-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  [data-theme="dark"] .user-modal-stat-item .stat-label,
+  [data-theme="light"] .user-modal-stat-item .stat-label {
+    font-size: 10px;
+  }
+
+  [data-theme="dark"] .user-modal-stat-item .stat-value,
+  [data-theme="light"] .user-modal-stat-item .stat-value {
+    font-size: 20px;
+  }
+
+  [data-theme="dark"] .user-modal-level-card,
+  [data-theme="light"] .user-modal-level-card {
+    padding: 16px;
+  }
+
+  [data-theme="dark"] .user-modal-level-card h4,
+  [data-theme="light"] .user-modal-level-card h4 {
+    font-size: 16px;
+  }
+
+  [data-theme="dark"] .user-modal-level-card p,
+  [data-theme="light"] .user-modal-level-card p {
+    font-size: 12px;
+  }
+
+  [data-theme="dark"] .user-modal-level-card .current-points,
+  [data-theme="light"] .user-modal-level-card .current-points {
+    font-size: 18px;
+  }
+
+  [data-theme="dark"] .user-modal-level-card .next-level-points,
+  [data-theme="light"] .user-modal-level-card .next-level-points {
+    font-size: 10px;
+  }
+
+  [data-theme="dark"] .user-modal-level-card .progress-bar,
+  [data-theme="light"] .user-modal-level-card .progress-bar {
+    height: 8px;
+  }
+
+  [data-theme="dark"] .user-modal-level-card .progress-label,
+  [data-theme="light"] .user-modal-level-card .progress-label {
+    font-size: 10px;
+  }
+
+  [data-theme="dark"] .streak-item,
+  [data-theme="light"] .streak-item {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  [data-theme="dark"] .streak-item .streak-icon,
+  [data-theme="light"] .streak-item .streak-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  [data-theme="dark"] .streak-item .streak-icon svg,
+  [data-theme="light"] .streak-item .streak-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  [data-theme="dark"] .streak-item .streak-label,
+  [data-theme="light"] .streak-item .streak-label {
+    font-size: 10px;
+  }
+
+  [data-theme="dark"] .streak-item .streak-value,
+  [data-theme="light"] .streak-item .streak-value {
+    font-size: 22px;
+  }
+
+  [data-theme="dark"] .streak-badge,
+  [data-theme="light"] .streak-badge {
+    top: 10px;
+    right: 10px;
+    padding: 3px 6px;
+    font-size: 9px;
+  }
+
+  [data-theme="dark"] .streak-badge svg,
+  [data-theme="light"] .streak-badge svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  [data-theme="dark"] .user-modal-active-title,
+  [data-theme="light"] .user-modal-active-title {
+    padding: 16px;
+  }
+
+  [data-theme="dark"] .user-modal-active-title h4,
+  [data-theme="light"] .user-modal-active-title h4 {
+    font-size: 14px;
+  }
+
+  [data-theme="dark"] .title-active-badge,
+  [data-theme="light"] .title-active-badge {
+    padding: 3px 8px;
+    font-size: 9px;
+  }
+
+  [data-theme="dark"] .current-title-display,
+  [data-theme="light"] .current-title-display {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  [data-theme="dark"] .title-icon-large,
+  [data-theme="light"] .title-icon-large {
+    width: 44px;
+    height: 44px;
+  }
+
+  [data-theme="dark"] .title-icon-large svg,
+  [data-theme="light"] .title-icon-large svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  [data-theme="dark"] .title-details h5,
+  [data-theme="light"] .title-details h5 {
+    font-size: 15px;
+  }
+
+  [data-theme="dark"] .title-details p,
+  [data-theme="light"] .title-details p {
+    font-size: 12px;
+  }
+
+  [data-theme="dark"] .user-modal-achievements,
+  [data-theme="light"] .user-modal-achievements {
+    padding: 16px;
+  }
+
+  [data-theme="dark"] .section-header h4,
+  [data-theme="light"] .section-header h4 {
+    font-size: 14px;
+  }
+
+  [data-theme="dark"] .section-header svg,
+  [data-theme="light"] .section-header svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  [data-theme="dark"] .count-badge,
+  [data-theme="light"] .count-badge {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+
+  [data-theme="dark"] .achievements-grid,
+  [data-theme="light"] .achievements-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  [data-theme="dark"] .achievement-card,
+  [data-theme="light"] .achievement-card {
+    padding: 12px;
+  }
+
+  [data-theme="dark"] .achievement-emoji,
+  [data-theme="light"] .achievement-emoji {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+  }
+
+  [data-theme="dark"] .achievement-card .achievement-info h5,
+  [data-theme="light"] .achievement-card .achievement-info h5 {
+    font-size: 12px;
+  }
+
+  [data-theme="dark"] .achievement-card .achievement-info p,
+  [data-theme="light"] .achievement-card .achievement-info p {
+    font-size: 10px;
+  }
+
+  [data-theme="dark"] .achievement-category,
+  [data-theme="light"] .achievement-category {
+    font-size: 9px;
+  }
+
+  [data-theme="dark"] .empty-achievements svg,
+  [data-theme="light"] .empty-achievements svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  [data-theme="dark"] .empty-achievements p,
+  [data-theme="light"] .empty-achievements p {
+    font-size: 13px;
+  }
+
+  /* Clickeable avatars small mobile */
+  [data-theme="dark"] .user-avatar-small[style*="cursor: pointer"]:hover,
+  [data-theme="light"] .user-avatar-small[style*="cursor: pointer"]:hover,
+  [data-theme="dark"] .player-avatar-ultra[style*="cursor: pointer"]:hover,
+  [data-theme="light"] .player-avatar-ultra[style*="cursor: pointer"]:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Landscape Mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  [data-theme="dark"] .user-modal-container,
+  [data-theme="light"] .user-modal-container {
+    max-height: 90vh;
+  }
+
+  [data-theme="dark"] .user-modal-banner,
+  [data-theme="light"] .user-modal-banner {
+    height: 60px;
+  }
+
+  [data-theme="dark"] .user-modal-avatar,
+  [data-theme="light"] .user-modal-avatar {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+  }
+
+  [data-theme="dark"] .user-modal-stats-grid,
+  [data-theme="light"] .user-modal-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  [data-theme="dark"] .user-modal-streaks,
+  [data-theme="light"] .user-modal-streaks {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
