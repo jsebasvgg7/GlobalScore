@@ -584,13 +584,13 @@ button {
 }
 /* Match Card Footer */
 [data-theme="dark"] .match-footer-light {
-  border-top-color: var( --accent-hover)
+  border-top-color: var( --border);
 }
 [data-theme="dark"] .league-footer-light {
-  border-top-color: var(--accent-hover);
+  border-top-color: var(--border);
 }
 [data-theme="dark"] .award-footer-light {
-  border-top-color: var(--accent-hover);
+  border-top-color: var(--border);
 }
 
 /* Scrollbar */
