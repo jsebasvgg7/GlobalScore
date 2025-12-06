@@ -98,7 +98,7 @@ export default function NotificationsPage({ currentUser }) {
       </div>
 
       <div className="notifications-container">
-        {/* Banner de Instalación - Fijado */}
+        {/* Banner de Instalación - Fijado 
         {showInstallBanner && (
           <div className="install-banner pinned">
             <button 
@@ -134,7 +134,7 @@ export default function NotificationsPage({ currentUser }) {
               </button>
             </div>
           </div>
-        )}
+        )}*/}
 
         {/* Filtros */}
         <div className="notifications-filters">
