@@ -884,3 +884,124 @@
 .player-avatar-ultra[style*="cursor: pointer"] {
   transition: all 0.3s ease;
 }
+/* ==================== MODAL OVERLAY ==================== */
+.user-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.user-modal-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .user-modal-overlay {
+    padding: 12px;
+    padding-top: calc(70px + 12px); /* Header height + spacing */
+    padding-bottom: calc(70px + 12px); /* Bottom nav height + spacing */
+  }
+
+  .user-modal-container {
+    max-height: calc(100vh - 70px - 70px - 24px); /* viewport - header - bottom nav - spacing */
+    border-radius: 20px;
+  }
+
+  .user-modal-header {
+    padding: 18px;
+  }
+
+  .user-modal-body {
+    padding: 18px;
+    gap: 18px;
+  }
+
+  .user-modal-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-modal-streaks {
+    grid-template-columns: 1fr;
+  }
+
+  .achievements-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .user-modal-badges-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-modal-overlay {
+    padding-top: calc(60px + 10px); /* Header más pequeño en móviles pequeños */
+    padding-bottom: calc(65px + 10px); /* Bottom nav más pequeño */
+  }
+
+  .user-modal-container {
+    max-height: calc(100vh - 60px - 65px - 20px);
+  }
+
+  .user-modal-header {
+    padding: 16px;
+  }
+
+  .user-modal-title-section h2 {
+    font-size: 18px;
+  }
+
+  .user-modal-body {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .user-modal-banner {
+    height: 80px;
+  }
+
+  .user-modal-avatar {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+
+  .user-modal-level-badge {
+    right: calc(50% - 50px);
+    padding: 3px 10px;
+    font-size: 11px;
+  }
+
+  .user-modal-name {
+    font-size: 20px;
+  }
+
+  .achievements-grid {
+    grid-template-columns: 1fr;
+  }
+}
