@@ -938,23 +938,6 @@ button {
   color: var(--text-secondary);
 }
 
-/* RESPONSIVE - Ajustes para móvil */
-@media (max-width: 768px) {
-  [data-theme="dark"] .bottom-nav {
-    background: var(--card);
-    border-top: 1px solid var(--border);
-  }
-  
-  [data-theme="dark"] .bottom-nav-btn {
-    color: var(--text-secondary);
-  }
-  
-  [data-theme="dark"] .bottom-nav-btn.active {
-    color: var(--accent-light);
-    background: rgba(124, 107, 184, 0.15);
-  }
-}
-
 /* ==========================================
    RANKING PAGE - DETALLES ADICIONALES
 ========================================== */
