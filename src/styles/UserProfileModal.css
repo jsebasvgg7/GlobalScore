@@ -1,5 +1,4 @@
 /* src/styles/UserProfileModal.css */
-
 /* ==================== MODAL OVERLAY ==================== */
 .user-modal-overlay {
   position: fixed;
@@ -12,6 +11,15 @@
   z-index: 10000;
   padding: 20px;
   animation: fadeIn 0.2s ease;
+  overflow-y: auto; /* Permitir scroll en el overlay */
+}
+
+/* Mobile: Ajustar para no sobrepasar header y bottom nav */
+@media (max-width: 768px) {
+  .user-modal-overlay {
+    padding: 0; /* Remover padding, usaremos margin en el container */
+    align-items: flex-start; /* Alinear al inicio */
+  }
 }
 
 @keyframes fadeIn {
@@ -33,6 +41,30 @@
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.3s ease;
+  position: relative;
+}
+
+/* Mobile: Ajustar márgenes y altura */
+@media (max-width: 768px) {
+  .user-modal-container {
+    margin-top: 80px; /* Espacio para el header (70px + 10px) */
+    margin-bottom: 80px; /* Espacio para el bottom nav (70px + 10px) */
+    margin-left: 12px;
+    margin-right: 12px;
+    max-height: calc(100vh - 160px); /* 80px arriba + 80px abajo */
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-modal-container {
+    margin-top: 70px; /* Header más pequeño (60px + 10px) */
+    margin-bottom: 75px; /* Bottom nav más pequeño (65px + 10px) */
+    margin-left: 10px;
+    margin-right: 10px;
+    max-height: calc(100vh - 145px);
+    border-radius: 16px;
+  }
 }
 
 @keyframes slideUp {
@@ -57,7 +89,19 @@
   top: 0;
   background: var(--bg-card);
   z-index: 10;
-  backdrop-filter: blur(10px); /* Para que se vea bien al hacer scroll */
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 768px) {
+  .user-modal-header {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-modal-header {
+    padding: 16px;
+  }
 }
 
 .user-modal-title-section {
@@ -65,6 +109,8 @@
   align-items: center;
   gap: 12px;
   color: var(--primary);
+  flex: 1;
+  min-width: 0;
 }
 
 .user-modal-title-section h2 {
@@ -72,21 +118,48 @@
   font-size: 20px;
   font-weight: 700;
   color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .user-modal-title-section h2 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-modal-title-section {
+    gap: 8px;
+  }
+
+  .user-modal-title-section h2 {
+    font-size: 16px;
+  }
+
+  .user-modal-title-section svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .user-modal-close {
   background: rgba(239, 68, 68, 0.15);
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px; /* Evitar compresión */
+  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #EF4444;
   cursor: pointer;
   transition: all 0.3s ease;
-  flex-shrink: 0; /* Evitar que se comprima */
+  flex-shrink: 0;
+  margin-left: 12px;
 }
 
 .user-modal-close:hover {
@@ -97,6 +170,21 @@
 
 .user-modal-close:active {
   transform: rotate(90deg) scale(0.95);
+}
+
+@media (max-width: 480px) {
+  .user-modal-close {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    margin-left: 8px;
+  }
+
+  .user-modal-close svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 /* ==================== BODY ==================== */
