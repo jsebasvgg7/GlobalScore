@@ -32,6 +32,7 @@
   justify-content: space-between;
   gap: 12px;
   min-height: 60px;
+  background-color: #9ca3af;
 }
 
 .league-info-section {
