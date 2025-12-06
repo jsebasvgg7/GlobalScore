@@ -1022,12 +1022,9 @@ button {
 }
 
 [data-theme="dark"] .matches-empty-text {
-  color: var(--text-primary);
+  color: var(--border);
 }
 
-[data-theme="dark"] .matches-empty-subtext {
-  color: var(--text-secondary);
-}
 
 /* ==========================================
    RANKING PAGE - MODO OSCURO RELAJADO
