@@ -197,11 +197,11 @@ export default function MatchCard({ match, userPred, onPredict }) {
            
           {showSaveButton && (
             <button
-              className="predict-button-light"
+              className="predict-button-match"
               onClick={handleSubmit}
               style={{ marginTop: '8px', width: '100%' }}
             >
-              {isSaved ? "Update" : "   Save"}
+              {isSaved ? "Update" : "Save"}
             </button>
           )}
 

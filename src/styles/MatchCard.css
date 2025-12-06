@@ -257,7 +257,7 @@
   color: #6b7280;
 }
 
-.predict-button-light {
+.predict-button-match {
   padding: 8px 16px;
   border: none;
   border-radius: 10px;
@@ -271,18 +271,17 @@
   letter-spacing: 0.3px;
 }
 
-.predict-button-light:hover {
+.predict-button-match:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
 }
 
-.predict-button-light:disabled {
+.predict-button-match:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
-
 /* ===================================
    RESPONSIVE
 =================================== */
