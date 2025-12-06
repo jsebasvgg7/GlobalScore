@@ -1578,3 +1578,445 @@ button {
 [data-theme="dark"] * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
+
+/* ==========================================
+   LEAGUE CARD Y AWARD CARD - FORMULARIOS
+========================================== */
+
+[data-theme="dark"] .league-predictions-container,
+[data-theme="dark"] .award-prediction-form {
+  background: rgba(26, 28, 36, 0.6);
+}
+
+[data-theme="dark"] .prediction-group,
+[data-theme="dark"] .prediction-field-award {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .prediction-label-light,
+[data-theme="dark"] .prediction-label-award {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .prediction-label-light svg,
+[data-theme="dark"] .prediction-label-award svg {
+  color: var(--muted);
+}
+
+/* ==========================================
+   PROFILE PAGE - CONTENEDORES FALTANTES
+========================================== */
+
+/* Avatar Card - Card Banner */
+[data-theme="dark"] .card-banner {
+  background: linear-gradient(135deg, #7c6bb8 0%, #9988cc 100%);
+}
+
+[data-theme="dark"] .banner-pattern {
+  background-image: 
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.05) 10px, rgba(255, 255, 255, 0.05) 20px);
+}
+
+/* Edit Icon Button */
+[data-theme="dark"] .edit-icon-btn {
+  background: rgba(26, 28, 36, 0.9);
+  border-color: var(--border);
+  color: var(--accent-light);
+}
+
+[data-theme="dark"] .edit-icon-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Card Content Wrapper */
+[data-theme="dark"] .card-content-wrapper {
+  color: var(--text-primary);
+}
+
+/* User Info */
+[data-theme="dark"] .name-header,
+[data-theme="dark"] .user-name-new {
+  color: var(--text-primary);
+}
+
+/* User Badges Grid */
+[data-theme="dark"] .user-badges-grid .info-badge {
+  background: rgba(26, 28, 36, 0.6);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .user-badges-grid .info-badge:hover {
+  background: rgba(26, 28, 36, 0.8);
+  border-color: rgba(124, 107, 184, 0.3);
+}
+
+/* Stats Card */
+[data-theme="dark"] .stats-card {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .stats-header {
+  color: var(--accent-light);
+}
+
+[data-theme="dark"] .stats-header h3 {
+  color: var(--text-primary);
+}
+
+/* Level Card */
+[data-theme="dark"] .level-card {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .level-title-section {
+  color: var(--accent-light);
+}
+
+[data-theme="dark"] .level-title {
+  background: linear-gradient(135deg, #7c6bb8, #9988cc);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+[data-theme="dark"] .level-points .current-points {
+  color: var(--accent-light);
+}
+
+[data-theme="dark"] .level-points .next-level-points {
+  color: var(--text-secondary);
+}
+
+/* Progress Bar */
+[data-theme="dark"] .progress-bar {
+  background: rgba(26, 28, 36, 0.6);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .progress-fill {
+  background: linear-gradient(90deg, #7c6bb8, #9988cc);
+}
+
+/* Mini Achievements Section */
+[data-theme="dark"] .mini-achievements-section {
+  background: rgba(26, 28, 36, 0.6);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .mini-achievement {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .mini-achievement:hover {
+  background: rgba(26, 28, 36, 0.8);
+  border-color: rgba(124, 107, 184, 0.3);
+}
+
+[data-theme="dark"] .achievement-icon {
+  background: rgba(124, 107, 184, 0.15);
+  color: var(--accent-light);
+}
+
+/* Streaks Card */
+[data-theme="dark"] .streaks-card {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .streaks-header {
+  color: #F59E0B;
+}
+
+[data-theme="dark"] .streaks-header h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .streak-item {
+  background: rgba(26, 28, 36, 0.6);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .streak-item:hover {
+  border-color: #F59E0B;
+}
+
+/* Titles and Achievements Section */
+[data-theme="dark"] .titles-achievements-section {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .active-title-card,
+[data-theme="dark"] .titles-container,
+[data-theme="dark"] .achievements-container {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .active-title-header h3,
+[data-theme="dark"] .titles-header h3,
+[data-theme="dark"] .achievements-header h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .title-active-badge {
+  background: rgba(124, 107, 184, 0.15);
+  border-color: rgba(124, 107, 184, 0.3);
+  color: var(--accent-light);
+}
+
+[data-theme="dark"] .current-title-display {
+  background: rgba(26, 28, 36, 0.6);
+}
+
+[data-theme="dark"] .no-title-message {
+  background: rgba(26, 28, 36, 0.6);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .no-title-icon {
+  background: rgba(124, 107, 184, 0.15);
+  color: var(--accent-light);
+}
+
+[data-theme="dark"] .no-title-text h4 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .no-title-text p {
+  color: var(--text-secondary);
+}
+
+/* Count Badge */
+[data-theme="dark"] .count-badge {
+  background: rgba(124, 107, 184, 0.15);
+  border-color: rgba(124, 107, 184, 0.3);
+  color: var(--accent-light);
+}
+
+/* Admin Action Button */
+[data-theme="dark"] .admin-action-btn {
+  background: rgba(124, 107, 184, 0.15);
+  border-color: rgba(124, 107, 184, 0.3);
+  color: var(--accent-light);
+}
+
+[data-theme="dark"] .admin-action-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+/* View All Button */
+[data-theme="dark"] .view-all-button {
+  background: rgba(26, 28, 36, 0.6);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .view-all-button:hover {
+  background: rgba(26, 28, 36, 0.8);
+  border-color: rgba(124, 107, 184, 0.3);
+  color: var(--accent-light);
+}
+
+/* ==========================================
+   HEADER - FIX MÓVIL NO DEBE CAMBIAR
+========================================== */
+
+/* Desktop header - modo oscuro */
+@media (min-width: 769px) {
+  [data-theme="dark"] .app-header {
+    background: linear-gradient(135deg, #1e202c 0%, #31323e 100%);
+    border-bottom-color: rgba(124, 107, 184, 0.2);
+  }
+}
+
+/* Mobile header - NO cambia (se mantiene igual en ambos modos) */
+@media (max-width: 768px) {
+  .app-header {
+    background: linear-gradient(135deg, #1e202c 0%, #31323e 100%) !important;
+    border-bottom-color: rgba(96, 81, 155, 0.2) !important;
+  }
+}
+
+/* Bottom Navigation - modo oscuro */
+[data-theme="dark"] .bottom-nav {
+  background: var(--card);
+  border-top-color: var(--border);
+}
+
+[data-theme="dark"] .bottom-nav-btn {
+  color: var(--light-text);
+}
+
+[data-theme="dark"] .bottom-nav-btn.active {
+  color: var(--accent-light);
+  background: rgba(124, 107, 184, 0.15);
+}
+
+/* ==========================================
+   FILTROS Y NOTIFICACIONES - FALTANTES
+========================================== */
+
+/* Filtros Modern */
+[data-theme="dark"] .filters-modern,
+[data-theme="dark"] .sorts-modern {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .filter-modern,
+[data-theme="dark"] .sort-modern {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .filter-modern:hover,
+[data-theme="dark"] .sort-modern:hover {
+  background: rgba(124, 107, 184, 0.1);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-modern.active,
+[data-theme="dark"] .sort-modern.active {
+  background: linear-gradient(135deg, #7c6bb8, #9988cc);
+  color: white;
+}
+
+/* Notification Details */
+[data-theme="dark"] .notif-details {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .detail-item {
+  background: rgba(26, 28, 36, 0.6);
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .detail-item svg {
+  color: var(--muted);
+}
+
+/* Filter Chip */
+[data-theme="dark"] .filter-chip {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .filter-chip:hover {
+  background: rgba(124, 107, 184, 0.1);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-chip.active {
+  background: linear-gradient(135deg, #7c6bb8, #9988cc);
+  color: white;
+}
+
+[data-theme="dark"] .chip-count {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .filter-chip.active .chip-count {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================
+   RANKINGS - SIDEBAR Y PODIO
+========================================== */
+
+[data-theme="dark"] .ranking-premium {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .ranking-header-premium {
+  background: linear-gradient(135deg, #0a0b0f 0%, #14151d 100%);
+}
+
+[data-theme="dark"] .ranking-title-premium h3 {
+  color: white;
+}
+
+[data-theme="dark"] .ranking-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+[data-theme="dark"] .podium-card {
+  background: rgba(26, 28, 36, 0.6);
+}
+
+[data-theme="dark"] .podium-first {
+  background: rgba(124, 107, 184, 0.15);
+  border-color: var(--accent);
+}
+
+[data-theme="dark"] .podium-second {
+  background: rgba(192, 192, 192, 0.1);
+  border-color: rgba(192, 192, 192, 0.3);
+}
+
+[data-theme="dark"] .podium-third {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+[data-theme="dark"] .podium-name {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .podium-points {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .podium-position {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .ranking-item-premium {
+  background: rgba(26, 28, 36, 0.4);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .ranking-item-premium.hovered {
+  background: rgba(26, 28, 36, 0.6);
+  border-color: var(--accent);
+}
+
+[data-theme="dark"] .rank-number {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .rank-name-text {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .points-number {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .points-label {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .rank-progress {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .ranking-footer {
+  background: rgba(10, 11, 15, 0.6);
+  border-top-color: var(--border);
+}
+
+[data-theme="dark"] .ranking-stat {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .ranking-divider {
+  border-bottom-color: var(--border);
+}
+
+[data-theme="dark"] .ranking-divider span {
+  color: var(--text-secondary);
+}
