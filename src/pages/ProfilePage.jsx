@@ -578,7 +578,7 @@ const handleDeleteTitle = async (titleId) => {
                         currentUrl={userData.avatar_url}
                         userId={currentUser.id}
                         onUploadComplete={handleAvatarUpload}
-                        toast={toast}
+                        userLevel={userData.level}
                       />
                       {/* Nivel Badge dentro del container cuando edita */}
                       <div className="level-badge-floating">

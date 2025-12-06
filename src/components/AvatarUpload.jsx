@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Camera, X, Loader2 } from 'lucide-react';
+import { Upload, Camera, X, Loader2, Crown } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import '../styles/ProfilePage.css';
 
-export default function AvatarUpload({ currentUrl, userId, onUploadComplete }) {
+export default function AvatarUpload({ currentUrl, userId, onUploadComplete, userLevel }) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(currentUrl);
   const fileInputRef = useRef(null);
@@ -63,11 +63,10 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete }) {
       if (updateError) throw updateError;
       
       onUploadComplete(publicUrl);
-      showNotification('¡Avatar actualizado!', 'success');
 
     } catch (error) {
       console.error('Error al subir el avatar:', error.message);
-      showNotification('Error al subir el avatar', 'error');
+      alert('Error al subir el avatar');
     } finally {
       setUploading(false);
     }
@@ -88,11 +87,10 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete }) {
       
       setPreview(null);
       onUploadComplete(null);
-      showNotification('¡Avatar eliminado!', 'success');
       
     } catch (error) {
       console.error('Error al eliminar el avatar:', error.message);
-      showNotification('Error al eliminar el avatar', 'error');
+      alert('Error al eliminar el avatar');
     } finally {
       setUploading(false);
     }
@@ -112,30 +110,38 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete }) {
       {/* Nuevo contenedor para alinear Avatar y Botones lateralmente */}
       <div className="avatar-upload-horizontal-group">
         
-        {/* Sección del Avatar (lado izquierdo) */}
-        <div className="avatar-preview-wrapper" onClick={() => !uploading && fileInputRef.current?.click()}>
-          {/* Muestra la imagen de preview o un placeholder */}
-          {preview ? (
-            <img src={preview} alt="Avatar Preview" className="avatar-preview-image" />
-          ) : (
-            <div className="avatar-placeholder-upload">
-              <Camera size={24} />
-            </div>
-          )}
+        {/* Sección del Avatar (lado izquierdo) - CON BADGE DE NIVEL */}
+        <div className="avatar-container-new">
+          <div className="avatar-preview-wrapper" onClick={() => !uploading && fileInputRef.current?.click()}>
+            {/* Muestra la imagen de preview o un placeholder */}
+            {preview ? (
+              <img src={preview} alt="Avatar Preview" className="avatar-preview-image" />
+            ) : (
+              <div className="avatar-placeholder-upload">
+                <Camera size={24} />
+              </div>
+            )}
+            
+            {/* Overlay de carga */}
+            {uploading && (
+              <div className="avatar-loading-overlay">
+                <Loader2 size={32} className="spinner" />
+              </div>
+            )}
+            
+            {/* Overlay de cámara para indicar que es clickeable */}
+            {!uploading && (
+              <div className="camera-overlay">
+                <Camera size={20} />
+              </div>
+            )}
+          </div>
           
-          {/* Overlay de carga */}
-          {uploading && (
-            <div className="avatar-loading-overlay">
-              <Loader2 size={32} className="spinner" />
-            </div>
-          )}
-          
-          {/* Overlay de cámara para indicar que es clickeable */}
-          {!uploading && (
-            <div className="camera-overlay">
-              <Camera size={20} />
-            </div>
-          )}
+          {/* Badge de nivel - SIEMPRE VISIBLE */}
+          <div className="level-badge-floating">
+            <Crown size={14} fill="currentColor" />
+            <span>Lvl {userLevel || 1}</span>
+          </div>
         </div>
 
         {/* Sección de Botones (lado derecho) */}
@@ -145,6 +151,7 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete }) {
             className="avatar-btn primary"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
+            title="Cambiar avatar"
           >
             {uploading ? (
               <Loader2 size={16} className="spinner" />
@@ -159,6 +166,7 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete }) {
               className="avatar-btn secondary"
               onClick={handleRemoveAvatar}
               disabled={uploading}
+              title="Eliminar avatar"
             >
               <X size={16} />
             </button>
