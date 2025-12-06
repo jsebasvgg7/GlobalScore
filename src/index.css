@@ -1021,6 +1021,14 @@ button {
   background: var(--bg);
 }
 
+[data-theme="dark"] .matches-empty-text {
+  color: var(--small-shadow);
+}
+
+[data-theme="dark"] .matches-empty-subtext {
+  color: var(--small-shadow);
+}
+
 /* ==========================================
    RANKING PAGE - MODO OSCURO RELAJADO
 ========================================== */
