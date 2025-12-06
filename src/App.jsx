@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "./utils/supabaseClient";
-import { ThemeProvider } from "./contexts/ThemeContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 import Header from "./components/Header";
 import LoginPage from "./pages/LoginPage";
