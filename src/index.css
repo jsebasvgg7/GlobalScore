@@ -1045,7 +1045,29 @@ button {
 [data-theme="dark"] .orb {
   opacity: 0.08;
 }
+/* ==========================================
+   FIX BUSCADOR - Remover línea oscura
+========================================== */
 
+/* Search input - remover borde oscuro */
+[data-theme="dark"] .search-input-modern,
+[data-theme="dark"] .search-modern input {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Si el input tiene foco, mantener sin borde */
+[data-theme="dark"] .search-input-modern:focus,
+[data-theme="dark"] .search-modern input:focus {
+  border: none !important;
+  outline: none !important;
+}
+
+/* Asegurar que el contenedor search-modern no tenga bordes internos extra */
+[data-theme="dark"] .search-modern {
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
 /* Cards y contenedores */
 [data-theme="dark"] .stat-card-modern,
 [data-theme="dark"] .your-rank-modern,
