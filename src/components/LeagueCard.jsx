@@ -7,7 +7,6 @@ export default function LeagueCard({ league, userPrediction, onPredict }) {
   const [topScorer, setTopScorer] = useState(userPrediction?.predicted_top_scorer ?? '');
   const [topAssist, setTopAssist] = useState(userPrediction?.predicted_top_assist ?? '');
   const [mvp, setMvp] = useState(userPrediction?.predicted_mvp ?? '');
-  const [isHovered, setIsHovered] = useState(false);
 
   const handleSubmit = () => {
     if (!champion.trim() || !topScorer.trim() || !topAssist.trim() || !mvp.trim()) {
@@ -26,143 +25,146 @@ export default function LeagueCard({ league, userPrediction, onPredict }) {
     minute: '2-digit'
   }) : null;
 
+  const isPredictionChanged = (
+    champion !== userPrediction?.predicted_champion ||
+    topScorer !== userPrediction?.predicted_top_scorer ||
+    topAssist !== userPrediction?.predicted_top_assist ||
+    mvp !== userPrediction?.predicted_mvp
+  );
+
+  const showSaveButton = !isFinished && (!hasPrediction || isPredictionChanged);
+
   return (
-    <div 
-      className="league-card-premium"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-      }}
-    >
+    <div className="league-card-light">
       {/* Header */}
-      <div className="league-header-premium">
-        <div className="league-logo-section">
-          <div className="league-logo-big">{league.logo}</div>
-          <div className="league-info-header">
-            <h3 className="league-name-premium">{league.name}</h3>
-            <span className="league-season">{league.season}</span>
+      <div className="league-header-light">
+        <div className="league-info-section">
+          <div className="league-logo-container">
+            <span className="league-logo-emoji">{league.logo}</span>
+          </div>
+          <div className="league-text-info">
+            <h3 className="league-name-light">{league.name}</h3>
+            <span className="league-season-light">{league.season}</span>
           </div>
         </div>
         
         {deadline && !isFinished && (
-          <div className="league-deadline">
-            <Calendar size={14} />
+          <div className="league-deadline-badge">
+            <Calendar size={12} />
             <span>Hasta {deadline}</span>
           </div>
         )}
 
         {isFinished && (
-          <div className="league-status finished">
-            <CheckCircle2 size={14} />
+          <div className="league-status-badge finished">
+            <CheckCircle2 size={12} />
             <span>Finalizada</span>
           </div>
         )}
       </div>
 
       {/* Formulario de predicciones */}
-      <div className="league-predictions-form">
+      <div className="league-predictions-container">
         {/* Campeón - Ancho completo */}
-        <div className="prediction-field full-width">
-          <label className="prediction-label">
-            <Shield size={16} />
-            <span>Campeón de la competicion</span>
+        <div className="prediction-group full-width">
+          <label className="prediction-label-light">
+            <Shield size={14} />
+            <span>Campeón de la competición</span>
           </label>
           <input
             type="text"
-            className="prediction-input champion-input"
+            className={`prediction-input-light ${hasPrediction ? 'has-prediction' : ''}`}
             value={champion}
             onChange={(e) => setChampion(e.target.value)}
-            placeholder="..."
+            placeholder="Escribe el equipo..."
             disabled={isFinished}
           />
           {isFinished && league.champion && (
-            <div className="actual-result">
-              <CheckCircle2 size={14} />
+            <div className="actual-result-light">
+              <CheckCircle2 size={12} />
               <span>
                 <strong>{league.champion}</strong>
                 {champion.toLowerCase() === league.champion.toLowerCase() && 
-                  <strong className="correct-badge"> ✓ Correcto!</strong>
+                  <strong className="correct-indicator"> ✓ Correcto</strong>
                 }
               </span>
             </div>
           )}
         </div>
 
-        {/* Goleador y Asistidor en grid */}
-        <div className="prediction-field">
-          <label className="prediction-label">
-            <Trophy size={16} />
+        {/* Goleador, Asistidor y MVP en grid */}
+        <div className="prediction-group">
+          <label className="prediction-label-light">
+            <Trophy size={14} />
             <span>Máximo Goleador</span>
           </label>
           <input
             type="text"
-            className="prediction-input"
+            className={`prediction-input-light ${hasPrediction ? 'has-prediction' : ''}`}
             value={topScorer}
             onChange={(e) => setTopScorer(e.target.value)}
-            placeholder="..."
+            placeholder="Jugador..."
             disabled={isFinished}
           />
           {isFinished && league.top_scorer && (
-            <div className="actual-result">
-              <CheckCircle2 size={14} />
+            <div className="actual-result-light">
+              <CheckCircle2 size={12} />
               <span>
-                {league.top_scorer} ({league.top_scorer_goals} goles)
+                {league.top_scorer} ({league.top_scorer_goals}g)
                 {topScorer.toLowerCase() === league.top_scorer.toLowerCase() && 
-                  <strong className="correct-badge"> ✓ Correcto!</strong>
+                  <strong className="correct-indicator"> ✓</strong>
                 }
               </span>
             </div>
           )}
         </div>
 
-        <div className="prediction-field">
-          <label className="prediction-label">
-            <Target size={16} />
+        <div className="prediction-group">
+          <label className="prediction-label-light">
+            <Target size={14} />
             <span>Máximo Asistidor</span>
           </label>
           <input
             type="text"
-            className="prediction-input"
+            className={`prediction-input-light ${hasPrediction ? 'has-prediction' : ''}`}
             value={topAssist}
             onChange={(e) => setTopAssist(e.target.value)}
-            placeholder="..."
+            placeholder="Jugador..."
             disabled={isFinished}
           />
           {isFinished && league.top_assist && (
-            <div className="actual-result">
-              <CheckCircle2 size={14} />
+            <div className="actual-result-light">
+              <CheckCircle2 size={12} />
               <span>
-                {league.top_assist} ({league.top_assist_count} asistencias)
+                {league.top_assist} ({league.top_assist_count}a)
                 {topAssist.toLowerCase() === league.top_assist.toLowerCase() && 
-                  <strong className="correct-badge"> ✓ Correcto!</strong>
+                  <strong className="correct-indicator"> ✓</strong>
                 }
               </span>
             </div>
           )}
         </div>
 
-        <div className="prediction-field">
-          <label className="prediction-label">
-            <Award size={16} />
+        <div className="prediction-group">
+          <label className="prediction-label-light">
+            <Award size={14} />
             <span>Jugador MVP</span>
           </label>
           <input
             type="text"
-            className="prediction-input"
+            className={`prediction-input-light ${hasPrediction ? 'has-prediction' : ''}`}
             value={mvp}
             onChange={(e) => setMvp(e.target.value)}
-            placeholder="..."
+            placeholder="Jugador..."
             disabled={isFinished}
           />
           {isFinished && league.mvp_player && (
-            <div className="actual-result">
-              <CheckCircle2 size={14} />
+            <div className="actual-result-light">
+              <CheckCircle2 size={12} />
               <span>
                 {league.mvp_player}
                 {mvp.toLowerCase() === league.mvp_player.toLowerCase() && 
-                  <strong className="correct-badge"> ✓ Correcto!</strong>
+                  <strong className="correct-indicator"> ✓</strong>
                 }
               </span>
             </div>
@@ -170,31 +172,28 @@ export default function LeagueCard({ league, userPrediction, onPredict }) {
         </div>
       </div>
 
-      {/* Footer con predicción guardada o botón */}
-      {hasPrediction && !isFinished && (
-        <div className="prediction-saved-badge">
-          <CheckCircle2 size={16} />
-          <span>Predicción guardada</span>
-          {userPrediction.points_earned > 0 && (
-            <span className="points-earned">+{userPrediction.points_earned} pts</span>
-          )}
-        </div>
-      )}
-
-      {isFinished && userPrediction && (
-        <div className="final-points-banner">
-          <Star size={18} />
-          <span>Obtuviste {userPrediction.points_earned} puntos en esta liga</span>
-        </div>
-      )}
-
-      {!isFinished && (
-        <button className="predict-league-btn" onClick={handleSubmit}>
-          <Star size={18} />
-          <span>{hasPrediction ? 'Actualizar Predicción' : 'Guardar Predicción'}</span>
-          <div className="btn-glow"></div>
-        </button>
-      )}
+      {/* Footer */}
+      <div className="league-footer-light">
+        {isFinished && userPrediction ? (
+          <div className="final-points-display">
+            <Star size={16} />
+            <span>Obtuviste {userPrediction.points_earned} puntos</span>
+          </div>
+        ) : !isFinished && hasPrediction && !showSaveButton ? (
+          <span className="prediction-status-light">
+            <CheckCircle2 size={14} style={{color: '#059669'}}/>
+            Predicción guardada
+            {userPrediction.points_earned > 0 && (
+              <span className="points-badge">+{userPrediction.points_earned} pts</span>
+            )}
+          </span>
+        ) : showSaveButton ? (
+          <button className="predict-button-light" onClick={handleSubmit}>
+            <Star size={16} />
+            <span>{hasPrediction ? 'Actualizar' : 'Guardar'}</span>
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }
