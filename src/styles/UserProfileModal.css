@@ -90,6 +90,7 @@
   background: var(--bg-card);
   z-index: 10;
   backdrop-filter: blur(10px);
+  border-radius: 24px 24px 0 0;
 }
 
 @media (max-width: 768px) {
@@ -204,6 +205,7 @@
 .user-modal-body {
   padding: 24px;
   display: flex;
+  padding-right: 20px;
   flex-direction: column;
   gap: 24px;
 }
@@ -961,23 +963,51 @@
   }
 }
 
-/* ==================== SCROLLBAR ==================== */
+/* ==================== SCROLLBAR MEJORADO ==================== */
+.user-modal-container {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 92, 246, 0.4) transparent;
+  overflow-x: hidden;
+}
+
 .user-modal-container::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 .user-modal-container::-webkit-scrollbar-track {
-  background: var(--bg-tertiary);
-  border-radius: 4px;
+  background: transparent;
+  margin: 8px 0;
 }
 
 .user-modal-container::-webkit-scrollbar-thumb {
   background: rgba(139, 92, 246, 0.3);
-  border-radius: 4px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: all 0.3s ease;
 }
 
 .user-modal-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.5);
+  background: rgba(139, 92, 246, 0.6);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.user-modal-container::-webkit-scrollbar-thumb:active {
+  background: rgba(139, 92, 246, 0.8);
+}
+
+/* Scrollbar en mobile */
+@media (max-width: 768px) {
+  .user-modal-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .user-modal-container::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+  }
 }
 
 /* ==================== CLICKEABLE AVATARS ==================== */
