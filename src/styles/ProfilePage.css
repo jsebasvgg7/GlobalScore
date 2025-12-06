@@ -139,6 +139,76 @@
 }
 
 /* ==================== AVATAR CARD PREMIUM ==================== */
+/* Level Badge - Siempre flotante y fijo */
+.level-badge-floating {
+  position: absolute;
+  bottom: 0;
+  right: -8px;
+  background: var(--primary-gradient);
+  border: 3px solid var(--bg-card);
+  border-radius: 20px;
+  padding: clamp(3px, 1vw, 4px) clamp(8px, 2vw, 12px);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: clamp(0.65rem, 2vw, 0.75rem);
+  font-weight: 700;
+  color: white;
+  box-shadow: var(--shadow-sm);
+  z-index: 20;
+  pointer-events: none; /* Para que no interfiera con clics */
+}
+
+/* Asegurar que el contenedor del avatar siempre tenga position relative */
+.avatar-container-new {
+  position: relative;
+  display: inline-block;
+}
+
+/* Cuando está en modo edición */
+.avatar-upload-container {
+  position: relative;
+  width: clamp(80px, 18vw, 120px);
+  height: clamp(80px, 18vw, 120px);
+  margin: 0 auto;
+}
+
+.avatar-upload-container .level-badge-floating {
+  position: absolute;
+  bottom: 0;
+  right: -8px;
+  z-index: 30; /* Más alto cuando está editando */
+}
+
+/* Asegurar que el wrapper del upload no oculte el badge */
+.avatar-upload-wrapper,
+.avatar-upload-horizontal-group {
+  position: relative;
+}
+
+.avatar-preview-wrapper {
+  position: relative;
+  width: clamp(80px, 18vw, 120px);
+  height: clamp(80px, 18vw, 120px);
+  border-radius: 50%;
+  border: 4px solid var(--bg-card);
+  overflow: visible; /* Cambiar de hidden a visible para que el badge no se corte */
+  cursor: pointer;
+  background: var(--bg-tertiary);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+}
+
+/* La imagen dentro sí debe tener overflow hidden */
+.avatar-preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
+  overflow: hidden;
+}
 .avatar-card.premium-layout {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
