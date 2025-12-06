@@ -59,7 +59,26 @@ export default function LeagueCard({ league, userPrediction, onPredict }) {
       <div className="league-header-light">
         <div className="league-info-section">
           <div className="league-logo-container">
-            <span className="league-logo-emoji">{league.logo}</span>
+            {league.logo_url && league.logo_url.startsWith('http') ? (
+              <>
+                <img 
+                  src={league.logo_url} 
+                  alt={`${league.name} logo`}
+                  className="league-logo-img"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+                <span className="league-logo-emoji-display" style={{ display: 'none' }}>
+                  {league.logo || '🏆'}
+                </span>
+              </>
+            ) : (
+              <span className="league-logo-emoji-display">
+                {league.logo || '🏆'}
+              </span>
+            )}
           </div>
           <div className="league-text-info">
             <h3 className="league-name-light">{league.name}</h3>
