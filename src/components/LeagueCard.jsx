@@ -3,6 +3,25 @@ import { Trophy, Target, Award, Star, CheckCircle2, Calendar, Shield } from 'luc
 import '../styles/LeagueCard.css';
 
 export default function LeagueCard({ league, userPrediction, onPredict }) {
+  // Función para renderizar el logo (URL de imagen o emoji de fallback)
+  const renderLeagueLogo = (logoUrl, fallbackEmoji) => {
+    if (logoUrl && logoUrl.startsWith('http')) {
+      return (
+        <img 
+          src={logoUrl} 
+          alt="League logo" 
+          className="league-logo-img"
+          onError={(e) => {
+            // Si la imagen falla, mostrar el emoji
+            e.target.style.display = 'none';
+            e.target.nextElementSibling.style.display = 'flex';
+          }}
+        />
+      );
+    }
+    // Si no hay URL, usar emoji
+    return <span className="league-logo-emoji-display">{fallbackEmoji || '🏆'}</span>;
+  };
   const [champion, setChampion] = useState(userPrediction?.predicted_champion ?? '');
   const [topScorer, setTopScorer] = useState(userPrediction?.predicted_top_scorer ?? '');
   const [topAssist, setTopAssist] = useState(userPrediction?.predicted_top_assist ?? '');

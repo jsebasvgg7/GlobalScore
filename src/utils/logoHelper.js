@@ -1,5 +1,13 @@
-const BUCKET_NAME = 'team-logos';
+// ============================================
+// LOGO HELPER - Equipos y Ligas
+// ============================================
 
+const TEAM_LOGOS_BUCKET = 'team-logos';
+const LEAGUE_LOGOS_BUCKET = 'league-logos';
+
+// ============================================
+// MAPEO DE EQUIPOS
+// ============================================
 export const teamSlugMap = {
   'Man United': 'manchesterunited',
   'Liverpool': 'liverpool',
@@ -134,6 +142,9 @@ export const teamSlugMap = {
   'Bodo/Glimt CL': 'bodo_glimt',
 };
 
+// ============================================
+// MAPEO DE LIGAS (para equipos)
+// ============================================
 export const leagueMap = {
   'Premier League': 'premier-league',
   'La Liga': 'la-liga',
@@ -143,15 +154,36 @@ export const leagueMap = {
   'Ligue 1': 'ligue-1',
 };
 
+// ============================================
+// MAPEO DE LOGOS DE LIGAS (para LeagueCard)
+// ============================================
+export const leagueLogoMap = {
+  'Premier League': 'inglaterra',
+  'La Liga': 'espana',
+  'Serie A': 'italia',
+  'Bundesliga': 'alemania',
+  'Ligue 1': 'francia',
+  'Champions League': 'champions',
+  'Europa League': 'europa',
+  'Conference League': 'conference',
+};
+
+// ============================================
+// FUNCIONES PARA LOGOS DE EQUIPOS
+// ============================================
+
 /**
- * Obtiene la URL pública del logo
+ * Obtiene la URL pública del logo de un equipo
  * @param {Object} supabase - Cliente de Supabase
+ * @param {string} leagueSlug - Slug de la liga
+ * @param {string} teamSlug - Slug del equipo
+ * @returns {string} URL pública del logo
  */
 export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
   const path = `leagues/${leagueSlug}/${teamSlug}.png`;
   
   const { data } = supabase.storage
-    .from(BUCKET_NAME)
+    .from(TEAM_LOGOS_BUCKET)
     .getPublicUrl(path);
   
   return data.publicUrl;
@@ -160,15 +192,55 @@ export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
 /**
  * Genera URL del logo basado en nombre de equipo y liga
  * @param {Object} supabase - Cliente de Supabase
+ * @param {string} teamName - Nombre del equipo
+ * @param {string} leagueName - Nombre de la liga
+ * @returns {string|null} URL del logo o null si no se encuentra
  */
 export function getLogoUrlByTeamName(supabase, teamName, leagueName) {
   const teamSlug = teamSlugMap[teamName];
   const leagueSlug = leagueMap[leagueName];
   
   if (!teamSlug || !leagueSlug) {
-    console.warn(`⚠️ Logo no encontrado para: "${teamName}" en "${leagueName}"`);
+    console.warn(`⚠️ Logo de equipo no encontrado: "${teamName}" en "${leagueName}"`);
     return null;
   }
   
   return getTeamLogoUrl(supabase, leagueSlug, teamSlug);
+}
+
+// ============================================
+// FUNCIONES PARA LOGOS DE LIGAS
+// ============================================
+
+/**
+ * Obtiene la URL pública del logo de una liga
+ * @param {Object} supabase - Cliente de Supabase
+ * @param {string} leagueSlug - Slug de la liga
+ * @returns {string} URL pública del logo
+ */
+export function getLeagueLogoUrl(supabase, leagueSlug) {
+  const path = `${leagueSlug}.png`;
+  
+  const { data } = supabase.storage
+    .from(LEAGUE_LOGOS_BUCKET)
+    .getPublicUrl(path);
+  
+  return data.publicUrl;
+}
+
+/**
+ * Genera URL del logo de liga basado en nombre
+ * @param {Object} supabase - Cliente de Supabase
+ * @param {string} leagueName - Nombre de la liga
+ * @returns {string|null} URL del logo o null si no se encuentra
+ */
+export function getLogoUrlByLeagueName(supabase, leagueName) {
+  const leagueSlug = leagueLogoMap[leagueName];
+  
+  if (!leagueSlug) {
+    console.warn(`⚠️ Logo de liga no encontrado: "${leagueName}"`);
+    return null;
+  }
+  
+  return getLeagueLogoUrl(supabase, leagueSlug);
 }
