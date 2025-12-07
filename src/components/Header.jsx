@@ -84,7 +84,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           </button>
 
           <button
-          classnaem="icon-btn worldcup-btn desktop-only"
+          classname="icon-btn worldcup-btn desktop-only"
             onClick={handleWorldCupClick}
             aria-label="Ver sección del Mundial"
             title="Mundial 2026"
