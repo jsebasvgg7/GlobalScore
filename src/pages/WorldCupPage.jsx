@@ -7,17 +7,17 @@ import '../styles/WorldCupPage.css';
 
 // Datos de los grupos del Mundial 2026
 const WORLD_CUP_GROUPS = {
-  A: ['Mexico', 'South Africa', 'Korea Republic', 'CZE/DEN/IRL/MKD'],
-  B: ['Canada', 'BIH/ITA/NIR/WAL', 'Qatar', 'Switzerland'],
+  A: ['Mexico', 'South Africa', 'Korea Republic', 'Denmark*'],
+  B: ['Canada', 'Italy*', 'Qatar', 'Switzerland'],
   C: ['Brazil', 'Morocco', 'Haiti', 'Scotland'],
-  D: ['USA', 'Paraguay', 'Australia', 'KOS/ROU/SVK/TUR'],
+  D: ['USA', 'Paraguay', 'Australia', 'Turkey*'],
   E: ['Germany', 'Curacao', 'Cote d Ivoire', 'Ecuador'],
-  F: ['Netherlands', 'Japan', 'ALB/POL/SWE/UKR', 'Tunisia'],
+  F: ['Netherlands', 'Japan', 'Poland*', 'Tunisia'],
   G: ['Belgium', 'Egypt', 'Iran', 'New Zealand'],
   H: ['Spain', 'Cabo Verde', 'Saudi Arabia', 'Uruguay'],
-  I: ['France', 'Senegal', 'BOL/IRQ/SUR', 'Norway'],
+  I: ['France', 'Senegal', 'Bolivia*', 'Norway'],
   J: ['Argentina', 'Algeria', 'Austria', 'Jordan'],
-  K: ['Portugal', 'COD/JAM/NCL', 'Uzbekistan', 'Colombia'],
+  K: ['Portugal', 'Congo*', 'Uzbekistan', 'Colombia'],
   L: ['England', 'Croatia', 'Ghana', 'Panama']
 };
 
@@ -64,7 +64,12 @@ const TEAM_LOGO_MAP = {
   'England': 'inglaterra',
   'Croatia': 'croacia',
   'Ghana': 'ghana',
-  'Panama': 'panama'
+  'Denmark*': 'dinamarca',
+  'Turkey*': 'turquia',
+  'Italy*': 'italia',
+  'Poland*': 'polonia',
+  'Bolivia*': 'bolivia',
+  'Congo*': 'congo'
 };
 
 export default function WorldCupPage({ currentUser }) {
@@ -213,7 +218,7 @@ export default function WorldCupPage({ currentUser }) {
       );
     }
     
-    return <span className="team-flag-emoji">🏴</span>;
+    return <span className="team-flag-emoji">❓</span>;
   };
 
   if (loading) {
@@ -323,7 +328,7 @@ export default function WorldCupPage({ currentUser }) {
                 onClick={savePredictions}
                 disabled={saving}
               >
-                {saving ? 'Guardando...' : 'Guardar Predicciones'}
+                {saving ? 'Guardando...' : 'Guardar'}
               </button>
             </div>
           )}
@@ -342,7 +347,7 @@ export default function WorldCupPage({ currentUser }) {
                 onClick={savePredictions}
                 disabled={saving}
               >
-                {saving ? 'Guardando...' : 'Guardar Predicciones'}
+                {saving ? 'Guardando...' : 'Guardar'}
               </button>
             </div>
           )}
@@ -435,7 +440,7 @@ export default function WorldCupPage({ currentUser }) {
                 onClick={savePredictions}
                 disabled={saving}
               >
-                {saving ? 'Guardando...' : 'Guardar Predicciones'}
+                {saving ? 'Guardando...' : 'Guardar'}
               </button>
             </div>
           )}

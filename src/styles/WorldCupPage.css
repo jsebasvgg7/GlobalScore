@@ -84,11 +84,6 @@
   gap: 10px;
 }
 
-.save-predictions-btn::before {
-  content: '💾';
-  font-size: 20px;
-}
-
 .save-predictions-btn:hover {
   transform: translateY(-4px);
   box-shadow: 
