@@ -15,7 +15,7 @@ import { supabase } from '../utils/supabaseClient';
 import AvatarUpload from '../components/AvatarUpload';
 import AchievementsSection from '../components/AchievementsSection';
 import AdminAchievementsModal from '../components/adminComponents/AdminAchievementsModal';
-import AdminTitlesModal from '../components/AdminTitlesModal';
+import AdminTitlesModal from '../components/adminComponents/AdminTitlesModal';
 import { ToastContainer, useToast } from '../components/Toast';
 import Footer from '../components/Footer';
 import '../styles/pagesStyles/ProfilePage.css';
