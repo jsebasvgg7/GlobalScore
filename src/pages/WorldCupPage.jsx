@@ -531,86 +531,86 @@ const [predictions, setPredictions] = useState({
           )}
 
           {activeTab === 'awards' && (
-  <div className="awards-section">
-    <div className="wc-awards-grid">
-      {[
-        { 
-          icon: Trophy, 
-          label: 'Bota de Oro', 
-          category: 'Máximo Goleador',
-          key: 'topScorer',
-          placeholder: 'Ingresa el nombre del ganador...'
-        },
-        { 
-          icon: Target, 
-          label: 'Mejor Asistidor', 
-          category: 'Más Asistencias',
-          key: 'topAssist',
-          placeholder: 'Ingresa el nombre del ganador...'
-        },
-        { 
-          icon: Medal, 
-          label: 'Balón de Oro', 
-          category: 'Mejor Jugador del Mundial',
-          key: 'goldenBall',
-          placeholder: 'Ingresa el nombre del ganador...'
-        },
-        { 
-          icon: User, 
-          label: 'Mejor Jugador Joven', 
-          category: 'Sub-21 Destacado',
-          key: 'bestYoungPlayer',
-          placeholder: 'Ingresa el nombre del ganador...'
-        },
-        { 
-          icon: Award, 
-          label: 'Guante de Oro', 
-          category: 'Mejor Portero',
-          key: 'goldenGlove',
-          placeholder: 'Ingresa el nombre del ganador...'
-        },
-        { 
-          icon: TrendingUp, 
-          label: 'Selección Sorpresa', 
-          category: 'Equipo Revelación',
-          key: 'surpriseTeam',
-          placeholder: 'Ingresa el nombre del ganador...'
-        },
-        { 
-          icon: TrendingDown, 
-          label: 'Selección Decepción', 
-          category: 'Bajo Rendimiento',
-          key: 'disappointmentTeam',
-          placeholder: 'Ingresa el nombre del ganador...'
-        },
-        { 
-          icon: Star, 
-          label: 'Jugador Revelación', 
-          category: 'Descubrimiento del Torneo',
-          key: 'breakoutPlayer',
-          placeholder: 'Ingresa el nombre del ganador...'
-        },
-        { 
-          icon: Zap, 
-          label: 'Jugador Decepción', 
-          category: 'Por Debajo de Expectativas',
-          key: 'disappointmentPlayer',
-          placeholder: 'Ingresa el nombre del ganador...'
-        }
-      ].map(award => (
-        <WorldCupAwardCard
-          key={award.key}
-          award={award}
-          value={predictions.awards[award.key]}
-          onChange={handleAwardUpdate}
-        />
-      ))}
-    </div>
-    <button className="save-predictions-btn" onClick={handleSave} disabled={saving}>
-      {saving ? 'Guardando...' : 'Guardar Premios'}
-    </button>
-  </div>
-)}
+            <div className="awards-section">
+              <div className="wc-awards-grid">
+                {[
+                  { 
+                    icon: Trophy, 
+                    label: 'Bota de Oro', 
+                    category: 'Máximo Goleador',
+                    key: 'topScorer',
+                    placeholder: 'Ingresa el nombre del ganador...'
+                  },
+                  { 
+                    icon: Target, 
+                    label: 'Mejor Asistidor', 
+                    category: 'Más Asistencias',
+                    key: 'topAssist',
+                    placeholder: 'Ingresa el nombre del ganador...'
+                  },
+                  { 
+                    icon: Medal, 
+                    label: 'Balón de Oro', 
+                    category: 'Mejor Jugador del Mundial',
+                    key: 'goldenBall',
+                    placeholder: 'Ingresa el nombre del ganador...'
+                  },
+                  { 
+                    icon: User, 
+                    label: 'Mejor Jugador Joven', 
+                    category: 'Sub-21 Destacado',
+                    key: 'bestYoungPlayer',
+                    placeholder: 'Ingresa el nombre del ganador...'
+                  },
+                  { 
+                    icon: Award, 
+                    label: 'Guante de Oro', 
+                    category: 'Mejor Portero',
+                    key: 'goldenGlove',
+                    placeholder: 'Ingresa el nombre del ganador...'
+                  },
+                  { 
+                    icon: TrendingUp, 
+                    label: 'Selección Sorpresa', 
+                    category: 'Equipo Revelación',
+                    key: 'surpriseTeam',
+                    placeholder: 'Ingresa el nombre del ganador...'
+                  },
+                  { 
+                    icon: TrendingDown, 
+                    label: 'Selección Decepción', 
+                    category: 'Bajo Rendimiento',
+                    key: 'disappointmentTeam',
+                    placeholder: 'Ingresa el nombre del ganador...'
+                  },
+                  { 
+                    icon: Star, 
+                    label: 'Jugador Revelación', 
+                    category: 'Descubrimiento del Torneo',
+                    key: 'breakoutPlayer',
+                    placeholder: 'Ingresa el nombre del ganador...'
+                  },
+                  { 
+                    icon: Zap, 
+                    label: 'Jugador Decepción', 
+                    category: 'Por Debajo de Expectativas',
+                    key: 'disappointmentPlayer',
+                    placeholder: 'Ingresa el nombre del ganador...'
+                  }
+                ].map(award => (
+                  <WorldCupAwardCard
+                    key={award.key}
+                    award={award}
+                    value={predictions.awards[award.key]}
+                    onChange={handleAwardUpdate}
+                  />
+                ))}
+              </div>
+              <button className="save-predictions-btn" onClick={handleSave} disabled={saving}>
+                {saving ? 'Guardando...' : 'Guardar Premios'}
+              </button>
+            </div>
+          )}
           
           <Footer /> 
         </div>

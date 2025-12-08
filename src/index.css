@@ -571,18 +571,34 @@ button {
 }
 
 /* ================================
-   TOAST FIX
+   TOAST FIX - POR ENCIMA DEL HEADER
 ================================ */
 .toast-container {
+  position: fixed !important;
+  top: 95px !important;
+  right: 20px !important;
+  z-index: 10000 !important;
   pointer-events: none !important;
-  z-index: 10000;
 }
 
 .toast-notification {
   pointer-events: all !important;
-  background: var(--card);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+  .toast-container {
+    top: 85px !important;
+    right: 12px !important;
+    left: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .toast-container {
+    top: 78px !important;
+    right: 10px !important;
+    left: 10px !important;
+  }
 }
 
 /* ================================
