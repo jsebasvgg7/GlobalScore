@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { X, Plus, Trophy, Calendar, Award, Star } from 'lucide-react';
 import { getLogoUrlByAwardName } from '../../utils/logoHelper.js';
-import { supabase } from '../utils/supabaseClient';
-import '../styles/adminStyles/AdminModal.css';
+import { supabase } from '../../utils/supabaseClient';
+import '../../styles/adminStyles/AdminModal.css';
 
 export default function AdminAwardModal({ onAdd, onClose }) {
   const [form, setForm] = useState({
