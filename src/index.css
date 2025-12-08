@@ -55,64 +55,137 @@
   color: var(--text-primary);
 }
 
-/* ==========================================
-   FOOTER - Compacto
-========================================== */
-.app-footer {
-  background: linear-gradient(135deg, #1e202c 0%, #31323e 100%);
-  border-top: 1px solid rgba(96, 81, 155, 0.2);
-  padding: 12px 18px;
-  margin-top: auto;
-  width: 100%;
-  text-align: center;
-}
-
-.footer-text {
-  color: #bfc0d1;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-}
-
-/* Asegurar que las páginas usen flexbox para el footer al final */
-.vega-root,
-.ranking-page,
-.admin-page,
-.profile-page,
-.notifications-page,
-.stats-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.container,
-.main-content-full {
-  flex: 1;
-}
-
-/* Footer responsive */
+/* ================================
+   RESPONSIVE MOBILE - AJUSTADO
+================================ */
 @media (max-width: 768px) {
-  .app-footer {
-    padding: 10px 12px;
-    margin-bottom: 70px; /* Espacio para el bottom nav */
+  body {
+    padding-bottom: 0;
   }
-  
-  .footer-text {
-    font-size: 11px;
+
+  .container {
+    padding: 0 12px;
+    margin: 16px auto;
+  }
+
+  /* REDUCIR padding-bottom significativamente */
+  .page-container,
+  .vega-score-page,
+  .vega-root,
+  .ranking-page,
+  .admin-page,
+  .profile-page,
+  .notifications-page,
+  .stats-page,
+  .profile-container,
+  .ranking-container,
+  .admin-container {
+    padding-bottom: 20px !important; /* Reducido de 100px a 20px */
+    min-height: auto !important;
+  }
+
+  .matches-container,
+  .ranking-list-premium,
+  .admin-content,
+  .profile-bottom-section,
+  .history-card,
+  .notifications-list {
+    padding-bottom: 20px !important; /* Reducido de 40px a 20px */
+  }
+
+  .floating-action-btn,
+  .save-predictions-btn,
+  .submit-button,
+  .save-button,
+  .action-button,
+  .form-actions,
+  .button-group,
+  .match-actions {
+    margin-bottom: 15px; /* Reducido de 30px a 15px */
+  }
+
+  .match-card-premium:last-child,
+  .ranking-item-premium:last-child,
+  .history-item:last-child {
+    margin-bottom: 15px; /* Reducido de 30px a 15px */
+  }
+
+  .modal-content,
+  .overlay-content {
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+  }
+
+  .scrollable-content {
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .bottom-nav ~ * {
+    position: relative;
+    z-index: 1;
+  }
+}
+/* ================================
+   RESPONSIVE SMALL MOBILE - AJUSTADO
+================================ */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+    margin: 12px auto;
+  }
+
+  .page-container,
+  .vega-score-page,
+  .vega-root,
+  .ranking-page,
+  .admin-page,
+  .profile-page,
+  .notifications-page,
+  .stats-page,
+  .profile-container,
+  .ranking-container,
+  .admin-container {
+    padding-bottom: 15px !important; /* Reducido de 90px a 15px */
+    min-height: auto !important;
+  }
+
+  .matches-container,
+  .ranking-list-premium,
+  .admin-content,
+  .profile-bottom-section,
+  .history-card,
+  .notifications-list {
+    padding-bottom: 15px !important; /* Reducido de 35px a 15px */
+  }
+
+  .floating-action-btn,
+  .save-predictions-btn,
+  .submit-button,
+  .save-button,
+  .action-button,
+  .form-actions,
+  .button-group,
+  .match-actions {
+    margin-bottom: 12px; /* Reducido de 25px a 12px */
+  }
+
+  .match-card-premium:last-child,
+  .ranking-item-premium:last-child,
+  .history-item:last-child {
+    margin-bottom: 12px; /* Reducido de 25px a 12px */
   }
 }
 
-@media (max-width: 480px) {
-  .app-footer {
-    padding: 8px 10px;
-    margin-bottom: 65px;
-  }
-  
-  .footer-text {
-    font-size: 10px;
-  }
-}
 /* ==========================================
    HEADER - FIX MÓVIL NO DEBE CAMBIAR
 ========================================== */
