@@ -8,7 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-import Dashboard from "./pages/Dashboard";
+import DashboardPage from "./pages/DashboardPage";
 import RankingPage from "./pages/RankingPage";
 import AdminPage from "./pages/AdminPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -157,7 +157,7 @@ export default function App() {
           {/* Rutas protegidas */}
           <Route
             path="/app"
-            element={session ? <Dashboard /> : <Navigate to="/" replace />}
+            element={session ? <DashboardPage /> : <Navigate to="/" replace />}
           />
           <Route
             path="/notifications"
