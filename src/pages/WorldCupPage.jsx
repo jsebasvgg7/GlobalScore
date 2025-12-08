@@ -272,14 +272,28 @@ const GroupCard = ({ group, teams, predictions, onUpdatePrediction, expanded, on
 // ============================================
 export default function WorldCupPage({ currentUser }) {
   const [activeTab, setActiveTab] = useState('groups');
-  const [predictions, setPredictions] = useState({
-    groups: {},
-    knockout: { round16: {}, quarters: {}, semis: {}, final: {}, thirdPlace: {} },
-    awards: {
-      topScorer: '', topAssist: '', surpriseTeam: '',
-      disappointmentTeam: '', breakoutPlayer: '', disappointmentPlayer: ''
-    }
-  });
+const [predictions, setPredictions] = useState({
+  groups: {},
+  knockout: { 
+    round16: {},    
+    round8: {},     
+    quarters: {},   
+    semis: {},        
+    final: {},        
+    thirdPlace: {}    
+  },
+  awards: {
+    topScorer: '',
+    topAssist: '',
+    goldenBall: '',
+    bestYoungPlayer: '',
+    goldenGlove: '',
+    surpriseTeam: '',
+    disappointmentTeam: '',
+    breakoutPlayer: '',
+    disappointmentPlayer: ''
+  }
+});
   const [expandedGroups, setExpandedGroups] = useState({});
   const [loading, setLoading] = useState(true);
   

@@ -1,13 +1,15 @@
 // src/components/KnockoutSection.jsx
 import React, { useMemo } from 'react';
-import { Trophy, Award, Target, AlertCircle } from 'lucide-react';
+import { Trophy, Award, AlertCircle } from 'lucide-react';
 import KnockoutMatchCard from './KnockoutMatchCard';
 import '../styles/KnockoutSection.css';
 
 // ============================================
-// CONFIGURACIÓN DE LLAVES FIFA
+// CONFIGURACIÓN DE LLAVES FIFA - 32 EQUIPOS
 // ============================================
-const ROUND_16_BRACKETS = {
+
+// 16AVOS DE FINAL (32 equipos → 16 ganadores)
+const ROUND_OF_16_BRACKETS = {
   leftTop: [
     { id: 1, home: 'E-1', away: 'ABCDF-3', label: 'Llave 1', homeDesc: '1° Grupo E', awayDesc: '3° Grupo A/B/C/D/F' },
     { id: 2, home: 'I-1', away: 'CDFGH-3', label: 'Llave 2', homeDesc: '1° Grupo I', awayDesc: '3° Grupo C/D/F/G/H' },
@@ -34,22 +36,30 @@ const ROUND_16_BRACKETS = {
   ]
 };
 
-const QUARTERS_BRACKETS = [
-  { id: 'QF1', matches: [1, 2], label: 'Cuarto 1', section: 'leftTop' },
-  { id: 'QF2', matches: [3, 4], label: 'Cuarto 2', section: 'leftTop' },
-  { id: 'QF3', matches: [5, 6], label: 'Cuarto 3', section: 'leftBottom' },
-  { id: 'QF4', matches: [7, 8], label: 'Cuarto 4', section: 'leftBottom' },
-  { id: 'QF5', matches: [9, 10], label: 'Cuarto 5', section: 'rightTop' },
-  { id: 'QF6', matches: [11, 12], label: 'Cuarto 6', section: 'rightTop' },
-  { id: 'QF7', matches: [13, 14], label: 'Cuarto 7', section: 'rightBottom' },
-  { id: 'QF8', matches: [15, 16], label: 'Cuarto 8', section: 'rightBottom' }
+// OCTAVOS DE FINAL (16 equipos → 8 ganadores)
+const ROUND_OF_8_BRACKETS = [
+  { id: 'R8-1', matches: [1, 2], label: 'Octavo 1', section: 'leftTop' },
+  { id: 'R8-2', matches: [3, 4], label: 'Octavo 2', section: 'leftTop' },
+  { id: 'R8-3', matches: [5, 6], label: 'Octavo 3', section: 'leftBottom' },
+  { id: 'R8-4', matches: [7, 8], label: 'Octavo 4', section: 'leftBottom' },
+  { id: 'R8-5', matches: [9, 10], label: 'Octavo 5', section: 'rightTop' },
+  { id: 'R8-6', matches: [11, 12], label: 'Octavo 6', section: 'rightTop' },
+  { id: 'R8-7', matches: [13, 14], label: 'Octavo 7', section: 'rightBottom' },
+  { id: 'R8-8', matches: [15, 16], label: 'Octavo 8', section: 'rightBottom' }
 ];
 
+// CUARTOS DE FINAL (8 equipos → 4 ganadores)
+const QUARTERS_BRACKETS = [
+  { id: 'QF1', octavos: ['R8-1', 'R8-2'], label: 'Cuarto 1', side: 'left' },
+  { id: 'QF2', octavos: ['R8-3', 'R8-4'], label: 'Cuarto 2', side: 'left' },
+  { id: 'QF3', octavos: ['R8-5', 'R8-6'], label: 'Cuarto 3', side: 'right' },
+  { id: 'QF4', octavos: ['R8-7', 'R8-8'], label: 'Cuarto 4', side: 'right' }
+];
+
+// SEMIFINALES (4 equipos → 2 ganadores)
 const SEMIS_BRACKETS = [
   { id: 'SF1', quarters: ['QF1', 'QF2'], label: 'Semifinal 1', side: 'left' },
-  { id: 'SF2', quarters: ['QF3', 'QF4'], label: 'Semifinal 2', side: 'left' },
-  { id: 'SF3', quarters: ['QF5', 'QF6'], label: 'Semifinal 3', side: 'right' },
-  { id: 'SF4', quarters: ['QF7', 'QF8'], label: 'Semifinal 4', side: 'right' }
+  { id: 'SF2', quarters: ['QF3', 'QF4'], label: 'Semifinal 2', side: 'right' }
 ];
 
 // ============================================
@@ -178,19 +188,16 @@ export default function KnockoutSection({
       return qualified[group]?.second;
     }
     if (code.includes('-3')) {
-      // Mejores terceros - buscar en grupos posibles sin repetir
       const possibleGroups = code.split('-')[0].split('');
       
-      // Buscar el primer tercero disponible que no haya sido usado
       for (let g of possibleGroups) {
         if (bestThirds[g] && !usedThirds.has(g)) {
           const team = bestThirds[g].team;
-          usedThirds.add(g); // Marcar como usado
+          usedThirds.add(g);
           return team;
         }
       }
       
-      // Si todos están usados, buscar cualquiera que esté en bestThirds
       for (let g of possibleGroups) {
         if (bestThirds[g]) {
           return bestThirds[g].team;
@@ -200,22 +207,19 @@ export default function KnockoutSection({
     return null;
   }
 
-  // Función para resetear el registro de terceros usados
   function resetUsedThirds() {
     usedThirds.clear();
   }
 
-  // Obtener todos los equipos de octavos en orden para evitar duplicados
   function getAllRound16Teams() {
     resetUsedThirds();
     const teams = {};
     
-    // Procesar en el orden de las llaves
     const allBrackets = [
-      ...ROUND_16_BRACKETS.leftTop,
-      ...ROUND_16_BRACKETS.leftBottom,
-      ...ROUND_16_BRACKETS.rightTop,
-      ...ROUND_16_BRACKETS.rightBottom
+      ...ROUND_OF_16_BRACKETS.leftTop,
+      ...ROUND_OF_16_BRACKETS.leftBottom,
+      ...ROUND_OF_16_BRACKETS.rightTop,
+      ...ROUND_OF_16_BRACKETS.rightBottom
     ].sort((a, b) => a.id - b.id);
 
     allBrackets.forEach(match => {
@@ -228,7 +232,6 @@ export default function KnockoutSection({
     return teams;
   }
 
-  // Manejar predicción
   function handlePrediction(stage, id, team) {
     onUpdatePrediction({
       ...knockoutPredictions,
@@ -239,17 +242,16 @@ export default function KnockoutSection({
     });
   }
 
-  // Obtener ganador de una fase
   function getWinner(stage, id) {
     return knockoutPredictions[stage]?.[id];
   }
 
-  // Verificar si una fase está completa
+  // Verificar completitud de cada fase
   const isRound16Complete = Object.keys(knockoutPredictions.round16 || {}).length === 16;
-  const isQuartersComplete = Object.keys(knockoutPredictions.quarters || {}).length === 8;
-  const isSemisComplete = Object.keys(knockoutPredictions.semis || {}).length === 4;
+  const isRound8Complete = Object.keys(knockoutPredictions.round8 || {}).length === 8;
+  const isQuartersComplete = Object.keys(knockoutPredictions.quarters || {}).length === 4;
+  const isSemisComplete = Object.keys(knockoutPredictions.semis || {}).length === 2;
 
-  // Verificar si hay predicciones de grupos
   const hasGroupPredictions = Object.values(groupPredictions).some(g => 
     g?.matches && Object.keys(g.matches).length > 0
   );
@@ -264,32 +266,29 @@ export default function KnockoutSection({
     );
   }
 
-  // Obtener todos los equipos de octavos
   const round16Teams = getAllRound16Teams();
 
   return (
     <div className="knockout-section">
-      {/* ========== OCTAVOS DE FINAL ========== */}
+      {/* ========== 16AVOS DE FINAL (32 → 16) ========== */}
       <div className="knockout-stage">
         <div className="knockout-stage-header">
           <Trophy size={28} style={{ color: '#F59E0B' }} />
           <div>
-            <h2>OCTAVOS DE FINAL</h2>
+            <h2>16AVOS DE FINAL</h2>
             <p>32 equipos clasificados • Selecciona los ganadores de cada llave</p>
           </div>
           <span className="knockout-badge">16 Llaves</span>
         </div>
 
         <div className="knockout-bracket-container">
-          {/* Lado Izquierdo */}
           <div className="knockout-side">
             <h3 className="knockout-side-title">Lado Izquierdo</h3>
             
-            {/* Superior Izquierdo */}
             <div className="knockout-quarter-section">
               <h4 className="knockout-quarter-title">Parte Superior</h4>
               <div className="knockout-matches-grid">
-                {ROUND_16_BRACKETS.leftTop.map(match => (
+                {ROUND_OF_16_BRACKETS.leftTop.map(match => (
                   <KnockoutMatchCard
                     key={match.id}
                     match={{ 
@@ -307,11 +306,10 @@ export default function KnockoutSection({
               </div>
             </div>
 
-            {/* Inferior Izquierdo */}
             <div className="knockout-quarter-section">
               <h4 className="knockout-quarter-title">Parte Inferior</h4>
               <div className="knockout-matches-grid">
-                {ROUND_16_BRACKETS.leftBottom.map(match => (
+                {ROUND_OF_16_BRACKETS.leftBottom.map(match => (
                   <KnockoutMatchCard
                     key={match.id}
                     match={{ 
@@ -330,15 +328,13 @@ export default function KnockoutSection({
             </div>
           </div>
 
-          {/* Lado Derecho */}
           <div className="knockout-side">
             <h3 className="knockout-side-title">Lado Derecho</h3>
             
-            {/* Superior Derecho */}
             <div className="knockout-quarter-section">
               <h4 className="knockout-quarter-title">Parte Superior</h4>
               <div className="knockout-matches-grid">
-                {ROUND_16_BRACKETS.rightTop.map(match => (
+                {ROUND_OF_16_BRACKETS.rightTop.map(match => (
                   <KnockoutMatchCard
                     key={match.id}
                     match={{ 
@@ -356,11 +352,10 @@ export default function KnockoutSection({
               </div>
             </div>
 
-            {/* Inferior Derecho */}
             <div className="knockout-quarter-section">
               <h4 className="knockout-quarter-title">Parte Inferior</h4>
               <div className="knockout-matches-grid">
-                {ROUND_16_BRACKETS.rightBottom.map(match => (
+                {ROUND_OF_16_BRACKETS.rightBottom.map(match => (
                   <KnockoutMatchCard
                     key={match.id}
                     match={{ 
@@ -381,22 +376,59 @@ export default function KnockoutSection({
         </div>
       </div>
 
-      {/* ========== CUARTOS DE FINAL ========== */}
+      {/* ========== OCTAVOS DE FINAL (16 → 8) ========== */}
       {isRound16Complete && (
         <div className="knockout-stage">
           <div className="knockout-stage-header">
             <Trophy size={28} style={{ color: '#8B5CF6' }} />
             <div>
-              <h2>CUARTOS DE FINAL</h2>
+              <h2>OCTAVOS DE FINAL</h2>
               <p>16 equipos restantes • Los mejores enfrentándose</p>
             </div>
             <span className="knockout-badge">8 Llaves</span>
           </div>
 
           <div className="knockout-quarters-grid">
+            {ROUND_OF_8_BRACKETS.map(octavo => {
+              const team1 = getWinner('round16', octavo.matches[0]);
+              const team2 = getWinner('round16', octavo.matches[1]);
+
+              return (
+                <KnockoutMatchCard
+                  key={octavo.id}
+                  match={{
+                    id: octavo.id,
+                    label: octavo.label,
+                    home: `Ganador Llave ${octavo.matches[0]}`,
+                    away: `Ganador Llave ${octavo.matches[1]}`
+                  }}
+                  homeTeam={team1}
+                  awayTeam={team2}
+                  selectedWinner={knockoutPredictions.round8?.[octavo.id]}
+                  onSelect={(team) => handlePrediction('round8', octavo.id, team)}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ========== CUARTOS DE FINAL (8 → 4) ========== */}
+      {isRound8Complete && (
+        <div className="knockout-stage">
+          <div className="knockout-stage-header">
+            <Trophy size={28} style={{ color: '#EF4444' }} />
+            <div>
+              <h2>CUARTOS DE FINAL</h2>
+              <p>8 equipos restantes • Definiendo a los semifinalistas</p>
+            </div>
+            <span className="knockout-badge">4 Llaves</span>
+          </div>
+
+          <div className="knockout-semis-grid">
             {QUARTERS_BRACKETS.map(qf => {
-              const team1 = getWinner('round16', qf.matches[0]);
-              const team2 = getWinner('round16', qf.matches[1]);
+              const team1 = getWinner('round8', qf.octavos[0]);
+              const team2 = getWinner('round8', qf.octavos[1]);
 
               return (
                 <KnockoutMatchCard
@@ -404,8 +436,8 @@ export default function KnockoutSection({
                   match={{
                     id: qf.id,
                     label: qf.label,
-                    home: `Ganador Llave ${qf.matches[0]}`,
-                    away: `Ganador Llave ${qf.matches[1]}`
+                    home: `Ganador ${qf.octavos[0]}`,
+                    away: `Ganador ${qf.octavos[1]}`
                   }}
                   homeTeam={team1}
                   awayTeam={team2}
@@ -418,19 +450,19 @@ export default function KnockoutSection({
         </div>
       )}
 
-      {/* ========== SEMIFINALES ========== */}
+      {/* ========== SEMIFINALES (4 → 2) ========== */}
       {isQuartersComplete && (
         <div className="knockout-stage">
           <div className="knockout-stage-header">
-            <Trophy size={28} style={{ color: '#EF4444' }} />
+            <Trophy size={28} style={{ color: '#10B981' }} />
             <div>
               <h2>SEMIFINALES</h2>
-              <p>8 equipos restantes • A un paso de la gloria</p>
+              <p>4 equipos restantes • A un paso de la gloria</p>
             </div>
-            <span className="knockout-badge">4 Llaves</span>
+            <span className="knockout-badge">2 Llaves</span>
           </div>
 
-          <div className="knockout-semis-grid">
+          <div className="knockout-final-grid">
             {SEMIS_BRACKETS.map(sf => {
               const team1 = getWinner('quarters', sf.quarters[0]);
               const team2 = getWinner('quarters', sf.quarters[1]);
@@ -474,12 +506,12 @@ export default function KnockoutSection({
                 <h3>🥉 Tercer Puesto</h3>
               </div>
               <p className="knockout-final-description">
-                Los perdedores de las semifinales SF2 y SF4 disputarán el tercer lugar
+                Los perdedores de las semifinales disputarán el tercer lugar
               </p>
               <div className="knockout-final-teams">
-                <span>Perdedor SF2</span>
+                <span>Perdedor SF1</span>
                 <span className="knockout-vs-large">VS</span>
-                <span>Perdedor SF4</span>
+                <span>Perdedor SF2</span>
               </div>
             </div>
 
@@ -498,10 +530,10 @@ export default function KnockoutSection({
                   id: 'final',
                   label: 'FINAL',
                   home: 'Ganador SF1',
-                  away: 'Ganador SF3'
+                  away: 'Ganador SF2'
                 }}
                 homeTeam={getWinner('semis', 'SF1')}
-                awayTeam={getWinner('semis', 'SF3')}
+                awayTeam={getWinner('semis', 'SF2')}
                 selectedWinner={knockoutPredictions.final?.champion}
                 onSelect={(team) => handlePrediction('final', 'champion', team)}
               />
