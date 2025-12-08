@@ -16,7 +16,7 @@ import AdminTitlesModal from '../components/adminComponents/AdminTitlesModal';
 import FinishLeagueModal from '../components/adminComponents/FinishLeagueModal';
 import FinishAwardModal from '../components/adminComponents/FinishAwardModal';
 import { ToastContainer, useToast } from '../components/Toast';
-import '../styles/pagesStyles/AdminPage.css';
+import '../styles/adminStyles/AdminPage.css';
 
 export default function AdminPage({ currentUser, onBack }) {
   const [activeSection, setActiveSection] = useState('matches');
