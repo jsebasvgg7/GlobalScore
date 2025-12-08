@@ -420,28 +420,28 @@ export default function WorldCupPage({ currentUser }) {
             </div>
           </div>
 
-          {/* Navigation Tabs */}
-          <div className="worldcup-nav-tabs">
+          {/* Navigation Tabs - Estilo Sección */}
+          <div className="worldcup-tabs-section">
             <button 
-              className={`worldcup-nav-tab ${activeTab === 'groups' ? 'active' : ''}`}
+              className={`worldcup-tab-item ${activeTab === 'groups' ? 'active' : ''}`}
               onClick={() => setActiveTab('groups')}
             >
-              <Users size={20} />
-              <span className="worldcup-nav-tab-text">Fase de Grupos</span>
+              <Users size={18} />
+              <span>Fase de Grupos</span>
             </button>
             <button 
-              className={`worldcup-nav-tab ${activeTab === 'knockout' ? 'active' : ''}`}
+              className={`worldcup-tab-item ${activeTab === 'knockout' ? 'active' : ''}`}
               onClick={() => setActiveTab('knockout')}
             >
-              <Target size={20} />
-              <span className="worldcup-nav-tab-text">Eliminatorias</span>
+              <Target size={18} />
+              <span>Eliminatorias</span>
             </button>
             <button 
-              className={`worldcup-nav-tab ${activeTab === 'awards' ? 'active' : ''}`}
+              className={`worldcup-tab-item ${activeTab === 'awards' ? 'active' : ''}`}
               onClick={() => setActiveTab('awards')}
             >
-              <Award size={20} />
-              <span className="worldcup-nav-tab-text">Premios</span>
+              <Award size={18} />
+              <span>Premios</span>
             </button>
           </div>
 
