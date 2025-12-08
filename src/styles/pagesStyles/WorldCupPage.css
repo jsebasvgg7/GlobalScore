@@ -1045,50 +1045,50 @@
     font-weight: 700;
   }
 
-  /* Awards - Mejorado para móviles */
-  .awards-section {
-    padding: 16px;
+.awards-section {
+    padding: 20px;
     border-radius: 14px;
   }
 
   .awards-grid {
-    gap: 12px;
+    gap: 16px;
     grid-template-columns: 1fr;
   }
 
   .award-card {
-    padding: 16px;
+    padding: 20px;
     border-radius: 10px;
-    gap: 10px;
+    gap: 12px;
     min-height: auto;
   }
 
   .award-icon {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border-radius: 8px;
     flex-shrink: 0;
   }
 
   .award-icon svg {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
 
   .award-card label {
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.3;
     display: block;
   }
 
   .award-card input {
     padding: 12px 14px;
-    font-size: 13px;
+    font-size: 14px;
     border-radius: 8px;
-    min-height: 44px;
+    min-height: 48px;
     width: 100%;
     box-sizing: border-box;
   }
+
 
   /* Save Button */
   .save-predictions-btn {
@@ -1122,7 +1122,7 @@
     line-height: 1.4;
   }
 
-  
+
 /* ==========================================
 RESPONSIVE - SMALL (480px - 640px)
 ========================================== */
