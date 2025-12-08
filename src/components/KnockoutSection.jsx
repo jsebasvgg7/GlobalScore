@@ -503,16 +503,42 @@ export default function KnockoutSection({
             <div className="knockout-final-card third-place">
               <div className="knockout-final-header">
                 <Award size={24} style={{ color: '#CD7F32' }} />
-                <h3>🥉 Tercer Puesto</h3>
+                <h3>🥉 Partido por el Tercer Puesto</h3>
               </div>
               <p className="knockout-final-description">
-                Los perdedores de las semifinales disputarán el tercer lugar
+                Los perdedores de las semifinales SF1 y SF2 disputarán el tercer lugar
               </p>
-              <div className="knockout-final-teams">
-                <span>Perdedor SF1</span>
-                <span className="knockout-vs-large">VS</span>
-                <span>Perdedor SF2</span>
-              </div>
+              
+              {(() => {
+                // Calcular perdedores de semifinales
+                const sf1Winner = getWinner('semis', 'SF1');
+                const sf2Winner = getWinner('semis', 'SF2');
+                
+                // Equipos de SF1
+                const sf1Team1 = getWinner('quarters', 'QF1');
+                const sf1Team2 = getWinner('quarters', 'QF2');
+                const sf1Loser = sf1Winner && (sf1Team1 && sf1Team1 !== sf1Winner ? sf1Team1 : sf1Team2);
+                
+                // Equipos de SF2
+                const sf2Team1 = getWinner('quarters', 'QF3');
+                const sf2Team2 = getWinner('quarters', 'QF4');
+                const sf2Loser = sf2Winner && (sf2Team1 && sf2Team1 !== sf2Winner ? sf2Team1 : sf2Team2);
+
+                return (
+                  <KnockoutMatchCard
+                    match={{
+                      id: 'thirdPlace',
+                      label: 'TERCER PUESTO',
+                      home: 'Perdedor SF1',
+                      away: 'Perdedor SF2'
+                    }}
+                    homeTeam={sf1Loser}
+                    awayTeam={sf2Loser}
+                    selectedWinner={knockoutPredictions.thirdPlace?.winner}
+                    onSelect={(team) => handlePrediction('thirdPlace', 'winner', team)}
+                  />
+                );
+              })()}
             </div>
 
             {/* Final */}
