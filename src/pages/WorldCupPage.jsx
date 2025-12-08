@@ -1,11 +1,12 @@
 // src/pages/WorldCupPage.jsx
 import React, { useState, useEffect } from 'react';
-import { Trophy, Award, TrendingUp, TrendingDown, Star, Users, Target, Zap, ChevronDown, ChevronUp } from 'lucide-react';
+import { Trophy, Award, TrendingUp, TrendingDown, Star, Users, Target, Zap, ChevronDown, ChevronUp, Medal, User  } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useToast, ToastContainer } from '../components/Toast';
 import { useWorldCup } from '../hooks/useWorldCup';
 import Footer from '../components/Footer';
 import WorldCupNavigationTabs from '../components/WorldCupNavigationTabs';
+import WorldCupAwardCard from '../components/WorldCupAwardCard';
 import KnockoutSection from '../components/KnockoutSection'; // NUEVO IMPORT
 import '../styles/pagesStyles/WorldCupPage.css';
 
@@ -516,38 +517,86 @@ export default function WorldCupPage({ currentUser }) {
           )}
 
           {activeTab === 'awards' && (
-            <div className="awards-section">
-              <div className="awards-grid">
-                {[
-                  { icon: Trophy, label: 'Máximo Goleador', key: 'topScorer' },
-                  { icon: Target, label: 'Máximo Asistidor', key: 'topAssist' },
-                  { icon: TrendingUp, label: 'Selección Sorpresa', key: 'surpriseTeam' },
-                  { icon: TrendingDown, label: 'Selección Decepción', key: 'disappointmentTeam' },
-                  { icon: Star, label: 'Jugador Revelación', key: 'breakoutPlayer' },
-                  { icon: Zap, label: 'Jugador Decepción', key: 'disappointmentPlayer' }
-                ].map(award => {
-                  const Icon = award.icon;
-                  return (
-                    <div key={award.key} className="award-card">
-                      <div className="award-icon">
-                        <Icon size={24} />
-                      </div>
-                      <label>{award.label}</label>
-                      <input
-                        type="text"
-                        value={predictions.awards[award.key]}
-                        onChange={(e) => handleAwardUpdate(award.key, e.target.value)}
-                        placeholder={`Nombre...`}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-              <button className="save-predictions-btn" onClick={handleSave} disabled={saving}>
-                {saving ? 'Guardando...' : 'Guardar'}
-              </button>
-            </div>
-          )}
+  <div className="awards-section">
+    <div className="wc-awards-grid">
+      {[
+        { 
+          icon: Trophy, 
+          label: 'Bota de Oro', 
+          category: 'Máximo Goleador',
+          key: 'topScorer',
+          placeholder: 'Ej: Kylian Mbappé'
+        },
+        { 
+          icon: Target, 
+          label: 'Mejor Asistidor', 
+          category: 'Más Asistencias',
+          key: 'topAssist',
+          placeholder: 'Ej: Kevin De Bruyne'
+        },
+        { 
+          icon: Medal, 
+          label: 'Balón de Oro', 
+          category: 'Mejor Jugador del Mundial',
+          key: 'goldenBall',
+          placeholder: 'Ej: Lionel Messi'
+        },
+        { 
+          icon: User, 
+          label: 'Mejor Jugador Joven', 
+          category: 'Sub-21 Destacado',
+          key: 'bestYoungPlayer',
+          placeholder: 'Ej: Jude Bellingham'
+        },
+        { 
+          icon: Award, 
+          label: 'Guante de Oro', 
+          category: 'Mejor Portero',
+          key: 'goldenGlove',
+          placeholder: 'Ej: Emiliano Martínez'
+        },
+        { 
+          icon: TrendingUp, 
+          label: 'Selección Sorpresa', 
+          category: 'Equipo Revelación',
+          key: 'surpriseTeam',
+          placeholder: 'Ej: Marruecos'
+        },
+        { 
+          icon: TrendingDown, 
+          label: 'Selección Decepción', 
+          category: 'Bajo Rendimiento',
+          key: 'disappointmentTeam',
+          placeholder: 'Ej: Alemania'
+        },
+        { 
+          icon: Star, 
+          label: 'Jugador Revelación', 
+          category: 'Descubrimiento del Torneo',
+          key: 'breakoutPlayer',
+          placeholder: 'Ej: Enzo Fernández'
+        },
+        { 
+          icon: Zap, 
+          label: 'Jugador Decepción', 
+          category: 'Por Debajo de Expectativas',
+          key: 'disappointmentPlayer',
+          placeholder: 'Ej: Cristiano Ronaldo'
+        }
+      ].map(award => (
+        <WorldCupAwardCard
+          key={award.key}
+          award={award}
+          value={predictions.awards[award.key]}
+          onChange={handleAwardUpdate}
+        />
+      ))}
+    </div>
+    <button className="save-predictions-btn" onClick={handleSave} disabled={saving}>
+      {saving ? 'Guardando...' : 'Guardar Premios'}
+    </button>
+  </div>
+)}
           
           <Footer /> 
         </div>

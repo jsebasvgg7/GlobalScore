@@ -493,77 +493,267 @@
 }
 
 /* ==========================================
-   AWARDS SECTION - Simplificado
+   AWARDS SECTION - Nuevo diseño estilo AwardCard
 ========================================== */
 .awards-section {
-  padding: 24px;
-  background: transparent;
-  border-radius: 0;
-  border: none;
-}
-
-.awards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  max-width: 100%;
-}
-
-.award-card {
-  padding: 20px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  transition: all 0.2s;
+  gap: 20px;
 }
 
-.award-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
+.wc-awards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-.award-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  background: var(--accent);
+.wc-award-card-light {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 6px 16px -6px rgba(0, 0, 0, 0.08);
+}
+
+.wc-award-card-light:hover {
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 10px 20px -5px rgba(0, 0, 0, 0.1);
+  border-color: #d1d5db;
+}
+
+.wc-award-header-light {
+  padding: 20px 20px 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 70px;
+}
+
+.wc-award-icon-container {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #F59E0B, #D97706);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.award-card label {
+.wc-award-card-light:hover .wc-award-icon-container {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.wc-award-info-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.wc-award-name-light {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wc-award-category-light {
   font-size: 12px;
-  font-weight: 600;
-  color: var(--text-primary);
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.wc-award-prediction-form {
+  padding: 20px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+}
+
+.wc-prediction-field-award {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wc-prediction-label-award {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.award-card input {
-  padding: 12px 14px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--input-bg);
+.wc-prediction-label-award svg {
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.wc-prediction-input-award {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  background: #ffffff;
   font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.wc-prediction-input-award::placeholder {
+  color: #9ca3af;
   font-weight: 500;
-  color: var(--text-primary);
-  transition: all 0.15s;
 }
 
-.award-card input:focus {
+.wc-prediction-input-award:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(96, 81, 155, 0.1);
+  border-color: #f59e0b;
+  background: #ffffff;
+  box-shadow: 
+    0 0 0 3px rgba(245, 158, 11, 0.1),
+    0 2px 8px rgba(245, 158, 11, 0.15);
+  transform: translateY(-1px);
 }
 
-.award-card input::placeholder {
+.wc-prediction-input-award:not(:placeholder-shown) {
+  background: #fef3c7;
+  border-color: #fde68a;
+}
+
+/* ==========================================
+   RESPONSIVE - Awards Section
+========================================== */
+@media (max-width: 768px) {
+  .wc-awards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .wc-award-card-light {
+    border-radius: 16px;
+  }
+
+  .wc-award-header-light {
+    padding: 16px 18px 8px;
+  }
+
+  .wc-award-icon-container {
+    width: 48px;
+    height: 48px;
+  }
+
+  .wc-award-name-light {
+    font-size: 15px;
+  }
+
+  .wc-award-category-light {
+    font-size: 11px;
+  }
+
+  .wc-award-prediction-form {
+    padding: 16px 18px 20px;
+  }
+
+  .wc-prediction-input-award {
+    padding: 11px 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wc-award-header-light {
+    padding: 14px 16px 6px;
+  }
+
+  .wc-award-icon-container {
+    width: 44px;
+    height: 44px;
+  }
+
+  .wc-award-icon-container svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .wc-award-name-light {
+    font-size: 14px;
+  }
+
+  .wc-award-category-light {
+    font-size: 10px;
+  }
+
+  .wc-award-prediction-form {
+    padding: 14px 16px 18px;
+  }
+
+  .wc-prediction-label-award {
+    font-size: 10px;
+  }
+
+  .wc-prediction-input-award {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .wc-award-card-light {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .wc-award-card-light:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(96, 81, 155, 0.2);
+}
+
+[data-theme="dark"] .wc-award-name-light {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .wc-award-category-light {
   color: var(--text-secondary);
-  opacity: 0.6;
+}
+
+[data-theme="dark"] .wc-award-prediction-form {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--card) 100%);
+}
+
+[data-theme="dark"] .wc-prediction-input-award {
+  background: var(--input-bg);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .wc-prediction-input-award:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(96, 81, 155, 0.2);
+}
+
+[data-theme="dark"] .wc-prediction-input-award:not(:placeholder-shown) {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
 }
 
 /* ==========================================
