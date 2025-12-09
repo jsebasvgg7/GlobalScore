@@ -1081,6 +1081,32 @@ background: #ffffff !important;
   }
 }
 
+/* MODO CLARO - Ajustes para letras */
+@media (prefers-color-scheme: light) {
+  .ranking-type-btn {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .ranking-type-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.15);
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .ranking-type-btn.active {
+    background: linear-gradient(135deg, 
+      rgba(139, 92, 246, 0.15) 0%, 
+      rgba(59, 130, 246, 0.15) 100%);
+    border-color: rgba(139, 92, 246, 0.4);
+    color: #5B21B6;
+    box-shadow: 
+      0 0 20px rgba(139, 92, 246, 0.2),
+      0 0 40px rgba(59, 130, 246, 0.1);
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .ranking-type-selector {
