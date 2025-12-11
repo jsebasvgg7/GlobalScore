@@ -26,7 +26,7 @@ export const teamSlugMap = {
   'Brentford': 'brentford',
   'Wolves': 'wolves',
   'Fulham': 'fulham',
-  'Crystal Palace': 'crystalpalace',
+  'Crystal P.': 'crystalpalace',
   'Bournem.': 'bournemouth',
   'Nottingham': 'nottingham_forest',
   'Burnley': 'burnley',
