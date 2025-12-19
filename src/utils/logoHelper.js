@@ -18,7 +18,7 @@ export const teamSlugMap = {
   'Tottenham': 'tottenham',
   'Newcastle': 'newcastle',
   'Aston Villa': 'astonvilla',
-  'West Ham': 'west-ham',
+  'West Ham': 'westham',
   'Brighton': 'brighton',
   'Leeds': 'leeds',
   'Sunderland': 'sunderland',
