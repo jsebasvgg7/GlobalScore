@@ -69,7 +69,7 @@ export const teamSlugMap = {
   'Parma': 'parma',
   'Pisa': 'pisa',
   'Como': 'como',
-  'cremonese': 'cremonese',
+  'Cremonese': 'cremonese',
   'Bayern M.': 'bayernmunchen',
   'Dortmund': 'borussiadortmund',
   'RB Leipzig': 'rbleipzig',
