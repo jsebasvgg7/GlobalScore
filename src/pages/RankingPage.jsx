@@ -20,8 +20,68 @@ export default function RankingPage({ currentUser, onBack }) {
   const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
+    checkAndResetWeekly();
     loadUsers();
   }, []);
+
+  // 🔄 FUNCIÓN DE RESET AUTOMÁTICO
+  const checkAndResetWeekly = async () => {
+    try {
+      const now = new Date();
+      const dayOfWeek = now.getDay(); // 0 = Domingo, 1 = Lunes, etc.
+      
+      // Obtener la fecha del último reset global
+      const { data: config, error: configError } = await supabase
+        .from('app_config')
+        .select('last_weekly_reset')
+        .eq('id', 1)
+        .single();
+
+      if (configError && configError.code !== 'PGRST116') {
+        console.error('Error al obtener config:', configError);
+        return;
+      }
+
+      const lastReset = config?.last_weekly_reset 
+        ? new Date(config.last_weekly_reset) 
+        : new Date(0);
+      
+      const daysSinceReset = Math.floor((now - lastReset) / (1000 * 60 * 60 * 24));
+      
+      // Si pasó más de 7 días Y es lunes (día 1), hacer reset
+      if (daysSinceReset >= 7 && dayOfWeek === 1) {
+        console.log('🔄 Iniciando reset semanal automático...');
+        console.log('📅 Último reset:', lastReset.toISOString());
+        console.log('📅 Fecha actual:', now.toISOString());
+        
+        // Llamar a la función RPC
+        const { error: resetError } = await supabase.rpc('reset_weekly_stats');
+        
+        if (resetError) {
+          console.error('❌ Error en reset:', resetError);
+          return;
+        }
+
+        // Actualizar última fecha de reset
+        const { error: updateError } = await supabase
+          .from('app_config')
+          .upsert({ 
+            id: 1, 
+            last_weekly_reset: now.toISOString() 
+          });
+
+        if (updateError) {
+          console.error('❌ Error actualizando config:', updateError);
+        } else {
+          console.log('✅ Reset semanal completado exitosamente');
+        }
+      } else {
+        console.log('ℹ️ No es necesario reset. Días desde último reset:', daysSinceReset);
+      }
+    } catch (error) {
+      console.error('❌ Error en checkAndResetWeekly:', error);
+    }
+  };
 
   const loadUsers = async () => {
     try {
