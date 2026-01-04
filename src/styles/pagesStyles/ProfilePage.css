@@ -1444,6 +1444,7 @@
   margin-bottom: 0.75rem;
   letter-spacing: -0.04em;
   position: relative;
+  display: inline-block;
 }
 
 /* DESKTOP: Número de ranking MUCHO más grande */
