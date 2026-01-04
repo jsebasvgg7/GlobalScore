@@ -70,7 +70,249 @@
     max-width: 1600px;
   }
 }
+/* En ProfilePage.css - Agregar/actualizar estos estilos para mejor espaciado: */
 
+/* ==========================================
+   OVERVIEW LAYOUT - ESPACIADO MEJORADO
+========================================== */
+
+@media (min-width: 1024px) {
+  /* OVERVIEW: Layout con mejor espaciado */
+  .tab-content-wrapper[data-tab="overview"] {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 2rem; /* Aumentado de 1.5rem a 2rem */
+    align-items: start;
+  }
+  
+  /* Primera fila: Ranking y Level card lado a lado */
+  .tab-content-wrapper[data-tab="overview"] > .ranking-card-modern {
+    grid-column: 1 / 2;
+    grid-row: 1;
+  }
+  
+  .tab-content-wrapper[data-tab="overview"] > .level-card-modern {
+    grid-column: 2 / 4; /* Ocupa 2 columnas */
+    grid-row: 1;
+  }
+  
+  .tab-content-wrapper[data-tab="overview"] > .streaks-grid {
+    grid-column: 4 / 5;
+    grid-row: 1;
+  }
+  
+  /* Segunda fila: Stats cards ocupan todo el ancho */
+  .tab-content-wrapper[data-tab="overview"] > .stats-cards-grid {
+    grid-column: 1 / -1; /* Span completo */
+    grid-row: 2;
+    margin-top: 1rem; /* Espacio adicional arriba */
+  }
+}
+
+/* Más espaciado para pantallas grandes */
+@media (min-width: 1400px) {
+  .tab-content-wrapper[data-tab="overview"] {
+    gap: 2.5rem;
+  }
+  
+  .tab-content-wrapper[data-tab="overview"] > .stats-cards-grid {
+    margin-top: 1.5rem;
+  }
+}
+
+/* ==========================================
+   STATS CARDS - ESPACIADO HORIZONTAL
+========================================== */
+
+.stats-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem; /* Aumentado de 1rem */
+  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .stats-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem; /* Aumentado de 1.25rem */
+    margin-bottom: 0;
+    align-items: stretch;
+  }
+  
+  .stat-card-modern {
+    min-height: 160px; /* Aumentado de 140px */
+  }
+}
+
+/* ==========================================
+   LEVEL CARD - MÁS ESPACIO INTERNO
+========================================== */
+
+.level-card-modern {
+  background: var(--profile-card);
+  border: 1px solid var(--profile-border);
+  border-radius: 20px;
+  padding: 2rem; /* Aumentado de 1.75rem */
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--profile-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .level-card-modern {
+    margin-bottom: 0;
+    padding: 2.25rem; /* Aumentado de 2rem */
+  }
+}
+
+.level-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem; /* Aumentado de 1rem */
+  margin-bottom: 1.5rem; /* Aumentado de 1.25rem */
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================
+   RANKING CARD - MÁS ESPACIO
+========================================== */
+
+.ranking-card-modern {
+  background: var(--profile-card);
+  border: 1px solid var(--profile-border);
+  border-radius: 20px;
+  padding: 2rem; /* Aumentado de 1.75rem */
+  transition: all 0.3s ease;
+  box-shadow: var(--profile-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .ranking-card-modern {
+    margin-bottom: 0;
+    padding: 2.25rem; /* Aumentado de 2rem */
+  }
+}
+
+.ranking-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* Aumentado de 0.625rem */
+  margin-bottom: 1.75rem; /* Aumentado de 1.5rem */
+  color: #F59E0B;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+
+.ranking-position-display {
+  text-align: center;
+  padding: 1rem 0; /* Agregado espacio interno */
+}
+
+/* ==========================================
+   STREAKS - MÁS ESPACIO ENTRE CARDS
+========================================== */
+
+.streaks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem; /* Aumentado de 1rem */
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .streaks-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem; /* Aumentado de 1.25rem */
+    margin-bottom: 0;
+  }
+}
+
+.streak-card {
+  background: var(--profile-card);
+  border: 1px solid var(--profile-border);
+  border-radius: 20px;
+  padding: 1.75rem; /* Aumentado de 1.5rem */
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Aumentado de 1.25rem */
+  transition: all 0.3s ease;
+  box-shadow: var(--profile-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .streak-card {
+    padding: 2rem; /* Aumentado de 1.75rem */
+    gap: 1.75rem; /* Aumentado de 1.5rem */
+  }
+}
+
+/* ==========================================
+   STAT CARDS - MÁS PADDING INTERNO
+========================================== */
+
+.stat-card-modern {
+  background: var(--profile-card);
+  border: 1px solid var(--profile-border);
+  border-radius: 20px;
+  padding: 2rem 1.5rem; /* Aumentado de 1.5rem 1.25rem */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem; /* Aumentado de 1rem */
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--profile-shadow);
+}
+
+@media (min-width: 1024px) {
+  .stat-card-modern {
+    flex-direction: column;
+    padding: 2.25rem 1.75rem; /* Aumentado de 1.75rem */
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ==========================================
+   CONTENT AREA - MÁS PADDING
+========================================== */
+
+.profile-content-area {
+  padding: 2rem 1rem 2rem; /* Aumentado de 1.5rem */
+  position: relative;
+  flex: 1;
+  min-height: 400px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1024px) {
+  .profile-content-area {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2.5rem 2.5rem; /* Aumentado de 2rem */
+  }
+}
+
+@media (min-width: 1400px) {
+  .profile-content-area {
+    padding: 3rem 3rem; /* Aún más espacio en pantallas grandes */
+  }
+}
 /* ==========================================
    FIX: TABS STICKY - NO SUPERPONER HEADER
 ========================================== */
