@@ -2529,7 +2529,7 @@
   .position-large { font-size: 3rem; }
 }
 
-/* Mobile */
+/* Mobile - 768px */
 @media (max-width: 768px) {
   /* Ajuste para bottom nav - CRÍTICO */
   .profile-page-modern {
@@ -2587,13 +2587,31 @@
     grid-template-columns: repeat(2, minmax(140px, 1fr));
   }
   
+  /* AMPLIAR AVATAR EN MOBILE */
   .avatar-circle {
-    width: 90px;
-    height: 90px;
+    width: 140px;
+    height: 140px;
   }
   
+  /* AMPLIAR NOMBRE Y DESCRIPCIÓN */
   .user-name-display {
-    font-size: 1.5rem;
+    font-size: 2rem;
+  }
+  
+  .user-email-display {
+    font-size: 1.125rem;
+  }
+  
+  .user-bio-display {
+    font-size: 1.125rem;
+  }
+  
+  /* Mantener el badge de nivel visible y proporcionado */
+  .level-badge-modern {
+    bottom: -4px;
+    right: -4px;
+    padding: 7px 13px;
+    font-size: 0.875rem;
   }
   
   .stats-mini-row {
@@ -2653,7 +2671,7 @@
   }
 }
 
-/* Small Mobile */
+/* Small Mobile - 480px */
 @media (max-width: 480px) {
   .profile-page-modern {
     padding-bottom: 0;
@@ -2689,24 +2707,31 @@
     padding: 1.75rem 1rem 1.5rem;
   }
   
+  /* AMPLIAR AVATAR EN SMALL MOBILE */
   .avatar-circle {
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
   }
   
+  /* Mantener el badge de nivel visible y proporcionado */
   .level-badge-modern {
-    bottom: -2px;
-    right: -2px;
-    padding: 4px 8px;
-    font-size: 0.6875rem;
+    bottom: -3px;
+    right: -3px;
+    padding: 6px 11px;
+    font-size: 0.8125rem;
   }
   
+  /* AMPLIAR NOMBRE Y DESCRIPCIÓN */
   .user-name-display {
-    font-size: 1.375rem;
+    font-size: 1.875rem;
+  }
+  
+  .user-email-display {
+    font-size: 1.0625rem;
   }
   
   .user-bio-display {
-    font-size: 0.9375rem;
+    font-size: 1.0625rem;
   }
   
   .stats-mini-row {
@@ -2824,7 +2849,7 @@
   }
 }
 
-/* Ultra Small Devices */
+/* Ultra Small Devices - 360px */
 @media (max-width: 360px) {
   .profile-page-modern {
     padding-bottom: 0;
@@ -2852,13 +2877,31 @@
     display: none;
   }
   
+  /* AMPLIAR AVATAR EN ULTRA SMALL */
   .avatar-circle {
-    width: 70px;
-    height: 70px;
+    width: 100px;
+    height: 100px;
   }
   
+  /* AMPLIAR NOMBRE Y DESCRIPCIÓN */
   .user-name-display {
-    font-size: 1.25rem;
+    font-size: 1.625rem;
+  }
+  
+  .user-email-display {
+    font-size: 1rem;
+  }
+  
+  .user-bio-display {
+    font-size: 1rem;
+  }
+  
+  /* Mantener el badge de nivel */
+  .level-badge-modern {
+    bottom: -2px;
+    right: -2px;
+    padding: 5px 10px;
+    font-size: 0.75rem;
   }
   
   .position-large {
