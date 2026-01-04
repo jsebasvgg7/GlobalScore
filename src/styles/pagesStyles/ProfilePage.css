@@ -1367,6 +1367,7 @@
   border: 1px solid var(--profile-border);
   border-radius: 20px;
   padding: 1.75rem;
+  margin-bottom: 1.5rem;
   transition: all 0.3s ease;
   box-shadow: var(--profile-shadow);
   position: relative;
@@ -1384,7 +1385,6 @@
     min-height: 300px;
   }
 }
-
 .ranking-card-modern::before {
   content: '';
   position: absolute;
