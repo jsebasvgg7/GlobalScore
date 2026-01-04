@@ -159,7 +159,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           aria-label="Inicio"
         >
           <Home size={24} />
-          <span>Inicio</span>
         </button>
 
         <button 
@@ -168,7 +167,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           aria-label="Ranking"
         >
           <Award size={24} />
-          <span>Ranking</span>
         </button>
         
         <button 
@@ -177,7 +175,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           aria-label="Mundial"
         >
           <Trophy size={24} />
-          <span>Mundial</span>
         </button>
         
         <button 
@@ -186,7 +183,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           aria-label="Estadísticas"
         >
           <BarChart3 size={24} />
-          <span>Stats</span>
         </button>
 
         {currentUser?.is_admin && (
@@ -196,7 +192,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             aria-label="Admin"
           >
             <Shield size={24} />
-            <span>Admin</span>
           </button>
         )}
 
@@ -206,7 +201,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           aria-label="Perfil"
         >
           <User2 size={24} />
-          <span>Perfil</span>
         </button>
       </nav>
     </>
