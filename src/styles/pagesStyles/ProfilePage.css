@@ -58,9 +58,10 @@
 }
 
 /* ==========================================
-   HEADER - NO STICKY, FLUJO NATURAL
+   FIX: TABS STICKY - NO SUPERPONER HEADER
 ========================================== */
 
+/* Header debe tener z-index mayor */
 .profile-header-minimal {
   display: flex;
   align-items: center;
@@ -68,47 +69,78 @@
   padding: 1.25rem 1rem;
   background: var(--profile-card);
   border-bottom: 1px solid var(--profile-border);
-  position: relative;
-  z-index: 10;
+  position: sticky;
+  top: 0;
+  z-index: 200; /* Mayor que tabs */
   transition: all 0.3s ease;
 }
 
-.back-btn-modern {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: none;
-  background: var(--profile-hover);
-  color: var(--profile-text);
+/* Tabs sticky DEBAJO del header */
+.profile-tabs-modern {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
+  background: var(--profile-card);
+  border-bottom: 1px solid var(--profile-border);
+  position: sticky;
+  top: 73px; /* Altura del header (padding + contenido) */
+  z-index: 100; /* Menor que header */
+  backdrop-filter: blur(12px);
+  box-shadow: var(--profile-shadow);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
-.back-btn-modern:hover {
-  background: var(--profile-border);
-  transform: scale(1.05);
+/* Ajuste para tablets y escritorio */
+@media (min-width: 769px) {
+  .profile-header-minimal {
+    z-index: 200;
+  }
+  
+  .profile-tabs-modern {
+    top: 73px; /* Ajustar según altura real del header */
+    z-index: 100;
+  }
 }
 
-.back-btn-modern:active {
-  transform: scale(0.95);
+/* Mobile - mantener comportamiento correcto */
+@media (max-width: 768px) {
+  .profile-header-minimal {
+    z-index: 200;
+    padding: 1rem;
+  }
+  
+  .profile-tabs-modern {
+    top: 68px; /* Altura del header en móvil */
+    z-index: 100;
+  }
 }
 
-.profile-header-title {
-  margin: 0;
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--profile-text);
-  flex: 1;
-  letter-spacing: -0.02em;
+@media (max-width: 480px) {
+  .profile-header-minimal {
+    padding: 0.875rem;
+  }
+  
+  .profile-tabs-modern {
+    top: 64px; /* Altura del header en móviles pequeños */
+  }
 }
 
-.header-spacer {
-  width: 44px;
-  flex-shrink: 0;
+/* Asegurar que el header siempre esté encima de todo */
+.app-header {
+  z-index: 300 !important;
+}
+
+/* Si hay un header global de la app, asegurar jerarquía */
+.profile-page-modern .app-header {
+  z-index: 300;
+}
+
+.profile-page-modern .profile-header-minimal {
+  z-index: 200;
+}
+
+.profile-page-modern .profile-tabs-modern {
+  z-index: 100;
 }
 
 /* ==========================================
