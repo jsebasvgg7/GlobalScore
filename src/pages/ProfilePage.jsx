@@ -531,7 +531,25 @@ export default function ProfilePage({ currentUser, onBack }) {
                 <div className="position-context">de {userRanking.totalUsers} jugadores</div>
               </div>
             </div>
-            
+
+            {/* Level Card */}
+            <div className="level-card-modern">
+              <div className="level-card-header">
+                <div className="level-icon-wrapper">
+                  <Zap size={20} />
+                </div>
+                <div className="level-info">
+                  <div className="level-number">Nivel {userData.level}</div>
+                  <div className="level-subtitle">{pointsInLevel} de 20 puntos</div>
+                </div>
+                <div className="points-to-next">{pointsToNextLevel} pts</div>
+              </div>
+              <div className="level-progress-bar">
+                <div className="level-progress-fill" style={{ width: `${levelProgress}%` }}></div>
+              </div>
+            </div>
+
+
             {/* Stats Cards */}
             <div className="stats-cards-grid">
               <div className="stat-card-modern predictions">
@@ -564,24 +582,6 @@ export default function ProfilePage({ currentUser, onBack }) {
                 </div>
               </div>
             </div>
-
-            {/* Level Card */}
-            <div className="level-card-modern">
-              <div className="level-card-header">
-                <div className="level-icon-wrapper">
-                  <Zap size={20} />
-                </div>
-                <div className="level-info">
-                  <div className="level-number">Nivel {userData.level}</div>
-                  <div className="level-subtitle">{pointsInLevel} de 20 puntos</div>
-                </div>
-                <div className="points-to-next">{pointsToNextLevel} pts</div>
-              </div>
-              <div className="level-progress-bar">
-                <div className="level-progress-fill" style={{ width: `${levelProgress}%` }}></div>
-              </div>
-            </div>
-
           </div>
         );
 
