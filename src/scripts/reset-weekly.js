@@ -1,5 +1,4 @@
-// scripts/reset-weekly.js
-// Este script se ejecuta desde GitHub Actions
+
 
 const { createClient } = require('@supabase/supabase-js');
 

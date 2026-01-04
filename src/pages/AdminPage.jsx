@@ -6,6 +6,7 @@ import {
   Zap, TrendingUp, Package, Filter, Search, AlertCircle
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
+import { finishMatch } from '../utils/matchUtils'; // ✅ IMPORTAR FUNCIÓN
 import AdminModal from '../components/AdminModal';
 import AdminLeagueModal from '../components/adminComponents/AdminLeagueModal';
 import AdminAwardModal from '../components/adminComponents/AdminAwardModal';
@@ -85,21 +86,12 @@ export default function AdminPage({ currentUser, onBack }) {
     }
   };
 
+  // ✅ FUNCIÓN CORREGIDA - Ahora actualiza estadísticas semanales
   const handleFinishMatch = async (matchId, homeScore, awayScore) => {
-   try {
-      // Actualizar resultado
-      const { error } = await supabase
-        .from('matches')
-        .update({ 
-          result_home: homeScore, 
-          result_away: awayScore, 
-          status: 'finished' 
-        })
-        .eq('id', matchId);
-
-      if (error) throw error;
-
-      // Calcular puntos (lógica simplificada - deberías usar tu hook useMatches)
+    try {
+      // Usar la función que actualiza AMBAS estadísticas
+      await finishMatch(matchId, homeScore, awayScore);
+      
       await loadData();
       toast.success(`⚽ Partido finalizado: ${homeScore} - ${awayScore}`, 4000);
       setShowFinishMatchModal(false);
@@ -107,7 +99,7 @@ export default function AdminPage({ currentUser, onBack }) {
     } catch (err) {
       console.error('Error finishing match:', err);
       toast.error('❌ Error al finalizar el partido. Intenta de nuevo.');
-      throw err; // Para que el modal maneje el loading
+      throw err;
     }
   };
 
@@ -284,6 +276,7 @@ const handleDeleteTitle = async (titleId) => {
     toast.error('❌ Error al eliminar el título');
   }
 };
+
   // ========== FILTERS ==========
   const getFilteredItems = () => {
     let items = [];
