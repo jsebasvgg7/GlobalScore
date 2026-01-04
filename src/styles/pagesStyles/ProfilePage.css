@@ -57,6 +57,20 @@
   flex-direction: column;
 }
 
+/* DESKTOP: Contenedor más amplio */
+@media (min-width: 1024px) {
+  .profile-container-modern {
+    max-width: 1400px;
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .profile-container-modern {
+    max-width: 1600px;
+  }
+}
+
 /* ==========================================
    FIX: TABS STICKY - NO SUPERPONER HEADER
 ========================================== */
@@ -88,6 +102,22 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+}
+
+/* DESKTOP: Tabs centrados y con max-width */
+@media (min-width: 1024px) {
+  .profile-tabs-modern {
+    justify-content: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .profile-tabs-modern {
+    max-width: 1600px;
+  }
 }
 
 /* Ajuste para tablets y escritorio */
@@ -159,6 +189,18 @@
   overflow: hidden;
 }
 
+/* DESKTOP: Layout horizontal amplio */
+@media (min-width: 769px) {
+  .profile-hero {
+    flex-direction: row;
+    padding: 3rem 2.5rem;
+    gap: 3rem;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
 /* Patrón decorativo de fondo */
 .profile-hero::before {
   content: '';
@@ -173,6 +215,13 @@
   z-index: 0;
 }
 
+@media (min-width: 769px) {
+  .profile-hero::before {
+    height: 100%;
+    width: 40%;
+  }
+}
+
 [data-theme="dark"] .profile-hero::before {
   background: linear-gradient(135deg, 
     rgba(139, 92, 246, 0.08) 0%, 
@@ -183,6 +232,14 @@
   position: relative;
   z-index: 1;
 }
+
+/* DESKTOP: Avatar más grande */
+@media (min-width: 769px) {
+  .avatar-section {
+    flex-shrink: 0;
+  }
+}
+
 .avatar-circle {
   width: 110px;
   height: 110px;
@@ -193,6 +250,22 @@
   box-shadow: var(--profile-shadow-lg);
   transition: all 0.3s ease;
   position: relative;
+}
+
+/* DESKTOP: Avatar amplio tipo gaming */
+@media (min-width: 769px) {
+  .avatar-circle {
+    width: 180px;
+    height: 180px;
+    border: 6px solid var(--profile-card);
+  }
+}
+
+@media (min-width: 1024px) {
+  .avatar-circle {
+    width: 200px;
+    height: 200px;
+  }
 }
 
 .avatar-circle::after {
@@ -252,6 +325,23 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
+/* DESKTOP: Badge más grande */
+@media (min-width: 769px) {
+  .level-badge-modern {
+    bottom: -6px;
+    right: -6px;
+    padding: 8px 16px;
+    font-size: 1rem;
+    border: 4px solid var(--profile-card);
+    border-radius: 18px;
+  }
+  
+  .level-badge-modern svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
@@ -265,6 +355,15 @@
   z-index: 1;
 }
 
+/* DESKTOP: Alineación izquierda y más espacio */
+@media (min-width: 769px) {
+  .user-info-section {
+    text-align: left;
+    flex: 1;
+    max-width: none;
+  }
+}
+
 .user-name-display {
   margin: 0 0 0.5rem 0;
   font-size: 1.75rem;
@@ -273,11 +372,33 @@
   letter-spacing: -0.03em;
 }
 
+/* DESKTOP: Nombre más grande */
+@media (min-width: 769px) {
+  .user-name-display {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .user-name-display {
+    font-size: 3rem;
+  }
+}
+
 .user-email-display {
   margin: 0 0 1rem 0;
   font-size: 0.9375rem;
   color: var(--profile-text-secondary);
   font-weight: 500;
+}
+
+/* DESKTOP: Email más grande */
+@media (min-width: 769px) {
+  .user-email-display {
+    font-size: 1.125rem;
+    margin-bottom: 1.25rem;
+  }
 }
 
 .user-bio-display {
@@ -290,12 +411,31 @@
   margin-right: auto;
 }
 
+/* DESKTOP: Bio sin límite de ancho */
+@media (min-width: 769px) {
+  .user-bio-display {
+    max-width: none;
+    margin: 0 0 1.5rem 0;
+    font-size: 1.125rem;
+    line-height: 1.7;
+  }
+}
+
 .user-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.625rem;
   justify-content: center;
   margin-bottom: 1.5rem;
+}
+
+/* DESKTOP: Tags alineados a la izquierda */
+@media (min-width: 769px) {
+  .user-tags {
+    justify-content: flex-start;
+    gap: 0.875rem;
+    margin-bottom: 2rem;
+  }
 }
 
 .user-tag {
@@ -311,6 +451,14 @@
   font-weight: 600;
   transition: all 0.2s ease;
   box-shadow: var(--profile-shadow);
+}
+
+/* DESKTOP: Tags más grandes */
+@media (min-width: 769px) {
+  .user-tag {
+    padding: 0.625rem 1.25rem;
+    font-size: 1rem;
+  }
 }
 
 .user-tag:hover {
@@ -334,6 +482,17 @@
   margin: 0 auto;
   box-shadow: var(--profile-shadow-md);
   border: 1px solid var(--profile-border);
+}
+
+/* DESKTOP: Stats en fila horizontal más amplia */
+@media (min-width: 769px) {
+  .stats-mini-row {
+    max-width: none;
+    justify-content: flex-start;
+    gap: 3rem;
+    padding: 2rem;
+    margin: 0;
+  }
 }
 
 .stat-mini {
@@ -371,20 +530,6 @@
 /* ==========================================
    TABS - STICKY MEJORADO
 ========================================== */
-
-.profile-tabs-modern {
-  display: flex;
-  background: var(--profile-card);
-  border-bottom: 1px solid var(--profile-border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(12px);
-  box-shadow: var(--profile-shadow);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
 
 .profile-tabs-modern::-webkit-scrollbar {
   display: none;
@@ -457,9 +602,49 @@
   min-height: 400px;
 }
 
+/* DESKTOP: Layout de dos columnas */
+@media (min-width: 1024px) {
+  .profile-content-area {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 2.5rem;
+  }
+}
+
 .tab-content-wrapper {
   animation: fadeInUp 0.4s ease;
   min-height: 300px;
+}
+
+/* DESKTOP: Grid de dos columnas para overview */
+@media (min-width: 1024px) {
+  .tab-content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  
+  /* Stats cards ocupan columna izquierda */
+  .tab-content-wrapper > .stats-cards-grid {
+    grid-column: 1;
+  }
+  
+  /* Level card en columna derecha */
+  .tab-content-wrapper > .level-card-modern {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  
+  /* Streaks debajo de stats */
+  .tab-content-wrapper > .streaks-grid {
+    grid-column: 1;
+  }
+  
+  /* Ranking debajo de level */
+  .tab-content-wrapper > .ranking-card-modern {
+    grid-column: 2;
+  }
 }
 
 @keyframes fadeInUp {
@@ -484,6 +669,15 @@
   margin-bottom: 1.5rem;
 }
 
+/* DESKTOP: Una sola columna vertical */
+@media (min-width: 1024px) {
+  .stats-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 0;
+  }
+}
+
 .stat-card-modern {
   background: var(--profile-card);
   border: 1px solid var(--profile-border);
@@ -497,6 +691,20 @@
   position: relative;
   overflow: hidden;
   box-shadow: var(--profile-shadow);
+}
+
+/* DESKTOP: Cards horizontales con más padding */
+@media (min-width: 1024px) {
+  .stat-card-modern {
+    flex-direction: row;
+    padding: 1.75rem 2rem;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  .stat-card-content {
+    text-align: left;
+  }
 }
 
 .stat-card-modern::before {
@@ -530,6 +738,20 @@
   justify-content: center;
   transition: all 0.3s ease;
   position: relative;
+}
+
+/* DESKTOP: Iconos más grandes */
+@media (min-width: 1024px) {
+  .stat-card-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+  }
+  
+  .stat-card-icon svg {
+    width: 28px;
+    height: 28px;
+  }
 }
 
 .stat-card-icon::after {
@@ -603,6 +825,13 @@
   letter-spacing: -0.03em;
 }
 
+/* DESKTOP: Valores más grandes */
+@media (min-width: 1024px) {
+  .stat-card-value {
+    font-size: 2.5rem;
+  }
+}
+
 .stat-card-label {
   font-size: 0.75rem;
   color: var(--profile-text-secondary);
@@ -625,6 +854,14 @@
   box-shadow: var(--profile-shadow);
   position: relative;
   overflow: hidden;
+}
+
+/* DESKTOP: Sin margin bottom y más padding */
+@media (min-width: 1024px) {
+  .level-card-modern {
+    margin-bottom: 0;
+    padding: 2rem;
+  }
 }
 
 .level-card-modern::before {
@@ -755,6 +992,15 @@
   margin-bottom: 1.5rem;
 }
 
+/* DESKTOP: Una sola columna vertical */
+@media (min-width: 1024px) {
+  .streaks-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 0;
+  }
+}
+
 .streak-card {
   background: var(--profile-card);
   border: 1px solid var(--profile-border);
@@ -767,6 +1013,14 @@
   box-shadow: var(--profile-shadow);
   position: relative;
   overflow: hidden;
+}
+
+/* DESKTOP: Más padding y espacio */
+@media (min-width: 1024px) {
+  .streak-card {
+    padding: 1.75rem 2rem;
+    gap: 1.5rem;
+  }
 }
 
 .streak-card::before {
@@ -799,6 +1053,20 @@
   justify-content: center;
   flex-shrink: 0;
   position: relative;
+}
+
+/* DESKTOP: Iconos más grandes */
+@media (min-width: 1024px) {
+  .streak-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+  }
+  
+  .streak-icon svg {
+    width: 32px;
+    height: 32px;
+  }
 }
 
 .streak-icon::after {
@@ -853,10 +1121,24 @@
   letter-spacing: -0.03em;
 }
 
+/* DESKTOP: Valores más grandes */
+@media (min-width: 1024px) {
+  .streak-value {
+    font-size: 2.5rem;
+  }
+}
+
 .streak-label {
   font-size: 0.875rem;
   color: var(--profile-text-secondary);
   font-weight: 600;
+}
+
+/* DESKTOP: Labels más grandes */
+@media (min-width: 1024px) {
+  .streak-label {
+    font-size: 1rem;
+  }
 }
 
 /* ==========================================
@@ -872,6 +1154,14 @@
   box-shadow: var(--profile-shadow);
   position: relative;
   overflow: hidden;
+}
+
+/* DESKTOP: Sin margin bottom y más padding */
+@media (min-width: 1024px) {
+  .ranking-card-modern {
+    margin-bottom: 0;
+    padding: 2rem;
+  }
 }
 
 .ranking-card-modern::before {
@@ -921,6 +1211,14 @@
   position: relative;
 }
 
+/* DESKTOP: Posición más grande */
+@media (min-width: 1024px) {
+  .position-large {
+    font-size: 4.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
 .position-large::after {
   content: '';
   position: absolute;
@@ -951,6 +1249,19 @@
   margin-bottom: 1.5rem;
   box-shadow: var(--profile-shadow);
   transition: all 0.3s ease;
+}
+
+/* DESKTOP: Secciones toman ancho completo en tabs de logros e historial */
+@media (min-width: 1024px) {
+  .section-modern {
+    padding: 2rem;
+  }
+  
+  /* En tabs de achievements e history, romper el grid */
+  [data-tab="achievements"] .tab-content-wrapper,
+  [data-tab="history"] .tab-content-wrapper {
+    display: block;
+  }
 }
 
 .section-modern:hover {
@@ -1168,6 +1479,20 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1rem;
+}
+
+/* DESKTOP: Más columnas para mejor distribución */
+@media (min-width: 1024px) {
+  .achievements-grid-modern {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .achievements-grid-modern {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .achievement-card-modern {
