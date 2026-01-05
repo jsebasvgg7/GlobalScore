@@ -179,12 +179,21 @@ export default function UserProfileModal({ userId, onClose }) {
     });
   };
 
-  const getActiveTitle = () => {
+const getActiveTitle = () => {
     if (userTitles.length === 0) return null;
     
+    // Ordenar por el requirement_value del logro asociado (mayor = más avanzado)
     const sortedTitles = [...userTitles].sort((a, b) => {
-      const order = ['leyenda', 'oráculo', 'visionario', 'pronosticador', 'novato'];
-      return order.indexOf(b.id) - order.indexOf(a.id);
+      // Buscar el logro requerido para cada título
+      const achievementA = availableAchievements.find(ach => ach.id === a.requirement_achievement_id);
+      const achievementB = availableAchievements.find(ach => ach.id === b.requirement_achievement_id);
+      
+      // Si alguno no tiene logro asociado, ponerlo al final
+      if (!achievementA) return 1;
+      if (!achievementB) return -1;
+      
+      // Ordenar por requirement_value descendente (mayor valor = título más avanzado)
+      return (achievementB.requirement_value || 0) - (achievementA.requirement_value || 0);
     });
     
     return sortedTitles[0];
