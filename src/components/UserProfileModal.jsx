@@ -17,6 +17,7 @@ export default function UserProfileModal({ userId, onClose }) {
   });
   const [userAchievements, setUserAchievements] = useState([]);
   const [userTitles, setUserTitles] = useState([]);
+  const [availableAchievements, setAvailableAchievements] = useState([]); // AGREGAR ESTA LÍNEA
   const [userRanking, setUserRanking] = useState({
     position: 0,
     totalUsers: 0
@@ -81,6 +82,7 @@ export default function UserProfileModal({ userId, onClose }) {
         .order('requirement_value', { ascending: true });
 
       if (achievements) {
+        setAvailableAchievements(achievements); // AGREGAR ESTA LÍNEA
         const calculatedAchievements = calculateAchievements(achievements, {
           points: user.points || 0,
           predictions: user.predictions || 0,
@@ -179,7 +181,7 @@ export default function UserProfileModal({ userId, onClose }) {
     });
   };
 
-const getActiveTitle = () => {
+  const getActiveTitle = () => {
     if (userTitles.length === 0) return null;
     
     // Ordenar por el requirement_value del logro asociado (mayor = más avanzado)
@@ -198,6 +200,7 @@ const getActiveTitle = () => {
     
     return sortedTitles[0];
   };
+
 
   const getCategoryColor = (category) => {
     switch(category) {
