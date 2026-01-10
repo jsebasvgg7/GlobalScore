@@ -470,12 +470,15 @@
 [data-theme="dark"] .score-box {
   background: var(--input-bg);
   border: 2px solid var(--input-border);
+  border-radius: 14px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  overflow: visible;
 }
 
 [data-theme="dark"] .score-box:hover:not(.saved):not(.disabled) {
   background: var(--dark-secondary);
   border-color: var(--border);
+  border-radius: 14px;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
@@ -484,12 +487,15 @@
 [data-theme="dark"] .score-box.saved {
   background: rgba(16, 185, 129, 0.15);
   border: 2px solid #10b981;
-  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1), 0 2px 8px rgba(16, 185, 129, 0.15);
+  overflow: visible;
 }
 
 [data-theme="dark"] .score-box.disabled {
   background: var(--input-bg);
   border: 2px solid var(--border);
+  border-radius: 14px;
   opacity: 0.5;
 }
 
