@@ -277,7 +277,7 @@ const filteredPendingMatches = leagueFilter === 'all'
                   </div>
                   <div className="matches-badge">
                     <Target size={14} />
-                    <span>{pendingMatches.length} disponibles</span>
+                    <span>{pendingMatches.length}</span>
                   </div>
                 </div>
 
