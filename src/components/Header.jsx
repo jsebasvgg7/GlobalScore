@@ -9,19 +9,40 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const position = currentUser ? users.findIndex((u) => u.id === currentUser.id) + 1 : 0;
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/");
   };
 
-  const handleHomeClick = () => navigate("/app");
-  const handleRankingClick = () => navigate("/ranking");
-  const handleAdminClick = () => navigate("/admin");
-  const handleProfileClick = () => navigate("/profile");
-  const handleNotificationsClick = () => navigate("/notifications");
-  const handleStatsClick = () => navigate("/stats");
-  const handleWorldCupClick = () => navigate("/worldcup");
+  const handleHomeClick = () => {
+    navigate("/app");
+  };
+
+  const handleRankingClick = () => {
+    navigate("/ranking");
+  };
+
+  const handleAdminClick = () => {
+    navigate("/admin");
+  };
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
+  const handleNotificationsClick = () => {
+    navigate("/notifications");
+  };
+
+  const handleStatsClick = () => {
+    navigate("/stats");
+  };
+
+  const handleWorldCupClick = () => {
+    navigate("/worldcup");
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -29,10 +50,9 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
     <>
       {/* Header Superior */}
       <header className="app-header">
-        {/* Botón Izquierdo - Logout */}
         <div className="header-left">
           <button 
-            className="icon-btn logout-btn-header" 
+            className="icon-btn logout-btn" 
             onClick={handleLogout} 
             aria-label="Cerrar sesión"
             title="Cerrar Sesión"
@@ -41,44 +61,34 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           </button>
         </div>
 
-        {/* Título Centro con Iconos */}
         <div className="header-center">
-          <h1 className="app-title-header">
-            <span className="title-part">Gl</span>
-            <Trophy className="title-trophy" size={24} strokeWidth={2.5} />
-            <span className="title-part">balSc</span>
-            <span className="title-soccer">⚽</span>
-            <span className="title-part">re</span>
-          </h1>
+          <h1 className="app-title">GlobalScore</h1>
         </div>
 
-        {/* Botones Derecha */}
         <div className="header-right">
-          {/* Notificaciones - Siempre visible */}
           <button 
             className="icon-btn notifications-btn" 
             onClick={handleNotificationsClick} 
-            aria-label="Notificaciones"
+            aria-label="Ver notificaciones"
             title="Notificaciones"
           >
             <Bell size={18} />
           </button>
 
-          {/* Tema - Siempre visible */}
           <button 
             className="icon-btn theme-btn" 
             onClick={toggleTheme}
-            aria-label={theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}
+            aria-label={theme === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
             title={theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}
           >
             {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
           </button>
 
-          {/* Botones Desktop Only */}
+          {/* Botones solo para desktop */}
           <button
             className="icon-btn worldcup-btn desktop-only"
             onClick={handleWorldCupClick}
-            aria-label="Mundial"
+            aria-label="Ver sección del Mundial"
             title="Mundial 2026"
           >
             <Trophy size={18} />
@@ -87,8 +97,8 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           <button 
             className="icon-btn stats-btn desktop-only" 
             onClick={handleStatsClick}
-            aria-label="Estadísticas"
-            title="Estadísticas"
+            aria-label="Ver estadísticas"
+            title="Ver Estadísticas"
           >
             <BarChart3 size={18} />
           </button>
@@ -97,8 +107,8 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             <button 
               className="icon-btn admin-btn desktop-only" 
               onClick={handleAdminClick} 
-              aria-label="Admin"
-              title="Administración"
+              aria-label="Panel de administración"
+              title="Panel de Administración"
             >
               <Shield size={18} />
             </button>
@@ -107,8 +117,8 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           <button 
             className="icon-btn ranking-btn desktop-only" 
             onClick={handleRankingClick} 
-            aria-label="Ranking"
-            title="Ranking"
+            aria-label="Ver ranking"
+            title="Ver Ranking Global"
           >
             <Award size={18} />
           </button>
@@ -116,15 +126,15 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           <button 
             className="icon-btn profile-btn desktop-only" 
             onClick={handleProfileClick} 
-            aria-label="Perfil"
-            title="Perfil"
+            aria-label="Ver perfil"
+            title="Ver Perfil"
           >
             <User2 size={18} />
           </button>
         </div>
       </header>
 
-      {/* Bottom Navigation Bar - Solo Móvil */}
+      {/* Bottom Navigation Bar */}
       <nav className="bottom-nav">
         <button 
           className={`bottom-nav-btn ${isActive('/app') ? 'active' : ''}`}
