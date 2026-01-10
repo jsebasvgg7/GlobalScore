@@ -470,7 +470,7 @@
 [data-theme="dark"] .score-box {
   background: var(--input-bg);
   border: 2px solid var(--input-border);
-  box-shadow: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 [data-theme="dark"] .score-box:hover:not(.saved):not(.disabled) {
