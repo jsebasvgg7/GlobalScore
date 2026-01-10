@@ -475,6 +475,8 @@ button {
 
 /* Mobile header - SE ADAPTA AL TEMA */
 @media (max-width: 768px) {
+  /* HEADER SUPERIOR */
+  
   /* Modo claro - header blanco */
   [data-theme="light"] .app-header {
     background: #ffffff !important;
@@ -488,54 +490,98 @@ button {
     background-clip: text;
   }
   
+  [data-theme="light"] .header-left .icon-btn,
+  [data-theme="light"] .header-right .icon-btn {
+    color: #1e202c;
+  }
+  
   /* Modo oscuro - header oscuro */
   [data-theme="dark"] .app-header {
-    background: var(--card) !important;
-    border-bottom: 1px solid var(--border) !important;
+    background: linear-gradient(135deg, #353b4d 0%, #3f4556 100%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
   }
   
   [data-theme="dark"] .app-title {
     color: var(--text-primary);
+    background: none;
+    -webkit-text-fill-color: var(--text-primary);
   }
   
-  /* Bottom Nav - SIEMPRE OSCURO */
-  .bottom-nav {
+  /* BOTTOM NAVIGATION */
+  
+  /* Modo claro - bottom nav oscuro (contraste) */
+  [data-theme="light"] .bottom-nav {
     background: linear-gradient(135deg, #1e202c 0%, #31323e 100%) !important;
     border-top: 1px solid rgba(96, 81, 155, 0.2) !important;
   }
   
-  /* Botones del bottom nav - SIEMPRE texto claro */
-  .bottom-nav-btn {
+  [data-theme="light"] .bottom-nav::before {
+    background: linear-gradient(90deg, 
+      transparent,
+      #60519b,
+      #8b7fc7,
+      #60519b,
+      transparent
+    );
+  }
+  
+  [data-theme="light"] .bottom-nav-btn {
     color: #bfc0d1 !important;
   }
   
-  .bottom-nav-btn.active {
-    color: #ffffff !important;
-    background: rgba(96, 81, 155, 0.2) !important;
+  [data-theme="light"] .bottom-nav-btn:active {
+    background: rgba(96, 81, 155, 0.15);
   }
   
-  .bottom-nav-btn.active span {
+  [data-theme="light"] .bottom-nav-btn.active {
+    color: #ffffff !important;
+    background: rgba(96, 81, 155, 0.25) !important;
+  }
+  
+  [data-theme="light"] .bottom-nav-btn.active span {
     color: #8b7fc7 !important;
   }
-}
-
-/* Forzar para MODO CLARO también en bottom nav */
-[data-theme="light"] .bottom-nav {
-  background: linear-gradient(135deg, #1e202c 0%, #31323e 100%) !important;
-  border-top-color: rgba(96, 81, 155, 0.2) !important;
-}
-
-[data-theme="light"] .bottom-nav-btn {
-  color: #bfc0d1 !important;
-}
-
-[data-theme="light"] .bottom-nav-btn.active {
-  color: #ffffff !important;
-  background: rgba(96, 81, 155, 0.2) !important;
-}
-
-[data-theme="light"] .bottom-nav-btn.active span {
-  color: #8b7fc7 !important;
+  
+  [data-theme="light"] .bottom-nav-btn.active::before {
+    background: linear-gradient(90deg, #60519b, #8b7fc7);
+  }
+  
+  /* Modo oscuro - bottom nav más claro (coherente con el header) */
+  [data-theme="dark"] .bottom-nav {
+    background: linear-gradient(135deg, #353b4d 0%, #3f4556 100%) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+  }
+  
+  [data-theme="dark"] .bottom-nav::before {
+    background: linear-gradient(90deg, 
+      transparent,
+      rgba(139, 127, 199, 0.6),
+      rgba(165, 153, 217, 0.6),
+      rgba(139, 127, 199, 0.6),
+      transparent
+    );
+  }
+  
+  [data-theme="dark"] .bottom-nav-btn {
+    color: #c5c9d9 !important;
+  }
+  
+  [data-theme="dark"] .bottom-nav-btn:active {
+    background: rgba(139, 127, 199, 0.15);
+  }
+  
+  [data-theme="dark"] .bottom-nav-btn.active {
+    color: #ffffff !important;
+    background: rgba(139, 127, 199, 0.25) !important;
+  }
+  
+  [data-theme="dark"] .bottom-nav-btn.active span {
+    color: #a599d9 !important;
+  }
+  
+  [data-theme="dark"] .bottom-nav-btn.active::before {
+    background: linear-gradient(90deg, #8b7fc7, #a599d9);
+  }
 }
 
 /* ================================

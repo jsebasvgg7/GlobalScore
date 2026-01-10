@@ -391,7 +391,7 @@ export default function VegaScorePage() {
                   <div className="matches-header-actions">
                     <div className="matches-badge">
                       <Trophy size={14} />
-                      <span>{activeLeagues.length}</span>
+                      <span>{activeLeagues.length} disponibles</span>
                     </div>
                   </div>
                 </div>
@@ -424,7 +424,7 @@ export default function VegaScorePage() {
                   <div className="matches-header-actions">
                     <div className="matches-badge">
                       <Trophy size={14} />
-                      <span>{activeAwards.length}</span>
+                      <span>{activeAwards.length} disponibles</span>
                     </div>
                   </div>
                 </div>
