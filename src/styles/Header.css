@@ -121,16 +121,24 @@
   }
 
   [data-theme="light"] .bottom-nav-btn {
-    color: #60519b;
+    color: #60519b !important;
+  }
+
+  [data-theme="light"] .bottom-nav-btn svg {
+    color: #60519b !important;
   }
 
   [data-theme="light"] .bottom-nav-btn.active {
-    color: #8b7fc7;
-    background: rgba(96, 81, 155, 0.1);
+    color: #8b7fc7 !important;
+    background: rgba(96, 81, 155, 0.15);
+  }
+
+  [data-theme="light"] .bottom-nav-btn.active svg {
+    color: #8b7fc7 !important;
   }
 
   [data-theme="light"] .bottom-nav-btn.active span {
-    color: #60519b;
+    color: #60519b !important;
   }
   
   /* Modo oscuro - header oscuro */
