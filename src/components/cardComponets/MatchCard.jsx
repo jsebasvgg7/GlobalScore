@@ -71,57 +71,52 @@ export default function MatchCard({ match, userPred, onPredict }) {
         <img 
           src={match.league_logo_url} 
           alt={`${match.league} logo`}
-          className="league-logo-img"
+          className="league-logo"
           onError={(e) => {
-            // Si falla la carga, ocultar imagen y mostrar icono
             e.target.style.display = 'none';
-            const fallbackIcon = e.target.parentElement.querySelector('.league-icon-fallback');
+            const fallbackIcon = e.target.nextElementSibling;
             if (fallbackIcon) fallbackIcon.style.display = 'flex';
           }}
         />
       );
     }
-    return null;
+    return <Trophy size={16} className="league-icon-fallback" />;
   };
 
-  // Función para renderizar el logo (URL de imagen o emoji de fallback)
+  // Función para renderizar el logo del equipo
   const renderTeamLogo = (logoUrl, fallbackEmoji) => {
     if (logoUrl && logoUrl.startsWith('http')) {
       return (
         <img 
           src={logoUrl} 
           alt="Team logo" 
-          className="team-logo-img"
+          className="team-logo"
           onError={(e) => {
-            // Si la imagen falla, mostrar el emoji
             e.target.style.display = 'none';
-            e.target.nextElementSibling.style.display = 'flex';
+            if (e.target.nextElementSibling) {
+              e.target.nextElementSibling.style.display = 'flex';
+            }
           }}
         />
       );
     }
-    // Si no hay URL, usar emoji
-    return <span className="team-logo-emoji">{fallbackEmoji || '⚽'}</span>;
+    return <span className="team-emoji">{fallbackEmoji || '⚽'}</span>;
   };
 
   // Función para formatear la fecha
   const formatMatchDate = (dateString) => {
-    // Si ya viene formateado como texto (ej: "Hoy", "Mañana")
     if (dateString && typeof dateString === 'string' && !dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
       return dateString;
     }
 
-    // Si es una fecha en formato YYYY-MM-DD
     try {
-      // Parsear la fecha en hora local (evita problemas de zona horaria)
       const [year, month, day] = dateString.split('-').map(Number);
-      const matchDate = new Date(year, month - 1, day); // month - 1 porque los meses en JS van de 0-11
+      const matchDate = new Date(year, month - 1, day);
       
       const today = new Date();
       const tomorrow = new Date(today);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
-      // Normalizar las fechas para comparar solo día/mes/año
       const normalizeDate = (date) => {
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
       };
@@ -135,7 +130,6 @@ export default function MatchCard({ match, userPred, onPredict }) {
       } else if (normalizedMatch.getTime() === normalizedTomorrow.getTime()) {
         return 'Mañana';
       } else {
-        // Formato: "15 Dic"
         return matchDate.toLocaleDateString('es-ES', { 
           day: 'numeric', 
           month: 'short' 
@@ -147,111 +141,114 @@ export default function MatchCard({ match, userPred, onPredict }) {
   };
 
   return (
-    <div className="match-card-light">
+    <div className="match-card">
       
-      <div className="match-header-light">
-        {/* Liga */}
-        <div className="match-league-info-light">
+      {/* HEADER */}
+      <div className="match-header">
+        <div className="league-info">
           {renderLeagueLogo()}
-          <Trophy 
-            size={14} 
-            className="league-icon league-icon-fallback" 
-            style={{ display: match.league_logo_url ? 'none' : 'flex' }} 
-          />
+          <Trophy size={16} className="league-icon-fallback" style={{ display: 'none' }} />
           <span className="league-name">{match.league}</span>
         </div>
         
-        {/* Fecha del partido en la esquina */}
-        <div className="match-date-badge">
+        <div className="match-date">
           <Calendar size={12} />
           <span>{formatMatchDate(match.date)}</span>
         </div>
       </div>
 
-      <div className="match-content-light">
+      {/* CONTENT */}
+      <div className="match-content">
         
         {/* Equipo Local */}
-        <div className="team-box-light team-home">
-          <div className="team-logo-light">
+        <div className="team-section">
+          <div className="team-logo-container">
             {renderTeamLogo(match.home_team_logo_url, match.home_team_logo)}
-            <span className="team-logo-emoji" style={{ display: 'none' }}>
+            <span className="team-emoji" style={{ display: 'none' }}>
               {match.home_team_logo}
             </span>
           </div>
-          <span className="team-name-light">{match.home_team}</span>
+          <span className="team-name">{match.home_team}</span>
         </div>
 
         {/* Controles de Predicción */}
-        <div className="prediction-controls">
+        <div className="prediction-section">
           
-          <div className="score-display-light">
-            <div className={`score-cell-light ${isSaved ? 'has-prediction' : ''}`}>
+          <div className="score-inputs">
+            <div className={`score-box ${isSaved ? 'saved' : ''}`}>
               <input
                 type="number"
                 min="0"
                 max="20"
-                className="score-input-in-cell"
+                className="score-input"
                 value={homeScore}
                 onChange={(e) => handleScoreChange('home', e.target.value)}
                 placeholder="0"
                 disabled={isDisabled}
               />
-              {isSaved && <div className="prediction-check-light"><CheckCircle2 size={12} /></div>}
+              {isSaved && (
+                <div className="saved-indicator">
+                  <CheckCircle2 size={12} />
+                </div>
+              )}
             </div>
             
-            <div className={`score-cell-light ${isSaved ? 'has-prediction' : ''}`}>
+            <div className={`score-box ${isSaved ? 'saved' : ''}`}>
               <input
                 type="number"
                 min="0"
                 max="20"
-                className="score-input-in-cell"
+                className="score-input"
                 value={awayScore}
                 onChange={(e) => handleScoreChange('away', e.target.value)}
                 placeholder="0"
                 disabled={isDisabled}
               />
-              {isSaved && <div className="prediction-check-light"><CheckCircle2 size={12} /></div>}
+              {isSaved && (
+                <div className="saved-indicator">
+                  <CheckCircle2 size={12} />
+                </div>
+              )}
             </div>
           </div>
           
-          {/* Hora debajo de los controles */}
-          <div className="match-time-center">
+          <div className="match-time">
             <Clock size={13} />
             <span>{match.time}</span>
           </div>
            
           {showSaveButton && (
             <button
-              className="predict-button-match"
+              className="save-button"
               onClick={handleSubmit}
-              style={{ marginTop: '8px', width: '100%' }}
             >
-              {isSaved ? "Update" : "Save"}
+              {isSaved ? "Actualizar" : "Guardar"}
             </button>
           )}
 
         </div>
 
         {/* Equipo Visitante */}
-        <div className="team-box-light team-away">
-          <div className="team-logo-light">
+        <div className="team-section">
+          <div className="team-logo-container">
             {renderTeamLogo(match.away_team_logo_url, match.away_team_logo)}
-            <span className="team-logo-emoji" style={{ display: 'none' }}>
+            <span className="team-emoji" style={{ display: 'none' }}>
               {match.away_team_logo}
             </span>
           </div>
-          <span className="team-name-light">{match.away_team}</span>
+          <span className="team-name">{match.away_team}</span>
         </div>
       </div>
 
-      <div className="match-footer-light">
+      {/* FOOTER */}
+      <div className="match-footer">
         {isDisabled ? (
-          <span className="prediction-status-light" style={{color: '#ef4444'}}>
-             <Clock size={14} /> Plazo de predicción expirado
+          <span className="status-message expired">
+            <Clock size={14} /> Plazo de predicción expirado
           </span>
         ) : !showSaveButton && isSaved ? (
-          <span className="prediction-status-light">
-            <CheckCircle2 size={14} style={{color: '#059669'}}/>
+          <span className="status-message saved">
+            <CheckCircle2 size={14} />
             Predicción guardada
           </span>
         ) : null}

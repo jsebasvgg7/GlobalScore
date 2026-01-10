@@ -1,138 +1,140 @@
-/* ===================================
-   MATCH CARD - Light & Minimal Design
-=================================== */
+/* ========================================
+   MATCH CARD - Sistema de diseño coherente
+======================================== */
 
-.match-card-light {
+.match-card {
   background: #ffffff;
-  border-radius: 18px;
+  border-radius: 16px;
   border: 1px solid #e5e7eb;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.08),
-    0 6px 16px -6px rgba(0, 0, 0, 0.08);
+    0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.match-card-light:hover {
-  transform: translateY(-3px);
+.match-card:hover {
+  transform: translateY(-2px);
   box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.1),
-    0 10px 20px -5px rgba(0, 0, 0, 0.1);
+    0 4px 12px rgba(0, 0, 0, 0.12),
+    0 8px 20px rgba(0, 0, 0, 0.08);
   border-color: #d1d5db;
 }
 
-/* ===================================
-   HEADER
-=================================== */
+/* ========================================
+   HEADER - Competición y fecha
+======================================== */
 
-.match-header-light {
-  padding: 12px 16px 0;
+.match-header {
+  padding: 14px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1f2937;
+  gap: 12px;
+  border-bottom: 1px solid #f3f4f6;
 }
 
-.match-league-info-light {
+.league-info {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: #6b7280;
-  font-size: 13px;
-  font-weight: 500;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
 
-/* Logo de la competición - PEQUEÑO al lado del texto */
-.league-logo-img {
-  width: 22px;
-  height: 22px;
+/* Logo de la competición - Tamaño pequeño y proporcional */
+.league-logo {
+  width: 20px;
+  height: 20px;
   object-fit: contain;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
   flex-shrink: 0;
 }
 
-.match-league-info-light .league-icon {
+.league-icon-fallback {
+  width: 20px;
+  height: 20px;
   color: #9ca3af;
   flex-shrink: 0;
 }
 
-.match-league-info-light .league-icon-fallback {
-  width: 18px;
-  height: 18px;
-}
-
 .league-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.match-date-badge {
+.match-date {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  background: #f3f4f6;
+  gap: 5px;
+  padding: 5px 12px;
+  background: #f9fafb;
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: #6b7280;
+  flex-shrink: 0;
 }
 
-/* ===================================
-   CONTENEDOR DE EQUIPOS Y PREDICCIÓN
-=================================== */
+.match-date svg {
+  flex-shrink: 0;
+}
 
-.match-content-light {
-  padding: 20px 16px;
+/* ========================================
+   CONTENT - Equipos y predicción
+======================================== */
+
+.match-content {
+  padding: 24px 18px;
   display: grid;
-  grid-template-columns: 1fr 110px 1fr;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
 }
 
-/* CAJAS DE EQUIPOS */
+/* ========================================
+   SECCIÓN DE EQUIPOS
+======================================== */
 
-.team-box-light {
+.team-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-/* LOGOS DE EQUIPOS - TAMAÑO ADECUADO */
-.team-logo-light {
-  height: 56px;
-  width: 56px;
+.team-logo-container {
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 
-/* Logos como imágenes reales */
-.team-logo-img {
+/* Logo del equipo como imagen */
+.team-logo {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
 }
 
-/* Logos como emojis (fallback) */
-.team-logo-emoji {
-  font-size: 48px;
+/* Logo del equipo como emoji (fallback) */
+.team-emoji {
+  font-size: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
 }
 
-.team-name-light {
-  font-size: 14px;
+.team-name {
+  font-size: 15px;
   font-weight: 700;
   color: #1f2937;
   max-width: 100%;
@@ -141,83 +143,47 @@
   white-space: nowrap;
 }
 
-/* ===================================
-   CONTROLES DE PREDICCIÓN
-=================================== */
+/* ========================================
+   SECCIÓN DE PREDICCIÓN
+======================================== */
 
-.prediction-controls {
+.prediction-section {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
+  min-width: 120px;
+}
+
+.score-inputs {
+  display: flex;
   gap: 8px;
 }
 
-.score-display-light {
-  display: flex;
-  gap: 4px;
-}
-
-.score-cell-light {
-  width: 50px;
-  height: 50px;
-  background: #f3f4f6;
+.score-box {
+  width: 56px;
+  height: 56px;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  font-weight: 800;
-  color: #1f2937;
-  border: 2px solid #e5e7eb;
   position: relative;
+  transition: all 0.2s;
 }
 
-.score-cell-light.has-prediction {
+.score-box:hover:not(.saved) {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.score-box.saved {
   background: #d1fae5;
-  border-color: #a7f3d0;
-  color: #065f46;
+  border-color: #10b981;
 }
 
-.prediction-check-light {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  color: #059669;
-  background: white;
-  border-radius: 50%;
-  padding: 2px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  font-size: 10px;
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* HORA EN EL CENTRO (debajo de controles) */
-
-.match-time-center {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #6b7280;
-  padding: 4px 10px;
-  background: #f9fafb;
-  border-radius: 6px;
-  border: 1px solid #e5e7eb;
-}
-
-.match-time-center svg {
-  flex-shrink: 0;
-  color: #9ca3af;
-}
-
-/* INPUT EN CELDA DE MARCADOR */
-
-.score-input-in-cell {
+.score-input {
   width: 100%;
   height: 100%;
   padding: 0;
@@ -225,177 +191,245 @@
   border: none;
   background: transparent;
   text-align: center;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
-  color: inherit;
-}
-
-.score-input-in-cell:focus {
+  color: #1f2937;
   outline: none;
-  background: rgba(255, 255, 255, 0.5);
 }
 
-.score-input-in-cell::placeholder {
+.score-box.saved .score-input {
+  color: #065f46;
+}
+
+.score-input::placeholder {
   color: #9ca3af;
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
-.score-input-in-cell::-webkit-outer-spin-button,
-.score-input-in-cell::-webkit-inner-spin-button {
+.score-input::-webkit-outer-spin-button,
+.score-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.score-input-in-cell[type=number] {
+.score-input[type=number] {
   -moz-appearance: textfield;
 }
 
-/* ===================================
-   FOOTER
-=================================== */
-
-.match-footer-light {
-  padding: 12px 16px;
-  border-top: 1px dashed #e5e7eb;
+.saved-indicator {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: white;
+  color: #10b981;
+  border-radius: 50%;
+  padding: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.prediction-status-light {
+.match-time {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 12px;
+  gap: 5px;
+  padding: 6px 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 13px;
   font-weight: 600;
   color: #6b7280;
 }
 
-.predict-button-match {
-  padding: 8px 16px;
+.match-time svg {
+  flex-shrink: 0;
+  color: #9ca3af;
+}
+
+.save-button {
+  width: 100%;
+  padding: 10px 16px;
   border: none;
   border-radius: 10px;
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
-  letter-spacing: 0.3px;
+  margin-top: 4px;
 }
 
-.predict-button-match:hover {
+.save-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
 }
 
-.predict-button-match:disabled {
+.save-button:active {
+  transform: translateY(0);
+}
+
+.save-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
-/* ===================================
-   RESPONSIVE
-=================================== */
+/* ========================================
+   FOOTER - Estado de la predicción
+======================================== */
+
+.match-footer {
+  padding: 14px 18px;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+}
+
+.status-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-message.saved {
+  color: #059669;
+}
+
+.status-message.expired {
+  color: #dc2626;
+}
+
+/* ========================================
+   RESPONSIVE - Mobile
+======================================== */
 
 @media (max-width: 480px) {
-  .match-card-light {
-    border-radius: 16px;
+  .match-card {
+    border-radius: 14px;
   }
   
-  .match-header-light {
-    padding: 10px 12px 0;
+  .match-header {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  
+  .league-info {
+    gap: 7px;
+  }
+  
+  .league-logo,
+  .league-icon-fallback {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .league-name {
+    font-size: 13px;
+  }
+  
+  .match-date {
+    padding: 4px 10px;
+    font-size: 11px;
+    gap: 4px;
+  }
+  
+  .match-content {
+    grid-template-columns: 1fr auto 1fr;
+    padding: 20px 14px;
+    gap: 12px;
+  }
+  
+  .team-logo-container {
+    width: 52px;
+    height: 52px;
+  }
+  
+  .team-emoji {
+    font-size: 44px;
+  }
+  
+  .team-name {
+    font-size: 14px;
+  }
+  
+  .prediction-section {
+    min-width: 100px;
+    gap: 8px;
+  }
+  
+  .score-inputs {
     gap: 6px;
   }
   
-  .match-league-info-light {
+  .score-box {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .score-input {
+    font-size: 20px;
+  }
+  
+  .match-time {
+    padding: 5px 10px;
     font-size: 12px;
-    flex: 1;
-    min-width: 0;
-    gap: 5px;
+    gap: 4px;
   }
   
-  /* Logo de competición en mobile */
-  .league-logo-img {
-    width: 20px;
-    height: 20px;
+  .save-button {
+    padding: 8px 14px;
+    font-size: 13px;
   }
   
-  .match-league-info-light .league-icon-fallback {
+  .match-footer {
+    padding: 12px 14px;
+  }
+  
+  .status-message {
+    font-size: 12px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .league-logo,
+  .league-icon-fallback {
     width: 16px;
     height: 16px;
   }
   
-  .match-league-info-light .league-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  .league-name {
+    font-size: 12px;
   }
   
-  .match-date-badge {
-    padding: 4px 10px;
-    font-size: 11px;
-    gap: 4px;
-    flex-shrink: 0;
+  .team-logo-container {
+    width: 48px;
+    height: 48px;
   }
   
-  .match-content-light {
-    grid-template-columns: 1fr 100px 1fr;
-    padding: 16px 12px;
+  .team-emoji {
+    font-size: 40px;
   }
   
-  .score-cell-light {
-    width: 45px;
-    height: 45px;
-    font-size: 18px;
-  }
-  
-  .match-time-center {
-    font-size: 11px;
-    padding: 3px 8px;
-    gap: 4px;
-  }
-  
-  /* LOGOS DE EQUIPOS en mobile */
-  .team-logo-light {
-    height: 50px;
-    width: 50px;
-  }
-  
-  .team-logo-emoji {
-    font-size: 42px;
-  }
-  
-  .team-name-light {
+  .team-name {
     font-size: 13px;
   }
-}
-
-/* Extra small mobile */
-@media (max-width: 360px) {
-  .league-logo-img {
-    width: 13px;
-    height: 13px;
+  
+  .score-box {
+    width: 44px;
+    height: 44px;
   }
   
-  .match-league-info-light .league-icon-fallback {
-    width: 11px;
-    height: 11px;
-  }
-  
-  .match-league-info-light {
-    font-size: 11px;
-  }
-  
-  .team-logo-light {
-    height: 36px;
-    width: 36px;
-  }
-  
-  .team-logo-emoji {
-    font-size: 30px;
+  .score-input {
+    font-size: 18px;
   }
 }
