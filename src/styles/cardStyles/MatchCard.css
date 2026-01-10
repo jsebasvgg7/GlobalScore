@@ -387,7 +387,7 @@
 }
 
 /* ========================================
-   MODO OSCURO - CORREGIDO
+   MODO OSCURO - IGUAL AL MODO CLARO
 ======================================== */
 
 [data-theme="dark"] .match-card {
@@ -452,13 +452,20 @@
 }
 
 [data-theme="dark"] .score-separator {
-  color: #94a3b8;
+  color: #64748b;
 }
 
+/* ========================================
+   SCORE BOX - MODO OSCURO DETALLADO
+======================================== */
+
+/* Score box normal - sin predicción */
 [data-theme="dark"] .score-box {
   background: rgba(58, 64, 82, 0.6);
-  border-color: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-theme="dark"] .score-box:hover:not(.saved):not(.disabled) {
@@ -468,25 +475,41 @@
   transform: translateY(-1px);
 }
 
-/* Score box guardado - Verde brillante */
+/* Score box guardado - IGUAL AL MODO CLARO */
 [data-theme="dark"] .score-box.saved {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.2) 100%);
-  border-color: #10b981;
+  background: linear-gradient(135deg, rgba(209, 250, 229, 0.25) 0%, rgba(167, 243, 208, 0.2) 100%);
+  border: 2px solid #10b981;
+  border-radius: 14px;
   box-shadow: 
-    0 2px 8px rgba(16, 185, 129, 0.4),
-    0 0 0 1px rgba(16, 185, 129, 0.2);
+    0 2px 8px rgba(16, 185, 129, 0.3),
+    inset 0 0 0 1px rgba(16, 185, 129, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Borde interno adicional para más detalle */
+[data-theme="dark"] .score-box.saved::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(5, 150, 105, 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 [data-theme="dark"] .score-box.disabled {
   background: rgba(42, 47, 63, 0.4);
-  border-color: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
 }
 
 [data-theme="dark"] .score-input {
   color: var(--text-primary);
 }
 
-/* Color del texto cuando está guardado - Verde más brillante */
 [data-theme="dark"] .score-box.saved .score-input {
   color: #34d399;
   font-weight: 800;
@@ -497,19 +520,34 @@
   opacity: 0.7;
 }
 
-/* Indicador de guardado mejorado */
+/* Indicador de guardado - más detallado */
 [data-theme="dark"] .saved-indicator {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
+  border-radius: 50%;
+  padding: 4px;
   box-shadow: 
     0 2px 8px rgba(16, 185, 129, 0.6),
-    0 0 0 2px rgba(16, 185, 129, 0.2);
-  border: 2px solid #34d399;
+    0 0 0 2px var(--card),
+    0 0 0 3px #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
 }
+
+[data-theme="dark"] .saved-indicator svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* ========================================
+   MATCH TIME - MODO OSCURO
+======================================== */
 
 [data-theme="dark"] .match-time {
   background: rgba(42, 47, 63, 0.6);
-  border-color: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 10px;
   color: var(--text-secondary);
 }
 
@@ -517,31 +555,57 @@
   color: var(--muted);
 }
 
+/* ========================================
+   FOOTER - MODO OSCURO DETALLADO
+======================================== */
+
 [data-theme="dark"] .match-footer {
-  border-top-color: var(--border);
+  border-top: 1px solid var(--border);
   background: var(--card);
 }
 
+/* Estado guardado - con borde completo y redondeado */
 [data-theme="dark"] .status-message.saved {
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.15) 100%);
+  border: 1px solid #10b981;
+  border-radius: 10px;
+  box-shadow: 
+    0 1px 3px rgba(16, 185, 129, 0.2),
+    inset 0 1px 0 rgba(16, 185, 129, 0.1);
 }
 
+[data-theme="dark"] .status-message.saved svg {
+  color: #10b981;
+  filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.4));
+}
+
+/* Estado guardando */
 [data-theme="dark"] .status-message.saving {
   color: #fbbf24;
   background: rgba(245, 158, 11, 0.15);
-  border-color: rgba(245, 158, 11, 0.3);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 10px;
 }
 
+/* Estado pendiente */
+[data-theme="dark"] .status-message.pending {
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 10px;
+}
+
+/* Estado expirado */
 [data-theme="dark"] .status-message.expired {
   color: #ef4444;
   background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.3);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
 }
 
 [data-theme="dark"] .spinner-small {
-  border-color: rgba(245, 158, 11, 0.3);
+  border: 2px solid rgba(245, 158, 11, 0.3);
   border-top-color: #fbbf24;
 }
 
