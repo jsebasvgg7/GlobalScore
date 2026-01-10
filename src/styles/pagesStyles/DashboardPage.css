@@ -389,6 +389,109 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(96, 81, 155, 0.3);
 }
+/* ===================================
+   FILTERS GRID - Compacto
+=================================== */
+
+.league-filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.league-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.league-filter-btn:hover {
+  border-color: var(--accent);
+  background: var(--glass);
+  transform: translateY(-2px);
+  box-shadow: var(--small-shadow);
+}
+
+.league-filter-btn.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  border-color: var(--accent);
+  color: white;
+}
+
+.league-filter-btn .filter-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.filter-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.filter-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+}
+
+.league-filter-btn:hover .filter-name {
+  color: var(--text-primary);
+}
+
+.league-filter-btn.active .filter-name {
+  color: white !important;
+}
+
+.filter-count {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.league-filter-btn:hover .filter-count {
+  color: var(--text-primary);
+}
+
+.league-filter-btn.active .filter-count {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Fix específico para Dark Mode */
+[data-theme="dark"] .filter-name {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-count {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .league-filter-btn:hover .filter-name {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .league-filter-btn:hover .filter-count {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .league-filter-btn.active .filter-name {
+  color: white !important;
+}
+
+[data-theme="dark"] .league-filter-btn.active .filter-count {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
 
 /* ===================================
    RESPONSIVE - TABLET
