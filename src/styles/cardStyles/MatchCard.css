@@ -39,36 +39,36 @@
 .match-league-info-light {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   color: #6b7280;
   font-size: 13px;
   font-weight: 500;
 }
 
-.match-league-info-light .league-icon {
-  color: #9ca3af;
-  margin-right: -2px;
-}
-
-.match-date-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  border: 1px solid #bae6fd;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #0369a1;
-  white-space: nowrap;
-  box-shadow: 0 1px 3px rgba(3, 105, 161, 0.1);
-}
-
-.match-date-badge svg {
+/* Logo de la competición como imagen */
+.league-logo-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
   flex-shrink: 0;
 }
 
+.match-league-info-light .league-icon {
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.match-league-info-light .league-icon-fallback {
+  width: 16px;
+  height: 16px;
+}
+
+.league-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 /* ===================================
    CONTENEDOR DE EQUIPOS Y PREDICCIÓN
 =================================== */
@@ -358,5 +358,97 @@
   
   .team-name-light {
     font-size: 13px;
+  }
+}
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media (max-width: 480px) {
+  .match-card-light {
+    border-radius: 16px;
+  }
+  
+  .match-header-light {
+    padding: 10px 12px 0;
+    gap: 6px;
+  }
+  
+  .match-league-info-light {
+    font-size: 12px;
+    flex: 1;
+    min-width: 0;
+    gap: 5px;
+  }
+  
+  /* Logo más pequeño en mobile */
+  .league-logo-img {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .match-league-info-light .league-icon-fallback {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .match-league-info-light .league-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .match-date-badge {
+    padding: 4px 10px;
+    font-size: 11px;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  
+  .match-content-light {
+    grid-template-columns: 1fr 100px 1fr;
+    padding: 16px 12px;
+  }
+  
+  .score-cell-light {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+  
+  .match-time-center {
+    font-size: 11px;
+    padding: 3px 8px;
+    gap: 4px;
+  }
+  
+  .team-logo-light {
+    height: 42px;
+    width: 42px;
+  }
+  
+  .team-logo-emoji {
+    font-size: 36px;
+  }
+  
+  .team-name-light {
+    font-size: 13px;
+  }
+}
+
+/* Extra small mobile */
+@media (max-width: 360px) {
+  .league-logo-img {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .match-league-info-light .league-icon-fallback {
+    width: 13px;
+    height: 13px;
+  }
+  
+  .match-league-info-light {
+    font-size: 11px;
   }
 }

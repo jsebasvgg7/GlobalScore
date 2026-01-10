@@ -3436,6 +3436,15 @@ button {
   }
 
   /* League logo en modo oscuro - mejorar visibilidad */
-  [data-theme="dark"] .league-logo-img {filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)) brightness(1.1);
-  }
+[data-theme="dark"] .league-logo-img {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)) brightness(1.15) contrast(1.1);
+}
+
+[data-theme="dark"] .match-league-info-light {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .match-league-info-light .league-icon {
+  color: var(--muted);
+}
 }
