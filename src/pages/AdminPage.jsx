@@ -527,50 +527,50 @@ export default function AdminPage({ currentUser, onBack }) {
           {/* Content Area */}
           <div className="admin-content-area">
             {activeSection === 'matches' && (
-            <div className="admin-items-grid">
-              {getFilteredItems().map(match => (
-                <div key={match.id} className="admin-item-card match">
-                  <div className="item-header">
-                    <div className="item-info">
-                      <div className="item-league">{match.league}</div>
-                      <div className="item-teams">
-                        {match.home_team_logo} {match.home_team} vs {match.away_team} {match.away_team_logo}
+              <div className="admin-items-grid">
+                {getFilteredItems().map(match => (
+                  <div key={match.id} className="admin-item-card match">
+                    <div className="item-header">
+                      <div className="item-info">
+                        <div className="item-league">{match.league}</div>
+                        <div className="item-teams">
+                          {match.home_team_logo} {match.home_team} vs {match.away_team} {match.away_team_logo}
+                        </div>
+                        <div className="item-meta">
+                          <Calendar size={14} />
+                          <span>{match.date}</span>
+                          <Clock size={14} />
+                          <span>{match.time}</span>
+                        </div>
                       </div>
-                      <div className="item-meta">
-                        <Calendar size={14} />
-                        <span>{match.date}</span>
-                        <Clock size={14} />
-                        <span>{match.time}</span>
+                      <div className={`item-status ${match.status}`}>
+                        {match.status === 'pending' ? 'Pendiente' : 'Finalizado'}
                       </div>
                     </div>
-                    <div className={`item-status ${match.status}`}>
-                      {match.status === 'pending' ? 'Pendiente' : 'Finalizado'}
-                    </div>
-                  </div>
-                  <div className="item-actions">
-                    {match.status === 'pending' && (
+                    <div className="item-actions">
+                      {match.status === 'pending' && (
+                        <button 
+                          className="action-btn finish"
+                          onClick={() => {
+                            setItemToFinish(match);
+                            setShowFinishMatchModal(true);
+                          }}
+                        >
+                          <CheckCircle size={16} />
+                          <span>Finalizar</span>
+                        </button>
+                      )}
                       <button 
-                        className="action-btn finish"
-                        onClick={() => {
-                          setItemToFinish(match);
-                          setShowFinishMatchModal(true);
-                        }}
+                        className="action-btn delete"
+                        onClick={() => handleDeleteMatch(match.id)}
                       >
-                        <CheckCircle size={16} />
-                        <span>Finalizar</span>
+                        <Trash2 size={16} />
                       </button>
-                    )}
-                    <button 
-                      className="action-btn delete"
-                      onClick={() => handleDeleteMatch(match.id)}
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
 
             {activeSection === 'leagues' && (
               <div className="admin-items-grid">
@@ -802,6 +802,18 @@ export default function AdminPage({ currentUser, onBack }) {
           }}
         />
       )}
+
+      {showFinishAwardModal && itemToFinish && (
+        <FinishAwardModal 
+          award={itemToFinish}
+          onFinish={handleFinishAward}
+          onClose={() => {
+            setShowFinishAwardModal(false);
+            setItemToFinish(null);
+          }}
+        />
+      )}
+
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
     </>
   );
