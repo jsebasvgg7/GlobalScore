@@ -106,12 +106,32 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    font-size: 24px !important;
   }
 
   /* Asegurar que los iconos sean visibles en modo claro */
   [data-theme="light"] .header-left .icon-btn,
   [data-theme="light"] .header-right .icon-btn {
     color: #1e202c;
+  }
+
+  /* Bottom nav en modo claro - iconos morados */
+  [data-theme="light"] .bottom-nav {
+    background: #ffffff !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+  }
+
+  [data-theme="light"] .bottom-nav-btn {
+    color: #60519b;
+  }
+
+  [data-theme="light"] .bottom-nav-btn.active {
+    color: #8b7fc7;
+    background: rgba(96, 81, 155, 0.1);
+  }
+
+  [data-theme="light"] .bottom-nav-btn.active span {
+    color: #60519b;
   }
   
   /* Modo oscuro - header oscuro */
