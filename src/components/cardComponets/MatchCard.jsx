@@ -191,6 +191,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
               )}
             </div>
             
+            <div className="score-separator">:</div>
             
             <div className={`score-box ${isSaved ? 'saved' : ''} ${isDisabled ? 'disabled' : ''}`}>
               <input
@@ -230,26 +231,28 @@ export default function MatchCard({ match, userPred, onPredict }) {
       </div>
 
       {/* FOOTER: Estado y Acciones */}
-      <div className="match-footer">
-        {isPastDeadline ? (
-          <div className="status-message expired">
-            <Clock size={14} />
-            <span>Predicción cerrada</span>
-          </div>
-        ) : showSaveButton ? (
-          <button
-            className="save-button"
-            onClick={handleSubmit}
-          >
-            {isSaved ? "Actualiza" : "Guarda"}
-          </button>
-        ) : isSaved && !isDisabled ? (
-          <div className="status-message saved">
-            <CheckCircle2 size={14} />
-            <span>Predicción guardada</span>
-          </div>
-        ) : null}
-      </div>
+      {(isPastDeadline || showSaveButton || (isSaved && !isDisabled)) && (
+        <div className="match-footer">
+          {isPastDeadline ? (
+            <div className="status-message expired">
+              <Clock size={14} />
+              <span>Predicción cerrada</span>
+            </div>
+          ) : showSaveButton ? (
+            <button
+              className="save-button"
+              onClick={handleSubmit}
+            >
+              {isSaved ? "Actualiza" : "Guarda"}
+            </button>
+          ) : isSaved && !isDisabled ? (
+            <div className="status-message saved">
+              <CheckCircle2 size={14} />
+              <span>Predicción guardada</span>
+            </div>
+          ) : null}
+        </div>
+      )}
 
     </div>
   );
