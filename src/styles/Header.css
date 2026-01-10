@@ -11,7 +11,7 @@
   text-align: center;
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 0px;
 }
 
 .title-text {
@@ -20,7 +20,9 @@
 }
 
 .title-icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin: 0 -2px;
   vertical-align: middle;
   flex-shrink: 0;
@@ -32,7 +34,8 @@
 }
 
 .football-icon {
-  color: #ffffff;
+  font-size: 24px;
+  line-height: 1;
   filter: drop-shadow(0 2px 6px rgba(255, 255, 255, 0.3));
 }
 
@@ -55,10 +58,13 @@
     background-clip: text;
   }
 
-  [data-theme="light"] .trophy-icon,
-  [data-theme="light"] .football-icon {
+  [data-theme="light"] .trophy-icon {
     color: #60519b;
     filter: drop-shadow(0 2px 6px rgba(96, 81, 155, 0.3));
+  }
+
+  [data-theme="light"] .football-icon {
+    filter: drop-shadow(0 2px 4px rgba(96, 81, 155, 0.3));
   }
 
   /* Asegurar que los iconos sean visibles en modo claro */
@@ -79,20 +85,27 @@
     -webkit-text-fill-color: var(--text-primary);
   }
 
-  [data-theme="dark"] .trophy-icon,
-  [data-theme="dark"] .football-icon {
+  [data-theme="dark"] .trophy-icon {
     color: var(--text-primary);
     filter: drop-shadow(0 2px 6px rgba(255, 255, 255, 0.2));
   }
 
-  .app-title {
-    font-size: 20px;
-    gap: 1px;
+  [data-theme="dark"] .football-icon {
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.2));
   }
 
-  .title-icon {
-    width: 24px;
-    height: 24px;
+  .app-title {
+    font-size: 20px;
+    gap: 0px;
+  }
+
+  .trophy-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .football-icon {
+    font-size: 20px;
   }
 
   .header-left,
@@ -108,12 +121,15 @@
 
   .app-title {
     font-size: 18px;
-    gap: 0px;
   }
 
-  .title-icon {
+  .trophy-icon {
     width: 20px;
     height: 20px;
+  }
+
+  .football-icon {
+    font-size: 18px;
   }
 
   .header-left,
