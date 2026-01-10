@@ -365,6 +365,7 @@
   transform: none;
   box-shadow: none;
 }
+
 /* Estado "guardando" */
 .status-message.saving {
   color: #f59e0b;
@@ -533,4 +534,358 @@
 [data-theme="dark"] .spinner-small {
   border-color: rgba(245, 158, 11, 0.3);
   border-top-color: #fbbf24;
+}
+
+/* ========================================
+   RESPONSIVE - TABLET (768px - 1024px)
+======================================== */
+
+@media (max-width: 1024px) {
+  .match-card {
+    border-radius: 14px;
+  }
+
+  .match-header {
+    padding: 14px 18px;
+  }
+
+  .match-content {
+    padding: 20px 18px;
+    gap: 16px;
+  }
+
+  .team-logo-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .team-logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .team-emoji {
+    font-size: 44px;
+  }
+
+  .prediction-section {
+    min-width: 130px;
+  }
+
+  .score-box {
+    width: 54px;
+    height: 54px;
+  }
+
+  .score-input {
+    font-size: 22px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE (481px - 767px)
+======================================== */
+
+@media (max-width: 767px) {
+  .match-card {
+    border-radius: 12px;
+  }
+  
+  .match-header {
+    padding: 12px 16px;
+    gap: 10px;
+  }
+  
+  .league-info {
+    gap: 8px;
+  }
+  
+  .league-logo,
+  .league-icon-fallback {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .league-name {
+    font-size: 13px;
+  }
+  
+  .match-date {
+    padding: 5px 10px;
+    font-size: 11px;
+    gap: 5px;
+  }
+  
+  .match-content {
+    padding: 18px 16px;
+    gap: 14px;
+  }
+  
+  .team-logo-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+  }
+  
+  .team-logo {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .team-emoji {
+    font-size: 40px;
+  }
+  
+  .team-name {
+    font-size: 14px;
+  }
+  
+  .prediction-section {
+    min-width: 120px;
+    gap: 10px;
+  }
+  
+  .score-inputs {
+    gap: 8px;
+  }
+  
+  .score-separator {
+    font-size: 24px;
+  }
+  
+  .score-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+  }
+  
+  .score-input {
+    font-size: 20px;
+  }
+  
+  .match-time {
+    padding: 6px 12px;
+    font-size: 12px;
+    gap: 5px;
+  }
+  
+  .match-footer {
+    padding: 14px 16px;
+    min-height: 56px;
+  }
+  
+  .save-button {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+  
+  .status-message {
+    font-size: 12px;
+    gap: 6px;
+    padding: 7px 14px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE PEQUEÑO (≤480px)
+======================================== */
+
+@media (max-width: 480px) {
+  .match-card {
+    border-radius: 12px;
+  }
+
+  .match-header {
+    padding: 12px 14px;
+  }
+  
+  .league-logo,
+  .league-icon-fallback {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .league-name {
+    font-size: 12px;
+  }
+  
+  .match-date {
+    padding: 4px 9px;
+    font-size: 11px;
+    gap: 4px;
+  }
+  
+  .match-content {
+    padding: 16px 14px;
+    gap: 12px;
+  }
+  
+  .team-logo-wrapper {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+  }
+  
+  .team-logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .team-emoji {
+    font-size: 36px;
+  }
+  
+  .team-name {
+    font-size: 13px;
+  }
+  
+  .prediction-section {
+    min-width: 110px;
+    gap: 9px;
+  }
+  
+  .score-inputs {
+    gap: 7px;
+  }
+  
+  .score-separator {
+    font-size: 22px;
+  }
+  
+  .score-box {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+  }
+  
+  .score-input {
+    font-size: 18px;
+  }
+  
+  .saved-indicator {
+    top: -6px;
+    right: -6px;
+    padding: 3px;
+  }
+  
+  .saved-indicator svg {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .match-time {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  
+  .match-footer {
+    padding: 12px 14px;
+    min-height: 52px;
+  }
+  
+  .save-button {
+    padding: 9px 18px;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+  
+  .status-message {
+    font-size: 11px;
+    gap: 5px;
+    padding: 6px 12px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - EXTRA PEQUEÑO (≤360px)
+======================================== */
+
+@media (max-width: 360px) {
+  .match-header {
+    padding: 10px 12px;
+  }
+  
+  .league-logo,
+  .league-icon-fallback {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .league-name {
+    font-size: 11px;
+  }
+  
+  .match-date {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+  
+  .match-content {
+    padding: 14px 12px;
+    gap: 10px;
+  }
+  
+  .team-logo-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+  }
+  
+  .team-logo {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .team-emoji {
+    font-size: 32px;
+  }
+  
+  .team-name {
+    font-size: 12px;
+  }
+  
+  .prediction-section {
+    min-width: 100px;
+    gap: 8px;
+  }
+  
+  .score-inputs {
+    gap: 6px;
+  }
+  
+  .score-separator {
+    font-size: 20px;
+  }
+  
+  .score-box {
+    width: 42px;
+    height: 42px;
+    border-radius: 9px;
+  }
+  
+  .score-input {
+    font-size: 17px;
+  }
+  
+  .match-time {
+    padding: 4px 9px;
+    font-size: 10px;
+  }
+  
+  .match-footer {
+    padding: 10px 12px;
+    min-height: 48px;
+  }
+  
+  .save-button {
+    padding: 8px 16px;
+    font-size: 11px;
+    border-radius: 9px;
+  }
+  
+  .status-message {
+    font-size: 10px;
+    gap: 5px;
+    padding: 5px 10px;
+  }
 }
