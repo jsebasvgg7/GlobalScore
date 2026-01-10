@@ -1,6 +1,6 @@
-// src/pages/VegaScorePage.jsx
-import React, { useState } from "react";
-import { Trophy, TrendingUp, Target, Percent } from "lucide-react";
+// src/pages/DashboardPage.jsx
+import React, { useState, useMemo } from "react";
+import { Trophy, TrendingUp, Target, Filter, X } from "lucide-react";
 
 // Components
 import MatchCard from "../components/cardComponets/MatchCard";
@@ -34,6 +34,7 @@ export default function VegaScorePage() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [activeTab, setActiveTab] = useState('matches');
+  const [showFilters, setShowFilters] = useState(false);
 
   const toast = useToast();
 
@@ -74,22 +75,22 @@ export default function VegaScorePage() {
   } = useAwards(currentUser);
 
   // ========== LEAGUE FILTERS ==========
-const leagueCategories = [
-  { id: 'all', name: 'Todos', icon: '🌍', leagues: [] },
-  { id: 'england', name: 'Inglaterra', icon: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', leagues: ['Premier League', 'Championship', 'FA Cup', 'Carabao Cup'] },
-  { id: 'spain', name: 'España', icon: '🇪🇸', leagues: ['La Liga', 'Copa del Rey', 'Supercopa'] },
-  { id: 'italy', name: 'Italia', icon: '🇮🇹', leagues: ['Serie A', 'Coppa Italia', 'Supercoppa'] },
-  { id: 'germany', name: 'Alemania', icon: '🇩🇪', leagues: ['Bundesliga', 'DFB Pokal', 'Supercup'] },
-  { id: 'france', name: 'Francia', icon: '🇫🇷', leagues: ['Ligue 1', 'Coupe de France', 'Trophée des Champions'] },
-  { id: 'europe', name: 'Europa', icon: '🏆', leagues: ['UEFA Champions League', 'UEFA Europa League', 'UEFA Conference League', 'Champions League', 'Europa League', 'Conference League'] }
-];
+  const leagueCategories = [
+    { id: 'all', name: 'Todos', icon: '🌍', leagues: [] },
+    { id: 'england', name: 'Inglaterra', icon: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', leagues: ['Premier League', 'Championship', 'FA Cup', 'Carabao Cup'] },
+    { id: 'spain', name: 'España', icon: '🇪🇸', leagues: ['La Liga', 'Copa del Rey', 'Supercopa'] },
+    { id: 'italy', name: 'Italia', icon: '🇮🇹', leagues: ['Serie A', 'Coppa Italia', 'Supercoppa'] },
+    { id: 'germany', name: 'Alemania', icon: '🇩🇪', leagues: ['Bundesliga', 'DFB Pokal', 'Supercup'] },
+    { id: 'france', name: 'Francia', icon: '🇫🇷', leagues: ['Ligue 1', 'Coupe de France', 'Trophée des Champions'] },
+    { id: 'europe', name: 'Europa', icon: '🏆', leagues: ['UEFA Champions League', 'UEFA Europa League', 'UEFA Conference League', 'Champions League', 'Europa League', 'Conference League'] }
+  ];
 
   // ========== HANDLERS - PAGINAS ==========
   const handleBackToHome = () => {
     setShowProfile(false);
     setShowRanking(false);
     setShowAdmin(false);
-    setShowNotifications(false); // AÑADIR ESTA 
+    setShowNotifications(false);
     setShowStats(false);
   };
 
@@ -145,6 +146,28 @@ const leagueCategories = [
       (error) => toast.error(`Error: ${error}`)
     );
   };
+
+  // ========== FILTERED MATCHES ==========
+  const filteredMatches = useMemo(() => {
+    const pending = matches
+      .filter((m) => m.status === "pending")
+      .sort((a, b) => {
+        const dateA = new Date(`${a.date}T${a.time}`);
+        const dateB = new Date(`${b.date}T${b.time}`);
+        return dateA - dateB;
+      });
+
+    if (leagueFilter === 'all') return pending;
+
+    const category = leagueCategories.find(c => c.id === leagueFilter);
+    if (!category) return pending;
+
+    return pending.filter(match => 
+      category.leagues.some(league => 
+        match.league.toLowerCase().includes(league.toLowerCase())
+      )
+    );
+  }, [matches, leagueFilter]);
 
   // ========== RENDER ==========
   if (loading) {
@@ -206,7 +229,6 @@ const leagueCategories = [
     );
   }
 
-  // AÑADIR ESTE BLOQUE COMPLETO
   if (showNotifications) {
     return (
       <>
@@ -218,6 +240,7 @@ const leagueCategories = [
       </>
     );
   }
+
   if (showStats) {
     return (
       <>
@@ -230,23 +253,6 @@ const leagueCategories = [
     );
   }
 
-  const pendingMatches = matches
-  .filter((m) => m.status === "pending")
-  .sort((a, b) => {
-    const dateA = new Date(`${a.date}T${a.time}`);
-    const dateB = new Date(`${b.date}T${b.time}`);
-    return dateA - dateB;
-  });
-
-const filteredPendingMatches = leagueFilter === 'all'
-  ? pendingMatches
-  : pendingMatches.filter(match => {
-      const category = leagueCategories.find(c => c.id === leagueFilter);
-      return category.leagues.some(league => 
-        match.league.toLowerCase().includes(league.toLowerCase())
-      );
-    });
-
   const sortedUsers = [...users].sort((a, b) => b.points - a.points);
   const activeLeagues = leagues.filter((l) => l.status === "active");
   const activeAwards = awards.filter((a) => a.status === "active");
@@ -256,7 +262,6 @@ const filteredPendingMatches = leagueFilter === 'all'
     <>
       <div className="vega-root">
         <main className="container">
-          {/* --- Main Content (Sin Sidebar) --- */}
           <section className="main-content-full">
             <NavigationTabs 
               activeTab={activeTab} 
@@ -265,6 +270,7 @@ const filteredPendingMatches = leagueFilter === 'all'
 
             {activeTab === 'matches' && (
               <div className="matches-section-premium">
+                {/* Header */}
                 <div className="matches-header-premium">
                   <div className="matches-title-section">
                     <div className="matches-icon-wrapper">
@@ -275,48 +281,105 @@ const filteredPendingMatches = leagueFilter === 'all'
                       <p className="matches-subtitle-premium">Haz tus predicciones y gana puntos</p>
                     </div>
                   </div>
-                  <div className="matches-badge">
-                    <Target size={14} />
-                    <span>{pendingMatches.length}</span>
+                  <div className="matches-header-actions">
+                    <div className="matches-badge">
+                      <Target size={14} />
+                      <span>{filteredMatches.length} disponibles</span>
+                    </div>
+                    <button 
+                      className="filter-toggle-btn"
+                      onClick={() => setShowFilters(!showFilters)}
+                    >
+                      <Filter size={16} />
+                      <span>Filtrar</span>
+                    </button>
                   </div>
                 </div>
 
-                {/* ✨ FILTROS DE LIGAS */}
-                <div className="league-filters-container">
-                  <div className="league-filters-scroll">
-                    {leagueCategories.map((category) => {
-                      const categoryMatches = category.id === 'all'
-                        ? pendingMatches
-                        : pendingMatches.filter(match =>
-                            category.leagues.some(league =>
-                              match.league.toLowerCase().includes(league.toLowerCase())
-                            )
-                          );
+                {/* Filtros Desplegables */}
+                {showFilters && (
+                  <div className="league-filters-panel">
+                    <div className="filters-panel-header">
+                      <h3>Filtrar por competición</h3>
+                      <button 
+                        className="filters-close-btn"
+                        onClick={() => setShowFilters(false)}
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+                    <div className="league-filters-grid">
+                      {leagueCategories.map((category) => {
+                        const categoryMatches = category.id === 'all'
+                          ? matches.filter(m => m.status === "pending")
+                          : matches.filter(m => 
+                              m.status === "pending" &&
+                              category.leagues.some(league =>
+                                m.league.toLowerCase().includes(league.toLowerCase())
+                              )
+                            );
 
-                      return (
-                        <button
-                          key={category.id}
-                          className={`league-filter-chip ${leagueFilter === category.id ? 'active' : ''}`}
-                          onClick={() => setLeagueFilter(category.id)}
-                        >
-                          <span className="filter-icon">{category.icon}</span>
-                          <span className="filter-name">{category.name}</span>
-                          <span className="filter-count">{categoryMatches.length}</span>
-                        </button>
-                      );
-                    })}
+                        return (
+                          <button
+                            key={category.id}
+                            className={`league-filter-btn ${leagueFilter === category.id ? 'active' : ''}`}
+                            onClick={() => {
+                              setLeagueFilter(category.id);
+                              setShowFilters(false);
+                            }}
+                          >
+                            <span className="filter-icon">{category.icon}</span>
+                            <div className="filter-info">
+                              <span className="filter-name">{category.name}</span>
+                              <span className="filter-count">{categoryMatches.length} partidos</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                )}
 
+                {/* Chip de filtro activo */}
+                {leagueFilter !== 'all' && (
+                  <div className="active-filter-bar">
+                    <div className="active-filter-chip">
+                      <span className="filter-icon">
+                        {leagueCategories.find(c => c.id === leagueFilter)?.icon}
+                      </span>
+                      <span>{leagueCategories.find(c => c.id === leagueFilter)?.name}</span>
+                      <button 
+                        className="clear-filter-btn"
+                        onClick={() => setLeagueFilter('all')}
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Lista de Partidos */}
                 <div className="matches-container">
-                  {pendingMatches.length === 0 ? (
+                  {filteredMatches.length === 0 ? (
                     <div className="matches-empty-state">
                       <div className="matches-empty-icon">⚽</div>
-                      <div className="matches-empty-text">No hay partidos disponibles</div>
-                      <div className="matches-empty-subtext">Los nuevos partidos aparecerán aquí</div>
+                      <div className="matches-empty-text">
+                        {leagueFilter === 'all' 
+                          ? 'No hay partidos disponibles'
+                          : `No hay partidos de ${leagueCategories.find(c => c.id === leagueFilter)?.name}`
+                        }
+                      </div>
+                      {leagueFilter !== 'all' && (
+                        <button 
+                          className="show-all-btn"
+                          onClick={() => setLeagueFilter('all')}
+                        >
+                          Ver todos los partidos
+                        </button>
+                      )}
                     </div>
                   ) : (
-                    pendingMatches.map((m) => (
+                    filteredMatches.map((m) => (
                       <MatchCard
                         key={m.id}
                         match={m}
@@ -419,7 +482,6 @@ const filteredPendingMatches = leagueFilter === 'all'
         {isLoading && <LoadingOverlay message="Procesando..." />}
         <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       </div>
-
     </>
   );
 }
