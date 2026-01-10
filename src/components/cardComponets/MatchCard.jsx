@@ -4,7 +4,8 @@ import {
   Clock, 
   CheckCircle2,
   Calendar,
-  Trophy
+  Trophy,
+  AlertCircle
 } from "lucide-react";
 import "../../styles/cardStyles/MatchCard.css"; 
 
@@ -241,27 +242,30 @@ export default function MatchCard({ match, userPred, onPredict }) {
         </div>
       </div>
 
-      {/* FOOTER: Estado */}
-      {(isPastDeadline || isSaved || isSaving) && (
-        <div className="match-footer">
-          {isPastDeadline ? (
-            <div className="status-message expired">
-              <Clock size={14} />
-              <span>Predicción cerrada</span>
-            </div>
-          ) : isSaving ? (
-            <div className="status-message saving">
-              <div className="spinner-small" />
-              <span>Guardando...</span>
-            </div>
-          ) : isSaved ? (
-            <div className="status-message saved">
-              <CheckCircle2 size={14} />
-              <span>Predicción guardada</span>
-            </div>
-          ) : null}
-        </div>
-      )}
+      {/* FOOTER: Estado - SIEMPRE VISIBLE */}
+      <div className="match-footer">
+        {isPastDeadline ? (
+          <div className="status-message expired">
+            <Clock size={14} />
+            <span>Predicción cerrada</span>
+          </div>
+        ) : isSaving ? (
+          <div className="status-message saving">
+            <div className="spinner-small" />
+            <span>Guardando...</span>
+          </div>
+        ) : isSaved ? (
+          <div className="status-message saved">
+            <CheckCircle2 size={14} />
+            <span>Predicción guardada</span>
+          </div>
+        ) : (
+          <div className="status-message pending">
+            <AlertCircle size={14} />
+            <span>Predicción pendiente</span>
+          </div>
+        )}
+      </div>
 
     </div>
   );
