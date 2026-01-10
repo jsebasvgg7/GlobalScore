@@ -29,6 +29,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
   const deadline = match.deadline ? new Date(match.deadline) : null;
   const isPastDeadline = deadline && now >= deadline;
   const isDisabled = isPastDeadline || match.status !== "pending";
+  const isPendingVisual = !isSaved && !isDisabled;
 
   // Auto-save cuando ambos campos tienen valores válidos
   useEffect(() => {
@@ -187,7 +188,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
         {/* Predicción Central */}
         <div className="prediction-section">
           <div className="score-inputs">
-            <div className={`score-box ${isSaved ? 'saved' : ''} ${isDisabled ? 'disabled' : ''}`}>
+            <div className={`score-box ${isSaved ? 'saved' : ''} ${isDisabled ? 'disabled' : ''} ${isPendingVisual ? 'pending' : ''}`}>
               <input
                 type="number"
                 min="0"
@@ -198,14 +199,14 @@ export default function MatchCard({ match, userPred, onPredict }) {
                 placeholder="—"
                 disabled={isDisabled}
               />
-              {isSaved && !isDisabled && (
+              {(isSaved || isPendingVisual) && (
                 <div className="saved-indicator">
                   <CheckCircle2 size={12} />
                 </div>
               )}
             </div>
             
-            <div className={`score-box ${isSaved ? 'saved' : ''} ${isDisabled ? 'disabled' : ''}`}>
+            <div className={`score-box ${isSaved ? 'saved' : ''} ${isDisabled ? 'disabled' : ''} ${isPendingVisual ? 'pending' : ''}`}>
               <input
                 type="number"
                 min="0"
@@ -216,7 +217,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
                 placeholder="—"
                 disabled={isDisabled}
               />
-              {isSaved && !isDisabled && (
+              {(isSaved || isPendingVisual) && (
                 <div className="saved-indicator">
                   <CheckCircle2 size={12} />
                 </div>
