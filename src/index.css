@@ -895,6 +895,7 @@ button {
   animation: themeSwitch 0.6s ease-in-out;
 }
 
+
 /* ==========================================
    PAGINAS ESPECÍFICAS - MODO OSCURO
 ========================================== */
@@ -3432,5 +3433,9 @@ button {
   [data-theme="dark"] .user-modal-streaks,
   [data-theme="light"] .user-modal-streaks {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* League logo en modo oscuro - mejorar visibilidad */
+  [data-theme="dark"] .league-logo-img {filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)) brightness(1.1);
   }
 }

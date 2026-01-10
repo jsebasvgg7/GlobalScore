@@ -64,6 +64,26 @@ export default function MatchCard({ match, userPred, onPredict }) {
   );
   const showSaveButton = !isDisabled && (!isSaved || isPredictionChanged);
 
+  // Función para renderizar el logo de la competición
+  const renderLeagueLogo = () => {
+    if (match.league_logo_url) {
+      return (
+        <img 
+          src={match.league_logo_url} 
+          alt={`${match.league} logo`}
+          className="league-logo-img"
+          onError={(e) => {
+            // Si falla la carga, ocultar imagen y mostrar icono
+            e.target.style.display = 'none';
+            const fallbackIcon = e.target.parentElement.querySelector('.league-icon-fallback');
+            if (fallbackIcon) fallbackIcon.style.display = 'flex';
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
   // Función para renderizar el logo (URL de imagen o emoji de fallback)
   const renderTeamLogo = (logoUrl, fallbackEmoji) => {
     if (logoUrl && logoUrl.startsWith('http')) {
@@ -132,8 +152,13 @@ export default function MatchCard({ match, userPred, onPredict }) {
       <div className="match-header-light">
         {/* Liga */}
         <div className="match-league-info-light">
-          <Trophy size={14} className="league-icon" />
-          <span className=" league-name">{match.league}</span>
+          {renderLeagueLogo()}
+          <Trophy 
+            size={14} 
+            className="league-icon league-icon-fallback" 
+            style={{ display: match.league_logo_url ? 'none' : 'flex' }} 
+          />
+          <span className="league-name">{match.league}</span>
         </div>
         
         {/* Fecha del partido en la esquina */}
