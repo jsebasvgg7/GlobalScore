@@ -527,38 +527,32 @@
    SCORE BOXES - Predicción cerrada = Predicción guardada
 ======================================== */
 
-/* MODO CLARO - Cerrado y Pendiente se ven igual que Guardado */
-.score-box.disabled,
-.score-box.pending {
+/* MODO CLARO - Cerrado se ve igual que Guardado */
+.score-box.disabled {
   background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%) !important;
   border-color: #10b981 !important;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15) !important;
 }
 
-.score-box.disabled .score-input,
-.score-box.pending .score-input {
+.score-box.disabled .score-input {
   color: #065f46 !important;
 }
 
-/* MODO OSCURO - Cerrado y Pendiente se ven igual que Guardado */
-[data-theme="dark"] .score-box.disabled,
-[data-theme="dark"] .score-box.pending {
+/* MODO OSCURO - Cerrado se ve igual que Guardado */
+[data-theme="dark"] .score-box.disabled {
   background: rgba(16, 185, 129, 0.15) !important;
   border: 2px solid #10b981 !important;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25) !important;
 }
 
-[data-theme="dark"] .score-box.disabled .score-input,
-[data-theme="dark"] .score-box.pending .score-input {
+[data-theme="dark"] .score-box.disabled .score-input {
   color: #34d399 !important;
 }
 
-/* Mostrar el check indicator también en cerrado y pendiente */
-.score-box.disabled .saved-indicator,
-.score-box.pending .saved-indicator {
+/* Mostrar el check indicator también en cerrado */
+.score-box.disabled .saved-indicator {
   display: flex !important;
 }
-
 
 /* ========================================
    MATCH TIME
