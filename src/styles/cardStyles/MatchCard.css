@@ -459,94 +459,69 @@
 }
 
 /* ========================================
-   SCORE BOXES - SIEMPRE IGUAL
+   SCORE BOXES - USANDO VARIABLES
 ======================================== */
 
-/* MODO CLARO - Score box siempre igual */
-.score-box,
-.score-box.saved,
-.score-box.disabled {
-  background: #f8fafc;
-  border: 2px solid #e2e8f0;
+[data-theme="dark"] .score-separator {
+  color: var(--muted);
+}
+
+/* Score box normal */
+[data-theme="dark"] .score-box {
+  background: var(--input-bg);
+  border: 2px solid var(--input-border);
   border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  opacity: 1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.score-box:hover:not(.disabled) {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-/* Input siempre igual en modo claro */
-.score-input,
-.score-box.saved .score-input,
-.score-box.disabled .score-input {
-  color: #1e293b;
-  font-weight: 800;
-  text-shadow: none;
-}
-
-/* MODO OSCURO - Score box siempre igual */
-[data-theme="dark"] .score-box,
-[data-theme="dark"] .score-box.saved,
-[data-theme="dark"] .score-box.disabled {
-  background: var(--input-bg) !important;
-  border: 2px solid var(--input-border) !important;
+[data-theme="dark"] .score-box:hover:not(.saved):not(.disabled) {
+  background: var(--dark-secondary);
+  border-color: var(--border);
   border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-  opacity: 1 !important;
-  animation: none !important;
-}
-
-[data-theme="dark"] .score-box:hover:not(.disabled) {
-  background: var(--dark-secondary) !important;
-  border-color: var(--border) !important;
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Input siempre igual en modo oscuro */
-[data-theme="dark"] .score-input,
-[data-theme="dark"] .score-box.saved .score-input,
-[data-theme="dark"] .score-box.disabled .score-input {
-  color: var(--text-primary) !important;
-  font-weight: 800;
-  text-shadow: none !important;
-}
-
-/* Indicador de guardado - MANTENER pero más discreto */
-.saved-indicator {
-  position: absolute;
-  top: -7px;
-  right: -7px;
-  background: #ffffff;
-  color: #10b981;
-  border-radius: 50%;
-  padding: 4px;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #d1fae5;
-}
-
-[data-theme="dark"] .saved-indicator {
-  background: var(--card) !important;
-  color: #10b981 !important;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4) !important;
-  border: 2px solid rgba(16, 185, 129, 0.3) !important;
-}
-
-/* ELIMINAR la animación saved-glow si existe */
+/* Score box GUARDADO - Verde con variables de acento */
 [data-theme="dark"] .score-box.saved {
-  animation: none !important;
+  background: rgba(16, 185, 129, 0.15);
+  border: 2px solid #10b981;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
 }
 
-@keyframes saved-glow {
-  /* Eliminar o dejar vacío */
+[data-theme="dark"] .score-box.saved .score-input {
+  border-radius: 12px;
+}
+
+[data-theme="dark"] .score-box.disabled {
+  background: var(--input-bg);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  opacity: 0.5;
+}
+
+/* Input de score */
+[data-theme="dark"] .score-input {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .score-box.saved .score-input {
+  color: #34d399;
+}
+
+[data-theme="dark"] .score-input::placeholder {
+  color: var(--muted);
+}
+
+/* Indicador de guardado */
+[data-theme="dark"] .saved-indicator {
+  background: #10b981;
+  color: white;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.5);
+  border: 2px solid var(--card);
+  z-index: 10;
+  position: absolute;
 }
 
 /* ========================================
