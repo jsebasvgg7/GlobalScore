@@ -62,7 +62,9 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
         </div>
 
         <div className="header-center">
-          <h1 className="app-title">GlobalScore</h1>
+          <h1 className="app-title" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
+            GlobalScore
+          </h1>
         </div>
 
         <div className="header-right">
