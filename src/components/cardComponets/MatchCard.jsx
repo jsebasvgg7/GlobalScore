@@ -191,7 +191,6 @@ export default function MatchCard({ match, userPred, onPredict }) {
               )}
             </div>
             
-            <span className="score-separator">:</span>
             
             <div className={`score-box ${isSaved ? 'saved' : ''} ${isDisabled ? 'disabled' : ''}`}>
               <input
@@ -242,7 +241,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
             className="save-button"
             onClick={handleSubmit}
           >
-            {isSaved ? "Actualizar predicción" : "Guardar predicción"}
+            {isSaved ? "Actualiza" : "Guarda"}
           </button>
         ) : isSaved && !isDisabled ? (
           <div className="status-message saved">
