@@ -9,19 +9,32 @@ import {
 import "../../styles/cardStyles/MatchCard.css"; 
 
 export default function MatchCard({ match, userPred, onPredict }) {
-  const initialHomeScore = userPred?.home_score ?? "";
-  const initialAwayScore = userPred?.away_score ?? "";
-
-  const [homeScore, setHomeScore] = useState(initialHomeScore);
-  const [awayScore, setAwayScore] = useState(initialAwayScore);
+  // Estados
+  const [homeScore, setHomeScore] = useState(userPred?.home_score ?? "");
+  const [awayScore, setAwayScore] = useState(userPred?.away_score ?? "");
   const [isSaved, setIsSaved] = useState(userPred !== undefined);
 
+  // Sincronizar con cambios en userPred
   useEffect(() => {
     setHomeScore(userPred?.home_score ?? "");
     setAwayScore(userPred?.away_score ?? "");
     setIsSaved(userPred !== undefined);
   }, [userPred]);
-  
+
+  // Cálculos de estado del partido
+  const now = new Date();
+  const deadline = match.deadline ? new Date(match.deadline) : null;
+  const isPastDeadline = deadline && now >= deadline;
+  const isDisabled = isPastDeadline || match.status !== "pending";
+
+  // Verificar si la predicción cambió
+  const isPredictionChanged = (
+    parseInt(homeScore) !== userPred?.home_score || 
+    parseInt(awayScore) !== userPred?.away_score
+  );
+  const showSaveButton = !isDisabled && (!isSaved || isPredictionChanged);
+
+  // Manejadores
   const handleScoreChange = (team, value) => {
     if (isDisabled) return;
     
@@ -41,8 +54,8 @@ export default function MatchCard({ match, userPred, onPredict }) {
     const away = parseInt(awayScore);
 
     if (homeScore === "" || awayScore === "" || isNaN(home) || isNaN(away)) {
-        alert("Por favor, ingresa un marcador válido en ambos campos.");
-        return;
+      alert("Por favor, ingresa un marcador válido en ambos campos.");
+      return;
     }
 
     if (isSaved && home === userPred.home_score && away === userPred.away_score) {
@@ -53,57 +66,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
     setIsSaved(true);
   };
 
-  const now = new Date();
-  const deadline = match.deadline ? new Date(match.deadline) : null;
-  const isPastDeadline = deadline && now >= deadline;
-  const isDisabled = isPastDeadline || match.status !== "pending";
-
-  const isPredictionChanged = (
-    parseInt(homeScore) !== userPred?.home_score || 
-    parseInt(awayScore) !== userPred?.away_score
-  );
-  const showSaveButton = !isDisabled && (!isSaved || isPredictionChanged);
-
-  // Función para renderizar el logo de la competición
-  const renderLeagueLogo = () => {
-    if (match.league_logo_url) {
-      return (
-        <img 
-          src={match.league_logo_url} 
-          alt={`${match.league} logo`}
-          className="league-logo"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            const fallbackIcon = e.target.nextElementSibling;
-            if (fallbackIcon) fallbackIcon.style.display = 'flex';
-          }}
-        />
-      );
-    }
-    return <Trophy size={16} className="league-icon-fallback" />;
-  };
-
-  // Función para renderizar el logo del equipo
-  const renderTeamLogo = (logoUrl, fallbackEmoji) => {
-    if (logoUrl && logoUrl.startsWith('http')) {
-      return (
-        <img 
-          src={logoUrl} 
-          alt="Team logo" 
-          className="team-logo"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            if (e.target.nextElementSibling) {
-              e.target.nextElementSibling.style.display = 'flex';
-            }
-          }}
-        />
-      );
-    }
-    return <span className="team-emoji">{fallbackEmoji || '⚽'}</span>;
-  };
-
-  // Función para formatear la fecha
+  // Funciones auxiliares
   const formatMatchDate = (dateString) => {
     if (dateString && typeof dateString === 'string' && !dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
       return dateString;
@@ -140,14 +103,50 @@ export default function MatchCard({ match, userPred, onPredict }) {
     }
   };
 
+  const renderLeagueLogo = () => {
+    if (match.league_logo_url) {
+      return (
+        <img 
+          src={match.league_logo_url} 
+          alt={`${match.league} logo`}
+          className="league-logo"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            const fallbackIcon = e.target.nextElementSibling;
+            if (fallbackIcon) fallbackIcon.style.display = 'flex';
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
+  const renderTeamLogo = (logoUrl, fallbackEmoji) => {
+    if (logoUrl && logoUrl.startsWith('http')) {
+      return (
+        <img 
+          src={logoUrl} 
+          alt="Team logo" 
+          className="team-logo"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            const fallback = e.target.nextElementSibling;
+            if (fallback) fallback.style.display = 'flex';
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="match-card">
       
-      {/* HEADER */}
+      {/* HEADER: Liga y Fecha */}
       <div className="match-header">
         <div className="league-info">
           {renderLeagueLogo()}
-          <Trophy size={16} className="league-icon-fallback" style={{ display: 'none' }} />
+          <Trophy size={16} className="league-icon-fallback" style={{ display: match.league_logo_url ? 'none' : 'flex' }} />
           <span className="league-name">{match.league}</span>
         </div>
         
@@ -157,25 +156,24 @@ export default function MatchCard({ match, userPred, onPredict }) {
         </div>
       </div>
 
-      {/* CONTENT */}
+      {/* CONTENT: Equipos y Predicción */}
       <div className="match-content">
         
         {/* Equipo Local */}
         <div className="team-section">
-          <div className="team-logo-container">
+          <div className="team-logo-wrapper">
             {renderTeamLogo(match.home_team_logo_url, match.home_team_logo)}
-            <span className="team-emoji" style={{ display: 'none' }}>
-              {match.home_team_logo}
+            <span className="team-emoji" style={{ display: match.home_team_logo_url ? 'none' : 'flex' }}>
+              {match.home_team_logo || '⚽'}
             </span>
           </div>
           <span className="team-name">{match.home_team}</span>
         </div>
 
-        {/* Controles de Predicción */}
+        {/* Predicción Central */}
         <div className="prediction-section">
-          
           <div className="score-inputs">
-            <div className={`score-box ${isSaved ? 'saved' : ''}`}>
+            <div className={`score-box ${isSaved ? 'saved' : ''} ${isDisabled ? 'disabled' : ''}`}>
               <input
                 type="number"
                 min="0"
@@ -183,17 +181,19 @@ export default function MatchCard({ match, userPred, onPredict }) {
                 className="score-input"
                 value={homeScore}
                 onChange={(e) => handleScoreChange('home', e.target.value)}
-                placeholder="0"
+                placeholder="—"
                 disabled={isDisabled}
               />
-              {isSaved && (
+              {isSaved && !isDisabled && (
                 <div className="saved-indicator">
                   <CheckCircle2 size={12} />
                 </div>
               )}
             </div>
             
-            <div className={`score-box ${isSaved ? 'saved' : ''}`}>
+            <span className="score-separator">:</span>
+            
+            <div className={`score-box ${isSaved ? 'saved' : ''} ${isDisabled ? 'disabled' : ''}`}>
               <input
                 type="number"
                 min="0"
@@ -201,10 +201,10 @@ export default function MatchCard({ match, userPred, onPredict }) {
                 className="score-input"
                 value={awayScore}
                 onChange={(e) => handleScoreChange('away', e.target.value)}
-                placeholder="0"
+                placeholder="—"
                 disabled={isDisabled}
               />
-              {isSaved && (
+              {isSaved && !isDisabled && (
                 <div className="saved-indicator">
                   <CheckCircle2 size={12} />
                 </div>
@@ -213,42 +213,42 @@ export default function MatchCard({ match, userPred, onPredict }) {
           </div>
           
           <div className="match-time">
-            <Clock size={13} />
+            <Clock size={12} />
             <span>{match.time}</span>
           </div>
-
         </div>
 
         {/* Equipo Visitante */}
         <div className="team-section">
-          <div className="team-logo-container">
+          <div className="team-logo-wrapper">
             {renderTeamLogo(match.away_team_logo_url, match.away_team_logo)}
-            <span className="team-emoji" style={{ display: 'none' }}>
-              {match.away_team_logo}
+            <span className="team-emoji" style={{ display: match.away_team_logo_url ? 'none' : 'flex' }}>
+              {match.away_team_logo || '⚽'}
             </span>
           </div>
           <span className="team-name">{match.away_team}</span>
         </div>
       </div>
 
-      {/* FOOTER - AHORA CON EL BOTÓN */}
+      {/* FOOTER: Estado y Acciones */}
       <div className="match-footer">
         {isPastDeadline ? (
-          <span className="status-message expired">
-            <Clock size={14} /> Plazo de predicción expirado
-          </span>
+          <div className="status-message expired">
+            <Clock size={14} />
+            <span>Predicción cerrada</span>
+          </div>
         ) : showSaveButton ? (
           <button
             className="save-button"
             onClick={handleSubmit}
           >
-            {isSaved ? "Actualizar" : "Guardar"}
+            {isSaved ? "Actualizar predicción" : "Guardar predicción"}
           </button>
-        ) : !isDisabled && isSaved ? (
-          <span className="status-message saved">
+        ) : isSaved && !isDisabled ? (
+          <div className="status-message saved">
             <CheckCircle2 size={14} />
-            Predicción guardada
-          </span>
+            <span>Predicción guardada</span>
+          </div>
         ) : null}
       </div>
 
