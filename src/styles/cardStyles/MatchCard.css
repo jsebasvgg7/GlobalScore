@@ -452,7 +452,7 @@
 }
 
 [data-theme="dark"] .score-separator {
-  color: #64748b;
+  color: #94a3b8;
 }
 
 [data-theme="dark"] .score-box {
@@ -465,12 +465,16 @@
   background: rgba(58, 64, 82, 0.8);
   border-color: rgba(255, 255, 255, 0.18);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  transform: translateY(-1px);
 }
 
+/* Score box guardado - Verde brillante */
 [data-theme="dark"] .score-box.saved {
-  background: rgba(16, 185, 129, 0.2);
-  border-color: rgba(16, 185, 129, 0.4);
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.2) 100%);
+  border-color: #10b981;
+  box-shadow: 
+    0 2px 8px rgba(16, 185, 129, 0.4),
+    0 0 0 1px rgba(16, 185, 129, 0.2);
 }
 
 [data-theme="dark"] .score-box.disabled {
@@ -482,8 +486,10 @@
   color: var(--text-primary);
 }
 
+/* Color del texto cuando está guardado - Verde más brillante */
 [data-theme="dark"] .score-box.saved .score-input {
   color: #34d399;
+  font-weight: 800;
 }
 
 [data-theme="dark"] .score-input::placeholder {
@@ -491,11 +497,14 @@
   opacity: 0.7;
 }
 
+/* Indicador de guardado mejorado */
 [data-theme="dark"] .saved-indicator {
-  background: var(--card);
-  color: #10b981;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
-  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 
+    0 2px 8px rgba(16, 185, 129, 0.6),
+    0 0 0 2px rgba(16, 185, 129, 0.2);
+  border: 2px solid #34d399;
 }
 
 [data-theme="dark"] .match-time {
@@ -513,13 +522,26 @@
   background: var(--card);
 }
 
+/* Estados del footer en modo oscuro - más vibrantes */
 [data-theme="dark"] .status-message.saved {
+  color: #34d399;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.15) 100%);
+  border-color: #10b981;
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.2);
+}
+
+[data-theme="dark"] .status-message.saved svg {
   color: #10b981;
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.3);
+  filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.4));
 }
 
 [data-theme="dark"] .status-message.saving {
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+[data-theme="dark"] .status-message.pending {
   color: #fbbf24;
   background: rgba(245, 158, 11, 0.15);
   border-color: rgba(245, 158, 11, 0.3);
