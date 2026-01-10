@@ -472,7 +472,7 @@
   border: 2px solid var(--input-border);
   border-radius: 14px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  overflow: visible;
+  overflow: hidden;
 }
 
 [data-theme="dark"] .score-box:hover:not(.saved):not(.disabled) {
@@ -481,6 +481,7 @@
   border-radius: 14px;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
 }
 
 /* Score box GUARDADO - Verde con variables de acento */
@@ -489,7 +490,7 @@
   border: 2px solid #10b981;
   border-radius: 14px;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
-  overflow: visible;
+  overflow: hidden;
 }
 
 [data-theme="dark"] .score-box.disabled {
