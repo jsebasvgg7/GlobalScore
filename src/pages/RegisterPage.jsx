@@ -33,37 +33,37 @@ export default function RegisterPage() {
 
     // Validaciones
     if (!name.trim()) {
-      setError("Please enter your name");
+      setError("Por favor ingresa tu nombre");
       return;
     }
 
     if (!validateName(name)) {
-      setError("Name must be 3-50 characters and contain only letters");
+      setError("El nombre debe tener entre 3 y 50 caracteres y solo contener letras");
       return;
     }
 
     if (!email.trim()) {
-      setError("Please enter your email");
+      setError("Por favor ingresa tu correo electrónico");
       return;
     }
 
     if (!validateEmail(email)) {
-      setError("Please enter a valid email address");
+      setError("Por favor ingresa un correo electrónico válido");
       return;
     }
 
     if (!password) {
-      setError("Please enter a password");
+      setError("Por favor ingresa una contraseña");
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError("La contraseña debe tener al menos 6 caracteres");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords don't match");
+      setError("Las contraseñas no coinciden");
       return;
     }
 
@@ -78,14 +78,14 @@ export default function RegisterPage() {
         .maybeSingle();
 
       if (checkError && checkError.code !== 'PGRST116') {
-        console.error("Error checking email:", checkError);
-        setError("Error verifying email. Please try again.");
+        console.error("Error al verificar email:", checkError);
+        setError("Error al verificar el correo. Por favor intenta de nuevo.");
         setLoading(false);
         return;
       }
 
       if (existingUser) {
-        setError("This email is already registered. Please sign in instead.");
+        setError("Este correo ya está registrado. Por favor inicia sesión.");
         setLoading(false);
         return;
       }
@@ -102,26 +102,26 @@ export default function RegisterPage() {
       });
 
       if (signUpError) {
-        console.error("SignUp error:", signUpError);
+        console.error("Error de registro:", signUpError);
         
         if (signUpError.message.includes("already registered")) {
-          setError("This email is already registered. Please sign in instead.");
+          setError("Este correo ya está registrado. Por favor inicia sesión.");
         } else if (signUpError.message.includes("Password")) {
-          setError("Password is too weak. Use at least 6 characters.");
+          setError("La contraseña es muy débil. Usa al menos 6 caracteres.");
         } else {
-          setError(`Registration failed: ${signUpError.message}`);
+          setError(`Error al registrarse: ${signUpError.message}`);
         }
         setLoading(false);
         return;
       }
 
       if (!authData?.user) {
-        setError("Failed to create account. Please try again.");
+        setError("No se pudo crear la cuenta. Por favor intenta de nuevo.");
         setLoading(false);
         return;
       }
 
-      console.log("Auth user created:", authData.user.id);
+      console.log("Usuario de autenticación creado:", authData.user.id);
 
       // Crear perfil en la base de datos
       const { error: insertError } = await supabase
@@ -141,24 +141,24 @@ export default function RegisterPage() {
         });
 
       if (insertError) {
-        console.error("Profile creation error:", insertError);
+        console.error("Error al crear perfil:", insertError);
         
         // Si falla la creación del perfil, eliminar el usuario de auth
         await supabase.auth.admin.deleteUser(authData.user.id);
         
-        setError("Failed to create profile. Please try again or contact support.");
+        setError("No se pudo crear el perfil. Por favor intenta de nuevo o contacta al soporte.");
         setLoading(false);
         return;
       }
 
-      console.log("Profile created successfully");
+      console.log("Perfil creado exitosamente");
 
       // Registro exitoso
       setSuccess(
-        "Account created successfully! " +
+        "¡Cuenta creada exitosamente! " +
         (authData.user.identities?.length === 0 
-          ? "You can now sign in." 
-          : "Please check your email to verify your account.")
+          ? "Ya puedes iniciar sesión." 
+          : "Por favor revisa tu correo para verificar tu cuenta.")
       );
 
       // Limpiar formulario
@@ -173,8 +173,8 @@ export default function RegisterPage() {
       }, 3000);
 
     } catch (err) {
-      console.error("Unexpected error:", err);
-      setError("An unexpected error occurred. Please try again.");
+      console.error("Error inesperado:", err);
+      setError("Ocurrió un error inesperado. Por favor intenta de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -183,20 +183,20 @@ export default function RegisterPage() {
   return (
     <div className="auth-wrapper">
       <div className="auth-card">
-        <h2>Create Account</h2>
+        <h2>Crear Cuenta</h2>
         <p style={{ 
           color: 'var(--text-secondary)', 
           fontSize: '14px', 
           marginBottom: '20px',
           textAlign: 'center' 
         }}>
-          Join GlobalScore and start predicting
+          Únete a GlobalScore y comienza a predecir
         </p>
 
         <form onSubmit={register} style={{ width: '100%' }}>
           <input
             type="text"
-            placeholder="Full Name"
+            placeholder="Nombre Completo"
             value={name}
             onChange={(e) => {
               setName(e.target.value);
@@ -214,7 +214,7 @@ export default function RegisterPage() {
 
           <input
             type="email"
-            placeholder="Email Address"
+            placeholder="Correo Electrónico"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -231,7 +231,7 @@ export default function RegisterPage() {
           <div style={{ position: 'relative', width: '100%' }}>
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Password (min 6 characters)"
+              placeholder="Contraseña (mínimo 6 caracteres)"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -269,7 +269,7 @@ export default function RegisterPage() {
           <div style={{ position: 'relative', width: '100%' }}>
             <input
               type={showConfirmPassword ? "text" : "password"}
-              placeholder="Confirm Password"
+              placeholder="Confirmar Contraseña"
               value={confirmPassword}
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
@@ -314,11 +314,11 @@ export default function RegisterPage() {
               color: 'var(--text-secondary)',
               marginBottom: '12px'
             }}>
-              Password strength: {
-                password.length < 6 ? '❌ Too short' :
-                password.length < 8 ? '⚠️ Weak' :
-                password.length < 12 ? '✅ Good' :
-                '🔒 Strong'
+              Seguridad de la contraseña: {
+                password.length < 6 ? '❌ Muy corta' :
+                password.length < 8 ? '⚠️ Débil' :
+                password.length < 12 ? '✅ Buena' :
+                '🔒 Fuerte'
               }
             </div>
           )}
@@ -372,15 +372,15 @@ export default function RegisterPage() {
                   borderRadius: '50%',
                   animation: 'spin 0.6s linear infinite'
                 }}/> 
-                Creating Account...
+                Creando Cuenta...
               </span>
-            ) : "Sign Up"}
+            ) : "Registrarse"}
           </button>
         </form>
 
         <div className="auth-alt">
-          <span style={{ color: 'var(--text-secondary)' }}>Already have an account?</span>
-          <Link to="/" style={{ fontWeight: 'bold' }}>Sign In</Link>
+          <span style={{ color: 'var(--text-secondary)' }}>¿Ya tienes cuenta?</span>
+          <Link to="/" style={{ fontWeight: 'bold' }}>Iniciar Sesión</Link>
         </div>
 
         <div style={{
@@ -393,7 +393,7 @@ export default function RegisterPage() {
           color: 'var(--text-secondary)',
           textAlign: 'center'
         }}>
-          🔒 Your data is secure and will never be shared
+          🔒 Tus datos están seguros y nunca serán compartidos
         </div>
       </div>
 

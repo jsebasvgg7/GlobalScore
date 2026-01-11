@@ -22,22 +22,22 @@ export default function LoginPage() {
     
     // Validaciones antes de intentar login
     if (!email.trim()) {
-      setError("Please enter your email");
+      setError("Por favor ingresa tu correo electrónico");
       return;
     }
 
     if (!validateEmail(email)) {
-      setError("Please enter a valid email address");
+      setError("Por favor ingresa un correo electrónico válido");
       return;
     }
 
     if (!password) {
-      setError("Please enter your password");
+      setError("Por favor ingresa tu contraseña");
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError("La contraseña debe tener al menos 6 caracteres");
       return;
     }
 
@@ -51,17 +51,17 @@ export default function LoginPage() {
       });
 
       if (signInError) {
-        console.error("Login error:", signInError);
+        console.error("Error de login:", signInError);
         
         // Mensajes de error más específicos
         if (signInError.message.includes("Invalid login credentials")) {
-          setError("Incorrect email or password. Please try again.");
+          setError("Correo o contraseña incorrectos. Por favor intenta de nuevo.");
         } else if (signInError.message.includes("Email not confirmed")) {
-          setError("Please verify your email before logging in. Check your inbox.");
+          setError("Por favor verifica tu correo antes de iniciar sesión. Revisa tu bandeja de entrada.");
         } else if (signInError.message.includes("User not found")) {
-          setError("This account doesn't exist. Please sign up first.");
+          setError("Esta cuenta no existe. Por favor regístrate primero.");
         } else {
-          setError("Login failed. Please check your credentials and try again.");
+          setError("Error al iniciar sesión. Por favor verifica tus credenciales.");
         }
         setLoading(false);
         return;
@@ -69,7 +69,7 @@ export default function LoginPage() {
 
       // Verificar que el usuario existe en la base de datos
       if (data?.user) {
-        console.log("User authenticated:", data.user.id);
+        console.log("Usuario autenticado:", data.user.id);
 
         // Verificar si el perfil del usuario existe
         const { data: profile, error: profileError } = await supabase
@@ -79,8 +79,8 @@ export default function LoginPage() {
           .maybeSingle();
 
         if (profileError) {
-          console.error("Profile check error:", profileError);
-          setError("Error loading your profile. Please try again.");
+          console.error("Error al verificar perfil:", profileError);
+          setError("Error al cargar tu perfil. Por favor intenta de nuevo.");
           await supabase.auth.signOut();
           setLoading(false);
           return;
@@ -88,7 +88,7 @@ export default function LoginPage() {
 
         // Si no existe el perfil, crearlo
         if (!profile) {
-          console.log("Profile not found, creating one...");
+          console.log("Perfil no encontrado, creando uno nuevo...");
           
           const { error: createError } = await supabase
             .from("users")
@@ -107,24 +107,24 @@ export default function LoginPage() {
             });
 
           if (createError) {
-            console.error("Profile creation error:", createError);
-            setError("Error creating your profile. Please contact support.");
+            console.error("Error al crear perfil:", createError);
+            setError("Error al crear tu perfil. Por favor contacta al soporte.");
             await supabase.auth.signOut();
             setLoading(false);
             return;
           }
 
-          console.log("Profile created successfully");
+          console.log("Perfil creado exitosamente");
         }
 
         // Login exitoso
-        console.log("Login successful, redirecting...");
+        console.log("Inicio de sesión exitoso, redirigiendo...");
         navigate("/app");
       }
 
     } catch (err) {
-      console.error("Unexpected error:", err);
-      setError("An unexpected error occurred. Please try again.");
+      console.error("Error inesperado:", err);
+      setError("Ocurrió un error inesperado. Por favor intenta de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -140,13 +140,13 @@ export default function LoginPage() {
           marginBottom: '20px',
           textAlign: 'center' 
         }}>
-          Sign in to start predicting
+          Inicia sesión para comenzar a predecir
         </p>
 
         <form onSubmit={login} style={{ width: '100%' }}>
           <input
             type="email"
-            placeholder="Your Email"
+            placeholder="Tu Correo Electrónico"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -163,7 +163,7 @@ export default function LoginPage() {
           <div style={{ position: 'relative', width: '100%' }}>
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
+              placeholder="Contraseña"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -234,16 +234,16 @@ export default function LoginPage() {
                   borderRadius: '50%',
                   animation: 'spin 0.6s linear infinite'
                 }}/> 
-                Signing in...
+                Iniciando sesión...
               </span>
-            ) : "Enter"}
+            ) : "Entrar"}
           </button>
         </form>
 
         <div className="auth-alt">
-          <Link to="/forgot-password">Forgot Your Password?</Link>
+          <Link to="/forgot-password">¿Olvidaste tu Contraseña?</Link>
           <Link to="/register" style={{ fontWeight: 'bold' }}>
-            Create Account
+            Crear Cuenta
           </Link>
         </div>
 
@@ -257,7 +257,7 @@ export default function LoginPage() {
           color: 'var(--text-secondary)',
           textAlign: 'center'
         }}>
-          💡 <strong>New here?</strong> Create an account to start predicting matches!
+          💡 <strong>¿Nuevo aquí?</strong> ¡Crea una cuenta para comenzar a predecir partidos!
         </div>
       </div>
 
