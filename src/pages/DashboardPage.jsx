@@ -86,8 +86,6 @@ export default function VegaScorePage() {
     { id: 'italy', name: 'Italia', icon: '🇮🇹', leagues: ['Serie A', 'Coppa Italia', 'Supercoppa'] },
     { id: 'germany', name: 'Alemania', icon: '🇩🇪', leagues: ['Bundesliga', 'DFB Pokal'] },
     { id: 'france', name: 'Francia', icon: '🇫🇷', leagues: ['Ligue 1', 'Coupe de France', 'Coupe de la Ligue'] },
-    { id: 'portugal', name: 'Portugal', icon: '🇵🇹', leagues: ['Primeira Liga', 'Taça de Portugal'] },
-    { id: 'netherlands', name: 'Países Bajos', icon: '🇳🇱', leagues: ['Eredivisie'] },
     { id: 'southamerica', name: 'Sudamérica', icon: '🌎', leagues: ['Copa Libertadores', 'Copa Sudamericana'] },
   ];
 
