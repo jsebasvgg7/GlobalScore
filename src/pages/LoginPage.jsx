@@ -132,13 +132,13 @@ export default function LoginPage() {
   return (
     <div className="auth-wrapper">
       <div className="auth-card">
-        <h2>Entrar</h2>
-        <p>¿No tienes una cuenta? <Link to="/register" style={{ color: '#9b87d8', fontWeight: 600, textDecoration: 'none' }}>regístrate</Link></p>
+        <h2>Bienvenido a GlobalScore</h2>
+        <p>Empieza a predecir aqui!!</p>
 
         <form onSubmit={login}>
           <input
             type="email"
-            placeholder="Correo o teléfono"
+            placeholder="Correo electronico"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -173,7 +173,7 @@ export default function LoginPage() {
           </div>
 
           <div className="forgot-password-link">
-            <Link to="/forgot-password">¿OLVIDASTE TU CONTRASEÑA?</Link>
+            <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
           </div>
 
           {error && (

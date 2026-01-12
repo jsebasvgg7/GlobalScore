@@ -174,7 +174,7 @@ export default function RegisterPage() {
     <div className="auth-wrapper">
       <div className="auth-card">
         <h2>Crear cuenta</h2>
-        <p>¿Ya tienes una cuenta? <Link to="/" style={{ color: '#9b87d8', fontWeight: 600, textDecoration: 'none' }}>entrar</Link></p>
+        <p>Crea tu cuenta y predice!!</p>
 
         <form onSubmit={register}>
           <input
@@ -194,7 +194,7 @@ export default function RegisterPage() {
 
           <input
             type="email"
-            placeholder="Correo o teléfono"
+            placeholder="Correo electronico"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
