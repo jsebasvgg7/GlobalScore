@@ -307,7 +307,8 @@ export default function VegaScorePage() {
                 <div className="matches-header-premium">
                   <div className="matches-badge">
                     <Target size={16} />
-                    <span>{filteredMatches.length} disponibles</span>
+                    <span className="matches-badge-count">{filteredMatches.length}</span>
+                    <span className="matches-badge-text"> disponibles</span>
                   </div>
                   
                   <div className="sort-filter-buttons">
@@ -559,7 +560,8 @@ export default function VegaScorePage() {
                   <div className="matches-header-actions">
                     <div className="matches-badge">
                       <Trophy size={14} />
-                      <span>{activeLeagues.length} disponibles</span>
+                      <span className="matches-badge-count">{activeLeagues.length}</span>
+                      <span className="matches-badge-text"> disponibles</span>
                     </div>
                   </div>
                 </div>
@@ -592,7 +594,8 @@ export default function VegaScorePage() {
                   <div className="matches-header-actions">
                     <div className="matches-badge">
                       <Trophy size={14} />
-                      <span>{activeAwards.length} disponibles</span>
+                      <span className="matches-badge-count">{activeAwards.length}</span>
+                      <span className="matches-badge-text"> disponibles</span>
                     </div>
                   </div>
                 </div>
