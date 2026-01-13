@@ -7,124 +7,140 @@ const LEAGUE_LOGOS_BUCKET = 'league-logos';
 const AWARD_LOGOS_BUCKET = 'award-logos';
 
 // ============================================
-// MAPEO DE EQUIPOS
+// MAPEO DE EQUIPOS CON ABREVIACIONES
 // ============================================
-export const teamSlugMap = {
-  'Man United': 'manchesterunited',
-  'Liverpool': 'liverpool',
-  'Arsenal': 'arsenal',
-  'Chelsea': 'chelsea',
-  'Man City': 'manchestercity',
-  'Tottenham': 'tottenham',
-  'Newcastle': 'newcastle',
-  'Aston Villa': 'astonvilla',
-  'West Ham': 'westham',
-  'Brighton': 'brighton',
-  'Leeds': 'leeds',
-  'Sunderland': 'sunderland',
-  'Everton': 'everton',
-  'Brentford': 'brentford',
-  'Wolves': 'wolves',
-  'Fulham': 'fulham',
-  'Crystal P.': 'crystalpalace',
-  'Bournem.': 'bournemouth',
-  'Nottingham': 'nottingham_forest',
-  'Burnley': 'burnley',
-  'Real Madrid': 'realmadrid',
-  'Barcelona': 'barcelona',
-  'Atl. Madrid': 'atlmadrid',
-  'Sevilla': 'sevilla',
-  'Real Betis': 'betis',
-  'Valencia': 'valencia',
-  'Villarreal': 'villarreal',
-  'Athletic Club': 'athletic',
-  'Real Sociedad': 'realsociedad',
-  'Celta Vigo': 'celta',
-  'Espanyol': 'espanyol',
-  'Mallorca': 'mallorca',
-  'Rayo Valle': 'rayovallecano',
-  'Getafe': 'getafe',
-  'Alaves': 'alaves',
-  'Elche': 'elche',
-  'Girona': 'girona',
-  'Levante': 'levante',
-  'Real Oviedo': 'realoviedo',
-  'Ozasuna': 'osasuna',
-  'Inter Milan': 'inter',
-  'AC Milan': 'milan',
-  'Juventus': 'juventus',
-  'Napoli': 'napoli',
-  'AS Roma': 'roma',
-  'Lazio': 'lazio',
-  'Atalanta': 'atalanta',
-  'Fiorentina': 'fiorentina',
-  'Torino': 'torino',
-  'Bologna': 'bologna',
-  'Sassuolo': 'sassuolo',
-  'Udinese': 'udinese',
-  'Genoa': 'genoa',
-  'Cagliari': 'cagliari',
-  'Verona': 'hellasverona',
-  'Lecce': 'lecce',
-  'Parma': 'parma',
-  'Pisa': 'pisa',
-  'Como': 'como',
-  'Cremonese': 'cremonese',
-  'Bayern M.': 'bayernmunchen',
-  'Dortmund': 'borussiadortmund',
-  'RB Leipzig': 'rbleipzig',
-  'Leverkusen': 'bayerleverkusen',
-  'Augsburg': 'augsburgo',
-  'Borussia M.': 'bmonchengladbach',
-  'Frankfurt': 'eintrachtfrankfurt',
-  'Wolfsburg': 'wolfsburg',
-  'Stuttgart': 'stuttgart',
-  'Hoffenheim': 'hoffenheim',
-  'Freiburg': 'freiburg',
-  'Union Berlin': 'unionberlin',
-  'Heidenheim': 'heidenheim',
-  'St. Pauli': 'st_pauli',
-  'Mainz': 'mainz05',
-  'Hamburgo': 'hamburgo',
-  'Werder Bremen': 'werderbremen',
-  'Koln': 'koln',
-  'Paris SG': 'psg',
-  'Marseille': 'olimpiquemarsella',
-  'Lyon': 'olimpiquelyon', 
-  'Monaco': 'monaco',
-  'Lille': 'lille',
-  'Rennes': 'rennais',
-  'Nice': 'nice',
-  'Nantes': 'nantes',
-  'Strasbourg': 'strasbourg',
-  'Angers': 'angers',
-  'Auxerre': 'auxerre',
-  'Toulouse': 'toulouse',
-  'Havre': 'havre',
-  'Brest': 'stadebretois',
-  'Lorient': 'lorient',
-  'Metz': 'metz',
-  'Racing': 'racingstrasbourg',
-  'Paris FC': 'paris_fc',
-  'Ajax': 'ajax',
-  'Benfica': 'benfica',
-  'Sporting': 'sporting',
-  'Pafos': 'pafos',
-  'Slavia Praga': 'slavia_praga',
-  'Kairat': 'kairat_almaty',
-  'Galatasaray': 'galatasaray',
-  'Copenhague': 'fc_copenhague',
-  'Eintracht': 'eintrachtfrankfurt',
-  'Brujas': 'clubbrugge',
-  'Union SG': 'union_saint_gilloise',
-  'Qarabag FK': 'qarabag',
-  'Olimpiakos': 'olympiacos',
-  'Psv': 'psv',
-  'Bodo/Glimt': 'bodo_glimt',
+export const teamData = {
+  // PREMIER LEAGUE
+  'Man United': { slug: 'manchesterunited', abbr: 'MUN' },
+  'Liverpool': { slug: 'liverpool', abbr: 'LIV' },
+  'Arsenal': { slug: 'arsenal', abbr: 'ARS' },
+  'Chelsea': { slug: 'chelsea', abbr: 'CHE' },
+  'Man City': { slug: 'manchestercity', abbr: 'MCI' },
+  'Tottenham': { slug: 'tottenham', abbr: 'TOT' },
+  'Newcastle': { slug: 'newcastle', abbr: 'NEW' },
+  'Aston Villa': { slug: 'astonvilla', abbr: 'AVL' },
+  'West Ham': { slug: 'westham', abbr: 'WHU' },
+  'Brighton': { slug: 'brighton', abbr: 'BHA' },
+  'Leeds': { slug: 'leeds', abbr: 'LEE' },
+  'Sunderland': { slug: 'sunderland', abbr: 'SUN' },
+  'Everton': { slug: 'everton', abbr: 'EVE' },
+  'Brentford': { slug: 'brentford', abbr: 'BRE' },
+  'Wolves': { slug: 'wolves', abbr: 'WOL' },
+  'Fulham': { slug: 'fulham', abbr: 'FUL' },
+  'Crystal P.': { slug: 'crystalpalace', abbr: 'CRY' },
+  'Bournem.': { slug: 'bournemouth', abbr: 'BOU' },
+  'Nottingham': { slug: 'nottingham_forest', abbr: 'NFO' },
+  'Burnley': { slug: 'burnley', abbr: 'BUR' },
+
+  // LA LIGA
+  'Real Madrid': { slug: 'realmadrid', abbr: 'RMA' },
+  'Barcelona': { slug: 'barcelona', abbr: 'BAR' },
+  'Atl. Madrid': { slug: 'atlmadrid', abbr: 'ATM' },
+  'Sevilla': { slug: 'sevilla', abbr: 'SEV' },
+  'Real Betis': { slug: 'betis', abbr: 'BET' },
+  'Valencia': { slug: 'valencia', abbr: 'VAL' },
+  'Villarreal': { slug: 'villarreal', abbr: 'VIL' },
+  'Athletic Club': { slug: 'athletic', abbr: 'ATH' },
+  'Real Sociedad': { slug: 'realsociedad', abbr: 'RSO' },
+  'Celta Vigo': { slug: 'celta', abbr: 'CEL' },
+  'Espanyol': { slug: 'espanyol', abbr: 'ESP' },
+  'Mallorca': { slug: 'mallorca', abbr: 'MLL' },
+  'Rayo Valle': { slug: 'rayovallecano', abbr: 'RAY' },
+  'Getafe': { slug: 'getafe', abbr: 'GET' },
+  'Alaves': { slug: 'alaves', abbr: 'ALA' },
+  'Elche': { slug: 'elche', abbr: 'ELC' },
+  'Girona': { slug: 'girona', abbr: 'GIR' },
+  'Levante': { slug: 'levante', abbr: 'LEV' },
+  'Real Oviedo': { slug: 'realoviedo', abbr: 'OVI' },
+  'Ozasuna': { slug: 'osasuna', abbr: 'OSA' },
+
+  // SERIE A
+  'Inter Milan': { slug: 'inter', abbr: 'INT' },
+  'AC Milan': { slug: 'milan', abbr: 'MIL' },
+  'Juventus': { slug: 'juventus', abbr: 'JUV' },
+  'Napoli': { slug: 'napoli', abbr: 'NAP' },
+  'AS Roma': { slug: 'roma', abbr: 'ROM' },
+  'Lazio': { slug: 'lazio', abbr: 'LAZ' },
+  'Atalanta': { slug: 'atalanta', abbr: 'ATA' },
+  'Fiorentina': { slug: 'fiorentina', abbr: 'FIO' },
+  'Torino': { slug: 'torino', abbr: 'TOR' },
+  'Bologna': { slug: 'bologna', abbr: 'BOL' },
+  'Sassuolo': { slug: 'sassuolo', abbr: 'SAS' },
+  'Udinese': { slug: 'udinese', abbr: 'UDI' },
+  'Genoa': { slug: 'genoa', abbr: 'GEN' },
+  'Cagliari': { slug: 'cagliari', abbr: 'CAG' },
+  'Verona': { slug: 'hellasverona', abbr: 'VER' },
+  'Lecce': { slug: 'lecce', abbr: 'LEC' },
+  'Parma': { slug: 'parma', abbr: 'PAR' },
+  'Pisa': { slug: 'pisa', abbr: 'PIS' },
+  'Como': { slug: 'como', abbr: 'COM' },
+  'Cremonese': { slug: 'cremonese', abbr: 'CRE' },
+
+  // BUNDESLIGA
+  'Bayern M.': { slug: 'bayernmunchen', abbr: 'BAY' },
+  'Dortmund': { slug: 'borussiadortmund', abbr: 'DOR' },
+  'RB Leipzig': { slug: 'rbleipzig', abbr: 'RBL' },
+  'Leverkusen': { slug: 'bayerleverkusen', abbr: 'B04' },
+  'Augsburg': { slug: 'augsburgo', abbr: 'AUG' },
+  'Borussia M.': { slug: 'bmonchengladbach', abbr: 'BMG' },
+  'Frankfurt': { slug: 'eintrachtfrankfurt', abbr: 'SGE' },
+  'Wolfsburg': { slug: 'wolfsburg', abbr: 'WOB' },
+  'Stuttgart': { slug: 'stuttgart', abbr: 'VFB' },
+  'Hoffenheim': { slug: 'hoffenheim', abbr: 'HOF' },
+  'Freiburg': { slug: 'freiburg', abbr: 'SCF' },
+  'Union Berlin': { slug: 'unionberlin', abbr: 'FCU' },
+  'Heidenheim': { slug: 'heidenheim', abbr: 'HEI' },
+  'St. Pauli': { slug: 'st_pauli', abbr: 'STP' },
+  'Mainz': { slug: 'mainz05', abbr: 'M05' },
+  'Hamburgo': { slug: 'hamburgo', abbr: 'HSV' },
+  'Werder Bremen': { slug: 'werderbremen', abbr: 'SVW' },
+  'Koln': { slug: 'koln', abbr: 'KOE' },
+
+  // LIGUE 1
+  'Paris SG': { slug: 'psg', abbr: 'PSG' },
+  'Marseille': { slug: 'olimpiquemarsella', abbr: 'OGM' },
+  'Lyon': { slug: 'olimpiquelyon', abbr: 'OLY' },
+  'Monaco': { slug: 'monaco', abbr: 'MON' },
+  'Lille': { slug: 'lille', abbr: 'LIL' },
+  'Rennes': { slug: 'rennais', abbr: 'REN' },
+  'Nice': { slug: 'nice', abbr: 'NIC' },
+  'Nantes': { slug: 'nantes', abbr: 'NAN' },
+  'Strasbourg': { slug: 'strasbourg', abbr: 'STR' },
+  'Angers': { slug: 'angers', abbr: 'ANG' },
+  'Auxerre': { slug: 'auxerre', abbr: 'AUX' },
+  'Toulouse': { slug: 'toulouse', abbr: 'TOU' },
+  'Havre': { slug: 'havre', abbr: 'HAC' },
+  'Brest': { slug: 'stadebretois', abbr: 'BRE' },
+  'Lorient': { slug: 'lorient', abbr: 'LOR' },
+  'Metz': { slug: 'metz', abbr: 'MET' },
+  'Racing': { slug: 'racingstrasbourg', abbr: 'RCS' },
+  'Paris FC': { slug: 'paris_fc', abbr: 'PFC' },
+
+  // OTROS
+  'Ajax': { slug: 'ajax', abbr: 'AJA' },
+  'Benfica': { slug: 'benfica', abbr: 'BEN' },
+  'Sporting': { slug: 'sporting', abbr: 'SCP' },
+  'Pafos': { slug: 'pafos', abbr: 'PAF' },
+  'Slavia Praga': { slug: 'slavia_praga', abbr: 'SLP' },
+  'Kairat': { slug: 'kairat_almaty', abbr: 'KAI' },
+  'Galatasaray': { slug: 'galatasaray', abbr: 'GAL' },
+  'Copenhague': { slug: 'fc_copenhague', abbr: 'FCK' },
+  'Eintracht': { slug: 'eintrachtfrankfurt', abbr: 'SGE' },
+  'Brujas': { slug: 'clubbrugge', abbr: 'CLB' },
+  'Union SG': { slug: 'union_saint_gilloise', abbr: 'USG' },
+  'Qarabag FK': { slug: 'qarabag', abbr: 'QAR' },
+  'Olimpiakos': { slug: 'olympiacos', abbr: 'OLY' },
+  'Psv': { slug: 'psv', abbr: 'PSV' },
+  'Bodo/Glimt': { slug: 'bodo_glimt', abbr: 'BOD' },
 };
 
+// Mapeo inverso para compatibilidad
+export const teamSlugMap = Object.fromEntries(
+  Object.entries(teamData).map(([name, data]) => [name, data.slug])
+);
+
 // ============================================
-// MAPEO DE LIGAS (para equipos)
+// MAPEO DE LIGAS
 // ============================================
 export const leagueMap = {
   'Premier League': 'premier-league',
@@ -135,9 +151,6 @@ export const leagueMap = {
   'Ligue 1': 'ligue-1',
 };
 
-// ============================================
-// MAPEO DE LOGOS DE LIGAS (para LeagueCard)
-// ============================================
 export const leagueLogoMap = {
   'Premier League': 'inglaterra',
   'La Liga': 'espana',
@@ -150,7 +163,7 @@ export const leagueLogoMap = {
 };
 
 // ============================================
-// MAPEO DE LOGOS DE PREMIOS (para AwardCard)
+// MAPEO DE LOGOS DE PREMIOS
 // ============================================
 export const awardLogoMap = {
   'Ballon D Or': 'balondeor',
@@ -162,79 +175,70 @@ export const awardLogoMap = {
 };
 
 // ============================================
-// FUNCIONES PARA LOGOS DE EQUIPOS
+// FUNCIONES DE ABREVIACIONES
 // ============================================
 
 /**
- * Obtiene la URL pública del logo de un equipo
- * @param {Object} supabase - Cliente de Supabase
- * @param {string} leagueSlug - Slug de la liga
- * @param {string} teamSlug - Slug del equipo
- * @returns {string} URL pública del logo
+ * Obtiene la abreviación de 3 letras de un equipo
+ * @param {string} teamName - Nombre del equipo
+ * @returns {string} Abreviación de 3 letras o el nombre si no existe
  */
-export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
-  const path = `leagues/${leagueSlug}/${teamSlug}.png`;
-  
-  const { data } = supabase.storage
-    .from(TEAM_LOGOS_BUCKET)
-    .getPublicUrl(path);
-  
-  return data.publicUrl;
+export function getTeamAbbreviation(teamName) {
+  const data = teamData[teamName];
+  return data ? data.abbr : teamName.substring(0, 3).toUpperCase();
 }
 
 /**
- * Genera URL del logo basado en nombre de equipo y liga
- * @param {Object} supabase - Cliente de Supabase
+ * Obtiene slug y abreviación de un equipo
  * @param {string} teamName - Nombre del equipo
- * @param {string} leagueName - Nombre de la liga
- * @returns {string|null} URL del logo o null si no se encuentra
+ * @returns {Object|null} { slug, abbr } o null si no existe
  */
+export function getTeamData(teamName) {
+  return teamData[teamName] || null;
+}
+
+// ============================================
+// FUNCIONES PARA LOGOS DE EQUIPOS
+// ============================================
+
+export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
+  const path = `leagues/${leagueSlug}/${teamSlug}.png`;
+  const { data } = supabase.storage
+    .from(TEAM_LOGOS_BUCKET)
+    .getPublicUrl(path);
+  return data.publicUrl;
+}
+
 export function getLogoUrlByTeamName(supabase, teamName, leagueName) {
-  const teamSlug = teamSlugMap[teamName];
+  const data = teamData[teamName];
   const leagueSlug = leagueMap[leagueName];
   
-  if (!teamSlug || !leagueSlug) {
+  if (!data || !leagueSlug) {
     console.warn(`⚠️ Logo de equipo no encontrado: "${teamName}" en "${leagueName}"`);
     return null;
   }
   
-  return getTeamLogoUrl(supabase, leagueSlug, teamSlug);
+  return getTeamLogoUrl(supabase, leagueSlug, data.slug);
 }
 
 // ============================================
 // FUNCIONES PARA LOGOS DE LIGAS
 // ============================================
 
-/**
- * Obtiene la URL pública del logo de una liga
- * @param {Object} supabase - Cliente de Supabase
- * @param {string} leagueSlug - Slug de la liga
- * @returns {string} URL pública del logo
- */
 export function getLeagueLogoUrl(supabase, leagueSlug) {
   const path = `${leagueSlug}.png`;
-  
   const { data } = supabase.storage
     .from(LEAGUE_LOGOS_BUCKET)
     .getPublicUrl(path);
-  
   return data.publicUrl;
 }
 
-/**
- * Genera URL del logo de liga basado en nombre
- * @param {Object} supabase - Cliente de Supabase
- * @param {string} leagueName - Nombre de la liga
- * @returns {string|null} URL del logo o null si no se encuentra
- */
 export function getLogoUrlByLeagueName(supabase, leagueName) {
   const leagueSlug = leagueLogoMap[leagueName];
-  
   if (!leagueSlug) {
     console.warn(`⚠️ Logo de liga no encontrado: "${leagueName}"`);
     return null;
   }
-  
   return getLeagueLogoUrl(supabase, leagueSlug);
 }
 
@@ -242,35 +246,19 @@ export function getLogoUrlByLeagueName(supabase, leagueName) {
 // FUNCIONES PARA LOGOS DE PREMIOS
 // ============================================
 
-/**
- * Obtiene la URL pública del logo de un premio
- * @param {Object} supabase - Cliente de Supabase
- * @param {string} awardSlug - Slug del premio
- * @returns {string} URL pública del logo
- */
 export function getAwardLogoUrl(supabase, awardSlug) {
   const path = `${awardSlug}.png`;
-  
   const { data } = supabase.storage
     .from(AWARD_LOGOS_BUCKET)
     .getPublicUrl(path);
-  
   return data.publicUrl;
 }
 
-/**
- * Genera URL del logo de premio basado en nombre
- * @param {Object} supabase - Cliente de Supabase
- * @param {string} awardName - Nombre del premio
- * @returns {string|null} URL del logo o null si no se encuentra
- */
 export function getLogoUrlByAwardName(supabase, awardName) {
   const awardSlug = awardLogoMap[awardName];
-  
   if (!awardSlug) {
     console.warn(`⚠️ Logo de premio no encontrado: "${awardName}"`);
     return null;
   }
-  
   return getAwardLogoUrl(supabase, awardSlug);
 }
