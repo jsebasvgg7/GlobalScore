@@ -17,11 +17,12 @@ export default function UserProfileModal({ userId, onClose }) {
   });
   const [userAchievements, setUserAchievements] = useState([]);
   const [userTitles, setUserTitles] = useState([]);
-  const [availableAchievements, setAvailableAchievements] = useState([]); // AGREGAR ESTA LÍNEA
+  const [availableAchievements, setAvailableAchievements] = useState([]); 
   const [userRanking, setUserRanking] = useState({
     position: 0,
     totalUsers: 0
   });
+  const [crownHistory, setCrownHistory] = useState([]); // Nuevo: historial de coronas
 
   useEffect(() => {
     loadUserData();
@@ -82,7 +83,7 @@ export default function UserProfileModal({ userId, onClose }) {
         .order('requirement_value', { ascending: true });
 
       if (achievements) {
-        setAvailableAchievements(achievements); // AGREGAR ESTA LÍNEA
+        setAvailableAchievements(achievements); 
         const calculatedAchievements = calculateAchievements(achievements, {
           points: user.points || 0,
           predictions: user.predictions || 0,
@@ -108,6 +109,17 @@ export default function UserProfileModal({ userId, onClose }) {
           })
         );
         setUserTitles(calculatedTitles);
+      }
+
+      // Cargar historial de coronas (nuevo)
+      const { data: history } = await supabase
+        .from('monthly_championship_history')
+        .select('*')
+        .eq('user_id', userId)
+        .order('awarded_at', { ascending: false });
+
+      if (history) {
+        setCrownHistory(history);
       }
 
     } catch (err) {
@@ -242,9 +254,19 @@ export default function UserProfileModal({ userId, onClose }) {
     return (
       <div className="user-modal-overlay">
         <div className="user-modal-container">
-          <div className="user-modal-loading">
-            <Zap size={32} className="spinner" />
-            <p>Cargando perfil...</p>
+          <div className="user-modal-header">
+            <div className="user-modal-title-section">
+              <Users size={20} />
+              <h2>Cargando Perfil</h2>
+            </div>
+            <button className="user-modal-close" onClick={onClose}>
+              <X size={20} />
+            </button>
+          </div>
+          <div className="user-modal-body">
+            <div className="loading-spinner">
+              <Activity size={48} className="animate-spin" />
+            </div>
           </div>
         </div>
       </div>
@@ -252,112 +274,136 @@ export default function UserProfileModal({ userId, onClose }) {
   }
 
   if (!userData) {
-    return (
-      <div className="user-modal-overlay">
-        <div className="user-modal-container">
-          <div className="user-modal-error">
-            <p>Error al cargar el perfil</p>
-            <button onClick={onClose} className="modal-close-btn">Cerrar</button>
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   const accuracy = userData.predictions > 0 
-    ? Math.round((userData.correct / userData.predictions) * 100) 
+    ? Math.round((userData.correct / userData.predictions) * 100)
     : 0;
-
-  const currentLevelPoints = (userData.level - 1) * 20;
-  const nextLevelPoints = userData.level * 20;
-  const currentPoints = userData.points || 0;
-  const pointsInLevel = currentPoints - currentLevelPoints;
-  const levelProgress = (pointsInLevel / 20) * 100;
 
   const activeTitle = getActiveTitle();
 
+  const currentPoints = userData.points || 0;
+  const pointsInLevel = currentPoints % 20;
+  const nextLevelPoints = 20;
+  const levelProgress = (pointsInLevel / nextLevelPoints) * 100;
+
   return (
     <div className="user-modal-overlay" onClick={onClose}>
-      <div className="user-modal-container" onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
+      <div className="user-modal-container" onClick={e => e.stopPropagation()}>
         <div className="user-modal-header">
           <div className="user-modal-title-section">
-            <Users size={24} />
-            <h2>Perfil de Usuario</h2>
+            <Users size={20} />
+            <h2>{userData.name || 'Usuario'}</h2>
           </div>
           <button className="user-modal-close" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
 
-        {/* Body */}
         <div className="user-modal-body">
-          {/* Avatar y Info Básica */}
+          {/* Banner y Avatar */}
           <div className="user-modal-avatar-section">
             <div className="user-modal-banner">
               <div className="banner-pattern"></div>
             </div>
-
             <div className="user-modal-avatar-wrapper">
               <div className="user-modal-avatar">
                 {userData.avatar_url ? (
                   <img src={userData.avatar_url} alt={userData.name} />
                 ) : (
-                  <span>{userData.name.charAt(0).toUpperCase()}</span>
+                  <div className="avatar-placeholder">
+                    {userData.name?.charAt(0).toUpperCase() || 'U'}
+                  </div>
                 )}
               </div>
               <div className="user-modal-level-badge">
-                <Crown size={14} fill="currentColor" />
-                <span>Lvl {userData.level}</span>
+                <Shield size={14} />
+                <span>{userData.level || 1}</span>
               </div>
             </div>
+          </div>
 
-            <div className="user-modal-info">
-              <h3 className="user-modal-name">{userData.name}</h3>
-              <p className="user-modal-email">{userData.email}</p>
-              {userData.bio && (
-                <p className="user-modal-bio">{userData.bio}</p>
+          {/* Nombre y Badges */}
+          <div className="user-modal-name-section">
+            <h3 className="user-modal-name">{userData.name || 'Usuario Anónimo'}</h3>
+            {activeTitle && (
+              <div className="user-modal-title-badge" style={{ color: activeTitle.color }}>
+                <Gem size={14} />
+                <span>{activeTitle.name}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Coronas - Nueva sección */}
+          <div className="user-modal-crowns">
+            <div className="section-header">
+              <Crown size={20} />
+              <h4>Coronas Mensuales</h4>
+              <span className="count-badge">
+                {userData.monthly_championships || 0}
+              </span>
+            </div>
+            
+            <div className="crowns-display">
+              {Array.from({ length: userData.monthly_championships || 0 }).map((_, index) => (
+                <Crown key={index} size={28} className="crown-icon" />
+              ))}
+              {userData.monthly_championships === 0 && (
+                <p className="no-crowns">No hay coronas aún</p>
               )}
             </div>
-
-            {/* Badges Info */}
-            <div className="user-modal-badges-grid">
-              {userData.favorite_team && (
-                <div className="user-modal-badge team">
-                  <div className="badge-icon"><Trophy size={14} /></div>
-                  <div className="badge-text">
-                    <span className="badge-label">Equipo</span>
-                    <span className="badge-value">{userData.favorite_team}</span>
+            
+            {crownHistory.length > 0 && (
+              <div className="crowns-history">
+                <h5>Historial</h5>
+                {crownHistory.map((crown) => (
+                  <div key={crown.id} className="history-item">
+                    <span className="month">{crown.month_year}</span>
+                    <span className="points">{crown.points} pts</span>
                   </div>
-                </div>
-              )}
-              
-              {userData.favorite_player && (
-                <div className="user-modal-badge player">
-                  <div className="badge-icon"><Heart size={14} /></div>
-                  <div className="badge-text">
-                    <span className="badge-label">Ídolo</span>
-                    <span className="badge-value">{userData.favorite_player}</span>
-                  </div>
-                </div>
-              )}
+                ))}
+              </div>
+            )}
+          </div>
 
-              {userData.nationality && (
-                <div className="user-modal-badge nation">
-                  <div className="badge-icon"><Globe size={14} /></div>
-                  <div className="badge-text">
-                    <span className="badge-label">País</span>
-                    <span className="badge-value">{userData.nationality}</span>
-                  </div>
-                </div>
-              )}
-
-              <div className="user-modal-badge joined">
-                <div className="badge-icon"><Calendar size={14} /></div>
+          {/* Badges */}
+          <div className="user-modal-badges-grid">
+            {userData.favorite_team && (
+              <div className="user-modal-badge team">
+                <div className="badge-icon"><Trophy size={14} /></div>
                 <div className="badge-text">
-                  <span className="badge-label">Miembro desde</span>
-                  <span className="badge-value">{formatDate(userData.created_at)}</span>
+                  <span className="badge-label">Equipo Fav</span>
+                  <span className="badge-value">{userData.favorite_team}</span>
                 </div>
+              </div>
+            )}
+
+            {userData.favorite_player && (
+              <div className="user-modal-badge player">
+                <div className="badge-icon"><Heart size={14} /></div>
+                <div className="badge-text">
+                  <span className="badge-label">Jugador Fav</span>
+                  <span className="badge-value">{userData.favorite_player}</span>
+                </div>
+              </div>
+            )}
+
+            {userData.nationality && (
+              <div className="user-modal-badge nation">
+                <div className="badge-icon"><Globe size={14} /></div>
+                <div className="badge-text">
+                  <span className="badge-label">País</span>
+                  <span className="badge-value">{userData.nationality}</span>
+                </div>
+              </div>
+            )}
+
+            <div className="user-modal-badge joined">
+              <div className="badge-icon"><Calendar size={14} /></div>
+              <div className="badge-text">
+                <span className="badge-label">Miembro desde</span>
+                <span className="badge-value">{formatDate(userData.created_at)}</span>
               </div>
             </div>
           </div>

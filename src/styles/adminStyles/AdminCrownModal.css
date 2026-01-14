@@ -17,13 +17,14 @@
 
 /* Modal Container */
 .admin-crown-modal {
-  background: white;
+  background: var(--card);
   border-radius: 20px;
   width: 100%;
   max-width: 480px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   animation: modalFadeIn 0.3s ease;
+  color: var(--text-primary);
 }
 
 @keyframes modalFadeIn {
@@ -37,8 +38,12 @@
   align-items: center;
   gap: 12px;
   padding: 20px 24px;
-  border-bottom: 2px solid #E5E7EB;
-  background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+  border-bottom: 2px solid var(--border);
+  background: linear-gradient(135deg, rgba(245, 246, 250, 0.5) 0%, rgba(243, 244, 246, 0.5) 100%);
+}
+
+[data-theme="dark"] .modal-header {
+  background: linear-gradient(135deg, rgba(53, 59, 77, 0.5) 0%, rgba(42, 47, 63, 0.5) 100%);
 }
 
 .modal-header .header-icon {
@@ -49,7 +54,7 @@
 .modal-header h2 {
   font-size: 20px;
   font-weight: 800;
-  color: #1F2937;
+  color: var(--text-primary);
   margin: 0;
   flex: 1;
 }
@@ -57,7 +62,7 @@
 .modal-header .close-btn {
   background: none;
   border: none;
-  color: #9CA3AF;
+  color: var(--text-secondary);
   cursor: pointer;
   padding: 4px;
   border-radius: 8px;
@@ -65,8 +70,8 @@
 }
 
 .modal-header .close-btn:hover {
-  background: #F3F4F6;
-  color: #374151;
+  background: var(--bg);
+  color: var(--text-primary);
 }
 
 /* Content */
@@ -93,10 +98,10 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: #F9FAFB;
+  background: var(--bg);
   padding: 16px;
   border-radius: 12px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--border);
 }
 
 .user-detail {
@@ -108,12 +113,12 @@
 
 .user-detail .label {
   font-weight: 600;
-  color: #6B7280;
+  color: var(--text-secondary);
 }
 
 .user-detail .value {
   font-weight: 700;
-  color: #1F2937;
+  color: var(--text-primary);
 }
 
 .form-group {
@@ -125,15 +130,16 @@
 .form-group label {
   font-size: 14px;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-primary);
 }
 
 .form-group input {
   padding: 12px 16px;
-  border: 2px solid #E5E7EB;
+  border: 2px solid var(--border);
   border-radius: 12px;
   font-size: 15px;
-  color: #1F2937;
+  color: var(--text-primary);
+  background: var(--input-bg);
   transition: all 0.2s ease;
 }
 
@@ -145,7 +151,7 @@
 
 .confirmation-text {
   font-size: 14px;
-  color: #6B7280;
+  color: var(--text-secondary);
   line-height: 1.5;
   text-align: center;
   padding: 12px;
@@ -158,8 +164,8 @@
   display: flex;
   gap: 12px;
   padding: 20px 24px;
-  border-top: 2px solid #E5E7EB;
-  background: #F9FAFB;
+  border-top: 2px solid var(--border);
+  background: var(--bg);
 }
 
 .modal-actions button {
@@ -178,12 +184,17 @@
 }
 
 .cancel-btn {
-  background: #F3F4F6;
-  color: #374151;
+  background: var(--bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
 }
 
 .cancel-btn:hover {
-  background: #E5E7EB;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .award-btn {
