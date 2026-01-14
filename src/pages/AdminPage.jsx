@@ -16,6 +16,7 @@ import Footer from '../components/Footer';
 import AdminTitlesModal from '../components/adminComponents/AdminTitlesModal';
 import FinishLeagueModal from '../components/adminComponents/FinishLeagueModal';
 import FinishAwardModal from '../components/adminComponents/FinishAwardModal';
+import AdminCrownModal from '../components/adminComponents/AdminCrownModal';
 import { ToastContainer, useToast } from '../components/Toast';
 import '../styles/adminStyles/AdminPage.css';
 
@@ -25,6 +26,8 @@ export default function AdminPage({ currentUser, onBack }) {
   const [leagues, setLeagues] = useState([]);
   const [awards, setAwards] = useState([]);
   const [achievements, setAchievements] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [crownHistory, setCrownHistory] = useState([]);
   const [titles, setTitles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFinishMatchModal, setShowFinishMatchModal] = useState(false);
@@ -38,6 +41,7 @@ export default function AdminPage({ currentUser, onBack }) {
   const [showAchievementModal, setShowAchievementModal] = useState(false);
   const [showTitleModal, setShowTitleModal] = useState(false);
   const [showFinishLeagueModal, setShowFinishLeagueModal] = useState(false);
+  const [showCrownModal, setShowCrownModal] = useState(false);
   const [showFinishAwardModal, setShowFinishAwardModal] = useState(false);
   const [itemToFinish, setItemToFinish] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
@@ -59,7 +63,9 @@ export default function AdminPage({ currentUser, onBack }) {
         supabase.from('leagues').select('*, league_predictions(*)'),
         supabase.from('awards').select('*, award_predictions(*)'),
         supabase.from('available_achievements').select('*'),
-        supabase.from('available_titles').select('*')
+        supabase.from('available_titles').select('*'),
+        supabase.from('users').select('*').order('monthly_points', { ascending: false }).limit(10), // Asume monthly_points; ajusta si es weekly_points
+        supabase.from('monthly_championship_history').select('*, users(name)').order('awarded_at', { ascending: false })
       ]);
 
       setMatches(matchData.data || []);
@@ -67,6 +73,8 @@ export default function AdminPage({ currentUser, onBack }) {
       setAwards(awardData.data || []);
       setAchievements(achievementData.data || []);
       setTitles(titleData.data || []);
+      setUsers(userData.data || []);
+      setCrownHistory(historyData.data || []);
     } catch (err) {
       console.error('Error loading data:', err);
       toast.error('Error al cargar los datos');
@@ -74,6 +82,7 @@ export default function AdminPage({ currentUser, onBack }) {
       setLoading(false);
     }
   };
+  const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
 
   // ========== HANDLERS - MATCHES ==========
   const handleAddMatch = async (match) => {
@@ -87,6 +96,10 @@ export default function AdminPage({ currentUser, onBack }) {
       console.error('Error adding match:', err);
       toast.error('❌ Error al agregar el partido. Verifica los datos.');
     }
+  };
+  // Handler para otorgar corona (llamado desde modal)
+  const handleAwardCrown = async (data) => {
+    await loadData(); // Recargar users y history
   };
 
   // ✅ USAR LA FUNCIÓN DEL HOOK
@@ -308,6 +321,8 @@ export default function AdminPage({ currentUser, onBack }) {
       case 'titles':
         items = titles;
         break;
+        case 'crowns': // Nueva sección
+        return { top10: users.filter(u => JSON.stringify(u).toLowerCase().includes(searchTerm.toLowerCase())), history: crownHistory };
       default:
         items = [];
     }
@@ -347,6 +362,10 @@ export default function AdminPage({ currentUser, onBack }) {
     },
     titles: {
       total: titles.length
+    },
+    crowns: { // Nuevo stat
+      total: crownHistory.length,
+      thisMonth: crownHistory.filter(h => h.month_year === currentMonth).length
     }
   };
 
@@ -470,6 +489,17 @@ export default function AdminPage({ currentUser, onBack }) {
               <Package size={20} />
               <span>Títulos</span>
             </button>
+
+            <button 
+              className={`admin-nav-tab ${activeSection === 'crowns' ? 'active' : ''}`}
+              onClick={() => setActiveSection('crowns')}
+            >
+              <Crown size={20} />
+              <span>Coronas</span>
+              {stats.crowns.thisMonth === 0 && (
+                <span className="tab-badge pending">Pendiente</span>
+              )}
+            </button>
           </div>
 
           {/* Controls */}
@@ -517,6 +547,7 @@ export default function AdminPage({ currentUser, onBack }) {
                 if (activeSection === 'awards') setShowAwardModal(true);
                 if (activeSection === 'achievements') setShowAchievementModal(true);
                 if (activeSection === 'titles') setShowTitleModal(true);
+                if (activeSection === 'crowns') setShowCrownModal(true);
               }}
             >
               <Plus size={20} />
@@ -723,6 +754,49 @@ export default function AdminPage({ currentUser, onBack }) {
                 ))}
               </div>
             )}
+            {activeSection === 'crowns' && (
+              <div className="admin-crowns-section">
+                <div className="section-header">
+                  <h3>Ranking Mensual Top 10</h3>
+                  <p>Usuarios ordenados por puntos mensuales</p>
+                </div>
+                <div className="top10-list">
+                  {getFilteredItems().top10.map((user, index) => (
+                    <div key={user.id} className={`top-user-card ${index === 0 ? 'top1' : ''}`}>
+                      <div className="position">{index + 1}</div>
+                      <div className="user-info">
+                        <span className="name">{user.name}</span>
+                        <span className="points">{user.monthly_points || 0} pts</span>
+                        <span className="championships">Coronas: {user.monthly_championships || 0}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="section-header">
+                  <h3>Historial de Coronas</h3>
+                  <p>Últimas coronas otorgadas</p>
+                </div>
+                <div className="history-list">
+                  {getFilteredItems().history.map(history => (
+                    <div key={history.id} className="history-item">
+                      <div className="history-info">
+                        <span className="month">{history.month_year}</span>
+                        <span className="winner">{history.users.name}</span>
+                        <span className="points">{history.points} pts</span>
+                      </div>
+                      <div className="history-meta">
+                        <Calendar size={14} />
+                        <span>{new Date(history.awarded_at).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  ))}
+                  {getFilteredItems().history.length === 0 && (
+                    <p className="empty-history">No hay coronas otorgadas aún</p>
+                  )}
+                </div>
+              </div>
+            )}
 
             {getFilteredItems().length === 0 && (
               <div className="admin-empty-state">
@@ -800,6 +874,25 @@ export default function AdminPage({ currentUser, onBack }) {
             setShowFinishMatchModal(false);
             setItemToFinish(null);
           }}
+        />
+      )}
+      {showFinishAwardModal && itemToFinish && (
+        <FinishAwardModal 
+          award={itemToFinish}
+          onFinish={handleFinishAward}
+          onClose={() => {
+            setShowFinishAwardModal(false);
+            setItemToFinish(null);
+          }}
+        />
+      )}
+      
+      {showCrownModal && (
+        <AdminCrownModal 
+          onClose={() => setShowCrownModal(false)}
+          onAward={handleAwardCrown}
+          currentTopUser={users[0]} // Top 1
+          currentMonth={currentMonth}
         />
       )}
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
