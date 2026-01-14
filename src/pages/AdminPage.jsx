@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   ArrowLeft, Shield, Plus, Edit2, Trash2, CheckCircle, X,
   Trophy, Target, Award, Calendar, Clock, Users, BarChart3,
-  Zap, TrendingUp, Package, Filter, Search, AlertCircle
+  Zap, TrendingUp, Package, Filter, Search, Crown, AlertCircle
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useMatches } from '../hooks/useMatches';
@@ -58,7 +58,7 @@ export default function AdminPage({ currentUser, onBack }) {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [matchData, leagueData, awardData, achievementData, titleData] = await Promise.all([
+      const [matchData, leagueData, awardData, achievementData, titleData, userData, historyData] = await Promise.all([
         supabase.from('matches').select('*, predictions(*)'),
         supabase.from('leagues').select('*, league_predictions(*)'),
         supabase.from('awards').select('*, award_predictions(*)'),
