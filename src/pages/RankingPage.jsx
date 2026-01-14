@@ -211,7 +211,7 @@ export default function RankingPage({ currentUser, onBack }) {
             onClick={() => setRankingType('weekly')}
           >
             <Calendar size={20} />
-            <span>Top Semanal</span>
+            <span>Top Mensual</span>
             <div className="btn-shine"></div>
           </button>
         </div>
@@ -336,7 +336,7 @@ export default function RankingPage({ currentUser, onBack }) {
             <div className="podium-header-ultra">
               <Award className="podium-icon-ultra" size={32} />
               <h2 className="podium-title-ultra">
-                {rankingType === 'weekly' ? 'Campeones de la Semana' : 'Hall of Champions'}
+                {rankingType === 'weekly' ? 'Campeones del Mes' : 'Hall of Champions'}
               </h2>
               <Sparkles className="podium-sparkle" size={24} />
             </div>
