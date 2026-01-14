@@ -1,11 +1,10 @@
-// src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   User, Calendar, Trophy, TrendingUp, Target, Flame, 
   Star, Award, Edit2, Save, X, ArrowLeft, Activity, Percent,
   CheckCircle2, XCircle, Clock, Medal, Globe, Heart, Zap,
   Crown, Shield, Rocket, Sparkles, BarChart3,
-  Gamepad2, Users, MapPin, Map, Flag, Layers, BadgeCheck, Gem,
+  Gamepad2, Users, MapPin, Flag, Layers, BadgeCheck, Gem,
   CheckCircle, TrendingDown, ChevronRight, Grid3x3, List
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
@@ -33,8 +32,7 @@ export default function ProfilePage({ currentUser, onBack }) {
     nationality: currentUser?.nationality || '',
     avatar_url: currentUser?.avatar_url || null,
     level: currentUser?.level || 1,
-    joined_date: currentUser?.created_at || new Date().toISOString(),
-    monthly_championships: currentUser?.monthly_championships || 0 // Nuevo
+    joined_date: currentUser?.created_at || new Date().toISOString()
   });
   
   const [predictionHistory, setPredictionHistory] = useState([]);
@@ -61,8 +59,6 @@ export default function ProfilePage({ currentUser, onBack }) {
     pointsFromPrev: 0
   });
 
-  const [crownHistory, setCrownHistory] = useState([]); // Nuevo: historial de coronas para el usuario
-
   const profileTabs = [
     { id: 'overview', label: 'Resumen', icon: Grid3x3 },
     { id: 'achievements', label: 'Logros', icon: Trophy },
@@ -74,7 +70,6 @@ export default function ProfilePage({ currentUser, onBack }) {
     loadUserData();
     loadPredictionHistory();
     calculateStreaks();
-    loadCrownHistory(); // Nuevo
   }, [currentUser]);
 
   useEffect(() => {
@@ -186,27 +181,11 @@ export default function ProfilePage({ currentUser, onBack }) {
           nationality: data.nationality || '',
           avatar_url: data.avatar_url || null,
           level: data.level || 1,
-          joined_date: data.created_at,
-          monthly_championships: data.monthly_championships || 0 // Nuevo
+          joined_date: data.created_at
         });
       }
     } catch (err) {
       console.error('Error loading user data:', err);
-    }
-  };
-
-  const loadCrownHistory = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('monthly_championship_history')
-        .select('*')
-        .eq('user_id', currentUser.id)
-        .order('awarded_at', { ascending: false });
-
-      if (error) throw error;
-      setCrownHistory(data || []);
-    } catch (err) {
-      console.error('Error loading crown history:', err);
     }
   };
 
@@ -266,8 +245,9 @@ export default function ProfilePage({ currentUser, onBack }) {
       let currentStreak = 0;
       let bestStreak = 0;
       let tempStreak = 0;
+      let lastDate = null;
 
-      const finishedPredictions = data
+      const finishedPredictions = (data || [])
         .filter(p => p.matches?.status === 'finished')
         .sort((a, b) => new Date(b.matches.date) - new Date(a.matches.date));
 
@@ -275,9 +255,13 @@ export default function ProfilePage({ currentUser, onBack }) {
         const match = pred.matches;
         const isCorrect = checkPredictionCorrect(pred, match);
 
+        if (index === 0) lastDate = match.date;
+
         if (isCorrect) {
           tempStreak++;
-          if (index === 0) currentStreak = tempStreak;
+          if (index === 0 || isConsecutive(finishedPredictions[index - 1]?.matches.date, match.date)) {
+            currentStreak = tempStreak;
+          }
           bestStreak = Math.max(bestStreak, tempStreak);
         } else {
           tempStreak = 0;
@@ -285,15 +269,21 @@ export default function ProfilePage({ currentUser, onBack }) {
         }
       });
 
-      setStreakData({ 
-        current_streak: currentStreak, 
+      setStreakData({
+        current_streak: currentStreak,
         best_streak: bestStreak,
-        last_prediction_date: finishedPredictions[0]?.matches?.date || null
+        last_prediction_date: lastDate
       });
-
     } catch (err) {
       console.error('Error calculating streaks:', err);
     }
+  };
+
+  const isConsecutive = (date1, date2) => {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    const diffDays = Math.abs((d1 - d2) / (1000 * 60 * 60 * 24));
+    return diffDays <= 7;
   };
 
   const checkPredictionCorrect = (prediction, match) => {
@@ -304,6 +294,69 @@ export default function ProfilePage({ currentUser, onBack }) {
     
     return predDiff === resultDiff || 
            (prediction.home_score === match.result_home && prediction.away_score === match.result_away);
+  };
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({
+          name: userData.name,
+          bio: userData.bio,
+          favorite_team: userData.favorite_team,
+          favorite_player: userData.favorite_player,
+          gender: userData.gender,
+          nationality: userData.nationality
+        })
+        .eq('id', currentUser.id);
+
+      if (error) throw error;
+
+      toast.success('¡Perfil actualizado con éxito!');
+      setActiveTab('overview');
+      
+      setTimeout(() => {
+        onBack();
+      }, 1500);
+    } catch (err) {
+      console.error('Error updating profile:', err);
+      toast.error('Error al actualizar el perfil');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAvatarUpload = (newUrl) => {
+    setUserData({ ...userData, avatar_url: newUrl });
+    toast.success('¡Avatar actualizado con éxito!');
+  };
+
+  const getPredictionResult = (pred) => {
+    if (!pred.matches || pred.matches.status !== 'finished') {
+      return { status: 'pending', points: 0, label: 'Pendiente' };
+    }
+
+    const match = pred.matches;
+    const exactMatch = pred.home_score === match.result_home && pred.away_score === match.result_away;
+    const resultCorrect = Math.sign(pred.home_score - pred.away_score) === Math.sign(match.result_home - match.result_away);
+
+    if (exactMatch) {
+      return { status: 'exact', points: 5, label: 'Resultado Exacto' };
+    } else if (resultCorrect) {
+      return { status: 'correct', points: 3, label: 'Resultado Acertado' };
+    } else {
+      return { status: 'wrong', points: 0, label: 'Fallado' };
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
   };
 
   const calculateAchievements = (availableAchievements, userStats) => {
@@ -334,126 +387,33 @@ export default function ProfilePage({ currentUser, onBack }) {
     });
   };
 
-  const handleSave = async () => {
-    setLoading(true);
-    try {
-      const { error } = await supabase
-        .from('users')
-        .update({
-          name: userData.name,
-          bio: userData.bio,
-          favorite_team: userData.favorite_team,
-          favorite_player: userData.favorite_player,
-          gender: userData.gender,
-          nationality: userData.nationality
-        })
-        .eq('id', currentUser.id);
-
-      if (error) throw error;
+  const getActiveTitle = () => {
+    if (userTitles.length === 0) return null;
+    
+    // Ordenar por el requirement_value del logro asociado (mayor = más avanzado)
+    const sortedTitles = [...userTitles].sort((a, b) => {
+      // Buscar el logro requerido para cada título
+      const achievementA = availableAchievements.find(ach => ach.id === a.requirement_achievement_id);
+      const achievementB = availableAchievements.find(ach => ach.id === b.requirement_achievement_id);
       
-      toast.success('✅ Perfil actualizado correctamente', 3000);
-      setActiveTab('overview');
-    } catch (err) {
-      console.error('Error saving profile:', err);
-      toast.error('❌ Error al guardar los cambios');
-    } finally {
-      setLoading(false);
-    }
+      // Si alguno no tiene logro asociado, ponerlo al final
+      if (!achievementA) return 1;
+      if (!achievementB) return -1;
+      
+      // Ordenar por requirement_value descendente (mayor valor = título más avanzado)
+      return (achievementB.requirement_value || 0) - (achievementA.requirement_value || 0);
+    });
+    
+    return sortedTitles[0];
   };
 
-  const handleAvatarUpdate = async (newAvatarUrl) => {
-    setUserData(prev => ({ ...prev, avatar_url: newAvatarUrl }));
-    await loadUserData();
-  };
-
-  const handleSaveAchievement = async (achievement) => {
-    try {
-      if (achievement.id) {
-        const { error } = await supabase
-          .from('available_achievements')
-          .update(achievement)
-          .eq('id', achievement.id);
-        if (error) throw error;
-        toast.success('Logro actualizado');
-      } else {
-        const { error } = await supabase
-          .from('available_achievements')
-          .insert(achievement);
-        if (error) throw error;
-        toast.success('Logro creado');
-      }
-      // Recargar datos
-      const { data } = await supabase
-        .from('available_achievements')
-        .select('*');
-      setAvailableAchievements(data || []);
-    } catch (err) {
-      console.error('Error saving achievement:', err);
-      toast.error('Error al guardar logro');
-    }
-  };
-
-  const handleDeleteAchievement = async (id) => {
-    try {
-      const { error } = await supabase
-        .from('available_achievements')
-        .delete()
-        .eq('id', id);
-      if (error) throw error;
-      toast.success('Logro eliminado');
-      const { data } = await supabase
-        .from('available_achievements')
-        .select('*');
-      setAvailableAchievements(data || []);
-    } catch (err) {
-      console.error('Error deleting achievement:', err);
-      toast.error('Error al eliminar logro');
-    }
-  };
-
-  const handleSaveTitle = async (title) => {
-    try {
-      if (title.id) {
-        const { error } = await supabase
-          .from('available_titles')
-          .update(title)
-          .eq('id', title.id);
-        if (error) throw error;
-        toast.success('Título actualizado');
-      } else {
-        const { error } = await supabase
-          .from('available_titles')
-          .insert(title);
-        if (error) throw error;
-        toast.success('Título creado');
-      }
-      // Recargar datos
-      const { data } = await supabase
-        .from('available_titles')
-        .select('*');
-      setAvailableTitles(data || []);
-    } catch (err) {
-      console.error('Error saving title:', err);
-      toast.error('Error al guardar título');
-    }
-  };
-
-  const handleDeleteTitle = async (id) => {
-    try {
-      const { error } = await supabase
-        .from('available_titles')
-        .delete()
-        .eq('id', id);
-      if (error) throw error;
-      toast.success('Título eliminado');
-      const { data } = await supabase
-        .from('available_titles')
-        .select('*');
-      setAvailableTitles(data || []);
-    } catch (err) {
-      console.error('Error deleting title:', err);
-      toast.error('Error al eliminar título');
-    }
+  const getIconEmoji = (iconText) => {
+    const emojiMap = {
+      '🎯': '🎯', '🌟': '🌟', '⭐': '⭐', '✨': '✨',
+      '💫': '💫', '🎪': '🎪', '🎭': '🎭', '🎨': '🎨',
+      '🔥': '🔥', '🌋': '🌋', '☄️': '☄️'
+    };
+    return emojiMap[iconText] || '';
   };
 
   const getCategoryColor = (category) => {
@@ -466,197 +426,250 @@ export default function ProfilePage({ currentUser, onBack }) {
     }
   };
 
-  const getIconEmoji = (iconText) => {
-    const emojiMap = {
-      '🎯': '🎯',
-      '🌟': '🌟',
-      '⭐': '⭐',
-      '✨': '✨',
-      '💫': '💫',
-      '🎪': '🎪',
-      '🎭': '🎭',
-      '🎨': '🎨',
-      '🔥': '🔥',
-      '🌋': '🌋',
-      '☄️': '☄️'
-    };
-    return emojiMap[iconText] || '';
+  const handleSaveAchievement = async (achievementData) => {
+    try {
+      const { error } = await supabase
+        .from('available_achievements')
+        .upsert(achievementData, { onConflict: 'id' });
+
+      if (error) throw error;
+
+      toast.success('¡Logro guardado exitosamente!');
+      
+      const { data } = await supabase
+        .from('available_achievements')
+        .select('*')
+        .order('requirement_value', { ascending: true });
+      setAvailableAchievements(data || []);
+    } catch (err) {
+      console.error('Error saving achievement:', err);
+      toast.error('Error al guardar el logro');
+    }
+  };
+
+  const handleDeleteAchievement = async (achievementId) => {
+    try {
+      const { error } = await supabase
+        .from('available_achievements')
+        .delete()
+        .eq('id', achievementId);
+
+      if (error) throw error;
+
+      toast.success('¡Logro eliminado correctamente!');
+      
+      const { data } = await supabase
+        .from('available_achievements')
+        .select('*')
+        .order('requirement_value', { ascending: true });
+      setAvailableAchievements(data || []);
+    } catch (err) {
+      console.error('Error deleting achievement:', err);
+      toast.error('Error al eliminar el logro');
+    }
+  };
+
+  const handleSaveTitle = async (titleData) => {
+    try {
+      const { error } = await supabase
+        .from('available_titles')
+        .upsert(titleData, { onConflict: 'id' });
+
+      if (error) throw error;
+
+      toast.success('Título guardado correctamente');
+      
+      const { data } = await supabase
+        .from('available_titles')
+        .select('*');
+      setAvailableTitles(data || []);
+    } catch (err) {
+      console.error('Error saving title:', err);
+      toast.error('Error al guardar el título');
+    }
+  };
+
+  const handleDeleteTitle = async (titleId) => {
+    try {
+      const { error } = await supabase
+        .from('available_titles')
+        .delete()
+        .eq('id', titleId);
+
+      if (error) throw error;
+
+      toast.success('Título eliminado correctamente');
+      
+      const { data } = await supabase
+        .from('available_titles')
+        .select('*');
+      setAvailableTitles(data || []);
+    } catch (err) {
+      console.error('Error deleting title:', err);
+      toast.error('Error al eliminar el título');
+    }
   };
 
   const accuracy = currentUser?.predictions > 0 
-    ? Math.round((currentUser.correct / currentUser.predictions) * 100)
+    ? Math.round((currentUser.correct / currentUser.predictions) * 100) 
     : 0;
 
+  const currentLevelPoints = (userData.level - 1) * 20;
+  const nextLevelPoints = userData.level * 20;
+  const currentPoints = currentUser?.points || 0;
+  const pointsInLevel = currentPoints - currentLevelPoints;
+  const pointsToNextLevel = nextLevelPoints - currentPoints;
+  const levelProgress = (pointsInLevel / 20) * 100;
+
+  const activeTitle = getActiveTitle();
+
   const renderTabContent = () => {
-    switch(activeTab) {
-      case 'overview':
+    switch (activeTab) {
+  case 'overview':
+  return (
+    <div className="tab-content-wrapper" data-tab="overview">
+      {/* Ranking */}
+      <div className="ranking-card-modern">
+        <div className="ranking-card-header">
+          <Trophy size={20} />
+          <span>Ranking Global</span>
+        </div>
+        <div className="ranking-position-display">
+          <div className="position-large">#{userRanking.position || '--'}</div>
+          <div className="position-context">de {userRanking.totalUsers} jugadores</div>
+        </div>
+      </div>
+
+      {/* Level Card */}
+      <div className="level-card-modern">
+        <div className="level-card-header">
+          <div className="level-icon-wrapper">
+            <Zap size={20} />
+          </div>
+          <div className="level-info">
+            <div className="level-number">Nivel {userData.level}</div>
+            <div className="level-subtitle">{pointsInLevel} de 20 puntos</div>
+          </div>
+          <div className="points-to-next">{pointsToNextLevel} pts</div>
+        </div>
+        <div className="level-progress-bar">
+          <div className="level-progress-fill" style={{ width: `${levelProgress}%` }}></div>
+        </div>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="stats-cards-grid">
+        <div className="stat-card-modern predictions">
+          <div className="stat-card-icon">
+            <Target size={20} />
+          </div>
+          <div className="stat-card-content">
+            <div className="stat-card-value">{currentUser?.predictions || 0}</div>
+            <div className="stat-card-label">Predicciones</div>
+          </div>
+        </div>
+
+        <div className="stat-card-modern points">
+          <div className="stat-card-icon">
+            <Zap size={20} />
+          </div>
+          <div className="stat-card-content">
+            <div className="stat-card-value">{currentUser?.points || 0}</div>
+            <div className="stat-card-label">Puntos</div>
+          </div>
+        </div>
+
+        <div className="stat-card-modern accuracy">
+          <div className="stat-card-icon">
+            <BarChart3 size={20} />
+          </div>
+          <div className="stat-card-content">
+            <div className="stat-card-value">{accuracy}%</div>
+            <div className="stat-card-label">Precisión</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+      case 'achievements':
         return (
           <div className="tab-content-wrapper">
-            {/* Coronas Premium - Nueva sección */}
-            <div className="crowns-section">
+            {/* Active Title */}
+            {activeTitle && (
+              <div className="active-title-card" style={{ borderColor: activeTitle.color }}>
+                <div className="title-icon-large" style={{ background: `${activeTitle.color}15` }}>
+                  <Gem size={24} style={{ color: activeTitle.color }} />
+                </div>
+                <div className="title-card-info">
+                  <div className="title-card-name" style={{ color: activeTitle.color }}>{activeTitle.name}</div>
+                  <div className="title-card-desc">{activeTitle.description}</div>
+                </div>
+              </div>
+            )}
+
+            {/* Titles Section */}
+            <div className="section-modern">
               <div className="section-header-modern">
-                <Crown size={24} className="section-icon" />
-                <h3 className="section-title-modern">Coronas Mensuales</h3>
-                <div className="section-badge">{userData.monthly_championships}</div>
+                <Layers size={18} />
+                <h3>Títulos</h3>
+                <span className="count-badge-modern">{userTitles.length}</span>
               </div>
               
-              <div className="crowns-card">
-                <div className="crowns-display">
-                  {Array.from({ length: userData.monthly_championships }).map((_, index) => (
-                    <Crown key={index} size={32} className="crown-icon" />
-                  ))}
-                  {userData.monthly_championships === 0 && (
-                    <p className="no-crowns">Aún no has ganado coronas mensuales</p>
-                  )}
+              {achievementsLoading ? (
+                <div className="loading-state">
+                  <Activity size={24} className="spinner" />
                 </div>
-                
-                {crownHistory.length > 0 && (
-                  <div className="crowns-history">
-                    <h4>Historial de Coronas</h4>
-                    <div className="history-list">
-                      {crownHistory.map((crown) => (
-                        <div key={crown.id} className="history-item">
-                          <div className="history-date">{crown.month_year}</div>
-                          <div className="history-points">{crown.points} pts</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Stats Generales */}
-            <div className="stats-grid-modern">
-              <div className="stat-card-modern primary">
-                <div className="stat-card-icon">
-                  <TrendingUp size={24} />
-                </div>
-                <div className="stat-card-content">
-                  <div className="stat-card-label">Puntos Totales</div>
-                  <div className="stat-card-value">{currentUser?.points || 0}</div>
-                </div>
-              </div>
-
-              <div className="stat-card-modern success">
-                <div className="stat-card-icon">
-                  <Target size={24} />
-                </div>
-                <div className="stat-card-content">
-                  <div className="stat-card-label">Precisión</div>
-                  <div className="stat-card-value">{accuracy}%</div>
-                </div>
-              </div>
-
-              <div className="stat-card-modern warning">
-                <div className="stat-card-icon">
-                  <Flame size={24} />
-                </div>
-                <div className="stat-card-content">
-                  <div className="stat-card-label">Racha Actual</div>
-                  <div className="stat-card-value">{streakData.current_streak}</div>
-                </div>
-              </div>
-
-              <div className="stat-card-modern accent">
-                <div className="stat-card-icon">
-                  <Trophy size={24} />
-                </div>
-                <div className="stat-card-content">
-                  <div className="stat-card-label">Ranking</div>
-                  <div className="stat-card-value">#{userRanking.position}</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Nivel y Progreso */}
-            <div className="level-card-modern">
-              <div className="level-header-modern">
-                <div className="level-title-section">
-                  <Shield size={24} />
-                  <div>
-                    <h3>Nivel {userData.level}</h3>
-                    <p>Progreso al siguiente nivel</p>
-                  </div>
-                </div>
-                <div className="level-points">
-                  <span className="current-points">{currentUser.points % 20} pts</span>
-                  <span className="next-level-points">Siguiente: {20 - (currentUser.points % 20)} pts</span>
-                </div>
-              </div>
-              
-              <div className="progress-container-modern">
-                <div className="progress-bar-modern">
-                  <div 
-                    className="progress-fill-modern"
-                    style={{ width: `${(currentUser.points % 20 / 20) * 100}%` }}
-                  >
-                    <div className="progress-glow-modern"></div>
-                  </div>
-                </div>
-                <div className="progress-label-modern">
-                  <span>{currentUser.points % 20}/20 puntos</span>
-                  <span>{20 - (currentUser.points % 20)} pts restantes</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Rachas */}
-            <div className="streaks-section-modern">
-              <div className="streak-card current">
-                <div className="streak-icon">
-                  <Flame size={32} />
-                </div>
-                <div className="streak-info">
-                  <div className="streak-label">Racha Actual</div>
-                  <div className="streak-value">{streakData.current_streak}</div>
-                </div>
-                {streakData.current_streak > 0 && (
-                  <div className="streak-badge">
-                    <Sparkles size={16} />
-                    <span>Activa</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="streak-card best">
-                <div className="streak-icon">
-                  <Rocket size={32} />
-                </div>
-                <div className="streak-info">
-                  <div className="streak-label">Mejor Racha</div>
-                  <div className="streak-value">{streakData.best_streak}</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Títulos */}
-            <div className="titles-section-modern">
-              <div className="section-header-modern">
-                <Gem size={24} className="section-icon" />
-                <h3 className="section-title-modern">Títulos Desbloqueados</h3>
-                <div className="section-badge">{userTitles.length}</div>
-              </div>
-
-              {userTitles.length === 0 ? (
-                <div className="empty-state-modern">
-                  <Layers size={48} />
-                  <p>Aún no has desbloqueado títulos</p>
+              ) : userTitles.length === 0 ? (
+                <div className="empty-state">
+                  <Shield size={32} />
+                  <p>Aún no has obtenido títulos</p>
                 </div>
               ) : (
-                <div className="titles-grid-modern">
+                <div className="titles-list">
                   {userTitles.map((title) => (
-                    <div 
-                      key={title.id} 
-                      className="title-card-modern"
-                      style={{ borderColor: title.color }}
-                    >
-                      <div className="title-icon" style={{ color: title.color }}>
-                        <BadgeCheck size={24} />
+                    <div key={title.id} className="title-list-item" style={{ borderLeftColor: title.color }}>
+                      <div className="title-item-icon" style={{ color: title.color }}>
+                        <Crown size={18} />
                       </div>
-                      <div className="title-info">
-                        <h4 style={{ color: title.color }}>{title.name}</h4>
-                        <p>{title.description}</p>
+                      <div className="title-item-content">
+                        <div className="title-item-name" style={{ color: title.color }}>{title.name}</div>
+                        <div className="title-item-desc">{title.description}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Achievements Section */}
+            <div className="section-modern">
+              <div className="section-header-modern">
+                <Award size={18} />
+                <h3>Logros</h3>
+                <span className="count-badge-modern">{userAchievements.length}/{availableAchievements.length}</span>
+              </div>
+              
+              {achievementsLoading ? (
+                <div className="loading-state">
+                  <Activity size={24} className="spinner" />
+                </div>
+              ) : userAchievements.length === 0 ? (
+                <div className="empty-state">
+                  <Target size={32} />
+                  <p>Comienza a hacer predicciones para desbloquear logros</p>
+                </div>
+              ) : (
+                <div className="achievements-grid-modern">
+                  {userAchievements.map((achievement) => (
+                    <div key={achievement.id} className="achievement-card-modern">
+                      <div className="achievement-emoji-icon">{getIconEmoji(achievement.icon)}</div>
+                      <div className="achievement-card-content">
+                        <div className="achievement-card-name">{achievement.name}</div>
+                        <div className="achievement-card-desc">{achievement.description}</div>
+                        <div className="achievement-category-badge" style={{ background: `${getCategoryColor(achievement.category)}15`, color: getCategoryColor(achievement.category) }}>
+                          {achievement.category}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -666,144 +679,66 @@ export default function ProfilePage({ currentUser, onBack }) {
           </div>
         );
 
-      case 'achievements':
-        return (
-          <div className="tab-content-wrapper">
-            <div className="section-header-modern">
-              <Award size={24} className="section-icon" />
-              <h3 className="section-title-modern">Logros Desbloqueados</h3>
-              <div className="section-badge">{userAchievements.length}</div>
-            </div>
-
-            {achievementsLoading ? (
-              <div className="loading-state-modern">
-                <Activity size={32} className="spinner" />
-                <p>Cargando logros...</p>
-              </div>
-            ) : userAchievements.length === 0 ? (
-              <div className="empty-state-modern">
-                <Star size={48} />
-                <p>Aún no has desbloqueado logros</p>
-              </div>
-            ) : (
-              <div className="achievements-grid-modern">
-                {userAchievements.map((achievement) => (
-                  <div 
-                    key={achievement.id} 
-                    className="achievement-card-modern"
-                    style={{ 
-                      borderColor: getCategoryColor(achievement.category),
-                      background: `linear-gradient(135deg, ${getCategoryColor(achievement.category)}10, transparent)`
-                    }}
-                  >
-                    <div className="achievement-emoji">{getIconEmoji(achievement.icon)}</div>
-                    <div className="achievement-info">
-                      <h4>{achievement.name}</h4>
-                      <p>{achievement.description}</p>
-                      <div className="achievement-meta">
-                        <span 
-                          className="category-badge" 
-                          style={{ background: `${getCategoryColor(achievement.category)}20`, color: getCategoryColor(achievement.category) }}
-                        >
-                          {achievement.category}
-                        </span>
-                        <span className="requirement">
-                          {achievement.requirement_value} {achievement.requirement_type}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-
       case 'history':
         return (
           <div className="tab-content-wrapper">
-            <div className="section-header-modern">
-              <Clock size={24} className="section-icon" />
-              <h3 className="section-title-modern">Historial de Predicciones</h3>
-              <div className="section-badge">{predictionHistory.length}</div>
-            </div>
-
             {historyLoading ? (
-              <div className="loading-state-modern">
+              <div className="loading-state large">
                 <Activity size={32} className="spinner" />
                 <p>Cargando historial...</p>
               </div>
             ) : predictionHistory.length === 0 ? (
-              <div className="empty-state-modern">
-                <Calendar size={48} />
-                <p>No hay predicciones en el historial</p>
+              <div className="empty-state large">
+                <Gamepad2 size={48} />
+                <p>Aún no has hecho predicciones</p>
+                <span className="empty-subtitle">¡Comienza a predecir resultados!</span>
               </div>
             ) : (
               <div className="history-list-modern">
                 {predictionHistory.map((pred) => {
+                  const result = getPredictionResult(pred);
                   const match = pred.matches;
-                  const isFinished = match?.status === 'finished';
-                  const isCorrect = isFinished ? checkPredictionCorrect(pred, match) : null;
 
                   return (
-                    <div key={pred.id} className="history-card-modern">
-                      <div className="history-header">
-                        <span className="history-league">{match.league}</span>
-                        <span className="history-date">
-                          {new Date(match.date).toLocaleDateString()} {match.time}
-                        </span>
+                    <div key={pred.id} className={`history-card-modern ${result.status}`}>
+                      <div className="history-card-header">
+                        <span className="league-badge-modern">{match?.league}</span>
+                        <span className="match-date-modern">{match?.date}</span>
+                      </div>
+                      
+                      <div className="teams-display">
+                        <div className="team-display">
+                          <span className="team-logo-modern">{match?.home_team_logo}</span>
+                          <span className="team-name-modern">{match?.home_team}</span>
+                        </div>
+                        <div className="vs-divider">VS</div>
+                        <div className="team-display">
+                          <span className="team-name-modern">{match?.away_team}</span>
+                          <span className="team-logo-modern">{match?.away_team_logo}</span>
+                        </div>
                       </div>
 
-                      <div className="history-match">
-                        <div className="team home">
-                          <img src={match.home_team_logo} alt={match.home_team} className="team-logo" />
-                          <span>{match.home_team}</span>
-                        </div>
-
+                      <div className="scores-display">
                         <div className="score-section">
-                          {isFinished ? (
-                            <div className="actual-score">
-                              <span className="score">{match.result_home} - {match.result_away}</span>
-                              <span className="label">Resultado</span>
-                            </div>
-                          ) : (
-                            <div className="pending-score">
-                              <Clock size={16} />
-                              <span>Pendiente</span>
-                            </div>
-                          )}
-
-                          <div className="prediction-score">
-                            <span className="score">{pred.home_score} - {pred.away_score}</span>
-                            <span className="label">Tu Predicción</span>
-                          </div>
+                          <span className="score-label-modern">Tu predicción</span>
+                          <span className="score-value-modern">{pred.home_score} - {pred.away_score}</span>
                         </div>
-
-                        <div className="team away">
-                          <span>{match.away_team}</span>
-                          <img src={match.away_team_logo} alt={match.away_team} className="team-logo" />
-                        </div>
-                      </div>
-
-                      <div className="history-status">
-                        {isFinished ? (
-                          isCorrect ? (
-                            <div className="status success">
-                              <CheckCircle2 size={16} />
-                              <span>Correcta (+{pred.points_earned || 3} pts)</span>
-                            </div>
-                          ) : (
-                            <div className="status error">
-                              <XCircle size={16} />
-                              <span>Incorrecta</span>
-                            </div>
-                          )
-                        ) : (
-                          <div className="status pending">
-                            <Clock size={16} />
-                            <span>En curso</span>
+                        
+                        {match?.status === 'finished' && (
+                          <div className="score-section">
+                            <span className="score-label-modern">Resultado</span>
+                            <span className="score-value-modern">{match.result_home} - {match.result_away}</span>
                           </div>
                         )}
+                      </div>
+
+                      <div className={`result-badge-modern ${result.status}`}>
+                        {result.status === 'exact' && <CheckCircle2 size={16} />}
+                        {result.status === 'correct' && <CheckCircle2 size={16} />}
+                        {result.status === 'wrong' && <XCircle size={16} />}
+                        {result.status === 'pending' && <Clock size={16} />}
+                        <span>{result.label}</span>
+                        {result.points > 0 && <span className="points-earned">+{result.points}</span>}
                       </div>
                     </div>
                   );
@@ -816,52 +751,25 @@ export default function ProfilePage({ currentUser, onBack }) {
       case 'edit':
         return (
           <div className="tab-content-wrapper">
-            <div className="edit-profile-form">
-              {/* Avatar Upload */}
-              <div className="avatar-upload-horizontal-group">
-                <div className="avatar-preview-wrapper">
-                  {userData.avatar_url ? (
-                    <img src={userData.avatar_url} alt={userData.name} className="avatar-preview" />
-                  ) : (
-                    <div className="avatar-placeholder-preview">
-                      {userData.name.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                  <div className="level-badge-floating">
-                    <Crown size={14} />
-                    <span>{userData.level}</span>
-                  </div>
-                </div>
+            <div className="section-header-modern">
+              <Edit2 size={18} />
+              <h3>Editar Perfil</h3>
+            </div>
 
-                <div className="avatar-actions-side">
-                  <AvatarUpload 
-                    currentUser={currentUser} 
-                    onAvatarUpdate={handleAvatarUpdate} 
-                  />
-                  <button 
-                    className="avatar-btn remove"
-                    onClick={async () => {
-                      try {
-                        await supabase
-                          .from('users')
-                          .update({ avatar_url: null })
-                          .eq('id', currentUser.id);
-                        handleAvatarUpdate(null);
-                        toast.success('Avatar eliminado');
-                      } catch (err) {
-                        toast.error('Error al eliminar avatar');
-                      }
-                    }}
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
-              </div>
+            <div className="edit-avatar-wrapper">
+              <AvatarUpload
+                currentUrl={userData.avatar_url}
+                userId={currentUser.id}
+                onUploadComplete={handleAvatarUpload}
+                userLevel={userData.level}
+              />
+            </div>
 
+            <div className="edit-form-modern">
               <div className="form-group-modern">
                 <label className="form-label-modern">
                   <User size={16} />
-                  <span>Nombre</span>
+                  <span>Nombre Completo</span>
                 </label>
                 <input
                   type="text"
