@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { Trophy, Award, AlertCircle } from 'lucide-react';
 import KnockoutMatchCard from './KnockoutMatchCard';
-import '../styles/KnockoutSection.css';
+import '../../styles/KnockoutSection.css';
 
 // ============================================
 // CONFIGURACIÓN DE LLAVES FIFA - 32 EQUIPOS

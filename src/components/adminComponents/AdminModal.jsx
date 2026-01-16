@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { X, Plus, Calendar, Clock, Shield, Zap, Home, Plane } from "lucide-react";
-import { getLogoUrlByTeamName, getLeagueLogoUrlDirect } from "../utils/logoHelper.js";
-import { supabase } from "../utils/supabaseClient";
+import { getLogoUrlByTeamName, getLeagueLogoUrlDirect } from "../../utils/logoHelper.js";
+import { supabase } from "../../utils/supabaseClient.js";
 import "../styles/adminStyles/AdminModal.css";
 
 export default function AdminModal({ onAdd, onClose }) {

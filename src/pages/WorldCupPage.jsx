@@ -5,9 +5,9 @@ import { supabase } from '../utils/supabaseClient';
 import { useToast, ToastContainer } from '../components/Toast';
 import { useWorldCup } from '../hooks/useWorldCup';
 import Footer from '../components/Footer';
-import WorldCupNavigationTabs from '../components/WorldCupNavigationTabs';
-import WorldCupAwardCard from '../components/WorldCupAwardCard';
-import KnockoutSection from '../components/KnockoutSection'; // NUEVO IMPORT
+import WorldCupNavigationTabs from '../components/worldCupComponent/WorldCupNavigationTabs';
+import WorldCupAwardCard from '../components/worldCupComponent/WorldCupAwardCard';
+import KnockoutSection from '../components/worldCupComponent/KnockoutSection';
 import '../styles/pagesStyles/WorldCupPage.css';
 
 // ============================================

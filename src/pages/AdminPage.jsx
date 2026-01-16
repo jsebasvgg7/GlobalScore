@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { useMatches } from '../hooks/useMatches';
-import AdminModal from '../components/AdminModal';
+import AdminModal from '../components/adminComponents/AdminModal';
 import AdminLeagueModal from '../components/adminComponents/AdminLeagueModal';
 import AdminAwardModal from '../components/adminComponents/AdminAwardModal';
 import FinishMatchModal from '../components/adminComponents/FinishMatchModal';

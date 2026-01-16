@@ -1,8 +1,8 @@
 // src/components/KnockoutMatchCard.jsx
 import React from 'react';
 import { Award, CheckCircle } from 'lucide-react';
-import { supabase } from '../utils/supabaseClient';
-import '../styles/cardStyles/KnockoutMatchCard.css';
+import { supabase } from '../../utils/supabaseClient';
+import '../../styles/cardStyles/KnockoutMatchCard.css';
 
 // ============================================
 // MAPA DE LOGOS
