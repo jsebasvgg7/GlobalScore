@@ -109,24 +109,14 @@
   display: none;
 }
 
-@media (min-width: 1024px) {
-  .profile-tabs-modern {
-    max-width: 1400px;
-    margin: 0 auto;
-    width: 100%;
-    padding: 0 2rem;
-  }
-}
-
-@media (min-width: 1200px) {
-  .profile-tabs-modern {
-    max-width: 1600px;
-  }
-}
-
 @media (max-width: 768px) {
   .profile-tabs-modern {
-    padding: 0 0.75rem;
+    padding: 0;
+  }
+  
+  .profile-tabs-modern::before,
+  .profile-tabs-modern::after {
+    min-width: 0.75rem;
   }
   
   .tab-btn-modern {
@@ -135,8 +125,9 @@
 }
 
 @media (max-width: 480px) {
-  .profile-tabs-modern {
-    padding: 0 0.5rem;
+  .profile-tabs-modern::before,
+  .profile-tabs-modern::after {
+    min-width: 0.5rem;
   }
   
   .tab-btn-modern {
@@ -146,15 +137,15 @@
 }
 
 @media (max-width: 360px) {
-  .profile-tabs-modern {
-    padding: 0 0.25rem;
+  .profile-tabs-modern::before,
+  .profile-tabs-modern::after {
+    min-width: 0.25rem;
   }
   
   .tab-btn-modern {
     padding: 0.875rem 0.875rem;
   }
 }
-
 /* Asegurar que el header siempre esté encima de todo */
 .app-header {
   z-index: 300 !important;
