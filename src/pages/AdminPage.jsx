@@ -132,9 +132,6 @@ export default function AdminPage({ currentUser }) {
     <>
       <div className="admin-page">
         <div className="admin-page-container">
-          {/* Panel de Diagnóstico */}
-          <AdminDiagnosticPanel />
-
           {/* Stats Overview */}
           <AdminStatsOverview stats={stats} />
 
