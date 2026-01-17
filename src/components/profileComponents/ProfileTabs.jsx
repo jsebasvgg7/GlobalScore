@@ -1,6 +1,6 @@
 // src/components/profileComponents/ProfileTabs.jsx
 import React from 'react';
-import { Grid3x3, Trophy, List, Edit2 } from 'lucide-react';
+import { Grid3x3, Trophy, List, Edit2, Crown } from 'lucide-react';
 
 const profileTabs = [
   { id: 'overview', label: 'Resumen', icon: Grid3x3 },
