@@ -1,4 +1,4 @@
-// src/components/UserProfileModal.jsx
+// src/components/UserProfileModal.jsx - MEJORADO
 import React, { useState, useEffect } from 'react';
 import { 
   X, Trophy, Target, Flame, Star, Award, Calendar, 
@@ -22,7 +22,7 @@ export default function UserProfileModal({ userId, onClose }) {
     position: 0,
     totalUsers: 0
   });
-  const [crownHistory, setCrownHistory] = useState([]); // Nuevo: historial de coronas
+  const [crownHistory, setCrownHistory] = useState([]);
 
   useEffect(() => {
     loadUserData();
@@ -111,7 +111,7 @@ export default function UserProfileModal({ userId, onClose }) {
         setUserTitles(calculatedTitles);
       }
 
-      // Cargar historial de coronas (nuevo)
+      // Cargar historial de coronas
       const { data: history } = await supabase
         .from('monthly_championship_history')
         .select('*')
@@ -196,23 +196,18 @@ export default function UserProfileModal({ userId, onClose }) {
   const getActiveTitle = () => {
     if (userTitles.length === 0) return null;
     
-    // Ordenar por el requirement_value del logro asociado (mayor = más avanzado)
     const sortedTitles = [...userTitles].sort((a, b) => {
-      // Buscar el logro requerido para cada título
       const achievementA = availableAchievements.find(ach => ach.id === a.requirement_achievement_id);
       const achievementB = availableAchievements.find(ach => ach.id === b.requirement_achievement_id);
       
-      // Si alguno no tiene logro asociado, ponerlo al final
       if (!achievementA) return 1;
       if (!achievementB) return -1;
       
-      // Ordenar por requirement_value descendente (mayor valor = título más avanzado)
       return (achievementB.requirement_value || 0) - (achievementA.requirement_value || 0);
     });
     
     return sortedTitles[0];
   };
-
 
   const getCategoryColor = (category) => {
     switch(category) {
@@ -226,17 +221,9 @@ export default function UserProfileModal({ userId, onClose }) {
 
   const getIconEmoji = (iconText) => {
     const emojiMap = {
-      '🎯': '🎯',
-      '🌟': '🌟',
-      '⭐': '⭐',
-      '✨': '✨',
-      '💫': '💫',
-      '🎪': '🎪',
-      '🎭': '🎭',
-      '🎨': '🎨',
-      '🔥': '🔥',
-      '🌋': '🌋',
-      '☄️': '☄️'
+      '🎯': '🎯', '🌟': '🌟', '⭐': '⭐', '✨': '✨',
+      '💫': '💫', '🎪': '🎪', '🎭': '🎭', '🎨': '🎨',
+      '🔥': '🔥', '🌋': '🌋', '☄️': '☄️'
     };
     return emojiMap[iconText] || '';
   };
@@ -252,8 +239,8 @@ export default function UserProfileModal({ userId, onClose }) {
 
   if (loading) {
     return (
-      <div className="user-modal-overlay">
-        <div className="user-modal-container">
+      <div className="user-modal-overlay" onClick={onClose}>
+        <div className="user-modal-container" onClick={e => e.stopPropagation()}>
           <div className="user-modal-header">
             <div className="user-modal-title-section">
               <Users size={20} />
@@ -273,9 +260,7 @@ export default function UserProfileModal({ userId, onClose }) {
     );
   }
 
-  if (!userData) {
-    return null;
-  }
+  if (!userData) return null;
 
   const accuracy = userData.predictions > 0 
     ? Math.round((userData.correct / userData.predictions) * 100)
@@ -291,6 +276,7 @@ export default function UserProfileModal({ userId, onClose }) {
   return (
     <div className="user-modal-overlay" onClick={onClose}>
       <div className="user-modal-container" onClick={e => e.stopPropagation()}>
+        {/* ========== HEADER ========== */}
         <div className="user-modal-header">
           <div className="user-modal-title-section">
             <Users size={20} />
@@ -302,7 +288,7 @@ export default function UserProfileModal({ userId, onClose }) {
         </div>
 
         <div className="user-modal-body">
-          {/* Banner y Avatar */}
+          {/* ========== 1. AVATAR Y NOMBRE (Siempre primero) ========== */}
           <div className="user-modal-avatar-section">
             <div className="user-modal-banner">
               <div className="banner-pattern"></div>
@@ -324,7 +310,6 @@ export default function UserProfileModal({ userId, onClose }) {
             </div>
           </div>
 
-          {/* Nombre y Badges */}
           <div className="user-modal-name-section">
             <h3 className="user-modal-name">{userData.name || 'Usuario Anónimo'}</h3>
             {activeTitle && (
@@ -335,87 +320,14 @@ export default function UserProfileModal({ userId, onClose }) {
             )}
           </div>
 
-          {/* Coronas - Nueva sección */}
-          <div className="user-modal-crowns">
-            <div className="section-header">
-              <Crown size={20} />
-              <h4>Coronas Mensuales</h4>
-              <span className="count-badge">
-                {userData.monthly_championships || 0}
-              </span>
-            </div>
-            
-            <div className="crowns-display">
-              {Array.from({ length: userData.monthly_championships || 0 }).map((_, index) => (
-                <Crown key={index} size={28} className="crown-icon" />
-              ))}
-              {userData.monthly_championships === 0 && (
-                <p className="no-crowns">No hay coronas aún</p>
-              )}
-            </div>
-            
-            {crownHistory.length > 0 && (
-              <div className="crowns-history">
-                <h5>Historial</h5>
-                {crownHistory.map((crown) => (
-                  <div key={crown.id} className="history-item">
-                    <span className="month">{crown.month_year}</span>
-                    <span className="points">{crown.points} pts</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Badges */}
-          <div className="user-modal-badges-grid">
-            {userData.favorite_team && (
-              <div className="user-modal-badge team">
-                <div className="badge-icon"><Trophy size={14} /></div>
-                <div className="badge-text">
-                  <span className="badge-label">Equipo Fav</span>
-                  <span className="badge-value">{userData.favorite_team}</span>
-                </div>
-              </div>
-            )}
-
-            {userData.favorite_player && (
-              <div className="user-modal-badge player">
-                <div className="badge-icon"><Heart size={14} /></div>
-                <div className="badge-text">
-                  <span className="badge-label">Jugador Fav</span>
-                  <span className="badge-value">{userData.favorite_player}</span>
-                </div>
-              </div>
-            )}
-
-            {userData.nationality && (
-              <div className="user-modal-badge nation">
-                <div className="badge-icon"><Globe size={14} /></div>
-                <div className="badge-text">
-                  <span className="badge-label">País</span>
-                  <span className="badge-value">{userData.nationality}</span>
-                </div>
-              </div>
-            )}
-
-            <div className="user-modal-badge joined">
-              <div className="badge-icon"><Calendar size={14} /></div>
-              <div className="badge-text">
-                <span className="badge-label">Miembro desde</span>
-                <span className="badge-value">{formatDate(userData.created_at)}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Stats Principales */}
+          {/* ========== 2. STATS PRINCIPALES (Grid 2x2 en mobile, 4 columnas en desktop) ========== */}
           <div className="user-modal-stats-grid">
             <div className="user-modal-stat-item primary">
               <div className="stat-icon">
                 <TrendingUp size={20} />
               </div>
               <div className="stat-info">
-                <div className="stat-label">Puntos Totales</div>
+                <div className="stat-label">Puntos</div>
                 <div className="stat-value">{userData.points || 0}</div>
               </div>
             </div>
@@ -435,7 +347,7 @@ export default function UserProfileModal({ userId, onClose }) {
                 <Flame size={20} />
               </div>
               <div className="stat-info">
-                <div className="stat-label">Racha Actual</div>
+                <div className="stat-label">Racha</div>
                 <div className="stat-value">{streakData.current_streak}</div>
               </div>
             </div>
@@ -451,7 +363,7 @@ export default function UserProfileModal({ userId, onClose }) {
             </div>
           </div>
 
-          {/* Progreso de Nivel */}
+          {/* ========== 3. PROGRESO DE NIVEL ========== */}
           <div className="user-modal-level-card">
             <div className="level-header">
               <div className="level-title-section">
@@ -462,8 +374,7 @@ export default function UserProfileModal({ userId, onClose }) {
                 </div>
               </div>
               <div className="level-points">
-                <span className="current-points">{currentPoints} pts</span>
-                <span className="next-level-points">Siguiente: {nextLevelPoints} pts</span>
+                <span className="current-points">{pointsInLevel}/20</span>
               </div>
             </div>
             
@@ -476,14 +387,10 @@ export default function UserProfileModal({ userId, onClose }) {
                   <div className="progress-glow"></div>
                 </div>
               </div>
-              <div className="progress-label">
-                <span>{pointsInLevel}/20 puntos</span>
-                <span>{nextLevelPoints - currentPoints} pts restantes</span>
-              </div>
             </div>
           </div>
 
-          {/* Rachas */}
+          {/* ========== 4. RACHAS (Grid 2 columnas) ========== */}
           <div className="user-modal-streaks">
             <div className="streak-item current">
               <div className="streak-icon">
@@ -506,13 +413,87 @@ export default function UserProfileModal({ userId, onClose }) {
                 <Crown size={28} />
               </div>
               <div className="streak-info">
-                <div className="streak-label">Récord Personal</div>
+                <div className="streak-label">Récord</div>
                 <div className="streak-value">{streakData.best_streak}</div>
               </div>
             </div>
           </div>
 
-          {/* Título Activo */}
+          {/* ========== 5. CORONAS MENSUALES ========== */}
+          {(userData.monthly_championships > 0 || crownHistory.length > 0) && (
+            <div className="user-modal-crowns">
+              <div className="section-header">
+                <Crown size={20} />
+                <h4>Coronas Mensuales</h4>
+                <span className="count-badge">
+                  {userData.monthly_championships || 0}
+                </span>
+              </div>
+              
+              <div className="crowns-display">
+                {Array.from({ length: userData.monthly_championships || 0 }).map((_, index) => (
+                  <Crown key={index} size={28} className="crown-icon" />
+                ))}
+              </div>
+              
+              {crownHistory.length > 0 && (
+                <div className="crowns-history">
+                  <h5>Historial</h5>
+                  {crownHistory.slice(0, 3).map((crown) => (
+                    <div key={crown.id} className="history-item">
+                      <span className="month">{crown.month_year}</span>
+                      <span className="points">{crown.points} pts</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ========== 6. BADGES DE INFORMACIÓN ========== */}
+          {(userData.favorite_team || userData.favorite_player || userData.nationality || userData.created_at) && (
+            <div className="user-modal-badges-grid">
+              {userData.favorite_team && (
+                <div className="user-modal-badge team">
+                  <div className="badge-icon"><Trophy size={14} /></div>
+                  <div className="badge-text">
+                    <span className="badge-label">Equipo</span>
+                    <span className="badge-value">{userData.favorite_team}</span>
+                  </div>
+                </div>
+              )}
+
+              {userData.favorite_player && (
+                <div className="user-modal-badge player">
+                  <div className="badge-icon"><Heart size={14} /></div>
+                  <div className="badge-text">
+                    <span className="badge-label">Jugador</span>
+                    <span className="badge-value">{userData.favorite_player}</span>
+                  </div>
+                </div>
+              )}
+
+              {userData.nationality && (
+                <div className="user-modal-badge nation">
+                  <div className="badge-icon"><Globe size={14} /></div>
+                  <div className="badge-text">
+                    <span className="badge-label">País</span>
+                    <span className="badge-value">{userData.nationality}</span>
+                  </div>
+                </div>
+              )}
+
+              <div className="user-modal-badge joined">
+                <div className="badge-icon"><Calendar size={14} /></div>
+                <div className="badge-text">
+                  <span className="badge-label">Miembro</span>
+                  <span className="badge-value">{formatDate(userData.created_at)}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ========== 7. TÍTULO ACTIVO ========== */}
           {activeTitle && (
             <div className="user-modal-active-title">
               <div className="title-header">
@@ -536,7 +517,7 @@ export default function UserProfileModal({ userId, onClose }) {
             </div>
           )}
 
-          {/* Logros */}
+          {/* ========== 8. LOGROS (Al final) ========== */}
           <div className="user-modal-achievements">
             <div className="section-header">
               <Award size={20} />
