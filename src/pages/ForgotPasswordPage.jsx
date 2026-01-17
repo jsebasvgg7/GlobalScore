@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
+import LoadingDots from "../components/LoadingSpinner";
 import "../styles/pagesStyles/Auth.css";
 
 export default function ForgotPasswordPage() {
@@ -59,13 +60,13 @@ export default function ForgotPasswordPage() {
           {error && <div className="error-message">{error}</div>}
 
           <button className="btn" type="submit" disabled={loading}>
-            {loading ? (
-              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                <span className="loading-spinner" /> 
-                Enviando...
-              </span>
-            ) : "Enviar Enlace"}
-          </button>
+          {loading ? (
+            <span className="btn-loading">
+              <LoadingDots />
+              <span>Enviando...</span>
+            </span>
+          ) : "Enviar Enlace"}
+        </button>
         </form>
 
         <div className="auth-alt">

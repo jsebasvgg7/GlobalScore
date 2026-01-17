@@ -1,4 +1,4 @@
-// src/components/UserProfileModal.jsx - MEJORADO
+// src/components/UserProfileModal.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   X, Trophy, Target, Flame, Star, Award, Calendar, 
@@ -6,6 +6,7 @@ import {
   Globe, Heart, Flag, Gem, Layers, Activity
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
+import { LoadingDots } from './LoadingSpinner';
 import '../styles/UserProfileModal.css';
 
 export default function UserProfileModal({ userId, onClose }) {
@@ -252,7 +253,11 @@ export default function UserProfileModal({ userId, onClose }) {
           </div>
           <div className="user-modal-body">
             <div className="loading-spinner">
-              <Activity size={48} className="animate-spin" />
+              <div className="loading-content">
+                <Users size={48} className="loading-icon" />
+                <p className="loading-text">Cargando perfil</p>
+                <LoadingDots />
+              </div>
             </div>
           </div>
         </div>
