@@ -2991,3 +2991,315 @@
     margin-bottom: 70px;
   }
 }
+/* ==========================================
+   MONTHLY CHAMPIONSHIPS - ESTILOS PREMIUM
+========================================== */
+
+/* Stats Mensuales Grid */
+.monthly-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.monthly-stat-card {
+  background: var(--profile-card);
+  border: 1px solid var(--profile-border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--profile-shadow);
+}
+
+.monthly-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--profile-shadow-md);
+}
+
+.monthly-stat-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 14px;
+  background: rgba(245, 158, 11, 0.12);
+  color: #F59E0B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme="dark"] .monthly-stat-icon {
+  background: rgba(245, 158, 11, 0.18);
+  color: #FBBF24;
+}
+
+.monthly-stat-content {
+  flex: 1;
+}
+
+.monthly-stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--profile-text);
+  line-height: 1;
+  margin-bottom: 0.375rem;
+}
+
+.monthly-stat-label {
+  font-size: 0.75rem;
+  color: var(--profile-text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Crowns Display Large */
+.crowns-display-large {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem 1rem;
+  justify-items: center;
+}
+
+.crown-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), transparent);
+  border-radius: 16px;
+  border: 2px solid rgba(245, 158, 11, 0.2);
+  transition: all 0.3s ease;
+}
+
+.crown-showcase:hover {
+  transform: translateY(-4px) scale(1.05);
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+}
+
+.crown-icon-large {
+  color: #F59E0B;
+  animation: crownFloat 3s ease-in-out infinite;
+}
+
+@keyframes crownFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+[data-theme="dark"] .crown-icon-large {
+  color: #FBBF24;
+}
+
+/* Championships History List */
+.championships-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.championship-history-card {
+  background: var(--profile-card);
+  border: 1px solid var(--profile-border);
+  border-left: 4px solid #F59E0B;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--profile-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.championship-history-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), transparent);
+  pointer-events: none;
+}
+
+.championship-history-card:hover {
+  transform: translateX(4px);
+  box-shadow: var(--profile-shadow-md);
+  border-left-color: #D97706;
+}
+
+.championship-rank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.championship-crown {
+  color: #F59E0B;
+}
+
+[data-theme="dark"] .championship-crown {
+  color: #FBBF24;
+}
+
+.championship-position {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--profile-text-secondary);
+  background: var(--profile-hover);
+  padding: 0.25rem 0.625rem;
+  border-radius: 8px;
+}
+
+.championship-info {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.championship-month {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--profile-text);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.championship-details {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--profile-text-secondary);
+}
+
+.championship-points {
+  font-weight: 700;
+  color: #059669;
+}
+
+[data-theme="dark"] .championship-points {
+  color: #34D399;
+}
+
+.championship-date {
+  font-weight: 600;
+}
+
+/* ==========================================
+   RESPONSIVE - CHAMPIONSHIPS
+========================================== */
+
+@media (max-width: 768px) {
+  .monthly-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+  }
+
+  .monthly-stat-card {
+    padding: 1rem;
+  }
+
+  .monthly-stat-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+
+  .monthly-stat-value {
+    font-size: 1.5rem;
+  }
+
+  .crowns-display-large {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 1rem;
+    padding: 1.5rem 0.5rem;
+  }
+
+  .crown-showcase {
+    padding: 1rem;
+  }
+
+  .crown-icon-large {
+    width: 36px;
+    height: 36px;
+  }
+
+  .championship-history-card {
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  .championship-month {
+    font-size: 1rem;
+  }
+
+  .championship-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .monthly-stat-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .monthly-stat-content {
+    text-align: center;
+  }
+
+  .crowns-display-large {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 0.75rem;
+    padding: 1rem 0.5rem;
+  }
+
+  .crown-showcase {
+    padding: 0.875rem;
+  }
+
+  .crown-icon-large {
+    width: 32px;
+    height: 32px;
+  }
+
+  .championship-history-card {
+    padding: 1rem;
+  }
+
+  .championship-rank {
+    gap: 0.375rem;
+  }
+
+  .championship-crown {
+    width: 20px;
+    height: 20px;
+  }
+
+  .championship-month {
+    font-size: 0.9375rem;
+  }
+
+  .championship-points,
+  .championship-date {
+    font-size: 0.8125rem;
+  }
+}

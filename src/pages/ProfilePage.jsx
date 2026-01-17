@@ -1,4 +1,4 @@
-// src/pages/ProfilePage.jsx - REFACTORIZADO
+// src/pages/ProfilePage.jsx
 import React, { useState } from 'react';
 import { ToastContainer, useToast } from '../components/Toast';
 import Footer from '../components/Footer';
@@ -11,12 +11,14 @@ import { usePredictionHistory } from '../hooks/hooksProfile/usePredictionHistory
 import { useStreaks } from '../hooks/hooksProfile/useStreaks';
 import { useAchievements } from '../hooks/hooksProfile/useAchievements';
 import { useUserRanking } from '../hooks/hooksProfile/useUserRanking';
+import { useMonthlyChampionships } from '../hooks/hooksProfile/useMonthlyChampionships'; // NUEVO
 
 // Componentes de UI
 import ProfileHero from '../components/profileComponents/ProfileHero';
 import ProfileTabs from '../components/profileComponents/ProfileTabs';
 import OverviewTab from '../components/profileComponents/OverviewTab';
 import AchievementsTab from '../components/profileComponents/AchievementsTab';
+import MonthlyChampionshipsTab from '../components/profileComponents/MonthlyChampionshipsTab'; // NUEVO
 import HistoryTab from '../components/profileComponents/HistoryTab';
 import EditTab from '../components/profileComponents/EditTab';
 
@@ -35,6 +37,7 @@ export default function ProfilePage({ currentUser, onBack }) {
   const { predictionHistory, historyLoading } = usePredictionHistory(currentUser);
   const { streakData } = useStreaks(currentUser);
   const { userRanking } = useUserRanking(currentUser);
+  const { crownHistory, monthlyStats, championshipsLoading } = useMonthlyChampionships(currentUser); // NUEVO
   
   const {
     userAchievements,
@@ -84,6 +87,16 @@ export default function ProfilePage({ currentUser, onBack }) {
             userAchievements={userAchievements}
             availableAchievements={availableAchievements}
             achievementsLoading={achievementsLoading}
+          />
+        );
+
+      case 'championships': // NUEVO
+        return (
+          <MonthlyChampionshipsTab
+            userData={{ ...userData, ...monthlyStats }}
+            crownHistory={crownHistory}
+            monthlyStats={monthlyStats}
+            championshipsLoading={championshipsLoading}
           />
         );
 
