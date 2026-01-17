@@ -8,12 +8,13 @@ import { useAdminMatches } from '../hooks/adminHooks/useAdminMatches';
 import { useAdminLeagues } from '../hooks/adminHooks/useAdminLeagues';
 import { useAdminAwards } from '../hooks/adminHooks/useAdminAwards';
 import { useAdminAchievements } from '../hooks/adminHooks/useAdminAchievements';
-import { useAdminCrowns } from '../hooks/adminHooks/useAdminCrowns'; // ⬅️ NUEVO
+import { useAdminCrowns } from '../hooks/adminHooks/useAdminCrowns';
 
 // Utils
 import { getFilteredItems, calculateStats } from '../utils/adminFilters';
 
 // Componentes
+import AdminDiagnosticPanel from '../components/adminComponents/AdminDiagnosticPanel';
 import AdminStatsOverview from '../components/adminComponents/AdminStatsOverview';
 import AdminNavigationTabs from '../components/adminComponents/AdminNavigationTabs';
 import AdminControls from '../components/adminComponents/AdminControls';
@@ -87,7 +88,6 @@ export default function AdminPage({ currentUser }) {
     handleDeleteTitle 
   } = useAdminAchievements(loadData, toast);
 
-  // ⬇️ NUEVO: Hook para coronas
   const { handleAwardCrown, handleResetMonthlyStats } = useAdminCrowns(loadData, toast);
 
   // Handlers
@@ -132,6 +132,9 @@ export default function AdminPage({ currentUser }) {
     <>
       <div className="admin-page">
         <div className="admin-page-container">
+          {/* Panel de Diagnóstico */}
+          <AdminDiagnosticPanel />
+
           {/* Stats Overview */}
           <AdminStatsOverview stats={stats} />
 
@@ -268,7 +271,7 @@ export default function AdminPage({ currentUser }) {
         handleSaveTitle={handleSaveTitle}
         handleDeleteTitle={handleDeleteTitle}
         
-        // Crown modal - ⬇️ ACTUALIZADO
+        // Crown modal
         showCrownModal={showCrownModal}
         setShowCrownModal={setShowCrownModal}
         handleAwardCrown={handleAwardCrown}
