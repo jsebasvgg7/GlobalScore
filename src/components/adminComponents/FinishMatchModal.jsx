@@ -33,8 +33,12 @@ export default function FinishMatchModal({ match, onFinish, onClose }) {
 
     try {
       await onFinish(match.id, home, away);
+      // ✅ CERRAR EL MODAL DESPUÉS DE FINALIZAR EXITOSAMENTE
+      onClose();
     } catch (err) {
       setError('Error al finalizar el partido');
+      console.error('Error:', err);
+    } finally {
       setLoading(false);
     }
   };
