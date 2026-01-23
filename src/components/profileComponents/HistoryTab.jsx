@@ -12,18 +12,34 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
     
     return predictionHistory.filter(pred => {
       const match = pred.matches;
+      const result = getPredictionResult(pred);
+      
+      // Filtros por estado del partido
       if (activeFilter === 'active') return match?.status === 'pending';
       if (activeFilter === 'finished') return match?.status === 'finished';
+      
+      // Filtros por resultado de la predicción
+      if (activeFilter === 'exact') return result.status === 'exact';
+      if (activeFilter === 'correct') return result.status === 'correct';
+      if (activeFilter === 'wrong') return result.status === 'wrong';
+      
       return true;
     });
   }, [predictionHistory, activeFilter]);
 
   // Contadores para los filtros
-  const counts = useMemo(() => ({
-    all: predictionHistory.length,
-    active: predictionHistory.filter(p => p.matches?.status === 'pending').length,
-    finished: predictionHistory.filter(p => p.matches?.status === 'finished').length,
-  }), [predictionHistory]);
+  const counts = useMemo(() => {
+    const finished = predictionHistory.filter(p => p.matches?.status === 'finished');
+    
+    return {
+      all: predictionHistory.length,
+      active: predictionHistory.filter(p => p.matches?.status === 'pending').length,
+      finished: finished.length,
+      exact: finished.filter(p => getPredictionResult(p).status === 'exact').length,
+      correct: finished.filter(p => getPredictionResult(p).status === 'correct').length,
+      wrong: finished.filter(p => getPredictionResult(p).status === 'wrong').length,
+    };
+  }, [predictionHistory]);
 
   if (historyLoading) {
     return (
@@ -75,6 +91,35 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
             <span className="filter-label">Terminadas</span>
             <span className="filter-count">{counts.finished}</span>
           </button>
+
+          <div className="filter-divider"></div>
+
+          <button
+            className={`history-filter-chip filter-exact ${activeFilter === 'exact' ? 'active' : ''}`}
+            onClick={() => setActiveFilter('exact')}
+          >
+            <Trophy size={14} />
+            <span className="filter-label">Exactas</span>
+            <span className="filter-count">{counts.exact}</span>
+          </button>
+
+          <button
+            className={`history-filter-chip filter-correct ${activeFilter === 'correct' ? 'active' : ''}`}
+            onClick={() => setActiveFilter('correct')}
+          >
+            <CheckCircle2 size={14} />
+            <span className="filter-label">Acertadas</span>
+            <span className="filter-count">{counts.correct}</span>
+          </button>
+
+          <button
+            className={`history-filter-chip filter-wrong ${activeFilter === 'wrong' ? 'active' : ''}`}
+            onClick={() => setActiveFilter('wrong')}
+          >
+            <XCircle size={14} />
+            <span className="filter-label">Falladas</span>
+            <span className="filter-count">{counts.wrong}</span>
+          </button>
         </div>
       </div>
 
@@ -86,11 +131,17 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
             {activeFilter === 'all' && 'Aún no has hecho predicciones'}
             {activeFilter === 'active' && 'No tienes predicciones activas'}
             {activeFilter === 'finished' && 'No tienes predicciones finalizadas'}
+            {activeFilter === 'exact' && 'No tienes predicciones exactas'}
+            {activeFilter === 'correct' && 'No tienes predicciones acertadas'}
+            {activeFilter === 'wrong' && 'No tienes predicciones falladas'}
           </p>
           <span className="empty-subtitle">
             {activeFilter === 'all' && '¡Comienza a predecir resultados!'}
             {activeFilter === 'active' && 'Todas tus predicciones han sido finalizadas'}
             {activeFilter === 'finished' && 'Tus predicciones finalizadas aparecerán aquí'}
+            {activeFilter === 'exact' && '¡Sigue intentando acertar el resultado exacto!'}
+            {activeFilter === 'correct' && 'Las predicciones donde aciertes el ganador aparecerán aquí'}
+            {activeFilter === 'wrong' && 'Las predicciones incorrectas aparecerán aquí'}
           </span>
         </div>
       ) : (

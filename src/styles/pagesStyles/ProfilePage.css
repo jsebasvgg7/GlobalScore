@@ -2016,6 +2016,14 @@
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--profile-border);
+  margin: 0 0.25rem;
 }
 
 .history-filter-chip {
@@ -2042,22 +2050,89 @@
 
 .history-filter-chip:hover:not(.active) {
   background: var(--profile-hover);
-  border-color: var(--profile-primary);
   transform: translateY(-1px);
 }
 
-.history-filter-chip:hover:not(.active) svg {
+/* Filtros de estado - General */
+.history-filter-chip:not(.filter-exact):not(.filter-correct):not(.filter-wrong):hover:not(.active) {
+  border-color: var(--profile-primary);
+}
+
+.history-filter-chip:not(.filter-exact):not(.filter-correct):not(.filter-wrong):hover:not(.active) svg {
   color: var(--profile-primary);
 }
 
-.history-filter-chip.active {
+.history-filter-chip:not(.filter-exact):not(.filter-correct):not(.filter-wrong).active {
   background: linear-gradient(135deg, var(--profile-primary), var(--profile-primary-light));
   border-color: var(--profile-primary);
   color: white;
   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
 }
 
-.history-filter-chip.active svg {
+.history-filter-chip:not(.filter-exact):not(.filter-correct):not(.filter-wrong).active svg {
+  color: white;
+}
+
+/* Filtro EXACT - Dorado */
+.history-filter-chip.filter-exact:hover:not(.active) {
+  border-color: #F59E0B;
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.history-filter-chip.filter-exact:hover:not(.active) svg {
+  color: #F59E0B;
+}
+
+.history-filter-chip.filter-exact.active {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  border-color: #F59E0B;
+  color: white;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.history-filter-chip.filter-exact.active svg {
+  color: white;
+}
+
+/* Filtro CORRECT - Verde */
+.history-filter-chip.filter-correct:hover:not(.active) {
+  border-color: #10B981;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.history-filter-chip.filter-correct:hover:not(.active) svg {
+  color: #10B981;
+}
+
+.history-filter-chip.filter-correct.active {
+  background: linear-gradient(135deg, #10B981, #059669);
+  border-color: #10B981;
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.history-filter-chip.filter-correct.active svg {
+  color: white;
+}
+
+/* Filtro WRONG - Rojo */
+.history-filter-chip.filter-wrong:hover:not(.active) {
+  border-color: #EF4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.history-filter-chip.filter-wrong:hover:not(.active) svg {
+  color: #EF4444;
+}
+
+.history-filter-chip.filter-wrong.active {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  border-color: #EF4444;
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.history-filter-chip.filter-wrong.active svg {
   color: white;
 }
 
@@ -2407,6 +2482,10 @@
     gap: 0.625rem;
   }
 
+  .filter-divider {
+    height: 28px;
+  }
+
   .history-filter-chip {
     padding: 0.5rem 0.875rem;
     font-size: 0.8125rem;
@@ -2568,6 +2647,10 @@
 @media (max-width: 360px) {
   .history-filters {
     gap: 0.5rem;
+  }
+
+  .filter-divider {
+    display: none;
   }
 
   .history-filter-chip {
