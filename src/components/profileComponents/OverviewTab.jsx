@@ -5,7 +5,11 @@ import {
   Zap, 
   Target, 
   BarChart3, 
-  Heart
+  Heart, 
+  Calendar, 
+  Pill, 
+  FileText, 
+  ChevronRight 
 } from 'lucide-react';
 import { calculateLevelProgress, calculateAccuracy } from '../../utils/profileUtils';
 
@@ -13,7 +17,8 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
   const accuracy = calculateAccuracy(currentUser);
   const { pointsInLevel, pointsToNextLevel, levelProgress } = calculateLevelProgress(userData, currentUser);
 
-  const statsSections = [
+  // Datos de ejemplo para el diseño clínico
+  const clinicalSections = [
     {
       id: 'stats',
       title: 'Predictions',
@@ -37,6 +42,14 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
       subtitle: `${accuracy}% success rate`,
     },
     {
+      id: 'level',
+      title: 'Current Level',
+      icon: Trophy,
+      color: 'orange',
+      count: userData.level || 1,
+      subtitle: `${pointsInLevel}/20 points`,
+    },
+    {
       id: 'ranking',
       title: 'Global Ranking',
       icon: Trophy,
@@ -55,7 +68,7 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
 
   return (
     <div className="tab-content-wrapper">
-      {/* Level Progress Card - Ahora primero */}
+       {/* Level Progress Card */}
       <div className="level-card-modern">
         <div className="level-card-header">
           <div className="level-icon-wrapper">
@@ -71,13 +84,12 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
           <div className="level-progress-fill" style={{ width: `${levelProgress}%` }}></div>
         </div>
       </div>
-
-      {/* Stats List */}
-      <div className="stats-list">
-        {statsSections.map((section) => {
+      
+      <div className="clinical-list">
+        {clinicalSections.map((section) => {
           const IconComponent = section.icon;
           return (
-            <div key={section.id} className="stat-item">
+            <div key={section.id} className="clinical-item touchable">
               <div className={`icon-wrapper ${section.color}`}>
                 <IconComponent />
               </div>
@@ -91,6 +103,9 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
                 {section.count !== null && (
                   <div className="item-count">{section.count}</div>
                 )}
+                <div className="chevron">
+                  <ChevronRight />
+                </div>
               </div>
             </div>
           );
