@@ -1,6 +1,6 @@
 // src/components/profileComponents/HistoryTab.jsx
 import React, { useState, useMemo } from 'react';
-import { Activity, Gamepad2, CheckCircle2, XCircle, Clock, Filter, Trophy, Calendar } from 'lucide-react';
+import { Activity, Gamepad2, CheckCircle2, XCircle, Clock, Trophy, Calendar } from 'lucide-react';
 import { getPredictionResult } from '../../utils/profileUtils';
 
 export default function HistoryTab({ predictionHistory, historyLoading }) {
@@ -44,80 +44,78 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
   if (historyLoading) {
     return (
       <div className="tab-content-wrapper">
-        <div className="loading-state large">
+        <div className="loading-state">
           <Activity size={32} className="spinner" />
-          <p>Cargando historial...</p>
+          <p>Loading history...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="tab-content-wrapper" data-tab="history">
+    <div className="tab-content-wrapper">
       {/* Header con Filtros */}
       <div className="history-header-modern">
         <div className="history-title-section">
           <div className="history-icon-wrapper">
             <Gamepad2 size={20} />
           </div>
-          <h3>Historial de Predicciones</h3>
+          <h3>Prediction History</h3>
           <span className="history-count-badge">{counts.all}</span>
         </div>
 
         {/* Filtros */}
         <div className="history-filters">
           <button
-            className={`history-filter-chip ${activeFilter === 'all' ? 'active' : ''}`}
+            className={`history-filter-chip touchable ${activeFilter === 'all' ? 'active' : ''}`}
             onClick={() => setActiveFilter('all')}
           >
-            <span className="filter-label">Todas</span>
+            <span className="filter-label">All</span>
             <span className="filter-count">{counts.all}</span>
           </button>
 
           <button
-            className={`history-filter-chip ${activeFilter === 'active' ? 'active' : ''}`}
+            className={`history-filter-chip touchable ${activeFilter === 'active' ? 'active' : ''}`}
             onClick={() => setActiveFilter('active')}
           >
             <Clock size={14} />
-            <span className="filter-label">Activas</span>
+            <span className="filter-label">Active</span>
             <span className="filter-count">{counts.active}</span>
           </button>
 
           <button
-            className={`history-filter-chip ${activeFilter === 'finished' ? 'active' : ''}`}
+            className={`history-filter-chip touchable ${activeFilter === 'finished' ? 'active' : ''}`}
             onClick={() => setActiveFilter('finished')}
           >
             <CheckCircle2 size={14} />
-            <span className="filter-label">Terminadas</span>
+            <span className="filter-label">Finished</span>
             <span className="filter-count">{counts.finished}</span>
           </button>
 
-          <div className="filter-divider"></div>
-
           <button
-            className={`history-filter-chip filter-exact ${activeFilter === 'exact' ? 'active' : ''}`}
+            className={`history-filter-chip touchable ${activeFilter === 'exact' ? 'active' : ''}`}
             onClick={() => setActiveFilter('exact')}
           >
             <Trophy size={14} />
-            <span className="filter-label">Exactas</span>
+            <span className="filter-label">Exact</span>
             <span className="filter-count">{counts.exact}</span>
           </button>
 
           <button
-            className={`history-filter-chip filter-correct ${activeFilter === 'correct' ? 'active' : ''}`}
+            className={`history-filter-chip touchable ${activeFilter === 'correct' ? 'active' : ''}`}
             onClick={() => setActiveFilter('correct')}
           >
             <CheckCircle2 size={14} />
-            <span className="filter-label">Acertadas</span>
+            <span className="filter-label">Correct</span>
             <span className="filter-count">{counts.correct}</span>
           </button>
 
           <button
-            className={`history-filter-chip filter-wrong ${activeFilter === 'wrong' ? 'active' : ''}`}
+            className={`history-filter-chip touchable ${activeFilter === 'wrong' ? 'active' : ''}`}
             onClick={() => setActiveFilter('wrong')}
           >
             <XCircle size={14} />
-            <span className="filter-label">Falladas</span>
+            <span className="filter-label">Wrong</span>
             <span className="filter-count">{counts.wrong}</span>
           </button>
         </div>
@@ -125,23 +123,18 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
 
       {/* Lista de Predicciones */}
       {filteredHistory.length === 0 ? (
-        <div className="empty-state large">
+        <div className="empty-state">
           <Gamepad2 size={48} />
           <p>
-            {activeFilter === 'all' && 'Aún no has hecho predicciones'}
-            {activeFilter === 'active' && 'No tienes predicciones activas'}
-            {activeFilter === 'finished' && 'No tienes predicciones finalizadas'}
-            {activeFilter === 'exact' && 'No tienes predicciones exactas'}
-            {activeFilter === 'correct' && 'No tienes predicciones acertadas'}
-            {activeFilter === 'wrong' && 'No tienes predicciones falladas'}
+            {activeFilter === 'all' && 'No predictions yet'}
+            {activeFilter === 'active' && 'No active predictions'}
+            {activeFilter === 'finished' && 'No finished predictions'}
+            {activeFilter === 'exact' && 'No exact predictions'}
+            {activeFilter === 'correct' && 'No correct predictions'}
+            {activeFilter === 'wrong' && 'No wrong predictions'}
           </p>
           <span className="empty-subtitle">
-            {activeFilter === 'all' && '¡Comienza a predecir resultados!'}
-            {activeFilter === 'active' && 'Todas tus predicciones han sido finalizadas'}
-            {activeFilter === 'finished' && 'Tus predicciones finalizadas aparecerán aquí'}
-            {activeFilter === 'exact' && '¡Sigue intentando acertar el resultado exacto!'}
-            {activeFilter === 'correct' && 'Las predicciones donde aciertes el ganador aparecerán aquí'}
-            {activeFilter === 'wrong' && 'Las predicciones incorrectas aparecerán aquí'}
+            {activeFilter === 'all' && 'Start predicting results!'}
           </span>
         </div>
       ) : (
@@ -151,7 +144,7 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
             const match = pred.matches;
 
             return (
-              <div key={pred.id} className={`history-card-simple ${result.status}`}>
+              <div key={pred.id} className={`history-card-simple ${result.status} touchable`}>
                 {/* Header */}
                 <div className="history-card-header-simple">
                   <div className="league-info-simple">

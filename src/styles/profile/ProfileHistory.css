@@ -1,0 +1,254 @@
+/* ==========================================
+   HISTORY CARDS - Diseño limpio y compacto
+========================================== */
+
+.history-card-header-simple {
+  padding: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+  background: var(--profile-hover);
+  border-bottom: 1px solid var(--profile-border);
+}
+
+.league-info-simple {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.league-info-simple svg {
+  flex-shrink: 0;
+  color: var(--profile-primary);
+}
+
+.league-name-simple {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--profile-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.match-date-simple {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--profile-primary-bg);
+  border: 1px solid var(--profile-primary);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--profile-primary);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.match-date-simple svg {
+  flex-shrink: 0;
+}
+
+/* History Card Content */
+.history-card-content-simple {
+  padding: var(--spacing-md) var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.team-row-simple {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+}
+
+.team-info-simple {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.team-logo-simple {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.team-name-simple {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--profile-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score-display-simple {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.score-value-simple {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--profile-text);
+  letter-spacing: -0.5px;
+  min-width: 28px;
+  text-align: center;
+}
+
+.real-score-simple {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--profile-text-secondary);
+}
+
+.vs-separator-simple {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--profile-text-muted);
+  background: var(--profile-hover);
+  padding: 4px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* History Card Footer */
+.history-card-footer-simple {
+  padding: var(--spacing-sm);
+  border-top: 1px solid var(--profile-border);
+  background: var(--profile-hover);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+}
+
+.result-indicator-simple {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 8px;
+  flex: 1;
+}
+
+.result-indicator-simple.exact {
+  background: var(--icon-orange-bg);
+  color: var(--icon-orange);
+  border: 1px solid var(--icon-orange);
+}
+
+.result-indicator-simple.correct {
+  background: var(--icon-green-bg);
+  color: var(--icon-green);
+  border: 1px solid var(--icon-green);
+}
+
+.result-indicator-simple.wrong {
+  background: var(--icon-pink-bg);
+  color: var(--icon-pink);
+  border: 1px solid var(--icon-pink);
+}
+
+.result-indicator-simple.pending {
+  background: var(--profile-hover);
+  color: var(--profile-text-secondary);
+  border: 1px solid var(--profile-border);
+}
+
+.result-indicator-simple svg {
+  flex-shrink: 0;
+}
+
+.result-label-simple {
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.points-badge-simple {
+  background: var(--profile-primary);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 480px) {
+  .history-card-header-simple {
+    padding: 10px;
+  }
+
+  .league-name-simple {
+    font-size: 11px;
+  }
+
+  .match-date-simple {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+
+  .history-card-content-simple {
+    padding: var(--spacing-sm);
+  }
+
+  .team-logo-simple {
+    font-size: 20px;
+  }
+
+  .team-name-simple {
+    font-size: 13px;
+  }
+
+  .score-value-simple {
+    font-size: 18px;
+  }
+
+  .history-card-footer-simple {
+    padding: 10px;
+  }
+
+  .result-indicator-simple {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .result-label-simple {
+    font-size: 10px;
+  }
+
+  .points-badge-simple {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 360px) {
+  .match-date-simple svg {
+    display: none;
+  }
+
+  .result-indicator-simple svg {
+    width: 14px;
+    height: 14px;
+  }
+}

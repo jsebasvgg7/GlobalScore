@@ -1,0 +1,119 @@
+/* ==========================================
+   PROFILE TABS - Solo iconos (estilo imagen)
+========================================== */
+
+.profile-tabs-modern {
+  display: flex;
+  background: var(--profile-card);
+  border-bottom: 1px solid var(--profile-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 var(--spacing-xs);
+  box-shadow: var(--profile-shadow);
+}
+
+/* ==========================================
+   TAB BUTTONS - Solo iconos
+========================================== */
+
+.tab-btn-modern {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: var(--spacing-md) var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--profile-text-muted);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ocultar texto en mobile */
+.tab-btn-modern span {
+  display: none;
+}
+
+.tab-btn-modern svg {
+  width: 24px;
+  height: 24px;
+  transition: all 0.2s ease;
+}
+
+/* ==========================================
+   ESTADOS
+========================================== */
+
+/* Hover (solo desktop) */
+@media (hover: hover) {
+  .tab-btn-modern:hover {
+    color: var(--profile-primary);
+  }
+}
+
+/* Active State */
+.tab-btn-modern:active {
+  transform: scale(0.95);
+}
+
+/* Selected Tab */
+.tab-btn-modern.active {
+  color: var(--profile-primary);
+}
+
+/* Indicador de tab activa */
+.tab-btn-modern.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--profile-primary);
+  border-radius: 3px 3px 0 0;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+/* Tablet y Desktop - Mostrar texto */
+@media (min-width: 768px) {
+  .tab-btn-modern {
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--spacing-md);
+  }
+
+  .tab-btn-modern span {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tab-btn-modern svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 360px) {
+  .profile-tabs-modern {
+    padding: 0 4px;
+  }
+
+  .tab-btn-modern {
+    padding: var(--spacing-sm) 6px;
+  }
+
+  .tab-btn-modern svg {
+    width: 22px;
+    height: 22px;
+  }
+}

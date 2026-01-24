@@ -11,18 +11,19 @@ import { usePredictionHistory } from '../hooks/hooksProfile/usePredictionHistory
 import { useStreaks } from '../hooks/hooksProfile/useStreaks';
 import { useAchievements } from '../hooks/hooksProfile/useAchievements';
 import { useUserRanking } from '../hooks/hooksProfile/useUserRanking';
-import { useMonthlyChampionships } from '../hooks/hooksProfile/useMonthlyChampionships'; // NUEVO
+import { useMonthlyChampionships } from '../hooks/hooksProfile/useMonthlyChampionships';
 
 // Componentes de UI
 import ProfileHero from '../components/profileComponents/ProfileHero';
 import ProfileTabs from '../components/profileComponents/ProfileTabs';
 import OverviewTab from '../components/profileComponents/OverviewTab';
 import AchievementsTab from '../components/profileComponents/AchievementsTab';
-import MonthlyChampionshipsTab from '../components/profileComponents/MonthlyChampionshipsTab'; // NUEVO
+import MonthlyChampionshipsTab from '../components/profileComponents/MonthlyChampionshipsTab';
 import HistoryTab from '../components/profileComponents/HistoryTab';
 import EditTab from '../components/profileComponents/EditTab';
 
-import '../styles/pagesStyles/ProfilePage.css';
+// Importar el nuevo archivo CSS modular
+import '../styles/pagesStyles/ProfilePageNew.css';
 
 export default function ProfilePage({ currentUser, onBack }) {
   const [activeTab, setActiveTab] = useState('overview');
@@ -37,7 +38,7 @@ export default function ProfilePage({ currentUser, onBack }) {
   const { predictionHistory, historyLoading } = usePredictionHistory(currentUser);
   const { streakData } = useStreaks(currentUser);
   const { userRanking } = useUserRanking(currentUser);
-  const { crownHistory, monthlyStats, championshipsLoading } = useMonthlyChampionships(currentUser); // NUEVO
+  const { crownHistory, monthlyStats, championshipsLoading } = useMonthlyChampionships(currentUser);
   
   const {
     userAchievements,
@@ -65,7 +66,7 @@ export default function ProfilePage({ currentUser, onBack }) {
 
   const handleAvatarUpload = (newUrl) => {
     setUserData({ ...userData, avatar_url: newUrl });
-    toast.success('¡Avatar actualizado con éxito!');
+    toast.success('Avatar updated successfully!');
   };
 
   const renderTabContent = () => {
@@ -90,7 +91,7 @@ export default function ProfilePage({ currentUser, onBack }) {
           />
         );
 
-      case 'championships': // NUEVO
+      case 'championships':
         return (
           <MonthlyChampionshipsTab
             userData={{ ...userData, ...monthlyStats }}
@@ -140,9 +141,7 @@ export default function ProfilePage({ currentUser, onBack }) {
           setActiveTab={setActiveTab}
         />
 
-        <div className="profile-content-area">
-          {renderTabContent()}
-        </div>
+        {renderTabContent()}
       </div>
 
       <Footer />

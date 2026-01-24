@@ -1,0 +1,257 @@
+/* ==========================================
+   PROFILE HERO - Diseño Clínico/Médico
+   Avatar + Nombre + Info + ID Badge
+========================================== */
+
+.profile-hero {
+  background: var(--profile-card);
+  padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-lg);
+  text-align: center;
+  border-bottom: 1px solid var(--profile-border);
+  position: relative;
+}
+
+/* ==========================================
+   AVATAR SECTION
+========================================== */
+
+.avatar-section {
+  position: relative;
+  display: inline-block;
+  margin-bottom: var(--spacing-md);
+}
+
+.avatar-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--profile-hover);
+  border: 4px solid var(--profile-card);
+  box-shadow: var(--profile-shadow-md);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder-modern {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--profile-primary), var(--profile-primary-light));
+  color: white;
+  font-size: 48px;
+  font-weight: 700;
+}
+
+/* Level Badge - Estilo más limpio */
+.level-badge-modern {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--profile-primary);
+  border: 3px solid var(--profile-card);
+  border-radius: 18px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.level-badge-modern svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ==========================================
+   USER INFO SECTION
+========================================== */
+
+.user-info-section {
+  text-align: center;
+  position: relative;
+}
+
+.user-name-display {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--profile-text);
+  letter-spacing: -0.5px;
+}
+
+.user-email-display {
+  display: none; /* Ocultar email en este diseño */
+}
+
+/* Gender & Age Row */
+.user-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
+  font-size: 14px;
+  color: var(--profile-text-secondary);
+}
+
+.user-meta-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--profile-text-muted);
+  font-weight: 600;
+}
+
+.user-meta-value {
+  font-weight: 600;
+  color: var(--profile-text-secondary);
+}
+
+/* ID Badge - Estilo médico/clínico */
+.user-id-card {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: #E8F5E9;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-top: var(--spacing-sm);
+}
+
+[data-theme="dark"] .user-id-card {
+  background: rgba(76, 175, 80, 0.15);
+}
+
+.user-id-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2E7D32;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="dark"] .user-id-text {
+  color: #66BB6A;
+}
+
+.info-icon {
+  width: 16px;
+  height: 16px;
+  background: #4CAF50;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+/* Date of Birth */
+.user-dob {
+  font-size: 13px;
+  color: var(--profile-text-secondary);
+  margin-top: 4px;
+}
+
+/* Bio - Si existe */
+.user-bio-display {
+  display: none; /* Ocultar en este diseño minimalista */
+}
+
+/* Tags - Ocultar en este diseño */
+.user-tags {
+  display: none;
+}
+
+/* Stats Mini Row - Rediseñar más limpio */
+.stats-mini-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+  margin-top: var(--spacing-md);
+  border-top: 1px solid var(--profile-border);
+}
+
+.stat-mini {
+  text-align: center;
+  flex: 1;
+}
+
+.stat-mini-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--profile-text);
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+
+.stat-mini-label {
+  font-size: 11px;
+  color: var(--profile-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-mini-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--profile-border);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 480px) {
+  .profile-hero {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .avatar-circle {
+    width: 100px;
+    height: 100px;
+  }
+
+  .avatar-placeholder-modern {
+    font-size: 40px;
+  }
+
+  .level-badge-modern {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .user-name-display {
+    font-size: 22px;
+  }
+
+  .stat-mini-value {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 360px) {
+  .stats-mini-row {
+    gap: var(--spacing-sm);
+  }
+
+  .stat-mini-divider {
+    display: none;
+  }
+}

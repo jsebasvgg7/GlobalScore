@@ -1,0 +1,378 @@
+/* ==========================================
+   OVERVIEW TAB - Estilo lista clínica
+========================================== */
+
+.tab-content-wrapper {
+  padding: var(--spacing-md);
+  animation: fadeIn 0.3s ease;
+}
+
+/* ==========================================
+   CLINICAL LIST - Lista tipo médico
+========================================== */
+
+.clinical-list {
+  background: var(--profile-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--profile-shadow);
+  margin-bottom: var(--spacing-md);
+}
+
+.clinical-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--profile-border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.clinical-item:last-child {
+  border-bottom: none;
+}
+
+.clinical-item:active {
+  background: var(--profile-hover);
+  transform: scale(0.98);
+}
+
+/* ==========================================
+   ICON WRAPPER - Círculos de colores
+========================================== */
+
+.icon-wrapper {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--spacing-sm);
+  transition: transform 0.2s ease;
+}
+
+.clinical-item:active .icon-wrapper {
+  transform: scale(0.95);
+}
+
+/* Colores según la imagen */
+.icon-wrapper.yellow {
+  background: var(--icon-yellow-bg);
+  color: var(--icon-yellow);
+}
+
+.icon-wrapper.pink {
+  background: var(--icon-pink-bg);
+  color: var(--icon-pink);
+}
+
+.icon-wrapper.green {
+  background: var(--icon-green-bg);
+  color: var(--icon-green);
+}
+
+.icon-wrapper.orange {
+  background: var(--icon-orange-bg);
+  color: var(--icon-orange);
+}
+
+.icon-wrapper.teal {
+  background: var(--icon-teal-bg);
+  color: var(--icon-teal);
+}
+
+.icon-wrapper.blue {
+  background: var(--icon-blue-bg);
+  color: var(--icon-blue);
+}
+
+.icon-wrapper svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ==========================================
+   ITEM CONTENT
+========================================== */
+
+.item-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--profile-text);
+  margin-bottom: 2px;
+  letter-spacing: -0.2px;
+}
+
+.item-subtitle {
+  font-size: 13px;
+  color: var(--profile-text-secondary);
+}
+
+/* ==========================================
+   BADGES Y COUNTS
+========================================== */
+
+.item-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 8px;
+  background: var(--profile-text);
+  color: var(--profile-card);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .item-count {
+  background: var(--profile-card);
+  color: var(--profile-text);
+  border: 1px solid var(--profile-border);
+}
+
+/* ==========================================
+   CHEVRON ICON
+========================================== */
+
+.chevron {
+  color: var(--profile-text-muted);
+  flex-shrink: 0;
+  margin-left: auto;
+  transition: transform 0.2s ease;
+}
+
+.chevron svg {
+  width: 20px;
+  height: 20px;
+}
+
+.clinical-item:active .chevron {
+  transform: translateX(2px);
+}
+
+/* ==========================================
+   STATS CARDS - Grid 3 columnas
+========================================== */
+
+.stats-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.stat-card-modern {
+  background: var(--profile-card);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  text-align: center;
+  box-shadow: var(--profile-shadow);
+  transition: all 0.2s ease;
+}
+
+.stat-card-modern:active {
+  transform: scale(0.98);
+}
+
+.stat-card-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--profile-text);
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+
+.stat-card-label {
+  font-size: 11px;
+  color: var(--profile-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================
+   LEVEL CARD - Diseño limpio
+========================================== */
+
+.level-card-modern {
+  background: var(--profile-card);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--profile-shadow);
+}
+
+.level-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.level-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--profile-primary-bg);
+  color: var(--profile-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.level-icon-wrapper svg {
+  width: 20px;
+  height: 20px;
+}
+
+.level-info {
+  flex: 1;
+}
+
+.level-number {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--profile-text);
+  margin-bottom: 2px;
+  letter-spacing: -0.3px;
+}
+
+.level-subtitle {
+  font-size: 13px;
+  color: var(--profile-text-secondary);
+  font-weight: 500;
+}
+
+.points-to-next {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  background: var(--profile-primary);
+  padding: 6px 12px;
+  border-radius: 10px;
+}
+
+.level-progress-bar {
+  height: 8px;
+  background: var(--profile-hover);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.level-progress-fill {
+  height: 100%;
+  background: var(--profile-primary);
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+/* ==========================================
+   RANKING CARD
+========================================== */
+
+.ranking-card-modern {
+  background: var(--profile-card);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--profile-shadow);
+}
+
+.ranking-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  color: var(--icon-orange);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+}
+
+.ranking-card-header svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ranking-position-display {
+  text-align: center;
+}
+
+.position-large {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--profile-text);
+  line-height: 1;
+  margin-bottom: var(--spacing-xs);
+  letter-spacing: -2px;
+}
+
+.position-context {
+  font-size: 14px;
+  color: var(--profile-text-secondary);
+  font-weight: 600;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 480px) {
+  .stats-cards-grid {
+    gap: var(--spacing-xs);
+  }
+
+  .stat-card-modern {
+    padding: var(--spacing-sm);
+  }
+
+  .stat-card-value {
+    font-size: 20px;
+  }
+
+  .clinical-item {
+    padding: var(--spacing-sm);
+  }
+
+  .icon-wrapper {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+
+  .icon-wrapper svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .stats-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .position-large {
+    font-size: 40px;
+  }
+}

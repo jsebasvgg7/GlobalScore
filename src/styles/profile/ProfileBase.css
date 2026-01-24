@@ -1,0 +1,208 @@
+/* ==========================================
+   PROFILE BASE - Variables y Fundamentos
+   Diseño inspirado en UI médica/clínica
+========================================== */
+
+:root {
+  /* Colores Base - Más limpios y clínicos */
+  --profile-bg: #F8F9FA;
+  --profile-card: #FFFFFF;
+  --profile-text: #1A1A1A;
+  --profile-text-secondary: #666666;
+  --profile-text-muted: #999999;
+  --profile-border: #E5E5E5;
+  --profile-hover: #F5F5F5;
+  
+  /* Color Principal - Púrpura suave */
+  --profile-primary: #667eea;
+  --profile-primary-light: #764ba2;
+  --profile-primary-bg: rgba(102, 126, 234, 0.08);
+  
+  /* Colores de Íconos - Según imagen */
+  --icon-yellow-bg: #FFF9E6;
+  --icon-yellow: #FFA726;
+  --icon-pink-bg: #FFE6F0;
+  --icon-pink: #EC407A;
+  --icon-green-bg: #E6F7ED;
+  --icon-green: #66BB6A;
+  --icon-orange-bg: #FFF4E6;
+  --icon-orange: #FFA726;
+  --icon-teal-bg: #E6F7F7;
+  --icon-teal: #26A69A;
+  --icon-blue-bg: #E6F0FF;
+  --icon-blue: #42A5F5;
+  
+  /* Sombras - Más sutiles */
+  --profile-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --profile-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --profile-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  
+  /* Espaciado */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Border Radius */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-full: 50%;
+}
+
+[data-theme="dark"] {
+  --profile-bg: #0F0F0F;
+  --profile-card: #1A1A1A;
+  --profile-text: #FFFFFF;
+  --profile-text-secondary: #CCCCCC;
+  --profile-text-muted: #999999;
+  --profile-border: #2A2A2A;
+  --profile-hover: #242424;
+  
+  /* Ajustar colores de íconos para dark mode */
+  --icon-yellow-bg: rgba(255, 167, 38, 0.15);
+  --icon-pink-bg: rgba(236, 64, 122, 0.15);
+  --icon-green-bg: rgba(102, 187, 106, 0.15);
+  --icon-orange-bg: rgba(255, 167, 38, 0.15);
+  --icon-teal-bg: rgba(38, 166, 154, 0.15);
+  --icon-blue-bg: rgba(66, 165, 245, 0.15);
+}
+
+/* ==========================================
+   LAYOUT BASE
+========================================== */
+
+.profile-page-modern {
+  min-height: 100vh;
+  background: var(--profile-bg);
+  transition: background-color 0.3s ease;
+}
+
+.profile-container-modern {
+  max-width: 428px;
+  margin: 0 auto;
+  position: relative;
+  background: var(--profile-bg);
+}
+
+/* ==========================================
+   TYPOGRAPHY
+========================================== */
+
+.profile-page-modern {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Títulos */
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--profile-text);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.3px;
+}
+
+/* Texto de items */
+.item-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--profile-text);
+  letter-spacing: -0.2px;
+}
+
+.item-subtitle {
+  font-size: 13px;
+  color: var(--profile-text-secondary);
+  margin-top: 2px;
+}
+
+/* ==========================================
+   UTILITIES
+========================================== */
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Touch Feedback */
+.touchable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touchable:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* ==========================================
+   ACCESSIBILITY
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible para navegación por teclado */
+.touchable:focus-visible {
+  outline: 2px solid var(--profile-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   RESPONSIVE BASE
+========================================== */
+
+/* Mobile First - Base para 375px+ */
+@media (max-width: 428px) {
+  .profile-container-modern {
+    max-width: 100%;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .profile-container-modern {
+    max-width: 680px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .profile-container-modern {
+    max-width: 800px;
+  }
+}

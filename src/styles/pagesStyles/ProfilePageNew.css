@@ -1,0 +1,518 @@
+/* ==========================================
+   PROFILE PAGE - MAIN IMPORT FILE
+   Importa todos los módulos CSS del perfil
+========================================== */
+
+/* Base y Variables */
+@import '../profile/ProfileBase.css';
+
+/* Componentes principales */
+@import '../profile/ProfileHero.css';
+@import '../profile/ProfileTabs.css';
+@import '../profile/ProfileOverview.css';
+@import '../profile/ProfileEdit.css';
+
+/* ==========================================
+   ACHIEVEMENTS TAB
+========================================== */
+
+.section-modern {
+  background: var(--profile-card);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--profile-shadow);
+}
+
+.section-header-modern {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--profile-border);
+}
+
+.section-header-modern svg {
+  color: var(--profile-primary);
+  width: 18px;
+  height: 18px;
+}
+
+.section-header-modern h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--profile-text);
+  flex: 1;
+}
+
+.count-badge-modern {
+  background: var(--profile-primary-bg);
+  border: 1px solid var(--profile-primary);
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--profile-primary);
+}
+
+/* Active Title Card */
+.active-title-card {
+  background: var(--profile-card);
+  border: 2px solid var(--profile-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--profile-shadow);
+}
+
+.title-icon-large {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.title-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.title-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.title-card-desc {
+  font-size: 13px;
+  color: var(--profile-text-secondary);
+}
+
+/* Titles List */
+.titles-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.title-list-item {
+  background: var(--profile-hover);
+  border-left: 4px solid;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.title-list-item:active {
+  transform: translateX(4px);
+}
+
+.title-item-icon {
+  flex-shrink: 0;
+}
+
+.title-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.title-item-name {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.title-item-desc {
+  font-size: 12px;
+  color: var(--profile-text-secondary);
+}
+
+/* Achievements Grid */
+.achievements-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.achievement-card-modern {
+  background: var(--profile-card);
+  border: 1px solid var(--profile-border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  text-align: center;
+  box-shadow: var(--profile-shadow);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.achievement-card-modern:active {
+  transform: scale(0.98);
+}
+
+.achievement-emoji-icon {
+  font-size: 36px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.achievement-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--profile-text);
+  margin-bottom: 4px;
+}
+
+.achievement-card-desc {
+  font-size: 11px;
+  color: var(--profile-text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.achievement-category-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* ==========================================
+   CHAMPIONSHIPS TAB
+========================================== */
+
+.monthly-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.monthly-stat-card {
+  background: var(--profile-card);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  text-align: center;
+  box-shadow: var(--profile-shadow);
+}
+
+.monthly-stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--icon-orange-bg);
+  color: var(--icon-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-xs);
+}
+
+.monthly-stat-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--profile-text);
+  margin-bottom: 4px;
+}
+
+.monthly-stat-label {
+  font-size: 10px;
+  color: var(--profile-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.crowns-display-large {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) 0;
+}
+
+.crown-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-sm);
+  background: var(--icon-orange-bg);
+  border-radius: var(--radius-sm);
+}
+
+.crown-icon-large {
+  color: var(--icon-orange);
+}
+
+.championships-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.championship-history-card {
+  background: var(--profile-card);
+  border-left: 4px solid var(--icon-orange);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  box-shadow: var(--profile-shadow);
+}
+
+.championship-rank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.championship-crown {
+  color: var(--icon-orange);
+}
+
+.championship-position {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--profile-text-secondary);
+  background: var(--profile-hover);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.championship-info {
+  flex: 1;
+}
+
+.championship-month {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--profile-text);
+  margin-bottom: 2px;
+}
+
+.championship-details {
+  display: flex;
+  gap: var(--spacing-sm);
+  font-size: 11px;
+  color: var(--profile-text-secondary);
+}
+
+.championship-points {
+  font-weight: 700;
+  color: var(--icon-green);
+}
+
+/* ==========================================
+   HISTORY TAB
+========================================== */
+
+.history-header-modern {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.history-title-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.history-icon-wrapper {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--profile-primary-bg);
+  color: var(--profile-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-title-section h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--profile-text);
+  flex: 1;
+}
+
+.history-count-badge {
+  background: var(--profile-primary-bg);
+  border: 1px solid var(--profile-primary);
+  border-radius: 10px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--profile-primary);
+}
+
+/* Filtros */
+.history-filters {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.history-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.history-filter-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--profile-card);
+  border: 1px solid var(--profile-border);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--profile-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.history-filter-chip:active {
+  transform: scale(0.95);
+}
+
+.history-filter-chip.active {
+  background: var(--profile-primary);
+  border-color: var(--profile-primary);
+  color: white;
+}
+
+.filter-label {
+  font-weight: 600;
+}
+
+.filter-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.history-filter-chip:not(.active) .filter-count {
+  background: var(--profile-hover);
+  color: var(--profile-text-secondary);
+}
+
+/* History Grid */
+.history-grid-modern {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.history-card-simple {
+  background: var(--profile-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--profile-shadow);
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.history-card-simple:active {
+  transform: scale(0.98);
+}
+
+.history-card-simple.exact {
+  border-left-color: var(--icon-orange);
+}
+
+.history-card-simple.correct {
+  border-left-color: var(--icon-green);
+}
+
+.history-card-simple.wrong {
+  border-left-color: var(--icon-pink);
+}
+
+.history-card-simple.pending {
+  border-left-color: var(--profile-text-muted);
+}
+
+/* ==========================================
+   EMPTY STATES
+========================================== */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xl);
+  color: var(--profile-text-secondary);
+  text-align: center;
+}
+
+.empty-state svg {
+  opacity: 0.4;
+}
+
+.empty-subtitle {
+  font-size: 13px;
+  color: var(--profile-text-muted);
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xl);
+  color: var(--profile-text-secondary);
+}
+
+/* ==========================================
+   RESPONSIVE ADJUSTMENTS
+========================================== */
+
+@media (max-width: 768px) {
+  .profile-container-modern {
+    padding-bottom: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .achievements-grid-modern {
+    grid-template-columns: 1fr;
+  }
+
+  .monthly-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .crowns-display-large {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 360px) {
+  .crowns-display-large {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

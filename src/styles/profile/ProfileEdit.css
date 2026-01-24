@@ -1,0 +1,320 @@
+/* ==========================================
+   EDIT TAB - Formulario limpio
+========================================== */
+
+.edit-avatar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.edit-form-modern {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* ==========================================
+   FORM GROUPS
+========================================== */
+
+.form-group-modern {
+  background: var(--profile-card);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--profile-shadow);
+}
+
+.form-label-modern {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 13px;
+  color: var(--profile-text-secondary);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+}
+
+.form-label-modern svg {
+  color: var(--profile-primary);
+  width: 16px;
+  height: 16px;
+}
+
+/* ==========================================
+   INPUTS
+========================================== */
+
+.form-input-modern,
+.form-textarea-modern,
+.form-select-modern {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--profile-border);
+  border-radius: var(--radius-sm);
+  background: var(--profile-hover);
+  color: var(--profile-text);
+  font-size: 15px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.form-input-modern:focus,
+.form-textarea-modern:focus,
+.form-select-modern:focus {
+  outline: none;
+  border-color: var(--profile-primary);
+  background: var(--profile-card);
+  box-shadow: 0 0 0 3px var(--profile-primary-bg);
+}
+
+.form-textarea-modern {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.form-actions-modern {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.save-button-modern,
+.cancel-button-modern {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.save-button-modern {
+  background: var(--profile-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.save-button-modern:active:not(:disabled) {
+  transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.save-button-modern:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancel-button-modern {
+  background: var(--profile-hover);
+  color: var(--profile-text);
+  border: 1px solid var(--profile-border);
+}
+
+.cancel-button-modern:active {
+  transform: scale(0.98);
+  background: var(--profile-border);
+}
+
+/* ==========================================
+   AVATAR UPLOAD - Diseño limpio
+========================================== */
+
+.avatar-upload-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.avatar-upload-horizontal-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--profile-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--profile-shadow);
+}
+
+.avatar-container-new {
+  position: relative;
+}
+
+.avatar-preview-wrapper {
+  width: 100px;
+  height: 100px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 3px solid var(--profile-border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  background: var(--profile-hover);
+}
+
+.avatar-preview-wrapper:active {
+  transform: scale(0.95);
+}
+
+.avatar-preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder-upload {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--profile-primary-bg);
+  color: var(--profile-primary);
+}
+
+.avatar-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 10;
+  border-radius: var(--radius-full);
+}
+
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: var(--radius-full);
+  z-index: 5;
+}
+
+.avatar-preview-wrapper:hover .camera-overlay {
+  opacity: 1;
+}
+
+.level-badge-floating {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: var(--profile-primary);
+  border: 3px solid var(--profile-card);
+  border-radius: 14px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  z-index: 15;
+}
+
+.level-badge-floating svg {
+  width: 12px;
+  height: 12px;
+}
+
+.avatar-actions-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.avatar-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.avatar-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.avatar-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.avatar-btn.primary {
+  background: var(--profile-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.avatar-btn.secondary {
+  background: var(--profile-hover);
+  color: #EF4444;
+  border: 1px solid var(--profile-border);
+}
+
+.avatar-btn.secondary:active:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 480px) {
+  .form-actions-modern {
+    flex-direction: column;
+  }
+
+  .avatar-upload-horizontal-group {
+    padding: var(--spacing-sm);
+  }
+
+  .avatar-preview-wrapper {
+    width: 90px;
+    height: 90px;
+  }
+
+  .avatar-btn {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 360px) {
+  .avatar-upload-horizontal-group {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .avatar-actions-side {
+    flex-direction: row;
+  }
+}
