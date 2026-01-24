@@ -1,21 +1,281 @@
 /* ==========================================
-   HISTORY CARDS - Diseño limpio y compacto
+   HISTORY TAB - ESTILOS MODERNOS Y SIMPLES
 ========================================== */
 
+/* Header con Filtros */
+.history-header-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--profile-border);
+}
+
+.history-title-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.history-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(139, 92, 246, 0.12);
+  color: var(--profile-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .history-icon-wrapper {
+  background: rgba(139, 92, 246, 0.18);
+  color: #A78BFA;
+}
+
+.history-title-section h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--profile-text);
+  flex: 1;
+  letter-spacing: -0.02em;
+}
+
+.history-count-badge {
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: var(--profile-primary);
+}
+
+[data-theme="dark"] .history-count-badge {
+  background: rgba(139, 92, 246, 0.18);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #A78BFA;
+}
+
+/* Filtros */
+.history-filters {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--profile-border);
+  margin: 0 0.25rem;
+}
+
+.history-filter-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: var(--profile-card);
+  border: 1.5px solid var(--profile-border);
+  border-radius: 14px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--profile-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.history-filter-chip svg {
+  flex-shrink: 0;
+  color: var(--profile-text-secondary);
+  transition: color 0.2s ease;
+}
+
+.history-filter-chip:hover:not(.active) {
+  background: var(--profile-hover);
+  transform: translateY(-1px);
+}
+
+/* Filtros de estado - General */
+.history-filter-chip:not(.filter-exact):not(.filter-correct):not(.filter-wrong):hover:not(.active) {
+  border-color: var(--profile-primary);
+}
+
+.history-filter-chip:not(.filter-exact):not(.filter-correct):not(.filter-wrong):hover:not(.active) svg {
+  color: var(--profile-primary);
+}
+
+.history-filter-chip:not(.filter-exact):not(.filter-correct):not(.filter-wrong).active {
+  background: linear-gradient(135deg, var(--profile-primary), var(--profile-primary-light));
+  border-color: var(--profile-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+}
+
+.history-filter-chip:not(.filter-exact):not(.filter-correct):not(.filter-wrong).active svg {
+  color: white;
+}
+
+/* Filtro EXACT - Dorado */
+.history-filter-chip.filter-exact:hover:not(.active) {
+  border-color: #F59E0B;
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.history-filter-chip.filter-exact:hover:not(.active) svg {
+  color: #F59E0B;
+}
+
+.history-filter-chip.filter-exact.active {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  border-color: #F59E0B;
+  color: white;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.history-filter-chip.filter-exact.active svg {
+  color: white;
+}
+
+/* Filtro CORRECT - Verde */
+.history-filter-chip.filter-correct:hover:not(.active) {
+  border-color: #10B981;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.history-filter-chip.filter-correct:hover:not(.active) svg {
+  color: #10B981;
+}
+
+.history-filter-chip.filter-correct.active {
+  background: linear-gradient(135deg, #10B981, #059669);
+  border-color: #10B981;
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.history-filter-chip.filter-correct.active svg {
+  color: white;
+}
+
+/* Filtro WRONG - Rojo */
+.history-filter-chip.filter-wrong:hover:not(.active) {
+  border-color: #EF4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.history-filter-chip.filter-wrong:hover:not(.active) svg {
+  color: #EF4444;
+}
+
+.history-filter-chip.filter-wrong.active {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  border-color: #EF4444;
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.history-filter-chip.filter-wrong.active svg {
+  color: white;
+}
+
+.filter-label {
+  font-weight: 600;
+}
+
+.filter-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.125rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  min-width: 24px;
+  text-align: center;
+}
+
+.history-filter-chip:not(.active) .filter-count {
+  background: var(--profile-hover);
+  color: var(--profile-text-secondary);
+}
+
+/* Grid de Historial */
+.history-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   HISTORY CARD SIMPLE - Estilo MatchCard
+========================================== */
+
+.history-card-simple {
+  background: var(--profile-card);
+  border: 1px solid var(--profile-border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.history-card-simple:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-color: var(--profile-primary);
+}
+
+/* Border de color según estado */
+.history-card-simple.exact {
+  border-left: 4px solid #F59E0B;
+}
+
+.history-card-simple.correct {
+  border-left: 4px solid #10B981;
+}
+
+.history-card-simple.wrong {
+  border-left: 4px solid #EF4444;
+}
+
+.history-card-simple.pending {
+  border-left: 4px solid #94A3B8;
+}
+
+/* Header */
 .history-card-header-simple {
-  padding: var(--spacing-sm);
+  padding: 14px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-xs);
-  background: var(--profile-hover);
+  gap: 12px;
+  background: linear-gradient(to bottom, var(--profile-hover) 0%, var(--profile-card) 100%);
   border-bottom: 1px solid var(--profile-border);
 }
 
 .league-info-simple {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex: 1;
   min-width: 0;
 }
@@ -26,9 +286,10 @@
 }
 
 .league-name-simple {
-  font-size: 12px;
+  font-size: 0.8125rem;
   font-weight: 700;
   color: var(--profile-text);
+  letter-spacing: 0.01em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -37,53 +298,61 @@
 .match-date-simple {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  background: var(--profile-primary-bg);
-  border: 1px solid var(--profile-primary);
+  gap: 5px;
+  padding: 5px 10px;
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.15);
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--profile-primary);
   flex-shrink: 0;
   white-space: nowrap;
 }
 
-.match-date-simple svg {
-  flex-shrink: 0;
+[data-theme="dark"] .match-date-simple {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.25);
+  color: #A78BFA;
 }
 
-/* History Card Content */
+.match-date-simple svg {
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+/* Content */
 .history-card-content-simple {
-  padding: var(--spacing-md) var(--spacing-sm);
+  padding: 20px 18px;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: 12px;
 }
 
 .team-row-simple {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-xs);
+  gap: 12px;
 }
 
 .team-info-simple {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex: 1;
   min-width: 0;
 }
 
 .team-logo-simple {
-  font-size: 24px;
+  font-size: 1.5rem;
   flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
 .team-name-simple {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 0.9375rem;
+  font-weight: 700;
   color: var(--profile-text);
   white-space: nowrap;
   overflow: hidden;
@@ -93,80 +362,103 @@
 .score-display-simple {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
 .score-value-simple {
-  font-size: 20px;
+  font-size: 1.5rem;
   font-weight: 800;
   color: var(--profile-text);
-  letter-spacing: -0.5px;
-  min-width: 28px;
+  letter-spacing: -0.02em;
+  min-width: 32px;
   text-align: center;
 }
 
 .real-score-simple {
-  font-size: 12px;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--profile-text-secondary);
 }
 
 .vs-separator-simple {
   text-align: center;
-  font-size: 11px;
+  font-size: 0.75rem;
   font-weight: 800;
   color: var(--profile-text-muted);
   background: var(--profile-hover);
-  padding: 4px;
-  border-radius: 6px;
-  letter-spacing: 0.5px;
+  padding: 0.375rem;
+  border-radius: 8px;
+  letter-spacing: 0.1em;
 }
 
-/* History Card Footer */
+/* Footer */
 .history-card-footer-simple {
-  padding: var(--spacing-sm);
+  padding: 14px 18px;
   border-top: 1px solid var(--profile-border);
-  background: var(--profile-hover);
+  background: linear-gradient(to top, var(--profile-hover) 0%, var(--profile-card) 100%);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-xs);
+  gap: 12px;
 }
 
 .result-indicator-simple {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
+  gap: 8px;
+  font-size: 0.875rem;
   font-weight: 700;
-  padding: 6px 10px;
-  border-radius: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
   flex: 1;
 }
 
 .result-indicator-simple.exact {
-  background: var(--icon-orange-bg);
-  color: var(--icon-orange);
-  border: 1px solid var(--icon-orange);
+  background: rgba(245, 158, 11, 0.12);
+  color: #D97706;
+  border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
 .result-indicator-simple.correct {
-  background: var(--icon-green-bg);
-  color: var(--icon-green);
-  border: 1px solid var(--icon-green);
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .result-indicator-simple.wrong {
-  background: var(--icon-pink-bg);
-  color: var(--icon-pink);
-  border: 1px solid var(--icon-pink);
+  background: rgba(239, 68, 68, 0.12);
+  color: #DC2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .result-indicator-simple.pending {
-  background: var(--profile-hover);
+  background: rgba(148, 163, 184, 0.12);
   color: var(--profile-text-secondary);
-  border: 1px solid var(--profile-border);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+[data-theme="dark"] .result-indicator-simple.exact {
+  background: rgba(245, 158, 11, 0.18);
+  color: #FBBF24;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+[data-theme="dark"] .result-indicator-simple.correct {
+  background: rgba(16, 185, 129, 0.18);
+  color: #34D399;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme="dark"] .result-indicator-simple.wrong {
+  background: rgba(239, 68, 68, 0.18);
+  color: #F87171;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="dark"] .result-indicator-simple.pending {
+  background: rgba(148, 163, 184, 0.15);
+  border-color: rgba(148, 163, 184, 0.25);
 }
 
 .result-indicator-simple svg {
@@ -174,81 +466,251 @@
 }
 
 .result-label-simple {
-  font-size: 11px;
+  font-size: 0.8125rem;
   white-space: nowrap;
 }
 
 .points-badge-simple {
-  background: var(--profile-primary);
+  background: linear-gradient(135deg, var(--profile-primary), var(--profile-primary-light));
   color: white;
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 12px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.875rem;
   font-weight: 800;
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
 }
 
 /* ==========================================
-   RESPONSIVE
+   RESPONSIVE - TABLET
 ========================================== */
 
-@media (max-width: 480px) {
-  .history-card-header-simple {
-    padding: 10px;
+@media (max-width: 1024px) {
+  .history-grid-modern {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
   }
 
-  .league-name-simple {
-    font-size: 11px;
-  }
-
-  .match-date-simple {
-    padding: 3px 6px;
-    font-size: 10px;
-  }
-
-  .history-card-content-simple {
-    padding: var(--spacing-sm);
-  }
-
-  .team-logo-simple {
-    font-size: 20px;
-  }
-
-  .team-name-simple {
-    font-size: 13px;
-  }
-
-  .score-value-simple {
-    font-size: 18px;
-  }
-
-  .history-card-footer-simple {
-    padding: 10px;
-  }
-
-  .result-indicator-simple {
-    padding: 5px 8px;
-    font-size: 11px;
-  }
-
-  .result-label-simple {
-    font-size: 10px;
-  }
-
-  .points-badge-simple {
-    padding: 5px 8px;
-    font-size: 11px;
+  .history-header-modern {
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
   }
 }
 
-@media (max-width: 360px) {
-  .match-date-simple svg {
-    display: none;
+/* ==========================================
+   RESPONSIVE - MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+  .history-header-modern {
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+  }
+
+  .history-title-section {
+    gap: 0.625rem;
+  }
+
+  .history-icon-wrapper {
+    width: 36px;
+    height: 36px;
+  }
+
+  .history-title-section h3 {
+    font-size: 1.125rem;
+  }
+
+  .history-count-badge {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .history-filters {
+    gap: 0.625rem;
+  }
+
+  .filter-divider {
+    height: 28px;
+  }
+
+  .history-filter-chip {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+
+  .history-grid-modern {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .history-card-header-simple {
+    padding: 12px 16px;
+  }
+
+  .league-name-simple {
+    font-size: 0.75rem;
+  }
+
+  .match-date-simple {
+    padding: 4px 9px;
+    font-size: 0.6875rem;
+  }
+
+  .history-card-content-simple {
+    padding: 16px 16px;
+    gap: 10px;
+  }
+
+  .team-logo-simple {
+    font-size: 1.375rem;
+  }
+
+  .team-name-simple {
+    font-size: 0.875rem;
+  }
+
+  .score-value-simple {
+    font-size: 1.375rem;
+  }
+
+  .real-score-simple {
+    font-size: 0.8125rem;
+  }
+
+  .history-card-footer-simple {
+    padding: 12px 16px;
+  }
+
+  .result-indicator-simple {
+    padding: 7px 12px;
+    font-size: 0.8125rem;
+  }
+
+  .result-label-simple {
+    font-size: 0.75rem;
+  }
+
+  .points-badge-simple {
+    padding: 7px 12px;
+    font-size: 0.8125rem;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - SMALL MOBILE
+========================================== */
+
+@media (max-width: 480px) {
+  .history-title-section h3 {
+    font-size: 1rem;
+  }
+
+  .history-icon-wrapper {
+    width: 32px;
+    height: 32px;
+  }
+
+  .history-icon-wrapper svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .history-filter-chip {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .history-filter-chip svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .filter-count {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.375rem;
+  }
+
+  .history-card-header-simple {
+    padding: 10px 14px;
+  }
+
+  .league-name-simple {
+    font-size: 0.6875rem;
+  }
+
+  .match-date-simple {
+    padding: 4px 8px;
+    font-size: 0.625rem;
+  }
+
+  .history-card-content-simple {
+    padding: 14px 14px;
+  }
+
+  .team-logo-simple {
+    font-size: 1.25rem;
+  }
+
+  .team-name-simple {
+    font-size: 0.8125rem;
+  }
+
+  .score-value-simple {
+    font-size: 1.25rem;
+  }
+
+  .vs-separator-simple {
+    font-size: 0.6875rem;
+    padding: 0.25rem;
+  }
+
+  .history-card-footer-simple {
+    padding: 10px 14px;
+  }
+
+  .result-indicator-simple {
+    padding: 6px 10px;
   }
 
   .result-indicator-simple svg {
     width: 14px;
     height: 14px;
+  }
+
+  .result-label-simple {
+    font-size: 0.6875rem;
+  }
+
+  .points-badge-simple {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - ULTRA SMALL
+========================================== */
+
+@media (max-width: 360px) {
+  .history-filters {
+    gap: 0.5rem;
+  }
+
+  .filter-divider {
+    display: none;
+  }
+
+  .history-filter-chip {
+    padding: 0.5rem 0.625rem;
+  }
+
+  .filter-label {
+    display: none;
+  }
+
+  .history-filter-chip svg {
+    margin-right: 0;
   }
 }
