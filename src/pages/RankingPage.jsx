@@ -208,7 +208,7 @@ export default function RankingPage({ currentUser, onBack }) {
                   <div className="stat-row">
                     {filteredUsers[1].rankPredictions > 0 
                       ? Math.round((filteredUsers[1].rankCorrect / filteredUsers[1].rankPredictions) * 100) 
-                      : 0}
+                      : 0}%
                   </div>
                 </div>
               </div>
@@ -229,12 +229,12 @@ export default function RankingPage({ currentUser, onBack }) {
                 <div className="winner-name">{filteredUsers[0].name}</div>
                 <div className="winner-stats">
                   <div className="stat-row points">
-                    {filteredUsers[0].rankPoints} pts
+                    {filteredUsers[0].rankPoints}
                   </div>
                   <div className="stat-row">
                     {filteredUsers[0].rankPredictions > 0 
                       ? Math.round((filteredUsers[0].rankCorrect / filteredUsers[0].rankPredictions) * 100) 
-                      : 0}% precisión
+                      : 0}%
                   </div>
                 </div>
               </div>
@@ -255,12 +255,12 @@ export default function RankingPage({ currentUser, onBack }) {
                 <div className="winner-name">{filteredUsers[2].name}</div>
                 <div className="winner-stats">
                   <div className="stat-row points">
-                    {filteredUsers[2].rankPoints} pts
+                    {filteredUsers[2].rankPoints}
                   </div>
                   <div className="stat-row">
                     {filteredUsers[2].rankPredictions > 0 
                       ? Math.round((filteredUsers[2].rankCorrect / filteredUsers[2].rankPredictions) * 100) 
-                      : 0}% precisión
+                      : 0}%
                   </div>
                 </div>
               </div>
