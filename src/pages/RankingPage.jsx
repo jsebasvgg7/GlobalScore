@@ -203,12 +203,12 @@ export default function RankingPage({ currentUser, onBack }) {
                 <div className="winner-name">{filteredUsers[1].name}</div>
                 <div className="winner-stats">
                   <div className="stat-row points">
-                    {filteredUsers[1].rankPoints} pts
+                    {filteredUsers[1].rankPoints}
                   </div>
                   <div className="stat-row">
                     {filteredUsers[1].rankPredictions > 0 
                       ? Math.round((filteredUsers[1].rankCorrect / filteredUsers[1].rankPredictions) * 100) 
-                      : 0}% precisión
+                      : 0}
                   </div>
                 </div>
               </div>
