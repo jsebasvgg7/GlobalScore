@@ -12,29 +12,11 @@
 
 /* Elementos decorativos de fondo */
 .ranking-page::before {
-  content: '';
-  position: fixed;
-  top: -50%;
-  right: -10%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  animation: floatSlow 20s ease-in-out infinite;
+  display: none;
 }
 
 .ranking-page::after {
-  content: '';
-  position: fixed;
-  bottom: -30%;
-  left: -10%;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.06) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  animation: floatSlow 25s ease-in-out infinite reverse;
+  display: none;
 }
 
 @keyframes floatSlow {
@@ -103,12 +85,7 @@
 }
 
 .back-button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #10B981, #059669);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  display: none;
 }
 
 .back-button svg {
@@ -148,14 +125,7 @@
 }
 
 .page-title::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(90deg, #10B981, transparent);
-  border-radius: 2px;
+  display: none;
 }
 
 /* ==========================================
@@ -203,13 +173,7 @@
 }
 
 .tab-button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 14px;
+  display: none;
 }
 
 .tab-button svg,
@@ -258,13 +222,7 @@
 }
 
 .podium-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #10B981, transparent);
+  display: none;
 }
 
 
@@ -308,12 +266,7 @@
 }
 
 .winner-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
+  display: none;
 }
 
 .winner-card:hover::before {
@@ -429,13 +382,7 @@
 }
 
 .winner-avatar::before {
-  content: '';
-  position: absolute;
-  inset: -50%;
-  background: conic-gradient(from 0deg, transparent, rgba(16, 185, 129, 0.3), transparent);
-  animation: avatarRotate 3s linear infinite;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  display: none;
 }
 
 @keyframes avatarRotate {
@@ -542,12 +489,7 @@
 }
 
 .user-position-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  display: none;
 }
 
 .user-position-card:hover {
@@ -583,12 +525,7 @@
 }
 
 .position-number::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transform: translateX(-100%);
-  animation: shimmer 2s infinite;
+  display: none;
 }
 
 @keyframes shimmer {
@@ -629,17 +566,7 @@
 }
 
 .stat-item::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 24px;
-  height: 3px;
-  background: linear-gradient(90deg, #10B981, #059669);
-  border-radius: 2px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  display: none;
 }
 
 .stat-item:hover::after {
@@ -687,16 +614,7 @@
 }
 
 .stat-card-mini::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #10B981, #3B82F6);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s ease;
+  display: none;
 }
 
 .stat-card-mini:hover::before {
@@ -753,13 +671,7 @@
 }
 
 .list-header::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 80px;
-  height: 2px;
-  background: linear-gradient(90deg, #10B981, transparent);
+  display: none;
 }
 
 .list-title {
@@ -796,13 +708,7 @@
 }
 
 .sort-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #10B981, #059669);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 10px;
+  display: none;
 }
 
 .sort-btn svg,
@@ -868,16 +774,7 @@
 .ranking-item:nth-child(n+6) { animation-delay: 0.3s; }
 
 .ranking-item::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 0;
-  background: linear-gradient(180deg, #10B981, #059669);
-  border-radius: 0 4px 4px 0;
-  transition: height 0.3s ease;
+  display: none;
 }
 
 .ranking-item:hover {
@@ -1034,12 +931,7 @@ position: relative;
 overflow: hidden;
 }
 .item-points::before {
-content: '';
-position: absolute;
-inset: 0;
-background: linear-gradient(135deg, rgba(252, 211, 77, 0.2), transparent);
-opacity: 0;
-transition: opacity 0.3s ease;
+display: none;
 }
 .ranking-item:hover .item-points {
 transform: scale(1.05);
@@ -1176,25 +1068,15 @@ font-weight: 500;
 /* Remover todos los verdes del modo oscuro */
 [data-theme="dark"] .back-button::before,
 [data-theme="dark"] .tab-button::before,
-[data-theme="dark"] .sort-btn::before {
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-}
-
+[data-theme="dark"] .sort-btn::before,
 [data-theme="dark"] .page-title::after,
-[data-theme="dark"] .list-header::after {
-  background: linear-gradient(90deg, var(--accent), transparent);
-}
-
-[data-theme="dark"] .position-number {
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-}
-
-[data-theme="dark"] .ranking-item::before {
-  background: linear-gradient(180deg, var(--accent), var(--accent-light));
-}
-
-[data-theme="dark"] .stat-card-mini::before {
-  background: linear-gradient(90deg, var(--accent), #3B82F6);
+[data-theme="dark"] .list-header::after,
+[data-theme="dark"] .position-number::before,
+[data-theme="dark"] .ranking-item::before,
+[data-theme="dark"] .stat-card-mini::before,
+[data-theme="dark"] .user-position-card::before,
+[data-theme="dark"] .item-points::before {
+  display: none;
 }
 
 /* Header */
