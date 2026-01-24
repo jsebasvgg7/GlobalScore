@@ -1173,6 +1173,30 @@ font-weight: 500;
   background: linear-gradient(135deg, var(--bg) 0%, var(--card) 100%);
 }
 
+/* Remover todos los verdes del modo oscuro */
+[data-theme="dark"] .back-button::before,
+[data-theme="dark"] .tab-button::before,
+[data-theme="dark"] .sort-btn::before {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+}
+
+[data-theme="dark"] .page-title::after,
+[data-theme="dark"] .list-header::after {
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+[data-theme="dark"] .position-number {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+}
+
+[data-theme="dark"] .ranking-item::before {
+  background: linear-gradient(180deg, var(--accent), var(--accent-light));
+}
+
+[data-theme="dark"] .stat-card-mini::before {
+  background: linear-gradient(90deg, var(--accent), #3B82F6);
+}
+
 /* Header */
 [data-theme="dark"] .page-title {
   background: linear-gradient(135deg, var(--accent-light), var(--accent));
