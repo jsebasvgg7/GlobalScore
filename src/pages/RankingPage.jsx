@@ -164,13 +164,6 @@ export default function RankingPage({ currentUser, onBack }) {
   return (
     <div className="ranking-page">
       <div className="ranking-page-container">
-        {/* Header */}
-        <div className="ranking-header">
-          <button className="back-button" onClick={onBack}>
-            <ArrowLeft size={20} />
-          </button>
-          <h1 className="page-title">Leader Board</h1>
-        </div>
 
         {/* Tabs */}
         <div className="ranking-tabs">
