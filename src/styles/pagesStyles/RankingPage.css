@@ -267,15 +267,6 @@
   background: linear-gradient(90deg, transparent, #10B981, transparent);
 }
 
-.podium-container::after {
-  content: '🏆';
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 32px;
-  opacity: 0.1;
-  animation: trophyFloat 3s ease-in-out infinite;
-}
 
 @keyframes trophyFloat {
   0%, 100% { transform: translateY(0) rotate(0deg); }
