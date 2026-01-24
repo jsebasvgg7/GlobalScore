@@ -92,87 +92,50 @@
 }
 
 .user-email-display {
-  display: none; /* Ocultar email en este diseño */
+  font-size: 14px;
+  color: var(--profile-text-muted);
+  margin: 0 0 var(--spacing-sm) 0;
 }
 
-/* Gender & Age Row */
-.user-meta-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-xs);
+/* Bio */
+.user-bio-display {
   font-size: 14px;
   color: var(--profile-text-secondary);
+  margin: var(--spacing-sm) auto;
+  max-width: 400px;
+  line-height: 1.5;
 }
 
-.user-meta-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--profile-text-muted);
-  font-weight: 600;
+/* Tags */
+.user-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  justify-content: center;
+  margin: var(--spacing-md) 0;
 }
 
-.user-meta-value {
-  font-weight: 600;
-  color: var(--profile-text-secondary);
-}
-
-/* ID Badge - Estilo médico/clínico */
-.user-id-card {
+.user-tag {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  background: #E8F5E9;
-  padding: 8px 16px;
-  border-radius: 20px;
-  margin-top: var(--spacing-sm);
-}
-
-[data-theme="dark"] .user-id-card {
-  background: rgba(76, 175, 80, 0.15);
-}
-
-.user-id-text {
+  gap: 6px;
+  background: var(--profile-hover);
+  padding: 6px 12px;
+  border-radius: 16px;
   font-size: 13px;
   font-weight: 600;
-  color: #2E7D32;
-  letter-spacing: 0.5px;
-}
-
-[data-theme="dark"] .user-id-text {
-  color: #66BB6A;
-}
-
-.info-icon {
-  width: 16px;
-  height: 16px;
-  background: #4CAF50;
-  border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 10px;
-  font-weight: bold;
-}
-
-/* Date of Birth */
-.user-dob {
-  font-size: 13px;
   color: var(--profile-text-secondary);
-  margin-top: 4px;
+  transition: all 0.2s ease;
 }
 
-/* Bio - Si existe */
-.user-bio-display {
-  display: none; /* Ocultar en este diseño minimalista */
+.user-tag:hover {
+  background: var(--profile-border);
 }
 
-/* Tags - Ocultar en este diseño */
-.user-tags {
-  display: none;
+.user-tag svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0.7;
 }
 
 /* Stats Mini Row - Rediseñar más limpio */
