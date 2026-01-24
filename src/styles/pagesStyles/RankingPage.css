@@ -1084,15 +1084,7 @@ animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
 @keyframes spin {
 to { transform: rotate(360deg); }
 }
-.loader-container::after {
-content: '🏆';
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-font-size: 32px;
-animation: iconBounce 1s ease-in-out infinite;
-}
+
 @keyframes iconBounce {
 0%, 100% { transform: translate(-50%, -50%) scale(1); }
 50% { transform: translate(-50%, -50%) scale(1.2); }
