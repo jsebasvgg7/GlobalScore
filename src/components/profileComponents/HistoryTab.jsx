@@ -2,6 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Activity, Gamepad2, CheckCircle2, XCircle, Clock, Filter, Trophy, Calendar } from 'lucide-react';
 import { getPredictionResult } from '../../utils/profileUtils';
+import '../../styles/profile/HistoryTab.css';
 
 export default function HistoryTab({ predictionHistory, historyLoading }) {
   const [activeFilter, setActiveFilter] = useState('all');
