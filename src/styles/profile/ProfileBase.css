@@ -53,13 +53,13 @@
 }
 
 [data-theme="dark"] {
-  --profile-bg: #0F0F0F;
-  --profile-card: #1A1A1A;
-  --profile-text: #FFFFFF;
-  --profile-text-secondary: #CCCCCC;
-  --profile-text-muted: #999999;
-  --profile-border: #2A2A2A;
-  --profile-hover: #242424;
+  --profile-bg: #2a2f3f;
+  --profile-card: #353b4d;
+  --profile-text: #f5f6fa;
+  --profile-text-secondary: #c5c9d9;
+  --profile-text-muted: #9ca3b8;
+  --profile-border: rgba(255,255,255,0.18);
+  --profile-hover: #3a4052;
   
   /* Ajustar colores de íconos para dark mode */
   --icon-yellow-bg: rgba(255, 167, 38, 0.15);
