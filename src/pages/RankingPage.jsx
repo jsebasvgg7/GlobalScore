@@ -268,60 +268,7 @@ export default function RankingPage({ currentUser, onBack }) {
           </div>
         )}
 
-        {/* Tu Posición */}
-        {currentUserData && (
-          <div className="user-position-card">
-            <div className="position-info">
-              <div className="position-number">
-                #{currentUserPosition}
-              </div>
-              <div className="user-info-inline">
-                <div className="user-name-inline">{currentUserData.name}</div>
-                <div className="user-detail">
-                  {currentUserData.rankCorrect} aciertos de {currentUserData.rankPredictions} predicciones
-                </div>
-              </div>
-            </div>
-            <div className="position-stats">
-              <div className="stat-item">
-                <div className="stat-value">{currentUserData.rankPoints}</div>
-                <div className="stat-label">Puntos</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-value">
-                  {currentUserData.rankPredictions > 0 
-                    ? Math.round((currentUserData.rankCorrect / currentUserData.rankPredictions) * 100) 
-                    : 0}%
-                </div>
-                <div className="stat-label">Precisión</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-value">{currentUserData.rankPredictions}</div>
-                <div className="stat-label">Predicciones</div>
-              </div>
-            </div>
-          </div>
-        )}
 
-        {/* Stats Overview */}
-        <div className="stats-overview">
-          <div className="stat-card-mini">
-            <div className="stat-card-value">{globalStats.totalUsers}</div>
-            <div className="stat-card-label">Usuarios</div>
-          </div>
-          <div className="stat-card-mini">
-            <div className="stat-card-value">{globalStats.totalPredictions}</div>
-            <div className="stat-card-label">Predicciones</div>
-          </div>
-          <div className="stat-card-mini">
-            <div className="stat-card-value">{globalStats.totalPoints}</div>
-            <div className="stat-card-label">Puntos Totales</div>
-          </div>
-          <div className="stat-card-mini">
-            <div className="stat-card-value">{globalStats.avgAccuracy}%</div>
-            <div className="stat-card-label">Precisión Media</div>
-          </div>
-        </div>
 
         {/* Ranking List */}
         <div className="ranking-list-section">
