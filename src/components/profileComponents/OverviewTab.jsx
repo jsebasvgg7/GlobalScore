@@ -5,11 +5,7 @@ import {
   Zap, 
   Target, 
   BarChart3, 
-  Heart, 
-  Calendar, 
-  Pill, 
-  FileText, 
-  ChevronRight 
+  Heart
 } from 'lucide-react';
 import { calculateLevelProgress, calculateAccuracy } from '../../utils/profileUtils';
 
@@ -17,8 +13,7 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
   const accuracy = calculateAccuracy(currentUser);
   const { pointsInLevel, pointsToNextLevel, levelProgress } = calculateLevelProgress(userData, currentUser);
 
-  // Datos de ejemplo para el diseño clínico
-  const clinicalSections = [
+  const statsSections = [
     {
       id: 'stats',
       title: 'Predictions',
@@ -42,14 +37,6 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
       subtitle: `${accuracy}% success rate`,
     },
     {
-      id: 'level',
-      title: 'Current Level',
-      icon: Trophy,
-      color: 'orange',
-      count: userData.level || 1,
-      subtitle: `${pointsInLevel}/20 points`,
-    },
-    {
       id: 'ranking',
       title: 'Global Ranking',
       icon: Trophy,
@@ -68,35 +55,7 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
 
   return (
     <div className="tab-content-wrapper">
-      {/* Clinical List - Estilo de la imagen */}
-      <div className="clinical-list">
-        {clinicalSections.map((section) => {
-          const IconComponent = section.icon;
-          return (
-            <div key={section.id} className="clinical-item touchable">
-              <div className={`icon-wrapper ${section.color}`}>
-                <IconComponent />
-              </div>
-              <div className="item-content">
-                <div className="item-info">
-                  <div className="item-title">{section.title}</div>
-                  {section.subtitle && (
-                    <div className="item-subtitle">{section.subtitle}</div>
-                  )}
-                </div>
-                {section.count !== null && (
-                  <div className="item-count">{section.count}</div>
-                )}
-                <div className="chevron">
-                  <ChevronRight />
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Level Progress Card */}
+      {/* Level Progress Card - Ahora primero */}
       <div className="level-card-modern">
         <div className="level-card-header">
           <div className="level-icon-wrapper">
@@ -111,6 +70,31 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
         <div className="level-progress-bar">
           <div className="level-progress-fill" style={{ width: `${levelProgress}%` }}></div>
         </div>
+      </div>
+
+      {/* Stats List */}
+      <div className="stats-list">
+        {statsSections.map((section) => {
+          const IconComponent = section.icon;
+          return (
+            <div key={section.id} className="stat-item">
+              <div className={`icon-wrapper ${section.color}`}>
+                <IconComponent />
+              </div>
+              <div className="item-content">
+                <div className="item-info">
+                  <div className="item-title">{section.title}</div>
+                  {section.subtitle && (
+                    <div className="item-subtitle">{section.subtitle}</div>
+                  )}
+                </div>
+                {section.count !== null && (
+                  <div className="item-count">{section.count}</div>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
