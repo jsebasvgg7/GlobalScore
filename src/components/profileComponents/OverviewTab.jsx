@@ -68,9 +68,6 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
 
   return (
     <div className="tab-content-wrapper">
-      {/* Section Title */}
-      <h3 className="section-title">Clinical profile</h3>
-
       {/* Clinical List - Estilo de la imagen */}
       <div className="clinical-list">
         {clinicalSections.map((section) => {
