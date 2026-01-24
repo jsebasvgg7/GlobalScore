@@ -7,8 +7,8 @@
   background: var(--profile-card);
   border-bottom: 1px solid var(--profile-border);
   position: sticky;
-  top: 0;
-  z-index: 100;
+  top: 80px; /* Altura del header para desktop */
+  z-index: 90; /* Menor que el header (100) */
   padding: 0 var(--spacing-xs);
   box-shadow: var(--profile-shadow);
 }
