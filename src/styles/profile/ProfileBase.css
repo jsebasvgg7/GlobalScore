@@ -53,21 +53,38 @@
 }
 
 [data-theme="dark"] {
-  --profile-bg: #2a2f3f;
-  --profile-card: #353b4d;
-  --profile-text: #f5f6fa;
-  --profile-text-secondary: #c5c9d9;
-  --profile-text-muted: #9ca3b8;
-  --profile-border: rgba(255,255,255,0.18);
-  --profile-hover: #3a4052;
+  /* Usar EXACTAMENTE los mismos colores del index.css */
+  --profile-bg: #1a1d2e;
+  --profile-card: #252936;
+  --profile-text: #f0f1f7;
+  --profile-text-secondary: #b4b8d0;
+  --profile-text-muted: #8186a0;
+  --profile-border: rgba(255,255,255,0.12);
+  --profile-hover: #2f3544;
   
-  /* Ajustar colores de íconos para dark mode */
+  /* Color Principal - Púrpura del index.css */
+  --profile-primary: #8b7fc7;
+  --profile-primary-light: #a599d9;
+  --profile-primary-bg: rgba(139, 127, 199, 0.18);
+  
+  /* Colores de Íconos - iguales al index.css */
   --icon-yellow-bg: rgba(255, 167, 38, 0.15);
+  --icon-yellow: #FFA726;
   --icon-pink-bg: rgba(236, 64, 122, 0.15);
+  --icon-pink: #EC407A;
   --icon-green-bg: rgba(102, 187, 106, 0.15);
+  --icon-green: #66BB6A;
   --icon-orange-bg: rgba(255, 167, 38, 0.15);
+  --icon-orange: #FFA726;
   --icon-teal-bg: rgba(38, 166, 154, 0.15);
+  --icon-teal: #26A69A;
   --icon-blue-bg: rgba(66, 165, 245, 0.15);
+  --icon-blue: #42A5F5;
+  
+  /* Sombras - del index.css */
+  --profile-shadow: 0 8px 30px rgba(55, 35, 68, 0.377);
+  --profile-shadow-md: 0 4px 14px rgba(31, 23, 42, 0.923);
+  --profile-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 /* ==========================================
