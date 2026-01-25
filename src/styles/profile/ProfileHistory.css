@@ -490,3 +490,356 @@
     margin-right: 0;
   }
 }
+/* Agregar estos estilos al final de ProfileHistory.css */
+
+/* ==========================================
+   SORT BUTTON Y MODAL PARA HISTORY
+========================================== */
+
+/* Sort Button */
+.history-header-modern .sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  background: var(--profile-card);
+  border: 1.5px solid var(--profile-border);
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--profile-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.history-header-modern .sort-btn svg {
+  width: 16px;
+  height: 16px;
+  color: var(--profile-text-secondary);
+  transition: all 0.2s ease;
+}
+
+.history-header-modern .sort-btn span {
+  color: var(--profile-text);
+  transition: color 0.2s ease;
+}
+
+.history-header-modern .sort-btn:hover {
+  background: var(--profile-hover);
+  border-color: var(--profile-primary);
+  transform: translateY(-1px);
+}
+
+.history-header-modern .sort-btn:hover svg {
+  color: var(--profile-primary);
+}
+
+.history-header-modern .sort-btn:active {
+  transform: translateY(0);
+}
+
+/* Estado activo para Sort */
+.history-header-modern .sort-btn.active {
+  background: var(--profile-primary);
+  border-color: var(--profile-primary);
+  color: white;
+}
+
+.history-header-modern .sort-btn.active svg,
+.history-header-modern .sort-btn.active span {
+  color: white;
+}
+
+/* Sort Modal Backdrop */
+.history-header-modern .sort-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  animation: fadeIn 0.15s ease-out;
+}
+
+/* Sort Modal */
+.history-header-modern .sort-modal {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--profile-card);
+  border: 1px solid var(--profile-border);
+  border-radius: 14px;
+  min-width: 220px;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.05),
+    0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  overflow: hidden;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sort-modal-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--profile-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--profile-hover);
+}
+
+.sort-modal-header svg {
+  width: 18px;
+  height: 18px;
+  color: var(--profile-primary);
+}
+
+.sort-modal-header h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--profile-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Modo oscuro para el modal */
+[data-theme="dark"] .sort-modal {
+  background: var(--profile-card) !important;
+  border-color: rgba(255,255,255,0.06) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+}
+
+[data-theme="dark"] .sort-modal .sort-modal-header {
+  background: var(--profile-hover) !important;
+  border-bottom-color: rgba(255,255,255,0.06) !important;
+}
+
+[data-theme="dark"] .sort-modal .sort-modal-header h4,
+[data-theme="dark"] .sort-modal .sort-option-text,
+[data-theme="dark"] .sort-modal .sort-option {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .sort-modal .sort-option-icon {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .sort-modal svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Sort Options Container */
+.sort-options {
+  padding: 6px;
+}
+
+.sort-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+
+.sort-option-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: var(--profile-hover);
+  color: var(--profile-text-secondary);
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.sort-option-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Iconos con colores específicos */
+.sort-icon-exact {
+  background: rgba(245, 158, 11, 0.12) !important;
+  color: #F59E0B !important;
+}
+
+.sort-icon-correct {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #10B981 !important;
+}
+
+.sort-icon-wrong {
+  background: rgba(239, 68, 68, 0.12) !important;
+  color: #EF4444 !important;
+}
+
+[data-theme="dark"] .sort-icon-exact {
+  background: rgba(245, 158, 11, 0.18) !important;
+  color: #FBBF24 !important;
+}
+
+[data-theme="dark"] .sort-icon-correct {
+  background: rgba(16, 185, 129, 0.18) !important;
+  color: #34D399 !important;
+}
+
+[data-theme="dark"] .sort-icon-wrong {
+  background: rgba(239, 68, 68, 0.18) !important;
+  color: #F87171 !important;
+}
+
+.sort-option-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--profile-text);
+  flex: 1;
+}
+
+.sort-option-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--profile-text-secondary);
+  background: var(--profile-hover);
+  padding: 3px 8px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.sort-option:hover {
+  background: var(--profile-hover);
+}
+
+.sort-option:hover .sort-option-icon {
+  background: var(--profile-primary);
+  color: white;
+}
+
+.sort-option.active {
+  background: linear-gradient(135deg, var(--profile-primary), var(--profile-primary-light));
+}
+
+.sort-option.active .sort-option-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.sort-option.active .sort-option-text {
+  color: white;
+  font-weight: 700;
+}
+
+.sort-option.active .sort-option-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Divisor entre secciones */
+.sort-divider {
+  height: 1px;
+  background: var(--profile-border);
+  margin: 6px 0;
+}
+
+/* ==========================================
+   RESPONSIVE - MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+  .history-header-modern {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .history-title-section {
+    flex: 1;
+  }
+
+  /* Sort modal mobile - bottom sheet */
+  .history-header-modern .sort-modal {
+    position: fixed;
+    top: auto;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    border-radius: 20px 20px 0 0;
+    animation: slideUp 0.3s ease-out;
+    min-width: auto;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .history-header-modern .sort-btn {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+
+  .history-header-modern .sort-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .history-header-modern .sort-modal {
+    bottom: 65px;
+  }
+
+  .history-header-modern .sort-btn {
+    padding: 7px 12px;
+    font-size: 11px;
+  }
+
+  .history-header-modern .sort-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .sort-option {
+    padding: 9px 10px;
+  }
+
+  .sort-option-text {
+    font-size: 12px;
+  }
+
+  .sort-option-count {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}

@@ -1,10 +1,12 @@
 // src/components/profileComponents/HistoryTab.jsx
-import React, { useState, useMemo } from 'react';
-import { Activity, Gamepad2, CheckCircle2, XCircle, Clock, Filter, Trophy, Calendar } from 'lucide-react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { Activity, Gamepad2, CheckCircle2, XCircle, Clock, Trophy, Calendar, ArrowUpDown } from 'lucide-react';
 import { getPredictionResult } from '../../utils/profileUtils';
 
 export default function HistoryTab({ predictionHistory, historyLoading }) {
   const [activeFilter, setActiveFilter] = useState('all');
+  const [showSort, setShowSort] = useState(false);
+  const sortRef = useRef(null);
 
   // Filtrar predicciones según el estado activo
   const filteredHistory = useMemo(() => {
@@ -41,6 +43,36 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
     };
   }, [predictionHistory]);
 
+  // Cerrar Sort al hacer click afuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sortRef.current && !sortRef.current.contains(event.target)) {
+        setShowSort(false);
+      }
+    };
+
+    if (showSort) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showSort]);
+
+  // Obtener el nombre del filtro activo
+  const getActiveFilterName = () => {
+    const filterNames = {
+      all: 'Todas',
+      active: 'Activas',
+      finished: 'Terminadas',
+      exact: 'Exactas',
+      correct: 'Acertadas',
+      wrong: 'Falladas'
+    };
+    return filterNames[activeFilter] || 'Todas';
+  };
+
   if (historyLoading) {
     return (
       <div className="tab-content-wrapper">
@@ -54,7 +86,7 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
 
   return (
     <div className="tab-content-wrapper" data-tab="history">
-      {/* Header con Filtros */}
+      {/* Header con Sort */}
       <div className="history-header-modern">
         <div className="history-title-section">
           <div className="history-icon-wrapper">
@@ -64,62 +96,124 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
           <span className="history-count-badge">{counts.all}</span>
         </div>
 
-        {/* Filtros */}
-        <div className="history-filters">
-          <button
-            className={`history-filter-chip ${activeFilter === 'all' ? 'active' : ''}`}
-            onClick={() => setActiveFilter('all')}
+        {/* Sort Button */}
+        <div style={{ position: 'relative' }} ref={sortRef}>
+          <button 
+            className={`sort-btn ${showSort ? 'active' : ''}`}
+            onClick={() => setShowSort(!showSort)}
           >
-            <span className="filter-label">Todas</span>
-            <span className="filter-count">{counts.all}</span>
+            <ArrowUpDown size={16} />
+            <span>{getActiveFilterName()}</span>
           </button>
 
-          <button
-            className={`history-filter-chip ${activeFilter === 'active' ? 'active' : ''}`}
-            onClick={() => setActiveFilter('active')}
-          >
-            <Clock size={14} />
-            <span className="filter-label">Activas</span>
-            <span className="filter-count">{counts.active}</span>
-          </button>
+          {showSort && (
+            <>
+              <div 
+                className="sort-modal-backdrop" 
+                onClick={() => setShowSort(false)}
+              />
+              <div className="sort-modal">
+                <div className="sort-modal-header">
+                  <ArrowUpDown size={18} />
+                  <h4>Filtrar por</h4>
+                </div>
+                <div className="sort-options">
+                  {/* Todas */}
+                  <button
+                    className={`sort-option ${activeFilter === 'all' ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveFilter('all');
+                      setShowSort(false);
+                    }}
+                  >
+                    <div className="sort-option-icon">
+                      <Gamepad2 size={14} />
+                    </div>
+                    <span className="sort-option-text">Todas</span>
+                    <span className="sort-option-count">{counts.all}</span>
+                  </button>
 
-          <button
-            className={`history-filter-chip ${activeFilter === 'finished' ? 'active' : ''}`}
-            onClick={() => setActiveFilter('finished')}
-          >
-            <CheckCircle2 size={14} />
-            <span className="filter-label">Terminadas</span>
-            <span className="filter-count">{counts.finished}</span>
-          </button>
+                  {/* Activas */}
+                  <button
+                    className={`sort-option ${activeFilter === 'active' ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveFilter('active');
+                      setShowSort(false);
+                    }}
+                  >
+                    <div className="sort-option-icon">
+                      <Clock size={14} />
+                    </div>
+                    <span className="sort-option-text">Activas</span>
+                    <span className="sort-option-count">{counts.active}</span>
+                  </button>
 
-          <div className="filter-divider"></div>
+                  {/* Terminadas */}
+                  <button
+                    className={`sort-option ${activeFilter === 'finished' ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveFilter('finished');
+                      setShowSort(false);
+                    }}
+                  >
+                    <div className="sort-option-icon">
+                      <CheckCircle2 size={14} />
+                    </div>
+                    <span className="sort-option-text">Terminadas</span>
+                    <span className="sort-option-count">{counts.finished}</span>
+                  </button>
 
-          <button
-            className={`history-filter-chip filter-exact ${activeFilter === 'exact' ? 'active' : ''}`}
-            onClick={() => setActiveFilter('exact')}
-          >
-            <Trophy size={14} />
-            <span className="filter-label">Exactas</span>
-            <span className="filter-count">{counts.exact}</span>
-          </button>
+                  {/* Divisor visual */}
+                  <div className="sort-divider"></div>
 
-          <button
-            className={`history-filter-chip filter-correct ${activeFilter === 'correct' ? 'active' : ''}`}
-            onClick={() => setActiveFilter('correct')}
-          >
-            <CheckCircle2 size={14} />
-            <span className="filter-label">Acertadas</span>
-            <span className="filter-count">{counts.correct}</span>
-          </button>
+                  {/* Exactas */}
+                  <button
+                    className={`sort-option ${activeFilter === 'exact' ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveFilter('exact');
+                      setShowSort(false);
+                    }}
+                  >
+                    <div className="sort-option-icon sort-icon-exact">
+                      <Trophy size={14} />
+                    </div>
+                    <span className="sort-option-text">Exactas</span>
+                    <span className="sort-option-count">{counts.exact}</span>
+                  </button>
 
-          <button
-            className={`history-filter-chip filter-wrong ${activeFilter === 'wrong' ? 'active' : ''}`}
-            onClick={() => setActiveFilter('wrong')}
-          >
-            <XCircle size={14} />
-            <span className="filter-label">Falladas</span>
-            <span className="filter-count">{counts.wrong}</span>
-          </button>
+                  {/* Acertadas */}
+                  <button
+                    className={`sort-option ${activeFilter === 'correct' ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveFilter('correct');
+                      setShowSort(false);
+                    }}
+                  >
+                    <div className="sort-option-icon sort-icon-correct">
+                      <CheckCircle2 size={14} />
+                    </div>
+                    <span className="sort-option-text">Acertadas</span>
+                    <span className="sort-option-count">{counts.correct}</span>
+                  </button>
+
+                  {/* Falladas */}
+                  <button
+                    className={`sort-option ${activeFilter === 'wrong' ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveFilter('wrong');
+                      setShowSort(false);
+                    }}
+                  >
+                    <div className="sort-option-icon sort-icon-wrong">
+                      <XCircle size={14} />
+                    </div>
+                    <span className="sort-option-text">Falladas</span>
+                    <span className="sort-option-count">{counts.wrong}</span>
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
