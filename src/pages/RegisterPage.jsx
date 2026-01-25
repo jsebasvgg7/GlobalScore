@@ -30,6 +30,7 @@ export default function RegisterPage() {
     setError("");
     setSuccess("");
 
+    // Validaciones
     if (!name.trim()) {
       setError("Por favor ingresa tu nombre");
       return;
@@ -63,6 +64,9 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
+      console.log("📝 Iniciando registro para:", email);
+      
+      // 1. Verificar si el email ya existe
       const { data: existingUser, error: checkError } = await supabase
         .from("users")
         .select("email")
@@ -82,6 +86,7 @@ export default function RegisterPage() {
         return;
       }
 
+      // 2. Crear usuario en Auth
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: email.trim().toLowerCase(),
         password,
@@ -94,7 +99,7 @@ export default function RegisterPage() {
       });
 
       if (signUpError) {
-        console.error("Error de registro:", signUpError);
+        console.error("❌ Error de registro:", signUpError);
         
         if (signUpError.message.includes("already registered")) {
           setError("Este correo ya está registrado");
@@ -114,9 +119,11 @@ export default function RegisterPage() {
       }
 
       console.log("✅ Usuario de autenticación creado:", authData.user.id);
+
+      // 3. Crear perfil en la tabla users
       console.log("📝 Creando perfil en base de datos...");
       
-      const { error: insertError } = await supabase
+      const { data: newProfile, error: insertError } = await supabase
         .from("users")
         .insert({
           auth_id: authData.user.id,
@@ -125,33 +132,41 @@ export default function RegisterPage() {
           points: 0,
           predictions: 0,
           correct: 0,
-          weekly_points: 0,
-          weekly_predictions: 0,
-          weekly_correct: 0,
+          monthly_points: 0,
+          monthly_predictions: 0,
+          monthly_correct: 0,
           current_streak: 0,
-          best_streak: 0
-        });
+          best_streak: 0,
+          level: 1,
+          monthly_championships: 0
+        })
+        .select()
+        .single();
 
-      if (insertError && insertError.code !== '23505') {
-        console.error("Error al crear perfil:", insertError);
+      if (insertError) {
+        console.error("❌ Error al crear perfil:", insertError);
         
-        try {
-          await supabase.auth.signOut();
-        } catch (e) {
-          console.error("Error signing out:", e);
+        // Si falla la creación del perfil, eliminar el usuario de Auth
+        if (insertError.code !== '23505') { // No es duplicado
+          try {
+            await supabase.auth.signOut();
+          } catch (e) {
+            console.error("Error signing out:", e);
+          }
+          
+          setError("No se pudo crear el perfil. Por favor intenta de nuevo.");
+          setLoading(false);
+          return;
         }
-        
-        setError("No se pudo crear el perfil");
-        setLoading(false);
-        return;
       }
 
-      console.log("✅ Perfil creado exitosamente");
+      console.log("✅ Perfil creado exitosamente:", newProfile);
 
+      // 4. Mostrar mensaje de éxito
       setSuccess(
         "¡Cuenta creada exitosamente! " +
         (authData.user.identities?.length === 0 
-          ? "Ya puedes iniciar sesión." 
+          ? "Redirigiendo..." 
           : "Revisa tu correo para verificar tu cuenta.")
       );
 
@@ -159,12 +174,19 @@ export default function RegisterPage() {
       setEmail("");
       setPassword("");
 
+      // 5. Redirigir según el estado de verificación
       setTimeout(() => {
-        navigate("/");
-      }, 2000);
+        if (authData.user.identities?.length === 0) {
+          // Email ya confirmado, ir directo al app
+          navigate("/app");
+        } else {
+          // Requiere verificación, ir al login
+          navigate("/");
+        }
+      }, 1500);
 
     } catch (err) {
-      console.error("Error inesperado:", err);
+      console.error("💥 Error inesperado:", err);
       setError("Ocurrió un error inesperado");
     } finally {
       setLoading(false);

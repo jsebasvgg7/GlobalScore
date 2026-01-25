@@ -45,13 +45,16 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
+      console.log("🔐 Intentando login para:", email);
+      
+      // 1. Iniciar sesión
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email: email.trim().toLowerCase(),
         password,
       });
 
       if (signInError) {
-        console.error("Error de login:", signInError);
+        console.error("❌ Error de login:", signInError);
         
         if (signInError.message.includes("Invalid login credentials")) {
           setError("Correo o contraseña incorrectos");
@@ -66,64 +69,95 @@ export default function LoginPage() {
         return;
       }
 
-      if (data?.user) {
-        console.log("Usuario autenticado:", data.user.id);
+      if (!data?.user) {
+        setError("Error al iniciar sesión");
+        setLoading(false);
+        return;
+      }
 
-        const { data: profile, error: profileError } = await supabase
+      console.log("✅ Usuario autenticado:", data.user.id);
+
+      // 2. Verificar si existe el perfil
+      const { data: profile, error: profileError } = await supabase
+        .from("users")
+        .select("*")
+        .eq("auth_id", data.user.id)
+        .maybeSingle();
+
+      if (profileError && profileError.code !== 'PGRST116') {
+        console.error("❌ Error al verificar perfil:", profileError);
+        setError("Error al cargar tu perfil");
+        await supabase.auth.signOut();
+        setLoading(false);
+        return;
+      }
+
+      // 3. Si no existe perfil, crearlo
+      if (!profile) {
+        console.log("📝 Perfil no encontrado, creando uno nuevo...");
+        
+        const userName = data.user.user_metadata?.name || 
+                        data.user.user_metadata?.display_name ||
+                        data.user.email?.split('@')[0] || 
+                        "Usuario";
+        
+        const { data: newProfile, error: createError } = await supabase
           .from("users")
-          .select("*")
-          .eq("auth_id", data.user.id)
-          .maybeSingle();
+          .insert({
+            auth_id: data.user.id,
+            name: userName,
+            email: data.user.email,
+            points: 0,
+            predictions: 0,
+            correct: 0,
+            monthly_points: 0,
+            monthly_predictions: 0,
+            monthly_correct: 0,
+            current_streak: 0,
+            best_streak: 0,
+            level: 1,
+            monthly_championships: 0
+          })
+          .select()
+          .single();
 
-        if (profileError) {
-          console.error("Error al verificar perfil:", profileError);
-          setError("Error al cargar tu perfil");
-          await supabase.auth.signOut();
-          setLoading(false);
-          return;
-        }
-
-        if (!profile) {
-          console.log("📝 Perfil no encontrado, creando uno nuevo...");
+        if (createError) {
+          console.error("❌ Error al crear perfil:", createError);
           
-          const userName = data.user.user_metadata?.name || 
-                          data.user.user_metadata?.display_name ||
-                          data.user.email?.split('@')[0] || 
-                          "Usuario";
-          
-          const { error: createError } = await supabase
-            .from("users")
-            .insert({
-              auth_id: data.user.id,
-              name: userName,
-              email: data.user.email,
-              points: 0,
-              predictions: 0,
-              correct: 0,
-              weekly_points: 0,
-              weekly_predictions: 0,
-              weekly_correct: 0,
-              current_streak: 0,
-              best_streak: 0
-            });
-
-          if (createError && createError.code !== '23505') {
-            console.error("Error al crear perfil:", createError);
+          // Si es error de duplicado, intentar obtener el perfil
+          if (createError.code === '23505') {
+            const { data: existingProfile } = await supabase
+              .from("users")
+              .select("*")
+              .eq("auth_id", data.user.id)
+              .single();
+            
+            if (existingProfile) {
+              console.log("✅ Perfil duplicado encontrado");
+            } else {
+              setError("Error al crear tu perfil");
+              await supabase.auth.signOut();
+              setLoading(false);
+              return;
+            }
+          } else {
             setError("Error al crear tu perfil");
             await supabase.auth.signOut();
             setLoading(false);
             return;
           }
-
-          console.log("✅ Perfil creado exitosamente");
+        } else {
+          console.log("✅ Perfil creado exitosamente:", newProfile);
         }
-
-        console.log("✅ Inicio de sesión exitoso");
-        navigate("/app");
+      } else {
+        console.log("✅ Perfil encontrado:", profile);
       }
 
+      console.log("✅ Inicio de sesión exitoso");
+      navigate("/app");
+
     } catch (err) {
-      console.error("Error inesperado:", err);
+      console.error("💥 Error inesperado:", err);
       setError("Ocurrió un error inesperado");
     } finally {
       setLoading(false);
@@ -133,8 +167,8 @@ export default function LoginPage() {
   return (
     <div className="auth-wrapper">
       <div className="auth-card">
-        <h2>Bienvenido a GlobalScore</h2>
-
+        <h2>Inicia sesión</h2>
+        <p></p>
         <form onSubmit={login}>
           <input
             type="email"

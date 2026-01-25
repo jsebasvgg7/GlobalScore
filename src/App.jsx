@@ -73,7 +73,7 @@ export default function App() {
     };
   }, []);
 
-  // Reemplaza la función loadUserData en App.jsx con esta versión corregida:
+ // Reemplaza la función loadUserData en App.jsx con esta versión corregida:
 
 const loadUserData = async (authId) => {
   try {
@@ -89,10 +89,9 @@ const loadUserData = async (authId) => {
     if (profileError) {
       console.error("❌ Profile error:", profileError);
       
-      if (profileError.code === 'PGRST116' || 
-          profileError.message.includes('permission') ||
-          profileError.message.includes('not found')) {
-        console.log("🚪 Signing out due to profile error");
+      // Solo cerrar sesión si es un error de permisos
+      if (profileError.message.includes('permission')) {
+        console.log("🚪 Signing out due to permission error");
         await supabase.auth.signOut();
         setSession(null);
         setCurrentUser(null);
@@ -100,25 +99,90 @@ const loadUserData = async (authId) => {
         setInitialLoad(false);
         return;
       }
-      throw profileError;
+      // Para otros errores, continuar (podría ser temporal)
     }
 
-    // 2. Si no existe el perfil, ERROR (debe crearse en RegisterPage)
+    // 2. Si no existe el perfil, crear uno con la info de auth
     if (!profile) {
-      console.error("❌ No profile found for auth_id:", authId);
-      console.error("El perfil debe crearse durante el registro");
+      console.log("📝 Perfil no encontrado, creando uno nuevo...");
       
-      // Cerrar sesión y redirigir al registro
-      await supabase.auth.signOut();
-      setSession(null);
-      setCurrentUser(null);
-      setLoading(false);
-      setInitialLoad(false);
-      return;
-    }
+      // Obtener datos del usuario de Auth
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      
+      if (!authUser) {
+        console.error("❌ No se pudo obtener usuario de Auth");
+        await supabase.auth.signOut();
+        setSession(null);
+        setCurrentUser(null);
+        setLoading(false);
+        setInitialLoad(false);
+        return;
+      }
 
-    console.log("✅ Profile loaded:", profile);
-    setCurrentUser(profile);
+      // Crear perfil con nombre del metadata o del email
+      const userName = authUser.user_metadata?.name || 
+                      authUser.user_metadata?.display_name ||
+                      authUser.email?.split('@')[0] || 
+                      "Usuario";
+
+      const { data: newProfile, error: createError } = await supabase
+        .from("users")
+        .insert({
+          auth_id: authUser.id,
+          name: userName,
+          email: authUser.email,
+          points: 0,
+          predictions: 0,
+          correct: 0,
+          monthly_points: 0,
+          monthly_predictions: 0,
+          monthly_correct: 0,
+          current_streak: 0,
+          best_streak: 0,
+          level: 1,
+          monthly_championships: 0
+        })
+        .select()
+        .single();
+
+      if (createError) {
+        console.error("❌ Error al crear perfil:", createError);
+        
+        // Si es error de duplicado, intentar obtener el perfil de nuevo
+        if (createError.code === '23505') {
+          const { data: existingProfile } = await supabase
+            .from("users")
+            .select("*")
+            .eq("auth_id", authId)
+            .single();
+          
+          if (existingProfile) {
+            console.log("✅ Perfil duplicado encontrado:", existingProfile);
+            setCurrentUser(existingProfile);
+          } else {
+            await supabase.auth.signOut();
+            setSession(null);
+            setCurrentUser(null);
+            setLoading(false);
+            setInitialLoad(false);
+            return;
+          }
+        } else {
+          await supabase.auth.signOut();
+          setSession(null);
+          setCurrentUser(null);
+          setLoading(false);
+          setInitialLoad(false);
+          return;
+        }
+      } else {
+        console.log("✅ Perfil creado exitosamente:", newProfile);
+        setCurrentUser(newProfile);
+      }
+    } else {
+      console.log("✅ Profile loaded:", profile);
+      setCurrentUser(profile);
+    }
 
     // 3. Cargar lista de usuarios para el ranking
     const { data: userList, error: usersError } = await supabase
@@ -135,10 +199,8 @@ const loadUserData = async (authId) => {
   } catch (err) {
     console.error("💥 Unexpected error loading user data:", err);
     
-    console.log("🚪 Signing out due to unexpected error");
-    await supabase.auth.signOut();
-    setSession(null);
-    setCurrentUser(null);
+    // No cerrar sesión por errores inesperados, solo mostrar error
+    console.error("Error manteniendo sesión activa");
   } finally {
     setTimeout(() => {
       setLoading(false);
