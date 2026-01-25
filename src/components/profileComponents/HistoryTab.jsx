@@ -73,6 +73,44 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
     return filterNames[activeFilter] || 'Todas';
   };
 
+  // Renderizar logo de equipo (igual que MatchCard)
+  const renderTeamLogo = (logoUrl, fallbackEmoji) => {
+    if (logoUrl && logoUrl.startsWith('http')) {
+      return (
+        <img 
+          src={logoUrl} 
+          alt="Team logo" 
+          className="history-team-logo"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            const fallback = e.target.nextElementSibling;
+            if (fallback) fallback.style.display = 'flex';
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
+  // Renderizar logo de liga
+  const renderLeagueLogo = (logoUrl) => {
+    if (logoUrl) {
+      return (
+        <img 
+          src={logoUrl} 
+          alt="League logo"
+          className="history-league-logo"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            const fallbackIcon = e.target.nextElementSibling;
+            if (fallbackIcon) fallbackIcon.style.display = 'flex';
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
   if (historyLoading) {
     return (
       <div className="tab-content-wrapper">
@@ -86,20 +124,19 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
 
   return (
     <div className="tab-content-wrapper" data-tab="history">
-      {/* Header con Sort */}
-      <div className="history-header-modern">
-        <div className="history-title-section">
-          <div className="history-icon-wrapper">
-            <Gamepad2 size={20} />
-          </div>
-          <h3>Historial de Predicciones</h3>
-          <span className="history-count-badge">{counts.all}</span>
+      {/* Header Compacto */}
+      <div className="history-header-compact">
+        <div className="history-title-compact">
+          <Gamepad2 size={20} />
+          <span>Historial</span>
         </div>
 
+        <div className="history-header-divider"></div>
+
         {/* Sort Button */}
-        <div style={{ position: 'relative' }} ref={sortRef}>
+        <div className="history-sort-wrapper" ref={sortRef}>
           <button 
-            className={`sort-btn ${showSort ? 'active' : ''}`}
+            className={`history-sort-compact ${showSort ? 'active' : ''}`}
             onClick={() => setShowSort(!showSort)}
           >
             <ArrowUpDown size={16} />
@@ -215,6 +252,11 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
             </>
           )}
         </div>
+
+        <div className="history-header-divider"></div>
+
+        {/* Count Badge */}
+        <div className="history-count-compact">{counts.all}</div>
       </div>
 
       {/* Lista de Predicciones */}
@@ -245,63 +287,86 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
             const match = pred.matches;
 
             return (
-              <div key={pred.id} className={`history-card-simple ${result.status}`}>
-                {/* Header */}
-                <div className="history-card-header-simple">
-                  <div className="league-info-simple">
-                    <Trophy size={14} />
-                    <span className="league-name-simple">{match?.league}</span>
+              <div key={pred.id} className={`history-match-card ${result.status}`}>
+                
+                {/* HEADER: Liga y Fecha */}
+                <div className="history-match-header">
+                  <div className="history-league-info">
+                    {renderLeagueLogo(match?.league_logo_url)}
+                    <Trophy size={16} className="history-league-icon-fallback" style={{ display: match?.league_logo_url ? 'none' : 'flex' }} />
+                    <span className="history-league-name">{match?.league}</span>
                   </div>
-                  <div className="match-date-simple">
+                  
+                  <div className="history-match-date">
                     <Calendar size={12} />
                     <span>{match?.date}</span>
                   </div>
                 </div>
 
-                {/* Content - Equipos */}
-                <div className="history-card-content-simple">
-                  <div className="team-row-simple">
-                    <div className="team-info-simple">
-                      <span className="team-logo-simple">{match?.home_team_logo}</span>
-                      <span className="team-name-simple">{match?.home_team}</span>
+                {/* CONTENT: Equipos y Predicción */}
+                <div className="history-match-content">
+                  
+                  {/* Equipo Local */}
+                  <div className="history-team-section">
+                    <div className="history-team-logo-wrapper">
+                      {renderTeamLogo(match?.home_team_logo_url, match?.home_team_logo)}
+                      <span className="history-team-emoji" style={{ display: match?.home_team_logo_url ? 'none' : 'flex' }}>
+                        {match?.home_team_logo || '⚽'}
+                      </span>
                     </div>
-                    <div className="score-display-simple">
-                      <span className="score-value-simple">{pred.home_score}</span>
-                      {match?.status === 'finished' && (
-                        <span className="real-score-simple">({match.result_home})</span>
-                      )}
-                    </div>
+                    <span className="history-team-name">{match?.home_team}</span>
                   </div>
 
-                  <div className="vs-separator-simple">VS</div>
+                  {/* Predicción Central */}
+                  <div className="history-prediction-section">
+                    <div className="history-score-display">
+                      <div className="history-score-box">
+                        <span className="history-score-value">{pred.home_score}</span>
+                      </div>
+                      
+                      <div className="history-score-box">
+                        <span className="history-score-value">{pred.away_score}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Resultado Real - Solo si el partido terminó */}
+                    {match?.status === 'finished' && (
+                      <div className="history-real-result">
+                        <div className="history-real-scores">
+                          <span className="history-real-score">{match.result_home}</span>
+                          <span className="history-score-separator">-</span>
+                          <span className="history-real-score">{match.result_away}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
-                  <div className="team-row-simple">
-                    <div className="team-info-simple">
-                      <span className="team-logo-simple">{match?.away_team_logo}</span>
-                      <span className="team-name-simple">{match?.away_team}</span>
+                  {/* Equipo Visitante */}
+                  <div className="history-team-section">
+                    <div className="history-team-logo-wrapper">
+                      {renderTeamLogo(match?.away_team_logo_url, match?.away_team_logo)}
+                      <span className="history-team-emoji" style={{ display: match?.away_team_logo_url ? 'none' : 'flex' }}>
+                        {match?.away_team_logo || '⚽'}
+                      </span>
                     </div>
-                    <div className="score-display-simple">
-                      <span className="score-value-simple">{pred.away_score}</span>
-                      {match?.status === 'finished' && (
-                        <span className="real-score-simple">({match.result_away})</span>
-                      )}
-                    </div>
+                    <span className="history-team-name">{match?.away_team}</span>
                   </div>
                 </div>
 
-                {/* Footer - Resultado */}
-                <div className="history-card-footer-simple">
-                  <div className={`result-indicator-simple ${result.status}`}>
-                    {result.status === 'exact' && <CheckCircle2 size={16} />}
+                {/* FOOTER: Resultado */}
+                <div className="history-match-footer">
+                  <div className={`history-result-indicator ${result.status}`}>
+                    {result.status === 'exact' && <Trophy size={16} />}
                     {result.status === 'correct' && <CheckCircle2 size={16} />}
                     {result.status === 'wrong' && <XCircle size={16} />}
                     {result.status === 'pending' && <Clock size={16} />}
-                    <span className="result-label-simple">{result.label}</span>
+                    <span className="history-result-label">{result.label}</span>
                   </div>
                   {result.points > 0 && (
-                    <div className="points-badge-simple">+{result.points} pts</div>
+                    <div className="history-points-badge">+{result.points} pts</div>
                   )}
                 </div>
+
               </div>
             );
           })}
