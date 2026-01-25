@@ -186,6 +186,9 @@ export default function RankingPage({ currentUser, onBack }) {
         {/* Podio Top 3 */}
         {filteredUsers.length >= 3 && (
           <div className="podium-container">
+            <h2 className="podium-title">
+              {rankingType === 'global' ? 'Campeones De Temporada' : 'Campeones Del Mes'}
+            </h2>
             <div className="podium-winners">
               {/* 2do Lugar */}
               <div className="winner-card second">
