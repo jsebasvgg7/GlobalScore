@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { Eye, EyeOff, Trophy } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import LoadingDots from "../components/LoadingSpinner";
 import "../styles/pagesStyles/Auth.css";
@@ -44,6 +44,12 @@ export default function ResetPasswordPage() {
       return;
     }
 
+    if (password !== confirmPassword) {
+      setError("Las contraseñas no coinciden");
+      setLoading(false);
+      return;
+    }
+
     try {
       const { error } = await supabase.auth.updateUser({
         password: password,
@@ -66,11 +72,29 @@ export default function ResetPasswordPage() {
   if (!isValidToken && error) {
     return (
       <div className="auth-wrapper">
-        <div className="auth-card">
-          <h2>Enlace Inválido</h2>
-          <div className="error-message">{error}</div>
-          <div className="auth-alt" style={{ justifyContent: "center", marginTop: "24px" }}>
-            <Link to="/forgot-password">Solicitar nuevo enlace</Link>
+        {/* Banner - Solo visible en desktop */}
+        <div className="auth-banner">
+          <img 
+            src="/GlobalscoreBanner.jpg" 
+            alt="Globalscore Banner" 
+          />
+        </div>
+
+        {/* Contenido */}
+        <div className="auth-content">
+          <div className="auth-brand">
+            <div className="auth-brand-icon">
+              <Trophy size={20} />
+            </div>
+            <div className="auth-brand-name">Globalscore</div>
+          </div>
+
+          <div className="auth-card">
+            <h2>Enlace<br/>Inválido</h2>
+            <div className="error-message">{error}</div>
+            <div className="auth-alt" style={{ justifyContent: "center", marginTop: "24px" }}>
+              <Link to="/forgot-password">Solicitar nuevo enlace</Link>
+            </div>
           </div>
         </div>
       </div>
@@ -79,61 +103,90 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="auth-wrapper">
-      <div className="auth-card">
-        <h2>Nueva Contraseña</h2>
-        <p>Ingresa tu nueva contraseña</p>
+      {/* Banner - Solo visible en desktop */}
+      <div className="auth-banner">
+        <img 
+          src="/GlobalscoreBanner.jpg" 
+          alt="Globalscore Banner" 
+        />
+      </div>
 
-        <form onSubmit={handleResetPassword}>
-          <div className="password-input-wrapper">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Nueva Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={loading}
-              required
-            />
-            <button
-              type="button"
-              className="password-toggle-btn"
-              onClick={() => setShowPassword(!showPassword)}
-              disabled={loading}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
+      {/* Contenido del formulario */}
+      <div className="auth-content">
+        <div className="auth-brand">
+          <div className="auth-brand-icon">
+            <Trophy size={20} />
           </div>
+          <div className="auth-brand-name">Globalscore</div>
+        </div>
 
-          <div className="password-input-wrapper">
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="Confirmar Contraseña"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              disabled={loading}
-              required
-            />
-            <button
-              type="button"
-              className="password-toggle-btn"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              disabled={loading}
-            >
-              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+        <div className="auth-card">
+          <h2>Nueva<br/>Contraseña</h2>
+          <p>Ingresa tu nueva contraseña</p>
+
+          <form onSubmit={handleResetPassword}>
+            <div className="password-input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Nueva Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={loading}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+
+            <div className="password-input-wrapper">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirmar Contraseña"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                disabled={loading}
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                disabled={loading}
+              >
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+
+            {password && (
+              <div className="password-strength">
+                Seguridad: {
+                  password.length < 6 ? '❌ Muy corta' :
+                  password.length < 8 ? '⚠️ Débil' :
+                  password.length < 12 ? '✅ Buena' :
+                  '🔒 Fuerte'
+                }
+              </div>
+            )}
+
+            {error && <div className="error-message">{error}</div>}
+            {message && <div className="success-message">{message}</div>}
+
+            <button className="btn" type="submit" disabled={loading}>
+              {loading ? (
+                <span className="btn-loading">
+                  <LoadingDots />
+                  <span>Actualizando...</span>
+                </span>
+              ) : "Actualizar Contraseña"}
             </button>
-          </div>
-
-          {error && <div className="error-message">{error}</div>}
-          {message && <div className="success-message">{message}</div>}
-
-          <button className="btn" type="submit" disabled={loading}>
-          {loading ? (
-            <span className="btn-loading">
-              <LoadingDots />
-              <span>Actualizando...</span>
-            </span>
-          ) : "Actualizar Contraseña"}
-        </button>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

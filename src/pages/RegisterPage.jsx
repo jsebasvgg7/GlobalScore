@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Trophy } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import LoadingDots from "../components/LoadingSpinner";
 import "../styles/pagesStyles/Auth.css";
@@ -30,7 +30,6 @@ export default function RegisterPage() {
     setError("");
     setSuccess("");
 
-    // Validaciones
     if (!name.trim()) {
       setError("Por favor ingresa tu nombre");
       return;
@@ -66,7 +65,6 @@ export default function RegisterPage() {
     try {
       console.log("📝 Iniciando registro para:", email);
       
-      // 1. Verificar si el email ya existe
       const { data: existingUser, error: checkError } = await supabase
         .from("users")
         .select("email")
@@ -86,7 +84,6 @@ export default function RegisterPage() {
         return;
       }
 
-      // 2. Crear usuario en Auth
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: email.trim().toLowerCase(),
         password,
@@ -120,7 +117,6 @@ export default function RegisterPage() {
 
       console.log("✅ Usuario de autenticación creado:", authData.user.id);
 
-      // 3. Crear perfil en la tabla users
       console.log("📝 Creando perfil en base de datos...");
       
       const { data: newProfile, error: insertError } = await supabase
@@ -146,8 +142,7 @@ export default function RegisterPage() {
       if (insertError) {
         console.error("❌ Error al crear perfil:", insertError);
         
-        // Si falla la creación del perfil, eliminar el usuario de Auth
-        if (insertError.code !== '23505') { // No es duplicado
+        if (insertError.code !== '23505') {
           try {
             await supabase.auth.signOut();
           } catch (e) {
@@ -162,7 +157,6 @@ export default function RegisterPage() {
 
       console.log("✅ Perfil creado exitosamente:", newProfile);
 
-      // 4. Mostrar mensaje de éxito
       setSuccess(
         "¡Cuenta creada exitosamente! " +
         (authData.user.identities?.length === 0 
@@ -174,13 +168,10 @@ export default function RegisterPage() {
       setEmail("");
       setPassword("");
 
-      // 5. Redirigir según el estado de verificación
       setTimeout(() => {
         if (authData.user.identities?.length === 0) {
-          // Email ya confirmado, ir directo al app
           navigate("/app");
         } else {
-          // Requiere verificación, ir al login
           navigate("/");
         }
       }, 1500);
@@ -195,107 +186,125 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-wrapper">
-      <div className="auth-card">
-        <h2>Crear cuenta</h2>
-        <p>Crea tu cuenta y predice!!</p>
+      {/* Banner - Solo visible en desktop */}
+      <div className="auth-banner">
+        <img 
+          src="/GlobalscoreBanner.jpg" 
+          alt="Globalscore Banner" 
+        />
+      </div>
 
-        <form onSubmit={register}>
-          <input
-            type="text"
-            placeholder="Nombre"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-              setError("");
-            }}
-            disabled={loading}
-            autoComplete="name"
-            required
-            minLength={3}
-            maxLength={50}
-          />
+      {/* Contenido del formulario */}
+      <div className="auth-content">
+        <div className="auth-brand">
+          <div className="auth-brand-icon">
+            <Trophy size={20} />
+          </div>
+          <div className="auth-brand-name">Globalscore</div>
+        </div>
 
-          <input
-            type="email"
-            placeholder="Correo electronico"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setError("");
-            }}
-            disabled={loading}
-            autoComplete="email"
-            required
-          />
+        <div className="auth-card">
+          <h2>Crear cuenta</h2>
+          <p>Regístrate y comienza a predecir</p>
 
-          <div className="password-input-wrapper">
+          <form onSubmit={register}>
             <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Contraseña"
-              value={password}
+              type="text"
+              placeholder="Nombre"
+              value={name}
               onChange={(e) => {
-                setPassword(e.target.value);
+                setName(e.target.value);
                 setError("");
               }}
               disabled={loading}
-              autoComplete="new-password"
+              autoComplete="name"
               required
-              minLength={6}
+              minLength={3}
+              maxLength={50}
             />
-            <button
-              type="button"
-              className="password-toggle-btn"
-              onClick={() => setShowPassword(!showPassword)}
+
+            <input
+              type="email"
+              placeholder="Correo electrónico"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError("");
+              }}
               disabled={loading}
+              autoComplete="email"
+              required
+            />
+
+            <div className="password-input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError("");
+                }}
+                disabled={loading}
+                autoComplete="new-password"
+                required
+                minLength={6}
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={loading}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+
+            {password && (
+              <div className="password-strength">
+                Seguridad: {
+                  password.length < 6 ? '❌ Muy corta' :
+                  password.length < 8 ? '⚠️ Débil' :
+                  password.length < 12 ? '✅ Buena' :
+                  '🔒 Fuerte'
+                }
+              </div>
+            )}
+
+            {error && (
+              <div className="error-message">
+                {error}
+              </div>
+            )}
+
+            {success && (
+              <div className="success-message">
+                {success}
+              </div>
+            )}
+
+            <button 
+              className="btn" 
+              type="submit" 
+              disabled={loading || !name || !email || !password}
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {loading ? (
+                <span className="btn-loading">
+                  <LoadingDots />
+                  <span>Creando cuenta...</span>
+                </span>
+              ) : "Registrarse"}
             </button>
+          </form>
+
+          <div className="auth-alt">
+            <span>¿Ya tienes cuenta?</span>
+            <Link to="/">Entrar</Link>
           </div>
 
-          {password && (
-            <div className="password-strength">
-              Seguridad: {
-                password.length < 6 ? '❌ Muy corta' :
-                password.length < 8 ? '⚠️ Débil' :
-                password.length < 12 ? '✅ Buena' :
-                '🔒 Fuerte'
-              }
-            </div>
-          )}
-
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="success-message">
-              {success}
-            </div>
-          )}
-
-          <button 
-            className="btn" 
-            type="submit" 
-            disabled={loading || !name || !email || !password}
-          >
-            {loading ? (
-              <span className="btn-loading">
-                <LoadingDots />
-                <span>Creando cuenta...</span>
-              </span>
-            ) : "Registrarse"}
-          </button>
-        </form>
-
-        <div className="auth-alt">
-          <span>¿Ya tienes cuenta?</span>
-          <Link to="/">Entrar</Link>
-        </div>
-
-        <div className="info-box">
-          🔒 Tus datos están seguros y protegidos
+          <div className="info-box">
+            🔒 Tus datos están seguros y protegidos
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Trophy } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import LoadingDots from "../components/LoadingSpinner";
 import "../styles/pagesStyles/Auth.css";
@@ -42,36 +43,55 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="auth-wrapper">
-      <div className="auth-card">
-        <h2>Recuperar Contraseña</h2>
-        <p>Ingresa tu correo para recibir un enlace de recuperación</p>
+      {/* Banner - Solo visible en desktop */}
+      <div className="auth-banner">
+        <img 
+          src="/GlobalscoreBanner.jpg" 
+          alt="Globalscore Banner" 
+        />
+      </div>
 
-        <form onSubmit={handleResetPassword}>
-          <input
-            type="email"
-            placeholder="Tu Correo Electrónico"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={loading}
-            required
-          />
+      {/* Contenido del formulario */}
+      <div className="auth-content">
+        <div className="auth-brand">
+          <div className="auth-brand-icon">
+            <Trophy size={20} />
+          </div>
+          <div className="auth-brand-name">Globalscore</div>
+        </div>
 
-          {message && <div className="success-message">{message}</div>}
-          {error && <div className="error-message">{error}</div>}
+        <div className="auth-card">
+          <h2>Recuperar<br/>Contraseña</h2>
+          <p>Ingresa tu correo para recibir un enlace</p>
 
-          <button className="btn" type="submit" disabled={loading}>
-          {loading ? (
-            <span className="btn-loading">
-              <LoadingDots />
-              <span>Enviando...</span>
-            </span>
-          ) : "Enviar Enlace"}
-        </button>
-        </form>
+          <form onSubmit={handleResetPassword}>
+            <input
+              type="email"
+              placeholder="Correo electrónico"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+              required
+            />
 
-        <div className="auth-alt">
-          <Link to="/">Volver a Entrar</Link>
-          <Link to="/register">Crear Cuenta</Link>
+            {message && <div className="success-message">{message}</div>}
+            {error && <div className="error-message">{error}</div>}
+
+            <button className="btn" type="submit" disabled={loading}>
+              {loading ? (
+                <span className="btn-loading">
+                  <LoadingDots />
+                  <span>Enviando...</span>
+                </span>
+              ) : "Enviar Enlace"}
+            </button>
+          </form>
+
+          <div className="auth-alt">
+            <Link to="/">Volver a Entrar</Link>
+            <span>•</span>
+            <Link to="/register">Crear Cuenta</Link>
+          </div>
         </div>
       </div>
     </div>

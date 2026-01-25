@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Trophy } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import LoadingDots from "../components/LoadingSpinner";
 import "../styles/pagesStyles/Auth.css";
@@ -47,7 +47,6 @@ export default function LoginPage() {
     try {
       console.log("🔐 Intentando login para:", email);
       
-      // 1. Iniciar sesión
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email: email.trim().toLowerCase(),
         password,
@@ -77,7 +76,6 @@ export default function LoginPage() {
 
       console.log("✅ Usuario autenticado:", data.user.id);
 
-      // 2. Verificar si existe el perfil
       const { data: profile, error: profileError } = await supabase
         .from("users")
         .select("*")
@@ -92,7 +90,6 @@ export default function LoginPage() {
         return;
       }
 
-      // 3. Si no existe perfil, crearlo
       if (!profile) {
         console.log("📝 Perfil no encontrado, creando uno nuevo...");
         
@@ -124,7 +121,6 @@ export default function LoginPage() {
         if (createError) {
           console.error("❌ Error al crear perfil:", createError);
           
-          // Si es error de duplicado, intentar obtener el perfil
           if (createError.code === '23505') {
             const { data: existingProfile } = await supabase
               .from("users")
@@ -166,73 +162,92 @@ export default function LoginPage() {
 
   return (
     <div className="auth-wrapper">
-      <div className="auth-card">
-        <h2>Inicia sesión</h2>
-        <p></p>
-        <form onSubmit={login}>
-          <input
-            type="email"
-            placeholder="Correo electronico"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setError("");
-            }}
-            disabled={loading}
-            autoComplete="email"
-            required
-          />
+      {/* Banner - Solo visible en desktop */}
+      <div className="auth-banner">
+        <img 
+          src="/GlobalscoreBanner.jpg" 
+          alt="Globalscore Banner" 
+        />
+      </div>
 
-          <div className="password-input-wrapper">
+      {/* Contenido del formulario */}
+      <div className="auth-content">
+        <div className="auth-brand">
+          <div className="auth-brand-icon">
+            <Trophy size={20} />
+          </div>
+          <div className="auth-brand-name">Globalscore</div>
+        </div>
+
+        <div className="auth-card">
+          <h2>Inicia sesión</h2>
+          <p>Entra y comienza a predecir</p>
+          
+          <form onSubmit={login}>
             <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Contraseña"
-              value={password}
+              type="email"
+              placeholder="Correo electrónico"
+              value={email}
               onChange={(e) => {
-                setPassword(e.target.value);
+                setEmail(e.target.value);
                 setError("");
               }}
               disabled={loading}
-              autoComplete="current-password"
+              autoComplete="email"
               required
             />
-            <button
-              type="button"
-              className="password-toggle-btn"
-              onClick={() => setShowPassword(!showPassword)}
-              disabled={loading}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
-          </div>
 
-          <div className="forgot-password-link">
-            <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
-          </div>
-
-          {error && (
-            <div className="error-message">
-              {error}
+            <div className="password-input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError("");
+                }}
+                disabled={loading}
+                autoComplete="current-password"
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={loading}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
-          )}
 
-          <button 
-            className="btn" 
-            type="submit" 
-            disabled={loading || !email || !password}
-          >
-            {loading ? (
-              <span className="btn-loading">
-                <LoadingDots />
-                <span>Entrando...</span>
-              </span>
-            ) : "Entrar"}
-          </button>
-        </form>
+            <div className="forgot-password-link">
+              <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
+            </div>
 
-        <div className="auth-alt">
-          <span>¿No tienes una cuenta?</span>
-          <Link to="/register">Regístrate</Link>
+            {error && (
+              <div className="error-message">
+                {error}
+              </div>
+            )}
+
+            <button 
+              className="btn" 
+              type="submit" 
+              disabled={loading || !email || !password}
+            >
+              {loading ? (
+                <span className="btn-loading">
+                  <LoadingDots />
+                  <span>Entrando...</span>
+                </span>
+              ) : "Entrar"}
+            </button>
+          </form>
+
+          <div className="auth-alt">
+            <span>¿No tienes una cuenta?</span>
+            <Link to="/register">Regístrate</Link>
+          </div>
         </div>
       </div>
     </div>

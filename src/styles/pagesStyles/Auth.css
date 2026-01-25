@@ -1,5 +1,5 @@
 /* ===================================
-   AUTH PAGES - Modern Mobile Design
+   AUTH PAGES - Adapted Design
 =================================== */
 
 .auth-wrapper {
@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   background: linear-gradient(180deg, #f0f0f8 0%, #ffffff 100%);
-  padding: 20px;
+  padding: 0;
   position: relative;
   overflow: hidden;
 }
@@ -41,34 +41,105 @@
   z-index: 0;
 }
 
-.auth-card {
-  position: relative;
+/* Banner - Siempre oculto */
+.auth-banner {
+  display: none;
+}
+
+/* Content Layout */
+.auth-content {
   width: 100%;
-  max-width: 380px;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  z-index: 10;
+  padding: 32px 20px;
+  min-height: 100vh;
+}
+
+@media (min-width: 768px) {
+  .auth-content {
+    padding: 40px 60px;
+  }
+}
+
+/* Logo/Brand at top left corner */
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 60px;
+  align-self: flex-start;
+  position: absolute;
+  top: 32px;
+  left: 20px;
+}
+
+@media (min-width: 768px) {
+  .auth-brand {
+    top: 40px;
+    left: 60px;
+  }
+}
+
+.auth-brand-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #9b87d8 0%, #7c6bb8 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.auth-brand-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a2e;
+  letter-spacing: -0.5px;
+}
+
+/* Auth Card */
+.auth-card {
+  width: 100%;
+  max-width: 420px;
   background: #ffffff;
   border-radius: 32px;
   padding: 48px 32px 40px 32px;
-  z-index: 10;
   box-shadow: 
     0 20px 60px rgba(96, 81, 155, 0.15),
     0 8px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  margin-top: 80px;
+}
+
+@media (min-width: 768px) {
+  .auth-card {
+    margin-top: 100px;
+  }
 }
 
 .auth-card h2 {
   margin: 0 0 12px 0;
-  font-size: 32px;
+  font-size: 48px;
   font-weight: 700;
   color: #1a1a2e;
-  text-align: left;
-  letter-spacing: -0.5px;
+  text-align: center;
+  letter-spacing: -1px;
+  line-height: 1.1;
 }
 
 .auth-card > p {
-  margin: 0 0 32px 0;
-  font-size: 15px;
+  margin: 0 0 40px 0;
+  font-size: 16px;
   font-weight: 400;
   color: #6b7280;
-  text-align: left;
+  text-align: center;
 }
 
 .auth-card form {
@@ -78,6 +149,7 @@
   gap: 16px;
 }
 
+/* Inputs */
 .auth-card input {
   width: 100%;
   padding: 16px 20px;
@@ -103,7 +175,7 @@
   font-weight: 400;
 }
 
-/* Input con icono de ojo (password) */
+/* Password Input */
 .password-input-wrapper {
   position: relative;
   width: 100%;
@@ -138,7 +210,7 @@
   opacity: 0.5;
 }
 
-/* Enlace "Olvidaste tu contraseña?" */
+/* Forgot Password Link */
 .forgot-password-link {
   text-align: right;
   margin-top: -8px;
@@ -157,7 +229,7 @@
   color: #7c6bb8;
 }
 
-/* Botón principal */
+/* Main Button */
 .auth-card .btn {
   width: 100%;
   padding: 16px;
@@ -175,6 +247,7 @@
   letter-spacing: 0.3px;
   box-shadow: 0 8px 24px rgba(155, 135, 216, 0.35);
 }
+
 .btn-loading {
   display: flex;
   align-items: center;
@@ -212,7 +285,7 @@
   box-shadow: 0 4px 16px rgba(155, 135, 216, 0.2);
 }
 
-/* Texto alternativo (crear cuenta / iniciar sesión) */
+/* Alternative Actions */
 .auth-alt {
   display: flex;
   align-items: center;
@@ -237,7 +310,7 @@
   color: #7c6bb8;
 }
 
-/* Mensajes de éxito y error */
+/* Messages */
 .success-message {
   padding: 14px 16px;
   margin-top: 16px;
@@ -275,7 +348,7 @@
   }
 }
 
-/* Info box (consejos) */
+/* Info Box */
 .info-box {
   margin-top: 24px;
   padding: 16px;
@@ -293,7 +366,7 @@
   font-weight: 600;
 }
 
-/* Password strength indicator */
+/* Password Strength */
 .password-strength {
   padding: 10px 14px;
   background: rgba(155, 135, 216, 0.08);
@@ -314,8 +387,8 @@
   }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Tablet Adjustments */
+@media (max-width: 1023px) and (min-width: 768px) {
   .auth-wrapper::before {
     width: 280px;
     height: 280px;
@@ -331,34 +404,59 @@
   }
 
   .auth-card {
+    max-width: 450px;
+  }
+
+  .auth-card h2 {
+    font-size: 42px;
+  }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 767px) {
+  .auth-wrapper::before {
+    width: 280px;
+    height: 280px;
+    top: -100px;
+    right: -60px;
+  }
+
+  .auth-wrapper::after {
+    width: 240px;
+    height: 240px;
+    bottom: -80px;
+    left: -50px;
+  }
+
+  .auth-brand {
+    margin-bottom: 40px;
+  }
+
+  .auth-brand-name {
+    font-size: 20px;
+  }
+
+  .auth-card {
     max-width: 360px;
     padding: 40px 28px 36px 28px;
   }
 
   .auth-card h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
+    font-size: 36px;
   }
 
   .auth-card > p {
-    font-size: 14px;
-    margin-bottom: 28px;
+    font-size: 15px;
+    margin-bottom: 32px;
   }
 
   .auth-card input {
     padding: 15px 18px;
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .auth-card .btn {
     padding: 15px;
-    font-size: 15px;
-  }
-
-  .loading-spinner {
-    width: 16px;
-    height: 16px;
-    border-width: 2px;
   }
 }
 
@@ -381,6 +479,10 @@
     left: -40px;
   }
 
+  .auth-brand {
+    margin-bottom: 32px;
+  }
+
   .auth-card {
     max-width: 100%;
     padding: 36px 24px 32px 24px;
@@ -388,12 +490,12 @@
   }
 
   .auth-card h2 {
-    font-size: 26px;
+    font-size: 32px;
   }
 
   .auth-card > p {
-    font-size: 13px;
-    margin-bottom: 24px;
+    font-size: 14px;
+    margin-bottom: 28px;
   }
 
   .auth-card form {
@@ -403,34 +505,11 @@
   .auth-card input {
     padding: 14px 16px;
     font-size: 14px;
-    border-radius: 14px;
-  }
-
-  .password-toggle-btn {
-    right: 14px;
-  }
-
-  .auth-card .btn {
-    padding: 14px;
-    font-size: 15px;
-    border-radius: 14px;
   }
 
   .auth-alt {
     font-size: 13px;
-    margin-top: 24px;
-  }
-
-  .info-box {
-    margin-top: 20px;
-    padding: 14px;
-    font-size: 12px;
-  }
-
-  .loading-spinner {
-    width: 15px;
-    height: 15px;
-    border-width: 2px;
+    margin-top: 28px;
   }
 }
 
@@ -454,6 +533,10 @@
   box-shadow: 
     0 20px 60px rgba(0, 0, 0, 0.5),
     0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .auth-brand-name {
+  color: #f0f1f7;
 }
 
 [data-theme="dark"] .auth-card h2 {
@@ -543,11 +626,5 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-
-  .loading-spinner {
-    animation: none;
-    border-top-color: transparent;
-    border-right-color: white;
   }
 }
