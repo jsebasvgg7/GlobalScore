@@ -131,17 +131,23 @@ export default function ProfilePage({ currentUser, onBack }) {
   return (
     <div className="profile-page-modern">
       <div className="profile-container-modern">
-        <ProfileHero 
-          userData={userData}
-          currentUser={currentUser}
-        />
+        {/* COLUMNA IZQUIERDA - Hero + Tabs (Desktop) */}
+        <div className="profile-left-column">
+          <ProfileHero 
+            userData={userData}
+            currentUser={currentUser}
+          />
 
-        <ProfileTabs 
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
+          <ProfileTabs 
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        </div>
 
-        {renderTabContent()}
+        {/* COLUMNA DERECHA - Contenido (Desktop) */}
+        <div className="profile-right-column">
+          {renderTabContent()}
+        </div>
       </div>
 
       <Footer />

@@ -14,6 +14,199 @@
 @import '../profile/ProfileHistory.css';
 
 /* ==========================================
+   DESKTOP LAYOUT - Diseño mejorado para pantallas grandes
+   Inspirado en la imagen de referencia
+========================================== */
+
+@media (min-width: 1024px) {
+  .profile-container-modern {
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 32px;
+    padding: 32px;
+    align-items: start;
+  }
+
+  /* COLUMNA IZQUIERDA - Hero + Tabs */
+  .profile-left-column {
+    position: sticky;
+    top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Hero Card mejorado para desktop */
+  .profile-hero {
+    background: var(--profile-card);
+    border-radius: 24px;
+    padding: 40px 32px;
+    box-shadow: var(--profile-shadow-lg);
+    border: 1px solid var(--profile-border);
+  }
+
+  /* Tabs verticales en desktop - estilo de la imagen */
+  .profile-tabs-modern {
+    flex-direction: column;
+    padding: 16px;
+    border-radius: 24px;
+    border: 1px solid var(--profile-border);
+    position: static;
+    box-shadow: var(--profile-shadow-lg);
+    background: var(--profile-card);
+  }
+
+  .tab-btn-modern {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+
+  .tab-btn-modern span {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .tab-btn-modern svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .tab-btn-modern.active::after {
+    display: none;
+  }
+
+  .tab-btn-modern.active {
+    background: linear-gradient(135deg, var(--profile-primary), var(--profile-primary-light));
+    color: white;
+  }
+
+  .tab-btn-modern:hover:not(.active) {
+    background: var(--profile-hover);
+  }
+
+  /* COLUMNA DERECHA - Contenido */
+  .profile-right-column {
+    min-height: 600px;
+  }
+
+  .tab-content-wrapper {
+    background: var(--profile-card);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: var(--profile-shadow-lg);
+    border: 1px solid var(--profile-border);
+    min-height: 500px;
+  }
+
+  /* Header del contenido */
+  .content-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--profile-border);
+  }
+
+  .content-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--profile-text);
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+
+  /* Mejorar spacing de secciones */
+  .section-modern {
+    margin-bottom: 24px;
+  }
+
+  /* Clinical list más espaciada */
+  .clinical-item {
+    padding: 20px;
+  }
+
+  .icon-wrapper {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+  }
+
+  .icon-wrapper svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .item-title {
+    font-size: 16px;
+  }
+
+  .item-subtitle {
+    font-size: 14px;
+  }
+
+  /* Level Card mejorada */
+  .level-card-modern {
+    padding: 24px;
+  }
+
+  .level-card-header {
+    margin-bottom: 16px;
+  }
+
+  /* Stats grid mejorada */
+  .stats-cards-grid {
+    gap: 16px;
+  }
+
+  .stat-card-modern {
+    padding: 20px;
+  }
+
+  /* Achievements grid desktop */
+  .achievements-grid-modern {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .achievement-card-modern {
+    padding: 20px;
+  }
+
+  /* Monthly stats desktop */
+  .monthly-stats-grid {
+    gap: 16px;
+  }
+
+  .monthly-stat-card {
+    padding: 20px;
+  }
+
+  /* History cards desktop */
+  .history-grid-modern {
+    gap: 16px;
+  }
+
+  .history-match-card {
+    transition: all 0.3s ease;
+  }
+
+  .history-match-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--profile-shadow-lg);
+  }
+}
+
+/* ==========================================
    ACHIEVEMENTS TAB
 ========================================== */
 
@@ -495,6 +688,12 @@
 @media (max-width: 768px) {
   .profile-container-modern {
     padding-bottom: 90px;
+    display: block;
+  }
+
+  .profile-left-column,
+  .profile-right-column {
+    width: 100%;
   }
 }
 
