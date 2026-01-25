@@ -1068,7 +1068,7 @@ height: 80px;
 width: 80px;
 height: 80px;
 border: 4px solid #F3F4F6;
-border-top-color: #10B981;
+border-top-color: #5B21B6;
 border-radius: 50%;
 animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
 }
@@ -1083,7 +1083,7 @@ to { transform: rotate(360deg); }
 .loading-text {
 font-size: 18px;
 font-weight: 700;
-background: linear-gradient(135deg, #10B981, #059669);
+background: linear-gradient(135deg, #7C3AED, #5B21B6);
 -webkit-background-clip: text;
 background-clip: text;
 color: transparent;
