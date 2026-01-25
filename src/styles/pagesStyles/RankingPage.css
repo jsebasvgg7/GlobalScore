@@ -106,7 +106,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #10B981, #059669);
+  background: linear-gradient(135deg, #7C3AED, #5B21B6);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -120,7 +120,7 @@
 .back-button:hover {
   transform: translateX(-4px) scale(1.05);
   box-shadow: 0 8px 16px rgba(16, 185, 129, 0.15);
-  border-color: #10B981;
+  border-color: #7C3AED;
 }
 
 .back-button:hover::before {
@@ -154,7 +154,7 @@
   left: 0;
   width: 60px;
   height: 4px;
-  background: linear-gradient(90deg, #10B981, transparent);
+  background: linear-gradient(90deg, #7C3AED, #5B21B6);
   border-radius: 2px;
 }
 
@@ -206,7 +206,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
   border-radius: 14px;
@@ -227,7 +227,7 @@
 .tab-button.active {
   color: white;
   transform: scale(1.02);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
 .tab-button.active::before {
@@ -759,7 +759,7 @@
   left: 0;
   width: 80px;
   height: 2px;
-  background: linear-gradient(90deg, #10B981, transparent);
+  background: linear-gradient(90deg, #7C3AED, transparent);
 }
 
 .list-title {
@@ -799,7 +799,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #10B981, #059669);
+  background: linear-gradient(135deg, #7C3AED, #5B21B6);
   opacity: 0;
   transition: opacity 0.3s ease;
   border-radius: 10px;
@@ -821,7 +821,7 @@
 .sort-btn.active {
   color: white;
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
 }
 
 .sort-btn.active::before {
