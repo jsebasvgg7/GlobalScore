@@ -48,23 +48,6 @@ export default function ProfileHero({ userData, currentUser }) {
             )}
           </div>
         )}
-
-        <div className="stats-mini-row">
-          <div className="stat-mini">
-            <div className="stat-mini-value">{currentUser?.predictions || 0}</div>
-            <div className="stat-mini-label">Predicts</div>
-          </div>
-          <div className="stat-mini-divider"></div>
-          <div className="stat-mini">
-            <div className="stat-mini-value">{currentUser?.points || 0}</div>
-            <div className="stat-mini-label">Puntos</div>
-          </div>
-          <div className="stat-mini-divider"></div>
-          <div className="stat-mini">
-            <div className="stat-mini-value">{accuracy}%</div>
-            <div className="stat-mini-label">Precisión</div>
-          </div>
-        </div>
       </div>
     </div>
   );
