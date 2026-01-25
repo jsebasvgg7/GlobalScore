@@ -276,7 +276,6 @@ export default function RankingPage({ currentUser, onBack }) {
         {/* Ranking List */}
         <div className="ranking-list-section">
           <div className="list-header">
-            <h2 className="list-title">Clasificación Completa</h2>
             <div className="sort-controls">
               <button 
                 className={`sort-btn ${sortBy === 'points' ? 'active' : ''}`}
