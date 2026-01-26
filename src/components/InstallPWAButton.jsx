@@ -8,21 +8,19 @@ export default function InstallPWAButton() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    // Escuchar evento de instalación
+    console.log('🎯 InstallPWAButton montado');
+    
     const handler = (e) => {
+      console.log('📥 beforeinstallprompt recibido');
       e.preventDefault();
       setDeferredPrompt(e);
-      
-      // Mostrar banner después de 5 segundos
-      setTimeout(() => {
-        setShowBanner(true);
-      }, 5000);
+      setTimeout(() => setShowBanner(true), 5000);
     };
 
     window.addEventListener('beforeinstallprompt', handler);
 
-    // Ocultar si ya está instalada
     if (window.matchMedia('(display-mode: standalone)').matches) {
+      console.log('✅ Ya está instalada como PWA');
       setShowBanner(false);
     }
 
@@ -30,7 +28,6 @@ export default function InstallPWAButton() {
       window.removeEventListener('beforeinstallprompt', handler);
     };
   }, []);
-
   const handleInstall = async () => {
     if (!deferredPrompt) return;
 

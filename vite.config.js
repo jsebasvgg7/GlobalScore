@@ -1,15 +1,30 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { copyFileSync } from 'fs';
+import { resolve } from 'path';
 
 export default defineConfig({
-  plugins: [react()],
-  build: {
-    // Generar service worker en build
-    rollupOptions: {
-      input: {
-        main: './index.html',
-        sw: './public/service-worker.js'
+  plugins: [
+    react(),
+    {
+      name: 'copy-sw',
+      closeBundle() {
+        // Copiar service worker al dist después del build
+        try {
+          copyFileSync(
+            resolve('public/service-worker.js'),
+            resolve('dist/service-worker.js')
+          );
+          console.log('✅ Service Worker copiado a dist/');
+        } catch (err) {
+          console.error('❌ Error copiando SW:', err);
+        }
       }
     }
+  ],
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false
   }
 });
