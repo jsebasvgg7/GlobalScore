@@ -1,0 +1,110 @@
+/* src/components/InstallPWAButton.css */
+.install-pwa-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  animation: slideUp 0.3s ease;
+  max-width: 90%;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.install-pwa-content {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.install-pwa-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.install-pwa-text {
+  flex: 1;
+}
+
+.install-pwa-title {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+
+.install-pwa-subtitle {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.install-pwa-btn {
+  background: white;
+  color: #667eea;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.2s;
+}
+
+.install-pwa-btn:hover {
+  transform: scale(1.05);
+}
+
+.install-pwa-close {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.install-pwa-close:hover {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .install-pwa-banner {
+    bottom: 80px; /* Sobre la navegación móvil */
+    left: 10px;
+    right: 10px;
+    transform: none;
+    max-width: none;
+  }
+
+  .install-pwa-content {
+    padding: 12px 16px;
+  }
+
+  .install-pwa-subtitle {
+    display: none; /* Ocultar en móvil para ahorrar espacio */
+  }
+}

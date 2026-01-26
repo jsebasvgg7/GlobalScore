@@ -4,6 +4,7 @@ import { supabase } from "./utils/supabaseClient";
 import { ThemeProvider } from "./context/ThemeContext";
 
 import Header from "./components/Header";
+import InstallPWAButton from './components/InstallPWAButton';
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
@@ -276,6 +277,7 @@ export default function App() {
             element={session ? <WorldCupPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           /> */}
         </Routes>
+        <InstallPWAButton />
       </BrowserRouter>
     </ThemeProvider>
   );
