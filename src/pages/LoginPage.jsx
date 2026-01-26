@@ -180,7 +180,7 @@ export default function LoginPage() {
         </div>
 
         <div className="auth-card">
-          <h2>Inicia sesión</h2>
+          <h2>Iniciar sesión</h2>
           <p>Entra y comienza a predecir</p>
           
           <form onSubmit={login}>
