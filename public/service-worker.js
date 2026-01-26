@@ -1,29 +1,22 @@
-// public/service-worker.js
+// public/service-worker.js - VERSIÓN CORREGIDA
 const CACHE_NAME = 'globalscore-v1';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/src/main.jsx',
-  '/src/App.jsx',
-  '/src/index.css'
-];
 
-// Install Service Worker
+// ============================================
+// INSTALL - No cachear nada al instalar
+// ============================================
 self.addEventListener('install', (event) => {
   console.log('🔧 Service Worker instalando...');
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('📦 Cacheando archivos iniciales');
-        return cache.addAll(urlsToCache);
-      })
-      .then(() => self.skipWaiting())
-  );
+  
+  // Activar inmediatamente sin esperar
+  self.skipWaiting();
 });
 
-// Activate Service Worker
+// ============================================
+// ACTIVATE - Limpiar cachés antiguas
+// ============================================
 self.addEventListener('activate', (event) => {
   console.log('✅ Service Worker activado');
+  
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -38,7 +31,9 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch - Network First, fallback to Cache
+// ============================================
+// FETCH - Network First con Cache Fallback
+// ============================================
 self.addEventListener('fetch', (event) => {
   // Solo cachear GET requests
   if (event.request.method !== 'GET') return;
@@ -48,15 +43,25 @@ self.addEventListener('fetch', (event) => {
     return event.respondWith(fetch(event.request));
   }
 
+  // No cachear requests a APIs externas
+  if (event.request.url.includes('api')) {
+    return event.respondWith(fetch(event.request));
+  }
+
   event.respondWith(
+    // Intentar desde red primero
     fetch(event.request)
       .then((response) => {
-        // Si la respuesta es válida, clonarla y guardarla en caché
-        if (response && response.status === 200) {
+        // Si la respuesta es válida, clonarla y guardarla
+        if (response && response.status === 200 && response.type === 'basic') {
           const responseToCache = response.clone();
+          
           caches.open(CACHE_NAME)
             .then((cache) => {
               cache.put(event.request, responseToCache);
+            })
+            .catch((err) => {
+              console.warn('⚠️ Error guardando en caché:', err);
             });
         }
         return response;
@@ -66,18 +71,36 @@ self.addEventListener('fetch', (event) => {
         return caches.match(event.request)
           .then((cachedResponse) => {
             if (cachedResponse) {
+              console.log('📦 Sirviendo desde caché:', event.request.url);
               return cachedResponse;
             }
-            // Página offline personalizada
+            
+            // Si es una navegación y no hay caché, mostrar página offline
             if (event.request.mode === 'navigate') {
-              return caches.match('/offline.html');
+              return caches.match('/offline.html').then((offlineResponse) => {
+                return offlineResponse || new Response('Sin conexión', {
+                  status: 503,
+                  statusText: 'Service Unavailable',
+                  headers: new Headers({
+                    'Content-Type': 'text/html'
+                  })
+                });
+              });
             }
+            
+            // Para otros recursos, responder con error
+            return new Response('Recurso no disponible sin conexión', {
+              status: 503,
+              statusText: 'Service Unavailable'
+            });
           });
       })
   );
 });
 
-// Push Notifications
+// ============================================
+// PUSH NOTIFICATIONS
+// ============================================
 self.addEventListener('push', (event) => {
   console.log('📬 Push notification recibida');
   
@@ -95,7 +118,7 @@ self.addEventListener('push', (event) => {
   const options = {
     body: data.body || 'Nuevo contenido disponible',
     icon: '/icons/icon-192x192.png',
-    badge: '/icons/badge-72x72.png',
+    badge: '/icons/icon-72x72.png',
     vibrate: [200, 100, 200],
     data: {
       url: data.url || '/',
@@ -105,13 +128,11 @@ self.addEventListener('push', (event) => {
     actions: [
       {
         action: 'view',
-        title: '👀 Ver',
-        icon: '/icons/view.png'
+        title: '👀 Ver'
       },
       {
         action: 'close',
-        title: '✖️ Cerrar',
-        icon: '/icons/close.png'
+        title: '✖️ Cerrar'
       }
     ],
     tag: data.tag || `notification-${Date.now()}`,
@@ -124,7 +145,9 @@ self.addEventListener('push', (event) => {
   );
 });
 
-// Notification Click
+// ============================================
+// NOTIFICATION CLICK
+// ============================================
 self.addEventListener('notificationclick', (event) => {
   console.log('🖱️ Notification clicked:', event.action);
   
@@ -141,7 +164,7 @@ self.addEventListener('notificationclick', (event) => {
         .then((clientList) => {
           // Enfocar ventana existente o abrir nueva
           for (const client of clientList) {
-            if (client.url === event.notification.data.url && 'focus' in client) {
+            if (client.url === (event.notification.data.url || '/') && 'focus' in client) {
               return client.focus();
             }
           }
@@ -153,7 +176,9 @@ self.addEventListener('notificationclick', (event) => {
   }
 });
 
-// Sync - Para predicciones offline
+// ============================================
+// BACKGROUND SYNC
+// ============================================
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-predictions') {
     event.waitUntil(syncPredictions());
@@ -161,7 +186,7 @@ self.addEventListener('sync', (event) => {
 });
 
 async function syncPredictions() {
-  // Aquí sincronizarías las predicciones guardadas offline
   console.log('🔄 Sincronizando predicciones offline...');
   // TODO: Implementar lógica de sincronización
+  // Por ahora solo logueamos
 }
