@@ -16,6 +16,16 @@
   gap: 24px;
 }
 
+/* Vista Desktop visible por defecto */
+.settings-page .desktop-view {
+  display: block;
+}
+
+/* Vista Mobile oculta por defecto */
+.settings-page .mobile-view {
+  display: none;
+}
+
 /* ==========================================
    HEADER
 ========================================== */
@@ -194,6 +204,10 @@
   background: var(--card);
   border-color: var(--accent);
   transform: translateX(4px);
+}
+
+.settings-page .setting-item.clickable {
+  cursor: pointer;
 }
 
 .settings-page .setting-item.danger {
@@ -584,6 +598,207 @@
 }
 
 /* ==========================================
+   VISTA MÓVIL - MENU
+========================================== */
+
+.settings-page .mobile-menu-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 8px;
+}
+
+.settings-page .mobile-menu-header {
+  padding: 20px 20px 12px;
+}
+
+.settings-page .mobile-menu-title {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -1px;
+}
+
+/* Settings Groups */
+.settings-page .mobile-settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.settings-page .group-title {
+  margin: 0;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--bg);
+}
+
+.settings-page .mobile-settings-list {
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-page .mobile-setting-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  text-align: left;
+}
+
+.settings-page .mobile-setting-row:last-child {
+  border-bottom: none;
+}
+
+.settings-page .mobile-setting-row:active {
+  background: var(--glass);
+}
+
+.settings-page .mobile-setting-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(124, 58, 237, 0.1);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.settings-page .mobile-setting-label {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.settings-page .mobile-setting-chevron {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   VISTA MÓVIL - DETAIL
+========================================== */
+
+.settings-page .mobile-detail-view {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.settings-page .mobile-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.settings-page .back-button {
+  background: none;
+  border: none;
+  padding: 8px;
+  margin-left: -8px;
+  color: var(--accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.settings-page .back-button:active {
+  transform: scale(0.9);
+}
+
+.settings-page .mobile-detail-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.settings-page .mobile-detail-content {
+  padding: 20px 16px 100px;
+}
+
+.settings-page .mobile-detail-content .settings-section {
+  gap: 16px;
+}
+
+.settings-page .mobile-detail-content .section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 12px 0;
+  padding: 0 4px 8px;
+  border-bottom: none;
+}
+
+.settings-page .mobile-detail-content .section-title::after {
+  display: none;
+}
+
+.settings-page .mobile-detail-content .setting-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.settings-page .mobile-detail-content .setting-item:hover {
+  transform: none;
+}
+
+.settings-page .mobile-detail-content .setting-item:active {
+  transform: scale(0.98);
+}
+
+.settings-page .mobile-detail-content .subsection {
+  background: transparent;
+  padding: 0;
+  border: none;
+  gap: 12px;
+}
+
+.settings-page .mobile-detail-content .subsection .subsection-title {
+  padding: 0 4px;
+  margin-bottom: 8px;
+}
+
+.settings-page .mobile-detail-content .danger-zone {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-top: 24px;
+}
+
+.settings-page .mobile-detail-content .danger-title {
+  font-size: 13px;
+  padding: 0 4px;
+  margin-bottom: 12px;
+}
+
+/* ==========================================
    RESPONSIVE - TABLET
 ========================================== */
 
@@ -604,173 +819,63 @@
 
 @media (max-width: 768px) {
   .settings-page {
-    padding: 16px 12px 100px;
+    padding: 0;
   }
 
-  .settings-page .settings-header {
-    padding: 20px;
-    border-radius: 14px;
-  }
-
-  .settings-page .settings-header .header-icon {
-    width: 48px;
-    height: 48px;
-  }
-
-  .settings-page .settings-header .page-title {
-    font-size: 22px;
-  }
-
-  .settings-page .settings-header .page-subtitle {
-    font-size: 13px;
-  }
-
-  .settings-page .settings-layout {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .settings-page .settings-sidebar {
-    position: static;
-    padding: 8px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-
-  .settings-page .sidebar-item {
-    padding: 12px;
-    flex-direction: column;
-    text-align: center;
-    gap: 8px;
-  }
-
-  .settings-page .sidebar-item span {
-    font-size: 12px;
-  }
-
-  .settings-page .sidebar-item .chevron {
+  /* Ocultar vista desktop */
+  .settings-page .desktop-view {
     display: none;
   }
 
-  .settings-page .settings-content {
-    padding: 20px;
-    border-radius: 14px;
+  /* Mostrar vista mobile */
+  .settings-page .mobile-view {
+    display: block;
   }
 
-  .settings-page .section-title {
-    font-size: 18px;
-    margin-bottom: 12px;
+  /* Menú principal con espacio abajo */
+  .settings-page .mobile-menu-view {
+    padding-top: 0;
+    padding-bottom: 100px; /* Espacio inferior para bottom nav */
   }
 
-  .settings-page .setting-item {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 16px;
-    gap: 14px;
+  /* Header del menú con más espacio abajo */
+  .settings-page .mobile-menu-header {
+    padding: 20px 20px 32px; /* Aumentado el padding inferior */
+    margin-top: 20px; /* Espacio desde el header superior */
   }
 
-  .settings-page .setting-info {
-    width: 100%;
+  /* Vista de detalle */
+  .settings-page .mobile-detail-view {
+    padding-top: 0;
   }
 
-  .settings-page .setting-control {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
+  /* Header de detalle fijo */
+  .settings-page .mobile-detail-header {
+    top: 0;
   }
 
-  .settings-page .select-input {
-    width: 100%;
+  /* Contenido de detalle con espacio abajo */
+  .settings-page .mobile-detail-content {
+    padding: 20px 16px 120px; /* Aumentado padding inferior */
   }
 
-  .settings-page .btn-primary-small,
-  .settings-page .btn-secondary-small,
-  .settings-page .btn-danger-small {
-    width: 100%;
-  }
-
+  /* Ajustar modales para móvil */
   .settings-page .modal-danger {
     padding: 24px;
-    border-radius: 16px;
+    border-radius: 20px;
+    max-width: 90%;
   }
 
   .settings-page .modal-actions {
-    flex-direction: column-reverse;
-  }
-}
-
-/* ==========================================
-   RESPONSIVE - SMALL MOBILE
-========================================== */
-
-@media (max-width: 480px) {
-  .settings-page {
-    padding: 12px 10px 100px;
-  }
-
-  .settings-page .settings-header {
-    padding: 16px;
+    flex-direction: column;
     gap: 12px;
   }
 
-  .settings-page .settings-header .header-icon {
-    width: 44px;
-    height: 44px;
-  }
-
-  .settings-page .settings-header .page-title {
-    font-size: 20px;
-  }
-
-  .settings-page .settings-sidebar {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .settings-page .sidebar-item {
-    padding: 10px 8px;
-  }
-
-  .settings-page .sidebar-item svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .settings-page .sidebar-item span {
-    font-size: 11px;
-  }
-
-  .settings-page .settings-content {
-    padding: 16px;
-  }
-
-  .settings-page .section-title {
-    font-size: 16px;
-  }
-
-  .settings-page .setting-item {
+  .settings-page .btn-cancel,
+  .settings-page .btn-danger {
+    width: 100%;
     padding: 14px;
-  }
-
-  .settings-page .setting-icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .settings-page .setting-label {
-    font-size: 14px;
-  }
-
-  .settings-page .setting-description {
-    font-size: 12px;
-  }
-
-  .settings-page .subsection {
-    padding: 16px;
-  }
-
-  .settings-page .danger-zone {
-    padding: 20px;
+    font-size: 16px;
   }
 }
 

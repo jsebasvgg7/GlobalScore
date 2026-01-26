@@ -4,7 +4,7 @@ import {
   Settings, User, Palette, Bell, Target, Lock, 
   Database, Info, Moon, Sun, Save, RotateCcw,
   Download, Trash2, LogOut, AlertTriangle, Check,
-  ChevronRight, Volume2, VolumeX, Eye, EyeOff
+  ChevronRight, Volume2, VolumeX, Eye, EyeOff, ArrowLeft
 } from 'lucide-react';
 import { useSettings } from '../hooks/settingsHooks/useSettings';
 import { useTheme } from '../context/ThemeContext';
@@ -16,6 +16,7 @@ import '../styles/pagesStyles/SettingsPage.css';
 export default function SettingsPage({ currentUser }) {
   const [activeSection, setActiveSection] = useState('account');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isMobileDetailView, setIsMobileDetailView] = useState(false);
   
   const { 
     preferences, 
@@ -87,6 +88,18 @@ export default function SettingsPage({ currentUser }) {
     window.location.href = '/';
   };
 
+  const handleSectionClick = (sectionId) => {
+    setActiveSection(sectionId);
+    // En móvil, mostrar vista de detalle
+    if (window.innerWidth <= 768) {
+      setIsMobileDetailView(true);
+    }
+  };
+
+  const handleBackToMenu = () => {
+    setIsMobileDetailView(false);
+  };
+
   // ============================================
   // SECCIONES DE CONFIGURACIÓN
   // ============================================
@@ -119,8 +132,11 @@ export default function SettingsPage({ currentUser }) {
   // COMPONENTE: Setting Item
   // ============================================
 
-  const SettingItem = ({ icon: Icon, label, description, children, danger }) => (
-    <div className={`setting-item ${danger ? 'danger' : ''}`}>
+  const SettingItem = ({ icon: Icon, label, description, children, danger, onClick }) => (
+    <div 
+      className={`setting-item ${danger ? 'danger' : ''} ${onClick ? 'clickable' : ''}`}
+      onClick={onClick}
+    >
       <div className="setting-info">
         {Icon && (
           <div className={`setting-icon ${danger ? 'danger' : ''}`}>
@@ -491,44 +507,144 @@ export default function SettingsPage({ currentUser }) {
   };
 
   // ============================================
-  // RENDER
+  // VISTA DE MENÚ MÓVIL
+  // ============================================
+
+  const renderMobileMenu = () => (
+    <div className="mobile-menu-view">
+      <div className="mobile-menu-header">
+        <h1 className="mobile-menu-title">Settings</h1>
+      </div>
+
+      {/* Settings Groups */}
+      <div className="mobile-settings-group">
+        <h3 className="group-title">General</h3>
+        <div className="mobile-settings-list">
+          {sections.slice(0, 2).map(section => (
+            <button
+              key={section.id}
+              className="mobile-setting-row"
+              onClick={() => handleSectionClick(section.id)}
+            >
+              <div className="mobile-setting-icon">
+                <section.icon size={22} />
+              </div>
+              <span className="mobile-setting-label">{section.name}</span>
+              <ChevronRight size={20} className="mobile-setting-chevron" />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mobile-settings-group">
+        <h3 className="group-title">Preferences</h3>
+        <div className="mobile-settings-list">
+          {sections.slice(2, 5).map(section => (
+            <button
+              key={section.id}
+              className="mobile-setting-row"
+              onClick={() => handleSectionClick(section.id)}
+            >
+              <div className="mobile-setting-icon">
+                <section.icon size={22} />
+              </div>
+              <span className="mobile-setting-label">{section.name}</span>
+              <ChevronRight size={20} className="mobile-setting-chevron" />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mobile-settings-group">
+        <h3 className="group-title">About</h3>
+        <div className="mobile-settings-list">
+          {sections.slice(5).map(section => (
+            <button
+              key={section.id}
+              className="mobile-setting-row"
+              onClick={() => handleSectionClick(section.id)}
+            >
+              <div className="mobile-setting-icon">
+                <section.icon size={22} />
+              </div>
+              <span className="mobile-setting-label">{section.name}</span>
+              <ChevronRight size={20} className="mobile-setting-chevron" />
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  // ============================================
+  // VISTA DE DETALLE MÓVIL
+  // ============================================
+
+  const renderMobileDetail = () => {
+    const currentSection = sections.find(s => s.id === activeSection);
+    
+    return (
+      <div className="mobile-detail-view">
+        <div className="mobile-detail-header">
+          <button className="back-button" onClick={handleBackToMenu}>
+            <ArrowLeft size={24} />
+          </button>
+          <h1 className="mobile-detail-title">{currentSection?.name}</h1>
+        </div>
+        <div className="mobile-detail-content">
+          {renderContent()}
+        </div>
+      </div>
+    );
+  };
+
+  // ============================================
+  // RENDER PRINCIPAL
   // ============================================
 
   return (
     <div className="settings-page">
-      <div className="settings-container">
-        {/* Header */}
-        <div className="settings-header">
-          <div className="header-icon">
-            <Settings size={32} />
-          </div>
-          <div>
-            <h1 className="page-title">Ajustes</h1>
-            <p className="page-subtitle">Personaliza tu experiencia</p>
-          </div>
-        </div>
-
-        <div className="settings-layout">
-          {/* Sidebar */}
-          <div className="settings-sidebar">
-            {sections.map(section => (
-              <button
-                key={section.id}
-                className={`sidebar-item ${activeSection === section.id ? 'active' : ''}`}
-                onClick={() => setActiveSection(section.id)}
-              >
-                <section.icon size={20} />
-                <span>{section.name}</span>
-                <ChevronRight size={16} className="chevron" />
-              </button>
-            ))}
+      {/* Vista Desktop (sin cambios) */}
+      <div className="desktop-view">
+        <div className="settings-container">
+          {/* Header */}
+          <div className="settings-header">
+            <div className="header-icon">
+              <Settings size={32} />
+            </div>
+            <div>
+              <h1 className="page-title">Ajustes</h1>
+              <p className="page-subtitle">Personaliza tu experiencia</p>
+            </div>
           </div>
 
-          {/* Content */}
-          <div className="settings-content">
-            {renderContent()}
+          <div className="settings-layout">
+            {/* Sidebar */}
+            <div className="settings-sidebar">
+              {sections.map(section => (
+                <button
+                  key={section.id}
+                  className={`sidebar-item ${activeSection === section.id ? 'active' : ''}`}
+                  onClick={() => setActiveSection(section.id)}
+                >
+                  <section.icon size={20} />
+                  <span>{section.name}</span>
+                  <ChevronRight size={16} className="chevron" />
+                </button>
+              ))}
+            </div>
+
+            {/* Content */}
+            <div className="settings-content">
+              {renderContent()}
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* Vista Móvil (nueva estructura) */}
+      <div className="mobile-view">
+        {!isMobileDetailView ? renderMobileMenu() : renderMobileDetail()}
       </div>
 
       {/* Modal de confirmación de eliminación */}
