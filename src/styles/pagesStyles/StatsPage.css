@@ -1,44 +1,90 @@
 /* ==========================================
-   STATS PAGE - Modern Statistics
+   STATS PAGE - Consistente con el diseño de la app
 ========================================== */
 
 .stats-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #F8FAFC 0%, #EEF2F6 100%);
+  background: var(--bg);
   padding: 24px 16px;
   position: relative;
+  overflow-x: hidden;
 }
 
+/* Elementos decorativos de fondo */
 .stats-page::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 320px;
-  background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
-  border-radius: 0 0 32px 32px;
-  z-index: 0;
-  opacity: 0.04;
+  top: -50%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: floatSlow 20s ease-in-out infinite;
+}
+
+.stats-page::after {
+  content: '';
+  position: fixed;
+  bottom: -30%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: floatSlow 25s ease-in-out infinite reverse;
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -30px) scale(1.1); }
+}
+
+.stats-page-loading {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
 }
 
 .stats-page-container {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   position: relative;
-  z-index: 10;
+  z-index: 1;
+  padding-bottom: 100px;
 }
 
-/* Header */
+/* ==========================================
+   HEADER
+========================================== */
+
 .stats-page-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 8px;
+  animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .stats-header-content {
@@ -48,13 +94,13 @@
 }
 
 .header-icon {
-  color: #7C3AED;
+  color: var(--accent);
 }
 
 .stats-page-title {
   font-size: 28px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #7C3AED, #5B21B6);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent-light), var(--accent));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -64,86 +110,137 @@
 
 .stats-page-subtitle {
   font-size: 13px;
-  color: #64748B;
+  color: var(--text-secondary);
   margin: 4px 0 0 0;
   font-weight: 500;
 }
 
-/* Time Range Selector */
+/* ==========================================
+   TIME RANGE SELECTOR
+========================================== */
+
 .time-range-selector {
   display: flex;
-  gap: 6px;
-  background: white;
-  padding: 5px;
+  gap: 8px;
+  background: var(--card);
+  padding: 6px;
   border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--small-shadow);
+  border: 1px solid var(--border);
+  animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
 }
 
 .time-btn {
-  padding: 9px 18px;
+  padding: 10px 20px;
   border: none;
   border-radius: 10px;
   background: transparent;
-  color: #64748B;
+  color: var(--text-secondary);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-.time-btn:hover {
-  background: #F1F5F9;
-  color: #334155;
+.time-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 10px;
+}
+
+.time-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.time-btn:hover:not(.active) {
+  background: var(--glass);
+  color: var(--text-primary);
 }
 
 .time-btn.active {
-  background: linear-gradient(135deg, #7C3AED, #5B21B6);
   color: white;
-  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.25);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
-/* Overview Grid */
+.time-btn.active::before {
+  opacity: 1;
+}
+
+/* ==========================================
+   OVERVIEW GRID
+========================================== */
+
 .stats-overview-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .overview-card {
-  background: white;
+  background: var(--card);
   border-radius: 18px;
   padding: 20px;
   display: flex;
   align-items: center;
   gap: 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid transparent;
-  transition: all 0.2s ease;
+  box-shadow: var(--small-shadow);
+  border: 1px solid var(--border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.overview-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
 }
 
 .overview-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.overview-card:hover::before {
+  transform: translateX(100%);
 }
 
 .overview-card.primary {
   border-color: rgba(124, 58, 237, 0.15);
-  background: linear-gradient(135deg, white 0%, rgba(124, 58, 237, 0.02) 100%);
 }
 
 .overview-card.success {
   border-color: rgba(16, 185, 129, 0.15);
-  background: linear-gradient(135deg, white 0%, rgba(16, 185, 129, 0.02) 100%);
 }
 
 .overview-card.warning {
   border-color: rgba(245, 158, 11, 0.15);
-  background: linear-gradient(135deg, white 0%, rgba(245, 158, 11, 0.02) 100%);
 }
 
 .overview-card.info {
   border-color: rgba(59, 130, 246, 0.15);
-  background: linear-gradient(135deg, white 0%, rgba(59, 130, 246, 0.02) 100%);
 }
 
 .card-icon {
@@ -158,7 +255,7 @@
 
 .overview-card.primary .card-icon {
   background: rgba(124, 58, 237, 0.12);
-  color: #7C3AED;
+  color: var(--accent);
 }
 
 .overview-card.success .card-icon {
@@ -181,18 +278,18 @@
 }
 
 .card-label {
-  font-size: 12px;
-  color: #64748B;
-  font-weight: 600;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 700;
   margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
 }
 
 .card-value {
   font-size: 30px;
-  font-weight: 800;
-  color: #1E293B;
+  font-weight: 900;
+  color: var(--text-primary);
   line-height: 1;
   margin-bottom: 4px;
   letter-spacing: -0.5px;
@@ -200,17 +297,21 @@
 
 .card-subtitle {
   font-size: 11px;
-  color: #94A3B8;
+  color: var(--text-muted);
   font-weight: 500;
 }
 
-/* Stats Section */
+/* ==========================================
+   STATS SECTION
+========================================== */
+
 .stats-section {
-  background: white;
-  border-radius: 18px;
-  padding: 22px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(124, 58, 237, 0.08);
+  background: var(--card);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--small-shadow);
+  border: 1px solid var(--border);
+  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
 }
 
 .section-header {
@@ -218,18 +319,34 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
-  color: #7C3AED;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--accent);
+  position: relative;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
 }
 
 .section-header h2 {
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #1E293B;
+  color: var(--text-primary);
   letter-spacing: -0.3px;
 }
 
-/* Results Breakdown */
+/* ==========================================
+   RESULTS BREAKDOWN
+========================================== */
+
 .results-breakdown {
   display: flex;
   flex-direction: column;
@@ -240,17 +357,17 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 14px;
-  background: #FAFBFC;
+  padding: 16px;
+  background: var(--glass);
   border-radius: 14px;
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   transition: all 0.2s ease;
 }
 
 .result-item:hover {
-  border-color: rgba(124, 58, 237, 0.15);
-  background: white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  border-color: var(--accent);
+  background: var(--card);
+  box-shadow: var(--small-shadow);
 }
 
 .result-icon {
@@ -284,22 +401,22 @@
 
 .result-label {
   font-size: 13px;
-  color: #64748B;
+  color: var(--text-secondary);
   font-weight: 600;
   margin-bottom: 4px;
 }
 
 .result-value {
   font-size: 26px;
-  font-weight: 800;
-  color: #1E293B;
+  font-weight: 900;
+  color: var(--text-primary);
   line-height: 1;
   letter-spacing: -0.5px;
 }
 
 .result-points {
   font-size: 11px;
-  color: #7C3AED;
+  color: var(--accent);
   font-weight: 700;
   margin-top: 4px;
 }
@@ -307,7 +424,7 @@
 .result-bar {
   width: 180px;
   height: 6px;
-  background: #F1F5F9;
+  background: var(--glass);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -330,7 +447,10 @@
   background: linear-gradient(90deg, #EF4444, #DC2626);
 }
 
-/* League Stats */
+/* ==========================================
+   LEAGUE STATS
+========================================== */
+
 .league-stats-list {
   display: flex;
   flex-direction: column;
@@ -341,24 +461,24 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 14px;
-  background: #FAFBFC;
+  padding: 16px;
+  background: var(--glass);
   border-radius: 14px;
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   transition: all 0.2s ease;
 }
 
 .league-stat-item:hover {
-  border-color: rgba(124, 58, 237, 0.15);
-  background: white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  border-color: var(--accent);
+  background: var(--card);
+  box-shadow: var(--small-shadow);
 }
 
 .league-rank {
   width: 38px;
   height: 38px;
   border-radius: 11px;
-  background: linear-gradient(135deg, #7C3AED, #5B21B6);
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
   color: white;
   display: flex;
   align-items: center;
@@ -376,7 +496,7 @@
 .league-name {
   font-size: 14px;
   font-weight: 700;
-  color: #1E293B;
+  color: var(--text-primary);
   margin-bottom: 3px;
   white-space: nowrap;
   overflow: hidden;
@@ -385,7 +505,7 @@
 
 .league-details {
   font-size: 12px;
-  color: #64748B;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -415,12 +535,10 @@
   position: relative;
   width: 56px;
   height: 56px;
-  background: transparent;
 }
 
 .accuracy-circle svg {
   display: block;
-  background: transparent;
 }
 
 .accuracy-value {
@@ -430,10 +548,13 @@
   transform: translate(-50%, -50%);
   font-size: 13px;
   font-weight: 800;
-  color: #7C3AED;
+  color: var(--accent);
 }
 
-/* Day Stats */
+/* ==========================================
+   DAY STATS
+========================================== */
+
 .day-stats-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -441,26 +562,26 @@
 }
 
 .day-stat-card {
-  background: #FAFBFC;
+  background: var(--glass);
   border-radius: 14px;
   padding: 14px 8px;
   text-align: center;
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
 }
 
 .day-stat-card:hover {
-  border-color: rgba(124, 58, 237, 0.15);
-  background: white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  border-color: var(--accent);
+  background: var(--card);
+  box-shadow: var(--small-shadow);
 }
 
 .day-name {
   font-size: 11px;
   font-weight: 700;
-  color: #64748B;
+  color: var(--text-secondary);
   margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -469,14 +590,14 @@
 .day-accuracy {
   font-size: 22px;
   font-weight: 800;
-  color: #7C3AED;
+  color: var(--accent);
   margin-bottom: 3px;
   letter-spacing: -0.5px;
 }
 
 .day-details {
   font-size: 10px;
-  color: #94A3B8;
+  color: var(--text-muted);
   margin-bottom: 10px;
   font-weight: 500;
 }
@@ -487,16 +608,19 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: #F1F5F9;
+  background: var(--glass);
 }
 
 .day-fill {
   width: 100%;
-  background: linear-gradient(90deg, #7C3AED, #5B21B6);
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
   transition: height 0.5s ease;
 }
 
-/* Points Distribution */
+/* ==========================================
+   POINTS DISTRIBUTION
+========================================== */
+
 .points-distribution {
   display: flex;
   flex-direction: column;
@@ -516,13 +640,13 @@
   min-width: 110px;
   font-size: 13px;
   font-weight: 600;
-  color: #64748B;
+  color: var(--text-secondary);
 }
 
 .distribution-bar {
   flex: 1;
   height: 10px;
-  background: #F1F5F9;
+  background: var(--glass);
   border-radius: 5px;
   overflow: hidden;
 }
@@ -550,29 +674,33 @@
   text-align: right;
   font-size: 15px;
   font-weight: 700;
-  color: #1E293B;
+  color: var(--text-primary);
 }
 
-/* Additional Stats Grid */
+/* ==========================================
+   ADDITIONAL STATS GRID
+========================================== */
+
 .additional-stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
+  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
 }
 
 .additional-stat-card {
-  background: white;
+  background: var(--card);
   border-radius: 16px;
   padding: 18px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(124, 58, 237, 0.08);
+  box-shadow: var(--small-shadow);
+  border: 1px solid var(--border);
   transition: all 0.2s ease;
 }
 
 .additional-stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.12);
+  box-shadow: var(--shadow);
 }
 
 .additional-stat-icon {
@@ -581,7 +709,7 @@
   margin: 0 auto 10px;
   border-radius: 12px;
   background: rgba(124, 58, 237, 0.12);
-  color: #7C3AED;
+  color: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -590,20 +718,23 @@
 .additional-stat-value {
   font-size: 26px;
   font-weight: 800;
-  color: #1E293B;
+  color: var(--text-primary);
   margin-bottom: 6px;
   letter-spacing: -0.5px;
 }
 
 .additional-stat-label {
   font-size: 11px;
-  color: #64748B;
+  color: var(--text-secondary);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
-/* Loading & Empty States */
+/* ==========================================
+   LOADING & EMPTY STATES
+========================================== */
+
 .stats-page-loading,
 .stats-page-empty {
   min-height: 100vh;
@@ -612,28 +743,39 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
-  color: #64748B;
+  color: var(--text-secondary);
 }
 
 .stats-page-empty svg {
   opacity: 0.25;
-  color: #7C3AED;
+  color: var(--accent);
 }
 
 .stats-page-empty h3 {
   font-size: 19px;
   font-weight: 700;
-  color: #334155;
+  color: var(--text-primary);
   margin: 0;
 }
 
 .stats-page-empty p {
   font-size: 13px;
-  color: #94A3B8;
+  color: var(--text-muted);
   margin: 0;
 }
 
-/* Responsive - Tablet */
+.stats-page-loading .spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   RESPONSIVE - TABLET
+========================================== */
+
 @media (max-width: 1024px) {
   .stats-overview-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -648,10 +790,19 @@
   }
 }
 
-/* Responsive - Mobile */
+/* ==========================================
+   RESPONSIVE - MOBILE
+========================================== */
+
 @media (max-width: 768px) {
   .stats-page {
     padding: 16px 12px;
+  }
+
+  .stats-page::before,
+  .stats-page::after {
+    width: 400px;
+    height: 400px;
   }
 
   .stats-page-header {
@@ -772,7 +923,6 @@
     margin-top: 6px;
   }
 
-  /* League Stats Mobile */
   .league-stats-list {
     gap: 8px;
   }
@@ -832,7 +982,6 @@
     font-size: 11px;
   }
 
-  /* Day Stats Mobile */
   .day-stats-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
@@ -856,7 +1005,6 @@
     margin-bottom: 8px;
   }
 
-  /* Distribution Mobile */
   .points-distribution {
     gap: 12px;
   }
@@ -881,7 +1029,6 @@
     font-size: 14px;
   }
 
-  /* Additional Stats Mobile */
   .additional-stats-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -911,10 +1058,23 @@
   }
 }
 
-/* Responsive - Small Mobile */
+/* ==========================================
+   RESPONSIVE - SMALL MOBILE
+========================================== */
+
 @media (max-width: 480px) {
   .stats-page {
     padding: 12px 10px;
+  }
+
+  .stats-page::before,
+  .stats-page::after {
+    width: 300px;
+    height: 300px;
+  }
+
+  .stats-page-container {
+    padding-bottom: 80px;
   }
 
   .stats-page-title {
@@ -1035,18 +1195,4 @@
   .additional-stat-value {
     font-size: 20px;
   }
-
-  /* Bottom Padding for Mobile Navigation */
-  .stats-page-container {
-    padding-bottom: 80px;
-  }
-}
-
-/* Loading Spinner */
-.stats-page-loading .spinner {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
