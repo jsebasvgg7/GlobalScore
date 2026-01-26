@@ -1,5 +1,5 @@
 import React from "react";
-import { Trophy, LogOut, User2, Award, Shield, Bell, Home, BarChart3, Moon, Sun } from "lucide-react";
+import { Trophy, LogOut, User2, Award, Shield, Bell, Home, BarChart3, Moon, Sun, Settings } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
@@ -40,8 +40,8 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
     navigate("/stats");
   };
 
-  const handleWorldCupClick = () => {
-    navigate("/worldcup");
+  const handleSettingsClick = () => {
+    navigate("/settings");
   };
 
   const isActive = (path) => location.pathname === path;
@@ -86,14 +86,14 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
           </button>
 
-          {/* Botones solo para desktop */}
+          {/* NUEVO: Botón de Settings - Desktop */}
           <button
-            className="icon-btn worldcup-btn desktop-only"
-            onClick={handleWorldCupClick}
-            aria-label="Ver sección del Mundial"
-            title="Mundial 2026"
+            className="icon-btn settings-btn desktop-only"
+            onClick={handleSettingsClick}
+            aria-label="Abrir ajustes"
+            title="Ajustes"
           >
-            <Trophy size={18} />
+            <Settings size={18} />
           </button>
           
           <button 
@@ -139,11 +139,11 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
       {/* Bottom Navigation Bar */}
       <nav className="bottom-nav">
         <button 
-          className={`bottom-nav-btn ${isActive('/app') ? 'active' : ''}`}
-          onClick={handleHomeClick}
-          aria-label="Inicio"
+          className={`bottom-nav-btn ${isActive('/profile') ? 'active' : ''}`}
+          onClick={handleProfileClick}
+          aria-label="Perfil"
         >
-          <Home size={24} />
+          <User2 size={24} />
         </button>
 
         <button 
@@ -155,12 +155,13 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
         </button>
         
         <button 
-          className={`bottom-nav-btn ${isActive('/worldcup') ? 'active' : ''}`}
-          onClick={handleWorldCupClick}
-          aria-label="Mundial"
+          className={`bottom-nav-btn ${isActive('/app') ? 'active' : ''}`}
+          onClick={handleHomeClick}
+          aria-label="Inicio"
         >
-          <Trophy size={24} />
+          <Home size={24} />
         </button>
+
         
         <button 
           className={`bottom-nav-btn ${isActive('/stats') ? 'active' : ''}`}
@@ -169,6 +170,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
         >
           <BarChart3 size={24} />
         </button>
+
 
         {currentUser?.is_admin && (
           <button 
@@ -180,12 +182,13 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           </button>
         )}
 
-        <button 
-          className={`bottom-nav-btn ${isActive('/profile') ? 'active' : ''}`}
-          onClick={handleProfileClick}
-          aria-label="Perfil"
+
+                <button 
+          className={`bottom-nav-btn ${isActive('/settings') ? 'active' : ''}`}
+          onClick={handleSettingsClick}
+          aria-label="Ajustes"
         >
-          <User2 size={24} />
+          <Settings size={24} />
         </button>
       </nav>
     </>

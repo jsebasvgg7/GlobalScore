@@ -268,10 +268,10 @@ const loadUserData = async (authId) => {
             path="/stats"
             element={session ? <StatsPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
-          <Route
+         { /* <Route
             path="/worldcup"
             element={session ? <WorldCupPage currentUser={currentUser} /> : <Navigate to="/" replace />}
-          />
+          /> */}
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
