@@ -609,15 +609,16 @@
 }
 
 .settings-page .mobile-menu-header {
-  padding: 20px 20px 12px;
+  padding: 16px 20px;
+  text-align: center;
 }
 
 .settings-page .mobile-menu-title {
   margin: 0;
-  font-size: 34px;
+  font-size: 24px;
   font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
 }
 
 /* Settings Groups */
@@ -838,10 +839,11 @@
     padding-bottom: 100px; /* Espacio inferior para bottom nav */
   }
 
-  /* Header del menú con más espacio abajo */
+  /* Header del menú con espaciado equilibrado */
   .settings-page .mobile-menu-header {
-    padding: 20px 20px 32px; /* Aumentado el padding inferior */
-    margin-top: 20px; /* Espacio desde el header superior */
+    padding: 16px 20px;
+    text-align: center;
+    margin-top: 12px; /* Espacio desde el header superior */
   }
 
   /* Vista de detalle */

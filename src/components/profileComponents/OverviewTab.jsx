@@ -21,21 +21,21 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
   const clinicalSections = [
     {
       id: 'stats',
-      title: 'Predictions',
+      title: 'Predicciones',
       icon: Target,
       color: 'yellow',
       count: currentUser?.predictions || 0,
     },
     {
       id: 'points',
-      title: 'Total Points',
+      title: 'Puntos totales',
       icon: Zap,
       color: 'pink',
       count: currentUser?.points || 0,
     },
     {
       id: 'accuracy',
-      title: 'Accuracy Rate',
+      title: 'Precisión',
       icon: BarChart3,
       color: 'green',
       count: null,
@@ -43,11 +43,11 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
     },
     {
       id: 'level',
-      title: 'Current Level',
+      title: 'Nivel actual',
       icon: Trophy,
       color: 'orange',
       count: userData.level || 1,
-      subtitle: `${pointsInLevel}/20 points`,
+      subtitle: `${pointsInLevel}/20 puntos`,
     },
     {
       id: 'ranking',
@@ -59,7 +59,7 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
     },
     {
       id: 'championships',
-      title: 'Championships',
+      title: 'Campeonatos',
       icon: Heart,
       color: 'blue',
       count: userData.monthly_championships || 0,
@@ -75,8 +75,8 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
             <Zap size={20} />
           </div>
           <div className="level-info">
-            <div className="level-number">Level {userData.level}</div>
-            <div className="level-subtitle">{pointsInLevel} of 20 points</div>
+            <div className="level-number">Nivel {userData.level}</div>
+            <div className="level-subtitle">{pointsInLevel} de 20 puntos</div>
           </div>
           <div className="points-to-next">{pointsToNextLevel} pts</div>
         </div>

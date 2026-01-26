@@ -513,7 +513,7 @@ export default function SettingsPage({ currentUser }) {
   const renderMobileMenu = () => (
     <div className="mobile-menu-view">
       <div className="mobile-menu-header">
-        <h1 className="mobile-menu-title">Settings</h1>
+        <h1 className="mobile-menu-title">Ajustes y privacidad</h1>
       </div>
 
       {/* Settings Groups */}
@@ -537,7 +537,7 @@ export default function SettingsPage({ currentUser }) {
       </div>
 
       <div className="mobile-settings-group">
-        <h3 className="group-title">Preferences</h3>
+        <h3 className="group-title">Preferencias</h3>
         <div className="mobile-settings-list">
           {sections.slice(2, 5).map(section => (
             <button
@@ -556,7 +556,7 @@ export default function SettingsPage({ currentUser }) {
       </div>
 
       <div className="mobile-settings-group">
-        <h3 className="group-title">About</h3>
+        <h3 className="group-title">Acerca de</h3>
         <div className="mobile-settings-list">
           {sections.slice(5).map(section => (
             <button
