@@ -15,7 +15,11 @@ services:
       - path: /*
         name: X-XSS-Protection
         value: 1; mode=block
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
     routes:
+      # Esta es la parte CRÍTICA para que funcione React Router
       - type: rewrite
         source: /*
         destination: /index.html
