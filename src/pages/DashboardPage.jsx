@@ -189,8 +189,10 @@ export default function VegaScorePage() {
       
       switch (sortOption) {
         case 'date-asc':
+          // Más reciente = partidos más próximos a empezar primero
           return dateA - dateB;
         case 'date-desc':
+          // Más antiguo = partidos más lejanos primero
           return dateB - dateA;
         case 'league-asc':
           return a.league.localeCompare(b.league);
@@ -344,7 +346,7 @@ export default function VegaScorePage() {
                                 <div className="sort-option-icon">
                                   <TrendingUp size={14} />
                                 </div>
-                                <span className="sort-option-text">Fecha: Más reciente</span>
+                                <span className="sort-option-text">Fecha: Más próximos</span>
                               </button>
                               <button
                                 className={`sort-option ${sortOption === 'date-desc' ? 'active' : ''}`}
@@ -356,7 +358,7 @@ export default function VegaScorePage() {
                                 <div className="sort-option-icon">
                                   <TrendingUp size={14} style={{ transform: 'rotate(180deg)' }} />
                                 </div>
-                                <span className="sort-option-text">Fecha: Más antiguo</span>
+                                <span className="sort-option-text">Fecha: Más lejanos</span>
                               </button>
                               <button
                                 className={`sort-option ${sortOption === 'league-asc' ? 'active' : ''}`}
