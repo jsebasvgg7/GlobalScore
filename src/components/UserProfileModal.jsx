@@ -324,107 +324,7 @@ export default function UserProfileModal({ userId, onClose }) {
               </div>
             )}
           </div>
-
-          {/* ========== 2. STATS PRINCIPALES (Grid 2x2 en mobile, 4 columnas en desktop) ========== */}
-          <div className="user-modal-stats-grid">
-            <div className="user-modal-stat-item primary">
-              <div className="stat-icon">
-                <TrendingUp size={20} />
-              </div>
-              <div className="stat-info">
-                <div className="stat-label">Puntos</div>
-                <div className="stat-value">{userData.points || 0}</div>
-              </div>
-            </div>
-
-            <div className="user-modal-stat-item success">
-              <div className="stat-icon">
-                <Target size={20} />
-              </div>
-              <div className="stat-info">
-                <div className="stat-label">Precisión</div>
-                <div className="stat-value">{accuracy}%</div>
-              </div>
-            </div>
-
-            <div className="user-modal-stat-item warning">
-              <div className="stat-icon">
-                <Flame size={20} />
-              </div>
-              <div className="stat-info">
-                <div className="stat-label">Racha</div>
-                <div className="stat-value">{streakData.current_streak}</div>
-              </div>
-            </div>
-
-            <div className="user-modal-stat-item accent">
-              <div className="stat-icon">
-                <Trophy size={20} />
-              </div>
-              <div className="stat-info">
-                <div className="stat-label">Ranking</div>
-                <div className="stat-value">#{userRanking.position}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* ========== 3. PROGRESO DE NIVEL ========== */}
-          <div className="user-modal-level-card">
-            <div className="level-header">
-              <div className="level-title-section">
-                <Zap size={20} />
-                <div>
-                  <h4>Nivel {userData.level}</h4>
-                  <p>Progreso hacia el siguiente nivel</p>
-                </div>
-              </div>
-              <div className="level-points">
-                <span className="current-points">{pointsInLevel}/20</span>
-              </div>
-            </div>
-            
-            <div className="progress-container">
-              <div className="progress-bar">
-                <div 
-                  className="progress-fill"
-                  style={{ width: `${levelProgress}%` }}
-                >
-                  <div className="progress-glow"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* ========== 4. RACHAS (Grid 2 columnas) ========== */}
-          <div className="user-modal-streaks">
-            <div className="streak-item current">
-              <div className="streak-icon">
-                <Flame size={28} />
-              </div>
-              <div className="streak-info">
-                <div className="streak-label">Racha Actual</div>
-                <div className="streak-value">{streakData.current_streak}</div>
-              </div>
-              {streakData.current_streak > 0 && (
-                <div className="streak-badge">
-                  <Sparkles size={12} />
-                  <span>Activa</span>
-                </div>
-              )}
-            </div>
-
-            <div className="streak-item best">
-              <div className="streak-icon">
-                <Crown size={28} />
-              </div>
-              <div className="streak-info">
-                <div className="streak-label">Récord</div>
-                <div className="streak-value">{streakData.best_streak}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* ========== 5. CORONAS MENSUALES ========== */}
+                    {/* ========== 5. CORONAS MENSUALES ========== */}
           {(userData.monthly_championships > 0 || crownHistory.length > 0) && (
             <div className="user-modal-crowns">
               <div className="section-header">
@@ -454,8 +354,59 @@ export default function UserProfileModal({ userId, onClose }) {
               )}
             </div>
           )}
+          
+          {/* ========== 7. TÍTULO ACTIVO ========== */}
+          {activeTitle && (
+            <div className="user-modal-active-title">
+              <div className="title-header">
+                <Crown size={20} />
+                <h4>Título Activo</h4>
+                <div className="title-active-badge">
+                  <Sparkles size={12} />
+                  <span>Equipado</span>
+                </div>
+              </div>
+              
+              <div className="current-title-display" style={{ borderColor: activeTitle.color }}>
+                <div className="title-icon-large" style={{ color: activeTitle.color }}>
+                  <Gem size={28} />
+                </div>
+                <div className="title-details">
+                  <h5 style={{ color: activeTitle.color }}>{activeTitle.name}</h5>
+                  <p>{activeTitle.description}</p>
+                </div>
+              </div>
+            </div>
+          )}
 
-          {/* ========== 6. BADGES DE INFORMACIÓN ========== */}
+
+          {/* ========== 3. PROGRESO DE NIVEL ========== */}
+          <div className="user-modal-level-card">
+            <div className="level-header">
+              <div className="level-title-section">
+                <Zap size={20} />
+                <div>
+                  <h4>Nivel {userData.level}</h4>
+                  <p>Progreso hacia el siguiente nivel</p>
+                </div>
+              </div>
+              <div className="level-points">
+                <span className="current-points">{pointsInLevel}/20</span>
+              </div>
+            </div>
+            
+            <div className="progress-container">
+              <div className="progress-bar">
+                <div 
+                  className="progress-fill"
+                  style={{ width: `${levelProgress}%` }}
+                >
+                  <div className="progress-glow"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+                    {/* ========== 6. BADGES DE INFORMACIÓN ========== */}
           {(userData.favorite_team || userData.favorite_player || userData.nationality || userData.created_at) && (
             <div className="user-modal-badges-grid">
               {userData.favorite_team && (
@@ -496,71 +447,7 @@ export default function UserProfileModal({ userId, onClose }) {
                 </div>
               </div>
             </div>
-          )}
-
-          {/* ========== 7. TÍTULO ACTIVO ========== */}
-          {activeTitle && (
-            <div className="user-modal-active-title">
-              <div className="title-header">
-                <Crown size={20} />
-                <h4>Título Activo</h4>
-                <div className="title-active-badge">
-                  <Sparkles size={12} />
-                  <span>Equipado</span>
-                </div>
-              </div>
-              
-              <div className="current-title-display" style={{ borderColor: activeTitle.color }}>
-                <div className="title-icon-large" style={{ color: activeTitle.color }}>
-                  <Gem size={28} />
-                </div>
-                <div className="title-details">
-                  <h5 style={{ color: activeTitle.color }}>{activeTitle.name}</h5>
-                  <p>{activeTitle.description}</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ========== 8. LOGROS (Al final) ========== */}
-          <div className="user-modal-achievements">
-            <div className="section-header">
-              <Award size={20} />
-              <h4>Logros Obtenidos</h4>
-              <span className="count-badge">
-                {userAchievements.length}
-              </span>
-            </div>
-            
-            {userAchievements.length === 0 ? (
-              <div className="empty-achievements">
-                <Target size={40} />
-                <p>Sin logros aún</p>
-              </div>
-            ) : (
-              <div className="achievements-grid">
-                {userAchievements.slice(0, 6).map((achievement) => (
-                  <div 
-                    key={achievement.id} 
-                    className="achievement-card"
-                    style={{ 
-                      borderColor: getCategoryColor(achievement.category),
-                      background: `linear-gradient(135deg, ${getCategoryColor(achievement.category)}10, transparent)`
-                    }}
-                  >
-                    <div className="achievement-emoji">{getIconEmoji(achievement.icon)}</div>
-                    <div className="achievement-info">
-                      <h5>{achievement.name}</h5>
-                      <p>{achievement.description}</p>
-                      <div className="achievement-category" style={{ color: getCategoryColor(achievement.category) }}>
-                        {achievement.category}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          )} 
         </div>
       </div>
     </div>
