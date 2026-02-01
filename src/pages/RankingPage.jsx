@@ -81,20 +81,93 @@ export default function RankingPage({ currentUser, onBack }) {
     }
   };
 
+  // ⭐ FUNCIÓN CORREGIDA - Usa 2 consultas separadas (más confiable)
   const loadTopChampions = async () => {
     try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('id, name, avatar_url, monthly_championships, points, correct, predictions')
-        .gt('monthly_championships', 0)
-        .order('monthly_championships', { ascending: false })
-        .order('points', { ascending: false })
-        .limit(10); // Top 10 campeones
+      console.log('🔍 Cargando campeones desde monthly_championship_history...');
+      
+      // PASO 1: Obtener TODOS los registros de historial
+      const { data: historyData, error: historyError } = await supabase
+        .from('monthly_championship_history')
+        .select('user_id');
+      
+      console.log('📊 Registros de historial raw:', historyData?.length || 0);
+      
+      if (historyError) {
+        console.error('❌ Error al cargar historial:', historyError);
+        throw historyError;
+      }
 
-      if (error) throw error;
-      setChampions(data || []);
+      if (!historyData || historyData.length === 0) {
+        console.log('⚠️ No hay coronas en el historial');
+        setChampions([]);
+        return;
+      }
+
+      // PASO 2: Contar coronas por usuario
+      const championCounts = {};
+      
+      historyData.forEach(record => {
+        const userId = record.user_id;
+        if (!championCounts[userId]) {
+          championCounts[userId] = 0;
+        }
+        championCounts[userId]++;
+      });
+      
+      console.log('📈 Conteo de coronas:', championCounts);
+
+      // PASO 3: Obtener IDs únicos de usuarios
+      const userIds = Object.keys(championCounts);
+      console.log('👥 User IDs únicos:', userIds);
+
+      // PASO 4: Obtener datos completos de esos usuarios
+      const { data: usersData, error: usersError } = await supabase
+        .from('users')
+        .select('id, name, avatar_url, points, correct, predictions')
+        .in('id', userIds);
+
+      console.log('👤 Usuarios encontrados:', usersData?.length || 0);
+
+      if (usersError) {
+        console.error('❌ Error al cargar usuarios:', usersError);
+        throw usersError;
+      }
+
+      if (!usersData || usersData.length === 0) {
+        console.warn('⚠️ No se encontraron usuarios para los IDs');
+        setChampions([]);
+        return;
+      }
+
+      // PASO 5: Combinar datos de usuarios con conteo de coronas
+      const championsArray = usersData
+        .map(user => ({
+          id: user.id,
+          name: user.name,
+          avatar_url: user.avatar_url,
+          points: user.points || 0,
+          correct: user.correct || 0,
+          predictions: user.predictions || 0,
+          monthly_championships: championCounts[user.id] || 0
+        }))
+        .sort((a, b) => {
+          // Primero por número de coronas (descendente)
+          if (b.monthly_championships !== a.monthly_championships) {
+            return b.monthly_championships - a.monthly_championships;
+          }
+          // Luego por puntos totales (descendente)
+          return b.points - a.points;
+        })
+        .slice(0, 10); // Top 10
+
+      console.log('🏆 Champions finales:', championsArray.length);
+      console.log('👑 Detalle completo:', championsArray);
+
+      setChampions(championsArray);
     } catch (err) {
-      console.error('Error loading champions:', err);
+      console.error('❌ Error loading champions:', err);
+      setChampions([]);
     }
   };
 
@@ -224,10 +297,12 @@ export default function RankingPage({ currentUser, onBack }) {
 
             {champions.length > 0 ? (
               <>
-                {/* Top 3 Destacado */}
-                {champions.length >= 3 && (
-                  <div className="hall-podium">
-                    {/* 2do Lugar */}
+                {/* Podio - Se adapta a la cantidad de campeones disponibles */}
+                <div className="hall-podium" style={{
+                  gridTemplateColumns: champions.length === 1 ? '1fr' : champions.length === 2 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'
+                }}>
+                  {/* 2do Lugar - Solo si hay al menos 2 campeones */}
+                  {champions.length >= 2 && (
                     <div className="hall-winner second">
                       <div className="hall-position">2</div>
                       <div 
@@ -243,41 +318,43 @@ export default function RankingPage({ currentUser, onBack }) {
                       <div className="hall-name">{champions[1].name}</div>
                       <div className="hall-crowns">
                         <Crown size={18} />
-                        <span>{champions[1].monthly_championships} Coronas</span>
+                        <span>{champions[1].monthly_championships} {champions[1].monthly_championships === 1 ? 'Corona' : 'Coronas'}</span>
                       </div>
                       <div className="hall-stats">
                         {champions[1].points} pts totales
                       </div>
                     </div>
+                  )}
 
-                    {/* 1er Lugar */}
-                    <div className="hall-winner first">
-                      <Star className="hall-star star-1" size={16} />
-                      <Star className="hall-star star-2" size={14} />
-                      <Star className="hall-star star-3" size={12} />
-                      
-                      <div className="hall-position">1</div>
-                      <div 
-                        className="hall-avatar"
-                        onClick={() => setSelectedUserId(champions[0].id)}
-                      >
-                        {champions[0].avatar_url ? (
-                          <img src={champions[0].avatar_url} alt={champions[0].name} />
-                        ) : (
-                          <span>{champions[0].name.charAt(0).toUpperCase()}</span>
-                        )}
-                      </div>
-                      <div className="hall-name">{champions[0].name}</div>
-                      <div className="hall-crowns champion">
-                        <Crown size={20} />
-                        <span>{champions[0].monthly_championships} Coronas</span>
-                      </div>
-                      <div className="hall-stats">
-                        {champions[0].points} pts totales
-                      </div>
+                  {/* 1er Lugar - Siempre se muestra si hay al menos 1 campeón */}
+                  <div className="hall-winner first">
+                    <Star className="hall-star star-1" size={16} />
+                    <Star className="hall-star star-2" size={14} />
+                    <Star className="hall-star star-3" size={12} />
+                    
+                    <div className="hall-position">1</div>
+                    <div 
+                      className="hall-avatar"
+                      onClick={() => setSelectedUserId(champions[0].id)}
+                    >
+                      {champions[0].avatar_url ? (
+                        <img src={champions[0].avatar_url} alt={champions[0].name} />
+                      ) : (
+                        <span>{champions[0].name.charAt(0).toUpperCase()}</span>
+                      )}
                     </div>
+                    <div className="hall-name">{champions[0].name}</div>
+                    <div className="hall-crowns champion">
+                      <Crown size={20} />
+                      <span>{champions[0].monthly_championships} {champions[0].monthly_championships === 1 ? 'Corona' : 'Coronas'}</span>
+                    </div>
+                    <div className="hall-stats">
+                      {champions[0].points} pts totales
+                    </div>
+                  </div>
 
-                    {/* 3er Lugar */}
+                  {/* 3er Lugar - Solo si hay al menos 3 campeones */}
+                  {champions.length >= 3 && (
                     <div className="hall-winner third">
                       <div className="hall-position">3</div>
                       <div 
@@ -293,16 +370,16 @@ export default function RankingPage({ currentUser, onBack }) {
                       <div className="hall-name">{champions[2].name}</div>
                       <div className="hall-crowns">
                         <Crown size={18} />
-                        <span>{champions[2].monthly_championships} Coronas</span>
+                        <span>{champions[2].monthly_championships} {champions[2].monthly_championships === 1 ? 'Corona' : 'Coronas'}</span>
                       </div>
                       <div className="hall-stats">
                         {champions[2].points} pts totales
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
 
-                {/* Resto del Top 10 */}
+                {/* Resto del Top 10 - Solo si hay más de 3 */}
                 {champions.length > 3 && (
                   <div className="hall-list">
                     <h3 className="hall-list-title">Otros Campeones</h3>
