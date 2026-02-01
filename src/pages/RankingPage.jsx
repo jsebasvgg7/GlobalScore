@@ -296,7 +296,7 @@ export default function RankingPage({ currentUser, onBack }) {
             onClick={() => setRankingType('halloffame')}
           >
             <Crown size={18} />
-            <span>Campeones</span>
+            <span>S.Fama</span>
           </button>
         </div>
 
