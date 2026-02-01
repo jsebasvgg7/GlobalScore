@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   ArrowLeft, Target, TrendingUp, Calendar, Globe, Zap,
-  ChevronRight, Users, BarChart3
+  ChevronRight, Users, BarChart3, Crown, Trophy, Star, Award
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import Footer from '../components/Footer';
@@ -13,13 +13,15 @@ export default function RankingPage({ currentUser, onBack }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [rankingType, setRankingType] = useState('global');
+  const [rankingType, setRankingType] = useState('global'); // 'global', 'monthly', 'halloffame'
   const [sortBy, setSortBy] = useState('points');
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [champions, setChampions] = useState([]);
 
   useEffect(() => {
     checkAndResetMonthly();
     loadUsers();
+    loadTopChampions();
   }, []);
 
   const checkAndResetMonthly = async () => {
@@ -76,6 +78,23 @@ export default function RankingPage({ currentUser, onBack }) {
       console.error('Error loading users:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadTopChampions = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, name, avatar_url, monthly_championships, points, correct, predictions')
+        .gt('monthly_championships', 0)
+        .order('monthly_championships', { ascending: false })
+        .order('points', { ascending: false })
+        .limit(10); // Top 10 campeones
+
+      if (error) throw error;
+      setChampions(data || []);
+    } catch (err) {
+      console.error('Error loading champions:', err);
     }
   };
 
@@ -165,7 +184,7 @@ export default function RankingPage({ currentUser, onBack }) {
     <div className="ranking-page">
       <div className="ranking-page-container">
 
-        {/* Tabs */}
+        {/* Tabs - Ahora con 3 opciones */}
         <div className="ranking-tabs">
           <button 
             className={`tab-button ${rankingType === 'global' ? 'active' : ''}`}
@@ -181,179 +200,337 @@ export default function RankingPage({ currentUser, onBack }) {
             <Calendar size={18} />
             <span>Top Mensual</span>
           </button>
+          <button 
+            className={`tab-button ${rankingType === 'halloffame' ? 'active' : ''}`}
+            onClick={() => setRankingType('halloffame')}
+          >
+            <Crown size={18} />
+            <span>Hall of Fame</span>
+          </button>
         </div>
 
-        {/* Podio Top 3 */}
-        {filteredUsers.length >= 3 && (
-          <div className="podium-container">
-            <h2 className="podium-title">
-              {rankingType === 'global' ? 'Campeones De Temporada' : 'Campeones Del Mes'}
-            </h2>
-            <div className="podium-winners">
-              {/* 2do Lugar */}
-              <div className="winner-card second">
-                <div className="position-badge">2</div>
-                <div 
-                  className="winner-avatar"
-                  onClick={() => setSelectedUserId(filteredUsers[1].id)}
-                >
-                  {filteredUsers[1].avatar_url ? (
-                    <img src={filteredUsers[1].avatar_url} alt={filteredUsers[1].name} />
-                  ) : (
-                    <span>{filteredUsers[1].name.charAt(0).toUpperCase()}</span>
-                  )}
-                </div>
-                <div className="winner-name">{filteredUsers[1].name}</div>
-                <div className="winner-stats">
-                  <div className="stat-row points">
-                    {filteredUsers[1].rankPoints}
-                  </div>
-                  <div className="stat-row">
-                    {filteredUsers[1].rankPredictions > 0 
-                      ? Math.round((filteredUsers[1].rankCorrect / filteredUsers[1].rankPredictions) * 100) 
-                      : 0}%
-                  </div>
-                </div>
+        {/* Contenido según la pestaña seleccionada */}
+        {rankingType === 'halloffame' ? (
+          // SECCIÓN HALL OF FAME
+          <div className="hall-of-fame-section">
+            <div className="hall-header">
+              <Trophy className="hall-icon" size={32} />
+              <div className="hall-title-group">
+                <h2 className="hall-title">Hall of Fame</h2>
+                <p className="hall-subtitle">Leyendas con más coronas mensuales ganadas</p>
               </div>
-
-              {/* 1er Lugar */}
-              <div className="winner-card first">
-                <div className="position-badge">1</div>
-                <div 
-                  className="winner-avatar"
-                  onClick={() => setSelectedUserId(filteredUsers[0].id)}
-                >
-                  {filteredUsers[0].avatar_url ? (
-                    <img src={filteredUsers[0].avatar_url} alt={filteredUsers[0].name} />
-                  ) : (
-                    <span>{filteredUsers[0].name.charAt(0).toUpperCase()}</span>
-                  )}
-                </div>
-                <div className="winner-name">{filteredUsers[0].name}</div>
-                <div className="winner-stats">
-                  <div className="stat-row points">
-                    {filteredUsers[0].rankPoints}
-                  </div>
-                  <div className="stat-row">
-                    {filteredUsers[0].rankPredictions > 0 
-                      ? Math.round((filteredUsers[0].rankCorrect / filteredUsers[0].rankPredictions) * 100) 
-                      : 0}%
-                  </div>
-                </div>
-              </div>
-
-              {/* 3er Lugar */}
-              <div className="winner-card third">
-                <div className="position-badge">3</div>
-                <div 
-                  className="winner-avatar"
-                  onClick={() => setSelectedUserId(filteredUsers[2].id)}
-                >
-                  {filteredUsers[2].avatar_url ? (
-                    <img src={filteredUsers[2].avatar_url} alt={filteredUsers[2].name} />
-                  ) : (
-                    <span>{filteredUsers[2].name.charAt(0).toUpperCase()}</span>
-                  )}
-                </div>
-                <div className="winner-name">{filteredUsers[2].name}</div>
-                <div className="winner-stats">
-                  <div className="stat-row points">
-                    {filteredUsers[2].rankPoints}
-                  </div>
-                  <div className="stat-row">
-                    {filteredUsers[2].rankPredictions > 0 
-                      ? Math.round((filteredUsers[2].rankCorrect / filteredUsers[2].rankPredictions) * 100) 
-                      : 0}%
-                  </div>
-                </div>
-              </div>
+              <Award className="hall-icon-secondary" size={28} />
             </div>
-          </div>
-        )}
 
+            {champions.length > 0 ? (
+              <>
+                {/* Top 3 Destacado */}
+                {champions.length >= 3 && (
+                  <div className="hall-podium">
+                    {/* 2do Lugar */}
+                    <div className="hall-winner second">
+                      <div className="hall-position">2</div>
+                      <div 
+                        className="hall-avatar"
+                        onClick={() => setSelectedUserId(champions[1].id)}
+                      >
+                        {champions[1].avatar_url ? (
+                          <img src={champions[1].avatar_url} alt={champions[1].name} />
+                        ) : (
+                          <span>{champions[1].name.charAt(0).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div className="hall-name">{champions[1].name}</div>
+                      <div className="hall-crowns">
+                        <Crown size={18} />
+                        <span>{champions[1].monthly_championships} Coronas</span>
+                      </div>
+                      <div className="hall-stats">
+                        {champions[1].points} pts totales
+                      </div>
+                    </div>
 
+                    {/* 1er Lugar */}
+                    <div className="hall-winner first">
+                      <Star className="hall-star star-1" size={16} />
+                      <Star className="hall-star star-2" size={14} />
+                      <Star className="hall-star star-3" size={12} />
+                      
+                      <div className="hall-position">1</div>
+                      <div 
+                        className="hall-avatar"
+                        onClick={() => setSelectedUserId(champions[0].id)}
+                      >
+                        {champions[0].avatar_url ? (
+                          <img src={champions[0].avatar_url} alt={champions[0].name} />
+                        ) : (
+                          <span>{champions[0].name.charAt(0).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div className="hall-name">{champions[0].name}</div>
+                      <div className="hall-crowns champion">
+                        <Crown size={20} />
+                        <span>{champions[0].monthly_championships} Coronas</span>
+                      </div>
+                      <div className="hall-stats">
+                        {champions[0].points} pts totales
+                      </div>
+                    </div>
 
-        {/* Ranking List */}
-        <div className="ranking-list-section">
-          <div className="list-header">
-            <div className="sort-controls">
-              <button 
-                className={`sort-btn ${sortBy === 'points' ? 'active' : ''}`}
-                onClick={() => setSortBy('points')}
-              >
-                <Zap size={14} />
-                <span>Puntos</span>
-              </button>
-              <button 
-                className={`sort-btn ${sortBy === 'accuracy' ? 'active' : ''}`}
-                onClick={() => setSortBy('accuracy')}
-              >
-                <Target size={14} />
-                <span>Precisión</span>
-              </button>
-              <button 
-                className={`sort-btn ${sortBy === 'predictions' ? 'active' : ''}`}
-                onClick={() => setSortBy('predictions')}
-              >
-                <BarChart3 size={14} />
-                <span>Actividad</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="ranking-list">
-            {filteredUsers.map((user, index) => {
-              const accuracy = user.rankPredictions > 0 
-                ? Math.round((user.rankCorrect / user.rankPredictions) * 100) 
-                : 0;
-              const isCurrentUser = user.id === currentUser?.id;
-              const position = index + 1;
-              const isTop3 = position <= 3;
-
-              return (
-                <div 
-                  key={user.id} 
-                  className={`ranking-item ${isCurrentUser ? 'is-current' : ''} ${isTop3 ? 'top-3' : ''}`}
-                >
-                  <div className="item-position">
-                    {position < 10 ? `0${position}` : position}
+                    {/* 3er Lugar */}
+                    <div className="hall-winner third">
+                      <div className="hall-position">3</div>
+                      <div 
+                        className="hall-avatar"
+                        onClick={() => setSelectedUserId(champions[2].id)}
+                      >
+                        {champions[2].avatar_url ? (
+                          <img src={champions[2].avatar_url} alt={champions[2].name} />
+                        ) : (
+                          <span>{champions[2].name.charAt(0).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div className="hall-name">{champions[2].name}</div>
+                      <div className="hall-crowns">
+                        <Crown size={18} />
+                        <span>{champions[2].monthly_championships} Coronas</span>
+                      </div>
+                      <div className="hall-stats">
+                        {champions[2].points} pts totales
+                      </div>
+                    </div>
                   </div>
-                  <div 
-                    className="item-avatar"
-                    onClick={() => setSelectedUserId(user.id)}
+                )}
+
+                {/* Resto del Top 10 */}
+                {champions.length > 3 && (
+                  <div className="hall-list">
+                    <h3 className="hall-list-title">Otros Campeones</h3>
+                    <div className="hall-items">
+                      {champions.slice(3).map((champion, index) => {
+                        const position = index + 4;
+                        const accuracy = champion.predictions > 0 
+                          ? Math.round((champion.correct / champion.predictions) * 100) 
+                          : 0;
+
+                        return (
+                          <div 
+                            key={champion.id}
+                            className="hall-item"
+                            onClick={() => setSelectedUserId(champion.id)}
+                          >
+                            <div className="hall-item-position">#{position}</div>
+                            <div className="hall-item-avatar">
+                              {champion.avatar_url ? (
+                                <img src={champion.avatar_url} alt={champion.name} />
+                              ) : (
+                                <span>{champion.name.charAt(0).toUpperCase()}</span>
+                              )}
+                            </div>
+                            <div className="hall-item-info">
+                              <div className="hall-item-name">{champion.name}</div>
+                              <div className="hall-item-detail">
+                                {champion.correct} aciertos • {accuracy}% precisión
+                              </div>
+                            </div>
+                            <div className="hall-item-crowns">
+                              <Crown size={16} />
+                              <span>{champion.monthly_championships}</span>
+                            </div>
+                            <div className="hall-item-points">
+                              {champion.points} pts
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="hall-empty">
+                <Crown size={64} className="hall-empty-icon" />
+                <p className="hall-empty-text">Aún no hay campeones mensuales</p>
+                <p className="hall-empty-subtitle">
+                  Sé el primero en ganar una corona mensual
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          // SECCIÓN DE RANKINGS (Global o Mensual)
+          <>
+            {/* Podio Top 3 */}
+            {filteredUsers.length >= 3 && (
+              <div className="podium-container">
+                <h2 className="podium-title">
+                  {rankingType === 'global' ? 'Campeones De Temporada' : 'Campeones Del Mes'}
+                </h2>
+                <div className="podium-winners">
+                  {/* 2do Lugar */}
+                  <div className="winner-card second">
+                    <div className="position-badge">2</div>
+                    <div 
+                      className="winner-avatar"
+                      onClick={() => setSelectedUserId(filteredUsers[1].id)}
+                    >
+                      {filteredUsers[1].avatar_url ? (
+                        <img src={filteredUsers[1].avatar_url} alt={filteredUsers[1].name} />
+                      ) : (
+                        <span>{filteredUsers[1].name.charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    <div className="winner-name">{filteredUsers[1].name}</div>
+                    <div className="winner-stats">
+                      <div className="stat-row points">
+                        {filteredUsers[1].rankPoints}
+                      </div>
+                      <div className="stat-row">
+                        {filteredUsers[1].rankPredictions > 0 
+                          ? Math.round((filteredUsers[1].rankCorrect / filteredUsers[1].rankPredictions) * 100) 
+                          : 0}%
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 1er Lugar */}
+                  <div className="winner-card first">
+                    <div className="position-badge">1</div>
+                    <div 
+                      className="winner-avatar"
+                      onClick={() => setSelectedUserId(filteredUsers[0].id)}
+                    >
+                      {filteredUsers[0].avatar_url ? (
+                        <img src={filteredUsers[0].avatar_url} alt={filteredUsers[0].name} />
+                      ) : (
+                        <span>{filteredUsers[0].name.charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    <div className="winner-name">{filteredUsers[0].name}</div>
+                    <div className="winner-stats">
+                      <div className="stat-row points">
+                        {filteredUsers[0].rankPoints}
+                      </div>
+                      <div className="stat-row">
+                        {filteredUsers[0].rankPredictions > 0 
+                          ? Math.round((filteredUsers[0].rankCorrect / filteredUsers[0].rankPredictions) * 100) 
+                          : 0}%
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 3er Lugar */}
+                  <div className="winner-card third">
+                    <div className="position-badge">3</div>
+                    <div 
+                      className="winner-avatar"
+                      onClick={() => setSelectedUserId(filteredUsers[2].id)}
+                    >
+                      {filteredUsers[2].avatar_url ? (
+                        <img src={filteredUsers[2].avatar_url} alt={filteredUsers[2].name} />
+                      ) : (
+                        <span>{filteredUsers[2].name.charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    <div className="winner-name">{filteredUsers[2].name}</div>
+                    <div className="winner-stats">
+                      <div className="stat-row points">
+                        {filteredUsers[2].rankPoints}
+                      </div>
+                      <div className="stat-row">
+                        {filteredUsers[2].rankPredictions > 0 
+                          ? Math.round((filteredUsers[2].rankCorrect / filteredUsers[2].rankPredictions) * 100) 
+                          : 0}%
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Ranking List */}
+            <div className="ranking-list-section">
+              <div className="list-header">
+                <div className="sort-controls">
+                  <button 
+                    className={`sort-btn ${sortBy === 'points' ? 'active' : ''}`}
+                    onClick={() => setSortBy('points')}
                   >
-                    {user.avatar_url ? (
-                      <img src={user.avatar_url} alt={user.name} />
-                    ) : (
-                      <span>{user.name.charAt(0).toUpperCase()}</span>
-                    )}
-                  </div>
-                  <div className="item-info">
-                    <div className="item-name">
-                      {user.name}
-                      {isCurrentUser && <span className="you-badge">Tú</span>}
-                    </div>
-                    <div className="item-correct">
-                      {user.rankCorrect} aciertos
-                    </div>
-                  </div>
-                  <div className="item-points">
-                    {user.rankPoints} pts
-                  </div>
-                  <ChevronRight size={20} className="item-arrow" />
+                    <Zap size={14} />
+                    <span>Puntos</span>
+                  </button>
+                  <button 
+                    className={`sort-btn ${sortBy === 'accuracy' ? 'active' : ''}`}
+                    onClick={() => setSortBy('accuracy')}
+                  >
+                    <Target size={14} />
+                    <span>Precisión</span>
+                  </button>
+                  <button 
+                    className={`sort-btn ${sortBy === 'predictions' ? 'active' : ''}`}
+                    onClick={() => setSortBy('predictions')}
+                  >
+                    <BarChart3 size={14} />
+                    <span>Actividad</span>
+                  </button>
                 </div>
-              );
-            })}
-          </div>
-        </div>
+              </div>
 
-        {filteredUsers.length === 0 && (
-          <div className="no-results">
-            <div className="no-results-icon">
-              <TrendingUp size={64} />
+              <div className="ranking-list">
+                {filteredUsers.map((user, index) => {
+                  const accuracy = user.rankPredictions > 0 
+                    ? Math.round((user.rankCorrect / user.rankPredictions) * 100) 
+                    : 0;
+                  const isCurrentUser = user.id === currentUser?.id;
+                  const position = index + 1;
+                  const isTop3 = position <= 3;
+
+                  return (
+                    <div 
+                      key={user.id} 
+                      className={`ranking-item ${isCurrentUser ? 'is-current' : ''} ${isTop3 ? 'top-3' : ''}`}
+                    >
+                      <div className="item-position">
+                        {position < 10 ? `0${position}` : position}
+                      </div>
+                      <div 
+                        className="item-avatar"
+                        onClick={() => setSelectedUserId(user.id)}
+                      >
+                        {user.avatar_url ? (
+                          <img src={user.avatar_url} alt={user.name} />
+                        ) : (
+                          <span>{user.name.charAt(0).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div className="item-info">
+                        <div className="item-name">
+                          {user.name}
+                          {isCurrentUser && <span className="you-badge">Tú</span>}
+                        </div>
+                        <div className="item-correct">
+                          {user.rankCorrect} aciertos
+                        </div>
+                      </div>
+                      <div className="item-points">
+                        {user.rankPoints} pts
+                      </div>
+                      <ChevronRight size={20} className="item-arrow" />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <p className="no-results-text">No se encontraron usuarios</p>
-          </div>
+
+            {filteredUsers.length === 0 && (
+              <div className="no-results">
+                <div className="no-results-icon">
+                  <TrendingUp size={64} />
+                </div>
+                <p className="no-results-text">No se encontraron usuarios</p>
+              </div>
+            )}
+          </>
         )}
       </div>
       
