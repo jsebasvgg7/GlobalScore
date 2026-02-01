@@ -282,21 +282,21 @@ export default function RankingPage({ currentUser, onBack }) {
             onClick={() => setRankingType('global')}
           >
             <Globe size={18} />
-            <span>Top Global</span>
+            <span>Global</span>
           </button>
           <button 
             className={`tab-button ${rankingType === 'monthly' ? 'active' : ''}`}
             onClick={() => setRankingType('monthly')}
           >
             <Calendar size={18} />
-            <span>Top Mensual</span>
+            <span>Mensual</span>
           </button>
           <button 
             className={`tab-button ${rankingType === 'halloffame' ? 'active' : ''}`}
             onClick={() => setRankingType('halloffame')}
           >
             <Crown size={18} />
-            <span>Hall of Fame</span>
+            <span>Campeones</span>
           </button>
         </div>
 
@@ -306,7 +306,7 @@ export default function RankingPage({ currentUser, onBack }) {
           <div className="hall-of-fame-section">
             <div className="hall-header">
               <div className="hall-title-group">
-                <h2 className="hall-title">Hall of Fame</h2>
+                <h2 className="hall-title">Salon de la Fama</h2>
                 <p className="hall-subtitle">Leyendas con más coronas mensuales ganadas</p>
               </div>
 

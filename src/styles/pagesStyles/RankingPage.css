@@ -2024,6 +2024,331 @@ color: #064E3B;
 background: rgba(16, 185, 129, 0.3);
 color: #D1FAE5;
 }
+
+/* ==========================================
+   HALL OF FAME - TÍTULO PREMIUM CON EFECTOS ESPECIALES
+========================================== */
+
+.hall-title-group {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #F3F4F6;
+  position: relative;
+  text-align: center;
+}
+
+.hall-title-group::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #F59E0B, #D97706, #F59E0B, transparent);
+  animation: shimmerLine 2s ease-in-out infinite;
+}
+
+@keyframes shimmerLine {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.hall-title {
+  font-size: 24px;
+  font-weight: 900;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+  position: relative;
+  display: inline-block;
+  
+  /* Gradiente dorado brillante */
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 25%, #FBBF24 50%, #D97706 75%, #F59E0B 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  
+  /* Animación de brillo */
+  animation: goldShine 3s ease-in-out infinite;
+  
+  /* Sombra de texto dorada */
+  filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3));
+}
+
+@keyframes goldShine {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hall-title::before {
+  content: '👑';
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  animation: crownBounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.4));
+}
+
+.hall-title::after {
+  content: '👑';
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  animation: crownBounce 2s ease-in-out infinite 1s;
+  filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.4));
+}
+
+@keyframes crownBounce {
+  0%, 100% { 
+    transform: translateY(-50%) scale(1) rotate(0deg); 
+  }
+  25% { 
+    transform: translateY(-55%) scale(1.1) rotate(-5deg); 
+  }
+  50% { 
+    transform: translateY(-50%) scale(1) rotate(0deg); 
+  }
+  75% { 
+    transform: translateY(-55%) scale(1.1) rotate(5deg); 
+  }
+}
+
+/* Efecto de resplandor detrás del título */
+.hall-title-group::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 80px;
+  background: radial-gradient(ellipse, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: glowPulse 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes glowPulse {
+  0%, 100% { 
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+.hall-subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #9CA3AF;
+  margin: 0;
+  letter-spacing: 0.5px;
+  position: relative;
+  animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Partículas doradas decorativas */
+.hall-title-group {
+  overflow: visible;
+}
+
+.hall-title-group .sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #F59E0B;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: sparkleFloat 3s ease-in-out infinite;
+}
+
+.hall-title-group .sparkle:nth-child(1) {
+  top: 10px;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.hall-title-group .sparkle:nth-child(2) {
+  top: 15px;
+  right: 20%;
+  animation-delay: 0.5s;
+}
+
+.hall-title-group .sparkle:nth-child(3) {
+  bottom: 30px;
+  left: 30%;
+  animation-delay: 1s;
+}
+
+.hall-title-group .sparkle:nth-child(4) {
+  bottom: 35px;
+  right: 30%;
+  animation-delay: 1.5s;
+}
+
+@keyframes sparkleFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(-20px) scale(0.8);
+  }
+  75% {
+    opacity: 0.2;
+    transform: translateY(-30px) scale(0.5);
+  }
+}
+
+/* ==========================================
+   DARK MODE - HALL OF FAME TÍTULO
+========================================== */
+
+[data-theme="dark"] .hall-title-group {
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .hall-title-group::after {
+  background: linear-gradient(90deg, transparent, #FBBF24, #F59E0B, #FBBF24, transparent);
+}
+
+[data-theme="dark"] .hall-title {
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 25%, #FDE68A 50%, #F59E0B 75%, #FBBF24 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 2px 6px rgba(251, 191, 36, 0.4));
+}
+
+[data-theme="dark"] .hall-title::before,
+[data-theme="dark"] .hall-title::after {
+  filter: drop-shadow(0 2px 10px rgba(251, 191, 36, 0.5));
+}
+
+[data-theme="dark"] .hall-title-group::before {
+  background: radial-gradient(ellipse, rgba(251, 191, 36, 0.2) 0%, transparent 70%);
+}
+
+[data-theme="dark"] .hall-subtitle {
+  color: var(--text-secondary);
+}
+
+/* ==========================================
+   RESPONSIVE - MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+  .hall-title-group {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+  }
+  
+  .hall-title {
+    font-size: 20px;
+  }
+  
+  .hall-title::before,
+  .hall-title::after {
+    font-size: 20px;
+  }
+  
+  .hall-title::before {
+    left: -32px;
+  }
+  
+  .hall-title::after {
+    right: -32px;
+  }
+  
+  .hall-subtitle {
+    font-size: 12px;
+  }
+  
+  .hall-title-group::before {
+    width: 250px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hall-title-group {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+  
+  .hall-title {
+    font-size: 18px;
+    letter-spacing: -0.3px;
+  }
+  
+  .hall-title::before,
+  .hall-title::after {
+    font-size: 18px;
+    display: none; /* Ocultar coronas en móviles muy pequeños */
+  }
+  
+  .hall-subtitle {
+    font-size: 11px;
+    letter-spacing: 0.3px;
+  }
+  
+  .hall-title-group::after {
+    width: 80px;
+  }
+  
+  .hall-title-group::before {
+    width: 200px;
+    height: 50px;
+  }
+  
+  /* Ocultar partículas en mobile para mejor rendimiento */
+  .hall-title-group .sparkle {
+    display: none;
+  }
+}
+
+/* Mejora de rendimiento */
+@media (prefers-reduced-motion: reduce) {
+  .hall-title,
+  .hall-title::before,
+  .hall-title::after,
+  .hall-title-group::before,
+  .hall-title-group::after,
+  .hall-subtitle,
+  .hall-title-group .sparkle {
+    animation: none;
+  }
+  
+  .hall-title {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
 /* ==========================================
    HALL OF FAME - ESTILO LISTA COMO RANKING NORMAL
 ========================================== */
