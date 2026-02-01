@@ -90,7 +90,6 @@
   animation: slideUp 0.3s ease;
   position: relative;
   
-  /* Scrollbar */
   scrollbar-width: thin;
   scrollbar-color: rgba(139, 92, 246, 0.4) transparent;
 }
@@ -201,7 +200,8 @@
   flex-direction: column;
   gap: 24px;
 }
-/* ==================== LOADING STATE - MEJORADO PARA MÓVILES ==================== */
+
+/* ==================== LOADING STATE ==================== */
 .loading-spinner {
   display: flex;
   justify-content: center;
@@ -235,444 +235,12 @@
   width: 100%;
 }
 
-/* Asegurar que LoadingDots esté centrado */
 .loading-content > div {
   display: flex;
   justify-content: center;
   width: 100%;
 }
-/* ==================== RESPONSIVE: TABLETS ==================== */
-@media (max-width: 768px) {
-  .user-modal-overlay {
-    padding: 0;
-    align-items: flex-start; /* Cambiar de center a flex-start */
-    justify-content: center;
-    padding-top: 16px; /* Añadir padding top al overlay */
-  }
 
-  .user-modal-container {
-    /* CRÍTICO: Aumentar margen superior para evitar header */
-    margin-top: 90px;  /* Aumentado significativamente */
-    margin-bottom: 90px;
-    max-height: calc(100vh - 180px);
-    border-radius: 20px;
-    width: calc(100% - 24px);
-  }
-
-  .user-modal-container::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .user-modal-header {
-    padding: 18px;
-    position: sticky;
-    top: 0;
-    background: var(--bg-card);
-    z-index: 10;
-  }
-
-  .user-modal-title-section h2 {
-    font-size: 18px;
-  }
-
-  .user-modal-close {
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-    min-height: 38px;
-  }
-
-  .user-modal-body {
-    padding: 20px;
-    gap: 20px;
-  }
-
-  /* Loading en tablets */
-  .loading-spinner {
-    padding: 50px 20px;
-    min-height: 250px;
-  }
-
-  .loading-content {
-    gap: 18px;
-  }
-
-  .loading-icon {
-    width: 44px;
-    height: 44px;
-  }
-
-  .loading-text {
-    font-size: 15px;
-  }
-
-  /* Stats en 2 columnas en tablets */
-  .user-modal-stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* Streaks en 2 columnas en tablets */
-  .user-modal-streaks {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* Badges en 2 columnas en tablets */
-  .user-modal-badges-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* Achievements en 2 columnas en tablets */
-  .achievements-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* ==================== RESPONSIVE: MÓVILES ==================== */
-@media (max-width: 480px) {
-  .user-modal-overlay {
-    padding: 0;
-    align-items: flex-start; /* Cambiar de center a flex-start */
-    justify-content: center;
-    padding-top: 12px; /* Añadir padding top al overlay */
-  }
-
-  .user-modal-container {
-    /* SOLUCIÓN: Márgenes mayores para evitar superposición con header */
-    margin-top: 85px;  /* Aumentado significativamente de 75px */
-    margin-bottom: 85px;
-    max-height: calc(100vh - 170px);
-    border-radius: 16px;
-    width: calc(100% - 20px);
-  }
-
-  .user-modal-header {
-    padding: 16px;
-    position: sticky;
-    top: 0;
-    background: var(--bg-card);
-    z-index: 10;
-    border-radius: 16px 16px 0 0;
-  }
-
-  .user-modal-title-section {
-    gap: 8px;
-  }
-
-  .user-modal-title-section h2 {
-    font-size: 16px;
-  }
-
-  .user-modal-title-section svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .user-modal-close {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    min-height: 36px;
-  }
-
-  .user-modal-close svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  .user-modal-body {
-    padding: 16px;
-    gap: 16px;
-  }
-
-  /* LOADING MÓVIL - COMPACTO Y CENTRADO */
-  .loading-spinner {
-    padding: 40px 16px;
-    min-height: 220px;
-  }
-
-  .loading-content {
-    gap: 16px;
-  }
-
-  .loading-icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .loading-text {
-    font-size: 14px;
-  }
-
-  /* Avatar más pequeño en móviles */
-  .user-modal-banner {
-    height: 80px;
-  }
-
-  .user-modal-avatar {
-    width: 80px;
-    height: 80px;
-    font-size: 32px;
-    border-width: 3px;
-  }
-
-  .user-modal-level-badge {
-    right: calc(50% - 50px);
-    padding: 4px 10px;
-    font-size: 11px;
-    bottom: 12px;
-  }
-
-  .user-modal-level-badge svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  /* Nombre más pequeño */
-  .user-modal-name {
-    font-size: 20px;
-  }
-
-  .user-modal-title-badge {
-    font-size: 12px;
-    padding: 4px 10px;
-  }
-
-  /* Stats en una columna en móviles */
-  .user-modal-stats-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .stat-icon {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-  }
-
-  .stat-icon svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .stat-label {
-    font-size: 11px;
-  }
-
-  .stat-value {
-    font-size: 20px;
-  }
-
-  /* Level card más compacto */
-  .user-modal-level-card {
-    padding: 14px;
-  }
-
-  .level-title-section h4 {
-    font-size: 15px;
-  }
-
-  .level-title-section p {
-    font-size: 12px;
-  }
-
-  .current-points {
-    font-size: 14px;
-  }
-
-  .progress-bar {
-    height: 8px;
-  }
-
-  /* Streaks en una columna en móviles */
-  .user-modal-streaks {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .streak-icon {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-  }
-
-  .streak-icon svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .streak-label {
-    font-size: 11px;
-  }
-
-  .streak-value {
-    font-size: 20px;
-  }
-
-  /* Coronas más compactas */
-  .user-modal-crowns {
-    padding: 14px;
-  }
-
-  .section-header h4 {
-    font-size: 15px;
-  }
-
-  .crown-icon {
-    width: 24px;
-    height: 24px;
-  }
-
-  /* Badges en una columna en móviles */
-  .user-modal-badges-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .user-modal-badge {
-    padding: 12px;
-  }
-
-  .badge-icon {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-  }
-
-  .badge-icon svg {
-    width: 14px;
-    height: 14px;
-  }
-
-  .badge-label {
-    font-size: 10px;
-  }
-
-  .badge-value {
-    font-size: 13px;
-  }
-
-  /* Active title más compacto */
-  .user-modal-active-title {
-    padding: 14px;
-  }
-
-  .current-title-display {
-    padding: 12px;
-  }
-
-  .title-icon-large {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-  }
-
-  .title-icon-large svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .title-details h5 {
-    font-size: 15px;
-  }
-
-  .title-details p {
-    font-size: 12px;
-  }
-
-  /* Achievements en una columna en móviles */
-  .achievements-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .achievement-card {
-    padding: 14px;
-  }
-
-  .achievement-emoji {
-    font-size: 28px;
-  }
-
-  .achievement-info h5 {
-    font-size: 14px;
-  }
-
-  .achievement-info p {
-    font-size: 11px;
-  }
-
-  .achievement-category {
-    font-size: 10px;
-  }
-
-  /* Historial de coronas más compacto */
-  .history-item {
-    padding: 8px 12px;
-    font-size: 12px;
-  }
-
-  .crowns-history h5 {
-    font-size: 13px;
-  }
-}
-
-/* ==================== RESPONSIVE: MÓVILES EXTRA PEQUEÑOS ==================== */
-@media (max-width: 360px) {
-  .user-modal-overlay {
-    padding: 0;
-    align-items: flex-start; /* Añadir esto */
-    justify-content: center;
-    padding-top: 10px; /* Añadir padding top */
-  }
-
-  .user-modal-container {
-    margin-top: 80px;  /* Aumentado de 72px */
-    margin-bottom: 85px;
-    max-height: calc(100vh - 165px);
-    border-radius: 14px;
-    width: calc(100% - 16px);
-  }
-
-  .user-modal-header {
-    padding: 14px;
-  }
-
-  .user-modal-body {
-    padding: 14px;
-    gap: 14px;
-  }
-
-  .user-modal-stats-grid,
-  .user-modal-streaks,
-  .user-modal-badges-grid,
-  .achievements-grid {
-    gap: 8px;
-  }
-
-  .stat-value,
-  .streak-value {
-    font-size: 18px;
-  }
-
-  /* Loading extra pequeño */
-  .loading-spinner {
-    padding: 30px 12px;
-    min-height: 200px;
-  }
-
-  .loading-content {
-    gap: 14px;
-  }
-
-  .loading-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .loading-text {
-    font-size: 13px;
-  }
-}
 /* ==================== AVATAR SECTION ==================== */
 .user-modal-avatar-section {
   background: var(--bg-tertiary);
@@ -1026,7 +594,7 @@
   background: rgba(96, 81, 155, 0.1);
 }
 
-/* ==================== CORONAS ==================== */
+/* ==================== CORONAS MENSUALES (REDISEÑO) ==================== */
 .user-modal-crowns {
   background: var(--bg-tertiary);
   border-radius: 16px;
@@ -1034,51 +602,104 @@
   border: 1px solid var(--border-light);
 }
 
-.section-header {
+/* Header: mismo patrón que level-card / active-title */
+.crowns-header {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 14px;
 }
 
-.section-header svg {
-  color: #F59E0B;
-  flex-shrink: 0;
+.crowns-header-icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
 }
 
-.section-header h4 {
+.crowns-header h4 {
   font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
-  flex: 1;
 }
 
-.count-badge {
-  background: rgba(245, 158, 11, 0.1);
-  color: #D97706;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 4px 10px;
+/* Fila stat principal: misma estructura que un stat-item horizontal */
+.crowns-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-secondary);
   border-radius: 12px;
+  padding: 14px 16px;
+}
+
+/* Grupo de iconos de corona dentro de la fila */
+.crowns-stat-visual {
   flex-shrink: 0;
 }
 
-.crowns-display {
+.crowns-icons-group {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  min-height: 40px;
   align-items: center;
-  padding: 8px 0;
+  gap: 4px;
 }
 
-.crown-icon {
+.crowns-single-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #F59E0B;
-  animation: pulse 1.5s infinite;
+  /* Escalonamiento sutil: cada corona se sube un poco menos */
+  transition: transform 0.2s ease;
 }
 
+.crowns-single-icon:nth-child(odd) {
+  transform: translateY(-2px);
+}
+
+.crowns-single-icon:nth-child(even) {
+  transform: translateY(2px);
+  color: #D97706;
+}
+
+.crowns-overflow {
+  font-size: 13px;
+  font-weight: 700;
+  color: #D97706;
+  margin-left: 4px;
+}
+
+/* Info textual a la derecha de los iconos */
+.crowns-stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.crowns-stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.crowns-stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Historial: separador y filas con borde izquierdo dorado */
 .crowns-history {
   display: flex;
   flex-direction: column;
@@ -1089,30 +710,63 @@
 }
 
 .crowns-history h5 {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 4px;
 }
 
-.history-item {
+.crowns-history-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  border-left: 3px solid #F59E0B;
+  transition: all 0.2s ease;
+}
+
+.crowns-history-item:hover {
+  background: var(--bg-tertiary);
+  transform: translateX(3px);
+}
+
+/* Icono pequeño dentro de cada fila del historial */
+.crowns-history-icon {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Contenido textual de cada fila del historial */
+.crowns-history-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 14px;
-  background: var(--bg-secondary);
-  border-radius: 12px;
-  font-size: 13px;
+  flex: 1;
+  min-width: 0;
 }
 
-.history-item .month {
+.crowns-history-month {
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
 }
 
-.history-item .points {
-  color: #059669;
-  font-weight: 600;
+.crowns-history-points {
+  font-size: 13px;
+  font-weight: 700;
+  color: #10B981;
 }
 
 /* ==================== BADGES GRID ==================== */
@@ -1284,7 +938,6 @@
 
 /* ==================== ACHIEVEMENTS ==================== */
 .user-modal-achievements {
-  /* Sin padding horizontal, ya está en el body */
 }
 
 .empty-achievements {
@@ -1360,21 +1013,110 @@
   letter-spacing: 0.5px;
 }
 
-/* ==================== RESPONSIVE: MÓVILES ==================== */
-@media (max-width: 480px) {
+/* ==================== RESPONSIVE: TABLETS ==================== */
+@media (max-width: 768px) {
   .user-modal-overlay {
-    padding: 10px;
-    padding-top: calc(60px + 10px);
-    padding-bottom: calc(65px + 10px);
+    padding: 0;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 16px;
   }
 
   .user-modal-container {
-    max-height: calc(100vh - 60px - 65px - 20px);
+    margin-top: 90px;
+    margin-bottom: 90px;
+    max-height: calc(100vh - 180px);
+    border-radius: 20px;
+    width: calc(100% - 24px);
+  }
+
+  .user-modal-container::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .user-modal-header {
+    padding: 18px;
+    position: sticky;
+    top: 0;
+    background: var(--bg-card);
+    z-index: 10;
+  }
+
+  .user-modal-title-section h2 {
+    font-size: 18px;
+  }
+
+  .user-modal-close {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+  }
+
+  .user-modal-body {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .loading-spinner {
+    padding: 50px 20px;
+    min-height: 250px;
+  }
+
+  .loading-content {
+    gap: 18px;
+  }
+
+  .loading-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .loading-text {
+    font-size: 15px;
+  }
+
+  .user-modal-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .user-modal-streaks {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .user-modal-badges-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .achievements-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ==================== RESPONSIVE: MÓVILES ==================== */
+@media (max-width: 480px) {
+  .user-modal-overlay {
+    padding: 0;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12px;
+  }
+
+  .user-modal-container {
+    margin-top: 85px;
+    margin-bottom: 85px;
+    max-height: calc(100vh - 170px);
     border-radius: 16px;
+    width: calc(100% - 20px);
   }
 
   .user-modal-header {
     padding: 16px;
+    position: sticky;
+    top: 0;
+    background: var(--bg-card);
+    z-index: 10;
+    border-radius: 16px 16px 0 0;
   }
 
   .user-modal-title-section {
@@ -1407,7 +1149,26 @@
     gap: 16px;
   }
 
-  /* Avatar más pequeño en móviles */
+  /* Loading móvil */
+  .loading-spinner {
+    padding: 40px 16px;
+    min-height: 220px;
+  }
+
+  .loading-content {
+    gap: 16px;
+  }
+
+  .loading-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .loading-text {
+    font-size: 14px;
+  }
+
+  /* Avatar */
   .user-modal-banner {
     height: 80px;
   }
@@ -1431,7 +1192,6 @@
     height: 12px;
   }
 
-  /* Nombre más pequeño */
   .user-modal-name {
     font-size: 20px;
   }
@@ -1441,7 +1201,7 @@
     padding: 4px 10px;
   }
 
-  /* Stats en una columna en móviles */
+  /* Stats */
   .user-modal-stats-grid {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -1466,7 +1226,7 @@
     font-size: 20px;
   }
 
-  /* Level card más compacto */
+  /* Level card */
   .user-modal-level-card {
     padding: 14px;
   }
@@ -1487,7 +1247,7 @@
     height: 8px;
   }
 
-  /* Streaks en una columna en móviles */
+  /* Streaks */
   .user-modal-streaks {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -1512,21 +1272,82 @@
     font-size: 20px;
   }
 
-  /* Coronas más compactas */
+  /* Coronas móvil */
   .user-modal-crowns {
     padding: 14px;
   }
 
-  .section-header h4 {
+  .crowns-header {
+    margin-bottom: 12px;
+  }
+
+  .crowns-header-icon {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+  }
+
+  .crowns-header-icon svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .crowns-header h4 {
     font-size: 15px;
   }
 
-  .crown-icon {
-    width: 24px;
-    height: 24px;
+  .crowns-stat-row {
+    padding: 12px 14px;
+    gap: 14px;
   }
 
-  /* Badges en una columna en móviles */
+  .crowns-single-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .crowns-stat-value {
+    font-size: 20px;
+  }
+
+  .crowns-stat-label {
+    font-size: 11px;
+  }
+
+  .crowns-history {
+    padding-top: 12px;
+    margin-top: 12px;
+  }
+
+  .crowns-history h5 {
+    font-size: 11px;
+  }
+
+  .crowns-history-item {
+    padding: 8px 10px;
+    gap: 10px;
+  }
+
+  .crowns-history-icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+  }
+
+  .crowns-history-icon svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .crowns-history-month {
+    font-size: 13px;
+  }
+
+  .crowns-history-points {
+    font-size: 12px;
+  }
+
+  /* Badges */
   .user-modal-badges-grid {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -1555,7 +1376,7 @@
     font-size: 13px;
   }
 
-  /* Active title más compacto */
+  /* Active title */
   .user-modal-active-title {
     padding: 14px;
   }
@@ -1583,7 +1404,7 @@
     font-size: 12px;
   }
 
-  /* Achievements en una columna en móviles */
+  /* Achievements */
   .achievements-grid {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -1608,43 +1429,23 @@
   .achievement-category {
     font-size: 10px;
   }
-
-  /* Historial de coronas más compacto */
-  .history-item {
-    padding: 8px 12px;
-    font-size: 12px;
-  }
-
-  .crowns-history h5 {
-    font-size: 13px;
-  }
-
-  /* Loading más compacto */
-  .loading-spinner {
-    padding: 40px 20px;
-    min-height: 250px;
-  }
-
-  .loading-icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .loading-text {
-    font-size: 14px;
-  }
 }
 
 /* ==================== RESPONSIVE: MÓVILES EXTRA PEQUEÑOS ==================== */
 @media (max-width: 360px) {
   .user-modal-overlay {
-    padding: 8px;
-    padding-top: calc(60px + 8px);
-    padding-bottom: calc(65px + 8px);
+    padding: 0;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 10px;
   }
 
   .user-modal-container {
+    margin-top: 80px;
+    margin-bottom: 85px;
+    max-height: calc(100vh - 165px);
     border-radius: 14px;
+    width: calc(100% - 16px);
   }
 
   .user-modal-header {
@@ -1668,9 +1469,56 @@
     font-size: 18px;
   }
 
+  /* Loading extra pequeño */
   .loading-spinner {
-    padding: 30px 15px;
+    padding: 30px 12px;
     min-height: 200px;
+  }
+
+  .loading-content {
+    gap: 14px;
+  }
+
+  .loading-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .loading-text {
+    font-size: 13px;
+  }
+
+  /* Coronas extra pequeño */
+  .crowns-stat-row {
+    padding: 10px 12px;
+    gap: 12px;
+  }
+
+  .crowns-single-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .crowns-stat-value {
+    font-size: 18px;
+  }
+
+  .crowns-history-item {
+    padding: 7px 8px;
+  }
+
+  .crowns-history-icon {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+  }
+
+  .crowns-history-month {
+    font-size: 12px;
+  }
+
+  .crowns-history-points {
+    font-size: 11px;
   }
 }
 

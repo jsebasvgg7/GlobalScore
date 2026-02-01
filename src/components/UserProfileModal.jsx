@@ -33,7 +33,6 @@ export default function UserProfileModal({ userId, onClose }) {
     try {
       setLoading(true);
 
-      // Cargar datos del usuario
       const { data: user, error: userError } = await supabase
         .from('users')
         .select('*')
@@ -43,7 +42,6 @@ export default function UserProfileModal({ userId, onClose }) {
       if (userError) throw userError;
       setUserData(user);
 
-      // Cargar ranking
       const { data: allUsers } = await supabase
         .from('users')
         .select('id, points')
@@ -57,7 +55,6 @@ export default function UserProfileModal({ userId, onClose }) {
         });
       }
 
-      // Calcular rachas
       const { data: predictions } = await supabase
         .from('predictions')
         .select(`
@@ -77,7 +74,6 @@ export default function UserProfileModal({ userId, onClose }) {
         calculateStreaks(predictions);
       }
 
-      // Cargar logros disponibles
       const { data: achievements } = await supabase
         .from('available_achievements')
         .select('*')
@@ -94,7 +90,6 @@ export default function UserProfileModal({ userId, onClose }) {
         setUserAchievements(calculatedAchievements);
       }
 
-      // Cargar títulos disponibles
       const { data: titles } = await supabase
         .from('available_titles')
         .select('*');
@@ -112,7 +107,6 @@ export default function UserProfileModal({ userId, onClose }) {
         setUserTitles(calculatedTitles);
       }
 
-      // Cargar historial de coronas
       const { data: history } = await supabase
         .from('monthly_championship_history')
         .select('*')
@@ -278,6 +272,8 @@ export default function UserProfileModal({ userId, onClose }) {
   const nextLevelPoints = 20;
   const levelProgress = (pointsInLevel / nextLevelPoints) * 100;
 
+  const totalCrowns = userData.monthly_championships || 0;
+
   return (
     <div className="user-modal-overlay" onClick={onClose}>
       <div className="user-modal-container" onClick={e => e.stopPropagation()}>
@@ -293,7 +289,7 @@ export default function UserProfileModal({ userId, onClose }) {
         </div>
 
         <div className="user-modal-body">
-          {/* ========== 1. AVATAR Y NOMBRE (Siempre primero) ========== */}
+          {/* ========== 1. AVATAR Y NOMBRE ========== */}
           <div className="user-modal-avatar-section">
             <div className="user-modal-banner">
               <div className="banner-pattern"></div>
@@ -324,36 +320,6 @@ export default function UserProfileModal({ userId, onClose }) {
               </div>
             )}
           </div>
-                    {/* ========== 5. CORONAS MENSUALES ========== */}
-          {(userData.monthly_championships > 0 || crownHistory.length > 0) && (
-            <div className="user-modal-crowns">
-              <div className="section-header">
-                <Crown size={20} />
-                <h4>Coronas Mensuales</h4>
-                <span className="count-badge">
-                  {userData.monthly_championships || 0}
-                </span>
-              </div>
-              
-              <div className="crowns-display">
-                {Array.from({ length: userData.monthly_championships || 0 }).map((_, index) => (
-                  <Crown key={index} size={28} className="crown-icon" />
-                ))}
-              </div>
-              
-              {crownHistory.length > 0 && (
-                <div className="crowns-history">
-                  <h5>Historial</h5>
-                  {crownHistory.slice(0, 3).map((crown) => (
-                    <div key={crown.id} className="history-item">
-                      <span className="month">{crown.month_year}</span>
-                      <span className="points">{crown.points} pts</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
           
           {/* ========== 7. TÍTULO ACTIVO ========== */}
           {activeTitle && (
@@ -378,7 +344,6 @@ export default function UserProfileModal({ userId, onClose }) {
               </div>
             </div>
           )}
-
 
           {/* ========== 3. PROGRESO DE NIVEL ========== */}
           <div className="user-modal-level-card">
@@ -406,7 +371,8 @@ export default function UserProfileModal({ userId, onClose }) {
               </div>
             </div>
           </div>
-                    {/* ========== 6. BADGES DE INFORMACIÓN ========== */}
+
+          {/* ========== 6. BADGES DE INFORMACIÓN ========== */}
           {(userData.favorite_team || userData.favorite_player || userData.nationality || userData.created_at) && (
             <div className="user-modal-badges-grid">
               {userData.favorite_team && (
@@ -448,6 +414,59 @@ export default function UserProfileModal({ userId, onClose }) {
               </div>
             </div>
           )} 
+          {/* ========== 5. CORONAS MENSUALES ========== */}
+          {(totalCrowns > 0 || crownHistory.length > 0) && (
+            <div className="user-modal-crowns">
+              {/* Header: mismo patrón que level-card y active-title */}
+              <div className="crowns-header">
+                <div className="crowns-header-icon">
+                  <Crown size={18} />
+                </div>
+                <h4>Coronas Mensuales</h4>
+              </div>
+
+              {/* Stat principal: mismo patrón que .user-modal-stat-item */}
+              <div className="crowns-stat-row">
+                <div className="crowns-stat-visual">
+                  {/* Coronas individuales dentro de la fila estructurada */}
+                  <div className="crowns-icons-group">
+                    {Array.from({ length: Math.min(totalCrowns, 5) }).map((_, i) => (
+                      <span key={i} className="crowns-single-icon">
+                        <Crown size={20} />
+                      </span>
+                    ))}
+                    {totalCrowns > 5 && (
+                      <span className="crowns-overflow">+{totalCrowns - 5}</span>
+                    )}
+                  </div>
+                </div>
+                <div className="crowns-stat-info">
+                  <span className="crowns-stat-value">{totalCrowns}</span>
+                  <span className="crowns-stat-label">
+                    {totalCrowns === 1 ? 'Corona ganada' : 'Coronas ganadas'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Historial: cada item es una fila tipo badge con borde izquierdo */}
+              {crownHistory.length > 0 && (
+                <div className="crowns-history">
+                  <h5>Historial reciente</h5>
+                  {crownHistory.slice(0, 3).map((crown, index) => (
+                    <div key={crown.id} className="crowns-history-item">
+                      <div className="crowns-history-icon">
+                        <Crown size={14} />
+                      </div>
+                      <div className="crowns-history-content">
+                        <span className="crowns-history-month">{crown.month_year}</span>
+                        <span className="crowns-history-points">{crown.points} pts</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
