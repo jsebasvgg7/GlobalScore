@@ -2,15 +2,9 @@
 import { supabase } from '../../utils/supabaseClient';
 
 export const useAdminCrowns = (loadData, toast) => {
-  
-  // ============================================
-  // OTORGAR CORONA MENSUAL
-  // ============================================
   const handleAwardCrown = async (winnerId, monthLabel, currentUserId) => {
     try {
-      console.log('👑 Otorgando corona...', { winnerId, monthLabel, currentUserId });
-      
-      // Llamar a la función RPC
+      // Llamar a la función de Supabase para otorgar la corona
       const { data, error } = await supabase.rpc('award_monthly_championship', {
         winner_user_id: winnerId,
         month_label: monthLabel,
@@ -19,17 +13,13 @@ export const useAdminCrowns = (loadData, toast) => {
 
       if (error) throw error;
 
-      console.log('✅ Corona otorgada:', data);
-
       await loadData();
-      
       toast.success(
         `👑 Corona otorgada exitosamente a ${data.winner_name} para ${monthLabel}`,
         4000
       );
       
       return { success: true, data };
-      
     } catch (err) {
       console.error('Error awarding crown:', err);
       
@@ -38,64 +28,51 @@ export const useAdminCrowns = (loadData, toast) => {
         toast.error('⚠️ Ya se otorgó una corona para este mes');
       } else if (err.message.includes('Usuario no encontrado')) {
         toast.error('❌ Usuario no encontrado');
-      } else if (err.message.includes('function')) {
-        toast.error(
-          '❌ Error: La función de base de datos no está disponible.\n' +
-          'Por favor, ejecuta el script SQL para crear las funciones necesarias.'
-        );
       } else {
-        toast.error(`❌ Error al otorgar la corona: ${err.message}`);
+        toast.error('❌ Error al otorgar la corona. Intenta de nuevo.');
       }
       
       throw err;
     }
   };
 
-  // ============================================
-  // RESETEAR ESTADÍSTICAS MENSUALES
-  // ============================================
   const handleResetMonthlyStats = async () => {
-    const confirmed = confirm(
-      '⚠️ ¿Estás seguro de resetear las estadísticas mensuales de TODOS los usuarios?\n\n' +
-      'Esta acción:\n' +
-      '• Pondrá en 0 los puntos mensuales\n' +
-      '• Reiniciará las predicciones mensuales\n' +
-      '• Reiniciará los aciertos mensuales\n\n' +
-      'Esta acción NO se puede deshacer.'
-    );
-    
-    if (!confirmed) return;
+    if (!confirm('⚠️ ¿Estás seguro de resetear las estadísticas mensuales de TODOS los usuarios? Esta acción no se puede deshacer.')) {
+      return;
+    }
 
     try {
       console.log('🔄 Reseteando estadísticas mensuales...');
       
       const { data, error } = await supabase.rpc('reset_all_monthly_stats');
 
-      if (error) throw error;
+      console.log('Respuesta de reset:', { data, error });
 
-      console.log('✅ Estadísticas reseteadas:', data);
+      if (error) {
+        console.error('Error en RPC:', error);
+        throw error;
+      }
+
+      // Verificar si la función retornó un error dentro del JSON
+      if (data && !data.success) {
+        throw new Error(data.error || 'Error desconocido en reset');
+      }
 
       await loadData();
       
+      const usersReset = data?.users_reset || 0;
       toast.success(
-        `🔄 Estadísticas mensuales reseteadas\n` +
-        `👥 ${data.users_reset} usuarios actualizados`,
+        `🔄 Estadísticas mensuales reseteadas. ${usersReset} usuarios actualizados.`,
         4000
       );
       
       return { success: true, data };
-      
     } catch (err) {
       console.error('Error resetting monthly stats:', err);
       
-      if (err.message.includes('function')) {
-        toast.error(
-          '❌ Error: La función de base de datos no está disponible.\n' +
-          'Por favor, ejecuta el script SQL para crear las funciones necesarias.'
-        );
-      } else {
-        toast.error(`❌ Error al resetear estadísticas: ${err.message}`);
-      }
+      // Mensaje de error más específico
+      const errorMessage = err.message || err.hint || 'Error desconocido';
+      toast.error(`❌ Error al resetear estadísticas: ${errorMessage}`);
       
       throw err;
     }
