@@ -81,15 +81,16 @@ export default function RankingPage({ currentUser, onBack }) {
     }
   };
 
-  // ⭐ FUNCIÓN CORREGIDA - Usa 2 consultas separadas (más confiable)
+  // ⭐ FUNCIÓN ACTUALIZADA - Obtiene puntos del campeonato y fecha
   const loadTopChampions = async () => {
     try {
       console.log('🔍 Cargando campeones desde monthly_championship_history...');
       
-      // PASO 1: Obtener TODOS los registros de historial
+      // PASO 1: Obtener TODOS los registros de historial con detalles
       const { data: historyData, error: historyError } = await supabase
         .from('monthly_championship_history')
-        .select('user_id');
+        .select('user_id, points, month_year, awarded_at')
+        .order('awarded_at', { ascending: false });
       
       console.log('📊 Registros de historial raw:', historyData?.length || 0);
       
@@ -104,27 +105,35 @@ export default function RankingPage({ currentUser, onBack }) {
         return;
       }
 
-      // PASO 2: Contar coronas por usuario
-      const championCounts = {};
+      // PASO 2: Agrupar por usuario y guardar todos sus campeonatos
+      const championData = {};
       
       historyData.forEach(record => {
         const userId = record.user_id;
-        if (!championCounts[userId]) {
-          championCounts[userId] = 0;
+        if (!championData[userId]) {
+          championData[userId] = {
+            count: 0,
+            championships: []
+          };
         }
-        championCounts[userId]++;
+        championData[userId].count++;
+        championData[userId].championships.push({
+          points: record.points,
+          monthYear: record.month_year,
+          awardedAt: record.awarded_at
+        });
       });
       
-      console.log('📈 Conteo de coronas:', championCounts);
+      console.log('📈 Datos de campeones:', championData);
 
       // PASO 3: Obtener IDs únicos de usuarios
-      const userIds = Object.keys(championCounts);
+      const userIds = Object.keys(championData);
       console.log('👥 User IDs únicos:', userIds);
 
       // PASO 4: Obtener datos completos de esos usuarios
       const { data: usersData, error: usersError } = await supabase
         .from('users')
-        .select('id, name, avatar_url, points, correct, predictions')
+        .select('id, name, avatar_url')
         .in('id', userIds);
 
       console.log('👤 Usuarios encontrados:', usersData?.length || 0);
@@ -140,24 +149,33 @@ export default function RankingPage({ currentUser, onBack }) {
         return;
       }
 
-      // PASO 5: Combinar datos de usuarios con conteo de coronas
+      // PASO 5: Combinar datos de usuarios con información de campeonatos
       const championsArray = usersData
-        .map(user => ({
-          id: user.id,
-          name: user.name,
-          avatar_url: user.avatar_url,
-          points: user.points || 0,
-          correct: user.correct || 0,
-          predictions: user.predictions || 0,
-          monthly_championships: championCounts[user.id] || 0
-        }))
+        .map(user => {
+          const userData = championData[user.id];
+          // Obtener el campeonato más reciente
+          const latestChampionship = userData.championships[0]; // Ya está ordenado por fecha desc
+          
+          return {
+            id: user.id,
+            name: user.name,
+            avatar_url: user.avatar_url,
+            monthly_championships: userData.count,
+            // Info del campeonato más reciente
+            championship_points: latestChampionship.points,
+            championship_month_year: latestChampionship.monthYear,
+            championship_awarded_at: latestChampionship.awardedAt,
+            // Todos los campeonatos para referencia
+            all_championships: userData.championships
+          };
+        })
         .sort((a, b) => {
           // Primero por número de coronas (descendente)
           if (b.monthly_championships !== a.monthly_championships) {
             return b.monthly_championships - a.monthly_championships;
           }
-          // Luego por puntos totales (descendente)
-          return b.points - a.points;
+          // Luego por puntos del último campeonato (descendente)
+          return b.championship_points - a.championship_points;
         })
         .slice(0, 10); // Top 10
 
@@ -284,155 +302,68 @@ export default function RankingPage({ currentUser, onBack }) {
 
         {/* Contenido según la pestaña seleccionada */}
         {rankingType === 'halloffame' ? (
-          // SECCIÓN HALL OF FAME
+          // SECCIÓN HALL OF FAME - FORMATO LISTA
           <div className="hall-of-fame-section">
             <div className="hall-header">
-              <Trophy className="hall-icon" size={32} />
               <div className="hall-title-group">
                 <h2 className="hall-title">Hall of Fame</h2>
                 <p className="hall-subtitle">Leyendas con más coronas mensuales ganadas</p>
               </div>
-              <Award className="hall-icon-secondary" size={28} />
-            </div>
 
-            {champions.length > 0 ? (
-              <>
-                {/* Podio - Se adapta a la cantidad de campeones disponibles */}
-                <div className="hall-podium" style={{
-                  gridTemplateColumns: champions.length === 1 ? '1fr' : champions.length === 2 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'
-                }}>
-                  {/* 2do Lugar - Solo si hay al menos 2 campeones */}
-                  {champions.length >= 2 && (
-                    <div className="hall-winner second">
-                      <div className="hall-position">2</div>
+              {champions.length > 0 ? (
+                <div className="hall-items">
+                  {champions.map((champion, index) => {
+                    const position = index + 1;
+
+                    return (
                       <div 
-                        className="hall-avatar"
-                        onClick={() => setSelectedUserId(champions[1].id)}
+                        key={champion.id}
+                        className="hall-item"
                       >
-                        {champions[1].avatar_url ? (
-                          <img src={champions[1].avatar_url} alt={champions[1].name} />
-                        ) : (
-                          <span>{champions[1].name.charAt(0).toUpperCase()}</span>
-                        )}
-                      </div>
-                      <div className="hall-name">{champions[1].name}</div>
-                      <div className="hall-crowns">
-                        <Crown size={18} />
-                        <span>{champions[1].monthly_championships} {champions[1].monthly_championships === 1 ? 'Corona' : 'Coronas'}</span>
-                      </div>
-                      <div className="hall-stats">
-                        {champions[1].points} pts totales
-                      </div>
-                    </div>
-                  )}
-
-                  {/* 1er Lugar - Siempre se muestra si hay al menos 1 campeón */}
-                  <div className="hall-winner first">
-                    <Star className="hall-star star-1" size={16} />
-                    <Star className="hall-star star-2" size={14} />
-                    <Star className="hall-star star-3" size={12} />
-                    
-                    <div className="hall-position">1</div>
-                    <div 
-                      className="hall-avatar"
-                      onClick={() => setSelectedUserId(champions[0].id)}
-                    >
-                      {champions[0].avatar_url ? (
-                        <img src={champions[0].avatar_url} alt={champions[0].name} />
-                      ) : (
-                        <span>{champions[0].name.charAt(0).toUpperCase()}</span>
-                      )}
-                    </div>
-                    <div className="hall-name">{champions[0].name}</div>
-                    <div className="hall-crowns champion">
-                      <Crown size={20} />
-                      <span>{champions[0].monthly_championships} {champions[0].monthly_championships === 1 ? 'Corona' : 'Coronas'}</span>
-                    </div>
-                    <div className="hall-stats">
-                      {champions[0].points} pts totales
-                    </div>
-                  </div>
-
-                  {/* 3er Lugar - Solo si hay al menos 3 campeones */}
-                  {champions.length >= 3 && (
-                    <div className="hall-winner third">
-                      <div className="hall-position">3</div>
-                      <div 
-                        className="hall-avatar"
-                        onClick={() => setSelectedUserId(champions[2].id)}
-                      >
-                        {champions[2].avatar_url ? (
-                          <img src={champions[2].avatar_url} alt={champions[2].name} />
-                        ) : (
-                          <span>{champions[2].name.charAt(0).toUpperCase()}</span>
-                        )}
-                      </div>
-                      <div className="hall-name">{champions[2].name}</div>
-                      <div className="hall-crowns">
-                        <Crown size={18} />
-                        <span>{champions[2].monthly_championships} {champions[2].monthly_championships === 1 ? 'Corona' : 'Coronas'}</span>
-                      </div>
-                      <div className="hall-stats">
-                        {champions[2].points} pts totales
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Resto del Top 10 - Solo si hay más de 3 */}
-                {champions.length > 3 && (
-                  <div className="hall-list">
-                    <h3 className="hall-list-title">Otros Campeones</h3>
-                    <div className="hall-items">
-                      {champions.slice(3).map((champion, index) => {
-                        const position = index + 4;
-                        const accuracy = champion.predictions > 0 
-                          ? Math.round((champion.correct / champion.predictions) * 100) 
-                          : 0;
-
-                        return (
-                          <div 
-                            key={champion.id}
-                            className="hall-item"
-                            onClick={() => setSelectedUserId(champion.id)}
-                          >
-                            <div className="hall-item-position">#{position}</div>
-                            <div className="hall-item-avatar">
-                              {champion.avatar_url ? (
-                                <img src={champion.avatar_url} alt={champion.name} />
-                              ) : (
-                                <span>{champion.name.charAt(0).toUpperCase()}</span>
-                              )}
-                            </div>
-                            <div className="hall-item-info">
-                              <div className="hall-item-name">{champion.name}</div>
-                              <div className="hall-item-detail">
-                                {champion.correct} aciertos • {accuracy}% precisión
-                              </div>
-                            </div>
-                            <div className="hall-item-crowns">
-                              <Crown size={16} />
-                              <span>{champion.monthly_championships}</span>
-                            </div>
-                            <div className="hall-item-points">
-                              {champion.points} pts
-                            </div>
+                        <div className="hall-item-position">
+                          {position < 10 ? `0${position}` : position}
+                        </div>
+                        
+                        <div 
+                          className="hall-item-avatar"
+                          onClick={() => setSelectedUserId(champion.id)}
+                        >
+                          {champion.avatar_url ? (
+                            <img src={champion.avatar_url} alt={champion.name} />
+                          ) : (
+                            <span>{champion.name.charAt(0).toUpperCase()}</span>
+                          )}
+                        </div>
+                        
+                        <div className="hall-item-info">
+                          <div className="hall-item-name">{champion.name}</div>
+                          <div className="hall-item-detail">
+                            {champion.championship_month_year}
                           </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="hall-empty">
-                <Crown size={64} className="hall-empty-icon" />
-                <p className="hall-empty-text">Aún no hay campeones mensuales</p>
-                <p className="hall-empty-subtitle">
-                  Sé el primero en ganar una corona mensual
-                </p>
-              </div>
-            )}
+                        </div>
+                        
+                        <div className="hall-item-crowns">
+                          <Crown size={16} />
+                          <span>{champion.monthly_championships}</span>
+                        </div>
+                        
+                        <div className="hall-item-points">
+                          {champion.championship_points} pts
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="hall-empty">
+                  <Crown size={64} className="hall-empty-icon" />
+                  <p className="hall-empty-text">Aún no hay campeones mensuales</p>
+                  <p className="hall-empty-subtitle">
+                    Sé el primero en ganar una corona mensual
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           // SECCIÓN DE RANKINGS (Global o Mensual)
