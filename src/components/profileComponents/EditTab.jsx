@@ -34,11 +34,12 @@ export default function EditTab({
           <label className="form-label-modern">
             <User size={16} />
             <span>Nombre Completo</span>
+            <span className="optional-badge">Opcional</span>
           </label>
           <input
             type="text"
             className="form-input-modern"
-            value={userData.name}
+            value={userData.name || ''}
             onChange={(e) => setUserData({ ...userData, name: e.target.value })}
             placeholder="Tu nombre"
           />
@@ -48,11 +49,12 @@ export default function EditTab({
           <label className="form-label-modern">
             <Trophy size={16} />
             <span>Equipo Favorito</span>
+            <span className="optional-badge">Opcional</span>
           </label>
           <input
             type="text"
             className="form-input-modern"
-            value={userData.favorite_team}
+            value={userData.favorite_team || ''}
             onChange={(e) => setUserData({ ...userData, favorite_team: e.target.value })}
             placeholder="Ej: Real Madrid"
           />
@@ -62,11 +64,12 @@ export default function EditTab({
           <label className="form-label-modern">
             <Heart size={16} />
             <span>Jugador Favorito</span>
+            <span className="optional-badge">Opcional</span>
           </label>
           <input
             type="text"
             className="form-input-modern"
-            value={userData.favorite_player}
+            value={userData.favorite_player || ''}
             onChange={(e) => setUserData({ ...userData, favorite_player: e.target.value })}
             placeholder="Ej: Lionel Messi"
           />
@@ -76,10 +79,11 @@ export default function EditTab({
           <label className="form-label-modern">
             <User size={16} />
             <span>Género</span>
+            <span className="optional-badge">Opcional</span>
           </label>
           <select
             className="form-select-modern"
-            value={userData.gender}
+            value={userData.gender || ''}
             onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
           >
             <option value="">Seleccionar...</option>
@@ -94,11 +98,12 @@ export default function EditTab({
           <label className="form-label-modern">
             <Flag size={16} />
             <span>Nacionalidad</span>
+            <span className="optional-badge">Opcional</span>
           </label>
           <input
             type="text"
             className="form-input-modern"
-            value={userData.nationality}
+            value={userData.nationality || ''}
             onChange={(e) => setUserData({ ...userData, nationality: e.target.value })}
             placeholder="Ej: Colombia"
           />
@@ -108,10 +113,11 @@ export default function EditTab({
           <label className="form-label-modern">
             <Star size={16} />
             <span>Biografía</span>
+            <span className="optional-badge">Opcional</span>
           </label>
           <textarea
             className="form-textarea-modern"
-            value={userData.bio}
+            value={userData.bio || ''}
             onChange={(e) => setUserData({ ...userData, bio: e.target.value })}
             placeholder="Cuéntanos sobre ti..."
             rows={3}
