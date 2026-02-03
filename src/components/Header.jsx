@@ -69,21 +69,21 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
 
         <div className="header-right">
           <button 
-            className="icon-btn notifications-btn" 
-            onClick={handleNotificationsClick} 
-            aria-label="Ver notificaciones"
-            title="Notificaciones"
-          >
-            <Bell size={18} />
-          </button>
-
-          <button 
             className="icon-btn theme-btn" 
             onClick={toggleTheme}
             aria-label={theme === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
             title={theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}
           >
             {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
+
+          <button 
+            className="icon-btn notifications-btn" 
+            onClick={handleNotificationsClick} 
+            aria-label="Ver notificaciones"
+            title="Notificaciones"
+          >
+            <Bell size={18} />
           </button>
 
           {/* NUEVO: Botón de Settings - Desktop */}
