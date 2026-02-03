@@ -581,7 +581,7 @@
 ========================================== */
 
 [data-theme="dark"] .knockout-badge {
-  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  background: linear-gradient(135deg, #a18743 0%, #856732 100%);
   color: #1F2937;
   box-shadow: 0 2px 6px rgba(251, 191, 36, 0.4);
 }
