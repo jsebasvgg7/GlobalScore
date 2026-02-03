@@ -204,7 +204,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
             <span className="team-emoji" style={{ display: match.home_team_logo_url ? 'none' : 'flex' }}>
               {match.home_team_logo || '⚽'}
             </span>
-            {advancingTeam === 'home' && (
+            {advancingTeam === 'home' && !isDisabled && (
               <div className="advancing-indicator">
                 <CheckCircle2 size={14} />
               </div>
@@ -269,7 +269,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
             <span className="team-emoji" style={{ display: match.away_team_logo_url ? 'none' : 'flex' }}>
               {match.away_team_logo || '⚽'}
             </span>
-            {advancingTeam === 'away' && (
+            {advancingTeam === 'away' && !isDisabled && (
               <div className="advancing-indicator">
                 <CheckCircle2 size={14} />
               </div>
