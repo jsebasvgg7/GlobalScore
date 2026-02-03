@@ -229,7 +229,8 @@
 }
 
 /* ================================
-   ICON BUTTONS BASE - TODOS IGUALES
+   ICON BUTTONS - ESTILO ÚNICO PARA TODOS
+   En desktop modo claro: fondo transparente con borde morado claro
 ================================ */
 
 .icon-btn {
@@ -249,7 +250,7 @@
   padding: 0;
 }
 
-/* FIX: Asegurar que los SVG tomen el tamaño correcto */
+/* Asegurar que los SVG tomen el tamaño correcto */
 .icon-btn svg {
   width: 20px;
   height: 20px;
@@ -266,143 +267,27 @@
 .icon-btn:active {
   transform: translateY(0);
 }
-/* ================================
-   SETTING BUTTON (Púrpura)
-================================ */
-.icon-btn.settings-btn {
-  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
-  border-color: transparent;
-  color: white;
-}
-.icon-btn.settings-btn svg {
-  width: 20px;
-  height: 20px;
-}
-.icon-btn.settings-btn:hover {
-  background: linear-gradient(135deg, #4f3f85 0%, #7366b3 100%);
-  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.5);
-  transform: translateY(-2px) scale(1.05);
-}
-.icon-btn.settings-btn:active {
-  transform: translateY(0) scale(0.98);
-}
 
 /* ================================
-   NOTIFICATIONS BUTTON  
+   MODO CLARO EN DESKTOP - TODOS LOS BOTONES IGUALES
 ================================ */
-.icon-btn.notifications-btn {
-  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
-  border-color: transparent;
-  color: white;
-}
-.icon-btn.notifications-btn svg {
-  width: 20px;
-  height: 20px;
-}
-.icon-btn.notifications-btn:hover {
-  background: linear-gradient(135deg, #4f3f85 0%, #7366b3 100%);
-  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.5);
-  transform: translateY(-2px) scale(1.05);
-}
-.icon-btn.notifications-btn:active {
-  transform: translateY(0) scale(0.98);
-}
+@media (min-width: 769px) {
+  [data-theme="light"] .icon-btn {
+    background: rgba(96, 81, 155, 0.08) !important;
+    border: 1px solid rgba(96, 81, 155, 0.15) !important;
+    color: #60519b !important;
+  }
 
-/* ================================
-   RANKING BUTTON 
-================================ */
+  [data-theme="light"] .icon-btn svg {
+    color: #60519b !important;
+  }
 
-.icon-btn.ranking-btn {
-  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
-  border-color: transparent;
-  color: white;
-}
-
-.icon-btn.ranking-btn svg {
-  width: 20px;
-  height: 20px;
-}
-
-.icon-btn.ranking-btn:hover {
-  background: linear-gradient(135deg, #4f3f85 0%, #7366b3 100%);
-  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.5);
-  transform: translateY(-2px) scale(1.05);
-}
-
-.icon-btn.ranking-btn:active {
-  transform: translateY(0) scale(0.98);
-}
-
-/* ================================
-   STATS BUTTON 
-================================ */
-
-.icon-btn.stats-btn {
-  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
-  border-color: transparent;
-  color: white;
-}
-.icon-btn.stats-btn svg {
-  width: 20px;
-  height: 20px;
-}
-.icon-btn.stats-btn:hover {
-  background: linear-gradient(135deg, #4f3f85 0%, #7366b3 100%);
-  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.5);
-  transform: translateY(-2px) scale(1.05);
-}
-.icon-btn.stats-btn:active {
-  transform: translateY(0) scale(0.98);
-}
-
-/* ================================
-   ADMIN BUTTON 
-================================ */
-
-.icon-btn.admin-btn {
-  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
-  border-color: transparent;
-  color: white;
-}
-
-.icon-btn.admin-btn svg {
-  width: 20px;
-  height: 20px;
-}
-
-.icon-btn.admin-btn:hover {
-  background: linear-gradient(135deg, #4f3f85 0%, #7366b3 100%);
-  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.5);
-  transform: translateY(-2px) scale(1.05);
-}
-
-.icon-btn.admin-btn:active {
-  transform: translateY(0) scale(0.98);
-}
-
-/* ================================
-   PROFILE BUTTON 
-================================ */
-
-.icon-btn.profile-btn {
-  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
-  border-color: transparent;
-  color: white;
-}
-
-.icon-btn.profile-btn svg {
-  width: 20px;
-  height: 20px;
-}
-
-.icon-btn.profile-btn:hover {
-  background: linear-gradient(135deg, #4f3f85 0%, #7366b3 100%);
-  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.5);
-  transform: translateY(-2px) scale(1.05);
-}
-
-.icon-btn.profile-btn:active {
-  transform: translateY(0) scale(0.98);
+  [data-theme="light"] .icon-btn:hover {
+    background: rgba(96, 81, 155, 0.15) !important;
+    border-color: rgba(96, 81, 155, 0.25) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(96, 81, 155, 0.15) !important;
+  }
 }
 
 /* ================================
@@ -660,6 +545,7 @@
     height: 17px;
   }
 }
+
 /* ================================
    WORLD CUP BUTTON (Dorado/Oro) - MISMO TAMAÑO
 ================================ */
