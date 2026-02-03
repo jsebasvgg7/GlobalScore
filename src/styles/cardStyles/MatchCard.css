@@ -1009,3 +1009,205 @@
     padding: 5px 10px;
   }
 }
+
+/* ==========================================
+   KNOCKOUT STYLES - Nuevos estilos
+========================================== */
+
+/* Badge de Eliminatoria en Header */
+.knockout-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: white;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
+  margin-left: 8px;
+}
+
+/* Team Logo Wrapper - Clickable en knockout */
+.team-logo-wrapper.clickable {
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.team-logo-wrapper.clickable:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+}
+
+.team-logo-wrapper.clickable:active {
+  transform: scale(0.98);
+}
+
+/* Estado: Equipo Avanzando (seleccionado) */
+.team-logo-wrapper.advancing {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%) !important;
+  border-color: #10b981 !important;
+  box-shadow: 
+    0 0 0 3px rgba(16, 185, 129, 0.2),
+    0 4px 12px rgba(16, 185, 129, 0.3) !important;
+  animation: pulseGreen 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseGreen {
+  0%, 100% {
+    box-shadow: 
+      0 0 0 3px rgba(16, 185, 129, 0.2),
+      0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 0 5px rgba(16, 185, 129, 0.3),
+      0 6px 16px rgba(16, 185, 129, 0.4);
+  }
+}
+
+/* Indicador de Avanzando (checkmark) */
+.advancing-indicator {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  animation: bounceIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Hint de Knockout en Footer */
+.knockout-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #D97706;
+  margin-left: 12px;
+}
+
+.knockout-hint svg {
+  flex-shrink: 0;
+  color: #F59E0B;
+}
+
+/* ==========================================
+   MODO OSCURO - Knockout Styles
+========================================== */
+
+[data-theme="dark"] .knockout-badge {
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  color: #1F2937;
+  box-shadow: 0 2px 6px rgba(251, 191, 36, 0.4);
+}
+
+[data-theme="dark"] .team-logo-wrapper.clickable:hover {
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  border-color: #34d399;
+}
+
+[data-theme="dark"] .team-logo-wrapper.advancing {
+  background: rgba(16, 185, 129, 0.2) !important;
+  border-color: #34d399 !important;
+  box-shadow: 
+    0 0 0 3px rgba(16, 185, 129, 0.3),
+    0 4px 12px rgba(16, 185, 129, 0.4) !important;
+}
+
+[data-theme="dark"] .advancing-indicator {
+  background: #34d399;
+  border-color: var(--card);
+  box-shadow: 0 2px 8px rgba(52, 211, 153, 0.5);
+}
+
+[data-theme="dark"] .knockout-hint {
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.3);
+  color: #FBBF24;
+}
+
+[data-theme="dark"] .knockout-hint svg {
+  color: #FBBF24;
+}
+
+/* ==========================================
+   RESPONSIVE - Knockout Styles
+========================================== */
+
+@media (max-width: 767px) {
+  .knockout-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    margin-left: 6px;
+  }
+
+  .knockout-hint {
+    font-size: 10px;
+    padding: 5px 10px;
+    gap: 5px;
+  }
+
+  .knockout-hint span {
+    display: none;
+  }
+
+  /* Mostrar solo ícono en mobile */
+  .knockout-hint::after {
+    content: '+2 pts';
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .advancing-indicator {
+    top: -5px;
+    right: -5px;
+    padding: 3px;
+  }
+
+  .advancing-indicator svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .knockout-badge {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+
+  .knockout-hint {
+    padding: 4px 8px;
+  }
+}

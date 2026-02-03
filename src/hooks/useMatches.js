@@ -5,27 +5,34 @@ import { supabase } from '../utils/supabaseClient';
 export const useMatches = (currentUser) => {
   const [loading, setLoading] = useState(false);
 
-  // Hacer predicción de un partido
-  const makePrediction = useCallback(async (matchId, homeScore, awayScore, onSuccess, onError) => {
+  // ⚡ MODIFICADO: Agregar advancingTeam como parámetro
+  const makePrediction = useCallback(async (matchId, homeScore, awayScore, advancingTeam, onSuccess, onError) => {
     if (!currentUser) return;
 
     setLoading(true);
     try {
-      const { data: predictionData, error } = await supabase
+      const predictionData = {
+        match_id: matchId,
+        user_id: currentUser.id,
+        home_score: homeScore,
+        away_score: awayScore,
+      };
+
+      // ⚡ NUEVO: Solo agregar advancing_team si existe
+      if (advancingTeam) {
+        predictionData.predicted_advancing_team = advancingTeam;
+      }
+
+      const { data: predictionResult, error } = await supabase
         .from("predictions")
-        .upsert({
-          match_id: matchId,
-          user_id: currentUser.id,
-          home_score: homeScore,
-          away_score: awayScore,
-        }, {
+        .upsert(predictionData, {
           onConflict: 'match_id,user_id'
         })
         .select();
 
       if (error) throw error;
 
-      console.log('✅ Predicción guardada:', predictionData);
+      console.log('✅ Predicción guardada:', predictionResult);
 
       // Recargar lista de partidos
       const { data: matchList } = await supabase
@@ -58,20 +65,30 @@ export const useMatches = (currentUser) => {
     }
   }, []);
 
-  // ✅ FINALIZAR PARTIDO - Actualiza GLOBAL + SEMANAL
-  const finishMatch = useCallback(async (matchId, homeScore, awayScore, onSuccess, onError) => {
+  // ⚡ MODIFICADO: Finalizar partido ahora acepta advancingTeam
+  const finishMatch = useCallback(async (matchId, homeScore, awayScore, advancingTeam, onSuccess, onError) => {
     setLoading(true);
     try {
       console.log(`🎯 Finalizando partido ${matchId}: ${homeScore}-${awayScore}`);
+      if (advancingTeam) {
+        console.log(`⚡ Equipo que avanza: ${advancingTeam}`);
+      }
 
       // 1. Actualizar resultado del partido
+      const updateData = { 
+        result_home: homeScore, 
+        result_away: awayScore, 
+        status: "finished" 
+      };
+
+      // ⚡ NUEVO: Agregar advancing_team si existe
+      if (advancingTeam) {
+        updateData.advancing_team = advancingTeam;
+      }
+
       const { error: updateError } = await supabase
         .from("matches")
-        .update({ 
-          result_home: homeScore, 
-          result_away: awayScore, 
-          status: "finished" 
-        })
+        .update(updateData)
         .eq("id", matchId);
 
       if (updateError) throw updateError;
@@ -86,15 +103,18 @@ export const useMatches = (currentUser) => {
       if (matchError) throw matchError;
 
       console.log(`📊 Partido encontrado con ${match.predictions.length} predicciones`);
+      console.log(`⚡ Es knockout: ${match.is_knockout}`);
 
       // 3. Calcular y distribuir puntos
       const resultDiff = Math.sign(homeScore - awayScore);
       let exactPredictions = 0;
       let correctResults = 0;
+      let correctAdvancing = 0;
 
       for (const prediction of match.predictions) {
         const predDiff = Math.sign(prediction.home_score - prediction.away_score);
         let pointsEarned = 0;
+        let advancingPoints = 0;
 
         // Resultado exacto: 5 puntos
         if (prediction.home_score === homeScore && prediction.away_score === awayScore) {
@@ -113,10 +133,30 @@ export const useMatches = (currentUser) => {
           console.log(`❌ Usuario ${prediction.user_id}: No acertó (0 pts)`);
         }
 
+        // ⚡ NUEVO: Puntos por acertar advancing team (solo si ya ganó puntos base)
+        if (match.is_knockout && advancingTeam && pointsEarned > 0) {
+          if (prediction.predicted_advancing_team === advancingTeam) {
+            advancingPoints = 2;
+            correctAdvancing++;
+            console.log(`⚡ Usuario ${prediction.user_id}: Acertó equipo que pasa (+2 pts)`);
+          }
+        }
+
+        const totalPoints = pointsEarned + advancingPoints;
+
+        // ⚡ MODIFICADO: Actualizar predicción con advancing_points separado
+        await supabase
+          .from("predictions")
+          .update({ 
+            points_earned: pointsEarned,
+            advancing_points: advancingPoints
+          })
+          .eq("id", prediction.id);
+
         // Obtener datos actuales del usuario
         const { data: userData, error: userError } = await supabase
           .from("users")
-          .select("points, predictions, correct, best_streak, current_streak, weekly_points, weekly_predictions, weekly_correct")
+          .select("points, predictions, correct, best_streak, current_streak, monthly_points, monthly_predictions, monthly_correct")
           .eq("id", prediction.user_id)
           .single();
 
@@ -126,20 +166,20 @@ export const useMatches = (currentUser) => {
         }
 
         // ========== ESTADÍSTICAS GLOBALES ==========
-        const newPoints = (userData.points || 0) + pointsEarned;
+        const newPoints = (userData.points || 0) + totalPoints;
         const newPredictions = (userData.predictions || 0) + 1;
-        const newCorrect = (userData.correct || 0) + (pointsEarned > 0 ? 1 : 0);
+        const newCorrect = (userData.correct || 0) + (totalPoints > 0 ? 1 : 0);
         
-        // ========== ESTADÍSTICAS SEMANALES ==========
-        const newWeeklyPoints = (userData.weekly_points || 0) + pointsEarned;
-        const newWeeklyPredictions = (userData.weekly_predictions || 0) + 1;
-        const newWeeklyCorrect = (userData.weekly_correct || 0) + (pointsEarned > 0 ? 1 : 0);
+        // ========== ESTADÍSTICAS MENSUALES ==========
+        const newMonthlyPoints = (userData.monthly_points || 0) + totalPoints;
+        const newMonthlyPredictions = (userData.monthly_predictions || 0) + 1;
+        const newMonthlyCorrect = (userData.monthly_correct || 0) + (totalPoints > 0 ? 1 : 0);
         
         // ========== RACHAS ==========
         let newCurrentStreak = userData.current_streak || 0;
         let newBestStreak = userData.best_streak || 0;
         
-        if (pointsEarned > 0) {
+        if (totalPoints > 0) {
           newCurrentStreak = newCurrentStreak + 1;
           newBestStreak = Math.max(newBestStreak, newCurrentStreak);
         } else {
@@ -156,10 +196,10 @@ export const useMatches = (currentUser) => {
             correct: newCorrect,
             current_streak: newCurrentStreak,
             best_streak: newBestStreak,
-            // 📅 Estadísticas semanales
-            weekly_points: newWeeklyPoints,
-            weekly_predictions: newWeeklyPredictions,
-            weekly_correct: newWeeklyCorrect
+            // 📅 Estadísticas mensuales
+            monthly_points: newMonthlyPoints,
+            monthly_predictions: newMonthlyPredictions,
+            monthly_correct: newMonthlyCorrect
           })
           .eq("id", prediction.user_id);
 
@@ -168,7 +208,10 @@ export const useMatches = (currentUser) => {
         } else {
           console.log(`✅ Usuario ${prediction.user_id} actualizado exitosamente:`);
           console.log(`   🌍 Global: ${newPoints} pts, ${newCorrect}/${newPredictions} correctas, racha: ${newCurrentStreak}`);
-          console.log(`   📅 Semanal: ${newWeeklyPoints} pts, ${newWeeklyCorrect}/${newWeeklyPredictions} correctas`);
+          console.log(`   📅 Mensual: ${newMonthlyPoints} pts, ${newMonthlyCorrect}/${newMonthlyPredictions} correctas`);
+          if (advancingPoints > 0) {
+            console.log(`   ⚡ Advancing: +${advancingPoints} pts`);
+          }
         }
       }
 
@@ -184,12 +227,15 @@ export const useMatches = (currentUser) => {
 
       console.log("✅ Partido finalizado exitosamente");
       console.log(`📈 Resultados: ${exactPredictions} exactos, ${correctResults} resultados correctos`);
-      console.log(`🔄 Rankings actualizados: Global + Semanal`);
+      if (match.is_knockout) {
+        console.log(`⚡ Advancing: ${correctAdvancing} usuarios acertaron quién pasa`);
+      }
+      console.log(`🔄 Rankings actualizados: Global + Mensual`);
 
       onSuccess?.({
         users: updatedUsers || [],
         matches: updatedMatches || [],
-        stats: { exactPredictions, correctResults }
+        stats: { exactPredictions, correctResults, correctAdvancing }
       });
 
     } catch (err) {

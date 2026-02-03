@@ -15,12 +15,20 @@ export default function AdminModal({ onAdd, onClose }) {
     date: "",
     time: "",
     deadLine: "",
-    deadLine_time: ""
+    deadLine_time: "",
+    is_knockout: false // ⚡ NUEVO CAMPO
   });
   const [sending, setSending] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+    
+    // Manejar checkbox separadamente
+    if (type === 'checkbox') {
+      setForm({ ...form, [name]: checked });
+      return;
+    }
+    
     setForm({ ...form, [name]: value });
     
     // Auto-generar las URLs de logos cuando se ingresen los nombres de equipos
@@ -114,6 +122,7 @@ export default function AdminModal({ onAdd, onClose }) {
         time: form.time,
         deadline: deadlineISO,
         status: "pending",
+        is_knockout: form.is_knockout // ⚡ NUEVO CAMPO
       };
 
       // Agregar el partido
@@ -184,6 +193,25 @@ export default function AdminModal({ onAdd, onClose }) {
               onChange={handleChange}
             />
             <span className="form-hint">Los logos se asignarán automáticamente según la liga</span>
+          </div>
+
+          {/* ⚡ NUEVO: Checkbox Knockout */}
+          <div className="form-group-premium">
+            <label className="form-label-premium checkbox-label">
+              <input 
+                type="checkbox"
+                name="is_knockout"
+                checked={form.is_knockout}
+                onChange={handleChange}
+                className="knockout-checkbox"
+              />
+              <span className="knockout-label">
+                ⚡ Partido de Eliminatoria (Knockout)
+              </span>
+            </label>
+            <span className="form-hint">
+              Activa esto para copas/eliminatorias donde se puede seleccionar quién pasa (+2 pts)
+            </span>
           </div>
 
           {/* Vista previa del logo de la liga */}

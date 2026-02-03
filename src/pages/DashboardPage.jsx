@@ -115,7 +115,7 @@ export default function VegaScorePage() {
     setShowStats(false);
   };
 
-  const handleMakePrediction = async (matchId, homeScore, awayScore) => {
+  const handleMakePrediction = async (matchId, homeScore, awayScore, advancingTeam = null) => {
     const match = matches.find(m => m.id === matchId);
     if (match?.deadline) {
       const now = new Date();
@@ -130,6 +130,7 @@ export default function VegaScorePage() {
       matchId,
       homeScore,
       awayScore,
+      advancingTeam, // ⚡ NUEVO PARÁMETRO
       (matchList) => {
         updateMatches(matchList);
         toast.success("Guardado 🎯");

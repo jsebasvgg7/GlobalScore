@@ -1,4 +1,4 @@
-// src/components/MatchCard.jsx
+// src/components/cardComponets/MatchCard.jsx
 import React, { useState, useEffect, useRef } from "react";
 import {  
   Clock, 
@@ -13,6 +13,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
   // Estados
   const [homeScore, setHomeScore] = useState(userPred?.home_score ?? "");
   const [awayScore, setAwayScore] = useState(userPred?.away_score ?? "");
+  const [advancingTeam, setAdvancingTeam] = useState(userPred?.predicted_advancing_team ?? null);
   const [isSaved, setIsSaved] = useState(userPred !== undefined);
   const [isSaving, setIsSaving] = useState(false);
   const saveTimeoutRef = useRef(null);
@@ -21,6 +22,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
   useEffect(() => {
     setHomeScore(userPred?.home_score ?? "");
     setAwayScore(userPred?.away_score ?? "");
+    setAdvancingTeam(userPred?.predicted_advancing_team ?? null);
     setIsSaved(userPred !== undefined);
   }, [userPred]);
 
@@ -44,13 +46,16 @@ export default function MatchCard({ match, userPred, onPredict }) {
 
     // Solo guardar si ambos valores son válidos y diferentes a la predicción actual
     const isValidPrediction = !isNaN(home) && !isNaN(away) && homeScore !== "" && awayScore !== "";
-    const isDifferent = home !== userPred?.home_score || away !== userPred?.away_score;
+    const isDifferent = 
+      home !== userPred?.home_score || 
+      away !== userPred?.away_score ||
+      advancingTeam !== userPred?.predicted_advancing_team;
 
     if (isValidPrediction && isDifferent) {
       // Esperar 1 segundo después del último cambio para guardar
       saveTimeoutRef.current = setTimeout(() => {
         setIsSaving(true);
-        onPredict(match.id, home, away);
+        onPredict(match.id, home, away, advancingTeam);
         setTimeout(() => {
           setIsSaved(true);
           setIsSaving(false);
@@ -63,7 +68,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [homeScore, awayScore, isDisabled, match.id, onPredict, userPred]);
+  }, [homeScore, awayScore, advancingTeam, isDisabled, match.id, onPredict, userPred]);
 
   // Manejadores
   const handleScoreChange = (team, value) => {
@@ -77,6 +82,14 @@ export default function MatchCard({ match, userPred, onPredict }) {
     } else {
       setAwayScore(score);
     }
+    setIsSaved(false);
+  };
+
+  const handleAdvancingTeamClick = (team) => {
+    if (isDisabled || !match.is_knockout) return;
+    
+    // Toggle: si ya está seleccionado, deseleccionar
+    setAdvancingTeam(prevTeam => prevTeam === team ? null : team);
     setIsSaved(false);
   };
 
@@ -162,6 +175,9 @@ export default function MatchCard({ match, userPred, onPredict }) {
           {renderLeagueLogo()}
           <Trophy size={16} className="league-icon-fallback" style={{ display: match.league_logo_url ? 'none' : 'flex' }} />
           <span className="league-name">{match.league}</span>
+          {match.is_knockout && (
+            <span className="knockout-badge">⚡ Eliminatoria</span>
+          )}
         </div>
         
         <div className="match-date">
@@ -175,11 +191,19 @@ export default function MatchCard({ match, userPred, onPredict }) {
         
         {/* Equipo Local */}
         <div className="team-section">
-          <div className="team-logo-wrapper">
+          <div 
+            className={`team-logo-wrapper ${match.is_knockout && !isDisabled ? 'clickable' : ''} ${advancingTeam === 'home' ? 'advancing' : ''}`}
+            onClick={() => handleAdvancingTeamClick('home')}
+          >
             {renderTeamLogo(match.home_team_logo_url, match.home_team_logo)}
             <span className="team-emoji" style={{ display: match.home_team_logo_url ? 'none' : 'flex' }}>
               {match.home_team_logo || '⚽'}
             </span>
+            {advancingTeam === 'home' && (
+              <div className="advancing-indicator">
+                <CheckCircle2 size={20} />
+              </div>
+            )}
           </div>
           <span className="team-name">{match.home_team}</span>
         </div>
@@ -232,11 +256,19 @@ export default function MatchCard({ match, userPred, onPredict }) {
 
         {/* Equipo Visitante */}
         <div className="team-section">
-          <div className="team-logo-wrapper">
+          <div 
+            className={`team-logo-wrapper ${match.is_knockout && !isDisabled ? 'clickable' : ''} ${advancingTeam === 'away' ? 'advancing' : ''}`}
+            onClick={() => handleAdvancingTeamClick('away')}
+          >
             {renderTeamLogo(match.away_team_logo_url, match.away_team_logo)}
             <span className="team-emoji" style={{ display: match.away_team_logo_url ? 'none' : 'flex' }}>
               {match.away_team_logo || '⚽'}
             </span>
+            {advancingTeam === 'away' && (
+              <div className="advancing-indicator">
+                <CheckCircle2 size={20} />
+              </div>
+            )}
           </div>
           <span className="team-name">{match.away_team}</span>
         </div>
@@ -263,6 +295,13 @@ export default function MatchCard({ match, userPred, onPredict }) {
           <div className="status-message pending">
             <AlertCircle size={14} />
             <span>Predicción pendiente</span>
+          </div>
+        )}
+        
+        {match.is_knockout && !isDisabled && (
+          <div className="knockout-hint">
+            <Trophy size={12} />
+            <span>Toca el escudo del equipo que pasa (+2 pts)</span>
           </div>
         )}
       </div>

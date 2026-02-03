@@ -5,6 +5,7 @@ import '../../styles/adminStyles/AdminModal.css';
 export default function FinishMatchModal({ match, onFinish, onClose }) {
   const [homeScore, setHomeScore] = useState('');
   const [awayScore, setAwayScore] = useState('');
+  const [advancingTeam, setAdvancingTeam] = useState(null); // ⚡ NUEVO ESTADO
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -28,12 +29,17 @@ export default function FinishMatchModal({ match, onFinish, onClose }) {
       return;
     }
 
+    // ⚡ VALIDACIÓN KNOCKOUT: Si es knockout, debe seleccionar quién pasa
+    if (match.is_knockout && !advancingTeam) {
+      setError('Debes seleccionar qué equipo pasa a la siguiente ronda');
+      return;
+    }
+
     setError('');
     setLoading(true);
 
     try {
-      await onFinish(match.id, home, away);
-      // ✅ CERRAR EL MODAL DESPUÉS DE FINALIZAR EXITOSAMENTE
+      await onFinish(match.id, home, away, advancingTeam); // ⚡ Pasar advancingTeam
       onClose();
     } catch (err) {
       setError('Error al finalizar el partido');
@@ -51,7 +57,7 @@ export default function FinishMatchModal({ match, onFinish, onClose }) {
 
   return (
     <div className="modal-backdrop-premium">
-      <div className="modal-premium" style={{ maxWidth: '500px' }}>
+      <div className="modal-premium" style={{ maxWidth: '540px' }}>
         {/* Header */}
         <div className="modal-header-premium">
           <div className="modal-title-section">
@@ -61,7 +67,7 @@ export default function FinishMatchModal({ match, onFinish, onClose }) {
             <div>
               <h2 className="modal-title-premium">Finalizar Partido</h2>
               <p className="modal-subtitle-premium">
-                Ingresa el resultado final
+                {match.is_knockout ? 'Ingresa el resultado y quién pasa' : 'Ingresa el resultado final'}
               </p>
             </div>
           </div>
@@ -149,6 +155,19 @@ export default function FinishMatchModal({ match, onFinish, onClose }) {
               color: '#666'
             }}>
               {match.league} • {match.date} {match.time}
+              {match.is_knockout && (
+                <span style={{
+                  marginLeft: '8px',
+                  padding: '2px 8px',
+                  background: 'linear-gradient(135deg, #F59E0B, #D97706)',
+                  color: 'white',
+                  borderRadius: '6px',
+                  fontSize: '10px',
+                  fontWeight: '700'
+                }}>
+                  ⚡ ELIMINATORIA
+                </span>
+              )}
             </div>
           </div>
 
@@ -222,6 +241,130 @@ export default function FinishMatchModal({ match, onFinish, onClose }) {
             </div>
           </div>
 
+          {/* ⚡ NUEVO: Selector de Equipo que Pasa (solo si is_knockout) */}
+          {match.is_knockout && (
+            <div style={{
+              padding: '16px',
+              background: 'rgba(245, 158, 11, 0.05)',
+              border: '2px solid rgba(245, 158, 11, 0.2)',
+              borderRadius: '12px',
+              marginBottom: '20px'
+            }}>
+              <div style={{
+                fontSize: '13px',
+                fontWeight: '700',
+                color: '#D97706',
+                marginBottom: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}>
+                <Trophy size={16} />
+                <span>¿Qué equipo pasa a la siguiente ronda?</span>
+                <span style={{ color: '#EF4444' }}>*</span>
+              </div>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '12px'
+              }}>
+                {/* Botón Home */}
+                <button
+                  type="button"
+                  onClick={() => setAdvancingTeam('home')}
+                  disabled={loading}
+                  style={{
+                    padding: '14px',
+                    border: advancingTeam === 'home' ? '3px solid #10B981' : '2px solid #e5e7eb',
+                    borderRadius: '10px',
+                    background: advancingTeam === 'home' 
+                      ? 'linear-gradient(135deg, #d1fae5, #a7f3d0)' 
+                      : 'white',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '8px',
+                    position: 'relative'
+                  }}
+                >
+                  <div style={{ fontSize: '28px' }}>{match.home_team_logo}</div>
+                  <div style={{ 
+                    fontSize: '13px', 
+                    fontWeight: '700',
+                    color: advancingTeam === 'home' ? '#065F46' : '#374151'
+                  }}>
+                    {match.home_team}
+                  </div>
+                  {advancingTeam === 'home' && (
+                    <CheckCircle 
+                      size={20} 
+                      style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        color: '#10B981'
+                      }}
+                    />
+                  )}
+                </button>
+
+                {/* Botón Away */}
+                <button
+                  type="button"
+                  onClick={() => setAdvancingTeam('away')}
+                  disabled={loading}
+                  style={{
+                    padding: '14px',
+                    border: advancingTeam === 'away' ? '3px solid #10B981' : '2px solid #e5e7eb',
+                    borderRadius: '10px',
+                    background: advancingTeam === 'away' 
+                      ? 'linear-gradient(135deg, #d1fae5, #a7f3d0)' 
+                      : 'white',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '8px',
+                    position: 'relative'
+                  }}
+                >
+                  <div style={{ fontSize: '28px' }}>{match.away_team_logo}</div>
+                  <div style={{ 
+                    fontSize: '13px', 
+                    fontWeight: '700',
+                    color: advancingTeam === 'away' ? '#065F46' : '#374151'
+                  }}>
+                    {match.away_team}
+                  </div>
+                  {advancingTeam === 'away' && (
+                    <CheckCircle 
+                      size={20} 
+                      style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        color: '#10B981'
+                      }}
+                    />
+                  )}
+                </button>
+              </div>
+
+              <div style={{
+                marginTop: '10px',
+                fontSize: '11px',
+                color: '#9CA3AF',
+                textAlign: 'center'
+              }}>
+                Selecciona el equipo que avanza a la siguiente fase (ej: por penales)
+              </div>
+            </div>
+          )}
+
           {/* Error Message */}
           {error && (
             <div style={{
@@ -254,7 +397,7 @@ export default function FinishMatchModal({ match, onFinish, onClose }) {
             lineHeight: '1.5'
           }}>
             <strong>⚠️ Importante:</strong> Esta acción calculará automáticamente los puntos 
-            de todas las predicciones y no se puede deshacer.
+            de todas las predicciones{match.is_knockout ? ' (hasta 7 puntos en eliminatoria)' : ''} y no se puede deshacer.
           </div>
         </div>
 
@@ -270,12 +413,12 @@ export default function FinishMatchModal({ match, onFinish, onClose }) {
           <button 
             className="modal-btn-premium primary" 
             onClick={handleSubmit}
-            disabled={loading || homeScore === '' || awayScore === ''}
+            disabled={loading || homeScore === '' || awayScore === '' || (match.is_knockout && !advancingTeam)}
             style={{
               background: loading 
                 ? '#9CA3AF' 
                 : 'linear-gradient(135deg, #10B981, #059669)',
-              opacity: (loading || homeScore === '' || awayScore === '') ? 0.6 : 1
+              opacity: (loading || homeScore === '' || awayScore === '' || (match.is_knockout && !advancingTeam)) ? 0.6 : 1
             }}
           >
             {loading ? (
