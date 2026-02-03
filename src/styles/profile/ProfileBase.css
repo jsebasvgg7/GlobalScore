@@ -5,7 +5,7 @@
 
 :root {
   /* Colores Base - Más limpios y clínicos */
-  --profile-bg: #F8F9FA;
+  --profile-bg: linear-gradient(135deg, #FFF9F0 0%, #FFF5E6 50%, #FFEFD5 100%);
   --profile-card: #FFFFFF;
   --profile-text: #1A1A1A;
   --profile-text-secondary: #666666;
@@ -101,7 +101,7 @@
   max-width: 428px;
   margin: 0 auto;
   position: relative;
-  background: var(--profile-bg);
+  background: var(--profile-bg); 
 }
 
 /* ==========================================

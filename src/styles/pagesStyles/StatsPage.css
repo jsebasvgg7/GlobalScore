@@ -4,7 +4,7 @@
 
 .stats-page {
   min-height: 100vh;
-  background: var(--bg);
+  background: linear-gradient(135deg, #FFF9F0 0%, #FFF5E6 50%, #FFEFD5 100%);
   padding: 24px 16px;
   position: relative;
   overflow-x: hidden;
