@@ -176,7 +176,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
           <Trophy size={16} className="league-icon-fallback" style={{ display: match.league_logo_url ? 'none' : 'flex' }} />
           <span className="league-name">{match.league}</span>
           {match.is_knockout && (
-            <span className="knockout-badge">⚡ Eliminatoria</span>
+            <span className="knockout-badge">⚡</span>
           )}
         </div>
         
