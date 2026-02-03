@@ -176,7 +176,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
           <Trophy size={16} className="league-icon-fallback" style={{ display: match.league_logo_url ? 'none' : 'flex' }} />
           <span className="league-name">{match.league}</span>
           {match.is_knockout && (
-            <span className="knockout-badge">⚡</span>
+            <span className="knockout-badge">⚡ Eliminatoria</span>
           )}
         </div>
         
@@ -201,7 +201,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
             </span>
             {advancingTeam === 'home' && (
               <div className="advancing-indicator">
-                <CheckCircle2 size={20} />
+                <CheckCircle2 size={14} />
               </div>
             )}
           </div>
@@ -266,7 +266,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
             </span>
             {advancingTeam === 'away' && (
               <div className="advancing-indicator">
-                <CheckCircle2 size={20} />
+                <CheckCircle2 size={14} />
               </div>
             )}
           </div>

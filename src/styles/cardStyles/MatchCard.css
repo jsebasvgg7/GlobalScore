@@ -1071,21 +1071,26 @@
   }
 }
 
-/* Indicador de Avanzando (checkmark) */
+/* Indicador de Avanzando (checkmark) - Versión compacta */
 .advancing-indicator {
   position: absolute;
-  top: -6px;
-  right: -6px;
+  top: -4px;
+  right: -4px;
   background: #10b981;
   color: white;
   border-radius: 50%;
-  padding: 4px;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+  padding: 2px;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px solid white;
   animation: bounceIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.advancing-indicator svg {
+  width: 14px;
+  height: 14px;
 }
 
 @keyframes bounceIn {
@@ -1190,14 +1195,15 @@
   }
 
   .advancing-indicator {
-    top: -5px;
-    right: -5px;
-    padding: 3px;
+    top: -3px;
+    right: -3px;
+    padding: 2px;
+    border-width: 1.5px;
   }
 
   .advancing-indicator svg {
-    width: 16px;
-    height: 16px;
+    width: 12px;
+    height: 12px;
   }
 }
 
