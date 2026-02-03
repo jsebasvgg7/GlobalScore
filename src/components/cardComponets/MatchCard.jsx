@@ -5,7 +5,8 @@ import {
   CheckCircle2,
   Calendar,
   Trophy,
-  AlertCircle
+  AlertCircle,
+  Zap
 } from "lucide-react";
 import "../../styles/cardStyles/MatchCard.css"; 
 
@@ -176,7 +177,9 @@ export default function MatchCard({ match, userPred, onPredict }) {
           <Trophy size={16} className="league-icon-fallback" style={{ display: match.league_logo_url ? 'none' : 'flex' }} />
           <span className="league-name">{match.league}</span>
           {match.is_knockout && (
-            <span className="knockout-badge">⚡</span>
+            <span className="knockout-badge">
+              <Zap size={14} />
+            </span>
           )}
         </div>
         
