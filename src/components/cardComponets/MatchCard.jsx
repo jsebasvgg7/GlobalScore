@@ -176,16 +176,18 @@ export default function MatchCard({ match, userPred, onPredict }) {
           {renderLeagueLogo()}
           <Trophy size={16} className="league-icon-fallback" style={{ display: match.league_logo_url ? 'none' : 'flex' }} />
           <span className="league-name">{match.league}</span>
-          {match.is_knockout && (
-            <span className="knockout-badge">
-              <Zap size={14} />
-            </span>
-          )}
         </div>
         
-        <div className="match-date">
-          <Calendar size={12} />
-          <span>{formatMatchDate(match.date)}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {match.is_knockout && (
+            <span className="knockout-badge">
+              <Zap size={12} />
+            </span>
+          )}
+          <div className="match-date">
+            <Calendar size={12} />
+            <span>{formatMatchDate(match.date)}</span>
+          </div>
         </div>
       </div>
 

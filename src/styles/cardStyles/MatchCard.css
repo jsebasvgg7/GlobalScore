@@ -463,20 +463,25 @@
    KNOCKOUT STYLES - Nuevos estilos
 ========================================== */
 
-/* Badge de Eliminatoria en Header */
+/* Badge de Eliminatoria en Header - IGUAL QUE MATCH-DATE */
 .knockout-badge {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-  color: white;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.15);
   border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f59e0b;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.knockout-badge svg {
+  flex-shrink: 0;
+  opacity: 0.8;
 }
 
 /* Team Logo Wrapper - Clickable en knockout */
@@ -580,9 +585,9 @@
 ========================================== */
 
 [data-theme="dark"] .knockout-badge {
-  background: linear-gradient(135deg, #a18743 0%, #856732 100%);
-  color: #1F2937;
-  box-shadow: 0 2px 6px rgba(251, 191, 36, 0.4);
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
 }
 
 [data-theme="dark"] .team-logo-wrapper.clickable:hover {
@@ -620,9 +625,9 @@
 
 @media (max-width: 767px) {
   .knockout-badge {
-    font-size: 10px;
-    padding: 3px 8px;
-    margin-left: 6px;
+    font-size: 11px;
+    padding: 5px 10px;
+    gap: 5px;
   }
 
   .knockout-hint {
@@ -657,8 +662,8 @@
 
 @media (max-width: 480px) {
   .knockout-badge {
-    font-size: 9px;
-    padding: 2px 6px;
+    font-size: 10px;
+    padding: 4px 9px;
   }
 
   .knockout-hint {
