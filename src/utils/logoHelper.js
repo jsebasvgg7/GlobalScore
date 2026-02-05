@@ -14,7 +14,7 @@ export const teamSlugMap = {
   'LIV': 'liverpool',
   'ARS': 'arsenalmini',
   'CHE': 'chelsea',
-  'MCI': 'manchestercityminis',
+  'MCI': 'manchestercitymini',
   'TOT': 'tottenham',
   'NEW': 'newcastle',
   'AVL': 'astonvilla',
@@ -227,6 +227,7 @@ export const awardLogoMap = {
 // FUNCIONES PARA LOGOS DE EQUIPOS
 // ============================================
 
+
 export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
   // Detectar si es un logo mini
   const isMini = teamSlug.includes('mini');
@@ -234,8 +235,13 @@ export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
   let path;
   if (isMini) {
     // Para minis: usar carpeta sin guion y sin "leagues/"
-    // Ejemplo: "serie-a" -> "seriea"
-    const leagueFolder = leagueSlug.replace(/-/g, ''); // Eliminar todos los guiones
+    let leagueFolder = leagueSlug.replace(/-/g, ''); // Eliminar todos los guiones
+    
+    // CORRECCIÓN ESPECIAL PARA PREMIER LEAGUE
+    if (leagueSlug === 'premier-league') {
+      leagueFolder = 'premier'; // No "premierleague", solo "premier"
+    }
+    
     path = `${leagueFolder}/${teamSlug}.png`;
   } else {
     // Para normales: estructura estándar
