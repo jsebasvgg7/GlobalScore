@@ -12,7 +12,7 @@ const AWARD_LOGOS_BUCKET = 'award-logos';
 export const teamSlugMap = {
   'MUN': 'manchesterunited',
   'LIV': 'liverpool',
-  'ARS': 'arsenal',
+  'ARS': 'arsenalmini',
   'CHE': 'chelsea',
   'MCI': 'manchestercityminis',
   'TOT': 'tottenham',
