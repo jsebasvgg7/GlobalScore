@@ -228,7 +228,20 @@ export const awardLogoMap = {
 // ============================================
 
 export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
-  const path = `leagues/${leagueSlug}/${teamSlug}.png`;
+  // Detectar si es un logo mini
+  const isMini = teamSlug.includes('mini');
+  
+  let path;
+  if (isMini) {
+    // Para minis: usar carpeta sin guion y sin "leagues/"
+    // Ejemplo: "serie-a" -> "seriea"
+    const leagueFolder = leagueSlug.replace(/-/g, ''); // Eliminar todos los guiones
+    path = `${leagueFolder}/${teamSlug}.png`;
+  } else {
+    // Para normales: estructura estándar
+    path = `leagues/${leagueSlug}/${teamSlug}.png`;
+  }
+  
   const { data } = supabase.storage
     .from(TEAM_LOGOS_BUCKET)
     .getPublicUrl(path);
