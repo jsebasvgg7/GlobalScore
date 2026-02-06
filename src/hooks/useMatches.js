@@ -2,25 +2,14 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '../utils/supabaseClient';
 
-  export const useMatches = (currentUser) => {
+export const useMatches = (currentUser) => {
   const [loading, setLoading] = useState(false);
-  const savingRef = useRef(new Set()); // Track de predicciones en proceso
 
+  // ⚡ MODIFICADO: Agregar advancingTeam como parámetro
   const makePrediction = useCallback(async (matchId, homeScore, awayScore, advancingTeam, onSuccess, onError) => {
     if (!currentUser) return;
 
-    // Crear key única para esta predicción
-    const predictionKey = `${matchId}-${homeScore}-${awayScore}-${advancingTeam}`;
-    
-    // Si ya se está guardando esta misma predicción, ignorar
-    if (savingRef.current.has(predictionKey)) {
-      console.log('⚠️ Predicción ya en proceso, ignorando duplicado');
-      return;
-    }
-
     setLoading(true);
-    savingRef.current.add(predictionKey);
-
     try {
       const predictionData = {
         match_id: matchId,
@@ -29,6 +18,7 @@ import { supabase } from '../utils/supabaseClient';
         away_score: awayScore,
       };
 
+      // ⚡ NUEVO: Solo agregar advancing_team si existe
       if (advancingTeam) {
         predictionData.predicted_advancing_team = advancingTeam;
       }
@@ -44,6 +34,7 @@ import { supabase } from '../utils/supabaseClient';
 
       console.log('✅ Predicción guardada:', predictionResult);
 
+      // Recargar lista de partidos
       const { data: matchList } = await supabase
         .from("matches")
         .select("*, predictions(*)");
@@ -54,10 +45,6 @@ import { supabase } from '../utils/supabaseClient';
       onError?.(err.message);
     } finally {
       setLoading(false);
-      // Remover de tracking después de 500ms
-      setTimeout(() => {
-        savingRef.current.delete(predictionKey);
-      }, 500);
     }
   }, [currentUser]);
 
