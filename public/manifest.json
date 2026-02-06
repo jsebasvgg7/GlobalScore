@@ -1,189 +1,22 @@
 {
   "name": "GlobalScore - Predicciones Deportivas",
   "short_name": "GlobalScore",
-  "description": "Plataforma de predicciones deportivas con rankings, logros y competencias entre amigos. Predice partidos, ligas y torneos.",
+  "id": "/app",
   "start_url": "/app",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0F172A",
   "theme_color": "#8B5CF6",
-  "orientation": "portrait-primary",
-  "scope": "/",
-  "lang": "es-ES",
-  "dir": "ltr",
-  "categories": ["sports", "social", "games", "entertainment"],
-  
   "icons": [
-    {
-      "src": "/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any"
-    },
     {
       "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
       "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
-  ],
-  
-  "screenshots": [
-    {
-      "src": "/screenshots/home.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Página principal con predicciones de partidos"
-    },
-    {
-      "src": "/screenshots/ranking.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Ranking global con podio y estadísticas"
-    },
-    {
-      "src": "/screenshots/profile.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Perfil de usuario con logros y títulos"
-    },
-    {
-      "src": "/screenshots/worldcup.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Predicciones del Mundial 2026"
-    }
-  ],
-  
-  "shortcuts": [
-    {
-      "name": "Hacer Predicción",
-      "short_name": "Predecir",
-      "description": "Ver partidos disponibles para predecir",
-      "url": "/app?tab=matches",
-      "icons": [
-        {
-          "src": "/icons/shortcut-predict.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Ver Ranking",
-      "short_name": "Ranking",
-      "description": "Consultar la tabla de posiciones global",
-      "url": "/ranking",
-      "icons": [
-        {
-          "src": "/icons/shortcut-ranking.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Mi Perfil",
-      "short_name": "Perfil",
-      "description": "Ver tu perfil, estadísticas y logros",
-      "url": "/profile",
-      "icons": [
-        {
-          "src": "/icons/shortcut-profile.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Mundial 2026",
-      "short_name": "Mundial",
-      "description": "Predicciones del Mundial 2026",
-      "url": "/worldcup",
-      "icons": [
-        {
-          "src": "/icons/shortcut-worldcup.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    }
-  ],
-  
-  "related_applications": [],
-  "prefer_related_applications": false,
-  
-  "share_target": {
-    "action": "/share",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url"
-    }
-  },
-  
-  "protocol_handlers": [
-    {
-      "protocol": "web+globalscore",
-      "url": "/app?action=%s"
-    }
-  ],
-  
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  },
-  
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
-  
-  "display_override": [
-    "window-controls-overlay",
-    "standalone",
-    "minimal-ui",
-    "browser"
-  ],
-  
-  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7"
+  ]
 }

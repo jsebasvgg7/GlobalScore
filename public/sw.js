@@ -1,22 +1,14 @@
 // ============================================
-// 🏆 GLOBALSCORE SERVICE WORKER v2.0
-// ============================================
-// Features:
-// - Network-First con Cache Fallback
-// - Offline Support inteligente
-// - Push Notifications
-// - Background Sync
-// - Cache Strategy por tipo de recurso
+// 🏆 GLOBALSCORE SERVICE WORKER (PROD)
+// Optimizado para estabilidad, instalación PWA
 // ============================================
 
-const CACHE_VERSION = 'globalscore-v2.0.0';
+const CACHE_VERSION = 'globalscore-v3';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
 
-// ============================================
-// 📦 RECURSOS PARA PRE-CACHE (CRÍTICOS)
-// ============================================
+// ⚠️ SOLO recursos que EXISTEN 100%
 const STATIC_ASSETS = [
   '/',
   '/offline.html',
@@ -26,440 +18,192 @@ const STATIC_ASSETS = [
 ];
 
 // ============================================
-// ⚙️ CONFIGURACIÓN DE CACHE
+// INSTALL
 // ============================================
-const CACHE_CONFIG = {
-  // No cachear estos dominios
-  EXCLUDED_DOMAINS: [
-    'supabase.co',
-    'googleapis.com',
-    'analytics',
-    'doubleclick'
-  ],
-  
-  // Tiempo máximo en caché (7 días)
-  MAX_AGE: 7 * 24 * 60 * 60 * 1000,
-  
-  // Máximo de items en caché dinámico
-  MAX_DYNAMIC_ITEMS: 50,
-  MAX_IMAGE_ITEMS: 100
-};
+self.addEventListener('install', event => {
+  console.log('🔧 Installing SW...');
 
-// ============================================
-// 🔧 INSTALL EVENT
-// ============================================
-self.addEventListener('install', (event) => {
-  console.log('🔧 [SW] Installing Service Worker v2.0...');
-  
   event.waitUntil(
     caches.open(STATIC_CACHE)
-      .then(cache => {
-        console.log('📦 [SW] Pre-caching static assets...');
-        return cache.addAll(STATIC_ASSETS);
-      })
-      .then(() => {
-        console.log('✅ [SW] Static assets cached successfully');
-        return self.skipWaiting(); // Activar inmediatamente
-      })
-      .catch(err => {
-        console.error('❌ [SW] Error during install:', err);
-      })
+      .then(cache =>
+        Promise.allSettled(
+          STATIC_ASSETS.map(url => cache.add(url))
+        )
+      )
+      .then(() => self.skipWaiting())
   );
 });
 
 // ============================================
-// ✨ ACTIVATE EVENT
+// ACTIVATE
 // ============================================
-self.addEventListener('activate', (event) => {
-  console.log('✨ [SW] Activating Service Worker v2.0...');
-  
+self.addEventListener('activate', event => {
+  console.log('✨ Activating SW...');
+
   event.waitUntil(
-    Promise.all([
-      // Limpiar cachés antiguas
-      caches.keys().then(cacheNames => {
-        return Promise.all(
-          cacheNames
-            .filter(cacheName => {
-              // Eliminar cachés de versiones anteriores
-              return cacheName.startsWith('globalscore-') && 
-                     cacheName !== STATIC_CACHE &&
-                     cacheName !== DYNAMIC_CACHE &&
-                     cacheName !== IMAGE_CACHE;
-            })
-            .map(cacheName => {
-              console.log('🗑️ [SW] Deleting old cache:', cacheName);
-              return caches.delete(cacheName);
-            })
-        );
-      }),
-      
-      // Tomar control de todas las páginas inmediatamente
-      self.clients.claim()
-    ])
-    .then(() => {
-      console.log('✅ [SW] Service Worker activated and ready');
-    })
+    caches.keys().then(names =>
+      Promise.all(
+        names
+          .filter(n => n !== STATIC_CACHE && n !== DYNAMIC_CACHE && n !== IMAGE_CACHE)
+          .map(n => caches.delete(n))
+      )
+    ).then(() => self.clients.claim())
   );
 });
 
 // ============================================
-// 🌐 FETCH EVENT - ESTRATEGIA DE CACHE
+// FETCH
 // ============================================
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
-  
-  // ============================================
-  // 🚫 SKIP: Métodos no-GET y dominios excluidos
-  // ============================================
-  if (request.method !== 'GET') return;
-  
-  const shouldExclude = CACHE_CONFIG.EXCLUDED_DOMAINS.some(domain => 
-    url.hostname.includes(domain)
-  );
-  
-  if (shouldExclude) {
-    return event.respondWith(fetch(request));
-  }
-  
-  // ============================================
-  // 🎨 ESTRATEGIA: IMÁGENES
-  // ============================================
-  if (request.destination === 'image' || /\.(png|jpg|jpeg|svg|gif|webp|ico)$/i.test(url.pathname)) {
-    event.respondWith(cacheFirst(request, IMAGE_CACHE, CACHE_CONFIG.MAX_IMAGE_ITEMS));
+self.addEventListener('fetch', event => {
+  const req = event.request;
+
+  if (req.method !== 'GET') return;
+
+  const url = new URL(req.url);
+
+  // ❌ No cache APIs externas sensibles
+  if (url.hostname.includes('supabase.co')) {
+    event.respondWith(fetch(req));
     return;
   }
-  
-  // ============================================
-  // 📄 ESTRATEGIA: HTML (Network First)
-  // ============================================
-  if (request.mode === 'navigate' || request.destination === 'document') {
-    event.respondWith(networkFirstWithOffline(request));
+
+  // 🖼️ IMAGES → Cache First
+  if (req.destination === 'image') {
+    event.respondWith(cacheFirst(req, IMAGE_CACHE, 80));
     return;
   }
-  
-  // ============================================
-  // 📦 ESTRATEGIA: ASSETS ESTÁTICOS (Cache First)
-  // ============================================
-  if (/\.(css|js|woff2?|ttf|eot)$/i.test(url.pathname)) {
-    event.respondWith(cacheFirst(request, STATIC_CACHE));
+
+  // 📄 HTML → Network First + Offline fallback
+  if (req.mode === 'navigate') {
+    event.respondWith(networkFirstPage(req));
     return;
   }
-  
-  // ============================================
-  // 🔄 DEFAULT: Network First con Cache Fallback
-  // ============================================
-  event.respondWith(networkFirst(request, DYNAMIC_CACHE, CACHE_CONFIG.MAX_DYNAMIC_ITEMS));
+
+  // 📦 Assets JS/CSS/fonts
+  if (/\.(js|css|woff2?|ttf)$/i.test(url.pathname)) {
+    event.respondWith(cacheFirst(req, STATIC_CACHE));
+    return;
+  }
+
+  // Default
+  event.respondWith(networkFirst(req, DYNAMIC_CACHE, 50));
 });
 
 // ============================================
-// 📡 ESTRATEGIA: NETWORK FIRST
+// NETWORK FIRST
 // ============================================
-async function networkFirst(request, cacheName, maxItems = 50) {
+async function networkFirst(req, cacheName, limit) {
   try {
-    const networkResponse = await fetch(request);
-    
-    // Solo cachear respuestas exitosas
-    if (networkResponse && networkResponse.status === 200) {
+    const fresh = await fetch(req);
+
+    if (fresh.ok) {
       const cache = await caches.open(cacheName);
-      cache.put(request, networkResponse.clone());
-      
-      // Limpiar caché antigua si excede el límite
-      trimCache(cacheName, maxItems);
+      cache.put(req, fresh.clone());
+      trimCache(cacheName, limit);
     }
-    
-    return networkResponse;
-  } catch (error) {
-    // Si falla la red, buscar en caché
-    const cachedResponse = await caches.match(request);
-    
-    if (cachedResponse) {
-      console.log('📦 [SW] Serving from cache (offline):', request.url);
-      return cachedResponse;
-    }
-    
-    // Si no hay caché, respuesta de error
-    return new Response('Offline - No cached version available', {
-      status: 503,
-      statusText: 'Service Unavailable'
-    });
+
+    return fresh;
+
+  } catch {
+    const cached = await caches.match(req);
+    return cached || new Response('Offline', { status: 503 });
   }
 }
 
 // ============================================
-// 📡 ESTRATEGIA: NETWORK FIRST CON OFFLINE PAGE
+// NETWORK FIRST PAGE
 // ============================================
-async function networkFirstWithOffline(request) {
+async function networkFirstPage(req) {
   try {
-    const networkResponse = await fetch(request);
-    
-    if (networkResponse && networkResponse.status === 200) {
-      const cache = await caches.open(DYNAMIC_CACHE);
-      cache.put(request, networkResponse.clone());
-    }
-    
-    return networkResponse;
-  } catch (error) {
-    // Intentar desde caché
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-    
-    // Mostrar página offline personalizada
-    const offlinePage = await caches.match('/offline.html');
-    return offlinePage || new Response('Offline', { status: 503 });
+    return await fetch(req);
+  } catch {
+    return (
+      await caches.match(req) ||
+      await caches.match('/offline.html')
+    );
   }
 }
 
 // ============================================
-// 💾 ESTRATEGIA: CACHE FIRST
+// CACHE FIRST
 // ============================================
-async function cacheFirst(request, cacheName, maxItems) {
-  const cachedResponse = await caches.match(request);
-  
-  if (cachedResponse) {
-    // Verificar edad del caché
-    const cacheDate = new Date(cachedResponse.headers.get('date'));
-    const age = Date.now() - cacheDate.getTime();
-    
-    if (age < CACHE_CONFIG.MAX_AGE) {
-      return cachedResponse;
-    }
-  }
-  
-  // Si no hay caché o está viejo, fetch de red
+async function cacheFirst(req, cacheName, limit) {
+  const cached = await caches.match(req);
+  if (cached) return cached;
+
   try {
-    const networkResponse = await fetch(request);
-    
-    if (networkResponse && networkResponse.status === 200) {
+    const fresh = await fetch(req);
+
+    if (fresh.ok) {
       const cache = await caches.open(cacheName);
-      cache.put(request, networkResponse.clone());
-      
-      if (maxItems) {
-        trimCache(cacheName, maxItems);
-      }
+      cache.put(req, fresh.clone());
+      if (limit) trimCache(cacheName, limit);
     }
-    
-    return networkResponse;
-  } catch (error) {
-    // Si falla la red y hay caché (aunque viejo), usarlo
-    return cachedResponse || new Response('Resource not available', { 
-      status: 503 
-    });
+
+    return fresh;
+
+  } catch {
+    return new Response('Offline resource', { status: 503 });
   }
 }
 
 // ============================================
-// 🗑️ LIMPIAR CACHÉ ANTIGUO
+// LIMPIAR CACHE
 // ============================================
-async function trimCache(cacheName, maxItems) {
-  const cache = await caches.open(cacheName);
+async function trimCache(name, maxItems) {
+  const cache = await caches.open(name);
   const keys = await cache.keys();
-  
+
   if (keys.length > maxItems) {
-    const itemsToDelete = keys.length - maxItems;
-    
-    for (let i = 0; i < itemsToDelete; i++) {
+    for (let i = 0; i < keys.length - maxItems; i++) {
       await cache.delete(keys[i]);
     }
-    
-    console.log(`🗑️ [SW] Trimmed ${itemsToDelete} items from ${cacheName}`);
   }
 }
 
 // ============================================
-// 📬 PUSH NOTIFICATIONS
+// PUSH NOTIFICATIONS ROBUSTAS
 // ============================================
-self.addEventListener('push', (event) => {
-  console.log('📬 [SW] Push notification received');
-  
+self.addEventListener('push', event => {
   let data = {
     title: '⚽ GlobalScore',
     body: 'Nueva notificación',
-    icon: '/icons/icon-192x192.png',
-    badge: '/icons/icon-72x72.png'
+    url: '/'
   };
-  
+
   try {
     if (event.data) {
       data = { ...data, ...event.data.json() };
     }
-  } catch (e) {
-    console.warn('⚠️ [SW] Error parsing push data:', e);
+  } catch {
+    data.body = event.data?.text() || data.body;
   }
-  
-  const options = {
-    body: data.body,
-    icon: data.icon || '/icons/icon-192x192.png',
-    badge: data.badge || '/icons/icon-72x72.png',
-    vibrate: [200, 100, 200],
-    data: {
-      url: data.url || '/app',
-      matchId: data.matchId,
-      type: data.type || 'general',
-      timestamp: Date.now()
-    },
-    actions: [
-      {
-        action: 'view',
-        title: '👀 Ver',
-        icon: '/icons/icon-96x96.png'
-      },
-      {
-        action: 'close',
-        title: '✖️ Cerrar'
-      }
-    ],
-    tag: data.tag || `notification-${Date.now()}`,
-    requireInteraction: data.requireInteraction || false,
-    silent: false,
-    renotify: true
-  };
-  
+
   event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
-});
-
-// ============================================
-// 🖱️ NOTIFICATION CLICK
-// ============================================
-self.addEventListener('notificationclick', (event) => {
-  console.log('🖱️ [SW] Notification clicked:', event.action);
-  
-  event.notification.close();
-  
-  if (event.action === 'close') {
-    return;
-  }
-  
-  const urlToOpen = event.notification.data?.url || '/app';
-  
-  event.waitUntil(
-    clients.matchAll({ 
-      type: 'window', 
-      includeUncontrolled: true 
-    })
-    .then(clientList => {
-      // Si hay una ventana abierta, enfocarla
-      for (const client of clientList) {
-        if (client.url.includes(urlToOpen) && 'focus' in client) {
-          return client.focus();
-        }
-      }
-      
-      // Si no, abrir nueva ventana
-      if (clients.openWindow) {
-        return clients.openWindow(urlToOpen);
-      }
-    })
-  );
-});
-
-// ============================================
-// 🔄 BACKGROUND SYNC (para predicciones offline)
-// ============================================
-self.addEventListener('sync', (event) => {
-  console.log('🔄 [SW] Background sync triggered:', event.tag);
-  
-  if (event.tag === 'sync-predictions') {
-    event.waitUntil(syncPredictions());
-  }
-  
-  if (event.tag === 'sync-profile-updates') {
-    event.waitUntil(syncProfileUpdates());
-  }
-});
-
-async function syncPredictions() {
-  console.log('🔄 [SW] Syncing offline predictions...');
-  
-  try {
-    // Obtener predicciones pendientes del IndexedDB
-    const pendingPredictions = await getPendingPredictions();
-    
-    if (pendingPredictions.length === 0) {
-      console.log('✅ [SW] No pending predictions to sync');
-      return;
-    }
-    
-    // Intentar enviar cada predicción
-    for (const prediction of pendingPredictions) {
-      try {
-        const response = await fetch('/api/predictions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(prediction)
-        });
-        
-        if (response.ok) {
-          await removePendingPrediction(prediction.id);
-          console.log('✅ [SW] Synced prediction:', prediction.id);
-        }
-      } catch (err) {
-        console.error('❌ [SW] Error syncing prediction:', err);
-      }
-    }
-    
-    // Notificar al usuario
-    await self.registration.showNotification('🔄 Sincronización completada', {
-      body: `${pendingPredictions.length} predicciones sincronizadas`,
+    self.registration.showNotification(data.title, {
+      body: data.body,
       icon: '/icons/icon-192x192.png',
-      tag: 'sync-complete'
-    });
-    
-  } catch (error) {
-    console.error('❌ [SW] Sync error:', error);
-  }
-}
-
-async function syncProfileUpdates() {
-  console.log('🔄 [SW] Syncing profile updates...');
-  // TODO: Implementar sync de actualizaciones de perfil
-}
-
-// ============================================
-// 💾 HELPERS DE INDEXEDDB (PLACEHOLDER)
-// ============================================
-async function getPendingPredictions() {
-  // TODO: Implementar lectura de IndexedDB
-  return [];
-}
-
-async function removePendingPrediction(id) {
-  // TODO: Implementar eliminación de IndexedDB
-  return true;
-}
-
-// ============================================
-// 📊 MESSAGE HANDLER (comunicación con app)
-// ============================================
-self.addEventListener('message', (event) => {
-  console.log('📨 [SW] Message received:', event.data);
-  
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-  
-  if (event.data && event.data.type === 'CACHE_URLS') {
-    const urlsToCache = event.data.urls || [];
-    event.waitUntil(
-      caches.open(DYNAMIC_CACHE).then(cache => {
-        return cache.addAll(urlsToCache);
-      })
-    );
-  }
-  
-  if (event.data && event.data.type === 'CLEAR_CACHE') {
-    event.waitUntil(
-      caches.keys().then(cacheNames => {
-        return Promise.all(
-          cacheNames.map(cacheName => caches.delete(cacheName))
-        );
-      })
-    );
-  }
+      data: { url: data.url }
+    })
+  );
 });
 
-console.log('✅ [SW] Service Worker loaded successfully');
+// ============================================
+// CLICK NOTIFICATION
+// ============================================
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+
+  const url = event.notification.data?.url || '/';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window' }).then(list => {
+      for (const client of list) {
+        if (client.url.includes(url)) return client.focus();
+      }
+      return clients.openWindow(url);
+    })
+  );
+});
+
+console.log('✅ SW listo para producción');
