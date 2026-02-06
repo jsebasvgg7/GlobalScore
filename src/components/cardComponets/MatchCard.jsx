@@ -33,7 +33,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
   const isPastDeadline = deadline && now >= deadline;
   const isDisabled = isPastDeadline || match.status !== "pending";
 
-  // Auto-save cuando ambos campos tienen valores válidos
+  // Auto-save cuando ambos campos tienen valores válidos - MEJORADO
   useEffect(() => {
     if (isDisabled) return;
 
@@ -63,10 +63,14 @@ export default function MatchCard({ match, userPred, onPredict }) {
         try {
           // Usar await para asegurar que solo se ejecute una vez
           await onPredict(match.id, home, away, advancingTeam);
-          setIsSaved(true);
+          
+          // Solo marcar como guardado después de completar
+          setTimeout(() => {
+            setIsSaved(true);
+            setIsSaving(false);
+          }, 300);
         } catch (error) {
-          console.error('Error guardando predicción:', error);
-        } finally {
+          console.error('❌ Error guardando predicción:', error);
           setIsSaving(false);
         }
       }, 1000);
@@ -78,7 +82,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
       }
     };
   }, [homeScore, awayScore, advancingTeam, isDisabled, match.id, onPredict, userPred]);
-  
+
   // Manejadores
   const handleScoreChange = (team, value) => {
     if (isDisabled) return;

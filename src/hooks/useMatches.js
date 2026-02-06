@@ -1,15 +1,27 @@
 // src/hooks/useMatches.js
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { supabase } from '../utils/supabaseClient';
 
 export const useMatches = (currentUser) => {
   const [loading, setLoading] = useState(false);
+  const savingRef = useRef(new Set()); // Track de predicciones en proceso
 
-  // ⚡ MODIFICADO: Agregar advancingTeam como parámetro
+  // ⚡ MODIFICADO: Agregar advancingTeam como parámetro + Sistema Anti-Duplicados
   const makePrediction = useCallback(async (matchId, homeScore, awayScore, advancingTeam, onSuccess, onError) => {
     if (!currentUser) return;
 
+    // Crear key única para esta predicción
+    const predictionKey = `${matchId}-${homeScore}-${awayScore}-${advancingTeam || 'none'}`;
+    
+    // Si ya se está guardando esta misma predicción, ignorar
+    if (savingRef.current.has(predictionKey)) {
+      console.log('⚠️ Predicción duplicada ignorada para match:', matchId);
+      return;
+    }
+
     setLoading(true);
+    savingRef.current.add(predictionKey);
+
     try {
       const predictionData = {
         match_id: matchId,
@@ -45,6 +57,10 @@ export const useMatches = (currentUser) => {
       onError?.(err.message);
     } finally {
       setLoading(false);
+      // Remover de tracking después de 500ms para permitir re-intentos
+      setTimeout(() => {
+        savingRef.current.delete(predictionKey);
+      }, 500);
     }
   }, [currentUser]);
 
