@@ -1,14 +1,13 @@
 // ============================================
 // 🏆 GLOBALSCORE SERVICE WORKER (PROD)
-// Optimizado para estabilidad, instalación PWA
+// Optimizado + Offline fallback real
 // ============================================
 
-const CACHE_VERSION = 'globalscore-v3';
+const CACHE_VERSION = 'globalscore-v4';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
 
-// ⚠️ SOLO recursos que EXISTEN 100%
 const STATIC_ASSETS = [
   '/',
   '/offline.html',
@@ -25,11 +24,7 @@ self.addEventListener('install', event => {
 
   event.waitUntil(
     caches.open(STATIC_CACHE)
-      .then(cache =>
-        Promise.allSettled(
-          STATIC_ASSETS.map(url => cache.add(url))
-        )
-      )
+      .then(cache => cache.addAll(STATIC_ASSETS))
       .then(() => self.skipWaiting())
   );
 });
@@ -44,7 +39,9 @@ self.addEventListener('activate', event => {
     caches.keys().then(names =>
       Promise.all(
         names
-          .filter(n => n !== STATIC_CACHE && n !== DYNAMIC_CACHE && n !== IMAGE_CACHE)
+          .filter(n =>
+            ![STATIC_CACHE, DYNAMIC_CACHE, IMAGE_CACHE].includes(n)
+          )
           .map(n => caches.delete(n))
       )
     ).then(() => self.clients.claim())
@@ -61,36 +58,36 @@ self.addEventListener('fetch', event => {
 
   const url = new URL(req.url);
 
-  // ❌ No cache APIs externas sensibles
+  // ❌ Supabase siempre online
   if (url.hostname.includes('supabase.co')) {
     event.respondWith(fetch(req));
     return;
   }
 
-  // 🖼️ IMAGES → Cache First
+  // 🖼️ IMAGES
   if (req.destination === 'image') {
     event.respondWith(cacheFirst(req, IMAGE_CACHE, 80));
     return;
   }
 
-  // 📄 HTML → Network First + Offline fallback
+  // 📄 NAVEGACIÓN → OFFLINE.HTML SI FALLA
   if (req.mode === 'navigate') {
     event.respondWith(networkFirstPage(req));
     return;
   }
 
-  // 📦 Assets JS/CSS/fonts
+  // 📦 JS/CSS/FONTS
   if (/\.(js|css|woff2?|ttf)$/i.test(url.pathname)) {
     event.respondWith(cacheFirst(req, STATIC_CACHE));
     return;
   }
 
-  // Default
+  // DEFAULT
   event.respondWith(networkFirst(req, DYNAMIC_CACHE, 50));
 });
 
 // ============================================
-// NETWORK FIRST
+// NETWORK FIRST NORMAL
 // ============================================
 async function networkFirst(req, cacheName, limit) {
   try {
@@ -105,35 +102,26 @@ async function networkFirst(req, cacheName, limit) {
     return fresh;
 
   } catch {
-    const cached = await caches.match(req);
-    return cached || new Response('Offline', { status: 503 });
+    return caches.match(req) || new Response('Offline', { status: 503 });
   }
 }
 
 // ============================================
-// NETWORK FIRST PAGE
+// NETWORK FIRST PAGE (CLAVE)
 // ============================================
 async function networkFirstPage(req) {
   try {
-    const response = await fetch(req);
+    const fresh = await fetch(req);
+    return fresh;
 
-    // Si la respuesta es válida → usarla
-    if (response && response.ok) {
-      return response;
-    }
+  } catch {
+    console.log('📴 Mostrando offline.html');
 
-    throw new Error('Network response not ok');
-
-  } catch (error) {
-    console.log('📴 Offline fallback triggered');
-
-    const cachedPage = await caches.match(req);
-    if (cachedPage) return cachedPage;
-
-    return await caches.match('/offline.html');
+    // SI NO HAY INTERNET → offline.html SIEMPRE
+    const offline = await caches.match('/offline.html');
+    return offline || new Response('Offline', { status: 503 });
   }
 }
-
 
 // ============================================
 // CACHE FIRST
@@ -173,7 +161,7 @@ async function trimCache(name, maxItems) {
 }
 
 // ============================================
-// PUSH NOTIFICATIONS ROBUSTAS
+// PUSH NOTIFICATIONS
 // ============================================
 self.addEventListener('push', event => {
   let data = {
@@ -183,9 +171,7 @@ self.addEventListener('push', event => {
   };
 
   try {
-    if (event.data) {
-      data = { ...data, ...event.data.json() };
-    }
+    if (event.data) data = { ...data, ...event.data.json() };
   } catch {
     data.body = event.data?.text() || data.body;
   }
@@ -199,9 +185,7 @@ self.addEventListener('push', event => {
   );
 });
 
-// ============================================
 // CLICK NOTIFICATION
-// ============================================
 self.addEventListener('notificationclick', event => {
   event.notification.close();
 
@@ -217,4 +201,4 @@ self.addEventListener('notificationclick', event => {
   );
 });
 
-console.log('✅ SW listo para producción');
+console.log('✅ GlobalScore SW listo (offline real)');
