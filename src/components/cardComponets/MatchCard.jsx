@@ -53,14 +53,22 @@ export default function MatchCard({ match, userPred, onPredict }) {
       advancingTeam !== userPred?.predicted_advancing_team;
 
     if (isValidPrediction && isDifferent) {
+      // Resetear estados inmediatamente para feedback visual
+      setIsSaved(false);
+      
       // Esperar 1 segundo después del último cambio para guardar
-      saveTimeoutRef.current = setTimeout(() => {
+      saveTimeoutRef.current = setTimeout(async () => {
         setIsSaving(true);
-        onPredict(match.id, home, away, advancingTeam);
-        setTimeout(() => {
+        
+        try {
+          // Usar await para asegurar que solo se ejecute una vez
+          await onPredict(match.id, home, away, advancingTeam);
           setIsSaved(true);
+        } catch (error) {
+          console.error('Error guardando predicción:', error);
+        } finally {
           setIsSaving(false);
-        }, 300);
+        }
       }, 1000);
     }
 
@@ -70,7 +78,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
       }
     };
   }, [homeScore, awayScore, advancingTeam, isDisabled, match.id, onPredict, userPred]);
-
+  
   // Manejadores
   const handleScoreChange = (team, value) => {
     if (isDisabled) return;
