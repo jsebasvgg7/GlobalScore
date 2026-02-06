@@ -320,69 +320,216 @@ Configura los métodos de autenticación en Supabase:
 
 ```
 globalscore/
-├── public/                     # Assets estáticos
+├── .github/                    # Configuraciones de GitHub (workflows, etc.)
+│   └── workflows/              # (si usas CI/CD)
+├── public/                     # Archivos estáticos servidos directamente
+│   ├── favicon.ico
+│   ├── robots.txt
+│   ├── manifest.json           # Para PWA
+│   └── assets/                 # Imágenes globales
+│       ├── GlobalSCore-logo.png
+│       └── ... (otros assets)
+│
 ├── src/
-│   ├── assets/                 # Imágenes y recursos
-│   ├── components/             # Componentes reutilizables
-│   │   ├── adminComponents/    # Componentes del panel admin
+│   ├── assets/                 # Imágenes, icons, etc. importadas en código
+│   │   ├── images/
+│   │   │   ├── league-logos/   # Logos de ligas y equipos
+│   │   │   ├── awards/         # Iconos de logros y premios
+│   │   │   └── worldcup/       # Imágenes específicas del Mundial 2026
+│   │   └── icons/              # SVGs o PNGs pequeños
+│   │
+│   ├── components/             # Todos los componentes reutilizables
+│   │   ├── adminComponents/    # Panel de administración
+│   │   │   ├── AdminAchievementsList.jsx
 │   │   │   ├── AdminAchievementsModal.jsx
+│   │   │   ├── AdminAwardModal.jsx
+│   │   │   ├── AdminAwardsList.jsx
+│   │   │   ├── AdminControls.jsx
+│   │   │   ├── AdminCrownModal.jsx
+│   │   │   ├── AdminCrownsSection.jsx
+│   │   │   ├── AdminDiagnosticPanel.jsx
 │   │   │   ├── AdminLeagueModal.jsx
-│   │   │   ├── FinishMatchModal.jsx
-│   │   │   └── ...
-│   │   ├── cardComponents/     # Cards de predicciones
-│   │   │   ├── MatchCard.jsx
-│   │   │   ├── LeagueCard.jsx
+│   │   │   ├── AdminLeaguesList.jsx
+│   │   │   ├── AdminMatchesList.jsx
+│   │   │   ├── AdminModal.jsx
+│   │   │   ├── AdminModalsContainer.jsx
+│   │   │   ├── AdminNavigationTabs.jsx
+│   │   │   ├── AdminStatsOverview.jsx
+│   │   │   ├── AdminTitlesList.jsx
+│   │   │   ├── AdminTitlesModal.jsx
+│   │   │   ├── FinishAwardModal.jsx
+│   │   │   ├── FinishLeagueModal.jsx
+│   │   │   └── FinishMatchModal.jsx
+│   │   │
+│   │   ├── cardComponents/     # Tarjetas de contenido
 │   │   │   ├── AwardCard.jsx
-│   │   │   └── ...
-│   │   ├── AchievementsSection.jsx
-│   │   ├── AvatarUpload.jsx
-│   │   ├── Footer.jsx
-│   │   ├── Header.jsx
-│   │   ├── KnockoutSection.jsx # Sistema de eliminatorias
-│   │   ├── LoadingStates.jsx
-│   │   ├── NavigationTabs.jsx
-│   │   ├── RankingSidebar.jsx
-│   │   ├── Toast.jsx
-│   │   └── ...
-│   ├── context/               # React Context
-│   │   └── ThemeContext.jsx
-│   ├── hooks/                 # Custom Hooks
-│   │   ├── useDataLoader.js
-│   │   ├── useMatches.js
-│   │   ├── useLeagues.js
-│   │   ├── useAwards.js
-│   │   └── useWorldCup.js
-│   ├── pages/                 # Páginas principales
+│   │   │   ├── KnockoutMatchCard.jsx
+│   │   │   ├── LeagueCard.jsx
+│   │   │   └── MatchCard.jsx
+│   │   │
+│   │   ├── profileComponents/  # Componentes exclusivos del perfil
+│   │   │   ├── AchievementsTab.jsx
+│   │   │   ├── AvatarUpload.jsx
+│   │   │   ├── EditTab.jsx
+│   │   │   ├── HistoryTab.jsx
+│   │   │   ├── MonthlyChampionshipsTab.jsx
+│   │   │   ├── OverviewTab.jsx
+│   │   │   ├── ProfileHero.jsx
+│   │   │   └── ProfileTabs.jsx
+│   │   │
+│   │   ├── worldCupComponents/ # Componentes específicos del Mundial
+│   │   │   ├── KnockoutMatchCard.jsx
+│   │   │   ├── KnockoutSection.jsx
+│   │   │   ├── WorldCupAwardCard.jsx
+│   │   │   ├── WorldCupNavigationTabs.jsx
+│   │   │   └── AchievementsSection.jsx  # (logros del mundial)
+│   │   │
+│   │   ├── common/             # Componentes muy reutilizables
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Header.jsx
+│   │   │   ├── InstallPWAButton.jsx
+│   │   │   ├── KnockoutoutSection.jsx   # (se repite? → unificar si es posible)
+│   │   │   ├── LoadingSpinner.jsx
+│   │   │   ├── LoadingStates.jsx
+│   │   │   ├── NavigationTabs.jsx
+│   │   │   ├── NavigationTabsTwo.jsx    # (versión alternativa)
+│   │   │   ├── ProtectedRoute.jsx
+│   │   │   ├── RankingSidebar.jsx
+│   │   │   ├── RequireAuth.jsx
+│   │   │   ├── Toast.jsx
+│   │   │   └── UserProfileModal.jsx
+│   │   │
+│   │   └── context/            # Contextos de React
+│   │       └── ThemeContext.jsx
+│   │
+│   ├── hooks/                  # Custom hooks organizados
+│   │   ├── adminHooks/
+│   │   │   ├── useAdminAchievements.js
+│   │   │   ├── useAdminAwards.js
+│   │   │   ├── useAdminCrowns.js
+│   │   │   ├── useAdminData.js
+│   │   │   ├── useAdminLeagues.js
+│   │   │   └── useAdminMatches.js
+│   │   │
+│   │   ├── hooksProfile/
+│   │   │   ├── useAchievements.js
+│   │   │   ├── useMonthlyChampionships.js
+│   │   │   ├── usePredictionHistory.js
+│   │   │   ├── useProfileData.js
+│   │   │   ├── useStreaks.js
+│   │   │   └── useUserRanking.js
+│   │   │
+│   │   ├── settingsHooks/
+│   │   │   ├── useSettings.js
+│   │   │   ├── useAwards.js
+│   │   │   ├── useDataLoader.js
+│   │   │   ├── useKnockoutBracket.js
+│   │   │   ├── useLeagues.js
+│   │   │   ├── useMatches.js
+│   │   │   └── useWorldCup.js
+│   │   │
+│   │   └── index.js            # (opcional: barrel file para exportar hooks)
+│   │
+│   ├── pages/                  # Páginas principales (rutas)
 │   │   ├── AdminPage.jsx
 │   │   ├── DashboardPage.jsx
+│   │   ├── ForgotPasswordPage.jsx
 │   │   ├── LoginPage.jsx
 │   │   ├── NotificationsPage.jsx
 │   │   ├── ProfilePage.jsx
 │   │   ├── RankingPage.jsx
 │   │   ├── RegisterPage.jsx
+│   │   ├── ResetPasswordPage.jsx
+│   │   ├── SettingsPage.jsx
 │   │   ├── StatsPage.jsx
 │   │   └── WorldCupPage.jsx
-│   ├── styles/                # Estilos CSS
+│   │
+│   ├── scripts/                # Scripts de utilidad y mantenimiento (no React)
+│   │   ├── checkDatabaseFunctions.js
+│   │   ├── diagnoseDatabase.js
+│   │   ├── listLeagues.js
+│   │   ├── listTeams.js
+│   │   ├── reset-weekly.js
+│   │   ├── updateLeagueLogos.js
+│   │   ├── updateLeagueLogosWithServiceRole.js
+│   │   ├── updateLogosImproved.js
+│   │   └── updateLogoUrls.js
+│   │
+│   ├── styles/                 # Estilos organizados por propósito
 │   │   ├── adminStyles/
+│   │   │   ├── AdminCrownModal.css
+│   │   │   ├── AdminModal.css
+│   │   │   ├── AdminPage.css
+│   │   │   └── AdminPanel.css
+│   │   │
 │   │   ├── cardStyles/
+│   │   │   ├── AwardCard.css
+│   │   │   ├── KnockoutMatchCard.css
+│   │   │   ├── LeagueCard.css
+│   │   │   └── MatchCard.css
+│   │   │
 │   │   ├── pagesStyles/
-│   │   ├── Footer.css
-│   │   ├── Header.css
-│   │   ├── Toast.css
-│   │   └── ...
-│   ├── utils/                # Utilidades
-│   │   ├── logoHelper.js     # Helpers para logos
+│   │   │   ├── Auth.css
+│   │   │   ├── DashboardPage.css
+│   │   │   ├── NotificationsPage.css
+│   │   │   ├── ProfilePageNew.css
+│   │   │   ├── RankingPage.css
+│   │   │   ├── SettingsPage.css
+│   │   │   ├── StatsPage.css
+│   │   │   └── WorldCupPage.css
+│   │   │
+│   │   ├── profile/            # Estilos específicos del perfil
+│   │   │   ├── ProfileBase.css
+│   │   │   ├── ProfileEdit.css
+│   │   │   ├── ProfileHero.css
+│   │   │   ├── ProfileHistory.css
+│   │   │   ├── ProfileOverview.css
+│   │   │   ├── Profile.css
+│   │   │   └── ProfileTabs.css
+│   │   │
+│   │   ├── common/
+│   │   │   ├── Footer.css
+│   │   │   ├── Header.css
+│   │   │   ├── InstallPWAButton.css
+│   │   │   ├── KnockoutSection.css
+│   │   │   ├── LoadingSpinner.css
+│   │   │   ├── LoadingStates.css
+│   │   │   ├── NavigationTabs.css
+│   │   │   ├── NavigationTabsTwo.css
+│   │   │   ├── RankingSidebar.css
+│   │   │   ├── Toast.css
+│   │   │   └── UserProfileModal.css
+│   │   │
+│   │   └── index.css           # Estilos globales + Tailwind
+│   │
+│   ├── utils/                  # Funciones y helpers reutilizables
+│   │   ├── adminFilters.js
+│   │   ├── logoHelper.js
+│   │   ├── matchUtils.js
+│   │   ├── profileUtils.js
+│   │   ├── pushNotifications.js
+│   │   ├── pushNotificationsService.js
+│   │   ├── registerServiceWorker.js
 │   │   ├── storage.js
-│   │   └── supabaseClient.js
-│   ├── App.jsx               # Componente raíz
-│   ├── main.jsx              # Entry point
-│   └── index.css             # Estilos globales
-├── .env                      # Variables de entorno
+│   │   ├── supabaseClient.js
+│   │   └── supabaseClientNode.js
+│   │
+│   ├── App.jsx                 # Componente raíz
+│   └── main.jsx                # Entry point (ReactDOM)
+│
+├── .env                        # Variables de entorno (NO en git)
+├── .env.example                # (recomendado: plantilla)
 ├── .gitignore
 ├── index.html
 ├── package.json
-├── vite.config.js
-└── README.md
+├── package-lock.json           # o pnpm-lock.yaml / yarn.lock
+├── postcss.config.cjs
+├── README.md
+├── render.yaml                 # (si usas Render.com)
+├── robots.txt
+├── schema.sql                  # Esquema de la base de datos (PostgreSQL/Supabase)
+├── tailwind.config.cjs
+└── vite.config.js
 ```
 
 ---
