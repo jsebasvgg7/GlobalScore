@@ -16,7 +16,6 @@ import ProfilePage from "./pages/ProfilePage";
 import NotificationsPage from "./pages/NotificationsPage";
 import StatsPage from "./pages/StatsPage";
 import SettingsPage from "./pages/SettingsPage";
-import WorldCupPage from "./pages/WorldCupPage";
 import { PageLoader } from "./components/LoadingStates";
 
 export default function App() {
@@ -25,28 +24,54 @@ export default function App() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [initialLoad, setInitialLoad] = useState(true);
-  const [showProfile, setShowProfile] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
+  // ============================================
+  // 🌐 DETECCIÓN OFFLINE / ONLINE
+  // ============================================
   useEffect(() => {
-    if (loading && initialLoad) {
-      document.body.classList.add('loading');
-    } else {
-      document.body.classList.remove('loading');
-    }
+    const goOffline = () => {
+      console.log("📴 Offline mode activated");
+      setIsOffline(true);
+
+      const cachedUser = localStorage.getItem("cachedUser");
+      if (cachedUser) {
+        setCurrentUser(JSON.parse(cachedUser));
+        setSession({ offline: true });
+      }
+
+      setLoading(false);
+      setInitialLoad(false);
+    };
+
+    const goOnline = () => {
+      console.log("🌐 Back online");
+      setIsOffline(false);
+      window.location.reload(); // refresca sesión real
+    };
+
+    window.addEventListener("offline", goOffline);
+    window.addEventListener("online", goOnline);
 
     return () => {
-      document.body.classList.remove('loading');
+      window.removeEventListener("offline", goOffline);
+      window.removeEventListener("online", goOnline);
     };
-  }, [loading, initialLoad]);
+  }, []);
 
+  // ============================================
+  // 🔐 AUTH SUPABASE (SOLO ONLINE)
+  // ============================================
   useEffect(() => {
+    if (isOffline) return;
+
     let mounted = true;
 
     supabase.auth.getSession().then(({ data }) => {
       if (!mounted) return;
 
       setSession(data?.session || null);
-      
+
       if (data?.session) {
         loadUserData(data.session.user.id);
       } else {
@@ -60,11 +85,12 @@ export default function App() {
         if (!mounted) return;
 
         setSession(session);
+
         if (session) {
           loadUserData(session.user.id);
         } else {
-          setLoading(false);
           setCurrentUser(null);
+          setLoading(false);
         }
       }
     );
@@ -73,139 +99,48 @@ export default function App() {
       mounted = false;
       listener.subscription.unsubscribe();
     };
-  }, []);
+  }, [isOffline]);
 
+  // ============================================
+  // 👤 CARGAR PERFIL USUARIO
+  // ============================================
   const loadUserData = async (authId) => {
-    try {
-      console.log("🔍 Loading user data for auth_id:", authId);
+    if (!navigator.onLine) {
+      console.log("📴 Skipping user fetch (offline)");
+      return;
+    }
 
-      // 1. Obtener perfil del usuario
-      const { data: profile, error: profileError } = await supabase
+    try {
+      const { data: profile, error } = await supabase
         .from("users")
         .select("*")
         .eq("auth_id", authId)
         .maybeSingle();
 
-      if (profileError) {
-        console.error("❌ Profile error:", profileError);
-        
-        // Solo cerrar sesión si es un error de permisos
-        if (profileError.message.includes('permission')) {
-          console.log("🚪 Signing out due to permission error");
-          await supabase.auth.signOut();
-          setSession(null);
-          setCurrentUser(null);
-          setLoading(false);
-          setInitialLoad(false);
-          return;
-        }
-        // Para otros errores, continuar (podría ser temporal)
+      if (error) {
+        console.error("Profile error:", error);
+        return;
       }
 
-      // 2. Si no existe el perfil, crear uno con la info de auth
-      if (!profile) {
-        console.log("📝 Perfil no encontrado, creando uno nuevo...");
-        
-        // Obtener datos del usuario de Auth
-        const { data: { user: authUser } } = await supabase.auth.getUser();
-        
-        if (!authUser) {
-          console.error("❌ No se pudo obtener usuario de Auth");
-          await supabase.auth.signOut();
-          setSession(null);
-          setCurrentUser(null);
-          setLoading(false);
-          setInitialLoad(false);
-          return;
-        }
-
-        // Crear perfil con nombre del metadata o del email
-        const userName = authUser.user_metadata?.name || 
-                        authUser.user_metadata?.display_name ||
-                        authUser.email?.split('@')[0] || 
-                        "Usuario";
-
-        const { data: newProfile, error: createError } = await supabase
-          .from("users")
-          .insert({
-            auth_id: authUser.id,
-            name: userName,
-            email: authUser.email,
-            points: 0,
-            predictions: 0,
-            correct: 0,
-            monthly_points: 0,
-            monthly_predictions: 0,
-            monthly_correct: 0,
-            current_streak: 0,
-            best_streak: 0,
-            level: 1,
-            monthly_championships: 0
-          })
-          .select()
-          .single();
-
-        if (createError) {
-          console.error("❌ Error al crear perfil:", createError);
-          
-          // Si es error de duplicado, intentar obtener el perfil de nuevo
-          if (createError.code === '23505') {
-            const { data: existingProfile } = await supabase
-              .from("users")
-              .select("*")
-              .eq("auth_id", authId)
-              .single();
-            
-            if (existingProfile) {
-              console.log("✅ Perfil duplicado encontrado:", existingProfile);
-              setCurrentUser(existingProfile);
-            } else {
-              await supabase.auth.signOut();
-              setSession(null);
-              setCurrentUser(null);
-              setLoading(false);
-              setInitialLoad(false);
-              return;
-            }
-          } else {
-            await supabase.auth.signOut();
-            setSession(null);
-            setCurrentUser(null);
-            setLoading(false);
-            setInitialLoad(false);
-            return;
-          }
-        } else {
-          console.log("✅ Perfil creado exitosamente:", newProfile);
-          setCurrentUser(newProfile);
-        }
-      } else {
-        console.log("✅ Profile loaded:", profile);
+      if (profile) {
         setCurrentUser(profile);
+
+        // 👉 GUARDAR EN CACHE LOCAL
+        localStorage.setItem("cachedUser", JSON.stringify(profile));
       }
 
-      // 3. Cargar lista de usuarios para el ranking
-      const { data: userList, error: usersError } = await supabase
+      const { data: userList } = await supabase
         .from("users")
         .select("*")
         .order("points", { ascending: false });
 
-      if (usersError) {
-        console.error("⚠️ Error loading users list:", usersError);
-      } else {
-        setUsers(userList || []);
-      }
+      setUsers(userList || []);
 
     } catch (err) {
-      console.error("💥 Unexpected error loading user data:", err);
-      
-      // No cerrar sesión por errores inesperados, solo mostrar error
-      console.error("Error manteniendo sesión activa");
+      console.error("Unexpected error:", err);
     } finally {
-      setTimeout(() => {
-        setLoading(false);
-        setInitialLoad(false);
-      }, 300);
+      setLoading(false);
+      setInitialLoad(false);
     }
   };
 
@@ -217,11 +152,7 @@ export default function App() {
     <ThemeProvider>
       <BrowserRouter>
         {session && currentUser && (
-          <Header
-            currentUser={currentUser}
-            users={users}
-            onProfileClick={() => setShowProfile(!showProfile)}
-          />
+          <Header currentUser={currentUser} users={users} />
         )}
 
         <Routes>
@@ -238,10 +169,7 @@ export default function App() {
             path="/forgot-password"
             element={session ? <Navigate to="/app" replace /> : <ForgotPasswordPage />}
           />
-          <Route
-            path="/reset-password"
-            element={<ResetPasswordPage />}
-          />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
 
           {/* Rutas protegidas */}
           <Route
@@ -262,22 +190,36 @@ export default function App() {
           />
           <Route
             path="/profile"
-            element={session ? <ProfilePage currentUser={currentUser} onBack={() => window.history.back()} /> : <Navigate to="/" replace />}
+            element={session ? <ProfilePage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
-          <Route 
+          <Route
             path="/stats"
             element={session ? <StatsPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
-          <Route 
+          <Route
             path="/settings"
             element={session ? <SettingsPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
-          {/* <Route
-            path="/worldcup"
-            element={session ? <WorldCupPage currentUser={currentUser} /> : <Navigate to="/" replace />}
-          /> */}
         </Routes>
+
         <InstallPWAButton />
+
+        {/* Banner offline opcional */}
+        {isOffline && (
+          <div style={{
+            position: "fixed",
+            bottom: 0,
+            width: "100%",
+            background: "#ff9800",
+            color: "#fff",
+            textAlign: "center",
+            padding: "6px",
+            fontSize: "14px",
+            zIndex: 9999
+          }}>
+            📡 Estás en modo offline
+          </div>
+        )}
       </BrowserRouter>
     </ThemeProvider>
   );
