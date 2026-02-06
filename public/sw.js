@@ -115,14 +115,25 @@ async function networkFirst(req, cacheName, limit) {
 // ============================================
 async function networkFirstPage(req) {
   try {
-    return await fetch(req);
-  } catch {
-    return (
-      await caches.match(req) ||
-      await caches.match('/offline.html')
-    );
+    const response = await fetch(req);
+
+    // Si la respuesta es válida → usarla
+    if (response && response.ok) {
+      return response;
+    }
+
+    throw new Error('Network response not ok');
+
+  } catch (error) {
+    console.log('📴 Offline fallback triggered');
+
+    const cachedPage = await caches.match(req);
+    if (cachedPage) return cachedPage;
+
+    return await caches.match('/offline.html');
   }
 }
+
 
 // ============================================
 // CACHE FIRST
