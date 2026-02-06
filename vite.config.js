@@ -12,8 +12,8 @@ export default defineConfig({
         // Copiar service worker al dist después del build
         try {
           copyFileSync(
-            resolve('public/service-worker.js'),
-            resolve('dist/service-worker.js')
+            resolve('public/sw.js'),
+            resolve('dist/sw.js')
           );
           console.log('✅ Service Worker copiado a dist/');
         } catch (err) {

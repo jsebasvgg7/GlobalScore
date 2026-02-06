@@ -2,23 +2,20 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './index.css';
+import { registerPWA } from './services/pwaService';
 
-// ✅ NUEVO: Importar registro de Service Worker
-import { 
-  registerServiceWorker, 
-  setupInstallPrompt,
-  isPWAInstalled 
-} from './utils/registerServiceWorker';
-
-// Registrar Service Worker
 if (import.meta.env.PROD) {
-  registerServiceWorker();
-  setupInstallPrompt();
-  
-  // Log si está instalada
-  if (isPWAInstalled()) {
-    console.log('✅ App ejecutándose como PWA instalada');
-  }
+  registerPWA()
+    .then(result => {
+      if (result.success) {
+        console.log('✅ PWA registrada correctamente');
+      }
+    })
+    .catch(err => {
+      console.error('❌ Error registrando PWA:', err);
+    });
+} else {
+  console.log('🔧 PWA deshabilitada en desarrollo');
 }
 
 createRoot(document.getElementById('root')).render(
