@@ -61,7 +61,6 @@ export default function ImageViewer({ imageUrl, userName, onClose }) {
       {/* Header */}
       <div className="image-viewer-header">
         <div className="viewer-user-info">
-          <span className="viewer-user-name">{userName}</span>
         </div>
         <button className="viewer-close-btn" onClick={onClose}>
           <X size={24} />
