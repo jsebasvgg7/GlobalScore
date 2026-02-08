@@ -1,10 +1,9 @@
 // src/components/ImageViewer.jsx
 import React, { useState, useEffect } from 'react';
-import { X, ZoomIn, ZoomOut } from 'lucide-react';
+import { X } from 'lucide-react';
 import '../styles/ImageViewer.css';
 
 export default function ImageViewer({ imageUrl, userName, onClose }) {
-  const [scale, setScale] = useState(1);
   const [startY, setStartY] = useState(0);
   const [currentY, setCurrentY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -22,24 +21,14 @@ export default function ImageViewer({ imageUrl, userName, onClose }) {
     e.stopPropagation();
   };
 
-  // Zoom con botones
-  const handleZoomIn = () => {
-    setScale(prev => Math.min(prev + 0.25, 3));
-  };
-
-  const handleZoomOut = () => {
-    setScale(prev => Math.max(prev - 0.25, 0.5));
-  };
-
   // Touch events para swipe down
   const handleTouchStart = (e) => {
-    if (scale !== 1) return; // No permitir swipe si hay zoom
     setStartY(e.touches[0].clientY);
     setIsDragging(true);
   };
 
   const handleTouchMove = (e) => {
-    if (!isDragging || scale !== 1) return;
+    if (!isDragging) return;
     const deltaY = e.touches[0].clientY - startY;
     if (deltaY > 0) { // Solo permitir swipe hacia abajo
       setCurrentY(deltaY);
@@ -50,8 +39,8 @@ export default function ImageViewer({ imageUrl, userName, onClose }) {
     if (!isDragging) return;
     setIsDragging(false);
     
-    // Si se deslizó más de 150px, cerrar
-    if (currentY > 150) {
+    // Si se deslizó más de 100px, cerrar
+    if (currentY > 100) {
       onClose();
     } else {
       setCurrentY(0);
@@ -87,7 +76,8 @@ export default function ImageViewer({ imageUrl, userName, onClose }) {
         onTouchEnd={handleTouchEnd}
         style={{
           transform: `translateY(${currentY}px)`,
-          opacity: backdropOpacity
+          opacity: backdropOpacity,
+          transition: isDragging ? 'none' : 'all 0.3s ease'
         }}
       >
         <img 
@@ -95,38 +85,13 @@ export default function ImageViewer({ imageUrl, userName, onClose }) {
           alt={userName}
           className="viewer-image"
           onClick={handleImageClick}
-          style={{
-            transform: `scale(${scale})`,
-            transition: isDragging ? 'none' : 'transform 0.3s ease'
-          }}
         />
       </div>
 
-      {/* Controles de Zoom */}
-      <div className="image-viewer-controls">
-        <button 
-          className="zoom-btn" 
-          onClick={handleZoomOut}
-          disabled={scale <= 0.5}
-        >
-          <ZoomOut size={20} />
-        </button>
-        <span className="zoom-indicator">{Math.round(scale * 100)}%</span>
-        <button 
-          className="zoom-btn" 
-          onClick={handleZoomIn}
-          disabled={scale >= 3}
-        >
-          <ZoomIn size={20} />
-        </button>
-      </div>
-
       {/* Indicador de swipe */}
-      {scale === 1 && (
-        <div className="swipe-indicator">
-          <div className="swipe-line"></div>
-        </div>
-      )}
+      <div className="swipe-indicator">
+        <div className="swipe-line"></div>
+      </div>
     </div>
   );
 }

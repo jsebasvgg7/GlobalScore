@@ -1,5 +1,6 @@
 /* ==========================================
    IMAGE VIEWER - Estilo Instagram/WhatsApp
+   Optimizado para móviles
 ========================================== */
 
 .image-viewer-overlay {
@@ -31,7 +32,7 @@
   top: 0;
   left: 0;
   right: 0;
-  padding: 16px 20px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -61,17 +62,17 @@
 }
 
 .viewer-user-name {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: white;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .viewer-close-btn {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
@@ -80,15 +81,17 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .viewer-close-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
   transform: scale(1.05);
 }
 
 .viewer-close-btn:active {
   transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 /* ==========================================
@@ -100,9 +103,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
+  padding: 60px 0 80px;
   overflow: hidden;
-  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
 }
 
 .viewer-image {
@@ -111,96 +113,22 @@
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: 8px;
   animation: zoomIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: grab;
   user-select: none;
   -webkit-user-select: none;
-  touch-action: pan-x pan-y pinch-zoom;
+  -webkit-touch-callout: none;
+  pointer-events: none;
 }
 
 @keyframes zoomIn {
   from {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.9);
   }
   to {
     opacity: 1;
     transform: scale(1);
   }
-}
-
-.viewer-image:active {
-  cursor: grabbing;
-}
-
-/* ==========================================
-   CONTROLES DE ZOOM
-========================================== */
-
-.image-viewer-controls {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 12px 20px;
-  z-index: 10;
-  animation: slideUp 0.3s ease-out 0.2s both;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-.zoom-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.zoom-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
-}
-
-.zoom-btn:active:not(:disabled) {
-  transform: scale(0.95);
-}
-
-.zoom-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.zoom-indicator {
-  min-width: 60px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 700;
-  color: white;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* ==========================================
@@ -209,70 +137,28 @@
 
 .swipe-indicator {
   position: fixed;
-  bottom: 12px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
-  animation: fadeInOut 2s ease-in-out infinite;
+  animation: fadeInOut 2.5s ease-in-out infinite;
 }
 
 @keyframes fadeInOut {
   0%, 100% {
-    opacity: 0.3;
+    opacity: 0.2;
   }
   50% {
-    opacity: 1;
+    opacity: 0.8;
   }
 }
 
 .swipe-line {
-  width: 40px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 2px;
-}
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
-@media (max-width: 480px) {
-  .image-viewer-header {
-    padding: 12px 16px;
-  }
-
-  .viewer-user-name {
-    font-size: 15px;
-  }
-
-  .viewer-close-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-  .image-viewer-content {
-    padding: 70px 16px;
-  }
-
-  .image-viewer-controls {
-    bottom: 30px;
-    padding: 10px 16px;
-  }
-
-  .zoom-btn {
-    width: 36px;
-    height: 36px;
-  }
-
-  .zoom-btn svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .zoom-indicator {
-    font-size: 13px;
-    min-width: 50px;
-  }
+  width: 50px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* ==========================================
@@ -281,13 +167,50 @@
 
 @supports (padding: max(0px)) {
   .image-viewer-header {
-    padding-top: max(16px, env(safe-area-inset-top));
-    padding-left: max(20px, env(safe-area-inset-left));
-    padding-right: max(20px, env(safe-area-inset-right));
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
   }
 
-  .image-viewer-controls {
-    bottom: max(40px, calc(env(safe-area-inset-bottom) + 20px));
+  .image-viewer-content {
+    padding-top: max(60px, calc(env(safe-area-inset-top) + 60px));
+    padding-bottom: max(80px, calc(env(safe-area-inset-bottom) + 80px));
+  }
+
+  .swipe-indicator {
+    bottom: max(20px, calc(env(safe-area-inset-bottom) + 10px));
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - TABLETS Y DESKTOP
+========================================== */
+
+@media (min-width: 768px) {
+  .image-viewer-header {
+    padding: 20px 24px;
+  }
+
+  .viewer-user-name {
+    font-size: 17px;
+  }
+
+  .viewer-close-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .viewer-close-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .image-viewer-content {
+    padding: 80px 20px 100px;
+  }
+
+  .swipe-indicator {
+    display: none; /* Ocultar en desktop */
   }
 }
 
@@ -314,4 +237,21 @@
     opacity: 0;
     transform: scale(0.8);
   }
+}
+
+/* ==========================================
+   OPTIMIZACIONES DE RENDIMIENTO
+========================================== */
+
+.image-viewer-overlay,
+.image-viewer-content,
+.viewer-image {
+  will-change: transform, opacity;
+}
+
+/* Prevenir rebote en iOS */
+body.image-viewer-open {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
 }
