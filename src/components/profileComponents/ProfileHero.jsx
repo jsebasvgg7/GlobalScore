@@ -1,15 +1,27 @@
 // src/components/profileComponents/ProfileHero.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Trophy, Heart, Globe, Crown } from 'lucide-react';
 import { calculateAccuracy } from '../../utils/profileUtils';
+import ImageViewer from '../ImageViewer';
 
 export default function ProfileHero({ userData, currentUser }) {
   const accuracy = calculateAccuracy(currentUser);
+  const [showImageViewer, setShowImageViewer] = useState(false);
+
+  const handleAvatarClick = () => {
+    if (userData.avatar_url) {
+      setShowImageViewer(true);
+    }
+  };
 
   return (
     <div className="profile-hero">
       <div className="avatar-section">
-        <div className="avatar-circle">
+        <div 
+          className={`avatar-circle ${userData.avatar_url ? 'clickable-avatar' : ''}`}
+          onClick={handleAvatarClick}
+          style={{ cursor: userData.avatar_url ? 'pointer' : 'default' }}
+        >
           {userData.avatar_url ? (
             <img src={userData.avatar_url} alt={userData.name} />
           ) : (
@@ -49,6 +61,14 @@ export default function ProfileHero({ userData, currentUser }) {
           </div>
         )}
       </div>
+
+      {showImageViewer && userData.avatar_url && (
+        <ImageViewer 
+          imageUrl={userData.avatar_url}
+          userName={userData.name}
+          onClose={() => setShowImageViewer(false)}
+        />
+      )}
     </div>
   );
 }

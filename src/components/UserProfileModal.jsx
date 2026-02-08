@@ -7,11 +7,13 @@ import {
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import { LoadingDots } from './LoadingSpinner';
+import ImageViewer from './ImageViewer';
 import '../styles/UserProfileModal.css';
 
 export default function UserProfileModal({ userId, onClose }) {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showImageViewer, setShowImageViewer] = useState(false);
   const [streakData, setStreakData] = useState({
     current_streak: 0,
     best_streak: 0
@@ -232,6 +234,13 @@ export default function UserProfileModal({ userId, onClose }) {
     });
   };
 
+  const handleAvatarClick = (e) => {
+    e.stopPropagation();
+    if (userData.avatar_url) {
+      setShowImageViewer(true);
+    }
+  };
+
   if (loading) {
     return (
       <div className="user-modal-overlay" onClick={onClose}>
@@ -295,7 +304,11 @@ export default function UserProfileModal({ userId, onClose }) {
               <div className="banner-pattern"></div>
             </div>
             <div className="user-modal-avatar-wrapper">
-              <div className="user-modal-avatar">
+              <div 
+                className={`user-modal-avatar ${userData.avatar_url ? 'clickable-avatar' : ''}`}
+                onClick={handleAvatarClick}
+                style={{ cursor: userData.avatar_url ? 'pointer' : 'default' }}
+              >
                 {userData.avatar_url ? (
                   <img src={userData.avatar_url} alt={userData.name} />
                 ) : (
@@ -469,6 +482,15 @@ export default function UserProfileModal({ userId, onClose }) {
           )}
         </div>
       </div>
+
+      {/* ImageViewer Modal */}
+      {showImageViewer && userData.avatar_url && (
+        <ImageViewer 
+          imageUrl={userData.avatar_url}
+          userName={userData.name || 'Usuario'}
+          onClose={() => setShowImageViewer(false)}
+        />
+      )}
     </div>
   );
 }

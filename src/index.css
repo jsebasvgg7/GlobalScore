@@ -55,6 +55,192 @@
   color: var(--text-primary);
 }
 
+/* ==========================================
+   AVATARES CLICKEABLES - Estilos Globales
+   Agregar estos estilos a los archivos CSS correspondientes
+========================================== */
+
+/* ==========================================
+   CLASE GENERAL CLICKABLE AVATAR
+========================================== */
+
+.clickable-avatar {
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.clickable-avatar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.clickable-avatar:hover {
+  transform: scale(1.05);
+  filter: brightness(0.95);
+}
+
+.clickable-avatar:hover::after {
+  opacity: 1;
+}
+
+.clickable-avatar:active {
+  transform: scale(0.98);
+}
+
+/* Prevenir selección de texto en avatares */
+.clickable-avatar img,
+.clickable-avatar span {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  pointer-events: none;
+}
+
+/* ==========================================
+   DARK MODE
+========================================== */
+
+[data-theme="dark"] .clickable-avatar:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 8px 24px rgba(139, 127, 199, 0.3);
+}
+
+[data-theme="dark"] .clickable-avatar::after {
+  background: linear-gradient(
+    135deg, 
+    rgba(139, 127, 199, 0.2) 0%, 
+    transparent 50%
+  );
+}
+
+/* ==========================================
+   ESTILOS ESPECÍFICOS POR COMPONENTE
+========================================== */
+
+/* ProfileHero */
+.profile-hero .avatar-circle.clickable-avatar {
+  cursor: pointer;
+}
+
+.profile-hero .avatar-circle.clickable-avatar:hover {
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+  border-color: var(--profile-primary);
+}
+
+/* UserProfileModal */
+.user-modal-avatar.clickable-avatar {
+  cursor: pointer;
+}
+
+.user-modal-avatar.clickable-avatar:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* RankingPage - Winner Avatars */
+.winner-avatar.clickable-avatar:hover {
+  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.3);
+  border-color: #10B981;
+}
+
+.first .winner-avatar.clickable-avatar:hover {
+  box-shadow: 0 16px 40px rgba(217, 119, 6, 0.35);
+}
+
+/* RankingPage - List Avatars */
+.item-avatar.clickable-avatar:hover {
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
+  border-color: #10B981;
+}
+
+/* Hall of Fame Avatars */
+.hall-item-avatar.clickable-avatar:hover {
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
+  border-color: #F59E0B;
+}
+
+/* AvatarUpload - Preview */
+.avatar-preview-wrapper.clickable-avatar {
+  cursor: pointer;
+}
+
+.avatar-preview-wrapper.clickable-avatar:hover {
+  border-color: var(--profile-primary);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+}
+
+.avatar-preview-wrapper.clickable-avatar:hover .avatar-preview-image {
+  transform: scale(1.08);
+  filter: brightness(0.9);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+  .clickable-avatar:hover {
+    transform: scale(1.03);
+  }
+  
+  .clickable-avatar:active {
+    transform: scale(0.97);
+  }
+}
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+/* Focus visible para navegación por teclado */
+.clickable-avatar:focus-visible {
+  outline: 2px solid var(--profile-primary);
+  outline-offset: 2px;
+}
+
+/* Reducir movimiento si el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce) {
+  .clickable-avatar,
+  .clickable-avatar::after,
+  .clickable-avatar:hover {
+    transition: none;
+    animation: none;
+  }
+  
+  .clickable-avatar:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================
+   LOADING STATE
+========================================== */
+
+.clickable-avatar[data-loading="true"] {
+  pointer-events: none;
+  opacity: 0.6;
+  cursor: wait !important;
+}
+
+.clickable-avatar[data-loading="true"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
 /* ================================
    RESPONSIVE MOBILE - AJUSTADO
 ================================ */

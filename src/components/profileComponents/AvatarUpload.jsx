@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { Upload, Camera, X, Loader2, Crown } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
+import ImageViewer from '../ImageViewer';
 import '../../styles/profile/ProfileBase.css';
 
 export default function AvatarUpload({ currentUrl, userId, onUploadComplete, userLevel }) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(currentUrl);
+  const [showImageViewer, setShowImageViewer] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleFileSelect = async (event) => {
@@ -18,7 +20,7 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
       return;
     }
 
-    // Validar tamaño (máximo 2MB)
+    // Validar tamaño (máximo 10MB)
     if (file.size > 10 * 1024 * 1024) {
       alert('La imagen debe ser menor a 10MB');
       return;
@@ -96,6 +98,16 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
     }
   };
 
+  const handlePreviewClick = () => {
+    // Solo abrir viewer si hay imagen y NO está en modo de carga o subiendo
+    if (preview && !uploading) {
+      setShowImageViewer(true);
+    } else if (!uploading) {
+      // Si no hay imagen, abrir selector de archivos
+      fileInputRef.current?.click();
+    }
+  };
+
   return (
     <div className="avatar-upload-container">
       <input
@@ -112,7 +124,11 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
         
         {/* Sección del Avatar (lado izquierdo) - CON BADGE DE NIVEL */}
         <div className="avatar-container-new">
-          <div className="avatar-preview-wrapper" onClick={() => !uploading && fileInputRef.current?.click()}>
+          <div 
+            className={`avatar-preview-wrapper ${preview ? 'clickable-avatar' : ''}`}
+            onClick={handlePreviewClick}
+            style={{ cursor: !uploading ? 'pointer' : 'default' }}
+          >
             {/* Muestra la imagen de preview o un placeholder */}
             {preview ? (
               <img src={preview} alt="Avatar Preview" className="avatar-preview-image" />
@@ -130,7 +146,7 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
             )}
             
             {/* Overlay de cámara para indicar que es clickeable */}
-            {!uploading && (
+            {!uploading && !preview && (
               <div className="camera-overlay">
                 <Camera size={20} />
               </div>
@@ -173,6 +189,15 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
           )}
         </div>
       </div>
+
+      {/* ImageViewer Modal */}
+      {showImageViewer && preview && (
+        <ImageViewer 
+          imageUrl={preview}
+          userName="Vista Previa"
+          onClose={() => setShowImageViewer(false)}
+        />
+      )}
     </div>
   );
 }
