@@ -29,7 +29,7 @@
 
 .image-viewer-header {
   position: fixed;
-  top: 0;
+  top: 60px; /* Espacio para el header principal en mobile */
   left: 0;
   right: 0;
   padding: 12px 16px;
@@ -103,7 +103,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px 0 80px;
+  padding: 120px 0 80px; /* Más espacio arriba para el header del viewer */
   overflow: hidden;
 }
 
@@ -167,18 +167,32 @@
 
 @supports (padding: max(0px)) {
   .image-viewer-header {
-    padding-top: max(12px, env(safe-area-inset-top));
+    /* En mobile: 60px base + safe area del dispositivo */
+    top: max(60px, calc(60px + env(safe-area-inset-top)));
     padding-left: max(16px, env(safe-area-inset-left));
     padding-right: max(16px, env(safe-area-inset-right));
   }
 
   .image-viewer-content {
-    padding-top: max(60px, calc(env(safe-area-inset-top) + 60px));
+    padding-top: max(120px, calc(120px + env(safe-area-inset-top)));
     padding-bottom: max(80px, calc(env(safe-area-inset-bottom) + 80px));
   }
 
   .swipe-indicator {
     bottom: max(20px, calc(env(safe-area-inset-bottom) + 10px));
+  }
+
+  /* Desktop: safe areas normales */
+  @media (min-width: 768px) {
+    .image-viewer-header {
+      top: 0;
+      padding-top: max(20px, env(safe-area-inset-top));
+    }
+
+    .image-viewer-content {
+      padding-top: max(80px, calc(env(safe-area-inset-top) + 80px));
+      padding-bottom: max(100px, calc(env(safe-area-inset-bottom) + 100px));
+    }
   }
 }
 
@@ -188,6 +202,7 @@
 
 @media (min-width: 768px) {
   .image-viewer-header {
+    top: 0; /* En desktop vuelve a la parte superior */
     padding: 20px 24px;
   }
 
@@ -206,7 +221,7 @@
   }
 
   .image-viewer-content {
-    padding: 80px 20px 100px;
+    padding: 80px 20px 100px; /* Padding normal en desktop */
   }
 
   .swipe-indicator {
