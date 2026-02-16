@@ -129,8 +129,8 @@ export const teamSlugMap = {
 export const leagueMap = {
   // Competiciones Europeas
   'Champions League': 'champions-league',
-  'Europa League': 'europa-league',
-  'Conference League': 'conference-league',
+  'Europa League': 'champions-league',
+  'Conference League': 'champions-league',
   
   // España - todas usan los mismos equipos de La Liga
   'La Liga': 'la-liga',
@@ -227,31 +227,25 @@ export const awardLogoMap = {
 // FUNCIONES PARA LOGOS DE EQUIPOS
 // ============================================
 
+
 export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
   // Detectar si es un logo mini
   const isMini = teamSlug.includes('mini');
   
   let path;
   if (isMini) {
-    // Para minis: usar carpeta con guión bajo
-    let leagueFolder = leagueSlug.replace(/-/g, '_'); // Reemplazar guiones con guión bajo
+    // Para minis: usar carpeta sin guion y sin "leagues/"
+    let leagueFolder = leagueSlug.replace(/-/g, ''); // Eliminar todos los guiones
     
     // CORRECCIÓN ESPECIAL PARA PREMIER LEAGUE
     if (leagueSlug === 'premier-league') {
-      leagueFolder = 'premier'; // Solo "premier"
+      leagueFolder = 'premier'; // No "premierleague", solo "premier"
     }
     
     path = `${leagueFolder}/${teamSlug}.png`;
   } else {
-    // Para normales: usar carpeta con guión bajo también
-    let leagueFolder = leagueSlug.replace(/-/g, '_'); // Reemplazar guiones con guión bajo
-    
-    // CORRECCIÓN ESPECIAL PARA PREMIER LEAGUE
-    if (leagueSlug === 'premier-league') {
-      leagueFolder = 'premier'; // Solo "premier"
-    }
-    
-    path = `${leagueFolder}/${teamSlug}.png`;
+    // Para normales: estructura estándar
+    path = `leagues/${leagueSlug}/${teamSlug}.png`;
   }
   
   const { data } = supabase.storage
