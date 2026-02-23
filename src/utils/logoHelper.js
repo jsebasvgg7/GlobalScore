@@ -12,9 +12,9 @@ const AWARD_LOGOS_BUCKET = 'award-logos';
 export const teamSlugMap = {
   'MUN': 'manchesterunited',
   'LIV': 'liverpool',
-  'ARS': 'arsenalmini',
+  'ARS': 'arsenal',
   'CHE': 'chelsea',
-  'MCI': 'manchestercitymini',
+  'MCI': 'manchestercity',
   'TOT': 'tottenham',
   'NEW': 'newcastle',
   'AVL': 'astonvilla',
@@ -30,17 +30,17 @@ export const teamSlugMap = {
   'BOU': 'bournemouth',
   'NFO': 'nottingham_forest',
   'BUR': 'burnley',
-  'RMA': 'realmadridmini',
-  'FCB': 'barcelonamini',
-  'ATM': 'atlmadridmini',
-  'SEV': 'sevillamini',
-  'BET': 'betismini',
-  'VAL': 'valenciamini',
-  'VIL': 'villarrealmini',
-  'ATH': 'athleticmini',
-  'RSO': 'realsociedadmini',
-  'CEL': 'celtamini',
-  'ESP': 'espanyolmini',
+  'RMA': 'realmadrid',
+  'FCB': 'barcelona',
+  'ATM': 'atlmadrid',
+  'SEV': 'sevilla',
+  'BET': 'betis',
+  'VAL': 'valencia',
+  'VIL': 'villarreal',
+  'ATH': 'athletic',
+  'RSO': 'realsociedad',
+  'CEL': 'celta',
+  'ESP': 'espanyol',
   'MLL': 'mallorca',
   'RAY': 'rayovallecano',
   'GET': 'getafe',
@@ -49,11 +49,11 @@ export const teamSlugMap = {
   'GIR': 'girona',
   'LEV': 'levante',
   'OVI': 'realoviedo',
-  'OSA': 'osasunamini',
+  'OSA': 'osasuna',
   'INT': 'inter',
   'MIL': 'milan',
-  'JUV': 'juventusmini',
-  'NAP': 'napolimini',
+  'JUV': 'juventus',
+  'NAP': 'napoli',
   'ROM': 'roma',
   'LAZ': 'lazio',
   'ATA': 'atalanta',
@@ -70,10 +70,10 @@ export const teamSlugMap = {
   'PIS': 'pisa',
   'COM': 'como',
   'CRE': 'cremonese',
-  'BAY': 'bayernmunchenmini',
-  'DOR': 'borussiadortmundmini',
+  'BAY': 'bayernmunchen',
+  'DOR': 'borussiadortmund',
   'RBL': 'rbleipzig',
-  'B04': 'bayerleverkusenmini',
+  'B04': 'bayerleverkusen',
   'AUG': 'augsburgo',
   'BMG': 'bmonchengladbach',
   'SGE': 'eintrachtfrankfurt',
@@ -88,7 +88,7 @@ export const teamSlugMap = {
   'HSV': 'hamburgo',
   'SVW': 'werderbremen',
   'KOE': 'koln',
-  'PSG': 'psgmini',
+  'PSG': 'psg',
   'OGM': 'olimpiquemarsella',
   'OLY': 'olimpiquelyon', 
   'MON': 'monaco',
@@ -129,8 +129,8 @@ export const teamSlugMap = {
 export const leagueMap = {
   // Competiciones Europeas
   'Champions League': 'champions-league',
-  'Europa League': 'europa-league',
-  'Conference League': 'conference-league',
+  'Europa League': 'champions-league',
+  'Conference League': 'champions-league',
   
   // España - todas usan los mismos equipos de La Liga
   'La Liga': 'la-liga',
@@ -228,32 +228,7 @@ export const awardLogoMap = {
 // ============================================
 
 export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
-  // Detectar si es un logo mini
-  const isMini = teamSlug.includes('mini');
-  
-  let path;
-  if (isMini) {
-    // Para minis: usar carpeta con guión bajo
-    let leagueFolder = leagueSlug.replace(/-/g, '_'); // Reemplazar guiones con guión bajo
-    
-    // CORRECCIÓN ESPECIAL PARA PREMIER LEAGUE
-    if (leagueSlug === 'premier-league') {
-      leagueFolder = 'premier'; // Solo "premier"
-    }
-    
-    path = `${leagueFolder}/${teamSlug}.png`;
-  } else {
-    // Para normales: usar carpeta con guión bajo también
-    let leagueFolder = leagueSlug.replace(/-/g, '_'); // Reemplazar guiones con guión bajo
-    
-    // CORRECCIÓN ESPECIAL PARA PREMIER LEAGUE
-    if (leagueSlug === 'premier-league') {
-      leagueFolder = 'premier'; // Solo "premier"
-    }
-    
-    path = `${leagueFolder}/${teamSlug}.png`;
-  }
-  
+  const path = `leagues/${leagueSlug}/${teamSlug}.png`;
   const { data } = supabase.storage
     .from(TEAM_LOGOS_BUCKET)
     .getPublicUrl(path);
