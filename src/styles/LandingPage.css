@@ -1,13 +1,18 @@
 /* ═══════════════════════════════════════════════════════════════
    LandingPage.css — GlobalScore Landing
-   Coherente con Auth.css y el sistema de variables de la app
+   Dark mode only + full mobile responsive
    ═══════════════════════════════════════════════════════════════ */
+
+/* ── FORCE DARK MODE ─────────────────────────────────────────── */
+:root {
+  color-scheme: dark;
+}
 
 /* ── ROOT & RESET ────────────────────────────────────────────── */
 .landing-root {
   min-height: 100vh;
-  background: var(--bg, #0a0a0f);
-  color: var(--text, #e2e8f0);
+  background: #1e1e2b !important;
+  color: #e2e8f0 !important;
   font-family: var(--font-body, 'Inter', sans-serif);
   overflow-x: hidden;
 }
@@ -93,6 +98,7 @@
   display: flex; align-items: center; justify-content: center;
   color: white;
   box-shadow: 0 0 20px rgba(139,92,246,0.4);
+  flex-shrink: 0;
 }
 .brand-icon.small {
   width: 26px; height: 26px;
@@ -117,7 +123,7 @@
 .btn-ghost {
   background: transparent;
   border: 1px solid rgba(139,92,246,0.3);
-  color: var(--text, #e2e8f0);
+  color: #e2e8f0;
   padding: 8px 18px;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -161,6 +167,7 @@
   padding: 60px 24px 40px;
   max-width: 780px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .hero-badge {
@@ -180,7 +187,7 @@
 }
 
 .hero-title {
-  font-size: clamp(3.2rem, 7vw, 5.5rem);
+  font-size: clamp(3rem, 7vw, 5.5rem);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -2px;
@@ -215,6 +222,8 @@
   gap: 14px;
   animation: fadeUp 0.7s 0.5s ease both;
   margin-bottom: 48px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .cta-main {
@@ -262,8 +271,10 @@
   align-items: center;
   gap: 0;
   animation: fadeUp 0.7s 0.6s ease both;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-.hero-stat { text-align: center; padding: 0 28px; }
+.hero-stat { text-align: center; padding: 0 20px; }
 .hs-value {
   display: block;
   font-size: 1.2rem;
@@ -447,7 +458,7 @@
   color: #FCD34D;
 }
 .section-title {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 800;
   letter-spacing: -1.5px;
   color: #e2e8f0;
@@ -835,8 +846,9 @@
   font-size: 0.7rem;
   font-weight: 700;
   color: white;
+  flex-shrink: 0;
 }
-.hlr-info { flex: 1; }
+.hlr-info { flex: 1; min-width: 0; }
 .hlr-name { display: block; font-size: 0.85rem; font-weight: 600; color: #e2e8f0; }
 .hlr-last { font-size: 0.72rem; color: #475569; }
 .hlr-crowns {
@@ -844,11 +856,13 @@
   color: #F59E0B;
   font-size: 0.8rem;
   font-weight: 700;
+  flex-shrink: 0;
 }
 .hlr-pts {
   font-size: 0.85rem;
   font-weight: 700;
   color: #a78bfa;
+  flex-shrink: 0;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -891,7 +905,7 @@
   filter: drop-shadow(0 0 20px rgba(245,158,11,0.4));
 }
 .ctaf-title {
-  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-size: clamp(1.8rem, 4.5vw, 3.2rem);
   font-weight: 800;
   letter-spacing: -1.5px;
   color: #e2e8f0;
@@ -956,7 +970,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE — TABLET (≤ 900px)
    ══════════════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
   .features-grid { grid-template-columns: repeat(2, 1fr); }
@@ -964,16 +978,252 @@
   .panel-ranking { display: none; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .hero-cards { display: none; }
+  .landing-preview { padding: 60px 20px; }
+  .landing-features { padding: 60px 20px; }
+  .landing-hof { padding: 60px 20px; }
 }
 
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤ 600px)
+   ══════════════════════════════════════════════════════════════ */
 @media (max-width: 600px) {
-  .landing-nav { padding: 16px 20px; }
+
+  /* NAV */
+  .landing-nav {
+    padding: 16px 20px;
+  }
   .btn-ghost { display: none; }
-  .features-grid { grid-template-columns: 1fr; }
-  .hof-podium { gap: 8px; }
-  .hof-card { padding: 16px 12px; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .landing-footer { flex-direction: column; text-align: center; gap: 12px; }
-  .hero-cta { flex-direction: column; }
-  .cta-secondary { font-size: 0.85rem; }
+  .btn-primary {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+  .brand-name {
+    font-size: 1.05rem;
+  }
+
+  /* HERO */
+  .hero-content {
+    padding: 32px 20px 32px;
+    min-height: calc(100vh - 70px);
+    justify-content: center;
+  }
+  .hero-badge {
+    font-size: 0.72rem;
+    padding: 5px 12px;
+    margin-bottom: 24px;
+  }
+  .hero-title {
+    font-size: clamp(2.6rem, 13vw, 4rem);
+    letter-spacing: -1.5px;
+    margin-bottom: 18px;
+  }
+  .hero-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+  }
+  .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 36px;
+    width: 100%;
+    max-width: 320px;
+  }
+  .cta-main {
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 0.95rem;
+  }
+  .cta-secondary {
+    font-size: 0.88rem;
+    padding: 12px 20px;
+    text-align: center;
+  }
+
+  /* HERO STATS */
+  .hero-stats {
+    gap: 0;
+    width: 100%;
+    max-width: 320px;
+  }
+  .hero-stat {
+    padding: 0 12px;
+    flex: 1;
+  }
+  .hs-value {
+    font-size: 0.95rem;
+  }
+  .hs-label {
+    font-size: 0.62rem;
+    line-height: 1.3;
+  }
+  .hs-divider { height: 28px; }
+
+  /* STATS SECTION */
+  .landing-stats {
+    padding: 36px 20px;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 100%;
+  }
+  .sb-value {
+    font-size: 1.5rem;
+  }
+  .sb-label {
+    font-size: 0.7rem;
+  }
+  .sb-icon {
+    width: 40px; height: 40px;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    margin-bottom: 36px;
+  }
+  .section-sub {
+    font-size: 0.9rem;
+  }
+
+  /* PREVIEW */
+  .landing-preview {
+    padding: 60px 16px;
+  }
+  .preview-wrapper {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+  .panel-ranking { display: none; }
+  .panel-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .panel-tabs::-webkit-scrollbar { display: none; }
+
+  /* FEATURES */
+  .landing-features {
+    padding: 60px 16px;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .feature-card {
+    padding: 22px 18px;
+  }
+
+  /* HALL OF FAME */
+  .landing-hof {
+    padding: 60px 16px;
+  }
+  .hof-podium {
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .hof-card {
+    padding: 16px 10px;
+    border-radius: 12px;
+  }
+  .hof-card.first {
+    transform: translateY(-14px);
+  }
+  .hof-card.first:hover {
+    transform: translateY(-18px);
+  }
+  .hof-avatar {
+    width: 40px; height: 40px;
+    font-size: 0.7rem;
+  }
+  .hof-avatar.large {
+    width: 50px; height: 50px;
+    font-size: 0.8rem;
+  }
+  .hof-name {
+    font-size: 0.72rem;
+  }
+  .hof-crowns {
+    font-size: 0.62rem;
+  }
+  .hof-pts {
+    font-size: 0.68rem;
+  }
+  .hof-pos {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+  .hof-card.gold .hof-pos {
+    font-size: 1.4rem;
+  }
+  /* Simplify HoF list on mobile */
+  .hof-list-row {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .hlr-last {
+    display: none;
+  }
+  .hlr-name {
+    font-size: 0.8rem;
+  }
+  .hlr-pts {
+    font-size: 0.78rem;
+  }
+
+  /* CTA FINAL */
+  .landing-cta-final {
+    padding: 80px 20px;
+  }
+  .ctaf-actions {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 320px;
+    margin: 0 auto;
+    gap: 10px;
+  }
+  .ctaf-actions .cta-main {
+    justify-content: center;
+  }
+  .ctaf-actions .cta-secondary {
+    text-align: center;
+  }
+
+  /* FOOTER */
+  .landing-footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    padding: 28px 20px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — SMALL MOBILE (≤ 380px)
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 380px) {
+  .hero-title {
+    font-size: clamp(2.2rem, 14vw, 3rem);
+    letter-spacing: -1px;
+  }
+  .hof-podium {
+    flex-direction: column;
+    align-items: center;
+  }
+  .hof-card {
+    max-width: 260px;
+    width: 100%;
+  }
+  .hof-card.first {
+    transform: none;
+    order: -1;
+    border-color: rgba(245,158,11,0.35);
+  }
+  .hof-card.first:hover {
+    transform: translateY(-4px);
+  }
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
 }
