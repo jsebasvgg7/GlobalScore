@@ -15,6 +15,7 @@ import AdminPage from "./pages/AdminPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotificationsPage from "./pages/NotificationsPage";
 import StatsPage from "./pages/StatsPage";
+import LandingPage from "./pages/LandingPage";
 import SettingsPage from "./pages/SettingsPage";
 import WorldCupPage from "./pages/WorldCupPage";
 import { PageLoader } from "./components/LoadingStates";
@@ -226,8 +227,12 @@ export default function App() {
 
         <Routes>
           {/* Rutas públicas */}
+          <Route 
+            path="/" 
+            element={<LandingPage />} 
+          />
           <Route
-            path="/"
+            path="/login"
             element={session ? <Navigate to="/app" replace /> : <LoginPage />}
           />
           <Route
