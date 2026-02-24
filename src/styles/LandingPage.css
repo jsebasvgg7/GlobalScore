@@ -11,7 +11,7 @@
 /* ── ROOT & RESET ────────────────────────────────────────────── */
 .landing-root {
   min-height: 100vh;
-  background: #1e1e2b !important;
+  background: #1e202c !important;
   color: #e2e8f0 !important;
   font-family: var(--font-body, 'Inter', sans-serif);
   overflow-x: hidden;

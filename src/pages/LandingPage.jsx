@@ -129,14 +129,6 @@ export default function LandingPage() {
             <div className="brand-icon"><Trophy size={18} /></div>
             <span className="brand-name">Globalscore</span>
           </div>
-          <div className="nav-actions">
-            <button className="btn-ghost" onClick={() => navigate("/login")}>
-              Iniciar sesión
-            </button>
-            <button className="btn-primary" onClick={() => navigate("/register")}>
-              Crear cuenta <ChevronRight size={16} />
-            </button>
-          </div>
         </nav>
 
         <div className="hero-content">
