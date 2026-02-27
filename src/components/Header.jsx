@@ -32,8 +32,9 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
       : []),
   ];
 
-  const firstName = currentUser?.full_name?.split(" ")[0]
+  const firstName = currentUser?.name?.split(" ")[0]
     || currentUser?.username
+    || currentUser?.email?.split("@")[0]
     || "Jugador";
 
   const initials = firstName.slice(0, 2).toUpperCase();

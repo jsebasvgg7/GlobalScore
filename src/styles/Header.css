@@ -27,6 +27,13 @@
   --pill-icon:    #6b7099;
 }
 
+/* Light mode: pill gris */
+[data-theme="light"] {
+  --pill-bg:      #e2e4ef;
+  --pill-active:  #1a1d2e;
+  --pill-icon:    #9297b8;
+}
+
 /* ══════════════════════════════
    DESKTOP SIDEBAR
 ══════════════════════════════ */
@@ -176,13 +183,16 @@
   align-items: center;
   justify-content: space-between;
   height: 68px;
-  padding: 0 20px;
-  background: var(--gs-bg);
-  border-bottom: none;
+  padding: 0 16px;
+  background: var(--bg);
+  border: none;
+  box-shadow: none;
+  outline: none;
   position: sticky;
   top: 0; z-index: 100;
   transition: background 0.3s;
 }
+
 
 /* User section: avatar + greeting */
 .gs-mobile-user {
@@ -339,4 +349,15 @@
   .gs-bottom-btn svg { width: 20px; height: 20px; }
 
   body { padding-bottom: 88px; }
+}
+
+/* ─── Light mode: ajustes del pill ─── */
+[data-theme="light"] .gs-bottom-pill {
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.12),
+    0 2px 8px rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] .gs-bottom-btn.active::after {
+  background: var(--accent); /* punto morado sobre gris */
 }
