@@ -1,850 +1,342 @@
-/* ================================
-   HEADER PREMIUM - Purple Palette
-================================ */
+/* ═══════════════════════════════════════════════
+   GLOBALSCORE — Header & Navigation
+   Desktop: sidebar | Mobile: top header + pill nav
+═══════════════════════════════════════════════ */
 
-.app-header {
-  background: linear-gradient(135deg, #1e202c 0%, #31323e 100%);
-  color: white;
-  padding: 20px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(96, 81, 155, 0.2);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  position: relative;
-  overflow: hidden;
-  z-index: 100;
+/* ── Variables ──
+   Hereda directamente las variables globales de index.css
+   para que dark/light funcionen automáticamente sin duplicar valores.
+*/
+:root {
+  --sidebar-w: 72px;
+
+  --gs-bg:        var(--bg);
+  --gs-surface:   var(--card);
+  --gs-border:    var(--border);
+  --gs-accent:    var(--accent);
+  --gs-accent-2:  var(--accent-light);
+  --gs-text:      var(--text-primary);
+  --gs-muted:     var(--muted);
+  --gs-active-bg: var(--glass);
+  --gs-hover-bg:  var(--glass);
+  --gs-shadow:    var(--shadow);
+
+  /* Pill siempre oscuro sin importar el tema */
+  --pill-bg:      #1a1d27;
+  --pill-active:  #ffffff;
+  --pill-icon:    #6b7099;
 }
 
-.app-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, 
-    transparent,
-    #60519b,
-    #8b7fc7,
-    #60519b,
-    transparent
-  );
-  background-size: 200% 100%;
-  animation: header-shine 3s linear infinite;
-}
-
-@keyframes header-shine {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-.app-header::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: 
-    radial-gradient(circle at 20% 50%, rgba(96, 81, 155, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 50%, rgba(139, 127, 199, 0.05) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-.header-left,
-.header-right {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  position: relative;
-  z-index: 1;
-  flex: 1;
-}
-
-.header-left {
-  justify-content: flex-start;
-}
-
-.header-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex: 1;
-  position: relative;
-  z-index: 1;
-}
-
-.header-right {
-  justify-content: flex-end;
-}
-
-.app-title {
-  font-size: 22px;
-  font-weight: 800;
-  margin: 0;
-  background: linear-gradient(135deg, #ffffff 0%, #bfc0d1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.5px;
-  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
-  text-align: center;
-}
-
-/* RESPONSIVE - MOBILE */
-@media (max-width: 768px) {
-  .app-header {
-    padding: 16px 18px;
-  }
-
-  /* Modo claro - header blanco */
-  [data-theme="light"] .app-header {
-    background: #ffffff !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  }
-  
-  [data-theme="light"] .app-title {
-    background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Asegurar que los iconos sean visibles en modo claro */
-  [data-theme="light"] .header-left .icon-btn,
-  [data-theme="light"] .header-right .icon-btn {
-    color: #1e202c;
-  }
-
-  /* Bottom nav en modo claro - iconos morados */
-  [data-theme="light"] .bottom-nav {
-    background: #ffffff !important;
-    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
-  }
-
-  [data-theme="light"] .bottom-nav-btn {
-    color: #60519b !important;
-  }
-
-  [data-theme="light"] .bottom-nav-btn svg {
-    color: #60519b !important;
-  }
-
-  [data-theme="light"] .bottom-nav-btn.active {
-    color: #8b7fc7 !important;
-    background: rgba(96, 81, 155, 0.15);
-  }
-
-  [data-theme="light"] .bottom-nav-btn.active svg {
-    color: #8b7fc7 !important;
-  }
-
-  [data-theme="light"] .bottom-nav-btn.active span {
-    color: #60519b !important;
-  }
-
-  /* ================================
-     ACTION BUTTONS (Light Mode): Fondo blanco + icono morado
-     Aplica a los botones de navegación y al toggle de tema. No afecta modo oscuro.
-  ================================= */
-  [data-theme="light"] .header-right .icon-btn,
-  [data-theme="light"] .header-right .theme-btn {
-    background: #ffffff !important;
-    color: #60519b !important;
-    border-color: rgba(96,81,155,0.12) !important;
-    box-shadow: 0 6px 18px rgba(96,81,155,0.06) !important;
-  }
-
-  /* Forzar color en SVGs dentro de botones */
-  [data-theme="light"] .header-right .icon-btn svg,
-  [data-theme="light"] .header-right .icon-btn svg * {
-    color: #60519b !important;
-    fill: #60519b !important;
-    stroke: #60519b !important;
-  }
-
-  /* Hover ligero morado */
-  [data-theme="light"] .header-right .icon-btn:hover {
-    background: rgba(96,81,155,0.06) !important;
-    transform: translateY(-2px);
-  }
-
-  /* Asegurar contraste del botón de tema cuando está activo */
-  [data-theme="light"] .header-right .theme-btn.active,
-  [data-theme="light"] .header-right .theme-btn:active {
-    background: linear-gradient(135deg, #60519b, #8b7fc7) !important;
-    color: #ffffff !important;
-  }
-  
-  /* Modo oscuro - header oscuro */
-  [data-theme="dark"] .app-header {
-    background: var(--card) !important;
-    border-bottom: 1px solid var(--border) !important;
-  }
-  
-  [data-theme="dark"] .app-title {
-    color: var(--text-primary);
-    background: none;
-    -webkit-text-fill-color: var(--text-primary);
-  }
-
-  .app-title {
-    font-size: 20px;
-  }
-
-  .header-left,
-  .header-right {
-    gap: 8px;
-  }
-}
-
-@media (max-width: 480px) {
-  .app-header {
-    padding: 14px 12px;
-  }
-
-  .app-title {
-    font-size: 18px;
-  }
-
-  .header-left,
-  .header-right {
-    gap: 6px;
-  }
-}
-
-.app-sub {
-  font-size: 13px;
-  color: #bfc0d1;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.header-right {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  position: relative;
-  z-index: 1;
-}
-
-/* ================================
-   ICON BUTTONS - ESTILO ÚNICO PARA TODOS
-   En desktop modo claro: fondo transparente con borde morado claro
-================================ */
-
-.icon-btn {
-  width: 44px;
-  height: 44px;
-  background: rgba(96, 81, 155, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(96, 81, 155, 0.3);
-  color: white;
-  border-radius: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  position: relative;
-  padding: 0;
-}
-
-/* Asegurar que los SVG tomen el tamaño correcto */
-.icon-btn svg {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-.icon-btn:hover {
-  background: rgba(96, 81, 155, 0.25);
-  border-color: rgba(96, 81, 155, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.3);
-}
-
-.icon-btn:active {
-  transform: translateY(0);
-}
-
-/* ================================
-   MODO CLARO EN DESKTOP - TODOS LOS BOTONES IGUALES
-================================ */
-@media (min-width: 769px) {
-  [data-theme="light"] .icon-btn {
-    background: rgba(96, 81, 155, 0.08) !important;
-    border: 1px solid rgba(96, 81, 155, 0.15) !important;
-    color: #60519b !important;
-  }
-
-  [data-theme="light"] .icon-btn svg {
-    color: #60519b !important;
-  }
-
-  [data-theme="light"] .icon-btn:hover {
-    background: rgba(96, 81, 155, 0.15) !important;
-    border-color: rgba(96, 81, 155, 0.25) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(96, 81, 155, 0.15) !important;
-  }
-}
-
-/* ================================
-   LOGO BUTTON - Clicable
-================================ */
-
-.logo-box-button {
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
-  color: white;
-  border-radius: 16px;
-  border: none;
-  font-size: 28px;
-  box-shadow: 
-    0 8px 20px rgba(96, 81, 155, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  padding: 0;
-}
-
-.logo-box-button svg {
-  width: 28px;
-  height: 28px;
-  position: relative;
-  z-index: 1;
-}
-
-.logo-box-button::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(45deg, #60519b, #8b7fc7, #60519b);
-  background-size: 200% 200%;
-  border-radius: 16px;
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 0.3s;
-  animation: logo-gradient 3s ease infinite;
-}
-
-@keyframes logo-gradient {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.logo-box-button:hover {
-  transform: scale(1.05) translateY(-2px);
-}
-
-.logo-box-button:active {
-  transform: scale(0.98) translateY(0);
-}
-
-.logo-box-button:hover::before {
-  opacity: 1;
-}
-
-/* Animación de clic */
-.logo-box-button:active svg {
-  transform: scale(0.9);
-}
-
-/* Responsive para logo button */
-@media (max-width: 1024px) {
-  .logo-box-button {
-    width: 56px;
-    height: 56px;
-    font-size: 26px;
-  }
-
-  .logo-box-button svg {
-    width: 26px;
-    height: 26px;
-  }
-}
-
-@media (max-width: 768px) {
-  .logo-box-button {
-    width: 52px;
-    height: 52px;
-    font-size: 24px;
-    border-radius: 14px;
-  }
-
-  .logo-box-button svg {
-    width: 24px;
-    height: 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .logo-box-button {
-    width: 48px;
-    height: 48px;
-    font-size: 22px;
-    border-radius: 12px;
-  }
-
-  .logo-box-button svg {
-    width: 22px;
-    height: 22px;
-  }
-}
-/* ================================
-   OCULTAR BADGES
-================================ */
-
-.position-badge {
-  display: none !important;
-}
-
-/* ================================
-   ANIMATIONS
-================================ */
-
-@keyframes header-slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.app-header {
-  animation: header-slide-down 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* ================================
-   RESPONSIVE
-================================ */
-
-@media (max-width: 1024px) {
-  .app-header {
-    padding: 18px 24px;
-  }
-
-  .logo-box {
-    width: 56px;
-    height: 56px;
-    font-size: 26px;
-  }
-
-  .logo-box svg {
-    width: 26px;
-    height: 26px;
-  }
-
-  .app-title {
-    font-size: 20px;
-  }
-
-  .icon-btn {
-    width: 42px;
-    height: 42px;
-  }
-
-  .icon-btn svg {
-    width: 19px;
-    height: 19px;
-  }
-}
-
-@media (max-width: 768px) {
-  .app-header {
-    padding: 16px 18px;
-  }
-
-  .header-left {
-    gap: 12px;
-  }
-
-  .logo-box {
-    width: 52px;
-    height: 52px;
-    font-size: 24px;
-    border-radius: 14px;
-  }
-
-  .logo-box svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .app-title {
-    font-size: 18px;
-  }
-
-  .app-sub {
-    font-size: 12px;
-  }
-
-  .header-right {
-    gap: 10px;
-  }
-
-  .icon-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-  }
-
-  .icon-btn svg {
-    width: 18px;
-    height: 18px;
-  }
-}
-
-@media (max-width: 480px) {
-  .app-header {
-    padding: 14px 12px;
-  }
-
-  .header-left {
-    gap: 10px;
-  }
-
-  .logo-box {
-    width: 48px;
-    height: 48px;
-    font-size: 22px;
-    border-radius: 12px;
-  }
-
-  .logo-box svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .app-title {
-    font-size: 16px;
-  }
-
-  .app-sub {
-    font-size: 11px;
-  }
-
-  .icon-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-  }
-
-  .icon-btn svg {
-    width: 17px;
-    height: 17px;
-  }
-}
-
-/* ================================
-   WORLD CUP BUTTON (Dorado/Oro) - MISMO TAMAÑO
-================================ */
-
-.icon-btn.worldcup-btn {
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-  border-color: transparent;
-  color: white;
-  position: relative;
-  overflow: hidden;
-}
-
-.icon-btn.worldcup-btn svg {
-  width: 20px;
-  height: 20px;
-}
-
-/* Efecto de brillo animado para destacar el Mundial */
-.icon-btn.worldcup-btn::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.3) 50%,
-    transparent 70%
-  );
-  animation: worldcup-shine 3s ease-in-out infinite;
-}
-
-@keyframes worldcup-shine {
-  0%, 100% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-  }
-  50% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
-  }
-}
-
-.icon-btn.worldcup-btn:hover {
-  background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
-  transform: translateY(-2px) scale(1.05) rotate(5deg);
-}
-
-.icon-btn.worldcup-btn:active {
-  transform: translateY(0) scale(0.98) rotate(0deg);
-}
-
-/* Pulso sutil para llamar la atención */
-.icon-btn.worldcup-btn {
-  animation: worldcup-pulse 2s ease-in-out infinite;
-}
-
-@keyframes worldcup-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
-  }
-}
-
-/* Al hacer hover, detener el pulso */
-.icon-btn.worldcup-btn:hover {
-  animation: none;
-}
-
-/* ================================
-   BOTTOM NAVIGATION BAR (Mobile Only)
-================================ */
-
-.bottom-nav {
+/* ══════════════════════════════
+   DESKTOP SIDEBAR
+══════════════════════════════ */
+.gs-sidebar {
   display: none;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 70px;
-  background: linear-gradient(135deg, #1e202c 0%, #31323e 100%);
-  border-top: 1px solid rgba(96, 81, 155, 0.2);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-  padding: 8px 12px 8px;
-  z-index: 1000;
-  align-items: center;
-  justify-content: space-around;
-  gap: 4px;
-}
-
-.bottom-nav::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, 
-    transparent,
-    #60519b,
-    #8b7fc7,
-    #60519b,
-    transparent
-  );
-  background-size: 200% 100%;
-  animation: bottom-shine 3s linear infinite;
-}
-
-@keyframes bottom-shine {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-.bottom-nav-btn {
-  flex: 1;
-  display: flex;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: var(--gs-surface);
+  border-right: 1px solid var(--gs-border);
+  box-shadow: var(--gs-shadow);
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
-  background: transparent;
-  border: none;
-  color: #bfc0d1;
-  cursor: pointer;
-  padding: 8px 4px;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  position: relative;
-  min-width: 0;
+  padding: 20px 0;
+  z-index: 200;
+  transition: background 0.3s, border-color 0.3s;
 }
 
-.bottom-nav-btn svg {
-  width: 24px;
-  height: 24px;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-}
-
-.bottom-nav-btn span {
-  font-size: 11px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-
-/* Estado Activo */
-.bottom-nav-btn.active {
-  color: #ffffff;
-  background: rgba(96, 81, 155, 0.2);
-}
-
-.bottom-nav-btn.active svg {
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 8px rgba(96, 81, 155, 0.6));
-}
-
-.bottom-nav-btn.active span {
-  color: #8b7fc7;
-  font-weight: 700;
-}
-
-/* Hover (para dispositivos táctiles modernos) */
-.bottom-nav-btn:active {
-  transform: scale(0.95);
-  background: rgba(96, 81, 155, 0.15);
-}
-
-/* Indicador visual de página activa */
-.bottom-nav-btn.active::before {
+.gs-sidebar::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 3px;
-  background: linear-gradient(90deg, #60519b, #8b7fc7);
-  border-radius: 0 0 3px 3px;
+  top: 15%; right: 0;
+  width: 2px; height: 70%;
+  background: linear-gradient(180deg, transparent, var(--gs-accent), transparent);
+  opacity: 0.2;
+  border-radius: 2px;
 }
 
-/* ================================
-   RESPONSIVE - Mostrar barra solo en móvil
-================================ */
+/* Logo */
+.gs-logo {
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--gs-accent), var(--gs-accent-2));
+  color: #fff;
+  margin-bottom: 28px;
+  box-shadow: 0 6px 20px rgba(124,110,230,0.35);
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+  position: relative; overflow: hidden;
+}
+.gs-logo::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+}
+.gs-logo:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 10px 28px rgba(124,110,230,0.5);
+}
+.gs-logo:active { transform: scale(0.96); }
 
+/* Nav items */
+.gs-nav {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%; padding: 0 12px;
+}
+
+.gs-nav-btn {
+  position: relative;
+  width: 48px; height: 48px;
+  border: none; border-radius: 14px;
+  background: transparent;
+  color: var(--gs-muted);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease;
+}
+.gs-nav-btn:hover {
+  background: var(--gs-hover-bg);
+  color: var(--gs-text);
+  transform: translateX(2px);
+}
+.gs-nav-btn.active {
+  background: var(--gs-active-bg);
+  color: var(--gs-accent);
+}
+.gs-nav-btn.active::before {
+  content: '';
+  position: absolute;
+  left: -12px; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 22px;
+  background: var(--gs-accent);
+  border-radius: 0 3px 3px 0;
+}
+
+/* Tooltip */
+.gs-tooltip {
+  position: absolute;
+  left: calc(100% + 14px);
+  top: 50%; transform: translateY(-50%);
+  background: var(--gs-text);
+  color: var(--gs-surface);
+  font-size: 12px; font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 9999;
+  animation: tooltip-in 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.gs-tooltip::before {
+  content: '';
+  position: absolute;
+  right: 100%; top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: var(--gs-text);
+}
+@keyframes tooltip-in {
+  from { opacity:0; transform: translateY(-50%) translateX(-4px); }
+  to   { opacity:1; transform: translateY(-50%) translateX(0); }
+}
+
+/* Bottom section */
+.gs-sidebar-bottom {
+  display: flex; flex-direction: column;
+  align-items: center;
+  gap: 4px; padding: 0 12px; width: 100%;
+}
+.gs-logout:hover {
+  background: rgba(221,68,68,0.1) !important;
+  color: #e55 !important;
+}
+
+/* Show sidebar on desktop, hide mobile elements */
+@media (min-width: 769px) {
+  .gs-sidebar { display: flex; }
+  .vega-root  { margin-left: var(--sidebar-w); }
+  .gs-mobile-header,
+  .gs-bottom-nav { display: none !important; }
+}
+
+
+/* ══════════════════════════════
+   MOBILE TOP HEADER
+══════════════════════════════ */
+.gs-mobile-header {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  padding: 0 20px;
+  background: var(--gs-bg);
+  border-bottom: none;
+  position: sticky;
+  top: 0; z-index: 100;
+  transition: background 0.3s;
+}
+
+/* User section: avatar + greeting */
+.gs-mobile-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gs-avatar {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gs-accent), var(--gs-accent-2));
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(124,110,230,0.3);
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.gs-avatar:hover { transform: scale(1.05); }
+.gs-avatar:active { transform: scale(0.97); }
+.gs-avatar img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.gs-avatar span {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.gs-greeting {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.gs-greeting-hey {
+  font-size: 12px;
+  color: var(--gs-muted);
+  font-weight: 500;
+}
+.gs-greeting-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--gs-text);
+  letter-spacing: -0.3px;
+}
+
+/* Right icons */
+.gs-mobile-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.gs-mobile-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--gs-border);
+  background: var(--gs-surface);
+  color: var(--gs-text);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.gs-mobile-btn:hover {
+  background: var(--gs-active-bg);
+  color: var(--gs-accent);
+  border-color: var(--gs-accent);
+}
+.gs-mobile-btn:active { transform: scale(0.93); }
+
+
+/* ══════════════════════════════
+   MOBILE BOTTOM NAV — floating pill
+══════════════════════════════ */
+.gs-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 18px;
+  left: 0; right: 0;
+  justify-content: center;
+  align-items: center;
+  z-index: 300;
+  pointer-events: none; /* let clicks pass through the wrapper */
+}
+
+/* The dark pill */
+.gs-bottom-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--pill-bg);
+  border-radius: 50px;
+  padding: 8px 12px;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.35),
+    0 2px 8px rgba(0,0,0,0.2);
+  pointer-events: all;
+}
+
+/* Each icon button inside pill */
+.gs-bottom-btn {
+  width: 46px; height: 46px;
+  border: none;
+  border-radius: 50px;
+  background: transparent;
+  color: var(--pill-icon);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  position: relative;
+}
+
+.gs-bottom-btn:active {
+  transform: scale(0.88);
+}
+
+/* Active state: white circle highlight */
+.gs-bottom-btn.active {
+  background: rgba(255,255,255,0.12);
+  color: var(--pill-active);
+}
+
+/* Small dot indicator below active icon */
+.gs-bottom-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px;
+  background: var(--gs-accent-2);
+  border-radius: 50%;
+}
+
+/* Show on mobile */
 @media (max-width: 768px) {
-  /* Ocultar botones de navegación en móvil EXCEPTO logout */
-  .app-header .header-right .desktop-only {
-    display: none;
-  }
+  .gs-mobile-header { display: flex; }
+  .gs-bottom-nav    { display: flex; }
 
-  /* Mantener visible el botón de logout */
-  .app-header .header-right {
-    display: flex;
-  }
-
-  /* Mostrar bottom nav */
-  .bottom-nav {
-    display: flex;
-  }
-
-  /* Ajustar padding inferior del body para que no se superponga */
-  body {
-    padding-bottom: 70px;
-  }
-
-  /* Ajustar header superior */
-  .app-header {
-    padding: 14px 16px;
-  }
-
-  .logo-box-button {
-    width: 48px;
-    height: 48px;
-  }
-
-  .logo-box-button svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .app-title {
-    font-size: 18px;
-  }
-
-  .app-sub {
-    font-size: 12px;
-  }
-
-  .icon-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-  .icon-btn svg {
-    width: 18px;
-    height: 18px;
-  }
+  body { padding-bottom: 96px; } /* space for floating pill */
 }
 
 @media (max-width: 480px) {
-  .bottom-nav {
-    height: 65px;
-    padding: 6px 8px 6px;
-  }
+  .gs-mobile-header { height: 64px; padding: 0 16px; }
 
-  .bottom-nav-btn {
-    padding: 6px 2px;
-    gap: 3px;
-  }
+  .gs-avatar { width: 42px; height: 42px; }
+  .gs-avatar span { font-size: 14px; }
+  .gs-greeting-name { font-size: 16px; }
 
-  .bottom-nav-btn svg {
-    width: 22px;
-    height: 22px;
-  }
+  .gs-bottom-pill { padding: 6px 8px; gap: 2px; }
+  .gs-bottom-btn  { width: 42px; height: 42px; }
+  .gs-bottom-btn svg { width: 20px; height: 20px; }
 
-  .bottom-nav-btn span {
-    font-size: 10px;
-  }
-
-  body {
-    padding-bottom: 65px;
-  }
-
-  /* Header más compacto */
-  .app-header {
-    padding: 12px 12px;
-  }
-
-  .logo-box-button {
-    width: 44px;
-    height: 44px;
-  }
-
-  .logo-box-button svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .app-title {
-    font-size: 16px;
-  }
-
-  .app-sub {
-    font-size: 11px;
-  }
-
-  .icon-btn {
-    width: 38px;
-    height: 38px;
-  }
-
-  .icon-btn svg {
-    width: 17px;
-    height: 17px;
-  }
+  body { padding-bottom: 88px; }
 }

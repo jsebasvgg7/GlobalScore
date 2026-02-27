@@ -1,5 +1,8 @@
-import React from "react";
-import { Trophy, LogOut, User2, Award, Shield, Bell, Home, BarChart3, Moon, Sun, Settings } from "lucide-react";
+import React, { useState } from "react";
+import {
+  Trophy, LogOut, User2, Award, Shield, Bell,
+  Home, BarChart3, Moon, Sun, Settings, Globe
+} from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
@@ -9,187 +12,145 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const position = currentUser ? users.findIndex((u) => u.id === currentUser.id) + 1 : 0;
+  const [tooltipVisible, setTooltipVisible] = useState(null);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/");
   };
 
-  const handleHomeClick = () => {
-    navigate("/app");
-  };
-
-  const handleRankingClick = () => {
-    navigate("/ranking");
-  };
-
-  const handleAdminClick = () => {
-    navigate("/admin");
-  };
-
-  const handleProfileClick = () => {
-    navigate("/profile");
-  };
-
-  const handleNotificationsClick = () => {
-    navigate("/notifications");
-  };
-
-  const handleStatsClick = () => {
-    navigate("/stats");
-  };
-
-  const handleSettingsClick = () => {
-    navigate("/settings");
-  };
-
   const isActive = (path) => location.pathname === path;
+
+  const navItems = [
+    { path: "/app",      icon: Home,      label: "Inicio"  },
+    { path: "/ranking",  icon: Award,     label: "Ranking" },
+    { path: "/stats",    icon: BarChart3, label: "Stats"   },
+    { path: "/profile",  icon: User2,     label: "Perfil"  },
+    { path: "/settings", icon: Settings,  label: "Ajustes" },
+    ...(currentUser?.is_admin
+      ? [{ path: "/admin", icon: Shield, label: "Admin" }]
+      : []),
+  ];
+
+  const firstName = currentUser?.full_name?.split(" ")[0]
+    || currentUser?.username
+    || "Jugador";
+
+  const initials = firstName.slice(0, 2).toUpperCase();
 
   return (
     <>
-      {/* Header Superior */}
-      <header className="app-header">
-        <div className="header-left">
-          <button 
-            className="icon-btn logout-btn" 
-            onClick={handleLogout} 
-            aria-label="Cerrar sesión"
-            title="Cerrar Sesión"
-          >
-            <LogOut size={18} />
-          </button>
-        </div>
+      {/* ════════════════════════════
+          DESKTOP — Sidebar vertical
+      ════════════════════════════ */}
+      <aside className="gs-sidebar">
+        <button
+          className="gs-logo"
+          onClick={() => navigate("/app")}
+          aria-label="GlobalScore home"
+        >
+          <Globe size={22} />
+        </button>
 
-        <div className="header-center">
-          <h1 className="app-title" onClick={handleHomeClick} style={{ cursor: 'pointer' }}>
-            GlobalScore
-          </h1>
-        </div>
+        <nav className="gs-nav">
+          {navItems.map(({ path, icon: Icon, label }) => (
+            <button
+              key={path}
+              className={`gs-nav-btn ${isActive(path) ? "active" : ""}`}
+              onClick={() => navigate(path)}
+              aria-label={label}
+              onMouseEnter={() => setTooltipVisible(path)}
+              onMouseLeave={() => setTooltipVisible(null)}
+            >
+              <Icon size={20} />
+              {tooltipVisible === path && (
+                <span className="gs-tooltip">{label}</span>
+              )}
+            </button>
+          ))}
+        </nav>
 
-        <div className="header-right">
-          <button 
-            className="icon-btn theme-btn" 
+        <div className="gs-sidebar-bottom">
+          <button
+            className="gs-nav-btn"
             onClick={toggleTheme}
-            aria-label={theme === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
-            title={theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}
+            aria-label="Cambiar tema"
+            onMouseEnter={() => setTooltipVisible("theme")}
+            onMouseLeave={() => setTooltipVisible(null)}
           >
-            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+            {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+            {tooltipVisible === "theme" && (
+              <span className="gs-tooltip">
+                {theme === "light" ? "Modo oscuro" : "Modo claro"}
+              </span>
+            )}
           </button>
+          <button
+            className="gs-nav-btn gs-logout"
+            onClick={handleLogout}
+            aria-label="Cerrar sesión"
+            onMouseEnter={() => setTooltipVisible("logout")}
+            onMouseLeave={() => setTooltipVisible(null)}
+          >
+            <LogOut size={20} />
+            {tooltipVisible === "logout" && (
+              <span className="gs-tooltip">Cerrar sesión</span>
+            )}
+          </button>
+        </div>
+      </aside>
 
-          <button 
-            className="icon-btn notifications-btn" 
-            onClick={handleNotificationsClick} 
-            aria-label="Ver notificaciones"
-            title="Notificaciones"
+      {/* ════════════════════════════
+          MOBILE — Top Header
+      ════════════════════════════ */}
+      <header className="gs-mobile-header">
+        <div className="gs-mobile-user">
+          <button
+            className="gs-avatar"
+            onClick={() => navigate("/profile")}
+            aria-label="Ver perfil"
+          >
+            {currentUser?.avatar_url
+              ? <img src={currentUser.avatar_url} alt={firstName} />
+              : <span>{initials}</span>
+            }
+          </button>
+          <div className="gs-greeting">
+            <span className="gs-greeting-hey">Hey,</span>
+            <span className="gs-greeting-name">{firstName}</span>
+          </div>
+        </div>
+
+        <div className="gs-mobile-actions">
+          <button className="gs-mobile-btn" onClick={toggleTheme} aria-label="Cambiar tema">
+            {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
+          <button
+            className="gs-mobile-btn"
+            onClick={() => navigate("/notifications")}
+            aria-label="Notificaciones"
           >
             <Bell size={18} />
-          </button>
-
-          {/* NUEVO: Botón de Settings - Desktop */}
-          <button
-            className="icon-btn settings-btn desktop-only"
-            onClick={handleSettingsClick}
-            aria-label="Abrir ajustes"
-            title="Ajustes"
-          >
-            <Settings size={18} />
-          </button>
-          
-          <button 
-            className="icon-btn stats-btn desktop-only" 
-            onClick={handleStatsClick}
-            aria-label="Ver estadísticas"
-            title="Ver Estadísticas"
-          >
-            <BarChart3 size={18} />
-          </button>
-
-          {currentUser?.is_admin && (
-            <button 
-              className="icon-btn admin-btn desktop-only" 
-              onClick={handleAdminClick} 
-              aria-label="Panel de administración"
-              title="Panel de Administración"
-            >
-              <Shield size={18} />
-            </button>
-          )}
-
-          <button 
-            className="icon-btn ranking-btn desktop-only" 
-            onClick={handleRankingClick} 
-            aria-label="Ver ranking"
-            title="Ver Ranking Global"
-          >
-            <Award size={18} />
-          </button>
-
-          <button 
-            className="icon-btn profile-btn desktop-only" 
-            onClick={handleProfileClick} 
-            aria-label="Ver perfil"
-            title="Ver Perfil"
-          >
-            <User2 size={18} />
           </button>
         </div>
       </header>
 
-      {/* Bottom Navigation Bar */}
-      <nav className="bottom-nav">
-        <button 
-          className={`bottom-nav-btn ${isActive('/profile') ? 'active' : ''}`}
-          onClick={handleProfileClick}
-          aria-label="Perfil"
-        >
-          <User2 size={24} />
-        </button>
-
-        <button 
-          className={`bottom-nav-btn ${isActive('/ranking') ? 'active' : ''}`}
-          onClick={handleRankingClick}
-          aria-label="Ranking"
-        >
-          <Award size={24} />
-        </button>
-        
-        <button 
-          className={`bottom-nav-btn ${isActive('/app') ? 'active' : ''}`}
-          onClick={handleHomeClick}
-          aria-label="Inicio"
-        >
-          <Home size={24} />
-        </button>
-
-        
-        <button 
-          className={`bottom-nav-btn ${isActive('/stats') ? 'active' : ''}`}
-          onClick={handleStatsClick}
-          aria-label="Estadísticas"
-        >
-          <BarChart3 size={24} />
-        </button>
-
-
-        {currentUser?.is_admin && (
-          <button 
-            className={`bottom-nav-btn ${isActive('/admin') ? 'active' : ''}`}
-            onClick={handleAdminClick}
-            aria-label="Admin"
-          >
-            <Shield size={24} />
-          </button>
-        )}
-
-
-                <button 
-          className={`bottom-nav-btn ${isActive('/settings') ? 'active' : ''}`}
-          onClick={handleSettingsClick}
-          aria-label="Ajustes"
-        >
-          <Settings size={24} />
-        </button>
+      {/* ════════════════════════════
+          MOBILE — Bottom Nav (pill)
+      ════════════════════════════ */}
+      <nav className="gs-bottom-nav" aria-label="Navegación principal">
+        <div className="gs-bottom-pill">
+          {navItems.slice(0, 5).map(({ path, icon: Icon, label }) => (
+            <button
+              key={path}
+              className={`gs-bottom-btn ${isActive(path) ? "active" : ""}`}
+              onClick={() => navigate(path)}
+              aria-label={label}
+            >
+              <Icon size={22} />
+            </button>
+          ))}
+        </div>
       </nav>
     </>
   );
