@@ -132,7 +132,6 @@
   transform: translateY(0);
 }
 
-/* Estado activo para Sort */
 .sort-btn.active {
   background: var(--accent);
   border-color: var(--accent);
@@ -145,7 +144,7 @@
 }
 
 /* ===================================
-   MODAL SORT (Dropdown estilo imagen)
+   MODAL SORT (Dropdown)
 =================================== */
 
 .sort-modal-backdrop {
@@ -179,14 +178,8 @@
 }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .sort-modal-header {
@@ -213,7 +206,6 @@
   letter-spacing: 0.5px;
 }
 
-/* Asegurar contraste en modo oscuro para el modal de ordenar */
 [data-theme="dark"] .sort-modal {
   background: var(--card) !important;
   border-color: rgba(255,255,255,0.06) !important;
@@ -232,13 +224,11 @@
   color: #ffffff !important;
 }
 
-/* Icono y fondo de icono ligeramente aclarados para destacar */
 [data-theme="dark"] .sort-modal .sort-option-icon {
   background: rgba(255, 255, 255, 0.06) !important;
   color: #ffffff !important;
 }
 
-/* Forzar color de SVGs dentro del modal */
 [data-theme="dark"] .sort-modal svg {
   color: #ffffff !important;
   stroke: #ffffff !important;
@@ -312,7 +302,7 @@
 }
 
 /* ===================================
-   FILTERS PANEL (Estilo imagen - Side Modal)
+   FILTERS PANEL (Side Modal)
 =================================== */
 
 .filters-modal-backdrop {
@@ -341,15 +331,10 @@
 }
 
 @keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
 }
 
-/* Header del modal */
 .filters-modal-header {
   padding: 20px 24px;
   border-bottom: 1px solid var(--border);
@@ -419,14 +404,12 @@
   transform: rotate(90deg);
 }
 
-/* Body scrollable */
 .filters-modal-body {
   flex: 1;
   overflow-y: auto;
   padding: 24px;
 }
 
-/* Categoría de filtros */
 .filter-category {
   margin-bottom: 28px;
 }
@@ -468,7 +451,6 @@
   text-decoration: underline;
 }
 
-/* Pills de filtros */
 .filter-pills {
   display: flex;
   flex-wrap: wrap;
@@ -514,19 +496,13 @@
 }
 
 @keyframes popIn {
-  0% {
-    transform: scale(0.8);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
 /* ===================================
-   ACTIVE FILTER BAR (Chips superiores)
+   ACTIVE FILTER BAR
 =================================== */
 
 .active-filter-bar {
@@ -695,12 +671,8 @@
     justify-content: flex-start;
   }
 
-  /* Separar la palabra 'disponibles' para poder ocultarla en móvil */
   .matches-badge-text {
-    display: inline;
-    margin-left: 6px;
-    font-weight: 600;
-    color: var(--text-secondary);
+    display: none;
   }
 
   .sort-btn,
@@ -715,18 +687,13 @@
     height: 15px;
   }
 
+  /* Filter panel: ocupa toda la pantalla de arriba a abajo */
   .filters-modal {
-    /* Móvil: panel de filtros ocupa 75% del ancho y queda justo encima del bottom-nav */
-    width: 75vw;
-    max-width: 75vw;
+    width: 80vw;
+    max-width: 80vw;
     right: 0;
     top: 0;
-    bottom: 70px; /* ajustado para alinearse con bottom-nav */
-  }
-
-  /* Ocultar la palabra 'disponibles' en móvil para una cabecera compacta */
-  .matches-badge-text {
-    display: none;
+    bottom: 0;
   }
 
   .filters-modal-header {
@@ -767,11 +734,11 @@
     font-size: 12px;
   }
 
-  /* Sort modal mobile */
+  /* Sort modal: sheet desde abajo, ocupa lo que necesita */
   .sort-modal {
     position: fixed;
     top: auto;
-    bottom: 70px; /* alineado con bottom-nav */
+    bottom: 0;
     left: 0;
     right: 0;
     border-radius: 20px 20px 0 0;
@@ -779,12 +746,8 @@
   }
 
   @keyframes slideUp {
-    from {
-      transform: translateY(100%);
-    }
-    to {
-      transform: translateY(0);
-    }
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
   }
 }
 
@@ -824,15 +787,6 @@
 
   .filters-modal-header {
     padding: 14px 16px;
-  }
-
-  /* Ajuste para pantallas muy pequeñas: bottom-nav más pequeño (65px) */
-  .filters-modal {
-    bottom: 65px;
-  }
-
-  .sort-modal {
-    bottom: 65px;
   }
 
   .filters-modal-title h3 {
