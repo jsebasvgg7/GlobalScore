@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Trophy, LogIn } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
@@ -11,19 +11,12 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const isMobile = () => window.innerWidth <= 640;
-  const [showWelcome, setShowWelcome] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(() => isMobile());
   const [waveUp, setWaveUp] = useState(false);
 
-  useEffect(() => {
-    if (isMobile() /*&& !localStorage.getItem(WELCOME_KEY)*/) {
-      setShowWelcome(true);
-    }
-  }, []);
-
-  const handleContinue = () => {
+const handleContinue = () => {
     setWaveUp(true);
     setTimeout(() => {
-      localStorage.setItem(WELCOME_KEY, "1");
       setShowWelcome(false);
       setWaveUp(false);
     }, 600);
