@@ -50,7 +50,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           onClick={() => navigate("/app")}
           aria-label="GlobalScore home"
         >
-          <Globe size={22} />
+          <Trophy size={22} />
         </button>
 
         <nav className="gs-nav">

@@ -16,78 +16,55 @@ export default function AdminModal({ onAdd, onClose }) {
     time: "",
     deadLine: "",
     deadLine_time: "",
-    is_knockout: false // ⚡ NUEVO CAMPO
+    is_knockout: false,
   });
   const [sending, setSending] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
-    // Manejar checkbox separadamente
-    if (type === 'checkbox') {
+    if (type === "checkbox") {
       setForm({ ...form, [name]: checked });
       return;
     }
-    
     setForm({ ...form, [name]: value });
-    
-    // Auto-generar las URLs de logos cuando se ingresen los nombres de equipos
-    if (name === 'home_team' && value && form.league) {
+
+    if (name === "home_team" && value && form.league) {
       const logoUrl = getLogoUrlByTeamName(supabase, value, form.league);
-      if (logoUrl) {
-        setForm(prev => ({ ...prev, home_team_logo_url: logoUrl }));
-      }
+      if (logoUrl) setForm((p) => ({ ...p, home_team_logo_url: logoUrl }));
     }
-    
-    if (name === 'away_team' && value && form.league) {
+    if (name === "away_team" && value && form.league) {
       const logoUrl = getLogoUrlByTeamName(supabase, value, form.league);
-      if (logoUrl) {
-        setForm(prev => ({ ...prev, away_team_logo_url: logoUrl }));
-      }
+      if (logoUrl) setForm((p) => ({ ...p, away_team_logo_url: logoUrl }));
     }
-    
-    // Si cambia la liga, recalcular ambos logos de equipos Y el logo de la liga
-    if (name === 'league' && value) {
-      // Logo de la liga
+    if (name === "league" && value) {
       const leagueLogoUrl = getLeagueLogoUrlDirect(value);
-      if (leagueLogoUrl) {
-        setForm(prev => ({ ...prev, league_logo_url: leagueLogoUrl }));
-      }
-      
-      // Logos de equipos
+      if (leagueLogoUrl) setForm((p) => ({ ...p, league_logo_url: leagueLogoUrl }));
       if (form.home_team) {
-        const homeLogo = getLogoUrlByTeamName(supabase, form.home_team, value);
-        if (homeLogo) setForm(prev => ({ ...prev, home_team_logo_url: homeLogo }));
+        const hl = getLogoUrlByTeamName(supabase, form.home_team, value);
+        if (hl) setForm((p) => ({ ...p, home_team_logo_url: hl }));
       }
       if (form.away_team) {
-        const awayLogo = getLogoUrlByTeamName(supabase, form.away_team, value);
-        if (awayLogo) setForm(prev => ({ ...prev, away_team_logo_url: awayLogo }));
+        const al = getLogoUrlByTeamName(supabase, form.away_team, value);
+        if (al) setForm((p) => ({ ...p, away_team_logo_url: al }));
       }
     }
   };
 
   const sendPushNotification = async (matchData) => {
     try {
-      // Enviar notificación push a través de Edge Function
-      const { error } = await supabase.functions.invoke('send-push', {
+      await supabase.functions.invoke("send-push", {
         body: {
           matchId: matchData.id,
-          title: '🔥 ¡Nuevo partido disponible!',
+          title: "🔥 ¡Nuevo partido disponible!",
           body: `${matchData.home_team} vs ${matchData.away_team} - ${matchData.league}`,
           url: `/matches/${matchData.id}`,
           league: matchData.league,
           date: matchData.date,
-          time: matchData.time
-        }
+          time: matchData.time,
+        },
       });
-
-      if (error) {
-        console.error('Error enviando notificación push:', error);
-      } else {
-        console.log('✅ Notificación push enviada exitosamente');
-      }
     } catch (error) {
-      console.error('Error en sendPushNotification:', error);
+      console.error("Error en sendPushNotification:", error);
     }
   };
 
@@ -96,14 +73,9 @@ export default function AdminModal({ onAdd, onClose }) {
       alert("Todos los campos son obligatorios");
       return;
     }
-
     setSending(true);
-
     try {
-      // Combinar fecha y hora del deadline en formato ISO
       const deadlineISO = `${form.deadLine}T${form.deadLine_time}:00`;
-
-      // Generar URLs de logos automáticamente
       const homeLogoUrl = getLogoUrlByTeamName(supabase, form.home_team, form.league);
       const awayLogoUrl = getLogoUrlByTeamName(supabase, form.away_team, form.league);
       const leagueLogoUrl = getLeagueLogoUrlDirect(form.league);
@@ -122,246 +94,234 @@ export default function AdminModal({ onAdd, onClose }) {
         time: form.time,
         deadline: deadlineISO,
         status: "pending",
-        is_knockout: form.is_knockout // ⚡ NUEVO CAMPO
+        is_knockout: form.is_knockout,
       };
 
-      // Agregar el partido
       onAdd(matchData);
-
-      // Enviar notificación push (sin esperar)
       sendPushNotification(matchData);
-
       onClose();
     } catch (error) {
-      console.error('Error al crear partido:', error);
-      alert('Error al crear el partido');
+      console.error("Error al crear partido:", error);
+      alert("Error al crear el partido");
     } finally {
       setSending(false);
     }
   };
 
   return (
-    <div className="modal-backdrop-premium">
-      <div className="modal-premium">
-        {/* Header con gradiente */}
-        <div className="modal-header-premium">
-          <div className="modal-title-section">
-            <div className="modal-icon-wrapper">
-              <Plus size={20} />
-            </div>
-            <div>
-              <h2 className="modal-title-premium">Agregar Nuevo Partido</h2>
-              <p className="modal-subtitle-premium">Completa la información del partido</p>
-            </div>
+    <div className="am2-backdrop">
+      <div className="am2-shell">
+
+        {/* ── Header ── */}
+        <div className="am2-header">
+          <div className="am2-header-icon">
+            <Plus size={18} />
           </div>
-          <button onClick={onClose} className="modal-close-btn">
-            <X size={20} />
+          <div className="am2-header-text">
+            <h2>Agregar Partido</h2>
+            <p>Completa la información del partido</p>
+          </div>
+          <button className="am2-close" onClick={onClose} aria-label="Cerrar">
+            <X size={18} />
           </button>
         </div>
 
-        {/* Formulario con diseño mejorado */}
-        <div className="modal-body-premium">
-          {/* ID del partido */}
-          <div className="form-group-premium">
-            <label className="form-label-premium">
-              <Zap size={14} />
-              <span>ID del Partido</span>
-              <span className="required">*</span>
-            </label>
-            <input 
-              className="form-input-premium" 
-              name="id" 
-              placeholder="Ej: match-001" 
-              value={form.id}
-              onChange={handleChange}
-            />
-            <span className="form-hint">Identificador único del partido</span>
-          </div>
+        {/* ── Body ── */}
+        <div className="am2-body">
 
-          {/* Liga */}
-          <div className="form-group-premium">
-            <label className="form-label-premium">
-              <Shield size={14} />
-              <span>Liga o Competición</span>
-              <span className="required">*</span>
-            </label>
-            <input 
-              className="form-input-premium" 
-              name="league" 
-              placeholder="Ej: Premier League, La Liga, Champions League" 
-              value={form.league}
-              onChange={handleChange}
-            />
-            <span className="form-hint">Los logos se asignarán automáticamente según la liga</span>
-          </div>
-
-          {/* ⚡ NUEVO: Checkbox Knockout */}
-          <div className="form-group-premium">
-            <label className="form-label-premium checkbox-label">
-              <input 
-                type="checkbox"
-                name="is_knockout"
-                checked={form.is_knockout}
+          {/* ID + Liga */}
+          <div className="am2-row-2">
+            <div className="am2-field">
+              <label className="am2-label">
+                <Zap size={12} />
+                ID del Partido <span className="am2-req">*</span>
+              </label>
+              <input
+                className="am2-input"
+                name="id"
+                placeholder="match-001"
+                value={form.id}
                 onChange={handleChange}
-                className="knockout-checkbox"
               />
-              <span className="knockout-label">
-                ⚡ Partido de Eliminatoria (Knockout)
-              </span>
-            </label>
-            <span className="form-hint">
-              Activa esto para copas/eliminatorias donde se puede seleccionar quién pasa (+2 pts)
-            </span>
+              <span className="am2-hint">Identificador único</span>
+            </div>
+
+            <div className="am2-field">
+              <label className="am2-label">
+                <Shield size={12} />
+                Liga <span className="am2-req">*</span>
+              </label>
+              <input
+                className="am2-input"
+                name="league"
+                placeholder="Premier League"
+                value={form.league}
+                onChange={handleChange}
+              />
+              <span className="am2-hint">Logo asignado automáticamente</span>
+            </div>
           </div>
 
-          {/* Vista previa del logo de la liga */}
+          {/* Knockout toggle */}
+          <label className="am2-knockout-toggle">
+            <input
+              type="checkbox"
+              name="is_knockout"
+              checked={form.is_knockout}
+              onChange={handleChange}
+              className="am2-checkbox"
+            />
+            <span className="am2-knockout-track">
+              <span className="am2-knockout-thumb" />
+            </span>
+            <span className="am2-knockout-label">
+              ⚡ Partido de Eliminatoria
+              <span className="am2-knockout-sub">
+                Activa si se selecciona quién pasa (+2 pts)
+              </span>
+            </span>
+          </label>
+
+          {/* Logo preview liga */}
           {form.league && form.league_logo_url && (
-            <div className="logo-preview-section">
-              <div className="logo-preview-item">
-                <span className="logo-preview-label">Logo de la Liga:</span>
-                <img src={form.league_logo_url} alt="League" className="logo-preview-img" />
-              </div>
+            <div className="am2-logo-preview-row">
+              <span className="am2-logo-preview-label">Liga:</span>
+              <img src={form.league_logo_url} alt="League" className="am2-logo-img" />
             </div>
           )}
 
-          {/* Equipos en grid */}
-          <div className="teams-grid-premium">
-            <div className="form-group-premium">
-              <label className="form-label-premium">
-                <Home size={14} />
-                <span>Equipo Local</span>
-                <span className="required">*</span>
+          {/* Equipos */}
+          <div className="am2-row-2">
+            <div className="am2-field">
+              <label className="am2-label">
+                <Home size={12} />
+                Equipo Local <span className="am2-req">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="home_team" 
-                placeholder="MUN" 
+              <input
+                className="am2-input"
+                name="home_team"
+                placeholder="MUN"
                 value={form.home_team}
                 onChange={handleChange}
               />
-              <span className="form-hint">Usa código de 3 letras (MUN, BAR, RMA)</span>
+              <span className="am2-hint">Código 3 letras (MUN, BAR…)</span>
             </div>
 
-            <div className="form-group-premium">
-              <label className="form-label-premium">
-                <Plane size={14} />
-                <span>Equipo Visitante</span>
-                <span className="required">*</span>
+            <div className="am2-field">
+              <label className="am2-label">
+                <Plane size={12} />
+                Equipo Visitante <span className="am2-req">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="away_team" 
-                placeholder="LIV" 
+              <input
+                className="am2-input"
+                name="away_team"
+                placeholder="LIV"
                 value={form.away_team}
                 onChange={handleChange}
               />
-              <span className="form-hint">Usa código de 3 letras (LIV, ARS, CHE)</span>
+              <span className="am2-hint">Código 3 letras (LIV, ARS…)</span>
             </div>
           </div>
 
-          {/* Vista previa de logos */}
+          {/* Logo preview equipos */}
           {form.home_team && form.away_team && form.league && (
-            <div className="logo-preview-section">
-              <div className="logo-preview-item">
-                <span className="logo-preview-label">Logo Local:</span>
-                {form.home_team_logo_url ? (
-                  <img src={form.home_team_logo_url} alt="Home" className="logo-preview-img" />
-                ) : (
-                  <span className="logo-preview-emoji">{form.home_team_logo}</span>
-                )}
+            <div className="am2-logo-preview-row am2-logo-preview-row--teams">
+              <div className="am2-logo-item">
+                <span className="am2-logo-preview-label">Local</span>
+                {form.home_team_logo_url
+                  ? <img src={form.home_team_logo_url} alt="Home" className="am2-logo-img" />
+                  : <span className="am2-logo-emoji">{form.home_team_logo}</span>}
               </div>
-              <div className="logo-preview-item">
-                <span className="logo-preview-label">Logo Visitante:</span>
-                {form.away_team_logo_url ? (
-                  <img src={form.away_team_logo_url} alt="Away" className="logo-preview-img" />
-                ) : (
-                  <span className="logo-preview-emoji">{form.away_team_logo}</span>
-                )}
+              <div className="am2-logo-vs">VS</div>
+              <div className="am2-logo-item">
+                <span className="am2-logo-preview-label">Visitante</span>
+                {form.away_team_logo_url
+                  ? <img src={form.away_team_logo_url} alt="Away" className="am2-logo-img" />
+                  : <span className="am2-logo-emoji">{form.away_team_logo}</span>}
               </div>
             </div>
           )}
 
-          {/* Fecha y hora del partido */}
-          <div className="datetime-grid-premium">
-            <div className="form-group-premium">
-              <label className="form-label-premium">
-                <Calendar size={14} />
-                <span>Fecha del Partido</span>
-                <span className="required">*</span>
+          {/* Sección: Fecha del partido */}
+          <div className="am2-section-title">
+            <Calendar size={13} />
+            Fecha del Partido
+          </div>
+          <div className="am2-row-2">
+            <div className="am2-field">
+              <label className="am2-label">
+                Fecha <span className="am2-req">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="date" 
-                type="date" 
+              <input
+                className="am2-input"
+                name="date"
+                type="date"
                 value={form.date}
                 onChange={handleChange}
               />
             </div>
-
-            <div className="form-group-premium">
-              <label className="form-label-premium">
-                <Clock size={14} />
-                <span>Hora del Partido</span>
-                <span className="required">*</span>
+            <div className="am2-field">
+              <label className="am2-label">
+                <Clock size={12} />
+                Hora <span className="am2-req">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="time" 
-                type="time" 
+              <input
+                className="am2-input"
+                name="time"
+                type="time"
                 value={form.time}
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          {/* Fecha límite para predicciones */}
-          <div className="datetime-grid-premium">
-            <div className="form-group-premium">
-              <label className="form-label-premium">
-                <Calendar size={14} />
-                <span>Fecha Límite Predicciones</span>
-                <span className="required">*</span>
+          {/* Sección: Límite predicciones */}
+          <div className="am2-section-title">
+            <Clock size={13} />
+            Límite de Predicciones
+          </div>
+          <div className="am2-row-2">
+            <div className="am2-field">
+              <label className="am2-label">
+                Fecha Límite <span className="am2-req">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="deadLine" 
-                type="date" 
+              <input
+                className="am2-input"
+                name="deadLine"
+                type="date"
                 value={form.deadLine}
                 onChange={handleChange}
               />
             </div>
-
-            <div className="form-group-premium">
-              <label className="form-label-premium">
-                <Clock size={14} />
-                <span>Hora Límite Predicciones</span>
-                <span className="required">*</span>
+            <div className="am2-field">
+              <label className="am2-label">
+                Hora Límite <span className="am2-req">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="deadLine_time" 
-                type="time" 
+              <input
+                className="am2-input"
+                name="deadLine_time"
+                type="time"
                 value={form.deadLine_time}
                 onChange={handleChange}
               />
             </div>
           </div>
-
-          <div className="form-hint" style={{ marginTop: '-10px', marginBottom: '10px' }}>
+          <span className="am2-hint" style={{ marginTop: '-8px', display: 'block' }}>
             Fecha y hora hasta la cual se pueden hacer predicciones
-          </div>
+          </span>
         </div>
 
-        {/* Footer con botones */}
-        <div className="modal-footer-premium">
-          <button className="modal-btn-premium secondary" onClick={onClose} disabled={sending}>
+        {/* ── Footer ── */}
+        <div className="am2-footer">
+          <button className="am2-btn am2-btn--cancel" onClick={onClose} disabled={sending}>
             Cancelar
           </button>
-          <button className="modal-btn-premium primary" onClick={submit} disabled={sending}>
-            <Plus size={18} />
-            <span>{sending ? 'Enviando...' : 'Agregar Partido'}</span>
+          <button className="am2-btn am2-btn--submit" onClick={submit} disabled={sending}>
+            <Plus size={15} />
+            {sending ? "Enviando…" : "Agregar Partido"}
           </button>
         </div>
+
       </div>
     </div>
   );
