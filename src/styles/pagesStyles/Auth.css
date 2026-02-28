@@ -506,6 +506,7 @@
   .auth-right-panel h3 { font-size: 22px; }
   .auth-content { padding: 44px 36px; }
 }
+
 /* ===================================
    DARK MODE
 =================================== */
@@ -585,7 +586,7 @@
 
 /* ============================================================
    PANTALLA DE BIENVENIDA — Solo móvil, primera vez
-   Diseño: fondo blanco, ícono grande centrado, texto + botón
+   (SIN CAMBIOS)
 ============================================================ */
 
 .welcome-screen {
@@ -608,7 +609,6 @@
   to   { opacity: 1; }
 }
 
-/* Salida: fade + slide down */
 .welcome-screen.wave-exit {
   animation: wsExit 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
@@ -618,7 +618,6 @@
   100% { opacity: 0; transform: translateY(40px) scale(0.97); }
 }
 
-/* ── Punticos superiores ── */
 .welcome-dots-row {
   display: flex;
   gap: 5px;
@@ -638,7 +637,6 @@
   background: #7c6bb8;
 }
 
-/* ── Hero: ícono grande ── */
 .welcome-hero {
   position: relative;
   display: flex;
@@ -648,7 +646,6 @@
   width: 100%;
 }
 
-/* Fondo blob detrás del ícono */
 .welcome-icon-bg {
   position: relative;
   width: 200px; height: 200px;
@@ -668,7 +665,6 @@
   50%       { transform: translateY(-10px); }
 }
 
-/* Círculo interior con gradiente púrpura */
 .welcome-icon-ring {
   width: 130px; height: 130px;
   border-radius: 50%;
@@ -681,7 +677,6 @@
     inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
-/* Partículas decorativas */
 .welcome-particle {
   position: absolute;
   border-radius: 50%;
@@ -715,7 +710,6 @@
   66%       { transform: translate(-4px, 5px) scale(0.9); }
 }
 
-/* ── Texto y botón ── */
 .welcome-body {
   width: 100%;
   display: flex;
@@ -745,7 +739,6 @@
   animation: fadeUp 0.5s ease 0.2s both;
 }
 
-/* Botón "Entrar" — estilo pill oscuro como la referencia */
 .welcome-enter-btn {
   width: 100%;
   max-width: 280px;
@@ -799,140 +792,23 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Ocultar en desktop ── */
 @media (min-width: 641px) {
   .welcome-screen { display: none !important; }
 }
 
 /* ============================================================
-   LOGIN MÓVIL — ola púrpura superior
-
-/* ============================================================
-   LOGIN MÓVIL — diseño limpio con ola superior
-   Estructura:
-   • .auth-content = columna full height, bg blanco
-   • .auth-mobile-wave = bloque púrpura con ola en la base
-   • .auth-brand dentro de la ola (blanco)
-   • .auth-card debajo, con padding normal
+   MOBILE AUTH — Figma Design
+   Estructura exacta del diseño:
+   • Blob circular púrpura en la esquina superior derecha
+   • Título grande a la izquierda
+   • Subtítulo con link coloreado
+   • Inputs con bordes redondeados, bg blanco, sombra suave
+   • Botón pill púrpura con icono a la derecha
+   • Iconos sociales en fila (solo Login)
+   • Back arrow en Register/Forgot
 ============================================================ */
-@media (max-width: 640px) {
 
-  /* Wrapper: fondo blanco, sin padding */
-  .auth-wrapper {
-    padding: 0;
-    background: #ffffff;
-    align-items: stretch;
-    min-height: 100vh;
-  }
-
-  .auth-wrapper::before,
-  .auth-wrapper::after { display: none; }
-
-  /* Container: columna full screen */
-  .auth-card-container {
-    flex-direction: column;
-    border-radius: 0;
-    box-shadow: none;
-    min-height: 100vh;
-    width: 100%;
-    max-width: 100%;
-    background: #ffffff;
-  }
-
-  /* Ocultar panel derecho */
-  .auth-right-panel { display: none !important; }
-
-  /* Columna principal: sin padding propio */
-  .auth-content {
-    flex: 1;
-    padding: 0;
-    justify-content: flex-start;
-    align-items: stretch;
-    background: #ffffff;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* Eliminar el pseudo ::before antiguo */
-  .auth-content::before { display: none !important; }
-
-  /* Brand: dentro de la ola, centrado */
-  .auth-brand {
-    position: static;
-    transform: none;
-    justify-content: center;
-    margin: 0;
-    padding: 0 0 28px 0;
-    z-index: 2;
-  }
-
-  .auth-brand-name {
-    color: #ffffff;
-    font-size: 20px;
-  }
-
-  .auth-brand-icon {
-    background: rgba(255,255,255,0.2);
-    box-shadow: none;
-    width: 38px;
-    height: 38px;
-  }
-
-  /* Card: ocupa el resto, padding generoso */
-  .auth-card {
-    max-width: 100%;
-    width: 100%;
-    padding: 32px 28px 48px;
-    flex: 1;
-    align-items: stretch;
-  }
-
-  .auth-card h2 {
-    font-size: 24px;
-    text-align: left;
-  }
-
-  .auth-card > p {
-    text-align: left;
-    margin-bottom: 20px;
-  }
-
-  .auth-divider { margin-bottom: 16px; }
-
-  /* Mostrar link de registro en móvil */
-  .auth-alt { display: flex; }
-}
-
-/* ── Nueva clase: bloque ola superior ── */
-/* Se añade via JSX envolviendo brand en .auth-mobile-wave */
-.auth-mobile-wave {
-  width: 100%;
-  background: linear-gradient(145deg, #8b7fc7 0%, #5a4a9b 50%, #3d2e7c 100%);
-  padding: 52px 28px 0;
-  position: relative;
-  display: none; /* solo visible en móvil */
-}
-
-/* La ola SVG blanca en la parte baja */
-.auth-mobile-wave-svg {
-  display: block;
-  width: 100%;
-  margin-bottom: -2px;
-}
-
-@media (max-width: 640px) {
-  .auth-mobile-wave { display: block; }
-}
-
-@media (max-width: 380px) {
-  .auth-card { padding: 28px 20px 40px; }
-  .auth-card h2 { font-size: 22px; }
-  .auth-mobile-wave { padding: 44px 20px 0; }
-}
-
-/* ── Desktop/Mobile visibility helpers ── */
-
-/* En desktop: ocultar ola y mostrar brand/título normales */
+/* ── Desktop visibility helpers (sin cambios) ── */
 .auth-mobile-wave       { display: none; }
 .auth-brand-desktop     { display: flex; }
 .auth-title-desktop     { display: block; }
@@ -940,10 +816,346 @@
 .auth-divider-desktop   { display: flex; }
 
 @media (max-width: 640px) {
-  /* Mostrar ola, ocultar elementos duplicados de desktop */
-  .auth-mobile-wave       { display: block; }
+
+  /* ── Reset base ── */
+  .auth-wrapper {
+    padding: 0;
+    background: #f5f5f7;
+    align-items: stretch;
+    min-height: 100vh;
+  }
+
+  .auth-wrapper::before,
+  .auth-wrapper::after { display: none; }
+
+  .auth-card-container {
+    flex-direction: column;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
+    background: #f5f5f7;
+  }
+
+  /* Ocultar panel derecho y wave antigua */
+  .auth-right-panel   { display: none !important; }
+  .auth-mobile-wave   { display: none !important; }
+
+  /* ── Columna principal ── */
+  .auth-content {
+    flex: 1;
+    padding: 0;
+    justify-content: flex-start;
+    align-items: stretch;
+    background: #f5f5f7;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Register / Forgot / Reset: centrar verticalmente igual que Login */
+  .auth-content:has(.auth-card--register),
+  .auth-content:has(.auth-card--forgot) {
+    justify-content: center;
+  }
+
+  .auth-content::before { display: none !important; }
+
+  /* ── Blob decorativo superior derecho (como en el Figma) ── */
+  .auth-content::after {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%,
+      rgba(190, 170, 230, 0.55) 0%,
+      rgba(200, 185, 235, 0.35) 40%,
+      transparent 70%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Ocultar brand y elementos de desktop ── */
   .auth-brand-desktop     { display: none !important; }
   .auth-title-desktop     { display: none !important; }
   .auth-sub-desktop       { display: none !important; }
   .auth-divider-desktop   { display: none !important; }
+  .auth-brand             { display: none; }
+  .auth-divider           { display: none; }
+
+  /* ── Back button (Register / Forgot) ── */
+  .auth-back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    color: #1a1a2e;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    font-size: 18px;
+    text-decoration: none;
+  }
+
+  /* ── Card: el contenido principal ── */
+  .auth-card {
+    max-width: 100%;
+    width: 100%;
+    padding: 0 28px 48px;
+    flex: 1;
+    align-items: stretch;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Register / Forgot: no ocupar todo el espacio, solo lo necesario → centra con el padre */
+  .auth-card--register,
+  .auth-card--forgot {
+    flex: 0 0 auto;
+    padding: 28px 28px 40px;
+  }
+
+  /* ── Títulos ── */
+  .auth-card h2 {
+    font-size: 32px;
+    font-weight: 800;
+    text-align: left;
+    color: #1a1a2e;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.8px;
+    line-height: 1.15;
+  }
+
+  .auth-card > p {
+    text-align: left;
+    font-size: 13px;
+    color: #9ca3af;
+    margin: 0 0 32px 0;
+  }
+
+  /* Link inline del subtítulo (ej: "sign up", "sign in") */
+  .auth-card > p a,
+  .auth-subtitle-link {
+    color: #7c6bb8;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* ── Inputs ── */
+  .auth-card input {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1.5px solid #e8e8f0;
+    border-radius: 14px;
+    background: #ffffff;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    color: #1a1a2e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  .auth-card input:focus {
+    border-color: #7c6bb8;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(124, 107, 184, 0.15);
+  }
+
+  .auth-card input::placeholder {
+    color: #c0c4d0;
+    font-size: 13.5px;
+  }
+
+  /* ── Forgot password inline ── */
+  .forgot-password-link {
+    text-align: right;
+    margin-top: -6px;
+  }
+
+  .forgot-password-link a {
+    color: #7c6bb8;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  /* ── Botón principal: pill púrpura con icono ── */
+  .auth-card .btn {
+    width: auto;
+    align-self: flex-end;
+    padding: 15px 28px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #8b7fc7 0%, #6a56b8 100%);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.3px;
+    text-transform: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 8px 24px rgba(106, 86, 184, 0.45);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Icono dentro del botón (LogIn icon) */
+  .auth-card .btn svg,
+  .auth-card .btn .btn-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .auth-card .btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(106, 86, 184, 0.55);
+  }
+
+  .auth-card .btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 4px 14px rgba(106, 86, 184, 0.35);
+  }
+
+  .auth-card .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .auth-card .btn::after { display: none; }
+
+  /* ── Fila de iconos sociales (solo Login) ── */
+  .auth-social-row {
+    display: flex;
+    gap: 14px;
+    margin-top: 36px;
+    justify-content: center;
+    margin-bottom: 0;
+  }
+
+  .auth-social-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1.5px solid #e8e8f0;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: #4b5563;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  .auth-social-btn:hover {
+    border-color: #7c6bb8;
+    box-shadow: 0 4px 14px rgba(124, 107, 184, 0.2);
+    transform: translateY(-1px);
+  }
+
+  /* ── Alt link (¿No tienes cuenta?) ── */
+  .auth-alt {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    margin-top: 24px;
+    font-size: 13px;
+  }
+
+  .auth-alt span { color: #9ca3af; }
+
+  .auth-alt a {
+    color: #7c6bb8;
+    font-weight: 600;
+  }
+
+  /* ── Password strength ── */
+  .password-strength {
+    background: #fff;
+    border: 1.5px solid #e8e8f0;
+    border-radius: 10px;
+    font-size: 12px;
+    padding: 9px 14px;
+  }
+
+  /* ── Info box ── */
+  .info-box {
+    background: rgba(124, 107, 184, 0.06);
+    border: 1px solid rgba(124, 107, 184, 0.15);
+    border-radius: 12px;
+    font-size: 12px;
+    padding: 12px 16px;
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .auth-card {
+    padding: 0 20px 40px;
+  }
+
+  .auth-card h2 { font-size: 28px; }
+  .auth-card .btn { padding: 13px 24px; font-size: 13.5px; }
+}
+
+/* ============================================================
+   MOBILE — Espaciado superior dinámico según página
+   LoginPage: más espacio arriba (sin back btn)
+   RegisterPage / ForgotPasswordPage: menos (tiene back btn)
+============================================================ */
+@media (max-width: 640px) {
+  /* Login: espacio para el blob decorativo */
+  .auth-card--login {
+    padding-top: 130px;
+  }
+
+  /* Register / Forgot / Reset: sin padding extra, el justify-content: center lo centra */
+  .auth-card--register,
+  .auth-card--forgot {
+    padding-top: 28px;
+    padding-bottom: 28px;
+  }
+
+  /* Back button: fixed para no afectar el flujo del contenido */
+  .auth-back-btn {
+    position: fixed !important;
+    top: 20px;
+    left: 20px;
+  }
+
+  /* Mostrar títulos móvil, ocultar los de desktop */
+  .auth-title-mobile { display: block !important; }
+  .auth-sub-mobile   { display: block !important; }
+
+  /* Back button: visible solo en móvil */
+  .auth-back-btn { display: flex; }
+}
+
+/* Back button: oculto en desktop */
+@media (min-width: 641px) {
+  .auth-back-btn { display: none; }
 }

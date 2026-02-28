@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Trophy, KeyRound } from "lucide-react";
+import { Trophy, KeyRound, ChevronLeft, Send } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import LoadingDots from "../components/LoadingSpinner";
 import "../styles/pagesStyles/Auth.css";
@@ -37,21 +37,35 @@ export default function ForgotPasswordPage() {
 
         {/* ── IZQUIERDA: Formulario ── */}
         <div className="auth-content">
-          <div className="auth-brand">
+
+          {/* Brand desktop */}
+          <div className="auth-brand auth-brand-desktop">
             <div className="auth-brand-icon"><Trophy size={18} /></div>
             <div className="auth-brand-name">Globalscore</div>
           </div>
 
-          <div className="auth-card">
-            <h2>¿Olvidaste tu contraseña?</h2>
-            <p>Ingresa tu correo y te enviaremos un enlace de recuperación</p>
+          <div className="auth-card auth-card--forgot">
+            {/* Desktop header */}
+            <h2 className="auth-title-desktop">¿Olvidaste tu contraseña?</h2>
+            <p className="auth-sub-desktop">Ingresa tu correo y te enviaremos un enlace de recuperación</p>
+            <div className="auth-divider auth-divider-desktop"><span>ingresa tu correo registrado</span></div>
 
-            <div className="auth-divider"><span>ingresa tu correo registrado</span></div>
+            {/* Móvil header */}
+            <h2 className="auth-title-mobile" style={{ display: "none" }}>Forgot password</h2>
+            <p className="auth-sub-mobile" style={{ display: "none" }}>
+              ¿Recuerdas tu contraseña?{" "}
+              <Link to="/" className="auth-subtitle-link">sign in</Link>
+            </p>
 
             <form onSubmit={handleReset}>
-              <input type="email" placeholder="Correo electrónico" value={email}
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                disabled={loading} required />
+                disabled={loading}
+                required
+              />
 
               {message && <div className="success-message">{message}</div>}
               {error && <div className="error-message">{error}</div>}
@@ -59,17 +73,17 @@ export default function ForgotPasswordPage() {
               <button className="btn" type="submit" disabled={loading}>
                 {loading ? (
                   <span className="btn-loading"><LoadingDots /><span>Enviando...</span></span>
-                ) : "Enviar enlace"}
+                ) : (
+                  <>
+                    Enviar enlace
+                  </>
+                )}
               </button>
             </form>
-
-            <div className="auth-alt" style={{ display: "flex" }}>
-              <Link to="/">← Volver al inicio de sesión</Link>
-            </div>
           </div>
         </div>
 
-        {/* ── DERECHA: Panel púrpura ── */}
+        {/* ── DERECHA: Panel púrpura (desktop) ── */}
         <div className="auth-right-panel">
           <div className="auth-right-icon"><KeyRound size={52} color="white" strokeWidth={1.5} /></div>
           <h3>¡No te<br />preocupes!</h3>

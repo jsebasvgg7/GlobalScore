@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Trophy } from "lucide-react";
+import { Eye, EyeOff, Trophy, UserPlus, ChevronLeft } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import LoadingDots from "../components/LoadingSpinner";
 import "../styles/pagesStyles/Auth.css";
@@ -84,7 +84,7 @@ export default function RegisterPage() {
     <div className="auth-wrapper">
       <div className="auth-card-container">
 
-        {/* ── IZQUIERDA: Panel púrpura ── */}
+        {/* ── IZQUIERDA: Panel púrpura (desktop only) ── */}
         <div className="auth-right-panel">
           <div className="auth-right-icon"><Trophy size={52} color="white" strokeWidth={1.5} /></div>
           <h3>¡Bienvenido<br />de vuelta!</h3>
@@ -92,30 +92,39 @@ export default function RegisterPage() {
           <Link to="/" className="auth-right-btn">Iniciar Sesión</Link>
         </div>
 
-        {/* ── DERECHA: Formulario ── */}
+        {/* ── DERECHA (desktop) / ÚNICA (móvil): Formulario ── */}
         <div className="auth-content">
-          <div className="auth-brand">
+
+          {/* Brand desktop */}
+          <div className="auth-brand auth-brand-desktop">
             <div className="auth-brand-icon"><Trophy size={18} /></div>
             <div className="auth-brand-name">Globalscore</div>
           </div>
 
-          <div className="auth-card">
-            <h2>Crear Cuenta</h2>
-            <p>Regístrate y empieza a predecir</p>
+          <div className="auth-card auth-card--register">
+            {/* Desktop header */}
+            <h2 className="auth-title-desktop">Crear Cuenta</h2>
+            <p className="auth-sub-desktop">Regístrate y empieza a predecir</p>
+            <div className="auth-divider auth-divider-desktop"><span>usa tu correo para registrarte</span></div>
 
-            <div className="auth-divider"><span>usa tu correo para registrarte</span></div>
+            {/* Móvil header */}
+            <h2 className="auth-title-mobile" style={{ display: "none" }}>Create account</h2>
+            <p className="auth-sub-mobile" style={{ display: "none" }}>
+              ¿Ya tienes cuenta?{" "}
+              <Link to="/" className="auth-subtitle-link">sign in</Link>
+            </p>
 
             <form onSubmit={register}>
-              <input type="text" placeholder="Nombre completo" value={name}
+              <input type="text" placeholder="Name" value={name}
                 onChange={(e) => { setName(e.target.value); setError(""); }}
                 disabled={loading} autoComplete="name" required minLength={3} maxLength={50} />
 
-              <input type="email" placeholder="Correo electrónico" value={email}
+              <input type="email" placeholder="Email or phone" value={email}
                 onChange={(e) => { setEmail(e.target.value); setError(""); }}
                 disabled={loading} autoComplete="email" required />
 
               <div className="password-input-wrapper">
-                <input type={showPassword ? "text" : "password"} placeholder="Contraseña"
+                <input type={showPassword ? "text" : "password"} placeholder="Password"
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); setError(""); }}
                   disabled={loading} autoComplete="new-password" required minLength={6} />
@@ -136,20 +145,18 @@ export default function RegisterPage() {
 
               {error && <div className="error-message">{error}</div>}
               {success && <div className="success-message">{success}</div>}
+                          <div className="info-box">🔒 Tus datos están seguros y protegidos</div>
 
               <button className="btn" type="submit" disabled={loading || !name || !email || !password}>
                 {loading ? (
                   <span className="btn-loading"><LoadingDots /><span>Creando cuenta...</span></span>
-                ) : "Registrarse"}
+                ) : (
+                  <>
+                    Registrar
+                  </>
+                )}
               </button>
             </form>
-
-            <div className="info-box">🔒 Tus datos están seguros y protegidos</div>
-
-            <div className="auth-alt">
-              <span>¿Ya tienes cuenta?</span>
-              <Link to="/">Inicia sesión</Link>
-            </div>
           </div>
         </div>
 

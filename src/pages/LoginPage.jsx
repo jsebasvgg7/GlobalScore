@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Trophy } from "lucide-react";
+import { Eye, EyeOff, Trophy, LogIn } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import LoadingDots from "../components/LoadingSpinner";
 import "../styles/pagesStyles/Auth.css";
@@ -134,9 +134,8 @@ export default function LoginPage() {
         {/* Panel izquierdo / único en móvil */}
         <div className="auth-content">
 
-          {/* Ola púrpura — visible solo en móvil via CSS */}
+          {/* Ola púrpura — visible solo en móvil via CSS (legacy, kept for compat) */}
           <div className="auth-mobile-wave">
-            {/* Subtítulo y brand dentro de la ola */}
             <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, textAlign: "center", margin: "0 0 6px" }}>
               Ingresa los datos de tu cuenta
             </p>
@@ -147,7 +146,6 @@ export default function LoginPage() {
             <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, textAlign: "center", margin: "6px 0 0" }}>
               usa tu correo y contraseña
             </p>
-            {/* Ola SVG blanca */}
             <svg
               className="auth-mobile-wave-svg"
               viewBox="0 0 390 60"
@@ -164,11 +162,19 @@ export default function LoginPage() {
             <div className="auth-brand-name">Globalscore</div>
           </div>
 
-          <div className="auth-card">
-            {/* En desktop mostramos el h2 normal */}
+          {/* Card */}
+          <div className="auth-card auth-card--login">
+            {/* Título desktop */}
             <h2 className="auth-title-desktop">Iniciar Sesión</h2>
             <p className="auth-sub-desktop">Ingresa los datos de tu cuenta</p>
             <div className="auth-divider auth-divider-desktop"><span>usa tu correo y contraseña</span></div>
+
+            {/* Título móvil (visible solo en móvil vía CSS) */}
+            <h2 className="auth-title-mobile" style={{ display: "none" }}>Login</h2>
+            <p className="auth-sub-mobile" style={{ display: "none" }}>
+              ¿No tienes cuenta?{" "}
+              <Link to="/register" className="auth-subtitle-link">sign up</Link>
+            </p>
 
             <form onSubmit={login}>
               <input
@@ -193,16 +199,16 @@ export default function LoginPage() {
               </div>
               {error && <div className="error-message">{error}</div>}
               <button className="btn" type="submit" disabled={loading || !email || !password}>
-                {loading
-                  ? <span className="btn-loading"><LoadingDots /><span>Iniciando sesión...</span></span>
-                  : "Iniciar Sesión"}
+                {loading ? (
+                  <span className="btn-loading"><LoadingDots /><span>Iniciando sesión...</span></span>
+                ) : (
+                  <>
+                    Entrar
+                  </>
+                )}
               </button>
             </form>
 
-            <div className="auth-alt">
-              <span>¿No tienes cuenta?</span>
-              <Link to="/register">Regístrate</Link>
-            </div>
           </div>
         </div>
 
