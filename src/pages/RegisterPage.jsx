@@ -149,7 +149,7 @@ export default function RegisterPage() {
 
               <button className="btn" type="submit" disabled={loading || !name || !email || !password}>
                 {loading ? (
-                  <span className="btn-loading"><LoadingDots /><span>Creando cuenta...</span></span>
+                  <span className="btn-loading"><LoadingDots /><span>Creando...</span></span>
                 ) : (
                   <>
                     Registrar

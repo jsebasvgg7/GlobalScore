@@ -193,7 +193,7 @@ const handleContinue = () => {
               {error && <div className="error-message">{error}</div>}
               <button className="btn" type="submit" disabled={loading || !email || !password}>
                 {loading ? (
-                  <span className="btn-loading"><LoadingDots /><span>Iniciando sesión...</span></span>
+                  <span className="btn-loading"><LoadingDots /><span>Entrando...</span></span>
                 ) : (
                   <>
                     Entrar
