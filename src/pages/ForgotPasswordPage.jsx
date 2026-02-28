@@ -54,7 +54,7 @@ export default function ForgotPasswordPage() {
             <h2 className="auth-title-mobile" style={{ display: "none" }}>Forgot password</h2>
             <p className="auth-sub-mobile" style={{ display: "none" }}>
               ¿Recuerdas tu contraseña?{" "}
-              <Link to="/" className="auth-subtitle-link">sign in</Link>
+              <Link to="/" className="auth-subtitle-link">Login</Link>
             </p>
 
             <form onSubmit={handleReset}>

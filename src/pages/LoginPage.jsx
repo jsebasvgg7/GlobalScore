@@ -170,10 +170,10 @@ export default function LoginPage() {
             <div className="auth-divider auth-divider-desktop"><span>usa tu correo y contraseña</span></div>
 
             {/* Título móvil (visible solo en móvil vía CSS) */}
-            <h2 className="auth-title-mobile" style={{ display: "none" }}>Login</h2>
+            <h2 className="auth-title-mobile" style={{ display: "none" }}>Inicia sesion</h2>
             <p className="auth-sub-mobile" style={{ display: "none" }}>
               ¿No tienes cuenta?{" "}
-              <Link to="/register" className="auth-subtitle-link">sign up</Link>
+              <Link to="/register" className="auth-subtitle-link">crear cuenta</Link>
             </p>
 
             <form onSubmit={login}>

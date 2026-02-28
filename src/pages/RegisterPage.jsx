@@ -108,10 +108,10 @@ export default function RegisterPage() {
             <div className="auth-divider auth-divider-desktop"><span>usa tu correo para registrarte</span></div>
 
             {/* Móvil header */}
-            <h2 className="auth-title-mobile" style={{ display: "none" }}>Create account</h2>
+            <h2 className="auth-title-mobile" style={{ display: "none" }}>Crear cuenta</h2>
             <p className="auth-sub-mobile" style={{ display: "none" }}>
               ¿Ya tienes cuenta?{" "}
-              <Link to="/" className="auth-subtitle-link">sign in</Link>
+              <Link to="/" className="auth-subtitle-link">Inicia sesion</Link>
             </p>
 
             <form onSubmit={register}>

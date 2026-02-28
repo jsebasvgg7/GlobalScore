@@ -1130,7 +1130,7 @@
 @media (max-width: 640px) {
   /* Login: espacio para el blob decorativo */
   .auth-card--login {
-    padding-top: 130px;
+    padding-top: 180px;
   }
 
   /* Register / Forgot / Reset: sin padding extra, el justify-content: center lo centra */

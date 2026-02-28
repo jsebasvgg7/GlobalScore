@@ -110,7 +110,7 @@ export default function ResetPasswordPage() {
             <h2 className="auth-title-mobile" style={{ display: "none" }}>New password</h2>
             <p className="auth-sub-mobile" style={{ display: "none" }}>
               ¿Ya la recuerdas?{" "}
-              <Link to="/" className="auth-subtitle-link">sign in</Link>
+              <Link to="/" className="auth-subtitle-link">Login</Link>
             </p>
 
             <form onSubmit={handleResetPassword}>
