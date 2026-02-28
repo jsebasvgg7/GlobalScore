@@ -15,169 +15,65 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
-
-  const validateName = (name) => {
-    const regex = /^[a-zA-ZÀ-ÿ\s]{3,50}$/;
-    return regex.test(name.trim());
-  };
+  const validateEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  const validateName = (n) => /^[a-zA-ZÀ-ÿ\s]{3,50}$/.test(n.trim());
 
   const register = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+    setError(""); setSuccess("");
 
-    if (!name.trim()) {
-      setError("Por favor ingresa tu nombre");
-      return;
-    }
-
-    if (!validateName(name)) {
-      setError("El nombre debe tener entre 3 y 50 caracteres");
-      return;
-    }
-
-    if (!email.trim()) {
-      setError("Por favor ingresa tu correo electrónico");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      setError("Por favor ingresa un correo electrónico válido");
-      return;
-    }
-
-    if (!password) {
-      setError("Por favor ingresa una contraseña");
-      return;
-    }
-
-    if (password.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres");
-      return;
-    }
+    if (!name.trim()) return setError("Por favor ingresa tu nombre");
+    if (!validateName(name)) return setError("El nombre debe tener entre 3 y 50 caracteres");
+    if (!email.trim()) return setError("Por favor ingresa tu correo electrónico");
+    if (!validateEmail(email)) return setError("Correo electrónico inválido");
+    if (!password) return setError("Por favor ingresa una contraseña");
+    if (password.length < 6) return setError("La contraseña debe tener al menos 6 caracteres");
 
     setLoading(true);
 
     try {
-      console.log("📝 Iniciando registro para:", email);
-      
-      const { data: existingUser, error: checkError } = await supabase
-        .from("users")
-        .select("email")
-        .eq("email", email.trim().toLowerCase())
-        .maybeSingle();
+      const { data: existing } = await supabase
+        .from("users").select("email").eq("email", email.trim().toLowerCase()).maybeSingle();
 
-      if (checkError && checkError.code !== 'PGRST116') {
-        console.error("Error al verificar email:", checkError);
-        setError("Error al verificar el correo");
-        setLoading(false);
-        return;
-      }
-
-      if (existingUser) {
-        setError("Este correo ya está registrado");
-        setLoading(false);
-        return;
-      }
+      if (existing) { setError("Este correo ya está registrado"); setLoading(false); return; }
 
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: email.trim().toLowerCase(),
         password,
-        options: {
-          data: {
-            name: name.trim(),
-            display_name: name.trim()
-          }
-        }
+        options: { data: { name: name.trim(), display_name: name.trim() } },
       });
 
       if (signUpError) {
-        console.error("❌ Error de registro:", signUpError);
-        
-        if (signUpError.message.includes("already registered")) {
-          setError("Este correo ya está registrado");
-        } else if (signUpError.message.includes("Password")) {
-          setError("La contraseña es muy débil");
-        } else {
-          setError(`Error al registrarse: ${signUpError.message}`);
-        }
+        setError(signUpError.message.includes("already registered")
+          ? "Este correo ya está registrado"
+          : `Error: ${signUpError.message}`);
         setLoading(false);
         return;
       }
 
-      if (!authData?.user) {
-        setError("No se pudo crear la cuenta");
+      if (!authData?.user) { setError("No se pudo crear la cuenta"); setLoading(false); return; }
+
+      const { error: insertError } = await supabase.from("users").insert({
+        auth_id: authData.user.id, name: name.trim(),
+        email: email.trim().toLowerCase(),
+        points: 0, predictions: 0, correct: 0,
+        monthly_points: 0, monthly_predictions: 0, monthly_correct: 0,
+        current_streak: 0, best_streak: 0, level: 1, monthly_championships: 0,
+      }).select().single();
+
+      if (insertError && insertError.code !== "23505") {
+        try { await supabase.auth.signOut(); } catch (_) {}
+        setError("No se pudo crear el perfil. Intenta de nuevo.");
         setLoading(false);
         return;
       }
 
-      console.log("✅ Usuario de autenticación creado:", authData.user.id);
+      setSuccess("¡Cuenta creada! " + (authData.user.identities?.length === 0
+        ? "Redirigiendo..." : "Revisa tu correo para verificar tu cuenta."));
+      setName(""); setEmail(""); setPassword("");
 
-      console.log("📝 Creando perfil en base de datos...");
-      
-      const { data: newProfile, error: insertError } = await supabase
-        .from("users")
-        .insert({
-          auth_id: authData.user.id,
-          name: name.trim(),
-          email: email.trim().toLowerCase(),
-          points: 0,
-          predictions: 0,
-          correct: 0,
-          monthly_points: 0,
-          monthly_predictions: 0,
-          monthly_correct: 0,
-          current_streak: 0,
-          best_streak: 0,
-          level: 1,
-          monthly_championships: 0
-        })
-        .select()
-        .single();
-
-      if (insertError) {
-        console.error("❌ Error al crear perfil:", insertError);
-        
-        if (insertError.code !== '23505') {
-          try {
-            await supabase.auth.signOut();
-          } catch (e) {
-            console.error("Error signing out:", e);
-          }
-          
-          setError("No se pudo crear el perfil. Por favor intenta de nuevo.");
-          setLoading(false);
-          return;
-        }
-      }
-
-      console.log("✅ Perfil creado exitosamente:", newProfile);
-
-      setSuccess(
-        "¡Cuenta creada exitosamente! " +
-        (authData.user.identities?.length === 0 
-          ? "Redirigiendo..." 
-          : "Revisa tu correo para verificar tu cuenta.")
-      );
-
-      setName("");
-      setEmail("");
-      setPassword("");
-
-      setTimeout(() => {
-        if (authData.user.identities?.length === 0) {
-          navigate("/app");
-        } else {
-          navigate("/");
-        }
-      }, 1500);
-
+      setTimeout(() => navigate(authData.user.identities?.length === 0 ? "/app" : "/"), 1500);
     } catch (err) {
-      console.error("💥 Error inesperado:", err);
       setError("Ocurrió un error inesperado");
     } finally {
       setLoading(false);
@@ -186,126 +82,77 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-wrapper">
-      {/* Banner - Solo visible en desktop */}
-      <div className="auth-banner">
-        <img 
-          src="/GlobalscoreBanner.jpg" 
-          alt="Globalscore Banner" 
-        />
-      </div>
+      <div className="auth-card-container">
 
-      {/* Contenido del formulario */}
-      <div className="auth-content">
-        <div className="auth-brand">
-          <div className="auth-brand-icon">
-            <Trophy size={20} />
-          </div>
-          <div className="auth-brand-name">Globalscore</div>
+        {/* ── IZQUIERDA: Panel púrpura ── */}
+        <div className="auth-right-panel">
+          <div className="auth-right-icon"><Trophy size={52} color="white" strokeWidth={1.5} /></div>
+          <h3>¡Bienvenido<br />de vuelta!</h3>
+          <p>Para mantenerte conectado inicia sesión con tu cuenta personal</p>
+          <Link to="/" className="auth-right-btn">Iniciar Sesión</Link>
         </div>
 
-        <div className="auth-card">
-          <h2>Crear cuenta</h2>
-          <p>Regístrate y comienza a predecir</p>
+        {/* ── DERECHA: Formulario ── */}
+        <div className="auth-content">
+          <div className="auth-brand">
+            <div className="auth-brand-icon"><Trophy size={18} /></div>
+            <div className="auth-brand-name">Globalscore</div>
+          </div>
 
-          <form onSubmit={register}>
-            <input
-              type="text"
-              placeholder="Nombre"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                setError("");
-              }}
-              disabled={loading}
-              autoComplete="name"
-              required
-              minLength={3}
-              maxLength={50}
-            />
+          <div className="auth-card">
+            <h2>Crear Cuenta</h2>
+            <p>Regístrate y empieza a predecir</p>
 
-            <input
-              type="email"
-              placeholder="Correo electrónico"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setError("");
-              }}
-              disabled={loading}
-              autoComplete="email"
-              required
-            />
+            <div className="auth-divider"><span>usa tu correo para registrarte</span></div>
 
-            <div className="password-input-wrapper">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Contraseña"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError("");
-                }}
-                disabled={loading}
-                autoComplete="new-password"
-                required
-                minLength={6}
-              />
-              <button
-                type="button"
-                className="password-toggle-btn"
-                onClick={() => setShowPassword(!showPassword)}
-                disabled={loading}
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            <form onSubmit={register}>
+              <input type="text" placeholder="Nombre completo" value={name}
+                onChange={(e) => { setName(e.target.value); setError(""); }}
+                disabled={loading} autoComplete="name" required minLength={3} maxLength={50} />
+
+              <input type="email" placeholder="Correo electrónico" value={email}
+                onChange={(e) => { setEmail(e.target.value); setError(""); }}
+                disabled={loading} autoComplete="email" required />
+
+              <div className="password-input-wrapper">
+                <input type={showPassword ? "text" : "password"} placeholder="Contraseña"
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); setError(""); }}
+                  disabled={loading} autoComplete="new-password" required minLength={6} />
+                <button type="button" className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)} disabled={loading}>
+                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                </button>
+              </div>
+
+              {password && (
+                <div className="password-strength">
+                  {password.length < 6 ? "❌ Muy corta"
+                    : password.length < 8 ? "⚠️ Débil"
+                    : password.length < 12 ? "✅ Buena"
+                    : "🔒 Muy fuerte"}
+                </div>
+              )}
+
+              {error && <div className="error-message">{error}</div>}
+              {success && <div className="success-message">{success}</div>}
+
+              <button className="btn" type="submit" disabled={loading || !name || !email || !password}>
+                {loading ? (
+                  <span className="btn-loading"><LoadingDots /><span>Creando cuenta...</span></span>
+                ) : "Registrarse"}
               </button>
+            </form>
+
+            <div className="info-box">🔒 Tus datos están seguros y protegidos</div>
+
+            <div className="auth-alt">
+              <span>¿Ya tienes cuenta?</span>
+              <Link to="/">Inicia sesión</Link>
             </div>
-
-            {password && (
-              <div className="password-strength">
-                Seguridad: {
-                  password.length < 6 ? '❌ Muy corta' :
-                  password.length < 8 ? '⚠️ Débil' :
-                  password.length < 12 ? '✅ Buena' :
-                  '🔒 Fuerte'
-                }
-              </div>
-            )}
-
-            {error && (
-              <div className="error-message">
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="success-message">
-                {success}
-              </div>
-            )}
-
-            <button 
-              className="btn" 
-              type="submit" 
-              disabled={loading || !name || !email || !password}
-            >
-              {loading ? (
-                <span className="btn-loading">
-                  <LoadingDots />
-                  <span>Creando cuenta...</span>
-                </span>
-              ) : "Registrarse"}
-            </button>
-          </form>
-
-          <div className="auth-alt">
-            <span>¿Ya tienes cuenta?</span>
-            <Link to="/">Entrar</Link>
-          </div>
-
-          <div className="info-box">
-            🔒 Tus datos están seguros y protegidos
           </div>
         </div>
+
       </div>
     </div>
   );
