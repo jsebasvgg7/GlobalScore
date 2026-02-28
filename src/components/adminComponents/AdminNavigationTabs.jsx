@@ -61,7 +61,7 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
         <Crown size={20} />
         <span>Coronas</span>
         {stats.crowns.thisMonth === 0 && (
-          <span className="tab-badge pending">Pendiente</span>
+          <span className="tab-badge pending">!</span>
         )}
       </button>
     </div>
