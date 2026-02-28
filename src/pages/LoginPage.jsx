@@ -15,7 +15,7 @@ export default function LoginPage() {
   const [waveUp, setWaveUp] = useState(false);
 
   useEffect(() => {
-    if (isMobile() && !localStorage.getItem(WELCOME_KEY)) {
+    if (isMobile() /*&& !localStorage.getItem(WELCOME_KEY)*/) {
       setShowWelcome(true);
     }
   }, []);
