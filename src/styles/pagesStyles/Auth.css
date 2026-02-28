@@ -592,7 +592,8 @@
 .welcome-screen {
   position: fixed;
   inset: 0;
-  background: #f7f7fb;
+  background: #f7f7fb !important;
+  color-scheme: light;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -602,6 +603,23 @@
   z-index: 9999;
   overflow: hidden;
   animation: wsFadeIn 0.4s ease both;
+}
+
+/* Forzar todos los textos del welcome en colores light */
+.welcome-screen *,
+[data-theme="dark"] .welcome-screen,
+[data-theme="dark"] .welcome-screen * {
+  color-scheme: light;
+}
+
+[data-theme="dark"] .welcome-screen { background: #f7f7fb !important; }
+[data-theme="dark"] .welcome-title { color: #1a1a2e !important; }
+[data-theme="dark"] .welcome-subtitle { color: #9ca3af !important; }
+[data-theme="dark"] .welcome-dots-row span { background: #d1d5db !important; }
+[data-theme="dark"] .welcome-dots-row span:nth-child(3) { background: #7c6bb8 !important; }
+[data-theme="dark"] .welcome-enter-btn {
+  background: #1a1a2e !important;
+  color: #ffffff !important;
 }
 
 @keyframes wsFadeIn {
@@ -1130,7 +1148,7 @@
 @media (max-width: 640px) {
   /* Login: espacio para el blob decorativo */
   .auth-card--login {
-    padding-top: 180px;
+    padding-top: 80px;
   }
 
   /* Register / Forgot / Reset: sin padding extra, el justify-content: center lo centra */
