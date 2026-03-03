@@ -125,16 +125,18 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
     <>
       <div className="hof-root">
         <Stars />
+        
         {/* ── Header ── */}
-        <div className="hof-header">
-        <div className="hof-header-divider">
-        <div className="hof-header-line hof-header-line--left" />
-        <Crown size={17} className="hof-header-crown" />
-        <div className="hof-header-line hof-header-line--right" />
-        </div>
-        <h2 className="hof-title">Salón de la Fama</h2>
-        <p className="hof-subtitle">Campeones Mensuales</p>
-        </div>
+            <div className="hof-header">
+             <div className="hof-header-divider">
+              <div className="hof-header-line hof-header-line--left" />
+                 <Crown size={17} className="hof-header-crown" />
+                  <div className="hof-header-line hof-header-line--right" />
+                </div>
+                 <h2 className="hof-title">Salón de la Fama</h2>
+              <p className="hof-subtitle">Campeones Mensuales</p>
+            </div>
+
         {/* ── Empty state ── */}
         {total === 0 ? (
           <div className="hof-empty">

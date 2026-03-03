@@ -123,6 +123,7 @@ export default function RankingPage({ currentUser }) {
   return (
     <div className="lb-page">
       <div className="lb-container">
+        
 
         {/* HEADER */}
         <div className="lb-header-row">
@@ -139,7 +140,7 @@ export default function RankingPage({ currentUser }) {
             ))}
           </div>
         </div>
-
+      
         {/* HALL OF FAME */}
         {rankingType === 'halloffame' ? (
           <HallOfFame champions={champions} onSelectUser={setSelectedUserId} />
@@ -173,10 +174,21 @@ export default function RankingPage({ currentUser }) {
               </div>
             </div>
 
-            {/* ── TOP 3 CARDS ── */}
-            {top3.length >= 1 && (
-              <div className="lb-top3-row">
-                {top3.map((user, i) => {
+              {/* ── Header ── */}
+              <div className="hof-header">
+                <div className="hof-header-divider">
+                <div className="hof-header-line hof-header-line--left" />
+                    <Crown size={17} className="hof-header-crown" />
+                    <div className="hof-header-line hof-header-line--right" />
+                  </div>
+                    <h2 className="hof-title">Ranking {rankingType === 'monthly' ? 'Mensual' : 'Global'}</h2>
+                <p className="hof-subtitle">Podio</p>
+              </div>
+
+              {/* ── TOP 3 CARDS ── */}
+              {top3.length >= 1 && (
+                <div className="lb-top3-row">
+                  {top3.map((user, i) => {
                   const accuracy = user.rankPredictions > 0
                     ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
                   const medals = ['🥇','🥈','🥉'];
@@ -226,11 +238,7 @@ export default function RankingPage({ currentUser }) {
 
             {/* FULL TABLE */}
             <div className="lb-card">
-              <div className="lb-section-hd">
-                <div>
-                  <h2 className="lb-section-title">
-                    {rankingType === 'monthly' ? 'Ranking Mensual' : 'Ranking Global'}
-                  </h2>
+              <div className="lb-section-hd"><div>
                 </div>
                 <div className="lb-sort-row">
                   {[
