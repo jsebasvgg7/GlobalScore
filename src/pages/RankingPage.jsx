@@ -281,6 +281,7 @@ export default function RankingPage({ currentUser }) {
                               {user.name}
                               {isMe && <span className="lb-you">Tú</span>}
                             </span>
+                            <span className="lb-uname-correct">{user.rankCorrect} aciertos</span>
                           </div>
                         </button>
                       </span>
