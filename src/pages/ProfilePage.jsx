@@ -6,12 +6,12 @@ import AdminAchievementsModal from '../components/ComAdmin/AdminAchievementsModa
 import AdminTitlesModal from '../components/ComAdmin/AdminTitlesModal';
 
 // Hooks personalizados
-import { useProfileData } from '../hooks/HooksProfile/useProfileData';
-import { usePredictionHistory } from '../hooks/HooksProfile/usePredictionHistory';
-import { useStreaks } from '../hooks/HooksProfile/useStreaks';
-import { useAchievements } from '../hooks/HooksProfile/useAchievements';
-import { useUserRanking } from '../hooks/HooksProfile/useUserRanking';
-import { useMonthlyChampionships } from '../hooks/HooksProfile/useMonthlyChampionships';
+import { useProfileData } from '../hooks/HooksProfileTemp/useProfileData';
+import { usePredictionHistory } from '../hooks/HooksProfileTemp/usePredictionHistory';
+import { useStreaks } from '../hooks/HooksProfileTemp/useStreaks';
+import { useAchievements } from '../hooks/HooksProfileTemp/useAchievements';
+import { useUserRanking } from '../hooks/HooksProfileTemp/useUserRanking';
+import { useMonthlyChampionships } from '../hooks/HooksProfileTemp/useMonthlyChampionships';
 
 // Componentes de UI
 import ProfileHero from '../components/ComProfile/ProfileHero';
