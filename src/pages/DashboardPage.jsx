@@ -3,24 +3,24 @@ import React, { useState, useMemo, useRef, useEffect } from "react";
 import { Trophy, TrendingUp, Target, Filter, X, ArrowUpDown, ChevronRight } from "lucide-react";
 
 // Components
-import MatchCard from "../components/cardComponets/MatchCard";
-import LeagueCard from "../components/cardComponets/LeagueCard";
-import AwardCard from "../components/cardComponets/AwardCard";
-import NavigationTabs from "../components/NavigationTabs";
+import MatchCard from "../components/ComCards/MatchCard";
+import LeagueCard from "../components/ComCards/LeagueCard";
+import AwardCard from "../components/ComCards/AwardCard";
+import NavigationTabs from "../components/ComOthers/NavigationTabs";
 import ProfilePage from "./ProfilePage";
 import RankingPage from "./RankingPage";
-import Footer from "../components/Footer";
+import Footer from "../components/ComOthers/Footer";
 import AdminPage from "./AdminPage";
 import NotificationsPage from "./NotificationsPage";
 import StatsPage from "./StatsPage";
-import { PageLoader, LoadingOverlay } from "../components/LoadingStates";
-import { ToastContainer, useToast } from "../components/Toast";
+import { PageLoader, LoadingOverlay } from "../components/ComOthers/LoadingStates";
+import { ToastContainer, useToast } from "../components/ComOthers/Toast";
 
 // Custom Hooks
 import { useDataLoader } from "../hooks/useDataLoader";
-import { useMatches } from "../hooks/useMatches";
-import { useLeagues } from "../hooks/useLeagues";
-import { useAwards } from "../hooks/useAwards";
+import { useMatches } from "../hooks/HooksCards/useMatches";
+import { useLeagues } from "../hooks/HooksCards/useLeagues";
+import { useAwards } from "../hooks/HooksCards/useAwards";
 
 // Styles
 import "../styles/pagesStyles/DashboardPage.css";

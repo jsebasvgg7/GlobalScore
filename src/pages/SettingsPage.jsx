@@ -6,11 +6,11 @@ import {
   Download, Trash2, LogOut, AlertTriangle, Check,
   ChevronRight, Volume2, VolumeX, Eye, EyeOff, ArrowLeft
 } from 'lucide-react';
-import { useSettings } from '../hooks/settingsHooks/useSettings';
+import { useSettings } from '../hooks/HooksSettings/useSettings';
 import { useTheme } from '../context/ThemeContext';
-import { ToastContainer, useToast } from '../components/Toast';
+import { ToastContainer, useToast } from '../components/ComOthers/Toast';
 import { supabase } from '../utils/supabaseClient';
-import Footer from '../components/Footer';
+import Footer from '../components/ComOthers/Footer';
 import '../styles/pagesStyles/SettingsPage.css';
 
 export default function SettingsPage({ currentUser }) {
@@ -451,7 +451,7 @@ export default function SettingsPage({ currentUser }) {
             <SettingItem
               icon={Info}
               label="Versión"
-              description="GlobalScore v18.0.0"
+              description="GlobalScore v19.0.0"
             />
 
             <SettingItem

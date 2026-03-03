@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Trophy, LogIn } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
-import LoadingDots from "../components/LoadingSpinner";
+import LoadingDots from "../components/ComOthers/LoadingSpinner";
 import "../styles/pagesStyles/Auth.css";
 
 const WELCOME_KEY = "gs_welcome_seen";

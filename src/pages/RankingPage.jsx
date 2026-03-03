@@ -5,8 +5,8 @@ import {
   ChevronRight, Users, BarChart3, Crown, Trophy, Star, Award
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
-import Footer from '../components/Footer';
-import UserProfileModal from '../components/UserProfileModal';
+import Footer from '../components/ComOthers/Footer';
+import UserProfileModal from '../components/ComOthers/UserProfileModal';
 import '../styles/pagesStyles/RankingPage.css';
 
 export default function RankingPage({ currentUser, onBack }) {

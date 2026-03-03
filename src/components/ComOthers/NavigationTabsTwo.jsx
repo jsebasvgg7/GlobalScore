@@ -1,7 +1,7 @@
 // src/components/NavigationTabsTwo.jsx
 import React from 'react';
 import { Trophy, Shield } from 'lucide-react';
-import '../styles/NavigationTabsTwo.css';
+import '../../styles/NavigationTabsTwo.css';
 
 export default function NavigationTabsTwo({ activeTab, onTabChange, isAdmin }) {
   // Si no es admin, no mostrar las tabs

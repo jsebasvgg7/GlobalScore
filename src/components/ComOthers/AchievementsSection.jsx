@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, Award, Lock, Star, TrendingUp } from 'lucide-react';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../../utils/supabaseClient';
 
 export default function AchievementsSection({ userId, userStats }) {
   const [achievements, setAchievements] = useState([]);

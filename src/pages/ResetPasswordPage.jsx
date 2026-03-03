@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, Trophy, KeyRound, ChevronLeft, Check } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
-import LoadingDots from "../components/LoadingSpinner";
+import LoadingDots from "../components/ComOthers/LoadingSpinner";
 import "../styles/pagesStyles/Auth.css";
 
 export default function ResetPasswordPage() {

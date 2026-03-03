@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Trophy, Heart, Globe, Crown } from 'lucide-react';
 import { calculateAccuracy } from '../../utils/profileUtils';
-import ImageViewer from '../ImageViewer';
+import ImageViewer from '../ComOthers/ImageViewer';
 
 export default function ProfileHero({ userData, currentUser }) {
   const accuracy = calculateAccuracy(currentUser);

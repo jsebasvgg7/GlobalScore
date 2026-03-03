@@ -1,6 +1,6 @@
 // src/hooks/useWorldCup.js
 import { useState, useCallback } from 'react';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../../utils/supabaseClient';
 
 export const useWorldCup = (currentUser) => {
   const [loading, setLoading] = useState(false);

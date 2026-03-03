@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "./utils/supabaseClient";
 import { ThemeProvider } from "./context/ThemeContext";
 
-import Header from "./components/Header";
-import InstallPWAButton from './components/InstallPWAButton';
+import Header from "./components/ComOthers/Header";
+import InstallPWAButton from './components/ComOthers/InstallPWAButton';
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
@@ -17,7 +17,7 @@ import NotificationsPage from "./pages/NotificationsPage";
 import StatsPage from "./pages/StatsPage";
 import SettingsPage from "./pages/SettingsPage";
 import WorldCupPage from "./pages/WorldCupPage";
-import { PageLoader } from "./components/LoadingStates";
+import { PageLoader } from "./components/ComOthers/LoadingStates";
 
 export default function App() {
   const [session, setSession] = useState(null);

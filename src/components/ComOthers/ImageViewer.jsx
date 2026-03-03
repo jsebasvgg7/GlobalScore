@@ -1,7 +1,7 @@
 // src/components/ImageViewer.jsx
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import '../styles/ImageViewer.css';
+import '../../styles/ImageViewer.css';
 
 export default function ImageViewer({ imageUrl, userName, onClose }) {
   const [startY, setStartY] = useState(0);

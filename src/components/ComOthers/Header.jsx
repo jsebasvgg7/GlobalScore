@@ -3,10 +3,10 @@ import {
   Trophy, LogOut, User2, Award, Shield, Bell,
   Home, BarChart3, Moon, Sun, Settings, Globe
 } from "lucide-react";
-import { supabase } from "../utils/supabaseClient";
+import { supabase } from "../../utils/supabaseClient";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useTheme } from "../context/ThemeContext";
-import "../styles/Header.css";
+import { useTheme } from "../../context/ThemeContext";
+import "../../styles/Header.css";
 
 export default function Header({ currentUser, users = [], onProfileClick }) {
   const navigate = useNavigate();

@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, Award, TrendingUp, TrendingDown, Star, Users, Target, Zap, ChevronDown, ChevronUp, Medal, User  } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
-import { useToast, ToastContainer } from '../components/Toast';
-import { useWorldCup } from '../hooks/useWorldCup';
-import Footer from '../components/Footer';
-import WorldCupNavigationTabs from '../components/worldCupComponent/WorldCupNavigationTabs';
-import WorldCupAwardCard from '../components/worldCupComponent/WorldCupAwardCard';
-import KnockoutSection from '../components/worldCupComponent/KnockoutSection';
+import { useToast, ToastContainer } from '../components/ComOthers/Toast';
+import { useWorldCup } from '../hooks/HooksOthers/useWorldCup';
+import Footer from '../components/ComOthers/Footer';
+import WorldCupNavigationTabs from '../components/ComWorldCup/WorldCupNavigationTabs';
+import WorldCupAwardCard from '../components/ComWorldCup/WorldCupAwardCard';
+import KnockoutSection from '../components/ComWorldCup/KnockoutSection';
 import '../styles/pagesStyles/WorldCupPage.css';
 
 // ============================================

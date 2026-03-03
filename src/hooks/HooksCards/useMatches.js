@@ -1,6 +1,6 @@
 // src/hooks/useMatches.js
 import { useState, useCallback, useRef } from 'react';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../../utils/supabaseClient';
 
 export const useMatches = (currentUser) => {
   const [loading, setLoading] = useState(false);

@@ -3,30 +3,29 @@ import React, { useState } from 'react';
 import { AlertCircle } from 'lucide-react';
 
 // Hooks personalizados
-import { useAdminData } from '../hooks/adminHooks/useAdminData';
-import { useAdminMatches } from '../hooks/adminHooks/useAdminMatches';
-import { useAdminLeagues } from '../hooks/adminHooks/useAdminLeagues';
-import { useAdminAwards } from '../hooks/adminHooks/useAdminAwards';
-import { useAdminAchievements } from '../hooks/adminHooks/useAdminAchievements';
-import { useAdminCrowns } from '../hooks/adminHooks/useAdminCrowns';
+import { useAdminData } from '../hooks/HooksAdmin/useAdminData';
+import { useAdminMatches } from '../hooks/HooksAdmin/useAdminMatches';
+import { useAdminLeagues } from '../hooks/HooksAdmin/useAdminLeagues';
+import { useAdminAwards } from '../hooks/HooksAdmin/useAdminAwards';
+import { useAdminAchievements } from '../hooks/HooksAdmin/useAdminAchievements';
+import { useAdminCrowns } from '../hooks/HooksAdmin/useAdminCrowns';
 
 // Utils
 import { getFilteredItems, calculateStats } from '../utils/adminFilters';
 
 // Componentes
-import AdminDiagnosticPanel from '../components/adminComponents/AdminDiagnosticPanel';
-import AdminStatsOverview from '../components/adminComponents/AdminStatsOverview';
-import AdminNavigationTabs from '../components/adminComponents/AdminNavigationTabs';
-import AdminControls from '../components/adminComponents/AdminControls';
-import AdminMatchesList from '../components/adminComponents/AdminMatchesList';
-import AdminLeaguesList from '../components/adminComponents/AdminLeaguesList';
-import AdminAwardsList from '../components/adminComponents/AdminAwardsList';
-import AdminAchievementsList from '../components/adminComponents/AdminAchievementsList';
-import AdminTitlesList from '../components/adminComponents/AdminTitlesList';
-import AdminCrownsSection from '../components/adminComponents/AdminCrownsSection';
-import AdminModalsContainer from '../components/adminComponents/AdminModalsContainer';
-import Footer from '../components/Footer';
-import { ToastContainer, useToast } from '../components/Toast';
+import AdminStatsOverview from '../components/ComAdmin/AdminStatsOverview';
+import AdminNavigationTabs from '../components/ComAdmin/AdminNavigationTabs';
+import AdminControls from '../components/ComAdmin/AdminControls';
+import AdminMatchesList from '../components/ComAdmin/AdminMatchesList';
+import AdminLeaguesList from '../components/ComAdmin/AdminLeaguesList';
+import AdminAwardsList from '../components/ComAdmin/AdminAwardsList';
+import AdminAchievementsList from '../components/ComAdmin/AdminAchievementsList';
+import AdminTitlesList from '../components/ComAdmin/AdminTitlesList';
+import AdminCrownsSection from '../components/ComAdmin/AdminCrownsSection';
+import AdminModalsContainer from '../components/ComAdmin/AdminModalsContainer';
+import Footer from '../components/ComOthers/Footer';
+import { ToastContainer, useToast } from '../components/ComOthers/Toast';
 
 import '../styles/adminStyles/AdminPage.css';
 

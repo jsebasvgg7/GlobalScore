@@ -1,6 +1,6 @@
 // src/components/common/PushNotificationsToggle.jsx
 import { useState } from 'react';
-import usePushNotifications from '../hooks/usePushNotifications';
+import usePushNotifications from '../../hooks/usePushNotifications';
 
 export default function PushNotificationsToggle({ userId }) {
   const {

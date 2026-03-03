@@ -1,26 +1,26 @@
 // src/pages/ProfilePage.jsx
 import React, { useState } from 'react';
-import { ToastContainer, useToast } from '../components/Toast';
-import Footer from '../components/Footer';
-import AdminAchievementsModal from '../components/adminComponents/AdminAchievementsModal';
-import AdminTitlesModal from '../components/adminComponents/AdminTitlesModal';
+import { ToastContainer, useToast } from '../components/ComOthers/Toast';
+import Footer from '../components/ComOthers/Footer';
+import AdminAchievementsModal from '../components/ComAdmin/AdminAchievementsModal';
+import AdminTitlesModal from '../components/ComAdmin/AdminTitlesModal';
 
 // Hooks personalizados
-import { useProfileData } from '../hooks/hooksProfile/useProfileData';
-import { usePredictionHistory } from '../hooks/hooksProfile/usePredictionHistory';
-import { useStreaks } from '../hooks/hooksProfile/useStreaks';
-import { useAchievements } from '../hooks/hooksProfile/useAchievements';
-import { useUserRanking } from '../hooks/hooksProfile/useUserRanking';
-import { useMonthlyChampionships } from '../hooks/hooksProfile/useMonthlyChampionships';
+import { useProfileData } from '../hooks/HooksProfile/useProfileData';
+import { usePredictionHistory } from '../hooks/HooksProfile/usePredictionHistory';
+import { useStreaks } from '../hooks/HooksProfile/useStreaks';
+import { useAchievements } from '../hooks/HooksProfile/useAchievements';
+import { useUserRanking } from '../hooks/HooksProfile/useUserRanking';
+import { useMonthlyChampionships } from '../hooks/HooksProfile/useMonthlyChampionships';
 
 // Componentes de UI
-import ProfileHero from '../components/profileComponents/ProfileHero';
-import ProfileTabs from '../components/profileComponents/ProfileTabs';
-import OverviewTab from '../components/profileComponents/OverviewTab';
-import AchievementsTab from '../components/profileComponents/AchievementsTab';
-import MonthlyChampionshipsTab from '../components/profileComponents/MonthlyChampionshipsTab';
-import HistoryTab from '../components/profileComponents/HistoryTab';
-import EditTab from '../components/profileComponents/EditTab';
+import ProfileHero from '../components/ComProfile/ProfileHero';
+import ProfileTabs from '../components/ComProfile/ProfileTabs';
+import OverviewTab from '../components/ComProfile/OverviewTab';
+import AchievementsTab from '../components/ComProfile/AchievementsTab';
+import MonthlyChampionshipsTab from '../components/ComProfile/MonthlyChampionshipsTab';
+import HistoryTab from '../components/ComProfile/HistoryTab';
+import EditTab from '../components/ComProfile/EditTab';
 
 // Importar el nuevo archivo CSS modular
 import '../styles/pagesStyles/ProfilePageNew.css';

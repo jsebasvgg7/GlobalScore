@@ -5,10 +5,10 @@ import {
   TrendingUp, Crown, Shield, Sparkles, Zap, Users,
   Globe, Heart, Flag, Gem, Layers, Activity
 } from 'lucide-react';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../../utils/supabaseClient';
 import { LoadingDots } from './LoadingSpinner';
 import ImageViewer from './ImageViewer';
-import '../styles/UserProfileModal.css';
+import '../../styles/UserProfileModal.css';
 
 export default function UserProfileModal({ userId, onClose }) {
   const [userData, setUserData] = useState(null);
