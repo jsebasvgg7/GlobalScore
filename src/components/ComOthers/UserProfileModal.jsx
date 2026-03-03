@@ -197,10 +197,7 @@ export default function UserProfileModal({ userId, onClose }) {
           className={`upm-modal ${mounted ? 'upm-modal--in' : ''}`}
           onClick={e => e.stopPropagation()}
         >
-          {/* Floating crown above modal */}
-          <div className="upm-modal-crown-top">
-            <Crown size={36} fill="#F59E0B" color="#D97706" />
-          </div>
+
 
           {/* Close button */}
           <button className="upm-close" onClick={onClose} aria-label="Cerrar">
@@ -218,53 +215,50 @@ export default function UserProfileModal({ userId, onClose }) {
               <div className="upm-hero-banner-orb upm-hero-banner-orb--2" />
             </div>
 
-            {/* Avatar centrado sobre el banner */}
-            <div className="upm-hero-avatar-row">
-              <div className="upm-avatar-wrap">
-                <div
-                  className={`upm-avatar ${userData.avatar_url ? 'upm-avatar--clickable' : ''}`}
-                  onClick={() => userData.avatar_url && setShowImageViewer(true)}
-                >
-                  {userData.avatar_url
-                    ? <img src={userData.avatar_url} alt={userData.name} />
-                    : <span>{(userData.name || 'U')[0].toUpperCase()}</span>
-                  }
-                </div>
-                <div className="upm-level-ring">
-                  <Shield size={10} />
-                  <span>{userData.level || 1}</span>
-                </div>
+            {/* Avatar centrado, saliendo sobre el banner */}
+            <div className="upm-hero-avatar-wrap">
+              <div
+                className={`upm-avatar ${userData.avatar_url ? 'upm-avatar--clickable' : ''}`}
+                onClick={() => userData.avatar_url && setShowImageViewer(true)}
+              >
+                {userData.avatar_url
+                  ? <img src={userData.avatar_url} alt={userData.name} />
+                  : <span>{(userData.name || 'U')[0].toUpperCase()}</span>
+                }
+              </div>
+              <div className="upm-level-ring">
+                <Shield size={10} />
+                <span>{userData.level || 1}</span>
               </div>
             </div>
 
-            {/* Nombre + título + ranking — centrados */}
-            <div className="upm-hero-identity">
+            {/* Nombre + título + ranking — centrados debajo del avatar */}
+            <div className="upm-hero-body">
               <h2 className="upm-name">{userData.name || 'Usuario'}</h2>
+              
+              {/* Bio */}
+              {userData.bio && (
+                <p className="upm-bio">{userData.bio}</p>
+              )}
 
+              {/* Info tags */}
+              {(userData.nationality || userData.favorite_team || userData.favorite_player || userData.created_at) && (
+                <div className="upm-info-tags">
+                  {userData.nationality && (
+                    <span className="upm-tag"><Globe size={11} />{userData.nationality}</span>
+                  )}
+                  {userData.favorite_team && (
+                    <span className="upm-tag upm-tag--red"><Trophy size={11} />{userData.favorite_team}</span>
+                  )}
+                  {userData.favorite_player && (
+                    <span className="upm-tag upm-tag--green"><Heart size={11} />{userData.favorite_player}</span>
+                  )}
+                  {userData.created_at && (
+                    <span className="upm-tag upm-tag--gold"><Calendar size={11} />Desde {fmtDate(userData.created_at)}</span>
+                  )}
+                </div>
+              )}
             </div>
-
-            {/* Bio */}
-            {userData.bio && (
-              <p className="upm-bio">{userData.bio}</p>
-            )}
-
-            {/* Info tags */}
-            {(userData.nationality || userData.favorite_team || userData.favorite_player || userData.created_at) && (
-              <div className="upm-info-tags">
-                {userData.nationality && (
-                  <span className="upm-tag"><Globe size={11} />{userData.nationality}</span>
-                )}
-                {userData.favorite_team && (
-                  <span className="upm-tag upm-tag--red"><Trophy size={11} />{userData.favorite_team}</span>
-                )}
-                {userData.favorite_player && (
-                  <span className="upm-tag upm-tag--green"><Heart size={11} />{userData.favorite_player}</span>
-                )}
-                {userData.created_at && (
-                  <span className="upm-tag upm-tag--gold"><Calendar size={11} />Desde {fmtDate(userData.created_at)}</span>
-                )}
-              </div>
-            )}
 
           </div>
 

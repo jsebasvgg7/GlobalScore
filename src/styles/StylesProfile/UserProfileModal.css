@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════════════════
    USER PROFILE MODAL — Clash Royale Style
-   Paleta: púrpura de la app + acentos dorados/clash
+   Avatar izquierda · meta derecha · fondo liso
 ══════════════════════════════════════════════════════ */
 
 /* ── TOKENS ─────────────────────────────────────────── */
@@ -63,13 +63,10 @@
   overflow-x: hidden;
   box-shadow: var(--upm-shadow);
   border: 1px solid var(--upm-border);
-
-  /* start hidden, animate in */
   opacity: 0;
   transform: translateY(24px) scale(0.97);
   transition: opacity 0.35s cubic-bezier(.22,1,.36,1),
               transform 0.35s cubic-bezier(.22,1,.36,1);
-
   scrollbar-width: thin;
   scrollbar-color: rgba(139,92,246,0.35) transparent;
 }
@@ -85,36 +82,7 @@
   border-radius: 4px;
 }
 
-/* ── QUILTED BACKGROUND ──────────────────────────────── */
-.upm-quilt {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 18px,
-      rgba(139,92,246,0.045) 18px,
-      rgba(139,92,246,0.045) 19px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 18px,
-      rgba(139,92,246,0.045) 18px,
-      rgba(139,92,246,0.045) 19px
-    );
-}
-
-[data-theme="light"] .upm-quilt {
-  background-image:
-    repeating-linear-gradient(45deg, transparent, transparent 18px, rgba(96,81,155,0.06) 18px, rgba(96,81,155,0.06) 19px),
-    repeating-linear-gradient(-45deg, transparent, transparent 18px, rgba(96,81,155,0.06) 18px, rgba(96,81,155,0.06) 19px);
-}
-
-/* ── FLOATING CROWN TOP ──────────────────────────────── */
+/* ── FLOATING CROWN ──────────────────────────────────── */
 .upm-modal-crown-top {
   position: absolute;
   top: -22px;
@@ -155,55 +123,58 @@
   transform: scale(1.08) rotate(8deg);
 }
 
-/* ── HERO ────────────────────────────────────────────── */
+
+/* ══════════════════════════════════════════════════════
+   HERO — avatar izquierda flotando, todo centrado abajo
+══════════════════════════════════════════════════════ */
+
 .upm-hero {
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 0 16px 16px;
-  margin-top: 20px;
+  align-items: stretch;
 }
 
-/* Banner strip */
 .upm-hero-banner {
   width: 100%;
-  height: 90px;
-  border-radius: 16px 16px 0 0;
-  background: linear-gradient(135deg,
-    #3b1fa3 0%,
-    #6d28d9 40%,
-    #8b5cf6 70%,
-    #a78bfa 100%
-  );
+  height: 110px;
+  border-radius: 20px 20px 0 0;
+  background: linear-gradient(135deg, #3b1fa3 0%, #6d28d9 50%, #8b5cf6 100%);
   position: relative;
   overflow: hidden;
-  margin-bottom: -40px;
+  flex-shrink: 0;
 }
 
 [data-theme="light"] .upm-hero-banner {
   background: linear-gradient(135deg, #4c1d95, #6d28d9, #8b5cf6);
 }
 
-.upm-hero-banner-shimmer {
+.upm-hero-banner-orb {
   position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent,
-    transparent 40px,
-    rgba(255,255,255,0.07) 40px,
-    rgba(255,255,255,0.07) 41px
-  );
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.55;
+}
+.upm-hero-banner-orb--1 {
+  width: 160px; height: 160px;
+  background: #a78bfa;
+  top: -60px; right: -30px;
+}
+.upm-hero-banner-orb--2 {
+  width: 120px; height: 120px;
+  background: #3b82f6;
+  bottom: -50px; left: 10px;
+  opacity: 0.4;
 }
 
-/* Avatar */
-.upm-avatar-wrap {
+/* Avatar flotando sobre el banner, centrado */
+.upm-hero-avatar-wrap {
   position: relative;
-  z-index: 5;
-  margin-top: 0;
+  width: 88px;
+  align-self: center;
+  margin-top: -44px;
+  flex-shrink: 0;
 }
 
 .upm-avatar {
@@ -215,50 +186,48 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 36px;
+  font-size: 34px;
   font-weight: 800;
   color: white;
   overflow: hidden;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.35), 0 0 0 2px rgba(139,92,246,0.4);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35), 0 0 0 2px rgba(139,92,246,0.4);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.upm-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
+.upm-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .upm-avatar--clickable { cursor: pointer; }
 .upm-avatar--clickable:hover {
   transform: scale(1.06);
   box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 0 3px rgba(139,92,246,0.6);
 }
 
-/* Level ring */
 .upm-level-ring {
   position: absolute;
   bottom: -4px;
-  right: -4px;
+  left: 50%;
+  transform: translateX(-50%);
   background: linear-gradient(135deg, #F59E0B, #D97706);
   border: 3px solid var(--upm-card);
   border-radius: 14px;
-  padding: 4px 10px;
+  padding: 3px 9px;
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   color: white;
+  white-space: nowrap;
   box-shadow: 0 3px 10px rgba(245,158,11,0.5);
 }
 
-/* Name block */
-.upm-hero-name-block {
+/* Cuerpo: nombre + pills + tags + bio, centrados */
+.upm-hero-body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  padding: 14px 18px 16px;
+  text-align: center;
 }
 
 .upm-name {
@@ -267,31 +236,30 @@
   color: var(--upm-text);
   margin: 0;
   letter-spacing: -0.3px;
-  text-align: center;
+  line-height: 1.1;
 }
 
 .upm-title-badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 12px;
+  padding: 4px 14px;
   border-radius: 20px;
   border: 1.5px solid currentColor;
   font-size: 12px;
   font-weight: 700;
-  background: rgba(139,92,246,0.08);
+  background: rgba(139,92,246,0.07);
 }
 
-/* Rank pill */
 .upm-rank-pill {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 5px;
   background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.1));
   border: 1.5px solid rgba(245,158,11,0.35);
   border-radius: 20px;
-  padding: 5px 14px;
-  font-size: 13px;
+  padding: 4px 14px;
+  font-size: 12px;
   font-weight: 800;
   color: #F59E0B;
 }
@@ -303,7 +271,6 @@
   margin-left: 2px;
 }
 
-/* Info tags */
 .upm-info-tags {
   display: flex;
   flex-wrap: wrap;
@@ -328,14 +295,17 @@
 .upm-tag--green { color: #34D399; border-color: rgba(52,211,153,0.25);  }
 .upm-tag--gold  { color: #FBBF24; border-color: rgba(251,191,36,0.25);  }
 
-/* Bio */
 .upm-bio {
-  text-align: center;
   font-size: 13px;
   color: var(--upm-muted);
   line-height: 1.5;
-  margin: 0 8px;
-  max-width: 340px;
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--upm-card2);
+  border: 1px solid var(--upm-border2);
+  border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ── TABS ────────────────────────────────────────────── */
@@ -346,7 +316,7 @@
   display: flex;
   background: var(--upm-card);
   border-bottom: 2px solid var(--upm-border);
-  backdrop-filter: blur(12px);
+  margin-top: 16px;
 }
 
 .upm-tab {
@@ -381,7 +351,6 @@
 
 .upm-tab--active { color: var(--upm-text); }
 .upm-tab--active::after { opacity: 1; }
-
 .upm-tab svg { flex-shrink: 0; }
 
 /* ── CONTENT AREA ────────────────────────────────────── */
@@ -404,7 +373,7 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── SECTION DIVIDER (Clash-style) ──────────────────── */
+/* ── SECTION DIVIDER ─────────────────────────────────── */
 .upm-divider {
   display: flex;
   align-items: center;
@@ -481,15 +450,11 @@
   text-align: right;
 }
 
-/* ── STAT PILLS (2x2 grid) ───────────────────────────── */
+/* ── STAT PILLS ──────────────────────────────────────── */
 .upm-stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-}
-
-.upm-stats-grid--secondary {
-  margin-top: 0;
 }
 
 .upm-stat-pill {
@@ -515,16 +480,11 @@
   height: 36px;
   min-width: 36px;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--pill-accent) 15%, transparent);
+  background: rgba(139,92,246,0.12);
   color: var(--pill-accent);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* fallback for browsers without color-mix */
-@supports not (color: color-mix(in srgb, red, blue)) {
-  .upm-stat-pill-icon { background: rgba(139,92,246,0.15); }
 }
 
 .upm-stat-pill-body {
@@ -557,7 +517,7 @@
   pointer-events: none;
 }
 
-/* ── STREAKS ROW ─────────────────────────────────────── */
+/* ── STREAKS ─────────────────────────────────────────── */
 .upm-streaks-row {
   display: flex;
   align-items: center;
@@ -620,7 +580,7 @@
   height: 44px;
   min-width: 44px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--title-color, #8B5CF6) 15%, transparent);
+  background: rgba(139,92,246,0.12);
   color: var(--title-color, #8B5CF6);
   display: flex;
   align-items: center;
@@ -663,7 +623,7 @@
   letter-spacing: 0.3px;
 }
 
-/* ── BADGES GRID (achievement hexagons) ──────────────── */
+/* ── BADGES GRID ─────────────────────────────────────── */
 .upm-badges-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -684,8 +644,8 @@
   width: 62px;
   height: 62px;
   border-radius: 14px;
-  background: color-mix(in srgb, var(--badge-color) 14%, var(--upm-card2));
-  border: 2px solid color-mix(in srgb, var(--badge-color) 50%, transparent);
+  background: rgba(139,92,246,0.1);
+  border: 2px solid rgba(139,92,246,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -695,15 +655,14 @@
 
 .upm-badge:hover .upm-badge-hex {
   transform: scale(1.08) translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3),
-              0 0 12px color-mix(in srgb, var(--badge-color) 40%, transparent);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
 .upm-badge-ring {
   position: absolute;
   inset: -4px;
   border-radius: 17px;
-  border: 1.5px solid color-mix(in srgb, var(--badge-color) 30%, transparent);
+  border: 1.5px solid rgba(139,92,246,0.2);
   pointer-events: none;
 }
 
@@ -723,7 +682,6 @@
   white-space: nowrap;
 }
 
-/* Locked count */
 .upm-locked-count {
   display: flex;
   align-items: center;
@@ -734,7 +692,7 @@
   padding: 10px 0 4px;
 }
 
-/* ── CROWNS SHOWCASE ─────────────────────────────────── */
+/* ── CROWNS ──────────────────────────────────────────── */
 .upm-crowns-showcase {
   background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(217,119,6,0.05));
   border: 1.5px solid rgba(245,158,11,0.25);
@@ -787,7 +745,6 @@
   margin-left: 4px;
 }
 
-/* Crown history */
 .upm-crown-history {
   display: flex;
   flex-direction: column;
@@ -807,9 +764,7 @@
   transition: transform 0.15s ease;
 }
 
-.upm-crown-entry:hover {
-  transform: translateX(4px);
-}
+.upm-crown-entry:hover { transform: translateX(4px); }
 
 .upm-crown-icon {
   width: 30px;
@@ -829,17 +784,8 @@
   gap: 1px;
 }
 
-.upm-crown-month {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--upm-text);
-}
-
-.upm-crown-pts {
-  font-size: 11px;
-  font-weight: 600;
-  color: #10B981;
-}
+.upm-crown-month { font-size: 13px; font-weight: 700; color: var(--upm-text); }
+.upm-crown-pts   { font-size: 11px; font-weight: 600; color: #10B981; }
 
 .upm-crown-badge {
   background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(217,119,6,0.15));
@@ -862,15 +808,8 @@
   text-align: center;
 }
 
-.upm-empty p {
-  font-size: 14px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.upm-empty span {
-  font-size: 12px;
-}
+.upm-empty p    { font-size: 14px; font-weight: 600; margin: 0; }
+.upm-empty span { font-size: 12px; }
 
 /* ── LOADING ─────────────────────────────────────────── */
 .upm-loading {
@@ -899,7 +838,7 @@
   margin: 0;
 }
 
-/* ── LIGHT MODE OVERRIDES ────────────────────────────── */
+/* ── LIGHT MODE ──────────────────────────────────────── */
 [data-theme="light"] .upm-hero-banner {
   background: linear-gradient(135deg, #4c1d95, #7c3aed, #8b5cf6);
 }
@@ -912,10 +851,6 @@
   box-shadow: 0 6px 20px rgba(96,81,155,0.15);
 }
 
-[data-theme="light"] .upm-badge-hex {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
 [data-theme="light"] .upm-level-bar {
   background: rgba(0,0,0,0.06);
 }
@@ -926,6 +861,10 @@
 
 [data-theme="light"] .upm-streaks-row {
   box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+[data-theme="light"] .upm-bio {
+  background: rgba(0,0,0,0.03);
 }
 
 /* ── RESPONSIVE ──────────────────────────────────────── */
@@ -946,31 +885,22 @@
     transform: translateY(0) scale(1);
   }
 
-  .upm-modal-crown-top {
-    top: -20px;
-  }
+  .upm-hero-banner { height: 90px; }
+
+  .upm-avatar { width: 76px; height: 76px; font-size: 28px; }
+
+  .upm-name { font-size: 18px; }
 
   .upm-badges-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 8px 4px;
   }
 
-  .upm-badge-hex {
-    width: 56px;
-    height: 56px;
-  }
-
+  .upm-badge-hex { width: 56px; height: 56px; }
   .upm-badge-emoji { font-size: 22px; }
-
-  .upm-stats-grid {
-    gap: 7px;
-  }
-
   .upm-stat-pill-value { font-size: 16px; }
 }
 
 @media (max-width: 360px) {
-  .upm-badges-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  .upm-badges-grid { grid-template-columns: repeat(3, 1fr); }
 }
