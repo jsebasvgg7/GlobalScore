@@ -4,6 +4,7 @@ import { X, Crown, Flame, Star, Shield, Gem, Globe, Heart, Trophy, Calendar, Tar
 import { supabase } from '../../utils/supabaseClient';
 import { LoadingDots } from './LoadingSpinner';
 import ImageViewer from './ImageViewer';
+import '../../styles/StylesProfile/UserProfileModal.css';
 
 /* ─── tiny helpers ─────────────────────────────────── */
 const fmt = (n) => Number(n || 0).toLocaleString();
