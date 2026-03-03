@@ -1,11 +1,12 @@
-// src/components/adminComponents/AdminNavigationTabs.jsx
+// src/components/ComAdmin/AdminNavigationTabs.jsx
+// ACTUALIZADO — añade tab Banners
 import React from 'react';
-import { Trophy, Target, Award, Shield, Package, Crown } from 'lucide-react';
+import { Trophy, Target, Award, Shield, Package, Crown, Image } from 'lucide-react';
 
 export default function AdminNavigationTabs({ activeSection, setActiveSection, stats }) {
   return (
     <div className="admin-nav-tabs">
-      <button 
+      <button
         className={`admin-nav-tab ${activeSection === 'matches' ? 'active' : ''}`}
         onClick={() => setActiveSection('matches')}
       >
@@ -16,7 +17,7 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
         )}
       </button>
 
-      <button 
+      <button
         className={`admin-nav-tab ${activeSection === 'leagues' ? 'active' : ''}`}
         onClick={() => setActiveSection('leagues')}
       >
@@ -27,7 +28,7 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
         )}
       </button>
 
-      <button 
+      <button
         className={`admin-nav-tab ${activeSection === 'awards' ? 'active' : ''}`}
         onClick={() => setActiveSection('awards')}
       >
@@ -38,7 +39,7 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
         )}
       </button>
 
-      <button 
+      <button
         className={`admin-nav-tab ${activeSection === 'achievements' ? 'active' : ''}`}
         onClick={() => setActiveSection('achievements')}
       >
@@ -46,7 +47,7 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
         <span>Logros</span>
       </button>
 
-      <button 
+      <button
         className={`admin-nav-tab ${activeSection === 'titles' ? 'active' : ''}`}
         onClick={() => setActiveSection('titles')}
       >
@@ -54,7 +55,7 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
         <span>Títulos</span>
       </button>
 
-      <button 
+      <button
         className={`admin-nav-tab ${activeSection === 'crowns' ? 'active' : ''}`}
         onClick={() => setActiveSection('crowns')}
       >
@@ -62,6 +63,20 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
         <span>Coronas</span>
         {stats.crowns.thisMonth === 0 && (
           <span className="tab-badge pending">!</span>
+        )}
+      </button>
+
+      {/* ── NUEVA TAB BANNERS ── */}
+      <button
+        className={`admin-nav-tab ${activeSection === 'banners' ? 'active' : ''}`}
+        onClick={() => setActiveSection('banners')}
+      >
+        <Image size={20} />
+        <span>Banners</span>
+        {stats.banners?.total > 0 && (
+          <span className="tab-badge" style={{ background: 'rgba(124,111,247,0.2)', color: 'var(--accent)' }}>
+            {stats.banners.total}
+          </span>
         )}
       </button>
     </div>

@@ -1,4 +1,4 @@
-// src/hooks/adminHooks/useAdminData.js
+
 import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabaseClient';
 
@@ -10,19 +10,21 @@ export const useAdminData = () => {
   const [titles, setTitles] = useState([]);
   const [users, setUsers] = useState([]);
   const [crownHistory, setCrownHistory] = useState([]);
+  const [banners, setBanners] = useState([]);          // ← NUEVO
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
     try {
       setLoading(true);
       const [
-        matchData, 
-        leagueData, 
-        awardData, 
-        achievementData, 
-        titleData, 
-        userData, 
-        historyData
+        matchData,
+        leagueData,
+        awardData,
+        achievementData,
+        titleData,
+        userData,
+        historyData,
+        bannerData,                                      // ← NUEVO
       ] = await Promise.all([
         supabase.from('matches').select('*, predictions(*)'),
         supabase.from('leagues').select('*, league_predictions(*)'),
@@ -30,7 +32,8 @@ export const useAdminData = () => {
         supabase.from('available_achievements').select('*'),
         supabase.from('available_titles').select('*'),
         supabase.from('users').select('*').order('monthly_points', { ascending: false }).limit(10),
-        supabase.from('monthly_championship_history').select('*, users(name)').order('awarded_at', { ascending: false })
+        supabase.from('monthly_championship_history').select('*, users(name)').order('awarded_at', { ascending: false }),
+        supabase.from('available_banners').select('*').order('created_at', { ascending: false }), // ← NUEVO
       ]);
 
       setMatches(matchData.data || []);
@@ -40,6 +43,7 @@ export const useAdminData = () => {
       setTitles(titleData.data || []);
       setUsers(userData.data || []);
       setCrownHistory(historyData.data || []);
+      setBanners(bannerData.data || []);               // ← NUEVO
     } catch (err) {
       console.error('Error loading data:', err);
       throw err;
@@ -60,7 +64,8 @@ export const useAdminData = () => {
     titles,
     users,
     crownHistory,
+    banners,                                            // ← NUEVO
     loading,
-    loadData
+    loadData,
   };
 };

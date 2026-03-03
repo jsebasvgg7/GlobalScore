@@ -451,7 +451,7 @@ export default function SettingsPage({ currentUser }) {
             <SettingItem
               icon={Info}
               label="Versión"
-              description="GlobalScore v19.0.0"
+              description="GlobalScore v20.0.0"
             />
 
             <SettingItem

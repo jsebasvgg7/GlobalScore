@@ -128,7 +128,146 @@
   transform: scale(0.98);
   background: var(--profile-border);
 }
+/* ══════════════════════════════════════════════════════
+   BANNER SELECTOR — añadir al FINAL de
+   src/styles/StylesProfile/ProfileEdit.css
+══════════════════════════════════════════════════════ */
 
+/* Contenedor del selector de banners */
+.banner-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Cada opción de banner */
+.banner-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 12px 8px 8px;
+  background: var(--profile-hover);
+  border: 2px solid var(--profile-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.banner-option:hover {
+  border-color: var(--profile-primary);
+  background: var(--profile-primary-bg);
+}
+
+.banner-option--selected {
+  border-color: var(--profile-primary);
+  background: var(--profile-primary-bg);
+  box-shadow: 0 0 0 1px var(--profile-primary);
+}
+
+/* Preview del banner */
+.banner-option-preview {
+  width: 80px;
+  height: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Preview base (gradiente morado) */
+.banner-option-preview--base {
+  background: linear-gradient(135deg, #3b1fa3 0%, #6d28d9 50%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-base-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(8px);
+  opacity: 0.6;
+}
+
+.banner-base-orb--1 {
+  width: 40px;
+  height: 40px;
+  background: #a78bfa;
+  top: -10px;
+  right: -5px;
+}
+
+.banner-base-orb--2 {
+  width: 30px;
+  height: 30px;
+  background: #3b82f6;
+  bottom: -8px;
+  left: 2px;
+  opacity: 0.4;
+}
+
+.banner-base-label {
+  position: relative;
+  z-index: 1;
+  font-size: 10px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.banner-option-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Info del banner */
+.banner-option-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.banner-option-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--profile-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.banner-option-desc {
+  font-size: 11px;
+  color: var(--profile-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Check de seleccionado */
+.banner-option-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--profile-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
 /* ==========================================
    AVATAR UPLOAD - Diseño limpio
 ========================================== */

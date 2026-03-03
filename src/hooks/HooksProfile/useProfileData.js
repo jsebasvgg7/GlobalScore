@@ -13,7 +13,8 @@ export const useProfileData = (currentUser) => {
     nationality: currentUser?.nationality || '',
     avatar_url: currentUser?.avatar_url || null,
     level: currentUser?.level || 1,
-    joined_date: currentUser?.created_at || new Date().toISOString()
+    joined_date: currentUser?.created_at || new Date().toISOString(),
+    equipped_banner_url: currentUser?.equipped_banner_url || null, // ← NUEVO
   });
 
   const loadUserData = async () => {
@@ -25,7 +26,7 @@ export const useProfileData = (currentUser) => {
         .single();
 
       if (error) throw error;
-      
+
       if (data) {
         setUserData({
           name: data.name || '',
@@ -37,7 +38,8 @@ export const useProfileData = (currentUser) => {
           nationality: data.nationality || '',
           avatar_url: data.avatar_url || null,
           level: data.level || 1,
-          joined_date: data.created_at
+          joined_date: data.created_at,
+          equipped_banner_url: data.equipped_banner_url || null, // ← NUEVO
         });
       }
     } catch (err) {
@@ -56,14 +58,15 @@ export const useProfileData = (currentUser) => {
           favorite_team: userData.favorite_team,
           favorite_player: userData.favorite_player,
           gender: userData.gender,
-          nationality: userData.nationality
+          nationality: userData.nationality,
+          equipped_banner_url: userData.equipped_banner_url ?? null, // ← NUEVO
         })
         .eq('id', currentUser.id);
 
       if (error) throw error;
 
       toast.success('¡Perfil actualizado con éxito!');
-      
+
       setTimeout(() => {
         onBack();
       }, 1500);
@@ -86,6 +89,6 @@ export const useProfileData = (currentUser) => {
     setUserData,
     loading,
     loadUserData,
-    saveUserData
+    saveUserData,
   };
 };

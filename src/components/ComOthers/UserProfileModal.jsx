@@ -1,4 +1,5 @@
 // src/components/ComOthers/UserProfileModal.jsx
+// ACTUALIZADO — hero banner dinámico
 import React, { useState, useEffect } from 'react';
 import { X, Crown, Flame, Star, Shield, Gem, Globe, Heart, Trophy, Calendar, Target, Zap, Users, TrendingUp } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
@@ -15,7 +16,6 @@ const pointsInLevel = (points) => points % 20;
 const fmtDate = (d) =>
   new Date(d).toLocaleDateString('es-ES', { year: 'numeric', month: 'short' });
 
-/* ─── Section divider (Clash-style) ────────────────── */
 function SectionDivider({ icon: Icon, label, color = '#8B5CF6' }) {
   return (
     <div className="upm-divider">
@@ -29,7 +29,6 @@ function SectionDivider({ icon: Icon, label, color = '#8B5CF6' }) {
   );
 }
 
-/* ─── Stat pill (Clash-style rounded card) ──────────── */
 function StatPill({ icon: Icon, label, value, accent = '#8B5CF6', glow }) {
   return (
     <div className="upm-stat-pill" style={{ '--pill-accent': accent }}>
@@ -45,7 +44,6 @@ function StatPill({ icon: Icon, label, value, accent = '#8B5CF6', glow }) {
   );
 }
 
-/* ─── Achievement badge (hexagonal-ish) ─────────────── */
 function AchievementBadge({ achievement, index }) {
   const colors = ['#8B5CF6', '#3B82F6', '#10B981', '#EF4444', '#F59E0B', '#EC4899'];
   const color = colors[index % colors.length];
@@ -61,7 +59,6 @@ function AchievementBadge({ achievement, index }) {
   );
 }
 
-/* ─── Crown entry ───────────────────────────────────── */
 function CrownEntry({ crown, index }) {
   return (
     <div className="upm-crown-entry" style={{ animationDelay: `${index * 80}ms` }}>
@@ -159,7 +156,6 @@ export default function UserProfileModal({ userId, onClose }) {
     })[0];
   };
 
-  /* ── Loading ── */
   if (loading) {
     return (
       <div className="upm-overlay" onClick={onClose}>
@@ -185,6 +181,9 @@ export default function UserProfileModal({ userId, onClose }) {
   const activeTitle = getActiveTitle();
   const totalCrowns = userData.monthly_championships || 0;
 
+  // ── Banner del usuario ──────────────────────────────
+  const hasBanner = !!userData.equipped_banner_url;
+
   const tabs = [
     { id: 'stats', label: 'Stats', icon: TrendingUp },
     { id: 'logros', label: 'Logros', icon: Star },
@@ -198,7 +197,6 @@ export default function UserProfileModal({ userId, onClose }) {
           className={`upm-modal ${mounted ? 'upm-modal--in' : ''}`}
           onClick={e => e.stopPropagation()}
         >
-          {/* Close button */}
           <button className="upm-close" onClick={onClose} aria-label="Cerrar">
             <X size={16} />
           </button>
@@ -206,13 +204,29 @@ export default function UserProfileModal({ userId, onClose }) {
           {/* ════ HERO SECTION ════ */}
           <div className="upm-hero">
 
-            {/* Banner gradient top */}
+            {/* ── Banner: imagen real o gradiente por defecto ── */}
             <div className="upm-hero-banner">
-              <div className="upm-hero-banner-orb upm-hero-banner-orb--1" />
-              <div className="upm-hero-banner-orb upm-hero-banner-orb--2" />
+              {hasBanner ? (
+                <>
+                  {/* Imagen del banner */}
+                  <img
+                    src={userData.equipped_banner_url}
+                    alt="Banner"
+                    className="upm-hero-banner-img"
+                  />
+                  {/* Overlay sutil para que el avatar destaque */}
+                  <div className="upm-hero-banner-overlay" />
+                </>
+              ) : (
+                <>
+                  {/* Gradiente por defecto */}
+                  <div className="upm-hero-banner-orb upm-hero-banner-orb--1" />
+                  <div className="upm-hero-banner-orb upm-hero-banner-orb--2" />
+                </>
+              )}
             </div>
 
-            {/* Avatar centrado, saliendo sobre el banner */}
+            {/* Avatar */}
             <div className="upm-hero-avatar-wrap">
               <div
                 className={`upm-avatar ${userData.avatar_url ? 'upm-avatar--clickable' : ''}`}
@@ -229,11 +243,10 @@ export default function UserProfileModal({ userId, onClose }) {
               </div>
             </div>
 
-            {/* Nombre + título + ranking — centrados debajo del avatar */}
+            {/* Nombre + info */}
             <div className="upm-hero-body">
               <h2 className="upm-name">{userData.name || 'Usuario'}</h2>
 
-              {/* Info tags */}
               {(userData.nationality || userData.favorite_team || userData.favorite_player || userData.created_at) && (
                 <div className="upm-info-tags">
                   {userData.nationality && (
@@ -249,16 +262,10 @@ export default function UserProfileModal({ userId, onClose }) {
                     <span className="upm-tag upm-tag--gold"><Calendar size={11} />Desde {fmtDate(userData.created_at)}</span>
                   )}
                 </div>
-                
-              )}
-                            
-              {/* Bio */}
-              {userData.bio && (
-                <p className="upm-bio">{userData.bio}</p>
               )}
 
+              {userData.bio && <p className="upm-bio">{userData.bio}</p>}
             </div>
-
           </div>
 
           {/* ════ TABS ════ */}
@@ -281,10 +288,8 @@ export default function UserProfileModal({ userId, onClose }) {
           {/* ════ TAB CONTENT ════ */}
           <div className="upm-content">
 
-            {/* ── STATS TAB ── */}
             {activeTab === 'stats' && (
               <div className="upm-tab-panel">
-                {/* Level progress */}
                 <SectionDivider icon={Zap} label={`Nivel ${userData.level}`} color="#F59E0B" />
                 <div className="upm-level-block">
                   <div className="upm-level-bar-wrap">
@@ -297,7 +302,6 @@ export default function UserProfileModal({ userId, onClose }) {
                   </div>
                 </div>
 
-                {/* Main stats 2x2 */}
                 <SectionDivider icon={TrendingUp} label="Estadísticas" color="#8B5CF6" />
                 <div className="upm-stats-grid">
                   <StatPill icon={Zap} label="Puntos" value={fmt(userData.points)} accent="#8B5CF6" glow />
@@ -306,7 +310,6 @@ export default function UserProfileModal({ userId, onClose }) {
                   <StatPill icon={Flame} label="Racha actual" value={streakData.current_streak} accent="#EF4444" />
                 </div>
 
-                {/* Secondary stats */}
                 <div className="upm-stats-grid upm-stats-grid--secondary">
                   <StatPill icon={Trophy} label="Correctas" value={fmt(userData.correct)} accent="#F59E0B" />
                   <StatPill icon={Shield} label="Mejor racha" value={streakData.best_streak} accent="#EC4899" />
@@ -314,7 +317,6 @@ export default function UserProfileModal({ userId, onClose }) {
                   <StatPill icon={TrendingUp} label="Pts mes" value={fmt(userData.monthly_points)} accent="#6366F1" />
                 </div>
 
-                {/* Streaks highlight */}
                 <SectionDivider icon={Flame} label="Rachas" color="#EF4444" />
                 <div className="upm-streaks-row">
                   <div className="upm-streak-card upm-streak-card--fire">
@@ -332,10 +334,8 @@ export default function UserProfileModal({ userId, onClose }) {
               </div>
             )}
 
-            {/* ── LOGROS TAB ── */}
             {activeTab === 'logros' && (
               <div className="upm-tab-panel">
-                {/* Active title */}
                 {activeTitle && (
                   <>
                     <SectionDivider icon={Gem} label="Título activo" color={activeTitle.color || '#8B5CF6'} />
@@ -354,7 +354,6 @@ export default function UserProfileModal({ userId, onClose }) {
                   </>
                 )}
 
-                {/* Achievements grid */}
                 <SectionDivider icon={Star} label={`Insignias ${userAchievements.length}/${availableAchievements.length}`} color="#F59E0B" />
                 {userAchievements.length === 0 ? (
                   <div className="upm-empty">
@@ -369,7 +368,6 @@ export default function UserProfileModal({ userId, onClose }) {
                   </div>
                 )}
 
-                {/* Locked count */}
                 {availableAchievements.length > userAchievements.length && (
                   <div className="upm-locked-count">
                     <Shield size={14} opacity={0.5} />
@@ -379,10 +377,8 @@ export default function UserProfileModal({ userId, onClose }) {
               </div>
             )}
 
-            {/* ── CORONAS TAB ── */}
             {activeTab === 'coronas' && (
               <div className="upm-tab-panel">
-                {/* Total crowns showcase */}
                 <SectionDivider icon={Crown} label="Campeonatos" color="#F59E0B" />
                 <div className="upm-crowns-showcase">
                   {totalCrowns === 0 ? (
@@ -418,7 +414,6 @@ export default function UserProfileModal({ userId, onClose }) {
                   )}
                 </div>
 
-                {/* Monthly stats */}
                 <SectionDivider icon={TrendingUp} label="Este mes" color="#10B981" />
                 <div className="upm-stats-grid">
                   <StatPill icon={Zap} label="Pts mes" value={fmt(userData.monthly_points)} accent="#8B5CF6" glow />
@@ -427,7 +422,6 @@ export default function UserProfileModal({ userId, onClose }) {
                   <StatPill icon={Crown} label="Coronas" value={totalCrowns} accent="#F59E0B" glow />
                 </div>
 
-                {/* Crown history */}
                 {crownHistory.length > 0 && (
                   <>
                     <SectionDivider icon={Calendar} label="Historial" color="#8B5CF6" />
@@ -442,7 +436,6 @@ export default function UserProfileModal({ userId, onClose }) {
             )}
           </div>
 
-          {/* bottom padding */}
           <div style={{ height: 16 }} />
         </div>
       </div>
