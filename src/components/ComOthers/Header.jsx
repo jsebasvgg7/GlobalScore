@@ -27,6 +27,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
     { path: "/stats",    icon: BarChart3, label: "Stats"   },
     { path: "/profile",  icon: User2,     label: "Perfil"  },
     { path: "/settings", icon: Settings,  label: "Ajustes" },
+    {path: "/world",    icon: Globe,     label: "Mundo"   },
     ...(currentUser?.is_admin
       ? [{ path: "/admin", icon: Shield, label: "Admin" }]
       : []),
@@ -141,7 +142,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
       ════════════════════════════ */}
       <nav className="gs-bottom-nav" aria-label="Navegación principal">
         <div className="gs-bottom-pill">
-          {navItems.slice(0, 5).map(({ path, icon: Icon, label }) => (
+          {navItems.slice(0, 7).map(({ path, icon: Icon, label }) => (
             <button
               key={path}
               className={`gs-bottom-btn ${isActive(path) ? "active" : ""}`}

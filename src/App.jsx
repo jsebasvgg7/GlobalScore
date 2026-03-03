@@ -272,10 +272,10 @@ export default function App() {
             path="/settings"
             element={session ? <SettingsPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
-          {/* <Route
-            path="/worldcup"
+          {<Route
+            path="/world"
             element={session ? <WorldCupPage currentUser={currentUser} /> : <Navigate to="/" replace />}
-          /> */}
+          /> }
         </Routes>
         <InstallPWAButton />
       </BrowserRouter>
