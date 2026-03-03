@@ -1,19 +1,18 @@
-// src/pages/RankingPage.jsx
+// src/pages/RankingPage.jsx — NEW LEADERBOARD DESIGN
 import React, { useState, useEffect } from 'react';
-import { 
-  ArrowLeft, Target, TrendingUp, Calendar, Globe, Zap,
-  ChevronRight, Users, BarChart3, Crown, Trophy, Star, Award
+import {
+  Target, TrendingUp, Calendar, Globe, Zap,
+  BarChart3, Crown, Trophy, Users
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import Footer from '../components/ComOthers/Footer';
 import UserProfileModal from '../components/ComOthers/UserProfileModal';
 import '../styles/StylesPages/RankingPage.css';
 
-export default function RankingPage({ currentUser, onBack }) {
+export default function RankingPage({ currentUser }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [rankingType, setRankingType] = useState('global'); // 'global', 'monthly', 'halloffame'
+  const [rankingType, setRankingType] = useState('global');
   const [sortBy, setSortBy] = useState('points');
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [champions, setChampions] = useState([]);
@@ -27,528 +26,316 @@ export default function RankingPage({ currentUser, onBack }) {
   const checkAndResetMonthly = async () => {
     try {
       const now = new Date();
-      const currentDay = now.getDate();
-      
       const { data: config, error: configError } = await supabase
-        .from('app_config')
-        .select('last_monthly_reset')
-        .eq('id', 1)
-        .single();
-
-      if (configError && configError.code !== 'PGRST116') {
-        console.error('Error al obtener config:', configError);
-        return;
-      }
-
-      const lastReset = config?.last_monthly_reset 
-        ? new Date(config.last_monthly_reset) 
-        : new Date(0);
-      
-      const lastResetMonth = lastReset.getMonth();
-      const currentMonth = now.getMonth();
-      const lastResetYear = lastReset.getFullYear();
-      const currentYear = now.getFullYear();
-      
-      const monthChanged = (currentMonth !== lastResetMonth) || (currentYear !== lastResetYear);
-      
-      if (monthChanged && currentDay === 1) {
-        const { error: resetError } = await supabase.rpc('reset_all_monthly_stats');
-        
-        if (resetError) {
-          console.error('❌ Error en reset:', resetError);
-          return;
-        }
-      }
-    } catch (error) {
-      console.error('❌ Error en checkAndResetMonthly:', error);
-    }
+        .from('app_config').select('last_monthly_reset').eq('id', 1).single();
+      if (configError && configError.code !== 'PGRST116') return;
+      const lastReset = config?.last_monthly_reset ? new Date(config.last_monthly_reset) : new Date(0);
+      const monthChanged = (now.getMonth() !== lastReset.getMonth()) || (now.getFullYear() !== lastReset.getFullYear());
+      if (monthChanged && now.getDate() === 1) await supabase.rpc('reset_all_monthly_stats');
+    } catch (error) { console.error(error); }
   };
 
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .order('points', { ascending: false });
-
+      const { data, error } = await supabase.from('users').select('*').order('points', { ascending: false });
       if (error) throw error;
       setUsers(data || []);
-    } catch (err) {
-      console.error('Error loading users:', err);
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { console.error(err); } finally { setLoading(false); }
   };
 
-  // ⭐ FUNCIÓN ACTUALIZADA - Obtiene puntos del campeonato y fecha
   const loadTopChampions = async () => {
     try {
-      console.log('🔍 Cargando campeones desde monthly_championship_history...');
-      
-      // PASO 1: Obtener TODOS los registros de historial con detalles
-      const { data: historyData, error: historyError } = await supabase
+      const { data: historyData, error } = await supabase
         .from('monthly_championship_history')
         .select('user_id, points, month_year, awarded_at')
         .order('awarded_at', { ascending: false });
-      
-      console.log('📊 Registros de historial raw:', historyData?.length || 0);
-      
-      if (historyError) {
-        console.error('❌ Error al cargar historial:', historyError);
-        throw historyError;
-      }
+      if (error) throw error;
+      if (!historyData?.length) { setChampions([]); return; }
 
-      if (!historyData || historyData.length === 0) {
-        console.log('⚠️ No hay coronas en el historial');
-        setChampions([]);
-        return;
-      }
-
-      // PASO 2: Agrupar por usuario y guardar todos sus campeonatos
-      const championData = {};
-      
-      historyData.forEach(record => {
-        const userId = record.user_id;
-        if (!championData[userId]) {
-          championData[userId] = {
-            count: 0,
-            championships: []
-          };
-        }
-        championData[userId].count++;
-        championData[userId].championships.push({
-          points: record.points,
-          monthYear: record.month_year,
-          awardedAt: record.awarded_at
-        });
+      const map = {};
+      historyData.forEach(r => {
+        if (!map[r.user_id]) map[r.user_id] = { count: 0, champs: [] };
+        map[r.user_id].count++;
+        map[r.user_id].champs.push({ points: r.points, monthYear: r.month_year });
       });
-      
-      console.log('📈 Datos de campeones:', championData);
 
-      // PASO 3: Obtener IDs únicos de usuarios
-      const userIds = Object.keys(championData);
-      console.log('👥 User IDs únicos:', userIds);
+      const { data: usersData } = await supabase
+        .from('users').select('id, name, avatar_url').in('id', Object.keys(map));
+      if (!usersData?.length) { setChampions([]); return; }
 
-      // PASO 4: Obtener datos completos de esos usuarios
-      const { data: usersData, error: usersError } = await supabase
-        .from('users')
-        .select('id, name, avatar_url')
-        .in('id', userIds);
-
-      console.log('👤 Usuarios encontrados:', usersData?.length || 0);
-
-      if (usersError) {
-        console.error('❌ Error al cargar usuarios:', usersError);
-        throw usersError;
-      }
-
-      if (!usersData || usersData.length === 0) {
-        console.warn('⚠️ No se encontraron usuarios para los IDs');
-        setChampions([]);
-        return;
-      }
-
-      // PASO 5: Combinar datos de usuarios con información de campeonatos
-      const championsArray = usersData
-        .map(user => {
-          const userData = championData[user.id];
-          // Obtener el campeonato más reciente
-          const latestChampionship = userData.championships[0]; // Ya está ordenado por fecha desc
-          
-          return {
-            id: user.id,
-            name: user.name,
-            avatar_url: user.avatar_url,
-            monthly_championships: userData.count,
-            // Info del campeonato más reciente
-            championship_points: latestChampionship.points,
-            championship_month_year: latestChampionship.monthYear,
-            championship_awarded_at: latestChampionship.awardedAt,
-            // Todos los campeonatos para referencia
-            all_championships: userData.championships
-          };
-        })
-        .sort((a, b) => {
-          // Primero por número de coronas (descendente)
-          if (b.monthly_championships !== a.monthly_championships) {
-            return b.monthly_championships - a.monthly_championships;
-          }
-          // Luego por puntos del último campeonato (descendente)
-          return b.championship_points - a.championship_points;
-        })
-        .slice(0, 10); // Top 10
-
-      console.log('🏆 Champions finales:', championsArray.length);
-      console.log('👑 Detalle completo:', championsArray);
-
-      setChampions(championsArray);
-    } catch (err) {
-      console.error('❌ Error loading champions:', err);
-      setChampions([]);
-    }
+      setChampions(
+        usersData.map(u => ({
+          ...u,
+          monthly_championships: map[u.id].count,
+          championship_points: map[u.id].champs[0].points,
+          championship_month_year: map[u.id].champs[0].monthYear,
+        }))
+        .sort((a, b) => b.monthly_championships - a.monthly_championships || b.championship_points - a.championship_points)
+        .slice(0, 10)
+      );
+    } catch (err) { console.error(err); setChampions([]); }
   };
 
   const getRankingData = () => {
-    if (rankingType === 'monthly') {
-      return users.map(u => ({
-        ...u,
-        rankPoints: u.monthly_points || 0,
-        rankCorrect: u.monthly_correct || 0,
-        rankPredictions: u.monthly_predictions || 0
-      }));
-    } else {
-      return users.map(u => ({
-        ...u,
-        rankPoints: u.points || 0,
-        rankCorrect: u.correct || 0,
-        rankPredictions: u.predictions || 0
-      }));
-    }
+    const monthly = rankingType === 'monthly';
+    return users.map(u => ({
+      ...u,
+      rankPoints: monthly ? (u.monthly_points || 0) : (u.points || 0),
+      rankCorrect: monthly ? (u.monthly_correct || 0) : (u.correct || 0),
+      rankPredictions: monthly ? (u.monthly_predictions || 0) : (u.predictions || 0),
+    }));
   };
 
   const rankingUsers = getRankingData();
 
-  const globalStats = {
-    totalUsers: rankingUsers.length,
-    totalPredictions: rankingUsers.reduce((sum, u) => sum + (u.rankPredictions || 0), 0),
-    totalPoints: rankingUsers.reduce((sum, u) => sum + (u.rankPoints || 0), 0),
-    avgAccuracy: rankingUsers.length > 0 
-      ? Math.round(rankingUsers.reduce((sum, u) => {
-          const acc = u.rankPredictions > 0 ? (u.rankCorrect / u.rankPredictions) * 100 : 0;
-          return sum + acc;
-        }, 0) / rankingUsers.length)
-      : 0
-  };
-
-  const sortedByPoints = [...rankingUsers].sort((a, b) => b.rankPoints - a.rankPoints);
-  const currentUserPosition = sortedByPoints.findIndex(u => u.id === currentUser?.id) + 1;
-  const currentUserData = rankingUsers.find(u => u.id === currentUser?.id);
-
-  const getFilteredUsers = () => {
-    let filtered = [...rankingUsers];
-
-    if (searchTerm) {
-      filtered = filtered.filter(u => 
-        u.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
+  const filteredUsers = [...rankingUsers].sort((a, b) => {
     if (sortBy === 'accuracy') {
-      filtered.sort((a, b) => {
-        const accA = a.rankPredictions > 0 ? (a.rankCorrect / a.rankPredictions) : 0;
-        const accB = b.rankPredictions > 0 ? (b.rankCorrect / b.rankPredictions) : 0;
-        return accB - accA;
-      });
-    } else if (sortBy === 'predictions') {
-      filtered.sort((a, b) => b.rankPredictions - a.rankPredictions);
-    } else {
-      filtered.sort((a, b) => b.rankPoints - a.rankPoints);
+      const accA = a.rankPredictions > 0 ? a.rankCorrect / a.rankPredictions : 0;
+      const accB = b.rankPredictions > 0 ? b.rankCorrect / b.rankPredictions : 0;
+      return accB - accA;
     }
+    if (sortBy === 'predictions') return b.rankPredictions - a.rankPredictions;
+    return b.rankPoints - a.rankPoints;
+  });
 
-    return filtered;
-  };
-
-  const filteredUsers = getFilteredUsers();
+  const totalRegistered = rankingUsers.length;
+  const totalParticipated = rankingUsers.filter(u => u.rankPredictions > 0).length;
+  const top3 = filteredUsers.slice(0, 3);
 
   const getCurrentMonthLabel = () => {
-    const months = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-    ];
+    const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
     const now = new Date();
     return `${months[now.getMonth()]} ${now.getFullYear()}`;
   };
 
-  if (loading) {
-    return (
-      <div className="ranking-page-loading">
-        <div className="loader-container">
-          <div className="spinner-premium"></div>
-        </div>
-        <p className="loading-text">Cargando ranking...</p>
-      </div>
-    );
-  }
+  const Av = ({ user, size = 'md' }) => {
+    const cls = `lb-av lb-av-${size}`;
+    if (user.avatar_url) return <img src={user.avatar_url} alt={user.name} className={cls} />;
+    return <div className={`${cls} lb-av-ph`}>{user.name?.charAt(0).toUpperCase() || '?'}</div>;
+  };
+
+  if (loading) return (
+    <div className="lb-loading"><div className="lb-spinner" /><p>Cargando ranking…</p></div>
+  );
 
   return (
-    <div className="ranking-page">
-      <div className="ranking-page-container">
+    <div className="lb-page">
+      <div className="lb-container">
 
-        {/* Tabs - Ahora con 3 opciones */}
-        <div className="ranking-tabs">
-          <button 
-            className={`tab-button ${rankingType === 'global' ? 'active' : ''}`}
-            onClick={() => setRankingType('global')}
-          >
-            <Globe size={18} />
-            <span>Global</span>
-          </button>
-          <button 
-            className={`tab-button ${rankingType === 'monthly' ? 'active' : ''}`}
-            onClick={() => setRankingType('monthly')}
-          >
-            <Calendar size={18} />
-            <span>Mensual</span>
-          </button>
-          <button 
-            className={`tab-button ${rankingType === 'halloffame' ? 'active' : ''}`}
-            onClick={() => setRankingType('halloffame')}
-          >
-            <Crown size={18} />
-            <span>S fama</span>
-          </button>
+        {/* HEADER */}
+        <div className="lb-header-row">
+          <h1 className="lb-page-title">Ranking Globalscore</h1>
+          <div className="lb-tabs">
+            {[
+              { key: 'global',     icon: <Globe size={14} />,    label: 'Global'  },
+              { key: 'monthly',    icon: <Calendar size={14} />, label: 'Mensual' },
+              { key: 'halloffame', icon: <Crown size={14} />,    label: 'S. Fama' },
+            ].map(({ key, icon, label }) => (
+              <button key={key} className={`lb-tab ${rankingType === key ? 'active' : ''}`} onClick={() => setRankingType(key)}>
+                {icon}<span>{label}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Contenido según la pestaña seleccionada */}
+        {/* HALL OF FAME */}
         {rankingType === 'halloffame' ? (
-          // SECCIÓN HALL OF FAME - FORMATO LISTA
-          <div className="hall-of-fame-section">
-            <div className="hall-header">
-              <div className="hall-title-group">
-                <h2 className="hall-title">Salon de la Fama</h2>
-                <p className="hall-subtitle">Leyendas con más coronas mensuales ganadas</p>
+          <div className="lb-card">
+            <div className="lb-section-hd">
+              <Crown size={20} className="lb-icon-gold" />
+              <div>
+                <h2 className="lb-section-title">Salón de la Fama</h2>
+                <p className="lb-section-sub">Leyendas con más coronas mensuales ganadas</p>
               </div>
-
-              {champions.length > 0 ? (
-                <div className="hall-items">
-                  {champions.map((champion, index) => {
-                    const position = index + 1;
-
-                    return (
-                      <div 
-                        key={champion.id}
-                        className="hall-item"
-                      >
-                        <div className="hall-item-position">
-                          {position < 10 ? `0${position}` : position}
-                        </div>
-                        
-                        <div 
-                          className="hall-item-avatar"
-                          onClick={() => setSelectedUserId(champion.id)}
-                        >
-                          {champion.avatar_url ? (
-                            <img src={champion.avatar_url} alt={champion.name} />
-                          ) : (
-                            <span>{champion.name.charAt(0).toUpperCase()}</span>
-                          )}
-                        </div>
-                        
-                        <div className="hall-item-info">
-                          <div className="hall-item-name">{champion.name}</div>
-                          <div className="hall-item-detail">
-                            {champion.championship_month_year}
-                          </div>
-                        </div>
-                        
-                        <div className="hall-item-crowns">
-                          <Crown size={16} />
-                          <span>{champion.monthly_championships}</span>
-                        </div>
-                        
-                        <div className="hall-item-points">
-                          {champion.championship_points} pts
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="hall-empty">
-                  <Crown size={64} className="hall-empty-icon" />
-                  <p className="hall-empty-text">Aún no hay campeones mensuales</p>
-                  <p className="hall-empty-subtitle">
-                    Sé el primero en ganar una corona mensual
-                  </p>
-                </div>
-              )}
             </div>
-          </div>
-        ) : (
-          // SECCIÓN DE RANKINGS (Global o Mensual)
-          <>
-            {/* Podio Top 3 */}
-            {filteredUsers.length >= 3 && (
-              <div className="podium-container">
-                <h2 className="podium-title">
-                  {rankingType === 'global' ? 'Campeones De Temporada' : 'Campeones Del Mes'}
-                </h2>
-                <div className="podium-winners">
-                  {/* 2do Lugar */}
-                  <div className="winner-card second">
-                    <div className="position-badge">2</div>
-                    <div 
-                      className="winner-avatar"
-                      onClick={() => setSelectedUserId(filteredUsers[1].id)}
-                    >
-                      {filteredUsers[1].avatar_url ? (
-                        <img src={filteredUsers[1].avatar_url} alt={filteredUsers[1].name} />
-                      ) : (
-                        <span>{filteredUsers[1].name.charAt(0).toUpperCase()}</span>
-                      )}
-                    </div>
-                    <div className="winner-name">{filteredUsers[1].name}</div>
-                    <div className="winner-stats">
-                      <div className="stat-row points">
-                        {filteredUsers[1].rankPoints}
-                      </div>
-                      <div className="stat-row">
-                        {filteredUsers[1].rankPredictions > 0 
-                          ? Math.round((filteredUsers[1].rankCorrect / filteredUsers[1].rankPredictions) * 100) 
-                          : 0}%
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 1er Lugar */}
-                  <div className="winner-card first">
-                    <div className="position-badge">1</div>
-                    <div 
-                      className="winner-avatar"
-                      onClick={() => setSelectedUserId(filteredUsers[0].id)}
-                    >
-                      {filteredUsers[0].avatar_url ? (
-                        <img src={filteredUsers[0].avatar_url} alt={filteredUsers[0].name} />
-                      ) : (
-                        <span>{filteredUsers[0].name.charAt(0).toUpperCase()}</span>
-                      )}
-                    </div>
-                    <div className="winner-name">{filteredUsers[0].name}</div>
-                    <div className="winner-stats">
-                      <div className="stat-row points">
-                        {filteredUsers[0].rankPoints}
-                      </div>
-                      <div className="stat-row">
-                        {filteredUsers[0].rankPredictions > 0 
-                          ? Math.round((filteredUsers[0].rankCorrect / filteredUsers[0].rankPredictions) * 100) 
-                          : 0}%
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 3er Lugar */}
-                  <div className="winner-card third">
-                    <div className="position-badge">3</div>
-                    <div 
-                      className="winner-avatar"
-                      onClick={() => setSelectedUserId(filteredUsers[2].id)}
-                    >
-                      {filteredUsers[2].avatar_url ? (
-                        <img src={filteredUsers[2].avatar_url} alt={filteredUsers[2].name} />
-                      ) : (
-                        <span>{filteredUsers[2].name.charAt(0).toUpperCase()}</span>
-                      )}
-                    </div>
-                    <div className="winner-name">{filteredUsers[2].name}</div>
-                    <div className="winner-stats">
-                      <div className="stat-row points">
-                        {filteredUsers[2].rankPoints}
-                      </div>
-                      <div className="stat-row">
-                        {filteredUsers[2].rankPredictions > 0 
-                          ? Math.round((filteredUsers[2].rankCorrect / filteredUsers[2].rankPredictions) * 100) 
-                          : 0}%
-                      </div>
-                    </div>
-                  </div>
+            {champions.length > 0 ? (
+              <div className="lb-table">
+                <div className="lb-thead">
+                  <span className="lbc-rank">Rank</span>
+                  <span className="lbc-user">Jugador</span>
+                  <span className="lbc-num">Coronas</span>
+                  <span className="lbc-num lbc-hide-sm">Último mes</span>
+                  <span className="lbc-num">Puntos</span>
                 </div>
+                {champions.map((champ, i) => (
+                  <div key={champ.id} className={`lb-trow ${i < 3 ? 'lb-trow-top' : ''}`}>
+                    <span className="lbc-rank"><span className={`lb-rnk lb-rnk-${Math.min(i+1,4)}`}>{i+1}</span></span>
+                    <span className="lbc-user">
+                      <button className="lb-ucell" onClick={() => setSelectedUserId(champ.id)}>
+                        <Av user={champ} size="sm" />
+                        <span className="lb-uname">{champ.name}</span>
+                      </button>
+                    </span>
+                    <span className="lbc-num"><span className="lb-crowns-chip"><Crown size={12}/>{champ.monthly_championships}</span></span>
+                    <span className="lbc-num lbc-hide-sm lb-muted">{champ.championship_month_year}</span>
+                    <span className="lbc-num lb-pts">{champ.championship_points}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="lb-empty">
+                <Crown size={48} className="lb-icon-gold" style={{ opacity: 0.3 }} />
+                <p>Aún no hay campeones mensuales</p>
               </div>
             )}
+          </div>
 
-            {/* Ranking List */}
-            <div className="ranking-list-section">
-              <div className="list-header">
-                <div className="sort-controls">
-                  <button 
-                    className={`sort-btn ${sortBy === 'points' ? 'active' : ''}`}
-                    onClick={() => setSortBy('points')}
-                  >
-                    <Zap size={14} />
-                    <span>Puntos</span>
-                  </button>
-                  <button 
-                    className={`sort-btn ${sortBy === 'accuracy' ? 'active' : ''}`}
-                    onClick={() => setSortBy('accuracy')}
-                  >
-                    <Target size={14} />
-                    <span>Precisión</span>
-                  </button>
-                  <button 
-                    className={`sort-btn ${sortBy === 'predictions' ? 'active' : ''}`}
-                    onClick={() => setSortBy('predictions')}
-                  >
-                    <BarChart3 size={14} />
-                    <span>Actividad</span>
-                  </button>
+        ) : (
+          <>
+            {/* SUMMARY CARDS */}
+            <div className="lb-summary-row">
+              <div className="lb-summary-card">
+                <div className="lb-summary-top">
+                  <span className="lb-summary-num">{totalRegistered}</span>
+                  <div className="lb-s-icon lb-s-icon-blue"><Users size={16}/></div>
                 </div>
+                <span className="lb-summary-lbl">Total Registrados</span>
               </div>
+              <div className="lb-summary-card">
+                <div className="lb-summary-top">
+                  <span className="lb-summary-num">{totalParticipated}</span>
+                  <div className="lb-s-icon lb-s-icon-green"><Target size={16}/></div>
+                </div>
+                <span className="lb-summary-lbl">Total Participantes</span>
+              </div>
+              <div className="lb-summary-card lb-summary-wide">
+                <p className="lb-summary-period-title">
+                  {rankingType === 'monthly' ? `Mensual — ${getCurrentMonthLabel()}` : 'Clasificación Global'}
+                </p>
+                <p className="lb-summary-period-sub">
+                  {rankingType === 'monthly'
+                    ? 'Solo se cuentan puntos del mes actual'
+                    : 'Puntos acumulados de toda la temporada'}
+                </p>
+              </div>
+            </div>
 
-              <div className="ranking-list">
-                {filteredUsers.map((user, index) => {
-                  const accuracy = user.rankPredictions > 0 
-                    ? Math.round((user.rankCorrect / user.rankPredictions) * 100) 
-                    : 0;
-                  const isCurrentUser = user.id === currentUser?.id;
-                  const position = index + 1;
-                  const isTop3 = position <= 3;
-
+            {/* ── TOP 3 CARDS ── */}
+            {top3.length >= 1 && (
+              <div className="lb-top3-row">
+                {top3.map((user, i) => {
+                  const accuracy = user.rankPredictions > 0
+                    ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
+                  const medals = ['🥇','🥈','🥉'];
+                  const ringColors = [
+                    'linear-gradient(135deg, #F59E0B, #FCD34D, #F59E0B)',
+                    'linear-gradient(135deg, #9CA3AF, #E5E7EB, #9CA3AF)',
+                    'linear-gradient(135deg, #CD7F32, #F59E0B, #CD7F32)',
+                  ];
                   return (
-                    <div 
-                      key={user.id} 
-                      className={`ranking-item ${isCurrentUser ? 'is-current' : ''} ${isTop3 ? 'top-3' : ''}`}
-                    >
-                      <div className="item-position">
-                        {position < 10 ? `0${position}` : position}
+                    <div key={user.id} className={`lb-top-card lb-top-${i+1}`}>
+                      <div className="lb-top-hd">
+                        <span className="lb-top-medal">{medals[i]}</span>
+                        <span className={`lb-rnk lb-rnk-${i+1}`}>{i+1}</span>
                       </div>
-                      <div 
-                        className="item-avatar"
-                        onClick={() => setSelectedUserId(user.id)}
-                      >
-                        {user.avatar_url ? (
-                          <img src={user.avatar_url} alt={user.name} />
-                        ) : (
-                          <span>{user.name.charAt(0).toUpperCase()}</span>
-                        )}
-                      </div>
-                      <div className="item-info">
-                        <div className="item-name">
-                          {user.name}
-                          {isCurrentUser && <span className="you-badge">Tú</span>}
+                      <button className="lb-top-identity" onClick={() => setSelectedUserId(user.id)}>
+                        {/* Avatar con anillo de color */}
+                        <div className="lb-top-avatar-ring" style={{ background: ringColors[i] }}>
+                          <div className="lb-top-avatar-inner">
+                            <Av user={user} size="lg" />
+                          </div>
                         </div>
-                        <div className="item-correct">
-                          {user.rankCorrect} aciertos
+                        <span className="lb-top-name">{user.name}</span>
+                      </button>
+                      <div className="lb-top-stats-grid">
+                        <div className="lb-top-stat">
+                          <span className="lb-ts-l">ACIERTOS</span>
+                          <span className="lb-ts-v">{user.rankCorrect}</span>
+                        </div>
+                        <div className="lb-top-stat">
+                          <span className="lb-ts-l">PRED.</span>
+                          <span className="lb-ts-v">{user.rankPredictions}</span>
+                        </div>
+                        <div className="lb-top-stat">
+                          <span className="lb-ts-l">PUNTOS</span>
+                          <span className="lb-ts-v lb-ts-pts">{user.rankPoints}</span>
                         </div>
                       </div>
-                      <div className="item-points">
-                        {user.rankPoints} pts
+                      <div className="lb-top-chips">
+                        <span className="lb-chip lb-chip-a"><Trophy size={11}/>{user.rankPoints}</span>
+                        <span className="lb-chip lb-chip-b"><Target size={11}/>{accuracy}%</span>
                       </div>
-                      <ChevronRight size={20} className="item-arrow" />
                     </div>
                   );
                 })}
               </div>
-            </div>
-
-            {filteredUsers.length === 0 && (
-              <div className="no-results">
-                <div className="no-results-icon">
-                  <TrendingUp size={64} />
-                </div>
-                <p className="no-results-text">No se encontraron usuarios</p>
-              </div>
             )}
+
+            {/* FULL TABLE */}
+            <div className="lb-card">
+              <div className="lb-section-hd">
+                <div>
+                  <h2 className="lb-section-title">
+                    {rankingType === 'monthly' ? 'Ranking Mensual' : 'Ranking Global'}
+                  </h2>
+                </div>
+                <div className="lb-sort-row">
+                  {[
+                    { key: 'points',      icon: <Zap size={12}/>,       label: 'Puntos'    },
+                    { key: 'accuracy',    icon: <Target size={12}/>,     label: 'Precisión' },
+                    { key: 'predictions', icon: <BarChart3 size={12}/>,  label: 'Actividad' },
+                  ].map(({ key, icon, label }) => (
+                    <button key={key} className={`lb-sort-btn ${sortBy === key ? 'active' : ''}`} onClick={() => setSortBy(key)}>
+                      {icon}{label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="lb-table">
+                <div className="lb-thead">
+                  <span className="lbc-rank">Rank</span>
+                  <span className="lbc-user">Jugador</span>
+                  <span className="lbc-num lbc-hide-sm">Aciertos</span>
+                  <span className="lbc-num lbc-hide-sm">Predicciones</span>
+                  <span className="lbc-num">Precisión</span>
+                  <span className="lbc-num">Puntos</span>
+                </div>
+
+                {filteredUsers.map((user, index) => {
+                  const accuracy = user.rankPredictions > 0
+                    ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
+                  const isMe = user.id === currentUser?.id;
+                  const pos = index + 1;
+                  return (
+                    <div key={user.id} className={`lb-trow ${isMe ? 'lb-trow-me' : ''} ${pos <= 3 ? 'lb-trow-top' : ''}`}>
+                      <span className="lbc-rank">
+                        <span className={`lb-rnk lb-rnk-${Math.min(pos,4)}`}>{pos}</span>
+                      </span>
+                      <span className="lbc-user">
+                        <button className="lb-ucell" onClick={() => setSelectedUserId(user.id)}>
+                          <Av user={user} size="sm" />
+                          <div className="lb-uinfo">
+                            <span className="lb-uname">
+                              {user.name}
+                              {isMe && <span className="lb-you">Tú</span>}
+                            </span>
+                          </div>
+                        </button>
+                      </span>
+                      <span className="lbc-num lbc-hide-sm">{user.rankCorrect}</span>
+                      <span className="lbc-num lbc-hide-sm">{user.rankPredictions}</span>
+                      <span className="lbc-num"><span className="lb-acc">{accuracy}%</span></span>
+                      <span className="lbc-num lb-pts">{user.rankPoints}<span className="lb-pts-label">pts</span></span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {filteredUsers.length === 0 && (
+                <div className="lb-empty">
+                  <TrendingUp size={48} className="lb-empty-icon" />
+                  <p>No se encontraron usuarios</p>
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>
-      
       <Footer />
-      
       {selectedUserId && (
-        <UserProfileModal
-          userId={selectedUserId}
-          onClose={() => setSelectedUserId(null)}
-        />
+        <UserProfileModal userId={selectedUserId} onClose={() => setSelectedUserId(null)} />
       )}
     </div>
   );
