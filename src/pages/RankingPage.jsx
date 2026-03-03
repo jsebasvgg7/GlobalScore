@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import Footer from '../components/ComOthers/Footer';
+import HallOfFame from '../components/ComOthers/HallOfFame';
 import UserProfileModal from '../components/ComOthers/UserProfileModal';
 import '../styles/StylesPages/RankingPage.css';
 
@@ -141,48 +142,9 @@ export default function RankingPage({ currentUser }) {
 
         {/* HALL OF FAME */}
         {rankingType === 'halloffame' ? (
-          <div className="lb-card">
-            <div className="lb-section-hd">
-              <Crown size={20} className="lb-icon-gold" />
-              <div>
-                <h2 className="lb-section-title">Salón de la Fama</h2>
-                <p className="lb-section-sub">Leyendas con más coronas mensuales ganadas</p>
-              </div>
-            </div>
-            {champions.length > 0 ? (
-              <div className="lb-table">
-                <div className="lb-thead">
-                  <span className="lbc-rank">Rank</span>
-                  <span className="lbc-user">Jugador</span>
-                  <span className="lbc-num">Coronas</span>
-                  <span className="lbc-num lbc-hide-sm">Último mes</span>
-                  <span className="lbc-num">Puntos</span>
-                </div>
-                {champions.map((champ, i) => (
-                  <div key={champ.id} className={`lb-trow ${i < 3 ? 'lb-trow-top' : ''}`}>
-                    <span className="lbc-rank"><span className={`lb-rnk lb-rnk-${Math.min(i+1,4)}`}>{i+1}</span></span>
-                    <span className="lbc-user">
-                      <button className="lb-ucell" onClick={() => setSelectedUserId(champ.id)}>
-                        <Av user={champ} size="sm" />
-                        <span className="lb-uname">{champ.name}</span>
-                      </button>
-                    </span>
-                    <span className="lbc-num"><span className="lb-crowns-chip"><Crown size={12}/>{champ.monthly_championships}</span></span>
-                    <span className="lbc-num lbc-hide-sm lb-muted">{champ.championship_month_year}</span>
-                    <span className="lbc-num lb-pts">{champ.championship_points}</span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="lb-empty">
-                <Crown size={48} className="lb-icon-gold" style={{ opacity: 0.3 }} />
-                <p>Aún no hay campeones mensuales</p>
-              </div>
-            )}
-          </div>
-
+          <HallOfFame champions={champions} onSelectUser={setSelectedUserId} />
         ) : (
-          <>
+          <>        
             {/* SUMMARY CARDS */}
             <div className="lb-summary-row">
               <div className="lb-summary-card">
