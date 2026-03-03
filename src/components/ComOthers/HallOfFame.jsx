@@ -90,14 +90,14 @@ function Stars() {
 ═══════════════════════════════════════ */
 export default function HallOfFame({ champions = [], onSelectUser }) {
   const [active, setActive] = useState(0);
-  const [phase, setPhase] = useState('idle'); // idle | exit-left | exit-right | enter
+  const [phase, setPhase] = useState('idle'); 
   const timerRef = useRef(null);
   const total = champions.length;
 
   /* Auto-advance every 6 s */
   useEffect(() => {
     if (total <= 1) return;
-    timerRef.current = setTimeout(() => triggerNav('right'), 6000);
+    timerRef.current = setTimeout(() => triggerNav('right'), 600);
     return () => clearTimeout(timerRef.current);
   }, [active, total]);
 
@@ -133,6 +133,24 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
           </div>
         ) : (
           <>
+          {/* ── Thumbnail strip ── */}
+            {total > 1 && (
+              <div className="hof-strip">
+                {champions.slice(0, 8).map((c, i) => (
+                  <button
+                    key={c.id}
+                    className={`hof-thumb ${i === active ? 'hof-thumb-on' : ''}`}
+                    onClick={() => triggerNav(i > active ? 'right' : 'left', i)}
+                    title={c.name}
+                  >
+                    <Avatar user={c} size={38} />
+                    {i === 0 && <Crown size={11} className="hof-thumb-crown" />}
+                  </button>
+                ))}
+                {total > 8 && <div className="hof-thumb-more">+{total - 8}</div>}
+              </div>
+            )}
+
             {/* ── Carousel ── */}
             <div className="hof-stage">
               <button
@@ -235,23 +253,7 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
               ))}
             </div>
 
-            {/* ── Thumbnail strip ── */}
-            {total > 1 && (
-              <div className="hof-strip">
-                {champions.slice(0, 8).map((c, i) => (
-                  <button
-                    key={c.id}
-                    className={`hof-thumb ${i === active ? 'hof-thumb-on' : ''}`}
-                    onClick={() => triggerNav(i > active ? 'right' : 'left', i)}
-                    title={c.name}
-                  >
-                    <Avatar user={c} size={38} />
-                    {i === 0 && <Crown size={11} className="hof-thumb-crown" />}
-                  </button>
-                ))}
-                {total > 8 && <div className="hof-thumb-more">+{total - 8}</div>}
-              </div>
-            )}
+            
           </>
         )}
       </div>
