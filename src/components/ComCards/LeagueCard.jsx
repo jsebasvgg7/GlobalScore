@@ -1,7 +1,7 @@
 // src/components/cardComponents/LeagueCard.jsx
 import React, { useState } from 'react';
 import { Trophy, Target, Award, Star, CheckCircle2, Calendar, Shield, Clock } from 'lucide-react';
-import '../../styles/cardStyles/LeagueCard.css';
+import '../../styles/StylesCards/LeagueCard.css';
 
 export default function LeagueCard({ league, userPrediction, onPredict }) {
   // Función para renderizar el logo (URL de imagen o emoji de fallback)

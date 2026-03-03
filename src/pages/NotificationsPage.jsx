@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import Footers from '../components/ComOthers/Footer';
-import '../styles/pagesStyles/NotificationsPage.css';
+import '../styles/StylesPages/NotificationsPage.css';
 
 export default function NotificationsPage({ currentUser }) {
   const [notifications, setNotifications] = useState([]);

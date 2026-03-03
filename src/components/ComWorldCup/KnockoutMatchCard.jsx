@@ -2,7 +2,7 @@
 import React from 'react';
 import { Award, CheckCircle } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
-import '../../styles/cardStyles/KnockoutMatchCard.css';
+import '../../styles/StylesCards/KnockoutMatchCard.css';
 
 // ============================================
 // MAPA DE LOGOS

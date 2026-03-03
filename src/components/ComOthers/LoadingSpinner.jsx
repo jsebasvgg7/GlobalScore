@@ -1,4 +1,4 @@
-import "../../styles/LoadingSpinner.css";
+import "../../styles/StylesOthers/LoadingSpinner.css";
 
 export function LoadingDots({ color = "white" }) {
   return (

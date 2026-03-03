@@ -27,7 +27,7 @@ import AdminModalsContainer from '../components/ComAdmin/AdminModalsContainer';
 import Footer from '../components/ComOthers/Footer';
 import { ToastContainer, useToast } from '../components/ComOthers/Toast';
 
-import '../styles/adminStyles/AdminPage.css';
+import '../styles/StylesAdmin/AdminPage.css';
 
 export default function AdminPage({ currentUser }) {
   // Estados de UI

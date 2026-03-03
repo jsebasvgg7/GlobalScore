@@ -1,6 +1,6 @@
 import React from 'react';
 import { Trophy, Target, Award } from 'lucide-react';
-import '../../styles/NavigationTabs.css';
+import '../../styles/StylesOthers/NavigationTabs.css';
 
 export default function NavigationTabs({ activeTab, onTabChange }) {
   return (

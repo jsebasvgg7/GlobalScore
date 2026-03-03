@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import Footers from '../components/ComOthers/Footer';
-import '../styles/pagesStyles/StatsPage.css';
+import '../styles/StylesPages/StatsPage.css';
 
 export default function StatsPage({ currentUser }) {
   const [stats, setStats] = useState(null);

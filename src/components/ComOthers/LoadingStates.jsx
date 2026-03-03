@@ -1,6 +1,6 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
-import "../../styles/LoadingStates.css";
+import "../../styles/StylesOthers/LoadingStates.css";
 
 export const Spinner = ({ size = 40, color = '#60519b' }) => {
   return (

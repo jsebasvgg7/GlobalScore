@@ -23,7 +23,7 @@ import HistoryTab from '../components/ComProfile/HistoryTab';
 import EditTab from '../components/ComProfile/EditTab';
 
 // Importar el nuevo archivo CSS modular
-import '../styles/pagesStyles/ProfilePageNew.css';
+import '../styles/StylesPages/ProfilePageNew.css';
 
 export default function ProfilePage({ currentUser, onBack }) {
   const [activeTab, setActiveTab] = useState('overview');

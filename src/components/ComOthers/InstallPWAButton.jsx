@@ -1,7 +1,7 @@
 // src/components/InstallPWAButton.jsx
 import { useState } from 'react';
 import usePWA from '../../hooks/usePWA';
-import '../../styles/common/InstallPWAButton.css';
+import '../../styles/StylesPWA/InstallPWAButton.css';
 
 export default function InstallPWAButton() {
   const { 

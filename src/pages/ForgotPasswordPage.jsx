@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Trophy, KeyRound, ChevronLeft, Send } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import LoadingDots from "../components/ComOthers/LoadingSpinner";
-import "../styles/pagesStyles/Auth.css";
+import "../styles/StylesPages/Auth.css";
 
 export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);

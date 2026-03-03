@@ -7,7 +7,7 @@ import {
 import { supabase } from '../utils/supabaseClient';
 import Footer from '../components/ComOthers/Footer';
 import UserProfileModal from '../components/ComOthers/UserProfileModal';
-import '../styles/pagesStyles/RankingPage.css';
+import '../styles/StylesPages/RankingPage.css';
 
 export default function RankingPage({ currentUser, onBack }) {
   const [users, setUsers] = useState([]);

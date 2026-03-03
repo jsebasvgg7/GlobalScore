@@ -8,7 +8,7 @@ import Footer from '../components/ComOthers/Footer';
 import WorldCupNavigationTabs from '../components/ComWorldCup/WorldCupNavigationTabs';
 import WorldCupAwardCard from '../components/ComWorldCup/WorldCupAwardCard';
 import KnockoutSection from '../components/ComWorldCup/KnockoutSection';
-import '../styles/pagesStyles/WorldCupPage.css';
+import '../styles/StylesPages/WorldCupPage.css';
 
 // ============================================
 // DATOS DE GRUPOS

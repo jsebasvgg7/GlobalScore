@@ -11,7 +11,7 @@ import { useTheme } from '../context/ThemeContext';
 import { ToastContainer, useToast } from '../components/ComOthers/Toast';
 import { supabase } from '../utils/supabaseClient';
 import Footer from '../components/ComOthers/Footer';
-import '../styles/pagesStyles/SettingsPage.css';
+import '../styles/StylesPages/SettingsPage.css';
 
 export default function SettingsPage({ currentUser }) {
   const [activeSection, setActiveSection] = useState('account');

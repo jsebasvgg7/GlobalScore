@@ -8,7 +8,7 @@ import {
 import { supabase } from '../../utils/supabaseClient';
 import { LoadingDots } from './LoadingSpinner';
 import ImageViewer from './ImageViewer';
-import '../../styles/UserProfileModal.css';
+import '../../styles/StylesProfile/UserProfileModal.css';
 
 export default function UserProfileModal({ userId, onClose }) {
   const [userData, setUserData] = useState(null);

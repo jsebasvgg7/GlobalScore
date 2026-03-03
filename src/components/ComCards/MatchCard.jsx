@@ -8,7 +8,7 @@ import {
   AlertCircle,
   Zap
 } from "lucide-react";
-import "../../styles/cardStyles/MatchCard.css"; 
+import "../../styles/StylesCards/MatchCard.css"; 
 
 export default function MatchCard({ match, userPred, onPredict }) {
   // Estados

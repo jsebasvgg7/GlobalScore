@@ -4,14 +4,14 @@
 ========================================== */
 
 /* Base y Variables */
-@import '../profile/ProfileBase.css';
+@import '../StylesProfile/ProfileBase.css';
 
 /* Componentes principales */
-@import '../profile/ProfileHero.css';
-@import '../profile/ProfileTabs.css';
-@import '../profile/ProfileOverview.css';
-@import '../profile/ProfileEdit.css';
-@import '../profile/ProfileHistory.css';
+@import '../StylesProfile/ProfileHero.css';
+@import '../StylesProfile/ProfileTabs.css';
+@import '../StylesProfile/ProfileOverview.css';
+@import '../StylesProfile/ProfileEdit.css';
+@import '../StylesProfile/ProfileHistory.css';
 
 /* ==========================================
    DESKTOP LAYOUT - Diseño mejorado para pantallas grandes
