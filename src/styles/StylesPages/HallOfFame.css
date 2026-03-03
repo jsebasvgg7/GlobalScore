@@ -31,58 +31,58 @@
   50%      { opacity: 0.75; transform: scale(1.5); }
 }
 
-/* welcome */
-.hof-welcome {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  width: 100%;
-  max-width: 620px;
+/* ─── Header ─── */
+.hof-header {
   position: relative;
-  z-index: 1;
-}
-.hof-line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(139,127,199,0.5), transparent);
-}
-.hof-center-block {
+  z-index: 10;
+  text-align: center;
+  padding-top: 1px;
+  padding-bottom: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  text-align: center;
-  flex-shrink: 0;
+  gap: 3px;
 }
-.hof-crown-icon {
-  width: 34px;
-  height: 34px;
-  color: #F59E0B;
-  filter: drop-shadow(0 0 10px rgba(245,158,11,0.55));
-  animation: hofFloat 3s ease-in-out infinite;
+
+.hof-header-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-@keyframes hofFloat {
-  0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(-7px); }
+
+.hof-header-line {
+  width: 52px;
+  height: 1px;
 }
+.hof-header-line--left  { background: linear-gradient(90deg, transparent, rgba(245,200,66,0.5)); }
+.hof-header-line--right { background: linear-gradient(90deg, rgba(245,200,66,0.5), transparent); }
+
+.hof-header-crown {
+  color: #F5C842;
+  filter: drop-shadow(0 0 6px rgba(245,200,66,0.8));
+  animation: trophy-float 3.5s ease-in-out infinite;
+}
+
 .hof-title {
-  font-size: clamp(20px, 3.5vw, 30px);
+  font-size: clamp(17px, 2.8vw, 24px);
   font-weight: 900;
-  line-height: 1.2;
-  letter-spacing: -0.3px;
-  background: linear-gradient(135deg, #8b7fc7 0%, #a599d9 40%, #F59E0B 100%);
+  margin: 0;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #c9b98a 0%, #F5C842 40%, #e8d080 70%, #c9b98a 100%);
   -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: transparent;
-  margin: 0;
 }
+
 .hof-subtitle {
-  font-size: 12px;
-  color: var(--text-secondary);
   margin: 0;
-  max-width: 300px;
-  line-height: 1.5;
+  color: var(--text-secondary);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
+
 
 /* stage */
 .hof-stage {
@@ -421,8 +421,4 @@
   .hof-sv { font-size: 15px; }
   .hof-orbit { width: 130px; height: 130px; }
   .hof-strip { padding: 9px 12px; gap: 7px; }
-}
-@media (max-width: 380px) {
-  .hof-nav { display: none; }
-  .hof-stage { gap: 0; }
 }

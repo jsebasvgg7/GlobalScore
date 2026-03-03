@@ -125,6 +125,16 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
     <>
       <div className="hof-root">
         <Stars />
+        {/* ── Header ── */}
+        <div className="hof-header">
+        <div className="hof-header-divider">
+        <div className="hof-header-line hof-header-line--left" />
+        <Crown size={17} className="hof-header-crown" />
+        <div className="hof-header-line hof-header-line--right" />
+        </div>
+        <h2 className="hof-title">Salón de la Fama</h2>
+        <p className="hof-subtitle">Campeones Mensuales</p>
+        </div>
         {/* ── Empty state ── */}
         {total === 0 ? (
           <div className="hof-empty">
@@ -133,23 +143,7 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
           </div>
         ) : (
           <>
-          {/* ── Thumbnail strip ── */}
-            {total > 1 && (
-              <div className="hof-strip">
-                {champions.slice(0, 8).map((c, i) => (
-                  <button
-                    key={c.id}
-                    className={`hof-thumb ${i === active ? 'hof-thumb-on' : ''}`}
-                    onClick={() => triggerNav(i > active ? 'right' : 'left', i)}
-                    title={c.name}
-                  >
-                    <Avatar user={c} size={38} />
-                    {i === 0 && <Crown size={11} className="hof-thumb-crown" />}
-                  </button>
-                ))}
-                {total > 8 && <div className="hof-thumb-more">+{total - 8}</div>}
-              </div>
-            )}
+
 
             {/* ── Carousel ── */}
             <div className="hof-stage">
@@ -214,13 +208,13 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
                       <div className="hof-stat">
                         <Star size={15} style={{ color: '#8b7fc7' }} />
                         <span className="hof-sv">{champ.championship_points}</span>
-                        <span className="hof-sl">Mejor mes</span>
+                        <span className="hof-sl">Max Pts</span>
                       </div>
                       <div className="hof-divider" />
                       <div className="hof-stat">
                         <Sparkles size={15} style={{ color: '#10B981' }} />
                         <span className="hof-sv hof-sv-sm">{champ.championship_month_year || '—'}</span>
-                        <span className="hof-sl">Último título</span>
+                        <span className="hof-sl">título</span>
                       </div>
                     </div>
 
