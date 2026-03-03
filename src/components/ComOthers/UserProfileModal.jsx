@@ -198,14 +198,10 @@ export default function UserProfileModal({ userId, onClose }) {
           className={`upm-modal ${mounted ? 'upm-modal--in' : ''}`}
           onClick={e => e.stopPropagation()}
         >
-
-
           {/* Close button */}
           <button className="upm-close" onClick={onClose} aria-label="Cerrar">
             <X size={16} />
           </button>
-
-
 
           {/* ════ HERO SECTION ════ */}
           <div className="upm-hero">
@@ -236,11 +232,6 @@ export default function UserProfileModal({ userId, onClose }) {
             {/* Nombre + título + ranking — centrados debajo del avatar */}
             <div className="upm-hero-body">
               <h2 className="upm-name">{userData.name || 'Usuario'}</h2>
-              
-              {/* Bio */}
-              {userData.bio && (
-                <p className="upm-bio">{userData.bio}</p>
-              )}
 
               {/* Info tags */}
               {(userData.nationality || userData.favorite_team || userData.favorite_player || userData.created_at) && (
@@ -258,7 +249,14 @@ export default function UserProfileModal({ userId, onClose }) {
                     <span className="upm-tag upm-tag--gold"><Calendar size={11} />Desde {fmtDate(userData.created_at)}</span>
                   )}
                 </div>
+                
               )}
+                            
+              {/* Bio */}
+              {userData.bio && (
+                <p className="upm-bio">{userData.bio}</p>
+              )}
+
             </div>
 
           </div>
