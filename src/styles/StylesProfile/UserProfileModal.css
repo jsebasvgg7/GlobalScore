@@ -866,38 +866,3 @@
 [data-theme="light"] .upm-bio {
   background: rgba(0,0,0,0.03);
 }
-
-/* ── RESPONSIVE ──────────────────────────────────────── */
-@media (max-width: 480px) {
-  .upm-overlay {
-    padding: 0;
-    align-items: flex-end;
-  }
-
-  .upm-modal {
-    max-width: 100%;
-    max-height: 92vh;
-    border-radius: 20px 20px 0 0;
-    transform: translateY(40px) scale(1);
-  }
-
-  .upm-modal--in {
-    transform: translateY(0) scale(1);
-  }
-
-  .upm-hero-banner { height: 90px; }
-
-  .upm-avatar { width: 76px; height: 76px; font-size: 28px; }
-
-  .upm-name { font-size: 18px; }
-
-  .upm-badges-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px 4px;
-  }
-
-  .upm-badge-hex { width: 56px; height: 56px; }
-  .upm-badge-emoji { font-size: 22px; }
-  .upm-stat-pill-value { font-size: 16px; }
-}
-
