@@ -52,7 +52,7 @@ export default function AdminModal({ onAdd, onClose }) {
 
   const sendPushNotification = async (matchData) => {
     try {
-      await supabase.functions.invoke("send-push", {
+      await supabase.functions.invoke("send-match-notification", {
         body: {
           matchId: matchData.id,
           title: "🔥 ¡Nuevo partido disponible!",
