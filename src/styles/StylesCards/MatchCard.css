@@ -323,23 +323,3 @@
   color: #fbbf24;
   border-color: rgba(251,191,36,0.25);
 }
-
-/* ================================================================
-   RESPONSIVE
-================================================================ */
-
-@media (max-width: 480px) {
-  .mc-wrap         { padding-top: 28px; max-width: 300px; }
-  .mc-league-float { width: 56px; height: 56px; }
-  .mc-league-img   { width: 56px; height: 56px; }
-  .mc-card         { border-radius: 19px; padding: 36px 8px 0; }
-  .mc-body         { grid-template-columns: 38px 1fr 24px 1fr 38px; gap: 3px; }
-  .mc-box          { width: 38px; height: 42px; border-radius: 10px; }
-  .mc-input        { font-size: 16px; }
-  .mc-shield-img   { width: 54px; height: 54px; }
-  .mc-shield-emoji { font-size: 44px; }
-  .mc-team-name    { font-size: 10px; }
-  .mc-vs           { font-size: 10px; }
-  .mc-pill         { font-size: 10px; padding: 6px 16px; }
-}
-
