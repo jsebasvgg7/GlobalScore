@@ -299,8 +299,6 @@ export default function VegaScorePage() {
       <div className="vega-root">
         <main className="container">
           <section className="main-content-full">
-
-
             {activeTab === 'matches' && (
               <div className="matches-section-premium">
                 {/* Header con Sort y Filter */}
@@ -310,7 +308,6 @@ export default function VegaScorePage() {
                     <span className="matches-badge-count">{filteredMatches.length}</span>
                     <span className="matches-badge-text"> disponibles</span>
                   </div>
-                  
                   <div className="sort-filter-buttons">
                     {/* Sort Button */}
                     <div style={{ position: 'relative' }} ref={sortRef}>

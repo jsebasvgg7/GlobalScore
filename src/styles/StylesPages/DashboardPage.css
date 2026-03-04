@@ -565,7 +565,7 @@
   padding: 20px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 28px 8px;          /* ← más espacio vertical entre cards */
+  gap: 28px 2px;          /* ← más espacio vertical entre cards */
 }
 
 /* ===================================

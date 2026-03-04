@@ -6,8 +6,7 @@
 .mc-wrap {
   position: relative;
   padding-top: 32px;
-  /* Card estrecha — máx 340px centrada */
-  max-width: 350px;
+  max-width: 335px;
   margin: 0 auto;
   width: 100%;
 }
@@ -83,7 +82,7 @@
 /* ── Cuerpo: 5 columnas: box · team · vs · team · box ── */
 .mc-body {
   display: grid;
-  grid-template-columns: 42px 1fr 28px 1fr 42px;
+  grid-template-columns: 1fr 42px 28px 42px 1fr;
   align-items: center;
   gap: 4px;
 }
@@ -204,13 +203,13 @@
 
 /* ── VS central ── */
 .mc-vs {
-  font-size: 18px;
+  font-size: 12px;
   font-weight: 800;
   color: #94a3b8;
   letter-spacing: 0.08em;
   text-align: center;
   /* baja el VS al nivel de los escudos, no al nombre */
-  margin-bottom: 18px;
+  margin-bottom: 6px;
 }
 
 /* ── Pill hora ── */

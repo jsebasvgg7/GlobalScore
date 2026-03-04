@@ -105,19 +105,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
         {/* Cuerpo: score — equipo — VS — equipo — score */}
         <div className="mc-body">
 
-          {/* Score local */}
-          <div className={`mc-box ${boxDone ? "mc-box--done" : ""}`}>
-            <input
-              type="number" min="0" max="20"
-              className="mc-input"
-              value={homeScore}
-              onChange={e => handleScoreChange("home", e.target.value)}
-              placeholder="—"
-              disabled={isDisabled}
-            />
-          </div>
-
-          {/* Equipo local */}
+        {/* Equipo local */}
           <div
             className={`mc-team ${match.is_knockout && !isDisabled ? "mc-team--tap" : ""} ${advancingTeam === "home" ? "mc-team--on" : ""}`}
             onClick={() => handleAdvancingTeamClick("home")}
@@ -136,9 +124,33 @@ export default function MatchCard({ match, userPred, onPredict }) {
             <span className="mc-team-name">{abbr(match.home_team)}</span>
           </div>
 
+          {/* Score local */}
+          <div className={`mc-box ${boxDone ? "mc-box--done" : ""}`}>
+            <input
+              type="number" min="0" max="20"
+              className="mc-input"
+              value={homeScore}
+              onChange={e => handleScoreChange("home", e.target.value)}
+              placeholder="—"
+              disabled={isDisabled}
+            />
+          </div>
+
           {/* VS central */}
           <div className="mc-vs">VS</div>
 
+          {/* Score visitante */}
+          <div className={`mc-box ${boxDone ? "mc-box--done" : ""}`}>
+            <input
+              type="number" min="0" max="20"
+              className="mc-input"
+              value={awayScore}
+              onChange={e => handleScoreChange("away", e.target.value)}
+              placeholder="—"
+              disabled={isDisabled}
+            />
+          </div>
+          
           {/* Equipo visitante */}
           <div
             className={`mc-team ${match.is_knockout && !isDisabled ? "mc-team--tap" : ""} ${advancingTeam === "away" ? "mc-team--on" : ""}`}
@@ -156,18 +168,6 @@ export default function MatchCard({ match, userPred, onPredict }) {
               )}
             </div>
             <span className="mc-team-name">{abbr(match.away_team)}</span>
-          </div>
-
-          {/* Score visitante */}
-          <div className={`mc-box ${boxDone ? "mc-box--done" : ""}`}>
-            <input
-              type="number" min="0" max="20"
-              className="mc-input"
-              value={awayScore}
-              onChange={e => handleScoreChange("away", e.target.value)}
-              placeholder="—"
-              disabled={isDisabled}
-            />
           </div>
 
         </div>
