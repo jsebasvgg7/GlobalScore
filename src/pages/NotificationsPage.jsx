@@ -1,5 +1,5 @@
 // src/pages/NotificationsPage.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Bell, Filter, Calendar, Trophy, CheckCircle2, 
   Clock, Target, Award, BellRing, BellOff
@@ -8,30 +8,87 @@ import { supabase } from '../utils/supabaseClient';
 import Footers from '../components/ComOthers/Footer';
 import '../styles/StylesPages/NotificationsPage.css';
 
+const VAPID_PUBLIC_KEY = 'BBxgmAtEOHeYNi1tJQcrWzL_Q-6_Mj16ECGgQSL6JPX0i9XyL5V5LFJHjNdde_TTRxAUXJHSYNtUOvXcAsYS_Xs';
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
 export default function NotificationsPage({ currentUser }) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [pushEnabled, setPushEnabled] = useState(false);
-  const [checkingPermission, setCheckingPermission] = useState(true);
+  const [pushLoading, setPushLoading] = useState(true);
+
+  // ── Verificar estado real de suscripción ──────────────────────────────────
+  const checkSubscriptionStatus = useCallback(async () => {
+    if (!currentUser?.id) return;
+    setPushLoading(true);
+
+    try {
+      // 1. ¿El navegador tiene permiso?
+      if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
+        setPushEnabled(false);
+        return;
+      }
+
+      if (Notification.permission !== 'granted') {
+        setPushEnabled(false);
+        return;
+      }
+
+      // 2. ¿Hay suscripción activa en el navegador?
+      const registration = await navigator.serviceWorker.ready;
+      const browserSub = await registration.pushManager.getSubscription();
+
+      if (!browserSub) {
+        setPushEnabled(false);
+        // Limpiar registro huérfano en Supabase si existe
+        await supabase.from('push_subscriptions').delete().eq('user_id', currentUser.id);
+        return;
+      }
+
+      // 3. ¿Existe en Supabase?
+      const { data, error } = await supabase
+        .from('push_subscriptions')
+        .select('user_id')
+        .eq('user_id', currentUser.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error verificando suscripción:', error);
+        setPushEnabled(false);
+        return;
+      }
+
+      setPushEnabled(!!data);
+    } catch (err) {
+      console.error('Error en checkSubscriptionStatus:', err);
+      setPushEnabled(false);
+    } finally {
+      setPushLoading(false);
+    }
+  }, [currentUser?.id]);
 
   useEffect(() => {
     loadNotifications();
-    checkPushPermission();
-  }, []);
+    checkSubscriptionStatus();
+  }, [checkSubscriptionStatus]);
 
-  const checkPushPermission = async () => {
-    setCheckingPermission(true);
-    if ('Notification' in window) {
-      setPushEnabled(Notification.permission === 'granted');
-    }
-    setCheckingPermission(false);
-  };
-
+  // ── Cargar notificaciones ─────────────────────────────────────────────────
   const loadNotifications = async () => {
     try {
       setLoading(true);
-      
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
@@ -43,10 +100,9 @@ export default function NotificationsPage({ currentUser }) {
 
       if (error) throw error;
 
-      const notifs = matches.map(match => {
+      const notifs = (matches || []).map(match => {
         const isNew = match.status === 'pending';
         const isFinished = match.status === 'finished';
-        
         return {
           id: match.id,
           type: isNew ? 'new' : 'finished',
@@ -55,7 +111,7 @@ export default function NotificationsPage({ currentUser }) {
           league: match.league,
           date: match.date,
           time: match.time,
-          result: isFinished ? `${match.result_home || 0} - ${match.result_away || 0}` : null,
+          result: isFinished ? `${match.result_home ?? 0} - ${match.result_away ?? 0}` : null,
           created_at: match.created_at,
           icon: isNew ? <Trophy size={20} /> : <CheckCircle2 size={20} />
         };
@@ -63,130 +119,146 @@ export default function NotificationsPage({ currentUser }) {
 
       setNotifications(notifs);
     } catch (err) {
-      console.error('Error loading notifications:', err);
+      console.error('Error cargando notificaciones:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const requestNotificationPermission = async () => {
-    if (!('Notification' in window)) {
-      alert('Tu navegador no soporta notificaciones');
+  // ── Registrar Service Worker ──────────────────────────────────────────────
+  const ensureServiceWorker = async () => {
+    try {
+      let registration = await navigator.serviceWorker.getRegistration('/');
+      if (!registration) {
+        registration = await navigator.serviceWorker.register('/sw.js');
+        console.log('✅ Service Worker registrado');
+      }
+      // Esperar a que esté listo
+      return await navigator.serviceWorker.ready;
+    } catch (err) {
+      console.error('Error registrando SW:', err);
+      throw new Error('No se pudo registrar el Service Worker');
+    }
+  };
+
+  // ── Suscribirse ───────────────────────────────────────────────────────────
+  const subscribeToPush = async () => {
+    if (!currentUser?.id) {
+      alert('Debes iniciar sesión para activar notificaciones');
       return false;
     }
 
-    if (Notification.permission === 'granted') {
-      return true;
+    // Verificar soporte
+    if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
+      alert('Tu navegador no soporta notificaciones push');
+      return false;
     }
 
-    if (Notification.permission !== 'denied') {
-      const permission = await Notification.requestPermission();
-      return permission === 'granted';
+    // Pedir permiso
+    let permission = Notification.permission;
+    if (permission === 'denied') {
+      alert('Tienes las notificaciones bloqueadas. Actívalas en la configuración de tu navegador.');
+      return false;
     }
-
-    alert('Has bloqueado las notificaciones. Por favor, actívalas en la configuración de tu navegador.');
-    return false;
-  };
-
-  const registerServiceWorker = async () => {
-    if (!('serviceWorker' in navigator)) {
-      console.log('Service Workers no soportados');
-      return null;
+    if (permission !== 'granted') {
+      permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        alert('No se otorgaron permisos para notificaciones.');
+        return false;
+      }
     }
 
     try {
-      const registration = await navigator.serviceWorker.register('/sw.js');
-      console.log('Service Worker registrado:', registration);
-      return registration;
-    } catch (error) {
-      console.error('Error registrando Service Worker:', error);
-      return null;
-    }
-  };
+      const registration = await ensureServiceWorker();
 
-  const urlBase64ToUint8Array = (base64String) => {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-      .replace(/\-/g, '+')
-      .replace(/_/g, '/');
-
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
-  };
-
-  const subscribeToPush = async () => {
-    try {
-      const registration = await registerServiceWorker();
-      if (!registration) {
-        alert('Error al registrar Service Worker');
-        return null;
+      // Cancelar suscripción previa si existe
+      const existingSub = await registration.pushManager.getSubscription();
+      if (existingSub) {
+        await existingSub.unsubscribe();
       }
 
-      const permitted = await requestNotificationPermission();
-      if (!permitted) return null;
-
-      const vapidPublicKey = 'BBxgmAtEOHeYNi1tJQcrWzL_Q-6_Mj16ECGgQSL6JPX0i9XyL5V5LFJHjNdde_TTRxAUXJHSYNtUOvXcAsYS_Xs';
-      
+      // Crear nueva suscripción
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
       });
 
-const { error } = await supabase
-  .from('push_subscriptions')
-  .upsert({
-    user_id: currentUser.id,           // ← UUID del usuario
-    subscription: JSON.stringify(subscription),
-    created_at: new Date().toISOString()
-  }, { onConflict: 'user_id' }); 
+      console.log('📱 Suscripción creada:', subscription.endpoint);
 
-      if (error) throw error;
+      // Guardar en Supabase
+      const subJson = subscription.toJSON();
 
-      console.log('✅ Suscrito a notificaciones push');
-      return subscription;
+      const { error } = await supabase
+        .from('push_subscriptions')
+        .upsert(
+          {
+            user_id: currentUser.id,
+            subscription: subJson,           // guardar como objeto, no string
+            created_at: new Date().toISOString()
+          },
+          { onConflict: 'user_id' }
+        );
 
-    } catch (error) {
-      console.error('Error en suscripción push:', error);
-      return null;
+      if (error) {
+        console.error('Error guardando suscripción en Supabase:', error);
+        throw new Error(`Supabase error: ${error.message}`);
+      }
+
+      console.log('✅ Suscripción guardada en Supabase');
+      return true;
+
+    } catch (err) {
+      console.error('Error en subscribeToPush:', err);
+      alert(`Error al activar notificaciones: ${err.message}`);
+      return false;
     }
   };
 
+  // ── Desuscribirse ─────────────────────────────────────────────────────────
   const unsubscribeFromPush = async () => {
     try {
-      const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.getSubscription();
-      
-      if (subscription) {
-        await subscription.unsubscribe();
+      if ('serviceWorker' in navigator) {
+        const registration = await navigator.serviceWorker.ready;
+        const sub = await registration.pushManager.getSubscription();
+        if (sub) await sub.unsubscribe();
       }
 
-      await supabase
-        .from('push_subscriptions')
-        .delete()
-        .eq('user_id', currentUser.id);
+      if (currentUser?.id) {
+        const { error } = await supabase
+          .from('push_subscriptions')
+          .delete()
+          .eq('user_id', currentUser.id);
 
-      console.log('❌ Desuscrito de notificaciones push');
-    } catch (error) {
-      console.error('Error al desuscribirse:', error);
+        if (error) console.error('Error eliminando suscripción:', error);
+        else console.log('✅ Suscripción eliminada de Supabase');
+      }
+
+      return true;
+    } catch (err) {
+      console.error('Error en unsubscribeFromPush:', err);
+      return false;
     }
   };
 
+  // ── Toggle ────────────────────────────────────────────────────────────────
   const handleTogglePush = async () => {
-    if (pushEnabled) {
-      await unsubscribeFromPush();
-      setPushEnabled(false);
-      alert('Notificaciones desactivadas');
-    } else {
-      const subscription = await subscribeToPush();
-      if (subscription) {
-        setPushEnabled(true);
-        alert('¡Notificaciones activadas! 🔔\nTe avisaremos de nuevos partidos.');
+    setPushLoading(true);
+    try {
+      if (pushEnabled) {
+        const ok = await unsubscribeFromPush();
+        if (ok) {
+          setPushEnabled(false);
+          alert('Notificaciones desactivadas ✓');
+        }
+      } else {
+        const ok = await subscribeToPush();
+        if (ok) {
+          setPushEnabled(true);
+          alert('¡Notificaciones activadas! 🔔\nTe avisaremos de nuevos partidos.');
+        }
       }
+    } finally {
+      setPushLoading(false);
     }
   };
 
@@ -206,12 +278,12 @@ const { error } = await supabase
             <p className="page-subtitle">Mantente al día con todos los partidos</p>
           </div>
         </div>
-        
-        {/* Botón para activar/desactivar push notifications */}
-        {!checkingPermission && (
-          <button 
+
+        {!pushLoading && (
+          <button
             className={`push-toggle-btn ${pushEnabled ? 'enabled' : ''}`}
             onClick={handleTogglePush}
+            disabled={pushLoading}
           >
             {pushEnabled ? <BellRing size={20} /> : <BellOff size={20} />}
             <span>{pushEnabled ? 'Activadas' : 'Activar'}</span>
@@ -220,8 +292,8 @@ const { error } = await supabase
       </div>
 
       <div className="notifications-container">
-        {/* Banner informativo si las notificaciones están desactivadas */}
-        {!pushEnabled && !checkingPermission && (
+        {/* Banner si no están activas */}
+        {!pushEnabled && !pushLoading && (
           <div className="push-info-banner">
             <div className="banner-icon-circle">
               <BellRing size={24} />
@@ -238,7 +310,7 @@ const { error } = await supabase
 
         {/* Filtros */}
         <div className="notifications-filters">
-          <button 
+          <button
             className={`filter-chip ${filter === 'all' ? 'active' : ''}`}
             onClick={() => setFilter('all')}
           >
@@ -246,31 +318,25 @@ const { error } = await supabase
             <span>Todas</span>
             <span className="chip-count">{notifications.length}</span>
           </button>
-
-          <button 
+          <button
             className={`filter-chip ${filter === 'new' ? 'active' : ''}`}
             onClick={() => setFilter('new')}
           >
             <Trophy size={16} />
             <span>Nuevas</span>
-            <span className="chip-count">
-              {notifications.filter(n => n.type === 'new').length}
-            </span>
+            <span className="chip-count">{notifications.filter(n => n.type === 'new').length}</span>
           </button>
-
-          <button 
+          <button
             className={`filter-chip ${filter === 'finished' ? 'active' : ''}`}
             onClick={() => setFilter('finished')}
           >
             <CheckCircle2 size={16} />
             <span>Finalizadas</span>
-            <span className="chip-count">
-              {notifications.filter(n => n.type === 'finished').length}
-            </span>
+            <span className="chip-count">{notifications.filter(n => n.type === 'finished').length}</span>
           </button>
         </div>
 
-        {/* Lista de Notificaciones */}
+        {/* Lista */}
         <div className="notifications-list">
           {loading ? (
             <div className="notifications-loading">
@@ -285,21 +351,15 @@ const { error } = await supabase
             </div>
           ) : (
             filteredNotifications.map(notif => (
-              <div 
-                key={notif.id} 
-                className={`notification-card ${notif.type}`}
-              >
+              <div key={notif.id} className={`notification-card ${notif.type}`}>
                 <div className={`notif-icon-wrapper ${notif.type}`}>
                   {notif.icon}
                 </div>
-
                 <div className="notif-content">
                   <div className="notif-header">
                     <h4 className="notif-title">{notif.title}</h4>
                   </div>
-
                   <p className="notif-description">{notif.description}</p>
-
                   <div className="notif-details">
                     <div className="detail-item">
                       <Award size={14} />
@@ -314,7 +374,6 @@ const { error } = await supabase
                       <span>{notif.time}</span>
                     </div>
                   </div>
-
                   {notif.result && (
                     <div className="notif-result">
                       <Target size={16} />
@@ -322,7 +381,6 @@ const { error } = await supabase
                     </div>
                   )}
                 </div>
-
                 <div className={`notif-badge ${notif.type}`}>
                   {notif.type === 'new' ? 'Nuevo' : 'Finalizado'}
                 </div>
