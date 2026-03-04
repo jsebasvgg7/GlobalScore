@@ -700,9 +700,9 @@
 
 .settings-page .mobile-detail-header {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
   background: var(--card);
   border-bottom: 1px solid var(--border);
   position: sticky;
@@ -710,28 +710,49 @@
   z-index: 100;
 }
 
+.settings-page .mobile-detail-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  position: relative;
+}
+
+.settings-page .header-spacer {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
 .settings-page .back-button {
-  background: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(124, 58, 237, 0.1);
   border: none;
-  padding: 8px;
-  margin-left: -8px;
+  padding: 0;
   color: var(--accent);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .settings-page .back-button:active {
   transform: scale(0.9);
+  background: rgba(124, 58, 237, 0.2);
 }
 
 .settings-page .mobile-detail-title {
+  flex: 1;
   margin: 0;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
   color: var(--text-primary);
+  text-align: center;
 }
 
 .settings-page .mobile-detail-content {
@@ -813,7 +834,7 @@
 }
 
 /* ==========================================
-   RESPONSIVE - MOBILE  ★ MEJORADO ★
+   RESPONSIVE - MOBILE  ★ MEJORADO CON TÍTULO CENTRADO ★
 ========================================== */
 
 @media (max-width: 768px) {
@@ -832,82 +853,34 @@
     display: block;
   }
 
-  /* ─── HERO BANNER ─── */
+  /* ─── VISTA MENÚ MÓVIL ─── */
   .settings-page .mobile-menu-view {
-    padding: 0;
-    padding-bottom: 100px;
+    padding: 16px 16px 100px;
     gap: 0;
   }
 
-  /* Banner superior con degradado púrpura — como NotificationsPage header */
+  /* Header como una card más */
   .settings-page .mobile-menu-header {
-    position: relative;
-    padding: 32px 24px 40px;
-    text-align: left;
-    overflow: hidden;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-    margin-bottom: 0;
-  }
-
-  /* Círculo decorativo superior derecho */
-  .settings-page .mobile-menu-header::before {
-    content: '';
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    pointer-events: none;
-  }
-
-  /* Círculo decorativo inferior izquierdo */
-  .settings-page .mobile-menu-header::after {
-    content: '';
-    position: absolute;
-    bottom: -30px;
-    left: -30px;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.06);
-    pointer-events: none;
+    background: var(--card);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 20px;
+    text-align: center;
+    margin: 0 16px 20px 16px;
+    box-shadow: var(--small-shadow);
   }
 
   .settings-page .mobile-menu-title {
-    font-size: 28px;
-    font-weight: 900;
-    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
     letter-spacing: -0.5px;
-    margin: 0 0 4px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Subtítulo bajo el título del header */
-  .settings-page .mobile-menu-subtitle {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.72);
-    font-weight: 500;
     margin: 0;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Ola blanca que separa el banner del contenido */
-  .settings-page .mobile-menu-wave {
-    display: block;
-    width: 100%;
-    height: 28px;
-    background: var(--bg);
-    border-radius: 28px 28px 0 0;
-    margin-top: -1px;
   }
 
   /* ─── GRUPOS DE CONFIGURACIÓN ─── */
   .settings-page .mobile-settings-group {
-    margin: 0 16px 24px;
+    margin: 0 16px 16px;
     background: var(--card);
     border-radius: 20px;
     border: 1px solid var(--border);
@@ -916,7 +889,7 @@
   }
 
   .settings-page .mobile-settings-group:first-of-type {
-    margin-top: 20px;
+    margin-top: 0;
   }
 
   .settings-page .group-title {
@@ -952,21 +925,6 @@
     background: var(--glass);
   }
 
-  /* Ripple visual al hacer tap */
-  .settings-page .mobile-setting-row::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(96, 81, 155, 0.04), transparent);
-    opacity: 0;
-    transition: opacity 0.2s;
-    pointer-events: none;
-  }
-
-  .settings-page .mobile-setting-row:active::after {
-    opacity: 1;
-  }
-
   /* Icono con gradiente */
   .settings-page .mobile-setting-icon {
     width: 40px;
@@ -998,71 +956,71 @@
     opacity: 0.5;
   }
 
-  /* ─── VISTA DE DETALLE ─── */
+  /* ─── VISTA DE DETALLE CON TÍTULO CENTRADO ─── */
   .settings-page .mobile-detail-view {
     min-height: 100vh;
     background: var(--bg);
   }
 
-  /* Header sticky del detalle — estilo premium */
+  /* Header sticky con diseño mejorado */
   .settings-page .mobile-detail-header {
     padding: 0;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-    border-bottom: none;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 100;
     flex-direction: column;
     align-items: stretch;
     gap: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 
-  /* Fila interna del header con botón back + título */
+  /* Fila interna del header - distribuida en 3 columnas */
   .settings-page .mobile-detail-header-inner {
-    display: flex;
+    display: grid;
+    grid-template-columns: 36px 1fr 36px;
     align-items: center;
     gap: 12px;
-    padding: 16px 20px 20px;
-    position: relative;
+    padding: 14px 20px;
   }
 
+  /* Botón de volver - columna izquierda */
   .settings-page .back-button {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(124, 58, 237, 0.1);
     border: none;
     padding: 0;
-    color: #ffffff;
+    color: var(--accent);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
     flex-shrink: 0;
-    margin-left: 0;
   }
 
   .settings-page .back-button:active {
     transform: scale(0.9);
-    background: rgba(255, 255, 255, 0.28);
+    background: rgba(124, 58, 237, 0.2);
   }
 
+  /* Título - columna central, perfectamente centrado */
   .settings-page .mobile-detail-title {
-    font-size: 20px;
-    font-weight: 800;
-    color: #ffffff;
-    letter-spacing: -0.3px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+    text-align: center;
+    margin: 0;
   }
 
-  /* Ola blanca bajo el header del detalle */
-  .settings-page .mobile-detail-wave {
-    display: block;
-    width: 100%;
-    height: 24px;
-    background: var(--bg);
-    border-radius: 24px 24px 0 0;
-    margin-top: -1px;
+  /* Espaciador - columna derecha para balance visual */
+  .settings-page .header-spacer {
+    width: 36px;
+    height: 36px;
   }
 
   /* ─── CONTENIDO DEL DETALLE ─── */
@@ -1097,7 +1055,7 @@
     display: none;
   }
 
-  /* Setting items dentro del detalle — como lista limpia */
+  /* Setting items dentro del detalle */
   .settings-page .mobile-detail-content .setting-item {
     background: transparent;
     border: none;
@@ -1166,16 +1124,6 @@
     border: none;
     gap: 0;
     margin-top: 16px;
-  }
-
-  /* Card separada para la subsección */
-  .settings-page .mobile-detail-content .subsection-wrapper {
-    background: var(--card);
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    overflow: hidden;
-    box-shadow: var(--small-shadow);
-    margin-top: 8px;
   }
 
   .settings-page .mobile-detail-content .subsection .subsection-title {
@@ -1343,4 +1291,8 @@
 
 [data-theme="dark"] .settings-page .mobile-detail-content .danger-zone .danger-title {
   background: rgba(239, 68, 68, 0.08);
+}
+
+[data-theme="dark"] .settings-page .mobile-detail-header {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }

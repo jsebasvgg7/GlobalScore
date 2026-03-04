@@ -586,10 +586,14 @@ export default function SettingsPage({ currentUser }) {
     return (
       <div className="mobile-detail-view">
         <div className="mobile-detail-header">
-          <button className="back-button" onClick={handleBackToMenu}>
-            <ArrowLeft size={24} />
-          </button>
-          <h1 className="mobile-detail-title">{currentSection?.name}</h1>
+          <div className="mobile-detail-header-inner">
+            <button className="back-button" onClick={handleBackToMenu}>
+              <ArrowLeft size={20} />
+            </button>
+            <h1 className="mobile-detail-title">{currentSection?.name}</h1>
+            <div className="header-spacer"></div>
+          </div>
+          <div className="mobile-detail-wave"></div>
         </div>
         <div className="mobile-detail-content">
           {renderContent()}
