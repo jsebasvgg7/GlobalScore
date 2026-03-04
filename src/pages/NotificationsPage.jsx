@@ -137,14 +137,13 @@ export default function NotificationsPage({ currentUser }) {
         applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
       });
 
-      // Guardar suscripción en Supabase
-      const { error } = await supabase
-        .from('push_subscriptions')
-        .upsert({
-          user_id: currentUser.id,
-          subscription: JSON.stringify(subscription),
-          created_at: new Date().toISOString()
-        });
+const { error } = await supabase
+  .from('push_subscriptions')
+  .upsert({
+    user_id: currentUser.id,           // ← UUID del usuario
+    subscription: JSON.stringify(subscription),
+    created_at: new Date().toISOString()
+  }, { onConflict: 'user_id' }); 
 
       if (error) throw error;
 
