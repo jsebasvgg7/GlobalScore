@@ -12,10 +12,9 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import DashboardPage from "./pages/DashboardPage";
 import RankingPage from "./pages/RankingPage";
 import AdminPage from "./pages/AdminPage";
-import ProfilePage from "./pages/ProfilePage";
+import ProfileSettingsPage from "./pages/ProfileSettingsPage"; // ← FUSIONADA (reemplaza ProfilePage + SettingsPage)
 import NotificationsPage from "./pages/NotificationsPage";
 import StatsPage from "./pages/StatsPage";
-import SettingsPage from "./pages/SettingsPage";
 import WorldCupPage from "./pages/WorldCupPage";
 import { PageLoader } from "./components/ComOthers/LoadingStates";
 
@@ -79,7 +78,6 @@ export default function App() {
     try {
       console.log("🔍 Loading user data for auth_id:", authId);
 
-      // 1. Obtener perfil del usuario
       const { data: profile, error: profileError } = await supabase
         .from("users")
         .select("*")
@@ -89,7 +87,6 @@ export default function App() {
       if (profileError) {
         console.error("❌ Profile error:", profileError);
         
-        // Solo cerrar sesión si es un error de permisos
         if (profileError.message.includes('permission')) {
           console.log("🚪 Signing out due to permission error");
           await supabase.auth.signOut();
@@ -99,14 +96,11 @@ export default function App() {
           setInitialLoad(false);
           return;
         }
-        // Para otros errores, continuar (podría ser temporal)
       }
 
-      // 2. Si no existe el perfil, crear uno con la info de auth
       if (!profile) {
         console.log("📝 Perfil no encontrado, creando uno nuevo...");
         
-        // Obtener datos del usuario de Auth
         const { data: { user: authUser } } = await supabase.auth.getUser();
         
         if (!authUser) {
@@ -119,7 +113,6 @@ export default function App() {
           return;
         }
 
-        // Crear perfil con nombre del metadata o del email
         const userName = authUser.user_metadata?.name || 
                         authUser.user_metadata?.display_name ||
                         authUser.email?.split('@')[0] || 
@@ -148,7 +141,6 @@ export default function App() {
         if (createError) {
           console.error("❌ Error al crear perfil:", createError);
           
-          // Si es error de duplicado, intentar obtener el perfil de nuevo
           if (createError.code === '23505') {
             const { data: existingProfile } = await supabase
               .from("users")
@@ -184,7 +176,6 @@ export default function App() {
         setCurrentUser(profile);
       }
 
-      // 3. Cargar lista de usuarios para el ranking
       const { data: userList, error: usersError } = await supabase
         .from("users")
         .select("*")
@@ -198,8 +189,6 @@ export default function App() {
 
     } catch (err) {
       console.error("💥 Unexpected error loading user data:", err);
-      
-      // No cerrar sesión por errores inesperados, solo mostrar error
       console.error("Error manteniendo sesión activa");
     } finally {
       setTimeout(() => {
@@ -225,7 +214,7 @@ export default function App() {
         )}
 
         <Routes>
-          {/* Rutas públicas */}
+          {/* ── Rutas públicas ── */}
           <Route
             path="/"
             element={session ? <Navigate to="/app" replace /> : <LoginPage />}
@@ -243,7 +232,7 @@ export default function App() {
             element={<ResetPasswordPage />}
           />
 
-          {/* Rutas protegidas */}
+          {/* ── Rutas protegidas ── */}
           <Route
             path="/app"
             element={session ? <DashboardPage /> : <Navigate to="/" replace />}
@@ -261,22 +250,24 @@ export default function App() {
             element={session ? <AdminPage currentUser={currentUser} users={users} /> : <Navigate to="/" replace />}
           />
           <Route
-            path="/profile"
-            element={session ? <ProfilePage currentUser={currentUser} onBack={() => window.history.back()} /> : <Navigate to="/" replace />}
-          />
-          <Route 
             path="/stats"
             element={session ? <StatsPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
-          <Route 
-            path="/settings"
-            element={session ? <SettingsPage currentUser={currentUser} /> : <Navigate to="/" replace />}
-          />
-          {<Route
+          <Route
             path="/world"
             element={session ? <WorldCupPage currentUser={currentUser} /> : <Navigate to="/" replace />}
-          /> }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              session
+                ? <ProfileSettingsPage currentUser={currentUser} onBack={() => window.history.back()} />
+                : <Navigate to="/" replace />
+            }
+          />
         </Routes>
+
         <InstallPWAButton />
       </BrowserRouter>
     </ThemeProvider>

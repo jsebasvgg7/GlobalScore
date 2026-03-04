@@ -27,7 +27,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
     { path: "/stats",    icon: BarChart3, label: "Stats"   },
     { path: "/world",    icon: Globe,     label: "Mundo"   },
     { path: "/profile",  icon: User2,     label: "Perfil"  },
-    { path: "/settings", icon: Settings,  label: "Ajustes" },
     ...(currentUser?.is_admin? [{ path: "/admin", icon: Shield, label: "Admin" }]: []),
   ];
 

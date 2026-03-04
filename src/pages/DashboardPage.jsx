@@ -7,7 +7,7 @@ import MatchCard from "../components/ComCards/MatchCard";
 import LeagueCard from "../components/ComCards/LeagueCard";
 import AwardCard from "../components/ComCards/AwardCard";
 import NavigationTabs from "../components/ComOthers/NavigationTabs";
-import ProfilePage from "./ProfilePage";
+import ProfileSettings from "./ProfileSettingsPage"; 
 import RankingPage from "./RankingPage";
 import Footer from "../components/ComOthers/Footer";
 import AdminPage from "./AdminPage";
@@ -230,7 +230,7 @@ export default function VegaScorePage() {
   if (showProfile) {
     return (
       <>
-        <ProfilePage 
+        <ProfileSettings 
           currentUser={currentUser} 
           onBack={() => setShowProfile(false)}
         />
