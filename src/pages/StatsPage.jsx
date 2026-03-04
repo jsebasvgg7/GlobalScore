@@ -265,24 +265,15 @@ export default function StatsPage({ currentUser }) {
 
           {/* Time Range Selector */}
           <div className="time-range-selector">
-            <button 
-              className={`time-btn ${timeRange === 'all' ? 'active' : ''}`}
-              onClick={() => setTimeRange('all')}
-            >
-              Todo
-            </button>
-            <button 
-              className={`time-btn ${timeRange === 'month' ? 'active' : ''}`}
-              onClick={() => setTimeRange('month')}
-            >
-              Mes
-            </button>
-            <button 
-              className={`time-btn ${timeRange === 'week' ? 'active' : ''}`}
-              onClick={() => setTimeRange('week')}
-            >
-              Semana
-            </button>
+           <button className={`time-btn ${timeRange === 'all' ? 'active' : ''}`} onClick={() => setTimeRange('all')}>
+            <span>Todo</span>
+          </button>
+          <button className={`time-btn ${timeRange === 'month' ? 'active' : ''}`} onClick={() => setTimeRange('month')}>
+            <span>Mes</span>
+          </button>
+          <button className={`time-btn ${timeRange === 'week' ? 'active' : ''}`} onClick={() => setTimeRange('week')}>
+            <span>Semana</span>
+          </button>
           </div>
         </div>
 
