@@ -1,25 +1,25 @@
-// src/components/cardComponets/MatchCard.jsx
+// src/components/ComCards/MatchCard.jsx
 import React, { useState, useEffect, useRef } from "react";
-import {  
-  Clock, 
-  CheckCircle2,
-  Calendar,
-  Trophy,
-  AlertCircle,
-  Zap
-} from "lucide-react";
-import "../../styles/StylesCards/MatchCard.css"; 
+import { CheckCircle2 } from "lucide-react";
+import "../../styles/StylesCards/MatchCard.css";
+
+// Abrevia el nombre del equipo a 3 letras
+const abbr = (name = "") => {
+  if (!name) return "???";
+  const words = name.trim().split(/\s+/);
+  if (words.length === 1) return words[0].slice(0, 3).toUpperCase();
+  // Usar iniciales si hay varias palabras, si son más de 3 letras
+  return words.map(w => w[0]).join("").slice(0, 3).toUpperCase();
+};
 
 export default function MatchCard({ match, userPred, onPredict }) {
-  // Estados
-  const [homeScore, setHomeScore] = useState(userPred?.home_score ?? "");
-  const [awayScore, setAwayScore] = useState(userPred?.away_score ?? "");
+  const [homeScore,     setHomeScore]     = useState(userPred?.home_score ?? "");
+  const [awayScore,     setAwayScore]     = useState(userPred?.away_score ?? "");
   const [advancingTeam, setAdvancingTeam] = useState(userPred?.predicted_advancing_team ?? null);
-  const [isSaved, setIsSaved] = useState(userPred !== undefined);
+  const [isSaved,  setIsSaved]  = useState(userPred !== undefined);
   const [isSaving, setIsSaving] = useState(false);
   const saveTimeoutRef = useRef(null);
 
-  // Sincronizar con cambios en userPred
   useEffect(() => {
     setHomeScore(userPred?.home_score ?? "");
     setAwayScore(userPred?.away_score ?? "");
@@ -27,302 +27,160 @@ export default function MatchCard({ match, userPred, onPredict }) {
     setIsSaved(userPred !== undefined);
   }, [userPred]);
 
-  // Cálculos de estado del partido
-  const now = new Date();
-  const deadline = match.deadline ? new Date(match.deadline) : null;
+  const now            = new Date();
+  const deadline       = match.deadline ? new Date(match.deadline) : null;
   const isPastDeadline = deadline && now >= deadline;
-  const isDisabled = isPastDeadline || match.status !== "pending";
+  const isLive         = match.status === "live";
+  const isDisabled     = isPastDeadline || match.status !== "pending";
 
-  // Auto-save cuando ambos campos tienen valores válidos - MEJORADO
   useEffect(() => {
     if (isDisabled) return;
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
 
-    // Limpiar timeout anterior
-    if (saveTimeoutRef.current) {
-      clearTimeout(saveTimeoutRef.current);
-    }
-
-    const home = parseInt(homeScore);
-    const away = parseInt(awayScore);
-
-    // Solo guardar si ambos valores son válidos y diferentes a la predicción actual
-    const isValidPrediction = !isNaN(home) && !isNaN(away) && homeScore !== "" && awayScore !== "";
-    const isDifferent = 
-      home !== userPred?.home_score || 
+    const home  = parseInt(homeScore);
+    const away  = parseInt(awayScore);
+    const isValid = !isNaN(home) && !isNaN(away) && homeScore !== "" && awayScore !== "";
+    const isDiff  =
+      home !== userPred?.home_score ||
       away !== userPred?.away_score ||
       advancingTeam !== userPred?.predicted_advancing_team;
 
-    if (isValidPrediction && isDifferent) {
-      // Resetear estados inmediatamente para feedback visual
+    if (isValid && isDiff) {
       setIsSaved(false);
-      
-      // Esperar 1 segundo después del último cambio para guardar
       saveTimeoutRef.current = setTimeout(async () => {
         setIsSaving(true);
-        
         try {
-          // Usar await para asegurar que solo se ejecute una vez
           await onPredict(match.id, home, away, advancingTeam);
-          
-          // Solo marcar como guardado después de completar
-          setTimeout(() => {
-            setIsSaved(true);
-            setIsSaving(false);
-          }, 300);
-        } catch (error) {
-          console.error('❌ Error guardando predicción:', error);
+          setTimeout(() => { setIsSaved(true); setIsSaving(false); }, 300);
+        } catch (err) {
+          console.error("❌ Error guardando:", err);
           setIsSaving(false);
         }
       }, 1000);
     }
-
-    return () => {
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current);
-      }
-    };
+    return () => { if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current); };
   }, [homeScore, awayScore, advancingTeam, isDisabled, match.id, onPredict, userPred]);
 
-  // Manejadores
   const handleScoreChange = (team, value) => {
     if (isDisabled) return;
-    
-    const numericValue = parseInt(value, 10);
-    const score = isNaN(numericValue) || numericValue < 0 ? value : Math.min(numericValue, 20);
-
-    if (team === 'home') {
-      setHomeScore(score);
-    } else {
-      setAwayScore(score);
-    }
+    const n = parseInt(value, 10);
+    const score = isNaN(n) || n < 0 ? value : Math.min(n, 20);
+    team === "home" ? setHomeScore(score) : setAwayScore(score);
     setIsSaved(false);
   };
 
   const handleAdvancingTeamClick = (team) => {
     if (isDisabled || !match.is_knockout) return;
-    
-    // Toggle: si ya está seleccionado, deseleccionar
-    setAdvancingTeam(prevTeam => prevTeam === team ? null : team);
+    setAdvancingTeam(prev => prev === team ? null : team);
     setIsSaved(false);
   };
 
-  // Funciones auxiliares
-  const formatMatchDate = (dateString) => {
-    if (dateString && typeof dateString === 'string' && !dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
-      return dateString;
-    }
+  const dotClass =
+    (isPastDeadline || isLive) ? "mc-dot--expired" :
+    isSaving                   ? "mc-dot--saving"  :
+    isSaved                    ? "mc-dot--saved"   :
+                                 "mc-dot--pending";
 
-    try {
-      const [year, month, day] = dateString.split('-').map(Number);
-      const matchDate = new Date(year, month - 1, day);
-      
-      const today = new Date();
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-
-      const normalizeDate = (date) => {
-        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-      };
-
-      const normalizedMatch = normalizeDate(matchDate);
-      const normalizedToday = normalizeDate(today);
-      const normalizedTomorrow = normalizeDate(tomorrow);
-
-      if (normalizedMatch.getTime() === normalizedToday.getTime()) {
-        return 'Hoy';
-      } else if (normalizedMatch.getTime() === normalizedTomorrow.getTime()) {
-        return 'Mañana';
-      } else {
-        return matchDate.toLocaleDateString('es-ES', { 
-          day: 'numeric', 
-          month: 'short' 
-        });
-      }
-    } catch (e) {
-      return dateString;
-    }
-  };
-
-  const renderLeagueLogo = () => {
-    if (match.league_logo_url) {
-      return (
-        <img 
-          src={match.league_logo_url} 
-          alt={`${match.league} logo`}
-          className="league-logo"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            const fallbackIcon = e.target.nextElementSibling;
-            if (fallbackIcon) fallbackIcon.style.display = 'flex';
-          }}
-        />
-      );
-    }
-    return null;
-  };
-
-  const renderTeamLogo = (logoUrl, fallbackEmoji) => {
-    if (logoUrl && logoUrl.startsWith('http')) {
-      return (
-        <img 
-          src={logoUrl} 
-          alt="Team logo" 
-          className="team-logo"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            const fallback = e.target.nextElementSibling;
-            if (fallback) fallback.style.display = 'flex';
-          }}
-        />
-      );
-    }
-    return null;
-  };
+  const boxDone = isSaved || isDisabled;
 
   return (
-    <div className="match-card">
-      
-      {/* HEADER: Liga y Fecha */}
-      <div className="match-header">
-        <div className="league-info">
-          {renderLeagueLogo()}
-          <Trophy size={16} className="league-icon-fallback" style={{ display: match.league_logo_url ? 'none' : 'flex' }} />
-          <span className="league-name">{match.league}</span>
-        </div>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {match.is_knockout && (
-            <span className="knockout-badge">
-              <Zap size={12} />
-            </span>
-          )}
-          <div className="match-date">
-            <Calendar size={12} />
-            <span>{formatMatchDate(match.date)}</span>
-          </div>
-        </div>
+    <div className="mc-wrap">
+
+      {/* Escudo liga flotando */}
+      <div className="mc-league-float">
+        {match.league_logo_url
+          ? <img src={match.league_logo_url} alt={match.league}
+              className="mc-league-img"
+              onError={e => e.target.style.display = "none"} />
+          : <span className="mc-league-emoji">🏆</span>
+        }
       </div>
 
-      {/* CONTENT: Equipos y Predicción */}
-      <div className="match-content">
-        
-        {/* Equipo Local */}
-        <div className="team-section">
-          <div 
-            className={`team-logo-wrapper ${match.is_knockout && !isDisabled ? 'clickable' : ''} ${advancingTeam === 'home' ? 'advancing' : ''}`}
-            onClick={() => handleAdvancingTeamClick('home')}
-          >
-            {renderTeamLogo(match.home_team_logo_url, match.home_team_logo)}
-            <span className="team-emoji" style={{ display: match.home_team_logo_url ? 'none' : 'flex' }}>
-              {match.home_team_logo || '⚽'}
-            </span>
-            {advancingTeam === 'home' && !isDisabled && (
-              <div className="advancing-indicator">
-                <CheckCircle2 size={14} />
-              </div>
-            )}
-          </div>
-          <span className="team-name">{match.home_team}</span>
-        </div>
+      {/* Card */}
+      <div className="mc-card">
 
-        {/* Predicción Central */}
-        <div className="prediction-section">
-          <div className="score-inputs">
-            <div className={`score-box ${isSaved ? 'saved' : ''} ${isDisabled ? 'disabled' : ''}`}>
-              <input
-                type="number"
-                min="0"
-                max="20"
-                className="score-input"
-                value={homeScore}
-                onChange={(e) => handleScoreChange('home', e.target.value)}
-                placeholder="—"
-                disabled={isDisabled}
-              />
-              {isSaved && !isDisabled && (
-                <div className="saved-indicator">
-                  <CheckCircle2 size={12} />
-                </div>
+        {/* Dot estado */}
+        <span className={`mc-dot ${dotClass}`} />
+
+        {/* Cuerpo: score — equipo — VS — equipo — score */}
+        <div className="mc-body">
+
+          {/* Score local */}
+          <div className={`mc-box ${boxDone ? "mc-box--done" : ""}`}>
+            <input
+              type="number" min="0" max="20"
+              className="mc-input"
+              value={homeScore}
+              onChange={e => handleScoreChange("home", e.target.value)}
+              placeholder="—"
+              disabled={isDisabled}
+            />
+          </div>
+
+          {/* Equipo local */}
+          <div
+            className={`mc-team ${match.is_knockout && !isDisabled ? "mc-team--tap" : ""} ${advancingTeam === "home" ? "mc-team--on" : ""}`}
+            onClick={() => handleAdvancingTeamClick("home")}
+          >
+            <div className="mc-shield-wrap">
+              {match.home_team_logo_url
+                ? <img src={match.home_team_logo_url} alt={match.home_team}
+                    className="mc-shield-img"
+                    onError={e => e.target.style.display = "none"} />
+                : <span className="mc-shield-emoji">{match.home_team_logo || "⚽"}</span>
+              }
+              {advancingTeam === "home" && !isDisabled && (
+                <div className="mc-adv-badge"><CheckCircle2 size={8} /></div>
               )}
             </div>
-            
-            <div className={`score-box ${isSaved ? 'saved' : ''} ${isDisabled ? 'disabled' : ''}`}>
-              <input
-                type="number"
-                min="0"
-                max="20"
-                className="score-input"
-                value={awayScore}
-                onChange={(e) => handleScoreChange('away', e.target.value)}
-                placeholder="—"
-                disabled={isDisabled}
-              />
-              {isSaved && !isDisabled && (
-                <div className="saved-indicator">
-                  <CheckCircle2 size={12} />
-                </div>
+            <span className="mc-team-name">{abbr(match.home_team)}</span>
+          </div>
+
+          {/* VS central */}
+          <div className="mc-vs">VS</div>
+
+          {/* Equipo visitante */}
+          <div
+            className={`mc-team ${match.is_knockout && !isDisabled ? "mc-team--tap" : ""} ${advancingTeam === "away" ? "mc-team--on" : ""}`}
+            onClick={() => handleAdvancingTeamClick("away")}
+          >
+            <div className="mc-shield-wrap">
+              {match.away_team_logo_url
+                ? <img src={match.away_team_logo_url} alt={match.away_team}
+                    className="mc-shield-img"
+                    onError={e => e.target.style.display = "none"} />
+                : <span className="mc-shield-emoji">{match.away_team_logo || "⚽"}</span>
+              }
+              {advancingTeam === "away" && !isDisabled && (
+                <div className="mc-adv-badge"><CheckCircle2 size={8} /></div>
               )}
             </div>
+            <span className="mc-team-name">{abbr(match.away_team)}</span>
           </div>
-          
-          <div className="match-time">
-            <Clock size={12} />
-            <span>{match.time}</span>
+
+          {/* Score visitante */}
+          <div className={`mc-box ${boxDone ? "mc-box--done" : ""}`}>
+            <input
+              type="number" min="0" max="20"
+              className="mc-input"
+              value={awayScore}
+              onChange={e => handleScoreChange("away", e.target.value)}
+              placeholder="—"
+              disabled={isDisabled}
+            />
           </div>
+
         </div>
 
-        {/* Equipo Visitante */}
-        <div className="team-section">
-          <div 
-            className={`team-logo-wrapper ${match.is_knockout && !isDisabled ? 'clickable' : ''} ${advancingTeam === 'away' ? 'advancing' : ''}`}
-            onClick={() => handleAdvancingTeamClick('away')}
-          >
-            {renderTeamLogo(match.away_team_logo_url, match.away_team_logo)}
-            <span className="team-emoji" style={{ display: match.away_team_logo_url ? 'none' : 'flex' }}>
-              {match.away_team_logo || '⚽'}
-            </span>
-            {advancingTeam === 'away' && !isDisabled && (
-              <div className="advancing-indicator">
-                <CheckCircle2 size={14} />
-              </div>
-            )}
-          </div>
-          <span className="team-name">{match.away_team}</span>
+        {/* Pill hora */}
+        <div className={`mc-pill ${isLive ? "mc-pill--live" : ""}`}>
+          {isLive
+            ? <><span className="mc-live-dot" />EN VIVO</>
+            : (match.time || "—")
+          }
         </div>
-      </div>
 
-      {/* FOOTER: Estado - SIEMPRE VISIBLE */}
-      <div className="match-footer">
-        {isPastDeadline ? (
-          <div className="status-message expired">
-            <Clock size={14} />
-            <span>Predicción cerrada</span>
-          </div>
-        ) : isSaving ? (
-          <div className="status-message saving">
-            <div className="spinner-small" />
-            <span>Guardando...</span>
-          </div>
-        ) : isSaved ? (
-          <div className="status-message saved">
-            <CheckCircle2 size={14} />
-            <span>Predicción guardada</span>
-          </div>
-        ) : (
-          <div className="status-message pending">
-            <AlertCircle size={14} />
-            <span>Predicción pendiente</span>
-          </div>
-        )}
-        
-        {match.is_knockout && !isDisabled && (
-          <div className="knockout-hint">
-            <Trophy size={12} />
-            <span>Toca el escudo del equipo que pasa (+2 pts)</span>
-          </div>
-        )}
       </div>
-
     </div>
   );
 }
