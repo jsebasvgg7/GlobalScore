@@ -4,21 +4,49 @@ import { X, Search, UserCheck, Image, Check, Trash2 } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import '../../styles/StylesAdmin/AdminModal.css';
 
-export default function AdminAssignBannerModal({ onClose, banners, users, onAssign, onRevoke }) {
+// Normaliza texto: minúsculas, sin acentos, sin caracteres especiales
+const normalize = (str) =>
+  (str || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim();
+
+export default function AdminAssignBannerModal({ onClose, banners, users: initialUsers, onAssign, onRevoke }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [userSearch, setUserSearch] = useState('');
   const [userBanners, setUserBanners] = useState([]);
   const [loadingUserBanners, setLoadingUserBanners] = useState(false);
   const [assigning, setAssigning] = useState(false);
+  const [allUsers, setAllUsers] = useState(initialUsers || []);
 
-  const filteredUsers = users.filter(u =>
-    u.name?.toLowerCase().includes(userSearch.toLowerCase())
-  );
+  // Recargar usuarios frescos al abrir (captura nombres actualizados)
+  useEffect(() => {
+    const fetchFreshUsers = async () => {
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, name, points, avatar_url')
+        .order('name', { ascending: true });
+      if (!error && data) setAllUsers(data);
+    };
+    fetchFreshUsers();
+  }, []);
 
   useEffect(() => {
     if (selectedUser) loadUserBanners(selectedUser.id);
   }, [selectedUser]);
+
+  // Filtro normalizado — funciona con japonés, acentos, etc.
+  const filteredUsers = allUsers.filter(u => {
+    if (!userSearch.trim()) return false;
+    const term = normalize(userSearch);
+    const name = normalize(u.name);
+    // También busca sin normalizar para nombres en caracteres no latinos (japonés, árabe, etc.)
+    const nameRaw = (u.name || '').toLowerCase();
+    const termRaw = userSearch.toLowerCase().trim();
+    return name.includes(term) || nameRaw.includes(termRaw);
+  });
 
   const loadUserBanners = async (userId) => {
     setLoadingUserBanners(true);
@@ -77,7 +105,7 @@ export default function AdminAssignBannerModal({ onClose, banners, users, onAssi
         {/* Body */}
         <div className="am2-body">
 
-          {/* Seleccionar usuario */}
+          {/* Buscar usuario */}
           <div className="am2-field">
             <label className="am2-label"><Search size={12} /> Buscar Usuario</label>
             <input
@@ -88,10 +116,10 @@ export default function AdminAssignBannerModal({ onClose, banners, users, onAssi
             />
           </div>
 
-          {/* Lista de usuarios */}
-          {userSearch && !selectedUser && (
+          {/* Lista filtrada */}
+          {userSearch.trim() && !selectedUser && (
             <div className="assign-user-list">
-              {filteredUsers.slice(0, 6).map(u => (
+              {filteredUsers.slice(0, 8).map(u => (
                 <button
                   key={u.id}
                   className="assign-user-item"
@@ -111,7 +139,7 @@ export default function AdminAssignBannerModal({ onClose, banners, users, onAssi
               ))}
               {filteredUsers.length === 0 && (
                 <p style={{ padding: '12px', color: 'var(--muted)', fontSize: 13 }}>
-                  No se encontraron usuarios
+                  No se encontraron usuarios con ese nombre
                 </p>
               )}
             </div>
@@ -148,7 +176,6 @@ export default function AdminAssignBannerModal({ onClose, banners, users, onAssi
                 </div>
               )}
 
-              {/* Seleccionar banner a asignar */}
               <div className="assign-section-title" style={{ marginTop: 16 }}>
                 <Image size={13} />
                 Selecciona un banner para asignar
@@ -170,9 +197,7 @@ export default function AdminAssignBannerModal({ onClose, banners, users, onAssi
                         {assigned && <span className="assign-banner-tag">Ya asignado</span>}
                       </div>
                       {selected && !assigned && (
-                        <div className="assign-banner-check">
-                          <Check size={14} />
-                        </div>
+                        <div className="assign-banner-check"><Check size={14} /></div>
                       )}
                     </button>
                   );
@@ -190,20 +215,13 @@ export default function AdminAssignBannerModal({ onClose, banners, users, onAssi
 
         {/* Footer */}
         <div className="am2-footer">
-          <button className="am2-btn am2-btn--cancel" onClick={onClose}>
-            Cerrar
-          </button>
+          <button className="am2-btn am2-btn--cancel" onClick={onClose}>Cerrar</button>
           {selectedUser && selectedBanner && (
-            <button
-              className="am2-btn am2-btn--submit"
-              onClick={handleAssign}
-              disabled={assigning}
-            >
-              {assigning ? (
-                <><span className="am2-spinner" /> Asignando...</>
-              ) : (
-                <><UserCheck size={15} /> Asignar a {selectedUser.name}</>
-              )}
+            <button className="am2-btn am2-btn--submit" onClick={handleAssign} disabled={assigning}>
+              {assigning
+                ? <><span className="am2-spinner" /> Asignando...</>
+                : <><UserCheck size={15} /> Asignar a {selectedUser.name}</>
+              }
             </button>
           )}
         </div>
