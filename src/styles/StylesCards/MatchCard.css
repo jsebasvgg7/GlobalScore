@@ -343,11 +343,3 @@
   .mc-pill         { font-size: 10px; padding: 6px 16px; }
 }
 
-@media (max-width: 360px) {
-  .mc-wrap         { max-width: 270px; }
-  .mc-body         { grid-template-columns: 36px 1fr 22px 1fr 36px; gap: 2px; }
-  .mc-box          { width: 36px; height: 40px; }
-  .mc-input        { font-size: 15px; }
-  .mc-shield-img   { width: 48px; height: 48px; }
-  .mc-shield-emoji { font-size: 38px; }
-}
