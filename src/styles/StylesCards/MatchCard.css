@@ -47,7 +47,7 @@
   box-shadow:
     0 1px 3px rgba(0,0,0,0.05),
     0 6px 20px rgba(0,0,0,0.08);
-  padding: 35px 40px 0;
+  padding: 35px 20px 0;
   overflow: visible;
   transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
@@ -83,7 +83,6 @@
 /* ── Cuerpo: 5 columnas: box · team · vs · team · box ── */
 .mc-body {
   display: grid;
-  /* score box pegado · equipo amplio · VS estrecho · equipo amplio · score box pegado */
   grid-template-columns: 42px 1fr 28px 1fr 42px;
   align-items: center;
   gap: 4px;
