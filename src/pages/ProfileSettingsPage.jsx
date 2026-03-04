@@ -40,9 +40,7 @@ import '../styles/StylesPages/ProfileSettingsPage.css';
 import '../styles/StylesPages/ProfilePageNew.css';
 
 // ─────────────────────────────────────────────
-// VISTA MÓVIL — Pantalla principal (lista estilo imagen)
-// ─────────────────────────────────────────────
-// VISTA MÓVIL — Diseño compacto (banner pequeño + lista limpia)
+// VISTA MÓVIL — Pantalla principal 
 // ─────────────────────────────────────────────
 function MobileMainView({ userData, currentUser, preferences, onSectionClick, onTabClick, theme, toggleTheme }) {
   return (
@@ -57,8 +55,6 @@ function MobileMainView({ userData, currentUser, preferences, onSectionClick, on
             : <div className="psp-hero-banner-gradient" />
           }
           <div className="psp-compact-banner-overlay" />
-          {/* Título "Settings" sobre el banner como en la imagen */}
-          <h1 className="psp-compact-title">Settings</h1>
         </div>
 
         {/* Fila de usuario — solapada con el banner */}
