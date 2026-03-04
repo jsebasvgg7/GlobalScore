@@ -42,21 +42,26 @@
 .psp-desktop-wrapper{ display: none; }
 
 /* ════════════════════════════════════════════════════════════
-   MOBILE — MAIN VIEW
+   MOBILE — MAIN VIEW (diseño compacto)
 ════════════════════════════════════════════════════════════ */
 .psp-mobile-main {
   background: var(--bg);
 }
 
-/* ── HERO BANNER ── */
-.psp-hero-banner {
+/* ── COMPACT HEADER (banner pequeño + usuario solapado) ── */
+.psp-compact-header {
   position: relative;
-  width: 100%;
-  height: 210px;
+  margin-bottom: 0;
+}
+
+/* Banner — altura generosa para que el avatar solapado se vea bien */
+.psp-compact-banner {
+  position: relative;
+  height: 148px;
   overflow: hidden;
 }
 
-.psp-hero-banner-img {
+.psp-compact-banner .psp-hero-banner-img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -64,148 +69,161 @@
   object-fit: cover;
 }
 
-.psp-hero-banner-gradient {
+.psp-compact-banner .psp-hero-banner-gradient {
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
 }
 
-.psp-hero-overlay {
+.psp-compact-banner-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.52) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.38) 100%);
 }
 
-.psp-hero-content {
+/* Título "Settings" centrado en el banner */
+.psp-compact-title {
   position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 22px;
-  gap: 4px;
-}
-
-/* Avatar */
-.psp-avatar-wrap { position: relative; margin-bottom: 4px; }
-
-.psp-avatar {
-  width: 88px; height: 88px;
-  border-radius: 50%;
-  border: 4px solid rgba(255,255,255,0.9);
-  overflow: hidden;
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  transition: transform 0.2s ease;
-}
-.psp-avatar:active { transform: scale(0.95); }
-.psp-avatar img    { width: 100%; height: 100%; object-fit: cover; }
-.psp-avatar span   { font-size: 34px; font-weight: 800; color: white; }
-
-.psp-level-badge {
-  position: absolute;
-  bottom: -4px; left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-  border: 2.5px solid white;
-  border-radius: 12px;
-  padding: 3px 9px;
-  display: flex; align-items: center; gap: 4px;
-  font-size: 11px; font-weight: 800; color: white;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.4px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.25);
   white-space: nowrap;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
-.psp-hero-name {
-  margin: 0;
-  font-size: 20px; font-weight: 800; color: white;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  letter-spacing: -0.3px;
-}
-
-.psp-hero-location {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 13px; color: rgba(255,255,255,0.85);
-  margin: 0;
-}
-
-/* ── STATS STRIP ── */
-.psp-stats-strip {
-  display: flex; align-items: center;
+/* Fila usuario — flotante con padding cómodo */
+.psp-compact-user-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 20px 18px;
   background: var(--card);
-  padding: 16px 0;
   border-bottom: 1px solid var(--border);
-}
-
-.psp-stat { flex: 1; text-align: center; }
-
-.psp-stat-val {
-  display: block;
-  font-size: 20px; font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.5px; line-height: 1;
-  margin-bottom: 3px;
-}
-
-.psp-stat-lbl {
-  display: block;
-  font-size: 10px; font-weight: 600;
-  color: var(--muted);
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
-
-.psp-stat-divider { width: 1px; height: 32px; background: var(--border); }
-
-/* ── SECTION LABEL ── */
-.psp-section-label {
-  font-size: 12px; font-weight: 700;
-  color: var(--muted);
-  text-transform: uppercase; letter-spacing: 0.8px;
-  padding: 18px 20px 8px;
-}
-
-/* ── CARD LIST ── */
-.psp-card-list {
-  background: var(--card);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.psp-list-row {
-  display: flex; align-items: center;
-  gap: 14px; padding: 14px 20px;
-  background: transparent; border: none;
-  border-bottom: 1px solid var(--border);
-  width: 100%; cursor: pointer; text-align: left;
-  transition: background 0.15s ease;
+  cursor: pointer;
+  transition: background 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
-.psp-list-row:last-child { border-bottom: none; }
-.psp-list-row:active     { background: var(--glass); }
-.psp-row-toggle          { cursor: default; }
 
-.psp-row-icon {
-  width: 42px; height: 42px;
-  border-radius: 12px;
+.psp-compact-user-row:active { background: var(--glass); }
+
+/* Avatar grande solapado — sale del banner */
+.psp-compact-avatar {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 4px solid var(--card);
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+  margin-top: -36px;
+}
+
+.psp-compact-avatar img  { width: 100%; height: 100%; object-fit: cover; }
+.psp-compact-avatar span { font-size: 28px; font-weight: 800; color: white; }
+
+.psp-compact-level {
+  position: absolute;
+  bottom: -4px; right: -2px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  border: 2px solid var(--card);
+  border-radius: 20px;
+  padding: 2px 6px;
+  display: flex; align-items: center; gap: 2px;
+  font-size: 10px; font-weight: 800; color: white;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  line-height: 1;
+}
+
+.psp-compact-user-info { flex: 1; min-width: 0; }
+
+.psp-compact-name {
+  display: block;
+  font-size: 17px; font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.psp-compact-sub {
+  display: block;
+  font-size: 13px; color: var(--muted);
+  margin-top: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ── LISTA LIMPIA — flotante con margen lateral ── */
+.psp-clean-list {
+  margin: 16px 16px 0;
+  background: var(--card);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+
+.psp-clean-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 15px 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.psp-clean-row:last-child { border-bottom: none; }
+.psp-clean-row:active     { background: var(--glass); }
+.psp-clean-row--toggle    { cursor: default; }
+
+/* Icono circular */
+.psp-clean-icon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
 
-.psp-row-label {
+.psp-clean-label {
   flex: 1;
   font-size: 15px; font-weight: 500;
   color: var(--text-primary);
 }
 
-.psp-chevron { color: var(--muted); flex-shrink: 0; }
+/* ── EDIT BUTTON ── */
+.psp-edit-btn-wrap { padding: 14px 16px 8px; }
 
-/* ── TOGGLE ── */
+.psp-edit-btn {
+  display: flex; align-items: center;
+  justify-content: center; gap: 8px;
+  width: 100%; padding: 13px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: white; border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  transition: all 0.2s ease;
+}
+.psp-edit-btn:active { transform: scale(0.98); }
+
+/* ── TOGGLE (compartido mobile) ── */
 .psp-toggle {
   position: relative;
-  width: 50px; height: 28px;
+  width: 48px; height: 27px;
   border-radius: 14px;
   background: var(--border);
   border: none; cursor: pointer;
@@ -218,30 +236,17 @@
 .psp-toggle-knob {
   position: absolute;
   top: 3px; left: 3px;
-  width: 22px; height: 22px;
+  width: 21px; height: 21px;
   border-radius: 50%;
   background: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   transition: transform 0.3s cubic-bezier(.4,0,.2,1);
 }
-.psp-toggle--on .psp-toggle-knob { transform: translateX(22px); }
-
+.psp-toggle--on .psp-toggle-knob { transform: translateX(21px); }
 [data-theme="dark"] .psp-toggle-knob { background: var(--card); }
 
-/* ── EDIT BUTTON ── */
-.psp-edit-btn-wrap { padding: 20px 20px 8px; }
-
-.psp-edit-btn {
-  display: flex; align-items: center;
-  justify-content: center; gap: 8px;
-  width: 100%; padding: 14px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-  color: white; border: none; border-radius: 14px;
-  font-size: 15px; font-weight: 700; cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-  transition: all 0.2s ease;
-}
-.psp-edit-btn:active { transform: scale(0.98); }
+/* Chevron compartido */
+.psp-chevron { color: var(--muted); flex-shrink: 0; }
 
 /* ════════════════════════════════════════════════════════════
    MOBILE — DETAIL VIEW (settings sub-screen / tab view)
@@ -370,20 +375,21 @@
   .psp-footer-desktop  { display: block; }
 
   .psp-desktop-layout {
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 24px 16px;
     display: grid;
-    grid-template-columns: 270px 1fr;
+    grid-template-columns: 260px 1fr;
     gap: 20px;
     align-items: start;
   }
 
-  .psp-desktop-col3 { display: none; }
+  /* Col3 siempre oculta — ya no existe */
+  .psp-desktop-col3 { display: none !important; }
 
   .psp-desktop-col1 {
     position: sticky; top: 24px;
-    display: flex; flex-direction: column; gap: 14px;
+    display: flex; flex-direction: column; gap: 12px;
   }
 
   /* Hero */
@@ -395,7 +401,7 @@
     border: 1px solid var(--border);
   }
 
-  /* Tabs verticales */
+  /* Tabs verticales de perfil */
   .psp-desktop-col1 .profile-tabs-modern {
     flex-direction: column;
     padding: 10px;
@@ -427,6 +433,64 @@
     color: white;
   }
 
+  /* ── SETTINGS TAB NAV (debajo de las tabs de perfil) ── */
+  .psp-settings-tab-nav {
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .psp-settings-tab-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .psp-settings-tab-header svg { color: var(--accent); }
+
+  .psp-stab-btn {
+    width: 100%;
+    display: flex; align-items: center; gap: 9px;
+    padding: 10px 12px;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s ease;
+    text-align: left;
+  }
+
+  .psp-stab-btn:last-child { border-bottom: none; }
+
+  .psp-stab-btn span { flex: 1; }
+
+  .psp-stab-btn .psp-chevron { opacity: 0; transition: opacity 0.15s; }
+
+  .psp-stab-btn:hover {
+    background: var(--glass);
+    color: var(--text-primary);
+  }
+
+  .psp-stab-btn:hover .psp-chevron { opacity: 1; }
+
+  .psp-stab-btn--active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    color: white !important;
+  }
+
+  .psp-stab-btn--active .psp-chevron { opacity: 1; color: white; }
+
   /* Col2 */
   .psp-desktop-col2 .tab-content-wrapper {
     background: var(--card);
@@ -435,22 +499,95 @@
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
   }
+
+  /* ── SETTINGS CONTENT — cards en el contenido central ── */
+  .psp-settings-full {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .psp-ds-page-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  .psp-ds-page-title svg { color: var(--accent); }
+
+  .psp-ds-card {
+    background: var(--bg);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .psp-ds-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--glass);
+  }
+
+  .psp-ds-card-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border);
+  }
+
+  .psp-ds-card-title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .psp-ds-card-body { background: var(--card); }
+
+  /* Setting rows dentro de cards desktop */
+  .psp-ds-card-body .psp-setting-row {
+    padding: 14px 16px;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    background: transparent;
+    margin: 0;
+  }
+
+  .psp-ds-card-body .psp-setting-row:last-child { border-bottom: none; }
+  .psp-ds-card-body .psp-setting-row:hover { background: var(--glass); }
+
+  .psp-ds-card-body .psp-setting-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+  }
+
+  .psp-ds-card-body .psp-setting-label { font-size: 14px; }
+  .psp-ds-card-body .psp-setting-desc  { font-size: 12px; }
 }
 
 /* ════════════════════════════════════════════════════════════
-   DESKTOP (≥1024px) — 3 columnas
+   DESKTOP (≥1024px)
 ════════════════════════════════════════════════════════════ */
 @media (min-width: 1024px) {
-  .psp-desktop-col3 { display: block; }
-
   .psp-desktop-layout {
-    max-width: 1380px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 32px 24px;
-    display: grid;
-    grid-template-columns: 300px 1fr 275px;
+    grid-template-columns: 280px 1fr;
     gap: 24px;
-    align-items: start;
   }
 
   .psp-desktop-col1 { top: 32px; }
@@ -462,93 +599,11 @@
 
   .psp-desktop-col2 .tab-content-wrapper {
     border-radius: 20px;
-    padding: 28px;
+    padding: 32px;
     min-height: 500px;
   }
 
-  /* Settings panel */
-  .psp-desktop-col3 {
-    position: sticky;
-    top: 32px;
-  }
-
-  .psp-settings-panel {
-    background: var(--card);
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-  }
-
-  .psp-settings-panel-header {
-    display: flex; align-items: center; gap: 10px;
-    padding: 15px 16px;
-    font-size: 14px; font-weight: 700;
-    color: var(--text-primary);
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
-  }
-  .psp-settings-panel-header svg { color: var(--accent); }
-
-  .psp-settings-sidebar {
-    padding: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .psp-sidebar-btn {
-    width: 100%;
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 10px;
-    border: none; background: transparent;
-    border-radius: 8px;
-    color: var(--muted);
-    font-size: 13px; font-weight: 600;
-    cursor: pointer; transition: all 0.15s ease;
-    text-align: left;
-  }
-  .psp-sidebar-btn span { flex: 1; }
-  .psp-sidebar-btn .psp-chevron { opacity: 0; transition: opacity 0.15s; }
-
-  .psp-sidebar-btn:hover { background: var(--glass); color: var(--text-primary); }
-  .psp-sidebar-btn:hover .psp-chevron { opacity: 1; }
-
-  .psp-sidebar-btn--active {
-    background: linear-gradient(135deg, var(--accent), var(--accent-light));
-    color: white !important;
-  }
-  .psp-sidebar-btn--active .psp-chevron { opacity: 1; color: white; }
-
-  .psp-settings-content {
-    padding: 12px;
-    max-height: 420px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
-  }
-
-  .psp-settings-section { display: flex; flex-direction: column; gap: 2px; }
-
-  .psp-settings-section-title {
-    margin: 0 0 10px;
-    font-size: 11px; font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.6px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  /* Rows compactas */
-  .psp-settings-content .psp-setting-row {
-    padding: 9px 10px;
-    border-radius: 8px;
-    border-bottom: none;
-    margin-bottom: 2px;
-    background: var(--bg);
-  }
-  .psp-settings-content .psp-setting-row:hover { background: var(--glass); }
-  .psp-settings-content .psp-setting-icon { width: 30px; height: 30px; border-radius: 7px; }
-  .psp-settings-content .psp-setting-label { font-size: 13px; }
-  .psp-settings-content .psp-setting-desc  { font-size: 11px; }
+  .psp-ds-page-title { font-size: 22px; }
 }
 
 /* ════════════════════════════════════════════════════════════

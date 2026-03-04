@@ -38,167 +38,147 @@ import EditTab from '../components/ComProfile/EditTab';
 import { supabase } from '../utils/supabaseClient';
 import '../styles/StylesPages/ProfileSettingsPage.css';
 import '../styles/StylesPages/ProfilePageNew.css';
-import '../styles/StylesPages/ProfileSettingsPage.css';
 
 // ─────────────────────────────────────────────
 // VISTA MÓVIL — Pantalla principal (lista estilo imagen)
 // ─────────────────────────────────────────────
+// VISTA MÓVIL — Diseño compacto (banner pequeño + lista limpia)
+// ─────────────────────────────────────────────
 function MobileMainView({ userData, currentUser, preferences, onSectionClick, onTabClick, theme, toggleTheme }) {
-  const accuracy = currentUser?.predictions > 0
-    ? Math.round((currentUser.correct / currentUser.predictions) * 100)
-    : 0;
-
   return (
     <div className="psp-mobile-main">
-      {/* ── HERO BANNER ── */}
-      <div className="psp-hero-banner">
-        {userData.equipped_banner_url
-          ? <img src={userData.equipped_banner_url} alt="banner" className="psp-hero-banner-img" />
-          : <div className="psp-hero-banner-gradient" />
-        }
-        <div className="psp-hero-overlay" />
 
-        {/* Avatar */}
-        <div className="psp-hero-content">
-          <div className="psp-avatar-wrap">
-            <div className="psp-avatar" onClick={() => onTabClick('edit')}>
-              {userData.avatar_url
-                ? <img src={userData.avatar_url} alt={userData.name} />
-                : <span>{userData.name?.charAt(0)?.toUpperCase()}</span>
-              }
-            </div>
-            <div className="psp-level-badge">
-              <Crown size={11} fill="currentColor" />
-              <span>Lvl {userData.level || 1}</span>
-            </div>
+      {/* ── BANNER COMPACTO + AVATAR SOLAPADO ── */}
+      <div className="psp-compact-header">
+        {/* Banner estrecho */}
+        <div className="psp-compact-banner">
+          {userData.equipped_banner_url
+            ? <img src={userData.equipped_banner_url} alt="banner" className="psp-hero-banner-img" />
+            : <div className="psp-hero-banner-gradient" />
+          }
+          <div className="psp-compact-banner-overlay" />
+          {/* Título "Settings" sobre el banner como en la imagen */}
+          <h1 className="psp-compact-title">Settings</h1>
+        </div>
+
+        {/* Fila de usuario — solapada con el banner */}
+        <div className="psp-compact-user-row" onClick={() => onTabClick('edit')}>
+          <div className="psp-compact-avatar">
+            {userData.avatar_url
+              ? <img src={userData.avatar_url} alt={userData.name} />
+              : <span>{userData.name?.charAt(0)?.toUpperCase()}</span>
+            }
+
           </div>
-
-          <h2 className="psp-hero-name">{userData.name}</h2>
-          {userData.nationality && (
-            <p className="psp-hero-location">
-              <Globe size={12} />
-              {userData.nationality}
-            </p>
-          )}
+          <div className="psp-compact-user-info">
+            <span className="psp-compact-name">{userData.name}</span>
+            <span className="psp-compact-sub">
+              {userData.nationality || userData.email || 'Ver perfil'}
+            </span>
+          </div>
+          <ChevronRight size={18} className="psp-chevron" />
         </div>
       </div>
 
-      {/* ── STATS STRIP ── */}
-      <div className="psp-stats-strip">
-        <div className="psp-stat">
-          <span className="psp-stat-val">{currentUser?.predictions || 0}</span>
-          <span className="psp-stat-lbl">Predicciones</span>
-        </div>
-        <div className="psp-stat-divider" />
-        <div className="psp-stat">
-          <span className="psp-stat-val">{currentUser?.points || 0}</span>
-          <span className="psp-stat-lbl">Puntos</span>
-        </div>
-        <div className="psp-stat-divider" />
-        <div className="psp-stat">
-          <span className="psp-stat-val">{accuracy}%</span>
-          <span className="psp-stat-lbl">Precisión</span>
-        </div>
-      </div>
+      {/* ── LISTA ÚNICA LIMPIA (estilo imagen referencia) ── */}
+      <div className="psp-clean-list">
 
-      {/* ── SECCIÓN ACCOUNT ── */}
-      <div className="psp-section-label">Account</div>
-      <div className="psp-card-list">
-        <button className="psp-list-row" onClick={() => onTabClick('overview')}>
-          <div className="psp-row-icon" style={{ background: 'var(--psp-icon-orange-bg)', color: 'var(--psp-icon-orange)' }}>
-            <User size={20} />
+        {/* Modo oscuro inline — igual que en la imagen */}
+        <div className="psp-clean-row psp-clean-row--toggle">
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-purple-bg)', color: 'var(--psp-icon-purple)' }}>
+            {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
           </div>
-          <span className="psp-row-label">Personal Data</span>
-          <ChevronRight size={18} className="psp-chevron" />
-        </button>
-
-        <button className="psp-list-row" onClick={() => onTabClick('achievements')}>
-          <div className="psp-row-icon" style={{ background: 'var(--psp-icon-blue-bg)', color: 'var(--psp-icon-blue)' }}>
-            <Award size={20} />
-          </div>
-          <span className="psp-row-label">Logros y Títulos</span>
-          <ChevronRight size={18} className="psp-chevron" />
-        </button>
-
-        <button className="psp-list-row" onClick={() => onTabClick('history')}>
-          <div className="psp-row-icon" style={{ background: 'var(--psp-icon-green-bg)', color: 'var(--psp-icon-green)' }}>
-            <List size={20} />
-          </div>
-          <span className="psp-row-label">Historial</span>
-          <ChevronRight size={18} className="psp-chevron" />
-        </button>
-
-        <button className="psp-list-row" onClick={() => onTabClick('championships')}>
-          <div className="psp-row-icon" style={{ background: 'var(--psp-icon-yellow-bg)', color: 'var(--psp-icon-yellow)' }}>
-            <Crown size={20} />
-          </div>
-          <span className="psp-row-label">Campeonatos</span>
-          <ChevronRight size={18} className="psp-chevron" />
-        </button>
-      </div>
-
-      {/* ── SECCIÓN NOTIFICATION ── */}
-      <div className="psp-section-label">Notification</div>
-      <div className="psp-card-list">
-        <div className="psp-list-row psp-row-toggle">
-          <div className="psp-row-icon" style={{ background: 'var(--psp-icon-orange-bg)', color: 'var(--psp-icon-orange)' }}>
-            <Bell size={20} />
-          </div>
-          <span className="psp-row-label">Pop-up Notification</span>
-          <button
-            className={`psp-toggle ${preferences.push_enabled ? 'psp-toggle--on' : ''}`}
-            onClick={() => onSectionClick('notifications')}
-          >
+          <span className="psp-clean-label">Dark Mode</span>
+          <button className={`psp-toggle ${theme === 'dark' ? 'psp-toggle--on' : ''}`} onClick={toggleTheme}>
             <div className="psp-toggle-knob" />
           </button>
         </div>
+
+        <div className="psp-clean-row psp-clean-row--toggle">
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-orange-bg)', color: 'var(--psp-icon-orange)' }}>
+            <Bell size={18} />
+          </div>
+          <span className="psp-clean-label">Notificaciones</span>
+          <button className={`psp-toggle ${preferences.push_enabled ? 'psp-toggle--on' : ''}`} onClick={() => onSectionClick('notifications')}>
+            <div className="psp-toggle-knob" />
+          </button>
+        </div>
+
+        <button className="psp-clean-row" onClick={() => onTabClick('overview')}>
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-orange-bg)', color: 'var(--psp-icon-orange)' }}>
+            <User size={18} />
+          </div>
+          <span className="psp-clean-label">Personal Data</span>
+          <ChevronRight size={17} className="psp-chevron" />
+        </button>
+
+        <button className="psp-clean-row" onClick={() => onTabClick('achievements')}>
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-blue-bg)', color: 'var(--psp-icon-blue)' }}>
+            <Award size={18} />
+          </div>
+          <span className="psp-clean-label">Logros y Títulos</span>
+          <ChevronRight size={17} className="psp-chevron" />
+        </button>
+
+        <button className="psp-clean-row" onClick={() => onTabClick('history')}>
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-green-bg)', color: 'var(--psp-icon-green)' }}>
+            <List size={18} />
+          </div>
+          <span className="psp-clean-label">Historial</span>
+          <ChevronRight size={17} className="psp-chevron" />
+        </button>
+
+        <button className="psp-clean-row" onClick={() => onTabClick('championships')}>
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-yellow-bg)', color: 'var(--psp-icon-yellow)' }}>
+            <Crown size={18} />
+          </div>
+          <span className="psp-clean-label">Campeonatos</span>
+          <ChevronRight size={17} className="psp-chevron" />
+        </button>
+
+        <button className="psp-clean-row" onClick={() => onSectionClick('privacy')}>
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-teal-bg)', color: 'var(--psp-icon-teal)' }}>
+            <Shield size={18} />
+          </div>
+          <span className="psp-clean-label">Privacidad</span>
+          <ChevronRight size={17} className="psp-chevron" />
+        </button>
+
+        <button className="psp-clean-row" onClick={() => onSectionClick('appearance')}>
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-pink-bg)', color: 'var(--psp-icon-pink)' }}>
+            <Settings size={18} />
+          </div>
+          <span className="psp-clean-label">Apariencia</span>
+          <ChevronRight size={17} className="psp-chevron" />
+        </button>
+
+        <button className="psp-clean-row" onClick={() => onSectionClick('data')}>
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-blue-bg)', color: 'var(--psp-icon-blue)' }}>
+            <Database size={18} />
+          </div>
+          <span className="psp-clean-label">Datos</span>
+          <ChevronRight size={17} className="psp-chevron" />
+        </button>
+
+        <button className="psp-clean-row" onClick={() => onSectionClick('info')}>
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-green-bg)', color: 'var(--psp-icon-green)' }}>
+            <Info size={18} />
+          </div>
+          <span className="psp-clean-label">Información</span>
+          <ChevronRight size={17} className="psp-chevron" />
+        </button>
+
       </div>
 
-      {/* ── SECCIÓN SETTINGS ── */}
-      <div className="psp-section-label">Settings</div>
-      <div className="psp-card-list">
-        <button className="psp-list-row" onClick={() => onSectionClick('appearance')}>
-          <div className="psp-row-icon" style={{ background: 'var(--psp-icon-purple-bg)', color: 'var(--psp-icon-purple)' }}>
-            {theme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
-          </div>
-          <span className="psp-row-label">Apariencia</span>
-          <ChevronRight size={18} className="psp-chevron" />
-        </button>
-
-        <button className="psp-list-row" onClick={() => onSectionClick('privacy')}>
-          <div className="psp-row-icon" style={{ background: 'var(--psp-icon-teal-bg)', color: 'var(--psp-icon-teal)' }}>
-            <Shield size={20} />
-          </div>
-          <span className="psp-row-label">Privacidad</span>
-          <ChevronRight size={18} className="psp-chevron" />
-        </button>
-
-        <button className="psp-list-row" onClick={() => onSectionClick('data')}>
-          <div className="psp-row-icon" style={{ background: 'var(--psp-icon-pink-bg)', color: 'var(--psp-icon-pink)' }}>
-            <Database size={20} />
-          </div>
-          <span className="psp-row-label">Datos</span>
-          <ChevronRight size={18} className="psp-chevron" />
-        </button>
-
-        <button className="psp-list-row" onClick={() => onSectionClick('info')}>
-          <div className="psp-row-icon" style={{ background: 'var(--psp-icon-blue-bg)', color: 'var(--psp-icon-blue)' }}>
-            <Info size={20} />
-          </div>
-          <span className="psp-row-label">Información</span>
-          <ChevronRight size={18} className="psp-chevron" />
-        </button>
-      </div>
-
-      {/* ── EDIT PROFILE BUTTON ── */}
+      {/* Edit profile */}
       <div className="psp-edit-btn-wrap">
         <button className="psp-edit-btn" onClick={() => onTabClick('edit')}>
-          <Edit2 size={16} />
+          <Edit2 size={15} />
           Editar Perfil
         </button>
       </div>
 
-      <div style={{ height: 100 }} />
+      <div style={{ height: 80 }} />
     </div>
   );
 }
@@ -561,93 +541,146 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
   );
 
   const renderDesktopSettings = () => {
+    const SectionCard = ({ title, icon: Icon, children }) => (
+      <div className="psp-ds-card">
+        <div className="psp-ds-card-header">
+          {Icon && <div className="psp-ds-card-icon"><Icon size={18} /></div>}
+          <h3 className="psp-ds-card-title">{title}</h3>
+        </div>
+        <div className="psp-ds-card-body">{children}</div>
+      </div>
+    );
+
     switch (activeSection) {
       case 'account':
         return (
-          <div className="psp-settings-section">
-            <h3 className="psp-settings-section-title">Información de la Cuenta</h3>
-            <SettingItem icon={User} label="Nombre" description={currentUser?.name} />
-            <SettingItem icon={User} label="Correo" description={currentUser?.email} />
-            <SettingItem icon={LogOut} label="Cerrar sesión" danger>
-              <button className="psp-btn-small psp-btn-danger" onClick={handleLogout}>Salir</button>
-            </SettingItem>
-          </div>
+          <>
+            <div className="psp-ds-page-title">
+              <User size={22} />
+              <span>Cuenta</span>
+            </div>
+            <SectionCard title="Información personal" icon={User}>
+              <SettingItem icon={User} label="Nombre" description={currentUser?.name} />
+              <SettingItem icon={User} label="Correo" description={currentUser?.email} />
+            </SectionCard>
+            <SectionCard title="Sesión" icon={LogOut}>
+              <SettingItem icon={LogOut} label="Cerrar sesión" description="Salir de tu cuenta actual" danger>
+                <button className="psp-btn-small psp-btn-danger" onClick={handleLogout}>Salir</button>
+              </SettingItem>
+            </SectionCard>
+          </>
         );
       case 'appearance':
         return (
-          <div className="psp-settings-section">
-            <h3 className="psp-settings-section-title">Apariencia</h3>
-            <SettingItem icon={theme === 'dark' ? Moon : Sun} label="Modo oscuro" description="Cambiar entre tema claro y oscuro">
-              <ToggleSwitch checked={theme === 'dark'} onChange={toggleTheme} />
-            </SettingItem>
-            <SettingItem icon={Eye} label="Tamaño de fuente">
-              <select className="psp-select" value={preferences.font_size} onChange={(e) => handleSelect('font_size', e.target.value)}>
-                <option value="small">Pequeña</option>
-                <option value="medium">Mediana</option>
-                <option value="large">Grande</option>
-              </select>
-            </SettingItem>
-          </div>
+          <>
+            <div className="psp-ds-page-title">
+              {theme === 'dark' ? <Moon size={22} /> : <Sun size={22} />}
+              <span>Apariencia</span>
+            </div>
+            <SectionCard title="Tema" icon={theme === 'dark' ? Moon : Sun}>
+              <SettingItem icon={theme === 'dark' ? Moon : Sun} label="Modo oscuro" description="Cambiar entre tema claro y oscuro">
+                <ToggleSwitch checked={theme === 'dark'} onChange={toggleTheme} />
+              </SettingItem>
+            </SectionCard>
+            <SectionCard title="Texto" icon={Eye}>
+              <SettingItem icon={Eye} label="Tamaño de fuente" description="Ajusta el tamaño del texto en la app">
+                <select className="psp-select" value={preferences.font_size} onChange={(e) => handleSelect('font_size', e.target.value)}>
+                  <option value="small">Pequeña</option>
+                  <option value="medium">Mediana</option>
+                  <option value="large">Grande</option>
+                </select>
+              </SettingItem>
+            </SectionCard>
+          </>
         );
       case 'notifications':
         return (
-          <div className="psp-settings-section">
-            <h3 className="psp-settings-section-title">Notificaciones</h3>
-            <SettingItem icon={Bell} label="Push" description="Recibir notificaciones en tu dispositivo">
-              <ToggleSwitch checked={preferences.push_enabled} onChange={() => handleToggle('push_enabled')} />
-            </SettingItem>
-            <SettingItem label="Nuevos partidos">
-              <ToggleSwitch checked={preferences.notif_new_matches} onChange={() => handleToggle('notif_new_matches')} disabled={!preferences.push_enabled} />
-            </SettingItem>
-            <SettingItem label="Resultados">
-              <ToggleSwitch checked={preferences.notif_finished_matches} onChange={() => handleToggle('notif_finished_matches')} disabled={!preferences.push_enabled} />
-            </SettingItem>
-            <SettingItem label="Nuevas ligas">
-              <ToggleSwitch checked={preferences.notif_new_leagues} onChange={() => handleToggle('notif_new_leagues')} disabled={!preferences.push_enabled} />
-            </SettingItem>
-            <SettingItem icon={preferences.notif_sound ? Volume2 : VolumeX} label="Sonido">
-              <ToggleSwitch checked={preferences.notif_sound} onChange={() => handleToggle('notif_sound')} disabled={!preferences.push_enabled} />
-            </SettingItem>
-          </div>
+          <>
+            <div className="psp-ds-page-title">
+              <Bell size={22} />
+              <span>Notificaciones</span>
+            </div>
+            <SectionCard title="Push" icon={Bell}>
+              <SettingItem icon={Bell} label="Notificaciones push" description="Recibir alertas en tu dispositivo">
+                <ToggleSwitch checked={preferences.push_enabled} onChange={() => handleToggle('push_enabled')} />
+              </SettingItem>
+            </SectionCard>
+            <SectionCard title="Tipos de notificación" icon={Bell}>
+              <SettingItem label="Nuevos partidos" description="Cuando se publiquen partidos disponibles">
+                <ToggleSwitch checked={preferences.notif_new_matches} onChange={() => handleToggle('notif_new_matches')} disabled={!preferences.push_enabled} />
+              </SettingItem>
+              <SettingItem label="Resultados finalizados" description="Cuando terminen partidos con tus predicciones">
+                <ToggleSwitch checked={preferences.notif_finished_matches} onChange={() => handleToggle('notif_finished_matches')} disabled={!preferences.push_enabled} />
+              </SettingItem>
+              <SettingItem label="Nuevas ligas / premios" description="Ligas y torneos disponibles">
+                <ToggleSwitch checked={preferences.notif_new_leagues} onChange={() => handleToggle('notif_new_leagues')} disabled={!preferences.push_enabled} />
+              </SettingItem>
+              <SettingItem icon={preferences.notif_sound ? Volume2 : VolumeX} label="Sonido" description="Reproducir sonido al recibir notificaciones">
+                <ToggleSwitch checked={preferences.notif_sound} onChange={() => handleToggle('notif_sound')} disabled={!preferences.push_enabled} />
+              </SettingItem>
+            </SectionCard>
+          </>
         );
       case 'privacy':
         return (
-          <div className="psp-settings-section">
-            <h3 className="psp-settings-section-title">Privacidad</h3>
-            <SettingItem icon={Eye} label="Perfil público">
-              <ToggleSwitch checked={preferences.profile_public} onChange={() => handleToggle('profile_public')} />
-            </SettingItem>
-            <SettingItem icon={Target} label="Estadísticas en ranking">
-              <ToggleSwitch checked={preferences.show_stats_in_ranking} onChange={() => handleToggle('show_stats_in_ranking')} />
-            </SettingItem>
-            <SettingItem icon={Bell} label="Compartir actividad">
-              <ToggleSwitch checked={preferences.share_activity} onChange={() => handleToggle('share_activity')} />
-            </SettingItem>
-          </div>
+          <>
+            <div className="psp-ds-page-title">
+              <Shield size={22} />
+              <span>Privacidad</span>
+            </div>
+            <SectionCard title="Visibilidad" icon={Eye}>
+              <SettingItem icon={Eye} label="Perfil público" description="Otros usuarios pueden ver tu perfil">
+                <ToggleSwitch checked={preferences.profile_public} onChange={() => handleToggle('profile_public')} />
+              </SettingItem>
+              <SettingItem icon={Target} label="Estadísticas en ranking" description="Aparecer en rankings públicos">
+                <ToggleSwitch checked={preferences.show_stats_in_ranking} onChange={() => handleToggle('show_stats_in_ranking')} />
+              </SettingItem>
+              <SettingItem icon={Bell} label="Compartir actividad" description="Mostrar tu actividad reciente a otros">
+                <ToggleSwitch checked={preferences.share_activity} onChange={() => handleToggle('share_activity')} />
+              </SettingItem>
+              <SettingItem icon={preferences.predictions_public ? Eye : EyeOff} label="Predicciones públicas" description="Otros pueden ver tus predicciones">
+                <ToggleSwitch checked={preferences.predictions_public} onChange={() => handleToggle('predictions_public')} />
+              </SettingItem>
+            </SectionCard>
+          </>
         );
       case 'data':
         return (
-          <div className="psp-settings-section">
-            <h3 className="psp-settings-section-title">Gestión de Datos</h3>
-            <SettingItem icon={Download} label="Exportar mis datos" description="Descargar en JSON">
-              <button className="psp-btn-small psp-btn-primary" onClick={handleExport}>Exportar</button>
-            </SettingItem>
-            <SettingItem icon={RotateCcw} label="Restaurar configuración">
-              <button className="psp-btn-small psp-btn-secondary" onClick={handleReset}>Restaurar</button>
-            </SettingItem>
-            <SettingItem icon={Trash2} label="Eliminar cuenta" description="Acción irreversible" danger>
-              <button className="psp-btn-small psp-btn-danger" onClick={() => setShowDeleteConfirm(true)}>Eliminar</button>
-            </SettingItem>
-          </div>
+          <>
+            <div className="psp-ds-page-title">
+              <Database size={22} />
+              <span>Datos</span>
+            </div>
+            <SectionCard title="Exportar e importar" icon={Download}>
+              <SettingItem icon={Download} label="Exportar mis datos" description="Descargar toda tu información en formato JSON">
+                <button className="psp-btn-small psp-btn-primary" onClick={handleExport}>Exportar</button>
+              </SettingItem>
+              <SettingItem icon={RotateCcw} label="Restaurar configuración" description="Volver a los valores por defecto">
+                <button className="psp-btn-small psp-btn-secondary" onClick={handleReset}>Restaurar</button>
+              </SettingItem>
+            </SectionCard>
+            <SectionCard title="Zona de peligro" icon={Trash2}>
+              <SettingItem icon={Trash2} label="Eliminar cuenta" description="Esta acción es irreversible y eliminará todos tus datos" danger>
+                <button className="psp-btn-small psp-btn-danger" onClick={() => setShowDeleteConfirm(true)}>Eliminar</button>
+              </SettingItem>
+            </SectionCard>
+          </>
         );
       case 'info':
         return (
-          <div className="psp-settings-section">
-            <h3 className="psp-settings-section-title">Información</h3>
-            <SettingItem icon={Info} label="Versión" description="GlobalScore v20.0.0" />
-            <SettingItem icon={Shield} label="Política de privacidad" />
-            <SettingItem icon={Info} label="Términos y condiciones" />
-          </div>
+          <>
+            <div className="psp-ds-page-title">
+              <Info size={22} />
+              <span>Información</span>
+            </div>
+            <SectionCard title="App" icon={Info}>
+              <SettingItem icon={Info} label="Versión" description="GlobalScore v20.0.0" />
+            </SectionCard>
+            <SectionCard title="Legal" icon={Shield}>
+              <SettingItem icon={Shield} label="Política de privacidad" description="Cómo manejamos tus datos" />
+              <SettingItem icon={Info} label="Términos y condiciones" description="Reglas de uso de la plataforma" />
+            </SectionCard>
+          </>
         );
       default:
         return null;
@@ -719,47 +752,43 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
       </div>
 
       {/* ══════════════════════════════════
-          DESKTOP VIEW
+          DESKTOP VIEW — 2 columnas
       ══════════════════════════════════ */}
       <div className="psp-desktop-wrapper">
         <div className="psp-desktop-layout">
 
-          {/* COL 1 — Hero + Profile Tabs */}
+          {/* COL 1 — Hero + Tabs (incluye Settings como pestaña) */}
           <div className="psp-desktop-col1">
             <ProfileHero userData={userData} currentUser={currentUser} />
             <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-          </div>
 
-          {/* COL 2 — Tab Content */}
-          <div className="psp-desktop-col2">
-            <div className="tab-content-wrapper">
-              {renderTabContent(activeTab)}
+            {/* Pestaña Settings en el menú izquierdo */}
+            <div className="psp-settings-tab-nav">
+              <div className="psp-settings-tab-header">
+                <Settings size={15} />
+                <span>Ajustes</span>
+              </div>
+              {settingsSections.map(s => (
+                <button
+                  key={s.id}
+                  className={`psp-stab-btn ${activeTab === 'settings' && activeSection === s.id ? 'psp-stab-btn--active' : ''}`}
+                  onClick={() => { setActiveTab('settings'); setActiveSection(s.id); }}
+                >
+                  <s.icon size={15} />
+                  <span>{s.label}</span>
+                  <ChevronRight size={13} className="psp-chevron" />
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* COL 3 — Settings */}
-          <div className="psp-desktop-col3">
-            <div className="psp-settings-panel">
-              <div className="psp-settings-panel-header">
-                <Settings size={20} />
-                <span>Ajustes</span>
-              </div>
-              <div className="psp-settings-sidebar">
-                {settingsSections.map(s => (
-                  <button
-                    key={s.id}
-                    className={`psp-sidebar-btn ${activeSection === s.id ? 'psp-sidebar-btn--active' : ''}`}
-                    onClick={() => setActiveSection(s.id)}
-                  >
-                    <s.icon size={16} />
-                    <span>{s.label}</span>
-                    <ChevronRight size={14} className="psp-chevron" />
-                  </button>
-                ))}
-              </div>
-              <div className="psp-settings-content">
-                {renderDesktopSettings()}
-              </div>
+          {/* COL 2 — Contenido (perfil o settings según pestaña activa) */}
+          <div className="psp-desktop-col2">
+            <div className="tab-content-wrapper">
+              {activeTab === 'settings'
+                ? <div className="psp-settings-full">{renderDesktopSettings()}</div>
+                : renderTabContent(activeTab)
+              }
             </div>
           </div>
 
