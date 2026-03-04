@@ -167,18 +167,7 @@ function MobileMainView({ userData, currentUser, preferences, onSectionClick, on
           <span className="psp-clean-label">Información</span>
           <ChevronRight size={17} className="psp-chevron" />
         </button>
-
       </div>
-
-      {/* Edit profile */}
-      <div className="psp-edit-btn-wrap">
-        <button className="psp-edit-btn" onClick={() => onTabClick('edit')}>
-          <Edit2 size={15} />
-          Editar Perfil
-        </button>
-      </div>
-
-      <div style={{ height: 80 }} />
     </div>
   );
 }

@@ -37,7 +37,7 @@
 
 /* ── VISIBILIDAD BASE ────────────────────────────────────── */
 .psp-page           { background: var(--bg); min-height: 100vh; }
-.psp-footer-desktop { display: none; }          /* Solo en desktop */
+.psp-footer-desktop { display: block; }          /* Visible en todos los tamaños */
 .psp-mobile-wrapper { display: block; }
 .psp-desktop-wrapper{ display: none; }
 
@@ -46,6 +46,7 @@
 ════════════════════════════════════════════════════════════ */
 .psp-mobile-main {
   background: var(--bg);
+  padding-bottom: 24px;
 }
 
 /* ── COMPACT HEADER (banner pequeño + usuario solapado) ── */
