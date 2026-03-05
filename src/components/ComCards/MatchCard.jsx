@@ -100,7 +100,10 @@ export default function MatchCard({ match, userPred, onPredict }) {
       <div className="mc-card">
 
         {/* Dot estado */}
-        <span className={`mc-dot ${dotClass}`} />
+        {match.is_knockout && !isDisabled
+          ? <Zap className={`mc-dot-zap`} size={14} />
+          : <span className={`mc-dot ${dotClass}`} />
+        }
 
         {/* Cuerpo: score — equipo — VS — equipo — score */}
         <div className="mc-body">
@@ -137,12 +140,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
           </div>
 
           {/* VS central */}
-          <div className="mc-vs">
-            VS
-            {match.is_knockout && !isDisabled && (
-              <Zap className="mc-vs-hint" size={11} />
-            )}
-          </div>
+          <div className="mc-vs">VS</div>
 
           {/* Score visitante */}
           <div className={`mc-box ${boxDone ? "mc-box--done" : ""}`}>
