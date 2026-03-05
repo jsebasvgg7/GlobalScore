@@ -44,6 +44,88 @@
 /* ════════════════════════════════════════════════════════════
    MOBILE — MAIN VIEW (diseño compacto)
 ════════════════════════════════════════════════════════════ */
+/* ── OVERRIDE: psp-detail-header sin contenedor ─────────── */
+.psp-detail-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 16px 18px !important;
+  background: transparent !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  /* Sin sticky: el header fluye normal y no tapa contenido */
+  position: static !important;
+  z-index: auto !important;
+  backdrop-filter: none !important;
+}
+
+/* Título alineado a la izquierda, junto a la flecha */
+.psp-detail-header .psp-detail-title {
+  margin: 0 !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+  text-align: left !important;
+  flex: 1;
+  letter-spacing: -0.3px;
+}
+
+/* Ocultar el spacer derecho (ya no hace falta balancear) */
+.psp-detail-header > div[style*="width: 36"] {
+  display: none !important;
+}
+
+/* ── OVERRIDE: back button limpio ────────────────────────── */
+.psp-detail-header .psp-back-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-primary) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: opacity 0.15s ease !important;
+  flex-shrink: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.psp-detail-header .psp-back-btn:active {
+  opacity: 0.5 !important;
+  transform: scale(0.9) !important;
+}
+
+/* Modo oscuro: ícono un poco más brillante */
+[data-theme="dark"] .psp-detail-header .psp-back-btn {
+  color: var(--text-primary) !important;
+}
+
+/* Modo oscuro / claro */
+[data-theme="dark"] .psp-detail-header .psp-back-btn,
+[data-theme="light"] .psp-detail-header .psp-back-btn {
+  color: var(--text-primary) !important;
+}
+
+/* ── FIX: Último item no queda tapado por nav bar inferior ─ */
+.psp-mobile-detail {
+  min-height: 100vh;
+}
+
+.psp-detail-content {
+  padding-bottom: 100px !important;
+}
+
+.psp-mobile-main {
+  padding-bottom: 100px !important;
+}
+
+/* Espacio superior para compensar el header oculto */
+.psp-detail-header {
+  padding-top: 56px !important;
+}
 .psp-mobile-main {
   background: var(--bg);
   padding-bottom: 24px;
@@ -606,6 +688,7 @@
 
   .psp-ds-page-title { font-size: 22px; }
 }
+
 
 /* ════════════════════════════════════════════════════════════
    MODAL — Delete confirm

@@ -1,5 +1,5 @@
 // src/pages/ProfileSettingsPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   User, Bell, Shield, Database, Info, ChevronRight,
   Target, Trophy, Heart, Globe, Crown, Edit2, List,
@@ -40,7 +40,7 @@ import '../styles/StylesPages/ProfileSettingsPage.css';
 import '../styles/StylesPages/ProfilePageNew.css';
 
 // ─────────────────────────────────────────────
-// VISTA MÓVIL — Pantalla principal 
+// VISTA MÓVIL — Pantalla principal
 // ─────────────────────────────────────────────
 function MobileMainView({ userData, currentUser, preferences, onSectionClick, onTabClick, theme, toggleTheme }) {
   return (
@@ -48,7 +48,6 @@ function MobileMainView({ userData, currentUser, preferences, onSectionClick, on
 
       {/* ── BANNER COMPACTO + AVATAR SOLAPADO ── */}
       <div className="psp-compact-header">
-        {/* Banner estrecho */}
         <div className="psp-compact-banner">
           {userData.equipped_banner_url
             ? <img src={userData.equipped_banner_url} alt="banner" className="psp-hero-banner-img" />
@@ -57,14 +56,12 @@ function MobileMainView({ userData, currentUser, preferences, onSectionClick, on
           <div className="psp-compact-banner-overlay" />
         </div>
 
-        {/* Fila de usuario — solapada con el banner */}
         <div className="psp-compact-user-row" onClick={() => onTabClick('edit')}>
           <div className="psp-compact-avatar">
             {userData.avatar_url
               ? <img src={userData.avatar_url} alt={userData.name} />
               : <span>{userData.name?.charAt(0)?.toUpperCase()}</span>
             }
-
           </div>
           <div className="psp-compact-user-info">
             <span className="psp-compact-name">{userData.name}</span>
@@ -76,10 +73,9 @@ function MobileMainView({ userData, currentUser, preferences, onSectionClick, on
         </div>
       </div>
 
-      {/* ── LISTA ÚNICA LIMPIA (estilo imagen referencia) ── */}
+      {/* ── LISTA ÚNICA LIMPIA ── */}
       <div className="psp-clean-list">
 
-        {/* Modo oscuro inline — igual que en la imagen */}
         <div className="psp-clean-row psp-clean-row--toggle">
           <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-purple-bg)', color: 'var(--psp-icon-purple)' }}>
             {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
@@ -172,6 +168,16 @@ function MobileMainView({ userData, currentUser, preferences, onSectionClick, on
 // VISTA MÓVIL — Sub-pantalla de ajuste (settings detail)
 // ─────────────────────────────────────────────
 function MobileSettingDetail({ section, preferences, theme, toggleTheme, onBack, onToggle, onSelect, onExport, onReset, onLogout, onDeleteAccount, saving, currentUser }) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Ocultar el header móvil mientras estamos en la sub-pantalla
+    const header = document.querySelector('.gs-mobile-header');
+    if (header) header.style.display = 'none';
+    return () => {
+      if (header) header.style.display = '';
+    };
+  }, []);
+
   const sectionTitles = {
     notifications: 'Notificaciones',
     appearance: 'Apariencia',
@@ -334,13 +340,12 @@ function MobileSettingDetail({ section, preferences, theme, toggleTheme, onBack,
 
   return (
     <div className="psp-mobile-detail">
-      {/* Header */}
+      {/* Header sin contenedor: flecha + título pegados */}
       <div className="psp-detail-header">
         <button className="psp-back-btn" onClick={onBack}>
-          <ArrowLeft size={20} />
+          <ArrowLeft size={22} />
         </button>
         <h2 className="psp-detail-title">{sectionTitles[section] || section}</h2>
-        <div style={{ width: 36 }} />
       </div>
 
       <div className="psp-detail-content">
@@ -356,14 +361,24 @@ function MobileSettingDetail({ section, preferences, theme, toggleTheme, onBack,
 // VISTA MÓVIL — Sub-pantalla de pestaña de perfil
 // ─────────────────────────────────────────────
 function MobileTabView({ activeTab, onBack, children, tabTitle }) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Ocultar el header móvil mientras estamos en la sub-pantalla
+    const header = document.querySelector('.gs-mobile-header');
+    if (header) header.style.display = 'none';
+    return () => {
+      if (header) header.style.display = '';
+    };
+  }, []);
+
   return (
     <div className="psp-mobile-detail">
+      {/* Header sin contenedor: flecha + título pegados */}
       <div className="psp-detail-header">
         <button className="psp-back-btn" onClick={onBack}>
-          <ArrowLeft size={20} />
+          <ArrowLeft size={22} />
         </button>
         <h2 className="psp-detail-title">{tabTitle}</h2>
-        <div style={{ width: 36 }} />
       </div>
       <div className="psp-detail-content">
         {children}
@@ -376,15 +391,11 @@ function MobileTabView({ activeTab, onBack, children, tabTitle }) {
 // COMPONENTE PRINCIPAL
 // ─────────────────────────────────────────────
 export default function ProfileSettingsPage({ currentUser, onBack }) {
-  // Mobile navigation state
-  const [mobileView, setMobileView] = useState('main'); // 'main' | 'setting:{section}' | 'tab:{tabId}'
-  
-  // Desktop tab state
+  const [mobileView, setMobileView] = useState('main');
   const [activeTab, setActiveTab] = useState('overview');
   const [activeSection, setActiveSection] = useState('account');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  // Admin modals
   const [showAdminAchievementsModal, setShowAdminAchievementsModal] = useState(false);
   const [showAdminTitlesModal, setShowAdminTitlesModal] = useState(false);
   const [editingAchievement, setEditingAchievement] = useState(null);
@@ -742,12 +753,11 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
       <div className="psp-desktop-wrapper">
         <div className="psp-desktop-layout">
 
-          {/* COL 1 — Hero + Tabs (incluye Settings como pestaña) */}
+          {/* COL 1 — Hero + Tabs */}
           <div className="psp-desktop-col1">
             <ProfileHero userData={userData} currentUser={currentUser} />
             <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-            {/* Pestaña Settings en el menú izquierdo */}
             <div className="psp-settings-tab-nav">
               <div className="psp-settings-tab-header">
                 <Settings size={15} />
@@ -767,7 +777,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
             </div>
           </div>
 
-          {/* COL 2 — Contenido (perfil o settings según pestaña activa) */}
+          {/* COL 2 — Contenido */}
           <div className="psp-desktop-col2">
             <div className="tab-content-wrapper">
               {activeTab === 'settings'
