@@ -663,9 +663,9 @@
 =================================== */
 
 /* Wrapper general de los tabs */
-.nav-tabs,
-[class*="navigation-tabs"],
-[class*="nav-tabs"] {
+.vega-root .nav-tabs,
+.vega-root [class*="navigation-tabs"],
+.vega-root [class*="nav-tabs"] {
   display: flex;
   justify-content: center;
   gap: 12px;
@@ -676,9 +676,9 @@
 }
 
 /* Cada tab button */
-.nav-tab,
-[class*="nav-tab"],
-[class*="tab-btn"] {
+.vega-root .nav-tab,
+.vega-root [class*="nav-tab"],
+.vega-root [class*="tab-btn"] {
   width: 48px !important;
   height: 48px !important;
   border-radius: 50% !important;
@@ -696,20 +696,20 @@
 }
 
 /* Ocultar texto dentro del tab */
-.nav-tab span,
-[class*="nav-tab"] span,
-[class*="tab-btn"] span,
-.nav-tab .tab-label,
-[class*="nav-tab"] .tab-label {
+.vega-root .nav-tab span,
+.vega-root [class*="nav-tab"] span,
+.vega-root [class*="tab-btn"] span,
+.vega-root .nav-tab .tab-label,
+.vega-root [class*="nav-tab"] .tab-label {
   display: none !important;
   width: 0 !important;
   overflow: hidden !important;
 }
 
 /* Tab activo */
-.nav-tab.active,
-[class*="nav-tab"].active,
-[class*="tab-btn"].active {
+.vega-root .nav-tab.active,
+.vega-root [class*="nav-tab"].active,
+.vega-root [class*="tab-btn"].active {
   background: linear-gradient(135deg, var(--accent), var(--accent-light)) !important;
   border-color: var(--accent) !important;
   color: white !important;
@@ -717,9 +717,9 @@
   transform: translateY(-2px);
 }
 
-.nav-tab:hover:not(.active),
-[class*="nav-tab"]:hover:not(.active),
-[class*="tab-btn"]:hover:not(.active) {
+.vega-root .nav-tab:hover:not(.active),
+.vega-root [class*="nav-tab"]:hover:not(.active),
+.vega-root [class*="tab-btn"]:hover:not(.active) {
   border-color: var(--accent) !important;
   color: var(--accent) !important;
   transform: translateY(-1px);

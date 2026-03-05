@@ -1,84 +1,30 @@
-// src/components/ComAdmin/AdminNavigationTabs.jsx
-// ACTUALIZADO — añade tab Banners
 import React from 'react';
 import { Trophy, Target, Award, Shield, Package, Crown, Image } from 'lucide-react';
 
 export default function AdminNavigationTabs({ activeSection, setActiveSection, stats }) {
+  const tabs = [
+    { id: 'matches',      icon: Target,  badge: stats.matches.pending },
+    { id: 'leagues',      icon: Trophy,  badge: stats.leagues.active },
+    { id: 'awards',       icon: Award,   badge: stats.awards.active },
+    { id: 'achievements', icon: Shield,  badge: 0 },
+    { id: 'titles',       icon: Package, badge: 0 },
+    { id: 'crowns',       icon: Crown,   badge: stats.crowns.thisMonth === 0 ? 1 : 0 },
+    { id: 'banners',      icon: Image,   badge: 0 },
+  ];
+
   return (
     <div className="admin-nav-tabs">
-      <button
-        className={`admin-nav-tab ${activeSection === 'matches' ? 'active' : ''}`}
-        onClick={() => setActiveSection('matches')}
-      >
-        <Target size={20} />
-        <span>Partidos</span>
-        {stats.matches.pending > 0 && (
-          <span className="tab-badge">{stats.matches.pending}</span>
-        )}
-      </button>
-
-      <button
-        className={`admin-nav-tab ${activeSection === 'leagues' ? 'active' : ''}`}
-        onClick={() => setActiveSection('leagues')}
-      >
-        <Trophy size={20} />
-        <span>Ligas</span>
-        {stats.leagues.active > 0 && (
-          <span className="tab-badge">{stats.leagues.active}</span>
-        )}
-      </button>
-
-      <button
-        className={`admin-nav-tab ${activeSection === 'awards' ? 'active' : ''}`}
-        onClick={() => setActiveSection('awards')}
-      >
-        <Award size={20} />
-        <span>Premios</span>
-        {stats.awards.active > 0 && (
-          <span className="tab-badge">{stats.awards.active}</span>
-        )}
-      </button>
-
-      <button
-        className={`admin-nav-tab ${activeSection === 'achievements' ? 'active' : ''}`}
-        onClick={() => setActiveSection('achievements')}
-      >
-        <Shield size={20} />
-        <span>Logros</span>
-      </button>
-
-      <button
-        className={`admin-nav-tab ${activeSection === 'titles' ? 'active' : ''}`}
-        onClick={() => setActiveSection('titles')}
-      >
-        <Package size={20} />
-        <span>Títulos</span>
-      </button>
-
-      <button
-        className={`admin-nav-tab ${activeSection === 'crowns' ? 'active' : ''}`}
-        onClick={() => setActiveSection('crowns')}
-      >
-        <Crown size={20} />
-        <span>Coronas</span>
-        {stats.crowns.thisMonth === 0 && (
-          <span className="tab-badge pending">!</span>
-        )}
-      </button>
-
-      {/* ── NUEVA TAB BANNERS ── */}
-      <button
-        className={`admin-nav-tab ${activeSection === 'banners' ? 'active' : ''}`}
-        onClick={() => setActiveSection('banners')}
-      >
-        <Image size={20} />
-        <span>Banners</span>
-        {stats.banners?.total > 0 && (
-          <span className="tab-badge" style={{ background: 'rgba(124,111,247,0.2)', color: 'var(--accent)' }}>
-            {stats.banners.total}
-          </span>
-        )}
-      </button>
+      {tabs.map(({ id, icon: Icon, badge }) => (
+        <button
+          key={id}
+          className={`admin-nav-tab ${activeSection === id ? 'active' : ''}`}
+          onClick={() => setActiveSection(id)}
+          aria-label={id}
+        >
+          <Icon size={20} />
+          {badge > 0 && <span className="tab-badge">{badge}</span>}
+        </button>
+      ))}
     </div>
   );
 }

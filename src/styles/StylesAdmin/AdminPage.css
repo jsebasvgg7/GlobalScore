@@ -18,7 +18,6 @@
 }
 
 .admin-page-container {
-  /* Center within the available space (after sidebar) */
   max-width: 1280px;
   width: 100%;
   margin: 0 auto;
@@ -26,6 +25,7 @@
   flex-direction: column;
   gap: 18px;
   box-sizing: border-box;
+  align-items: stretch; /* ← vuelve a stretch */
 }
 
 /* ─── Stats Overview ────────────────────────── */
@@ -116,68 +116,125 @@
 
 /* ─── Navigation Tabs ───────────────────────── */
 .admin-nav-tabs {
-  display: flex;
-  gap: 3px;
-  background: var(--card);
-  padding: 4px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  flex-wrap: nowrap;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: transparent !important;
+  padding: 6px 2px !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin-bottom: 20px !important;
+  overflow: visible !important;
+  flex-wrap: nowrap !important;
+  width: fit-content !important;
+  margin: 0 auto !important;
+  max-width: none !important;
+  border-radius: 0 !important;
 }
 
-.admin-nav-tabs::-webkit-scrollbar { display: none; }
-
 .admin-nav-tab {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
-  position: relative;
-  font-family: inherit;
-  white-space: nowrap;
-  flex-shrink: 0;
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  min-height: 52px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  flex: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px solid var(--border) !important;
+  background: var(--card) !important;
+  color: var(--text-secondary) !important;
+  cursor: pointer !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: visible !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07) !important;
+  flex-shrink: 0 !important;
+  flex-direction: row !important;
+}
+
+.admin-nav-tab span:not(.tab-badge) {
+  display: none !important;
+  width: 0 !important;
+  overflow: hidden !important;
+}
+
+.admin-nav-tab svg {
+  width: 22px !important;
+  height: 22px !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+  z-index: 1 !important;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
 .admin-nav-tab:hover {
-  background: var(--glass);
-  color: var(--text-primary);
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 16px rgba(96, 81, 155, 0.18) !important;
+  background: var(--glass) !important;
+}
+
+.admin-nav-tab:hover svg {
+  transform: scale(1.15) !important;
 }
 
 .admin-nav-tab.active {
-  background: var(--glass);
-  color: var(--accent-light, var(--accent));
-  box-shadow: inset 0 0 0 1px rgba(124,111,247,0.25);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%) !important;
+  border-color: transparent !important;
+  color: white !important;
+  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.40) !important;
+  transform: translateY(-2px) !important;
+}
+
+.admin-nav-tab.active svg {
+  transform: scale(1.1) !important;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)) !important;
 }
 
 .tab-badge {
-  background: #f25f5c;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 800;
-  border-radius: 20px;
-  padding: 1px 6px;
-  min-width: 16px;
-  text-align: center;
-  line-height: 1.6;
+  position: absolute !important;
+  top: -4px !important;
+  right: -4px !important;
+  width: 16px !important;
+  height: 16px !important;
+  background: #f25f5c !important;
+  color: #fff !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  min-width: unset !important;
+  z-index: 2 !important;
 }
 
 .tab-badge.pending {
-  background: #f5a623;
-  color: #111;
+  background: #f5a623 !important;
+  color: #111 !important;
 }
 
+@media (max-width: 768px) {
+  .admin-nav-tabs {
+    gap: 6px !important;
+  }
+  .admin-nav-tab {
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    min-height: 46px !important;
+  }
+  .admin-nav-tab svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
 /* ─── Controls ──────────────────────────────── */
 .admin-controls {
   display: flex;
