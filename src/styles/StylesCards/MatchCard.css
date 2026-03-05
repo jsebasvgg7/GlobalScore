@@ -5,8 +5,8 @@
 /* Wrapper: espacio para el escudo flotante */
 .mc-wrap {
   position: relative;
-  padding-top: 32px;
-  max-width: 310px;
+  padding-top: 14px;
+  max-width: 280px;
   padding-bottom: 16px;
   margin: 0 auto;
   width: 100%;
@@ -221,8 +221,8 @@
   gap: 5px;
   width: fit-content;
   min-width: 76px;
-  margin: 10px auto 0;
-  padding: 7px 20px 5px;
+  margin: 10px auto -13px; 
+  padding: 7px 20px;
   background: #dde1eb;
   color: #64748b;
   font-size: 11px;
