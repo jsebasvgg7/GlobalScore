@@ -158,13 +158,17 @@
 .mc-team--tap:active .mc-shield-wrap { transform: scale(0.94); }
 
 .mc-shield-img {
-  width: 100%;
-  height: 100%;
-  max-width: 58px;
-  max-height: 58px;
-  object-fit: contain;
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  min-height: 56px !important;
+  max-width: 56px !important;
+  max-height: 56px !important;
+  object-fit: contain !important;
+  object-position: center !important;
   filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));
-  display: block;
+  display: block !important;
+  flex-shrink: 0 !important;
 }
 
 .mc-shield-emoji {
