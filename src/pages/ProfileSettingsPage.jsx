@@ -52,7 +52,7 @@ const TAB_TO_SECTION = {
 // ─────────────────────────────────────────────
 // VISTA MÓVIL — Pantalla principal
 // ─────────────────────────────────────────────
-function MobileMainView({ userData, currentUser, preferences, onTabClick, theme, toggleTheme }) {
+function MobileMainView({ userData, currentUser, preferences, onTabClick, theme, toggleTheme, onLogout }) {
   return (
     <div className="psp-mobile-main">
 
@@ -194,6 +194,15 @@ function MobileMainView({ userData, currentUser, preferences, onTabClick, theme,
         </button>
 
       </div>
+
+      {/* ── BOTÓN CERRAR SESIÓN ── */}
+      <div className="psp-logout-wrap">
+        <button className="psp-logout-btn" onClick={onLogout}>
+          <LogOut size={18} />
+          <span>Cerrar sesión</span>
+        </button>
+      </div>
+
     </div>
   );
 }
@@ -648,6 +657,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
             theme={theme}
             toggleTheme={toggleTheme}
             onTabClick={(tab) => setMobileView(`tab:${tab}`)}
+            onLogout={handleLogout}
           />
         )}
 
