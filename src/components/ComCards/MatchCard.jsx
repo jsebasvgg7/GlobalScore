@@ -1,6 +1,6 @@
 // src/components/ComCards/MatchCard.jsx
 import React, { useState, useEffect, useRef } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Zap } from "lucide-react";
 import "../../styles/StylesCards/MatchCard.css";
 
 // Abrevia el nombre del equipo a 3 letras
@@ -137,7 +137,12 @@ export default function MatchCard({ match, userPred, onPredict }) {
           </div>
 
           {/* VS central */}
-          <div className="mc-vs">VS</div>
+          <div className="mc-vs">
+            VS
+            {match.is_knockout && !isDisabled && (
+              <Zap className="mc-vs-hint" size={11} />
+            )}
+          </div>
 
           {/* Score visitante */}
           <div className={`mc-box ${boxDone ? "mc-box--done" : ""}`}>

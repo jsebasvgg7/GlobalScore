@@ -209,8 +209,22 @@
   color: #94a3b8;
   letter-spacing: 0.08em;
   text-align: center;
-  /* baja el VS al nivel de los escudos, no al nombre */
-  margin-bottom: 6px;
+  margin-bottom: -20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.mc-vs-hint {
+  color: #f59e0b;
+  fill: #f59e0b;
+  animation: mc-pulse 1.5s ease-in-out infinite;
+}
+
+[data-theme="dark"] .mc-vs-hint {
+  color: #fbbf24;
+  fill: #fbbf24;
 }
 
 /* ── Pill hora ── */
