@@ -19,6 +19,40 @@
 }
 
 /* ===================================
+   DATE GROUP HEADERS
+=================================== */
+
+.matches-date-group {
+  margin-bottom: 8px;
+}
+
+.matches-date-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+  letter-spacing: 0.04em;
+  padding: 0 4px 10px 4px;
+  border-bottom: 1.5px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.matches-date-label::first-letter {
+  text-transform: uppercase;
+}
+
+/* Hoy y Mañana con acento */
+.matches-date-group:first-child .matches-date-label {
+  color: var(--accent);
+  font-size: 15px;
+}
+
+.matches-date-group:nth-child(2) .matches-date-label {
+  color: var(--accent-light);
+  font-size: 14px;
+}
+
+/* ===================================
    MATCHES SECTION — sin contenedor visual
 =================================== */
 
@@ -275,6 +309,15 @@
   color: #ffffff !important;
   stroke: #ffffff !important;
   fill: #ffffff !important;
+}
+
+[data-theme="dark"] .matches-date-label {
+  color: var(--text-secondary);
+  border-bottom-color: var(--border);
+}
+
+[data-theme="dark"] .matches-date-group:first-child .matches-date-label {
+  color: var(--accent-light);
 }
 
 .sort-options {
@@ -741,6 +784,7 @@
   }
 }
 
+
 /* ===================================
    RESPONSIVE - MOBILE
 =================================== */
@@ -749,6 +793,16 @@
   .main-content-full {
     margin-top: 14px;
     padding: 0 12px;
+  }
+
+  .matches-date-label {
+    font-size: 12px;
+    padding: 0 2px 8px 2px;
+    margin-bottom: 16px;
+  }
+
+  .matches-date-group:first-child .matches-date-label {
+    font-size: 14px;
   }
 
   .matches-header-premium {

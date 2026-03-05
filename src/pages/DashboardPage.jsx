@@ -166,6 +166,8 @@ export default function VegaScorePage() {
     );
   };
 
+
+
   // ========== FILTERED & SORTED MATCHES ==========
   const filteredMatches = useMemo(() => {
     let pending = matches.filter((m) => m.status === "pending");
@@ -194,6 +196,32 @@ export default function VegaScorePage() {
       }
     });
   }, [matches, leagueFilter, sortOption]);
+
+    // ========== AGRUPAR POR FECHA ==========
+  const groupedMatches = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const groups = {};
+    filteredMatches.forEach((m) => {
+      const matchDate = new Date(m.date + 'T00:00:00');
+      let label;
+      if (matchDate.getTime() === today.getTime()) {
+        label = 'Hoy';
+      } else if (matchDate.getTime() === tomorrow.getTime()) {
+        label = 'Mañana';
+      } else {
+        label = matchDate.toLocaleDateString('es-ES', {
+          weekday: 'long', day: 'numeric', month: 'long'
+        });
+      }
+      if (!groups[label]) groups[label] = [];
+      groups[label].push(m);
+    });
+    return groups;
+  }, [filteredMatches]);
 
   // ========== RENDER ==========
   if (loading) return <PageLoader />;
@@ -405,8 +433,8 @@ export default function VegaScorePage() {
                 )}
 
                 {/* Lista de partidos flotando */}
-                <div className="matches-container">
-                  {filteredMatches.length === 0 ? (
+                {Object.keys(groupedMatches).length === 0 ? (
+                  <div className="matches-container">
                     <div className="matches-empty-state">
                       <div className="matches-empty-icon">⚽</div>
                       <div className="matches-empty-text">
@@ -421,17 +449,24 @@ export default function VegaScorePage() {
                         </button>
                       )}
                     </div>
-                  ) : (
-                    filteredMatches.map((m) => (
-                      <MatchCard
-                        key={m.id}
-                        match={m}
-                        userPred={m.predictions?.find((p) => p.user_id === currentUser?.id)}
-                        onPredict={handleMakePrediction}
-                      />
-                    ))
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  Object.entries(groupedMatches).map(([label, group]) => (
+                    <div key={label} className="matches-date-group">
+                      <div className="matches-date-label">{label}</div>
+                      <div className="matches-container">
+                        {group.map((m) => (
+                          <MatchCard
+                            key={m.id}
+                            match={m}
+                            userPred={m.predictions?.find((p) => p.user_id === currentUser?.id)}
+                            onPredict={handleMakePrediction}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             )}
 
