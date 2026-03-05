@@ -276,7 +276,6 @@
   background: var(--profile-hover);
   border-radius: 4px;
   overflow: hidden;
-  position: relative;
 }
 
 .level-progress-fill {
