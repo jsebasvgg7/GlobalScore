@@ -1,12 +1,3 @@
-/* ============================================================
-   PROFILE SETTINGS PAGE — CSS
-   Usa variables globales del proyecto: --accent, --accent-light,
-   --card, --bg, --border, --glass, --muted, --text-primary, --shadow
-   
-   Mobile: diseño exacto como imagen (hero + lista + toggles)
-   Desktop: 3 columnas (hero/nav | content | settings panel)
-============================================================ */
-
 /* ── TOKENS LOCALES (iconos — no existen globalmente) ────── */
 :root {
   --psp-icon-orange:    #FFA726;
@@ -44,7 +35,6 @@
 /* ════════════════════════════════════════════════════════════
    MOBILE — MAIN VIEW (diseño compacto)
 ════════════════════════════════════════════════════════════ */
-/* ── OVERRIDE: psp-detail-header sin contenedor ─────────── */
 .psp-detail-header {
   display: flex !important;
   align-items: center !important;
@@ -125,10 +115,6 @@
 /* Espacio superior para compensar el header oculto */
 .psp-detail-header {
   padding-top: 56px !important;
-}
-.psp-mobile-main {
-  background: var(--bg);
-  padding-bottom: 24px;
 }
 
 /* ── COMPACT HEADER (banner pequeño + usuario solapado) ── */
