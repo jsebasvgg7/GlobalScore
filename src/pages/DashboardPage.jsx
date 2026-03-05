@@ -299,6 +299,10 @@ export default function VegaScorePage() {
       <div className="vega-root">
         <main className="container">
           <section className="main-content-full">
+                        <NavigationTabs 
+              activeTab={activeTab} 
+              onTabChange={setActiveTab} 
+            />
             {activeTab === 'matches' && (
               <div className="matches-section-premium">
                 {/* Header con Sort y Filter */}
