@@ -1,147 +1,171 @@
 /* ===========================================
-   NAVIGATION TABS - Purple Theme
+   NAVIGATION TABS - Íconos + controles inline
 =========================================== */
 
 .navigation-tabs {
   display: flex;
-  gap: 12px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  padding: 8px;
-  border-radius: 20px;
-  border: 1px solid rgba(96, 81, 155, 0.1);
-  box-shadow: 0 4px 12px rgba(96, 81, 155, 0.08);
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  padding: 6px 2px;        /* espacio para que el box-shadow no se corte */
+  border: none;
+  box-shadow: none;
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+  overflow: visible;
+  animation: tabs-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* Grupos también deben ser visibles */
+.nav-tabs-group,
+.nav-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: visible;
+}
+
+@keyframes tabs-slide-in {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Grupo de tabs (izquierda) ── */
+
+/* ── Divisor vertical ── */
+.nav-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* ── Grupo de controles (derecha) ── */
+.nav-controls-group {
+  margin-left: auto;
+}
+
+/* ── Botón base (círculo) ── */
 .nav-tab {
-  flex: 1;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  padding: 0;
+  flex: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 14px 24px;
-  border: none;
-  border-radius: 14px;
-  background: transparent;
-  color: #666;
-  font-weight: 700;
-  font-size: 15px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+.nav-tab span,
+.tab-indicator {
+  display: none !important;
 }
 
 .nav-tab::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(96, 81, 155, 0.05), rgba(139, 127, 199, 0.05));
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(96, 81, 155, 0.12), transparent 70%);
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.25s;
 }
 
 .nav-tab:hover {
-  color: #60519b;
-  transform: translateY(-2px);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(96, 81, 155, 0.18);
 }
 
-.nav-tab:hover::before {
-  opacity: 1;
-}
+.nav-tab:hover::before { opacity: 1; }
+.nav-tab:active        { transform: translateY(-1px); }
 
 .nav-tab.active {
-  background: linear-gradient(135deg, #60519b 0%, #8b7fc7 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  border-color: transparent;
   color: white;
-  box-shadow: 0 4px 16px rgba(96, 81, 155, 0.4);
+  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.40);
+  transform: translateY(-2px);
 }
 
 .nav-tab.active:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(96, 81, 155, 0.5);
+  box-shadow: 0 8px 24px rgba(96, 81, 155, 0.50);
+  transform: translateY(-4px);
 }
 
-.tab-indicator {
-  position: absolute;
-  bottom: 4px;
-  left: 50%;
-  transform: translateX(-50%) scaleX(0);
-  width: 80%;
-  height: 3px;
-  background: white;
-  border-radius: 10px;
-  transition: transform 0.3s;
+.nav-tab.active::before { display: none; }
+
+.nav-tab svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.nav-tab.active .tab-indicator {
-  transform: translateX(-50%) scaleX(1);
+.nav-tab:hover svg  { transform: scale(1.15); }
+.nav-tab.active svg { transform: scale(1.1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+
+/* ── Controles ligeramente más pequeños ── */
+.nav-control-btn      { width: 46px; height: 46px; }
+.nav-control-btn svg  { width: 18px; height: 18px; }
+
+/* ── Dark mode ── */
+[data-theme="dark"] .navigation-tabs {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-/* Animación de entrada */
-.navigation-tabs {
-  animation: tabs-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+[data-theme="dark"] .nav-tab {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text-secondary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
-@keyframes tabs-slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+[data-theme="dark"] .nav-tab:hover {
+  border-color: var(--accent);
+  color: var(--accent-light);
+  box-shadow: 0 6px 16px rgba(139, 127, 199, 0.25);
 }
 
-/* Responsive */
+[data-theme="dark"] .nav-tab.active {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 6px 20px rgba(139, 127, 199, 0.45);
+}
+
+[data-theme="dark"] .nav-divider { background: var(--border); }
+
+/* ── Responsive ── */
 @media (max-width: 768px) {
-  .navigation-tabs {
-    gap: 8px;
-    padding: 6px;
-    border-radius: 16px;
-    margin-bottom: 16px;
-  }
-
-  .nav-tab {
-    padding: 12px 16px;
-    font-size: 14px;
-    gap: 8px;
-    border-radius: 12px;
-  }
-
-  .nav-tab svg {
-    width: 18px;
-    height: 18px;
-  }
+  .navigation-tabs   { gap: 6px; margin-bottom: 16px; }
+  .nav-tab           { width: 46px; height: 46px; }
+  .nav-tab svg       { width: 20px; height: 20px; }
+  .nav-control-btn   { width: 40px; height: 40px; }
+  .nav-control-btn svg { width: 16px; height: 16px; }
+  .nav-divider       { margin: 0 2px; }
 }
 
 @media (max-width: 480px) {
-  .navigation-tabs {
-    gap: 6px;
-    padding: 5px;
-    border-radius: 14px;
-    margin-bottom: 12px;
-  }
-
-  .nav-tab {
-    padding: 10px 12px;
-    font-size: 13px;
-    gap: 6px;
-    border-radius: 10px;
-  }
-
-  .nav-tab svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  .nav-tab span {
-    display: none;
-  }
-
-  /* Mostrar solo iconos en móvil pequeño */
-  .nav-tab {
-    justify-content: center;
-  }
+  .navigation-tabs   { gap: 5px; margin-bottom: 12px; }
+  .nav-tab           { width: 42px; height: 42px; }
+  .nav-tab svg       { width: 18px; height: 18px; }
+  .nav-control-btn   { width: 36px; height: 36px; }
+  .nav-control-btn svg { width: 15px; height: 15px; }
 }

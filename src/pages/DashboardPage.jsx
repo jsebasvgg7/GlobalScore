@@ -1,4 +1,4 @@
-// src/pages/DashboardPage.jsx - CON FILTROS MODERNOS
+// src/pages/DashboardPage.jsx - FLOATING LAYOUT + ICON-ONLY TABS
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { Trophy, TrendingUp, Target, Filter, X, ArrowUpDown, ChevronRight } from "lucide-react";
 
@@ -130,7 +130,7 @@ export default function VegaScorePage() {
       matchId,
       homeScore,
       awayScore,
-      advancingTeam, // ⚡ NUEVO PARÁMETRO
+      advancingTeam,
       (matchList) => {
         updateMatches(matchList);
         toast.success("Guardado 🎯");
@@ -168,10 +168,8 @@ export default function VegaScorePage() {
 
   // ========== FILTERED & SORTED MATCHES ==========
   const filteredMatches = useMemo(() => {
-    let pending = matches
-      .filter((m) => m.status === "pending");
+    let pending = matches.filter((m) => m.status === "pending");
 
-    // Aplicar filtro de liga
     if (leagueFilter !== 'all') {
       const category = leagueCategories.find(c => c.id === leagueFilter);
       if (category) {
@@ -183,32 +181,22 @@ export default function VegaScorePage() {
       }
     }
 
-    // Aplicar ordenamiento
     return pending.sort((a, b) => {
       const dateA = new Date(`${a.date}T${a.time}`);
       const dateB = new Date(`${b.date}T${b.time}`);
       
       switch (sortOption) {
-        case 'date-asc':
-          // Más reciente = partidos más próximos a empezar primero
-          return dateA - dateB;
-        case 'date-desc':
-          // Más antiguo = partidos más lejanos primero
-          return dateB - dateA;
-        case 'league-asc':
-          return a.league.localeCompare(b.league);
-        case 'league-desc':
-          return b.league.localeCompare(a.league);
-        default:
-          return dateA - dateB;
+        case 'date-asc':  return dateA - dateB;
+        case 'date-desc': return dateB - dateA;
+        case 'league-asc':  return a.league.localeCompare(b.league);
+        case 'league-desc': return b.league.localeCompare(a.league);
+        default: return dateA - dateB;
       }
     });
   }, [matches, leagueFilter, sortOption]);
 
   // ========== RENDER ==========
-  if (loading) {
-    return <PageLoader />;
-  }
+  if (loading) return <PageLoader />;
 
   if (error) {
     return (
@@ -226,14 +214,10 @@ export default function VegaScorePage() {
     );
   }
 
-  // Mostrar páginas secundarias
   if (showProfile) {
     return (
       <>
-        <ProfileSettings 
-          currentUser={currentUser} 
-          onBack={() => setShowProfile(false)}
-        />
+        <ProfileSettings currentUser={currentUser} onBack={() => setShowProfile(false)} />
         <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       </>
     );
@@ -242,7 +226,7 @@ export default function VegaScorePage() {
   if (showRanking) {
     return (
       <>
-        <RankingPage 
+        <RankingPage
           currentUser={currentUser}
           users={users.sort((a, b) => b.points - a.points)}
           onBack={() => setShowRanking(false)}
@@ -255,7 +239,7 @@ export default function VegaScorePage() {
   if (showAdmin) {
     return (
       <>
-        <AdminPage 
+        <AdminPage
           currentUser={currentUser}
           users={users.sort((a, b) => b.points - a.points)}
           onBack={() => setShowAdmin(false)}
@@ -268,10 +252,7 @@ export default function VegaScorePage() {
   if (showNotifications) {
     return (
       <>
-        <NotificationsPage 
-          currentUser={currentUser}
-          onBack={() => setShowNotifications(false)}
-        />
+        <NotificationsPage currentUser={currentUser} onBack={() => setShowNotifications(false)} />
         <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       </>
     );
@@ -280,10 +261,7 @@ export default function VegaScorePage() {
   if (showStats) {
     return (
       <>
-        <StatsPage 
-          currentUser={currentUser}
-          onBack={() => setShowStats(false)}
-        />
+        <StatsPage currentUser={currentUser} onBack={() => setShowStats(false)} />
         <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       </>
     );
@@ -299,114 +277,58 @@ export default function VegaScorePage() {
       <div className="vega-root">
         <main className="container">
           <section className="main-content-full">
-                        <NavigationTabs 
-              activeTab={activeTab} 
-              onTabChange={setActiveTab} 
+
+            {/* ── Tabs + controles en la misma fila ── */}
+            <NavigationTabs
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              onSortClick={activeTab === 'matches' ? () => setShowSort(!showSort) : null}
+              onFilterClick={activeTab === 'matches' ? () => setShowFilters(true) : null}
+              sortActive={showSort}
             />
+
+            {/* ══════════ PARTIDOS ══════════ */}
             {activeTab === 'matches' && (
               <div className="matches-section-premium">
-                {/* Header con Sort y Filter */}
-                <div className="matches-header-premium">
-                  <div className="matches-badge">
-                    <Target size={16} />
-                    <span className="matches-badge-count">{filteredMatches.length}</span>
-                    <span className="matches-badge-text"> disponibles</span>
-                  </div>
-                  <div className="sort-filter-buttons">
-                    {/* Sort Button */}
-                    <div style={{ position: 'relative' }} ref={sortRef}>
-                      <button 
-                        className={`sort-btn ${showSort ? 'active' : ''}`}
-                        onClick={() => setShowSort(!showSort)}
-                      >
-                        <ArrowUpDown size={16} />
-                        <span>Ordenar</span>
-                      </button>
 
-                      {showSort && (
-                        <>
-                          <div 
-                            className="sort-modal-backdrop" 
-                            onClick={() => setShowSort(false)}
-                          />
-                          <div className="sort-modal">
-                            <div className="sort-modal-header">
-                              <ArrowUpDown size={18} />
-                              <h4>Ordenar por</h4>
-                            </div>
-                            <div className="sort-options">
-                              <button
-                                className={`sort-option ${sortOption === 'date-asc' ? 'active' : ''}`}
-                                onClick={() => {
-                                  setSortOption('date-asc');
-                                  setShowSort(false);
-                                }}
-                              >
-                                <div className="sort-option-icon">
-                                  <TrendingUp size={14} />
-                                </div>
-                                <span className="sort-option-text">Fecha: Más próximos</span>
-                              </button>
-                              <button
-                                className={`sort-option ${sortOption === 'date-desc' ? 'active' : ''}`}
-                                onClick={() => {
-                                  setSortOption('date-desc');
-                                  setShowSort(false);
-                                }}
-                              >
-                                <div className="sort-option-icon">
-                                  <TrendingUp size={14} style={{ transform: 'rotate(180deg)' }} />
-                                </div>
-                                <span className="sort-option-text">Fecha: Más lejanos</span>
-                              </button>
-                              <button
-                                className={`sort-option ${sortOption === 'league-asc' ? 'active' : ''}`}
-                                onClick={() => {
-                                  setSortOption('league-asc');
-                                  setShowSort(false);
-                                }}
-                              >
-                                <div className="sort-option-icon">
-                                  <Trophy size={14} />
-                                </div>
-                                <span className="sort-option-text">Liga: A-Z</span>
-                              </button>
-                              <button
-                                className={`sort-option ${sortOption === 'league-desc' ? 'active' : ''}`}
-                                onClick={() => {
-                                  setSortOption('league-desc');
-                                  setShowSort(false);
-                                }}
-                              >
-                                <div className="sort-option-icon">
-                                  <Trophy size={14} />
-                                </div>
-                                <span className="sort-option-text">Liga: Z-A</span>
-                              </button>
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </div>
-
-                    {/* Filter Button */}
-                    <button 
-                      className="filter-toggle-btn"
-                      onClick={() => setShowFilters(true)}
-                    >
-                      <Filter size={16} />
-                      <span>Filtrar</span>
-                    </button>
-                  </div>
+                {/* Sort dropdown — anclado al botón del tab */}
+                <div style={{ position: 'relative' }} ref={sortRef}>
+                  {showSort && (
+                    <>
+                      <div className="sort-modal-backdrop" onClick={() => setShowSort(false)} />
+                      <div className="sort-modal sort-modal-top">
+                        <div className="sort-modal-header">
+                          <ArrowUpDown size={18} />
+                          <h4>Ordenar por</h4>
+                        </div>
+                        <div className="sort-options">
+                          {[
+                            { key: 'date-asc',    label: 'Fecha: Más próximos', icon: <TrendingUp size={14} /> },
+                            { key: 'date-desc',   label: 'Fecha: Más lejanos',  icon: <TrendingUp size={14} style={{ transform: 'rotate(180deg)' }} /> },
+                            { key: 'league-asc',  label: 'Liga: A-Z',           icon: <Trophy size={14} /> },
+                            { key: 'league-desc', label: 'Liga: Z-A',           icon: <Trophy size={14} /> },
+                          ].map(({ key, label, icon }) => (
+                            <button
+                              key={key}
+                              className={`sort-option ${sortOption === key ? 'active' : ''}`}
+                              onClick={() => { setSortOption(key); setShowSort(false); }}
+                            >
+                              <div className="sort-option-icon">{icon}</div>
+                              <span className="sort-option-text">{label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
 
-                {/* Filtros Modal (Side Panel) */}
+
+
+                {/* Panel lateral de filtros */}
                 {showFilters && (
                   <>
-                    <div 
-                      className="filters-modal-backdrop"
-                      onClick={() => setShowFilters(false)}
-                    />
+                    <div className="filters-modal-backdrop" onClick={() => setShowFilters(false)} />
                     <div className="filters-modal">
                       <div className="filters-modal-header">
                         <div className="filters-modal-title">
@@ -414,23 +336,16 @@ export default function VegaScorePage() {
                           <h3>Filtrar</h3>
                         </div>
                         <div style={{ display: 'flex', gap: '8px' }}>
-                          <button 
-                            className="filters-reset-btn"
-                            onClick={() => setLeagueFilter('all')}
-                          >
+                          <button className="filters-reset-btn" onClick={() => setLeagueFilter('all')}>
                             Reset
                           </button>
-                          <button 
-                            className="filters-close-btn"
-                            onClick={() => setShowFilters(false)}
-                          >
+                          <button className="filters-close-btn" onClick={() => setShowFilters(false)}>
                             <X size={16} />
                           </button>
                         </div>
                       </div>
 
                       <div className="filters-modal-body">
-                        {/* Categoría: Región */}
                         <div className="filter-category">
                           <div className="filter-category-header">
                             <span className="filter-category-title">Categoría</span>
@@ -439,61 +354,34 @@ export default function VegaScorePage() {
                             </button>
                           </div>
                           <div className="filter-pills">
-                            {leagueCategories.slice(0, 7).map((category) => {
-                              const categoryMatches = category.id === 'all'
-                                ? matches.filter(m => m.status === "pending")
-                                : matches.filter(m => 
-                                    m.status === "pending" &&
-                                    category.leagues.some(league =>
-                                      m.league.toLowerCase().includes(league.toLowerCase())
-                                    )
-                                  );
-
-                              return (
-                                <button
-                                  key={category.id}
-                                  className={`filter-pill ${leagueFilter === category.id ? 'active' : ''}`}
-                                  onClick={() => {
-                                    setLeagueFilter(category.id);
-                                    setShowFilters(false);
-                                  }}
-                                >
-                                  <span className="filter-pill-icon">{category.icon}</span>
-                                  <span>{category.name}</span>
-                                </button>
-                              );
-                            })}
+                            {leagueCategories.slice(0, 7).map((category) => (
+                              <button
+                                key={category.id}
+                                className={`filter-pill ${leagueFilter === category.id ? 'active' : ''}`}
+                                onClick={() => { setLeagueFilter(category.id); setShowFilters(false); }}
+                              >
+                                <span className="filter-pill-icon">{category.icon}</span>
+                                <span>{category.name}</span>
+                              </button>
+                            ))}
                           </div>
                         </div>
 
-                        {/* Categoría: Más regiones */}
                         <div className="filter-category">
                           <div className="filter-category-header">
                             <span className="filter-category-title">Más regiones</span>
                           </div>
                           <div className="filter-pills">
-                            {leagueCategories.slice(7).map((category) => {
-                              const categoryMatches = matches.filter(m => 
-                                m.status === "pending" &&
-                                category.leagues.some(league =>
-                                  m.league.toLowerCase().includes(league.toLowerCase())
-                                )
-                              );
-
-                              return (
-                                <button
-                                  key={category.id}
-                                  className={`filter-pill ${leagueFilter === category.id ? 'active' : ''}`}
-                                  onClick={() => {
-                                    setLeagueFilter(category.id);
-                                    setShowFilters(false);
-                                  }}
-                                >
-                                  <span className="filter-pill-icon">{category.icon}</span>
-                                  <span>{category.name}</span>
-                                </button>
-                              );
-                            })}
+                            {leagueCategories.slice(7).map((category) => (
+                              <button
+                                key={category.id}
+                                className={`filter-pill ${leagueFilter === category.id ? 'active' : ''}`}
+                                onClick={() => { setLeagueFilter(category.id); setShowFilters(false); }}
+                              >
+                                <span className="filter-pill-icon">{category.icon}</span>
+                                <span>{category.name}</span>
+                              </button>
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -509,32 +397,26 @@ export default function VegaScorePage() {
                         {leagueCategories.find(c => c.id === leagueFilter)?.icon}
                       </span>
                       <span>{leagueCategories.find(c => c.id === leagueFilter)?.name}</span>
-                      <button 
-                        className="clear-filter-btn"
-                        onClick={() => setLeagueFilter('all')}
-                      >
+                      <button className="clear-filter-btn" onClick={() => setLeagueFilter('all')}>
                         <X size={12} />
                       </button>
                     </div>
                   </div>
                 )}
 
-                {/* Lista de Partidos */}
+                {/* Lista de partidos flotando */}
                 <div className="matches-container">
                   {filteredMatches.length === 0 ? (
                     <div className="matches-empty-state">
                       <div className="matches-empty-icon">⚽</div>
                       <div className="matches-empty-text">
-                        {leagueFilter === 'all' 
+                        {leagueFilter === 'all'
                           ? 'Sin partidos'
                           : `Sin partidos de ${leagueCategories.find(c => c.id === leagueFilter)?.name}`
                         }
                       </div>
                       {leagueFilter !== 'all' && (
-                        <button 
-                          className="show-all-btn"
-                          onClick={() => setLeagueFilter('all')}
-                        >
+                        <button className="show-all-btn" onClick={() => setLeagueFilter('all')}>
                           Ver todos
                         </button>
                       )}
@@ -544,9 +426,7 @@ export default function VegaScorePage() {
                       <MatchCard
                         key={m.id}
                         match={m}
-                        userPred={m.predictions?.find(
-                          (p) => p.user_id === currentUser?.id
-                        )}
+                        userPred={m.predictions?.find((p) => p.user_id === currentUser?.id)}
                         onPredict={handleMakePrediction}
                       />
                     ))
@@ -555,15 +435,14 @@ export default function VegaScorePage() {
               </div>
             )}
 
+            {/* ══════════ LIGAS ══════════ */}
             {activeTab === 'leagues' && (
               <div className="matches-section-premium">
                 <div className="matches-header-premium">
-                  <div className="matches-header-actions">
-                    <div className="matches-badge">
-                      <Trophy size={14} />
-                      <span className="matches-badge-count">{activeLeagues.length}</span>
-                      <span className="matches-badge-text"> disponibles</span>
-                    </div>
+                  <div className="matches-badge">
+                    <Trophy size={14} />
+                    <span className="matches-badge-count">{activeLeagues.length}</span>
+                    <span className="matches-badge-text"> disponibles</span>
                   </div>
                 </div>
 
@@ -578,9 +457,7 @@ export default function VegaScorePage() {
                       <LeagueCard
                         key={league.id}
                         league={league}
-                        userPrediction={league.league_predictions?.find(
-                          (p) => p.user_id === currentUser?.id
-                        )}
+                        userPrediction={league.league_predictions?.find((p) => p.user_id === currentUser?.id)}
                         onPredict={handleMakeLeaguePrediction}
                       />
                     ))
@@ -589,15 +466,14 @@ export default function VegaScorePage() {
               </div>
             )}
 
+            {/* ══════════ PREMIOS ══════════ */}
             {activeTab === 'awards' && (
               <div className="matches-section-premium">
                 <div className="matches-header-premium">
-                  <div className="matches-header-actions">
-                    <div className="matches-badge">
-                      <Trophy size={14} />
-                      <span className="matches-badge-count">{activeAwards.length}</span>
-                      <span className="matches-badge-text"> disponibles</span>
-                    </div>
+                  <div className="matches-badge">
+                    <Trophy size={14} />
+                    <span className="matches-badge-count">{activeAwards.length}</span>
+                    <span className="matches-badge-text"> disponibles</span>
                   </div>
                 </div>
 
@@ -612,9 +488,7 @@ export default function VegaScorePage() {
                       <AwardCard
                         key={award.id}
                         award={award}
-                        userPrediction={award.award_predictions?.find(
-                          (p) => p.user_id === currentUser?.id
-                        )}
+                        userPrediction={award.award_predictions?.find((p) => p.user_id === currentUser?.id)}
                         onPredict={handleMakeAwardPrediction}
                       />
                     ))
@@ -622,6 +496,7 @@ export default function VegaScorePage() {
                 </div>
               </div>
             )}
+
           </section>
         </main>
         <Footer />

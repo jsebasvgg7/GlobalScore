@@ -1,12 +1,11 @@
 import React from 'react';
-import { Trophy, Target, Award } from 'lucide-react';
+import { Trophy, Target, Award, ArrowUpDown, Filter } from 'lucide-react';
 import '../../styles/StylesOthers/NavigationTabs.css';
 
-export default function NavigationTabs({ activeTab, onTabChange }) {
+export default function NavigationTabs({ activeTab, onTabChange, onSortClick, onFilterClick, sortActive }) {
   return (
     <div className="navigation-tabs">
 
-      {/* TAB: PARTIDOS */}
       <button
         className={`nav-tab ${activeTab === 'matches' ? 'active' : ''}`}
         onClick={() => onTabChange('matches')}
@@ -16,7 +15,6 @@ export default function NavigationTabs({ activeTab, onTabChange }) {
         <div className="tab-indicator"></div>
       </button>
 
-      {/* TAB: LIGAS */}
       <button
         className={`nav-tab ${activeTab === 'leagues' ? 'active' : ''}`}
         onClick={() => onTabChange('leagues')}
@@ -26,7 +24,6 @@ export default function NavigationTabs({ activeTab, onTabChange }) {
         <div className="tab-indicator"></div>
       </button>
 
-      {/* TAB: PREMIOS */}
       <button
         className={`nav-tab ${activeTab === 'awards' ? 'active' : ''}`}
         onClick={() => onTabChange('awards')}
@@ -35,6 +32,31 @@ export default function NavigationTabs({ activeTab, onTabChange }) {
         <span>Premios</span>
         <div className="tab-indicator"></div>
       </button>
+
+      {/* Ordenar */}
+      {onSortClick && (
+        <button
+          className={`nav-tab nav-tab-control ${sortActive ? 'active' : ''}`}
+          onClick={onSortClick}
+          title="Ordenar"
+        >
+          <ArrowUpDown size={18} />
+          <div className="tab-indicator"></div>
+        </button>
+      )}
+
+      {/* Filtrar */}
+      {onFilterClick && (
+        <button
+          className="nav-tab nav-tab-control"
+          onClick={onFilterClick}
+          title="Filtrar"
+        >
+          <Filter size={18} />
+          <div className="tab-indicator"></div>
+        </button>
+      )}
+
     </div>
   );
 }

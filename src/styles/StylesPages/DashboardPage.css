@@ -14,34 +14,75 @@
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  background: transparent;
+  overflow: visible;
 }
 
 /* ===================================
-   MATCHES SECTION
+   MATCHES SECTION — sin contenedor visual
 =================================== */
 
-.matches-section-premium {
-  background: var(--card);
-  border-radius: 20px;
+.matches-section-premium,
+[data-theme="dark"] .matches-section-premium,
+[data-theme="light"] .matches-section-premium {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
   padding-bottom: 24px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  box-shadow: var(--small-shadow);
+  overflow: visible !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* ===================================
-   HEADER CON SORT Y FILTER
+   HEADER FLOTANTE (sticky pill bar)
 =================================== */
 
 .matches-header-premium {
-  background: var(--bg);
-  padding: 16px 20px;
-  display: flex;
-  justify-content: space-between;
+  display: none;
+}
+
+/* Badge de conteo flotante */
+.matches-count-badge {
+  display: inline-flex;
   align-items: center;
-  border-bottom: 1px solid var(--border);
-  gap: 16px;
-  flex-wrap: wrap;
+  gap: 6px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(96, 81, 155, 0.2);
+}
+
+.matches-count-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Sort modal posicionado desde arriba */
+.sort-modal-top {
+  position: fixed;
+  top: 160px;
+  right: 20px;
+  left: auto;
+  bottom: auto;
+  border-radius: 14px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@media (max-width: 768px) {
+  .sort-modal-top {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 20px 20px 0 0;
+    animation: slideUp 0.3s ease-out;
+  }
 }
 
 .matches-header-actions {
@@ -503,13 +544,13 @@
 }
 
 /* ===================================
-   ACTIVE FILTER BAR
+   ACTIVE FILTER BAR — flotante
 =================================== */
 
 .active-filter-bar {
-  padding: 12px 20px;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
+  padding: 0 4px 14px 4px;
+  background: transparent;
+  border-bottom: none;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -558,14 +599,15 @@
 }
 
 /* ===================================
-   MATCHES CONTAINER
+   MATCHES CONTAINER — partidos flotando
 =================================== */
 
 .matches-container {
-  padding: 20px;
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 28px 2px;          /* ← más espacio vertical entre cards */
+  gap: 16px;
+  background: transparent;
 }
 
 /* ===================================
@@ -617,15 +659,82 @@
 }
 
 /* ===================================
+   NAVIGATION TABS — solo íconos en círculos
+=================================== */
+
+/* Wrapper general de los tabs */
+.nav-tabs,
+[class*="navigation-tabs"],
+[class*="nav-tabs"] {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-bottom: 20px;
+}
+
+/* Cada tab button */
+.nav-tab,
+[class*="nav-tab"],
+[class*="tab-btn"] {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px solid var(--border) !important;
+  background: var(--card) !important;
+  color: var(--text-secondary) !important;
+  cursor: pointer;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+
+/* Ocultar texto dentro del tab */
+.nav-tab span,
+[class*="nav-tab"] span,
+[class*="tab-btn"] span,
+.nav-tab .tab-label,
+[class*="nav-tab"] .tab-label {
+  display: none !important;
+  width: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Tab activo */
+.nav-tab.active,
+[class*="nav-tab"].active,
+[class*="tab-btn"].active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light)) !important;
+  border-color: var(--accent) !important;
+  color: white !important;
+  box-shadow: 0 4px 14px rgba(96, 81, 155, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+.nav-tab:hover:not(.active),
+[class*="nav-tab"]:hover:not(.active),
+[class*="tab-btn"]:hover:not(.active) {
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+  transform: translateY(-1px);
+  background: var(--glass) !important;
+}
+
+/* ===================================
    RESPONSIVE - TABLET
 =================================== */
 
 @media (max-width: 1024px) {
   .matches-container {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 14px;
   }
-
 
   .filters-modal {
     width: 340px;
@@ -642,15 +751,11 @@
     padding: 0 12px;
   }
 
-  .matches-section-premium {
-    border-radius: 16px;
-  }
-
   .matches-header-premium {
-    padding: 12px 16px;
+    padding: 10px 14px;
     gap: 10px;
-    flex-direction: row;
-    align-items: center;
+    border-radius: 16px;
+    top: 8px;
   }
 
   .matches-header-actions {
@@ -689,7 +794,6 @@
     height: 15px;
   }
 
-  /* Filter panel: ocupa toda la pantalla de arriba a abajo */
   .filters-modal {
     width: 80vw;
     max-width: 80vw;
@@ -711,14 +815,13 @@
   }
 
   .active-filter-bar {
-    padding: 10px 16px;
+    padding: 0 2px 12px 2px;
   }
 
-
   .matches-container {
-    padding: 14px;
-    gap: 22px 12px;
-  }  
+    padding: 0;
+    gap: 12px;
+  }
 
   .matches-empty-state {
     padding: 36px 20px;
@@ -737,7 +840,7 @@
     font-size: 12px;
   }
 
-  /* Sort modal: sheet desde abajo, ocupa lo que necesita */
+  /* Sort modal: sheet desde abajo */
   .sort-modal {
     position: fixed;
     top: auto;
@@ -752,6 +855,14 @@
     from { transform: translateY(100%); }
     to { transform: translateY(0); }
   }
+
+  /* Tabs círculos más pequeños en mobile */
+  .nav-tab,
+  [class*="nav-tab"],
+  [class*="tab-btn"] {
+    width: 42px !important;
+    height: 42px !important;
+  }
 }
 
 /* ===================================
@@ -763,12 +874,9 @@
     padding: 0 10px;
   }
 
-  .matches-section-premium {
-    border-radius: 14px;
-  }
-
   .matches-header-premium {
-    padding: 10px 14px;
+    padding: 8px 12px;
+    border-radius: 14px;
   }
 
   .matches-badge {
@@ -814,8 +922,8 @@
   }
 
   .matches-container {
-    padding: 12px;
-    gap: 20px 10px;
+    padding: 0;
+    gap: 10px;
   }
 
   .matches-empty-state {
