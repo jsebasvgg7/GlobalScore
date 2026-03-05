@@ -39,10 +39,20 @@ import { supabase } from '../utils/supabaseClient';
 import '../styles/StylesPages/ProfileSettingsPage.css';
 import '../styles/StylesPages/ProfilePageNew.css';
 
+// ─── Mapeo tab → sección de ajustes ───────────────────────
+const TAB_TO_SECTION = {
+  'settings-account':       'account',
+  'settings-appearance':    'appearance',
+  'settings-notifications': 'notifications',
+  'settings-privacy':       'privacy',
+  'settings-data':          'data',
+  'settings-info':          'info',
+};
+
 // ─────────────────────────────────────────────
 // VISTA MÓVIL — Pantalla principal
 // ─────────────────────────────────────────────
-function MobileMainView({ userData, currentUser, preferences, onSectionClick, onTabClick, theme, toggleTheme }) {
+function MobileMainView({ userData, currentUser, preferences, onTabClick, theme, toggleTheme }) {
   return (
     <div className="psp-mobile-main">
 
@@ -76,6 +86,7 @@ function MobileMainView({ userData, currentUser, preferences, onSectionClick, on
       {/* ── LISTA ÚNICA LIMPIA ── */}
       <div className="psp-clean-list">
 
+        {/* Toggle Dark Mode */}
         <div className="psp-clean-row psp-clean-row--toggle">
           <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-purple-bg)', color: 'var(--psp-icon-purple)' }}>
             {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
@@ -86,21 +97,26 @@ function MobileMainView({ userData, currentUser, preferences, onSectionClick, on
           </button>
         </div>
 
+        {/* Toggle Notificaciones */}
         <div className="psp-clean-row psp-clean-row--toggle">
           <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-orange-bg)', color: 'var(--psp-icon-orange)' }}>
             <Bell size={18} />
           </div>
           <span className="psp-clean-label">Notificaciones</span>
-          <button className={`psp-toggle ${preferences.push_enabled ? 'psp-toggle--on' : ''}`} onClick={() => onSectionClick('notifications')}>
+          <button
+            className={`psp-toggle ${preferences.push_enabled ? 'psp-toggle--on' : ''}`}
+            onClick={() => onTabClick('settings-notifications')}
+          >
             <div className="psp-toggle-knob" />
           </button>
         </div>
 
+        {/* Tabs de perfil */}
         <button className="psp-clean-row" onClick={() => onTabClick('overview')}>
           <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-orange-bg)', color: 'var(--psp-icon-orange)' }}>
             <User size={18} />
           </div>
-          <span className="psp-clean-label">Personal Data</span>
+          <span className="psp-clean-label">Estadísticas</span>
           <ChevronRight size={17} className="psp-chevron" />
         </button>
 
@@ -128,15 +144,16 @@ function MobileMainView({ userData, currentUser, preferences, onSectionClick, on
           <ChevronRight size={17} className="psp-chevron" />
         </button>
 
-        <button className="psp-clean-row" onClick={() => onSectionClick('privacy')}>
-          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-teal-bg)', color: 'var(--psp-icon-teal)' }}>
-            <Shield size={18} />
+        {/* Tabs de ajustes */}
+        <button className="psp-clean-row" onClick={() => onTabClick('settings-account')}>
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-orange-bg)', color: 'var(--psp-icon-orange)' }}>
+            <User size={18} />
           </div>
-          <span className="psp-clean-label">Privacidad</span>
+          <span className="psp-clean-label">Cuenta</span>
           <ChevronRight size={17} className="psp-chevron" />
         </button>
 
-        <button className="psp-clean-row" onClick={() => onSectionClick('appearance')}>
+        <button className="psp-clean-row" onClick={() => onTabClick('settings-appearance')}>
           <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-pink-bg)', color: 'var(--psp-icon-pink)' }}>
             <Settings size={18} />
           </div>
@@ -144,7 +161,23 @@ function MobileMainView({ userData, currentUser, preferences, onSectionClick, on
           <ChevronRight size={17} className="psp-chevron" />
         </button>
 
-        <button className="psp-clean-row" onClick={() => onSectionClick('data')}>
+        <button className="psp-clean-row" onClick={() => onTabClick('settings-notifications')}>
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-orange-bg)', color: 'var(--psp-icon-orange)' }}>
+            <Bell size={18} />
+          </div>
+          <span className="psp-clean-label">Notificaciones</span>
+          <ChevronRight size={17} className="psp-chevron" />
+        </button>
+
+        <button className="psp-clean-row" onClick={() => onTabClick('settings-privacy')}>
+          <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-teal-bg)', color: 'var(--psp-icon-teal)' }}>
+            <Shield size={18} />
+          </div>
+          <span className="psp-clean-label">Privacidad</span>
+          <ChevronRight size={17} className="psp-chevron" />
+        </button>
+
+        <button className="psp-clean-row" onClick={() => onTabClick('settings-data')}>
           <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-blue-bg)', color: 'var(--psp-icon-blue)' }}>
             <Database size={18} />
           </div>
@@ -152,218 +185,25 @@ function MobileMainView({ userData, currentUser, preferences, onSectionClick, on
           <ChevronRight size={17} className="psp-chevron" />
         </button>
 
-        <button className="psp-clean-row" onClick={() => onSectionClick('info')}>
+        <button className="psp-clean-row" onClick={() => onTabClick('settings-info')}>
           <div className="psp-clean-icon" style={{ background: 'var(--psp-icon-green-bg)', color: 'var(--psp-icon-green)' }}>
             <Info size={18} />
           </div>
           <span className="psp-clean-label">Información</span>
           <ChevronRight size={17} className="psp-chevron" />
         </button>
+
       </div>
     </div>
   );
 }
 
 // ─────────────────────────────────────────────
-// VISTA MÓVIL — Sub-pantalla de ajuste (settings detail)
+// VISTA MÓVIL — Sub-pantalla de pestaña
 // ─────────────────────────────────────────────
-function MobileSettingDetail({ section, preferences, theme, toggleTheme, onBack, onToggle, onSelect, onExport, onReset, onLogout, onDeleteAccount, saving, currentUser }) {
+function MobileTabView({ onBack, children, tabTitle }) {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-    // Ocultar el header móvil mientras estamos en la sub-pantalla
-    const header = document.querySelector('.gs-mobile-header');
-    if (header) header.style.display = 'none';
-    return () => {
-      if (header) header.style.display = '';
-    };
-  }, []);
-
-  const sectionTitles = {
-    notifications: 'Notificaciones',
-    appearance: 'Apariencia',
-    privacy: 'Privacidad',
-    data: 'Datos',
-    info: 'Información',
-    predictions: 'Predicciones',
-  };
-
-  const ToggleRow = ({ icon: Icon, label, desc, prefKey, disabled }) => (
-    <div className="psp-setting-row">
-      <div className="psp-setting-info">
-        {Icon && <div className="psp-setting-icon"><Icon size={18} /></div>}
-        <div>
-          <div className="psp-setting-label">{label}</div>
-          {desc && <div className="psp-setting-desc">{desc}</div>}
-        </div>
-      </div>
-      <button
-        className={`psp-toggle ${preferences[prefKey] ? 'psp-toggle--on' : ''}`}
-        onClick={() => onToggle(prefKey)}
-        disabled={disabled || saving}
-      >
-        <div className="psp-toggle-knob" />
-      </button>
-    </div>
-  );
-
-  const renderContent = () => {
-    switch (section) {
-      case 'notifications':
-        return (
-          <>
-            <ToggleRow icon={Bell} label="Notificaciones push" desc="Recibir alertas en tu dispositivo" prefKey="push_enabled" />
-            <div className="psp-subsection-label">Tipos</div>
-            <ToggleRow label="Nuevos partidos" prefKey="notif_new_matches" disabled={!preferences.push_enabled} />
-            <ToggleRow label="Resultados finalizados" prefKey="notif_finished_matches" disabled={!preferences.push_enabled} />
-            <ToggleRow label="Nuevas ligas/premios" prefKey="notif_new_leagues" disabled={!preferences.push_enabled} />
-            <ToggleRow label="Recordatorios" prefKey="notif_reminders" disabled={!preferences.push_enabled} />
-            <ToggleRow icon={preferences.notif_sound ? Volume2 : VolumeX} label="Sonido" prefKey="notif_sound" disabled={!preferences.push_enabled} />
-          </>
-        );
-      case 'appearance':
-        return (
-          <>
-            <div className="psp-setting-row">
-              <div className="psp-setting-info">
-                <div className="psp-setting-icon">{theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}</div>
-                <div>
-                  <div className="psp-setting-label">Modo oscuro</div>
-                  <div className="psp-setting-desc">Cambiar entre tema claro y oscuro</div>
-                </div>
-              </div>
-              <button className={`psp-toggle ${theme === 'dark' ? 'psp-toggle--on' : ''}`} onClick={toggleTheme}>
-                <div className="psp-toggle-knob" />
-              </button>
-            </div>
-            <div className="psp-setting-row">
-              <div className="psp-setting-info">
-                <div className="psp-setting-icon"><Eye size={18} /></div>
-                <div><div className="psp-setting-label">Tamaño de fuente</div></div>
-              </div>
-              <select
-                className="psp-select"
-                value={preferences.font_size}
-                onChange={(e) => onSelect('font_size', e.target.value)}
-              >
-                <option value="small">Pequeña</option>
-                <option value="medium">Mediana</option>
-                <option value="large">Grande</option>
-              </select>
-            </div>
-          </>
-        );
-      case 'privacy':
-        return (
-          <>
-            <ToggleRow icon={Eye} label="Perfil público" desc="Otros usuarios pueden ver tu perfil" prefKey="profile_public" />
-            <ToggleRow icon={Target} label="Mostrar estadísticas" desc="Aparecer en rankings públicos" prefKey="show_stats_in_ranking" />
-            <ToggleRow icon={Bell} label="Compartir actividad" desc="Mostrar tu actividad reciente" prefKey="share_activity" />
-            <ToggleRow icon={preferences.predictions_public ? Eye : EyeOff} label="Predicciones públicas" desc="Otros pueden ver tus predicciones" prefKey="predictions_public" />
-          </>
-        );
-      case 'data':
-        return (
-          <>
-            <div className="psp-setting-row">
-              <div className="psp-setting-info">
-                <div className="psp-setting-icon"><Download size={18} /></div>
-                <div>
-                  <div className="psp-setting-label">Exportar mis datos</div>
-                  <div className="psp-setting-desc">Descargar tu información en JSON</div>
-                </div>
-              </div>
-              <button className="psp-btn-small psp-btn-primary" onClick={onExport}>Exportar</button>
-            </div>
-            <div className="psp-setting-row">
-              <div className="psp-setting-info">
-                <div className="psp-setting-icon"><RotateCcw size={18} /></div>
-                <div>
-                  <div className="psp-setting-label">Restaurar configuración</div>
-                  <div className="psp-setting-desc">Volver a valores por defecto</div>
-                </div>
-              </div>
-              <button className="psp-btn-small psp-btn-secondary" onClick={onReset}>Restaurar</button>
-            </div>
-            <div className="psp-setting-row">
-              <div className="psp-setting-info">
-                <div className="psp-setting-icon psp-icon-danger"><LogOut size={18} /></div>
-                <div>
-                  <div className="psp-setting-label">Cerrar sesión</div>
-                </div>
-              </div>
-              <button className="psp-btn-small psp-btn-danger" onClick={onLogout}>Salir</button>
-            </div>
-            <div className="psp-setting-row psp-row-danger">
-              <div className="psp-setting-info">
-                <div className="psp-setting-icon psp-icon-danger"><Trash2 size={18} /></div>
-                <div>
-                  <div className="psp-setting-label psp-text-danger">Eliminar cuenta</div>
-                  <div className="psp-setting-desc">Acción irreversible</div>
-                </div>
-              </div>
-              <button className="psp-btn-small psp-btn-danger" onClick={onDeleteAccount}>Eliminar</button>
-            </div>
-          </>
-        );
-      case 'info':
-        return (
-          <>
-            <div className="psp-setting-row">
-              <div className="psp-setting-info">
-                <div className="psp-setting-icon"><Info size={18} /></div>
-                <div>
-                  <div className="psp-setting-label">Versión</div>
-                  <div className="psp-setting-desc">GlobalScore v20.0.0</div>
-                </div>
-              </div>
-            </div>
-            <div className="psp-setting-row psp-row-clickable">
-              <div className="psp-setting-info">
-                <div className="psp-setting-icon"><Shield size={18} /></div>
-                <div><div className="psp-setting-label">Política de privacidad</div></div>
-              </div>
-              <ChevronRight size={18} className="psp-chevron" />
-            </div>
-            <div className="psp-setting-row psp-row-clickable">
-              <div className="psp-setting-info">
-                <div className="psp-setting-icon"><Info size={18} /></div>
-                <div><div className="psp-setting-label">Términos y condiciones</div></div>
-              </div>
-              <ChevronRight size={18} className="psp-chevron" />
-            </div>
-          </>
-        );
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="psp-mobile-detail">
-      {/* Header sin contenedor: flecha + título pegados */}
-      <div className="psp-detail-header">
-        <button className="psp-back-btn" onClick={onBack}>
-          <ArrowLeft size={22} />
-        </button>
-        <h2 className="psp-detail-title">{sectionTitles[section] || section}</h2>
-      </div>
-
-      <div className="psp-detail-content">
-        <div className="psp-settings-card">
-          {renderContent()}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────
-// VISTA MÓVIL — Sub-pantalla de pestaña de perfil
-// ─────────────────────────────────────────────
-function MobileTabView({ activeTab, onBack, children, tabTitle }) {
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    // Ocultar el header móvil mientras estamos en la sub-pantalla
     const header = document.querySelector('.gs-mobile-header');
     if (header) header.style.display = 'none';
     return () => {
@@ -373,7 +213,6 @@ function MobileTabView({ activeTab, onBack, children, tabTitle }) {
 
   return (
     <div className="psp-mobile-detail">
-      {/* Header sin contenedor: flecha + título pegados */}
       <div className="psp-detail-header">
         <button className="psp-back-btn" onClick={onBack}>
           <ArrowLeft size={22} />
@@ -393,7 +232,6 @@ function MobileTabView({ activeTab, onBack, children, tabTitle }) {
 export default function ProfileSettingsPage({ currentUser, onBack }) {
   const [mobileView, setMobileView] = useState('main');
   const [activeTab, setActiveTab] = useState('overview');
-  const [activeSection, setActiveSection] = useState('account');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const [showAdminAchievementsModal, setShowAdminAchievementsModal] = useState(false);
@@ -471,72 +309,46 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
     else toast.error('Error al eliminar cuenta');
   };
 
-  // ── Tab labels for mobile header ──
+  // ── Títulos de tabs para mobile header ──
   const tabTitles = {
-    overview: 'Estadísticas',
-    achievements: 'Logros',
-    championships: 'Campeonatos',
-    history: 'Historial',
-    edit: 'Editar Perfil',
+    overview:                 'Estadísticas',
+    achievements:             'Logros',
+    championships:            'Campeonatos',
+    history:                  'Historial',
+    edit:                     'Editar Perfil',
+    'settings-account':       'Cuenta',
+    'settings-appearance':    'Apariencia',
+    'settings-notifications': 'Notificaciones',
+    'settings-privacy':       'Privacidad',
+    'settings-data':          'Datos',
+    'settings-info':          'Información',
   };
 
-  // ── Render profile tab content ──
-  const renderTabContent = (tab) => {
-    switch (tab) {
-      case 'overview':
-        return <OverviewTab userData={userData} currentUser={currentUser} userRanking={userRanking} />;
-      case 'achievements':
-        return (
-          <AchievementsTab
-            activeTitle={activeTitle} userTitles={userTitles}
-            userAchievements={userAchievements} availableAchievements={availableAchievements}
-            achievementsLoading={achievementsLoading}
-          />
-        );
-      case 'championships':
-        return (
-          <MonthlyChampionshipsTab
-            userData={{ ...userData, ...monthlyStats }} crownHistory={crownHistory}
-            monthlyStats={monthlyStats} championshipsLoading={championshipsLoading}
-          />
-        );
-      case 'history':
-        return <HistoryTab predictionHistory={predictionHistory} historyLoading={historyLoading} />;
-      case 'edit':
-        return (
-          <EditTab
-            userData={userData} setUserData={setUserData}
-            currentUser={currentUser} loading={loading}
-            handleSave={handleSave} handleAvatarUpload={handleAvatarUpload}
-            loadUserData={loadUserData} setActiveTab={(t) => { setActiveTab(t); setMobileView('main'); }}
-          />
-        );
-      default:
-        return null;
-    }
-  };
+  // ── Render de secciones de ajustes (recibe section como parámetro) ──
+  const renderSettingsSection = (section) => {
+    const ToggleSwitch = ({ checked, onChange, disabled }) => (
+      <button
+        className={`psp-toggle ${checked ? 'psp-toggle--on' : ''}`}
+        onClick={onChange}
+        disabled={disabled || saving}
+      >
+        <div className="psp-toggle-knob" />
+      </button>
+    );
 
-  // ── Desktop settings content ──
-  const ToggleSwitch = ({ checked, onChange, disabled }) => (
-    <button className={`psp-toggle ${checked ? 'psp-toggle--on' : ''}`} onClick={onChange} disabled={disabled || saving}>
-      <div className="psp-toggle-knob" />
-    </button>
-  );
-
-  const SettingItem = ({ icon: Icon, label, description, children, danger }) => (
-    <div className={`psp-setting-row ${danger ? 'psp-row-danger' : ''}`}>
-      <div className="psp-setting-info">
-        {Icon && <div className={`psp-setting-icon ${danger ? 'psp-icon-danger' : ''}`}><Icon size={18} /></div>}
-        <div>
-          <div className={`psp-setting-label ${danger ? 'psp-text-danger' : ''}`}>{label}</div>
-          {description && <div className="psp-setting-desc">{description}</div>}
+    const SettingItem = ({ icon: Icon, label, description, children, danger }) => (
+      <div className={`psp-setting-row ${danger ? 'psp-row-danger' : ''}`}>
+        <div className="psp-setting-info">
+          {Icon && <div className={`psp-setting-icon ${danger ? 'psp-icon-danger' : ''}`}><Icon size={18} /></div>}
+          <div>
+            <div className={`psp-setting-label ${danger ? 'psp-text-danger' : ''}`}>{label}</div>
+            {description && <div className="psp-setting-desc">{description}</div>}
+          </div>
         </div>
+        <div>{children}</div>
       </div>
-      <div>{children}</div>
-    </div>
-  );
+    );
 
-  const renderDesktopSettings = () => {
     const SectionCard = ({ title, icon: Icon, children }) => (
       <div className="psp-ds-card">
         <div className="psp-ds-card-header">
@@ -547,7 +359,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
       </div>
     );
 
-    switch (activeSection) {
+    switch (section) {
       case 'account':
         return (
           <>
@@ -566,6 +378,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
             </SectionCard>
           </>
         );
+
       case 'appearance':
         return (
           <>
@@ -574,13 +387,21 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
               <span>Apariencia</span>
             </div>
             <SectionCard title="Tema" icon={theme === 'dark' ? Moon : Sun}>
-              <SettingItem icon={theme === 'dark' ? Moon : Sun} label="Modo oscuro" description="Cambiar entre tema claro y oscuro">
+              <SettingItem
+                icon={theme === 'dark' ? Moon : Sun}
+                label="Modo oscuro"
+                description="Cambiar entre tema claro y oscuro"
+              >
                 <ToggleSwitch checked={theme === 'dark'} onChange={toggleTheme} />
               </SettingItem>
             </SectionCard>
             <SectionCard title="Texto" icon={Eye}>
               <SettingItem icon={Eye} label="Tamaño de fuente" description="Ajusta el tamaño del texto en la app">
-                <select className="psp-select" value={preferences.font_size} onChange={(e) => handleSelect('font_size', e.target.value)}>
+                <select
+                  className="psp-select"
+                  value={preferences.font_size}
+                  onChange={(e) => handleSelect('font_size', e.target.value)}
+                >
                   <option value="small">Pequeña</option>
                   <option value="medium">Mediana</option>
                   <option value="large">Grande</option>
@@ -589,6 +410,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
             </SectionCard>
           </>
         );
+
       case 'notifications':
         return (
           <>
@@ -597,26 +419,54 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
               <span>Notificaciones</span>
             </div>
             <SectionCard title="Push" icon={Bell}>
-              <SettingItem icon={Bell} label="Notificaciones push" description="Recibir alertas en tu dispositivo">
-                <ToggleSwitch checked={preferences.push_enabled} onChange={() => handleToggle('push_enabled')} />
+              <SettingItem
+                icon={Bell}
+                label="Notificaciones push"
+                description="Recibir alertas en tu dispositivo"
+              >
+                <ToggleSwitch
+                  checked={preferences.push_enabled}
+                  onChange={() => handleToggle('push_enabled')}
+                />
               </SettingItem>
             </SectionCard>
             <SectionCard title="Tipos de notificación" icon={Bell}>
               <SettingItem label="Nuevos partidos" description="Cuando se publiquen partidos disponibles">
-                <ToggleSwitch checked={preferences.notif_new_matches} onChange={() => handleToggle('notif_new_matches')} disabled={!preferences.push_enabled} />
+                <ToggleSwitch
+                  checked={preferences.notif_new_matches}
+                  onChange={() => handleToggle('notif_new_matches')}
+                  disabled={!preferences.push_enabled}
+                />
               </SettingItem>
               <SettingItem label="Resultados finalizados" description="Cuando terminen partidos con tus predicciones">
-                <ToggleSwitch checked={preferences.notif_finished_matches} onChange={() => handleToggle('notif_finished_matches')} disabled={!preferences.push_enabled} />
+                <ToggleSwitch
+                  checked={preferences.notif_finished_matches}
+                  onChange={() => handleToggle('notif_finished_matches')}
+                  disabled={!preferences.push_enabled}
+                />
               </SettingItem>
               <SettingItem label="Nuevas ligas / premios" description="Ligas y torneos disponibles">
-                <ToggleSwitch checked={preferences.notif_new_leagues} onChange={() => handleToggle('notif_new_leagues')} disabled={!preferences.push_enabled} />
+                <ToggleSwitch
+                  checked={preferences.notif_new_leagues}
+                  onChange={() => handleToggle('notif_new_leagues')}
+                  disabled={!preferences.push_enabled}
+                />
               </SettingItem>
-              <SettingItem icon={preferences.notif_sound ? Volume2 : VolumeX} label="Sonido" description="Reproducir sonido al recibir notificaciones">
-                <ToggleSwitch checked={preferences.notif_sound} onChange={() => handleToggle('notif_sound')} disabled={!preferences.push_enabled} />
+              <SettingItem
+                icon={preferences.notif_sound ? Volume2 : VolumeX}
+                label="Sonido"
+                description="Reproducir sonido al recibir notificaciones"
+              >
+                <ToggleSwitch
+                  checked={preferences.notif_sound}
+                  onChange={() => handleToggle('notif_sound')}
+                  disabled={!preferences.push_enabled}
+                />
               </SettingItem>
             </SectionCard>
           </>
         );
+
       case 'privacy':
         return (
           <>
@@ -626,20 +476,37 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
             </div>
             <SectionCard title="Visibilidad" icon={Eye}>
               <SettingItem icon={Eye} label="Perfil público" description="Otros usuarios pueden ver tu perfil">
-                <ToggleSwitch checked={preferences.profile_public} onChange={() => handleToggle('profile_public')} />
+                <ToggleSwitch
+                  checked={preferences.profile_public}
+                  onChange={() => handleToggle('profile_public')}
+                />
               </SettingItem>
               <SettingItem icon={Target} label="Estadísticas en ranking" description="Aparecer en rankings públicos">
-                <ToggleSwitch checked={preferences.show_stats_in_ranking} onChange={() => handleToggle('show_stats_in_ranking')} />
+                <ToggleSwitch
+                  checked={preferences.show_stats_in_ranking}
+                  onChange={() => handleToggle('show_stats_in_ranking')}
+                />
               </SettingItem>
               <SettingItem icon={Bell} label="Compartir actividad" description="Mostrar tu actividad reciente a otros">
-                <ToggleSwitch checked={preferences.share_activity} onChange={() => handleToggle('share_activity')} />
+                <ToggleSwitch
+                  checked={preferences.share_activity}
+                  onChange={() => handleToggle('share_activity')}
+                />
               </SettingItem>
-              <SettingItem icon={preferences.predictions_public ? Eye : EyeOff} label="Predicciones públicas" description="Otros pueden ver tus predicciones">
-                <ToggleSwitch checked={preferences.predictions_public} onChange={() => handleToggle('predictions_public')} />
+              <SettingItem
+                icon={preferences.predictions_public ? Eye : EyeOff}
+                label="Predicciones públicas"
+                description="Otros pueden ver tus predicciones"
+              >
+                <ToggleSwitch
+                  checked={preferences.predictions_public}
+                  onChange={() => handleToggle('predictions_public')}
+                />
               </SettingItem>
             </SectionCard>
           </>
         );
+
       case 'data':
         return (
           <>
@@ -648,20 +515,44 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
               <span>Datos</span>
             </div>
             <SectionCard title="Exportar e importar" icon={Download}>
-              <SettingItem icon={Download} label="Exportar mis datos" description="Descargar toda tu información en formato JSON">
+              <SettingItem
+                icon={Download}
+                label="Exportar mis datos"
+                description="Descargar toda tu información en formato JSON"
+              >
                 <button className="psp-btn-small psp-btn-primary" onClick={handleExport}>Exportar</button>
               </SettingItem>
-              <SettingItem icon={RotateCcw} label="Restaurar configuración" description="Volver a los valores por defecto">
+              <SettingItem
+                icon={RotateCcw}
+                label="Restaurar configuración"
+                description="Volver a los valores por defecto"
+              >
                 <button className="psp-btn-small psp-btn-secondary" onClick={handleReset}>Restaurar</button>
               </SettingItem>
             </SectionCard>
             <SectionCard title="Zona de peligro" icon={Trash2}>
-              <SettingItem icon={Trash2} label="Eliminar cuenta" description="Esta acción es irreversible y eliminará todos tus datos" danger>
-                <button className="psp-btn-small psp-btn-danger" onClick={() => setShowDeleteConfirm(true)}>Eliminar</button>
+              <SettingItem
+                icon={LogOut}
+                label="Cerrar sesión"
+                description="Salir de tu cuenta"
+                danger
+              >
+                <button className="psp-btn-small psp-btn-danger" onClick={handleLogout}>Salir</button>
+              </SettingItem>
+              <SettingItem
+                icon={Trash2}
+                label="Eliminar cuenta"
+                description="Esta acción es irreversible y eliminará todos tus datos"
+                danger
+              >
+                <button className="psp-btn-small psp-btn-danger" onClick={() => setShowDeleteConfirm(true)}>
+                  Eliminar
+                </button>
               </SettingItem>
             </SectionCard>
           </>
         );
+
       case 'info':
         return (
           <>
@@ -678,25 +569,68 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
             </SectionCard>
           </>
         );
+
       default:
         return null;
     }
   };
 
-  // ── Desktop sidebar sections ──
-  const settingsSections = [
-    { id: 'account', label: 'Cuenta', icon: User },
-    { id: 'appearance', label: 'Apariencia', icon: theme === 'dark' ? Moon : Sun },
-    { id: 'notifications', label: 'Notificaciones', icon: Bell },
-    { id: 'privacy', label: 'Privacidad', icon: Shield },
-    { id: 'data', label: 'Datos', icon: Database },
-    { id: 'info', label: 'Información', icon: Info },
-  ];
+  // ── Render del contenido según tab activo ──
+  const renderTabContent = (tab) => {
+    // Si es un tab de ajustes, resolvemos la sección directamente sin setState
+    if (tab.startsWith('settings-')) {
+      const section = TAB_TO_SECTION[tab];
+      return (
+        <div className="psp-settings-full">
+          {renderSettingsSection(section)}
+        </div>
+      );
+    }
+
+    switch (tab) {
+      case 'overview':
+        return <OverviewTab userData={userData} currentUser={currentUser} userRanking={userRanking} />;
+      case 'achievements':
+        return (
+          <AchievementsTab
+            activeTitle={activeTitle}
+            userTitles={userTitles}
+            userAchievements={userAchievements}
+            availableAchievements={availableAchievements}
+            achievementsLoading={achievementsLoading}
+          />
+        );
+      case 'championships':
+        return (
+          <MonthlyChampionshipsTab
+            userData={{ ...userData, ...monthlyStats }}
+            crownHistory={crownHistory}
+            monthlyStats={monthlyStats}
+            championshipsLoading={championshipsLoading}
+          />
+        );
+      case 'history':
+        return <HistoryTab predictionHistory={predictionHistory} historyLoading={historyLoading} />;
+      case 'edit':
+        return (
+          <EditTab
+            userData={userData}
+            setUserData={setUserData}
+            currentUser={currentUser}
+            loading={loading}
+            handleSave={handleSave}
+            handleAvatarUpload={handleAvatarUpload}
+            loadUserData={loadUserData}
+            setActiveTab={(t) => { setActiveTab(t); setMobileView('main'); }}
+          />
+        );
+      default:
+        return null;
+    }
+  };
 
   // ── Parse mobile view ──
-  const isMobileSettingView = mobileView.startsWith('setting:');
   const isMobileTabView = mobileView.startsWith('tab:');
-  const currentMobileSetting = isMobileSettingView ? mobileView.replace('setting:', '') : null;
   const currentMobileTab = isMobileTabView ? mobileView.replace('tab:', '') : null;
 
   return (
@@ -713,26 +647,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
             preferences={preferences}
             theme={theme}
             toggleTheme={toggleTheme}
-            onSectionClick={(section) => setMobileView(`setting:${section}`)}
             onTabClick={(tab) => setMobileView(`tab:${tab}`)}
-          />
-        )}
-
-        {isMobileSettingView && (
-          <MobileSettingDetail
-            section={currentMobileSetting}
-            preferences={preferences}
-            theme={theme}
-            toggleTheme={toggleTheme}
-            onBack={() => setMobileView('main')}
-            onToggle={handleToggle}
-            onSelect={handleSelect}
-            onExport={handleExport}
-            onReset={handleReset}
-            onLogout={handleLogout}
-            onDeleteAccount={() => setShowDeleteConfirm(true)}
-            saving={saving}
-            currentUser={currentUser}
           />
         )}
 
@@ -753,37 +668,16 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
       <div className="psp-desktop-wrapper">
         <div className="psp-desktop-layout">
 
-          {/* COL 1 — Hero + Tabs */}
+          {/* COL 1 — Hero + Tabs (ahora incluye ajustes) */}
           <div className="psp-desktop-col1">
             <ProfileHero userData={userData} currentUser={currentUser} />
             <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-
-            <div className="psp-settings-tab-nav">
-              <div className="psp-settings-tab-header">
-                <Settings size={15} />
-                <span>Ajustes</span>
-              </div>
-              {settingsSections.map(s => (
-                <button
-                  key={s.id}
-                  className={`psp-stab-btn ${activeTab === 'settings' && activeSection === s.id ? 'psp-stab-btn--active' : ''}`}
-                  onClick={() => { setActiveTab('settings'); setActiveSection(s.id); }}
-                >
-                  <s.icon size={15} />
-                  <span>{s.label}</span>
-                  <ChevronRight size={13} className="psp-chevron" />
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* COL 2 — Contenido */}
           <div className="psp-desktop-col2">
             <div className="tab-content-wrapper">
-              {activeTab === 'settings'
-                ? <div className="psp-settings-full">{renderDesktopSettings()}</div>
-                : renderTabContent(activeTab)
-              }
+              {renderTabContent(activeTab)}
             </div>
           </div>
 
@@ -799,8 +693,12 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
             <h3>¿Eliminar cuenta?</h3>
             <p>Esta acción <strong>NO se puede deshacer</strong>. Se eliminarán todos tus datos permanentemente.</p>
             <div className="psp-modal-actions">
-              <button className="psp-btn psp-btn-cancel" onClick={() => setShowDeleteConfirm(false)}>Cancelar</button>
-              <button className="psp-btn psp-btn-danger-full" onClick={handleDeleteAccount}>Eliminar mi cuenta</button>
+              <button className="psp-btn psp-btn-cancel" onClick={() => setShowDeleteConfirm(false)}>
+                Cancelar
+              </button>
+              <button className="psp-btn psp-btn-danger-full" onClick={handleDeleteAccount}>
+                Eliminar mi cuenta
+              </button>
             </div>
           </div>
         </>
@@ -810,6 +708,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
       <div className="psp-footer-desktop">
         <Footer />
       </div>
+
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
 
       {showAdminAchievementsModal && (

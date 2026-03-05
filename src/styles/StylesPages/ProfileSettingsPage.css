@@ -1,4 +1,6 @@
-/* ── TOKENS LOCALES (iconos — no existen globalmente) ────── */
+/* ══════════════════════════════════════════════════════════
+   TOKENS LOCALES
+══════════════════════════════════════════════════════════ */
 :root {
   --psp-icon-orange:    #FFA726;
   --psp-icon-orange-bg: rgba(255, 167, 38, 0.12);
@@ -26,104 +28,27 @@
   --psp-icon-purple-bg: rgba(126, 87, 194, 0.18);
 }
 
-/* ── VISIBILIDAD BASE ────────────────────────────────────── */
-.psp-page           { background: var(--bg); min-height: 100vh; }
-.psp-footer-desktop { display: block; }          /* Visible en todos los tamaños */
-.psp-mobile-wrapper { display: block; }
-.psp-desktop-wrapper{ display: none; }
+/* ══════════════════════════════════════════════════════════
+   VISIBILIDAD BASE — mobile por defecto
+══════════════════════════════════════════════════════════ */
+.psp-page            { background: var(--bg); min-height: 100vh; }
+.psp-footer-desktop  { display: block; }
+.psp-mobile-wrapper  { display: block; }
+.psp-desktop-wrapper { display: none; }
 
-/* ════════════════════════════════════════════════════════════
-   MOBILE — MAIN VIEW (diseño compacto)
-════════════════════════════════════════════════════════════ */
-.psp-detail-header {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  padding: 16px 18px !important;
-  background: transparent !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
-  /* Sin sticky: el header fluye normal y no tapa contenido */
-  position: static !important;
-  z-index: auto !important;
-  backdrop-filter: none !important;
-}
-
-/* Título alineado a la izquierda, junto a la flecha */
-.psp-detail-header .psp-detail-title {
-  margin: 0 !important;
-  font-size: 20px !important;
-  font-weight: 700 !important;
-  color: var(--text-primary) !important;
-  text-align: left !important;
-  flex: 1;
-  letter-spacing: -0.3px;
-}
-
-/* Ocultar el spacer derecho (ya no hace falta balancear) */
-.psp-detail-header > div[style*="width: 36"] {
-  display: none !important;
-}
-
-/* ── OVERRIDE: back button limpio ────────────────────────── */
-.psp-detail-header .psp-back-btn {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 50% !important;
-  background: transparent !important;
-  border: none !important;
-  color: var(--text-primary) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer !important;
-  transition: opacity 0.15s ease !important;
-  flex-shrink: 0 !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-}
-
-.psp-detail-header .psp-back-btn:active {
-  opacity: 0.5 !important;
-  transform: scale(0.9) !important;
-}
-
-/* Modo oscuro: ícono un poco más brillante */
-[data-theme="dark"] .psp-detail-header .psp-back-btn {
-  color: var(--text-primary) !important;
-}
-
-/* Modo oscuro / claro */
-[data-theme="dark"] .psp-detail-header .psp-back-btn,
-[data-theme="light"] .psp-detail-header .psp-back-btn {
-  color: var(--text-primary) !important;
-}
-
-/* ── FIX: Último item no queda tapado por nav bar inferior ─ */
-.psp-mobile-detail {
-  min-height: 100vh;
-}
-
-.psp-detail-content {
-  padding-bottom: 100px !important;
-}
-
+/* ══════════════════════════════════════════════════════════
+   MOBILE — MAIN VIEW
+══════════════════════════════════════════════════════════ */
 .psp-mobile-main {
-  padding-bottom: 100px !important;
+  padding-bottom: 100px;
 }
 
-/* Espacio superior para compensar el header oculto */
-.psp-detail-header {
-  padding-top: 56px !important;
-}
-
-/* ── COMPACT HEADER (banner pequeño + usuario solapado) ── */
+/* ── Compact header (banner + avatar) ── */
 .psp-compact-header {
   position: relative;
   margin-bottom: 0;
 }
 
-/* Banner — altura generosa para que el avatar solapado se vea bien */
 .psp-compact-banner {
   position: relative;
   height: 148px;
@@ -150,22 +75,7 @@
   background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.38) 100%);
 }
 
-/* Título "Settings" centrado en el banner */
-.psp-compact-title {
-  position: absolute;
-  top: 42%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
-  font-size: 24px;
-  font-weight: 800;
-  color: white;
-  letter-spacing: -0.4px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.25);
-  white-space: nowrap;
-}
-
-/* Fila usuario — flotante con padding cómodo */
+/* Fila usuario */
 .psp-compact-user-row {
   display: flex;
   align-items: center;
@@ -177,10 +87,9 @@
   transition: background 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
-
 .psp-compact-user-row:active { background: var(--glass); }
 
-/* Avatar grande solapado — sale del banner */
+/* Avatar solapado */
 .psp-compact-avatar {
   position: relative;
   width: 72px;
@@ -196,42 +105,33 @@
   box-shadow: 0 6px 20px rgba(0,0,0,0.18);
   margin-top: -36px;
 }
-
 .psp-compact-avatar img  { width: 100%; height: 100%; object-fit: cover; }
 .psp-compact-avatar span { font-size: 28px; font-weight: 800; color: white; }
-
-.psp-compact-level {
-  position: absolute;
-  bottom: -4px; right: -2px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-  border: 2px solid var(--card);
-  border-radius: 20px;
-  padding: 2px 6px;
-  display: flex; align-items: center; gap: 2px;
-  font-size: 10px; font-weight: 800; color: white;
-  white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  line-height: 1;
-}
 
 .psp-compact-user-info { flex: 1; min-width: 0; }
 
 .psp-compact-name {
   display: block;
-  font-size: 17px; font-weight: 700;
+  font-size: 17px;
+  font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.3px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .psp-compact-sub {
   display: block;
-  font-size: 13px; color: var(--muted);
+  font-size: 13px;
+  color: var(--muted);
   margin-top: 3px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* ── LISTA LIMPIA — flotante con margen lateral ── */
+/* ── Lista limpia ── */
 .psp-clean-list {
   margin: 16px 16px 0;
   background: var(--card);
@@ -255,57 +155,112 @@
   transition: background 0.12s ease;
   -webkit-tap-highlight-color: transparent;
 }
-
 .psp-clean-row:last-child { border-bottom: none; }
 .psp-clean-row:active     { background: var(--glass); }
 .psp-clean-row--toggle    { cursor: default; }
 
-/* Icono circular */
 .psp-clean-icon {
-  width: 40px; height: 40px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 
 .psp-clean-label {
   flex: 1;
-  font-size: 15px; font-weight: 500;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--text-primary);
 }
 
-/* ── EDIT BUTTON ── */
-.psp-edit-btn-wrap { padding: 14px 16px 8px; }
-
-.psp-edit-btn {
-  display: flex; align-items: center;
-  justify-content: center; gap: 8px;
-  width: 100%; padding: 13px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-  color: white; border: none; border-radius: 14px;
-  font-size: 15px; font-weight: 700; cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-  transition: all 0.2s ease;
+/* ══════════════════════════════════════════════════════════
+   MOBILE — DETAIL VIEW (sub-pantalla de tab)
+══════════════════════════════════════════════════════════ */
+.psp-mobile-detail {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
 }
-.psp-edit-btn:active { transform: scale(0.98); }
 
-/* ── TOGGLE (compartido mobile) ── */
+/* Header de la sub-pantalla */
+.psp-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 56px 18px 16px;   /* padding-top alto para compensar nav bar oculto */
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+  position: static;
+  z-index: auto;
+}
+
+.psp-detail-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: left;
+  flex: 1;
+  letter-spacing: -0.3px;
+}
+
+/* Botón volver */
+.psp-back-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  flex-shrink: 0;
+  padding: 0;
+  box-shadow: none;
+}
+.psp-back-btn:active {
+  opacity: 0.5;
+  transform: scale(0.9);
+}
+
+/* Contenido de la sub-pantalla */
+.psp-detail-content {
+  flex: 1;
+  padding: 12px 16px 100px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   TOGGLE (compartido)
+══════════════════════════════════════════════════════════ */
 .psp-toggle {
   position: relative;
-  width: 48px; height: 27px;
+  width: 48px;
+  height: 27px;
   border-radius: 14px;
   background: var(--border);
-  border: none; cursor: pointer;
+  border: none;
+  cursor: pointer;
   transition: background 0.3s ease;
-  flex-shrink: 0; padding: 0;
+  flex-shrink: 0;
+  padding: 0;
 }
-.psp-toggle:disabled  { opacity: 0.4; cursor: not-allowed; }
-.psp-toggle--on       { background: var(--accent); }
+.psp-toggle:disabled { opacity: 0.4; cursor: not-allowed; }
+.psp-toggle--on      { background: var(--accent); }
 
 .psp-toggle-knob {
   position: absolute;
-  top: 3px; left: 3px;
-  width: 21px; height: 21px;
+  top: 3px;
+  left: 3px;
+  width: 21px;
+  height: 21px;
   border-radius: 50%;
   background: white;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -317,50 +272,9 @@
 /* Chevron compartido */
 .psp-chevron { color: var(--muted); flex-shrink: 0; }
 
-/* ════════════════════════════════════════════════════════════
-   MOBILE — DETAIL VIEW (settings sub-screen / tab view)
-════════════════════════════════════════════════════════════ */
-.psp-mobile-detail {
-  min-height: 100vh;
-  background: var(--bg);
-  display: flex; flex-direction: column;
-}
-
-.psp-detail-header {
-  display: grid;
-  grid-template-columns: 40px 1fr 40px;
-  align-items: center;
-  padding: 14px 16px;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; z-index: 90;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.psp-back-btn {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  color: var(--accent);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all 0.2s ease;
-}
-.psp-back-btn:active { transform: scale(0.9); }
-
-.psp-detail-title {
-  margin: 0;
-  font-size: 17px; font-weight: 700;
-  color: var(--text-primary);
-  text-align: center;
-}
-
-.psp-detail-content {
-  flex: 1;
-  padding: 16px 16px 24px;
-}
-
-/* Settings card */
+/* ══════════════════════════════════════════════════════════
+   SETTINGS ROWS (mobile + desktop compartido)
+══════════════════════════════════════════════════════════ */
 .psp-settings-card {
   background: var(--card);
   border-radius: 16px;
@@ -368,11 +282,12 @@
   overflow: hidden;
 }
 
-/* Setting row */
 .psp-setting-row {
-  display: flex; align-items: center;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 14px; padding: 14px 16px;
+  gap: 14px;
+  padding: 14px 16px;
   border-bottom: 1px solid var(--border);
   transition: background 0.15s ease;
 }
@@ -382,16 +297,22 @@
 .psp-row-danger             { background: rgba(239,68,68,0.03); }
 
 .psp-setting-info {
-  display: flex; align-items: center;
-  gap: 12px; flex: 1; min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
 }
 
 .psp-setting-icon {
-  width: 36px; height: 36px;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
   background: var(--glass);
   color: var(--accent);
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 .psp-icon-danger { background: rgba(239,68,68,0.1) !important; color: #EF4444 !important; }
@@ -402,20 +323,24 @@
 
 /* Subsection label */
 .psp-subsection-label {
-  font-size: 11px; font-weight: 700;
+  font-size: 11px;
+  font-weight: 700;
   color: var(--muted);
-  text-transform: uppercase; letter-spacing: 0.6px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
   padding: 12px 16px 6px;
   border-bottom: 1px solid var(--border);
   background: var(--bg);
 }
 
-/* Small buttons */
+/* Botones pequeños */
 .psp-btn-small {
   padding: 7px 14px;
   border-radius: 8px;
-  font-size: 13px; font-weight: 600;
-  border: none; cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
 }
@@ -430,19 +355,99 @@
   border: 1.5px solid var(--border);
   background: var(--glass);
   color: var(--text-primary);
-  font-size: 13px; font-weight: 600;
-  cursor: pointer; min-width: 110px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 110px;
 }
 .psp-select:focus { outline: none; border-color: var(--accent); }
 
-/* ════════════════════════════════════════════════════════════
-   TABLET (769px – 1023px) — 2 columnas
-════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════
+   SETTINGS FULL (contenido de cada sección de ajuste)
+   — usado tanto en mobile detail como en desktop col2
+══════════════════════════════════════════════════════════ */
+.psp-settings-full {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.psp-ds-page-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 4px;
+}
+.psp-ds-page-title svg { color: var(--accent); }
+
+.psp-ds-card {
+  background: var(--card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.psp-ds-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--glass);
+}
+
+.psp-ds-card-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+}
+
+.psp-ds-card-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.psp-ds-card-body {
+  background: var(--card);
+}
+
+.psp-ds-card-body .psp-setting-row {
+  padding: 14px 16px;
+  border-radius: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  margin: 0;
+}
+.psp-ds-card-body .psp-setting-row:last-child { border-bottom: none; }
+.psp-ds-card-body .psp-setting-row:hover      { background: var(--glass); }
+.psp-ds-card-body .psp-setting-label          { font-size: 14px; }
+.psp-ds-card-body .psp-setting-desc           { font-size: 12px; }
+
+/* ══════════════════════════════════════════════════════════
+   TABLET + DESKTOP (≥769px)
+══════════════════════════════════════════════════════════ */
 @media (min-width: 769px) {
   .psp-mobile-wrapper  { display: none; }
   .psp-desktop-wrapper { display: block; }
   .psp-footer-desktop  { display: block; }
 
+  /* Layout 2 columnas */
   .psp-desktop-layout {
     max-width: 960px;
     margin: 0 auto;
@@ -453,15 +458,16 @@
     align-items: start;
   }
 
-  /* Col3 siempre oculta — ya no existe */
-  .psp-desktop-col3 { display: none !important; }
-
+  /* Col1 — sticky */
   .psp-desktop-col1 {
-    position: sticky; top: 24px;
-    display: flex; flex-direction: column; gap: 12px;
+    position: sticky;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
-  /* Hero */
+  /* Hero en col1 */
   .psp-desktop-col1 .profile-hero {
     background: var(--card);
     border-radius: 20px;
@@ -470,7 +476,7 @@
     border: 1px solid var(--border);
   }
 
-  /* Tabs verticales de perfil */
+  /* Tabs verticales */
   .psp-desktop-col1 .profile-tabs-modern {
     flex-direction: column;
     padding: 10px;
@@ -479,6 +485,19 @@
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
     position: static;
+    /* Scroll vertical si hay muchos tabs */
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .psp-desktop-col1 .profile-tabs-modern::-webkit-scrollbar {
+    width: 4px;
+  }
+  .psp-desktop-col1 .profile-tabs-modern::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
   }
 
   .psp-desktop-col1 .tab-btn-modern {
@@ -488,77 +507,34 @@
     padding: 11px 12px;
     border-radius: 8px;
     text-align: left;
+    width: 100%;
   }
 
   .psp-desktop-col1 .tab-btn-modern span {
     display: block;
-    font-size: 13px; font-weight: 600;
-    text-transform: none; letter-spacing: 0;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
   }
 
   .psp-desktop-col1 .tab-btn-modern.active::after { display: none; }
+
   .psp-desktop-col1 .tab-btn-modern.active {
     background: linear-gradient(135deg, var(--accent), var(--accent-light));
     color: white;
   }
 
-  /* ── SETTINGS TAB NAV (debajo de las tabs de perfil) ── */
-  .psp-settings-tab-nav {
-    background: var(--card);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-  }
-
-  .psp-settings-tab-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
-  }
-
-  .psp-settings-tab-header svg { color: var(--accent); }
-
-  .psp-stab-btn {
-    width: 100%;
-    display: flex; align-items: center; gap: 9px;
-    padding: 10px 12px;
-    border: none;
-    border-bottom: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-size: 13px; font-weight: 600;
-    cursor: pointer; transition: all 0.15s ease;
-    text-align: left;
-  }
-
-  .psp-stab-btn:last-child { border-bottom: none; }
-
-  .psp-stab-btn span { flex: 1; }
-
-  .psp-stab-btn .psp-chevron { opacity: 0; transition: opacity 0.15s; }
-
-  .psp-stab-btn:hover {
+  .psp-desktop-col1 .tab-btn-modern:hover:not(.active) {
     background: var(--glass);
-    color: var(--text-primary);
   }
 
-  .psp-stab-btn:hover .psp-chevron { opacity: 1; }
-
-  .psp-stab-btn--active {
-    background: linear-gradient(135deg, var(--accent), var(--accent-light));
-    color: white !important;
+  /* Separador visual entre grupo perfil y grupo ajustes */
+  .psp-desktop-col1 .profile-tabs-modern .tab-separator {
+    height: 1px;
+    background: var(--border);
+    margin: 6px 4px;
   }
-
-  .psp-stab-btn--active .psp-chevron { opacity: 1; color: white; }
 
   /* Col2 */
   .psp-desktop-col2 .tab-content-wrapper {
@@ -569,91 +545,16 @@
     border: 1px solid var(--border);
   }
 
-  /* ── SETTINGS CONTENT — cards en el contenido central ── */
-  .psp-settings-full {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .psp-ds-page-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--text-primary);
-    letter-spacing: -0.3px;
-    padding-bottom: 16px;
-    border-bottom: 2px solid var(--border);
-    margin-bottom: 4px;
-  }
-
-  .psp-ds-page-title svg { color: var(--accent); }
-
-  .psp-ds-card {
-    background: var(--bg);
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    overflow: hidden;
-  }
-
-  .psp-ds-card-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--glass);
-  }
-
-  .psp-ds-card-icon {
-    width: 28px; height: 28px;
-    border-radius: 8px;
-    background: var(--card);
-    color: var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    border: 1px solid var(--border);
-  }
-
-  .psp-ds-card-title {
-    margin: 0;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .psp-ds-card-body { background: var(--card); }
-
-  /* Setting rows dentro de cards desktop */
-  .psp-ds-card-body .psp-setting-row {
-    padding: 14px 16px;
-    border-radius: 0;
-    border-bottom: 1px solid var(--border);
-    background: transparent;
-    margin: 0;
-  }
-
-  .psp-ds-card-body .psp-setting-row:last-child { border-bottom: none; }
-  .psp-ds-card-body .psp-setting-row:hover { background: var(--glass); }
-
-  .psp-ds-card-body .psp-setting-icon {
-    width: 36px; height: 36px; border-radius: 10px;
-  }
-
-  .psp-ds-card-body .psp-setting-label { font-size: 14px; }
-  .psp-ds-card-body .psp-setting-desc  { font-size: 12px; }
+  /* Settings content en desktop */
+  .psp-ds-page-title { font-size: 20px; }
 }
 
-/* ════════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════
    DESKTOP (≥1024px)
-════════════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════ */
 @media (min-width: 1024px) {
   .psp-desktop-layout {
     max-width: 1200px;
-    margin: 0 auto;
     padding: 32px 24px;
     grid-template-columns: 280px 1fr;
     gap: 24px;
@@ -662,12 +563,10 @@
   .psp-desktop-col1 { top: 32px; }
 
   .psp-desktop-col1 .profile-hero {
-    border-radius: 20px;
     padding: 32px 24px;
   }
 
   .psp-desktop-col2 .tab-content-wrapper {
-    border-radius: 20px;
     padding: 32px;
     min-height: 500px;
   }
@@ -675,12 +574,12 @@
   .psp-ds-page-title { font-size: 22px; }
 }
 
-
-/* ════════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════
    MODAL — Delete confirm
-════════════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════ */
 .psp-modal-backdrop {
-  position: fixed; inset: 0;
+  position: fixed;
+  inset: 0;
   background: rgba(0,0,0,0.5);
   backdrop-filter: blur(4px);
   z-index: 9998;
@@ -704,15 +603,15 @@
   to   { transform: translateY(0);    opacity: 1; }
 }
 
-.psp-modal-danger h3 { margin: 0 0 12px; font-size: 20px; font-weight: 800; color: var(--text-primary); }
-.psp-modal-danger p  { font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0 0 24px; }
+.psp-modal-danger h3     { margin: 0 0 12px; font-size: 20px; font-weight: 800; color: var(--text-primary); }
+.psp-modal-danger p      { font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0 0 24px; }
 .psp-modal-danger strong { color: #EF4444; }
 
 .psp-modal-actions { display: flex; flex-direction: column; gap: 10px; }
 
-.psp-btn { padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; border: none; cursor: pointer; transition: all 0.2s; }
-.psp-btn-cancel       { background: var(--glass); color: var(--text-primary); border: 1.5px solid var(--border); }
-.psp-btn-danger-full  { background: linear-gradient(135deg, #EF4444, #DC2626); color: white; box-shadow: 0 4px 14px rgba(239,68,68,0.3); }
+.psp-btn           { padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; border: none; cursor: pointer; transition: all 0.2s; }
+.psp-btn-cancel    { background: var(--glass); color: var(--text-primary); border: 1.5px solid var(--border); }
+.psp-btn-danger-full { background: linear-gradient(135deg, #EF4444, #DC2626); color: white; box-shadow: 0 4px 14px rgba(239,68,68,0.3); }
 
 @media (min-width: 769px) {
   .psp-modal-danger {
@@ -724,10 +623,12 @@
     border: 2px solid rgba(239,68,68,0.2);
     animation: psp-fade-scale 0.25s ease;
   }
+
   @keyframes psp-fade-scale {
     from { opacity: 0; transform: translate(-50%, -48%) scale(0.97); }
     to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   }
+
   .psp-modal-actions { flex-direction: row; }
   .psp-btn { flex: 1; }
 }
