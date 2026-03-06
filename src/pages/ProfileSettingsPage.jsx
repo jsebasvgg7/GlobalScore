@@ -570,7 +570,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
               <span>Información</span>
             </div>
             <SectionCard title="App" icon={Info}>
-              <SettingItem icon={Info} label="Versión" description="GlobalScore v20.0.0" />
+              <SettingItem icon={Info} label="Versión" description="GlobalScore v21.0.0" />
             </SectionCard>
             <SectionCard title="Legal" icon={Shield}>
               <SettingItem icon={Shield} label="Política de privacidad" description="Cómo manejamos tus datos" />
