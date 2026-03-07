@@ -13,7 +13,8 @@
   "backgroundColor": "#0F172A",
   "enableNotifications": true,
   "startUrl": "/app",
-  "iconUrl": "https://globalscore.onrender.com/icons/icon-512x512.png?v=2",
+  "iconUrl": "https://globalscore.onrender.com/icons/icon-512x512.png",
+  "maskableIconUrl": "https://globalscore.onrender.com/icons/icon-maskable.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "C:\\Users\\DIANA\\OneDrive\\Documentos\\GlobalScore\\android.keystore",
