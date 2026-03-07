@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.onrender.globalscore.twa",
+    "sha256_cert_fingerprints": [
+      "4F:38:5B:BB:01:80:EA:03:08:C8:9B:5E:87:D4:4A:06:D7:94:76:D4:EA:82:2F:4E:C4:5A:48:5A:DD:D7:62:9E"
+    ]
+  }
+}]
