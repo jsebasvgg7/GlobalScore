@@ -9,9 +9,10 @@
   [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=flat&logo=react&logoColor=white)](https://reactjs.org/)
   [![Supabase](https://img.shields.io/badge/Supabase-Backend-3ECF8E?style=flat&logo=supabase&logoColor=white)](https://supabase.com/)
   [![Vite](https://img.shields.io/badge/Vite-5.4.11-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
+  [![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
   [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-  [Demo](https://your-demo-url.com) • [Documentación](https://your-docs-url.com) • [Reportar Bug](https://github.com/your-repo/issues)
+  [🌐 Demo en vivo](https://globalscore.onrender.com/app) • [🐛 Reportar Bug](https://github.com/jsebasvgg7/GlobalScore/issues)
 
 </div>
 
@@ -35,6 +36,8 @@
 
 **GlobalScore** es una plataforma web moderna y gamificada que permite a los usuarios hacer predicciones sobre resultados deportivos, competir en rankings globales, y ganar puntos, logros y títulos. Diseñada para crear una experiencia social y competitiva entre amigos y comunidades de aficionados al fútbol.
 
+Disponible como **PWA instalable** y próximamente en **Google Play Store** como app nativa mediante TWA (Trusted Web Activity).
+
 ### 🎮 ¿Por qué GlobalScore?
 
 - **Competencia Amistosa**: Compite con amigos y otros usuarios por el primer puesto
@@ -42,6 +45,7 @@
 - **Múltiples Modos**: Predice partidos, ligas completas, premios individuales y hasta el Mundial
 - **Estadísticas Detalladas**: Sigue tu evolución con métricas avanzadas
 - **Ranking Dinámico**: Podios visuales y tablas de posiciones en tiempo real
+- **Instalable**: Funciona como app nativa en Android e iOS vía PWA
 
 ---
 
@@ -131,9 +135,9 @@
 - **Diseño Purple Theme**: Paleta coherente y moderna
 - **Responsive Design**: Móvil, tablet y desktop optimizados
 - **Bottom Navigation**: Navegación móvil intuitiva
-- **Dark Mode Ready**: Variables CSS preparadas
 - **Animaciones Sutiles**: Transiciones fluidas
 - **Toast Notifications**: Feedback visual elegante
+- **PWA Completa**: Instalable, Service Worker, manifest, íconos adaptativos
 
 ### 🛡️ Panel de Administración
 
@@ -182,7 +186,19 @@ Admin Dashboard
   "database": "PostgreSQL",
   "authentication": "Supabase Auth",
   "storage": "Supabase Storage (Logos)",
-  "realtime": "Supabase Realtime (opcional)"
+  "security": "Row Level Security (RLS)"
+}
+```
+
+### Infraestructura & Deploy
+
+```javascript
+{
+  "hosting": "Render.com",
+  "pwa": "Service Worker + Web App Manifest",
+  "android": "TWA (Trusted Web Activity) via Bubblewrap",
+  "passwords": "bcrypt",
+  "ci": "Git push → auto deploy"
 }
 ```
 
@@ -192,8 +208,9 @@ Admin Dashboard
 - 🎣 **Custom Hooks**: Lógica reutilizable (`useMatches`, `useLeagues`, `useAwards`, `useWorldCup`)
 - 🎨 **CSS Variables**: Theming dinámico
 - 🖼️ **Lazy Loading**: Optimización de imágenes
-- 📱 **PWA Ready**: Estructura preparada para Progressive Web App
+- 📱 **PWA Completa**: Service Worker, manifest, íconos maskables, instalable
 - 🔒 **Row Level Security**: Políticas de seguridad en Supabase
+- 🤖 **TWA Android**: App nativa en Google Play via Bubblewrap
 
 ---
 
@@ -209,8 +226,8 @@ npm >= 9.0.0
 ### Paso 1: Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/globalscore.git
-cd globalscore
+git clone https://github.com/jsebasvgg7/GlobalScore.git
+cd GlobalScore
 ```
 
 ### Paso 2: Instalar dependencias
@@ -276,43 +293,11 @@ award-logos/
 ├── balondeor.png
 ├── botadeoro.png
 └── ...
-
-profiles/
-└── avatars/
-
-world-cup-logos/
-├── argentina.png
-├── brasil.png
-└── ...
 ```
 
-#### 3. Configurar Row Level Security (RLS)
+#### 3. Configurar assetlinks.json (para TWA/Android)
 
-```sql
--- Ejemplo: Política para la tabla 'matches'
-CREATE POLICY "Users can view all matches"
-ON matches FOR SELECT
-TO authenticated
-USING (true);
-
-CREATE POLICY "Only admins can modify matches"
-ON matches FOR ALL
-TO authenticated
-USING (
-  EXISTS (
-    SELECT 1 FROM users 
-    WHERE users.auth_id = auth.uid() 
-    AND users.is_admin = true
-  )
-);
-```
-
-#### 4. Habilitar Authentication
-
-Configura los métodos de autenticación en Supabase:
-- ✅ Email/Password
-- ✅ Password Recovery
-- ⚙️ (Opcional) OAuth Providers (Google, GitHub)
+El archivo `public/.well-known/assetlinks.json` ya está configurado para la verificación de Digital Asset Links con Google Play.
 
 ---
 
@@ -320,216 +305,52 @@ Configura los métodos de autenticación en Supabase:
 
 ```
 globalscore/
-├── .github/                    # Configuraciones de GitHub (workflows, etc.)
-│   └── workflows/              # (si usas CI/CD)
-├── public/                     # Archivos estáticos servidos directamente
-│   ├── favicon.ico
-│   ├── robots.txt
-│   ├── manifest.json           # Para PWA
-│   └── assets/                 # Imágenes globales
-│       ├── GlobalSCore-logo.png
-│       └── ... (otros assets)
+│
+├── public/
+│   ├── .well-known/
+│   │   └── assetlinks.json         # Digital Asset Links (TWA/Android)
+│   ├── icons/
+│   │   ├── icon-192x192.png        # Ícono PWA estándar
+│   │   ├── icon-512x512.png        # Ícono PWA grande
+│   │   └── icon-maskable.png       # Ícono adaptativo Android
+│   ├── manifest.json               # Web App Manifest (PWA)
+│   └── sw.js                       # Service Worker
 │
 ├── src/
-│   ├── assets/                 # Imágenes, icons, etc. importadas en código
-│   │   ├── images/
-│   │   │   ├── league-logos/   # Logos de ligas y equipos
-│   │   │   ├── awards/         # Iconos de logros y premios
-│   │   │   └── worldcup/       # Imágenes específicas del Mundial 2026
-│   │   └── icons/              # SVGs o PNGs pequeños
+│   ├── components/
+│   │   ├── adminComponents/
+│   │   ├── dashboardComponents/
+│   │   ├── rankingComponents/
+│   │   ├── statsComponents/
+│   │   ├── profileComponents/
+│   │   ├── worldCupComponents/
+│   │   ├── common/
+│   │   └── context/
 │   │
-│   ├── components/             # Todos los componentes reutilizables
-│   │   ├── adminComponents/    # Panel de administración
-│   │   │   ├── AdminAchievementsList.jsx
-│   │   │   ├── AdminAchievementsModal.jsx
-│   │   │   ├── AdminAwardModal.jsx
-│   │   │   ├── AdminAwardsList.jsx
-│   │   │   ├── AdminControls.jsx
-│   │   │   ├── AdminCrownModal.jsx
-│   │   │   ├── AdminCrownsSection.jsx
-│   │   │   ├── AdminDiagnosticPanel.jsx
-│   │   │   ├── AdminLeagueModal.jsx
-│   │   │   ├── AdminLeaguesList.jsx
-│   │   │   ├── AdminMatchesList.jsx
-│   │   │   ├── AdminModal.jsx
-│   │   │   ├── AdminModalsContainer.jsx
-│   │   │   ├── AdminNavigationTabs.jsx
-│   │   │   ├── AdminStatsOverview.jsx
-│   │   │   ├── AdminTitlesList.jsx
-│   │   │   ├── AdminTitlesModal.jsx
-│   │   │   ├── FinishAwardModal.jsx
-│   │   │   ├── FinishLeagueModal.jsx
-│   │   │   └── FinishMatchModal.jsx
-│   │   │
-│   │   ├── cardComponents/     # Tarjetas de contenido
-│   │   │   ├── AwardCard.jsx
-│   │   │   ├── KnockoutMatchCard.jsx
-│   │   │   ├── LeagueCard.jsx
-│   │   │   └── MatchCard.jsx
-│   │   │
-│   │   ├── profileComponents/  # Componentes exclusivos del perfil
-│   │   │   ├── AchievementsTab.jsx
-│   │   │   ├── AvatarUpload.jsx
-│   │   │   ├── EditTab.jsx
-│   │   │   ├── HistoryTab.jsx
-│   │   │   ├── MonthlyChampionshipsTab.jsx
-│   │   │   ├── OverviewTab.jsx
-│   │   │   ├── ProfileHero.jsx
-│   │   │   └── ProfileTabs.jsx
-│   │   │
-│   │   ├── worldCupComponents/ # Componentes específicos del Mundial
-│   │   │   ├── KnockoutMatchCard.jsx
-│   │   │   ├── KnockoutSection.jsx
-│   │   │   ├── WorldCupAwardCard.jsx
-│   │   │   ├── WorldCupNavigationTabs.jsx
-│   │   │   └── AchievementsSection.jsx  # (logros del mundial)
-│   │   │
-│   │   ├── common/             # Componentes muy reutilizables
-│   │   │   ├── Footer.jsx
-│   │   │   ├── Header.jsx
-│   │   │   ├── InstallPWAButton.jsx
-│   │   │   ├── KnockoutoutSection.jsx   # (se repite? → unificar si es posible)
-│   │   │   ├── LoadingSpinner.jsx
-│   │   │   ├── LoadingStates.jsx
-│   │   │   ├── NavigationTabs.jsx
-│   │   │   ├── NavigationTabsTwo.jsx    # (versión alternativa)
-│   │   │   ├── ProtectedRoute.jsx
-│   │   │   ├── RankingSidebar.jsx
-│   │   │   ├── RequireAuth.jsx
-│   │   │   ├── Toast.jsx
-│   │   │   └── UserProfileModal.jsx
-│   │   │
-│   │   └── context/            # Contextos de React
-│   │       └── ThemeContext.jsx
-│   │
-│   ├── hooks/                  # Custom hooks organizados
+│   ├── hooks/
 │   │   ├── adminHooks/
-│   │   │   ├── useAdminAchievements.js
-│   │   │   ├── useAdminAwards.js
-│   │   │   ├── useAdminCrowns.js
-│   │   │   ├── useAdminData.js
-│   │   │   ├── useAdminLeagues.js
-│   │   │   └── useAdminMatches.js
-│   │   │
 │   │   ├── hooksProfile/
-│   │   │   ├── useAchievements.js
-│   │   │   ├── useMonthlyChampionships.js
-│   │   │   ├── usePredictionHistory.js
-│   │   │   ├── useProfileData.js
-│   │   │   ├── useStreaks.js
-│   │   │   └── useUserRanking.js
-│   │   │
-│   │   ├── settingsHooks/
-│   │   │   ├── useSettings.js
-│   │   │   ├── useAwards.js
-│   │   │   ├── useDataLoader.js
-│   │   │   ├── useKnockoutBracket.js
-│   │   │   ├── useLeagues.js
-│   │   │   ├── useMatches.js
-│   │   │   └── useWorldCup.js
-│   │   │
-│   │   └── index.js            # (opcional: barrel file para exportar hooks)
+│   │   └── settingsHooks/
 │   │
-│   ├── pages/                  # Páginas principales (rutas)
+│   ├── pages/
 │   │   ├── AdminPage.jsx
 │   │   ├── DashboardPage.jsx
-│   │   ├── ForgotPasswordPage.jsx
 │   │   ├── LoginPage.jsx
-│   │   ├── NotificationsPage.jsx
 │   │   ├── ProfilePage.jsx
 │   │   ├── RankingPage.jsx
-│   │   ├── RegisterPage.jsx
-│   │   ├── ResetPasswordPage.jsx
-│   │   ├── SettingsPage.jsx
 │   │   ├── StatsPage.jsx
 │   │   └── WorldCupPage.jsx
 │   │
-│   ├── scripts/                # Scripts de utilidad y mantenimiento (no React)
-│   │   ├── checkDatabaseFunctions.js
-│   │   ├── diagnoseDatabase.js
-│   │   ├── listLeagues.js
-│   │   ├── listTeams.js
-│   │   ├── reset-weekly.js
-│   │   ├── updateLeagueLogos.js
-│   │   ├── updateLeagueLogosWithServiceRole.js
-│   │   ├── updateLogosImproved.js
-│   │   └── updateLogoUrls.js
-│   │
-│   ├── styles/                 # Estilos organizados por propósito
-│   │   ├── adminStyles/
-│   │   │   ├── AdminCrownModal.css
-│   │   │   ├── AdminModal.css
-│   │   │   ├── AdminPage.css
-│   │   │   └── AdminPanel.css
-│   │   │
-│   │   ├── cardStyles/
-│   │   │   ├── AwardCard.css
-│   │   │   ├── KnockoutMatchCard.css
-│   │   │   ├── LeagueCard.css
-│   │   │   └── MatchCard.css
-│   │   │
-│   │   ├── pagesStyles/
-│   │   │   ├── Auth.css
-│   │   │   ├── DashboardPage.css
-│   │   │   ├── NotificationsPage.css
-│   │   │   ├── ProfilePageNew.css
-│   │   │   ├── RankingPage.css
-│   │   │   ├── SettingsPage.css
-│   │   │   ├── StatsPage.css
-│   │   │   └── WorldCupPage.css
-│   │   │
-│   │   ├── profile/            # Estilos específicos del perfil
-│   │   │   ├── ProfileBase.css
-│   │   │   ├── ProfileEdit.css
-│   │   │   ├── ProfileHero.css
-│   │   │   ├── ProfileHistory.css
-│   │   │   ├── ProfileOverview.css
-│   │   │   ├── Profile.css
-│   │   │   └── ProfileTabs.css
-│   │   │
-│   │   ├── common/
-│   │   │   ├── Footer.css
-│   │   │   ├── Header.css
-│   │   │   ├── InstallPWAButton.css
-│   │   │   ├── KnockoutSection.css
-│   │   │   ├── LoadingSpinner.css
-│   │   │   ├── LoadingStates.css
-│   │   │   ├── NavigationTabs.css
-│   │   │   ├── NavigationTabsTwo.css
-│   │   │   ├── RankingSidebar.css
-│   │   │   ├── Toast.css
-│   │   │   └── UserProfileModal.css
-│   │   │
-│   │   └── index.css           # Estilos globales + Tailwind
-│   │
-│   ├── utils/                  # Funciones y helpers reutilizables
-│   │   ├── adminFilters.js
-│   │   ├── logoHelper.js
-│   │   ├── matchUtils.js
-│   │   ├── profileUtils.js
-│   │   ├── pushNotifications.js
-│   │   ├── pushNotificationsService.js
-│   │   ├── registerServiceWorker.js
-│   │   ├── storage.js
-│   │   ├── supabaseClient.js
-│   │   └── supabaseClientNode.js
-│   │
-│   ├── App.jsx                 # Componente raíz
-│   └── main.jsx                # Entry point (ReactDOM)
+│   ├── styles/
+│   ├── utils/
+│   ├── App.jsx
+│   └── main.jsx
 │
-├── .env                        # Variables de entorno (NO en git)
-├── .env.example                # (recomendado: plantilla)
-├── .gitignore
-├── index.html
-├── package.json
-├── package-lock.json           # o pnpm-lock.yaml / yarn.lock
-├── postcss.config.cjs
-├── README.md
-├── render.yaml                 # (si usas Render.com)
-├── robots.txt
-├── schema.sql                  # Esquema de la base de datos (PostgreSQL/Supabase)
-├── tailwind.config.cjs
-└── vite.config.js
+├── twa-manifest.json               # Configuración TWA (Android)
+├── schema.sql                      # Esquema base de datos
+├── render.yaml                     # Configuración Render.com
+├── vite.config.js
+└── package.json
 ```
 
 ---
@@ -540,37 +361,37 @@ globalscore/
 
 - [x] Sistema de autenticación completo
 - [x] Predicciones de partidos con puntos
-- [x] Predicciones de ligas y premios
+- [x] Predicciones de ligas y premios individuales
 - [x] Sistema de logros y títulos
 - [x] Ranking global con podio
-- [x] Panel de administración
+- [x] Panel de administración completo
 - [x] Mundial 2026 (Fase de grupos + Eliminatorias)
 - [x] Responsive design
-- [x] Sistema de notificaciones
+- [x] Sistema de notificaciones push
+- [x] PWA completa (instalable, Service Worker, manifest)
+- [x] App Android via TWA (Trusted Web Activity)
+- [x] Digital Asset Links configurados
 
-### 🚧 En Desarrollo (v1.1)
+### 🚧 En Progreso (v1.1)
 
-- [ ] **PWA**: Instalación como app nativa
-- [ ] **Push Notifications**: Alertas de nuevos partidos
+- [ ] **Google Play Store**: Publicación oficial de la app
 - [ ] **Chat Global**: Comunidad integrada
-- [ ] **Ligas Privadas**: Competencias entre grupos
+- [ ] **Ligas Privadas**: Competencias entre grupos cerrados
 - [ ] **Multidioma**: Español, Inglés, Portugués
 
 ### 📋 Planeado (v2.0)
 
-- [ ] **Integración con APIs**: Resultados automáticos
+- [ ] **Integración con APIs**: Resultados automáticos de partidos
 - [ ] **Sistema de Monedas**: Economía virtual
 - [ ] **Tienda**: Compra de avatares y temas
 - [ ] **Torneos Personalizados**: Crea tus propias ligas
 - [ ] **Predicciones en Vivo**: Durante el partido
-- [ ] **Analytics Avanzados**: ML para recomendaciones
-- [ ] **Social Sharing**: Compartir predicciones
-- [ ] **Modo Offline**: Funcionalidad sin conexión
+- [ ] **Social Sharing**: Compartir predicciones en redes
 
 ### 🔮 Futuro (v3.0)
 
-- [ ] **Mobile App**: React Native
-- [ ] **AI Predictions**: Asistente con IA
+- [ ] **AI Predictions**: Asistente con IA para sugerencias
+- [ ] **Analytics Avanzados**: ML para recomendaciones personalizadas
 
 ---
 
@@ -588,7 +409,6 @@ globalscore/
 
 ### Convenciones de Código
 
-- ✅ Usa **ESLint** y **Prettier**
 - ✅ Nombra componentes en **PascalCase**
 - ✅ Nombra funciones en **camelCase**
 - ✅ CSS classes en **kebab-case**
@@ -596,47 +416,47 @@ globalscore/
 
 ### Reportar Bugs
 
-Usa el [issue tracker](https://github.com/tu-usuario/globalscore/issues) con:
+Usa el [issue tracker](https://github.com/jsebasvgg7/GlobalScore/issues) con:
 - Descripción clara del bug
 - Pasos para reproducirlo
 - Comportamiento esperado vs actual
 - Screenshots si es posible
-- Información del entorno (browser, OS)
 
 ---
 
 ## 📞 Contacto
 
-**Hermanos Vega** - Desarrolladores
+**Hermanos Vega** — Desarrolladores
 
 - 📧 Email: [globalscore.oficial@gmail.com](mailto:globalscore.oficial@gmail.com)
-- 🌐 Website: [https://global-score.vercel.app/](https://global-score.vercel.app/)
-- 👤 Luis Vega [https://www.instagram.com/luisd__vg?igsh=MXQweHNmcTM5Y2RkbA==](https://www.instagram.com/luisd__vg?igsh=MXQweHNmcTM5Y2RkbA==)
-- 👤 J.Sebas Vega [https://www.instagram.com/jsebas.vg?igsh=M3FlYXowMHM1MDZr](https://www.instagram.com/jsebas.vg?igsh=M3FlYXowMHM1MDZr)
+- 🌐 Web: [https://globalscore.onrender.com/app](https://globalscore.onrender.com/app)
+- 👤 Luis Vega — [@luisd__vg](https://www.instagram.com/luisd__vg)
+- 👤 J.Sebas Vega — [@jsebas.vg](https://www.instagram.com/jsebas.vg)
 
-**Link del Proyecto**: [https://https://github.com/jsebasvgg7/GlobalScore](https://github.com/jsebasvgg7/GlobalScore)
+**Repositorio**: [https://github.com/jsebasvgg7/GlobalScore](https://github.com/jsebasvgg7/GlobalScore)
 
 ---
+
 ## 🫱🏼‍🫲🏼 Colaborador
 
-- [FRIEND](https://www.instagram.com/brainy_bh?igsh=ZzJzZ2J1dWd6dnEw) - The Brainy 
+- [The Brainy](https://www.instagram.com/brainy_bh) — Diseño y feedback
 
 ---
+
 ## 🙏 Agradecimientos
 
-- [React](https://reactjs.org/) - Framework frontend
-- [Supabase](https://supabase.com/) - Backend as a Service
-- [Vite](https://vitejs.dev/) - Build tool
-- [Lucide Icons](https://lucide.dev/) - Iconografía
-- [Vercel](https://vercel.com/) - Hosting
-
----
+- [React](https://reactjs.org/) — Framework frontend
+- [Supabase](https://supabase.com/) — Backend as a Service
+- [Vite](https://vitejs.dev/) — Build tool
+- [Lucide Icons](https://lucide.dev/) — Iconografía
+- [Render](https://render.com/) — Hosting
+- [Bubblewrap](https://github.com/GoogleChromeLabs/bubblewrap) — TWA para Android
 
 ## 🙏 Agradecimientos Personales
 
-- [FRIEND](https://www.instagram.com/f_dixxz7?igsh=djlzM28yaHdwdTBs) - Francisco Diaz
-- [FRIEND](https://www.instagram.com/bry4n._tdc?igsh=ZDcwMXEwZ2V4emZ1) - Bryan Tuñon
-- [FRIEND](https://www.instagram.com/tmichael_27?igsh=am9kd2ZhYXk0NzB2) - Mahicol Hurtado
+- [Francisco Diaz](https://www.instagram.com/f_dixxz7)
+- [Bryan Tuñon](https://www.instagram.com/bry4n._tdc)
+- [Mahicol Hurtado](https://www.instagram.com/tmichael_27)
 
 ---
 
@@ -644,7 +464,7 @@ Usa el [issue tracker](https://github.com/tu-usuario/globalscore/issues) con:
 
 ### ⭐ Si te gusta el proyecto, dale una estrella en GitHub
 
-**Hecho por Hermanos Vega 🔝**
+**Hecho con 💜 por Hermanos Vega**
 
 [⬆ Volver arriba](#-globalscore)
 
