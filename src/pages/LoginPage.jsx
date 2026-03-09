@@ -5,8 +5,6 @@ import { supabase } from "../utils/supabaseClient";
 import LoadingDots from "../components/ComOthers/LoadingSpinner";
 import "../styles/StylesPages/Auth.css";
 
-const WELCOME_KEY = "gs_welcome_seen";
-
 export default function LoginPage() {
   const navigate = useNavigate();
 

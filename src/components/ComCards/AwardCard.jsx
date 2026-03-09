@@ -1,4 +1,3 @@
-// src/components/cardComponents/AwardCard.jsx
 import React, { useState } from 'react';
 import { Trophy, Award, Calendar, CheckCircle2, Star, Clock } from 'lucide-react';
 import '../../styles/StylesCards/AwardCard.css';

@@ -1,4 +1,3 @@
-// src/hooks/useDataLoader.js
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../utils/supabaseClient';
 

@@ -1,4 +1,3 @@
-// src/components/ComCards/MatchCard.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { CheckCircle2, Zap } from "lucide-react";
 import "../../styles/StylesCards/MatchCard.css";

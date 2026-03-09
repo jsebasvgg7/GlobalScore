@@ -1,4 +1,3 @@
-// src/components/profileComponents/ProfileHero.jsx
 import React, { useState } from 'react';
 import { Trophy, Heart, Globe, Crown } from 'lucide-react';
 import { calculateAccuracy } from '../../utils/profileUtils';

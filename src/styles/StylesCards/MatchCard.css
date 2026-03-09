@@ -1,7 +1,3 @@
-/* ================================================================
-   MATCH CARD — compacta, escudos grandes, VS central
-================================================================ */
-
 /* Wrapper: espacio para el escudo flotante */
 .mc-wrap {
   position: relative;
@@ -122,8 +118,6 @@
   padding: 0;
   font-family: inherit;
   letter-spacing: -0.02em;
-  -moz-appearance: textfield;
-  -webkit-appearance: none;
 }
 
 .mc-input::placeholder { color: #c8d0db; font-weight: 400; font-size: 16px; }

@@ -1,4 +1,3 @@
-// src/components/adminComponents/AdminDiagnosticPanel.jsx
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, CheckCircle, XCircle, RefreshCw, Database } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';

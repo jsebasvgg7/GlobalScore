@@ -1,16 +1,5 @@
-// src/components/profileComponents/OverviewTab.jsx
 import React from 'react';
-import { 
-  Trophy, 
-  Zap, 
-  Target, 
-  BarChart3, 
-  Heart, 
-  Calendar, 
-  Pill, 
-  FileText, 
-  ChevronRight 
-} from 'lucide-react';
+import { Trophy, Zap, Target, BarChart3, Heart, Calendar, Pill, FileText, ChevronRight } from 'lucide-react';
 import { calculateLevelProgress, calculateAccuracy } from '../../utils/profileUtils';
 
 export default function OverviewTab({ userData, currentUser, userRanking }) {

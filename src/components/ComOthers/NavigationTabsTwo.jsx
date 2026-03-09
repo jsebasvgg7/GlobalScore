@@ -1,4 +1,3 @@
-// src/components/NavigationTabsTwo.jsx
 import React from 'react';
 import { Trophy, Shield } from 'lucide-react';
 import '../../styles/StylesOthers/NavigationTabsTwo.css';

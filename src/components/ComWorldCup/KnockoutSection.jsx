@@ -1,4 +1,3 @@
-// src/components/KnockoutSection.jsx
 import React, { useMemo } from 'react';
 import { Trophy, Award, AlertCircle } from 'lucide-react';
 import KnockoutMatchCard from './KnockoutMatchCard';

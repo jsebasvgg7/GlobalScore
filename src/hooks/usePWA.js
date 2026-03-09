@@ -1,8 +1,7 @@
 // ============================================
-// 🎣 usePWA Hook - GlobalScore
+//  usePWA Hook 
 // ============================================
-// Hook para gestionar instalación y estado PWA
-// ============================================
+
 
 import { useState, useEffect, useCallback } from 'react';
 
@@ -14,7 +13,7 @@ export function usePWA() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   // ============================================
-  // 📱 DETECTAR SI YA ESTÁ INSTALADO
+  // DETECTAR SI YA ESTÁ INSTALADO
   // ============================================
   useEffect(() => {
     const checkInstalled = () => {
@@ -39,7 +38,7 @@ export function usePWA() {
   }, []);
 
   // ============================================
-  // 📥 CAPTURAR EVENTO DE INSTALACIÓN
+  // CAPTURAR EVENTO DE INSTALACIÓN
   // ============================================
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
@@ -61,7 +60,7 @@ export function usePWA() {
   }, []);
 
   // ============================================
-  // ✅ DETECTAR CUANDO SE INSTALA
+  // DETECTAR CUANDO SE INSTALA
   // ============================================
   useEffect(() => {
     const handleAppInstalled = () => {
@@ -79,7 +78,7 @@ export function usePWA() {
   }, []);
 
   // ============================================
-  // 🔄 DETECTAR ACTUALIZACIONES DEL SW
+  // DETECTAR ACTUALIZACIONES DEL SW
   // ============================================
   useEffect(() => {
     if (!('serviceWorker' in navigator)) return;
@@ -114,7 +113,7 @@ export function usePWA() {
   }, []);
 
   // ============================================
-  // 🌐 DETECTAR CAMBIOS EN CONEXIÓN
+  // DETECTAR CAMBIOS EN CONEXIÓN
   // ============================================
   useEffect(() => {
     const handleOnline = () => {
@@ -137,7 +136,7 @@ export function usePWA() {
   }, []);
 
   // ============================================
-  // 🚀 FUNCIÓN PARA INSTALAR LA APP
+  //  FUNCIÓN PARA INSTALAR LA APP
   // ============================================
   const install = useCallback(async () => {
     if (!deferredPrompt) {
@@ -190,7 +189,7 @@ export function usePWA() {
   }, [deferredPrompt]);
 
   // ============================================
-  // 🔄 FUNCIÓN PARA APLICAR ACTUALIZACIÓN
+  //  FUNCIÓN PARA APLICAR ACTUALIZACIÓN
   // ============================================
   const applyUpdate = useCallback(async () => {
     try {
@@ -220,7 +219,7 @@ export function usePWA() {
   }, []);
 
   // ============================================
-  // 🔄 FUNCIÓN PARA FORZAR VERIFICACIÓN DE UPDATES
+  //  FUNCIÓN PARA FORZAR VERIFICACIÓN DE UPDATES
   // ============================================
   const checkForUpdates = useCallback(async () => {
     try {
@@ -242,7 +241,7 @@ export function usePWA() {
   }, []);
 
   // ============================================
-  // 📊 RETORNAR ESTADO Y FUNCIONES
+  //  RETORNAR ESTADO Y FUNCIONES
   // ============================================
   return {
     // Estado
@@ -263,7 +262,7 @@ export function usePWA() {
 }
 
 // ============================================
-// 🎣 usePWAStatus - Hook simplificado
+//  usePWAStatus - Hook simplificado
 // ============================================
 export function usePWAStatus() {
   const [status, setStatus] = useState({

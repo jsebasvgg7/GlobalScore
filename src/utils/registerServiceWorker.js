@@ -1,8 +1,3 @@
-// src/utils/registerServiceWorker.js
-
-/**
- * Registra el Service Worker para PWA
- */
 export function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

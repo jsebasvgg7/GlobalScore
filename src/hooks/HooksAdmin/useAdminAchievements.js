@@ -1,4 +1,3 @@
-// src/hooks/adminHooks/useAdminAchievements.js
 import { supabase } from '../../utils/supabaseClient';
 
 export const useAdminAchievements = (loadData, toast) => {

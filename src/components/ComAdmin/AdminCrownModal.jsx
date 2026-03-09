@@ -1,4 +1,3 @@
-// src/components/adminComponents/AdminCrownModal.jsx
 import React, { useState } from 'react';
 import { X, Trophy, AlertCircle, CheckCircle, Calendar } from 'lucide-react';
 import '../../styles/StylesAdmin/AdminCrownModal.css';

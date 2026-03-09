@@ -1,4 +1,3 @@
-// src/hooks/adminHooks/useAdminMatches.js
 import { useState } from 'react';
 import { supabase } from '../../utils/supabaseClient';
 
@@ -30,7 +29,6 @@ export const useAdminMatches = (currentUser, loadData, toast) => {
 
   // ============================================
   // FINALIZAR PARTIDO Y ACTUALIZAR ESTADÍSTICAS
-  // ⚡ MODIFICADO: Ahora acepta advancingTeam
   // ============================================
   const handleFinishMatch = async (matchId, homeScore, awayScore, advancingTeam = null) => {
     try {

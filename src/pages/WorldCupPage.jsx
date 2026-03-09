@@ -1,4 +1,3 @@
-// src/pages/WorldCupPage.jsx
 import React, { useState, useEffect } from 'react';
 import { Trophy, Award, TrendingUp, TrendingDown, Star, Users, Target, Zap, ChevronDown, ChevronUp, Medal, User  } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';

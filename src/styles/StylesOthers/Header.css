@@ -1,12 +1,3 @@
-/* ═══════════════════════════════════════════════
-   GLOBALSCORE — Header & Navigation
-   Desktop: sidebar | Mobile: top header + pill nav
-═══════════════════════════════════════════════ */
-
-/* ── Variables ──
-   Hereda directamente las variables globales de index.css
-   para que dark/light funcionen automáticamente sin duplicar valores.
-*/
 :root {
   --sidebar-w: 72px;
 
@@ -268,7 +259,7 @@
 
 
 /* ══════════════════════════════
-   MOBILE BOTTOM NAV — floating pill
+   MOBILE BOTTOM NAV 
 ══════════════════════════════ */
 .gs-bottom-nav {
   display: none;

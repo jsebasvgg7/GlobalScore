@@ -1,5 +1,3 @@
-// src/utils/profileUtils.js
-
 export const getPredictionResult = (pred) => {
   if (!pred.matches || pred.matches.status !== 'finished') {
     return { status: 'pending', points: 0, label: 'Pendiente' };

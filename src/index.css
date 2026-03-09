@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* -------------------------------
-   GLOBAL THEME - Light & Dark
+   GLOBAL THEME 
 ---------------------------------*/
 :root, [data-theme="light"] {
   /* Light Mode Colors */
@@ -54,11 +54,6 @@
   background: linear-gradient(135deg, #2a2f3f 0%, #353b4d 100%);
   color: var(--text-primary);
 }
-
-/* ==========================================
-   AVATARES CLICKEABLES - Estilos Globales
-   Agregar estos estilos a los archivos CSS correspondientes
-========================================== */
 
 /* ==========================================
    CLASE GENERAL CLICKABLE AVATAR

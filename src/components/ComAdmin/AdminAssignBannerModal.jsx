@@ -1,4 +1,3 @@
-// src/components/ComAdmin/AdminAssignBannerModal.jsx
 import React, { useState, useEffect } from 'react';
 import { X, Search, UserCheck, Image, Check, Trash2 } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';

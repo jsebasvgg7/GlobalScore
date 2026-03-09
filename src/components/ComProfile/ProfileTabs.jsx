@@ -1,4 +1,3 @@
-// src/components/ComProfile/ProfileTabs.jsx
 import React from 'react';
 import { Grid3x3, Trophy, List, Edit2, Crown, User, Moon, Bell, Shield, Database, Info } from 'lucide-react';
 

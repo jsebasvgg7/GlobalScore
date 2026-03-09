@@ -1,4 +1,3 @@
-// src/pages/DashboardPage.jsx - FLOATING LAYOUT + ICON-ONLY TABS
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { Trophy, TrendingUp, Target, Filter, X, ArrowUpDown, ChevronRight } from "lucide-react";
 

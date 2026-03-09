@@ -1,6 +1,4 @@
-// src/utils/matchUtils.js
 import { supabase } from './supabaseClient';
-
 /**
  * Calcula los puntos de una predicción
  * @param {Object} prediction - Predicción del usuario

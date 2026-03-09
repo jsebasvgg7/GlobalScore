@@ -1,4 +1,3 @@
-// src/components/profileComponents/MonthlyChampionshipsTab.jsx
 import React from 'react';
 import { Crown, Calendar, Trophy, TrendingUp, Activity } from 'lucide-react';
 

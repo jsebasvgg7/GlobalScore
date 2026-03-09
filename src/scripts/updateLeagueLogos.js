@@ -1,4 +1,3 @@
-// src/scripts/updateLeagueLogos.js
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import { getLogoUrlByLeagueName, leagueLogoMap } from '../utils/logoHelper.js';

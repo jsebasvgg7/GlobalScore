@@ -1,4 +1,3 @@
-// src/components/WorldCupNavigationTabs.jsx
 import React from 'react';
 import { Users, Target, Award } from 'lucide-react';
 import '../../styles/StylesOthers/NavigationTabs.css';

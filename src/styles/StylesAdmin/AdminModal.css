@@ -1,9 +1,3 @@
-/* =============================================
-   ADMIN MODAL — sistema de diseño unificado
-   Clases am2-* → AdminModal / FinishMatchModal
-   Clases legacy → otros modales sin tocar
-============================================= */
-
 /* ─── Backdrop ──────────────────────────────── */
 .am2-backdrop,
 .modal-backdrop-premium {

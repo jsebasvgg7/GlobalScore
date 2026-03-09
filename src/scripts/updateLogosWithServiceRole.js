@@ -1,4 +1,3 @@
-// src/scripts/updateLogosWithServiceRole.js
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import { teamSlugMap, leagueMap } from '../utils/logoHelper.js';

@@ -1,8 +1,5 @@
 // ============================================
-// 💾 OFFLINE SYNC SERVICE - GlobalScore
-// ============================================
-// Maneja predicciones offline con IndexedDB
-// y sincronización cuando vuelve conexión
+// OFFLINE SYNC SERVICE 
 // ============================================
 
 import { supabase } from '../utils/supabaseClient';

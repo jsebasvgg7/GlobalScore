@@ -1,4 +1,3 @@
-// src/components/adminComponents/AdminMatchesList.jsx
 import React from 'react';
 import { Calendar, CheckCircle, Trash2 } from 'lucide-react';
 

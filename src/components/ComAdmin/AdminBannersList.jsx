@@ -1,4 +1,3 @@
-// src/components/ComAdmin/AdminBannersList.jsx
 import React from 'react';
 import { Trash2, UserCheck, Image } from 'lucide-react';
 

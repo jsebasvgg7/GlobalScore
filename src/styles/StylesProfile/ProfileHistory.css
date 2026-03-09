@@ -1,5 +1,5 @@
 /* ==========================================
-   HISTORY MATCH CARD - Estilo igual a MatchCard
+   HISTORY MATCH CARD 
 ========================================== */
 .history-header-compact {
   display: flex;
@@ -356,7 +356,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   word-break: break-word;
 }

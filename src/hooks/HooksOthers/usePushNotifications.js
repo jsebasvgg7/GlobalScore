@@ -1,8 +1,5 @@
 // ============================================
-// 🎣 usePushNotifications Hook - GlobalScore
-// ============================================
-// Hook para gestionar permisos y suscripciones
-// de push notifications
+//  usePushNotifications Hook 
 // ============================================
 
 import { useState, useEffect, useCallback } from 'react';
@@ -16,7 +13,7 @@ export function usePushNotifications(userId) {
   const [error, setError] = useState(null);
 
   // ============================================
-  // 🔍 VERIFICAR SOPORTE Y ESTADO INICIAL
+  //  VERIFICAR SOPORTE Y ESTADO INICIAL
   // ============================================
   useEffect(() => {
     const checkSupport = async () => {
@@ -54,7 +51,7 @@ export function usePushNotifications(userId) {
   }, [userId]);
 
   // ============================================
-  // 🙏 SOLICITAR PERMISOS
+  //  SOLICITAR PERMISOS
   // ============================================
   const requestPermission = useCallback(async () => {
     try {
@@ -77,7 +74,7 @@ export function usePushNotifications(userId) {
   }, []);
 
   // ============================================
-  // ✅ SUSCRIBIRSE A NOTIFICACIONES
+  //  SUSCRIBIRSE A NOTIFICACIONES
   // ============================================
   const subscribe = useCallback(async () => {
     if (!userId) {
@@ -108,7 +105,7 @@ export function usePushNotifications(userId) {
   }, [userId]);
 
   // ============================================
-  // 🔕 DESUSCRIBIRSE
+  //  DESUSCRIBIRSE
   // ============================================
   const unsubscribe = useCallback(async () => {
     if (!userId) {
@@ -138,7 +135,7 @@ export function usePushNotifications(userId) {
   }, [userId]);
 
   // ============================================
-  // 🔄 TOGGLE SUSCRIPCIÓN
+  //  TOGGLE SUSCRIPCIÓN
   // ============================================
   const toggleSubscription = useCallback(async () => {
     if (isSubscribed) {
@@ -149,7 +146,7 @@ export function usePushNotifications(userId) {
   }, [isSubscribed, subscribe, unsubscribe]);
 
   // ============================================
-  // 🧪 ENVIAR NOTIFICACIÓN DE PRUEBA
+  //  ENVIAR NOTIFICACIÓN DE PRUEBA
   // ============================================
   const sendTestNotification = useCallback(async () => {
     try {
@@ -168,7 +165,7 @@ export function usePushNotifications(userId) {
   }, []);
 
   // ============================================
-  // 🔄 REFRESCAR ESTADO
+  //  REFRESCAR ESTADO
   // ============================================
   const refresh = useCallback(async () => {
     if (!userId) return;
@@ -191,7 +188,7 @@ export function usePushNotifications(userId) {
   }, [userId]);
 
   // ============================================
-  // 📊 RETORNAR ESTADO Y FUNCIONES
+  //  RETORNAR ESTADO Y FUNCIONES
   // ============================================
   return {
     // Estado
@@ -217,7 +214,7 @@ export function usePushNotifications(userId) {
 }
 
 // ============================================
-// 🎣 usePushStatus - Hook simplificado
+//  usePushStatus - Hook simplificado
 // ============================================
 export function usePushStatus() {
   const [status, setStatus] = useState({

@@ -1,8 +1,5 @@
 // ============================================
-// 🔔 PUSH NOTIFICATIONS MANAGER - GlobalScore
-// ============================================
-// Gestiona suscripciones, permisos y envío
-// de push notifications con Supabase
+// PUSH NOTIFICATIONS MANAGER 
 // ============================================
 
 import { supabase } from '../utils/supabaseClient';

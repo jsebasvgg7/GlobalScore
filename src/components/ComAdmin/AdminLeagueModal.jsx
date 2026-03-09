@@ -1,4 +1,3 @@
-// src/components/AdminLeagueModal.jsx
 import React, { useState } from 'react';
 import { X, Plus, Trophy, Calendar, Award, Target } from 'lucide-react';
 import { getLogoUrlByLeagueName } from '../../utils/logoHelper.js';

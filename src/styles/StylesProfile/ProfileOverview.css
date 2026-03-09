@@ -1,5 +1,5 @@
 /* ==========================================
-   OVERVIEW TAB - Estilo lista clínica
+   OVERVIEW TAB 
 ========================================== */
 
 .tab-content-wrapper {
@@ -8,7 +8,7 @@
 }
 
 /* ==========================================
-   CLINICAL LIST - Lista tipo médico
+   CLINICAL LIST 
 ========================================== */
 
 .clinical-list {
@@ -39,7 +39,7 @@
 }
 
 /* ==========================================
-   ICON WRAPPER - Círculos de colores
+   ICON WRAPPER 
 ========================================== */
 
 .icon-wrapper {
@@ -170,7 +170,7 @@
 }
 
 /* ==========================================
-   STATS CARDS - Grid 3 columnas
+   STATS CARDS
 ========================================== */
 
 .stats-cards-grid {
@@ -210,7 +210,7 @@
 }
 
 /* ==========================================
-   LEVEL CARD - Diseño limpio
+   LEVEL CARD 
 ========================================== */
 
 .level-card-modern {

@@ -1,4 +1,3 @@
-// src/pages/ProfileSettingsPage.jsx
 import React, { useState, useEffect } from 'react';
 import {
   User, Bell, Shield, Database, Info, ChevronRight,

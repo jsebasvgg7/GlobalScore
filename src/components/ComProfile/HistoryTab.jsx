@@ -1,4 +1,3 @@
-// src/components/profileComponents/HistoryTab.jsx
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Activity, Gamepad2, CheckCircle2, XCircle, Clock, Trophy, Calendar, ArrowUpDown } from 'lucide-react';
 import { getPredictionResult } from '../../utils/profileUtils';

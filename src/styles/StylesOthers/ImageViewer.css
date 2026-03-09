@@ -1,8 +1,3 @@
-/* ==========================================
-   IMAGE VIEWER - Estilo Instagram/WhatsApp
-   Optimizado para móviles
-========================================== */
-
 .image-viewer-overlay {
   position: fixed;
   inset: 0;
@@ -23,9 +18,9 @@
   }
 }
 
-/* ==========================================
+/* ===============
    HEADER
-========================================== */
+================== */
 
 .image-viewer-header {
   position: fixed;

@@ -1,4 +1,3 @@
-// src/components/adminComponents/AdminModalsContainer.jsx
 import React from 'react';
 import AdminModal from './AdminModal';
 import AdminLeagueModal from './AdminLeagueModal';

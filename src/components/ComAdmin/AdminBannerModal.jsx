@@ -1,4 +1,3 @@
-// src/components/ComAdmin/AdminBannerModal.jsx
 import React, { useState, useRef } from 'react';
 import { X, Plus, Image, Upload, Loader } from 'lucide-react';
 import '../../styles/StylesAdmin/AdminModal.css';

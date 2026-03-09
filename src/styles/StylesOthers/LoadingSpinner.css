@@ -1,8 +1,3 @@
-/* ============================================
-   src/styles/components/LoadingSpinner.css
-   Estilos para los puntos de carga animados
-============================================ */
-
 .dots-container {
   display: inline-flex;
   align-items: center;

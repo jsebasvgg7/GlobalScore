@@ -1,10 +1,6 @@
 // ============================================
-// 🏆 PWA SERVICE - GlobalScore
+//  PWA SERVICE 
 // ============================================
-// Gestiona el registro del Service Worker,
-// actualizaciones, y comunicación con el SW
-// ============================================
-
 class PWAService {
   constructor() {
     this.registration = null;

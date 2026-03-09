@@ -1,5 +1,3 @@
-// src/components/ComOthers/UserProfileModal.jsx
-// ACTUALIZADO — hero banner dinámico
 import React, { useState, useEffect } from 'react';
 import { X, Crown, Flame, Star, Shield, Gem, Globe, Heart, Trophy, Calendar, Target, Zap, Users, TrendingUp } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';

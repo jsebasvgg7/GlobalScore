@@ -1,4 +1,3 @@
-// src/components/WorldCupAwardCard.jsx
 import React, { useState } from 'react';
 import { Award } from 'lucide-react';
 

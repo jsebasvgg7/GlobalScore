@@ -1,6 +1,5 @@
 /* ==========================================
-   PROFILE PAGE - MAIN IMPORT FILE
-   Importa todos los módulos CSS del perfil
+   PROFILE PAGE 
 ========================================== */
 
 /* Base y Variables */
@@ -14,8 +13,7 @@
 @import '../StylesProfile/ProfileHistory.css';
 
 /* ==========================================
-   DESKTOP LAYOUT - Diseño mejorado para pantallas grandes
-   Inspirado en la imagen de referencia
+   DESKTOP LAYOUT 
 ========================================== */
 
 @media (min-width: 1024px) {

@@ -1,4 +1,3 @@
-// src/hooks/useAwards.js
 import { useState, useCallback } from 'react';
 import { supabase } from '../../utils/supabaseClient';
 

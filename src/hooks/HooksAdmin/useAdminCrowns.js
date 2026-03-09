@@ -1,4 +1,3 @@
-// src/hooks/adminHooks/useAdminCrowns.js
 import { supabase } from '../../utils/supabaseClient';
 
 export const useAdminCrowns = (loadData, toast) => {

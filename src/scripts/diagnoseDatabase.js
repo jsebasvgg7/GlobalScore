@@ -1,4 +1,3 @@
-// src/scripts/diagnoseDatabase.js
 import { supabase } from '../utils/supabaseClientNode.js';
 
 async function diagnoseDatabase() {

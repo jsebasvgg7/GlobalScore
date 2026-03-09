@@ -1,4 +1,3 @@
-// src/components/profileComponents/AchievementsTab.jsx
 import React from 'react';
 import { Layers, Crown, Shield, Award, Target, Activity, Gem } from 'lucide-react';
 import { getIconEmoji, getCategoryColor } from '../../utils/profileUtils';

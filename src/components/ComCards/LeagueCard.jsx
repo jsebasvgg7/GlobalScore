@@ -1,4 +1,3 @@
-// src/components/cardComponents/LeagueCard.jsx
 import React, { useState } from 'react';
 import { Trophy, Target, Award, Star, CheckCircle2, Calendar, Shield, Clock } from 'lucide-react';
 import '../../styles/StylesCards/LeagueCard.css';

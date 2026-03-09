@@ -1,5 +1,3 @@
-// src/components/ComProfile/EditTab.jsx
-// ACTUALIZADO — campo para equipar/cambiar banner
 import React, { useState, useEffect } from 'react';
 import { Edit2, User, Trophy, Heart, Flag, Star, Save, X, Activity, Image, Check } from 'lucide-react';
 import AvatarUpload from './AvatarUpload';

@@ -1,4 +1,3 @@
-// src/components/common/PushNotificationsToggle.jsx
 import { useState } from 'react';
 import usePushNotifications from '../../hooks/usePushNotifications';
 

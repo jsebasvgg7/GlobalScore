@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Crown, Star, Trophy, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import '../../styles/StylesPages/HallOfFame.css';

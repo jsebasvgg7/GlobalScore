@@ -1,5 +1,5 @@
 /* ==========================================
-   EDIT TAB - Formulario limpio
+   EDIT TAB
 ========================================== */
 
 .edit-avatar-wrapper {
@@ -128,10 +128,9 @@
   transform: scale(0.98);
   background: var(--profile-border);
 }
-/* ══════════════════════════════════════════════════════
-   BANNER SELECTOR — añadir al FINAL de
-   src/styles/StylesProfile/ProfileEdit.css
-══════════════════════════════════════════════════════ */
+/* ════════════════════════════
+   BANNER SELECTOR 
+════════════════════════════ */
 
 /* Contenedor del selector de banners */
 .banner-selector {
@@ -269,7 +268,7 @@
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
 }
 /* ==========================================
-   AVATAR UPLOAD - Diseño limpio
+   AVATAR UPLOAD 
 ========================================== */
 
 .avatar-upload-container {

@@ -1,4 +1,3 @@
-// src/hooks/adminHooks/useAdminAwards.js
 import { supabase } from '../../utils/supabaseClient';
 
 export const useAdminAwards = (loadData, toast) => {

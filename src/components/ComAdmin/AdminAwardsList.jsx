@@ -1,4 +1,3 @@
-// src/components/adminComponents/AdminAwardsList.jsx
 import React from 'react';
 import { CheckCircle, Trash2 } from 'lucide-react';
 

@@ -1,4 +1,3 @@
-// src/hooks/adminHooks/useAdminLeagues.js
 import { supabase } from '../../utils/supabaseClient';
 
 export const useAdminLeagues = (loadData, toast) => {

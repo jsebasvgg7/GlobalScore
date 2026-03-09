@@ -1,4 +1,3 @@
-// src/pages/NotificationsPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Bell, Filter, Calendar, Trophy, CheckCircle2, 

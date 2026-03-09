@@ -1,4 +1,3 @@
-// src/scripts/listLeagues.js
 import { supabase } from '../utils/supabaseClientNode.js';
 
 async function listAllLeagues() {

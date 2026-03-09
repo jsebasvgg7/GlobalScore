@@ -1,4 +1,3 @@
-// src/pages/RankingPage.jsx — NEW LEADERBOARD DESIGN
 import React, { useState, useEffect } from 'react';
 import {
   Target, TrendingUp, Calendar, Globe, Zap,

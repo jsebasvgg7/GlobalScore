@@ -1,4 +1,3 @@
-// src/pages/StatsPage.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   BarChart3, TrendingUp, Target, Flame, Trophy, Award,

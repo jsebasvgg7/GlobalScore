@@ -1,4 +1,3 @@
-// src/scripts/updateLogosImproved.js
 import { supabase } from '../utils/supabaseClientNode.js';
 import { getLogoUrlByTeamName, teamSlugMap, leagueMap } from '../utils/logoHelper.js';
 
