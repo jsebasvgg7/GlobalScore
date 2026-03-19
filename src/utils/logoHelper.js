@@ -106,7 +106,7 @@ export const teamSlugMap = {
   'MET': 'metz',
   'RCS': 'racingstrasbourg',
   'PFC': 'paris_fc',
-  'LENS': 'racinglens',
+  'LEN': 'racinglens',
   'AJA': 'ajax',
   'BEN': 'benfica',
   'SCP': 'sporting',
