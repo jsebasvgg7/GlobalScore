@@ -533,7 +533,6 @@ export default function VegaScorePage() {
 
           </section>
         </main>
-        <Footer />
 
         {isLoading && <LoadingOverlay message="Procesando..." />}
         <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
