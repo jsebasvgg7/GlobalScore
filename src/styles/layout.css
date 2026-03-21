@@ -26,6 +26,9 @@
     margin-left: 72px;   /* ancho del sidebar */
     padding-top: 88px;   /* altura del topbar  */
   }
+  .lb-page.page-root {
+    padding-top: 24px;   /* solo aire mínimo, sin el 88px */
+  }
 
   /* Contenedor interno de cada página */
   .container,
