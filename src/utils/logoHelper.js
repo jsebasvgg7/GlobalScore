@@ -177,7 +177,7 @@ export const leagueLogoUrlMap = {
   'Supercopa de España': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/139.png',
   
   // Inglaterra
-  'Premier League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/47.png',
+  'Premier League': 'https://image-service.onefootball.com/transform?w=256&dpr=2&image=https://images.onefootball.com/icons/leagueColoredCompetition/128/9.png',
   'FA Cup': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/132.png',
   'EFL Cup': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/133.png',
   'Carabao Cup': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/133.png',
