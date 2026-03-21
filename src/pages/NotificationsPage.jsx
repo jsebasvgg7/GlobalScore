@@ -267,7 +267,7 @@ export default function NotificationsPage({ currentUser }) {
   });
 
   return (
-    <div className="notifications-page">
+    <div className="notifications-page page-root">
       {/* Header */}
       <div className="notifications-header">
         <div className="header-title-section">

@@ -10,6 +10,7 @@
   margin-bottom: 14px;
   overflow: visible;
   animation: tabs-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  justify-content: center;
 }
 
 /* Grupos también deben ser visibles */

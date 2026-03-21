@@ -253,7 +253,7 @@ export default function StatsPage({ currentUser }) {
   }
 
   return (
-    <div className="stats-page">
+    <div className="stats-page page-root">
       <div className="stats-page-container">
         {/* Header */}
         <div className="stats-page-header">

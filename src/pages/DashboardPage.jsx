@@ -1,325 +1,237 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import { Trophy, TrendingUp, Target, Filter, X, ArrowUpDown, ChevronRight } from "lucide-react";
+import {
+  Trophy, TrendingUp, Target, Filter, X,
+  ArrowUpDown, ChevronRight, Zap, Flame, BarChart3
+} from "lucide-react";
 
 // Components
-import MatchCard from "../components/ComCards/MatchCard";
-import LeagueCard from "../components/ComCards/LeagueCard";
-import AwardCard from "../components/ComCards/AwardCard";
-import NavigationTabs from "../components/ComOthers/NavigationTabs";
-import ProfileSettings from "./ProfileSettingsPage"; 
-import RankingPage from "./RankingPage";
-import Footer from "../components/ComOthers/Footer";
-import AdminPage from "./AdminPage";
-import NotificationsPage from "./NotificationsPage";
-import StatsPage from "./StatsPage";
+import MatchCard       from "../components/ComCards/MatchCard";
+import LeagueCard      from "../components/ComCards/LeagueCard";
+import AwardCard       from "../components/ComCards/AwardCard";
+import NavigationTabs  from "../components/ComOthers/NavigationTabs";
+import DashboardSidebar from "../components/ComOthers/DashboardSidebar";
+import Footer          from "../components/ComOthers/Footer";
 import { PageLoader, LoadingOverlay } from "../components/ComOthers/LoadingStates";
 import { ToastContainer, useToast } from "../components/ComOthers/Toast";
 
-// Custom Hooks
+// Hooks
 import { useDataLoader } from "../hooks/useDataLoader";
-import { useMatches } from "../hooks/HooksCards/useMatches";
-import { useLeagues } from "../hooks/HooksCards/useLeagues";
-import { useAwards } from "../hooks/HooksCards/useAwards";
+import { useMatches }    from "../hooks/HooksCards/useMatches";
+import { useLeagues }    from "../hooks/HooksCards/useLeagues";
+import { useAwards }     from "../hooks/HooksCards/useAwards";
 
 // Styles
 import "../styles/StylesPages/DashboardPage.css";
 
-export default function VegaScorePage() {
-  // ========== STATE MANAGEMENT ==========
-  const [showProfile, setShowProfile] = useState(false);
-  const [showRanking, setShowRanking] = useState(false);
-  const [leagueFilter, setLeagueFilter] = useState('all');
-  const [showAdmin, setShowAdmin] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [showStats, setShowStats] = useState(false);
-  const [activeTab, setActiveTab] = useState('matches');
-  const [showFilters, setShowFilters] = useState(false);
-  const [showSort, setShowSort] = useState(false);
-  const [sortOption, setSortOption] = useState('date-asc');
-  
-  const sortRef = useRef(null);
-  const toast = useToast();
+// ── Helpers ──────────────────────────────────────────────────────
+const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
+const acc = (correct, total) =>
+  total > 0 ? Math.round((correct / total) * 100) : 0;
 
-  // ========== CUSTOM HOOKS ==========
+export default function DashboardPage() {
+  const [activeTab,    setActiveTab]    = useState("matches");
+  const [leagueFilter, setLeagueFilter] = useState("all");
+  const [showFilters,  setShowFilters]  = useState(false);
+  const [showSort,     setShowSort]     = useState(false);
+  const [sortOption,   setSortOption]   = useState("date-asc");
+
+  const sortRef = useRef(null);
+  const toast   = useToast();
+
+  // ── Data ──────────────────────────────────────────────────────
   const {
-    currentUser,
-    users,
-    matches,
-    leagues,
-    awards,
-    loading,
-    error,
-    updateUsers,
-    updateMatches,
-    updateLeagues,
-    updateAwards
+    currentUser, users, matches, leagues, awards,
+    loading, error,
+    updateMatches, updateLeagues, updateAwards,
   } = useDataLoader();
 
-  const {
-    loading: matchesLoading,
-    makePrediction,
-    addMatch,
-    finishMatch
-  } = useMatches(currentUser);
+  const { loading: matchesLoading, makePrediction }         = useMatches(currentUser);
+  const { loading: leaguesLoading, makeLeaguePrediction }   = useLeagues(currentUser);
+  const { loading: awardsLoading,  makeAwardPrediction }    = useAwards(currentUser);
 
-  const {
-    loading: leaguesLoading,
-    makeLeaguePrediction,
-    addLeague,
-    finishLeague: finishLeagueHook
-  } = useLeagues(currentUser);
-
-  const {
-    loading: awardsLoading,
-    makeAwardPrediction,
-    addAward,
-    finishAward: finishAwardHook
-  } = useAwards(currentUser);
-
-  // ========== LEAGUE CATEGORIES ==========
+  // ── League categories ─────────────────────────────────────────
   const leagueCategories = [
-    { id: 'all', name: 'Todos', icon: '🌍', leagues: [] },
-    { id: 'europe', name: 'Europa', icon: '🏆', leagues: ['Champions League', 'Europa League', 'Conference League'] },
-    { id: 'england', name: 'Inglaterra', icon: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', leagues: ['Premier League', 'Championship', 'FA Cup', 'EFL Cup'] },
-    { id: 'spain', name: 'España', icon: '🇪🇸', leagues: ['La Liga', 'Copa del Rey', 'Supercopa'] },
-    { id: 'italy', name: 'Italia', icon: '🇮🇹', leagues: ['Serie A', 'Coppa Italia', 'Supercoppa'] },
-    { id: 'germany', name: 'Alemania', icon: '🇩🇪', leagues: ['Bundesliga', 'DFB Pokal'] },
-    { id: 'france', name: 'Francia', icon: '🇫🇷', leagues: ['Ligue 1', 'Coupe de France', 'Coupe de la Ligue'] },
-    { id: 'southamerica', name: 'Sudamérica', icon: '🌎', leagues: ['Copa Libertadores', 'Copa Sudamericana'] },
+    { id: "all",          name: "Todos",       icon: "🌍", leagues: [] },
+    { id: "europe",       name: "Europa",      icon: "🏆", leagues: ["Champions League","Europa League","Conference League"] },
+    { id: "england",      name: "Inglaterra",  icon: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", leagues: ["Premier League","Championship","FA Cup","EFL Cup"] },
+    { id: "spain",        name: "España",      icon: "🇪🇸", leagues: ["La Liga","Copa del Rey","Supercopa"] },
+    { id: "italy",        name: "Italia",      icon: "🇮🇹", leagues: ["Serie A","Coppa Italia","Supercoppa"] },
+    { id: "germany",      name: "Alemania",    icon: "🇩🇪", leagues: ["Bundesliga","DFB Pokal"] },
+    { id: "france",       name: "Francia",     icon: "🇫🇷", leagues: ["Ligue 1","Coupe de France","Coupe de la Ligue"] },
+    { id: "southamerica", name: "Sudamérica",  icon: "🌎", leagues: ["Copa Libertadores","Copa Sudamericana"] },
   ];
 
-  // ========== CLOSE SORT ON OUTSIDE CLICK ==========
+  // ── Close sort on outside click ───────────────────────────────
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (sortRef.current && !sortRef.current.contains(event.target)) {
-        setShowSort(false);
-      }
+    if (!showSort) return;
+    const handler = (e) => {
+      if (sortRef.current && !sortRef.current.contains(e.target)) setShowSort(false);
     };
-
-    if (showSort) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, [showSort]);
 
-  // ========== HANDLERS ==========
-  const handleBackToHome = () => {
-    setShowProfile(false);
-    setShowRanking(false);
-    setShowAdmin(false);
-    setShowNotifications(false);
-    setShowStats(false);
-  };
-
+  // ── Handlers ─────────────────────────────────────────────────
   const handleMakePrediction = async (matchId, homeScore, awayScore, advancingTeam = null) => {
-    const match = matches.find(m => m.id === matchId);
-    if (match?.deadline) {
-      const now = new Date();
-      const deadline = new Date(match.deadline);
-      if (now > deadline) {
-        toast.warning("Plazo expirado");
-        return;
-      }
+    const match = matches.find((m) => m.id === matchId);
+    if (match?.deadline && new Date() > new Date(match.deadline)) {
+      toast.warning("Plazo expirado");
+      return;
     }
-
-    await makePrediction(
-      matchId,
-      homeScore,
-      awayScore,
-      advancingTeam,
-      (matchList) => {
-        updateMatches(matchList);
-        toast.success("Guardado 🎯");
-      },
-      (error) => toast.error(`Error: ${error}`)
+    await makePrediction(matchId, homeScore, awayScore, advancingTeam,
+      (list) => { updateMatches(list); toast.success("Guardado 🎯"); },
+      (err)  => toast.error(`Error: ${err}`)
     );
   };
 
   const handleMakeLeaguePrediction = async (leagueId, champion, topScorer, topAssist, mvp) => {
-    await makeLeaguePrediction(
-      leagueId,
-      champion,
-      topScorer,
-      topAssist,
-      mvp,
-      (leagueList) => {
-        updateLeagues(leagueList);
-        toast.success("Guardado 🏆");
-      },
-      (error) => toast.error(`Error: ${error}`)
+    await makeLeaguePrediction(leagueId, champion, topScorer, topAssist, mvp,
+      (list) => { updateLeagues(list); toast.success("Guardado 🏆"); },
+      (err)  => toast.error(`Error: ${err}`)
     );
   };
 
-  const handleMakeAwardPrediction = async (awardId, predictedWinner) => {
-    await makeAwardPrediction(
-      awardId,
-      predictedWinner,
-      (awardList) => {
-        updateAwards(awardList);
-        toast.success("Guardado 🏆");
-      },
-      (error) => toast.error(`Error: ${error}`)
+  const handleMakeAwardPrediction = async (awardId, winner) => {
+    await makeAwardPrediction(awardId, winner,
+      (list) => { updateAwards(list); toast.success("Guardado 🏆"); },
+      (err)  => toast.error(`Error: ${err}`)
     );
   };
 
-
-
-  // ========== FILTERED & SORTED MATCHES ==========
+  // ── Filtered matches ──────────────────────────────────────────
   const filteredMatches = useMemo(() => {
     let pending = matches.filter((m) => m.status === "pending");
-
-    if (leagueFilter !== 'all') {
-      const category = leagueCategories.find(c => c.id === leagueFilter);
-      if (category) {
-        pending = pending.filter(match => 
-          category.leagues.some(league => 
-            match.league.toLowerCase().includes(league.toLowerCase())
-          )
+    if (leagueFilter !== "all") {
+      const cat = leagueCategories.find((c) => c.id === leagueFilter);
+      if (cat) {
+        pending = pending.filter((m) =>
+          cat.leagues.some((l) => m.league?.toLowerCase().includes(l.toLowerCase()))
         );
       }
     }
-
     return pending.sort((a, b) => {
-      const dateA = new Date(`${a.date}T${a.time}`);
-      const dateB = new Date(`${b.date}T${b.time}`);
-      
+      const da = new Date(`${a.date}T${a.time}`);
+      const db = new Date(`${b.date}T${b.time}`);
       switch (sortOption) {
-        case 'date-asc':  return dateA - dateB;
-        case 'date-desc': return dateB - dateA;
-        case 'league-asc':  return a.league.localeCompare(b.league);
-        case 'league-desc': return b.league.localeCompare(a.league);
-        default: return dateA - dateB;
+        case "date-desc":   return db - da;
+        case "league-asc":  return (a.league || "").localeCompare(b.league || "");
+        case "league-desc": return (b.league || "").localeCompare(a.league || "");
+        default:            return da - db;
       }
     });
   }, [matches, leagueFilter, sortOption]);
 
-    // ========== AGRUPAR POR FECHA ==========
+  // ── Group by date ─────────────────────────────────────────────
   const groupedMatches = useMemo(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    const groups = {};
+    const today    = new Date(); today.setHours(0,0,0,0);
+    const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+    const groups   = {};
     filteredMatches.forEach((m) => {
-      const matchDate = new Date(m.date + 'T00:00:00');
-      let label;
-      if (matchDate.getTime() === today.getTime()) {
-        label = 'Hoy';
-      } else if (matchDate.getTime() === tomorrow.getTime()) {
-        label = 'Mañana';
-      } else {
-        label = matchDate.toLocaleDateString('es-ES', {
-          weekday: 'long', day: 'numeric', month: 'long'
-        });
-      }
+      const d = new Date(m.date + "T00:00:00");
+      let label =
+        d.getTime() === today.getTime()    ? "Hoy" :
+        d.getTime() === tomorrow.getTime() ? "Mañana" :
+        d.toLocaleDateString("es-ES", { weekday:"long", day:"numeric", month:"long" });
       if (!groups[label]) groups[label] = [];
       groups[label].push(m);
     });
     return groups;
   }, [filteredMatches]);
 
-  // ========== RENDER ==========
-  if (loading) return <PageLoader />;
+  // ── Quick stats ───────────────────────────────────────────────
+  const quickStats = useMemo(() => {
+    if (!currentUser) return [];
+    const accuracy = acc(currentUser.correct, currentUser.predictions);
+    return [
+      {
+        icon: Zap,
+        label: "Puntos totales",
+        value: fmt(currentUser.points || 0),
+        sub: `+${fmt(currentUser.monthly_points || 0)} este mes`,
+        accent: "#60519b",
+        bg: "rgba(96,81,155,0.1)",
+      },
+      {
+        icon: Target,
+        label: "Predicciones",
+        value: fmt(currentUser.predictions || 0),
+        sub: `${accuracy}% de precisión`,
+        accent: "#1D9E75",
+        bg: "rgba(29,158,117,0.1)",
+      },
+      {
+        icon: Flame,
+        label: "Racha actual",
+        value: currentUser.current_streak || 0,
+        sub: `Récord: ${currentUser.best_streak || 0}`,
+        accent: "#f59e0b",
+        bg: "rgba(245,158,11,0.1)",
+      },
+    ];
+  }, [currentUser]);
 
-  if (error) {
-    return (
-      <div className="centered">
-        <div>Error: {error}</div>
-      </div>
-    );
-  }
-
-  if (!currentUser) {
-    return (
-      <div className="centered">
-        <div>Error: Usuario no encontrado</div>
-      </div>
-    );
-  }
-
-  if (showProfile) {
-    return (
-      <>
-        <ProfileSettings currentUser={currentUser} onBack={() => setShowProfile(false)} />
-        <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
-      </>
-    );
-  }
-
-  if (showRanking) {
-    return (
-      <>
-        <RankingPage
-          currentUser={currentUser}
-          users={users.sort((a, b) => b.points - a.points)}
-          onBack={() => setShowRanking(false)}
-        />
-        <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
-      </>
-    );
-  }
-
-  if (showAdmin) {
-    return (
-      <>
-        <AdminPage
-          currentUser={currentUser}
-          users={users.sort((a, b) => b.points - a.points)}
-          onBack={() => setShowAdmin(false)}
-        />
-        <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
-      </>
-    );
-  }
-
-  if (showNotifications) {
-    return (
-      <>
-        <NotificationsPage currentUser={currentUser} onBack={() => setShowNotifications(false)} />
-        <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
-      </>
-    );
-  }
-
-  if (showStats) {
-    return (
-      <>
-        <StatsPage currentUser={currentUser} onBack={() => setShowStats(false)} />
-        <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
-      </>
-    );
-  }
-
-  const sortedUsers = [...users].sort((a, b) => b.points - a.points);
+  // ── Derived counts ────────────────────────────────────────────
   const activeLeagues = leagues.filter((l) => l.status === "active");
-  const activeAwards = awards.filter((a) => a.status === "active");
-  const isLoading = matchesLoading || leaguesLoading || awardsLoading;
+  const activeAwards  = awards.filter((a) => a.status === "active");
+  const isLoading     = matchesLoading || leaguesLoading || awardsLoading;
+  const firstName     = currentUser?.name?.split(" ")[0] || "Jugador";
+
+  // ── Early returns ─────────────────────────────────────────────
+  if (loading) return <PageLoader />;
+  if (error)   return <div className="centered">Error: {error}</div>;
+  if (!currentUser) return <div className="centered">Usuario no encontrado</div>;
 
   return (
     <>
-      <div className="vega-root">
-        <main className="container">
-          <section className="main-content-full">
+      <div className="vega-root page-root">
+        <div className="db-layout">
 
-            {/* ── Tabs + controles en la misma fila ── */}
+          {/* ════════════════════════════════
+              CONTENIDO PRINCIPAL
+          ════════════════════════════════ */}
+          <main className="db-main">
+
+            {/* ── Greeting + stats strip ── */}
+            <div className="db-greeting-section">
+              <div className="db-greeting"><div>
+                </div>
+              </div>
+
+              {/* Stats chips */}
+              <div className="db-stats-strip">
+                {quickStats.map(({ icon: Icon, label, value, sub, accent, bg }) => (
+                  <div className="db-stat-chip" key={label}>
+                    <div
+                      className="db-stat-chip-icon"
+                      style={{ background: bg, color: accent }}
+                    >
+                      <Icon size={16} />
+                    </div>
+                    <div className="db-stat-chip-body">
+                      <span className="db-stat-chip-val">{value}</span>
+                      <span className="db-stat-chip-lbl">{label}</span>
+                      <span className="db-stat-chip-sub">{sub}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ── Tabs ── */}
             <NavigationTabs
               activeTab={activeTab}
               onTabChange={setActiveTab}
-              onSortClick={activeTab === 'matches' ? () => setShowSort(!showSort) : null}
-              onFilterClick={activeTab === 'matches' ? () => setShowFilters(true) : null}
+              onSortClick={activeTab === "matches" ? () => setShowSort(!showSort) : null}
+              onFilterClick={activeTab === "matches" ? () => setShowFilters(true) : null}
               sortActive={showSort}
             />
 
-            {/* ══════════ PARTIDOS ══════════ */}
-            {activeTab === 'matches' && (
+            {/* ════ PARTIDOS ════ */}
+            {activeTab === "matches" && (
               <div className="matches-section-premium">
 
-                {/* Sort dropdown — anclado al botón del tab */}
-                <div style={{ position: 'relative' }} ref={sortRef}>
+                {/* Sort dropdown */}
+                <div style={{ position:"relative" }} ref={sortRef}>
                   {showSort && (
                     <>
                       <div className="sort-modal-backdrop" onClick={() => setShowSort(false)} />
@@ -330,17 +242,16 @@ export default function VegaScorePage() {
                         </div>
                         <div className="sort-options">
                           {[
-                            { key: 'date-asc',    label: 'Fecha: Más próximos', icon: <TrendingUp size={14} /> },
-                            { key: 'date-desc',   label: 'Fecha: Más lejanos',  icon: <TrendingUp size={14} style={{ transform: 'rotate(180deg)' }} /> },
-                            { key: 'league-asc',  label: 'Liga: A-Z',           icon: <Trophy size={14} /> },
-                            { key: 'league-desc', label: 'Liga: Z-A',           icon: <Trophy size={14} /> },
-                          ].map(({ key, label, icon }) => (
+                            { key:"date-asc",    label:"Fecha: Más próximos" },
+                            { key:"date-desc",   label:"Fecha: Más lejanos" },
+                            { key:"league-asc",  label:"Liga: A-Z" },
+                            { key:"league-desc", label:"Liga: Z-A" },
+                          ].map(({ key, label }) => (
                             <button
                               key={key}
-                              className={`sort-option ${sortOption === key ? 'active' : ''}`}
+                              className={`sort-option ${sortOption === key ? "active" : ""}`}
                               onClick={() => { setSortOption(key); setShowSort(false); }}
                             >
-                              <div className="sort-option-icon">{icon}</div>
                               <span className="sort-option-text">{label}</span>
                             </button>
                           ))}
@@ -350,9 +261,7 @@ export default function VegaScorePage() {
                   )}
                 </div>
 
-
-
-                {/* Panel lateral de filtros */}
+                {/* Panel de filtros */}
                 {showFilters && (
                   <>
                     <div className="filters-modal-backdrop" onClick={() => setShowFilters(false)} />
@@ -362,8 +271,8 @@ export default function VegaScorePage() {
                           <Filter size={22} />
                           <h3>Filtrar</h3>
                         </div>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                          <button className="filters-reset-btn" onClick={() => setLeagueFilter('all')}>
+                        <div style={{ display:"flex", gap:"8px" }}>
+                          <button className="filters-reset-btn" onClick={() => setLeagueFilter("all")}>
                             Reset
                           </button>
                           <button className="filters-close-btn" onClick={() => setShowFilters(false)}>
@@ -371,42 +280,40 @@ export default function VegaScorePage() {
                           </button>
                         </div>
                       </div>
-
                       <div className="filters-modal-body">
                         <div className="filter-category">
                           <div className="filter-category-header">
                             <span className="filter-category-title">Categoría</span>
                             <button className="view-all-link">
-                              Ver todas <ChevronRight size={12} style={{ display: 'inline', verticalAlign: 'middle' }} />
+                              Ver todas <ChevronRight size={12} style={{ display:"inline", verticalAlign:"middle" }} />
                             </button>
                           </div>
                           <div className="filter-pills">
-                            {leagueCategories.slice(0, 7).map((category) => (
+                            {leagueCategories.slice(0, 7).map((cat) => (
                               <button
-                                key={category.id}
-                                className={`filter-pill ${leagueFilter === category.id ? 'active' : ''}`}
-                                onClick={() => { setLeagueFilter(category.id); setShowFilters(false); }}
+                                key={cat.id}
+                                className={`filter-pill ${leagueFilter === cat.id ? "active" : ""}`}
+                                onClick={() => { setLeagueFilter(cat.id); setShowFilters(false); }}
                               >
-                                <span className="filter-pill-icon">{category.icon}</span>
-                                <span>{category.name}</span>
+                                <span className="filter-pill-icon">{cat.icon}</span>
+                                <span>{cat.name}</span>
                               </button>
                             ))}
                           </div>
                         </div>
-
                         <div className="filter-category">
                           <div className="filter-category-header">
                             <span className="filter-category-title">Más regiones</span>
                           </div>
                           <div className="filter-pills">
-                            {leagueCategories.slice(7).map((category) => (
+                            {leagueCategories.slice(7).map((cat) => (
                               <button
-                                key={category.id}
-                                className={`filter-pill ${leagueFilter === category.id ? 'active' : ''}`}
-                                onClick={() => { setLeagueFilter(category.id); setShowFilters(false); }}
+                                key={cat.id}
+                                className={`filter-pill ${leagueFilter === cat.id ? "active" : ""}`}
+                                onClick={() => { setLeagueFilter(cat.id); setShowFilters(false); }}
                               >
-                                <span className="filter-pill-icon">{category.icon}</span>
-                                <span>{category.name}</span>
+                                <span className="filter-pill-icon">{cat.icon}</span>
+                                <span>{cat.name}</span>
                               </button>
                             ))}
                           </div>
@@ -416,34 +323,33 @@ export default function VegaScorePage() {
                   </>
                 )}
 
-                {/* Chip de filtro activo */}
-                {leagueFilter !== 'all' && (
+                {/* Chip filtro activo */}
+                {leagueFilter !== "all" && (
                   <div className="active-filter-bar">
                     <div className="active-filter-chip">
                       <span className="filter-icon">
-                        {leagueCategories.find(c => c.id === leagueFilter)?.icon}
+                        {leagueCategories.find((c) => c.id === leagueFilter)?.icon}
                       </span>
-                      <span>{leagueCategories.find(c => c.id === leagueFilter)?.name}</span>
-                      <button className="clear-filter-btn" onClick={() => setLeagueFilter('all')}>
+                      <span>{leagueCategories.find((c) => c.id === leagueFilter)?.name}</span>
+                      <button className="clear-filter-btn" onClick={() => setLeagueFilter("all")}>
                         <X size={12} />
                       </button>
                     </div>
                   </div>
                 )}
 
-                {/* Lista de partidos flotando */}
+                {/* Lista de partidos */}
                 {Object.keys(groupedMatches).length === 0 ? (
                   <div className="matches-container">
                     <div className="matches-empty-state">
                       <div className="matches-empty-icon">⚽</div>
                       <div className="matches-empty-text">
-                        {leagueFilter === 'all'
-                          ? 'Sin partidos'
-                          : `Sin partidos de ${leagueCategories.find(c => c.id === leagueFilter)?.name}`
-                        }
+                        {leagueFilter === "all"
+                          ? "Sin partidos pendientes"
+                          : `Sin partidos de ${leagueCategories.find((c) => c.id === leagueFilter)?.name}`}
                       </div>
-                      {leagueFilter !== 'all' && (
-                        <button className="show-all-btn" onClick={() => setLeagueFilter('all')}>
+                      {leagueFilter !== "all" && (
+                        <button className="show-all-btn" onClick={() => setLeagueFilter("all")}>
                           Ver todos
                         </button>
                       )}
@@ -458,7 +364,7 @@ export default function VegaScorePage() {
                           <MatchCard
                             key={m.id}
                             match={m}
-                            userPred={m.predictions?.find((p) => p.user_id === currentUser?.id)}
+                            userPred={m.predictions?.find((p) => p.user_id === currentUser.id)}
                             onPredict={handleMakePrediction}
                           />
                         ))}
@@ -469,8 +375,8 @@ export default function VegaScorePage() {
               </div>
             )}
 
-            {/* ══════════ LIGAS ══════════ */}
-            {activeTab === 'leagues' && (
+            {/* ════ LIGAS ════ */}
+            {activeTab === "leagues" && (
               <div className="matches-section-premium">
                 <div className="matches-header-premium">
                   <div className="matches-badge">
@@ -479,7 +385,6 @@ export default function VegaScorePage() {
                     <span className="matches-badge-text"> disponibles</span>
                   </div>
                 </div>
-
                 <div className="matches-container">
                   {leagues.length === 0 ? (
                     <div className="matches-empty-state">
@@ -491,7 +396,9 @@ export default function VegaScorePage() {
                       <LeagueCard
                         key={league.id}
                         league={league}
-                        userPrediction={league.league_predictions?.find((p) => p.user_id === currentUser?.id)}
+                        userPrediction={league.league_predictions?.find(
+                          (p) => p.user_id === currentUser.id
+                        )}
                         onPredict={handleMakeLeaguePrediction}
                       />
                     ))
@@ -500,8 +407,8 @@ export default function VegaScorePage() {
               </div>
             )}
 
-            {/* ══════════ PREMIOS ══════════ */}
-            {activeTab === 'awards' && (
+            {/* ════ PREMIOS ════ */}
+            {activeTab === "awards" && (
               <div className="matches-section-premium">
                 <div className="matches-header-premium">
                   <div className="matches-badge">
@@ -510,7 +417,6 @@ export default function VegaScorePage() {
                     <span className="matches-badge-text"> disponibles</span>
                   </div>
                 </div>
-
                 <div className="matches-container">
                   {awards.length === 0 ? (
                     <div className="matches-empty-state">
@@ -522,7 +428,9 @@ export default function VegaScorePage() {
                       <AwardCard
                         key={award.id}
                         award={award}
-                        userPrediction={award.award_predictions?.find((p) => p.user_id === currentUser?.id)}
+                        userPrediction={award.award_predictions?.find(
+                          (p) => p.user_id === currentUser.id
+                        )}
                         onPredict={handleMakeAwardPrediction}
                       />
                     ))
@@ -531,8 +439,18 @@ export default function VegaScorePage() {
               </div>
             )}
 
-          </section>
-        </main>
+            <Footer />
+          </main>
+
+          {/* ════════════════════════════════
+              SIDEBAR DERECHO
+          ════════════════════════════════ */}
+          <DashboardSidebar
+            currentUser={currentUser}
+            users={users}
+          />
+
+        </div>
 
         {isLoading && <LoadingOverlay message="Procesando..." />}
         <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />

@@ -642,7 +642,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
   const currentMobileTab = isMobileTabView ? mobileView.replace('tab:', '') : null;
 
   return (
-    <div className="psp-page">
+    <div className="psp-page page-root">
 
       {/* ══════════════════════════════════
           MOBILE VIEW

@@ -428,7 +428,7 @@ const [predictions, setPredictions] = useState({
 
   return (
     <>
-      <div className="worldcup-page">
+      <div className="worldcup-page page-root">
         <div className="worldcup-container">
           {/* Header */}
           <div className="worldcup-header">

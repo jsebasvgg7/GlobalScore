@@ -1,107 +1,203 @@
-/* Wrapper: espacio para el escudo flotante */
+/* ================================================================
+   MatchCard — estilo Boardto
+   Estructura: mc-wrap > mc-card > (mc-league-chip | mc-dot/mc-zap)
+                                    mc-body (5 cols)
+                                    mc-footer
+================================================================ */
+
+/* ── Wrapper ── */
 .mc-wrap {
-  position: relative;
-  padding-top: 32px;
-  max-width: 280px;
-  padding-bottom: 16px;
-  margin: 0 auto;
   width: 100%;
+  max-width: 260px;
+  margin: 0 auto;
 }
-
-/* ── Escudo liga flotando ── */
-.mc-league-float {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  width: 64px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  filter:
-    drop-shadow(0 6px 14px rgba(0,0,0,0.18))
-    drop-shadow(0 2px 4px rgba(0,0,0,0.10));
-}
-
-.mc-league-img {
-  width: 56px;
-  height: 56px;
-  object-fit: contain;
-}
-
-.mc-league-emoji { font-size: 46px; line-height: 1; }
 
 /* ── Card ── */
 .mc-card {
   position: relative;
-  background: #f0f1f7;
-  border: 1px solid rgba(0,0,0,0.07);
-  border-radius: 22px;
-  box-shadow:
-    0 1px 3px rgba(0,0,0,0.05),
-    0 6px 20px rgba(0,0,0,0.08);
-  padding: 35px 20px 0;
+  background: #ffffff;
+  border: 1px solid #eef0f5;
+  border-radius: 18px;
+  padding: 14px 16px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   overflow: visible;
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  transition: box-shadow 0.22s ease, transform 0.22s ease;
 }
 
 .mc-card:hover {
   transform: translateY(-2px);
-  box-shadow:
-    0 3px 8px rgba(0,0,0,0.08),
-    0 14px 32px rgba(0,0,0,0.11);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Chip de liga — top left ── */
+.mc-league-chip {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  width: 30px;
+  height: 30px;
+  background: #f0f2f8;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.mc-league-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.mc-league-emoji {
+  font-size: 17px;
+  line-height: 1;
 }
 
 /* ── Dot estado — top right ── */
 .mc-dot {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 9px;
-  height: 9px;
+  top: 16px;
+  right: 14px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  transition: background 0.35s, box-shadow 0.35s;
+  transition: background 0.3s, box-shadow 0.3s;
 }
 
-.mc-dot--expired { background: #f91616; box-shadow: 0 0 0 3px rgba(249, 22, 22, 0.2); }
-.mc-dot--saving  { background: #3ef50b; box-shadow: 0 0 0 3px rgba(101, 245, 11, 0.2); animation: mc-pulse 1s ease-in-out infinite; }
-.mc-dot--saved   { background: #60a5fa; box-shadow: 0 0 0 3px rgba(96,165,250,0.22); }
-.mc-dot--pending { background: #d1d5db; box-shadow: 0 0 0 3px rgba(209,213,219,0.2); }
+.mc-dot--expired { background: #f87171; box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2); }
+.mc-dot--saving  { background: #fbbf24; box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);  animation: mc-pulse 1s ease-in-out infinite; }
+.mc-dot--saved   { background: #60a5fa; box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2); }
+.mc-dot--pending { background: #d1d5db; box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.2); }
 
 @keyframes mc-pulse {
-  0%,100% { transform: scale(1);    box-shadow: 0 0 0 3px rgba(245,158,11,0.2); }
-  50%      { transform: scale(1.25); box-shadow: 0 0 0 5px rgba(245,158,11,0.1); }
+  0%, 100% { transform: scale(1);    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2); }
+  50%       { transform: scale(1.3); box-shadow: 0 0 0 5px rgba(251, 191, 36, 0.1); }
 }
 
-/* ── Cuerpo: 5 columnas: box · team · vs · team · box ── */
+/* Espadas cruzadas knockout */
+.mc-swords-icon {
+  position: absolute;
+  top: 11px;
+  right: 11px;
+  width: 17px;
+  height: 17px;
+  color: #ef4444;
+  filter: drop-shadow(0 1px 3px rgba(239, 68, 68, 0.45));
+  animation: mc-swords-clash 2.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes mc-swords-clash {
+  0%,  90%, 100% { transform: scale(1)    rotate(0deg);   opacity: 1; }
+  92%             { transform: scale(1.2)  rotate(-8deg);  opacity: 0.9; }
+  95%             { transform: scale(1.25) rotate(8deg);   opacity: 1; }
+  97%             { transform: scale(1.15) rotate(-4deg);  opacity: 0.95; }
+}
+
+/* ── Cuerpo: 5 columnas ── */
 .mc-body {
   display: grid;
-  grid-template-columns: 1fr 42px 28px 42px 1fr;
+  grid-template-columns: 1fr 40px 26px 40px 1fr;
   align-items: center;
   gap: 4px;
+  padding-top: 30px; /* espacio para el chip de liga */
+}
+
+/* ── Equipo: escudo + abreviación ── */
+.mc-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.mc-team--tap { cursor: pointer; }
+
+.mc-shield-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+
+.mc-team--tap:hover  .mc-shield-wrap { transform: scale(1.08) translateY(-2px); }
+.mc-team--tap:active .mc-shield-wrap { transform: scale(0.94); }
+
+.mc-shield-img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.mc-shield-emoji {
+  font-size: 42px;
+  line-height: 1;
+}
+
+/* Glow al seleccionar advancing */
+.mc-team--on .mc-shield-img {
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.55));
+}
+
+/* Badge advancing */
+.mc-adv-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 15px;
+  height: 15px;
+  background: #22c55e;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 5px rgba(34, 197, 94, 0.4);
+  animation: mc-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes mc-pop {
+  from { opacity: 0; transform: scale(0.3); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Abreviación del equipo — sin nombre largo */
+.mc-team-abbr {
+  font-size: 10px;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.07em;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 /* ── Score boxes ── */
 .mc-box {
-  width: 42px;
-  height: 46px;
-  background: #ffffff;
+  width: 40px;
+  height: 44px;
+  background: #f8fafc;
   border: 1.5px solid #e2e8f0;
-  border-radius: 11px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: border-color 0.2s, box-shadow 0.2s;
   flex-shrink: 0;
 }
 
 .mc-box:not(.mc-box--done):focus-within {
-  border-color: #94a3b8;
-  box-shadow: 0 0 0 3px rgba(148,163,184,0.15);
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.2);
 }
 
 .mc-input {
@@ -110,168 +206,87 @@
   border: none;
   background: transparent;
   text-align: center;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
   color: #1e293b;
   outline: none;
-  border-radius: 11px;
+  border-radius: 10px;
   padding: 0;
   font-family: inherit;
   letter-spacing: -0.02em;
 }
 
-.mc-input::placeholder { color: #c8d0db; font-weight: 400; font-size: 16px; }
+.mc-input::placeholder {
+  color: #cbd5e1;
+  font-weight: 400;
+  font-size: 15px;
+}
+
 .mc-input::-webkit-inner-spin-button,
-.mc-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-.mc-box.mc-box--done .mc-input { color: #1e293b; cursor: default; }
-
-/* ── Equipo: escudo grande + nombre abreviado ── */
-.mc-team {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  min-width: 0;
-}
-
-.mc-team--tap { cursor: pointer; }
-
-.mc-shield-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 64px;
-  height: 64px;
-  flex-shrink: 0;
-  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
-}
-
-
-.mc-team--tap:hover  .mc-shield-wrap { transform: scale(1.08) translateY(-2px); }
-.mc-team--tap:active .mc-shield-wrap { transform: scale(0.94); }
-
-.mc-shield-img {
-  width: 56px !important;
-  height: 56px !important;
-  min-width: 56px !important;
-  min-height: 56px !important;
-  max-width: 56px !important;
-  max-height: 56px !important;
-  object-fit: contain !important;
-  object-position: center !important;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));
-  display: block !important;
-  flex-shrink: 0 !important;
-}
-
-.mc-shield-emoji {
-  font-size: 50px;
-  line-height: 1;
-  filter: drop-shadow(0 3px 7px rgba(0,0,0,0.12));
-  max-width: 58px;
-  max-height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Advancing glow */
-.mc-team--on .mc-shield-img {
-  filter: drop-shadow(0 0 10px rgba(34,197,94,0.6))
-          drop-shadow(0 4px 10px rgba(0,0,0,0.15));
-}
-
-.mc-adv-badge {
-  position: absolute;
-  top: -4px; right: -4px;
-  width: 16px; height: 16px;
-  background: #22c55e;
-  color: #fff;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  border: 2px solid #f0f1f7;
-  box-shadow: 0 2px 5px rgba(34,197,94,0.4);
-  animation: mc-pop 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-
-@keyframes mc-pop {
-  from { opacity:0; transform: scale(0.3); }
-  to   { opacity:1; transform: scale(1); }
-}
-
-/* Nombre abreviado */
-.mc-team-name {
-  font-size: 11px;
-  font-weight: 800;
-  color: #64748b;
-  letter-spacing: 0.06em;
-  text-align: center;
-  text-transform: uppercase;
+.mc-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* ── VS central ── */
 .mc-vs {
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 800;
-  color: #94a3b8;
+  color: #cbd5e1;
   letter-spacing: 0.08em;
   text-align: center;
-  margin-bottom: 0;
+}
+
+/* ── Footer: liga + pill hora ── */
+.mc-footer {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
-}
-.mc-dot-zap {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: rgba(255, 231, 49, 0.248);
-  fill: rgba(249, 226, 22, 0.953);
-  
+  justify-content: space-between;
+  padding: 10px 2px 12px;
+  margin-top: 8px;
+  border-top: 1px solid #f0f2f8;
 }
 
-[data-theme="dark"] .mc-dot-zap {
-  color: #fbbf24;
-  fill: #fbbf24;
+.mc-league-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
 }
 
-/* ── Pill hora ── */
 .mc-pill {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 5px;
-  width: fit-content;
-  min-width: 76px;
-  margin: 10px auto -13px; 
-  padding: 7px 20px;
-  background: #dde1eb;
+  gap: 4px;
+  padding: 4px 10px;
+  background: #f0f2f8;
   color: #64748b;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   border-radius: 999px;
-  font-family: inherit;
   text-transform: uppercase;
-  box-shadow:
-    0 2px 6px rgba(0,0,0,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.75);
+  white-space: nowrap;
 }
 
 .mc-pill--live {
-  background: linear-gradient(135deg,#fef3c7,#fde68a);
+  background: #fef3c7;
   color: #92400e;
-  border: 1px solid rgba(146,64,14,0.15);
+  border: 1px solid rgba(146, 64, 14, 0.12);
 }
 
 .mc-live-dot {
-  width: 6px; height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #f59e0b;
-  animation: mc-pulse 1s ease-in-out infinite;
   flex-shrink: 0;
+  animation: mc-pulse 1s ease-in-out infinite;
 }
 
 /* ================================================================
@@ -279,70 +294,67 @@
 ================================================================ */
 
 [data-theme="dark"] .mc-card {
-  background: var(--card);
-  border-color: var(--border);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.25), 0 6px 20px rgba(0,0,0,0.3);
+  background: var(--card, #1e2235);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="dark"] .mc-card:hover {
-  box-shadow: 0 3px 8px rgba(0,0,0,0.35), 0 14px 32px rgba(0,0,0,0.4);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
 }
 
-[data-theme="dark"] .mc-league-img {
-  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.5)) brightness(1.12) contrast(1.05);
+[data-theme="dark"] .mc-league-chip {
+  background: rgba(255, 255, 255, 0.07);
 }
 
-[data-theme="dark"] .mc-dot--expired { background:#fb3c3c; box-shadow:0 0 0 3px rgba(251, 60, 60, 0.25); }
-[data-theme="dark"] .mc-dot--saving  { background:#fbbf24; box-shadow:0 0 0 3px rgba(251,191,36,0.25); }
-[data-theme="dark"] .mc-dot--saved   { background:#93fdb1; box-shadow:0 0 0 3px rgba(147, 253, 223, 0.25); }
-[data-theme="dark"] .mc-dot--pending { background:#475569; box-shadow:0 0 0 3px rgba(71,85,105,0.25); }
+[data-theme="dark"] .mc-dot--expired { background: #fb3c3c; box-shadow: 0 0 0 3px rgba(251, 60, 60, 0.25); }
+[data-theme="dark"] .mc-dot--saving  { background: #fbbf24; box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.25); }
+[data-theme="dark"] .mc-dot--saved   { background: #93c5fd; box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.22); }
+[data-theme="dark"] .mc-dot--pending { background: #475569; box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.25); }
 
 [data-theme="dark"] .mc-box {
-  background: #1a1d2e;
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  border-radius: 11px;
-  box-shadow: 
-    0 0 0 1px rgba(255,255,255,0.1),
-    inset 0 0 0 1px rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 [data-theme="dark"] .mc-box:not(.mc-box--done):focus-within {
-  border-color: rgba(255,255,255,0.35);
-  box-shadow: 0 0 0 3px rgba(204, 204, 204, 0.18);
+  border-color: rgba(165, 180, 252, 0.5);
+  box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.15);
 }
 
-[data-theme="dark"] .mc-input            { color: var(--text-primary); }
-[data-theme="dark"] .mc-input::placeholder { color: var(--muted); }
-[data-theme="dark"] .mc-box.mc-box--done .mc-input { color: var(--text-primary); }
-
-[data-theme="dark"] .mc-shield-img {
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45)) brightness(1.06);
-}
-
+[data-theme="dark"] .mc-input { color: #f1f5f9; }
+[data-theme="dark"] .mc-input::placeholder { color: #475569; }
 
 [data-theme="dark"] .mc-team--on .mc-shield-img {
-  filter: drop-shadow(0 0 10px rgba(52,211,153,0.6))
-          drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.6));
 }
 
 [data-theme="dark"] .mc-adv-badge {
   background: #34d399;
-  border-color: var(--card);
-  box-shadow: 0 2px 6px rgba(52,211,153,0.5);
+  border-color: var(--card, #1e2235);
 }
 
-[data-theme="dark"] .mc-team-name { color: var(--text-secondary); }
-[data-theme="dark"] .mc-vs        { color: var(--muted); }
+[data-theme="dark"] .mc-team-abbr { color: #64748b; }
+[data-theme="dark"] .mc-vs        { color: #334155; }
+
+[data-theme="dark"] .mc-footer {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .mc-league-label { color: #475569; }
 
 [data-theme="dark"] .mc-pill {
-  background: var(--dark-bg);
-  color: var(--muted);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.06);
+  color: #64748b;
 }
 
 [data-theme="dark"] .mc-pill--live {
-  background: rgba(251,191,36,0.15);
+  background: rgba(251, 191, 36, 0.12);
   color: #fbbf24;
-  border-color: rgba(251,191,36,0.25);
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
+[data-theme="dark"] .mc-swords-icon {
+  color: #f87171;
+  filter: drop-shadow(0 1px 4px rgba(248, 113, 113, 0.65));
 }

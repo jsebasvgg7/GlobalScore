@@ -106,7 +106,7 @@ export default function AdminPage({ currentUser }) {
 
   return (
     <>
-      <div className="admin-page">
+      <div className="admin-page page-root">
         <div className="admin-page-container">
           <AdminStatsOverview stats={stats} />
           <AdminNavigationTabs
