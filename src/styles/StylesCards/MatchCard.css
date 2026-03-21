@@ -9,6 +9,12 @@
   margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+  .mc-wrap {
+    max-width: 100%;
+    padding: 0 30px;   /* márgenes laterales */
+  }
+}
 /* ── Card ── */
 .mc-card {
   position: relative;
