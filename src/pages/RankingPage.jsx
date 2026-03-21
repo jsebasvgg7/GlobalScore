@@ -120,7 +120,7 @@ export default function RankingPage({ currentUser }) {
   );
 
   return (
-    <div className="lb-page page-root">
+    <div className="lb-page">
       <div className="lb-container">
         
 
