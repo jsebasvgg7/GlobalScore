@@ -11,7 +11,8 @@
 
 @media (max-width: 768px) {
   .mc-wrap {
-    max-width: 90%;
+    max-width: 100%;
+    padding: 0 16px;   /* márgenes laterales */
   }
 }
 
