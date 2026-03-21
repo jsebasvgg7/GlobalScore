@@ -126,7 +126,6 @@ export default function RankingPage({ currentUser }) {
 
         {/* HEADER */}
         <div className="lb-header-row">
-          <h1 className="lb-page-title">Ranking Globalscore</h1>
           <div className="lb-tabs">
             {[
               { key: 'global',     icon: <Globe size={14} />,    label: 'Global'  },
