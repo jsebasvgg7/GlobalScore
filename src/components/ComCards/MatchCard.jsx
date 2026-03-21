@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { CheckCircle2 } from "lucide-react";
 import "../../styles/StylesCards/MatchCard.css";
 
-// Espadas cruzadas SVG — indicador de ronda Knockout
+// ── Espadas knockout ──────────────────────────────────────────
 const SwordsIcon = ({ className }) => (
   <svg
     className={className}
@@ -24,7 +24,7 @@ const SwordsIcon = ({ className }) => (
   </svg>
 );
 
-// Abrevia el nombre del equipo a 3 letras
+// ── Abreviación 3 letras ──────────────────────────────────────
 const abbr = (name = "") => {
   if (!name) return "???";
   const words = name.trim().split(/\s+/);
@@ -33,13 +33,11 @@ const abbr = (name = "") => {
 };
 
 export default function MatchCard({ match, userPred, onPredict }) {
-  const [homeScore, setHomeScore] = useState(userPred?.home_score ?? "");
-  const [awayScore, setAwayScore] = useState(userPred?.away_score ?? "");
-  const [advancingTeam, setAdvancingTeam] = useState(
-    userPred?.predicted_advancing_team ?? null
-  );
-  const [isSaved, setIsSaved] = useState(userPred !== undefined);
-  const [isSaving, setIsSaving] = useState(false);
+  const [homeScore,     setHomeScore]     = useState(userPred?.home_score ?? "");
+  const [awayScore,     setAwayScore]     = useState(userPred?.away_score ?? "");
+  const [advancingTeam, setAdvancingTeam] = useState(userPred?.predicted_advancing_team ?? null);
+  const [isSaved,       setIsSaved]       = useState(userPred !== undefined);
+  const [isSaving,      setIsSaving]      = useState(false);
   const saveTimeoutRef = useRef(null);
 
   useEffect(() => {
@@ -49,21 +47,20 @@ export default function MatchCard({ match, userPred, onPredict }) {
     setIsSaved(userPred !== undefined);
   }, [userPred]);
 
-  const now = new Date();
-  const deadline = match.deadline ? new Date(match.deadline) : null;
+  const now            = new Date();
+  const deadline       = match.deadline ? new Date(match.deadline) : null;
   const isPastDeadline = deadline && now >= deadline;
-  const isLive = match.status === "live";
-  const isDisabled = isPastDeadline || match.status !== "pending";
+  const isLive         = match.status === "live";
+  const isDisabled     = isPastDeadline || match.status !== "pending";
 
   useEffect(() => {
     if (isDisabled) return;
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
 
-    const home = parseInt(homeScore);
-    const away = parseInt(awayScore);
-    const isValid =
-      !isNaN(home) && !isNaN(away) && homeScore !== "" && awayScore !== "";
-    const isDiff =
+    const home    = parseInt(homeScore);
+    const away    = parseInt(awayScore);
+    const isValid = !isNaN(home) && !isNaN(away) && homeScore !== "" && awayScore !== "";
+    const isDiff  =
       home !== userPred?.home_score ||
       away !== userPred?.away_score ||
       advancingTeam !== userPred?.predicted_advancing_team;
@@ -74,24 +71,19 @@ export default function MatchCard({ match, userPred, onPredict }) {
         setIsSaving(true);
         try {
           await onPredict(match.id, home, away, advancingTeam);
-          setTimeout(() => {
-            setIsSaved(true);
-            setIsSaving(false);
-          }, 300);
+          setTimeout(() => { setIsSaved(true); setIsSaving(false); }, 300);
         } catch (err) {
           console.error("❌ Error guardando:", err);
           setIsSaving(false);
         }
       }, 1000);
     }
-    return () => {
-      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
-    };
+    return () => { if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current); };
   }, [homeScore, awayScore, advancingTeam, isDisabled, match.id, onPredict, userPred]);
 
   const handleScoreChange = (team, value) => {
     if (isDisabled) return;
-    const n = parseInt(value, 10);
+    const n     = parseInt(value, 10);
     const score = isNaN(n) || n < 0 ? value : Math.min(n, 20);
     team === "home" ? setHomeScore(score) : setAwayScore(score);
     setIsSaved(false);
@@ -103,46 +95,57 @@ export default function MatchCard({ match, userPred, onPredict }) {
     setIsSaved(false);
   };
 
-  // Estado del dot indicador
   const dotState =
-    isPastDeadline || isLive
-      ? "expired"
-      : isSaving
-      ? "saving"
-      : isSaved
-      ? "saved"
-      : "pending";
+    isPastDeadline || isLive ? "expired" :
+    isSaving                 ? "saving"  :
+    isSaved                  ? "saved"   :
+                               "pending";
 
   const boxDone = isSaved || isDisabled;
 
   return (
     <div className="mc-wrap">
-
-      {/* ── Card principal ── */}
       <div className="mc-card">
 
-        {/* Ícono de liga — top left */}
-        <div className="mc-league-chip">
-          {match.league_logo_url ? (
-            <img
-              src={match.league_logo_url}
-              alt={match.league}
-              className="mc-league-img"
-              onError={(e) => (e.target.style.display = "none")}
-            />
+        {/* ══════════════════════════════
+            BANNER SUPERIOR
+            Liga · Equipos · Estado
+        ══════════════════════════════ */}
+        <div className="mc-banner">
+
+          {/* Ícono de liga */}
+          <div className="mc-banner-icon">
+            {match.league_logo_url ? (
+              <img
+                src={match.league_logo_url}
+                alt={match.league}
+                className="mc-banner-logo"
+                onError={(e) => (e.target.style.display = "none")}
+              />
+            ) : (
+              <span className="mc-banner-emoji">🏆</span>
+            )}
+          </div>
+
+          {/* Info liga + nombres */}
+          <div className="mc-banner-info">
+            <span className="mc-banner-league">{match.league || "Liga"}</span>
+            <span className="mc-banner-teams">
+              {match.home_team} · {match.away_team}
+            </span>
+          </div>
+
+          {/* Indicador de estado */}
+          {match.is_knockout && !isDisabled ? (
+            <SwordsIcon className="mc-swords-icon" />
           ) : (
-            <span className="mc-league-emoji">🏆</span>
+            <span className={`mc-dot mc-dot--${dotState}`} />
           )}
         </div>
 
-        {/* Indicador de estado — top right */}
-        {match.is_knockout && !isDisabled ? (
-          <SwordsIcon className="mc-swords-icon" />
-        ) : (
-          <span className={`mc-dot mc-dot--${dotState}`} />
-        )}
-
-        {/* ── Cuerpo: escudo · score · VS · score · escudo ── */}
+        {/* ══════════════════════════════
+            CUERPO: escudos + scores
+        ══════════════════════════════ */}
         <div className="mc-body">
 
           {/* Equipo local */}
@@ -151,9 +154,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
               "mc-team",
               match.is_knockout && !isDisabled ? "mc-team--tap" : "",
               advancingTeam === "home" ? "mc-team--on" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            ].filter(Boolean).join(" ")}
             onClick={() => handleAdvancingTeamClick("home")}
           >
             <div className="mc-shield-wrap">
@@ -165,26 +166,19 @@ export default function MatchCard({ match, userPred, onPredict }) {
                   onError={(e) => (e.target.style.display = "none")}
                 />
               ) : (
-                <span className="mc-shield-emoji">
-                  {match.home_team_logo || "⚽"}
-                </span>
+                <span className="mc-shield-emoji">{match.home_team_logo || "⚽"}</span>
               )}
               {advancingTeam === "home" && !isDisabled && (
-                <div className="mc-adv-badge">
-                  <CheckCircle2 size={8} />
-                </div>
+                <div className="mc-adv-badge"><CheckCircle2 size={8} /></div>
               )}
             </div>
-            {/* Solo abreviación — sin nombre completo */}
             <span className="mc-team-abbr">{abbr(match.home_team)}</span>
           </div>
 
           {/* Score local */}
           <div className={`mc-box${boxDone ? " mc-box--done" : ""}`}>
             <input
-              type="number"
-              min="0"
-              max="20"
+              type="number" min="0" max="20"
               className="mc-input"
               value={homeScore}
               onChange={(e) => handleScoreChange("home", e.target.value)}
@@ -193,15 +187,12 @@ export default function MatchCard({ match, userPred, onPredict }) {
             />
           </div>
 
-          {/* VS central */}
           <div className="mc-vs">VS</div>
 
           {/* Score visitante */}
           <div className={`mc-box${boxDone ? " mc-box--done" : ""}`}>
             <input
-              type="number"
-              min="0"
-              max="20"
+              type="number" min="0" max="20"
               className="mc-input"
               value={awayScore}
               onChange={(e) => handleScoreChange("away", e.target.value)}
@@ -216,9 +207,7 @@ export default function MatchCard({ match, userPred, onPredict }) {
               "mc-team",
               match.is_knockout && !isDisabled ? "mc-team--tap" : "",
               advancingTeam === "away" ? "mc-team--on" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            ].filter(Boolean).join(" ")}
             onClick={() => handleAdvancingTeamClick("away")}
           >
             <div className="mc-shield-wrap">
@@ -230,31 +219,25 @@ export default function MatchCard({ match, userPred, onPredict }) {
                   onError={(e) => (e.target.style.display = "none")}
                 />
               ) : (
-                <span className="mc-shield-emoji">
-                  {match.away_team_logo || "⚽"}
-                </span>
+                <span className="mc-shield-emoji">{match.away_team_logo || "⚽"}</span>
               )}
               {advancingTeam === "away" && !isDisabled && (
-                <div className="mc-adv-badge">
-                  <CheckCircle2 size={8} />
-                </div>
+                <div className="mc-adv-badge"><CheckCircle2 size={8} /></div>
               )}
             </div>
-            {/* Solo abreviación — sin nombre completo */}
             <span className="mc-team-abbr">{abbr(match.away_team)}</span>
           </div>
 
         </div>
 
-        {/* ── Footer: nombre liga + pill hora ── */}
+        {/* ══════════════════════════════
+            FOOTER: hora + pill
+        ══════════════════════════════ */}
         <div className="mc-footer">
-          <span className="mc-league-label">{match.league || ""}</span>
+          <span className="mc-footer-date">{match.date || ""}</span>
           <div className={`mc-pill${isLive ? " mc-pill--live" : ""}`}>
             {isLive ? (
-              <>
-                <span className="mc-live-dot" />
-                EN VIVO
-              </>
+              <><span className="mc-live-dot" />EN VIVO</>
             ) : (
               match.time || "—"
             )}

@@ -1,8 +1,5 @@
 /* ================================================================
-   MatchCard — estilo Boardto
-   Estructura: mc-wrap > mc-card > (mc-league-chip | mc-dot/mc-zap)
-                                    mc-body (5 cols)
-                                    mc-footer
+   MatchCard — Rediseño con banner superior
 ================================================================ */
 
 /* ── Wrapper ── */
@@ -18,94 +15,131 @@
   background: #ffffff;
   border: 1px solid #eef0f5;
   border-radius: 18px;
-  padding: 14px 16px 0;
+  overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  overflow: visible;
   transition: box-shadow 0.22s ease, transform 0.22s ease;
 }
 
 .mc-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
-/* ── Chip de liga — top left ── */
-.mc-league-chip {
-  position: absolute;
-  top: 12px;
-  left: 14px;
-  width: 30px;
-  height: 30px;
-  background: #f0f2f8;
-  border-radius: 9px;
+/* ================================================================
+   BANNER SUPERIOR — liga + equipos + estado
+================================================================ */
+.mc-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px 10px;
+  background: #f8fafc;
+  border-bottom: 1px solid #eef0f5;
+}
+
+/* Ícono de liga */
+.mc-banner-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #eef0f5;
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: none;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
-.mc-league-img {
+.mc-banner-logo {
   width: 22px;
   height: 22px;
   object-fit: contain;
 }
 
-.mc-league-emoji {
-  font-size: 17px;
+.mc-banner-emoji {
+  font-size: 18px;
   line-height: 1;
 }
 
-/* ── Dot estado — top right ── */
+/* Info: nombre liga + equipos */
+.mc-banner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.mc-banner-league {
+  font-size: 10px;
+  font-weight: 800;
+  color: #60519b;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mc-banner-teams {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Dot estado ── */
 .mc-dot {
-  position: absolute;
-  top: 16px;
-  right: 14px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  flex-shrink: 0;
   transition: background 0.3s, box-shadow 0.3s;
 }
 
-.mc-dot--expired { background: #f87171; box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2); }
-.mc-dot--saving  { background: #fbbf24; box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);  animation: mc-pulse 1s ease-in-out infinite; }
-.mc-dot--saved   { background: #60a5fa; box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2); }
-.mc-dot--pending { background: #d1d5db; box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.2); }
+.mc-dot--expired { background: #f87171; box-shadow: 0 0 0 3px rgba(248,113,113,0.2); }
+.mc-dot--saving  { background: #fbbf24; box-shadow: 0 0 0 3px rgba(251,191,36,0.2); animation: mc-pulse 1s ease-in-out infinite; }
+.mc-dot--saved   { background: #60a5fa; box-shadow: 0 0 0 3px rgba(96,165,250,0.2); }
+.mc-dot--pending { background: #d1d5db; box-shadow: 0 0 0 3px rgba(209,213,219,0.2); }
 
 @keyframes mc-pulse {
-  0%, 100% { transform: scale(1);    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2); }
-  50%       { transform: scale(1.3); box-shadow: 0 0 0 5px rgba(251, 191, 36, 0.1); }
+  0%, 100% { transform: scale(1);   box-shadow: 0 0 0 3px rgba(251,191,36,0.2); }
+  50%       { transform: scale(1.3); box-shadow: 0 0 0 5px rgba(251,191,36,0.1); }
 }
 
-/* Espadas cruzadas knockout */
+/* Espadas knockout */
 .mc-swords-icon {
-  position: absolute;
-  top: 11px;
-  right: 11px;
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
   color: #ef4444;
-  filter: drop-shadow(0 1px 3px rgba(239, 68, 68, 0.45));
+  filter: drop-shadow(0 1px 3px rgba(239,68,68,0.45));
   animation: mc-swords-clash 2.8s ease-in-out infinite;
   transform-origin: center;
 }
 
 @keyframes mc-swords-clash {
-  0%,  90%, 100% { transform: scale(1)    rotate(0deg);   opacity: 1; }
-  92%             { transform: scale(1.2)  rotate(-8deg);  opacity: 0.9; }
-  95%             { transform: scale(1.25) rotate(8deg);   opacity: 1; }
-  97%             { transform: scale(1.15) rotate(-4deg);  opacity: 0.95; }
+  0%,  90%, 100% { transform: scale(1)    rotate(0deg);  opacity: 1; }
+  92%            { transform: scale(1.2)  rotate(-8deg); opacity: 0.9; }
+  95%            { transform: scale(1.25) rotate(8deg);  opacity: 1; }
+  97%            { transform: scale(1.15) rotate(-4deg); opacity: 0.95; }
 }
 
-/* ── Cuerpo: 5 columnas ── */
+/* ================================================================
+   CUERPO: 5 columnas
+================================================================ */
 .mc-body {
   display: grid;
   grid-template-columns: 1fr 40px 26px 40px 1fr;
   align-items: center;
   gap: 4px;
-  padding-top: 30px; /* espacio para el chip de liga */
+  padding: 16px 14px 10px;
 }
 
-/* ── Equipo: escudo + abreviación ── */
+/* ── Equipo ── */
 .mc-team {
   display: flex;
   flex-direction: column;
@@ -142,27 +176,23 @@
   line-height: 1;
 }
 
-/* Glow al seleccionar advancing */
+/* Glow advancing */
 .mc-team--on .mc-shield-img {
-  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.55));
+  filter: drop-shadow(0 0 8px rgba(34,197,94,0.55));
 }
 
 /* Badge advancing */
 .mc-adv-badge {
   position: absolute;
-  top: -3px;
-  right: -3px;
-  width: 15px;
-  height: 15px;
+  top: -3px; right: -3px;
+  width: 15px; height: 15px;
   background: #22c55e;
   color: #fff;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   border: 2px solid #fff;
-  box-shadow: 0 2px 5px rgba(34, 197, 94, 0.4);
-  animation: mc-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 5px rgba(34,197,94,0.4);
+  animation: mc-pop 0.3s cubic-bezier(0.34,1.56,0.64,1);
 }
 
 @keyframes mc-pop {
@@ -170,7 +200,7 @@
   to   { opacity: 1; transform: scale(1); }
 }
 
-/* Abreviación del equipo — sin nombre largo */
+/* Abreviación */
 .mc-team-abbr {
   font-size: 10px;
   font-weight: 800;
@@ -190,19 +220,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   transition: border-color 0.2s, box-shadow 0.2s;
   flex-shrink: 0;
 }
 
 .mc-box:not(.mc-box--done):focus-within {
   border-color: #a5b4fc;
-  box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.2);
+  box-shadow: 0 0 0 3px rgba(165,180,252,0.2);
 }
 
 .mc-input {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   border: none;
   background: transparent;
   text-align: center;
@@ -216,19 +245,11 @@
   letter-spacing: -0.02em;
 }
 
-.mc-input::placeholder {
-  color: #cbd5e1;
-  font-weight: 400;
-  font-size: 15px;
-}
-
+.mc-input::placeholder { color: #cbd5e1; font-weight: 400; font-size: 15px; }
 .mc-input::-webkit-inner-spin-button,
-.mc-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+.mc-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 
-/* ── VS central ── */
+/* ── VS ── */
 .mc-vs {
   font-size: 10px;
   font-weight: 800;
@@ -237,26 +258,22 @@
   text-align: center;
 }
 
-/* ── Footer: liga + pill hora ── */
+/* ================================================================
+   FOOTER
+================================================================ */
 .mc-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 2px 12px;
-  margin-top: 8px;
+  padding: 8px 14px 12px;
   border-top: 1px solid #f0f2f8;
 }
 
-.mc-league-label {
+.mc-footer-date {
   font-size: 10px;
   font-weight: 600;
-  color: #94a3b8;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 90px;
+  color: #cbd5e1;
+  letter-spacing: 0.03em;
 }
 
 .mc-pill {
@@ -277,12 +294,11 @@
 .mc-pill--live {
   background: #fef3c7;
   color: #92400e;
-  border: 1px solid rgba(146, 64, 14, 0.12);
+  border: 1px solid rgba(146,64,14,0.12);
 }
 
 .mc-live-dot {
-  width: 5px;
-  height: 5px;
+  width: 5px; height: 5px;
   border-radius: 50%;
   background: #f59e0b;
   flex-shrink: 0;
@@ -292,41 +308,54 @@
 /* ================================================================
    DARK MODE
 ================================================================ */
-
 [data-theme="dark"] .mc-card {
   background: var(--card, #1e2235);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 [data-theme="dark"] .mc-card:hover {
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.45);
 }
 
-[data-theme="dark"] .mc-league-chip {
-  background: rgba(255, 255, 255, 0.07);
+[data-theme="dark"] .mc-banner {
+  background: rgba(255,255,255,0.03);
+  border-bottom-color: rgba(255,255,255,0.07);
 }
 
-[data-theme="dark"] .mc-dot--expired { background: #fb3c3c; box-shadow: 0 0 0 3px rgba(251, 60, 60, 0.25); }
-[data-theme="dark"] .mc-dot--saving  { background: #fbbf24; box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.25); }
-[data-theme="dark"] .mc-dot--saved   { background: #93c5fd; box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.22); }
-[data-theme="dark"] .mc-dot--pending { background: #475569; box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.25); }
+[data-theme="dark"] .mc-banner-icon {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.1);
+}
+
+[data-theme="dark"] .mc-banner-league { color: #a599d9; }
+[data-theme="dark"] .mc-banner-teams  { color: #64748b; }
+
+[data-theme="dark"] .mc-dot--expired { background: #fb3c3c; box-shadow: 0 0 0 3px rgba(251,60,60,0.25); }
+[data-theme="dark"] .mc-dot--saving  { background: #fbbf24; box-shadow: 0 0 0 3px rgba(251,191,36,0.25); }
+[data-theme="dark"] .mc-dot--saved   { background: #93c5fd; box-shadow: 0 0 0 3px rgba(147,197,253,0.22); }
+[data-theme="dark"] .mc-dot--pending { background: #475569; box-shadow: 0 0 0 3px rgba(71,85,105,0.25); }
+
+[data-theme="dark"] .mc-swords-icon {
+  color: #f87171;
+  filter: drop-shadow(0 1px 4px rgba(248,113,113,0.65));
+}
 
 [data-theme="dark"] .mc-box {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.15);
 }
 
 [data-theme="dark"] .mc-box:not(.mc-box--done):focus-within {
-  border-color: rgba(165, 180, 252, 0.5);
-  box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.15);
+  border-color: rgba(165,180,252,0.5);
+  box-shadow: 0 0 0 3px rgba(165,180,252,0.15);
 }
 
 [data-theme="dark"] .mc-input { color: #f1f5f9; }
 [data-theme="dark"] .mc-input::placeholder { color: #475569; }
 
 [data-theme="dark"] .mc-team--on .mc-shield-img {
-  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.6));
+  filter: drop-shadow(0 0 8px rgba(52,211,153,0.6));
 }
 
 [data-theme="dark"] .mc-adv-badge {
@@ -338,23 +367,18 @@
 [data-theme="dark"] .mc-vs        { color: #334155; }
 
 [data-theme="dark"] .mc-footer {
-  border-top-color: rgba(255, 255, 255, 0.06);
+  border-top-color: rgba(255,255,255,0.06);
 }
 
-[data-theme="dark"] .mc-league-label { color: #475569; }
+[data-theme="dark"] .mc-footer-date { color: #334155; }
 
 [data-theme="dark"] .mc-pill {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255,255,255,0.06);
   color: #64748b;
 }
 
 [data-theme="dark"] .mc-pill--live {
-  background: rgba(251, 191, 36, 0.12);
+  background: rgba(251,191,36,0.12);
   color: #fbbf24;
-  border-color: rgba(251, 191, 36, 0.2);
-}
-
-[data-theme="dark"] .mc-swords-icon {
-  color: #f87171;
-  filter: drop-shadow(0 1px 4px rgba(248, 113, 113, 0.65));
+  border-color: rgba(251,191,36,0.2);
 }
