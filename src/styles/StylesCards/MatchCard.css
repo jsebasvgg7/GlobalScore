@@ -12,7 +12,7 @@
 @media (max-width: 768px) {
   .mc-wrap {
     max-width: 100%;
-    padding: 0 30px;   /* márgenes laterales */
+    padding: 0 26px;   /* márgenes laterales */
   }
 }
 /* ── Card ── */
