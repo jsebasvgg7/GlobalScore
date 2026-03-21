@@ -94,3 +94,10 @@
     padding: 12px;
   }
 }
+/* Agrega esto al FINAL de layout.css */
+@media (max-width: 768px) {
+  .lb-page.page-root {
+    padding-top: 0;
+    margin-left: 0;
+  }
+}
