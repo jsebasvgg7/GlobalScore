@@ -358,7 +358,7 @@ export default function DashboardPage() {
                 ) : (
                   Object.entries(groupedMatches).map(([label, group]) => (
                     <div key={label} className="matches-date-group">
-                      <div className="matches-date-label">{label}</div>
+                      <div className="matches-date-label"><span>{label}</span></div>
                       <div className="matches-container">
                         {group.map((m) => (
                           <MatchCard

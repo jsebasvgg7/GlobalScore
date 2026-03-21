@@ -97,31 +97,132 @@
 /* ================================================================
    DATE GROUP HEADERS
 ================================================================ */
+* ── Contenedor del grupo ── */
 .matches-date-group {
-  margin-bottom: 8px;
+  margin-bottom: 28px;
 }
-
+ 
+/* ── Label flotante sobre línea divisora ── */
 .matches-date-label {
-  font-size: 13px;
-  font-weight: 800;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  /* Quitar estilos anteriores */
+  border-bottom: none;
+  padding: 0;
+}
+ 
+/* Línea de fondo */
+.matches-date-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1.5px;
+  background: var(--border);
+  border-radius: 99px;
+}
+ 
+/* Texto flotante */
+.matches-date-label span {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 14px;
+  background: var(--bg, #f5f6fa);
+  border-radius: 99px;
+  border: 1.5px solid var(--border);
+  font-size: 12px;
+  font-weight: 700;
   color: var(--text-secondary);
   text-transform: capitalize;
   letter-spacing: 0.04em;
-  padding: 0 4px 10px 4px;
-  border-bottom: 1.5px solid var(--border);
-  margin-bottom: 20px;
+  white-space: nowrap;
 }
-
-.matches-date-label::first-letter { text-transform: uppercase; }
-
-.matches-date-group:first-child .matches-date-label {
-  color: var(--accent);
-  font-size: 15px;
+ 
+/* Dot dentro del label */
+.matches-date-label span::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
 }
-
-.matches-date-group:nth-child(2) .matches-date-label {
-  color: var(--accent-light);
-  font-size: 14px;
+ 
+/* ── HOY — destacado en morado ── */
+.matches-date-group:first-child .matches-date-label::before {
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--accent, #5b4fd8) 30%,
+    var(--accent, #5b4fd8) 70%,
+    transparent 100%
+  );
+  opacity: 0.35;
+  height: 2px;
+}
+ 
+.matches-date-group:first-child .matches-date-label span {
+  background: rgba(91, 79, 216, 0.07);
+  border-color: rgba(91, 79, 216, 0.3);
+  color: var(--accent, #5b4fd8);
+  font-size: 13px;
+  padding: 5px 16px;
+}
+ 
+.matches-date-group:first-child .matches-date-label span::before {
+  background: var(--accent, #5b4fd8);
+  width: 7px;
+  height: 7px;
+  box-shadow: 0 0 0 2px rgba(91, 79, 216, 0.2);
+}
+ 
+/* ── MAÑANA — acento suave ── */
+.matches-date-group:nth-child(2) .matches-date-label span {
+  color: var(--text-primary);
+  font-size: 12px;
+}
+ 
+.matches-date-group:nth-child(2) .matches-date-label span::before {
+  background: #94a3b8;
+}
+ 
+/* ================================================================
+   DARK MODE
+================================================================ */
+[data-theme="dark"] .matches-date-label span {
+  background: var(--card, #1e2235);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+}
+ 
+[data-theme="dark"] .matches-date-label span::before {
+  background: rgba(255, 255, 255, 0.2);
+}
+ 
+[data-theme="dark"] .matches-date-label::before {
+  background: rgba(255, 255, 255, 0.08);
+}
+ 
+[data-theme="dark"] .matches-date-group:first-child .matches-date-label span {
+  background: rgba(91, 79, 216, 0.15);
+  border-color: rgba(91, 79, 216, 0.4);
+  color: #a599d9;
+}
+ 
+[data-theme="dark"] .matches-date-group:first-child .matches-date-label span::before {
+  background: #a599d9;
+  box-shadow: 0 0 0 2px rgba(165, 153, 217, 0.2);
+}
+ 
+[data-theme="dark"] .matches-date-group:first-child .matches-date-label::before {
+  opacity: 0.25;
 }
 
 /* ================================================================
