@@ -2,7 +2,6 @@
    Layout Global — GlobalScore
 ========================================= */
 
-/* ── Contenedor raíz de la app ── */
 .vega-root {
   min-height: 100vh;
   display: flex;
@@ -15,22 +14,27 @@
   flex-direction: column;
 }
 
-/* ==========================================
-   DESKTOP
-========================================== */
 @media (min-width: 769px) {
 
-  /* Cualquier raíz de página */
-  .vega-root,
-  .page-root {
-    margin-left: 72px;   /* ancho del sidebar */
-    padding-top: 88px;   /* altura del topbar  */
-  }
-  .lb-page.page-root {
-    padding-top: 24px;   /* solo aire mínimo, sin el 88px */
+  .vega-root {
+    margin-left: 72px;
+    padding-top: 56px;
   }
 
-  /* Contenedor interno de cada página */
+  /* page-root: layout fijo tipo app, sin scroll de página */
+  .page-root {
+    margin-left: 72px;
+    padding-top: 56px;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .lb-page.page-root {
+    padding-top: 24px;
+  }
+
   .container,
   .page-container,
   .profile-container,
@@ -46,7 +50,6 @@
     box-sizing: border-box;
   }
 
-  /* Por si alguna página usa un wrapper genérico */
   .main-content-full {
     width: 100%;
     max-width: 1200px;
@@ -57,11 +60,7 @@
   }
 }
 
-/* ================================================================
-   MOBILE — sin desplazamiento lateral
-================================================================ */
 @media (max-width: 768px) {
-
   .vega-root,
   .page-root {
     margin-left: 0;

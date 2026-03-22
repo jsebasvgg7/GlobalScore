@@ -167,6 +167,11 @@
   height: 100%;
 }
 
+/* FIX PUNTO 1: Eliminar el hueco vacío — logo zone colapsada */
+.gs-topbar-logo-zone {
+  display: none;
+}
+
 .gs-breadcrumb {
   display: flex;
   align-items: center;
@@ -308,7 +313,7 @@
   .gs-mobile-header { display: none !important; }
   .gs-bottom-nav    { display: none !important; }
 
-  .vega-root,
+  /* padding-top y margin-left manejados por layout.css */
   .ranking-page,
   .admin-page,
   .profile-page,
@@ -319,7 +324,6 @@
     padding-top: var(--topbar-h);
   }
 
-  /* Dashboard: full-height — height total minus topbar, padding-top ya lo empuja */
   .vega-root {
     height: 100vh;
     display: flex;
@@ -330,8 +334,11 @@
     box-sizing: border-box;
   }
 
-  .vega-root .db-root  { flex: 1; min-height: 0; overflow: hidden; }
+  /* db-root y db-main pegados al borde superior, sin espacio entre topbar y tabs */
+  .vega-root .db-root  { flex: 1; min-height: 0; overflow: hidden; padding-top: 0 !important; margin-top: 0 !important; }
   .vega-root .db-body  { flex: 1; min-height: 0; overflow: hidden; }
+  .vega-root .db-main  { padding-top: 0 !important; margin-top: 0 !important; }
+  .vega-root .nt-bar   { margin-top: 0 !important; }
 }
 
 /* ================================================================
@@ -431,4 +438,13 @@
   .gs-mobile-header { display: flex; }
   .gs-bottom-nav    { display: flex; }
   body              { padding-bottom: 90px; }
+}
+
+/* ================================================================
+   FIX ESPACIO TOPBAR-TABS: colapsar cualquier div vacío al inicio
+   del db-main que pueda crear altura fantasma
+================================================================ */
+.db-main > div:empty {
+  display: none !important;
+  height: 0 !important;
 }

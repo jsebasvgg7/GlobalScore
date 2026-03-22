@@ -14,7 +14,7 @@ export default function RightPanel({ currentUser, users = [], matches = [] }) {
 
   // ── Top 5 ranking ─────────────────────────────────
   const top5 = useMemo(
-    () => [...users].sort((a, b) => b.points - a.points).slice(0, 5),
+    () => [...users].sort((a, b) => b.points - a.points).slice(0, 4),
     [users]
   );
 

@@ -12,6 +12,8 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  /* Layout fijo — sin scroll en la página */
+  height: 100%;
 }
 
 [data-theme="dark"] .db-root { background: #1a1d2e; }
@@ -21,6 +23,8 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  /* Fijo — no crece más allá del viewport */
+  height: 100%;
 }
 
 .db-main {
@@ -29,15 +33,20 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  height: 100%;
 }
 
+/* Solo el área de cards hace scroll */
 .db-content {
   flex: 1;
   overflow-y: auto;
-  padding: 20px 24px;
+  overflow-x: hidden;
+  padding: 16px 16px 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 0;
+  /* Scroll suave */
+  scroll-behavior: smooth;
 }
 
 .db-content::-webkit-scrollbar { width: 4px; }
@@ -48,13 +57,19 @@
 /* ================================================================
    DATE GROUP HEADERS
 ================================================================ */
-.matches-date-group { display: flex; flex-direction: column; gap: 12px; }
+.matches-date-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+}
 
 .matches-date-label {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 4px;
 }
 
 .matches-date-label::before {
@@ -119,32 +134,30 @@
 }
 
 /* ================================================================
-   MATCHES CONTAINER
+   MATCHES CONTAINER — columnas fijas 262px, grid centrado
 ================================================================ */
 .matches-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  background: transparent;
-  border: 0.5px solid #d4cfc8;
+  grid-template-columns: repeat(3, 262px);
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 0;
 }
 
-[data-theme="dark"] .matches-container {
-  border-color: rgba(255,255,255,0.07);
-}
-
-/* Cada card toca la siguiente — borde derecho e inferior compartido */
 .matches-container > * {
-  border-right: 0.5px solid #d4cfc8 !important;
-  border-bottom: 0.5px solid #d4cfc8 !important;
-  border-top: none !important;
-  border-left: none !important;
+  margin: 0 !important;
+  width: 262px !important;
+  max-width: 262px !important;
+}
+
+.matches-container .mc-wrap {
+  width: 262px !important;
+  max-width: 262px !important;
   margin: 0 !important;
 }
 
-[data-theme="dark"] .matches-container > * {
-  border-right-color: rgba(255,255,255,0.07) !important;
-  border-bottom-color: rgba(255,255,255,0.07) !important;
+.matches-container .mc-card {
+  width: 262px !important;
 }
 
 .matches-empty-state {
@@ -155,7 +168,6 @@
 
 .matches-empty-icon  { font-size: 48px; margin-bottom: 14px; opacity: 0.3; }
 .matches-empty-text  { font-size: 15px; font-weight: 600; color: #555; }
-
 [data-theme="dark"] .matches-empty-text { color: #b4b8d0; }
 
 .show-all-btn {
@@ -360,7 +372,7 @@
 [data-theme="dark"] .filter-pill { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); color: #b4b8d0; }
 [data-theme="dark"] .filter-pill:hover { background: rgba(124,111,232,0.1); color: #7c6fe8; }
 
-.active-filter-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.active-filter-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding-top: 8px; }
 
 .active-filter-chip {
   display: inline-flex;
@@ -389,12 +401,10 @@
 /* ================================================================
    RESPONSIVE
 ================================================================ */
-@media (max-width: 1400px) {
-  .matches-container { grid-template-columns: repeat(3, 1fr); }
-}
-
 @media (max-width: 1100px) {
-  .matches-container { grid-template-columns: repeat(2, 1fr); }
+  .matches-container {
+    grid-template-columns: repeat(2, 210px);
+  }
 }
 
 @media (max-width: 1024px) {
@@ -404,8 +414,56 @@
 }
 
 @media (max-width: 768px) {
-  .matches-container { grid-template-columns: 1fr; }
-  .db-content { padding: 12px; }
+  .matches-container {
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: stretch;
+  }
+  .matches-container > *,
+  .matches-container .mc-wrap,
+  .matches-container .mc-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .db-content { padding: 0 12px 20px; }
   .sort-modal { top: auto; bottom: 0; right: 0; left: 0; width: 100%; }
   .filters-modal { width: 85vw; }
+}
+
+@media (max-width: 480px) {
+  .matches-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================================================================
+   LEAGUE Y AWARD CARDS — grid de 3 columnas igual que MatchCard
+================================================================ */
+.matches-container .lc-card,
+.matches-container .ac-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Ligas y premios: 2 columnas, más anchas para formularios */
+.db-content--leagues .matches-container,
+.db-content--awards .matches-container {
+  grid-template-columns: repeat(2, 1fr) !important;
+  justify-content: stretch !important;
+}
+
+/* ================================================================
+   GRID PROPIO PARA LIGAS Y PREMIOS — 2 columnas verticales
+================================================================ */
+.leagues-grid,
+.awards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.leagues-grid .lc-card,
+.awards-grid .ac-card {
+  width: 100% !important;
+  max-width: 100% !important;
 }

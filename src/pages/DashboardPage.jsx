@@ -283,8 +283,12 @@ export default function DashboardPage() {
 
           {/* ════ LIGAS ════ */}
           {activeTab === "leagues" && (
-            <div className="db-content">
-              <div className="matches-container">
+          <div className="db-content db-content--leagues">
+            <div className="matches-date-group">
+              <div className="matches-date-label">
+                <span>Temporada 2025 · 2026</span>
+              </div>
+              <div className="leagues-grid"></div>
                 {leagues.length === 0 ? (
                   <div className="matches-empty-state">
                     <div className="matches-empty-icon">🏆</div>
@@ -306,8 +310,12 @@ export default function DashboardPage() {
 
           {/* ════ PREMIOS ════ */}
           {activeTab === "awards" && (
-            <div className="db-content">
-              <div className="matches-container">
+          <div className="db-content db-content--awards">
+            <div className="matches-date-group">
+              <div className="matches-date-label">
+                <span>Temporada 2025 · 2026</span>
+              </div>
+              <div className="matches-container"></div>
                 {awards.length === 0 ? (
                   <div className="matches-empty-state">
                     <div className="matches-empty-icon">🥇</div>
@@ -327,7 +335,6 @@ export default function DashboardPage() {
             </div>
           )}
 
-          <Footer />
         </main>
 
         {/* ── PANEL DERECHO ── */}
