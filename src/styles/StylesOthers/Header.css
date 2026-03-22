@@ -51,7 +51,6 @@
 .gs-logo-btn {
   width: 42px; height: 42px;
   background: var(--hdr-accent);
-  border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   color: #fff;
