@@ -269,7 +269,7 @@
 .matches-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 56px 16px;
+  gap: 30px 2px;
   background: transparent;
 }
 
@@ -592,7 +592,7 @@
 @media (max-width: 1024px) {
   .matches-container {
     grid-template-columns: repeat(2, 1fr);
-    gap: 40px 14px;
+    gap: 10px 12px;
   }
 }
 
@@ -613,7 +613,7 @@
 
   .matches-container {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 10px;
   }
 
   .sort-modal-top {

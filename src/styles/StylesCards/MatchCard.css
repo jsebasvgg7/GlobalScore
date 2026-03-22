@@ -308,8 +308,16 @@
 /* ================================================================
    DARK MODE (data-theme)
 ================================================================ */
-[data-theme="dark"] .mc-card           { background: #1e2235; border-color: rgba(255,255,255,0.08); }
+[data-theme="dark"] .mc-card {
+  background: #2a2f45;
+  border-color: rgba(255,255,255,0.18);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+}
 [data-theme="dark"] .mc-card--active   { background: #12121f; border-color: #2a2a3e; }
+[data-theme="dark"] .mc-card:not(.mc-card--active):hover {
+  box-shadow: 0 8px 28px rgba(0,0,0,0.55);
+  border-color: rgba(255,255,255,0.28);
+}
 [data-theme="dark"] .mc-header         { border-bottom-color: rgba(255,255,255,0.06); }
 [data-theme="dark"] .mc-league-icon    { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08); }
 [data-theme="dark"] .mc-league-name    { color: #4a5568; }
@@ -328,11 +336,11 @@
 [data-theme="dark"] .mc-team-block--on .mc-team-name--top,
 [data-theme="dark"] .mc-team-block--on .mc-team-name--bottom { color: var(--mc-accent-light); }
 
-[data-theme="dark"] .mc-shield-wrap           { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08); }
+[data-theme="dark"] .mc-shield-wrap { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); }
 [data-theme="dark"] .mc-team-block--on .mc-shield-wrap { border-color: var(--mc-accent-light); }
 [data-theme="dark"] .mc-adv-badge             { border-color: #1e2235; background: #34d399; }
 
-[data-theme="dark"] .mc-score-box             { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
+[data-theme="dark"] .mc-score-box { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.18); }
 [data-theme="dark"] .mc-score-box--done       { background: rgba(91,79,216,0.12);   border-color: rgba(91,79,216,0.22); }
 [data-theme="dark"] .mc-score-input           { color: #f1f5f9; }
 [data-theme="dark"] .mc-score-input::placeholder { color: #2d3748; }
