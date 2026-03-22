@@ -110,11 +110,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
 
         {/* Logo zone + breadcrumb */}
         <div className="gs-topbar-left">
-          <div className="gs-topbar-logo-zone">
-            <div className="gs-topbar-logo-icon">
-              <Trophy size={14} />
-            </div>
-          </div>
+          <div className="gs-topbar-logo-zone"></div>
           <div className="gs-breadcrumb">
             <span className="gs-breadcrumb-app">GlobalScore</span>
             <span className="gs-breadcrumb-sep">/</span>
