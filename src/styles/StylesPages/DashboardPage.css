@@ -60,7 +60,7 @@
 .matches-date-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 38px;
   padding-top: 16px;
 }
 
@@ -452,6 +452,12 @@
   justify-content: stretch !important;
 }
 
+.db-content--leagues .matches-date-group,
+.db-content--awards .matches-date-group {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 /* ================================================================
    GRID PROPIO PARA LIGAS Y PREMIOS — 2 columnas verticales
 ================================================================ */
@@ -460,6 +466,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
+  padding: 0 78px;
 }
 
 .leagues-grid .lc-card,

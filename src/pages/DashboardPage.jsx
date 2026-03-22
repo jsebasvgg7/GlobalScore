@@ -283,26 +283,27 @@ export default function DashboardPage() {
 
           {/* ════ LIGAS ════ */}
           {activeTab === "leagues" && (
-          <div className="db-content db-content--leagues">
-            <div className="matches-date-group">
-              <div className="matches-date-label">
-                <span>Temporada 2025 · 2026</span>
-              </div>
-              <div className="leagues-grid"></div>
+            <div className="db-content db-content--leagues">
+              <div className="matches-date-group">
+                <div className="matches-date-label">
+                  <span>Temporada 2025 · 2026</span>
+                </div>
                 {leagues.length === 0 ? (
                   <div className="matches-empty-state">
                     <div className="matches-empty-icon">🏆</div>
                     <div className="matches-empty-text">Sin ligas</div>
                   </div>
                 ) : (
-                  leagues.map((league) => (
-                    <LeagueCard
-                      key={league.id}
-                      league={league}
-                      userPrediction={league.league_predictions?.find((p) => p.user_id === currentUser.id)}
-                      onPredict={handleMakeLeaguePrediction}
-                    />
-                  ))
+                  <div className="leagues-grid">
+                    {leagues.map((league) => (
+                      <LeagueCard
+                        key={league.id}
+                        league={league}
+                        userPrediction={league.league_predictions?.find((p) => p.user_id === currentUser.id)}
+                        onPredict={handleMakeLeaguePrediction}
+                      />
+                    ))}
+                  </div>
                 )}
               </div>
             </div>
@@ -310,26 +311,27 @@ export default function DashboardPage() {
 
           {/* ════ PREMIOS ════ */}
           {activeTab === "awards" && (
-          <div className="db-content db-content--awards">
-            <div className="matches-date-group">
-              <div className="matches-date-label">
-                <span>Temporada 2025 · 2026</span>
-              </div>
-              <div className="matches-container"></div>
+            <div className="db-content db-content--awards">
+              <div className="matches-date-group">
+                <div className="matches-date-label">
+                  <span>Temporada 2025 · 2026</span>
+                </div>
                 {awards.length === 0 ? (
                   <div className="matches-empty-state">
                     <div className="matches-empty-icon">🥇</div>
                     <div className="matches-empty-text">Sin premios</div>
                   </div>
                 ) : (
-                  awards.map((award) => (
-                    <AwardCard
-                      key={award.id}
-                      award={award}
-                      userPrediction={award.award_predictions?.find((p) => p.user_id === currentUser.id)}
-                      onPredict={handleMakeAwardPrediction}
-                    />
-                  ))
+                  <div className="awards-grid">
+                    {awards.map((award) => (
+                      <AwardCard
+                        key={award.id}
+                        award={award}
+                        userPrediction={award.award_predictions?.find((p) => p.user_id === currentUser.id)}
+                        onPredict={handleMakeAwardPrediction}
+                      />
+                    ))}
+                  </div>
                 )}
               </div>
             </div>
