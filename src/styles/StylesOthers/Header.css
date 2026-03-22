@@ -16,7 +16,7 @@
 }
 
 /* ================================================================
-   DESKTOP SIDEBAR — sin cambios
+   DESKTOP SIDEBAR
 ================================================================ */
 .gs-sidebar {
   display: none;
@@ -139,7 +139,7 @@
 [data-theme="dark"] .gs-sidebar-bottom { border-top-color: rgba(255,255,255,0.07); }
 
 /* ================================================================
-   DESKTOP TOPBAR — sin cambios
+   DESKTOP TOPBAR
 ================================================================ */
 .gs-topbar {
   display: none;
@@ -336,9 +336,9 @@
 }
 
 /* ================================================================
-   MOBILE — Top Header  ← ÚNICO CAMBIO vs original
-   Antes: fondo oscuro fijo (#1e202c), avatar redondo
-   Ahora: fondo del tema (--bg), avatar cuadrado, botones cuadrados
+   MOBILE — Top Header
+   USA var(--bg) y var(--border) del sistema = mismo fondo
+   que MobileDashboard (--mob-bg mapeaba a var(--bg))
 ================================================================ */
 .gs-mobile-header {
   display: none;
@@ -346,38 +346,29 @@
   justify-content: space-between;
   height: 56px;
   padding: 0 16px;
-  /* Fondo del tema — cambia con light/dark */
-  background: #f0ede8;
-  border-bottom: 0.5px solid #d4cfc8;
+  background: var(--bg);
+  border-bottom: 0.5px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 200;
 }
 
-[data-theme="dark"] .gs-mobile-header {
-  background: #1a1d2e;
-  border-bottom-color: rgba(255, 255, 255, 0.08);
-}
+/* No hace falta override dark — var(--bg) ya cambia con el tema */
 
 .gs-mobile-left { display: flex; align-items: center; gap: 10px; }
 
-/* Avatar — cuadrado, sin border-radius */
 .gs-mobile-avatar {
   width: 38px;
   height: 38px;
   border-radius: 0;
-  background: #5b4fd8;
-  border: 0.5px solid #d4cfc8;
+  background: var(--accent);
+  border: 0.5px solid var(--border);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
-}
-
-[data-theme="dark"] .gs-mobile-avatar {
-  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .gs-mobile-avatar img  { width: 100%; height: 100%; object-fit: cover; }
@@ -392,33 +383,28 @@
 
 .gs-mobile-hey {
   font-size: 9px;
-  color: #a0a0b0;
+  color: var(--muted);
   font-family: 'DM Mono', monospace;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-[data-theme="dark"] .gs-mobile-hey { color: #4a5568; }
-
 .gs-mobile-name {
   font-size: 15px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
   font-family: 'Sora', sans-serif;
 }
 
-[data-theme="dark"] .gs-mobile-name { color: #f0f1f7; }
-
 .gs-mobile-actions { display: flex; gap: 6px; }
 
-/* Botones de acción — cuadrados, sin border-radius */
 .gs-mobile-btn {
   width: 36px;
   height: 36px;
   border-radius: 0;
-  border: 0.5px solid #d4cfc8;
-  background: #e8e4de;
-  color: #555;
+  border: 0.5px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -427,23 +413,12 @@
 }
 
 .gs-mobile-btn:hover {
-  border-color: #5b4fd8;
-  color: #5b4fd8;
-}
-
-[data-theme="dark"] .gs-mobile-btn {
-  border-color: rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: #a0a0b0;
-}
-
-[data-theme="dark"] .gs-mobile-btn:hover {
-  border-color: #7c6fe8;
-  color: #7c6fe8;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 /* ================================================================
-   MOBILE — Bottom Nav  ← IGUAL QUE ANTES, sin ningún cambio
+   MOBILE — Bottom Nav
 ================================================================ */
 .gs-bottom-nav {
   display: none;
@@ -498,7 +473,7 @@
 }
 
 /* ================================================================
-   FIX ESPACIO — sin cambios
+   FIX ESPACIO
 ================================================================ */
 .db-main > div:empty {
   display: none !important;
