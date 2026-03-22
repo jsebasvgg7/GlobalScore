@@ -1,31 +1,25 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import {
-  Trophy, TrendingUp, Target, Filter, X,
-  ArrowUpDown, ChevronRight, Zap, Flame, BarChart3
+  Trophy, Filter, X, ArrowUpDown, ChevronRight, Zap, Flame, Target
 } from "lucide-react";
 
-// Components
 import MatchCard       from "../components/ComCards/MatchCard";
 import LeagueCard      from "../components/ComCards/LeagueCard";
 import AwardCard       from "../components/ComCards/AwardCard";
 import NavigationTabs  from "../components/ComOthers/NavigationTabs";
+import RightPanel      from "../components/ComOthers/Rightpanel";
 import Footer          from "../components/ComOthers/Footer";
 import { PageLoader, LoadingOverlay } from "../components/ComOthers/LoadingStates";
-import { ToastContainer, useToast } from "../components/ComOthers/Toast";
+import { ToastContainer, useToast }   from "../components/ComOthers/Toast";
 
-// Hooks
 import { useDataLoader } from "../hooks/useDataLoader";
 import { useMatches }    from "../hooks/HooksCards/useMatches";
 import { useLeagues }    from "../hooks/HooksCards/useLeagues";
 import { useAwards }     from "../hooks/HooksCards/useAwards";
 
-// Styles
 import "../styles/StylesPages/DashboardPage.css";
 
-// ── Helpers ──────────────────────────────────────────────────────
-const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
-const acc = (correct, total) =>
-  total > 0 ? Math.round((correct / total) * 100) : 0;
+const acc = (c, t) => (t > 0 ? Math.round((c / t) * 100) : 0);
 
 export default function DashboardPage() {
   const [activeTab,    setActiveTab]    = useState("matches");
@@ -37,18 +31,17 @@ export default function DashboardPage() {
   const sortRef = useRef(null);
   const toast   = useToast();
 
-  // ── Data ──────────────────────────────────────────────────────
   const {
     currentUser, users, matches, leagues, awards,
     loading, error,
     updateMatches, updateLeagues, updateAwards,
   } = useDataLoader();
 
-  const { loading: matchesLoading, makePrediction }         = useMatches(currentUser);
-  const { loading: leaguesLoading, makeLeaguePrediction }   = useLeagues(currentUser);
-  const { loading: awardsLoading,  makeAwardPrediction }    = useAwards(currentUser);
+  const { loading: matchesLoading, makePrediction }       = useMatches(currentUser);
+  const { loading: leaguesLoading, makeLeaguePrediction } = useLeagues(currentUser);
+  const { loading: awardsLoading,  makeAwardPrediction }  = useAwards(currentUser);
 
-  // ── League categories ─────────────────────────────────────────
+  // ── League categories ───────────────────────────────
   const leagueCategories = [
     { id: "all",          name: "Todos",       icon: "🌍", leagues: [] },
     { id: "europe",       name: "Europa",      icon: "🏆", leagues: ["Champions League","Europa League","Conference League"] },
@@ -60,7 +53,6 @@ export default function DashboardPage() {
     { id: "southamerica", name: "Sudamérica",  icon: "🌎", leagues: ["Copa Libertadores","Copa Sudamericana"] },
   ];
 
-  // ── Close sort on outside click ───────────────────────────────
   useEffect(() => {
     if (!showSort) return;
     const handler = (e) => {
@@ -70,7 +62,7 @@ export default function DashboardPage() {
     return () => document.removeEventListener("mousedown", handler);
   }, [showSort]);
 
-  // ── Handlers ─────────────────────────────────────────────────
+  // ── Handlers ────────────────────────────────────────
   const handleMakePrediction = async (matchId, homeScore, awayScore, advancingTeam = null) => {
     const match = matches.find((m) => m.id === matchId);
     if (match?.deadline && new Date() > new Date(match.deadline)) {
@@ -97,7 +89,7 @@ export default function DashboardPage() {
     );
   };
 
-  // ── Filtered matches ──────────────────────────────────────────
+  // ── Filtered + sorted matches ────────────────────────
   const filteredMatches = useMemo(() => {
     let pending = matches.filter((m) => m.status === "pending");
     if (leagueFilter !== "all") {
@@ -120,9 +112,9 @@ export default function DashboardPage() {
     });
   }, [matches, leagueFilter, sortOption]);
 
-  // ── Group by date ─────────────────────────────────────────────
+  // ── Group by date ────────────────────────────────────
   const groupedMatches = useMemo(() => {
-    const today    = new Date(); today.setHours(0,0,0,0);
+    const today    = new Date(); today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
     const groups   = {};
     filteredMatches.forEach((m) => {
@@ -130,321 +122,225 @@ export default function DashboardPage() {
       let label =
         d.getTime() === today.getTime()    ? "Hoy" :
         d.getTime() === tomorrow.getTime() ? "Mañana" :
-        d.toLocaleDateString("es-ES", { weekday:"long", day:"numeric", month:"long" });
+        d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
       if (!groups[label]) groups[label] = [];
       groups[label].push(m);
     });
     return groups;
   }, [filteredMatches]);
 
-  // ── Quick stats ───────────────────────────────────────────────
-  const quickStats = useMemo(() => {
-    if (!currentUser) return [];
-    const accuracy = acc(currentUser.correct, currentUser.predictions);
-    return [
-      {
-        icon: Zap,
-        label: "Puntos totales",
-        value: fmt(currentUser.points || 0),
-        sub: `+${fmt(currentUser.monthly_points || 0)} este mes`,
-        accent: "#60519b",
-        bg: "rgba(96,81,155,0.1)",
-      },
-      {
-        icon: Target,
-        label: "Predicciones",
-        value: fmt(currentUser.predictions || 0),
-        sub: `${accuracy}% de precisión`,
-        accent: "#1D9E75",
-        bg: "rgba(29,158,117,0.1)",
-      },
-      {
-        icon: Flame,
-        label: "Racha actual",
-        value: currentUser.current_streak || 0,
-        sub: `Récord: ${currentUser.best_streak || 0}`,
-        accent: "#f59e0b",
-        bg: "rgba(245,158,11,0.1)",
-      },
-    ];
-  }, [currentUser]);
-
-  // ── Derived counts ────────────────────────────────────────────
   const activeLeagues = leagues.filter((l) => l.status === "active");
   const activeAwards  = awards.filter((a) => a.status === "active");
   const isLoading     = matchesLoading || leaguesLoading || awardsLoading;
-  const firstName     = currentUser?.name?.split(" ")[0] || "Jugador";
 
-  // ── Early returns ─────────────────────────────────────────────
   if (loading) return <PageLoader />;
   if (error)   return <div className="centered">Error: {error}</div>;
   if (!currentUser) return <div className="centered">Usuario no encontrado</div>;
 
   return (
-    <>
-      <div className="vega-root page-root">
-        <div className="db-layout">
+    <div className="db-root page-root">
 
-          {/* ════════════════════════════════
-              CONTENIDO PRINCIPAL
-          ════════════════════════════════ */}
-          <main className="db-main">
+      {/* ══ LAYOUT: Main + Panel derecho ══ */}
+      <div className="db-body">
 
-            {/* ── Greeting + stats strip ── */}
-            <div className="db-greeting-section">
-              <div className="db-greeting"><div>
-                </div>
-              </div>
+        {/* ── CONTENIDO PRINCIPAL ── */}
+        <main className="db-main">
 
-              {/* Stats chips */}
-              <div className="db-stats-strip">
-                {quickStats.map(({ icon: Icon, label, value, sub, accent, bg }) => (
-                  <div className="db-stat-chip" key={label}>
-                    <div
-                      className="db-stat-chip-icon"
-                      style={{ background: bg, color: accent }}
-                    >
-                      <Icon size={16} />
-                    </div>
-                    <div className="db-stat-chip-body">
-                      <span className="db-stat-chip-val">{value}</span>
-                      <span className="db-stat-chip-lbl">{label}</span>
-                      <span className="db-stat-chip-sub">{sub}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {/* Tabs */}
+          <NavigationTabs
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            onSortClick={activeTab === "matches" ? () => setShowSort(!showSort) : null}
+            onFilterClick={activeTab === "matches" ? () => setShowFilters(true) : null}
+            sortActive={showSort}
+            matchCount={filteredMatches.length}
+            leagueCount={activeLeagues.length}
+            awardCount={activeAwards.length}
+          />
 
-            {/* ── Tabs ── */}
-            <NavigationTabs
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              onSortClick={activeTab === "matches" ? () => setShowSort(!showSort) : null}
-              onFilterClick={activeTab === "matches" ? () => setShowFilters(true) : null}
-              sortActive={showSort}
-            />
+          {/* ════ PARTIDOS ════ */}
+          {activeTab === "matches" && (
+            <div className="db-content">
 
-            {/* ════ PARTIDOS ════ */}
-            {activeTab === "matches" && (
-              <div className="matches-section-premium">
-
-                {/* Sort dropdown */}
-                <div style={{ position:"relative" }} ref={sortRef}>
-                  {showSort && (
-                    <>
-                      <div className="sort-modal-backdrop" onClick={() => setShowSort(false)} />
-                      <div className="sort-modal sort-modal-top">
-                        <div className="sort-modal-header">
-                          <ArrowUpDown size={18} />
-                          <h4>Ordenar por</h4>
-                        </div>
-                        <div className="sort-options">
-                          {[
-                            { key:"date-asc",    label:"Fecha: Más próximos" },
-                            { key:"date-desc",   label:"Fecha: Más lejanos" },
-                            { key:"league-asc",  label:"Liga: A-Z" },
-                            { key:"league-desc", label:"Liga: Z-A" },
-                          ].map(({ key, label }) => (
-                            <button
-                              key={key}
-                              className={`sort-option ${sortOption === key ? "active" : ""}`}
-                              onClick={() => { setSortOption(key); setShowSort(false); }}
-                            >
-                              <span className="sort-option-text">{label}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-
-                {/* Panel de filtros */}
-                {showFilters && (
+              {/* Sort dropdown */}
+              <div style={{ position: "relative" }} ref={sortRef}>
+                {showSort && (
                   <>
-                    <div className="filters-modal-backdrop" onClick={() => setShowFilters(false)} />
-                    <div className="filters-modal">
-                      <div className="filters-modal-header">
-                        <div className="filters-modal-title">
-                          <Filter size={22} />
-                          <h3>Filtrar</h3>
-                        </div>
-                        <div style={{ display:"flex", gap:"8px" }}>
-                          <button className="filters-reset-btn" onClick={() => setLeagueFilter("all")}>
-                            Reset
-                          </button>
-                          <button className="filters-close-btn" onClick={() => setShowFilters(false)}>
-                            <X size={16} />
-                          </button>
-                        </div>
+                    <div className="sort-modal-backdrop" onClick={() => setShowSort(false)} />
+                    <div className="sort-modal sort-modal-top">
+                      <div className="sort-modal-header">
+                        <ArrowUpDown size={14} />
+                        <span>Ordenar por</span>
                       </div>
-                      <div className="filters-modal-body">
-                        <div className="filter-category">
-                          <div className="filter-category-header">
-                            <span className="filter-category-title">Categoría</span>
-                            <button className="view-all-link">
-                              Ver todas <ChevronRight size={12} style={{ display:"inline", verticalAlign:"middle" }} />
-                            </button>
-                          </div>
-                          <div className="filter-pills">
-                            {leagueCategories.slice(0, 7).map((cat) => (
-                              <button
-                                key={cat.id}
-                                className={`filter-pill ${leagueFilter === cat.id ? "active" : ""}`}
-                                onClick={() => { setLeagueFilter(cat.id); setShowFilters(false); }}
-                              >
-                                <span className="filter-pill-icon">{cat.icon}</span>
-                                <span>{cat.name}</span>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="filter-category">
-                          <div className="filter-category-header">
-                            <span className="filter-category-title">Más regiones</span>
-                          </div>
-                          <div className="filter-pills">
-                            {leagueCategories.slice(7).map((cat) => (
-                              <button
-                                key={cat.id}
-                                className={`filter-pill ${leagueFilter === cat.id ? "active" : ""}`}
-                                onClick={() => { setLeagueFilter(cat.id); setShowFilters(false); }}
-                              >
-                                <span className="filter-pill-icon">{cat.icon}</span>
-                                <span>{cat.name}</span>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
+                      <div className="sort-options">
+                        {[
+                          { key: "date-asc",    label: "Fecha: más próximos" },
+                          { key: "date-desc",   label: "Fecha: más lejanos" },
+                          { key: "league-asc",  label: "Liga: A-Z" },
+                          { key: "league-desc", label: "Liga: Z-A" },
+                        ].map(({ key, label }) => (
+                          <button
+                            key={key}
+                            className={`sort-option${sortOption === key ? " active" : ""}`}
+                            onClick={() => { setSortOption(key); setShowSort(false); }}
+                          >
+                            {label}
+                          </button>
+                        ))}
                       </div>
                     </div>
                   </>
                 )}
+              </div>
 
-                {/* Chip filtro activo */}
-                {leagueFilter !== "all" && (
-                  <div className="active-filter-bar">
-                    <div className="active-filter-chip">
-                      <span className="filter-icon">
-                        {leagueCategories.find((c) => c.id === leagueFilter)?.icon}
-                      </span>
-                      <span>{leagueCategories.find((c) => c.id === leagueFilter)?.name}</span>
-                      <button className="clear-filter-btn" onClick={() => setLeagueFilter("all")}>
-                        <X size={12} />
-                      </button>
+              {/* Panel de filtros */}
+              {showFilters && (
+                <>
+                  <div className="filters-modal-backdrop" onClick={() => setShowFilters(false)} />
+                  <div className="filters-modal">
+                    <div className="filters-modal-header">
+                      <div className="filters-modal-title">
+                        <Filter size={18} />
+                        <span>Filtrar</span>
+                      </div>
+                      <div style={{ display: "flex", gap: "8px" }}>
+                        <button className="filters-reset-btn" onClick={() => setLeagueFilter("all")}>Reset</button>
+                        <button className="filters-close-btn" onClick={() => setShowFilters(false)}>
+                          <X size={14} />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="filters-modal-body">
+                      <div className="filter-category">
+                        <div className="filter-category-header">
+                          <span className="filter-category-title">Categoría</span>
+                        </div>
+                        <div className="filter-pills">
+                          {leagueCategories.map((cat) => (
+                            <button
+                              key={cat.id}
+                              className={`filter-pill${leagueFilter === cat.id ? " active" : ""}`}
+                              onClick={() => { setLeagueFilter(cat.id); setShowFilters(false); }}
+                            >
+                              <span className="filter-pill-icon">{cat.icon}</span>
+                              <span>{cat.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                )}
+                </>
+              )}
 
-                {/* Lista de partidos */}
-                {Object.keys(groupedMatches).length === 0 ? (
-                  <div className="matches-container">
-                    <div className="matches-empty-state">
-                      <div className="matches-empty-icon">⚽</div>
-                      <div className="matches-empty-text">
-                        {leagueFilter === "all"
-                          ? "Sin partidos pendientes"
-                          : `Sin partidos de ${leagueCategories.find((c) => c.id === leagueFilter)?.name}`}
-                      </div>
-                      {leagueFilter !== "all" && (
-                        <button className="show-all-btn" onClick={() => setLeagueFilter("all")}>
-                          Ver todos
-                        </button>
-                      )}
+              {/* Chip filtro activo */}
+              {leagueFilter !== "all" && (
+                <div className="active-filter-bar">
+                  <div className="active-filter-chip">
+                    <span>{leagueCategories.find((c) => c.id === leagueFilter)?.icon}</span>
+                    <span>{leagueCategories.find((c) => c.id === leagueFilter)?.name}</span>
+                    <button className="clear-filter-btn" onClick={() => setLeagueFilter("all")}>
+                      <X size={10} />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Lista de partidos */}
+              {Object.keys(groupedMatches).length === 0 ? (
+                <div className="matches-container">
+                  <div className="matches-empty-state">
+                    <div className="matches-empty-icon">⚽</div>
+                    <div className="matches-empty-text">
+                      {leagueFilter === "all"
+                        ? "Sin partidos pendientes"
+                        : `Sin partidos de ${leagueCategories.find((c) => c.id === leagueFilter)?.name}`}
                     </div>
+                    {leagueFilter !== "all" && (
+                      <button className="show-all-btn" onClick={() => setLeagueFilter("all")}>Ver todos</button>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                Object.entries(groupedMatches).map(([label, group]) => (
+                  <div key={label} className="matches-date-group">
+                    <div className="matches-date-label"><span>{label}</span></div>
+                    <div className="matches-container">
+                      {group.map((m) => (
+                        <MatchCard
+                          key={m.id}
+                          match={m}
+                          userPred={m.predictions?.find((p) => p.user_id === currentUser.id)}
+                          onPredict={handleMakePrediction}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+
+          {/* ════ LIGAS ════ */}
+          {activeTab === "leagues" && (
+            <div className="db-content">
+              <div className="matches-container">
+                {leagues.length === 0 ? (
+                  <div className="matches-empty-state">
+                    <div className="matches-empty-icon">🏆</div>
+                    <div className="matches-empty-text">Sin ligas</div>
                   </div>
                 ) : (
-                  Object.entries(groupedMatches).map(([label, group]) => (
-                    <div key={label} className="matches-date-group">
-                      <div className="matches-date-label"><span>{label}</span></div>
-                      <div className="matches-container">
-                        {group.map((m) => (
-                          <MatchCard
-                            key={m.id}
-                            match={m}
-                            userPred={m.predictions?.find((p) => p.user_id === currentUser.id)}
-                            onPredict={handleMakePrediction}
-                          />
-                        ))}
-                      </div>
-                    </div>
+                  leagues.map((league) => (
+                    <LeagueCard
+                      key={league.id}
+                      league={league}
+                      userPrediction={league.league_predictions?.find((p) => p.user_id === currentUser.id)}
+                      onPredict={handleMakeLeaguePrediction}
+                    />
                   ))
                 )}
               </div>
-            )}
+            </div>
+          )}
 
-            {/* ════ LIGAS ════ */}
-            {activeTab === "leagues" && (
-              <div className="matches-section-premium">
-                <div className="matches-header-premium">
-                  <div className="matches-badge">
-                    <Trophy size={14} />
-                    <span className="matches-badge-count">{activeLeagues.length}</span>
-                    <span className="matches-badge-text"> disponibles</span>
+          {/* ════ PREMIOS ════ */}
+          {activeTab === "awards" && (
+            <div className="db-content">
+              <div className="matches-container">
+                {awards.length === 0 ? (
+                  <div className="matches-empty-state">
+                    <div className="matches-empty-icon">🥇</div>
+                    <div className="matches-empty-text">Sin premios</div>
                   </div>
-                </div>
-                <div className="matches-container">
-                  {leagues.length === 0 ? (
-                    <div className="matches-empty-state">
-                      <div className="matches-empty-icon">🏆</div>
-                      <div className="matches-empty-text">Sin ligas</div>
-                    </div>
-                  ) : (
-                    leagues.map((league) => (
-                      <LeagueCard
-                        key={league.id}
-                        league={league}
-                        userPrediction={league.league_predictions?.find(
-                          (p) => p.user_id === currentUser.id
-                        )}
-                        onPredict={handleMakeLeaguePrediction}
-                      />
-                    ))
-                  )}
-                </div>
+                ) : (
+                  awards.map((award) => (
+                    <AwardCard
+                      key={award.id}
+                      award={award}
+                      userPrediction={award.award_predictions?.find((p) => p.user_id === currentUser.id)}
+                      onPredict={handleMakeAwardPrediction}
+                    />
+                  ))
+                )}
               </div>
-            )}
+            </div>
+          )}
 
-            {/* ════ PREMIOS ════ */}
-            {activeTab === "awards" && (
-              <div className="matches-section-premium">
-                <div className="matches-header-premium">
-                  <div className="matches-badge">
-                    <Trophy size={14} />
-                    <span className="matches-badge-count">{activeAwards.length}</span>
-                    <span className="matches-badge-text"> disponibles</span>
-                  </div>
-                </div>
-                <div className="matches-container">
-                  {awards.length === 0 ? (
-                    <div className="matches-empty-state">
-                      <div className="matches-empty-icon">🥇</div>
-                      <div className="matches-empty-text">Sin premios</div>
-                    </div>
-                  ) : (
-                    awards.map((award) => (
-                      <AwardCard
-                        key={award.id}
-                        award={award}
-                        userPrediction={award.award_predictions?.find(
-                          (p) => p.user_id === currentUser.id
-                        )}
-                        onPredict={handleMakeAwardPrediction}
-                      />
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
+          <Footer />
+        </main>
 
-            <Footer />
-          </main>
-        </div>
+        {/* ── PANEL DERECHO ── */}
+        <RightPanel
+          currentUser={currentUser}
+          users={users}
+          matches={matches}
+        />
 
-        {isLoading && <LoadingOverlay message="Procesando..." />}
-        <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
       </div>
-    </>
+
+      {isLoading && <LoadingOverlay message="Procesando..." />}
+      <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
+    </div>
   );
 }

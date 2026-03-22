@@ -1,62 +1,85 @@
 import React from 'react';
-import { Trophy, Target, Award, ArrowUpDown, Filter } from 'lucide-react';
+import { Target, Trophy, Award, ArrowUpDown, Filter } from 'lucide-react';
 import '../../styles/StylesOthers/NavigationTabs.css';
 
-export default function NavigationTabs({ activeTab, onTabChange, onSortClick, onFilterClick, sortActive }) {
+export default function NavigationTabs({
+  activeTab,
+  onTabChange,
+  onSortClick,
+  onFilterClick,
+  sortActive,
+  matchCount   = 0,
+  leagueCount  = 0,
+  awardCount   = 0,
+}) {
   return (
-    <div className="navigation-tabs">
+    <div className="nt-bar">
 
-      <button
-        className={`nav-tab ${activeTab === 'matches' ? 'active' : ''}`}
-        onClick={() => onTabChange('matches')}
-      >
-        <Target size={20} />
-        <span>Partidos</span>
-        <div className="tab-indicator"></div>
-      </button>
-
-      <button
-        className={`nav-tab ${activeTab === 'leagues' ? 'active' : ''}`}
-        onClick={() => onTabChange('leagues')}
-      >
-        <Trophy size={20} />
-        <span>Ligas</span>
-        <div className="tab-indicator"></div>
-      </button>
-
-      <button
-        className={`nav-tab ${activeTab === 'awards' ? 'active' : ''}`}
-        onClick={() => onTabChange('awards')}
-      >
-        <Award size={20} />
-        <span>Premios</span>
-        <div className="tab-indicator"></div>
-      </button>
-
-      {/* Ordenar */}
-      {onSortClick && (
+      {/* Grupo principal */}
+      <div className="nt-group">
         <button
-          className={`nav-tab nav-tab-control ${sortActive ? 'active' : ''}`}
-          onClick={onSortClick}
-          title="Ordenar"
+          className={`nt-tab${activeTab === 'matches' ? ' nt-tab--active' : ''}`}
+          onClick={() => onTabChange('matches')}
         >
-          <ArrowUpDown size={18} />
-          <div className="tab-indicator"></div>
+          <Target size={13} />
+          <span>Partidos</span>
+          {matchCount > 0 && (
+            <span className={`nt-count${activeTab === 'matches' ? ' nt-count--active' : ''}`}>
+              {matchCount}
+            </span>
+          )}
         </button>
-      )}
 
-      {/* Filtrar */}
-      {onFilterClick && (
         <button
-          className="nav-tab nav-tab-control"
-          onClick={onFilterClick}
-          title="Filtrar"
+          className={`nt-tab${activeTab === 'leagues' ? ' nt-tab--active' : ''}`}
+          onClick={() => onTabChange('leagues')}
         >
-          <Filter size={18} />
-          <div className="tab-indicator"></div>
+          <Trophy size={13} />
+          <span>Ligas</span>
+          {leagueCount > 0 && (
+            <span className={`nt-count${activeTab === 'leagues' ? ' nt-count--active' : ''}`}>
+              {leagueCount}
+            </span>
+          )}
         </button>
-      )}
 
+        <button
+          className={`nt-tab${activeTab === 'awards' ? ' nt-tab--active' : ''}`}
+          onClick={() => onTabChange('awards')}
+        >
+          <Award size={13} />
+          <span>Premios</span>
+          {awardCount > 0 && (
+            <span className={`nt-count${activeTab === 'awards' ? ' nt-count--active' : ''}`}>
+              {awardCount}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* Controles */}
+      {(onSortClick || onFilterClick) && (
+        <div className="nt-controls">
+          {onSortClick && (
+            <button
+              className={`nt-ctrl-btn${sortActive ? ' nt-ctrl-btn--active' : ''}`}
+              onClick={onSortClick}
+              title="Ordenar"
+            >
+              <ArrowUpDown size={12} />
+            </button>
+          )}
+          {onFilterClick && (
+            <button
+              className="nt-ctrl-btn"
+              onClick={onFilterClick}
+              title="Filtrar"
+            >
+              <Filter size={12} />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
