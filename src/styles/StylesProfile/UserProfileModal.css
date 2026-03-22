@@ -1,5 +1,12 @@
 /* ══════════════════════════════════════════════════════
-   USER PROFILE MODAL 
+   USER PROFILE MODAL — Fixed Android Chrome compositing bug
+   
+   Root cause: position:sticky inside overflow:auto causes
+   GPU compositing glitch on Android WebKit/Chrome.
+   
+   Fix: Modal uses flex column. Top section is static.
+   Tabs are NOT sticky — they stay in flow.
+   Only .upm-content scrolls (overflow-y: auto on it, not modal).
 ══════════════════════════════════════════════════════ */
 
 /* ── TOKENS ─────────────────────────────────────────── */
@@ -35,13 +42,12 @@
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.72);
-  backdrop-filter: blur(6px);
+  /* Sin backdrop-filter — causa compositing issues en Android */
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10000;
   padding: 20px;
-  overflow-y: auto;
   animation: upmFadeIn 0.2s ease;
 }
 
@@ -50,35 +56,40 @@
   to   { opacity: 1; }
 }
 
-/* ── MODAL SHELL ─────────────────────────────────────── */
+/* ── MODAL SHELL ─────────────────────────────────────── 
+   KEY FIX: el modal NO tiene overflow propio.
+   Es un flex column de altura fija.
+   Solo .upm-content hace scroll.
+─────────────────────────────────────────────────────── */
 .upm-modal {
   position: relative;
   background: var(--upm-card);
   border-radius: var(--upm-radius);
   width: 100%;
   max-width: 420px;
+  /* Altura fija — el scroll va dentro */
+  height: 88vh;
   max-height: 88vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  /* SIN overflow aquí — el modal no scrollea */
+  overflow: hidden;
   box-shadow: var(--upm-shadow);
   border: 1px solid var(--upm-border);
   opacity: 0;
   transform: translateY(24px) scale(0.97);
   transition: opacity 0.35s cubic-bezier(.22,1,.36,1),
               transform 0.35s cubic-bezier(.22,1,.36,1);
-  scrollbar-width: thin;
-  scrollbar-color: rgba(139,92,246,0.35) transparent;
+  /* Force GPU layer para evitar glitch */
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .upm-modal--in {
   opacity: 1;
+  -webkit-transform: translateY(0) scale(1);
   transform: translateY(0) scale(1);
-}
-
-.upm-modal::-webkit-scrollbar { width: 5px; }
-.upm-modal::-webkit-scrollbar-thumb {
-  background: rgba(139,92,246,0.4);
-  border-radius: 4px;
 }
 
 /* ── FLOATING CROWN ──────────────────────────────────── */
@@ -114,7 +125,7 @@
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 3px 8px rgba(239,68,68,0.45);
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .upm-close:hover {
@@ -122,45 +133,13 @@
   transform: scale(1.08) rotate(8deg);
 }
 
-/* Imagen del banner dentro del hero */
-.upm-hero-banner-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 20px 20px 0 0;
-  display: block;
-}
-
-/* Overlay oscuro sutil sobre la imagen para que el avatar y texto destaquen */
-.upm-hero-banner-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.15) 0%,
-    rgba(0, 0, 0, 0.45) 100%
-  );
-  border-radius: 20px 20px 0 0;
-  pointer-events: none;
-}
-
-/* Cuando hay banner real, el hero-banner tiene posición relativa */
-.upm-hero-banner {
-  position: relative;
-}
-/* ══════════════════════════════════════════════════════
-   HERO — avatar izquierda flotando, todo centrado abajo
-══════════════════════════════════════════════════════ */
-
+/* ── HERO — zona no scrolleable ──────────────────────── */
 .upm-hero {
-  position: relative;
-  z-index: 1;
+  flex-shrink: 0;   /* nunca se comprime */
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  /* Sin overflow, sin transform aquí */
 }
 
 .upm-hero-banner {
@@ -195,13 +174,33 @@
   opacity: 0.4;
 }
 
-/* Avatar flotando sobre el banner, centrado */
+/* Banner con imagen real */
+.upm-hero-banner-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.upm-hero-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 100%);
+  pointer-events: none;
+}
+
+/* Avatar */
 .upm-hero-avatar-wrap {
   position: relative;
   width: 88px;
   align-self: center;
   margin-top: -44px;
   flex-shrink: 0;
+  /* Forzar su propio layer para no interferir */
+  isolation: isolate;
 }
 
 .upm-avatar {
@@ -247,7 +246,6 @@
   box-shadow: 0 3px 10px rgba(245,158,11,0.5);
 }
 
-/* Cuerpo: nombre + pills + tags + bio, centrados */
 .upm-hero-body {
   display: flex;
   flex-direction: column;
@@ -264,38 +262,6 @@
   margin: 0;
   letter-spacing: -0.3px;
   line-height: 1.1;
-}
-
-.upm-title-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 14px;
-  border-radius: 20px;
-  border: 1.5px solid currentColor;
-  font-size: 12px;
-  font-weight: 700;
-  background: rgba(139,92,246,0.07);
-}
-
-.upm-rank-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.1));
-  border: 1.5px solid rgba(245,158,11,0.35);
-  border-radius: 20px;
-  padding: 4px 14px;
-  font-size: 12px;
-  font-weight: 800;
-  color: #F59E0B;
-}
-
-.upm-rank-of {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--upm-muted);
-  margin-left: 2px;
 }
 
 .upm-info-tags {
@@ -335,15 +301,17 @@
   box-sizing: border-box;
 }
 
-/* ── TABS ────────────────────────────────────────────── */
+/* ── TABS — NO sticky, en flujo normal ───────────────── 
+   KEY FIX: quitamos position:sticky que causaba el glitch.
+   Los tabs están en el flex column del modal, siempre visibles.
+─────────────────────────────────────────────────────── */
 .upm-tabs {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  flex-shrink: 0;        /* no se comprime */
   display: flex;
   background: var(--upm-card);
   border-bottom: 2px solid var(--upm-border);
-  margin-top: 16px;
+  border-top: 1px solid var(--upm-border2);
+  /* Sin position:sticky — ese era el culpable */
 }
 
 .upm-tab {
@@ -380,24 +348,33 @@
 .upm-tab--active::after { opacity: 1; }
 .upm-tab svg { flex-shrink: 0; }
 
-/* ── CONTENT AREA ────────────────────────────────────── */
+/* ── CONTENT — el único que scrollea ────────────────── 
+   KEY FIX: overflow-y aquí, no en .upm-modal.
+   Al separar el scroll del sticky desaparece el glitch.
+─────────────────────────────────────────────────────── */
 .upm-content {
-  position: relative;
-  z-index: 1;
+  flex: 1;              /* ocupa todo el espacio restante */
+  overflow-y: auto;     /* scroll SOLO aquí */
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   padding: 0 14px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139,92,246,0.35) transparent;
+}
+
+.upm-content::-webkit-scrollbar { width: 4px; }
+.upm-content::-webkit-scrollbar-thumb {
+  background: rgba(139,92,246,0.4);
+  border-radius: 4px;
 }
 
 .upm-tab-panel {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding-bottom: 4px;
-  animation: upmSlideUp 0.25s ease;
-}
-
-@keyframes upmSlideUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  padding-bottom: 20px;
+  /* Sin transform en la animación — causa compositing issues */
+  animation: upmFadeIn 0.2s ease;
 }
 
 /* ── SECTION DIVIDER ─────────────────────────────────── */
@@ -448,6 +425,8 @@
   overflow: hidden;
 }
 
+[data-theme="light"] .upm-level-bar { background: rgba(0,0,0,0.06); }
+
 .upm-level-fill {
   height: 100%;
   background: linear-gradient(90deg, #6D28D9, #8B5CF6, #A78BFA);
@@ -456,6 +435,7 @@
   transition: width 0.8s cubic-bezier(.22,1,.36,1);
 }
 
+/* Glow animado — solo translate, no transform en el padre */
 .upm-level-fill-glow {
   position: absolute;
   inset: 0;
@@ -465,7 +445,7 @@
 
 @keyframes upmGlow {
   from { transform: translateX(-100%); }
-  to   { transform: translateX(100%); }
+  to   { transform: translateX(200%); }
 }
 
 .upm-level-pts {
@@ -484,6 +464,8 @@
   gap: 8px;
 }
 
+.upm-stats-grid--secondary { margin-top: 4px; }
+
 .upm-stat-pill {
   display: flex;
   align-items: center;
@@ -494,13 +476,11 @@
   padding: 12px 14px;
   position: relative;
   overflow: hidden;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: box-shadow 0.15s ease;
 }
 
-.upm-stat-pill:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-}
+[data-theme="light"] .upm-stat-pill { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+[data-theme="light"] .upm-stat-pill:hover { box-shadow: 0 6px 20px rgba(96,81,155,0.15); }
 
 .upm-stat-pill-icon {
   width: 36px;
@@ -512,6 +492,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .upm-stat-pill-body {
@@ -554,6 +535,8 @@
   overflow: hidden;
   margin-bottom: 4px;
 }
+
+[data-theme="light"] .upm-streaks-row { box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
 
 .upm-streak-card {
   flex: 1;
@@ -614,10 +597,7 @@
   justify-content: center;
 }
 
-.upm-active-title-info {
-  flex: 1;
-  min-width: 0;
-}
+.upm-active-title-info { flex: 1; min-width: 0; }
 
 .upm-active-title-info strong {
   font-size: 15px;
@@ -677,12 +657,6 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.upm-badge:hover .upm-badge-hex {
-  transform: scale(1.08) translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
 .upm-badge-ring {
@@ -693,10 +667,7 @@
   pointer-events: none;
 }
 
-.upm-badge-emoji {
-  font-size: 26px;
-  line-height: 1;
-}
+.upm-badge-emoji { font-size: 26px; line-height: 1; }
 
 .upm-badge-name {
   font-size: 10px;
@@ -729,6 +700,10 @@
   flex-direction: column;
   align-items: center;
   gap: 14px;
+}
+
+[data-theme="light"] .upm-crowns-showcase {
+  background: linear-gradient(135deg, rgba(245,158,11,0.07), rgba(217,119,6,0.04));
 }
 
 .upm-crowns-total {
@@ -787,11 +762,8 @@
   border-left: 3px solid #F59E0B;
   border-radius: 12px;
   padding: 11px 14px;
-  animation: upmSlideUp 0.3s ease both;
-  transition: transform 0.15s ease;
+  animation: upmFadeIn 0.3s ease both;
 }
-
-.upm-crown-entry:hover { transform: translateX(4px); }
 
 .upm-crown-icon {
   width: 30px;
@@ -865,31 +837,35 @@
   margin: 0;
 }
 
-/* ── LIGHT MODE ──────────────────────────────────────── */
-[data-theme="light"] .upm-hero-banner {
-  background: linear-gradient(135deg, #4c1d95, #7c3aed, #8b5cf6);
+/* ── MISC ────────────────────────────────────────────── */
+.upm-title-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1.5px solid currentColor;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(139,92,246,0.07);
 }
 
-[data-theme="light"] .upm-stat-pill {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+.upm-rank-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.1));
+  border: 1.5px solid rgba(245,158,11,0.35);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #F59E0B;
 }
 
-[data-theme="light"] .upm-stat-pill:hover {
-  box-shadow: 0 6px 20px rgba(96,81,155,0.15);
-}
-
-[data-theme="light"] .upm-level-bar {
-  background: rgba(0,0,0,0.06);
-}
-
-[data-theme="light"] .upm-crowns-showcase {
-  background: linear-gradient(135deg, rgba(245,158,11,0.07), rgba(217,119,6,0.04));
-}
-
-[data-theme="light"] .upm-streaks-row {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-}
-
-[data-theme="light"] .upm-bio {
-  background: rgba(0,0,0,0.03);
+.upm-rank-of {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--upm-muted);
+  margin-left: 2px;
 }
