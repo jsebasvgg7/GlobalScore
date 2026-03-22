@@ -1,10 +1,5 @@
 /* ================================================================
    MatchCard — Estilo Dashboard  ·  v2
-   Inspirado en la UI de Burnley Medical Practice
-   ─ Card activa con fondo morado
-   ─ Footer de métricas con iconos
-   ─ Pill de estado descriptiva
-   ─ Diseño vertical limpio y refinado
 ================================================================ */
 
 /* ── Tokens de color ── */
@@ -23,13 +18,9 @@
 /* ── Wrapper ── */
 .mc-wrap {
   width: 100%;
-  max-width: 280px;
+  max-width: 210px;
   margin: 0 auto;
 }
-
-
-
-
 
 /* ================================================================
    CARD BASE
@@ -225,53 +216,33 @@
 }
 
 /* ================================================================
-   BODY — [escudo local] [score] VS [score] [escudo visitante]
+   BODY — escudos + scores
 ================================================================ */
 .mc-body {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 10px 14px 16px;
+  gap: 6px;
+  padding: 6px 14px 14px;
 }
 
-/* ── Equipo: escudo + nombre en fila ── */
+/* ── Equipo ── */
 .mc-team {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  flex-shrink: 0;
+  gap: 6px;
 }
 
-.mc-team--tap { cursor: pointer; }
-
-/* ── Centro: score · VS · score ── */
-.mc-center {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  flex: 1;
-}
-
-/* VS wrap */
-.mc-vs-wrap {
-  width: 18px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+.mc-team--tap {
+  cursor: pointer;
 }
 
 /* Escudo */
 .mc-shield-wrap {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   border-radius: var(--mc-radius-shield);
   background: #f4f7fc;
   border: 0.5px solid #e8ecf4;
@@ -307,15 +278,15 @@
 }
 
 .mc-shield-img {
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   object-fit: contain;
   object-position: center;
   display: block;
 }
 
 .mc-shield-emoji {
-  font-size: 22px;
+  font-size: 28px;
   line-height: 1;
 }
 
@@ -372,6 +343,14 @@
   letter-spacing: 0.07em;
   text-transform: uppercase;
   text-align: center;
+}
+
+/* ── Columna central ── */
+.mc-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
 /* ── Score box ── */
