@@ -436,37 +436,14 @@
 }
 
 /* ================================================================
-   LEAGUE Y AWARD CARDS — grid de 3 columnas igual que MatchCard
-================================================================ */
-.matches-container .lc-card,
-.matches-container .ac-card {
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-}
-
-/* Ligas y premios: 2 columnas, más anchas para formularios */
-.db-content--leagues .matches-container,
-.db-content--awards .matches-container {
-  grid-template-columns: repeat(2, 1fr) !important;
-  justify-content: stretch !important;
-}
-
-.db-content--leagues .matches-date-group,
-.db-content--awards .matches-date-group {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-/* ================================================================
    GRID PROPIO PARA LIGAS Y PREMIOS — 2 columnas verticales
 ================================================================ */
 .leagues-grid,
 .awards-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 0 78px;
+  gap: 28px;
+  padding: 0 100px;
 }
 
 .leagues-grid .lc-card,
