@@ -441,15 +441,6 @@ export default function DashboardPage() {
 
             <Footer />
           </main>
-
-          {/* ════════════════════════════════
-              SIDEBAR DERECHO
-          ════════════════════════════════ */}
-          <DashboardSidebar
-            currentUser={currentUser}
-            users={users}
-          />
-
         </div>
 
         {isLoading && <LoadingOverlay message="Procesando..." />}
