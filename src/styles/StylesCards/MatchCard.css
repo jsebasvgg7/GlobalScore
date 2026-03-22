@@ -129,11 +129,12 @@
 .mc-team-block {
   display: flex;
   flex-direction: column;
-  align-items: center;        /* centrado horizontal */
+  align-items: center;
   padding: 11px 12px 13px;
   transition: background 0.15s;
+  /* ← cursor default siempre en el bloque */
+  cursor: default;
 }
-.mc-team-block--tap   { cursor: pointer; }
 .mc-team-block:hover  { background: #f8fafc; }
 .mc-card--active .mc-team-block:hover { background: #1a1a2c; }
 .mc-team-block--on    { background: var(--mc-accent-subtle); }
@@ -186,7 +187,15 @@
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; position: relative;
   transition: border-color 0.2s, box-shadow 0.2s;
+  /* ← cursor default por defecto */
+  cursor: default;
 }
+
+/* ← cursor pointer SOLO cuando es knockout y está habilitado */
+.mc-shield-wrap--tap {
+  cursor: pointer;
+}
+
 .mc-card--active .mc-shield-wrap { background: #1e1e30; border-color: #2a2a3e; }
 
 .mc-team-block--on .mc-shield-wrap {
@@ -279,101 +288,29 @@
   95%            { transform: scale(1.25) rotate(8deg);  }
   97%            { transform: scale(1.1)  rotate(-4deg); }
 }
+
 /* ================================================================
-   SCALE x1.25 — tamaño equivalente al zoom 125%
-   Todos los valores base * 1.25
+   SCALE x1.25
 ================================================================ */
-
-/* Wrapper: 210 * 1.25 = 262px */
-.mc-wrap {
-  max-width: 262px !important;
-}
-
-/* Shield: 48 * 1.25 = 60px */
-.mc-shield-wrap {
-  width: 60px !important;
-  height: 60px !important;
-}
-
-.mc-shield-img {
-  width: 40px !important;
-  height: 40px !important;
-}
-
-.mc-shield-emoji {
-  font-size: 30px !important;
-}
-
-/* Score box: 48 * 1.25 = 60px */
-.mc-score-box {
-  width: 60px !important;
-  height: 60px !important;
-}
-
-/* Score input: 18 * 1.25 = 22.5px */
-.mc-score-input {
-  font-size: 22px !important;
-}
-
-/* League icon: 20 * 1.25 = 25px */
-.mc-league-icon {
-  width: 25px !important;
-  height: 25px !important;
-}
-
-.mc-league-logo {
-  width: 16px !important;
-  height: 16px !important;
-}
-
-/* League name: 10 * 1.25 = 12.5px */
-.mc-league-name {
-  font-size: 12px !important;
-}
-
-/* Team name: 10 * 1.25 = 12.5px */
+.mc-wrap          { max-width: 262px !important; }
+.mc-shield-wrap   { width: 60px !important; height: 60px !important; }
+.mc-shield-img    { width: 40px !important; height: 40px !important; }
+.mc-shield-emoji  { font-size: 30px !important; }
+.mc-score-box     { width: 60px !important; height: 60px !important; }
+.mc-score-input   { font-size: 22px !important; }
+.mc-league-icon   { width: 25px !important; height: 25px !important; }
+.mc-league-logo   { width: 16px !important; height: 16px !important; }
+.mc-league-name   { font-size: 12px !important; }
 .mc-team-name--top,
-.mc-team-name--bottom {
-  font-size: 12px !important;
-}
+.mc-team-name--bottom { font-size: 12px !important; }
+.mc-team-block    { padding: 14px 15px 16px !important; }
+.mc-header        { padding: 11px 15px !important; }
+.mc-metric        { padding: 10px 15px !important; }
+.mc-metric-val    { font-size: 12px !important; }
+.mc-adv-badge     { width: 17px !important; height: 17px !important; }
+.mc-vs-label      { font-size: 11px !important; padding: 0 12px !important; }
+.mc-pill          { font-size: 9px !important; padding: 4px 8px !important; }
 
-/* Team block padding: 11/12/13 * 1.25 */
-.mc-team-block {
-  padding: 14px 15px 16px !important;
-}
-
-/* Header padding: 9/12 * 1.25 */
-.mc-header {
-  padding: 11px 15px !important;
-}
-
-/* Footer metric padding: 8/12 * 1.25 */
-.mc-metric {
-  padding: 10px 15px !important;
-}
-
-/* Metric value font: 10 * 1.25 = 12.5px */
-.mc-metric-val {
-  font-size: 12px !important;
-}
-
-/* Adv badge: 14 * 1.25 = 17.5px */
-.mc-adv-badge {
-  width: 17px !important;
-  height: 17px !important;
-}
-
-/* VS label */
-.mc-vs-label {
-  font-size: 11px !important;
-  padding: 0 12px !important;
-}
-
-/* Pill */
-.mc-pill {
-  font-size: 9px !important;
-  padding: 4px 8px !important;
-}
 /* ================================================================
    FOOTER
 ================================================================ */

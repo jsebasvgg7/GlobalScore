@@ -118,8 +118,6 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
   ].filter(Boolean).join(" ");
 
   // ── Bloque reutilizable por equipo ────────────────────────
-  // isHome = true  → nombre ARRIBA  del escudo
-  // isHome = false → nombre ABAJO   del escudo
   const TeamBlock = ({ side }) => {
     const isHome    = side === "home";
     const teamName  = isHome ? match.home_team          : match.away_team;
@@ -128,10 +126,16 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
     const score     = isHome ? homeScore                : awayScore;
     const isAdv     = advancingTeam === side;
 
+    // ← sin mc-team-block--tap, sin onClick en el bloque
     const blockClasses = [
       "mc-team-block",
-      match.is_knockout && !isDisabled ? "mc-team-block--tap" : "",
       isAdv ? "mc-team-block--on" : "",
+    ].filter(Boolean).join(" ");
+
+    // ← cursor pointer solo en el escudo cuando es knockout
+    const shieldClasses = [
+      "mc-shield-wrap",
+      match.is_knockout && !isDisabled ? "mc-shield-wrap--tap" : "",
     ].filter(Boolean).join(" ");
 
     const scoreBoxClasses = [
@@ -147,7 +151,11 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
 
     const rowEl = (
       <div className="mc-team-row">
-        <div className="mc-shield-wrap">
+        {/* ← onClick y clase --tap solo en el escudo */}
+        <div
+          className={shieldClasses}
+          onClick={() => handleAdvancingTeamClick(side)}
+        >
           {logoUrl ? (
             <img
               src={logoUrl}
@@ -178,8 +186,7 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
     );
 
     return (
-      <div className={blockClasses} onClick={() => handleAdvancingTeamClick(side)}>
-        {/* Local: nombre arriba — Visitante: nombre abajo */}
+      <div className={blockClasses}>
         {isHome ? <>{nameEl}{rowEl}</> : <>{rowEl}{nameEl}</>}
       </div>
     );
