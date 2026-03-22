@@ -12,7 +12,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
   const [clock, setClock] = useState("");
   const [tooltip, setTooltip] = useState(null);
 
-  // Reloj en vivo
   useEffect(() => {
     const tick = () => {
       const now = new Date();
@@ -48,18 +47,15 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
   return (
     <>
       {/* ══════════════════════════════════════
-          DESKTOP SIDEBAR — wireframe 52px
+          DESKTOP SIDEBAR — sin cambios
       ══════════════════════════════════════ */}
       <aside className="gs-sidebar">
-
-        {/* Logo */}
         <div className="gs-logo-wrap">
           <button className="gs-logo-btn" onClick={() => navigate("/app")} aria-label="Inicio">
             <Trophy size={18} />
           </button>
         </div>
 
-        {/* Nav */}
         <nav className="gs-nav">
           {navItems.map(({ path, icon: Icon, label }) => (
             <button
@@ -76,7 +72,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           ))}
         </nav>
 
-        {/* Bottom */}
         <div className="gs-sidebar-bottom">
           <button
             className="gs-nav-btn"
@@ -104,11 +99,9 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
       </aside>
 
       {/* ══════════════════════════════════════
-          DESKTOP TOPBAR — wireframe delgado
+          DESKTOP TOPBAR — sin cambios
       ══════════════════════════════════════ */}
       <header className="gs-topbar">
-
-        {/* Logo zone + breadcrumb */}
         <div className="gs-topbar-left">
           <div className="gs-topbar-logo-zone"></div>
           <div className="gs-breadcrumb">
@@ -117,11 +110,8 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             <span className="gs-breadcrumb-page">{pageName.toLowerCase()}</span>
           </div>
         </div>
-
-        {/* Derecha: reloj + notif + usuario */}
         <div className="gs-topbar-right">
           <span className="gs-clock">{clock}</span>
-
           <button
             className="gs-topbar-icon-btn"
             onClick={() => navigate("/notifications")}
@@ -130,7 +120,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             <Bell size={16} />
             <span className="gs-bell-dot" />
           </button>
-
           <div
             className="gs-user-chip"
             onClick={() => navigate("/profile")}
@@ -152,7 +141,9 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
       </header>
 
       {/* ══════════════════════════════════════
-          MOBILE — Top Header
+          MOBILE — Top Header  ← MODIFICADO
+          Fondo del tema, bordes rectos, sin
+          border-radius en ningún elemento
       ══════════════════════════════════════ */}
       <header className="gs-mobile-header">
         <div className="gs-mobile-left">
@@ -163,22 +154,23 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             }
           </button>
           <div className="gs-mobile-greeting">
-            <span className="gs-mobile-hey">Hey,</span>
+            <span className="gs-mobile-hey">HEY,</span>
             <span className="gs-mobile-name">{firstName}</span>
           </div>
         </div>
         <div className="gs-mobile-actions">
-          <button className="gs-mobile-btn" onClick={toggleTheme}>
+          <button className="gs-mobile-btn" onClick={toggleTheme} aria-label="Tema">
             {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
           </button>
-          <button className="gs-mobile-btn" onClick={() => navigate("/notifications")}>
+          <button className="gs-mobile-btn" onClick={() => navigate("/notifications")} aria-label="Notificaciones">
             <Bell size={16} />
           </button>
         </div>
       </header>
 
       {/* ══════════════════════════════════════
-          MOBILE — Bottom Nav
+          MOBILE — Bottom Nav  ← IGUAL QUE ANTES
+          Pill redondeada, sin cambios
       ══════════════════════════════════════ */}
       <nav className="gs-bottom-nav">
         <div className="gs-bottom-pill">

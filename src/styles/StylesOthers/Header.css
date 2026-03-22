@@ -16,7 +16,7 @@
 }
 
 /* ================================================================
-   DESKTOP SIDEBAR
+   DESKTOP SIDEBAR — sin cambios
 ================================================================ */
 .gs-sidebar {
   display: none;
@@ -140,7 +140,7 @@
 [data-theme="dark"] .gs-sidebar-bottom { border-top-color: rgba(255,255,255,0.07); }
 
 /* ================================================================
-   DESKTOP TOPBAR
+   DESKTOP TOPBAR — sin cambios
 ================================================================ */
 .gs-topbar {
   display: none;
@@ -167,10 +167,7 @@
   height: 100%;
 }
 
-/* FIX PUNTO 1: Eliminar el hueco vacío — logo zone colapsada */
-.gs-topbar-logo-zone {
-  display: none;
-}
+.gs-topbar-logo-zone { display: none; }
 
 .gs-breadcrumb {
   display: flex;
@@ -305,15 +302,14 @@
 }
 
 /* ================================================================
-   DESKTOP — mostrar y aplicar offsets
+   DESKTOP — mostrar sidebar + topbar, ocultar móvil
 ================================================================ */
 @media (min-width: 769px) {
-  .gs-sidebar { display: flex; }
-  .gs-topbar  { display: flex; }
+  .gs-sidebar       { display: flex; }
+  .gs-topbar        { display: flex; }
   .gs-mobile-header { display: none !important; }
   .gs-bottom-nav    { display: none !important; }
 
-  /* padding-top y margin-left manejados por layout.css */
   .ranking-page,
   .admin-page,
   .profile-page,
@@ -334,7 +330,6 @@
     box-sizing: border-box;
   }
 
-  /* db-root y db-main pegados al borde superior, sin espacio entre topbar y tabs */
   .vega-root .db-root  { flex: 1; min-height: 0; overflow: hidden; padding-top: 0 !important; margin-top: 0 !important; }
   .vega-root .db-body  { flex: 1; min-height: 0; overflow: hidden; }
   .vega-root .db-main  { padding-top: 0 !important; margin-top: 0 !important; }
@@ -342,54 +337,114 @@
 }
 
 /* ================================================================
-   MOBILE — Top Header
+   MOBILE — Top Header  ← ÚNICO CAMBIO vs original
+   Antes: fondo oscuro fijo (#1e202c), avatar redondo
+   Ahora: fondo del tema (--bg), avatar cuadrado, botones cuadrados
 ================================================================ */
 .gs-mobile-header {
   display: none;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  height: 56px;
   padding: 0 16px;
-  background: #1e202c;
+  /* Fondo del tema — cambia con light/dark */
+  background: #f0ede8;
+  border-bottom: 0.5px solid #d4cfc8;
   position: sticky;
   top: 0;
-  z-index: 100;
-  border-bottom: 0.5px solid rgba(96,81,155,0.2);
+  z-index: 200;
 }
 
-.gs-mobile-left  { display: flex; align-items: center; gap: 10px; }
+[data-theme="dark"] .gs-mobile-header {
+  background: #1a1d2e;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
 
+.gs-mobile-left { display: flex; align-items: center; gap: 10px; }
+
+/* Avatar — cuadrado, sin border-radius */
 .gs-mobile-avatar {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #5b4fd8, #7c6fe8);
-  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 0;
+  background: #5b4fd8;
+  border: 0.5px solid #d4cfc8;
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .gs-mobile-avatar {
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .gs-mobile-avatar img  { width: 100%; height: 100%; object-fit: cover; }
-.gs-mobile-avatar span { color: #fff; font-size: 14px; font-weight: 700; }
+.gs-mobile-avatar span {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+}
 
 .gs-mobile-greeting { display: flex; flex-direction: column; line-height: 1.2; }
-.gs-mobile-hey      { font-size: 11px; color: #9ca3b8; }
-.gs-mobile-name     { font-size: 16px; font-weight: 700; color: #f0f1f7; }
 
-.gs-mobile-actions { display: flex; gap: 8px; }
+.gs-mobile-hey {
+  font-size: 9px;
+  color: #a0a0b0;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 
+[data-theme="dark"] .gs-mobile-hey { color: #4a5568; }
+
+.gs-mobile-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a2e;
+  font-family: 'Sora', sans-serif;
+}
+
+[data-theme="dark"] .gs-mobile-name { color: #f0f1f7; }
+
+.gs-mobile-actions { display: flex; gap: 6px; }
+
+/* Botones de acción — cuadrados, sin border-radius */
 .gs-mobile-btn {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.06);
-  color: #f0f1f7;
-  display: flex; align-items: center; justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 0;
+  border: 0.5px solid #d4cfc8;
+  background: #e8e4de;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.gs-mobile-btn:hover {
+  border-color: #5b4fd8;
+  color: #5b4fd8;
+}
+
+[data-theme="dark"] .gs-mobile-btn {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #a0a0b0;
+}
+
+[data-theme="dark"] .gs-mobile-btn:hover {
+  border-color: #7c6fe8;
+  color: #7c6fe8;
 }
 
 /* ================================================================
-   MOBILE — Bottom Nav
+   MOBILE — Bottom Nav  ← IGUAL QUE ANTES, sin ningún cambio
 ================================================================ */
 .gs-bottom-nav {
   display: none;
@@ -434,6 +489,9 @@
   color: #5b4fd8;
 }
 
+/* ================================================================
+   MOBILE — mostrar header y nav
+================================================================ */
 @media (max-width: 768px) {
   .gs-mobile-header { display: flex; }
   .gs-bottom-nav    { display: flex; }
@@ -441,8 +499,7 @@
 }
 
 /* ================================================================
-   FIX ESPACIO TOPBAR-TABS: colapsar cualquier div vacío al inicio
-   del db-main que pueda crear altura fantasma
+   FIX ESPACIO — sin cambios
 ================================================================ */
 .db-main > div:empty {
   display: none !important;
