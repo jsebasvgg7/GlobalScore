@@ -4,7 +4,7 @@ import {
   Clock, Target, Award, BellRing, BellOff
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
-import Footers from '../components/ComOthers/Footer';
+import Footer from '../components/ComOthers/Footer';
 import '../styles/StylesPages/NotificationsPage.css';
 
 const VAPID_PUBLIC_KEY = 'BBxgmAtEOHeYNi1tJQcrWzL_Q-6_Mj16ECGgQSL6JPX0i9XyL5V5LFJHjNdde_TTRxAUXJHSYNtUOvXcAsYS_Xs';
@@ -29,13 +29,12 @@ export default function NotificationsPage({ currentUser }) {
   const [pushEnabled, setPushEnabled] = useState(false);
   const [pushLoading, setPushLoading] = useState(true);
 
-  // ── Verificar estado real de suscripción ──────────────────────────────────
+  // ── Verificar estado real de suscripción ─────────────────────────────────
   const checkSubscriptionStatus = useCallback(async () => {
     if (!currentUser?.id) return;
     setPushLoading(true);
 
     try {
-      // 1. ¿El navegador tiene permiso?
       if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
         setPushEnabled(false);
         return;
@@ -46,18 +45,15 @@ export default function NotificationsPage({ currentUser }) {
         return;
       }
 
-      // 2. ¿Hay suscripción activa en el navegador?
       const registration = await navigator.serviceWorker.ready;
       const browserSub = await registration.pushManager.getSubscription();
 
       if (!browserSub) {
         setPushEnabled(false);
-        // Limpiar registro huérfano en Supabase si existe
         await supabase.from('push_subscriptions').delete().eq('user_id', currentUser.id);
         return;
       }
 
-      // 3. ¿Existe en Supabase?
       const { data, error } = await supabase
         .from('push_subscriptions')
         .select('user_id')
@@ -77,12 +73,12 @@ export default function NotificationsPage({ currentUser }) {
     } finally {
       setPushLoading(false);
     }
-  }, [currentUser?.id]);
+  }, [currentUser?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     loadNotifications();
     checkSubscriptionStatus();
-  }, [checkSubscriptionStatus]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Cargar notificaciones ─────────────────────────────────────────────────
   const loadNotifications = async () => {
@@ -112,7 +108,7 @@ export default function NotificationsPage({ currentUser }) {
           time: match.time,
           result: isFinished ? `${match.result_home ?? 0} - ${match.result_away ?? 0}` : null,
           created_at: match.created_at,
-          icon: isNew ? <Trophy size={20} /> : <CheckCircle2 size={20} />
+          icon: isNew ? <Trophy size={18} /> : <CheckCircle2 size={18} />
         };
       });
 
@@ -130,9 +126,7 @@ export default function NotificationsPage({ currentUser }) {
       let registration = await navigator.serviceWorker.getRegistration('/');
       if (!registration) {
         registration = await navigator.serviceWorker.register('/sw.js');
-        console.log('✅ Service Worker registrado');
       }
-      // Esperar a que esté listo
       return await navigator.serviceWorker.ready;
     } catch (err) {
       console.error('Error registrando SW:', err);
@@ -147,13 +141,11 @@ export default function NotificationsPage({ currentUser }) {
       return false;
     }
 
-    // Verificar soporte
     if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
       alert('Tu navegador no soporta notificaciones push');
       return false;
     }
 
-    // Pedir permiso
     let permission = Notification.permission;
     if (permission === 'denied') {
       alert('Tienes las notificaciones bloqueadas. Actívalas en la configuración de tu navegador.');
@@ -170,21 +162,16 @@ export default function NotificationsPage({ currentUser }) {
     try {
       const registration = await ensureServiceWorker();
 
-      // Cancelar suscripción previa si existe
       const existingSub = await registration.pushManager.getSubscription();
       if (existingSub) {
         await existingSub.unsubscribe();
       }
 
-      // Crear nueva suscripción
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
       });
 
-      console.log('📱 Suscripción creada:', subscription.endpoint);
-
-      // Guardar en Supabase
       const subJson = subscription.toJSON();
 
       const { error } = await supabase
@@ -192,7 +179,7 @@ export default function NotificationsPage({ currentUser }) {
         .upsert(
           {
             user_id: currentUser.id,
-            subscription: subJson,           // guardar como objeto, no string
+            subscription: subJson,
             created_at: new Date().toISOString()
           },
           { onConflict: 'user_id' }
@@ -203,7 +190,6 @@ export default function NotificationsPage({ currentUser }) {
         throw new Error(`Supabase error: ${error.message}`);
       }
 
-      console.log('✅ Suscripción guardada en Supabase');
       return true;
 
     } catch (err) {
@@ -229,7 +215,6 @@ export default function NotificationsPage({ currentUser }) {
           .eq('user_id', currentUser.id);
 
         if (error) console.error('Error eliminando suscripción:', error);
-        else console.log('✅ Suscripción eliminada de Supabase');
       }
 
       return true;
@@ -266,129 +251,282 @@ export default function NotificationsPage({ currentUser }) {
     return notif.type === filter;
   });
 
+  const newCount      = notifications.filter(n => n.type === 'new').length;
+  const finishedCount = notifications.filter(n => n.type === 'finished').length;
+
+  // ────────────────────────────────────────────────────────────────────────
+  // RENDER
+  // ────────────────────────────────────────────────────────────────────────
   return (
-    <div className="notifications-page page-root">
-      {/* Header */}
-      <div className="notifications-header">
-        <div className="header-title-section">
-          <Bell size={32} className="bell-icon" />
-          <div>
-            <h1 className="page-title">Notificaciones</h1>
-            <p className="page-subtitle">Mantente al día con todos los partidos</p>
+    <div className="np-page page-root">
+
+      {/* ══════════════════════════════════════════
+          DESKTOP LAYOUT
+      ══════════════════════════════════════════ */}
+      <div className="np-shell">
+
+        {/* ── MAIN COLUMN ── */}
+        <div className="np-main">
+
+          {/* Topbar */}
+          <div className="np-topbar">
+            <div className="np-topbar-left">
+              <div className="np-topbar-dot" />
+              <span className="np-topbar-title">Notificaciones</span>
+              <span className="np-topbar-count">{notifications.length}</span>
+            </div>
+
+            {!pushLoading && (
+              <button
+                className={`np-push-btn${pushEnabled ? ' np-push-btn--on' : ''}`}
+                onClick={handleTogglePush}
+              >
+                {pushEnabled ? <BellRing size={13} /> : <BellOff size={13} />}
+                <span>{pushEnabled ? 'Push activo' : 'Activar push'}</span>
+              </button>
+            )}
+          </div>
+
+          {/* Banner push desactivado */}
+          {!pushEnabled && !pushLoading && (
+            <div className="np-banner">
+              <div className="np-banner-icon"><BellRing size={16} /></div>
+              <div className="np-banner-text">
+                <div className="np-banner-title">Activa las notificaciones push</div>
+                <div className="np-banner-sub">Recibe alertas cuando haya nuevos partidos o resultados</div>
+              </div>
+              <button className="np-banner-btn" onClick={handleTogglePush}>Activar</button>
+            </div>
+          )}
+
+          {/* Filtros */}
+          <div className="np-filters">
+            {[
+              { key: 'all',      label: 'Todas',       icon: <Filter size={11} />,      count: notifications.length },
+              { key: 'new',      label: 'Nuevas',      icon: <Trophy size={11} />,       count: newCount },
+              { key: 'finished', label: 'Finalizadas', icon: <CheckCircle2 size={11} />, count: finishedCount },
+            ].map(({ key, label, icon, count }) => (
+              <button
+                key={key}
+                className={`np-filter-btn${filter === key ? ' active' : ''}`}
+                onClick={() => setFilter(key)}
+              >
+                {icon}
+                <span>{label}</span>
+                <span className="np-filter-count">{count}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Scroll area */}
+          <div className="np-scroll">
+            {loading ? (
+              <div className="np-loading">
+                <div className="np-spinner" />
+                <span>Cargando notificaciones</span>
+              </div>
+            ) : filteredNotifications.length === 0 ? (
+              <div className="np-empty">
+                <div className="np-empty-icon-wrap"><Bell size={28} /></div>
+                <div className="np-empty-title">Sin notificaciones</div>
+                <div className="np-empty-sub">Cuando haya novedades, aparecerán aquí</div>
+              </div>
+            ) : (
+              <div className="np-list">
+                {filteredNotifications.map((notif) => (
+                  <div key={notif.id} className={`np-card np-card--${notif.type}`}>
+                    <div className={`np-card-stripe np-card-stripe--${notif.type}`} />
+                    <div className={`np-card-icon-wrap np-card-icon-wrap--${notif.type}`}>
+                      {notif.icon}
+                    </div>
+                    <div className="np-card-content">
+                      <div className="np-card-header">
+                        <span className={`np-card-badge np-card-badge--${notif.type}`}>
+                          {notif.type === 'new' ? 'Nuevo' : 'Finalizado'}
+                        </span>
+                        <span className="np-card-title">{notif.description}</span>
+                      </div>
+                      <div className="np-card-meta">
+                        <span className="np-card-meta-item"><Award size={11} />{notif.league}</span>
+                        <span className="np-card-meta-sep">·</span>
+                        <span className="np-card-meta-item"><Calendar size={11} />{notif.date}</span>
+                        {notif.time && (
+                          <>
+                            <span className="np-card-meta-sep">·</span>
+                            <span className="np-card-meta-item"><Clock size={11} />{notif.time}</span>
+                          </>
+                        )}
+                      </div>
+                      {notif.result && (
+                        <div className="np-card-result">
+                          <Target size={12} /><span>{notif.result}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <Footer />
           </div>
         </div>
 
-        {!pushLoading && (
-          <button
-            className={`push-toggle-btn ${pushEnabled ? 'enabled' : ''}`}
-            onClick={handleTogglePush}
-            disabled={pushLoading}
-          >
-            {pushEnabled ? <BellRing size={20} /> : <BellOff size={20} />}
-            <span>{pushEnabled ? 'Activadas' : 'Activar'}</span>
-          </button>
-        )}
+        {/* ── SIDEBAR DERECHO ── */}
+        <div className="np-sidebar">
+          <div className="np-sidebar-label">
+            <span className="np-sidebar-label-dot" />
+            Resumen
+          </div>
+
+          <div className="np-sidebar-block">
+            <div className="np-sidebar-block-lbl">TOTAL</div>
+            <div className="np-sidebar-num np-sidebar-num--accent">{notifications.length}</div>
+            <div className="np-sidebar-sub">notificaciones · 7 días</div>
+          </div>
+
+          <div className="np-sidebar-sep" />
+
+          <div className="np-sidebar-block">
+            <div className="np-sidebar-block-lbl">TIPOS</div>
+            <div className="np-sidebar-types">
+              <div className="np-sidebar-type">
+                <div className="np-sidebar-type-stripe np-sidebar-type-stripe--new" />
+                <div className="np-sidebar-type-info">
+                  <span className="np-sidebar-type-num">{newCount}</span>
+                  <span className="np-sidebar-type-lbl">Nuevos</span>
+                </div>
+              </div>
+              <div className="np-sidebar-type">
+                <div className="np-sidebar-type-stripe np-sidebar-type-stripe--fin" />
+                <div className="np-sidebar-type-info">
+                  <span className="np-sidebar-type-num">{finishedCount}</span>
+                  <span className="np-sidebar-type-lbl">Finalizados</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="np-sidebar-sep" />
+
+          <div className="np-sidebar-block">
+            <div className="np-sidebar-block-lbl">PUSH</div>
+            <div className={`np-sidebar-push${pushEnabled ? ' np-sidebar-push--on' : ''}`}>
+              {pushEnabled ? <BellRing size={13} /> : <BellOff size={13} />}
+              <span>{pushEnabled ? 'Activado' : 'Desactivado'}</span>
+            </div>
+            <div className="np-sidebar-push-desc">
+              {pushEnabled
+                ? 'Recibirás alertas de partidos y resultados.'
+                : 'Activa para no perderte ningún partido.'}
+            </div>
+          </div>
+
+          {/* Acento al fondo */}
+          <div className="np-sidebar-accent">
+            <div className="np-sidebar-accent-lbl">VIENDO AHORA</div>
+            <div className="np-sidebar-accent-num">
+              {filter === 'all' ? notifications.length : filteredNotifications.length}
+            </div>
+            <div className="np-sidebar-accent-sub">
+              {filter === 'all' ? 'Todas' : filter === 'new' ? 'Nuevas' : 'Finalizadas'}
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <div className="notifications-container">
-        {/* Banner si no están activas */}
-        {!pushEnabled && !pushLoading && (
-          <div className="push-info-banner">
-            <div className="banner-icon-circle">
-              <BellRing size={24} />
-            </div>
-            <div className="banner-text">
-              <h4>Activa las notificaciones push</h4>
-              <p>Recibe alertas cuando haya nuevos partidos o resultados</p>
-            </div>
-            <button onClick={handleTogglePush} className="activate-btn">
-              Activar
+      {/* ══════════════════════════════════════════
+          MOBILE LAYOUT  (≤768px)
+      ══════════════════════════════════════════ */}
+      <div className="np-mobile">
+
+        {/* Topbar mobile */}
+        <div className="npm-topbar">
+          <div className="npm-topbar-left">
+            <div className="npm-dot" />
+            <span className="npm-title">Notificaciones</span>
+          </div>
+          {!pushLoading && (
+            <button
+              className={`npm-push-btn${pushEnabled ? ' npm-push-btn--on' : ''}`}
+              onClick={handleTogglePush}
+            >
+              {pushEnabled ? <BellRing size={13} /> : <BellOff size={13} />}
+              <span>{pushEnabled ? 'Activas' : 'Activar'}</span>
             </button>
+          )}
+        </div>
+
+        {/* Banner mobile */}
+        {!pushEnabled && !pushLoading && (
+          <div className="npm-banner">
+            <div className="npm-banner-icon"><BellRing size={16} /></div>
+            <div className="npm-banner-text">
+              <div className="npm-banner-title">Activa las notificaciones</div>
+              <div className="npm-banner-sub">Recibe alertas de nuevos partidos</div>
+            </div>
+            <button className="npm-banner-btn" onClick={handleTogglePush}>Activar</button>
           </div>
         )}
 
-        {/* Filtros */}
-        <div className="notifications-filters">
-          <button
-            className={`filter-chip ${filter === 'all' ? 'active' : ''}`}
-            onClick={() => setFilter('all')}
-          >
-            <Filter size={16} />
-            <span>Todas</span>
-            <span className="chip-count">{notifications.length}</span>
-          </button>
-          <button
-            className={`filter-chip ${filter === 'new' ? 'active' : ''}`}
-            onClick={() => setFilter('new')}
-          >
-            <Trophy size={16} />
-            <span>Nuevas</span>
-            <span className="chip-count">{notifications.filter(n => n.type === 'new').length}</span>
-          </button>
-          <button
-            className={`filter-chip ${filter === 'finished' ? 'active' : ''}`}
-            onClick={() => setFilter('finished')}
-          >
-            <CheckCircle2 size={16} />
-            <span>Finalizadas</span>
-            <span className="chip-count">{notifications.filter(n => n.type === 'finished').length}</span>
-          </button>
+        {/* Filtros mobile */}
+        <div className="npm-filters">
+          {[
+            { key: 'all',      label: 'Todas',    count: notifications.length },
+            { key: 'new',      label: 'Nuevas',    count: newCount },
+            { key: 'finished', label: 'Final.',    count: finishedCount },
+          ].map(({ key, label, count }) => (
+            <button
+              key={key}
+              className={`npm-filter${filter === key ? ' active' : ''}`}
+              onClick={() => setFilter(key)}
+            >
+              <span>{label}</span>
+              <span className="npm-filter-count">{count}</span>
+            </button>
+          ))}
         </div>
 
-        {/* Lista */}
-        <div className="notifications-list">
+        {/* Lista mobile */}
+        <div className="npm-list">
           {loading ? (
-            <div className="notifications-loading">
-              <div className="spinner-ring"></div>
-              <p>Cargando notificaciones...</p>
+            <div className="npm-loading">
+              <div className="npm-spinner" />
+              <span>Cargando...</span>
             </div>
           ) : filteredNotifications.length === 0 ? (
-            <div className="notifications-empty">
-              <Bell size={64} />
-              <h3>No hay notificaciones</h3>
-              <p>Cuando haya novedades, aparecerán aquí</p>
+            <div className="npm-empty">
+              <Bell size={36} className="npm-empty-icon" />
+              <div className="npm-empty-title">Sin notificaciones</div>
+              <div className="npm-empty-sub">Aquí aparecerán las novedades</div>
             </div>
           ) : (
-            filteredNotifications.map(notif => (
-              <div key={notif.id} className={`notification-card ${notif.type}`}>
-                <div className={`notif-icon-wrapper ${notif.type}`}>
-                  {notif.icon}
+            filteredNotifications.map((notif) => (
+              <div key={notif.id} className={`npm-card npm-card--${notif.type}`}>
+                <div className={`npm-card-icon npm-card-icon--${notif.type}`}>
+                  {notif.type === 'new' ? <Trophy size={15} /> : <CheckCircle2 size={15} />}
                 </div>
-                <div className="notif-content">
-                  <div className="notif-header">
-                    <h4 className="notif-title">{notif.title}</h4>
-                  </div>
-                  <p className="notif-description">{notif.description}</p>
-                  <div className="notif-details">
-                    <div className="detail-item">
-                      <Award size={14} />
-                      <span>{notif.league}</span>
-                    </div>
-                    <div className="detail-item">
-                      <Calendar size={14} />
-                      <span>{notif.date}</span>
-                    </div>
-                    <div className="detail-item">
-                      <Clock size={14} />
-                      <span>{notif.time}</span>
-                    </div>
+                <div className="npm-card-body">
+                  <div className="npm-card-title">{notif.description}</div>
+                  <div className="npm-card-meta">
+                    <span>{notif.league}</span>
+                    <span>·</span>
+                    <span>{notif.date}</span>
+                    {notif.time && <><span>·</span><span>{notif.time}</span></>}
                   </div>
                   {notif.result && (
-                    <div className="notif-result">
-                      <Target size={16} />
-                      <span className="result-score">{notif.result}</span>
-                    </div>
+                    <div className="npm-card-result">{notif.result}</div>
                   )}
                 </div>
-                <div className={`notif-badge ${notif.type}`}>
-                  {notif.type === 'new' ? 'Nuevo' : 'Finalizado'}
-                </div>
+                <span className={`npm-card-badge npm-card-badge--${notif.type}`}>
+                  {notif.type === 'new' ? 'Nuevo' : 'Final'}
+                </span>
               </div>
             ))
           )}
         </div>
       </div>
-      <Footers />
+
     </div>
   );
 }

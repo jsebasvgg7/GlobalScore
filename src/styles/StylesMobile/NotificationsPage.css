@@ -1,0 +1,435 @@
+/* ================================================================
+   MobileNotifications.css — Notificaciones Mobile
+   Brutalista japonés retro · Variables del sistema · index.css
+   Solo visible en ≤768px
+================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
+
+/* ================================================================
+   TOKENS
+================================================================ */
+.mnot-root {
+  --mnot-accent:        var(--accent);
+  --mnot-accent-light:  var(--accent-light);
+  --mnot-accent-subtle: var(--glass);
+  --mnot-accent-border: rgba(96, 81, 155, 0.25);
+  --mnot-mono:          'DM Mono', monospace;
+  --mnot-sans:          'Sora', sans-serif;
+  --mnot-border:        var(--border);
+  --mnot-bg:            var(--bg);
+  --mnot-card:          var(--card);
+  --mnot-text:          var(--text-primary);
+  --mnot-muted:         var(--muted);
+  --mnot-shadow:        var(--small-shadow);
+
+  /* colores tipo */
+  --mnot-new:      #5b4fd8;
+  --mnot-new-bg:   rgba(91, 79, 216, 0.07);
+  --mnot-new-bdr:  rgba(91, 79, 216, 0.28);
+  --mnot-fin:      #1D9E75;
+  --mnot-fin-bg:   rgba(29, 158, 117, 0.07);
+  --mnot-fin-bdr:  rgba(29, 158, 117, 0.28);
+}
+
+[data-theme="dark"] .mnot-root {
+  --mnot-accent-border: rgba(139, 127, 199, 0.3);
+  --mnot-new:      #8b7fc7;
+  --mnot-new-bg:   rgba(124, 111, 232, 0.1);
+  --mnot-new-bdr:  rgba(124, 111, 232, 0.3);
+  --mnot-fin:      #34d399;
+  --mnot-fin-bg:   rgba(52, 211, 153, 0.08);
+  --mnot-fin-bdr:  rgba(52, 211, 153, 0.25);
+}
+
+/* ================================================================
+   ROOT — solo mobile
+================================================================ */
+.mnot-root {
+  display: none;
+  flex-direction: column;
+  background: var(--mnot-bg);
+  font-family: var(--mnot-sans);
+  min-height: 100dvh;
+  padding-bottom: 60px;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+  .mnot-root { display: flex; }
+}
+
+/* ================================================================
+   TOPBAR — sticky
+================================================================ */
+.mnot-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 16px;
+  background: var(--mnot-card);
+  border-bottom: 0.5px solid var(--mnot-border);
+  position: sticky;
+  top: 56px;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+.mnot-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mnot-topbar-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--mnot-accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: mnot-dot-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes mnot-dot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(1.3); }
+}
+
+.mnot-topbar-title {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--mnot-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mnot-text);
+}
+
+/* ── Botón push ── */
+.mnot-push-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--mnot-border);
+  background: var(--mnot-bg);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mnot-mono);
+  letter-spacing: 0.06em;
+  color: var(--mnot-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.mnot-push-btn:active { transform: scale(0.97); }
+
+.mnot-push-btn--on {
+  background: var(--mnot-accent);
+  border-color: var(--mnot-accent);
+  color: #fff;
+}
+
+/* ================================================================
+   BANNER — push desactivado
+================================================================ */
+.mnot-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 16px 0;
+  padding: 13px 14px;
+  background: var(--mnot-card);
+  border: 1px solid var(--mnot-accent-border);
+  border-left: 3px solid var(--mnot-accent);
+}
+
+.mnot-banner-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--mnot-accent-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mnot-accent);
+  flex-shrink: 0;
+}
+
+.mnot-banner-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mnot-banner-title {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--mnot-sans);
+  color: var(--mnot-text);
+}
+
+.mnot-banner-sub {
+  font-size: 10px;
+  font-family: var(--mnot-mono);
+  color: var(--mnot-muted);
+}
+
+.mnot-banner-btn {
+  padding: 6px 12px;
+  background: var(--mnot-accent);
+  border: none;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mnot-mono);
+  letter-spacing: 0.06em;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.mnot-banner-btn:active { opacity: 0.85; }
+
+/* ================================================================
+   FILTROS
+================================================================ */
+.mnot-filters {
+  display: flex;
+  gap: 0;
+  margin: 14px 16px 0;
+  border: 0.5px solid var(--mnot-border);
+  overflow: hidden;
+}
+
+.mnot-filter {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 6px;
+  background: var(--mnot-card);
+  border: none;
+  border-right: 0.5px solid var(--mnot-border);
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mnot-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mnot-muted);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.mnot-filter:last-child { border-right: none; }
+.mnot-filter:active { background: var(--mnot-bg); }
+
+.mnot-filter.active {
+  background: var(--mnot-accent);
+  color: #fff;
+}
+
+.mnot-filter-count {
+  background: rgba(255, 255, 255, 0.25);
+  padding: 1px 5px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mnot-mono);
+  border-radius: 0;
+}
+
+.mnot-filter:not(.active) .mnot-filter-count {
+  background: var(--mnot-bg);
+  color: var(--mnot-muted);
+}
+
+/* ================================================================
+   LISTA
+================================================================ */
+.mnot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 12px 16px 0;
+  border: 0.5px solid var(--mnot-border);
+  overflow: hidden;
+}
+
+/* ── Loading ── */
+.mnot-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 20px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mnot-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mnot-muted);
+}
+
+.mnot-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--mnot-border);
+  border-top-color: var(--mnot-accent);
+  border-right-color: var(--mnot-accent);
+  border-radius: 0;
+  animation: mnot-spin 0.75s linear infinite;
+}
+
+@keyframes mnot-spin { to { transform: rotate(360deg); } }
+
+/* ── Empty ── */
+.mnot-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 56px 20px;
+  text-align: center;
+  background: var(--mnot-card);
+}
+
+.mnot-empty-icon {
+  color: var(--mnot-muted);
+  opacity: 0.3;
+}
+
+.mnot-empty-title {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--mnot-sans);
+  color: var(--mnot-text);
+}
+
+.mnot-empty-sub {
+  font-size: 10px;
+  font-family: var(--mnot-mono);
+  color: var(--mnot-muted);
+  line-height: 1.5;
+}
+
+/* ================================================================
+   CARD
+================================================================ */
+.mnot-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 14px;
+  background: var(--mnot-card);
+  border-bottom: 0.5px solid var(--mnot-border);
+  border-left: 3px solid transparent;
+  position: relative;
+  transition: background 0.12s;
+}
+
+.mnot-card:last-child { border-bottom: none; }
+.mnot-card:active { background: var(--mnot-bg); }
+
+.mnot-card--new      { border-left-color: var(--mnot-new); background: var(--mnot-new-bg); }
+.mnot-card--finished { border-left-color: var(--mnot-fin); background: var(--mnot-fin-bg); }
+
+/* ── Ícono ── */
+.mnot-card-icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.mnot-card-icon--new      { background: var(--mnot-new); }
+.mnot-card-icon--finished { background: var(--mnot-fin); }
+
+/* ── Body ── */
+.mnot-card-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-right: 52px; /* espacio para el badge */
+}
+
+.mnot-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--mnot-sans);
+  color: var(--mnot-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mnot-card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mnot-card-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mnot-mono);
+  letter-spacing: 0.04em;
+  color: var(--mnot-muted);
+}
+
+.mnot-card-meta-item svg { flex-shrink: 0; }
+
+.mnot-card-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  background: var(--mnot-fin-bg);
+  border: 0.5px solid var(--mnot-fin-bdr);
+  font-size: 11px;
+  font-weight: 800;
+  font-family: var(--mnot-mono);
+  color: var(--mnot-fin);
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+/* ── Badge ── */
+.mnot-card-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 3px 7px;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: var(--mnot-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.mnot-card-badge--new      { background: var(--mnot-new); }
+.mnot-card-badge--finished { background: var(--mnot-fin); }
+
+/* ================================================================
+   BREAKPOINTS
+================================================================ */
+@media screen and (max-width: 380px) {
+  .mnot-topbar-title { font-size: 11px; }
+  .mnot-card         { padding: 12px; }
+  .mnot-card-title   { font-size: 12px; }
+  .mnot-card-icon    { width: 30px; height: 30px; }
+}
