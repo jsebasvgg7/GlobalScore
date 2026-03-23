@@ -13,6 +13,19 @@
   --hdr-accent:  #5b4fd8;
   --hdr-mono:    'DM Mono', monospace;
   --hdr-sans:    'Sora', sans-serif;
+
+  /* Bottom nav tokens */
+  --bn-h:        52px;        /* altura de la barra */
+  --bn-bg-light: #ffffff;
+  --bn-bg-dark:  #13151f;
+  --bn-border-light: #e2e0dc;
+  --bn-border-dark:  rgba(255,255,255,0.08);
+  --bn-text-light: #9a97b0;
+  --bn-text-dark:  #4a5068;
+  --bn-active-light: #5b4fd8;
+  --bn-active-dark:  #a899ff;
+  --bn-trophy-bg-light: #5b4fd8;
+  --bn-trophy-bg-dark:  #5b4fd8;
 }
 
 /* ================================================================
@@ -337,8 +350,6 @@
 
 /* ================================================================
    MOBILE — Top Header
-   USA var(--bg) y var(--border) del sistema = mismo fondo
-   que MobileDashboard (--mob-bg mapeaba a var(--bg))
 ================================================================ */
 .gs-mobile-header {
   display: none;
@@ -352,8 +363,6 @@
   top: 0;
   z-index: 200;
 }
-
-/* No hace falta override dark — var(--bg) ya cambia con el tema */
 
 .gs-mobile-left { display: flex; align-items: center; gap: 10px; }
 
@@ -418,49 +427,126 @@
 }
 
 /* ================================================================
-   MOBILE — Bottom Nav
+   MOBILE — Bottom Nav (pegada al fondo, sin flotar)
+   Layout: [item][item]  [🏆]  [item][item]
+                          ↑ copa elevada
 ================================================================ */
 .gs-bottom-nav {
   display: none;
   position: fixed;
-  bottom: 16px; left: 0; right: 0;
-  justify-content: center;
-  z-index: 300;
-  pointer-events: none;
-}
-
-.gs-bottom-pill {
-  display: flex;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bn-h);
+  background: var(--bn-bg-light);
+  border-top: 1px solid var(--bn-border-light);
+  flex-direction: row;
   align-items: center;
-  gap: 2px;
-  background: #1a1d27;
-  border-radius: 50px;
-  padding: 6px 10px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-  pointer-events: all;
+  justify-content: space-around;
+  z-index: 300;
+  /* Soporte safe area en iPhones con notch inferior */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-[data-theme="light"] .gs-bottom-pill { background: #e2e4ef; }
+[data-theme="dark"] .gs-bottom-nav {
+  background: var(--bn-bg-dark);
+  border-top-color: var(--bn-border-dark);
+}
 
+/* ── Botón normal ── */
 .gs-bottom-btn {
-  width: 42px; height: 42px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 100%;
   border: none;
-  border-radius: 50px;
   background: transparent;
-  color: #6b7099;
+  color: var(--bn-text-light);
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
+  transition: color 0.18s;
+  padding: 0;
 }
+
+[data-theme="dark"] .gs-bottom-btn { color: var(--bn-text-dark); }
 
 .gs-bottom-btn--active {
-  background: rgba(255,255,255,0.12);
-  color: #fff;
+  color: var(--bn-active-light);
 }
 
-[data-theme="light"] .gs-bottom-btn--active {
-  background: rgba(91,79,216,0.15);
-  color: #5b4fd8;
+[data-theme="dark"] .gs-bottom-btn--active {
+  color: var(--bn-active-dark);
+}
+
+.gs-bottom-btn:active { transform: scale(0.92); }
+
+/* ── Label pequeño debajo del ícono — oculto ── */
+.gs-bottom-label {
+  display: none;
+}
+
+/* ── Contenedor central (copa) ── */
+.gs-bottom-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;      /* empuja todo hacia abajo */
+  gap: 3px;
+  height: 100%;
+  padding-bottom: 6px;
+  position: relative;
+}
+
+/* ── Label "Inicio" debajo de la copa — oculto ── */
+.gs-bottom-label--center {
+  display: none;
+}
+
+/* ── Botón copa — círculo elevado que sobresale de la barra ── */
+.gs-bottom-trophy {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bn-trophy-bg-light);
+  color: rgba(255,255,255,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  /* Elevación: se sale hacia arriba de la barra */
+  position: absolute;
+  top: -14px;                     /* menos elevado que antes */
+  /* Sombra para flotar sobre la barra */
+  box-shadow: 0 -2px 16px rgba(91,79,216,0.25), 0 4px 12px rgba(0,0,0,0.15);
+  transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+}
+
+[data-theme="dark"] .gs-bottom-trophy {
+  background: var(--bn-trophy-bg-dark);
+  box-shadow: 0 -2px 20px rgba(91,79,216,0.4), 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.gs-bottom-trophy--active {
+  background: #4a3fc7;
+  color: #fff;
+  box-shadow: 0 -2px 24px rgba(91,79,216,0.5), 0 6px 20px rgba(0,0,0,0.25);
+}
+
+[data-theme="dark"] .gs-bottom-trophy--active {
+  background: #6d5fff;
+}
+
+.gs-bottom-trophy:active {
+  transform: scale(0.9);
+}
+
+.gs-bottom-trophy:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 -4px 24px rgba(91,79,216,0.4), 0 8px 20px rgba(0,0,0,0.2);
 }
 
 /* ================================================================
@@ -469,7 +555,7 @@
 @media (max-width: 768px) {
   .gs-mobile-header { display: flex; }
   .gs-bottom-nav    { display: flex; }
-  body              { padding-bottom: 90px; }
+  body              { padding-bottom: calc(var(--bn-h) + env(safe-area-inset-bottom, 0px)); }
 }
 
 /* ================================================================

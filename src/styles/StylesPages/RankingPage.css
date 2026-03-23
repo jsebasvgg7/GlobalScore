@@ -80,9 +80,6 @@
 
 /* ================================================================
    TABS BAR
-   Era 48px → ahora 54px
-   Font era 11px → 12px
-   Padding era 20px → 24px
 ================================================================ */
 .lb-tabs-bar {
   display: flex;
@@ -148,14 +145,6 @@
   flex-direction: column;
 }
 
-/* ── FILA STATS ──
-   Padding era 18px 22px → 22px 28px
-   Num era 42px → 52px
-   Lbl era 9px → 10px
-   Icon era 26px → 30px
-   Period era 14px → 16px
-   Sub era 11px → 12px
-*/
 .lb-row--stats {
   display: grid;
   grid-template-columns: 1fr 1fr 2fr;
@@ -534,8 +523,5 @@
    MOBILE — todo en MobileRanking.css
 ================================================================ */
 @media (max-width: 768px) {
-  .lb-shell  { margin-left: 0; margin-top: 0; display: block; height: auto; overflow: visible; }
-  .lb-page   { height: auto; overflow: visible; padding-bottom: 110px; }
-  .lb-grid   { height: auto; }
-  .lb-tbody-wrap { overflow: visible; max-height: none; }
+  .lb-shell { display: none !important; }
 }

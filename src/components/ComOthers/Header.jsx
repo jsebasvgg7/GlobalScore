@@ -31,7 +31,8 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
 
   const isActive = (path) => location.pathname === path;
 
-  const navItems = [
+  /* ── Sidebar / Desktop nav (todos los items) ── */
+  const sidebarItems = [
     { path: "/app",     icon: Home,      label: "Inicio"  },
     { path: "/ranking", icon: Award,     label: "Ranking" },
     { path: "/stats",   icon: BarChart3, label: "Stats"   },
@@ -40,14 +41,29 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
     ...(currentUser?.is_admin ? [{ path: "/admin", icon: Shield, label: "Admin" }] : []),
   ];
 
+  /* ── Mobile Bottom Nav ──
+     Normal:  Perfil | Ranking | [Trophy] | Stats | Mundial
+     Admin:   Admin  | Ranking | [Trophy] | Stats | Mundial
+  ── */
+  const leftItems = currentUser?.is_admin
+    ? [{ path: "/admin",   icon: Shield, label: "Admin"   }]
+    : [{ path: "/profile", icon: User2,  label: "Perfil"  }];
+
+  const mobileBottomItems = [
+    ...leftItems,
+    { path: "/ranking", icon: Award,     label: "Ranking" },
+    { path: "/stats",   icon: BarChart3, label: "Stats"   },
+    { path: "/world",   icon: Globe,     label: "Mundial" },
+  ];
+
   const firstName = currentUser?.name?.split(" ")[0] || "Jugador";
   const initials  = (currentUser?.name || "U").slice(0, 2).toUpperCase();
-  const pageName  = navItems.find((n) => isActive(n.path))?.label || "GlobalScore";
+  const pageName  = sidebarItems.find((n) => isActive(n.path))?.label || "GlobalScore";
 
   return (
     <>
       {/* ══════════════════════════════════════
-          DESKTOP SIDEBAR — sin cambios
+          DESKTOP SIDEBAR
       ══════════════════════════════════════ */}
       <aside className="gs-sidebar">
         <div className="gs-logo-wrap">
@@ -57,7 +73,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
         </div>
 
         <nav className="gs-nav">
-          {navItems.map(({ path, icon: Icon, label }) => (
+          {sidebarItems.map(({ path, icon: Icon, label }) => (
             <button
               key={path}
               className={`gs-nav-btn${isActive(path) ? " gs-nav-btn--active" : ""}`}
@@ -99,7 +115,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
       </aside>
 
       {/* ══════════════════════════════════════
-          DESKTOP TOPBAR — sin cambios
+          DESKTOP TOPBAR
       ══════════════════════════════════════ */}
       <header className="gs-topbar">
         <div className="gs-topbar-left">
@@ -141,9 +157,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
       </header>
 
       {/* ══════════════════════════════════════
-          MOBILE — Top Header  ← MODIFICADO
-          Fondo del tema, bordes rectos, sin
-          border-radius en ningún elemento
+          MOBILE — Top Header
       ══════════════════════════════════════ */}
       <header className="gs-mobile-header">
         <div className="gs-mobile-left">
@@ -169,22 +183,47 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
       </header>
 
       {/* ══════════════════════════════════════
-          MOBILE — Bottom Nav  ← IGUAL QUE ANTES
-          Pill redondeada, sin cambios
+          MOBILE — Bottom Nav (pegado al fondo)
+          Layout:  [item][item][🏆 CENTER][item][item]
       ══════════════════════════════════════ */}
       <nav className="gs-bottom-nav">
-        <div className="gs-bottom-pill">
-          {navItems.slice(0, 6).map(({ path, icon: Icon, label }) => (
-            <button
-              key={path}
-              className={`gs-bottom-btn${isActive(path) ? " gs-bottom-btn--active" : ""}`}
-              onClick={() => navigate(path)}
-              aria-label={label}
-            >
-              <Icon size={20} />
-            </button>
-          ))}
+        {/* Items izquierdos (2) */}
+        {mobileBottomItems.slice(0, 2).map(({ path, icon: Icon, label }) => (
+          <button
+            key={path}
+            className={`gs-bottom-btn${isActive(path) ? " gs-bottom-btn--active" : ""}`}
+            onClick={() => navigate(path)}
+            aria-label={label}
+          >
+            <Icon size={20} />
+            <span className="gs-bottom-label">{label}</span>
+          </button>
+        ))}
+
+        {/* Copa central elevada */}
+        <div className="gs-bottom-center">
+          <button
+            className={`gs-bottom-trophy${isActive("/app") ? " gs-bottom-trophy--active" : ""}`}
+            onClick={() => navigate("/app")}
+            aria-label="Inicio"
+          >
+            <Trophy size={22} />
+          </button>
+          <span className="gs-bottom-label gs-bottom-label--center">Inicio</span>
         </div>
+
+        {/* Items derechos (2) */}
+        {mobileBottomItems.slice(2).map(({ path, icon: Icon, label }) => (
+          <button
+            key={path}
+            className={`gs-bottom-btn${isActive(path) ? " gs-bottom-btn--active" : ""}`}
+            onClick={() => navigate(path)}
+            aria-label={label}
+          >
+            <Icon size={20} />
+            <span className="gs-bottom-label">{label}</span>
+          </button>
+        ))}
       </nav>
     </>
   );
