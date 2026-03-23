@@ -166,6 +166,8 @@ export const leagueMap = {
 // MAPEO DE LOGOS DE LIGAS (URLs directas)
 // ============================================
 export const leagueLogoUrlMap = {
+  // FIFA
+  'FIFA':'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/FIFA.png',
   // Competiciones Europeas
   'Champions League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/42.png',
   'Europa League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/73.png',
