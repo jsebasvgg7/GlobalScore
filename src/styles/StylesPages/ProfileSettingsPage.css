@@ -857,6 +857,151 @@
 [data-theme="dark"] .pnew-mob-row { background: var(--pnew-cream); }
 [data-theme="dark"] .pnew-mob-row:active { background: var(--pnew-surface); }
 /* ================================================================
+   PATCH v3 — Layout más grande + panel derecho ampliado
+   Agregar al final de ProfileSettingsPage.css
+   (estos bloques sobreescriben los originales via cascada)
+================================================================ */
+
+/* ── DESKTOP LAYOUT — columnas rebalanceadas ── */
+.pnew-desktop-layout {
+  display: grid;
+  grid-template-columns: 1fr 500px;   /* contenido | nav más ancho */
+  min-height: calc(100vh - 56px);
+  align-items: stretch;
+}
+
+/* ── PANEL DERECHO — más ancho, mismo scroll ── */
+.pnew-desktop-right {
+  order: 2;
+  display: flex;
+  flex-direction: column;
+  border-left: 0.5px solid var(--pnew-border);
+  background: var(--pnew-surface);
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 500px;                        /* fijo para evitar colapso */
+}
+
+/* ── HERO — avatar y banner más grandes ── */
+.pnew-hero-banner {
+  height: 140px;
+}
+
+.pnew-hero-avatar-wrap {
+  width: 96px;
+  margin: -48px auto 0;
+}
+
+.pnew-hero-avatar {
+  width: 96px;
+  height: 96px;
+  font-size: 36px;
+}
+
+.pnew-hero-name  { font-size: 22px; }
+.pnew-hero-email { font-size: 13px; }
+
+/* ── STATS HERO — números más visibles ── */
+.pnew-hero-stat-val { font-size: 20px; }
+.pnew-hero-stat-lbl { font-size: 9px; }
+
+/* ── NAV — items más cómodos ── */
+.pnew-nav-item {
+  padding: 14px 24px;
+  font-size: 15px;
+  gap: 13px;
+}
+
+.pnew-nav-group-lbl {
+  padding: 12px 24px 6px;
+  font-size: 10px;
+}
+
+.pnew-nav-logout {
+  padding: 14px 20px;
+}
+
+/* ── ACHIEVEMENTS GRID — 3 columnas aprovechando el ancho ── */
+.pnew-achievements-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.pnew-ach-card {
+  padding: 20px 16px;
+}
+
+.pnew-ach-emoji { font-size: 38px; }
+.pnew-ach-name  { font-size: 13px; }
+.pnew-ach-desc  { font-size: 11px; }
+
+/* ── HISTORIAL — cards más anchas, logos visibles ── */
+.pnew-hist-logo {
+  width: 56px;
+  height: 56px;
+}
+
+.pnew-hist-logo img {
+  width: 42px;
+  height: 42px;
+}
+
+.pnew-hist-logo span { font-size: 30px; }
+
+.pnew-hist-tname { font-size: 14px; }
+
+.pnew-hist-score {
+  width: 48px;
+  height: 48px;
+  font-size: 22px;
+}
+
+.pnew-hist-body {
+  padding: 22px 20px;
+  gap: 16px;
+}
+
+/* ── STATS GRID — valores más grandes ── */
+.pnew-stat-val { font-size: 32px; }
+.pnew-stat-lbl { font-size: 10px; }
+
+.pnew-stat-cell {
+  padding: 26px 12px;
+}
+
+/* ── CONTENT — más padding ahora que hay espacio ── */
+.pnew-tab-content {
+  padding: 28px 32px;
+}
+
+/* ── SECTION HEADER ── */
+.pnew-section-hdr {
+  font-size: 11px;
+}
+
+/* ── RESPONSIVE — ajustar breakpoints ── */
+@media (max-width: 1400px) {
+  .pnew-desktop-layout  { grid-template-columns: 1fr 440px; }
+  .pnew-desktop-right   { width: 440px; }
+}
+
+@media (max-width: 1200px) {
+  .pnew-desktop-layout  { grid-template-columns: 1fr 380px; }
+  .pnew-desktop-right   { width: 380px; }
+  .pnew-achievements-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 980px) {
+  .pnew-desktop-layout  { grid-template-columns: 1fr 300px; }
+  .pnew-desktop-right   { width: 300px; }
+  .pnew-nav-item        { padding: 12px 16px; font-size: 13px; }
+  .pnew-tab-content     { padding: 20px 22px; }
+  .pnew-achievements-grid { grid-template-columns: repeat(2, 1fr); }
+}
+/* ================================================================
    SPINNER
 ================================================================ */
 @keyframes spin { to { transform: rotate(360deg); } }
