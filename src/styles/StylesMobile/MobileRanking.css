@@ -1,0 +1,194 @@
+/* =============================================
+   MobileRanking.css
+   Estilos EXCLUSIVOS mobile del Ranking ≤768px
+   NO tocar — diseño mobile definitivo
+============================================= */
+
+@media (max-width: 768px) {
+
+  /* ── SHELL / PAGE ── */
+  .lb-shell {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .lb-page {
+    height: auto !important;
+    overflow: visible !important;
+    padding-bottom: 110px !important;
+    background: var(--bg) !important;
+  }
+
+  .lb-grid {
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lb-tbody-wrap {
+    overflow: visible !important;
+    max-height: none !important;
+    flex: none !important;
+  }
+
+  /* ── TABS BAR ── */
+  .lb-tabs-bar {
+    position: sticky;
+    top: 56px;
+    z-index: 50;
+    background: var(--bg) !important;
+    border-bottom: 0.5px solid var(--border) !important;
+    padding: 0 4px !important;
+  }
+
+  .lb-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 0 8px !important;
+    font-size: 11px !important;
+    gap: 5px !important;
+  }
+
+  .lb-tab svg { width: 13px; height: 13px; }
+
+  /* ── STATS ROW — stack en 2 columnas ── */
+  .lb-row--stats {
+    grid-template-columns: 1fr 1fr !important;
+    border-bottom: 0.5px solid var(--border) !important;
+  }
+
+  .lb-stat-block {
+    padding: 16px 16px !important;
+    background: var(--bg) !important;
+    border-right-color: var(--border) !important;
+  }
+
+  /* El tercer bloque (clasificación) ocupa fila entera */
+  .lb-stat-block--wide {
+    grid-column: 1 / -1 !important;
+    border-right: none !important;
+    border-top: 0.5px solid var(--border) !important;
+  }
+
+  .lb-stat-num {
+    font-size: 34px !important;
+    letter-spacing: -1px !important;
+  }
+
+  .lb-stat-period {
+    font-size: 13px !important;
+  }
+
+  /* ── SORT ROW ── */
+  .lb-row--sort {
+    padding: 0 12px !important;
+    background: var(--bg) !important;
+    border-bottom-color: var(--border) !important;
+    position: sticky;
+    top: calc(56px + 48px);
+    z-index: 40;
+  }
+
+  .lb-sort-label { display: none; }
+
+  .lb-sort-btns { width: 100%; display: flex; gap: 4px; }
+
+  .lb-sort-btn {
+    flex: 1;
+    justify-content: center;
+    height: 30px !important;
+    font-size: 10px !important;
+    padding: 0 6px !important;
+  }
+
+  /* ── THEAD — oculto en mobile ── */
+  .lb-thead { display: none !important; }
+
+  /* ── FILAS — layout mobile tipo píldora ── */
+  .lb-trow {
+    display: flex !important;
+    align-items: center !important;
+    grid-template-columns: unset !important;
+    height: auto !important;
+    padding: 12px 16px !important;
+    gap: 12px !important;
+    background: var(--bg) !important;
+    border-bottom: 0.5px solid var(--border) !important;
+    border-left: none !important;
+  }
+
+  /* Acento izquierdo top 3 — se mantiene */
+  .lb-trow--gold   { border-left: 3px solid #c9a227 !important; }
+  .lb-trow--silver { border-left: 3px solid #8a8a8a !important; }
+  .lb-trow--bronze { border-left: 3px solid #a0652a !important; }
+
+  .lb-trow--me {
+    background: rgba(91,79,216,0.06) !important;
+    border-left: 3px solid var(--accent) !important;
+  }
+
+  /* Columnas en mobile flex */
+  .lbc-rank  { flex-shrink: 0; width: 32px !important; }
+  .lbc-user  { flex: 1; min-width: 0 !important; }
+  .lbc-num   { flex-shrink: 0 !important; }
+
+  /* Ocultar aciertos y pred en mobile */
+  .lbc-hide-sm { display: none !important; }
+
+  /* La columna precisión también se oculta en mobile chico */
+  .lbc-num:nth-last-child(2) { display: none !important; }
+
+  /* Avatar más grande en mobile */
+  .lb-av-sm {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 16px !important;
+  }
+
+  /* Nombre */
+  .lb-uname {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+  }
+
+  /* Sub (aciertos) visible en mobile */
+  .lb-uname-sub {
+    display: block !important;
+    font-size: 11px !important;
+    color: var(--text-secondary) !important;
+  }
+
+  /* Rank badge */
+  .lb-rnk {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 11px !important;
+  }
+
+  /* Puntos */
+  .lb-pts {
+    font-size: 14px !important;
+  }
+
+  .lb-pts-lbl { font-size: 9px !important; }
+
+  /* ── DARK MODE MOBILE ── */
+  [data-theme="dark"] .lb-tabs-bar  { background: var(--bg) !important; border-bottom-color: var(--border) !important; }
+  [data-theme="dark"] .lb-stat-block { background: var(--bg) !important; border-right-color: var(--border) !important; }
+  [data-theme="dark"] .lb-row--sort  { background: var(--bg) !important; border-bottom-color: var(--border) !important; }
+  [data-theme="dark"] .lb-trow       { background: var(--bg) !important; border-bottom-color: rgba(255,255,255,0.06) !important; }
+  [data-theme="dark"] .lb-trow--me   { background: rgba(124,111,232,0.1) !important; }
+
+} /* fin @media 768px */
+
+/* ── EXTRA SMALL ── */
+@media (max-width: 380px) {
+  .lb-stat-num     { font-size: 28px !important; }
+  .lb-av-sm        { width: 38px !important; height: 38px !important; }
+  .lb-uname        { font-size: 13px !important; }
+  .lb-sort-btn     { font-size: 9px !important; padding: 0 4px !important; }
+  .lb-trow         { padding: 10px 12px !important; gap: 10px !important; }
+}
