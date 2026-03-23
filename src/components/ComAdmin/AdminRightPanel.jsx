@@ -233,12 +233,20 @@ function AddMatchForm({ onAdd }) {
     try {
       const deadlineISO = `${form.deadLine}T${form.deadLine_time}:00`;
       await onAdd({
-        ...form,
-        home_team_logo_url: getLogoUrlByTeamName(supabase, form.home_team, form.league),
-        away_team_logo_url: getLogoUrlByTeamName(supabase, form.away_team, form.league),
-        league_logo_url: getLeagueLogoUrlDirect(form.league),
-        deadline: deadlineISO,
-        status: 'pending',
+        id:                  form.id,
+        league:              form.league,
+        home_team:           form.home_team,
+        away_team:           form.away_team,
+        home_team_logo:      form.home_team_logo,
+        away_team_logo:      form.away_team_logo,
+        home_team_logo_url:  getLogoUrlByTeamName(supabase, form.home_team, form.league),
+        away_team_logo_url:  getLogoUrlByTeamName(supabase, form.away_team, form.league),
+        league_logo_url:     getLeagueLogoUrlDirect(form.league),
+        date:                form.date,
+        time:                form.time,
+        deadline:            deadlineISO,
+        status:              'pending',
+        is_knockout:         form.is_knockout,
       });
       setForm({ id: '', league: '', home_team: '', away_team: '', home_team_logo: '🏠', away_team_logo: '✈️', date: '', time: '', deadLine: '', deadLine_time: '', is_knockout: false });
     } finally {
