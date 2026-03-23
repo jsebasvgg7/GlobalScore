@@ -1,6 +1,16 @@
 import React from 'react';
 import { Trophy, Target, Award, Shield, Package, Crown, Image } from 'lucide-react';
 
+const TAB_LABELS = {
+  matches:      'Partidos',
+  leagues:      'Ligas',
+  awards:       'Premios',
+  achievements: 'Logros',
+  titles:       'Títulos',
+  crowns:       'Coronas',
+  banners:      'Banners',
+};
+
 export default function AdminNavigationTabs({ activeSection, setActiveSection, stats }) {
   const tabs = [
     { id: 'matches',      icon: Target,  badge: stats.matches.pending },
@@ -19,9 +29,9 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
           key={id}
           className={`admin-nav-tab ${activeSection === id ? 'active' : ''}`}
           onClick={() => setActiveSection(id)}
-          aria-label={id}
         >
-          <Icon size={20} />
+          <Icon size={14} />
+          <span>{TAB_LABELS[id]}</span>
           {badge > 0 && <span className="tab-badge">{badge}</span>}
         </button>
       ))}

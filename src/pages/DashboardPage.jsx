@@ -8,7 +8,7 @@ import MatchCard          from "../components/ComCards/MatchCard";
 import LeagueCard         from "../components/ComCards/LeagueCard";
 import AwardCard          from "../components/ComCards/AwardCard";
 import NavigationTabs     from "../components/ComOthers/NavigationTabs";
-import RightPanel         from "../components/ComOthers/RightPanel";
+import RightPanel         from "../components/ComPanels/RightPanel";
 import MobileDashboard    from "../components/ComMobile/MobileDashboard";
 import { PageLoader, LoadingOverlay } from "../components/ComOthers/LoadingStates";
 import { ToastContainer, useToast }   from "../components/ComOthers/Toast";

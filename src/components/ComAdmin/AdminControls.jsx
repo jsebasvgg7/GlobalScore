@@ -13,7 +13,7 @@ export default function AdminControls({
     <div className="admin-controls">
       <div className="search-filter-group">
         <div className="search-bar">
-          <Search size={20} />
+          <Search size={13} />
           <input
             type="text"
             placeholder={`Buscar ${activeSection}...`}
@@ -46,11 +46,8 @@ export default function AdminControls({
         )}
       </div>
 
-      <button 
-        className="add-new-btn"
-        onClick={onAddNew}
-      >
-        <Plus size={20} />
+      <button className="add-new-btn" onClick={onAddNew}>
+        <Plus size={13} />
         <span>Agregar Nuevo</span>
       </button>
     </div>

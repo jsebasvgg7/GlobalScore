@@ -4,12 +4,11 @@ import {
   BarChart3, Crown, Users
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
-import Footer from '../components/ComOthers/Footer';
 import HallOfFame from '../components/ComOthers/HallOfFame';
 import UserProfileModal from '../components/ComOthers/UserProfileModal';
-import RankingRightPanel from '../components/ComOthers/RankingRightPanel';
+import RankingRightPanel from '../components/ComPanels/RankingRightPanel';
 import MobileRanking from '../components/ComMobile/MobileRanking';
-import HallOfFamePanel from '../components/ComOthers/HallOfFamePanel';
+import HallOfFamePanel from '../components/ComPanels/HallOfFamePanel';
 import GlobalLoader from "../components/ComOthers/GlobalLoader";
 import '../styles/StylesPages/RankingPage.css';
 

@@ -5,7 +5,7 @@ import {
   Import
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
-import StatsRightPanel from '../components/ComOthers/StatsRightPanel';
+import StatsRightPanel from '../components/ComPanels/StatsRightPanel';
 import MobileStats from '../components/ComMobile/MobileStats';
 import Footer from '../components/ComOthers/Footer';
 import GlobalLoader from "../components/ComOthers/GlobalLoader";
