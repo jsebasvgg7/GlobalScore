@@ -140,8 +140,8 @@
   display: grid;
   grid-template-columns: repeat(3, 262px);
   justify-content: center;
-  gap: 12px;
-  padding: 8px 0;
+  gap: 42px;
+  padding: 12px 0;
 }
 
 .matches-container > * {
