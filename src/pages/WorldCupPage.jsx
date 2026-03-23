@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Trophy, Award, TrendingUp, TrendingDown, Star, Target, Zap,
-  ChevronDown, ChevronUp, Medal, User, Save, CheckCircle,
+  ChevronDown, ChevronUp, Medal, User, Save,ChevronRight, CheckCircle,
   AlertCircle, Users, Swords, Crown, Shield
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
@@ -10,8 +10,10 @@ import { useWorldCup } from '../hooks/HooksOthers/useWorldCup';
 import Footer from '../components/ComOthers/Footer';
 import KnockoutSection from '../components/ComWorldCup/KnockoutSection';
 import GlobalLoader from "../components/ComOthers/GlobalLoader";
+import RightPanelWorld from '../components/ComWorldCup/RightPanelWorld';
 import '../styles/StylesPages/WorldCupPage.css';
 import '../styles/StylesMobile/MobileWorldCup.css';
+import '../styles/StylesOthers/RightPanelWorld.css';
 
 /* ============================================================
    DATOS
@@ -116,32 +118,43 @@ function TeamFlag({ team, className }) {
 /* ============================================================
    COMPONENTE: GroupCard (DESKTOP)
 ============================================================ */
-function GroupCard({ group, groupPreds, onUpdate, expanded, onToggle }) {
+function GroupCard({ group, groupPreds, isActive, onActivate }) {
   const teams = GROUPS_DATA[group];
-  const matches = [
-    [teams[0],teams[1]],[teams[2],teams[3]],
-    [teams[0],teams[2]],[teams[1],teams[3]],
-    [teams[0],teams[3]],[teams[1],teams[2]],
-  ];
   const matchPreds = groupPreds?.[group]?.matches || {};
   const table = calcTable(group, groupPreds);
-
-  const handleScore = (idx, side, val) => {
-    const cur = matchPreds[idx] || { homeScore:'', awayScore:'' };
-    const updated = { ...cur, [side === 'home' ? 'homeScore' : 'awayScore']: val };
-    onUpdate(group, { ...(groupPreds[group]||{}), matches: { ...matchPreds, [idx]: updated } });
-  };
-
+ 
+  const filledCount = Object.values(matchPreds).filter(
+    p => p.homeScore !== '' && p.awayScore !== '' && p.homeScore !== undefined
+  ).length;
+ 
   return (
-    <div className="wcp-group-card">
-      <div className="wcp-group-hdr" onClick={onToggle}>
+    <div
+      className={`wcp-group-card${isActive ? ' wcp-group-card--active' : ''}`}
+      onClick={onActivate}
+    >
+      {/* Header */}
+      <div className="wcp-group-hdr">
         <div className="wcp-group-hdr-left">
           <div className="wcp-group-letter">{group}</div>
           <span className="wcp-group-lbl">GRUPO {group}</span>
         </div>
-        <ChevronDown size={14} className={`wcp-group-chevron${expanded?' open':''}`} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {filledCount > 0 && (
+            <span className="wcp-group-prog">
+              {filledCount}/6
+            </span>
+          )}
+          {filledCount === 0 && (
+            <span className="wcp-group-prog wcp-group-prog--empty">
+              0/6
+            </span>
+          )}
+          {/* ChevronRight importado en el archivo */}
+          <ChevronRight size={13} className="wcp-group-arrow" />
+        </div>
       </div>
-
+ 
+      {/* Tabla de clasificación */}
       <table className="wcp-group-table">
         <thead>
           <tr>
@@ -151,8 +164,8 @@ function GroupCard({ group, groupPreds, onUpdate, expanded, onToggle }) {
         </thead>
         <tbody>
           {table.map((row, i) => (
-            <tr key={row.team} className={i<2?'wcp-qualified':i===2?'wcp-third-place':''}>
-              <td>{i+1}</td>
+            <tr key={row.team} className={i < 2 ? 'wcp-qualified' : i === 2 ? 'wcp-third-place' : ''}>
+              <td>{i + 1}</td>
               <td>
                 <div className="wcp-team-cell">
                   <TeamFlag team={row.team} className="wcp-team-flag" />
@@ -162,48 +175,24 @@ function GroupCard({ group, groupPreds, onUpdate, expanded, onToggle }) {
               <td>{row.played}</td><td>{row.won}</td>
               <td>{row.drawn}</td><td>{row.lost}</td>
               <td>{row.gf}</td><td>{row.ga}</td>
-              <td className={row.gd>0?'wcp-gd-pos':row.gd<0?'wcp-gd-neg':''}>{row.gd>0?'+':''}{row.gd}</td>
+              <td className={row.gd > 0 ? 'wcp-gd-pos' : row.gd < 0 ? 'wcp-gd-neg' : ''}>
+                {row.gd > 0 ? '+' : ''}{row.gd}
+              </td>
               <td><span className="wcp-pts-bold">{row.pts}</span></td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {expanded && (
-        <div className="wcp-group-preds">
-          <div className="wcp-preds-hdr">
-            <Swords size={10} /> PARTIDOS DEL GRUPO
-          </div>
-          {matches.map(([home, away], idx) => {
-            const pred = matchPreds[idx] || { homeScore:'', awayScore:'' };
-            return (
-              <div key={idx} className="wcp-match-pred">
-                <div className="wcp-match-team">
-                  <TeamFlag team={home} className="wcp-team-flag" />
-                  <span style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{home}</span>
-                </div>
-                <div className="wcp-score-pair">
-                  <input className="wcp-score-input" type="number" min="0" max="20"
-                    value={pred.homeScore} placeholder="0"
-                    onChange={e=>handleScore(idx,'home',e.target.value)} />
-                  <span className="wcp-score-sep">-</span>
-                  <input className="wcp-score-input" type="number" min="0" max="20"
-                    value={pred.awayScore} placeholder="0"
-                    onChange={e=>handleScore(idx,'away',e.target.value)} />
-                </div>
-                <div className="wcp-match-team wcp-match-team--right">
-                  <span style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{away}</span>
-                  <TeamFlag team={away} className="wcp-team-flag" />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+ 
+      {/* Hint de predicción */}
+      <div className="wcp-group-hint" onClick={e => { e.stopPropagation(); onActivate(); }}>
+        <Swords size={9} />
+        {isActive ? 'Panel abierto' : 'Predecir partidos'}
+        <ChevronRight size={9} />
+      </div>
     </div>
   );
 }
-
 /* ============================================================
    COMPONENTE: AwardIcon helper
 ============================================================ */
@@ -222,10 +211,9 @@ function AwardIconEl({ variant, size=20 }) {
 /* ============================================================
    DESKTOP — SECCIÓN GRUPOS
 ============================================================ */
-function DesktopGroups({ groupPreds, onGroupUpdate, onSave, saving }) {
-  const [expanded, setExpanded] = useState({});
+function DesktopGroups({ groupPreds, onGroupUpdate, activeGroup, onSetActiveGroup }) {
   const bestThirds = calcBestThirds(groupPreds);
-
+ 
   return (
     <div>
       <div className="wcp-section-hdr">
@@ -235,24 +223,23 @@ function DesktopGroups({ groupPreds, onGroupUpdate, onSave, saving }) {
         </div>
         <span className="wcp-section-sub">12 grupos · 48 selecciones</span>
       </div>
-
+ 
       <div className="wcp-groups-grid">
         {Object.keys(GROUPS_DATA).map(group => (
           <GroupCard
             key={group}
             group={group}
             groupPreds={groupPreds}
-            onUpdate={onGroupUpdate}
-            expanded={!!expanded[group]}
-            onToggle={() => setExpanded(p => ({ ...p, [group]: !p[group] }))}
+            isActive={activeGroup === group}
+            onActivate={() => onSetActiveGroup(activeGroup === group ? null : group)}
           />
         ))}
       </div>
-
+ 
       {bestThirds.length > 0 && (
         <div className="wcp-thirds-wrap">
           <div className="wcp-thirds-hdr">
-            <Trophy size={16} className="wcp-thirds-icon" />
+            <Trophy size={15} className="wcp-thirds-icon" />
             <span className="wcp-thirds-title">MEJORES TERCEROS — 8 CLASIFICAN</span>
           </div>
           <table className="wcp-thirds-table">
@@ -261,8 +248,8 @@ function DesktopGroups({ groupPreds, onGroupUpdate, onSave, saving }) {
             </thead>
             <tbody>
               {bestThirds.map((row, i) => (
-                <tr key={i} className={i<8?'wcp-q':''}>
-                  <td><span className={`wcp-rnk-badge${i<8?' wcp-rnk-badge--q':''}`}>{i+1}</span></td>
+                <tr key={i} className={i < 8 ? 'wcp-q' : ''}>
+                  <td><span className={`wcp-rnk-badge${i < 8 ? ' wcp-rnk-badge--q' : ''}`}>{i + 1}</span></td>
                   <td><span className="wcp-grp-badge">G-{row.group}</span></td>
                   <td>
                     <div className="wcp-team-cell">
@@ -272,7 +259,9 @@ function DesktopGroups({ groupPreds, onGroupUpdate, onSave, saving }) {
                   </td>
                   <td>{row.played}</td>
                   <td><strong>{row.pts}</strong></td>
-                  <td className={row.gd>0?'wcp-gd-pos':row.gd<0?'wcp-gd-neg':''}>{row.gd>0?'+':''}{row.gd}</td>
+                  <td className={row.gd > 0 ? 'wcp-gd-pos' : row.gd < 0 ? 'wcp-gd-neg' : ''}>
+                    {row.gd > 0 ? '+' : ''}{row.gd}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -592,6 +581,7 @@ function MobileAwards({ awards, onAwardUpdate }) {
    COMPONENTE PRINCIPAL
 ============================================================ */
 export default function WorldCupPage({ currentUser }) {
+  const [activeGroup, setActiveGroup] = useState(null);
   const [activeTab, setActiveTab] = useState('groups');
   const [predictions, setPredictions] = useState({
     groups: {},
@@ -645,51 +635,6 @@ export default function WorldCupPage({ currentUser }) {
     <>
       {/* ══════════ DESKTOP ══════════ */}
       <div className="wcp-shell page-root">
-        {/* HERO */}
-        <div className="wcp-hero">
-          <div className="wcp-hero-deco">
-            <div className="wcp-hero-deco-line wcp-hero-deco-line--h1" />
-            <div className="wcp-hero-deco-line wcp-hero-deco-line--h2" />
-            <div className="wcp-hero-deco-line wcp-hero-deco-line--v1" />
-          </div>
-          <div className="wcp-hero-inner">
-            <div className="wcp-hero-left">
-              <div className="wcp-hero-eyebrow">
-                <div className="wcp-hero-eyebrow-dot" />
-                FIFA WORLD CUP 2026
-              </div>
-              <h1 className="wcp-hero-title">LLAMADA<br /><span>MUNDIALISTA</span></h1>
-              <p className="wcp-hero-subtitle">USA · CANADA · MEXICO · 2026</p>
-              <div className="wcp-hero-tags">
-                <span className="wcp-hero-tag"><Users size={9} /> 48 SELECCIONES</span>
-                <span className="wcp-hero-tag"><Trophy size={9} /> 12 GRUPOS</span>
-                <span className="wcp-hero-tag"><Shield size={9} /> 104 PARTIDOS</span>
-              </div>
-            </div>
-            <div className="wcp-hero-right">
-              <div className="wcp-hero-stat">
-                <Star size={16} className="wcp-hero-stat-icon" />
-                <div className={`wcp-hero-stat-num wcp-hero-stat-num--gold`}>{groupFilled}</div>
-                <div className="wcp-hero-stat-lbl">GRUPOS PRED.</div>
-              </div>
-              <div className="wcp-hero-stat">
-                <Swords size={16} className="wcp-hero-stat-icon" />
-                <div className="wcp-hero-stat-num wcp-hero-stat-num--blue">{ko16Count}</div>
-                <div className="wcp-hero-stat-lbl">LLAVES KO</div>
-              </div>
-              <div className="wcp-hero-stat">
-                <Award size={16} className="wcp-hero-stat-icon" />
-                <div className="wcp-hero-stat-num wcp-hero-stat-num--green">{awardsCount}</div>
-                <div className="wcp-hero-stat-lbl">PREMIOS PRED.</div>
-              </div>
-              <div className="wcp-hero-stat">
-                <Crown size={16} className="wcp-hero-stat-icon" />
-                <div className="wcp-hero-stat-num wcp-hero-stat-num--white">32</div>
-                <div className="wcp-hero-stat-lbl">EN KO TOTAL</div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* TABS NAV */}
         <div className="wcp-tabs">
@@ -713,36 +658,45 @@ export default function WorldCupPage({ currentUser }) {
           </div>
         </div>
 
-        {/* BODY */}
-        <div className="wcp-body">
-          {activeTab === 'groups' && (
-            <DesktopGroups
+        {/* LAYOUT CON PANEL DERECHO */}
+        <div className="wcp-layout">
+          <div className="wcp-body">
+            {activeTab === 'groups' && (
+              <DesktopGroups
+                groupPreds={predictions.groups}
+                onGroupUpdate={handleGroupUpdate}
+                activeGroup={activeGroup}
+                onSetActiveGroup={setActiveGroup}
+              />
+            )}
+            {activeTab === 'knockout' && (
+              <DesktopKnockout
+                groupPreds={predictions.groups}
+                knockout={predictions.knockout}
+                onKnockoutUpdate={handleKnockoutUpdate}
+                onSave={handleSave}
+                saving={saving}
+              />
+            )}
+            {activeTab === 'awards' && (
+              <DesktopAwards
+                awards={predictions.awards}
+                onAwardUpdate={handleAwardUpdate}
+                onSave={handleSave}
+                saving={saving}
+              />
+            )}
+          </div>
+
+          {activeTab === 'groups' && activeGroup && (
+            <RightPanelWorld
+              group={activeGroup}
               groupPreds={predictions.groups}
-              onGroupUpdate={handleGroupUpdate}
-              onSave={handleSave}
-              saving={saving}
-            />
-          )}
-          {activeTab === 'knockout' && (
-            <DesktopKnockout
-              groupPreds={predictions.groups}
-              knockout={predictions.knockout}
-              onKnockoutUpdate={handleKnockoutUpdate}
-              onSave={handleSave}
-              saving={saving}
-            />
-          )}
-          {activeTab === 'awards' && (
-            <DesktopAwards
-              awards={predictions.awards}
-              onAwardUpdate={handleAwardUpdate}
-              onSave={handleSave}
-              saving={saving}
+              onUpdate={handleGroupUpdate}
+              onClose={() => setActiveGroup(null)}
             />
           )}
         </div>
-
-        <Footer />
       </div>
 
       {/* ══════════ MOBILE ══════════ */}

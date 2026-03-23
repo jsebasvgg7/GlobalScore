@@ -1,507 +1,492 @@
-/* ==========================================
-   KNOCKOUT SECTION 
-========================================== */
+/* ================================================================
+   KnockoutSection.css — Brutalista Japonés Retro · FIFA 2026
+   TODO pegado: sin gap, sin border-radius, sin padding externo
+   Líneas conectadas como el resto del sistema
+================================================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
+
+/* ================================================================
+   CONTENEDOR PRINCIPAL
+================================================================ */
 .knockout-section {
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  padding-bottom: 40px;
+  /* Sin gap — cada stage tiene su propio border-bottom */
 }
 
-/* ==========================================
-   EMPTY STATE
-========================================== */
-.knockout-empty-state {
-  padding: 80px 20px;
-  text-align: center;
-  background: var(--card);
-  border-radius: 16px;
-  border: 2px dashed var(--border);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
-.knockout-empty-state svg {
-  color: var(--muted);
-}
-
-.knockout-empty-state h3 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.knockout-empty-state p {
-  margin: 0;
-  font-size: 14px;
-  color: var(--text-secondary);
-  max-width: 400px;
-}
-
-/* ==========================================
-   KNOCKOUT STAGE
-========================================== */
+/* ================================================================
+   STAGE (cada ronda: 16avos, octavos, etc.)
+================================================================ */
 .knockout-stage {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: var(--small-shadow);
+  border: 0.5px solid var(--wc-border, #d4cfc8);
+  border-bottom: none; /* se une al siguiente stage */
+  background: var(--wc-cream, #f0ede8);
 }
 
+.knockout-stage:last-child {
+  border-bottom: 0.5px solid var(--wc-border, #d4cfc8);
+}
+
+[data-theme="dark"] .knockout-stage {
+  background: #1a1d2e;
+  border-color: rgba(255,255,255,0.07);
+}
+
+/* ── Header de cada stage ── */
 .knockout-stage-header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid var(--border);
-  margin-bottom: 24px;
+  gap: 0;
+  padding: 0;
+  background: #12121f;
+  border-bottom: 0.5px solid rgba(255,255,255,0.08);
 }
 
+/* Icono lateral */
+.knockout-stage-header > svg {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 18px 20px;
+  border-right: 0.5px solid rgba(255,255,255,0.08);
+  width: 24px !important;
+  height: 24px !important;
+}
+
+/* Texto info */
 .knockout-stage-header > div {
   flex: 1;
+  padding: 14px 20px;
+  border-right: 0.5px solid rgba(255,255,255,0.08);
 }
 
 .knockout-stage-header h2 {
   margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: #fff;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
 .knockout-stage-header p {
-  margin: 4px 0 0 0;
-  font-size: 13px;
-  color: var(--text-secondary);
-  font-weight: 500;
+  margin: 0;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.08em;
+  margin-top: 2px;
 }
 
+/* Badge de llaves */
 .knockout-badge {
-  padding: 6px 14px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--accent);
+  padding: 0 24px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c9a227;
   white-space: nowrap;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  border-left: 0.5px solid rgba(255,255,255,0.08);
 }
 
-/* ==========================================
-   BRACKET CONTAINER - OCTAVOS
-========================================== */
+/* ================================================================
+   BRACKET CONTAINER — 16avos (2 lados)
+================================================================ */
 .knockout-bracket-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  /* Sin gap — la línea divisoria es el border */
 }
 
 .knockout-side {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  border-right: 0.5px solid var(--wc-border, #d4cfc8);
 }
 
+.knockout-side:last-child {
+  border-right: none;
+}
+
+[data-theme="dark"] .knockout-side {
+  border-right-color: rgba(255,255,255,0.07);
+}
+
+/* Título del lado */
 .knockout-side-title {
   margin: 0;
-  font-size: 16px;
+  padding: 10px 18px;
+  font-size: 10px;
   font-weight: 700;
-  color: var(--text-primary);
-  padding: 12px 16px;
-  background: var(--glass);
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  text-align: center;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #b0aaa0;
+  background: var(--wc-surface, #e8e4de);
+  border-bottom: 0.5px solid var(--wc-border, #d4cfc8);
 }
 
+[data-theme="dark"] .knockout-side-title {
+  background: #1e2235;
+  color: #4a5568;
+  border-bottom-color: rgba(255,255,255,0.07);
+}
+
+/* Sub-sección: parte superior / inferior */
 .knockout-quarter-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  /* Sin padding extra */
 }
 
 .knockout-quarter-title {
   margin: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
+  padding: 8px 18px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 8px 12px;
-  background: var(--bg);
-  border-radius: 8px;
+  color: #b0aaa0;
+  background: var(--wc-surface, #e8e4de);
+  border-bottom: 0.5px solid var(--wc-border, #d4cfc8);
+  border-top: 0.5px solid var(--wc-border, #d4cfc8);
 }
 
+[data-theme="dark"] .knockout-quarter-title {
+  background: #252936;
+  color: #4a5568;
+  border-color: rgba(255,255,255,0.06);
+}
+
+/* Grid de matches dentro de una sección */
 .knockout-matches-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-/* ==========================================
-   QUARTERS GRID
-========================================== */
+/* ================================================================
+   GRIDS para otras rondas — todos sin gap, todo conectado
+================================================================ */
 .knockout-quarters-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
 }
 
-/* ==========================================
-   SEMIS GRID
-========================================== */
 .knockout-semis-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  grid-template-columns: repeat(4, 1fr);
 }
 
-/* ==========================================
-   FINAL GRID
-========================================== */
 .knockout-final-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
-.knockout-final-card {
-  padding: 24px;
-  background: var(--bg);
-  border: 2px solid var(--border);
-  border-radius: 16px;
+/* ================================================================
+   KNOCKOUT MATCH CARD — la unidad mínima, toda conectada
+================================================================ */
+.knockout-match-card {
+  padding: 14px 16px;
+  border-right: 0.5px solid var(--wc-border, #d4cfc8);
+  border-bottom: 0.5px solid var(--wc-border, #d4cfc8);
+  background: #fff;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  /* Sin gap — los elementos se tocan */
 }
 
-.knockout-final-card.third-place {
-  border-color: #CD7F32;
+[data-theme="dark"] .knockout-match-card {
+  background: #1e2235;
+  border-right-color: rgba(255,255,255,0.07);
+  border-bottom-color: rgba(255,255,255,0.07);
 }
 
-.knockout-final-card.champion {
-  border-color: var(--accent);
-  box-shadow: 0 8px 24px rgba(96, 81, 155, 0.15);
+/* Eliminar border-right del último de cada fila */
+.knockout-matches-grid   .knockout-match-card:nth-child(2n)  { border-right: none; }
+.knockout-quarters-grid  .knockout-match-card:nth-child(4n)  { border-right: none; }
+.knockout-semis-grid     .knockout-match-card:nth-child(4n)  { border-right: none; }
+.knockout-final-grid     .knockout-match-card:last-child      { border-right: none; }
+
+/* Eliminar border-bottom de la última fila */
+.knockout-matches-grid   .knockout-match-card:nth-child(n+3) { border-bottom: none; }
+.knockout-quarters-grid  .knockout-match-card                 { border-bottom: none; }
+.knockout-semis-grid     .knockout-match-card                 { border-bottom: none; }
+.knockout-final-grid     .knockout-match-card                 { border-bottom: none; }
+
+/* Header de la card */
+.knockout-match-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.knockout-match-label {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #5b4fd8;
+}
+
+[data-theme="dark"] .knockout-match-label { color: #7c6fe8; }
+
+.knockout-match-id {
+  font-size: 8px;
+  font-family: 'DM Mono', monospace;
+  color: #b0aaa0;
+}
+
+[data-theme="dark"] .knockout-match-id { color: #4a5568; }
+
+/* ── Opción de equipo ── */
+.knockout-team-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border: 0.5px solid var(--wc-border, #d4cfc8);
+  background: var(--wc-surface, #e8e4de);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  margin-bottom: 6px;
+}
+
+.knockout-team-option:last-of-type {
+  margin-bottom: 0;
+}
+
+[data-theme="dark"] .knockout-team-option {
+  background: #252936;
+  border-color: rgba(255,255,255,0.08);
+}
+
+.knockout-team-option:hover:not(.disabled) {
+  border-color: #5b4fd8;
+  background: rgba(91,79,216,0.06);
+}
+
+[data-theme="dark"] .knockout-team-option:hover:not(.disabled) {
+  background: rgba(124,111,232,0.1);
+  border-color: rgba(124,111,232,0.4);
+}
+
+.knockout-team-option.selected {
+  background: rgba(29,158,117,0.08);
+  border-color: #1D9E75;
+}
+
+[data-theme="dark"] .knockout-team-option.selected {
+  background: rgba(52,211,153,0.08);
+  border-color: #34d399;
+}
+
+.knockout-team-option.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Container de la bandera */
+.knockout-team-flag-container {
+  width: 20px;
+  height: 14px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.knockout-team-flag {
+  width: 20px;
+  height: 14px;
+  object-fit: cover;
+  border: 0.5px solid rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] .knockout-team-flag { border-color: rgba(255,255,255,0.15); }
+
+.knockout-team-placeholder {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Nombre del equipo */
+.knockout-team-name {
+  flex: 1;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: #1a1a2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-theme="dark"] .knockout-team-name { color: #f0f1f7; }
+
+/* Check icon */
+.knockout-check-icon {
+  color: #1D9E75;
+  flex-shrink: 0;
+  animation: ko-check-in 0.2s ease;
+}
+
+[data-theme="dark"] .knockout-check-icon { color: #34d399; }
+
+@keyframes ko-check-in {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* VS */
+.knockout-vs {
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.2em;
+  color: #b0aaa0;
+  padding: 5px 0;
+}
+
+[data-theme="dark"] .knockout-vs { color: #4a5568; }
+
+/* Footer ganador */
+.knockout-match-footer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 0.5px solid var(--wc-border, #d4cfc8);
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: #1D9E75;
+  letter-spacing: 0.06em;
+}
+
+[data-theme="dark"] .knockout-match-footer {
+  border-top-color: rgba(255,255,255,0.07);
+  color: #34d399;
+}
+
+/* ================================================================
+   FINAL Y TERCER PUESTO — cards especiales
+================================================================ */
+.knockout-final-card {
+  padding: 0;
+  border-right: 0.5px solid var(--wc-border, #d4cfc8);
+  display: flex;
+  flex-direction: column;
+}
+
+.knockout-final-card:last-child {
+  border-right: none;
+}
+
+[data-theme="dark"] .knockout-final-card {
+  border-right-color: rgba(255,255,255,0.07);
 }
 
 .knockout-final-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--border);
+  gap: 0;
+  background: #12121f;
+  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+  padding: 0;
+}
+
+.knockout-final-header > svg {
+  padding: 14px 16px;
+  border-right: 0.5px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
 }
 
 .knockout-final-header h3 {
   margin: 0;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-primary);
+  padding: 14px 18px;
+  font-size: 13px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: #fff;
+  letter-spacing: -0.01em;
 }
+
+.third-place .knockout-final-header h3 { color: #CD7F32; }
+.champion   .knockout-final-header h3  { color: #c9a227; }
 
 .knockout-final-description {
   margin: 0;
-  font-size: 13px;
-  color: var(--text-secondary);
-  font-weight: 500;
+  padding: 10px 16px;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: #b0aaa0;
+  border-bottom: 0.5px solid var(--wc-border, #d4cfc8);
+  background: var(--wc-surface, #e8e4de);
+  letter-spacing: 0.04em;
 }
 
-.knockout-final-teams {
+[data-theme="dark"] .knockout-final-description {
+  background: #252936;
+  color: #4a5568;
+  border-bottom-color: rgba(255,255,255,0.07);
+}
+
+/* La KnockoutMatchCard dentro del final-card no tiene border externo */
+.knockout-final-card > .knockout-match-card {
+  border: none;
+  flex: 1;
+}
+
+/* ================================================================
+   EMPTY STATE
+================================================================ */
+.knockout-empty-state {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  background: var(--card);
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.knockout-vs-large {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  padding: 6px 12px;
-  background: var(--glass);
-  border-radius: 8px;
-}
-
-/* ==========================================
-   DARK MODE
-========================================== */
-[data-theme="dark"] .knockout-stage {
-  background: rgba(53, 59, 77, 0.6);
-  backdrop-filter: blur(20px);
+  gap: 14px;
+  padding: 64px 24px;
+  color: #b0aaa0;
+  text-align: center;
+  border: 0.5px solid var(--wc-border, #d4cfc8);
+  background: var(--wc-cream, #f0ede8);
 }
 
 [data-theme="dark"] .knockout-empty-state {
-  background: rgba(53, 59, 77, 0.4);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: #1a1d2e;
+  border-color: rgba(255,255,255,0.07);
+  color: #4a5568;
 }
 
-[data-theme="dark"] .knockout-final-card {
-  background: rgba(42, 47, 63, 0.6);
+.knockout-empty-state svg { opacity: 0.25; }
+
+.knockout-empty-state h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: #888;
+  letter-spacing: -0.01em;
 }
 
-[data-theme="dark"] .knockout-final-card.champion {
-  border-color: var(--accent);
-  box-shadow: 0 8px 24px rgba(139, 127, 199, 0.2);
+[data-theme="dark"] .knockout-empty-state h3 { color: #4a5568; }
+
+.knockout-empty-state p {
+  margin: 0;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: #b0aaa0;
+  letter-spacing: 0.06em;
+  max-width: 360px;
 }
 
-[data-theme="dark"] .knockout-final-teams {
-  background: rgba(58, 64, 82, 0.6);
-}
-
-/* ==========================================
-   RESPONSIVE - TABLET
-========================================== */
-@media (max-width: 1024px) {
-  .knockout-bracket-container {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-
-  .knockout-quarters-grid {
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  }
-
-  .knockout-semis-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
-
-  .knockout-final-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-}
-
-/* ==========================================
-   RESPONSIVE - MOBILE
-========================================== */
-@media (max-width: 768px) {
-  .knockout-section {
-    gap: 24px;
-  }
-
-  .knockout-stage {
-    padding: 16px;
-    border-radius: 12px;
-  }
-
-  .knockout-stage-header {
-    flex-wrap: wrap;
-    gap: 12px;
-    padding-bottom: 16px;
-    margin-bottom: 20px;
-  }
-
-  .knockout-stage-header svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .knockout-stage-header h2 {
-    font-size: 18px;
-  }
-
-  .knockout-stage-header p {
-    font-size: 12px;
-  }
-
-  .knockout-badge {
-    padding: 4px 12px;
-    font-size: 11px;
-  }
-
-  .knockout-side-title {
-    font-size: 14px;
-    padding: 10px 14px;
-  }
-
-  .knockout-quarter-title {
-    font-size: 11px;
-    padding: 6px 10px;
-  }
-
-  .knockout-matches-grid {
-    gap: 10px;
-  }
-
-  .knockout-quarters-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .knockout-semis-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .knockout-final-grid {
-    gap: 16px;
-  }
-
-  .knockout-final-card {
-    padding: 16px;
-    gap: 12px;
-  }
-
-  .knockout-final-header {
-    padding-bottom: 10px;
-  }
-
-  .knockout-final-header svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .knockout-final-header h3 {
-    font-size: 16px;
-  }
-
-  .knockout-final-description {
-    font-size: 12px;
-  }
-
-  .knockout-final-teams {
-    padding: 12px;
-    font-size: 12px;
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-  }
-
-  .knockout-vs-large {
-    font-size: 11px;
-    padding: 4px 10px;
-  }
-
-  .knockout-empty-state {
-    padding: 60px 16px;
-  }
-
-  .knockout-empty-state svg {
-    width: 40px;
-    height: 40px;
-  }
-
-  .knockout-empty-state h3 {
-    font-size: 18px;
-  }
-
-  .knockout-empty-state p {
-    font-size: 13px;
-  }
-}
-
-/* ==========================================
-   RESPONSIVE - SMALL MOBILE
-========================================== */
-@media (max-width: 480px) {
-  .knockout-stage {
-    padding: 12px;
-  }
-
-  .knockout-stage-header {
-    gap: 10px;
-    padding-bottom: 12px;
-    margin-bottom: 16px;
-  }
-
-  .knockout-stage-header h2 {
-    font-size: 16px;
-  }
-
-  .knockout-stage-header p {
-    font-size: 11px;
-  }
-
-  .knockout-side {
-    gap: 16px;
-  }
-
-  .knockout-quarter-section {
-    gap: 10px;
-  }
-
-  .knockout-final-card {
-    padding: 14px;
-  }
-
-  .knockout-final-header h3 {
-    font-size: 15px;
-  }
-
-  .knockout-empty-state {
-    padding: 40px 12px;
-  }
-}
-
-/* ==========================================
-   LANDSCAPE ORIENTATION
-========================================== */
-@media (max-width: 768px) and (orientation: landscape) {
-  .knockout-bracket-container {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .knockout-quarters-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .knockout-semis-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .knockout-final-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-/* ==========================================
-   ANIMATIONS
-========================================== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.knockout-stage {
-  animation: fadeIn 0.3s ease-out;
-}
-
-/* ==========================================
-   PRINT STYLES
-========================================== */
-@media print {
-  .knockout-badge,
-  .knockout-stage-header p {
-    display: none;
-  }
-
-  .knockout-stage {
-    page-break-inside: avoid;
-    box-shadow: none;
-    border: 1px solid #000;
-  }
-
-  .knockout-bracket-container {
-    page-break-inside: avoid;
-  }
-}
+[data-theme="dark"] .knockout-empty-state p { color: #3a4052; }

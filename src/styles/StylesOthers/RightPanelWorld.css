@@ -1,0 +1,470 @@
+/* ================================================================
+   RightPanelWorld.css
+   Panel derecho para predicciones de grupos — WorldCupPage
+   Mismo sistema brutalista japonés retro que los demás paneles
+================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
+
+/* ================================================================
+   ROOT
+================================================================ */
+.rpw-root {
+  width: 360px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #e8e4de;
+  border-left: 0.5px solid #d4cfc8;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  animation: rpw-slide-in 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes rpw-slide-in {
+  from { transform: translateX(24px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+[data-theme="dark"] .rpw-root {
+  background: #1a1d2e;
+  border-left-color: rgba(255, 255, 255, 0.08);
+}
+
+.rpw-root::-webkit-scrollbar { width: 3px; }
+.rpw-root::-webkit-scrollbar-track { background: transparent; }
+.rpw-root::-webkit-scrollbar-thumb { background: #c8c3bb; border-radius: 2px; }
+[data-theme="dark"] .rpw-root::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); }
+
+/* ================================================================
+   HEADER
+================================================================ */
+.rpw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 12px;
+  border-bottom: 0.5px solid #d4cfc8;
+  background: #f0ede8;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .rpw-header {
+  background: #1e2235;
+  border-bottom-color: rgba(255, 255, 255, 0.07);
+}
+
+.rpw-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rpw-group-badge {
+  width: 36px;
+  height: 36px;
+  background: #5b4fd8;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  flex-shrink: 0;
+}
+
+.rpw-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rpw-header-title {
+  font-size: 13px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: #1a1a2e;
+  letter-spacing: 0.06em;
+}
+
+[data-theme="dark"] .rpw-header-title { color: #f0f1f7; }
+
+.rpw-header-sub {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: #b0aaa0;
+  letter-spacing: 0.04em;
+}
+
+[data-theme="dark"] .rpw-header-sub { color: #4a5568; }
+
+.rpw-close-btn {
+  width: 32px;
+  height: 32px;
+  border: 0.5px solid #d4cfc8;
+  background: #fff;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.rpw-close-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.06);
+}
+
+[data-theme="dark"] .rpw-close-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #4a5568;
+}
+
+[data-theme="dark"] .rpw-close-btn:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.08);
+}
+
+/* ================================================================
+   BLOQUE GENÉRICO
+================================================================ */
+.rpw-block {
+  padding: 16px 18px;
+  border-bottom: 0.5px solid #d4cfc8;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .rpw-block { border-bottom-color: rgba(255, 255, 255, 0.07); }
+
+.rpw-block--matches { flex: 1; }
+
+.rpw-block-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #b0aaa0;
+  margin-bottom: 12px;
+}
+
+[data-theme="dark"] .rpw-block-label { color: #4a5568; }
+
+.rpw-block-label svg { color: #b0aaa0; flex-shrink: 0; }
+[data-theme="dark"] .rpw-block-label svg { color: #4a5568; }
+
+.rpw-label-line {
+  flex: 1;
+  height: 0.5px;
+  background: #d4cfc8;
+}
+
+[data-theme="dark"] .rpw-label-line { background: rgba(255, 255, 255, 0.07); }
+
+/* ================================================================
+   TABLA DE CLASIFICACIÓN
+================================================================ */
+.rpw-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.rpw-table thead tr {
+  border-bottom: 0.5px solid #d4cfc8;
+}
+
+[data-theme="dark"] .rpw-table thead tr { border-bottom-color: rgba(255, 255, 255, 0.07); }
+
+.rpw-table th {
+  padding: 6px 4px;
+  text-align: center;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #b0aaa0;
+  background: #f5f3f0;
+}
+
+[data-theme="dark"] .rpw-table th {
+  background: #1a1d2e;
+  color: #4a5568;
+}
+
+.rpw-table th:first-child { width: 20px; text-align: center; }
+.rpw-table th:nth-child(2) { text-align: left; }
+
+.rpw-table tbody tr {
+  border-bottom: 0.5px solid #d4cfc8;
+  transition: background 0.1s;
+}
+
+[data-theme="dark"] .rpw-table tbody tr { border-bottom-color: rgba(255, 255, 255, 0.04); }
+.rpw-table tbody tr:last-child { border-bottom: none; }
+.rpw-table tbody tr:hover { background: rgba(91, 79, 216, 0.04); }
+[data-theme="dark"] .rpw-table tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+
+/* Clasificados */
+.rpw-table tbody tr.rpw-qualified {
+  border-left: 2px solid #1D9E75;
+}
+
+[data-theme="dark"] .rpw-table tbody tr.rpw-qualified {
+  border-left-color: #34d399;
+}
+
+/* Mejor tercero */
+.rpw-table tbody tr.rpw-third {
+  border-left: 2px solid #c9a227;
+}
+
+[data-theme="dark"] .rpw-table tbody tr.rpw-third {
+  border-left-color: #f0c040;
+}
+
+.rpw-table td {
+  padding: 8px 4px;
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  color: #1a1a2e;
+  font-size: 10px;
+}
+
+[data-theme="dark"] .rpw-table td { color: #f0f1f7; }
+.rpw-table td:nth-child(2) { text-align: left; }
+
+.rpw-pos {
+  font-size: 11px;
+  font-weight: 800;
+  color: #b0aaa0 !important;
+  font-family: 'DM Mono', monospace;
+}
+
+.rpw-team-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rpw-flag {
+  width: 18px;
+  height: 12px;
+  object-fit: cover;
+  border-radius: 1px;
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .rpw-flag { border-color: rgba(255, 255, 255, 0.15); }
+
+.rpw-team-name {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: #1a1a2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+}
+
+[data-theme="dark"] .rpw-team-name { color: #f0f1f7; }
+
+.rpw-pts {
+  font-weight: 800;
+  color: #5b4fd8;
+  font-size: 12px;
+}
+
+[data-theme="dark"] .rpw-pts { color: #7c6fe8; }
+
+.rpw-gd-pos { color: #1D9E75 !important; font-weight: 700; }
+.rpw-gd-neg { color: #c0392b !important; font-weight: 700; }
+[data-theme="dark"] .rpw-gd-pos { color: #34d399 !important; }
+[data-theme="dark"] .rpw-gd-neg { color: #f87171 !important; }
+
+/* ================================================================
+   LISTA DE PARTIDOS
+================================================================ */
+.rpw-matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.rpw-match-row {
+  display: grid;
+  grid-template-columns: 1fr 72px 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 0.5px solid #d4cfc8;
+  transition: background 0.1s;
+}
+
+[data-theme="dark"] .rpw-match-row { border-bottom-color: rgba(255, 255, 255, 0.05); }
+.rpw-match-row:last-child { border-bottom: none; }
+.rpw-match-row:hover { background: rgba(91, 79, 216, 0.03); }
+[data-theme="dark"] .rpw-match-row:hover { background: rgba(255, 255, 255, 0.02); }
+
+/* Fila con predicción completa */
+.rpw-match-row--filled {
+  background: rgba(29, 158, 117, 0.04);
+}
+
+[data-theme="dark"] .rpw-match-row--filled {
+  background: rgba(52, 211, 153, 0.05);
+}
+
+.rpw-match-team {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow: hidden;
+}
+
+.rpw-match-team--away {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.rpw-match-team-name {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: #1a1a2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-theme="dark"] .rpw-match-team-name { color: #f0f1f7; }
+
+/* Score pair */
+.rpw-score-pair {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.rpw-score-input {
+  width: 30px;
+  height: 32px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  border: 0.5px solid #d4cfc8;
+  background: #fff;
+  color: #1a1a2e;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  border-radius: 0;
+  -moz-appearance: textfield;
+}
+
+.rpw-score-input::-webkit-outer-spin-button,
+.rpw-score-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+[data-theme="dark"] .rpw-score-input {
+  background: #252936;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #f0f1f7;
+}
+
+.rpw-score-input:focus {
+  border-color: #5b4fd8;
+  box-shadow: 0 0 0 2px rgba(91, 79, 216, 0.12);
+}
+
+.rpw-score-input:not(:placeholder-shown) {
+  background: rgba(29, 158, 117, 0.08);
+  border-color: rgba(29, 158, 117, 0.4);
+  color: #1D9E75;
+}
+
+[data-theme="dark"] .rpw-score-input:not(:placeholder-shown) {
+  background: rgba(52, 211, 153, 0.08);
+  border-color: rgba(52, 211, 153, 0.35);
+  color: #34d399;
+}
+
+.rpw-score-sep {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: #b0aaa0;
+  line-height: 1;
+}
+
+[data-theme="dark"] .rpw-score-sep { color: #4a5568; }
+
+/* ================================================================
+   LEYENDA
+================================================================ */
+.rpw-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 18px;
+  border-top: 0.5px solid #d4cfc8;
+  background: #f5f3f0;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .rpw-legend {
+  background: #1e2235;
+  border-top-color: rgba(255, 255, 255, 0.07);
+}
+
+.rpw-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  color: #888;
+}
+
+[data-theme="dark"] .rpw-legend-item { color: #4a5568; }
+
+.rpw-legend-dot {
+  width: 8px;
+  height: 8px;
+  background: #1D9E75;
+  flex-shrink: 0;
+}
+
+.rpw-legend-dot--t {
+  background: #c9a227;
+}
+
+[data-theme="dark"] .rpw-legend-dot { background: #34d399; }
+[data-theme="dark"] .rpw-legend-dot--t { background: #f0c040; }
+
+/* ================================================================
+   RESPONSIVE — ocultar en pantallas pequeñas
+================================================================ */
+@media (max-width: 1024px) {
+  .rpw-root { display: none; }
+}
