@@ -22,10 +22,167 @@ const SORT_OPTS = [
   { key: "date-desc", label: "Más lejanos"  },
 ];
 
+/* ================================================================
+   ICONOS BRUTALISTAS — SVG geométrico, sin relleno, solo trazo
+================================================================ */
+const IconMatch = () => (
+  <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="1" width="42" height="42" stroke="currentColor" strokeWidth="0.5"/>
+    <rect x="8" y="8" width="28" height="28" stroke="currentColor" strokeWidth="0.5" strokeDasharray="3 3"/>
+    <line x1="1" y1="22" x2="43" y2="22" stroke="currentColor" strokeWidth="0.5"/>
+    <line x1="22" y1="1" x2="22" y2="43" stroke="currentColor" strokeWidth="0.5"/>
+    <circle cx="22" cy="22" r="5" stroke="currentColor" strokeWidth="1.2" fill="none"/>
+  </svg>
+);
+
+const IconLeague = () => (
+  <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="1" width="42" height="42" stroke="currentColor" strokeWidth="0.5"/>
+    <path d="M22 8 L36 16 L36 28 L22 36 L8 28 L8 16 Z" stroke="currentColor" strokeWidth="1.2" fill="none"/>
+    <path d="M22 14 L30 18.5 L30 27 L22 31.5 L14 27 L14 18.5 Z" stroke="currentColor" strokeWidth="0.5" fill="none" strokeDasharray="2 2"/>
+    <circle cx="22" cy="22" r="2" fill="currentColor" opacity="0.4"/>
+  </svg>
+);
+
+const IconAward = () => (
+  <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="1" width="42" height="42" stroke="currentColor" strokeWidth="0.5"/>
+    <rect x="14" y="9" width="16" height="17" stroke="currentColor" strokeWidth="1.2" fill="none"/>
+    <rect x="8" y="9" width="6" height="10" stroke="currentColor" strokeWidth="0.5" fill="none"/>
+    <rect x="30" y="9" width="6" height="10" stroke="currentColor" strokeWidth="0.5" fill="none"/>
+    <line x1="17" y1="26" x2="17" y2="32" stroke="currentColor" strokeWidth="0.5"/>
+    <line x1="27" y1="26" x2="27" y2="32" stroke="currentColor" strokeWidth="0.5"/>
+    <line x1="12" y1="32" x2="32" y2="32" stroke="currentColor" strokeWidth="1.2"/>
+    <rect x="17" y="32" width="10" height="3" stroke="currentColor" strokeWidth="0.5" fill="none"/>
+  </svg>
+);
+
+/* ================================================================
+   EMPTY STATE — reemplaza el EmptyMsg de texto plano
+   type: "matches" | "leagues" | "awards"
+================================================================ */
+function EmptyState({ type = "matches" }) {
+  const configs = {
+    matches: {
+      icon: <IconMatch />,
+      label: "Sin partidos pendientes",
+      sub:   "Cuando haya partidos disponibles aparecerán aquí",
+    },
+    leagues: {
+      icon: <IconLeague />,
+      label: "Sin ligas activas",
+      sub:   "Las ligas de temporada aparecerán aquí",
+    },
+    awards: {
+      icon: <IconAward />,
+      label: "Sin premios activos",
+      sub:   "Los premios de temporada aparecerán aquí",
+    },
+  };
+  const { icon, label, sub } = configs[type] || configs.matches;
+
+  return (
+    <div className="mob-empty">
+      <div className="mob-empty-icon" style={{ color: "var(--mob-muted)" }}>
+        {icon}
+      </div>
+      <span className="mob-empty-lbl">{label}</span>
+      <span className="mob-empty-sub">{sub}</span>
+    </div>
+  );
+}
+
+/* ================================================================
+   SKELETON CARDS — placeholders mientras carga
+================================================================ */
+function SkeletonMatchCard() {
+  return (
+    <div className="mob-sk-mcard">
+      <div className="mob-sk-mcard-head">
+        <div className="mob-sk" style={{ width: 52, height: 9 }} />
+        <div className="mob-sk" style={{ width: 44, height: 14, borderRadius: 20 }} />
+      </div>
+      <div className="mob-sk-mcard-row">
+        <div className="mob-sk-mcard-left">
+          <div className="mob-sk" style={{ width: 28, height: 28, borderRadius: 6 }} />
+          <div className="mob-sk" style={{ width: 52, height: 10 }} />
+        </div>
+        <div className="mob-sk" style={{ width: 32, height: 32 }} />
+      </div>
+      <div className="mob-sk-sep" />
+      <div className="mob-sk-mcard-row">
+        <div className="mob-sk-mcard-left">
+          <div className="mob-sk" style={{ width: 28, height: 28, borderRadius: 6 }} />
+          <div className="mob-sk" style={{ width: 44, height: 10 }} />
+        </div>
+        <div className="mob-sk" style={{ width: 32, height: 32 }} />
+      </div>
+      <div className="mob-sk-mcard-foot">
+        <div className="mob-sk" style={{ width: 28, height: 8 }} />
+        <div className="mob-sk" style={{ width: 40, height: 8 }} />
+      </div>
+    </div>
+  );
+}
+
+function SkeletonLeagueCard() {
+  return (
+    <div className="mob-sk-lcard">
+      <div className="mob-sk-lcard-head">
+        <div className="mob-sk" style={{ width: 34, height: 34, borderRadius: 8 }} />
+        <div className="mob-sk-lcard-info">
+          <div className="mob-sk" style={{ width: 80, height: 10 }} />
+          <div className="mob-sk" style={{ width: 52, height: 8 }} />
+        </div>
+        <div className="mob-sk" style={{ width: 9, height: 9, borderRadius: "50%" }} />
+      </div>
+      <div className="mob-sk-lcard-field">
+        <div className="mob-sk" style={{ width: 52, height: 8 }} />
+        <div className="mob-sk" style={{ width: "100%", height: 26 }} />
+      </div>
+      <div className="mob-sk-lcard-row">
+        <div className="mob-sk-lcard-field">
+          <div className="mob-sk" style={{ width: 52, height: 8 }} />
+          <div className="mob-sk" style={{ width: "100%", height: 26 }} />
+        </div>
+        <div className="mob-sk-lcard-field">
+          <div className="mob-sk" style={{ width: 40, height: 8 }} />
+          <div className="mob-sk" style={{ width: "100%", height: 26 }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SkeletonAwardCard() {
+  return (
+    <div className="mob-sk-acard">
+      <div className="mob-sk-acard-head">
+        <div className="mob-sk" style={{ width: 34, height: 34, borderRadius: 8 }} />
+        <div className="mob-sk-lcard-info">
+          <div className="mob-sk" style={{ width: 80, height: 10 }} />
+          <div className="mob-sk" style={{ width: 52, height: 8 }} />
+        </div>
+        <div className="mob-sk" style={{ width: 9, height: 9, borderRadius: "50%" }} />
+      </div>
+      <div className="mob-sk-lcard-field">
+        <div className="mob-sk" style={{ width: 72, height: 8 }} />
+        <div className="mob-sk" style={{ width: "100%", height: 26 }} />
+      </div>
+    </div>
+  );
+}
+
+/* ================================================================
+   STATUS DOT
+================================================================ */
 function StatusDot({ mod }) {
   return <span className={`mob-status-dot mob-status-dot--${mod}`} title={mod} />;
 }
 
+/* ================================================================
+   MINI CARDS
+================================================================ */
 function MiniMatchCard({ match, userPred }) {
   const now       = new Date();
   const deadline  = match.deadline ? new Date(match.deadline) : null;
@@ -121,7 +278,6 @@ function MiniLeagueCard({ league, userPrediction }) {
               {userPrediction?.predicted_top_scorer || "Jugador..."}
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -160,6 +316,9 @@ function MiniAwardCard({ award, userPrediction }) {
   );
 }
 
+/* ================================================================
+   MODALES
+================================================================ */
 function MobModal({ isOpen, onClose, title, count, children }) {
   if (!isOpen) return null;
   return (
@@ -222,7 +381,6 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
   return (
     <div className="mob-modal-overlay" onClick={onClose}>
       <div className="mob-modal mob-modal--tall" onClick={e => e.stopPropagation()}>
-
         <div className="mob-modal-header">
           <div className="mob-modal-title">
             PARTIDOS
@@ -233,7 +391,6 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
           </button>
         </div>
 
-        {/* TOOLBAR */}
         <div className="mob-modal-toolbar">
           <div className="mob-sort-group">
             <ArrowUpDown size={12} style={{ color: "var(--mob-muted)", flexShrink: 0 }} />
@@ -260,9 +417,7 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
 
         <div className="mob-modal-body">
           {processed.length === 0 ? (
-            <div style={{ textAlign:"center", padding:"40px 0", color:"var(--mob-muted)", fontSize:"11px", fontFamily:"var(--mob-mono)", letterSpacing:"0.08em" }}>
-              SIN PARTIDOS EN ESTA CATEGORÍA
-            </div>
+            <EmptyState type="matches" />
           ) : (
             Object.entries(grouped).map(([label, group]) => (
               <div key={label} className="mob-modal-group">
@@ -283,7 +438,6 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
         </div>
       </div>
 
-      {/* FILTER PANEL */}
       {showFilter && (
         <div className="mob-filter-panel-overlay" onClick={() => setShowFilter(false)}>
           <div className="mob-filter-panel" onClick={e => e.stopPropagation()}>
@@ -292,7 +446,7 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
                 <Filter size={13} />
                 FILTRAR LIGA
               </div>
-              <div style={{ display:"flex", gap:"6px" }}>
+              <div style={{ display: "flex", gap: "6px" }}>
                 {leagueFilter !== "all" && (
                   <button className="mob-filter-panel-reset" onClick={() => { setLeagueFilter("all"); setShowFilter(false); }}>
                     RESET
@@ -322,12 +476,16 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
   );
 }
 
+/* ================================================================
+   MAIN COMPONENT
+================================================================ */
 export default function MobileDashboard({
   currentUser,
   users        = [],
   matches      = [],
   leagues      = [],
   awards       = [],
+  loading      = false,   // ← nueva prop opcional
   onPredict,
   onLeaguePredict,
   onAwardPredict,
@@ -351,12 +509,6 @@ export default function MobileDashboard({
   const previewMatches = pendingMatches.slice(0, 4);
   const previewLeagues = leagues.slice(0, 3);
   const previewAwards  = awards.slice(0, 3);
-
-  const EmptyMsg = ({ txt }) => (
-    <div style={{ padding:"20px 0", color:"var(--mob-muted)", fontSize:"10px", fontFamily:"var(--mob-mono)", letterSpacing:"0.08em" }}>
-      {txt}
-    </div>
-  );
 
   return (
     <div className="mob-root">
@@ -409,18 +561,25 @@ export default function MobileDashboard({
         <span className="mob-sec-title">PARTIDOS</span>
         <span className="mob-sec-all" onClick={() => setMatchModal(true)}>TODOS »</span>
       </div>
-      {/* wrapper que crea el margen inocupable */}
       <div className="mob-scroll-wrap">
         <div className="mob-hscroll">
-          {previewMatches.length === 0 && <EmptyMsg txt="SIN PARTIDOS PENDIENTES" />}
-          {previewMatches.map(m => (
-            <MiniMatchCard key={m.id} match={m} userPred={m.predictions?.find(p => p.user_id === currentUser?.id)} />
-          ))}
-          {pendingMatches.length > 4 && (
-            <div className="mob-more-card" onClick={() => setMatchModal(true)}>
-              <span className="mob-more-sym">&raquo;</span>
-              <span>MÁS</span>
-            </div>
+          {loading ? (
+            /* Skeleton mientras carga */
+            [0, 1, 2].map(i => <SkeletonMatchCard key={i} />)
+          ) : previewMatches.length === 0 ? (
+            <EmptyState type="matches" />
+          ) : (
+            <>
+              {previewMatches.map(m => (
+                <MiniMatchCard key={m.id} match={m} userPred={m.predictions?.find(p => p.user_id === currentUser?.id)} />
+              ))}
+              {pendingMatches.length > 4 && (
+                <div className="mob-more-card" onClick={() => setMatchModal(true)}>
+                  <span className="mob-more-sym">&raquo;</span>
+                  <span>MÁS</span>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -432,15 +591,22 @@ export default function MobileDashboard({
       </div>
       <div className="mob-scroll-wrap">
         <div className="mob-hscroll">
-          {previewLeagues.length === 0 && <EmptyMsg txt="SIN LIGAS" />}
-          {previewLeagues.map(l => (
-            <MiniLeagueCard key={l.id} league={l} userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)} />
-          ))}
-          {leagues.length > 3 && (
-            <div className="mob-more-card" onClick={() => setLeagueModal(true)}>
-              <span className="mob-more-sym">&raquo;</span>
-              <span>MÁS</span>
-            </div>
+          {loading ? (
+            [0, 1].map(i => <SkeletonLeagueCard key={i} />)
+          ) : previewLeagues.length === 0 ? (
+            <EmptyState type="leagues" />
+          ) : (
+            <>
+              {previewLeagues.map(l => (
+                <MiniLeagueCard key={l.id} league={l} userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)} />
+              ))}
+              {leagues.length > 3 && (
+                <div className="mob-more-card" onClick={() => setLeagueModal(true)}>
+                  <span className="mob-more-sym">&raquo;</span>
+                  <span>MÁS</span>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -452,15 +618,22 @@ export default function MobileDashboard({
       </div>
       <div className="mob-scroll-wrap">
         <div className="mob-hscroll">
-          {previewAwards.length === 0 && <EmptyMsg txt="SIN PREMIOS" />}
-          {previewAwards.map(a => (
-            <MiniAwardCard key={a.id} award={a} userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)} />
-          ))}
-          {awards.length > 3 && (
-            <div className="mob-more-card" onClick={() => setAwardModal(true)}>
-              <span className="mob-more-sym">&raquo;</span>
-              <span>MÁS</span>
-            </div>
+          {loading ? (
+            [0, 1].map(i => <SkeletonAwardCard key={i} />)
+          ) : previewAwards.length === 0 ? (
+            <EmptyState type="awards" />
+          ) : (
+            <>
+              {previewAwards.map(a => (
+                <MiniAwardCard key={a.id} award={a} userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)} />
+              ))}
+              {awards.length > 3 && (
+                <div className="mob-more-card" onClick={() => setAwardModal(true)}>
+                  <span className="mob-more-sym">&raquo;</span>
+                  <span>MÁS</span>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -475,17 +648,21 @@ export default function MobileDashboard({
       />
 
       <MobModal isOpen={leagueModal} onClose={() => setLeagueModal(false)} title="LIGAS" count={String(leagues.length)}>
-        {leagues.length === 0 && <div style={{ textAlign:"center", padding:"40px 0", color:"var(--mob-muted)", fontSize:"11px", fontFamily:"var(--mob-mono)" }}>SIN LIGAS</div>}
-        {leagues.map(l => (
-          <LeagueCard key={l.id} league={l} userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)} onPredict={onLeaguePredict} />
-        ))}
+        {leagues.length === 0
+          ? <EmptyState type="leagues" />
+          : leagues.map(l => (
+              <LeagueCard key={l.id} league={l} userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)} onPredict={onLeaguePredict} />
+            ))
+        }
       </MobModal>
 
       <MobModal isOpen={awardModal} onClose={() => setAwardModal(false)} title="PREMIOS" count={String(awards.length)}>
-        {awards.length === 0 && <div style={{ textAlign:"center", padding:"40px 0", color:"var(--mob-muted)", fontSize:"11px", fontFamily:"var(--mob-mono)" }}>SIN PREMIOS</div>}
-        {awards.map(a => (
-          <AwardCard key={a.id} award={a} userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)} onPredict={onAwardPredict} />
-        ))}
+        {awards.length === 0
+          ? <EmptyState type="awards" />
+          : awards.map(a => (
+              <AwardCard key={a.id} award={a} userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)} onPredict={onAwardPredict} />
+            ))
+        }
       </MobModal>
 
       {profileModal && currentUser?.id && (

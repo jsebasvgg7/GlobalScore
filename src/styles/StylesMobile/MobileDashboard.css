@@ -429,6 +429,202 @@
 .mob-more-sym { font-size: 20px; line-height: 1; }
 
 /* ================================================================
+   EMPTY STATE — reemplaza EmptyMsg
+================================================================ */
+.mob-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px 16px;
+  width: 100%;
+  min-height: 110px;
+}
+
+.mob-empty-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+
+.mob-empty-icon svg {
+  display: block;
+  width: 44px;
+  height: 44px;
+}
+
+.mob-empty-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mob-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mob-muted);
+}
+
+.mob-empty-sub {
+  font-size: 10px;
+  font-family: var(--mob-sans);
+  color: var(--mob-muted);
+  opacity: 0.7;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ================================================================
+   SKELETON — shimmer base
+================================================================ */
+@keyframes mob-sk-pulse {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.65; }
+}
+
+.mob-sk {
+  background: var(--mob-border);
+  animation: mob-sk-pulse 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* ================================================================
+   SKELETON MATCH CARD
+================================================================ */
+.mob-sk-mcard {
+  width: 172px;
+  background: var(--mob-card);
+  border-radius: var(--mob-radius);
+  border: 1px solid var(--mob-border);
+  overflow: hidden;
+  flex-shrink: 0;
+  padding: 10px 12px 10px;
+  scroll-snap-align: start;
+}
+
+.mob-sk-mcard-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.mob-sk-mcard-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.mob-sk-mcard-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mob-sk-sep {
+  height: 1px;
+  background: var(--mob-border);
+  margin-bottom: 8px;
+  opacity: 0.6;
+}
+
+.mob-sk-mcard-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+/* ================================================================
+   SKELETON LEAGUE CARD
+================================================================ */
+.mob-sk-lcard {
+  width: 228px;
+  background: var(--mob-card);
+  border-radius: var(--mob-radius);
+  border: 1px solid var(--mob-border);
+  flex-shrink: 0;
+  padding: 12px 14px;
+  scroll-snap-align: start;
+}
+
+.mob-sk-lcard-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.mob-sk-lcard-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.mob-sk-lcard-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.mob-sk-lcard-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* ================================================================
+   SKELETON AWARD CARD
+================================================================ */
+.mob-sk-acard {
+  width: 205px;
+  background: var(--mob-card);
+  border-radius: var(--mob-radius);
+  border: 1px solid var(--mob-border);
+  flex-shrink: 0;
+  padding: 12px 14px;
+  scroll-snap-align: start;
+}
+
+.mob-sk-acard-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* ================================================================
+   ANIMATION DELAYS — escalonado natural
+================================================================ */
+.mob-sk:nth-child(1)  { animation-delay: 0s;    }
+.mob-sk:nth-child(2)  { animation-delay: 0.08s; }
+.mob-sk:nth-child(3)  { animation-delay: 0.16s; }
+.mob-sk:nth-child(4)  { animation-delay: 0.24s; }
+.mob-sk:nth-child(5)  { animation-delay: 0.32s; }
+.mob-sk:nth-child(6)  { animation-delay: 0.40s; }
+.mob-sk:nth-child(7)  { animation-delay: 0.48s; }
+
+/* ================================================================
+   RESPONSIVE
+================================================================ */
+@media screen and (max-width: 469px) {
+  .mob-sk-mcard { width: 158px; }
+  .mob-sk-lcard { width: 210px; }
+  .mob-sk-acard { width: 188px; }
+}
+
+@media screen and (max-width: 370px) {
+  .mob-sk-mcard { width: 145px; }
+  .mob-sk-lcard { width: 192px; }
+  .mob-sk-acard { width: 172px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mob-sk { animation: none; opacity: 0.4; }
+}
+/* ================================================================
    LEAGUE MINI CARD
 ================================================================ */
 .mob-lcard {
