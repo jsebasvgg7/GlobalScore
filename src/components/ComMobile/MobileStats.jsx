@@ -5,7 +5,16 @@ import "../../styles/StylesMobile/MobileStats.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
 
-/* ── Icono hero cuadrado ── */
+/* ── Purple scale (matches CSS custom properties) ── */
+const P = {
+  accent:  "#60519b",  // base purple
+  light:   "#8b7fc7",  // light purple
+  exact:   "#7c6fe8",  // exactos — violeta vibrante
+  correct: "#a599d9",  // correctos — lila medio
+  wrong:   "#c9c0f0",  // incorrectos — lavanda suave
+  gold:    "#9d8fe6",  // puntos / totales
+};
+
 function HeroIcon({ color, children }) {
   return (
     <div className="mst-hero-icon" style={{ background: color, color: "#fff" }}>
@@ -16,16 +25,14 @@ function HeroIcon({ color, children }) {
 
 export default function MobileStats({ stats, loading, timeRange, onTimeRangeChange }) {
 
-  /* ── LOADING ── */
- if (loading) {
-  return (
-    <div className="mst-root">
-      <GlobalLoader variant="inline" size="md" label="cargando" />
-    </div>
-  );
-}
+  if (loading) {
+    return (
+      <div className="mst-root">
+        <GlobalLoader variant="inline" size="md" label="cargando" />
+      </div>
+    );
+  }
 
-  /* ── EMPTY ── */
   if (!stats) {
     return (
       <div className="mst-root">
@@ -49,7 +56,6 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
   const pctLeagues = totalPts > 0 ? Math.round(((stats.pointsFromLeagues || 0) / totalPts) * 100) : 0;
   const pctAwards  = totalPts > 0 ? Math.round(((stats.pointsFromAwards  || 0) / totalPts) * 100) : 0;
 
-  /* ── Días ordenados Lun→Dom ── */
   const orderedDays = stats.dayStats
     ? [...stats.dayStats.slice(1), stats.dayStats[0]]
     : [];
@@ -57,7 +63,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
   return (
     <div className="mst-root">
 
-      {/* ══ TOPBAR: selector rango ══ */}
+      {/* ══ TOPBAR ══ */}
       <div className="mst-topbar">
         <div className="mst-topbar-label">
           <span className="mst-topbar-dot" />
@@ -80,33 +86,33 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
         </div>
       </div>
 
-      {/* ══ HERO 2x2 ══ */}
+      {/* ══ HERO 2×2 ══ */}
       <div className="mst-hero">
         <div className="mst-hero-block">
-          <HeroIcon color="#5b4fd8"><Target size={13} /></HeroIcon>
+          <HeroIcon color={P.accent}><Target size={13} /></HeroIcon>
           <div className="mst-hero-lbl">Precisión</div>
           <div className="mst-hero-num mst-hero-num--accent">{stats.accuracy}%</div>
           <div className="mst-hero-sub">{fmt(totalFinished)} finalizadas</div>
         </div>
 
         <div className="mst-hero-block">
-          <HeroIcon color="#1D9E75"><Star size={13} /></HeroIcon>
+          <HeroIcon color={P.exact}><Star size={13} /></HeroIcon>
           <div className="mst-hero-lbl">Exactos</div>
           <div className="mst-hero-num mst-hero-num--green">{fmt(stats.exact)}</div>
           <div className="mst-hero-sub">{stats.exactAccuracy}% exactitud</div>
         </div>
 
         <div className="mst-hero-block">
-          <HeroIcon color="#b45309"><CheckCircle2 size={13} /></HeroIcon>
+          <HeroIcon color={P.correct}><CheckCircle2 size={13} /></HeroIcon>
           <div className="mst-hero-lbl">Correctos</div>
           <div className="mst-hero-num mst-hero-num--amber">{fmt(stats.correctResult)}</div>
           <div className="mst-hero-sub">+3 pts c/u</div>
         </div>
 
         <div className="mst-hero-block">
-          <HeroIcon color="#c9a227"><Zap size={13} /></HeroIcon>
+          <HeroIcon color={P.gold}><Zap size={13} /></HeroIcon>
           <div className="mst-hero-lbl">Puntos</div>
-          <div className="mst-hero-num" style={{ color: "#c9a227" }}>{fmt(stats.totalPoints)}</div>
+          <div className="mst-hero-num" style={{ color: P.gold }}>{fmt(stats.totalPoints)}</div>
           <div className="mst-hero-sub">de partidos</div>
         </div>
       </div>
@@ -114,7 +120,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
       {/* ══ DESGLOSE ══ */}
       <div className="mst-section">
         <div className="mst-section-hdr">
-          <span className="mst-section-dot" style={{ background: "#5b4fd8" }} />
+          <span className="mst-section-dot" style={{ background: P.accent }} />
           <span className="mst-section-title">Desglose de resultados</span>
         </div>
         <div className="mst-results">
@@ -123,7 +129,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
           <div className="mst-result-item">
             <div className="mst-result-top">
               <div className="mst-result-left">
-                <div className="mst-result-num" style={{ color: "#c9a227" }}>{fmt(stats.exact)}</div>
+                <div className="mst-result-num" style={{ color: P.exact }}>{fmt(stats.exact)}</div>
                 <div className="mst-result-pts">+{fmt(stats.exact * 5)} pts</div>
               </div>
               <div className="mst-result-pct">
@@ -136,7 +142,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
                 className="mst-result-bar"
                 style={{
                   width: `${totalFinished > 0 ? Math.round((stats.exact / totalFinished) * 100) : 0}%`,
-                  background: "#c9a227",
+                  background: P.exact,
                 }}
               />
             </div>
@@ -146,7 +152,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
           <div className="mst-result-item">
             <div className="mst-result-top">
               <div className="mst-result-left">
-                <div className="mst-result-num" style={{ color: "#1D9E75" }}>{fmt(stats.correctResult)}</div>
+                <div className="mst-result-num" style={{ color: P.correct }}>{fmt(stats.correctResult)}</div>
                 <div className="mst-result-pts">+{fmt(stats.correctResult * 3)} pts</div>
               </div>
               <div className="mst-result-pct">
@@ -159,7 +165,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
                 className="mst-result-bar"
                 style={{
                   width: `${totalFinished > 0 ? Math.round((stats.correctResult / totalFinished) * 100) : 0}%`,
-                  background: "#1D9E75",
+                  background: P.correct,
                 }}
               />
             </div>
@@ -169,7 +175,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
           <div className="mst-result-item">
             <div className="mst-result-top">
               <div className="mst-result-left">
-                <div className="mst-result-num" style={{ color: "#c0392b" }}>{fmt(stats.wrong)}</div>
+                <div className="mst-result-num" style={{ color: P.wrong }}>{fmt(stats.wrong)}</div>
                 <div className="mst-result-pts mst-result-pts--red">0 pts</div>
               </div>
               <div className="mst-result-pct">
@@ -182,12 +188,11 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
                 className="mst-result-bar"
                 style={{
                   width: `${totalFinished > 0 ? Math.round((stats.wrong / totalFinished) * 100) : 0}%`,
-                  background: "#c0392b",
+                  background: P.wrong,
                 }}
               />
             </div>
           </div>
-
         </div>
       </div>
 
@@ -195,11 +200,10 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
       {stats.leagueStats?.length > 0 && (
         <div className="mst-section">
           <div className="mst-section-hdr">
-            <span className="mst-section-dot" style={{ background: "#c9a227" }} />
+            <span className="mst-section-dot" style={{ background: P.gold }} />
             <span className="mst-section-title">Rendimiento por liga</span>
           </div>
           <div className="mst-leagues-scroll">
-            {/* Thead */}
             <div className="mst-league-row thead">
               <div style={{ width: 24 }} />
               <div className="mst-lc" style={{ flex: 1, textAlign: "left" }}>Liga</div>
@@ -230,7 +234,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
       {/* ══ DÍAS ══ */}
       <div className="mst-section">
         <div className="mst-section-hdr">
-          <span className="mst-section-dot" style={{ background: "#1D9E75" }} />
+          <span className="mst-section-dot" style={{ background: P.light }} />
           <span className="mst-section-title">Rendimiento por día</span>
         </div>
         <div className="mst-days-scroll">
@@ -243,10 +247,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
                   <div className="mst-day-lbl">{day.name}</div>
                   <div className="mst-day-pct">{pct}%</div>
                   <div className="mst-day-bar-wrap">
-                    <div
-                      className="mst-day-fill"
-                      style={{ height: `${pct}%`, opacity }}
-                    />
+                    <div className="mst-day-fill" style={{ height: `${pct}%`, opacity }} />
                   </div>
                   <div className="mst-day-detail">{day.correct}/{day.total}</div>
                 </div>
@@ -259,7 +260,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
       {/* ══ DISTRIBUCIÓN PTS ══ */}
       <div className="mst-section">
         <div className="mst-section-hdr">
-          <span className="mst-section-dot" style={{ background: "#5b4fd8" }} />
+          <span className="mst-section-dot" style={{ background: P.accent }} />
           <span className="mst-section-title">Distribución de puntos</span>
         </div>
         <div className="mst-dist">
@@ -269,7 +270,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
               <span className="mst-dist-val">{fmt(stats.pointsFromMatches)}</span>
             </div>
             <div className="mst-dist-track">
-              <div className="mst-dist-fill" style={{ width: `${pctMatches}%`, background: "#5b4fd8" }} />
+              <div className="mst-dist-fill" style={{ width: `${pctMatches}%`, background: P.accent }} />
             </div>
           </div>
           <div className="mst-dist-row">
@@ -278,7 +279,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
               <span className="mst-dist-val">{fmt(stats.pointsFromLeagues)}</span>
             </div>
             <div className="mst-dist-track">
-              <div className="mst-dist-fill" style={{ width: `${Math.max(pctLeagues, pctLeagues > 0 ? 4 : 0)}%`, background: "#1D9E75" }} />
+              <div className="mst-dist-fill" style={{ width: `${Math.max(pctLeagues, pctLeagues > 0 ? 4 : 0)}%`, background: P.exact }} />
             </div>
           </div>
           <div className="mst-dist-row">
@@ -287,7 +288,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
               <span className="mst-dist-val">{fmt(stats.pointsFromAwards)}</span>
             </div>
             <div className="mst-dist-track">
-              <div className="mst-dist-fill" style={{ width: `${Math.max(pctAwards, pctAwards > 0 ? 4 : 0)}%`, background: "#c9a227" }} />
+              <div className="mst-dist-fill" style={{ width: `${Math.max(pctAwards, pctAwards > 0 ? 4 : 0)}%`, background: P.correct }} />
             </div>
           </div>
         </div>
@@ -296,7 +297,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
       {/* ══ PRONÓSTICOS ══ */}
       <div className="mst-section">
         <div className="mst-section-hdr">
-          <span className="mst-section-dot" style={{ background: "#c9a227" }} />
+          <span className="mst-section-dot" style={{ background: P.gold }} />
           <span className="mst-section-title">Pronósticos especiales</span>
         </div>
         <div className="mst-forecast">
