@@ -1002,6 +1002,108 @@
   .pnew-achievements-grid { grid-template-columns: repeat(2, 1fr); }
 }
 /* ================================================================
+   PATCH v2: History card — equipo visitante nombre→logo
+   Pega esto al FINAL de ProfileSettingsPage.css
+   (reemplaza o complementa el patch anterior)
+================================================================ */
+
+/* ── Equipo local: logo → nombre (izquierda) ── */
+.pnew-hist-team {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* ── Equipo visitante: nombre → logo (derecha) ── */
+.pnew-hist-team--right {
+  flex-direction: row-reverse;   /* invierte visualmente: logo queda a la derecha */
+  justify-content: flex-start;
+}
+
+/* Nombre truncado en ambos equipos */
+.pnew-hist-tname {
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 58px;
+}
+
+/* Logo compacto */
+.pnew-hist-logo {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 0.5px solid var(--pnew-border);
+  background: var(--pnew-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.pnew-hist-logo img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.pnew-hist-logo span {
+  font-size: 20px;
+}
+
+/* Body de la carta compacto */
+.pnew-hist-body {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 10px;
+}
+
+/* Scores */
+.pnew-hist-score {
+  width: 34px;
+  height: 34px;
+  font-size: 16px;
+}
+
+.pnew-hist-score-wrap {
+  gap: 4px;
+}
+
+.pnew-hist-scores {
+  gap: 6px;
+  min-width: 0;
+}
+
+/* Resultado real */
+.pnew-hist-real span {
+  font-size: 11px;
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 360px) {
+  .pnew-hist-tname {
+    max-width: 44px;
+    font-size: 10px;
+  }
+
+  .pnew-hist-logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .pnew-hist-score {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+}
+/* ================================================================
    SPINNER
 ================================================================ */
 @keyframes spin { to { transform: rotate(360deg); } }

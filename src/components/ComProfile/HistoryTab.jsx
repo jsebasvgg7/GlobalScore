@@ -339,18 +339,17 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
                       </div>
                     )}
                   </div>
-
-                  {/* Equipo Visitante */}
+                   {/* Equipo Visitante */}
                   <div className="history-team-section">
+                    <span className="history-team-name">{match?.away_team}</span>
                     <div className="history-team-logo-wrapper">
                       {renderTeamLogo(match?.away_team_logo_url, match?.away_team_logo)}
                       <span className="history-team-emoji" style={{ display: match?.away_team_logo_url ? 'none' : 'flex' }}>
                         {match?.away_team_logo || '⚽'}
                       </span>
                     </div>
-                    <span className="history-team-name">{match?.away_team}</span>
                   </div>
-                </div>
+                  </div>
 
                 {/* FOOTER: Resultado */}
                 <div className="history-match-footer">
