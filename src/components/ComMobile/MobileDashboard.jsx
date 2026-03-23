@@ -121,12 +121,7 @@ function MiniLeagueCard({ league, userPrediction }) {
               {userPrediction?.predicted_top_scorer || "Jugador..."}
             </div>
           </div>
-          <div className="mob-lcard-field">
-            <div className="mob-lcard-lbl">ASIST.</div>
-            <div className={`mob-lcard-input${userPrediction?.predicted_top_assist ? " filled" : ""}`}>
-              {userPrediction?.predicted_top_assist || "Jugador..."}
-            </div>
-          </div>
+
         </div>
       </div>
     </div>
