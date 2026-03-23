@@ -135,8 +135,9 @@
 .lb-hof-wrap {
   flex: 1;
   overflow-y: auto;
-  padding: 28px;                         /* ↑ 24→28 */
+  padding: 0;
 }
+ 
 
 /* ================================================================
    GRID CONECTADO

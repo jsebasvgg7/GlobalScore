@@ -280,7 +280,6 @@ export default function RankingPage({ currentUser }) {
             </div>
           )}
 
-          <Footer />
         </div>
 
         {/* PANEL DERECHO */}

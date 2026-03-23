@@ -1,17 +1,18 @@
 /* ================================================================
    HallOfFame.css — Brutalista Japonés Retro
    Coherente con RankingPage.css · RightPanel.css
+   Sin border-radius · Sin box-shadow · Líneas 0.5px conectadas
+   Requiere: .lb-hof-wrap { padding: 0 } en RankingPage.css
 ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap');
 
 /* ================================================================
-   ROOT — ocupa el lb-hof-wrap (flex: 1, overflow-y: auto)
+   ROOT
 ================================================================ */
 .hof-root {
   display: flex;
   flex-direction: column;
-  gap: 0;
   font-family: 'Sora', sans-serif;
   background: #f0ede8;
   min-height: 100%;
@@ -20,20 +21,24 @@
 [data-theme="dark"] .hof-root { background: #1a1d2e; }
 
 /* ================================================================
-   HEADER — líneas + corona + título
+   HEADER — una sola línea, no se parte
 ================================================================ */
 .hof-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 22px 28px 8px;
+  gap: 10px;
+  padding: 20px 28px 6px;
   flex-shrink: 0;
+  white-space: nowrap;        /* ← evita que se parta */
+  overflow: hidden;
 }
 
 .hof-header-line {
   flex: 1;
   height: 0.5px;
-  max-width: 80px;
+  min-width: 12px;            /* mínimo para que no desaparezca */
+  max-width: 60px;
+  flex-shrink: 1;
 }
 
 .hof-header-line--left  { background: linear-gradient(90deg, transparent, rgba(201,162,39,0.6)); }
@@ -45,23 +50,28 @@
   animation: hof-crown-bob 3.5s ease-in-out infinite;
 }
 
+[data-theme="dark"] .hof-header-crown { color: #f0c040; }
+
 @keyframes hof-crown-bob {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-3px); }
 }
 
 .hof-header-title {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #c9a227;
-  white-space: nowrap;
+  white-space: nowrap;        /* ← nunca se rompe */
+  flex-shrink: 0;
 }
 
+[data-theme="dark"] .hof-header-title { color: #f0c040; }
+
 .hof-sub {
-  padding: 0 28px 20px;
+  padding: 0 28px 14px;
   font-size: 10px;
   font-family: 'DM Mono', monospace;
   color: #b0aaa0;
@@ -70,7 +80,10 @@
   border-bottom: 0.5px solid #d4cfc8;
 }
 
-[data-theme="dark"] .hof-sub { color: #4a5568; border-bottom-color: rgba(255,255,255,0.07); }
+[data-theme="dark"] .hof-sub {
+  color: #4a5568;
+  border-bottom-color: rgba(255,255,255,0.07);
+}
 
 /* ================================================================
    EMPTY
@@ -86,100 +99,90 @@
 }
 
 .hof-empty-icon { color: #d4cfc8; }
-.hof-empty p    { font-size: 12px; font-family: 'DM Mono', monospace; color: #b0aaa0; margin: 0; letter-spacing: 0.08em; }
+[data-theme="dark"] .hof-empty-icon { color: rgba(255,255,255,0.1); }
+
+.hof-empty p {
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  color: #b0aaa0;
+  margin: 0;
+  letter-spacing: 0.08em;
+}
 
 /* ================================================================
-   BODY — columna central + top3 bajo
+   BODY
 ================================================================ */
 .hof-body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
   flex: 1;
 }
 
 /* ================================================================
-   CARRUSEL
+   CARRUSEL — edge-to-edge, borde inferior conecta con top3
+   padding-bottom generoso para que los dots tengan aire
 ================================================================ */
 .hof-carousel-wrap {
   display: flex;
   align-items: center;
-  gap: 0;
   width: 100%;
-  padding: 28px 20px 20px;
+  padding: 28px 40px 20px;    /* ← reducido top, más controlado */
   justify-content: center;
+  border-bottom: 0.5px solid #d4cfc8;
+  background: #f0ede8;
+  box-sizing: border-box;
 }
 
-/* Botones nav — cuadrados, sin border-radius */
-.hof-nav {
-  width: 36px;
-  height: 36px;
-  border: 0.5px solid #d4cfc8;
-  background: #e8e4de;
-  color: #888;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border-radius: 0;
-  flex-shrink: 0;
-  transition: color 0.15s, background 0.15s;
+[data-theme="dark"] .hof-carousel-wrap {
+  border-bottom-color: rgba(255,255,255,0.07);
+  background: #1a1d2e;
 }
 
-.hof-nav:hover:not(:disabled) { color: #5b4fd8; border-color: rgba(91,79,216,0.4); }
-.hof-nav:disabled { opacity: 0.3; cursor: default; }
-
-[data-theme="dark"] .hof-nav {
-  background: rgba(255,255,255,0.04);
-  border-color: rgba(255,255,255,0.08);
-  color: #4a5568;
-}
-
-[data-theme="dark"] .hof-nav:hover:not(:disabled) { color: #7c6fe8; }
-
-/* ── Wrapper animación ── */
+/* Wrapper animación */
 .hof-card-wrap {
   flex: 1;
-  max-width: 420px;
+  max-width: 480px;
   transition: opacity 0.24s ease, transform 0.24s ease;
 }
 
-.hof-card-wrap--exit-right { opacity: 0; transform: translateX(-24px); }
-.hof-card-wrap--exit-left  { opacity: 0; transform: translateX(24px); }
+.hof-card-wrap--exit-right { opacity: 0; transform: translateX(-20px); }
+.hof-card-wrap--exit-left  { opacity: 0; transform: translateX(20px); }
 
 /* ================================================================
-   CARD — la tarjeta del campeón
-   Flat, sin border-radius, borde superior de color
+   CARD — FLAT. Sin border-radius. Sin box-shadow.
 ================================================================ */
 .hof-card {
-  background: #f0ede8;
+  background: #e8e4de;
   border: 0.5px solid #d4cfc8;
-  border-top: 2px solid var(--hof-color, #c9a227);
+  border-top: 3px solid var(--hof-color, #c9a227);
+  border-radius: 0;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  padding: 20px 24px 24px;
-  position: relative;
-  border-radius: 0;
+  padding: 20px 28px 24px;
 }
 
 [data-theme="dark"] .hof-card {
-  background: rgba(255,255,255,0.03);
+  background: #1e2235;
   border-color: rgba(255,255,255,0.08);
+  border-top-color: var(--hof-color, #c9a227);
 }
 
-/* Barra stripe redundante quitada — solo border-top */
 .hof-card-stripe { display: none; }
 
-/* Top: medalla + posición */
 .hof-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding-bottom: 14px;
+  border-bottom: 0.5px solid #d4cfc8;
 }
+
+[data-theme="dark"] .hof-card-top { border-bottom-color: rgba(255,255,255,0.07); }
 
 .hof-card-medal {
   font-size: 10px;
@@ -194,14 +197,12 @@
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: #fff;
-  padding: 3px 8px;
+  padding: 3px 10px;
   border-radius: 0;
   letter-spacing: 0.06em;
 }
 
-/* Avatar con anillo de color */
 .hof-card-av-wrap {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -237,9 +238,8 @@
 .hof-av--click { cursor: pointer; transition: opacity 0.15s; }
 .hof-av--click:hover { opacity: 0.85; }
 
-/* Nombre */
 .hof-card-name {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 800;
   font-family: 'Sora', sans-serif;
   color: #1a1a2e;
@@ -250,7 +250,6 @@
 
 [data-theme="dark"] .hof-card-name { color: #f0f1f7; }
 
-/* Coronas */
 .hof-card-crowns {
   display: flex;
   align-items: center;
@@ -259,9 +258,7 @@
   justify-content: center;
 }
 
-.hof-crown-mini {
-  animation: hof-crown-pop 0.4s ease both;
-}
+.hof-crown-mini { animation: hof-crown-pop 0.4s ease both; }
 
 @keyframes hof-crown-pop {
   from { transform: scale(0); opacity: 0; }
@@ -275,19 +272,20 @@
   margin-left: 2px;
 }
 
-/* Stats */
+/* Stats con separadores de línea */
 .hof-card-stats {
   display: flex;
-  align-items: center;
-  gap: 0;
+  align-items: stretch;
   width: 100%;
   border: 0.5px solid #d4cfc8;
-  background: #e8e4de;
+  background: #f0ede8;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 [data-theme="dark"] .hof-card-stats {
   border-color: rgba(255,255,255,0.07);
-  background: rgba(255,255,255,0.03);
+  background: #1a1d2e;
 }
 
 .hof-card-stat {
@@ -296,12 +294,11 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 12px 8px;
+  padding: 14px 8px;
 }
 
 .hof-card-stat-sep {
   width: 0.5px;
-  height: 40px;
   background: #d4cfc8;
   flex-shrink: 0;
 }
@@ -309,7 +306,7 @@
 [data-theme="dark"] .hof-card-stat-sep { background: rgba(255,255,255,0.07); }
 
 .hof-stat-val {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: #1a1a2e;
@@ -318,7 +315,6 @@
 }
 
 [data-theme="dark"] .hof-stat-val { color: #f0f1f7; }
-
 .hof-stat-val--sm { font-size: 13px; letter-spacing: 0; }
 
 .hof-stat-lbl {
@@ -332,7 +328,6 @@
 
 [data-theme="dark"] .hof-stat-lbl { color: #4a5568; }
 
-/* Counter */
 .hof-card-counter {
   font-size: 9px;
   font-family: 'DM Mono', monospace;
@@ -342,13 +337,13 @@
 }
 
 /* ================================================================
-   DOTS
+   DOTS — con padding generoso arriba y abajo para que respiren
 ================================================================ */
 .hof-dots {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 0 0 20px;
+  padding: 16px 0 20px;       /* ← aire arriba y abajo */
 }
 
 .hof-dot {
@@ -362,16 +357,13 @@
   padding: 0;
 }
 
-.hof-dot--active {
-  background: #c9a227;
-  width: 18px;
-}
+.hof-dot--active { background: #c9a227; width: 18px; }
 
 [data-theme="dark"] .hof-dot         { background: rgba(255,255,255,0.12); }
 [data-theme="dark"] .hof-dot--active { background: #f0c040; }
 
 /* ================================================================
-   TOP 3 LISTA
+   TOP 3 LISTA — misma lógica que lb-trow
 ================================================================ */
 .hof-top3 {
   width: 100%;
@@ -402,12 +394,13 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 24px;
+  padding: 0 24px;
+  height: 58px;
   border-bottom: 0.5px solid #d4cfc8;
   border-left: 3px solid transparent;
   cursor: pointer;
-  transition: background 0.12s, border-left-color 0.12s;
   background: #f0ede8;
+  transition: background 0.1s, border-left-color 0.12s;
 }
 
 .hof-top3-row:last-child { border-bottom: none; }
@@ -419,12 +412,12 @@
   border-bottom-color: rgba(255,255,255,0.05);
 }
 
-[data-theme="dark"] .hof-top3-row:hover { background: rgba(255,255,255,0.03); }
+[data-theme="dark"] .hof-top3-row:hover   { background: rgba(255,255,255,0.03); }
 [data-theme="dark"] .hof-top3-row--active { background: rgba(201,162,39,0.06); }
 
 .hof-top3-badge {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -445,7 +438,7 @@
 }
 
 .hof-top3-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   font-family: 'Sora', sans-serif;
   color: #1a1a2e;
@@ -466,7 +459,7 @@
 }
 
 .hof-top3-pts {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: #c9a227;
