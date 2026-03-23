@@ -10,6 +10,7 @@ import UserProfileModal from '../components/ComOthers/UserProfileModal';
 import RankingRightPanel from '../components/ComOthers/RankingRightPanel';
 import MobileRanking from '../components/ComMobile/MobileRanking';
 import HallOfFamePanel from '../components/ComOthers/HallOfFamePanel';
+import GlobalLoader from "../components/ComOthers/GlobalLoader";
 import '../styles/StylesPages/RankingPage.css';
 
 export default function RankingPage({ currentUser }) {
@@ -124,12 +125,7 @@ export default function RankingPage({ currentUser }) {
     return <div className={`${cls} lb-av-ph`}>{user.name?.charAt(0).toUpperCase() || '?'}</div>;
   };
 
-  if (loading) return (
-    <div className="lb-loading">
-      <div className="lb-spinner" />
-      CARGANDO
-    </div>
-  );
+  if (loading) return <GlobalLoader variant="page" />;
 
   return (
     <>

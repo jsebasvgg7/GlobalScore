@@ -1,0 +1,264 @@
+/* ================================================================
+   GlobalLoader.css — Spinner unificado · GlobalScore
+   Estética brutalista · DM Mono · variables del sistema (index.css)
+================================================================ */
+
+/* ── Token único ── */
+:root,
+[data-theme="light"],
+[data-theme="dark"] {
+  --gl-color: var(--accent, #5b4fd8);
+  --gl-muted:  var(--border, #d4cfc8);
+  --gl-bg:     var(--bg, #f0ede8);
+  --gl-card:   var(--card, #ffffff);
+  --gl-text:   var(--muted, #a0a0b0);
+  --gl-mono:   'DM Mono', monospace;
+}
+
+/* ================================================================
+   RING — el spinner base
+   Un cuadrado rotando. Sin degradados, sin luces — solo línea.
+   Tres tamaños: sm (20px), md (32px), lg (48px)
+================================================================ */
+.gl-ring {
+  display: inline-block;
+  flex-shrink: 0;
+  border-style: solid;
+  border-color: var(--gl-muted);
+  border-radius: 0;                   /* cuadrado: brutalismo puro  */
+  border-top-color: var(--gl-color);
+  border-right-color: var(--gl-color);
+  animation: gl-spin 0.75s linear infinite;
+}
+
+.gl-ring--sm  { width: 20px; height: 20px; border-width: 1.5px; }
+.gl-ring--md  { width: 32px; height: 32px; border-width: 2px;   }
+.gl-ring--lg  { width: 48px; height: 48px; border-width: 2.5px; }
+
+@keyframes gl-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ================================================================
+   DOTS — tres puntos, fondo transparente
+   Usado dentro de botones o como reemplazo del LoadingDots anterior
+================================================================ */
+.gl-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 20px;
+  --gl-color: var(--accent, #5b4fd8);
+}
+
+.gl-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 0;
+  background: var(--gl-color);
+  animation: gl-dot-blink 0.9s ease-in-out infinite both;
+}
+
+.gl-dot:nth-child(1) { animation-delay: -0.30s; }
+.gl-dot:nth-child(2) { animation-delay: -0.15s; }
+.gl-dot:nth-child(3) { animation-delay:  0s;    }
+
+@keyframes gl-dot-blink {
+  0%, 80%, 100% { opacity: 0.2; transform: scaleY(0.7); }
+  40%           { opacity: 1;   transform: scaleY(1);   }
+}
+
+/* ── Botones: fondo blanco cuando están en botón de acento ── */
+.btn .gl-dot,
+button .gl-dot {
+  background: currentColor;
+}
+
+/* ================================================================
+   INLINE — centrado dentro de su contenedor
+================================================================ */
+.gl-inline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 40px 0;
+}
+
+.gl-inline--sm { padding: 16px 0; gap: 8px;  }
+.gl-inline--md { padding: 32px 0; gap: 10px; }
+.gl-inline--lg { padding: 48px 0; gap: 14px; }
+
+.gl-inline-label {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--gl-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gl-text);
+  animation: gl-label-fade 1.2s ease-in-out infinite;
+}
+
+/* ================================================================
+   PAGE — pantalla completa, fija
+================================================================ */
+.gl-page {
+  position: fixed;
+  inset: 0;
+  background: var(--gl-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: gl-page-in 0.2s ease;
+}
+
+@keyframes gl-page-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.gl-page-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Marca de agua: cuadrado grande atrás */
+.gl-page-inner::before {
+  content: '';
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border: 0.5px solid var(--gl-muted);
+  opacity: 0.3;
+  animation: gl-spin 8s linear infinite reverse;
+}
+
+.gl-page-inner .gl-ring--lg {
+  position: relative;
+  z-index: 1;
+}
+
+.gl-page-label {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--gl-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gl-text);
+  animation: gl-label-fade 1.2s ease-in-out infinite;
+}
+
+/* ================================================================
+   OVERLAY — fixed semitransparente sobre el contenido
+================================================================ */
+.gl-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 8, 20, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+  animation: gl-page-in 0.15s ease;
+}
+
+[data-theme="light"] .gl-overlay {
+  background: rgba(240, 237, 232, 0.65);
+}
+
+.gl-overlay-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 32px;
+  background: var(--gl-card);
+  border: 0.5px solid var(--gl-muted);
+}
+
+.gl-overlay-label {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--gl-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gl-text);
+  animation: gl-label-fade 1.2s ease-in-out infinite;
+}
+
+/* ================================================================
+   ANIMACIÓN LABEL — parpadeo lento
+================================================================ */
+@keyframes gl-label-fade {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1;   }
+}
+
+/* ================================================================
+   MOBILE SECTIONS — spinner embebido en secciones móviles
+   Reemplaza .mst-spinner, .mrk-loading, etc.
+================================================================ */
+.mob-section-loading,
+.mst-loading,
+.mrk-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 60px 0;
+  width: 100%;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--gl-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted, #a0a0b0);
+}
+
+/* Override del spinner viejo en mobile stats */
+.mst-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--gl-muted);
+  border-top-color: var(--gl-color);
+  border-right-color: var(--gl-color);
+  border-radius: 0;
+  animation: gl-spin 0.75s linear infinite;
+}
+
+/* ================================================================
+   ACCESIBILIDAD
+================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .gl-ring {
+    animation-duration: 2s;
+  }
+  .gl-dot {
+    animation: gl-dot-blink-reduced 1.5s ease-in-out infinite both;
+  }
+  @keyframes gl-dot-blink-reduced {
+    0%, 100% { opacity: 0.3; }
+    50%       { opacity: 1;   }
+  }
+  .gl-page-inner::before {
+    animation: none;
+    opacity: 0.15;
+  }
+}
+
+/* ================================================================
+   DARK MODE — las variables del sistema lo manejan solas,
+   pero ajustamos el overlay claro que es hardcoded
+================================================================ */
+[data-theme="dark"] .gl-overlay {
+  background: rgba(10, 8, 20, 0.7);
+}

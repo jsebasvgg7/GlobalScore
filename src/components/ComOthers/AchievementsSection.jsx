@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, Award, Lock, Star, TrendingUp } from 'lucide-react';
+import GlobalLoader from "./GlobalLoader";
 import { supabase } from '../../utils/supabaseClient';
 
 export default function AchievementsSection({ userId, userStats }) {
@@ -115,12 +116,7 @@ export default function AchievementsSection({ userId, userStats }) {
   };
 
   if (loading) {
-    return (
-      <div className="achievements-loading">
-        <div className="spinner"></div>
-        <p>Cargando logros...</p>
-      </div>
-    );
+    <GlobalLoader variant="inline" size="md" label="cargando logros" />
   }
 
   return (

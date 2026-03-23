@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Target, CheckCircle2, XCircle, Star,
-  Trophy, Award, Calendar, Zap, Activity
+  Trophy, Award, Calendar, Zap, Activity,
+  Import
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import StatsRightPanel from '../components/ComOthers/StatsRightPanel';
 import MobileStats from '../components/ComMobile/MobileStats';
 import Footer from '../components/ComOthers/Footer';
+import GlobalLoader from "../components/ComOthers/GlobalLoader";
 import '../styles/StylesPages/StatsPage.css';
 
 const fmt = (n) => Number(n || 0).toLocaleString('es-ES');
@@ -162,17 +164,7 @@ export default function StatsPage({ currentUser }) {
      RENDER — LOADING
   ──────────────────────────────────────────────────────────── */
   if (loading) {
-    return (
-      <>
-        <MobileStats stats={null} loading={true} timeRange={timeRange} onTimeRangeChange={setTimeRange} />
-        <div className="sp-shell">
-          <div className="sp-loading">
-            <div className="sp-spinner" />
-            CARGANDO
-          </div>
-        </div>
-      </>
-    );
+    return <GlobalLoader variant="page" />;
   }
 
   if (!stats) {

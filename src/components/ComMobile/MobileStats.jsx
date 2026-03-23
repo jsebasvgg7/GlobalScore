@@ -1,5 +1,6 @@
 import React from "react";
 import { Target, Star, CheckCircle2, Zap } from "lucide-react";
+import GlobalLoader from "../ComOthers/GlobalLoader";
 import "../../styles/StylesMobile/MobileStats.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
@@ -16,16 +17,13 @@ function HeroIcon({ color, children }) {
 export default function MobileStats({ stats, loading, timeRange, onTimeRangeChange }) {
 
   /* ── LOADING ── */
-  if (loading) {
-    return (
-      <div className="mst-root">
-        <div className="mst-loading">
-          <div className="mst-spinner" />
-          CARGANDO
-        </div>
-      </div>
-    );
-  }
+ if (loading) {
+  return (
+    <div className="mst-root">
+      <GlobalLoader variant="inline" size="md" label="cargando" />
+    </div>
+  );
+}
 
   /* ── EMPTY ── */
   if (!stats) {

@@ -7,6 +7,7 @@ import Footer from '../components/ComOthers/Footer';
 import WorldCupNavigationTabs from '../components/ComWorldCup/WorldCupNavigationTabs';
 import WorldCupAwardCard from '../components/ComWorldCup/WorldCupAwardCard';
 import KnockoutSection from '../components/ComWorldCup/KnockoutSection';
+import GlobalLoader from "../components/ComOthers/GlobalLoader";
 import '../styles/StylesPages/WorldCupPage.css';
 
 // ============================================
@@ -418,12 +419,7 @@ const [predictions, setPredictions] = useState({
   const bestThirds = calculateBestThirds();
 
   if (loading) {
-    return (
-      <div className="worldcup-page-loading">
-        <div className="spinner-large"></div>
-        <p>Cargando predicciones del Mundial...</p>
-      </div>
-    );
+    return <GlobalLoader variant="page" label="Cargando mundial" />;
   }
 
   return (
