@@ -47,13 +47,13 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
   ── */
   const leftItems = currentUser?.is_admin
     ? [{ path: "/admin",   icon: Shield, label: "Admin"   }]
-    : [{ path: "/profile", icon: User2,  label: "Perfil"  }];
+    : [{ path: "/world",   icon: Globe,     label: "Mundial" }];
 
   const mobileBottomItems = [
     ...leftItems,
     { path: "/ranking", icon: Award,     label: "Ranking" },
     { path: "/stats",   icon: BarChart3, label: "Stats"   },
-    { path: "/world",   icon: Globe,     label: "Mundial" },
+    { path: "/profile", icon: User2,  label: "Perfil"  },
   ];
 
   const firstName = currentUser?.name?.split(" ")[0] || "Jugador";
