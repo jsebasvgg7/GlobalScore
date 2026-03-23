@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Trophy, Filter, X, ArrowUpDown, ChevronRight, Zap, Flame, Target
+  Trophy, Filter, X, ArrowUpDown
 } from "lucide-react";
 
 import MatchCard          from "../components/ComCards/MatchCard";
@@ -20,7 +20,59 @@ import { useAwards }     from "../hooks/HooksCards/useAwards";
 
 import "../styles/StylesPages/DashboardPage.css";
 
-const acc = (c, t) => (t > 0 ? Math.round((c / t) * 100) : 0);
+/* ── Empty state brutalista ── */
+function MatchesEmpty({ leagueFilter, leagueCategories, onClear }) {
+  const activeCategory = leagueCategories.find((c) => c.id === leagueFilter);
+  const isFiltered = leagueFilter !== "all";
+
+  return (
+    <div className="matches-empty-state">
+
+      {/* Cuadrado brutalista con ícono de balón SVG */}
+      <div className="matches-empty-icon-wrap">
+        <div className="matches-empty-icon-inner">
+          {/* Balón minimalista en SVG puro — sin emoji */}
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="13" />
+            <polygon points="16,6 20,10 18,15 14,15 12,10" />
+            <line x1="16" y1="6"  x2="16" y2="3"  />
+            <line x1="20" y1="10" x2="23" y2="8"  />
+            <line x1="18" y1="15" x2="21" y2="17" />
+            <line x1="14" y1="15" x2="11" y2="17" />
+            <line x1="12" y1="10" x2="9"  y2="8"  />
+          </svg>
+        </div>
+      </div>
+
+      {/* Decoración lineal */}
+      <div className="matches-empty-deco">
+        <div className="matches-empty-deco-line" />
+        <div className="matches-empty-deco-dot" />
+        <div className="matches-empty-deco-line" />
+      </div>
+
+      {/* Texto */}
+      <div className="matches-empty-title">
+        {isFiltered
+          ? `Sin partidos · ${activeCategory?.name}`
+          : "Sin partidos pendientes"}
+      </div>
+      <div className="matches-empty-sub">
+        {isFiltered
+          ? "No hay partidos disponibles en esta categoría"
+          : "Todos los partidos están al día"}
+      </div>
+
+      {/* Chip para limpiar filtro */}
+      {isFiltered && (
+        <button className="matches-empty-filter-chip" onClick={onClear}>
+          <X size={11} />
+          Ver todos los partidos
+        </button>
+      )}
+    </div>
+  );
+}
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -44,7 +96,6 @@ export default function DashboardPage() {
   const { loading: leaguesLoading, makeLeaguePrediction } = useLeagues(currentUser);
   const { loading: awardsLoading,  makeAwardPrediction }  = useAwards(currentUser);
 
-  // ── Navegación móvil ────────────────────────────────────────
   const handleNavigate = (section) => {
     switch (section) {
       case "profile":       navigate("/profile");       break;
@@ -56,7 +107,6 @@ export default function DashboardPage() {
     }
   };
 
-  // ── League categories ───────────────────────────────────────
   const leagueCategories = [
     { id: "all",          name: "Todos",       icon: "🌍", leagues: [] },
     { id: "europe",       name: "Europa",      icon: "🏆", leagues: ["Champions League","Europa League","Conference League"] },
@@ -77,7 +127,6 @@ export default function DashboardPage() {
     return () => document.removeEventListener("mousedown", handler);
   }, [showSort]);
 
-  // ── Handlers ────────────────────────────────────────────────
   const handleMakePrediction = async (matchId, homeScore, awayScore, advancingTeam = null) => {
     const match = matches.find((m) => m.id === matchId);
     if (match?.deadline && new Date() > new Date(match.deadline)) {
@@ -104,7 +153,6 @@ export default function DashboardPage() {
     );
   };
 
-  // ── Filtered + sorted matches ────────────────────────────────
   const filteredMatches = useMemo(() => {
     let pending = matches.filter((m) => m.status === "pending");
     if (leagueFilter !== "all") {
@@ -127,7 +175,6 @@ export default function DashboardPage() {
     });
   }, [matches, leagueFilter, sortOption]);
 
-  // ── Group by date ─────────────────────────────────────────────
   const groupedMatches = useMemo(() => {
     const today    = new Date(); today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
@@ -154,7 +201,6 @@ export default function DashboardPage() {
 
   return (
     <>
-      {/* ════ VISTA MÓVIL (solo visible bajo 769px portrait) ════ */}
       <MobileDashboard
         currentUser={currentUser}
         users={users}
@@ -168,15 +214,11 @@ export default function DashboardPage() {
         activeNav="home"
       />
 
-      {/* ════ VISTA DESKTOP (sin cambios) ════ */}
       <div className="db-root page-root">
-
         <div className="db-body">
 
-          {/* ── CONTENIDO PRINCIPAL ── */}
           <main className="db-main">
 
-            {/* Tabs */}
             <NavigationTabs
               activeTab={activeTab}
               onTabChange={setActiveTab}
@@ -276,20 +318,14 @@ export default function DashboardPage() {
                   </div>
                 )}
 
-                {/* Lista de partidos */}
+                {/* Lista de partidos o empty state */}
                 {Object.keys(groupedMatches).length === 0 ? (
                   <div className="matches-container">
-                    <div className="matches-empty-state">
-                      <div className="matches-empty-icon">⚽</div>
-                      <div className="matches-empty-text">
-                        {leagueFilter === "all"
-                          ? "Sin partidos pendientes"
-                          : `Sin partidos de ${leagueCategories.find((c) => c.id === leagueFilter)?.name}`}
-                      </div>
-                      {leagueFilter !== "all" && (
-                        <button className="show-all-btn" onClick={() => setLeagueFilter("all")}>Ver todos</button>
-                      )}
-                    </div>
+                    <MatchesEmpty
+                      leagueFilter={leagueFilter}
+                      leagueCategories={leagueCategories}
+                      onClear={() => setLeagueFilter("all")}
+                    />
                   </div>
                 ) : (
                   Object.entries(groupedMatches).map(([label, group]) => (
@@ -319,9 +355,12 @@ export default function DashboardPage() {
                     <span>Temporada 2025 · 2026</span>
                   </div>
                   {leagues.length === 0 ? (
-                    <div className="matches-empty-state">
-                      <div className="matches-empty-icon">🏆</div>
-                      <div className="matches-empty-text">Sin ligas</div>
+                    <div className="matches-container">
+                      <MatchesEmpty
+                        leagueFilter="all"
+                        leagueCategories={leagueCategories}
+                        onClear={() => {}}
+                      />
                     </div>
                   ) : (
                     <div className="leagues-grid">
@@ -347,9 +386,12 @@ export default function DashboardPage() {
                     <span>Temporada 2025 · 2026</span>
                   </div>
                   {awards.length === 0 ? (
-                    <div className="matches-empty-state">
-                      <div className="matches-empty-icon">🥇</div>
-                      <div className="matches-empty-text">Sin premios</div>
+                    <div className="matches-container">
+                      <MatchesEmpty
+                        leagueFilter="all"
+                        leagueCategories={leagueCategories}
+                        onClear={() => {}}
+                      />
                     </div>
                   ) : (
                     <div className="awards-grid">
@@ -369,7 +411,6 @@ export default function DashboardPage() {
 
           </main>
 
-          {/* ── PANEL DERECHO ── */}
           <RightPanel
             currentUser={currentUser}
             users={users}
