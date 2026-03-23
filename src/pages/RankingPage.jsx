@@ -8,8 +8,8 @@ import Footer from '../components/ComOthers/Footer';
 import HallOfFame from '../components/ComOthers/HallOfFame';
 import UserProfileModal from '../components/ComOthers/UserProfileModal';
 import RankingRightPanel from '../components/ComOthers/RankingRightPanel';
+import MobileRanking from '../components/ComMobile/MobileRanking';
 import '../styles/StylesPages/RankingPage.css';
-import '../styles/StylesMobile/MobileRanking.css';
 
 export default function RankingPage({ currentUser }) {
   const [users, setUsers]                   = useState([]);
@@ -131,151 +131,165 @@ export default function RankingPage({ currentUser }) {
   );
 
   return (
-    <div className="lb-shell">
+    <>
+      {/* ══════════════════════════════════════
+          VISTA MOBILE — solo ≤768px
+          Componente propio, no toca desktop
+      ══════════════════════════════════════ */}
+      <MobileRanking
+        users={users}
+        currentUser={currentUser}
+        rankingType={rankingType}
+        onChangeType={setRankingType}
+      />
 
-      {/* ══ CONTENIDO PRINCIPAL ══ */}
-      <div className="lb-page">
+      {/* ══════════════════════════════════════
+          VISTA DESKTOP — solo >768px
+      ══════════════════════════════════════ */}
+      <div className="lb-shell">
 
-        {/* TABS — barra superior */}
-        <div className="lb-tabs-bar">
-          <button className={`lb-tab${rankingType === 'global'     ? ' active' : ''}`} onClick={() => setRankingType('global')}>
-            <Globe size={13} /><span>Global</span>
-          </button>
-          <button className={`lb-tab${rankingType === 'monthly'    ? ' active' : ''}`} onClick={() => setRankingType('monthly')}>
-            <Calendar size={13} /><span>Mensual</span>
-          </button>
-          <button className={`lb-tab${rankingType === 'halloffame' ? ' active' : ''}`} onClick={() => setRankingType('halloffame')}>
-            <Crown size={13} /><span>S. Fama</span>
-          </button>
+        <div className="lb-page">
+
+          {/* TABS */}
+          <div className="lb-tabs-bar">
+            <button className={`lb-tab${rankingType === 'global'     ? ' active' : ''}`} onClick={() => setRankingType('global')}>
+              <Globe size={13} /><span>Global</span>
+            </button>
+            <button className={`lb-tab${rankingType === 'monthly'    ? ' active' : ''}`} onClick={() => setRankingType('monthly')}>
+              <Calendar size={13} /><span>Mensual</span>
+            </button>
+            <button className={`lb-tab${rankingType === 'halloffame' ? ' active' : ''}`} onClick={() => setRankingType('halloffame')}>
+              <Crown size={13} /><span>S. Fama</span>
+            </button>
+          </div>
+
+          {rankingType === 'halloffame' ? (
+            <div className="lb-hof-wrap">
+              <HallOfFame champions={champions} onSelectUser={setSelectedUserId} />
+            </div>
+          ) : (
+            <div className="lb-grid">
+
+              {/* STATS */}
+              <div className="lb-row lb-row--stats">
+                <div className="lb-stat-block">
+                  <span className="lb-stat-num">{totalRegistered}</span>
+                  <span className="lb-stat-lbl">Registrados</span>
+                  <div className="lb-stat-icon lb-stat-icon--blue"><Users size={13}/></div>
+                </div>
+                <div className="lb-stat-block">
+                  <span className="lb-stat-num">{totalParticipated}</span>
+                  <span className="lb-stat-lbl">Participantes</span>
+                  <div className="lb-stat-icon lb-stat-icon--green"><Target size={13}/></div>
+                </div>
+                <div className="lb-stat-block lb-stat-block--wide">
+                  <span className="lb-stat-period">
+                    {rankingType === 'monthly'
+                      ? `Mensual · ${getCurrentMonthLabel()}`
+                      : 'Clasificación Global'}
+                  </span>
+                  <span className="lb-stat-sub">
+                    {rankingType === 'monthly'
+                      ? 'Puntos del mes · Se reinicia cada mes'
+                      : 'Puntos acumulados · Temporada 25/26'}
+                  </span>
+                </div>
+              </div>
+
+              {/* SORT */}
+              <div className="lb-row lb-row--sort">
+                <span className="lb-sort-label">Ordenar</span>
+                <div className="lb-sort-btns">
+                  {[
+                    { key: 'points',      icon: <Zap size={11}/>,      label: 'Puntos'    },
+                    { key: 'accuracy',    icon: <Target size={11}/>,    label: 'Precisión' },
+                    { key: 'predictions', icon: <BarChart3 size={11}/>, label: 'Actividad' },
+                  ].map(({ key, icon, label }) => (
+                    <button
+                      key={key}
+                      className={`lb-sort-btn${sortBy === key ? ' active' : ''}`}
+                      onClick={() => setSortBy(key)}
+                    >
+                      {icon}{label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* THEAD */}
+              <div className="lb-thead">
+                <span className="lbc-rank">Rank</span>
+                <span className="lbc-user">Jugador</span>
+                <span className="lbc-num lbc-hide-sm">Aciertos</span>
+                <span className="lbc-num lbc-hide-sm">Pred.</span>
+                <span className="lbc-num">Precisión</span>
+                <span className="lbc-num">Puntos</span>
+              </div>
+
+              {/* TBODY */}
+              <div className="lb-tbody-wrap">
+                {filteredUsers.map((user, index) => {
+                  const accuracy = user.rankPredictions > 0
+                    ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
+                  const isMe = user.id === currentUser?.id;
+                  const pos  = index + 1;
+                  const topMod = pos === 1 ? ' lb-trow--gold'
+                               : pos === 2 ? ' lb-trow--silver'
+                               : pos === 3 ? ' lb-trow--bronze'
+                               : '';
+                  return (
+                    <div
+                      key={user.id}
+                      className={`lb-trow${topMod}${isMe ? ' lb-trow--me' : ''}`}
+                    >
+                      <span className="lbc-rank">
+                        <span className={`lb-rnk lb-rnk-${Math.min(pos, 4)}`}>{pos}</span>
+                      </span>
+                      <span className="lbc-user">
+                        <button className="lb-ucell" onClick={() => setSelectedUserId(user.id)}>
+                          <Av user={user} size="sm" />
+                          <div className="lb-uinfo">
+                            <span className="lb-uname">
+                              {user.name}
+                              {isMe && <span className="lb-you">TÚ</span>}
+                            </span>
+                            <span className="lb-uname-sub">{user.rankCorrect} aciertos</span>
+                          </div>
+                        </button>
+                      </span>
+                      <span className="lbc-num lbc-hide-sm">{user.rankCorrect}</span>
+                      <span className="lbc-num lbc-hide-sm">{user.rankPredictions}</span>
+                      <span className="lbc-num lb-acc">{accuracy}%</span>
+                      <span className="lbc-num lb-pts">
+                        {user.rankPoints}<span className="lb-pts-lbl">pts</span>
+                      </span>
+                    </div>
+                  );
+                })}
+
+                {filteredUsers.length === 0 && (
+                  <div className="lb-empty">
+                    <TrendingUp size={32} className="lb-empty-icon" />
+                    <p>Sin usuarios</p>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          )}
+
+          <Footer />
         </div>
 
-        {rankingType === 'halloffame' ? (
-          <div className="lb-hof-wrap">
-            <HallOfFame champions={champions} onSelectUser={setSelectedUserId} />
-          </div>
-        ) : (
-          /* GRID CONECTADO — todo toca borde con borde */
-          <div className="lb-grid">
-
-            {/* FILA 1 — stats */}
-            <div className="lb-row lb-row--stats">
-              <div className="lb-stat-block">
-                <span className="lb-stat-num">{totalRegistered}</span>
-                <span className="lb-stat-lbl">Registrados</span>
-                <div className="lb-stat-icon lb-stat-icon--blue"><Users size={13}/></div>
-              </div>
-              <div className="lb-stat-block">
-                <span className="lb-stat-num">{totalParticipated}</span>
-                <span className="lb-stat-lbl">Participantes</span>
-                <div className="lb-stat-icon lb-stat-icon--green"><Target size={13}/></div>
-              </div>
-              <div className="lb-stat-block lb-stat-block--wide">
-                <span className="lb-stat-period">
-                  {rankingType === 'monthly'
-                    ? `Mensual · ${getCurrentMonthLabel()}`
-                    : 'Clasificación Global'}
-                </span>
-                <span className="lb-stat-sub">
-                  {rankingType === 'monthly'
-                    ? 'Puntos del mes · Se reinicia cada mes'
-                    : 'Puntos acumulados · Temporada 25/26'}
-                </span>
-              </div>
-            </div>
-
-            {/* FILA 2 — sort bar */}
-            <div className="lb-row lb-row--sort">
-              <span className="lb-sort-label">Ordenar</span>
-              <div className="lb-sort-btns">
-                {[
-                  { key: 'points',      icon: <Zap size={11}/>,      label: 'Puntos'    },
-                  { key: 'accuracy',    icon: <Target size={11}/>,    label: 'Precisión' },
-                  { key: 'predictions', icon: <BarChart3 size={11}/>, label: 'Actividad' },
-                ].map(({ key, icon, label }) => (
-                  <button
-                    key={key}
-                    className={`lb-sort-btn${sortBy === key ? ' active' : ''}`}
-                    onClick={() => setSortBy(key)}
-                  >
-                    {icon}{label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* FILA 3 — cabecera de tabla */}
-            <div className="lb-thead">
-              <span className="lbc-rank">Rank</span>
-              <span className="lbc-user">Jugador</span>
-              <span className="lbc-num lbc-hide-sm">Aciertos</span>
-              <span className="lbc-num lbc-hide-sm">Pred.</span>
-              <span className="lbc-num">Precisión</span>
-              <span className="lbc-num">Puntos</span>
-            </div>
-
-            {/* FILA 4 — cuerpo tabla con scroll */}
-            <div className="lb-tbody-wrap">
-              {filteredUsers.map((user, index) => {
-                const accuracy = user.rankPredictions > 0
-                  ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
-                const isMe = user.id === currentUser?.id;
-                const pos  = index + 1;
-                const topMod = pos === 1 ? ' lb-trow--gold'
-                             : pos === 2 ? ' lb-trow--silver'
-                             : pos === 3 ? ' lb-trow--bronze'
-                             : '';
-                return (
-                  <div
-                    key={user.id}
-                    className={`lb-trow${topMod}${isMe ? ' lb-trow--me' : ''}`}
-                  >
-                    <span className="lbc-rank">
-                      <span className={`lb-rnk lb-rnk-${Math.min(pos, 4)}`}>{pos}</span>
-                    </span>
-                    <span className="lbc-user">
-                      <button className="lb-ucell" onClick={() => setSelectedUserId(user.id)}>
-                        <Av user={user} size="sm" />
-                        <div className="lb-uinfo">
-                          <span className="lb-uname">
-                            {user.name}
-                            {isMe && <span className="lb-you">TÚ</span>}
-                          </span>
-                          <span className="lb-uname-sub">{user.rankCorrect} aciertos</span>
-                        </div>
-                      </button>
-                    </span>
-                    <span className="lbc-num lbc-hide-sm">{user.rankCorrect}</span>
-                    <span className="lbc-num lbc-hide-sm">{user.rankPredictions}</span>
-                    <span className="lbc-num lb-acc">{accuracy}%</span>
-                    <span className="lbc-num lb-pts">
-                      {user.rankPoints}<span className="lb-pts-lbl">pts</span>
-                    </span>
-                  </div>
-                );
-              })}
-
-              {filteredUsers.length === 0 && (
-                <div className="lb-empty">
-                  <TrendingUp size={32} className="lb-empty-icon" />
-                  <p>Sin usuarios</p>
-                </div>
-              )}
-            </div>
-
-          </div>
+        {/* PANEL DERECHO */}
+        {rankingType !== 'halloffame' && (
+          <RankingRightPanel
+            users={users}
+            currentUser={currentUser}
+            rankingType={rankingType}
+          />
         )}
-
-        <Footer />
       </div>
-
-      {/* ══ PANEL DERECHO ══ */}
-      {rankingType !== 'halloffame' && (
-        <RankingRightPanel
-          users={users}
-          currentUser={currentUser}
-          rankingType={rankingType}
-        />
-      )}
 
       {selectedUserId && (
         <UserProfileModal
@@ -283,6 +297,6 @@ export default function RankingPage({ currentUser }) {
           onClose={() => setSelectedUserId(null)}
         />
       )}
-    </div>
+    </>
   );
 }

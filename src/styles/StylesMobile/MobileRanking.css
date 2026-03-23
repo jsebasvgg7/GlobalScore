@@ -1,194 +1,545 @@
-/* =============================================
-   MobileRanking.css
-   Estilos EXCLUSIVOS mobile del Ranking ≤768px
-   NO tocar — diseño mobile definitivo
-============================================= */
+/* ================================================================
+   MobileRanking.css — Ranking Mobile
+   Basado en MobileDashboard.css · Variables del sistema · index.css
+   Solo visible en ≤768px · Desktop no toca esto
+================================================================ */
 
-@media (max-width: 768px) {
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
-  /* ── SHELL / PAGE ── */
-  .lb-shell {
-    margin-left: 0 !important;
-    margin-top: 0 !important;
-    display: block !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
+.mrk-root {
+  --mrk-accent:        var(--accent);
+  --mrk-accent-light:  var(--accent-light);
+  --mrk-accent-subtle: var(--glass);
+  --mrk-accent-border: rgba(96, 81, 155, 0.25);
+  --mrk-mono:          'DM Mono', monospace;
+  --mrk-sans:          'Sora', sans-serif;
+  --mrk-border:        var(--border);
+  --mrk-bg:            var(--bg);
+  --mrk-card:          var(--card);
+  --mrk-text:          var(--text-primary);
+  --mrk-muted:         var(--muted);
+  --mrk-shadow:        var(--small-shadow);
+  --mrk-gold:          #c9a227;
+  --mrk-silver:        #8a8a8a;
+  --mrk-bronze:        #a0652a;
+}
 
-  .lb-page {
-    height: auto !important;
-    overflow: visible !important;
-    padding-bottom: 110px !important;
-    background: var(--bg) !important;
-  }
+[data-theme="dark"] .mrk-root {
+  --mrk-accent-border: rgba(139, 127, 199, 0.3);
+  --mrk-gold:   #f0c040;
+  --mrk-silver: #a0a0a0;
+  --mrk-bronze: #c0804a;
+}
 
-  .lb-grid {
-    height: auto !important;
-    display: flex;
-    flex-direction: column;
-  }
+/* ── ROOT — solo mobile ── */
+.mrk-root {
+  display: none;
+  flex-direction: column;
+  background: var(--mrk-bg);
+  font-family: var(--mrk-sans);
+  padding-bottom: 100px;
+  min-height: 100dvh;
+  box-sizing: border-box;
+}
 
-  .lb-tbody-wrap {
-    overflow: visible !important;
-    max-height: none !important;
-    flex: none !important;
-  }
+@media screen and (max-width: 768px) {
+  .mrk-root { display: flex; }
+}
 
-  /* ── TABS BAR ── */
-  .lb-tabs-bar {
-    position: sticky;
-    top: 56px;
-    z-index: 50;
-    background: var(--bg) !important;
-    border-bottom: 0.5px solid var(--border) !important;
-    padding: 0 4px !important;
-  }
+/* ================================================================
+   TABS
+================================================================ */
+.mrk-tabs {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  background: var(--mrk-card);
+  border-bottom: 0.5px solid var(--mrk-border);
+  flex-shrink: 0;
+  position: sticky;
+  top: 56px;
+  z-index: 50;
+}
 
-  .lb-tab {
-    flex: 1;
-    justify-content: center;
-    padding: 0 8px !important;
-    font-size: 11px !important;
-    gap: 5px !important;
-  }
+.mrk-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--mrk-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -0.5px;
+}
 
-  .lb-tab svg { width: 13px; height: 13px; }
+.mrk-tab svg { flex-shrink: 0; }
+.mrk-tab.active { color: var(--mrk-accent); border-bottom-color: var(--mrk-accent); }
+[data-theme="dark"] .mrk-tab.active { color: var(--accent-light); border-bottom-color: var(--accent-light); }
 
-  /* ── STATS ROW — stack en 2 columnas ── */
-  .lb-row--stats {
-    grid-template-columns: 1fr 1fr !important;
-    border-bottom: 0.5px solid var(--border) !important;
-  }
+/* ================================================================
+   STATS ROW
+================================================================ */
+.mrk-stats-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  background: var(--mrk-card);
+  border-bottom: 0.5px solid var(--mrk-border);
+  gap: 0;
+  flex-shrink: 0;
+}
 
-  .lb-stat-block {
-    padding: 16px 16px !important;
-    background: var(--bg) !important;
-    border-right-color: var(--border) !important;
-  }
+.mrk-stat-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
 
-  /* El tercer bloque (clasificación) ocupa fila entera */
-  .lb-stat-block--wide {
-    grid-column: 1 / -1 !important;
-    border-right: none !important;
-    border-top: 0.5px solid var(--border) !important;
-  }
+.mrk-stat-block--leader { align-items: flex-end; }
 
-  .lb-stat-num {
-    font-size: 34px !important;
-    letter-spacing: -1px !important;
-  }
+.mrk-stat-divider {
+  width: 0.5px;
+  height: 32px;
+  background: var(--mrk-border);
+  flex-shrink: 0;
+  margin: 0 12px;
+}
 
-  .lb-stat-period {
-    font-size: 13px !important;
-  }
+.mrk-stat-num {
+  font-size: 28px;
+  font-weight: 800;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-text);
+  line-height: 1;
+  letter-spacing: -1px;
+}
 
-  /* ── SORT ROW ── */
-  .lb-row--sort {
-    padding: 0 12px !important;
-    background: var(--bg) !important;
-    border-bottom-color: var(--border) !important;
-    position: sticky;
-    top: calc(56px + 48px);
-    z-index: 40;
-  }
+.mrk-stat-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mrk-muted);
+}
 
-  .lb-sort-label { display: none; }
+.mrk-stat-leader-name {
+  font-size: 13px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-gold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+}
 
-  .lb-sort-btns { width: 100%; display: flex; gap: 4px; }
+.mrk-stat-leader-pts {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-gold);
+  opacity: 0.8;
+}
 
-  .lb-sort-btn {
-    flex: 1;
-    justify-content: center;
-    height: 30px !important;
-    font-size: 10px !important;
-    padding: 0 6px !important;
-  }
+/* ================================================================
+   PODIO
+================================================================ */
+.mrk-podium-wrap {
+  background: var(--mrk-bg);
+  flex-shrink: 0;
+}
 
-  /* ── THEAD — oculto en mobile ── */
-  .lb-thead { display: none !important; }
+.mrk-podium-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 18px 20px 10px;
+}
 
-  /* ── FILAS — layout mobile tipo píldora ── */
-  .lb-trow {
-    display: flex !important;
-    align-items: center !important;
-    grid-template-columns: unset !important;
-    height: auto !important;
-    padding: 12px 16px !important;
-    gap: 12px !important;
-    background: var(--bg) !important;
-    border-bottom: 0.5px solid var(--border) !important;
-    border-left: none !important;
-  }
+.mrk-podium-header-line {
+  flex: 1;
+  height: 0.5px;
+  max-width: 60px;
+}
 
-  /* Acento izquierdo top 3 — se mantiene */
-  .lb-trow--gold   { border-left: 3px solid #c9a227 !important; }
-  .lb-trow--silver { border-left: 3px solid #8a8a8a !important; }
-  .lb-trow--bronze { border-left: 3px solid #a0652a !important; }
+.mrk-podium-header-line--left  { background: linear-gradient(90deg, transparent, rgba(201,162,39,0.5)); }
+.mrk-podium-header-line--right { background: linear-gradient(90deg, rgba(201,162,39,0.5), transparent); }
 
-  .lb-trow--me {
-    background: rgba(91,79,216,0.06) !important;
-    border-left: 3px solid var(--accent) !important;
-  }
+.mrk-podium-crown {
+  color: var(--mrk-gold);
+  flex-shrink: 0;
+  animation: mrk-crown-bob 3.5s ease-in-out infinite;
+}
 
-  /* Columnas en mobile flex */
-  .lbc-rank  { flex-shrink: 0; width: 32px !important; }
-  .lbc-user  { flex: 1; min-width: 0 !important; }
-  .lbc-num   { flex-shrink: 0 !important; }
+@keyframes mrk-crown-bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-3px); }
+}
 
-  /* Ocultar aciertos y pred en mobile */
-  .lbc-hide-sm { display: none !important; }
+.mrk-podium-title {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mrk-gold);
+}
 
-  /* La columna precisión también se oculta en mobile chico */
-  .lbc-num:nth-last-child(2) { display: none !important; }
+/* Escenario — 3 columnas, alineadas al fondo */
+.mrk-podium-stage {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: flex-end;
+  padding: 0 8px;
+  gap: 4px;
+  border-bottom: 0.5px solid var(--mrk-border);
+}
 
-  /* Avatar más grande en mobile */
-  .lb-av-sm {
-    width: 44px !important;
-    height: 44px !important;
-    font-size: 16px !important;
-  }
+.mrk-podium-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  /* Nombre */
-  .lb-uname {
-    font-size: 14px !important;
-    font-weight: 700 !important;
-  }
+/* Escalones */
+.mrk-podium-step {
+  width: 100%;
+}
 
-  /* Sub (aciertos) visible en mobile */
-  .lb-uname-sub {
-    display: block !important;
-    font-size: 11px !important;
-    color: var(--text-secondary) !important;
-  }
+.mrk-podium-step--first  { height: 20px; background: rgba(201,162,39,0.2);  border-top: 2px solid var(--mrk-gold); }
+.mrk-podium-step--second { height: 12px; background: rgba(138,138,138,0.15); border-top: 2px solid var(--mrk-silver); }
+.mrk-podium-step--third  { height: 6px;  background: rgba(160,101,42,0.15);  border-top: 2px solid var(--mrk-bronze); }
 
-  /* Rank badge */
-  .lb-rnk {
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 11px !important;
-  }
+/* Tarjeta del podio */
+.mrk-podium-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 4px 8px;
+  width: 100%;
+}
 
-  /* Puntos */
-  .lb-pts {
-    font-size: 14px !important;
-  }
+.mrk-podium-medal {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
 
-  .lb-pts-lbl { font-size: 9px !important; }
+.mrk-podium-card--gold   .mrk-podium-medal { color: var(--mrk-gold); }
+.mrk-podium-card--silver .mrk-podium-medal { color: var(--mrk-silver); }
+.mrk-podium-card--bronze .mrk-podium-medal { color: var(--mrk-bronze); }
 
-  /* ── DARK MODE MOBILE ── */
-  [data-theme="dark"] .lb-tabs-bar  { background: var(--bg) !important; border-bottom-color: var(--border) !important; }
-  [data-theme="dark"] .lb-stat-block { background: var(--bg) !important; border-right-color: var(--border) !important; }
-  [data-theme="dark"] .lb-row--sort  { background: var(--bg) !important; border-bottom-color: var(--border) !important; }
-  [data-theme="dark"] .lb-trow       { background: var(--bg) !important; border-bottom-color: rgba(255,255,255,0.06) !important; }
-  [data-theme="dark"] .lb-trow--me   { background: rgba(124,111,232,0.1) !important; }
+/* Avatar button */
+.mrk-podium-av-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-} /* fin @media 768px */
+.mrk-podium-av-ring {
+  border-radius: 50%;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-/* ── EXTRA SMALL ── */
-@media (max-width: 380px) {
-  .lb-stat-num     { font-size: 28px !important; }
-  .lb-av-sm        { width: 38px !important; height: 38px !important; }
-  .lb-uname        { font-size: 13px !important; }
-  .lb-sort-btn     { font-size: 9px !important; padding: 0 4px !important; }
-  .lb-trow         { padding: 10px 12px !important; gap: 10px !important; }
+.mrk-podium-card--gold   .mrk-podium-av-ring { background: linear-gradient(135deg, #c9a227, #f0c040, #c9a227); }
+.mrk-podium-card--silver .mrk-podium-av-ring { background: linear-gradient(135deg, #8a8a8a, #c0c0c0, #8a8a8a); }
+.mrk-podium-card--bronze .mrk-podium-av-ring { background: linear-gradient(135deg, #a0652a, #d4894a, #a0652a); }
+
+/* Número sobre el avatar */
+.mrk-podium-num {
+  position: absolute;
+  bottom: -6px;
+  right: -2px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: var(--mrk-mono);
+  color: #fff;
+  border: 2px solid var(--mrk-card);
+  border-radius: 0;
+}
+
+.mrk-podium-card--gold   .mrk-podium-num { background: var(--mrk-gold); }
+.mrk-podium-card--silver .mrk-podium-num { background: var(--mrk-silver); }
+.mrk-podium-card--bronze .mrk-podium-num { background: var(--mrk-bronze); }
+
+.mrk-podium-name {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-text);
+  text-align: center;
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 6px;
+  line-height: 1.2;
+}
+
+.mrk-podium-pts {
+  font-size: 12px;
+  font-weight: 800;
+  font-family: var(--mrk-mono);
+}
+
+.mrk-podium-card--gold   .mrk-podium-pts { color: var(--mrk-gold); }
+.mrk-podium-card--silver .mrk-podium-pts { color: var(--mrk-silver); }
+.mrk-podium-card--bronze .mrk-podium-pts { color: var(--mrk-bronze); }
+
+.mrk-podium-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mrk-podium-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.mrk-podium-sep {
+  width: 0.5px;
+  height: 18px;
+  background: var(--mrk-border);
+  flex-shrink: 0;
+}
+
+.mrk-podium-stat-val {
+  font-size: 11px;
+  font-weight: 800;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-text);
+  line-height: 1;
+}
+
+.mrk-podium-stat-val--acc { color: #1D9E75; }
+[data-theme="dark"] .mrk-podium-stat-val--acc { color: #34d399; }
+
+.mrk-podium-stat-lbl {
+  font-size: 7px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Avatares del podio — tamaños por columna */
+.mrk-av--podium { width: 52px; height: 52px; font-size: 18px; }
+.mrk-podium-col--first  .mrk-av--podium { width: 62px; height: 62px; font-size: 22px; }
+.mrk-podium-col--second .mrk-av--podium { width: 50px; height: 50px; font-size: 18px; }
+.mrk-podium-col--third  .mrk-av--podium { width: 46px; height: 46px; font-size: 16px; }
+
+/* ================================================================
+   TABLA
+================================================================ */
+.mrk-table {
+  display: flex;
+  flex-direction: column;
+  background: var(--mrk-card);
+}
+
+.mrk-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 10px;
+  border-bottom: 0.5px solid var(--mrk-border);
+}
+
+.mrk-table-title {
+  font-size: 13px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-text);
+}
+
+.mrk-table-sub {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.mrk-table-sep {
+  height: 1px;
+  background: var(--mrk-accent);
+  opacity: 0.2;
+}
+
+/* Fila */
+.mrk-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 0.5px solid var(--mrk-border);
+  background: var(--mrk-card);
+  transition: background 0.12s;
+}
+
+.mrk-row:last-child { border-bottom: none; }
+.mrk-row:active { background: var(--mrk-accent-subtle); }
+
+.mrk-row--gold   { border-left: 3px solid var(--mrk-gold); }
+.mrk-row--silver { border-left: 3px solid var(--mrk-silver); }
+.mrk-row--bronze { border-left: 3px solid var(--mrk-bronze); }
+
+.mrk-row--me {
+  background: var(--mrk-accent-subtle) !important;
+  border-left: 3px solid var(--mrk-accent) !important;
+}
+
+/* Número */
+.mrk-row-num {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: var(--mrk-mono);
+  background: var(--mrk-bg);
+  color: var(--mrk-muted);
+  flex-shrink: 0;
+  border-radius: 0;
+}
+
+.mrk-row-num--1 { background: var(--mrk-gold);   color: #fff; }
+.mrk-row-num--2 { background: var(--mrk-silver); color: #fff; }
+.mrk-row-num--3 { background: var(--mrk-bronze); color: #fff; }
+
+/* User */
+.mrk-row-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  min-width: 0;
+  flex: 1;
+}
+
+.mrk-row-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+.mrk-row-name {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mrk-row-sub {
+  font-size: 10px;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-muted);
+}
+
+.mrk-row-you {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-accent);
+  border: 0.5px solid var(--mrk-accent);
+  padding: 1px 5px;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  border-radius: 0;
+}
+
+/* Derecha */
+.mrk-row-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+.mrk-row-pts {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-gold);
+  line-height: 1;
+}
+
+.mrk-row-pts-lbl {
+  font-size: 9px;
+  font-weight: 600;
+  opacity: 0.55;
+  margin-left: 2px;
+}
+
+.mrk-row-acc {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: #1D9E75;
+}
+
+[data-theme="dark"] .mrk-row-acc { color: #34d399; }
+
+/* ================================================================
+   AVATARS
+================================================================ */
+.mrk-av { border-radius: 50%; object-fit: cover; flex-shrink: 0; display: block; }
+.mrk-av--ph { display: flex; align-items: center; justify-content: center; background: var(--mrk-accent); color: #fff; font-weight: 700; font-family: var(--mrk-mono); border-radius: 50%; flex-shrink: 0; }
+.mrk-av--sm { width: 40px; height: 40px; font-size: 14px; }
+
+/* ================================================================
+   EXTRA SMALL
+================================================================ */
+@media screen and (max-width: 380px) {
+  .mrk-podium-col--first  .mrk-av--podium { width: 54px; height: 54px; }
+  .mrk-podium-col--second .mrk-av--podium { width: 44px; height: 44px; }
+  .mrk-podium-col--third  .mrk-av--podium { width: 40px; height: 40px; }
+  .mrk-podium-name { font-size: 10px; max-width: 70px; }
+  .mrk-row         { padding: 10px 12px; }
+  .mrk-row-name    { font-size: 13px; }
+  .mrk-stat-num    { font-size: 24px; }
 }
