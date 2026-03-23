@@ -18,6 +18,7 @@ import StatsPage from "./pages/StatsPage";
 import WorldCupPage from "./pages/WorldCupPage";
 import { PageLoader } from "./components/ComOthers/LoadingStates";
 import "./styles/layout.css";
+import './styles/mobile-theme.css'; // último import siempre
 
 export default function App() {
   const [session, setSession] = useState(null);

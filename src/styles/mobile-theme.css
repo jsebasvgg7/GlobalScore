@@ -1,0 +1,723 @@
+/* ================================================================
+   mobile-theme.css
+   
+   Propósito: En mobile (≤768px) reemplaza TODOS los tokens
+   brutalistas (crema/oscuro) con el purple theme tradicional
+   del sistema (var(--accent), var(--bg), var(--card), etc.)
+   
+   Importar en index.css o App.jsx como último import.
+   
+   NO toca desktop (min-width: 769px).
+================================================================ */
+
+/* ================================================================
+   MEDIA QUERY RAÍZ — todos los overrides van aquí
+================================================================ */
+@media (max-width: 768px) {
+
+  /* ============================================================
+     1. TOKENS BRUTALISTAS → Purple system tokens
+        Afecta: DashboardPage, ProfileSettingsPage, RankingPage,
+        StatsPage, Auth, AdminPage, etc.
+  ============================================================ */
+
+  /* Dashboard / Layout brutalista */
+  :root,
+  [data-theme="light"],
+  [data-theme="dark"] {
+    --lb-cream:    var(--bg)     !important;
+    --lb-surface:  var(--card)   !important;
+    --lb-border:   var(--border) !important;
+    --lb-accent:   var(--accent) !important;
+
+    --sp-cream:    var(--bg)     !important;
+    --sp-surface:  var(--card)   !important;
+    --sp-border:   var(--border) !important;
+    --sp-accent:   var(--accent) !important;
+
+    --pnew-cream:   var(--bg)     !important;
+    --pnew-surface: var(--card)   !important;
+    --pnew-border:  var(--border) !important;
+    --pnew-accent:  var(--accent) !important;
+
+    --auth-cream:   var(--bg)     !important;
+    --auth-surface: var(--card)   !important;
+    --auth-border:  var(--border) !important;
+    --auth-dark:    var(--text-primary) !important;
+    --auth-muted:   var(--muted)  !important;
+  }
+
+  /* ============================================================
+     2. FONDOS DE PÁGINA — reemplazar crema con --bg del sistema
+  ============================================================ */
+
+  /* DashboardPage */
+  .db-root,
+  .db-body,
+  .db-main,
+  .db-content {
+    background: var(--bg) !important;
+  }
+
+  /* RankingPage shell */
+  .lb-shell,
+  .lb-page {
+    background: var(--bg) !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* StatsPage shell */
+  .sp-shell,
+  .sp-main,
+  .sp-scroll {
+    background: var(--bg) !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* ProfileSettingsPage */
+  .pnew-page,
+  .pnew-mobile-wrapper,
+  .pnew-mob-main,
+  .pnew-mob-list,
+  .pnew-mob-row,
+  .pnew-mob-user-row,
+  .pnew-mob-sub-hdr,
+  .pnew-mob-sub-body,
+  .pnew-tab-content,
+  .pnew-stat-cell,
+  .pnew-hist-card,
+  .pnew-crown-row,
+  .pnew-setting-row,
+  .pnew-ach-card,
+  .pnew-month-cell,
+  .pnew-level-block,
+  .pnew-sort-opt,
+  .pnew-form-input,
+  .pnew-banner-opt,
+  .pnew-title-row {
+    background: var(--card) !important;
+  }
+
+  .pnew-page {
+    background: var(--bg) !important;
+  }
+
+  .pnew-mob-main {
+    background: var(--bg) !important;
+  }
+
+  .pnew-mob-banner-grad {
+    background: linear-gradient(135deg, var(--dark-bg) 0%, var(--accent) 50%, var(--accent-light) 100%) !important;
+  }
+
+  .pnew-mob-avatar {
+    border-color: var(--card) !important;
+    background: var(--accent) !important;
+  }
+
+  /* Auth pages */
+  .auth-wrapper {
+    background: var(--bg) !important;
+    padding: 0 !important;
+  }
+
+  .auth-wrapper::before,
+  .auth-wrapper::after {
+    display: none !important;
+  }
+
+  .auth-inner {
+    background: var(--card) !important;
+    padding: 24px 20px 40px !important;
+  }
+
+  .auth-inner::before {
+    display: none !important;
+  }
+
+  .auth-brand-sq {
+    background: var(--accent) !important;
+  }
+
+  .auth-input {
+    background: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--text-primary) !important;
+    border-radius: 10px !important;
+  }
+
+  .auth-input:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 2px rgba(96, 81, 155, 0.15) !important;
+  }
+
+  .auth-cta-btn {
+    background: var(--accent) !important;
+    border-radius: 10px !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .auth-cta-btn:hover {
+    background: var(--accent-hover) !important;
+  }
+
+  .auth-btn-secondary {
+    border-color: var(--border) !important;
+    color: var(--text-primary) !important;
+    border-radius: 10px !important;
+  }
+
+  .auth-sub-header {
+    background: var(--card) !important;
+    border-bottom-color: var(--border) !important;
+  }
+
+  .auth-back-btn {
+    color: var(--accent) !important;
+    border-color: var(--border) !important;
+    border-radius: 8px !important;
+  }
+
+  /* ============================================================
+     3. BORDERS — usar var(--border) del sistema en todas partes
+  ============================================================ */
+
+  /* Auth */
+  .auth-divider-line {
+    background: var(--border) !important;
+  }
+
+  /* ProfileSettings borders */
+  .pnew-hero-stats,
+  .pnew-hero-stat-sep,
+  .pnew-stats-grid,
+  .pnew-stat-cell,
+  .pnew-level-track,
+  .pnew-section-hdr,
+  .pnew-hist-card,
+  .pnew-hist-card-hdr,
+  .pnew-hist-card-ftr,
+  .pnew-hist-body,
+  .pnew-hist-score,
+  .pnew-hist-logo,
+  .pnew-sort-modal,
+  .pnew-settings-card,
+  .pnew-settings-card-hdr,
+  .pnew-setting-row,
+  .pnew-month-grid,
+  .pnew-crown-list,
+  .pnew-titles-list,
+  .pnew-title-row,
+  .pnew-ach-card,
+  .pnew-active-title,
+  .pnew-level-block,
+  .pnew-banner-opt,
+  .pnew-form-input,
+  .pnew-form-actions {
+    border-color: var(--border) !important;
+  }
+
+  /* Mob list */
+  .pnew-mob-list,
+  .pnew-mob-row {
+    border-color: var(--border) !important;
+  }
+
+  .pnew-mob-logout-wrap .pnew-mob-logout {
+    border-color: rgba(239,68,68,0.25) !important;
+  }
+
+  /* ============================================================
+     4. TEXTOS — usar tokens del sistema
+  ============================================================ */
+
+  .pnew-mob-name,
+  .pnew-hist-tname,
+  .pnew-stat-val,
+  .pnew-month-val,
+  .pnew-crowns-num,
+  .pnew-crown-month,
+  .pnew-hist-league,
+  .pnew-hist-date,
+  .pnew-level-pts,
+  .pnew-sort-opt {
+    color: var(--text-primary) !important;
+  }
+
+  .pnew-mob-sub,
+  .pnew-stat-lbl,
+  .pnew-month-lbl,
+  .pnew-crowns-lbl,
+  .pnew-crown-pts,
+  .pnew-level-lbl,
+  .pnew-level-next,
+  .pnew-section-hdr,
+  .pnew-nav-group-lbl,
+  .pnew-hist-league,
+  .pnew-setting-desc,
+  .pnew-ach-desc,
+  .pnew-title-desc,
+  .pnew-form-label,
+  .pnew-form-note {
+    color: var(--muted) !important;
+  }
+
+  .pnew-level-lbl,
+  .pnew-count-badge {
+    color: var(--accent) !important;
+  }
+
+  /* Auth texts */
+  .auth-form-title,
+  .auth-brand-name {
+    color: var(--text-primary) !important;
+  }
+
+  .auth-form-sub,
+  .auth-field-label,
+  .auth-forgot-link a,
+  .auth-forgot-link button,
+  .auth-alt-link {
+    color: var(--muted) !important;
+  }
+
+  .auth-forgot-link a,
+  .auth-alt-link a,
+  .auth-alt-link button {
+    color: var(--accent) !important;
+  }
+
+  /* ============================================================
+     5. ACCENTS — var(--accent) en lugar de #5b4fd8
+  ============================================================ */
+
+  .pnew-count-badge,
+  .pnew-hist-pts,
+  .pnew-save-btn,
+  .pnew-btn-primary,
+  .pnew-nav-item--active {
+    background: var(--accent) !important;
+  }
+
+  .pnew-hist-score {
+    background: var(--glass) !important;
+    color: var(--accent) !important;
+  }
+
+  .pnew-nav-item--active {
+    color: #fff !important;
+    border-left-color: var(--accent) !important;
+  }
+
+  .pnew-level-fill {
+    background: var(--accent) !important;
+  }
+
+  /* ============================================================
+     6. MATCHES DATE LABELS — quitar fondo crema brutalista
+  ============================================================ */
+
+  .matches-date-label::before {
+    background: var(--border) !important;
+  }
+
+  .matches-date-label span {
+    background: var(--bg) !important;
+    border-color: var(--border) !important;
+    color: var(--muted) !important;
+  }
+
+  .matches-date-group:first-child .matches-date-label::before {
+    background: var(--glass) !important;
+  }
+
+  .matches-date-group:first-child .matches-date-label span {
+    background: var(--glass) !important;
+    border-color: rgba(96, 81, 155, 0.25) !important;
+    color: var(--accent) !important;
+  }
+
+  .matches-date-group:first-child .matches-date-label span::before {
+    background: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--glass) !important;
+  }
+
+  /* ============================================================
+     7. SORT / FILTER MODALS — quitar crema brutalista
+  ============================================================ */
+
+  .sort-modal,
+  .filters-modal {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+  }
+
+  .sort-modal-header,
+  .filters-modal-header {
+    background: var(--bg) !important;
+    border-bottom-color: var(--border) !important;
+    color: var(--muted) !important;
+  }
+
+  .sort-option {
+    color: var(--text-primary) !important;
+  }
+
+  .sort-option:hover {
+    background: var(--glass) !important;
+    color: var(--accent) !important;
+  }
+
+  .sort-option.active {
+    background: var(--accent) !important;
+    color: #fff !important;
+  }
+
+  .filter-pill {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .filter-pill:hover {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+  }
+
+  .filter-pill.active {
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: #fff !important;
+  }
+
+  .filter-category-header {
+    border-bottom-color: var(--border) !important;
+  }
+
+  .filter-category-title,
+  .filters-modal-title {
+    color: var(--muted) !important;
+  }
+
+  .active-filter-chip {
+    background: var(--accent) !important;
+  }
+
+  /* ============================================================
+     8. PROFILE HERO MOBILE — tokens del sistema
+  ============================================================ */
+
+  .pnew-mob-banner {
+    background: linear-gradient(135deg, var(--dark-bg), var(--accent), var(--accent-light)) !important;
+  }
+
+  .pnew-hero-banner,
+  .pnew-hero-banner-gradient {
+    background: linear-gradient(135deg, var(--dark-bg) 0%, var(--accent) 50%, var(--accent-light) 100%) !important;
+  }
+
+  .pnew-hero-tag {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+    color: var(--muted) !important;
+  }
+
+  .pnew-hero-level {
+    background: #c9a227 !important;
+    border-color: var(--card) !important;
+  }
+
+  .pnew-hero-stats {
+    border-color: var(--border) !important;
+    background: var(--card) !important;
+  }
+
+  .pnew-hero-stat-sep {
+    background: var(--border) !important;
+  }
+
+  /* ============================================================
+     9. NAVIGATION TABS (mobile sub-header)
+  ============================================================ */
+
+  .pnew-mob-sub-hdr {
+    background: var(--card) !important;
+    border-bottom-color: var(--border) !important;
+  }
+
+  .pnew-mob-back {
+    color: var(--accent) !important;
+    border-color: var(--border) !important;
+  }
+
+  .pnew-mob-back:active {
+    background: var(--glass) !important;
+  }
+
+  .pnew-mob-sub-title {
+    color: var(--text-primary) !important;
+  }
+
+  /* ============================================================
+     10. LOGOUT BUTTON
+  ============================================================ */
+
+  .pnew-mob-logout {
+    background: rgba(239,68,68,0.08) !important;
+    border-color: rgba(239,68,68,0.25) !important;
+    color: #ef4444 !important;
+  }
+
+  /* ============================================================
+     11. DARK MODE — ajustes específicos en mobile
+  ============================================================ */
+
+  [data-theme="dark"] {
+    --pnew-cream:   var(--bg)     !important;
+    --pnew-surface: var(--card)   !important;
+    --pnew-border:  var(--border) !important;
+  }
+
+  [data-theme="dark"] .pnew-mob-row,
+  [data-theme="dark"] .pnew-mob-user-row,
+  [data-theme="dark"] .pnew-mob-row:active,
+  [data-theme="dark"] .pnew-mob-user-row:active {
+    background: var(--card) !important;
+  }
+
+  [data-theme="dark"] .pnew-mob-row:active,
+  [data-theme="dark"] .pnew-mob-user-row:active {
+    background: var(--dark-secondary) !important;
+  }
+
+  [data-theme="dark"] .pnew-stat-cell,
+  [data-theme="dark"] .pnew-hist-card,
+  [data-theme="dark"] .pnew-crown-row,
+  [data-theme="dark"] .pnew-setting-row,
+  [data-theme="dark"] .pnew-ach-card,
+  [data-theme="dark"] .pnew-month-cell,
+  [data-theme="dark"] .pnew-level-block,
+  [data-theme="dark"] .pnew-sort-opt,
+  [data-theme="dark"] .pnew-form-input,
+  [data-theme="dark"] .pnew-banner-opt,
+  [data-theme="dark"] .pnew-title-row {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+  }
+
+  [data-theme="dark"] .pnew-hist-card-hdr,
+  [data-theme="dark"] .pnew-hist-card-ftr,
+  [data-theme="dark"] .pnew-crowns-hero,
+  [data-theme="dark"] .pnew-settings-card-hdr {
+    background: var(--dark-secondary) !important;
+    border-color: var(--border) !important;
+  }
+
+  [data-theme="dark"] .auth-input {
+    background: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--text-primary) !important;
+  }
+
+  [data-theme="dark"] .sort-modal,
+  [data-theme="dark"] .filters-modal {
+    background: var(--card) !important;
+  }
+
+  [data-theme="dark"] .sort-modal-header,
+  [data-theme="dark"] .filters-modal-header {
+    background: var(--dark-secondary) !important;
+  }
+
+  /* ============================================================
+     12. GRID CONTAINERS — quitar crema en mobile
+  ============================================================ */
+
+  .leagues-grid,
+  .awards-grid {
+    padding: 0 !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ============================================================
+     13. SCROLLBAR — adaptar al tema
+  ============================================================ */
+
+  .db-content::-webkit-scrollbar-thumb {
+    background: var(--border) !important;
+  }
+
+  /* ============================================================
+     14. WELCOME SCREEN — mantener light mode forzado
+         (no cambiar, ya funciona bien)
+  ============================================================ */
+
+  /* ============================================================
+     15. NAVIGATION TABS (dentro de cards)
+  ============================================================ */
+
+  .navigation-tabs,
+  .navigation-tabs-two {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+  }
+
+  .nav-tab,
+  .nav-tab-two {
+    color: var(--muted) !important;
+  }
+
+  .nav-tab:hover,
+  .nav-tab-two:hover {
+    color: var(--text-primary) !important;
+  }
+
+  /* ============================================================
+     16. NOTIFICACIONES — topbar / filtros
+  ============================================================ */
+
+  .np-topbar,
+  .np-filters,
+  .np-banner,
+  .np-card {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+  }
+
+  .np-filter-btn {
+    color: var(--muted) !important;
+  }
+
+  .np-filter-btn.active {
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: #fff !important;
+  }
+
+  /* ============================================================
+     17. ADMIN PAGE — quitar crema
+  ============================================================ */
+
+  .admin-page,
+  .admin-stat-card,
+  .admin-item-card,
+  .admin-nav-tabs,
+  .admin-content-area,
+  .search-bar {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+  }
+
+  .admin-stat-card .stat-value,
+  .item-title,
+  .item-teams {
+    color: var(--text-primary) !important;
+  }
+
+  .item-meta,
+  .item-subtitle,
+  .admin-stat-card .stat-detail {
+    color: var(--muted) !important;
+  }
+
+  /* ============================================================
+     18. WORLD CUP PAGE — si existe
+  ============================================================ */
+
+  .worldcup-container,
+  .worldcup-page {
+    background: var(--bg) !important;
+  }
+
+  /* ============================================================
+     19. SCORE / MATCH CARDS — quitar crema brutalista
+  ============================================================ */
+
+  .match-card-light,
+  .league-card-light,
+  .award-card-light {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+  }
+
+  .score-cell-light {
+    background: var(--dark-secondary) !important;
+    border-color: var(--border) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .match-time-center {
+    background: var(--dark-secondary) !important;
+    border-color: var(--border) !important;
+    color: var(--muted) !important;
+  }
+
+  /* ============================================================
+     20. EMPTY STATES — brutalista → sistema
+  ============================================================ */
+
+  .matches-empty-icon-wrap::before {
+    border-color: var(--border) !important;
+  }
+
+  .matches-empty-icon-wrap::after {
+    border-color: var(--glass) !important;
+  }
+
+  .matches-empty-icon-inner svg {
+    stroke: var(--muted) !important;
+    opacity: 0.4;
+  }
+
+  .matches-empty-deco-line {
+    background: var(--border) !important;
+  }
+
+  .matches-empty-title {
+    color: var(--muted) !important;
+  }
+
+  .matches-empty-sub {
+    color: var(--muted) !important;
+    opacity: 0.6;
+  }
+
+  .matches-empty-filter-chip {
+    background: var(--glass) !important;
+    border-color: var(--accent-light, rgba(96,81,155,0.3)) !important;
+    color: var(--accent) !important;
+  }
+}
+
+/* ================================================================
+   EXTRA SMALL — ajustes adicionales para pantallas muy pequeñas
+================================================================ */
+@media (max-width: 480px) {
+
+  .auth-inner {
+    padding: 20px 16px 36px !important;
+  }
+
+  .auth-form-title {
+    font-size: 26px !important;
+  }
+
+  .pnew-tab-content {
+    padding: 16px !important;
+  }
+
+  .pnew-stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .pnew-achievements-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
