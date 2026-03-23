@@ -631,7 +631,7 @@
 /* ================================================================
    MOBILE MAIN
 ================================================================ */
-.pnew-mob-main { padding-bottom: 100px; }
+.pnew-mob-main { padding-bottom: 70px; }
 
 .pnew-mob-header { position: relative; }
 
@@ -730,7 +730,7 @@
    sin height fijo, sin overflow, para que el scroll nativo funcione */
 .pnew-mob-sub-body {
   flex: 1;
-  padding-bottom: 100px;        /* espacio para la bottom nav */
+  padding-bottom: 150px;        /* espacio para la bottom nav */
 }
 
 /* ================================================================
