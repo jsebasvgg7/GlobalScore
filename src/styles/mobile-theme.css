@@ -233,7 +233,14 @@
   .pnew-mob-logout-wrap .pnew-mob-logout {
     border-color: rgba(239,68,68,0.25) !important;
   }
-
+@media (max-width: 768px) {
+ 
+  .pnew-mob-list {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+ 
+}
   /* ============================================================
      4. TEXTOS — usar tokens del sistema
   ============================================================ */
@@ -720,4 +727,319 @@
   .pnew-achievements-grid {
     grid-template-columns: 1fr 1fr !important;
   }
+}
+/* ================================================================
+   PATCH — Textos mobile Ranking y Perfil
+   Agregar al FINAL de src/styles/mobile-theme.css
+   
+   Problema: colores hardcodeados (#1a1a2e, #1a1d2e) del brutalismo
+   no respetan el data-theme en mobile, causando texto negro
+   sobre fondos oscuros (dark mode) o texto invisible en light mode.
+================================================================ */
+
+@media (max-width: 768px) {
+
+  /* ============================================================
+     MOBILE RANKING — MobileRanking.css
+     Textos del podio, tabla, stats row y HOF
+  ============================================================ */
+
+  /* Nombres en podio */
+  .mrk-podium-name,
+  .mrk-row-name,
+  .mrk-hof-name,
+  .mrk-hof-list-name {
+    color: var(--text-primary) !important;
+  }
+
+  /* Sub-textos (aciertos, coronas, etc.) */
+  .mrk-row-sub,
+  .mrk-hof-list-crowns,
+  .mrk-hof-stat-lbl,
+  .mrk-podium-stat-lbl,
+  .mrk-stat-lbl,
+  .mrk-tab:not(.active) {
+    color: var(--muted) !important;
+  }
+
+  /* Stat nums (28, 25 registrados…) */
+  .mrk-stat-num {
+    color: var(--text-primary) !important;
+  }
+
+  /* Líder nombre y pts */
+  .mrk-stat-leader-name,
+  .mrk-stat-leader-pts {
+    color: var(--mrk-gold, #c9a227) !important;
+  }
+
+  /* Tabla header */
+  .mrk-table-title {
+    color: var(--text-primary) !important;
+  }
+
+  .mrk-table-sub {
+    color: var(--muted) !important;
+  }
+
+  /* Stat vals del HOF */
+  .mrk-hof-stat-val {
+    color: var(--text-primary) !important;
+  }
+
+  /* Fondos de filas y podio — usar variables del sistema */
+  .mrk-root,
+  .mrk-tabs,
+  .mrk-stats-row,
+  .mrk-table,
+  .mrk-table-header {
+    background: var(--card) !important;
+  }
+
+  .mrk-podium-wrap {
+    background: var(--bg) !important;
+  }
+
+  .mrk-row {
+    background: var(--card) !important;
+  }
+
+  .mrk-row:active {
+    background: var(--glass) !important;
+  }
+
+  /* Podio step backgrounds */
+  .mrk-hof-list-label {
+    background: var(--card) !important;
+    color: var(--muted) !important;
+  }
+
+  .mrk-hof-list-row {
+    background: var(--card) !important;
+  }
+
+  .mrk-hof-card {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+  }
+
+  .mrk-hof-stats {
+    background: var(--bg) !important;
+    border-color: var(--border) !important;
+  }
+
+  /* Número de posición en tabla (no top 3) */
+  .mrk-row-num:not(.mrk-row-num--1):not(.mrk-row-num--2):not(.mrk-row-num--3) {
+    background: var(--bg) !important;
+    color: var(--muted) !important;
+  }
+
+  /* ============================================================
+     MOBILE PERFIL — ProfileSettingsPage.css (mobile view)
+     Textos del hero, lista de opciones, stats
+  ============================================================ */
+
+  /* Hero nombre y email */
+  .pnew-mob-name {
+    color: var(--text-primary) !important;
+  }
+
+  .pnew-mob-sub {
+    color: var(--muted) !important;
+  }
+
+  /* Opciones de lista (Estadísticas, Logros, etc.) */
+  .pnew-mob-row-lbl {
+    color: var(--text-primary) !important;
+  }
+
+  /* Stat valores en hero */
+  .pnew-hero-stat-val {
+    color: var(--text-primary) !important;
+  }
+
+  .pnew-hero-stat-lbl {
+    color: var(--muted) !important;
+  }
+
+  /* Nombre y email en hero desktop (panel derecho en mobile sub-view) */
+  .pnew-hero-name {
+    color: var(--text-primary) !important;
+  }
+
+  .pnew-hero-email,
+  .pnew-hero-bio {
+    color: var(--muted) !important;
+  }
+
+  /* Stats grid valores */
+  .pnew-stat-val {
+    color: var(--text-primary) !important;
+  }
+
+  .pnew-stat-lbl {
+    color: var(--muted) !important;
+  }
+
+  /* Historial */
+  .pnew-hist-tname {
+    color: var(--text-primary) !important;
+  }
+
+  .pnew-hist-league,
+  .pnew-hist-date {
+    color: var(--muted) !important;
+  }
+
+  /* Level block */
+  .pnew-level-pts {
+    color: var(--text-primary) !important;
+  }
+
+  .pnew-level-next {
+    color: var(--muted) !important;
+  }
+
+  /* Achievements */
+  .pnew-ach-name {
+    color: var(--text-primary) !important;
+  }
+
+  .pnew-ach-desc {
+    color: var(--muted) !important;
+  }
+
+  /* Crown list */
+  .pnew-crown-month {
+    color: var(--text-primary) !important;
+  }
+
+  /* Settings rows */
+  .pnew-setting-lbl {
+    color: var(--text-primary) !important;
+  }
+
+  .pnew-setting-desc {
+    color: var(--muted) !important;
+  }
+
+  /* Sort modal */
+  .pnew-sort-opt {
+    color: var(--text-primary) !important;
+  }
+
+  /* Month grid */
+  .pnew-month-val {
+    color: var(--text-primary) !important;
+  }
+
+  .pnew-month-lbl {
+    color: var(--muted) !important;
+  }
+
+  /* Crowns hero */
+  .pnew-crowns-num {
+    color: var(--text-primary) !important;
+  }
+
+  .pnew-crowns-lbl {
+    color: var(--muted) !important;
+  }
+
+  /* ============================================================
+     DARK MODE ESPECÍFICO — asegurar blanco en dark
+  ============================================================ */
+
+  [data-theme="dark"] .mrk-podium-name,
+  [data-theme="dark"] .mrk-row-name,
+  [data-theme="dark"] .mrk-stat-num,
+  [data-theme="dark"] .mrk-table-title,
+  [data-theme="dark"] .mrk-hof-name,
+  [data-theme="dark"] .mrk-hof-stat-val,
+  [data-theme="dark"] .mrk-hof-list-name,
+  [data-theme="dark"] .pnew-mob-name,
+  [data-theme="dark"] .pnew-mob-row-lbl,
+  [data-theme="dark"] .pnew-hero-stat-val,
+  [data-theme="dark"] .pnew-hero-name,
+  [data-theme="dark"] .pnew-stat-val,
+  [data-theme="dark"] .pnew-hist-tname,
+  [data-theme="dark"] .pnew-level-pts,
+  [data-theme="dark"] .pnew-ach-name,
+  [data-theme="dark"] .pnew-crown-month,
+  [data-theme="dark"] .pnew-setting-lbl,
+  [data-theme="dark"] .pnew-sort-opt,
+  [data-theme="dark"] .pnew-month-val,
+  [data-theme="dark"] .pnew-crowns-num {
+    color: #f0f1f7 !important;
+  }
+
+  [data-theme="dark"] .mrk-row-sub,
+  [data-theme="dark"] .mrk-stat-lbl,
+  [data-theme="dark"] .mrk-table-sub,
+  [data-theme="dark"] .mrk-hof-stat-lbl,
+  [data-theme="dark"] .mrk-hof-list-crowns,
+  [data-theme="dark"] .mrk-tab:not(.active),
+  [data-theme="dark"] .pnew-mob-sub,
+  [data-theme="dark"] .pnew-hero-stat-lbl,
+  [data-theme="dark"] .pnew-hero-email,
+  [data-theme="dark"] .pnew-hero-bio,
+  [data-theme="dark"] .pnew-stat-lbl,
+  [data-theme="dark"] .pnew-hist-league,
+  [data-theme="dark"] .pnew-hist-date,
+  [data-theme="dark"] .pnew-level-next,
+  [data-theme="dark"] .pnew-ach-desc,
+  [data-theme="dark"] .pnew-setting-desc,
+  [data-theme="dark"] .pnew-month-lbl,
+  [data-theme="dark"] .pnew-crowns-lbl {
+    color: #b4b8d0 !important;
+  }
+
+  /* ============================================================
+     LIGHT MODE ESPECÍFICO — asegurar oscuro en light
+  ============================================================ */
+
+  [data-theme="light"] .mrk-podium-name,
+  [data-theme="light"] .mrk-row-name,
+  [data-theme="light"] .mrk-stat-num,
+  [data-theme="light"] .mrk-table-title,
+  [data-theme="light"] .mrk-hof-name,
+  [data-theme="light"] .mrk-hof-stat-val,
+  [data-theme="light"] .mrk-hof-list-name,
+  [data-theme="light"] .pnew-mob-name,
+  [data-theme="light"] .pnew-mob-row-lbl,
+  [data-theme="light"] .pnew-hero-stat-val,
+  [data-theme="light"] .pnew-hero-name,
+  [data-theme="light"] .pnew-stat-val,
+  [data-theme="light"] .pnew-hist-tname,
+  [data-theme="light"] .pnew-level-pts,
+  [data-theme="light"] .pnew-ach-name,
+  [data-theme="light"] .pnew-crown-month,
+  [data-theme="light"] .pnew-setting-lbl,
+  [data-theme="light"] .pnew-sort-opt,
+  [data-theme="light"] .pnew-month-val,
+  [data-theme="light"] .pnew-crowns-num {
+    color: #111111 !important;
+  }
+
+  [data-theme="light"] .mrk-row-sub,
+  [data-theme="light"] .mrk-stat-lbl,
+  [data-theme="light"] .mrk-table-sub,
+  [data-theme="light"] .mrk-hof-stat-lbl,
+  [data-theme="light"] .mrk-hof-list-crowns,
+  [data-theme="light"] .mrk-tab:not(.active),
+  [data-theme="light"] .pnew-mob-sub,
+  [data-theme="light"] .pnew-hero-stat-lbl,
+  [data-theme="light"] .pnew-hero-email,
+  [data-theme="light"] .pnew-hero-bio,
+  [data-theme="light"] .pnew-stat-lbl,
+  [data-theme="light"] .pnew-hist-league,
+  [data-theme="light"] .pnew-hist-date,
+  [data-theme="light"] .pnew-level-next,
+  [data-theme="light"] .pnew-ach-desc,
+  [data-theme="light"] .pnew-setting-desc,
+  [data-theme="light"] .pnew-month-lbl,
+  [data-theme="light"] .pnew-crowns-lbl {
+    color: #777777 !important;
+  }
+
 }

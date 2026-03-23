@@ -47,10 +47,6 @@
 
 /* ================================================================
    DESKTOP LAYOUT
-   IZQUIERDA = contenido (flex: 1, scrolleable)
-   DERECHA   = hero + nav (340px, sticky, scroll propio)
-   FIX BUG PC: el panel derecho tiene height fijo y overflow-y:auto
-   para que NUNCA empuje el layout al hacer scroll interno
 ================================================================ */
 .pnew-desktop-layout {
   display: grid;
@@ -711,7 +707,7 @@
   flex-direction: column;
   width: 100%;
   overflow-x: hidden;
-  padding-bottom: 80px;
+  padding-bottom: 50px;
 }
 
 /* ── Header: banner + avatar superpuesto + user row ── */
@@ -800,11 +796,12 @@
 
 /* ── Lista de opciones ── */
 .pnew-mob-list {
-  margin: 14px 16px 0;
+  margin: 0px 0px 0;
   border: 0.5px solid var(--pnew-border);
   overflow: hidden;
   width: calc(100% - 32px);
   box-sizing: border-box;
+  width: 100%;
 }
 
 .pnew-mob-row {
@@ -834,9 +831,10 @@
 
 /* ── Logout ── */
 .pnew-mob-logout-wrap {
-  margin: 14px 16px 0;
+  margin: 0;
   width: calc(100% - 32px);
   box-sizing: border-box;
+  width: 100%;
 }
 .pnew-mob-logout {
   display: flex; align-items: center; justify-content: center; gap: 10px;
