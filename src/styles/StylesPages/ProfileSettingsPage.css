@@ -627,147 +627,161 @@
 }
 .pnew-empty svg { opacity: 0.4; }
 .pnew-empty p { font-size: 13px; font-weight: 600; font-family: var(--pnew-mono); letter-spacing: 0.08em; margin: 0; }
-
 /* ================================================================
-   MOBILE MAIN
+   MOBILE MAIN — reemplaza TODA la sección desde .pnew-mob-main
+   hasta .pnew-mob-logout:active inclusive en ProfileSettingsPage.css
 ================================================================ */
-.pnew-mob-main { padding-bottom: 70px; }
 
-.pnew-mob-header { position: relative; }
-
-.pnew-mob-banner { position: relative; height: 128px; overflow: hidden; }
-.pnew-mob-banner-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.pnew-mob-banner-grad { position: absolute; inset: 0; background: linear-gradient(135deg, #3b1fa3, var(--pnew-accent), #8b5cf6); }
-.pnew-mob-banner-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.38)); }
-
-.pnew-mob-user-row {
-  display: flex; align-items: center; gap: 14px;
-  padding: 6px 18px 16px; background: var(--card);
-  border-bottom: 0.5px solid var(--pnew-border);
-  cursor: pointer; transition: background 0.12s;
+.pnew-mob-main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+  padding-bottom: 80px;
 }
-.pnew-mob-user-row:active { background: var(--pnew-surface); }
+
+/* ── Header: banner + avatar superpuesto + user row ── */
+.pnew-mob-header {
+  position: relative;   /* contexto para el avatar absoluto */
+  width: 100%;
+}
+
+/* Banner */
+.pnew-mob-banner {
+  position: relative;
+  width: 100%;
+  height: 110px;
+  overflow: hidden;
+  display: block;
+}
+.pnew-mob-banner-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+}
+.pnew-mob-banner-grad {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #3b1fa3, var(--pnew-accent), #8b5cf6);
+}
+.pnew-mob-banner-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.35));
+}
+
+.pnew-mob-avatar-wrap {
+  position: absolute;
+  bottom: auto;
+  top: 134px;        /* altura del banner (110px) - mitad del avatar (32px) = 78px */
+  left: 16px;
+  z-index: 10;
+}
+ 
 
 .pnew-mob-avatar {
-  position: relative; width: 64px; height: 64px;
-  border-radius: 50%; border: 3px solid var(--card);
-  background: var(--pnew-accent); display: flex; align-items: center; justify-content: center;
-  overflow: hidden; flex-shrink: 0; margin-top: -32px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid var(--pnew-cream);
+  background: var(--pnew-accent);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
   font-size: 24px; font-weight: 800; color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  flex-shrink: 0;
 }
 .pnew-mob-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-.pnew-mob-user-info { flex: 1; min-width: 0; }
-.pnew-mob-name { display: block; font-size: 16px; font-weight: 700; color: var(--text-primary); font-family: var(--pnew-sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pnew-mob-sub { display: block; font-size: 12px; color: var(--muted); font-family: var(--pnew-sans); margin-top: 2px; }
+/* User row — padding-left deja espacio al avatar */
+.pnew-mob-user-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* 16px margen + 64px avatar + 12px gap = 92px de padding-left */
+  padding: 10px 16px 14px 96px;
+  /* top padding = mitad del avatar (32px) + espacio visual (10px) */
+  padding-top: 42px;
+  background: var(--pnew-cream);
+  border-bottom: 0.5px solid var(--pnew-border);
+  cursor: pointer;
+  transition: background 0.12s;
+  width: 100%;
+  box-sizing: border-box;
+}
+.pnew-mob-user-row:active { background: var(--pnew-surface); }
 
-.pnew-mob-list { margin: 14px 16px 0; border: 0.5px solid var(--pnew-border); overflow: hidden; }
+.pnew-mob-user-info { flex: 1; min-width: 0; }
+.pnew-mob-name {
+  display: block;
+  font-size: 16px; font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--pnew-sans);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pnew-mob-sub {
+  display: block;
+  font-size: 12px; color: var(--muted);
+  font-family: var(--pnew-sans); margin-top: 2px;
+}
+
+/* ── Lista de opciones ── */
+.pnew-mob-list {
+  margin: 14px 16px 0;
+  border: 0.5px solid var(--pnew-border);
+  overflow: hidden;
+  width: calc(100% - 32px);
+  box-sizing: border-box;
+}
 
 .pnew-mob-row {
   display: flex; align-items: center; gap: 14px;
-  padding: 15px 16px; background: var(--card);
+  padding: 13px 16px;
+  background: var(--pnew-cream);
   border: none; border-bottom: 0.5px solid var(--pnew-border);
   width: 100%; cursor: pointer; text-align: left;
   transition: background 0.12s;
+  box-sizing: border-box;
 }
 .pnew-mob-row:last-child { border-bottom: none; }
 .pnew-mob-row:active { background: var(--pnew-surface); }
 .pnew-mob-row--toggle { cursor: default; }
 
-.pnew-mob-row-icon { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 8px; }
-.pnew-mob-row-lbl { flex: 1; font-size: 15px; font-weight: 500; color: var(--text-primary); font-family: var(--pnew-sans); }
+.pnew-mob-row-icon {
+  width: 36px; height: 36px; min-width: 36px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; border-radius: 8px;
+}
+.pnew-mob-row-lbl {
+  flex: 1;
+  font-size: 15px; font-weight: 500;
+  color: var(--text-primary);
+  font-family: var(--pnew-sans);
+}
 
-.pnew-mob-logout-wrap { margin: 14px 16px 0; }
+/* ── Logout ── */
+.pnew-mob-logout-wrap {
+  margin: 14px 16px 0;
+  width: calc(100% - 32px);
+  box-sizing: border-box;
+}
 .pnew-mob-logout {
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; padding: 14px; background: rgba(239,68,68,0.08);
-  border: 0.5px solid rgba(239,68,68,0.25); color: #ef4444;
-  font-size: 15px; font-weight: 700; font-family: var(--pnew-sans); cursor: pointer;
-  transition: background 0.15s;
+  width: 100%; padding: 14px;
+  background: rgba(239,68,68,0.08);
+  border: 0.5px solid rgba(239,68,68,0.25);
+  color: #ef4444;
+  font-size: 15px; font-weight: 700; font-family: var(--pnew-sans);
+  cursor: pointer; transition: background 0.15s;
+  box-sizing: border-box;
 }
 .pnew-mob-logout:active { background: rgba(239,68,68,0.14); }
 
-/* ================================================================
-   MOBILE SUB VIEW
-   FIX BUG MOBILE: el header oculta el gs-mobile-header (56px),
-   necesitamos padding-top 56px + altura del sub-header propio (60px)
-   para que el contenido no quede oculto debajo de ambos
-================================================================ */
-.pnew-mob-sub {
-  display: flex; flex-direction: column;
-  min-height: 100dvh;           /* dynamic viewport height */
-  background: var(--pnew-cream);
-  /* FIX: no ponemos overflow:hidden aquí, dejamos que el body scrollee normalmente */
-}
-
-.pnew-mob-sub-hdr {
-  display: flex; align-items: center; gap: 10px;
-  /* FIX BUG: padding-top = altura del gs-mobile-header (56px) */
-  padding: 60px 16px 14px;
-  border-bottom: 0.5px solid var(--pnew-border);
-  background: var(--pnew-surface);
-  flex-shrink: 0;
-  /* FIX: sticky para que el header del sub-view siempre sea visible */
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-
-.pnew-mob-back {
-  width: 36px; height: 36px;
-  background: transparent; border: none;
-  color: var(--text-primary); display: flex; align-items: center; justify-content: center;
-  cursor: pointer; flex-shrink: 0;
-}
-.pnew-mob-back:active { opacity: 0.5; }
-
-.pnew-mob-sub-title {
-  margin: 0; font-size: 19px; font-weight: 700;
-  color: var(--text-primary); font-family: var(--pnew-sans); letter-spacing: -0.02em;
-}
-
-/* FIX BUG MOBILE: el body del sub-view ahora es libre,
-   sin height fijo, sin overflow, para que el scroll nativo funcione */
-.pnew-mob-sub-body {
-  flex: 1;
-  padding-bottom: 150px;        /* espacio para la bottom nav */
-}
-
-/* ================================================================
-   DELETE MODAL
-================================================================ */
-.pnew-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 9998; }
-
-.pnew-modal-danger {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: var(--card); padding: 28px 24px 40px;
-  z-index: 9999; text-align: center;
-  border-top: 2px solid rgba(239,68,68,0.3);
-  animation: pnew-slide-up 0.25s ease;
-}
-
-@keyframes pnew-slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-.pnew-modal-danger h3 { margin: 12px 0 10px; font-size: 19px; font-weight: 800; color: var(--text-primary); font-family: var(--pnew-sans); }
-.pnew-modal-danger p { font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0 0 22px; font-family: var(--pnew-sans); }
-.pnew-modal-danger strong { color: #ef4444; }
-
-.pnew-modal-actions { display: flex; gap: 10px; }
-.pnew-modal-actions > button { flex: 1; padding: 14px; font-size: 14px; font-weight: 700; font-family: var(--pnew-sans); cursor: pointer; }
-
-@media (min-width: 769px) {
-  .pnew-modal-danger {
-    bottom: auto; top: 50%; left: 50%; right: auto;
-    transform: translate(-50%, -50%);
-    width: 90%; max-width: 440px;
-    border-top: 2px solid rgba(239,68,68,0.3);
-    animation: pnew-fade 0.2s ease;
-  }
-  @keyframes pnew-fade { from { opacity: 0; } to { opacity: 1; } }
-  .pnew-modal-actions { flex-direction: row; }
-}
-
+/* ── Dark mode patches ── */
+[data-theme="dark"] .pnew-mob-user-row { background: var(--pnew-cream); }
+[data-theme="dark"] .pnew-mob-user-row:active { background: var(--pnew-surface); }
+[data-theme="dark"] .pnew-mob-avatar { border-color: var(--pnew-cream); }
+[data-theme="dark"] .pnew-mob-row { background: var(--pnew-cream); }
+[data-theme="dark"] .pnew-mob-row:active { background: var(--pnew-surface); }
 /* ================================================================
    SPINNER
 ================================================================ */

@@ -731,8 +731,10 @@ function ProfileHeroDesktop({ userData, currentUser }) {
 function MobileMainView({ userData, currentUser, preferences, onTabClick, theme, toggleTheme, onLogout }) {
   return (
     <div className="pnew-mob-main">
-      {/* Compact header */}
+ 
+      {/* ── HEADER: banner + avatar superpuesto ── */}
       <div className="pnew-mob-header">
+        {/* Banner */}
         <div className="pnew-mob-banner">
           {userData.equipped_banner_url
             ? <img src={userData.equipped_banner_url} alt="banner" className="pnew-mob-banner-img" />
@@ -740,22 +742,32 @@ function MobileMainView({ userData, currentUser, preferences, onTabClick, theme,
           }
           <div className="pnew-mob-banner-overlay" />
         </div>
-        <div className="pnew-mob-user-row" onClick={() => onTabClick('edit')}>
-          <div className="pnew-mob-avatar">
+ 
+        {/* Avatar flotante — FUERA del user-row, posición absoluta */}
+        <div className="pnew-mob-avatar-wrap">
+          <div className="pnew-mob-avatar" onClick={() => onTabClick('edit')}>
             {userData.avatar_url
               ? <img src={userData.avatar_url} alt={userData.name} />
               : <span>{userData.name?.charAt(0)?.toUpperCase()}</span>
             }
           </div>
+        </div>
+ 
+        {/* User info row — sin avatar adentro */}
+        <div className="pnew-mob-user-row" onClick={() => onTabClick('edit')}>
           <div className="pnew-mob-user-info">
             <span className="pnew-mob-name">{userData.name}</span>
-            <span className="pnew-mob-sub">{userData.nationality || userData.email || 'Ver perfil'}</span>
+            <span className="pnew-mob-sub">
+              {userData.nationality && userData.nationality !== 'null'
+                ? userData.nationality
+                : userData.email || 'Ver perfil'}
+            </span>
           </div>
-          <ChevronRight size={16} />
+          <ChevronRight size={16} style={{ color: 'var(--muted)', flexShrink: 0 }} />
         </div>
       </div>
-
-      {/* Lista limpia */}
+ 
+      {/* ── Lista de opciones ── */}
       <div className="pnew-mob-list">
         {/* Dark mode toggle */}
         <div className="pnew-mob-row pnew-mob-row--toggle">
@@ -767,7 +779,7 @@ function MobileMainView({ userData, currentUser, preferences, onTabClick, theme,
             <div className="pnew-toggle-knob" />
           </button>
         </div>
-
+ 
         {/* Nav items */}
         {NAV_ITEMS.map(item => {
           const Icon = item.icon;
@@ -789,7 +801,7 @@ function MobileMainView({ userData, currentUser, preferences, onTabClick, theme,
           );
         })}
       </div>
-
+ 
       {/* Logout */}
       <div className="pnew-mob-logout-wrap">
         <button className="pnew-mob-logout" onClick={onLogout}>
@@ -799,6 +811,7 @@ function MobileMainView({ userData, currentUser, preferences, onTabClick, theme,
     </div>
   );
 }
+ 
 
 /* ═══════════════════════════════════════════════════════════════
    MOBILE SUB-VIEW (header con back + contenido)
