@@ -857,9 +857,239 @@
 [data-theme="dark"] .pnew-mob-row { background: var(--pnew-cream); }
 [data-theme="dark"] .pnew-mob-row:active { background: var(--pnew-surface); }
 /* ================================================================
-   PATCH v3 — Layout más grande + panel derecho ampliado
+   PATCH — Mobile Profile: estética index.css + hero centrado
    Agregar al final de ProfileSettingsPage.css
-   (estos bloques sobreescriben los originales via cascada)
+================================================================ */
+
+/* ================================================================
+   OVERRIDE DE TOKENS — usar variables de index.css en mobile
+================================================================ */
+@media (max-width: 768px) {
+  .pnew-page {
+    background: var(--bg) !important;
+    font-family: 'Sora', Inter, sans-serif;
+  }
+
+  /* Sub-view también usa el fondo del sistema */
+  .pnew-mob-sub-hdr,
+  .pnew-mob-sub-body,
+  .pnew-tab-content {
+    background: var(--bg);
+  }
+
+  .pnew-tab-content {
+    padding: 16px 16px;
+  }
+}
+
+/* ================================================================
+   HERO MOBILE — banner + avatar CENTRADO + nombre debajo
+================================================================ */
+@media (max-width: 768px) {
+
+  /* Contenedor del header */
+  .pnew-mob-header {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--card);
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+
+  /* Banner */
+  .pnew-mob-banner {
+    position: relative;
+    width: 100%;
+    height: 130px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .pnew-mob-banner-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+  }
+
+  .pnew-mob-banner-grad {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #3b1fa3, var(--accent), #8b5cf6);
+  }
+
+  .pnew-mob-banner-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+  }
+
+  /* Avatar — CENTRADO, sobresale del banner */
+  .pnew-mob-avatar-wrap {
+    position: relative;
+    top: unset; left: unset;
+    z-index: 10;
+    margin-top: -44px;     /* sube para solapar el banner */
+    align-self: center;
+  }
+
+  .pnew-mob-avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    border: 4px solid var(--card);
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    font-size: 32px; font-weight: 800; color: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+
+  .pnew-mob-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* User row — centrado, sin padding-left de avatar lateral */
+  .pnew-mob-user-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+    padding: 10px 16px 0;
+    background: transparent;
+    border-bottom: none;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .pnew-mob-user-row:active { background: transparent; }
+
+  .pnew-mob-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .pnew-mob-name {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-family: 'Sora', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .pnew-mob-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-family: 'Sora', sans-serif;
+  }
+
+  /* Ocultar el chevron en modo centrado */
+  .pnew-mob-user-row > svg { display: none; }
+
+  /* ================================================================
+     LISTA DE OPCIONES — estilo card redondeada como otras páginas
+  ================================================================ */
+
+  .pnew-mob-list {
+    margin: 16px 16px 0;
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--card);
+    box-shadow: var(--small-shadow);
+    border: 1px solid var(--border);
+    width: calc(100% - 32px);
+    box-sizing: border-box;
+  }
+
+  .pnew-mob-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px;
+    background: var(--card);
+    border: none;
+    border-bottom: 1px solid var(--border);
+    width: 100%; cursor: pointer; text-align: left;
+    transition: background 0.12s;
+    box-sizing: border-box;
+  }
+
+  .pnew-mob-row:last-child { border-bottom: none; }
+  .pnew-mob-row:active { background: var(--bg); }
+  .pnew-mob-row--toggle { cursor: default; }
+
+  /* Iconos con fondo circular suave */
+  .pnew-mob-row-icon {
+    width: 38px; height: 38px; min-width: 38px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    border-radius: 10px;                 /* redondeado como la imagen */
+  }
+
+  .pnew-mob-row-lbl {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-family: 'Sora', sans-serif;
+  }
+
+  /* Toggle estilo index */
+  .pnew-toggle {
+    width: 51px; height: 31px; border-radius: 16px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .pnew-toggle--on { background: var(--accent); }
+
+  .pnew-toggle-knob {
+    width: 25px; height: 25px;
+    top: 3px; left: 3px;
+    border-radius: 50%;
+  }
+
+  .pnew-toggle--on .pnew-toggle-knob { transform: translateX(20px); }
+
+  /* ================================================================
+     LOGOUT — mismo estilo que lista
+  ================================================================ */
+  .pnew-mob-logout-wrap {
+    margin: 16px 16px 0;
+    width: calc(100% - 32px);
+    box-sizing: border-box;
+  }
+
+  .pnew-mob-logout {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    color: #ef4444;
+    font-size: 16px; font-weight: 600; font-family: 'Sora', sans-serif;
+    cursor: pointer; transition: background 0.15s;
+    box-shadow: var(--small-shadow);
+  }
+
+  .pnew-mob-logout:active { background: rgba(239, 68, 68, 0.06); }
+
+  /* ================================================================
+     DARK MODE PATCHES — mobile
+  ================================================================ */
+  [data-theme="dark"] .pnew-mob-header { background: var(--card); border-bottom-color: var(--border); }
+  [data-theme="dark"] .pnew-mob-avatar { border-color: var(--card); }
+  [data-theme="dark"] .pnew-mob-list   { background: var(--card); border-color: var(--border); }
+  [data-theme="dark"] .pnew-mob-row    { background: var(--card); border-bottom-color: var(--border); }
+  [data-theme="dark"] .pnew-mob-row:active  { background: var(--bg); }
+  [data-theme="dark"] .pnew-mob-logout { background: var(--card); border-color: var(--border); }
+  [data-theme="dark"] .pnew-mob-logout:active { background: rgba(239,68,68,0.08); }
+}
+/* ================================================================
+   PATCH v3 
 ================================================================ */
 
 /* ── DESKTOP LAYOUT — columnas rebalanceadas ── */
