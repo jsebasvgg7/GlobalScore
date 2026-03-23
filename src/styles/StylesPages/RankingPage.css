@@ -1,12 +1,11 @@
 /* =============================================
    RANKING PAGE — Brutalista Japonés Retro
-   Grid de líneas conectadas · Sin podio principal
+   Escalado definitivo ~110% · Grid conectado
    Mobile en MobileRanking.css
 ============================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap');
 
-/* ── tokens ── */
 :root {
   --lb-cream:   #f0ede8;
   --lb-surface: #e8e4de;
@@ -17,21 +16,20 @@
 }
 
 /* ================================================================
-   SHELL — flex, ocupa exactamente el espacio bajo topbar + sidebar
+   SHELL
 ================================================================ */
 .lb-shell {
   display: flex;
   align-items: stretch;
-  height: calc(100vh - 56px);  /* topbar = 56px */
+  height: calc(100vh - 56px);
   overflow: hidden;
-  margin-left: 72px;           /* sidebar = 72px */
+  margin-left: 72px;
   margin-top: 56px;
   background: var(--lb-cream);
 }
 
 [data-theme="dark"] .lb-shell { background: #1a1d2e; }
 
-/* Página principal — scrollea internamente */
 .lb-page {
   flex: 1;
   min-width: 0;
@@ -58,9 +56,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 16px;
   background: var(--lb-cream);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   font-family: var(--lb-mono);
   letter-spacing: 0.14em;
@@ -70,8 +68,8 @@
 [data-theme="dark"] .lb-loading { background: #1a1d2e; color: #4a5568; }
 
 .lb-spinner {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border: 2px solid var(--lb-border);
   border-top-color: var(--lb-accent);
   border-radius: 50%;
@@ -81,16 +79,18 @@
 @keyframes lb-spin { to { transform: rotate(360deg); } }
 
 /* ================================================================
-   TABS BAR — toca el borde izquierdo y derecho sin padding
+   TABS BAR
+   Era 48px → ahora 54px
+   Font era 11px → 12px
+   Padding era 20px → 24px
 ================================================================ */
 .lb-tabs-bar {
   display: flex;
   align-items: center;
-  height: 48px;
+  height: 54px;                          /* ↑ 48→54 */
   border-bottom: 0.5px solid var(--lb-border);
   background: var(--lb-surface);
   flex-shrink: 0;
-  /* sin padding lateral — las tabs arrancan desde el borde */
   padding: 0;
 }
 
@@ -102,10 +102,10 @@
 .lb-tab {
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 0 20px;
+  gap: 8px;
+  padding: 0 24px;                       /* ↑ 20→24 */
   height: 100%;
-  font-size: 11px;
+  font-size: 12px;                       /* ↑ 11→12 */
   font-weight: 700;
   font-family: var(--lb-mono);
   letter-spacing: 0.08em;
@@ -121,7 +121,7 @@
   white-space: nowrap;
 }
 
-.lb-tab svg { flex-shrink: 0; }
+.lb-tab svg { flex-shrink: 0; width: 15px; height: 15px; } /* ↑ 13→15 */
 .lb-tab:hover:not(.active) { color: #1a1a2e; }
 .lb-tab.active { color: var(--lb-accent); border-bottom-color: var(--lb-accent); }
 
@@ -135,22 +135,26 @@
 .lb-hof-wrap {
   flex: 1;
   overflow-y: auto;
-  padding: 24px;
+  padding: 28px;                         /* ↑ 24→28 */
 }
 
 /* ================================================================
    GRID CONECTADO
-   Todos los bloques son bordes que se tocan.
-   Sin margin, sin padding contenedor — el padding va DENTRO de cada bloque.
 ================================================================ */
 .lb-grid {
   flex: 1;
   display: flex;
   flex-direction: column;
-  /* sin padding exterior — las líneas tocan los bordes del shell */
 }
 
-/* ── FILA STATS ── */
+/* ── FILA STATS ──
+   Padding era 18px 22px → 22px 28px
+   Num era 42px → 52px
+   Lbl era 9px → 10px
+   Icon era 26px → 30px
+   Period era 14px → 16px
+   Sub era 11px → 12px
+*/
 .lb-row--stats {
   display: grid;
   grid-template-columns: 1fr 1fr 2fr;
@@ -162,11 +166,11 @@
 
 .lb-stat-block {
   position: relative;
-  padding: 18px 22px;
+  padding: 22px 28px;                    /* ↑ 18/22→22/28 */
   border-right: 0.5px solid var(--lb-border);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   background: var(--lb-cream);
 }
 
@@ -178,18 +182,18 @@
 }
 
 .lb-stat-num {
-  font-size: 42px;
+  font-size: 52px;                       /* ↑ 42→52 */
   font-weight: 800;
   font-family: var(--lb-mono);
   color: #1a1a2e;
   line-height: 1;
-  letter-spacing: -2px;
+  letter-spacing: -3px;
 }
 
 [data-theme="dark"] .lb-stat-num { color: #f0f1f7; }
 
 .lb-stat-lbl {
-  font-size: 9px;
+  font-size: 10px;                       /* ↑ 9→10 */
   font-weight: 700;
   font-family: var(--lb-mono);
   letter-spacing: 0.12em;
@@ -199,10 +203,10 @@
 
 .lb-stat-icon {
   position: absolute;
-  top: 18px;
-  right: 18px;
-  width: 26px;
-  height: 26px;
+  top: 22px;
+  right: 22px;
+  width: 30px;                           /* ↑ 26→30 */
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -219,7 +223,7 @@
 }
 
 .lb-stat-period {
-  font-size: 14px;
+  font-size: 16px;                       /* ↑ 14→16 */
   font-weight: 700;
   font-family: var(--lb-sans);
   color: var(--lb-accent);
@@ -229,22 +233,27 @@
 [data-theme="dark"] .lb-stat-period { color: #7c6fe8; }
 
 .lb-stat-sub {
-  font-size: 11px;
+  font-size: 12px;                       /* ↑ 11→12 */
   font-family: var(--lb-mono);
   color: #b0aaa0;
 }
 
-/* ── FILA SORT ── */
+/* ── FILA SORT ──
+   Era height 42px → 48px
+   Padding era 20px → 24px
+   Lbl era 9px → 10px
+   Btn era height 26px → 30px, font 9px → 10px, padding 11px → 14px
+*/
 .lb-row--sort {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 42px;
-  padding: 0 20px;
+  height: 48px;                          /* ↑ 42→48 */
+  padding: 0 24px;                       /* ↑ 20→24 */
   border-bottom: 0.5px solid var(--lb-border);
   background: var(--lb-surface);
   flex-shrink: 0;
-  gap: 12px;
+  gap: 14px;
 }
 
 [data-theme="dark"] .lb-row--sort {
@@ -253,7 +262,7 @@
 }
 
 .lb-sort-label {
-  font-size: 9px;
+  font-size: 10px;                       /* ↑ 9→10 */
   font-weight: 700;
   font-family: var(--lb-mono);
   letter-spacing: 0.12em;
@@ -264,18 +273,18 @@
 
 [data-theme="dark"] .lb-sort-label { color: #4a5568; }
 
-.lb-sort-btns { display: flex; gap: 4px; }
+.lb-sort-btns { display: flex; gap: 5px; }
 
 .lb-sort-btn {
   display: flex;
   align-items: center;
-  gap: 5px;
-  height: 26px;
-  padding: 0 11px;
+  gap: 6px;
+  height: 30px;                          /* ↑ 26→30 */
+  padding: 0 14px;                       /* ↑ 11→14 */
   border: 0.5px solid var(--lb-border);
   background: transparent;
   color: #888;
-  font-size: 9px;
+  font-size: 10px;                       /* ↑ 9→10 */
   font-weight: 700;
   font-family: var(--lb-mono);
   letter-spacing: 0.08em;
@@ -286,6 +295,7 @@
   white-space: nowrap;
 }
 
+.lb-sort-btn svg { width: 12px; height: 12px; } /* ↑ 11→12 */
 .lb-sort-btn:hover:not(.active) { color: var(--lb-accent); border-color: rgba(91,79,216,0.45); }
 .lb-sort-btn.active { background: var(--lb-accent); border-color: var(--lb-accent); color: #fff; }
 
@@ -293,12 +303,17 @@
 [data-theme="dark"] .lb-sort-btn:hover:not(.active) { color: #7c6fe8; border-color: rgba(124,111,232,0.4); }
 [data-theme="dark"] .lb-sort-btn.active { background: var(--lb-accent); border-color: var(--lb-accent); color: #fff; }
 
-/* ── THEAD ── */
+/* ── THEAD ──
+   Era height 36px → 42px
+   Padding era 20px → 24px
+   Cols era 52/100/100/90/90 → 60/1fr/110/110/100/100
+   Font era 9px → 10px
+*/
 .lb-thead {
   display: grid;
-  grid-template-columns: 52px 1fr 100px 100px 90px 90px;
-  padding: 0 20px;
-  height: 36px;
+  grid-template-columns: 60px 1fr 110px 110px 100px 100px;  /* ↑ */
+  padding: 0 24px;                       /* ↑ 20→24 */
+  height: 42px;                          /* ↑ 36→42 */
   align-items: center;
   background: var(--lb-surface);
   border-bottom: 0.5px solid var(--lb-border);
@@ -314,7 +329,7 @@
 }
 
 .lb-thead > span {
-  font-size: 9px;
+  font-size: 10px;                       /* ↑ 9→10 */
   font-weight: 700;
   font-family: var(--lb-mono);
   color: #b0aaa0;
@@ -324,7 +339,7 @@
 
 [data-theme="dark"] .lb-thead > span { color: #4a5568; }
 
-/* ── TBODY WRAP — scroll ── */
+/* ── TBODY WRAP ── */
 .lb-tbody-wrap {
   flex: 1;
   overflow-y: auto;
@@ -337,12 +352,16 @@
 .lb-tbody-wrap::-webkit-scrollbar-thumb { background: var(--lb-border); }
 [data-theme="dark"] .lb-tbody-wrap::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* ── FILAS ── */
+/* ── FILAS ──
+   Grid cols mismas que thead
+   Era height 48px → 58px
+   Padding era 20px → 24px
+*/
 .lb-trow {
   display: grid;
-  grid-template-columns: 52px 1fr 100px 100px 90px 90px;
-  padding: 0 20px;
-  height: 48px;
+  grid-template-columns: 60px 1fr 110px 110px 100px 100px;  /* ↑ igual que thead */
+  padding: 0 24px;                       /* ↑ 20→24 */
+  height: 58px;                          /* ↑ 48→58 */
   align-items: center;
   border-bottom: 0.5px solid var(--lb-border);
   background: var(--lb-cream);
@@ -355,12 +374,10 @@
 .lb-trow:hover { background: rgba(91,79,216,0.04); }
 [data-theme="dark"] .lb-trow:hover { background: rgba(255,255,255,0.03); }
 
-/* Acento izquierdo top 3 */
 .lb-trow--gold   { border-left: 3px solid #c9a227; }
 .lb-trow--silver { border-left: 3px solid #8a8a8a; }
 .lb-trow--bronze { border-left: 3px solid #a0652a; }
 
-/* "Tú" */
 .lb-trow--me {
   background: rgba(91,79,216,0.05) !important;
   border-left: 3px solid var(--lb-accent) !important;
@@ -371,17 +388,17 @@
 /* ── COLUMNAS ── */
 .lbc-rank { display: flex; align-items: center; }
 .lbc-user { display: flex; align-items: center; min-width: 0; }
-.lbc-num  { font-size: 13px; font-weight: 700; font-family: var(--lb-mono); color: #1a1a2e; }
+.lbc-num  { font-size: 14px; font-weight: 700; font-family: var(--lb-mono); color: #1a1a2e; } /* ↑ 13→14 */
 [data-theme="dark"] .lbc-num { color: #f0f1f7; }
 
-/* Rank badge — cuadrado, sin border-radius */
+/* Rank badge — era 26px → 32px, font 11px → 13px */
 .lb-rnk {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
-  font-size: 11px;
+  width: 32px;                           /* ↑ 26→32 */
+  height: 32px;
+  font-size: 13px;                       /* ↑ 11→13 */
   font-weight: 800;
   font-family: var(--lb-mono);
   background: var(--lb-surface);
@@ -400,7 +417,7 @@
 .lb-ucell {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;                             /* ↑ 10→12 */
   background: none;
   border: none;
   cursor: pointer;
@@ -416,13 +433,13 @@
 .lb-uinfo { display: flex; flex-direction: column; min-width: 0; gap: 1px; }
 
 .lb-uname {
-  font-size: 13px;
+  font-size: 15px;                       /* ↑ 13→15 */
   font-weight: 700;
   font-family: var(--lb-sans);
   color: #1a1a2e;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -432,33 +449,34 @@
 [data-theme="dark"] .lb-uname { color: #f0f1f7; }
 
 .lb-uname-sub {
-  font-size: 10px;
+  font-size: 11px;                       /* ↑ 10→11 */
   font-family: var(--lb-mono);
   color: #b0aaa0;
-  display: none; /* visible solo en mobile via MobileRanking.css */
+  display: none;
 }
 
 .lb-you {
-  font-size: 8px;
+  font-size: 9px;                        /* ↑ 8→9 */
   font-weight: 700;
   font-family: var(--lb-mono);
   color: var(--lb-accent);
   border: 0.5px solid var(--lb-accent);
-  padding: 1px 5px;
+  padding: 2px 6px;                      /* ↑ 1/5→2/6 */
   letter-spacing: 0.04em;
   flex-shrink: 0;
   border-radius: 0;
 }
 
+/* Puntos y precisión — era 13px → 15px */
 .lb-pts {
   color: #c9a227;
   font-weight: 800;
   font-family: var(--lb-mono);
-  font-size: 13px;
+  font-size: 15px;                       /* ↑ 13→15 */
 }
 
 .lb-pts-lbl {
-  font-size: 9px;
+  font-size: 10px;                       /* ↑ 9→10 */
   font-weight: 600;
   opacity: 0.55;
   margin-left: 2px;
@@ -469,7 +487,7 @@
   color: #1D9E75;
   font-weight: 700;
   font-family: var(--lb-mono);
-  font-size: 13px;
+  font-size: 15px;                       /* ↑ 13→15 */
 }
 
 [data-theme="dark"] .lb-pts { color: #f0c040; }
@@ -480,23 +498,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 60px 20px;
+  gap: 12px;
+  padding: 70px 24px;
   color: #b0aaa0;
   text-align: center;
 }
 
-.lb-empty p     { font-size: 11px; font-weight: 700; font-family: var(--lb-mono); color: #a0a0b0; margin: 0; letter-spacing: 0.08em; text-transform: uppercase; }
-.lb-empty-icon  { color: var(--lb-border); }
+.lb-empty p    { font-size: 12px; font-weight: 700; font-family: var(--lb-mono); color: #a0a0b0; margin: 0; letter-spacing: 0.08em; text-transform: uppercase; }
+.lb-empty-icon { color: var(--lb-border); }
 
-/* ── AVATARS ── */
-.lb-av     { border-radius: 50%; object-fit: cover; flex-shrink: 0; display: block; }
-.lb-av-ph  { display: flex; align-items: center; justify-content: center; background: var(--lb-accent); color: #fff; font-weight: 700; font-family: var(--lb-mono); border-radius: 50%; flex-shrink: 0; }
-.lb-av-sm  { width: 32px; height: 32px; font-size: 12px; }
-.lb-av-md  { width: 42px; height: 42px; font-size: 15px; }
+/* ── AVATARS — era 32px → 40px ── */
+.lb-av    { border-radius: 50%; object-fit: cover; flex-shrink: 0; display: block; }
+.lb-av-ph { display: flex; align-items: center; justify-content: center; background: var(--lb-accent); color: #fff; font-weight: 700; font-family: var(--lb-mono); border-radius: 50%; flex-shrink: 0; }
+.lb-av-sm { width: 40px; height: 40px; font-size: 14px; }  /* ↑ 32→40 */
+.lb-av-md { width: 48px; height: 48px; font-size: 17px; }  /* ↑ 42→48 */
 
 /* ================================================================
-   TABLET — sin panel derecho
+   TABLET
 ================================================================ */
 @media (max-width: 1024px) {
   .lb-shell  { display: block; height: auto; overflow: visible; margin-left: 72px; margin-top: 56px; }
@@ -507,7 +525,7 @@
   .lb-stat-block:nth-child(3) { grid-column: 1 / -1; border-right: none; border-top: 0.5px solid var(--lb-border); }
   .lb-row--stats { grid-template-columns: 1fr 1fr; }
 
-  .lb-thead, .lb-trow { grid-template-columns: 48px 1fr 90px 90px; }
+  .lb-thead, .lb-trow { grid-template-columns: 56px 1fr 100px 100px; }
   .lbc-hide-sm { display: none !important; }
 }
 

@@ -9,6 +9,7 @@ import HallOfFame from '../components/ComOthers/HallOfFame';
 import UserProfileModal from '../components/ComOthers/UserProfileModal';
 import RankingRightPanel from '../components/ComOthers/RankingRightPanel';
 import MobileRanking from '../components/ComMobile/MobileRanking';
+import HallOfFamePanel from '../components/ComOthers/HallOfFamePanel';
 import '../styles/StylesPages/RankingPage.css';
 
 export default function RankingPage({ currentUser }) {
@@ -141,6 +142,7 @@ export default function RankingPage({ currentUser }) {
         currentUser={currentUser}
         rankingType={rankingType}
         onChangeType={setRankingType}
+        champions={champions}
       />
 
       {/* ══════════════════════════════════════
@@ -282,12 +284,14 @@ export default function RankingPage({ currentUser }) {
         </div>
 
         {/* PANEL DERECHO */}
-        {rankingType !== 'halloffame' && (
+        {rankingType !== 'halloffame' ? (
           <RankingRightPanel
             users={users}
             currentUser={currentUser}
             rankingType={rankingType}
           />
+        ) : (
+          <HallOfFamePanel champions={champions} />
         )}
       </div>
 

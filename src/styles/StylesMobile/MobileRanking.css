@@ -543,3 +543,312 @@
   .mrk-row-name    { font-size: 13px; }
   .mrk-stat-num    { font-size: 24px; }
 }
+
+/* ================================================================
+   SALÓN DE LA FAMA — Mobile
+================================================================ */
+
+/* Empty */
+.mrk-hof-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 60px 24px;
+  color: var(--mrk-muted);
+  text-align: center;
+}
+
+.mrk-hof-empty-icon { color: var(--mrk-border, #d4cfc8); }
+
+.mrk-hof-empty p {
+  font-size: 12px;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-muted);
+  margin: 0;
+  letter-spacing: 0.06em;
+}
+
+/* Carrusel */
+.mrk-hof-carousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--mrk-bg);
+}
+
+.mrk-hof-card-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  padding: 20px 12px 12px;
+  justify-content: center;
+}
+
+/* Nav buttons */
+.mrk-hof-nav {
+  width: 34px;
+  height: 34px;
+  border: 0.5px solid var(--mrk-border);
+  background: var(--mrk-card);
+  color: var(--mrk-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 0;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.mrk-hof-nav:disabled { opacity: 0.3; cursor: default; }
+.mrk-hof-nav:not(:disabled):active { background: var(--mrk-accent-subtle); }
+
+/* Tarjeta campeón */
+.mrk-hof-card {
+  flex: 1;
+  max-width: 300px;
+  background: var(--mrk-card);
+  border: 0.5px solid var(--mrk-border);
+  border-top: 2px solid #c9a227;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px 18px;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.mrk-hof-card--exit { opacity: 0; transform: translateX(-16px); }
+
+.mrk-hof-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mrk-hof-medal {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mrk-hof-pos {
+  font-size: 9px;
+  font-weight: 800;
+  font-family: var(--mrk-mono);
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 0;
+  letter-spacing: 0.06em;
+}
+
+/* Avatar con anillo */
+.mrk-hof-av-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mrk-hof-av-ring {
+  padding: 3px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Avatar tamaño HOF */
+.mrk-av--hof { width: 80px; height: 80px; font-size: 28px; }
+
+.mrk-hof-name {
+  font-size: 18px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-text);
+  margin: 0;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+/* Coronas */
+.mrk-hof-crowns {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.mrk-hof-crowns-extra {
+  font-size: 11px;
+  font-weight: 800;
+  font-family: var(--mrk-mono);
+  margin-left: 2px;
+}
+
+/* Stats */
+.mrk-hof-stats {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--mrk-bg);
+  border: 0.5px solid var(--mrk-border);
+}
+
+.mrk-hof-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 4px;
+}
+
+.mrk-hof-stat-sep {
+  width: 0.5px;
+  height: 34px;
+  background: var(--mrk-border);
+  flex-shrink: 0;
+}
+
+.mrk-hof-stat-val {
+  font-size: 16px;
+  font-weight: 800;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-text);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.mrk-hof-stat-val--sm { font-size: 11px; letter-spacing: 0; }
+
+.mrk-hof-stat-lbl {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Dots */
+.mrk-hof-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0 14px;
+}
+
+.mrk-hof-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--mrk-border);
+  border: none;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.15s, width 0.15s;
+  padding: 0;
+}
+
+.mrk-hof-dot--active {
+  background: #c9a227;
+  width: 18px;
+}
+
+/* Lista top 3 */
+.mrk-hof-list {
+  width: 100%;
+  border-top: 0.5px solid var(--mrk-border);
+}
+
+.mrk-hof-list-label {
+  padding: 9px 16px 7px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mrk-muted);
+  background: var(--mrk-card);
+  border-bottom: 0.5px solid var(--mrk-border);
+}
+
+.mrk-hof-list-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 0.5px solid var(--mrk-border);
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  background: var(--mrk-card);
+  transition: background 0.12s, border-left-color 0.12s;
+}
+
+.mrk-hof-list-row:last-child { border-bottom: none; }
+.mrk-hof-list-row--active    { background: rgba(201,162,39,0.05); }
+.mrk-hof-list-row:active     { background: var(--mrk-accent-subtle); }
+
+.mrk-hof-list-badge {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: var(--mrk-mono);
+  color: #fff;
+  flex-shrink: 0;
+  border-radius: 0;
+}
+
+.mrk-hof-list-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mrk-hof-list-name {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mrk-hof-list-crowns {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+}
+
+.mrk-hof-list-pts {
+  font-size: 13px;
+  font-weight: 800;
+  font-family: var(--mrk-mono);
+  flex-shrink: 0;
+}
+
+/* ── Dark mode HOF mobile ── */
+[data-theme="dark"] .mrk-hof-card      { background: var(--card); border-color: rgba(255,255,255,0.08); }
+[data-theme="dark"] .mrk-hof-stats     { background: var(--bg); border-color: rgba(255,255,255,0.07); }
+[data-theme="dark"] .mrk-hof-stat-sep  { background: rgba(255,255,255,0.07); }
+[data-theme="dark"] .mrk-hof-list-label { background: var(--card); border-bottom-color: rgba(255,255,255,0.07); }
+[data-theme="dark"] .mrk-hof-list-row  { background: var(--card); border-bottom-color: rgba(255,255,255,0.05); }
+[data-theme="dark"] .mrk-hof-list-row--active { background: rgba(201,162,39,0.07); }
+[data-theme="dark"] .mrk-hof-nav       { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+[data-theme="dark"] .mrk-hof-dot       { background: rgba(255,255,255,0.12); }
