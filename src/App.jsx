@@ -12,13 +12,13 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import DashboardPage from "./pages/DashboardPage";
 import RankingPage from "./pages/RankingPage";
 import AdminPage from "./pages/AdminPage";
-import ProfileSettingsPage from "./pages/ProfileSettingsPage"; // ← FUSIONADA (reemplaza ProfilePage + SettingsPage)
+import ProfileSettingsPage from "./pages/ProfileSettingsPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import StatsPage from "./pages/StatsPage";
 import WorldCupPage from "./pages/WorldCupPage";
 import { PageLoader } from "./components/ComOthers/LoadingStates";
 import "./styles/layout.css";
-import './styles/mobile-theme.css'; // último import siempre
+import './styles/mobile-theme.css'; 
 
 export default function App() {
   const [session, setSession] = useState(null);
