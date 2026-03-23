@@ -627,9 +627,83 @@
 }
 .pnew-empty svg { opacity: 0.4; }
 .pnew-empty p { font-size: 13px; font-weight: 600; font-family: var(--pnew-mono); letter-spacing: 0.08em; margin: 0; }
+
 /* ================================================================
-   MOBILE MAIN — reemplaza TODA la sección desde .pnew-mob-main
-   hasta .pnew-mob-logout:active inclusive en ProfileSettingsPage.css
+ Mobile sub-view 
+================================================================ */
+
+/* ── HEADER — estilo "Pantalla y brillo" del sistema ── */
+.pnew-mob-sub-hdr {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 56px;                          /* altura fija como el header del sistema */
+  padding: 0 4px 0 4px;
+  background: var(--pnew-cream);
+  border-bottom: 0.5px solid var(--pnew-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+/* Botón de volver — cuadrado táctil generoso */
+.pnew-mob-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  color: var(--pnew-accent);            /* azul/morado acento como iOS/MIUI */
+  cursor: pointer;
+  border-radius: 10px;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pnew-mob-back:active {
+  background: rgba(91, 79, 216, 0.1);
+}
+
+/* Título — centrado absolutamente para que no dependa del botón */
+.pnew-mob-sub-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--pnew-sans);
+  margin: 0;
+  white-space: nowrap;
+  pointer-events: none;                  /* no interfiere con el botón back */
+  letter-spacing: -0.01em;
+}
+
+/* ── BODY — padding para el bottom nav ── */
+.pnew-mob-sub-body {
+  padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+/* ── DARK MODE ── */
+[data-theme="dark"] .pnew-mob-sub-hdr {
+  background: var(--pnew-cream);
+  border-bottom-color: var(--pnew-border);
+}
+
+[data-theme="dark"] .pnew-mob-back {
+  color: #a599d9;
+}
+
+[data-theme="dark"] .pnew-mob-back:active {
+  background: rgba(165, 153, 217, 0.12);
+}
+/* ================================================================
+   MOBILE MAIN 
 ================================================================ */
 
 .pnew-mob-main {
@@ -833,3 +907,6 @@
 [data-theme="dark"] .pnew-nav-item--active { background: #252936; }
 
 [data-theme="dark"] .pnew-nav-item--active { background: #1a1d2e !important; }
+[data-theme="dark"] .pnew-mob-sub-hdr {background: var(--pnew-cream);border-bottom-color: var(--pnew-border);}
+[data-theme="dark"] .pnew-mob-back {color: #a599d9;}
+ 
