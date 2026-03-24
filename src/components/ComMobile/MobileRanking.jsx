@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Globe, Calendar, Crown, ChevronLeft, ChevronRight, Zap, Star } from "lucide-react";
-import UserProfileModal from "../ComProfile/UserProfileModal";
+import MobileUserProfile from "../ComProfile/MobileUserProfile";
 import "../../styles/StylesMobile/MobileRanking.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
@@ -383,7 +383,10 @@ export default function MobileRanking({
       )}
 
       {selectedUserId && (
-        <UserProfileModal userId={selectedUserId} onClose={() => setSelectedUserId(null)} />
+        <MobileUserProfile
+          userId={selectedUserId}
+          onClose={() => setSelectedUserId(null)}
+        />
       )}
     </div>
   );

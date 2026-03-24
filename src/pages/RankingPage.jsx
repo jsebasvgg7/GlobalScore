@@ -5,7 +5,8 @@ import {
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import HallOfFame from '../components/ComOthers/HallOfFame';
-import UserProfileModal from '../components/ComProfile/UserProfileModal';
+import UserProfilePanel from '../components/ComProfile/UserProfilePanel';
+import MobileUserProfile from '../components/ComProfile/MobileUserProfile';
 import RankingRightPanel from '../components/ComPanels/RankingRightPanel';
 import MobileRanking from '../components/ComMobile/MobileRanking';
 import HallOfFamePanel from '../components/ComPanels/HallOfFamePanel';
@@ -19,6 +20,14 @@ export default function RankingPage({ currentUser }) {
   const [sortBy, setSortBy]                 = useState('points');
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [champions, setChampions]           = useState([]);
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   useEffect(() => {
     checkAndResetMonthly();
@@ -289,8 +298,15 @@ export default function RankingPage({ currentUser }) {
         )}
       </div>
 
-      {selectedUserId && (
-        <UserProfileModal
+      {selectedUserId && isMobile && (
+        <MobileUserProfile
+          userId={selectedUserId}
+          onClose={() => setSelectedUserId(null)}
+        />
+      )}
+
+      {selectedUserId && !isMobile && (
+        <UserProfilePanel
           userId={selectedUserId}
           onClose={() => setSelectedUserId(null)}
         />

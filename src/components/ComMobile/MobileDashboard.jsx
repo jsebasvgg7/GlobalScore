@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Swords, Trophy, Medal, User } from "lucide-react";
-import UserProfileModal  from "../ComProfile/UserProfileModal";
+import MobileUserProfile from "../ComProfile/MobileUserProfile";
 import MobileSubPage     from "./MobileSubPage";
 import "../../styles/StylesMobile/MobileDashboard.css";
 import "../../styles/StylesMobile/MobileSubPage.css";
@@ -471,9 +471,11 @@ export default function MobileDashboard({
         </div>
       </div>
 
-      {/* Perfil modal (se mantiene igual) */}
       {profileModal && currentUser?.id && (
-        <UserProfileModal userId={currentUser.id} onClose={() => setProfileModal(false)} />
+        <MobileUserProfile
+          userId={currentUser.id}
+          onClose={() => setProfileModal(false)}
+        />
       )}
     </div>
   );

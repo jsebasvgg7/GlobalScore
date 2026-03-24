@@ -2236,3 +2236,209 @@
     z-index: 50;
   }
 }
+/* ================================================================
+   AÑADIR AL FINAL DE mobile-theme.css
+   Dark mode tokens para MobileUserProfile (mup-*)
+================================================================ */
+
+/* ================================================================
+   MOBILE USER PROFILE — mup-page (nueva página slide)
+================================================================ */
+@media (max-width: 768px) {
+  [data-theme="dark"] .mup-page {
+    background: #262424 !important;
+    --mup-bg:            #262424;
+    --mup-card:          #2E2B2B;
+    --mup-border:        rgba(238,229,218,0.1);
+    --mup-text:          #EEE5DA;
+    --mup-muted:         #7A6E65;
+    --mup-accent:        #8b7fc7;
+    --mup-accent-light:  #a599d9;
+    --mup-accent-subtle: rgba(139,127,199,0.1);
+    --mup-accent-border: rgba(139,127,199,0.25);
+    --mup-gold:          #c9a227;
+    --mup-shadow:        0 4px 14px rgba(0,0,0,0.35);
+  }
+
+  /* Topbar */
+  [data-theme="dark"] .mup-topbar {
+    background: #2E2B2B !important;
+    border-bottom-color: rgba(238,229,218,0.08) !important;
+  }
+
+  [data-theme="dark"] .mup-topbar-title { color: #EEE5DA !important; }
+
+  [data-theme="dark"] .mup-back-btn {
+    border-color: rgba(238,229,218,0.12) !important;
+    color: #a599d9 !important;
+  }
+
+  [data-theme="dark"] .mup-back-btn:active { background: rgba(139,127,199,0.1) !important; }
+
+  [data-theme="dark"] .mup-topbar-tag {
+    color: #a599d9 !important;
+    border-color: rgba(139,127,199,0.25) !important;
+  }
+
+  /* Banner */
+  [data-theme="dark"] .mup-banner { border-bottom-color: #8b7fc7 !important; }
+
+  [data-theme="dark"] .mup-banner-tag {
+    color: #c9a227 !important;
+    border-color: rgba(201,162,39,0.4) !important;
+  }
+
+  /* Hero row */
+  [data-theme="dark"] .mup-hero-row {
+    background: #2E2B2B !important;
+    border-bottom-color: rgba(238,229,218,0.08) !important;
+  }
+
+  [data-theme="dark"] .mup-av {
+    background: #8b7fc7 !important;
+    border-color: #2E2B2B !important;
+  }
+
+  [data-theme="dark"] .mup-lv-badge { border-color: #2E2B2B !important; }
+
+  [data-theme="dark"] .mup-name { color: #EEE5DA !important; }
+
+  [data-theme="dark"] .mup-title-badge { color: var(--title-color, #a599d9) !important; }
+
+  [data-theme="dark"] .mup-meta-tag { color: #7A6E65 !important; }
+
+  /* Stats bar rápida */
+  [data-theme="dark"] .mup-quick-val  { color: #EEE5DA !important; }
+  [data-theme="dark"] .mup-quick-lbl  { color: #3a4060 !important; }
+  [data-theme="dark"] .mup-stats-sep  { background: rgba(255,255,255,0.06) !important; }
+
+  /* Tabs */
+  [data-theme="dark"] .mup-tabs {
+    background: #2E2B2B !important;
+    border-bottom-color: rgba(238,229,218,0.08) !important;
+    position: sticky;
+    top: 52px;
+    z-index: 9;
+  }
+
+  [data-theme="dark"] .mup-tab {
+    color: #7A6E65 !important;
+    border-right-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .mup-tab--active {
+    color: #a599d9 !important;
+    border-bottom-color: #a599d9 !important;
+  }
+
+  /* Section headers */
+  [data-theme="dark"] .mup-section-hdr {
+    border-top-color: rgba(238,229,218,0.07) !important;
+  }
+
+  [data-theme="dark"] .mup-section-dot  { background: #8b7fc7 !important; }
+  [data-theme="dark"] .mup-section-lbl  { color: #7A6E65 !important; }
+
+  /* Bio */
+  [data-theme="dark"] .mup-bio {
+    background: rgba(139,127,199,0.06) !important;
+    border-left-color: rgba(139,127,199,0.3) !important;
+    color: rgba(238,229,218,0.5) !important;
+  }
+
+  /* Nivel */
+  [data-theme="dark"] .mup-lvl-bar {
+    background: rgba(139,127,199,0.1) !important;
+    border-color: rgba(139,127,199,0.15) !important;
+  }
+
+  [data-theme="dark"] .mup-lvl-fill  { background: #a599d9 !important; }
+  [data-theme="dark"] .mup-lvl-pts   { color: #7A6E65 !important; }
+
+  /* Stat pills */
+  [data-theme="dark"] .mup-stat-pill {
+    background: #2E2B2B !important;
+    border-right-color: rgba(238,229,218,0.06) !important;
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .mup-stat-pill-val { color: #EEE5DA !important; }
+  [data-theme="dark"] .mup-stat-pill-lbl { color: #7A6E65 !important; }
+
+  /* Rachas */
+  [data-theme="dark"] .mup-streak-sep { background: rgba(238,229,218,0.08) !important; }
+
+  [data-theme="dark"] .mup-streak-card {
+    background: #2E2B2B !important;
+  }
+
+  [data-theme="dark"] .mup-streak-card--fire { background: rgba(239,68,68,0.06) !important; }
+  [data-theme="dark"] .mup-streak-card--gold { background: rgba(201,162,39,0.06) !important; }
+
+  [data-theme="dark"] .mup-streak-val { color: #EEE5DA !important; }
+  [data-theme="dark"] .mup-streak-lbl { color: #7A6E65 !important; }
+
+  /* Active title */
+  [data-theme="dark"] .mup-active-title {
+    background: #2E2B2B !important;
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .mup-active-title-info p { color: #7A6E65 !important; }
+
+  [data-theme="dark"] .mup-equipped-tag {
+    background: rgba(139,127,199,0.1) !important;
+    border-color: rgba(139,127,199,0.2) !important;
+    color: #a599d9 !important;
+  }
+
+  /* Badges */
+  [data-theme="dark"] .mup-badges-grid { background: #262424 !important; }
+  [data-theme="dark"] .mup-badge-name  { color: #7A6E65 !important; }
+
+  [data-theme="dark"] .mup-locked-note {
+    color: #7A6E65 !important;
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  /* Coronas */
+  [data-theme="dark"] .mup-crowns-hero {
+    background: #2E2B2B !important;
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .mup-crowns-num  { color: #c9a227 !important; }
+  [data-theme="dark"] .mup-crowns-lbl  { color: #7A6E65 !important; }
+  [data-theme="dark"] .mup-crowns-more { color: #c9a227 !important; }
+
+  [data-theme="dark"] .mup-crown-list {
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .mup-crown-row {
+    background: #2E2B2B !important;
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .mup-crown-row:active { background: #342F2F !important; }
+
+  [data-theme="dark"] .mup-crown-icon {
+    background: rgba(201,162,39,0.08) !important;
+    border-color: rgba(201,162,39,0.2) !important;
+  }
+
+  [data-theme="dark"] .mup-crown-month { color: #EEE5DA !important; }
+  [data-theme="dark"] .mup-crown-pts   { color: #34d399 !important; }
+  [data-theme="dark"] .mup-crown-pos   { color: #c9a227 !important; }
+
+  /* Empty */
+  [data-theme="dark"] .mup-empty {
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+    color: #7A6E65 !important;
+  }
+
+  [data-theme="dark"] .mup-empty span { color: #7A6E65 !important; }
+
+  /* Loading */
+  [data-theme="dark"] .mup-loading { color: #7A6E65 !important; }
+}
