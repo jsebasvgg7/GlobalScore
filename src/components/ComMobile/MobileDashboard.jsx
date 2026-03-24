@@ -1,16 +1,5 @@
-// src/components/ComMobile/MobileDashboard.jsx
-// ================================================================
-//  MobileDashboard — Dashboard principal mobile
-//  Los modales de Partidos/Ligas/Premios han sido reemplazados
-//  por páginas slide-in (MobileSubPage) para evitar conflictos
-//  con el teclado virtual y animaciones de inputs en Android/iOS
-// ================================================================
-
 import React, { useState, useMemo } from "react";
 import { Swords, Trophy, Medal, User } from "lucide-react";
-import MatchCard         from "../ComCards/MatchCard";
-import LeagueCard        from "../ComCards/LeagueCard";
-import AwardCard         from "../ComCards/AwardCard";
 import UserProfileModal  from "../ComOthers/UserProfileModal";
 import MobileSubPage     from "./MobileSubPage";
 import "../../styles/StylesMobile/MobileDashboard.css";
