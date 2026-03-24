@@ -1,0 +1,428 @@
+/* ================================================================
+   MatchCardMobile.css — Botones tecla brutalista retro japonés
+   Sin inputs de teclado. Teclas físicas +/- con efecto press.
+================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
+
+/* ================================================================
+   TOKENS
+================================================================ */
+.mcm-card {
+  --mcm-accent:      var(--accent);
+  --mcm-border:      var(--border);
+  --mcm-bg:          var(--card);
+  --mcm-surface:     var(--bg);
+  --mcm-text:        var(--text-primary);
+  --mcm-muted:       var(--muted);
+  --mcm-mono:        'DM Mono', monospace;
+  --mcm-sans:        'Sora', sans-serif;
+  /* Colores tecla */
+  --mcm-key-bg:      #f0ede8;
+  --mcm-key-border:  #bbb8b0;
+  --mcm-key-shadow:  #a0a090;
+  --mcm-key-text:    #1a1a1a;
+  --mcm-key-acc-bg:  var(--accent);
+  --mcm-key-acc-sh:  color-mix(in srgb, var(--accent) 50%, #000 50%);
+}
+
+[data-theme="dark"] .mcm-card {
+  --mcm-key-bg:     #2a2f45;
+  --mcm-key-border: rgba(255,255,255,0.22);
+  --mcm-key-shadow: rgba(0,0,0,0.55);
+  --mcm-key-text:   #f0f1f7;
+  --mcm-key-acc-bg: var(--accent);
+  --mcm-key-acc-sh: color-mix(in srgb, var(--accent) 40%, #000 60%);
+}
+
+/* ================================================================
+   CARD BASE
+================================================================ */
+.mcm-card {
+  background: var(--mcm-bg);
+  border: 1px solid var(--mcm-border);
+  border-radius: 16px;
+  overflow: hidden;
+  font-family: var(--mcm-sans);
+  width: 100%;
+}
+
+.mcm-card--live    { border-color: rgba(245,158,11,0.5); }
+.mcm-card--expired { opacity: 0.65; }
+
+/* ================================================================
+   HEADER
+================================================================ */
+.mcm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--mcm-border);
+  gap: 8px;
+}
+
+.mcm-header-left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  flex: 1;
+}
+
+.mcm-league-ico {
+  width: 22px; height: 22px;
+  background: var(--mcm-surface);
+  border: 1px solid var(--mcm-border);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; flex-shrink: 0;
+}
+
+.mcm-league-ico img { width: 15px; height: 15px; object-fit: contain; }
+
+.mcm-league-name {
+  font-size: 10px; font-weight: 700;
+  color: var(--mcm-muted);
+  text-transform: uppercase; letter-spacing: 0.09em;
+  font-family: var(--mcm-mono);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.mcm-ko-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: var(--mcm-mono);
+  letter-spacing: 0.06em;
+  color: #ef4444;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 20px;
+  padding: 2px 7px;
+  flex-shrink: 0;
+}
+
+/* ── Pill ── */
+.mcm-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 9px;
+  font-size: 8px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  white-space: nowrap; flex-shrink: 0;
+  font-family: var(--mcm-mono);
+  border-radius: 20px;
+  border: 1px solid transparent;
+}
+
+.mcm-pill--pending { background: var(--mcm-surface); color: var(--mcm-muted); border-color: var(--mcm-border); }
+.mcm-pill--saving  { background: rgba(251,191,36,0.12); color: #b45309; border-color: rgba(251,191,36,0.3); }
+.mcm-pill--saved   { background: var(--glass); color: var(--accent); border-color: var(--accent); }
+.mcm-pill--expired { background: rgba(239,68,68,0.1); color: #dc2626; border-color: rgba(239,68,68,0.25); }
+.mcm-pill--live    { background: rgba(245,158,11,0.12); color: #b45309; border-color: rgba(245,158,11,0.3); }
+
+.mcm-live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #f59e0b; flex-shrink: 0;
+  animation: mcm-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes mcm-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(1.5); }
+}
+
+.mcm-spin {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 1.5px solid currentColor; border-top-color: transparent;
+  animation: mcm-spin 0.7s linear infinite; flex-shrink: 0;
+}
+
+@keyframes mcm-spin { to { transform: rotate(360deg); } }
+
+/* ================================================================
+   BODY
+================================================================ */
+.mcm-body {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+}
+
+/* ── Team row ── */
+.mcm-team-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  transition: background 0.15s;
+}
+
+.mcm-team-row--adv {
+  background: rgba(var(--accent-rgb, 96,81,155), 0.06);
+}
+
+/* Escudo */
+.mcm-shield {
+  width: 40px; height: 40px;
+  background: var(--mcm-surface);
+  border: 1px solid var(--mcm-border);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: visible;
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.mcm-shield img { width: 26px; height: 26px; object-fit: contain; }
+.mcm-shield span { font-size: 20px; line-height: 1; }
+
+.mcm-shield--tap { cursor: pointer; }
+.mcm-shield--tap:active { transform: scale(0.94); }
+
+.mcm-shield--on {
+  border-color: var(--mcm-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent 75%);
+}
+
+.mcm-adv-dot {
+  position: absolute;
+  top: -5px; right: -5px;
+  width: 16px; height: 16px;
+  background: #22c55e; color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--mcm-bg);
+  animation: mcm-pop 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes mcm-pop {
+  from { opacity: 0; transform: scale(0.3); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Nombre */
+.mcm-team-name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mcm-text);
+  font-family: var(--mcm-sans);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* ── Controles ── */
+.mcm-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ================================================================
+   TECLA BRUTALISTA RETRO — el corazón del diseño
+================================================================ */
+.mcm-key {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  flex-shrink: 0;
+  /* La tecla tiene 3 capas: face + shadow */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* Cara de la tecla */
+.mcm-key-face {
+  position: relative;
+  z-index: 1;
+  width: 34px;
+  height: 30px;
+  background: var(--mcm-key-bg);
+  border: 1.5px solid var(--mcm-key-border);
+  border-radius: 5px 5px 4px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+  /* Esquinas superiores más pronunciadas — estética retro */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.1);
+}
+
+/* Sombra inferior (da el efecto 3D de tecla física) */
+.mcm-key-shadow {
+  position: absolute;
+  bottom: 0;
+  left: 2px;
+  right: 2px;
+  height: 8px;
+  background: var(--mcm-key-shadow);
+  border: 1.5px solid var(--mcm-key-border);
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  z-index: 0;
+}
+
+/* Símbolo */
+.mcm-key-symbol {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: var(--mcm-mono);
+  color: var(--mcm-key-text);
+  line-height: 1;
+  /* Kanji/retro feeling: letra fuerte y cuadrada */
+  letter-spacing: -0.02em;
+}
+
+/* ── Estado PRESSED — tecla hundida ── */
+.mcm-key--pressed .mcm-key-face,
+.mcm-key:active:not(.mcm-key--disabled) .mcm-key-face {
+  transform: translateY(5px);
+  box-shadow: inset 0 2px 0 rgba(0,0,0,0.1), inset 0 -1px 0 rgba(0,0,0,0.05);
+}
+
+.mcm-key--pressed .mcm-key-shadow,
+.mcm-key:active:not(.mcm-key--disabled) .mcm-key-shadow {
+  height: 3px;
+}
+
+/* ── Variante ACCENT (+) ── */
+.mcm-key--accent .mcm-key-face {
+  background: var(--mcm-key-acc-bg);
+  border-color: color-mix(in srgb, var(--accent) 70%, #000 30%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.15);
+}
+
+.mcm-key--accent .mcm-key-shadow {
+  background: var(--mcm-key-acc-sh);
+  border-color: color-mix(in srgb, var(--accent) 70%, #000 30%);
+}
+
+.mcm-key--accent .mcm-key-symbol {
+  color: #fff;
+  font-size: 20px;
+}
+
+/* ── Estado DISABLED ── */
+.mcm-key--disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ── Dark mode overrides ── */
+[data-theme="dark"] .mcm-key-face {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.3);
+}
+
+/* ================================================================
+   SCORE DISPLAY
+================================================================ */
+.mcm-score-display {
+  width: 44px;
+  height: 36px;
+  background: var(--mcm-surface);
+  border: 1.5px solid var(--mcm-border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  /* Pantalla de 7 segmentos — estética retro digital */
+  font-variant-numeric: tabular-nums;
+}
+
+.mcm-score-display--saved {
+  background: color-mix(in srgb, var(--accent) 10%, transparent 90%);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent 60%);
+}
+
+.mcm-score-num {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--mcm-mono);
+  color: var(--mcm-text);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.mcm-score-display--empty .mcm-score-num {
+  font-size: 14px;
+  color: var(--mcm-muted);
+  opacity: 0.5;
+}
+
+.mcm-score-display--saved .mcm-score-num {
+  color: var(--accent);
+}
+
+/* ================================================================
+   VS DIVIDER
+================================================================ */
+.mcm-vs-row {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 10px;
+}
+
+.mcm-vs-line {
+  flex: 1;
+  height: 1px;
+  background: var(--mcm-border);
+}
+
+.mcm-vs {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--mcm-muted);
+  font-family: var(--mcm-mono);
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+}
+
+/* ================================================================
+   FOOTER
+================================================================ */
+.mcm-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  border-top: 1px solid var(--mcm-border);
+  padding: 8px 14px;
+}
+
+.mcm-meta {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--mcm-muted);
+  font-family: var(--mcm-mono);
+}
+
+.mcm-meta svg { flex-shrink: 0; opacity: 0.6; }
+
+.mcm-footer-sep {
+  width: 1px;
+  height: 12px;
+  background: var(--mcm-border);
+  flex-shrink: 0;
+}

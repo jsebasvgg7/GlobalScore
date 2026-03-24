@@ -1,9 +1,9 @@
-
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { ArrowLeft, Filter, ArrowUpDown, X, SlidersHorizontal } from "lucide-react";
-import MatchCard  from "../ComCards/MatchCard";
-import LeagueCard from "../ComCards/LeagueCard";
-import AwardCard  from "../ComCards/AwardCard";
+import MatchCardMobile from "../ComCards/MatchCardMobile";
+import LeagueCard      from "../ComCards/LeagueCard";
+import AwardCard       from "../ComCards/AwardCard";
+import "../../styles/StylesCards/MatchCardMobile.css";
 
 // ── Categorías de liga ──────────────────────────────────────────
 const LEAGUE_CATS = [
@@ -136,7 +136,7 @@ function MatchesPage({ matches, currentUser, onPredict, onBack }) {
               </div>
               <div className="msp-cards-col">
                 {group.map(m => (
-                  <MatchCard
+                  <MatchCardMobile
                     key={m.id}
                     match={m}
                     userPred={m.predictions?.find(p => p.user_id === currentUser?.id)}
