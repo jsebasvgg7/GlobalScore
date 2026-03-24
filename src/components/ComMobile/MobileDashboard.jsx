@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { X, Swords, Trophy, Medal, User, Filter, ArrowUpDown } from "lucide-react";
 import MatchCard         from "../ComCards/MatchCard";
 import LeagueCard        from "../ComCards/LeagueCard";
@@ -22,9 +22,6 @@ const SORT_OPTS = [
   { key: "date-desc", label: "Más lejanos"  },
 ];
 
-/* ================================================================
-   ICONOS BRUTALISTAS — SVG geométrico, sin relleno, solo trazo
-================================================================ */
 const IconMatch = () => (
   <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="1" y="1" width="42" height="42" stroke="currentColor" strokeWidth="0.5"/>
@@ -57,44 +54,22 @@ const IconAward = () => (
   </svg>
 );
 
-/* ================================================================
-   EMPTY STATE — reemplaza el EmptyMsg de texto plano
-   type: "matches" | "leagues" | "awards"
-================================================================ */
 function EmptyState({ type = "matches" }) {
   const configs = {
-    matches: {
-      icon: <IconMatch />,
-      label: "Sin partidos pendientes",
-      sub:   "Cuando haya partidos disponibles aparecerán aquí",
-    },
-    leagues: {
-      icon: <IconLeague />,
-      label: "Sin ligas activas",
-      sub:   "Las ligas de temporada aparecerán aquí",
-    },
-    awards: {
-      icon: <IconAward />,
-      label: "Sin premios activos",
-      sub:   "Los premios de temporada aparecerán aquí",
-    },
+    matches: { icon: <IconMatch />, label: "Sin partidos pendientes", sub: "Cuando haya partidos disponibles aparecerán aquí" },
+    leagues: { icon: <IconLeague />, label: "Sin ligas activas", sub: "Las ligas de temporada aparecerán aquí" },
+    awards:  { icon: <IconAward />, label: "Sin premios activos", sub: "Los premios de temporada aparecerán aquí" },
   };
   const { icon, label, sub } = configs[type] || configs.matches;
-
   return (
     <div className="mob-empty">
-      <div className="mob-empty-icon" style={{ color: "var(--mob-muted)" }}>
-        {icon}
-      </div>
+      <div className="mob-empty-icon" style={{ color: "var(--mob-muted)" }}>{icon}</div>
       <span className="mob-empty-lbl">{label}</span>
       <span className="mob-empty-sub">{sub}</span>
     </div>
   );
 }
 
-/* ================================================================
-   SKELETON CARDS — placeholders mientras carga
-================================================================ */
 function SkeletonMatchCard() {
   return (
     <div className="mob-sk-mcard">
@@ -173,16 +148,10 @@ function SkeletonAwardCard() {
   );
 }
 
-/* ================================================================
-   STATUS DOT
-================================================================ */
 function StatusDot({ mod }) {
   return <span className={`mob-status-dot mob-status-dot--${mod}`} title={mod} />;
 }
 
-/* ================================================================
-   MINI CARDS
-================================================================ */
 function MiniMatchCard({ match, userPred }) {
   const now       = new Date();
   const deadline  = match.deadline ? new Date(match.deadline) : null;
@@ -316,25 +285,50 @@ function MiniAwardCard({ award, userPrediction }) {
   );
 }
 
-/* ================================================================
-   MODALES
-================================================================ */
 function MobModal({ isOpen, onClose, title, count, children }) {
+  const overlayRef = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    const prevPos = document.body.style.position;
+    const prevWidth = document.body.style.width;
+    const prevTop = document.body.style.top;
+    const scrollY = window.scrollY;
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = `-${scrollY}px`;
+    return () => {
+      document.body.style.overflow = prev;
+      document.body.style.position = prevPos;
+      document.body.style.width = prevWidth;
+      document.body.style.top = prevTop;
+      window.scrollTo(0, scrollY);
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
+
   return (
-   <div 
-      className="mob-modal-overlay" 
-      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
-      onTouchStart={(e) => { if (e.target === e.currentTarget) onClose(); }}
-      onClick={null}  
+    <div
+      ref={overlayRef}
+      className="mob-modal-overlay"
+      onPointerDown={(e) => {
+        if (e.target === overlayRef.current) onClose();
+      }}
+    >
+      <div
+        className="mob-modal"
+        onPointerDown={(e) => e.stopPropagation()}
       >
-      <div className="mob-modal" onClick={e => e.stopPropagation()}>
+        <div className="mob-modal-handle" />
         <div className="mob-modal-header">
           <div className="mob-modal-title">
             {title}
             <span className="mob-modal-title-accent">{count}</span>
           </div>
-          <button className="mob-modal-close" onClick={onClose}>
+          <button className="mob-modal-close" onPointerDown={onClose}>
             <X size={14} />
           </button>
         </div>
@@ -348,6 +342,29 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
   const [sortOpt,      setSortOpt]      = useState("date-asc");
   const [leagueFilter, setLeagueFilter] = useState("all");
   const [showFilter,   setShowFilter]   = useState(false);
+  const overlayRef = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const scrollY = window.scrollY;
+    const prev = {
+      overflow: document.body.style.overflow,
+      position: document.body.style.position,
+      width:    document.body.style.width,
+      top:      document.body.style.top,
+    };
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width    = '100%';
+    document.body.style.top      = `-${scrollY}px`;
+    return () => {
+      document.body.style.overflow = prev.overflow;
+      document.body.style.position = prev.position;
+      document.body.style.width    = prev.width;
+      document.body.style.top      = prev.top;
+      window.scrollTo(0, scrollY);
+    };
+  }, [isOpen]);
 
   const processed = useMemo(() => {
     let list = [...pendingMatches];
@@ -384,19 +401,25 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="mob-modal-overlay" 
-      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
-      onTouchStart={(e) => { if (e.target === e.currentTarget) onClose(); }}
-      onClick={null} 
+    <div
+      ref={overlayRef}
+      className="mob-modal-overlay"
+      onPointerDown={(e) => {
+        if (e.target === overlayRef.current) onClose();
+      }}
     >
-      <div className="mob-modal mob-modal--tall" onClick={e => e.stopPropagation()}>
+      <div
+        className="mob-modal mob-modal--tall"
+        onPointerDown={(e) => e.stopPropagation()}
+      >
+        <div className="mob-modal-handle" />
+
         <div className="mob-modal-header">
           <div className="mob-modal-title">
             PARTIDOS
             <span className="mob-modal-title-accent">{processed.length}</span>
           </div>
-          <button className="mob-modal-close" onClick={onClose}>
+          <button className="mob-modal-close" onPointerDown={onClose}>
             <X size={14} />
           </button>
         </div>
@@ -408,7 +431,7 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
               <button
                 key={opt.key}
                 className={`mob-sort-btn${sortOpt === opt.key ? " active" : ""}`}
-                onClick={() => setSortOpt(opt.key)}
+                onPointerDown={() => setSortOpt(opt.key)}
               >
                 {opt.label}
               </button>
@@ -416,7 +439,7 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
           </div>
           <button
             className={`mob-filter-btn${leagueFilter !== "all" ? " active" : ""}`}
-            onClick={() => setShowFilter(true)}
+            onPointerDown={() => setShowFilter(true)}
           >
             <Filter size={13} />
             {leagueFilter !== "all"
@@ -449,8 +472,13 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
       </div>
 
       {showFilter && (
-        <div className="mob-filter-panel-overlay" onClick={() => setShowFilter(false)}>
-          <div className="mob-filter-panel" onClick={e => e.stopPropagation()}>
+        <div
+          className="mob-filter-panel-overlay"
+          onPointerDown={(e) => {
+            if (e.target.classList.contains('mob-filter-panel-overlay')) setShowFilter(false);
+          }}
+        >
+          <div className="mob-filter-panel" onPointerDown={(e) => e.stopPropagation()}>
             <div className="mob-filter-panel-header">
               <div className="mob-filter-panel-title">
                 <Filter size={13} />
@@ -458,11 +486,11 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
               </div>
               <div style={{ display: "flex", gap: "6px" }}>
                 {leagueFilter !== "all" && (
-                  <button className="mob-filter-panel-reset" onClick={() => { setLeagueFilter("all"); setShowFilter(false); }}>
+                  <button className="mob-filter-panel-reset" onPointerDown={() => { setLeagueFilter("all"); setShowFilter(false); }}>
                     RESET
                   </button>
                 )}
-                <button className="mob-modal-close" onClick={() => setShowFilter(false)}>
+                <button className="mob-modal-close" onPointerDown={() => setShowFilter(false)}>
                   <X size={14} />
                 </button>
               </div>
@@ -472,7 +500,7 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
                 <button
                   key={cat.id}
                   className={`mob-filter-pill${leagueFilter === cat.id ? " active" : ""}`}
-                  onClick={() => { setLeagueFilter(cat.id); setShowFilter(false); }}
+                  onPointerDown={() => { setLeagueFilter(cat.id); setShowFilter(false); }}
                 >
                   <span className="mob-filter-icon">{cat.icon}</span>
                   <span>{cat.name}</span>
@@ -486,16 +514,13 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
   );
 }
 
-/* ================================================================
-   MAIN COMPONENT
-================================================================ */
 export default function MobileDashboard({
   currentUser,
   users        = [],
   matches      = [],
   leagues      = [],
   awards       = [],
-  loading      = false,   // ← nueva prop opcional
+  loading      = false,
   onPredict,
   onLeaguePredict,
   onAwardPredict,
@@ -536,28 +561,28 @@ export default function MobileDashboard({
 
       {/* QUICK ACTIONS */}
       <div className="mob-quick">
-        <div className="mob-qbtn" onClick={() => setMatchModal(true)}>
+        <div className="mob-qbtn" onPointerDown={() => setMatchModal(true)}>
           <div className="mob-qbtn-icon"><Swords size={18} /></div>
           <div>
             <div className="mob-qbtn-txt">PARTIDOS</div>
             <div className="mob-qbtn-sub">{pendingMatches.length} pendientes</div>
           </div>
         </div>
-        <div className="mob-qbtn" onClick={() => setLeagueModal(true)}>
+        <div className="mob-qbtn" onPointerDown={() => setLeagueModal(true)}>
           <div className="mob-qbtn-icon"><Trophy size={18} /></div>
           <div>
             <div className="mob-qbtn-txt">LIGAS</div>
             <div className="mob-qbtn-sub">{leagues.length} activas</div>
           </div>
         </div>
-        <div className="mob-qbtn" onClick={() => setAwardModal(true)}>
+        <div className="mob-qbtn" onPointerDown={() => setAwardModal(true)}>
           <div className="mob-qbtn-icon"><Medal size={18} /></div>
           <div>
             <div className="mob-qbtn-txt">PREMIOS</div>
             <div className="mob-qbtn-sub">{awards.length} activos</div>
           </div>
         </div>
-        <div className="mob-qbtn" onClick={() => currentUser?.id && setProfileModal(true)}>
+        <div className="mob-qbtn" onPointerDown={() => currentUser?.id && setProfileModal(true)}>
           <div className="mob-qbtn-icon"><User size={18} /></div>
           <div>
             <div className="mob-qbtn-txt">PERFIL</div>
@@ -569,12 +594,11 @@ export default function MobileDashboard({
       {/* ═══ PARTIDOS ═══ */}
       <div className="mob-sec">
         <span className="mob-sec-title">PARTIDOS</span>
-        <span className="mob-sec-all" onClick={() => setMatchModal(true)}>TODOS »</span>
+        <span className="mob-sec-all" onPointerDown={() => setMatchModal(true)}>TODOS »</span>
       </div>
       <div className="mob-scroll-wrap">
         <div className="mob-hscroll">
           {loading ? (
-            /* Skeleton mientras carga */
             [0, 1, 2].map(i => <SkeletonMatchCard key={i} />)
           ) : previewMatches.length === 0 ? (
             <EmptyState type="matches" />
@@ -584,7 +608,7 @@ export default function MobileDashboard({
                 <MiniMatchCard key={m.id} match={m} userPred={m.predictions?.find(p => p.user_id === currentUser?.id)} />
               ))}
               {pendingMatches.length > 4 && (
-                <div className="mob-more-card" onClick={() => setMatchModal(true)}>
+                <div className="mob-more-card" onPointerDown={() => setMatchModal(true)}>
                   <span className="mob-more-sym">&raquo;</span>
                   <span>MÁS</span>
                 </div>
@@ -597,7 +621,7 @@ export default function MobileDashboard({
       {/* ═══ LIGAS ═══ */}
       <div className="mob-sec">
         <span className="mob-sec-title">LIGAS</span>
-        <span className="mob-sec-all" onClick={() => setLeagueModal(true)}>TODOS »</span>
+        <span className="mob-sec-all" onPointerDown={() => setLeagueModal(true)}>TODOS »</span>
       </div>
       <div className="mob-scroll-wrap">
         <div className="mob-hscroll">
@@ -611,7 +635,7 @@ export default function MobileDashboard({
                 <MiniLeagueCard key={l.id} league={l} userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)} />
               ))}
               {leagues.length > 3 && (
-                <div className="mob-more-card" onClick={() => setLeagueModal(true)}>
+                <div className="mob-more-card" onPointerDown={() => setLeagueModal(true)}>
                   <span className="mob-more-sym">&raquo;</span>
                   <span>MÁS</span>
                 </div>
@@ -624,7 +648,7 @@ export default function MobileDashboard({
       {/* ═══ PREMIOS ═══ */}
       <div className="mob-sec">
         <span className="mob-sec-title">PREMIOS</span>
-        <span className="mob-sec-all" onClick={() => setAwardModal(true)}>TODOS »</span>
+        <span className="mob-sec-all" onPointerDown={() => setAwardModal(true)}>TODOS »</span>
       </div>
       <div className="mob-scroll-wrap">
         <div className="mob-hscroll">
@@ -638,7 +662,7 @@ export default function MobileDashboard({
                 <MiniAwardCard key={a.id} award={a} userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)} />
               ))}
               {awards.length > 3 && (
-                <div className="mob-more-card" onClick={() => setAwardModal(true)}>
+                <div className="mob-more-card" onPointerDown={() => setAwardModal(true)}>
                   <span className="mob-more-sym">&raquo;</span>
                   <span>MÁS</span>
                 </div>

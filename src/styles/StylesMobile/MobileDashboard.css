@@ -5,7 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
 /* ================================================================
-   TOKENS LOCALES — mapean directo a las variables de index.css
+   TOKENS LOCALES
 ================================================================ */
 .mob-root {
   --mob-accent:        var(--accent);
@@ -27,8 +27,6 @@
   --mob-shadow-accent: var(--shadow);
 }
 
-/* Dark mode: las variables de index.css ya se actualizan solas,
-   solo ajustamos el accent-border y surface que no tienen variable global */
 [data-theme="dark"] .mob-root {
   --mob-accent-border: rgba(139, 127, 199, 0.3);
   --mob-surface:       var(--dark-secondary);
@@ -122,6 +120,8 @@
   border: 1px solid var(--mob-border);
   transition: transform 0.18s ease, box-shadow 0.18s ease;
   min-width: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .mob-qbtn:active {
@@ -190,14 +190,14 @@
   cursor: pointer;
   transition: background 0.15s;
   white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .mob-sec-all:hover { background: var(--glass); }
 
 /* ================================================================
    SCROLL WRAP + HSCROLL
-   mob-scroll-wrap: margen inocupable a ambos lados (16px)
-   mob-hscroll:     scroll libre dentro del wrap
 ================================================================ */
 .mob-scroll-wrap {
   margin: 0 16px;
@@ -218,7 +218,6 @@
 }
 
 .mob-hscroll::-webkit-scrollbar { display: none; }
-
 .mob-hscroll > *:last-child { margin-right: 4px; }
 
 .mob-mcard,
@@ -299,7 +298,7 @@
 
 .mob-mcard-dot img { width: 100%; height: 100%; object-fit: contain; }
 
-/* ── Pills ── */
+/* Pills */
 .mob-pill {
   padding: 3px 8px;
   font-size: 8px;
@@ -423,13 +422,15 @@
   transition: background 0.15s, transform 0.15s;
   border: 1px solid var(--mob-accent-border);
   min-height: 80px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .mob-more-card:active { transform: scale(0.96); }
 .mob-more-sym { font-size: 20px; line-height: 1; }
 
 /* ================================================================
-   EMPTY STATE — reemplaza EmptyMsg
+   EMPTY STATE
 ================================================================ */
 .mob-empty {
   display: flex;
@@ -474,7 +475,7 @@
 }
 
 /* ================================================================
-   SKELETON — shimmer base
+   SKELETONS
 ================================================================ */
 @keyframes mob-sk-pulse {
   0%, 100% { opacity: 0.35; }
@@ -487,9 +488,6 @@
   flex-shrink: 0;
 }
 
-/* ================================================================
-   SKELETON MATCH CARD
-================================================================ */
 .mob-sk-mcard {
   width: 172px;
   background: var(--mob-card);
@@ -534,9 +532,6 @@
   margin-top: 10px;
 }
 
-/* ================================================================
-   SKELETON LEAGUE CARD
-================================================================ */
 .mob-sk-lcard {
   width: 228px;
   background: var(--mob-card);
@@ -575,9 +570,6 @@
   gap: 8px;
 }
 
-/* ================================================================
-   SKELETON AWARD CARD
-================================================================ */
 .mob-sk-acard {
   width: 205px;
   background: var(--mob-card);
@@ -595,9 +587,6 @@
   margin-bottom: 12px;
 }
 
-/* ================================================================
-   ANIMATION DELAYS — escalonado natural
-================================================================ */
 .mob-sk:nth-child(1)  { animation-delay: 0s;    }
 .mob-sk:nth-child(2)  { animation-delay: 0.08s; }
 .mob-sk:nth-child(3)  { animation-delay: 0.16s; }
@@ -606,24 +595,6 @@
 .mob-sk:nth-child(6)  { animation-delay: 0.40s; }
 .mob-sk:nth-child(7)  { animation-delay: 0.48s; }
 
-/* ================================================================
-   RESPONSIVE
-================================================================ */
-@media screen and (max-width: 469px) {
-  .mob-sk-mcard { width: 158px; }
-  .mob-sk-lcard { width: 210px; }
-  .mob-sk-acard { width: 188px; }
-}
-
-@media screen and (max-width: 370px) {
-  .mob-sk-mcard { width: 145px; }
-  .mob-sk-lcard { width: 192px; }
-  .mob-sk-acard { width: 172px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mob-sk { animation: none; opacity: 0.4; }
-}
 /* ================================================================
    LEAGUE MINI CARD
 ================================================================ */
@@ -753,11 +724,16 @@
 }
 
 /* ================================================================
-   MODAL — sheet desde abajo
+   MODAL OVERLAY — CLAVE PARA ANDROID
+   position: fixed con top/left/right/bottom evita que el
+   viewport se redimensione cuando sube el teclado virtual
 ================================================================ */
 .mob-modal-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(10, 8, 20, 0.5);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -765,35 +741,42 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  /* Evitar que el overlay capture taps en inputs */
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* ================================================================
+   MODAL
+================================================================ */
 .mob-modal {
   background: var(--mob-bg);
   border-radius: 24px 24px 0 0;
-  max-height: 88vh;
+  /* dvh = Dynamic Viewport Height, ignora el teclado en Android */
+  max-height: 88dvh;
+  max-height: 88vh; /* fallback para browsers viejos */
   display: flex;
   flex-direction: column;
-  animation: mob-sheet-up 0.3s cubic-bezier(0.34, 1.3, 0.64, 1) both;
-  animation-fill-mode: forwards;
-  will-change: transform;
+  animation: mob-sheet-up 0.28s cubic-bezier(0.34, 1.2, 0.64, 1);
   overflow: hidden;
-  transform: translateY(0);  
-  position: relative;
-  will-change: transform;
-  -webkit-transform: translateZ(0);  
+  /* GPU layer para evitar repaint cuando sube el teclado */
   transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+}
+
+.mob-modal--tall {
+  max-height: 92dvh;
+  max-height: 92vh;
 }
 
 @keyframes mob-sheet-up {
-  from { transform: translateY(60px); opacity: 0; }
+  from { transform: translateY(100%); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
 }
 
-.mob-modal::before {
-  content: "";
-  display: block;
+/* Handle visual */
+.mob-modal-handle {
   width: 40px;
   height: 4px;
   background: var(--mob-muted);
@@ -802,8 +785,6 @@
   margin: 12px auto 0;
   flex-shrink: 0;
 }
-
-.mob-modal--tall { max-height: 92vh; }
 
 .mob-modal-header {
   display: flex;
@@ -847,13 +828,15 @@
   color: var(--mob-muted);
   transition: background 0.15s, color 0.15s;
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
-.mob-modal-close:hover { background: rgba(239,68,68,0.1); color: #dc2626; }
+.mob-modal-close:active { background: rgba(239,68,68,0.1); color: #dc2626; }
 .mob-modal-close svg { width: 14px; height: 14px; }
 
 /* ================================================================
-   TOOLBAR — sort + filter
+   TOOLBAR
 ================================================================ */
 .mob-modal-toolbar {
   display: flex;
@@ -882,7 +865,6 @@
   height: 12px;
 }
 
-/* Botón sort */
 .mob-sort-btn {
   padding: 6px 12px;
   border: 1px solid var(--mob-accent-border);
@@ -896,7 +878,9 @@
   white-space: nowrap;
   flex-shrink: 0;
   line-height: 1;
-  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .mob-sort-btn:active { transform: scale(0.97); }
@@ -906,16 +890,8 @@
   border-color: var(--accent);
   color: #fff;
   font-weight: 700;
-  box-shadow: var(--small-shadow);
 }
 
-.mob-sort-btn:not(.active):hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: var(--glass);
-}
-
-/* Botón filter */
 .mob-filter-btn {
   display: flex;
   align-items: center;
@@ -933,6 +909,8 @@
   flex-shrink: 0;
   line-height: 1;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .mob-filter-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
@@ -945,14 +923,8 @@
   font-weight: 700;
 }
 
-.mob-filter-btn:not(.active):hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: var(--glass);
-}
-
 /* ================================================================
-   MODAL BODY
+   MODAL BODY — scroll interno, no afecta al overlay
 ================================================================ */
 .mob-modal-body {
   flex: 1;
@@ -964,8 +936,8 @@
   gap: 20px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  /* Evitar que el scroll del modal se propague al body */
   overscroll-behavior: contain;
-  scroll-behavior: smooth;
 }
 
 .mob-modal-body::-webkit-scrollbar { display: none; }
@@ -993,7 +965,7 @@
 .mob-modal-cards { display: flex; flex-direction: column; gap: 14px; align-items: center; }
 
 /* ================================================================
-   FILTER PANEL OVERLAY — panel lateral derecho
+   FILTER PANEL
 ================================================================ */
 .mob-filter-panel-overlay {
   position: fixed;
@@ -1009,7 +981,6 @@
 
 .mob-filter-panel-overlay .mob-filter-panel {
   position: relative !important;
-  top: unset !important; right: unset !important; bottom: unset !important;
   width: 272px !important;
   max-width: 82vw !important;
   height: 100% !important;
@@ -1029,7 +1000,6 @@
   to   { transform: translateX(0); }
 }
 
-/* Header del panel */
 .mob-filter-panel-overlay .mob-filter-panel-header {
   display: flex;
   align-items: center;
@@ -1063,7 +1033,6 @@
   gap: 6px;
 }
 
-/* Botón reset */
 .mob-filter-panel-reset {
   padding: 5px 11px;
   border: 1px solid var(--mob-accent-border);
@@ -1078,15 +1047,15 @@
   cursor: pointer;
   line-height: 1;
   transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.mob-filter-panel-reset:hover {
+.mob-filter-panel-reset:active {
   background: rgba(239, 68, 68, 0.08);
   border-color: rgba(239, 68, 68, 0.35);
   color: #dc2626;
 }
 
-/* Cuerpo del panel */
 .mob-filter-panel-overlay .mob-filter-panel-body {
   flex: 1;
   overflow-y: auto;
@@ -1097,7 +1066,6 @@
   -webkit-overflow-scrolling: touch;
 }
 
-/* Pills de categoría — full width, aire generoso */
 .mob-filter-panel-overlay .mob-filter-pill {
   display: flex;
   align-items: center;
@@ -1116,23 +1084,17 @@
   box-shadow: var(--mob-shadow);
   transition: all 0.15s ease;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .mob-filter-panel-overlay .mob-filter-pill:active { transform: scale(0.98); }
-
-.mob-filter-panel-overlay .mob-filter-pill:hover {
-  border-color: var(--accent);
-  background: var(--glass);
-  color: var(--accent);
-  box-shadow: var(--small-shadow);
-}
 
 .mob-filter-panel-overlay .mob-filter-pill.active {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
   font-weight: 700;
-  box-shadow: var(--shadow);
 }
 
 .mob-filter-panel-overlay .mob-filter-icon {
@@ -1155,6 +1117,9 @@
   .mob-qbtn-icon    { width: 32px; height: 32px; }
   .mob-qbtn-icon svg { width: 16px; height: 16px; }
   .mob-progress     { margin: 12px 14px 0; }
+  .mob-sk-mcard { width: 158px; }
+  .mob-sk-lcard { width: 210px; }
+  .mob-sk-acard { width: 188px; }
 }
 
 @media screen and (max-width: 370px) {
@@ -1165,4 +1130,12 @@
   .mob-qbtn-txt     { font-size: 10px; }
   .mob-sort-btn     { font-size: 10px; padding: 5px 9px; }
   .mob-filter-btn   { font-size: 10px; padding: 5px 9px; }
+  .mob-sk-mcard { width: 145px; }
+  .mob-sk-lcard { width: 192px; }
+  .mob-sk-acard { width: 172px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mob-sk { animation: none; opacity: 0.4; }
+  .mob-modal { animation: none; }
 }
