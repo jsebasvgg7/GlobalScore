@@ -1,11 +1,4 @@
 /* ================================================================
-   MobileProfileMain.css — Brutalista Japonés Retro
-   Fuentes: DM Mono + Sora (ya importadas en MobileDashboard.css)
-   Solo visible en ≤768px
-   Light mode = principal / Dark mode = automático via data-theme
-================================================================ */
-
-/* ================================================================
    TOKENS
 ================================================================ */
 .mpm-root {

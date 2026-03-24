@@ -91,3 +91,4 @@ export const useStreaks = (currentUser) => {
     calculateStreaks
   };
 };
+
