@@ -42,17 +42,6 @@ function PodiumCard({ user, rank, onSelect }) {
       </button>
       <span className="mrk-podium-name">{user.name}</span>
       <span className="mrk-podium-pts">{fmt(user.rankPoints)} pts</span>
-      <div className="mrk-podium-stats">
-        <span className="mrk-podium-stat">
-          <span className="mrk-podium-stat-val">{user.rankCorrect}</span>
-          <span className="mrk-podium-stat-lbl">AC</span>
-        </span>
-        <span className="mrk-podium-sep" />
-        <span className="mrk-podium-stat">
-          <span className="mrk-podium-stat-val mrk-podium-stat-val--acc">{accuracy}%</span>
-          <span className="mrk-podium-stat-lbl">PREC</span>
-        </span>
-      </div>
     </div>
   );
 }

@@ -220,17 +220,17 @@
   width: 100%;
 }
 
-.mrk-podium-step--first  { height: 20px; background: rgba(201,162,39,0.2);  border-top: 2px solid var(--mrk-gold); }
-.mrk-podium-step--second { height: 12px; background: rgba(138,138,138,0.15); border-top: 2px solid var(--mrk-silver); }
-.mrk-podium-step--third  { height: 6px;  background: rgba(160,101,42,0.15);  border-top: 2px solid var(--mrk-bronze); }
+.mrk-podium-step--first  { height: 52px; background: rgba(201,162,39,0.2);  border-top: 2px solid var(--mrk-gold); }
+.mrk-podium-step--second { height: 36px; background: rgba(138,138,138,0.15); border-top: 2px solid var(--mrk-silver); }
+.mrk-podium-step--third  { height: 20px; background: rgba(160,101,42,0.15);  border-top: 2px solid var(--mrk-bronze); }
 
 /* Tarjeta del podio */
 .mrk-podium-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  padding: 10px 4px 8px;
+  gap: 10px;
+  padding: 10px 4px 18px;
   width: 100%;
 }
 
@@ -358,9 +358,9 @@
 
 /* Avatares del podio — tamaños por columna */
 .mrk-av--podium { width: 52px; height: 52px; font-size: 18px; }
-.mrk-podium-col--first  .mrk-av--podium { width: 62px; height: 62px; font-size: 22px; }
-.mrk-podium-col--second .mrk-av--podium { width: 50px; height: 50px; font-size: 18px; }
-.mrk-podium-col--third  .mrk-av--podium { width: 46px; height: 46px; font-size: 16px; }
+.mrk-podium-col--first  .mrk-av--podium { width: 80px; height: 80px; font-size: 28px; }
+.mrk-podium-col--second .mrk-av--podium { width: 64px; height: 64px; font-size: 22px; }
+.mrk-podium-col--third  .mrk-av--podium { width: 58px; height: 58px; font-size: 20px; }
 
 /* ================================================================
    TABLA
@@ -535,9 +535,9 @@
    EXTRA SMALL
 ================================================================ */
 @media screen and (max-width: 380px) {
-  .mrk-podium-col--first  .mrk-av--podium { width: 54px; height: 54px; }
-  .mrk-podium-col--second .mrk-av--podium { width: 44px; height: 44px; }
-  .mrk-podium-col--third  .mrk-av--podium { width: 40px; height: 40px; }
+.mrk-podium-col--first  .mrk-av--podium { width: 68px; height: 68px; }
+.mrk-podium-col--second .mrk-av--podium { width: 54px; height: 54px; }
+.mrk-podium-col--third  .mrk-av--podium { width: 48px; height: 48px; }
   .mrk-podium-name { font-size: 10px; max-width: 70px; }
   .mrk-row         { padding: 10px 12px; }
   .mrk-row-name    { font-size: 13px; }
@@ -852,3 +852,45 @@
 [data-theme="dark"] .mrk-hof-list-row--active { background: rgba(201,162,39,0.07); }
 [data-theme="dark"] .mrk-hof-nav       { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
 [data-theme="dark"] .mrk-hof-dot       { background: rgba(255,255,255,0.12); }
+/* Fondo de la tabla */
+.mrk-table {
+  background: var(--mrk-card);
+}
+
+/* Fila — quitar el fondo plano y agregar acento purple al hover */
+.mrk-row {
+  background: var(--mrk-card);
+}
+
+.mrk-row:active {
+  background: var(--glass) !important;
+}
+
+/* Fila propia — highlight purple en lugar de neutro */
+.mrk-row--me {
+  background: rgba(96, 81, 155, 0.12) !important;
+  border-left: 3px solid var(--accent) !important;
+}
+
+/* Puntos — purple en lugar de gold */
+.mrk-row-pts {
+  color: var(--accent);
+}
+
+[data-theme="dark"] .mrk-row-pts {
+  color: var(--accent-light);
+}
+
+/* Número de posición sin top 3 — purple subtle */
+.mrk-row-num:not(.mrk-row-num--1):not(.mrk-row-num--2):not(.mrk-row-num--3) {
+  background: var(--glass);
+  color: var(--accent);
+}
+
+/* Tag TÚ — ya usa var(--mrk-accent) que mapea a var(--accent), ok */
+
+/* Separador de tabla — purple */
+.mrk-table-sep {
+  background: var(--accent);
+  opacity: 0.3;
+}

@@ -22,6 +22,7 @@ import { useAchievements } from '../hooks/HooksProfile/useAchievements';
 import { useUserRanking } from '../hooks/HooksProfile/useUserRanking';
 import { useMonthlyChampionships } from '../hooks/HooksProfile/useMonthlyChampionships';
 import { useSettings } from '../hooks/HooksSettings/useSettings';
+import MobileProfileMain from "../components/ComMobile/MobileProfileMain";
 import { useTheme } from '../context/ThemeContext';
 
 import AvatarUpload from '../components/ComProfile/AvatarUpload';
@@ -959,14 +960,13 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
       {/* ─── MOBILE ─── */}
       <div className="pnew-mobile-wrapper">
         {mobileView === 'main' && (
-          <MobileMainView
-            userData={userData}
-            currentUser={currentUser}
-            preferences={preferences}
-            theme={theme}
-            toggleTheme={toggleTheme}
-            onTabClick={tab => setMobileView(`tab:${tab}`)}
+          <MobileProfileMain
+            currentUser={{ ...currentUser, ...userData }}
+            isDark={theme === 'dark'}
+            onToggleDark={toggleTheme}
+            onNavigate={tab => setMobileView(`tab:${tab}`)}
             onLogout={handleLogout}
+            onAvatarClick={() => setMobileView('tab:edit')}
           />
         )}
         {isMobileSub && (
