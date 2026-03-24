@@ -148,6 +148,8 @@ export const countrySlugMap = {
   'ENG': 'inglaterra',
   'INT': 'irlandadelnorte',
   'RUM': 'rumania',
+  'SWE': 'suecia',
+  'UKR': 'ucrania',
 
   // América
   'ARG': 'argentina',
