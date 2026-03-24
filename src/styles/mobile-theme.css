@@ -2149,3 +2149,90 @@
     grid-template-columns: 1fr !important;
   }
 }
+/* ================================================================
+   FIX 1 — PERFIL MOBILE: fondo visible cuando hay poco contenido
+   El sub-view body necesita min-height para cubrir toda la pantalla
+================================================================ */
+@media (max-width: 768px) {
+  /* El wrapper del sub-view debe ocupar al menos toda la pantalla */
+  .pnew-mob-sub {
+    min-height: 100dvh;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* El body del sub-view se expande para llenar el espacio restante */
+  .pnew-mob-sub-body {
+    flex: 1;
+    background: var(--bg);
+    min-height: 0; /* flex child */
+  }
+
+  /* El contenido del tab también cubre el fondo */
+  .pnew-tab-content {
+    min-height: calc(100dvh - 56px); /* 56px = altura del sub-header */
+    background: var(--bg);
+    box-sizing: border-box;
+  }
+
+  /* Dark mode: asegurar el color cálido correcto */
+  [data-theme="dark"] .pnew-mob-sub {
+    background: #262424 !important;
+  }
+
+  [data-theme="dark"] .pnew-mob-sub-body {
+    background: #262424 !important;
+  }
+
+  [data-theme="dark"] .pnew-tab-content {
+    background: #262424 !important;
+  }
+}
+
+
+/* ================================================================
+   FIX 2 — NOTIFICACIONES MOBILE: np-shell visible en mobile
+   El problema: np-shell usa display:flex en desktop pero en mobile
+   se filtra. Forzamos con máxima especificidad.
+================================================================ */
+@media screen and (max-width: 768px) {
+  /* Ocultar el layout desktop de notificaciones */
+  .np-page .np-shell,
+  div.np-shell {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Mostrar el layout mobile de notificaciones */
+  .np-page .np-mobile,
+  div.np-mobile {
+    display: flex !important;
+    flex-direction: column;
+    min-height: 100dvh;
+    padding-bottom: 68px;
+    background: var(--bg);
+  }
+
+  /* Dark: fondo cálido */
+  [data-theme="dark"] .np-mobile {
+    background: #262424 !important;
+  }
+
+  /* Asegurar que la página raíz también tenga el fondo correcto */
+  [data-theme="dark"] .np-page {
+    background: #262424 !important;
+    min-height: 100dvh;
+  }
+
+  /* Fix topbar del mobile notifications (sticky correcto) */
+  .npm-topbar {
+    position: sticky;
+    top: 56px; /* debajo del header global */
+    z-index: 50;
+  }
+}
