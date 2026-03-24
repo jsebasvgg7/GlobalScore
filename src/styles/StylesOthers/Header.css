@@ -392,13 +392,11 @@
   left: var(--sidebar-w);
   right: 0;
   height: var(--topbar-h);
-  background: var(--hdr-surface);
-  border-bottom: 0.5px solid var(--hdr-border);
+  background: var(--sb-bg-light);
+  border-bottom: 1px solid var(--sb-border-light);
   align-items: center;
   justify-content: space-between;
   z-index: 200;
-  overflow: visible;
-  position: fixed;
 }
 
 [data-theme="dark"] .gs-topbar {
@@ -448,10 +446,9 @@
 .gs-topbar-right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   padding: 0 18px;
   height: 100%;
-  overflow: visible;
 }
 
 .gs-clock {
@@ -499,53 +496,33 @@
 }
 
 [data-theme="dark"] .gs-bell-dot { border-color: var(--sb-bg-dark); }
+
 .gs-user-chip {
   display: flex;
   align-items: center;
-  gap: 9px;
-  border: 0.5px solid var(--hdr-border);
-  background: var(--hdr-cream);
-  padding: 6px 12px 6px 52px;
+  gap: 8px;
+  border: 0.5px solid var(--sb-border-light);
+  background: transparent;
+  padding: 4px 11px 4px 4px;
   cursor: pointer;
   transition: border-color 0.15s;
-  position: relative;
-  height: 38px;
-  box-sizing: border-box;
 }
 
-.gs-user-chip:hover { border-color: rgba(91,79,216,0.35); }
+.gs-user-chip:hover { border-color: rgba(91,79,216,0.4); }
 
-[data-theme="dark"] .gs-user-chip {
-  background: rgba(255,255,255,0.04);
-  border-color: rgba(255,255,255,0.08);
-}
+[data-theme="dark"] .gs-user-chip { border-color: var(--sb-border-dark); }
 
 .gs-user-avatar {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: calc(var(--topbar-h) + 16px);
-  margin-top: 0;
-  background: var(--hdr-accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 30px; height: 30px;
+  background: var(--sb-accent);
+  display: flex; align-items: center; justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
-  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
-  box-shadow: 3px 0 8px rgba(0,0,0,0.18);
-  transition: transform 0.15s;
-  z-index: 1;
-}
-
-.gs-user-chip:hover .gs-user-avatar {
-  transform: translateY(calc(-50% - 2px));
+  clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
 }
 
 .gs-user-avatar img  { width: 100%; height: 100%; object-fit: cover; }
-.gs-user-avatar span { font-size: 12px; font-weight: 700; color: #fff; font-family: var(--hdr-mono); }
+.gs-user-avatar span { font-size: 11px; font-weight: 700; color: #fff; font-family: var(--sb-mono); }
 
 .gs-user-info { display: flex; flex-direction: column; }
 
@@ -605,76 +582,45 @@
 /* ================================================================
    MOBILE — Top Header · Brutalista Japonés Retro
 ================================================================ */
+
+/* ================================================================
+   MOBILE — Top Header
+================================================================ */
 .gs-mobile-header {
   display: none;
-  align-items: stretch;
-  height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 16px;
   background: var(--bg);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 200;
-  overflow: hidden;
 }
 
-/* Rejilla BJR de fondo */
-.gs-mobile-header::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(90deg, transparent, transparent 39px, var(--border) 40px);
-  opacity: 0.4;
-  pointer-events: none;
-  z-index: 0;
-}
+.gs-mobile-left { display: flex; align-items: center; gap: 10px; }
 
-/* Franja de acento izquierda */
-.gs-mobile-header::after {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: var(--accent);
-  z-index: 1;
-}
-
-/* ── Lado izquierdo: avatar + info ── */
-.gs-mobile-left {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  position: relative;
-  z-index: 2;
-}
-
-/* Avatar — columna cuadrada separada por borde */
 .gs-mobile-avatar {
-  width: 52px;
-  height: 52px;
+  width: 38px;
+  height: 38px;
   border-radius: 0;
   background: var(--accent);
-  border: none;
-  border-right: 1px solid var(--border);
+  border: 0.5px solid var(--border);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
-  margin-left: 3px; /* compensa la franja ::after */
-  transition: opacity 0.15s;
 }
-
-.gs-mobile-avatar:active { opacity: 0.85; }
 
 .gs-mobile-avatar img  { width: 100%; height: 100%; object-fit: cover; }
 .gs-mobile-avatar span {
   color: #fff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
-  letter-spacing: 0.04em;
 }
 
 /* Bloque de texto — padding interno, sin separación extra */
@@ -801,64 +747,48 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 0;
+  justify-content: flex-end;
+  gap: 3px;
   height: 100%;
+  padding-bottom: 6px;
   position: relative;
 }
 
 .gs-bottom-label--center { display: none; }
 
 .gs-bottom-trophy {
-  width: 46px;
-  height: 46px;
-  border-radius: 0;
+  width: 48px; height: 48px;
+  border-radius: 50%;
   border: none;
   background: var(--bn-trophy-bg-light);
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   position: absolute;
-  top: -12px;
-  clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
-  box-shadow: 3px 3px 0 rgba(0,0,0,0.22), 0 -2px 16px rgba(91,79,216,0.3);
-  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  top: -14px;
+  box-shadow: 0 -2px 16px rgba(91,79,216,0.25), 0 4px 12px rgba(0,0,0,0.15);
+  transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
 }
 
 [data-theme="dark"] .gs-bottom-trophy {
   background: var(--bn-trophy-bg-dark);
-  box-shadow: 3px 3px 0 rgba(0,0,0,0.4), 0 -2px 20px rgba(91,79,216,0.45);
-  color: rgba(255,255,255,0.8);
+  box-shadow: 0 -2px 20px rgba(91,79,216,0.4), 0 4px 16px rgba(0,0,0,0.4);
 }
 
 .gs-bottom-trophy--active {
   background: #4a3fc7;
   color: #fff;
-  box-shadow: 3px 3px 0 rgba(0,0,0,0.3), 0 -2px 24px rgba(91,79,216,0.55);
+  box-shadow: 0 -2px 24px rgba(91,79,216,0.5), 0 6px 20px rgba(0,0,0,0.25);
 }
 
 [data-theme="dark"] .gs-bottom-trophy--active { background: #6d5fff; }
 
-.gs-bottom-trophy:active {
-  transform: scale(0.92) translate(2px, 2px);
-  box-shadow: 1px 1px 0 rgba(0,0,0,0.3);
-}
-
+.gs-bottom-trophy:active { transform: scale(0.9); }
 .gs-bottom-trophy:hover {
-  transform: translateY(-3px);
-  box-shadow: 4px 5px 0 rgba(0,0,0,0.22), 0 -4px 20px rgba(91,79,216,0.4);
-}
-
-.gs-bottom-trophy::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 6px;
-  right: 0;
-  height: 2px;
-  background: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 -4px 24px rgba(91,79,216,0.4), 0 8px 20px rgba(0,0,0,0.2);
 }
 
 /* ================================================================
