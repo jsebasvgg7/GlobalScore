@@ -765,6 +765,8 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mob-modal {
@@ -777,7 +779,11 @@
   animation-fill-mode: forwards;
   will-change: transform;
   overflow: hidden;
-  transform: translateY(0);  /* ancla el estado final */
+  transform: translateY(0);  
+  position: relative;
+  will-change: transform;
+  -webkit-transform: translateZ(0);  
+  transform: translateZ(0);
 }
 
 @keyframes mob-sheet-up {
@@ -958,6 +964,8 @@
   gap: 20px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
 }
 
 .mob-modal-body::-webkit-scrollbar { display: none; }

@@ -322,7 +322,12 @@ function MiniAwardCard({ award, userPrediction }) {
 function MobModal({ isOpen, onClose, title, count, children }) {
   if (!isOpen) return null;
   return (
-    <div className="mob-modal-overlay" onClick={onClose}>
+   <div 
+      className="mob-modal-overlay" 
+      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      onTouchStart={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      onClick={null}  
+      >
       <div className="mob-modal" onClick={e => e.stopPropagation()}>
         <div className="mob-modal-header">
           <div className="mob-modal-title">
@@ -379,7 +384,12 @@ function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict })
   if (!isOpen) return null;
 
   return (
-    <div className="mob-modal-overlay" onClick={onClose}>
+    <div 
+      className="mob-modal-overlay" 
+      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      onTouchStart={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      onClick={null} 
+    >
       <div className="mob-modal mob-modal--tall" onClick={e => e.stopPropagation()}>
         <div className="mob-modal-header">
           <div className="mob-modal-title">
@@ -495,19 +505,7 @@ export default function MobileDashboard({
   const [awardModal,   setAwardModal]   = useState(false);
   const [profileModal, setProfileModal] = useState(false);
 
-  const [frozenMatches, setFrozenMatches] = useState([]);
-
   const pendingMatches = useMemo(() => matches.filter(m => m.status === "pending"), [matches]);
-
-  const handleOpenMatchModal = () => {
-    setFrozenMatches(pendingMatches);
-    setMatchModal(true);
-  };
-
-  const handleCloseMatchModal = () => {
-    setMatchModal(false);
-    setFrozenMatches([]);
-  };
 
   const myPredCount = useMemo(
     () => matches.filter(m => m.predictions?.some(p => p.user_id === currentUser?.id)).length,
@@ -538,7 +536,7 @@ export default function MobileDashboard({
 
       {/* QUICK ACTIONS */}
       <div className="mob-quick">
-        <div className="mob-qbtn" onClick={() => handleOpenMatchModal()}>
+        <div className="mob-qbtn" onClick={() => setMatchModal(true)}>
           <div className="mob-qbtn-icon"><Swords size={18} /></div>
           <div>
             <div className="mob-qbtn-txt">PARTIDOS</div>
@@ -571,7 +569,7 @@ export default function MobileDashboard({
       {/* ═══ PARTIDOS ═══ */}
       <div className="mob-sec">
         <span className="mob-sec-title">PARTIDOS</span>
-        <span className="mob-sec-all" onClick={() => handleOpenMatchModal()}>TODOS »</span>
+        <span className="mob-sec-all" onClick={() => setMatchModal(true)}>TODOS »</span>
       </div>
       <div className="mob-scroll-wrap">
         <div className="mob-hscroll">
@@ -586,7 +584,7 @@ export default function MobileDashboard({
                 <MiniMatchCard key={m.id} match={m} userPred={m.predictions?.find(p => p.user_id === currentUser?.id)} />
               ))}
               {pendingMatches.length > 4 && (
-                <div className="mob-more-card" onClick={() => handleOpenMatchModal()}>
+                <div className="mob-more-card" onClick={() => setMatchModal(true)}>
                   <span className="mob-more-sym">&raquo;</span>
                   <span>MÁS</span>
                 </div>
@@ -653,8 +651,8 @@ export default function MobileDashboard({
       {/* MODALES */}
       <MatchModal
         isOpen={matchModal}
-        onClose={handleCloseMatchModal}
-        pendingMatches={matchModal ? frozenMatches : pendingMatches} 
+        onClose={() => setMatchModal(false)}
+        pendingMatches={pendingMatches}
         currentUser={currentUser}
         onPredict={onPredict}
       />
