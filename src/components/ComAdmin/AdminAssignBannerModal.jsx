@@ -22,15 +22,18 @@ export default function AdminAssignBannerModal({ onClose, banners, users: initia
 
   // Recargar usuarios frescos al abrir (captura nombres actualizados)
   useEffect(() => {
-    const fetchFreshUsers = async () => {
+    const fetchUsers = async () => {
       const { data, error } = await supabase
         .from('users')
         .select('id, name, points, avatar_url')
         .order('name', { ascending: true });
       if (!error && data) setAllUsers(data);
     };
-    fetchFreshUsers();
+    fetchUsers();
   }, []);
+   const filtered = !search.trim() ? [] : allUsers.filter(u =>
+    (u.name || '').toLowerCase().includes(search.toLowerCase())
+  ).slice(0, 6);
 
   useEffect(() => {
     if (selectedUser) loadUserBanners(selectedUser.id);

@@ -605,9 +605,9 @@ function AddBannerForm({ onAdd }) {
   };
 
   const submit = async () => {
-    if (!form.name.trim() || !imageFile) return;
-    setUploading(true);
-    try { await onAdd(form, imageFile); setForm({ name: '', description: '' }); setImageFile(null); setPreview(null); }
+  if (!form.name.trim() || !imageFile) return;
+  setUploading(true);
+  try { await onAdd({ ...form, file: imageFile }); setForm({ name: '', description: '' }); setImageFile(null); setPreview(null); }
     finally { setUploading(false); }
   };
 
@@ -905,8 +905,20 @@ function AssignBannerForm({ users: initialUsers, banners, onAssign, onRevoke }) 
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [userBanners, setUserBanners] = useState([]);
   const [assigning, setAssigning] = useState(false);
+  const [allUsers, setAllUsers] = useState(initialUsers || []);
 
-  const filtered = !search.trim() ? [] : initialUsers.filter(u =>
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, name, points, avatar_url')
+        .order('name', { ascending: true });
+      if (!error && data) setAllUsers(data);
+    };
+    fetchUsers();
+  }, []);
+
+  const filtered = !search.trim() ? [] : allUsers.filter(u =>
     (u.name || '').toLowerCase().includes(search.toLowerCase())
   ).slice(0, 6);
 
@@ -948,6 +960,12 @@ function AssignBannerForm({ users: initialUsers, banners, onAssign, onRevoke }) 
             </button>
           ))}
         </div>
+      )}
+
+      {search && !selected && filtered.length === 0 && search.trim() && (
+        <p style={{ fontSize: 13, color: 'var(--muted)', padding: '8px 0' }}>
+          No se encontraron usuarios
+        </p>
       )}
 
       {selected && (
