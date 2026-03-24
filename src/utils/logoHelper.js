@@ -5,9 +5,10 @@
 const TEAM_LOGOS_BUCKET = 'team-logos';
 const LEAGUE_LOGOS_BUCKET = 'league-logos';
 const AWARD_LOGOS_BUCKET = 'award-logos';
+const WORLD_CUP_LOGOS_BUCKET = 'world-cup-logos';
 
 // ============================================
-// MAPEO DE EQUIPOS
+// MAPEO DE EQUIPOS (Clubes)
 // ============================================
 export const teamSlugMap = {
   'MUN': 'manchesterunited',
@@ -90,7 +91,7 @@ export const teamSlugMap = {
   'KOE': 'koln',
   'PSG': 'psg',
   'OGM': 'olimpiquemarsella',
-  'OLY': 'olimpiquelyon', 
+  'OLY': 'olimpiquelyon',
   'MON': 'monaco',
   'LIL': 'lille',
   'REN': 'rennais',
@@ -125,38 +126,102 @@ export const teamSlugMap = {
 };
 
 // ============================================
-// MAPEO DE LIGAS (para equipos)
+// MAPEO DE SELECCIONES NACIONALES (FIFA)
+// ============================================
+export const countrySlugMap = {
+  // Europa
+  'GER': 'alemania',
+  'AUT': 'austria',
+  'BEL': 'belgica',
+  'CRO': 'croacia',
+  'DEN': 'dinamarca',
+  'SCO': 'escocia',
+  'ESP': 'espana',
+  'FRA': 'francia',
+  'NED': 'paisesbajos',
+  'NOR': 'noruega',
+  'POL': 'polonia',
+  'POR': 'portugal',
+  'SUI': 'suiza',
+  'TUR': 'turquia',
+  'ITA': 'italia',
+  'ENG': 'inglaterra',
+
+  // América
+  'ARG': 'argentina',
+  'BOL': 'bolivia',
+  'BRA': 'brasil',
+  'CAN': 'canada',
+  'COL': 'colombia',
+  'CRC': 'costarica',
+  'CUR': 'curacao',
+  'ECU': 'ecuador',
+  'MEX': 'mexico',
+  'PAN': 'panama',
+  'PAR': 'paraguay',
+  'URU': 'uruguay',
+  'USA': 'usa',
+  'HTI': 'haiti',
+
+  // África
+  'ALG': 'argelia',
+  'CPV': 'caboverde',
+  'CIV': 'costamarfil',
+  'COG': 'congo',
+  'EGY': 'egipto',
+  'GHA': 'ghana',
+  'MAR': 'marruecos',
+  'SEN': 'senegal',
+  'RSA': 'sudafrica',
+  'TUN': 'tunez',
+
+  // Asia
+  'IRN': 'iran',
+  'JPN': 'japon',
+  'JOR': 'jordan',
+  'KOR': 'coreadelsur',
+  'QAT': 'qatar',
+  'UZB': 'uzbekistan',
+  'KSA': 'arabiasaudita',
+
+  // Oceanía
+  'AUS': 'australia',
+  'NZL': 'nuevazelanda',
+};
+
+// ============================================
+// MAPEO DE LIGAS (para equipos de clubes)
 // ============================================
 export const leagueMap = {
   // Competiciones Europeas
   'Champions League': 'champions-league',
   'Europa League': 'champions-league',
   'Conference League': 'champions-league',
-  
-  // España - todas usan los mismos equipos de La Liga
+
+  // España
   'La Liga': 'la-liga',
   'Copa del Rey': 'la-liga',
   'Supercopa de España': 'la-liga',
-  
-  // Inglaterra - todas usan los mismos equipos de Premier League
+
+  // Inglaterra
   'Premier League': 'premier-league',
   'FA Cup': 'premier-league',
   'EFL Cup': 'premier-league',
   'Carabao Cup': 'premier-league',
   'Community Shield': 'premier-league',
-  
-  // Italia - todas usan los mismos equipos de Serie A
+
+  // Italia
   'Serie A': 'serie-a',
   'Coppa Italia': 'serie-a',
   'Supercoppa Italiana': 'serie-a',
-  
-  // Alemania - todas usan los mismos equipos de Bundesliga
+
+  // Alemania
   'Bundesliga': 'bundesliga',
   'DFB Pokal': 'bundesliga',
   'Copa de Alemania': 'bundesliga',
   'Supercopa de Alemania': 'bundesliga',
-  
-  // Francia - todas usan los mismos equipos de Ligue 1
+
+  // Francia
   'Ligue 1': 'ligue-1',
   'Coupe de France': 'ligue-1',
   'Supercopa de Francia': 'ligue-1',
@@ -167,35 +232,36 @@ export const leagueMap = {
 // ============================================
 export const leagueLogoUrlMap = {
   // FIFA
-  'FIFA':'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/FIFA.png',
+  'FIFA': 'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/FIFA.png',
+
   // Competiciones Europeas
   'Champions League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/42.png',
   'Europa League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/73.png',
   'Conference League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/10216.png',
-  
+
   // España
   'La Liga': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/87.png',
   'Copa del Rey': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/138.png',
   'Supercopa de España': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/139.png',
-  
+
   // Inglaterra
   'Premier League': 'https://image-service.onefootball.com/transform?w=256&dpr=2&image=https://images.onefootball.com/icons/leagueColoredCompetition/128/9.png',
   'FA Cup': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/132.png',
   'EFL Cup': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/133.png',
   'Carabao Cup': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/133.png',
   'Community Shield': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/247.png',
-  
+
   // Italia
   'Serie A': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/55.png',
   'Coppa Italia': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/141.png',
   'Supercoppa Italiana': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/222.png',
-  
+
   // Alemania
   'Bundesliga': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/54.png',
   'DFB Pokal': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/209.png',
   'Copa de Alemania': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/209.png',
   'Supercopa de Alemania': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/8924.png',
-  
+
   // Francia
   'Ligue 1': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/53.png',
   'Coupe de France': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/134.png',
@@ -227,7 +293,7 @@ export const awardLogoMap = {
 };
 
 // ============================================
-// FUNCIONES PARA LOGOS DE EQUIPOS
+// FUNCIONES PARA LOGOS DE EQUIPOS (Clubes)
 // ============================================
 
 export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
@@ -239,38 +305,92 @@ export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
 }
 
 export function getLogoUrlByTeamName(supabase, teamName, leagueName) {
+  // Si es liga FIFA, usar logos de selecciones nacionales
+  if (leagueName === 'FIFA') {
+    return getCountryLogoUrl(supabase, teamName);
+  }
+
   const teamSlug = teamSlugMap[teamName];
   const leagueSlug = leagueMap[leagueName];
-  
+
   if (!teamSlug || !leagueSlug) {
     console.warn(`⚠️ Logo de equipo no encontrado: "${teamName}" en "${leagueName}"`);
     return null;
   }
-  
+
   return getTeamLogoUrl(supabase, leagueSlug, teamSlug);
+}
+
+// ============================================
+// FUNCIONES PARA LOGOS DE SELECCIONES (FIFA)
+// ============================================
+
+/**
+ * Obtiene la URL pública del logo de una selección nacional
+ * @param {object} supabase - Cliente de Supabase
+ * @param {string} countryCode - Abreviación del país (ej: 'MEX', 'ARG')
+ * @returns {string|null} URL pública del logo o null si no existe
+ */
+export function getCountryLogoUrl(supabase, countryCode) {
+  const slug = countrySlugMap[countryCode];
+
+  if (!slug) {
+    console.warn(`⚠️ Logo de selección no encontrado: "${countryCode}"`);
+    return null;
+  }
+
+  const { data } = supabase.storage
+    .from(WORLD_CUP_LOGOS_BUCKET)
+    .getPublicUrl(`${slug}.png`);
+
+  return data.publicUrl;
+}
+
+/**
+ * Obtiene la URL pública del logo de una selección por nombre completo
+ * @param {object} supabase - Cliente de Supabase
+ * @param {string} countryName - Nombre del país en español (ej: 'México', 'Paraguay')
+ * @returns {string|null} URL pública del logo o null si no existe
+ */
+export function getCountryLogoUrlByName(supabase, countryName) {
+  // Normalizar: minúsculas, sin acentos
+  const normalized = countryName
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '');
+
+  // Buscar directamente por slug normalizado
+  const slugValues = Object.values(countrySlugMap);
+  const match = slugValues.find(slug => slug === normalized);
+
+  if (!match) {
+    console.warn(`⚠️ Logo de selección no encontrado por nombre: "${countryName}"`);
+    return null;
+  }
+
+  const { data } = supabase.storage
+    .from(WORLD_CUP_LOGOS_BUCKET)
+    .getPublicUrl(`${match}.png`);
+
+  return data.publicUrl;
 }
 
 // ============================================
 // FUNCIONES PARA LOGOS DE LIGAS
 // ============================================
 
-/**
- * Obtiene la URL directa del logo de una liga desde Fotmob
- * @param {string} leagueName - Nombre de la liga
- * @returns {string|null} URL del logo o null si no existe
- */
 export function getLeagueLogoUrlDirect(leagueName) {
   const url = leagueLogoUrlMap[leagueName];
-  
+
   if (!url) {
     console.warn(`⚠️ Logo de liga no encontrado: "${leagueName}"`);
     return null;
   }
-  
+
   return url;
 }
 
-// Mantener función antigua para compatibilidad
 export function getLeagueLogoUrl(supabase, leagueSlug) {
   const path = `${leagueSlug}.png`;
   const { data } = supabase.storage
@@ -280,11 +400,9 @@ export function getLeagueLogoUrl(supabase, leagueSlug) {
 }
 
 export function getLogoUrlByLeagueName(supabase, leagueName) {
-  // Primero intentar con URL directa
   const directUrl = getLeagueLogoUrlDirect(leagueName);
   if (directUrl) return directUrl;
-  
-  // Fallback a storage de Supabase
+
   const leagueSlug = leagueLogoMap[leagueName];
   if (!leagueSlug) {
     console.warn(`⚠️ Logo de liga no encontrado: "${leagueName}"`);
