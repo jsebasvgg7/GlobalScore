@@ -31,7 +31,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
 
   const isActive = (path) => location.pathname === path;
 
-  /* ── Sidebar / Desktop nav (todos los items) ── */
+  /* ── Sidebar / Desktop nav ── */
   const sidebarItems = [
     { path: "/app",     icon: Home,      label: "Inicio"  },
     { path: "/ranking", icon: Award,     label: "Ranking" },
@@ -41,19 +41,16 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
     ...(currentUser?.is_admin ? [{ path: "/admin", icon: Shield, label: "Admin" }] : []),
   ];
 
-  /* ── Mobile Bottom Nav ──
-     Normal:  Perfil | Ranking | [Trophy] | Stats | Mundial
-     Admin:   Admin  | Ranking | [Trophy] | Stats | Mundial
-  ── */
+  /* ── Mobile Bottom Nav ── */
   const leftItems = currentUser?.is_admin
     ? [{ path: "/admin",   icon: Shield, label: "Admin"   }]
-    : [{ path: "/world",   icon: Globe,     label: "Mundial" }];
+    : [{ path: "/world",   icon: Globe,  label: "Mundial" }];
 
   const mobileBottomItems = [
     ...leftItems,
     { path: "/ranking", icon: Award,     label: "Ranking" },
     { path: "/stats",   icon: BarChart3, label: "Stats"   },
-    { path: "/profile", icon: User2,  label: "Perfil"  },
+    { path: "/profile", icon: User2,     label: "Perfil"  },
   ];
 
   const firstName = currentUser?.name?.split(" ")[0] || "Jugador";
@@ -63,32 +60,50 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
   return (
     <>
       {/* ══════════════════════════════════════
-          DESKTOP SIDEBAR
+          DESKTOP SIDEBAR — Brutalista Japonés
       ══════════════════════════════════════ */}
       <aside className="gs-sidebar">
+
+        {/* Logo */}
         <div className="gs-logo-wrap">
           <button className="gs-logo-btn" onClick={() => navigate("/app")} aria-label="Inicio">
             <Trophy size={18} />
           </button>
         </div>
 
+        {/* Separador decorativo */}
+        <div className="gs-sidebar-divider">
+          <span>NAV</span>
+        </div>
+
+        {/* Navegación — centrada verticalmente */}
         <nav className="gs-nav">
-          {sidebarItems.map(({ path, icon: Icon, label }) => (
+          {sidebarItems.map(({ path, icon: Icon, label }, index) => (
             <button
               key={path}
               className={`gs-nav-btn${isActive(path) ? " gs-nav-btn--active" : ""}`}
+              data-index={String(index + 1).padStart(2, "0")}
               onClick={() => navigate(path)}
               onMouseEnter={() => setTooltip(path)}
               onMouseLeave={() => setTooltip(null)}
               aria-label={label}
             >
-              <Icon size={18} />
+              <Icon size={16} />
               {tooltip === path && <span className="gs-tooltip">{label}</span>}
             </button>
           ))}
         </nav>
 
+        {/* Zona inferior — tema + season info + logout */}
         <div className="gs-sidebar-bottom">
+
+          {/* Bloque temporada */}
+          <div className="gs-season-block">
+            <span className="gs-season-label">TEMP</span>
+            <span className="gs-season-year">25/26</span>
+          </div>
+
+          {/* Botón tema */}
           <button
             className="gs-nav-btn"
             onClick={toggleTheme}
@@ -96,11 +111,13 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             onMouseLeave={() => setTooltip(null)}
             aria-label="Tema"
           >
-            {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+            {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
             {tooltip === "theme" && (
               <span className="gs-tooltip">{theme === "light" ? "Oscuro" : "Claro"}</span>
             )}
           </button>
+
+          {/* Logout */}
           <button
             className="gs-nav-btn gs-nav-btn--logout"
             onClick={handleLogout}
@@ -108,9 +125,10 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             onMouseLeave={() => setTooltip(null)}
             aria-label="Cerrar sesión"
           >
-            <LogOut size={18} />
+            <LogOut size={15} />
             {tooltip === "logout" && <span className="gs-tooltip">Salir</span>}
           </button>
+
         </div>
       </aside>
 
@@ -133,7 +151,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             onClick={() => navigate("/notifications")}
             aria-label="Notificaciones"
           >
-            <Bell size={16} />
+            <Bell size={15} />
             <span className="gs-bell-dot" />
           </button>
           <div
@@ -157,37 +175,41 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
       </header>
 
       {/* ══════════════════════════════════════
-          MOBILE — Top Header
+          MOBILE — Top Header · BJR
       ══════════════════════════════════════ */}
       <header className="gs-mobile-header">
+
+        {/* Izquierda: avatar columna + nombre */}
         <div className="gs-mobile-left">
-          <button className="gs-mobile-avatar" onClick={() => navigate("/profile")}>
+          <button className="gs-mobile-avatar" onClick={() => navigate("/profile")} aria-label="Perfil">
             {currentUser?.avatar_url
               ? <img src={currentUser.avatar_url} alt={firstName} />
               : <span>{initials}</span>
             }
           </button>
           <div className="gs-mobile-greeting">
-            <span className="gs-mobile-hey">HEY,</span>
+            <span className="gs-mobile-hey">GlobalScore</span>
             <span className="gs-mobile-name">{firstName}</span>
           </div>
         </div>
+
+        {/* Derecha: acciones como columnas separadas por borde */}
         <div className="gs-mobile-actions">
           <button className="gs-mobile-btn" onClick={toggleTheme} aria-label="Tema">
-            {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
+            {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
           </button>
           <button className="gs-mobile-btn" onClick={() => navigate("/notifications")} aria-label="Notificaciones">
-            <Bell size={16} />
+            <Bell size={15} />
+            <span className="gs-mobile-btn-dot" />
           </button>
         </div>
+
       </header>
 
       {/* ══════════════════════════════════════
-          MOBILE — Bottom Nav (pegado al fondo)
-          Layout:  [item][item][🏆 CENTER][item][item]
+          MOBILE — Bottom Nav
       ══════════════════════════════════════ */}
       <nav className="gs-bottom-nav">
-        {/* Items izquierdos (2) */}
         {mobileBottomItems.slice(0, 2).map(({ path, icon: Icon, label }) => (
           <button
             key={path}
@@ -200,7 +222,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           </button>
         ))}
 
-        {/* Copa central elevada */}
+        {/* Copa central */}
         <div className="gs-bottom-center">
           <button
             className={`gs-bottom-trophy${isActive("/app") ? " gs-bottom-trophy--active" : ""}`}
@@ -212,7 +234,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           <span className="gs-bottom-label gs-bottom-label--center">Inicio</span>
         </div>
 
-        {/* Items derechos (2) */}
         {mobileBottomItems.slice(2).map(({ path, icon: Icon, label }) => (
           <button
             key={path}

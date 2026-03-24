@@ -1,23 +1,29 @@
 /* ================================================================
-   Header — Wireframe Brutalist  ·  GlobalScore  ·  1080p optimized
+   Header — Brutalista Japonés Retro  ·  GlobalScore
+   Sidebar: centrado verticalmente, con identidad fuerte
 ================================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap');
 
 :root {
-  --sidebar-w:  72px;
+  --sidebar-w:  80px;
   --topbar-h:   56px;
-  --hdr-cream:   #f0ede8;
-  --hdr-surface: #e8e4de;
-  --hdr-border:  #d4cfc8;
-  --hdr-accent:  #5b4fd8;
-  --hdr-mono:    'DM Mono', monospace;
-  --hdr-sans:    'Sora', sans-serif;
+
+  /* Sidebar tokens — retro japonés */
+  --sb-bg-light:     #f0ede8;
+  --sb-bg-dark:      #0e0f14;
+  --sb-border-light: #ccc8c0;
+  --sb-border-dark:  rgba(255,255,255,0.07);
+  --sb-accent:       #5b4fd8;
+  --sb-accent-2:     #c9a227;          /* dorado retro */
+  --sb-red:          #d84040;          /* rojo señal */
+  --sb-mono:         'DM Mono', monospace;
+  --sb-sans:         'Sora', sans-serif;
 
   /* Bottom nav tokens */
-  --bn-h:        52px;        /* altura de la barra */
+  --bn-h:        52px;
   --bn-bg-light: #ffffff;
-  --bn-bg-dark:  #13151f;
+  --bn-bg-dark:  #0e0f14;
   --bn-border-light: #e2e0dc;
   --bn-border-dark:  rgba(255,255,255,0.08);
   --bn-text-light: #9a97b0;
@@ -29,7 +35,7 @@
 }
 
 /* ================================================================
-   DESKTOP SIDEBAR
+   DESKTOP SIDEBAR — Brutalista Japonés
 ================================================================ */
 .gs-sidebar {
   display: none;
@@ -37,122 +43,347 @@
   top: 0; left: 0;
   width: var(--sidebar-w);
   height: 100vh;
-  background: var(--hdr-surface);
-  border-right: 0.5px solid var(--hdr-border);
+  background: var(--sb-bg-light);
+  border-right: 1px solid var(--sb-border-light);
   flex-direction: column;
   align-items: center;
   z-index: 300;
+  overflow: hidden;
+}
+
+/* Línea de acento vertical izquierda — marca brutalista */
+.gs-sidebar::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--sb-accent);
+  z-index: 1;
+}
+
+/* Patrón de fondo — rejilla japonesa sutil */
+.gs-sidebar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(0,0,0,0.03) 20px),
+    repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(0,0,0,0.03) 20px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 [data-theme="dark"] .gs-sidebar {
-  background: #1e2235;
-  border-right-color: rgba(255,255,255,0.07);
+  background: var(--sb-bg-dark);
+  border-right-color: var(--sb-border-dark);
 }
 
+[data-theme="dark"] .gs-sidebar::after {
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255,255,255,0.02) 20px),
+    repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(255,255,255,0.02) 20px);
+}
+
+/* ── Logo / marca ── */
 .gs-logo-wrap {
   width: 100%;
   height: var(--topbar-h);
-  border-bottom: 0.5px solid var(--hdr-border);
+  border-bottom: 1px solid var(--sb-border-light);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  position: relative;
+  z-index: 2;
 }
 
-[data-theme="dark"] .gs-logo-wrap { border-bottom-color: rgba(255,255,255,0.07); }
+[data-theme="dark"] .gs-logo-wrap { border-bottom-color: var(--sb-border-dark); }
 
 .gs-logo-btn {
-  width: 42px; height: 42px;
-  background: var(--hdr-accent);
+  width: 44px; height: 44px;
+  background: var(--sb-accent);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   color: #fff;
-  transition: background 0.15s;
+  position: relative;
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+  transition: background 0.15s, transform 0.15s;
 }
 
-.gs-logo-btn:hover { background: #4a3fc7; }
+.gs-logo-btn:hover {
+  background: #4a3fc7;
+  transform: scale(1.05);
+}
 
+/* Número de versión retro debajo del logo */
+.gs-logo-btn::after {
+  content: 'GS';
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 7px;
+  font-weight: 700;
+  font-family: var(--sb-mono);
+  letter-spacing: 0.12em;
+  color: #bbb;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .gs-logo-btn::after { color: #444; }
+
+/* ── Línea separadora decorativa con texto japonés ── */
+.gs-sidebar-divider {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  flex-shrink: 0;
+}
+
+.gs-sidebar-divider::before {
+  content: '';
+  width: 24px;
+  height: 0.5px;
+  background: var(--sb-border-light);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.gs-sidebar-divider span {
+  font-size: 8px;
+  font-family: var(--sb-mono);
+  letter-spacing: 0.08em;
+  color: #ccc;
+  writing-mode: horizontal-tb;
+}
+
+[data-theme="dark"] .gs-sidebar-divider::before { background: var(--sb-border-dark); }
+[data-theme="dark"] .gs-sidebar-divider span { color: #2a2d38; }
+
+/* ── NAV — ocupa el espacio restante, centrado verticalmente ── */
 .gs-nav {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 12px 0;
-  gap: 4px;
+  justify-content: center;   /* centrado vertical */
+  padding: 8px 0;
+  gap: 2px;
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
+/* ── Botones de navegación ── */
 .gs-nav-btn {
   position: relative;
-  width: 42px; height: 42px;
+  width: 52px;
+  height: 52px;
   border: none;
   background: transparent;
-  color: #a0a0b0;
+  color: #a8a4b0;
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
   transition: color 0.15s, background 0.15s;
+  border-radius: 0;
+  outline: none;
 }
 
-[data-theme="dark"] .gs-nav-btn { color: #4a5568; }
+[data-theme="dark"] .gs-nav-btn { color: #3a4060; }
 
+/* Número de orden retro */
+.gs-nav-btn[data-index]::before {
+  content: attr(data-index);
+  font-size: 7px;
+  font-family: var(--sb-mono);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #d0ccc4;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+[data-theme="dark"] .gs-nav-btn[data-index]::before { color: #2a2d38; }
+
+/* Hover state */
 .gs-nav-btn:hover {
-  background: rgba(91,79,216,0.08);
-  color: var(--hdr-accent);
+  background: rgba(91,79,216,0.07);
+  color: var(--sb-accent);
 }
 
+.gs-nav-btn:hover[data-index]::before {
+  color: rgba(91,79,216,0.5);
+}
+
+[data-theme="dark"] .gs-nav-btn:hover {
+  background: rgba(91,79,216,0.12);
+  color: #a899ff;
+}
+
+/* Borde izquierdo al hacer hover */
+.gs-nav-btn::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px; bottom: 12px;
+  width: 2px;
+  background: var(--sb-accent);
+  transform: scaleY(0);
+  transition: transform 0.15s ease;
+  transform-origin: center;
+}
+
+.gs-nav-btn:hover::after {
+  transform: scaleY(1);
+}
+
+/* Estado ACTIVO — bloque lleno brutalista */
 .gs-nav-btn--active {
-  background: var(--hdr-accent);
-  color: #fff;
+  background: var(--sb-accent);
+  color: #fff !important;
+}
+
+.gs-nav-btn--active[data-index]::before {
+  color: rgba(255,255,255,0.4) !important;
+}
+
+.gs-nav-btn--active::after {
+  background: rgba(255,255,255,0.6);
+  transform: scaleY(1);
 }
 
 .gs-nav-btn--active:hover {
-  background: #4a3fc7;
-  color: #fff;
+  background: #4a3fc7 !important;
+}
+
+/* Logout — color rojo señal */
+.gs-nav-btn--logout {
+  color: #c0a0a0 !important;
 }
 
 .gs-nav-btn--logout:hover {
-  background: rgba(239,68,68,0.08);
-  color: #ef4444;
+  background: rgba(216, 64, 64, 0.08) !important;
+  color: var(--sb-red) !important;
 }
 
+.gs-nav-btn--logout:hover::after {
+  background: var(--sb-red);
+}
+
+/* ── Tooltip brutalista ── */
 .gs-tooltip {
   position: absolute;
-  left: calc(100% + 12px);
+  left: calc(100% + 14px);
   top: 50%; transform: translateY(-50%);
-  background: #1a1a2e;
-  color: #fff;
-  font-size: 10px;
+  background: #0e0f14;
+  color: #f0ede8;
+  font-size: 9px;
   font-weight: 700;
-  font-family: var(--hdr-mono);
-  letter-spacing: 0.06em;
-  padding: 5px 10px;
+  font-family: var(--sb-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 6px 11px;
   white-space: nowrap;
   pointer-events: none;
   z-index: 9999;
   animation: tt-in 0.1s ease;
+  clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
 }
 
-[data-theme="dark"] .gs-tooltip { background: #f0ede8; color: #1a1a2e; }
+/* Flecha del tooltip */
+.gs-tooltip::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 50%; transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: #0e0f14;
+  border-left: 0;
+}
+
+[data-theme="dark"] .gs-tooltip {
+  background: #f0ede8;
+  color: #0e0f14;
+}
+
+[data-theme="dark"] .gs-tooltip::before {
+  border-right-color: #f0ede8;
+}
 
 @keyframes tt-in {
-  from { opacity: 0; transform: translateY(-50%) translateX(-4px); }
+  from { opacity: 0; transform: translateY(-50%) translateX(-6px); }
   to   { opacity: 1; transform: translateY(-50%) translateX(0); }
 }
 
+/* ── Zona inferior del sidebar ── */
 .gs-sidebar-bottom {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 10px 0;
+  gap: 0;
+  padding: 0 0 12px;
   width: 100%;
-  border-top: 0.5px solid var(--hdr-border);
+  border-top: 1px solid var(--sb-border-light);
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
 }
 
-[data-theme="dark"] .gs-sidebar-bottom { border-top-color: rgba(255,255,255,0.07); }
+[data-theme="dark"] .gs-sidebar-bottom { border-top-color: var(--sb-border-dark); }
+
+/* Bloque de info de temporada */
+.gs-season-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0 8px;
+  border-bottom: 1px solid var(--sb-border-light);
+  margin-bottom: 6px;
+}
+
+[data-theme="dark"] .gs-season-block { border-bottom-color: var(--sb-border-dark); }
+
+.gs-season-label {
+  font-size: 7px;
+  font-weight: 700;
+  font-family: var(--sb-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c0bbb5;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+[data-theme="dark"] .gs-season-label { color: #2a2d38; }
+
+.gs-season-year {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--sb-mono);
+  color: var(--sb-accent-2);
+  letter-spacing: 0.06em;
+}
+
+[data-theme="dark"] .gs-season-year { color: #c9a227; }
+
+/* ── Bottom buttons (tema + logout) ── */
+.gs-sidebar-bottom .gs-nav-btn {
+  width: 52px;
+  height: 46px;
+}
 
 /* ================================================================
-   DESKTOP TOPBAR
+   DESKTOP TOPBAR — limpio, acorde al sidebar
 ================================================================ */
 .gs-topbar {
   display: none;
@@ -161,16 +392,16 @@
   left: var(--sidebar-w);
   right: 0;
   height: var(--topbar-h);
-  background: var(--hdr-surface);
-  border-bottom: 0.5px solid var(--hdr-border);
+  background: var(--sb-bg-light);
+  border-bottom: 1px solid var(--sb-border-light);
   align-items: center;
   justify-content: space-between;
   z-index: 200;
 }
 
 [data-theme="dark"] .gs-topbar {
-  background: #1e2235;
-  border-bottom-color: rgba(255,255,255,0.07);
+  background: var(--sb-bg-dark);
+  border-bottom-color: var(--sb-border-dark);
 }
 
 .gs-topbar-left {
@@ -189,11 +420,11 @@
 }
 
 .gs-breadcrumb-app {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: #1a1a2e;
-  font-family: var(--hdr-sans);
-  letter-spacing: -0.01em;
+  font-family: var(--sb-mono);
+  letter-spacing: 0.04em;
 }
 
 [data-theme="dark"] .gs-breadcrumb-app { color: #f0f1f7; }
@@ -201,120 +432,120 @@
 .gs-breadcrumb-sep {
   font-size: 14px;
   color: #c0bbb5;
-  font-family: var(--hdr-mono);
+  font-family: var(--sb-mono);
 }
 
 .gs-breadcrumb-page {
-  font-size: 13px;
+  font-size: 12px;
   color: #a0a0b0;
-  font-family: var(--hdr-mono);
-  letter-spacing: 0.02em;
+  font-family: var(--sb-mono);
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
 }
 
 .gs-topbar-right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   padding: 0 18px;
   height: 100%;
 }
 
 .gs-clock {
-  font-size: 12px;
-  font-family: var(--hdr-mono);
+  font-size: 11px;
+  font-family: var(--sb-mono);
   font-weight: 500;
   color: #a0a0b0;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   padding: 5px 12px;
-  border: 0.5px solid var(--hdr-border);
-  background: var(--hdr-cream);
+  border: 0.5px solid var(--sb-border-light);
+  background: transparent;
   white-space: nowrap;
 }
 
 [data-theme="dark"] .gs-clock {
-  background: rgba(255,255,255,0.04);
-  border-color: rgba(255,255,255,0.08);
-  color: #4a5568;
+  border-color: var(--sb-border-dark);
+  color: #3a4060;
 }
 
 .gs-topbar-icon-btn {
-  width: 36px; height: 36px;
-  border: 0.5px solid var(--hdr-border);
-  background: var(--hdr-cream);
+  width: 34px; height: 34px;
+  border: 0.5px solid var(--sb-border-light);
+  background: transparent;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   color: #888;
   position: relative;
-  transition: color 0.15s;
+  transition: color 0.15s, border-color 0.15s;
 }
 
-.gs-topbar-icon-btn:hover { color: var(--hdr-accent); border-color: rgba(91,79,216,0.3); }
+.gs-topbar-icon-btn:hover { color: var(--sb-accent); border-color: rgba(91,79,216,0.4); }
 
 [data-theme="dark"] .gs-topbar-icon-btn {
-  background: rgba(255,255,255,0.04);
-  border-color: rgba(255,255,255,0.08);
-  color: #4a5568;
+  border-color: var(--sb-border-dark);
+  color: #3a4060;
 }
 
 .gs-bell-dot {
   position: absolute;
   top: 6px; right: 6px;
-  width: 6px; height: 6px;
-  background: #ef4444;
+  width: 5px; height: 5px;
+  background: var(--sb-red);
   border-radius: 50%;
-  border: 1.5px solid var(--hdr-surface);
+  border: 1.5px solid var(--sb-bg-light);
 }
+
+[data-theme="dark"] .gs-bell-dot { border-color: var(--sb-bg-dark); }
 
 .gs-user-chip {
   display: flex;
   align-items: center;
-  gap: 9px;
-  border: 0.5px solid var(--hdr-border);
-  background: var(--hdr-cream);
-  padding: 5px 12px 5px 5px;
+  gap: 8px;
+  border: 0.5px solid var(--sb-border-light);
+  background: transparent;
+  padding: 4px 11px 4px 4px;
   cursor: pointer;
   transition: border-color 0.15s;
 }
 
-.gs-user-chip:hover { border-color: rgba(91,79,216,0.35); }
+.gs-user-chip:hover { border-color: rgba(91,79,216,0.4); }
 
-[data-theme="dark"] .gs-user-chip {
-  background: rgba(255,255,255,0.04);
-  border-color: rgba(255,255,255,0.08);
-}
+[data-theme="dark"] .gs-user-chip { border-color: var(--sb-border-dark); }
 
 .gs-user-avatar {
-  width: 32px; height: 32px;
-  background: var(--hdr-accent);
+  width: 30px; height: 30px;
+  background: var(--sb-accent);
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
+  clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
 }
 
 .gs-user-avatar img  { width: 100%; height: 100%; object-fit: cover; }
-.gs-user-avatar span { font-size: 12px; font-weight: 700; color: #fff; font-family: var(--hdr-mono); }
+.gs-user-avatar span { font-size: 11px; font-weight: 700; color: #fff; font-family: var(--sb-mono); }
 
 .gs-user-info { display: flex; flex-direction: column; }
 
 .gs-user-name {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #1a1a2e;
-  font-family: var(--hdr-mono);
+  font-family: var(--sb-mono);
   line-height: 1.3;
 }
 
 [data-theme="dark"] .gs-user-name { color: #f0f1f7; }
 
 .gs-user-role {
-  font-size: 10px;
+  font-size: 9px;
   color: #a0a0b0;
-  font-family: var(--hdr-mono);
+  font-family: var(--sb-mono);
   line-height: 1.2;
+  letter-spacing: 0.06em;
 }
 
 /* ================================================================
-   DESKTOP — mostrar sidebar + topbar, ocultar móvil
+   DESKTOP — mostrar sidebar + topbar
 ================================================================ */
 @media (min-width: 769px) {
   .gs-sidebar       { display: flex; }
@@ -349,94 +580,159 @@
 }
 
 /* ================================================================
-   MOBILE — Top Header
+   MOBILE — Top Header · Brutalista Japonés Retro
 ================================================================ */
 .gs-mobile-header {
   display: none;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
-  padding: 0 16px;
+  align-items: stretch;
+  height: 52px;
   background: var(--bg);
-  border-bottom: 0.5px solid var(--border);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 200;
+  overflow: hidden;
 }
 
-.gs-mobile-left { display: flex; align-items: center; gap: 10px; }
+/* Rejilla BJR de fondo */
+.gs-mobile-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(90deg, transparent, transparent 39px, var(--border) 40px);
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
 
+/* Franja de acento izquierda */
+.gs-mobile-header::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  z-index: 1;
+}
+
+/* ── Lado izquierdo: avatar + info ── */
+.gs-mobile-left {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: relative;
+  z-index: 2;
+}
+
+/* Avatar — columna cuadrada separada por borde */
 .gs-mobile-avatar {
-  width: 38px;
-  height: 38px;
+  width: 52px;
+  height: 52px;
   border-radius: 0;
   background: var(--accent);
-  border: 0.5px solid var(--border);
+  border: none;
+  border-right: 1px solid var(--border);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
+  margin-left: 3px; /* compensa la franja ::after */
+  transition: opacity 0.15s;
 }
+
+.gs-mobile-avatar:active { opacity: 0.85; }
 
 .gs-mobile-avatar img  { width: 100%; height: 100%; object-fit: cover; }
 .gs-mobile-avatar span {
   color: #fff;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
+  letter-spacing: 0.04em;
 }
 
-.gs-mobile-greeting { display: flex; flex-direction: column; line-height: 1.2; }
+/* Bloque de texto — padding interno, sin separación extra */
+.gs-mobile-greeting {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 12px;
+  line-height: 1;
+  gap: 3px;
+}
 
 .gs-mobile-hey {
-  font-size: 9px;
+  font-size: 7px;
   color: var(--muted);
   font-family: 'DM Mono', monospace;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  opacity: 0.7;
 }
 
 .gs-mobile-name {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-primary);
-  font-family: 'Sora', sans-serif;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: -0.01em;
 }
 
-.gs-mobile-actions { display: flex; gap: 6px; }
+/* ── Lado derecho: botones ── */
+.gs-mobile-actions {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-left: auto;
+  position: relative;
+  z-index: 2;
+}
 
+/* Cada botón de acción — columna cuadrada con borde izquierdo */
 .gs-mobile-btn {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 52px;
   border-radius: 0;
-  border: 0.5px solid var(--border);
-  background: var(--card);
+  border: none;
+  border-left: 1px solid var(--border);
+  background: transparent;
   color: var(--muted);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s;
+  position: relative;
+  flex-shrink: 0;
 }
 
-.gs-mobile-btn:hover {
-  border-color: var(--accent);
+.gs-mobile-btn:active {
+  background: var(--glass);
   color: var(--accent);
 }
 
+/* Dot de notificación */
+.gs-mobile-btn-dot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 5px;
+  height: 5px;
+  background: #d84040;
+  border-radius: 50%;
+  border: 1.5px solid var(--bg);
+}
+
 /* ================================================================
-   MOBILE — Bottom Nav (pegada al fondo, sin flotar)
-   Layout: [item][item]  [🏆]  [item][item]
-                          ↑ copa elevada
+   MOBILE — Bottom Nav
 ================================================================ */
 .gs-bottom-nav {
   display: none;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
   height: var(--bn-h);
   background: var(--bn-bg-light);
   border-top: 1px solid var(--bn-border-light);
@@ -444,7 +740,6 @@
   align-items: center;
   justify-content: space-around;
   z-index: 300;
-  /* Soporte safe area en iPhones con notch inferior */
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -453,7 +748,6 @@
   border-top-color: var(--bn-border-dark);
 }
 
-/* ── Botón normal ── */
 .gs-bottom-btn {
   flex: 1;
   display: flex;
@@ -472,43 +766,29 @@
 
 [data-theme="dark"] .gs-bottom-btn { color: var(--bn-text-dark); }
 
-.gs-bottom-btn--active {
-  color: var(--bn-active-light);
-}
-
-[data-theme="dark"] .gs-bottom-btn--active {
-  color: var(--bn-active-dark);
-}
+.gs-bottom-btn--active { color: var(--bn-active-light); }
+[data-theme="dark"] .gs-bottom-btn--active { color: var(--bn-active-dark); }
 
 .gs-bottom-btn:active { transform: scale(0.92); }
 
-/* ── Label pequeño debajo del ícono — oculto ── */
-.gs-bottom-label {
-  display: none;
-}
+.gs-bottom-label { display: none; }
 
-/* ── Contenedor central (copa) ── */
 .gs-bottom-center {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;      /* empuja todo hacia abajo */
+  justify-content: flex-end;
   gap: 3px;
   height: 100%;
   padding-bottom: 6px;
   position: relative;
 }
 
-/* ── Label "Inicio" debajo de la copa — oculto ── */
-.gs-bottom-label--center {
-  display: none;
-}
+.gs-bottom-label--center { display: none; }
 
-/* ── Botón copa — círculo elevado que sobresale de la barra ── */
 .gs-bottom-trophy {
-  width: 48px;
-  height: 48px;
+  width: 48px; height: 48px;
   border-radius: 50%;
   border: none;
   background: var(--bn-trophy-bg-light);
@@ -517,10 +797,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  /* Elevación: se sale hacia arriba de la barra */
   position: absolute;
-  top: -14px;                     /* menos elevado que antes */
-  /* Sombra para flotar sobre la barra */
+  top: -14px;
   box-shadow: 0 -2px 16px rgba(91,79,216,0.25), 0 4px 12px rgba(0,0,0,0.15);
   transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
 }
@@ -536,26 +814,21 @@
   box-shadow: 0 -2px 24px rgba(91,79,216,0.5), 0 6px 20px rgba(0,0,0,0.25);
 }
 
-[data-theme="dark"] .gs-bottom-trophy--active {
-  background: #6d5fff;
-}
+[data-theme="dark"] .gs-bottom-trophy--active { background: #6d5fff; }
 
-.gs-bottom-trophy:active {
-  transform: scale(0.9);
-}
-
+.gs-bottom-trophy:active { transform: scale(0.9); }
 .gs-bottom-trophy:hover {
   transform: translateY(-2px);
   box-shadow: 0 -4px 24px rgba(91,79,216,0.4), 0 8px 20px rgba(0,0,0,0.2);
 }
 
 /* ================================================================
-   MOBILE — mostrar header y nav
+   MOBILE — mostrar
 ================================================================ */
 @media (max-width: 768px) {
   .gs-mobile-header { display: flex; }
   .gs-bottom-nav    { display: flex; }
-  body              { padding-bottom: calc(var(--bn-h) + env(safe-area-inset-bottom, 0px)); }
+  body { padding-bottom: calc(var(--bn-h) + env(safe-area-inset-bottom, 0px)); }
 }
 
 /* ================================================================
