@@ -176,6 +176,8 @@ export const countrySlugMap = {
   'SEN': 'senegal',
   'RSA': 'sudafrica',
   'TUN': 'tunez',
+  'CMR': 'camerun',
+  'NGA': 'nigeria',
 
   // Asia
   'IRN': 'iran',
