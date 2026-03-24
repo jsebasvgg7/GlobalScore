@@ -14,6 +14,7 @@ const STATIC_ASSETS = [
   '/manifest.json',
 
   // 🆕 TODOS LOS ICONOS
+  '/icons/icon-48x48.png',
   '/icons/icon-72x72.png',
   '/icons/icon-96x96.png',
   '/icons/icon-128x128.png',
