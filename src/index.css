@@ -233,7 +233,7 @@ button {
 }
 
 [data-theme="dark"] .clickable-avatar:hover {
-  filter: brightness(1.1);
+  opacity: 0.9;
   box-shadow: 0 8px 24px rgba(139, 127, 199, 0.3);
 }
 

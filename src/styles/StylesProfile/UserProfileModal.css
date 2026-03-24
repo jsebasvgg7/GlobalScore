@@ -67,29 +67,20 @@
   border-radius: var(--upm-radius);
   width: 100%;
   max-width: 420px;
-  /* Altura fija — el scroll va dentro */
   height: 88vh;
   max-height: 88vh;
   display: flex;
   flex-direction: column;
-  /* SIN overflow aquí — el modal no scrollea */
   overflow: hidden;
   box-shadow: var(--upm-shadow);
   border: 1px solid var(--upm-border);
   opacity: 0;
-  transform: translateY(24px) scale(0.97);
-  transition: opacity 0.35s cubic-bezier(.22,1,.36,1),
-              transform 0.35s cubic-bezier(.22,1,.36,1);
-  /* Force GPU layer para evitar glitch */
-  will-change: transform;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  transition: opacity 0.3s ease;
+  isolation: isolate;
 }
 
 .upm-modal--in {
   opacity: 1;
-  -webkit-transform: translateY(0) scale(1);
-  transform: translateY(0) scale(1);
 }
 
 /* ── FLOATING CROWN ──────────────────────────────────── */
@@ -99,8 +90,12 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
-  filter: drop-shadow(0 4px 12px rgba(245,158,11,0.6));
-  animation: upmCrownBob 3s ease-in-out infinite;
+  animation: upmCrownFade 3s ease-in-out infinite;
+}
+
+@keyframes upmCrownFade {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.75; }
 }
 
 @keyframes upmCrownBob {
@@ -441,12 +436,9 @@
   inset: 0;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
   animation: upmGlow 2s linear infinite;
+  display: none;
 }
 
-@keyframes upmGlow {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(200%); }
-}
 
 .upm-level-pts {
   font-size: 12px;
