@@ -1,0 +1,783 @@
+/* ================================================================
+   AdminRightPanel.css — Panel derecho con formularios inline
+   Brutalista Japonés Retro · DM Mono + Sora · Líneas 0.5px
+================================================================ */
+
+/* ================================================================
+   PANEL WRAPPER
+================================================================ */
+.adm-panel {
+  width: 30%;
+  flex-shrink: 0;
+  border-left: 0.5px solid var(--border);
+  border-top: 2px solid var(--accent);
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.adm-panel-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ================================================================
+   HEADER
+================================================================ */
+.adm-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 18px;
+  background: var(--bg);
+  border-bottom: 0.5px solid var(--border);
+  flex-shrink: 0;
+}
+
+.adm-panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adm-panel-header-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.adm-panel-header-title {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-primary);
+}
+
+.adm-panel-back {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  background: transparent;
+  border: 0.5px solid var(--border);
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.adm-panel-back:hover {
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+/* ================================================================
+   BODY
+================================================================ */
+.adm-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.adm-panel-body::-webkit-scrollbar { width: 3px; }
+.adm-panel-body::-webkit-scrollbar-track { background: transparent; }
+.adm-panel-body::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* ================================================================
+   FORM
+================================================================ */
+.adm-form {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ================================================================
+   FIELD
+================================================================ */
+.adm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.adm-label {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.adm-req { color: #f25f5c; }
+
+.adm-hint {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+}
+
+.adm-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 0.5px solid var(--border);
+  background: var(--bg);
+  font-size: 12px;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+  border-radius: 0;
+  outline: none;
+}
+
+.adm-input:focus { border-color: var(--accent); }
+.adm-input::placeholder { color: var(--muted); opacity: 0.55; }
+.adm-input[type="date"],
+.adm-input[type="time"],
+.adm-input[type="month"] { color-scheme: light dark; }
+
+.adm-textarea {
+  resize: vertical;
+  min-height: 56px;
+  font-family: 'Sora', sans-serif;
+  line-height: 1.5;
+}
+
+/* ================================================================
+   GRID 2 COLS
+================================================================ */
+.adm-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* ================================================================
+   SECTION SEPARATOR
+================================================================ */
+.adm-section-sep {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  padding-bottom: 6px;
+  border-bottom: 0.5px solid var(--border);
+  margin-top: 2px;
+}
+
+/* ================================================================
+   LOGO PREVIEW
+================================================================ */
+.adm-logo-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px;
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+}
+
+.adm-logo-preview--single {
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+.adm-logo-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+}
+
+.adm-logo-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.adm-logo-img-lg {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.adm-logo-name {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+}
+
+.adm-logo-emoji { font-size: 28px; }
+
+.adm-logo-vs {
+  font-size: 9px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  padding: 4px 8px;
+  border: 0.5px solid var(--border);
+}
+
+/* ================================================================
+   TOGGLE (knockout)
+================================================================ */
+.adm-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(245, 166, 35, 0.04);
+  border: 0.5px solid rgba(245, 166, 35, 0.2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.adm-toggle-check {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+}
+
+.adm-toggle-track {
+  width: 32px;
+  height: 17px;
+  background: var(--border);
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.18s;
+}
+
+.adm-toggle-check:checked ~ .adm-toggle-track { background: #f5a623; }
+
+.adm-toggle-thumb {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 13px; height: 13px;
+  background: white;
+  transition: left 0.18s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.adm-toggle-check:checked ~ .adm-toggle-track .adm-toggle-thumb { left: 17px; }
+
+.adm-toggle-label {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: #f5a623;
+}
+
+.adm-toggle-sub {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ================================================================
+   ICON GRID (achievements)
+================================================================ */
+.adm-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+
+.adm-icon-btn {
+  aspect-ratio: 1;
+  font-size: 18px;
+  border: 0.5px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.12s, background 0.12s;
+  border-radius: 0;
+}
+
+.adm-icon-btn:hover { border-color: var(--accent); background: rgba(91,79,216,0.05); }
+.adm-icon-btn.active { border-color: var(--accent); background: rgba(91,79,216,0.1); border-width: 1.5px; }
+
+/* ================================================================
+   COLOR GRID (titles)
+================================================================ */
+.adm-color-grid {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.adm-color-btn {
+  width: 28px;
+  height: 28px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.12s, border-color 0.12s;
+  border-radius: 0;
+}
+
+.adm-color-btn:hover { transform: scale(1.1); }
+.adm-color-btn.active { border-color: var(--text-primary); transform: scale(1.15); }
+
+/* ================================================================
+   MATCH PREVIEW (finish)
+================================================================ */
+.adm-match-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 12px;
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-top: 1.5px solid #1D9E75;
+}
+
+.adm-match-team {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+}
+
+.adm-match-logo { font-size: 26px; line-height: 1; }
+
+.adm-match-name {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+}
+
+.adm-match-vs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  padding: 4px 8px;
+  border: 0.5px solid var(--border);
+}
+
+.adm-match-ko {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: #f5a623;
+  white-space: nowrap;
+}
+
+.adm-match-meta {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Score row */
+.adm-score-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: end;
+}
+
+.adm-score-sep {
+  font-size: 20px;
+  font-weight: 900;
+  font-family: 'DM Mono', monospace;
+  color: var(--border);
+  padding-bottom: 7px;
+  text-align: center;
+}
+
+.adm-score-input {
+  text-align: center !important;
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  font-family: 'DM Mono', monospace !important;
+  padding: 10px 6px !important;
+  letter-spacing: -1px;
+}
+
+/* KO section */
+.adm-ko-section {
+  padding: 10px 12px;
+  background: rgba(245,166,35,0.03);
+  border: 0.5px solid rgba(245,166,35,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.adm-ko-label {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #f5a623;
+}
+
+.adm-ko-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.adm-ko-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 8px;
+  border: 0.5px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-radius: 0;
+}
+
+.adm-ko-btn:hover { border-color: var(--accent); }
+.adm-ko-btn.active { border-color: #1D9E75; background: rgba(29,158,117,0.05); color: #1D9E75; }
+
+.adm-ko-check {
+  position: absolute;
+  top: 4px; right: 4px;
+  color: #1D9E75;
+}
+
+/* Finish title */
+.adm-finish-title {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-left: 2px solid #1D9E75;
+}
+
+/* Crown info */
+.adm-crown-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 12px;
+  background: rgba(201,162,39,0.04);
+  border: 0.5px solid rgba(201,162,39,0.2);
+  text-align: center;
+}
+
+.adm-crown-info p {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ================================================================
+   SUBMIT BUTTON
+================================================================ */
+.adm-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 38px;
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 4px;
+  border-radius: 0;
+}
+
+.adm-submit-btn:hover:not(:disabled) { background: var(--accent-light, var(--accent)); filter: brightness(1.1); }
+.adm-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.adm-submit-btn--green { background: #1D9E75; }
+.adm-submit-btn--green:hover:not(:disabled) { background: #17876a; filter: none; }
+
+.adm-submit-btn--gold { background: #c9a227; }
+.adm-submit-btn--gold:hover:not(:disabled) { background: #b8911f; filter: none; }
+
+/* Delete button */
+.adm-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex: 1;
+  height: 38px;
+  background: transparent;
+  border: 0.5px solid rgba(242,95,92,0.35);
+  color: #f25f5c;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-radius: 0;
+}
+
+.adm-delete-btn:hover { background: #f25f5c; color: #fff; border-color: #f25f5c; }
+
+/* Form actions row (edit) */
+.adm-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.adm-form-actions .adm-submit-btn { flex: 2; margin-top: 0; }
+
+/* ================================================================
+   ERROR / INFO
+================================================================ */
+.adm-error {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  background: rgba(242,95,92,0.06);
+  border: 0.5px solid rgba(242,95,92,0.3);
+  color: #f25f5c;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+}
+
+.adm-info-box {
+  padding: 10px 12px;
+  background: rgba(91,79,216,0.04);
+  border: 0.5px solid rgba(91,79,216,0.15);
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Spinner */
+.adm-spinner {
+  width: 13px;
+  height: 13px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: adm-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes adm-spin { to { transform: rotate(360deg); } }
+
+/* ================================================================
+   DROP ZONE (banners)
+================================================================ */
+.adm-drop-zone {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  max-height: 130px;
+  border: 0.5px dashed var(--border);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.adm-drop-zone:hover { border-color: var(--accent); border-style: solid; }
+.adm-drop-zone.has-image { border-style: solid; border-color: var(--accent); }
+
+.adm-drop-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.adm-drop-preview { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.adm-drop-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: white;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.adm-drop-zone:hover .adm-drop-overlay { opacity: 1; }
+
+/* ================================================================
+   ASSIGN BANNER
+================================================================ */
+.adm-search-wrap { position: relative; }
+.adm-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.adm-search-input { padding-left: 30px !important; }
+
+.adm-user-list {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.adm-user-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.12s;
+  border-bottom: 0.5px solid var(--border);
+  font-family: inherit;
+  text-align: left;
+}
+
+.adm-user-item:last-child { border-bottom: none; }
+.adm-user-item:hover { background: var(--card); }
+
+.adm-user-av {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; flex-shrink: 0;
+}
+
+.adm-user-av img { width: 100%; height: 100%; object-fit: cover; }
+
+.adm-user-name { font-size: 12px; font-weight: 700; font-family: 'Sora', sans-serif; color: var(--text-primary); }
+.adm-user-pts  { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--muted); }
+
+.adm-assigned-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.adm-chip {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(91,79,216,0.06);
+  border: 0.5px solid rgba(91,79,216,0.2);
+  padding: 3px 7px 3px 3px;
+  font-size: 11px; font-family: 'Sora', sans-serif; color: var(--text-primary);
+}
+
+.adm-chip-img { width: 28px; height: 14px; object-fit: cover; }
+
+.adm-chip-revoke {
+  background: none; border: none; cursor: pointer;
+  color: #f25f5c; display: flex; align-items: center; padding: 1px;
+  transition: background 0.12s;
+}
+
+.adm-banner-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.adm-banner-card {
+  position: relative;
+  border: 0.5px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  transition: border-color 0.15s;
+  font-family: inherit;
+  padding: 0;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  overflow: hidden;
+}
+
+.adm-banner-card img { width: 100%; aspect-ratio: 2/1; object-fit: cover; display: block; }
+.adm-banner-card span { font-size: 10px; font-weight: 600; font-family: 'DM Mono', monospace; color: var(--muted); padding: 4px 6px; }
+.adm-banner-card:hover:not(.assigned) { border-color: var(--accent); }
+.adm-banner-card.selected { border-color: #1D9E75; box-shadow: 0 0 0 1px #1D9E75; }
+.adm-banner-card.assigned { opacity: 0.4; cursor: not-allowed; }
+.adm-banner-assigned { position: absolute; top: 4px; right: 4px; font-size: 9px; background: #1D9E75; color: #fff; padding: 1px 4px; }
+
+/* ================================================================
+   RESPONSIVE — en mobile se oculta el panel
+================================================================ */
+@media (max-width: 1024px) {
+  .adm-panel { width: 40%; }
+}
+
+@media (max-width: 768px) {
+  .adm-panel { display: none; }
+}

@@ -1,33 +1,82 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  Trophy, TrendingUp, Target, Filter, X,
-  ArrowUpDown, ChevronRight, Zap, Flame, BarChart3
+  Trophy, Filter, X, ArrowUpDown
 } from "lucide-react";
 
-// Components
-import MatchCard       from "../components/ComCards/MatchCard";
-import LeagueCard      from "../components/ComCards/LeagueCard";
-import AwardCard       from "../components/ComCards/AwardCard";
-import NavigationTabs  from "../components/ComOthers/NavigationTabs";
-import Footer          from "../components/ComOthers/Footer";
+import MatchCard          from "../components/ComCards/MatchCard";
+import LeagueCard         from "../components/ComCards/LeagueCard";
+import AwardCard          from "../components/ComCards/AwardCard";
+import NavigationTabs     from "../components/ComOthers/NavigationTabs";
+import RightPanel         from "../components/ComPanels/RightPanel";
+import MobileDashboard    from "../components/ComMobile/MobileDashboard";
 import { PageLoader, LoadingOverlay } from "../components/ComOthers/LoadingStates";
-import { ToastContainer, useToast } from "../components/ComOthers/Toast";
+import { ToastContainer, useToast }   from "../components/ComOthers/Toast";
 
-// Hooks
 import { useDataLoader } from "../hooks/useDataLoader";
 import { useMatches }    from "../hooks/HooksCards/useMatches";
 import { useLeagues }    from "../hooks/HooksCards/useLeagues";
 import { useAwards }     from "../hooks/HooksCards/useAwards";
 
-// Styles
 import "../styles/StylesPages/DashboardPage.css";
 
-// ── Helpers ──────────────────────────────────────────────────────
-const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
-const acc = (correct, total) =>
-  total > 0 ? Math.round((correct / total) * 100) : 0;
+/* ── Empty state brutalista ── */
+function MatchesEmpty({ leagueFilter, leagueCategories, onClear }) {
+  const activeCategory = leagueCategories.find((c) => c.id === leagueFilter);
+  const isFiltered = leagueFilter !== "all";
+
+  return (
+    <div className="matches-empty-state">
+
+      {/* Cuadrado brutalista con ícono de balón SVG */}
+      <div className="matches-empty-icon-wrap">
+        <div className="matches-empty-icon-inner">
+          {/* Balón minimalista en SVG puro — sin emoji */}
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="13" />
+            <polygon points="16,6 20,10 18,15 14,15 12,10" />
+            <line x1="16" y1="6"  x2="16" y2="3"  />
+            <line x1="20" y1="10" x2="23" y2="8"  />
+            <line x1="18" y1="15" x2="21" y2="17" />
+            <line x1="14" y1="15" x2="11" y2="17" />
+            <line x1="12" y1="10" x2="9"  y2="8"  />
+          </svg>
+        </div>
+      </div>
+
+      {/* Decoración lineal */}
+      <div className="matches-empty-deco">
+        <div className="matches-empty-deco-line" />
+        <div className="matches-empty-deco-dot" />
+        <div className="matches-empty-deco-line" />
+      </div>
+
+      {/* Texto */}
+      <div className="matches-empty-title">
+        {isFiltered
+          ? `Sin partidos · ${activeCategory?.name}`
+          : "Sin partidos pendientes"}
+      </div>
+      <div className="matches-empty-sub">
+        {isFiltered
+          ? "No hay partidos disponibles en esta categoría"
+          : "Todos los partidos están al día"}
+      </div>
+
+      {/* Chip para limpiar filtro */}
+      {isFiltered && (
+        <button className="matches-empty-filter-chip" onClick={onClear}>
+          <X size={11} />
+          Ver todos los partidos
+        </button>
+      )}
+    </div>
+  );
+}
 
 export default function DashboardPage() {
+  const navigate = useNavigate();
+
   const [activeTab,    setActiveTab]    = useState("matches");
   const [leagueFilter, setLeagueFilter] = useState("all");
   const [showFilters,  setShowFilters]  = useState(false);
@@ -37,18 +86,27 @@ export default function DashboardPage() {
   const sortRef = useRef(null);
   const toast   = useToast();
 
-  // ── Data ──────────────────────────────────────────────────────
   const {
     currentUser, users, matches, leagues, awards,
     loading, error,
     updateMatches, updateLeagues, updateAwards,
   } = useDataLoader();
 
-  const { loading: matchesLoading, makePrediction }         = useMatches(currentUser);
-  const { loading: leaguesLoading, makeLeaguePrediction }   = useLeagues(currentUser);
-  const { loading: awardsLoading,  makeAwardPrediction }    = useAwards(currentUser);
+  const { loading: matchesLoading, makePrediction }       = useMatches(currentUser);
+  const { loading: leaguesLoading, makeLeaguePrediction } = useLeagues(currentUser);
+  const { loading: awardsLoading,  makeAwardPrediction }  = useAwards(currentUser);
 
-  // ── League categories ─────────────────────────────────────────
+  const handleNavigate = (section) => {
+    switch (section) {
+      case "profile":       navigate("/profile");       break;
+      case "ranking":       navigate("/ranking");       break;
+      case "stats":         navigate("/stats");         break;
+      case "world":         navigate("/world");         break;
+      case "notifications": navigate("/notifications"); break;
+      default: break;
+    }
+  };
+
   const leagueCategories = [
     { id: "all",          name: "Todos",       icon: "🌍", leagues: [] },
     { id: "europe",       name: "Europa",      icon: "🏆", leagues: ["Champions League","Europa League","Conference League"] },
@@ -60,7 +118,6 @@ export default function DashboardPage() {
     { id: "southamerica", name: "Sudamérica",  icon: "🌎", leagues: ["Copa Libertadores","Copa Sudamericana"] },
   ];
 
-  // ── Close sort on outside click ───────────────────────────────
   useEffect(() => {
     if (!showSort) return;
     const handler = (e) => {
@@ -70,7 +127,6 @@ export default function DashboardPage() {
     return () => document.removeEventListener("mousedown", handler);
   }, [showSort]);
 
-  // ── Handlers ─────────────────────────────────────────────────
   const handleMakePrediction = async (matchId, homeScore, awayScore, advancingTeam = null) => {
     const match = matches.find((m) => m.id === matchId);
     if (match?.deadline && new Date() > new Date(match.deadline)) {
@@ -97,7 +153,6 @@ export default function DashboardPage() {
     );
   };
 
-  // ── Filtered matches ──────────────────────────────────────────
   const filteredMatches = useMemo(() => {
     let pending = matches.filter((m) => m.status === "pending");
     if (leagueFilter !== "all") {
@@ -120,9 +175,8 @@ export default function DashboardPage() {
     });
   }, [matches, leagueFilter, sortOption]);
 
-  // ── Group by date ─────────────────────────────────────────────
   const groupedMatches = useMemo(() => {
-    const today    = new Date(); today.setHours(0,0,0,0);
+    const today    = new Date(); today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
     const groups   = {};
     filteredMatches.forEach((m) => {
@@ -130,128 +184,79 @@ export default function DashboardPage() {
       let label =
         d.getTime() === today.getTime()    ? "Hoy" :
         d.getTime() === tomorrow.getTime() ? "Mañana" :
-        d.toLocaleDateString("es-ES", { weekday:"long", day:"numeric", month:"long" });
+        d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
       if (!groups[label]) groups[label] = [];
       groups[label].push(m);
     });
     return groups;
   }, [filteredMatches]);
 
-  // ── Quick stats ───────────────────────────────────────────────
-  const quickStats = useMemo(() => {
-    if (!currentUser) return [];
-    const accuracy = acc(currentUser.correct, currentUser.predictions);
-    return [
-      {
-        icon: Zap,
-        label: "Puntos totales",
-        value: fmt(currentUser.points || 0),
-        sub: `+${fmt(currentUser.monthly_points || 0)} este mes`,
-        accent: "#60519b",
-        bg: "rgba(96,81,155,0.1)",
-      },
-      {
-        icon: Target,
-        label: "Predicciones",
-        value: fmt(currentUser.predictions || 0),
-        sub: `${accuracy}% de precisión`,
-        accent: "#1D9E75",
-        bg: "rgba(29,158,117,0.1)",
-      },
-      {
-        icon: Flame,
-        label: "Racha actual",
-        value: currentUser.current_streak || 0,
-        sub: `Récord: ${currentUser.best_streak || 0}`,
-        accent: "#f59e0b",
-        bg: "rgba(245,158,11,0.1)",
-      },
-    ];
-  }, [currentUser]);
-
-  // ── Derived counts ────────────────────────────────────────────
   const activeLeagues = leagues.filter((l) => l.status === "active");
   const activeAwards  = awards.filter((a) => a.status === "active");
   const isLoading     = matchesLoading || leaguesLoading || awardsLoading;
-  const firstName     = currentUser?.name?.split(" ")[0] || "Jugador";
 
-  // ── Early returns ─────────────────────────────────────────────
   if (loading) return <PageLoader />;
   if (error)   return <div className="centered">Error: {error}</div>;
   if (!currentUser) return <div className="centered">Usuario no encontrado</div>;
 
   return (
     <>
-      <div className="vega-root page-root">
-        <div className="db-layout">
+      <MobileDashboard
+        currentUser={currentUser}
+        users={users}
+        matches={matches}
+        leagues={leagues}
+        awards={awards}
+        onPredict={handleMakePrediction}
+        onLeaguePredict={handleMakeLeaguePrediction}
+        onAwardPredict={handleMakeAwardPrediction}
+        onNavigate={handleNavigate}
+        activeNav="home"
+      />
 
-          {/* ════════════════════════════════
-              CONTENIDO PRINCIPAL
-          ════════════════════════════════ */}
+      <div className="db-root page-root">
+        <div className="db-body">
+
           <main className="db-main">
 
-            {/* ── Greeting + stats strip ── */}
-            <div className="db-greeting-section">
-              <div className="db-greeting"><div>
-                </div>
-              </div>
-
-              {/* Stats chips */}
-              <div className="db-stats-strip">
-                {quickStats.map(({ icon: Icon, label, value, sub, accent, bg }) => (
-                  <div className="db-stat-chip" key={label}>
-                    <div
-                      className="db-stat-chip-icon"
-                      style={{ background: bg, color: accent }}
-                    >
-                      <Icon size={16} />
-                    </div>
-                    <div className="db-stat-chip-body">
-                      <span className="db-stat-chip-val">{value}</span>
-                      <span className="db-stat-chip-lbl">{label}</span>
-                      <span className="db-stat-chip-sub">{sub}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* ── Tabs ── */}
             <NavigationTabs
               activeTab={activeTab}
               onTabChange={setActiveTab}
               onSortClick={activeTab === "matches" ? () => setShowSort(!showSort) : null}
               onFilterClick={activeTab === "matches" ? () => setShowFilters(true) : null}
               sortActive={showSort}
+              matchCount={filteredMatches.length}
+              leagueCount={activeLeagues.length}
+              awardCount={activeAwards.length}
             />
 
             {/* ════ PARTIDOS ════ */}
             {activeTab === "matches" && (
-              <div className="matches-section-premium">
+              <div className="db-content">
 
                 {/* Sort dropdown */}
-                <div style={{ position:"relative" }} ref={sortRef}>
+                <div style={{ position: "relative" }} ref={sortRef}>
                   {showSort && (
                     <>
                       <div className="sort-modal-backdrop" onClick={() => setShowSort(false)} />
                       <div className="sort-modal sort-modal-top">
                         <div className="sort-modal-header">
-                          <ArrowUpDown size={18} />
-                          <h4>Ordenar por</h4>
+                          <ArrowUpDown size={14} />
+                          <span>Ordenar por</span>
                         </div>
                         <div className="sort-options">
                           {[
-                            { key:"date-asc",    label:"Fecha: Más próximos" },
-                            { key:"date-desc",   label:"Fecha: Más lejanos" },
-                            { key:"league-asc",  label:"Liga: A-Z" },
-                            { key:"league-desc", label:"Liga: Z-A" },
+                            { key: "date-asc",    label: "Fecha: más próximos" },
+                            { key: "date-desc",   label: "Fecha: más lejanos" },
+                            { key: "league-asc",  label: "Liga: A-Z" },
+                            { key: "league-desc", label: "Liga: Z-A" },
                           ].map(({ key, label }) => (
                             <button
                               key={key}
-                              className={`sort-option ${sortOption === key ? "active" : ""}`}
+                              className={`sort-option${sortOption === key ? " active" : ""}`}
                               onClick={() => { setSortOption(key); setShowSort(false); }}
                             >
-                              <span className="sort-option-text">{label}</span>
+                              {label}
                             </button>
                           ))}
                         </div>
@@ -267,15 +272,13 @@ export default function DashboardPage() {
                     <div className="filters-modal">
                       <div className="filters-modal-header">
                         <div className="filters-modal-title">
-                          <Filter size={22} />
-                          <h3>Filtrar</h3>
+                          <Filter size={18} />
+                          <span>Filtrar</span>
                         </div>
-                        <div style={{ display:"flex", gap:"8px" }}>
-                          <button className="filters-reset-btn" onClick={() => setLeagueFilter("all")}>
-                            Reset
-                          </button>
+                        <div style={{ display: "flex", gap: "8px" }}>
+                          <button className="filters-reset-btn" onClick={() => setLeagueFilter("all")}>Reset</button>
                           <button className="filters-close-btn" onClick={() => setShowFilters(false)}>
-                            <X size={16} />
+                            <X size={14} />
                           </button>
                         </div>
                       </div>
@@ -283,32 +286,12 @@ export default function DashboardPage() {
                         <div className="filter-category">
                           <div className="filter-category-header">
                             <span className="filter-category-title">Categoría</span>
-                            <button className="view-all-link">
-                              Ver todas <ChevronRight size={12} style={{ display:"inline", verticalAlign:"middle" }} />
-                            </button>
                           </div>
                           <div className="filter-pills">
-                            {leagueCategories.slice(0, 7).map((cat) => (
+                            {leagueCategories.map((cat) => (
                               <button
                                 key={cat.id}
-                                className={`filter-pill ${leagueFilter === cat.id ? "active" : ""}`}
-                                onClick={() => { setLeagueFilter(cat.id); setShowFilters(false); }}
-                              >
-                                <span className="filter-pill-icon">{cat.icon}</span>
-                                <span>{cat.name}</span>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="filter-category">
-                          <div className="filter-category-header">
-                            <span className="filter-category-title">Más regiones</span>
-                          </div>
-                          <div className="filter-pills">
-                            {leagueCategories.slice(7).map((cat) => (
-                              <button
-                                key={cat.id}
-                                className={`filter-pill ${leagueFilter === cat.id ? "active" : ""}`}
+                                className={`filter-pill${leagueFilter === cat.id ? " active" : ""}`}
                                 onClick={() => { setLeagueFilter(cat.id); setShowFilters(false); }}
                               >
                                 <span className="filter-pill-icon">{cat.icon}</span>
@@ -326,33 +309,23 @@ export default function DashboardPage() {
                 {leagueFilter !== "all" && (
                   <div className="active-filter-bar">
                     <div className="active-filter-chip">
-                      <span className="filter-icon">
-                        {leagueCategories.find((c) => c.id === leagueFilter)?.icon}
-                      </span>
+                      <span>{leagueCategories.find((c) => c.id === leagueFilter)?.icon}</span>
                       <span>{leagueCategories.find((c) => c.id === leagueFilter)?.name}</span>
                       <button className="clear-filter-btn" onClick={() => setLeagueFilter("all")}>
-                        <X size={12} />
+                        <X size={10} />
                       </button>
                     </div>
                   </div>
                 )}
 
-                {/* Lista de partidos */}
+                {/* Lista de partidos o empty state */}
                 {Object.keys(groupedMatches).length === 0 ? (
                   <div className="matches-container">
-                    <div className="matches-empty-state">
-                      <div className="matches-empty-icon">⚽</div>
-                      <div className="matches-empty-text">
-                        {leagueFilter === "all"
-                          ? "Sin partidos pendientes"
-                          : `Sin partidos de ${leagueCategories.find((c) => c.id === leagueFilter)?.name}`}
-                      </div>
-                      {leagueFilter !== "all" && (
-                        <button className="show-all-btn" onClick={() => setLeagueFilter("all")}>
-                          Ver todos
-                        </button>
-                      )}
-                    </div>
+                    <MatchesEmpty
+                      leagueFilter={leagueFilter}
+                      leagueCategories={leagueCategories}
+                      onClear={() => setLeagueFilter("all")}
+                    />
                   </div>
                 ) : (
                   Object.entries(groupedMatches).map(([label, group]) => (
@@ -376,31 +349,30 @@ export default function DashboardPage() {
 
             {/* ════ LIGAS ════ */}
             {activeTab === "leagues" && (
-              <div className="matches-section-premium">
-                <div className="matches-header-premium">
-                  <div className="matches-badge">
-                    <Trophy size={14} />
-                    <span className="matches-badge-count">{activeLeagues.length}</span>
-                    <span className="matches-badge-text"> disponibles</span>
+              <div className="db-content db-content--leagues">
+                <div className="matches-date-group">
+                  <div className="matches-date-label">
+                    <span>Temporada 2025 · 2026</span>
                   </div>
-                </div>
-                <div className="matches-container">
                   {leagues.length === 0 ? (
-                    <div className="matches-empty-state">
-                      <div className="matches-empty-icon">🏆</div>
-                      <div className="matches-empty-text">Sin ligas</div>
+                    <div className="matches-container">
+                      <MatchesEmpty
+                        leagueFilter="all"
+                        leagueCategories={leagueCategories}
+                        onClear={() => {}}
+                      />
                     </div>
                   ) : (
-                    leagues.map((league) => (
-                      <LeagueCard
-                        key={league.id}
-                        league={league}
-                        userPrediction={league.league_predictions?.find(
-                          (p) => p.user_id === currentUser.id
-                        )}
-                        onPredict={handleMakeLeaguePrediction}
-                      />
-                    ))
+                    <div className="leagues-grid">
+                      {leagues.map((league) => (
+                        <LeagueCard
+                          key={league.id}
+                          league={league}
+                          userPrediction={league.league_predictions?.find((p) => p.user_id === currentUser.id)}
+                          onPredict={handleMakeLeaguePrediction}
+                        />
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
@@ -408,38 +380,43 @@ export default function DashboardPage() {
 
             {/* ════ PREMIOS ════ */}
             {activeTab === "awards" && (
-              <div className="matches-section-premium">
-                <div className="matches-header-premium">
-                  <div className="matches-badge">
-                    <Trophy size={14} />
-                    <span className="matches-badge-count">{activeAwards.length}</span>
-                    <span className="matches-badge-text"> disponibles</span>
+              <div className="db-content db-content--awards">
+                <div className="matches-date-group">
+                  <div className="matches-date-label">
+                    <span>Temporada 2025 · 2026</span>
                   </div>
-                </div>
-                <div className="matches-container">
                   {awards.length === 0 ? (
-                    <div className="matches-empty-state">
-                      <div className="matches-empty-icon">🥇</div>
-                      <div className="matches-empty-text">Sin premios</div>
+                    <div className="matches-container">
+                      <MatchesEmpty
+                        leagueFilter="all"
+                        leagueCategories={leagueCategories}
+                        onClear={() => {}}
+                      />
                     </div>
                   ) : (
-                    awards.map((award) => (
-                      <AwardCard
-                        key={award.id}
-                        award={award}
-                        userPrediction={award.award_predictions?.find(
-                          (p) => p.user_id === currentUser.id
-                        )}
-                        onPredict={handleMakeAwardPrediction}
-                      />
-                    ))
+                    <div className="awards-grid">
+                      {awards.map((award) => (
+                        <AwardCard
+                          key={award.id}
+                          award={award}
+                          userPrediction={award.award_predictions?.find((p) => p.user_id === currentUser.id)}
+                          onPredict={handleMakeAwardPrediction}
+                        />
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
             )}
 
-            <Footer />
           </main>
+
+          <RightPanel
+            currentUser={currentUser}
+            users={users}
+            matches={matches}
+          />
+
         </div>
 
         {isLoading && <LoadingOverlay message="Procesando..." />}

@@ -1,0 +1,456 @@
+/* ================================================================
+   MobileProfileMain.css — Brutalista Japonés Retro
+   Fuentes: DM Mono + Sora (ya importadas en MobileDashboard.css)
+   Solo visible en ≤768px
+   Light mode = principal / Dark mode = automático via data-theme
+================================================================ */
+
+/* ================================================================
+   TOKENS
+================================================================ */
+.mpm-root {
+  --mpm-bg:        #f0ede8;
+  --mpm-card:      #e8e4de;
+  --mpm-surface:   #ffffff;
+  --mpm-border:    #d4cfc8;
+  --mpm-border-2:  #c4bfb8;
+  --mpm-text:      #1a1a2e;
+  --mpm-muted:     #888780;
+  --mpm-accent:    #5b4fd8;
+  --mpm-mono:      'DM Mono', monospace;
+  --mpm-sans:      'Sora', sans-serif;
+}
+
+[data-theme="dark"] .mpm-root {
+  --mpm-bg:        #1a1d2e;
+  --mpm-card:      #252936;
+  --mpm-surface:   #1e2235;
+  --mpm-border:    rgba(255,255,255,0.08);
+  --mpm-border-2:  rgba(255,255,255,0.14);
+  --mpm-text:      #f0f1f7;
+  --mpm-muted:     #60519b;
+  --mpm-accent:    #8b7fc7;
+}
+
+/* ================================================================
+   ANIMACIONES DE ENTRADA
+================================================================ */
+@keyframes mpm-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes mpm-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes mpm-slide-right {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ================================================================
+   ROOT — solo mobile
+================================================================ */
+.mpm-root {
+  display: none;
+  flex-direction: column;
+  background: var(--mpm-bg);
+  font-family: var(--mpm-sans);
+  min-height: 100dvh;
+  padding-bottom: 52px;
+}
+
+@media screen and (max-width: 768px) {
+  .mpm-root { display: flex; }
+}
+
+/* ================================================================
+   BANNER
+================================================================ */
+.mpm-banner {
+  position: relative;
+  height: 100px;
+  background: var(--mpm-text);
+  border-bottom: 2px solid var(--mpm-accent);
+  overflow: hidden;
+  flex-shrink: 0;
+  animation: mpm-fade-in 0.4s ease both;
+}
+
+.mpm-banner-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.mpm-banner-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1a0533 0%, #2d1b69 50%, #1e3a5f 100%);
+}
+
+.mpm-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.5) 100%);
+}
+
+/* Cuadrícula brutalista */
+.mpm-banner-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background-image:
+    repeating-linear-gradient(0deg, #8b7fc7 0, #8b7fc7 1px, transparent 1px, transparent 28px),
+    repeating-linear-gradient(90deg, #8b7fc7 0, #8b7fc7 1px, transparent 1px, transparent 28px);
+}
+
+.mpm-banner-tag {
+  position: absolute;
+  bottom: 10px;
+  left: 14px;
+  font-family: var(--mpm-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8b7fc7;
+  border: 1px solid #60519b;
+  padding: 3px 8px;
+  background: rgba(10, 8, 20, 0.6);
+}
+
+/* ================================================================
+   USER ROW
+================================================================ */
+.mpm-user-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--mpm-surface);
+  border-bottom: 1px solid var(--mpm-border-2);
+  cursor: pointer;
+  transition: background 0.1s;
+  animation: mpm-fade-up 0.35s ease 0.1s both;
+}
+
+.mpm-user-row:active { background: var(--mpm-card); }
+
+.mpm-avatar {
+  width: 52px;
+  height: 52px;
+  border: 2px solid var(--mpm-accent);
+  background: var(--mpm-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mpm-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--mpm-accent);
+  flex-shrink: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.mpm-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mpm-user-info { flex: 1; min-width: 0; }
+
+.mpm-name {
+  font-family: var(--mpm-sans);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--mpm-text);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mpm-sub {
+  font-family: var(--mpm-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mpm-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.mpm-user-arrow { color: var(--mpm-border-2); flex-shrink: 0; }
+
+/* ================================================================
+   STATS
+================================================================ */
+.mpm-stats {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr 1px 1fr;
+  background: var(--mpm-text);
+  border-bottom: 2px solid var(--mpm-border-2);
+  animation: mpm-fade-up 0.35s ease 0.18s both;
+}
+
+[data-theme="light"] .mpm-stats { background: #786BB4; }
+
+.mpm-stat {
+  padding: 14px 8px;
+  text-align: center;
+}
+
+.mpm-stat-sep { background: rgba(255,255,255,0.1); }
+
+.mpm-stat-val {
+  font-family: var(--mpm-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: #f0f1f7;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.mpm-stat-val span {
+  font-size: 11px;
+  color: #3a3d52;
+  font-weight: 400;
+  margin-left: 1px;
+}
+
+.mpm-stat-lbl {
+  font-family: var(--mpm-mono);
+  font-size: 8px;
+  font-weight: 700;
+  color: #3a3d52;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ================================================================
+   SECTION HEADER
+================================================================ */
+.mpm-sec-hdr {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 16px 6px;
+  background: var(--mpm-bg);
+  animation: mpm-fade-in 0.3s ease both;
+}
+
+.mpm-sec-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--mpm-accent);
+  flex-shrink: 0;
+}
+
+.mpm-sec-lbl {
+  font-family: var(--mpm-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mpm-muted);
+}
+
+/* ================================================================
+   GROUP + ROW
+================================================================ */
+.mpm-group {
+  border-top: 1px solid var(--mpm-border-2);
+  border-bottom: 1px solid var(--mpm-border-2);
+  animation: mpm-fade-up 0.35s ease both;
+}
+
+.mpm-group:nth-of-type(1) { animation-delay: 0.22s; }
+.mpm-group:nth-of-type(2) { animation-delay: 0.30s; }
+.mpm-group:nth-of-type(3) { animation-delay: 0.38s; }
+
+.mpm-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--mpm-surface);
+  border-bottom: 1px solid var(--mpm-border);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.mpm-row:last-child { border-bottom: none; }
+.mpm-row:active { background: var(--mpm-card); }
+.mpm-row--toggle { cursor: default; }
+
+/* Barra lateral de color */
+.mpm-row-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  flex-shrink: 0;
+}
+
+/* Icono cuadrado */
+.mpm-icon {
+  width: 34px;
+  height: 34px;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mpm-row-body { flex: 1; min-width: 0; }
+
+.mpm-row-lbl {
+  font-family: var(--mpm-sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mpm-text);
+  line-height: 1.2;
+}
+
+.mpm-row-desc {
+  font-family: var(--mpm-mono);
+  font-size: 10px;
+  color: var(--mpm-muted);
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+}
+
+.mpm-chevron { color: var(--mpm-border-2); flex-shrink: 0; }
+
+/* Badge numérico */
+.mpm-badge {
+  font-family: var(--mpm-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border: 1px solid var(--mpm-accent);
+  background: rgba(96, 81, 155, 0.1);
+  color: var(--mpm-accent);
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+/* Toggle */
+.mpm-toggle {
+  width: 42px;
+  height: 24px;
+  background: var(--mpm-border-2);
+  border: 1px solid var(--mpm-border-2);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.mpm-toggle--on {
+  background: var(--mpm-accent);
+  border-color: var(--mpm-accent);
+}
+
+.mpm-toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  transition: transform 0.2s;
+}
+
+.mpm-toggle--on .mpm-toggle-knob {
+  transform: translateX(18px);
+}
+
+/* ================================================================
+   LOGOUT
+================================================================ */
+.mpm-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-top: 6px;
+  background: var(--mpm-surface);
+  border-top: 2px solid rgba(239, 68, 68, 0.25);
+  border-bottom: 2px solid rgba(239, 68, 68, 0.25);
+  cursor: pointer;
+  transition: background 0.1s;
+  animation: mpm-fade-up 0.35s ease 0.46s both;
+}
+
+.mpm-logout:active { background: rgba(239, 68, 68, 0.05); }
+
+.mpm-logout-icon {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mpm-logout-lbl {
+  font-family: var(--mpm-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ef4444;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.mpm-logout-arrow { color: rgba(239, 68, 68, 0.3); flex-shrink: 0; }
+
+/* ================================================================
+   DARK MODE — ajustes específicos
+================================================================ */
+[data-theme="dark"] .mpm-user-row,
+[data-theme="dark"] .mpm-row,
+[data-theme="dark"] .mpm-logout {
+  background: #252936;
+}
+
+[data-theme="dark"] .mpm-user-row:active,
+[data-theme="dark"] .mpm-row:active {
+  background: #1e2235;
+}
+
+[data-theme="dark"] .mpm-sec-hdr {
+  background: #1a1d2e;
+}
+
+[data-theme="dark"] .mpm-stats {
+  background: #12121f;
+}
+/* ================================================================
+   ACCESIBILIDAD — sin animaciones si el usuario lo prefiere
+================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .mpm-banner,
+  .mpm-user-row,
+  .mpm-stats,
+  .mpm-sec-hdr,
+  .mpm-group,
+  .mpm-logout {
+    animation: none !important;
+  }
+}

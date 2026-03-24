@@ -1,15 +1,25 @@
+/* ================================================================
+   ForgotPasswordPage.jsx — Brutalista Japonés Retro
+================================================================ */
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Trophy, KeyRound, ChevronLeft, Send } from "lucide-react";
+import { Mail } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
-import LoadingDots from "../components/ComOthers/LoadingSpinner";
 import "../styles/StylesPages/Auth.css";
 
-export default function ForgotPasswordPage() {
+function LoadingDots() {
+  return (
+    <span className="auth-loading-dots">
+      <span /><span /><span />
+    </span>
+  );
+}
+
+function ForgotForm() {
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail]     = useState("");
   const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError]     = useState("");
 
   const handleReset = async (e) => {
     e.preventDefault();
@@ -32,66 +42,141 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-card-container">
-
-        {/* ── IZQUIERDA: Formulario ── */}
-        <div className="auth-content">
-
-          {/* Brand desktop */}
-          <div className="auth-brand auth-brand-desktop">
-            <div className="auth-brand-icon"><Trophy size={18} /></div>
-            <div className="auth-brand-name">Globalscore</div>
-          </div>
-
-          <div className="auth-card auth-card--forgot">
-            {/* Desktop header */}
-            <h2 className="auth-title-desktop">¿Olvidaste tu contraseña?</h2>
-            <p className="auth-sub-desktop">Ingresa tu correo y te enviaremos un enlace de recuperación</p>
-            <div className="auth-divider auth-divider-desktop"><span>ingresa tu correo registrado</span></div>
-
-            {/* Móvil header */}
-            <h2 className="auth-title-mobile" style={{ display: "none" }}>Forgot password</h2>
-            <p className="auth-sub-mobile" style={{ display: "none" }}>
-              ¿Recuerdas tu contraseña?{" "}
-              <Link to="/" className="auth-subtitle-link">Login</Link>
-            </p>
-
-            <form onSubmit={handleReset}>
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={loading}
-                required
-              />
-
-              {message && <div className="success-message">{message}</div>}
-              {error && <div className="error-message">{error}</div>}
-
-              <button className="btn" type="submit" disabled={loading}>
-                {loading ? (
-                  <span className="btn-loading"><LoadingDots /><span>Enviando...</span></span>
-                ) : (
-                  <>
-                    Enviar enlace
-                  </>
-                )}
-              </button>
-            </form>
+    <>
+      {/* Ilustración de acceso */}
+      <div className="auth-forgot-illus">
+        <div className="auth-forgot-illus-grid" />
+        <div className="auth-forgot-illus-content">
+          <div className="auth-key-icon">
+            <div className="auth-key-circle" />
+            <div className="auth-key-stem" />
           </div>
         </div>
-
-        {/* ── DERECHA: Panel púrpura (desktop) ── */}
-        <div className="auth-right-panel">
-          <div className="auth-right-icon"><KeyRound size={52} color="white" strokeWidth={1.5} /></div>
-          <h3>¡No te<br />preocupes!</h3>
-          <p>¿Recuerdas tu contraseña? Vuelve atrás y continúa con tus predicciones</p>
-          <Link to="/" className="auth-right-btn">Iniciar Sesión</Link>
-        </div>
-
+        <div className="auth-forgot-illus-tag">RECOVERY</div>
       </div>
+
+      {/* Sub-header */}
+      <div className="auth-sub-header">
+        <Link to="/" className="auth-back-btn">←</Link>
+        <span className="auth-sub-title">Recuperar acceso</span>
+      </div>
+
+      <div className="auth-inner">
+        <div className="auth-form-title">¿Olvidaste<br />tu clave?</div>
+        <div className="auth-form-sub">· te enviamos un enlace ·</div>
+
+        <div className="auth-divider">
+          <div className="auth-divider-line" />
+          <div className="auth-divider-dot" />
+          <div className="auth-divider-line" />
+        </div>
+
+        <div className="auth-message auth-message--info" style={{ marginBottom: "16px" }}>
+          Ingresa tu correo y recibirás un enlace para restablecer tu contraseña.
+        </div>
+
+        <form className="auth-form" onSubmit={handleReset}>
+          <div className="auth-input-group">
+            <div className="auth-field">
+              <label className="auth-field-label">Correo registrado</label>
+              <div className="auth-field-wrap">
+                <span className="auth-field-icon"><Mail /></span>
+                <input
+                  className="auth-input"
+                  type="email"
+                  placeholder="usuario@email.com"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setError(""); }}
+                  disabled={loading}
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          {message && <div className="auth-message auth-message--success">{message}</div>}
+          {error   && <div className="auth-message auth-message--error">{error}</div>}
+
+          <div className="auth-cta">
+            <button
+              className="auth-cta-btn"
+              type="submit"
+              disabled={loading || !email}
+            >
+              {loading
+                ? <><LoadingDots /> Enviando</>
+                : <>Enviar enlace <span className="auth-cta-arrow">→</span></>
+              }
+            </button>
+          </div>
+
+          <div className="auth-alt-link">
+            ¿La recuerdas? <Link to="/">Iniciar sesión</Link>
+          </div>
+        </form>
+      </div>
+    </>
+  );
+}
+
+function PhoneStatusBar() {
+  const now  = new Date();
+  const time = now.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+  return (
+    <div className="auth-phone-status">
+      <span className="auth-status-time">{time}</span>
+      <div className="auth-status-notch"><span /><span /></div>
+      <div className="auth-status-icons">
+        <span className="auth-sig-bar" style={{ height: "4px" }} />
+        <span className="auth-sig-bar" style={{ height: "6px" }} />
+        <span className="auth-sig-bar" style={{ height: "9px" }} />
+        <span className="auth-sig-bar" style={{ height: "12px" }} />
+      </div>
+    </div>
+  );
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <div className="auth-wrapper">
+
+      {/* ══ DESKTOP ══ */}
+      <div className="auth-phone-portal">
+        <div className="auth-side-panel">
+          <div>
+            <div className="auth-side-label">Recuperación</div>
+            <div className="auth-side-title">No te<br />preocupes</div>
+          </div>
+          <div className="auth-side-divider" />
+          <div className="auth-side-desc">
+            Te enviamos un enlace<br />
+            seguro para que puedas<br />
+            acceder de nuevo.
+          </div>
+          <div className="auth-side-version">v2.0 · 2025–2026</div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div className="auth-phone-frame">
+            <PhoneStatusBar />
+            <div className="auth-phone-content" style={{ overflowY: "auto" }}>
+              <ForgotForm />
+            </div>
+          </div>
+          <div className="auth-frame-label">
+            <div className="auth-frame-label-dots">
+              <span /><span /><span />
+            </div>
+            GLOBALSCORE · RECUPERACIÓN SEGURA
+          </div>
+        </div>
+      </div>
+
+      {/* ══ MOBILE ══ */}
+      <div className="auth-mobile-direct">
+        <ForgotForm />
+      </div>
+
     </div>
   );
 }

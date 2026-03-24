@@ -4,6 +4,7 @@ import {
   CheckCircle2, Clock, Crown, BarChart3
 } from "lucide-react";
 import { supabase } from "../../utils/supabaseClient";
+import GlobalLoader from "./GlobalLoader";
 import "../../styles/StylesOthers/DashboardSidebar.css";
 
 // ── Helpers ──────────────────────────────────────
@@ -203,9 +204,7 @@ export default function DashboardSidebar({ currentUser, users = [] }) {
         </div>
 
         {loading ? (
-          <div className="dsb-loading">
-            <div className="dsb-spinner" />
-          </div>
+          <GlobalLoader variant="inline" size="sm" />
         ) : recentActivity.length === 0 ? (
           <div className="dsb-empty">
             <Trophy size={28} />

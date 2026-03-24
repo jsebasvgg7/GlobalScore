@@ -1,13 +1,4 @@
-import "../../styles/StylesOthers/LoadingSpinner.css";
-
-export function LoadingDots({ color = "white" }) {
-  return (
-    <div className="dots-container">
-      <div className="dot"></div>
-      <div className="dot"></div>
-      <div className="dot"></div>
-    </div>
-  );
-}
-
+import { LoadingDots } from "./GlobalLoader";
+export { LoadingDots };
 export default LoadingDots;
+ 

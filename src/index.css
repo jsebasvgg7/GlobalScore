@@ -132,7 +132,9 @@
   box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
   border-color: var(--profile-primary);
 }
-
+@media screen and (max-width: 768px) and (orientation: portrait) {
+  .db-root { display: none !important; }
+}
 /* UserProfileModal */
 .user-modal-avatar.clickable-avatar {
   cursor: pointer;

@@ -1,46 +1,51 @@
-import React, { useState } from 'react';
-import { Award } from 'lucide-react';
+/* ============================================================
+   PATCH: Reemplazar solo la función MobileAwards en WorldCupPage.jsx
+   La nueva estructura usa icono lateral + label brutalista
+============================================================ */
 
-export default function WorldCupAwardCard({ award, value, onChange }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const Icon = award.icon;
+// ── Agregar a los imports de lucide-react (si no están ya) ──
+// Award ya debe estar importado
 
+// ── Reemplazar MobileAwards por completo: ────────────────────
+
+function MobileAwards({ awards, onAwardUpdate }) {
   return (
-    <div 
-      className="wc-award-card-light"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-      }}
-    >
-      {/* Header con icono */}
-      <div className="wc-award-header-light">
-        <div className="wc-award-icon-container">
-          <Icon size={28} />
-        </div>
-        <div className="wc-award-info-header">
-          <h3 className="wc-award-name-light">{award.label}</h3>
-          <span className="wc-award-category-light">{award.category}</span>
-        </div>
+    <div className="mwc-body">
+      <div className="mwc-sec-hdr">
+        <div className="mwc-sec-dot" />
+        <span className="mwc-sec-title">PREMIOS INDIVIDUALES · 2026</span>
       </div>
 
-      {/* Formulario de predicción */}
-      <div className="wc-award-prediction-form">
-        <div className="wc-prediction-field-award">
-          <label className="wc-prediction-label-award">
-            <Award size={14} />
-            <span>Tu Predicción</span>
-          </label>
-          <input
-            type="text"
-            className="wc-prediction-input-award"
-            value={value}
-            onChange={(e) => onChange(award.key, e.target.value)}
-            placeholder={award.placeholder}
-          />
-        </div>
+      <div className="mwc-awards">
+        {AWARDS_CFG.map(cfg => (
+          <div key={cfg.key} className="mwc-award-card">
+            {/* Header con icono lateral brutalista */}
+            <div className="mwc-award-hdr">
+              <div className={`mwc-award-icon mwc-award-icon--${cfg.iconVariant}`}>
+                <AwardIconEl variant={cfg.iconVariant} size={20} />
+              </div>
+              <div className="mwc-award-info">
+                <span className="mwc-award-name">{cfg.label}</span>
+                <span className="mwc-award-cat">{cfg.category}</span>
+              </div>
+            </div>
+
+            {/* Campo de predicción con etiqueta brutalista */}
+            <div className="mwc-award-input-wrap">
+              <div className="mwc-award-input-lbl">
+                <Award size={9} />
+                TU PREDICCIÓN
+              </div>
+              <input
+                type="text"
+                className="mwc-award-input"
+                value={awards[cfg.key] || ''}
+                onChange={e => onAwardUpdate(cfg.key, e.target.value)}
+                placeholder={cfg.placeholder}
+              />
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
