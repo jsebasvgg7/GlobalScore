@@ -10,8 +10,8 @@ import {
   ArrowUpDown, Gamepad2, Image, Filter
 } from 'lucide-react';
 
-import { ToastContainer, useToast } from '../components/ComOthers/Toast';
-import Footer from '../components/ComOthers/Footer';
+import { ToastContainer, useToast } from '../components/ComFeedback/Toast';
+import Footer from '../components/ComLayout/Footer';
 import AdminAchievementsModal from '../components/ComAdmin/AdminAchievementsModal';
 import AdminTitlesModal from '../components/ComAdmin/AdminTitlesModal';
 

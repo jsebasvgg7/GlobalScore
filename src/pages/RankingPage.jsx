@@ -5,11 +5,11 @@ import {
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import HallOfFame from '../components/ComOthers/HallOfFame';
-import UserProfileModal from '../components/ComOthers/UserProfileModal';
+import UserProfileModal from '../components/ComProfile/UserProfileModal';
 import RankingRightPanel from '../components/ComPanels/RankingRightPanel';
 import MobileRanking from '../components/ComMobile/MobileRanking';
 import HallOfFamePanel from '../components/ComPanels/HallOfFamePanel';
-import GlobalLoader from "../components/ComOthers/GlobalLoader";
+import GlobalLoader from "../components/ComFeedback/GlobalLoader";
 import '../styles/StylesPages/RankingPage.css';
 
 export default function RankingPage({ currentUser }) {

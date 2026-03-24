@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Zap, Target, Flame, Clock, Calendar } from "lucide-react";
-import "../../styles/StylesOthers/RightPanel.css";
+import "../../styles/StylesPanels/RightPanel.css";
 
 const fmt   = (n) => Number(n || 0).toLocaleString("es-ES");
 const acc   = (c, t) => (t > 0 ? Math.round((c / t) * 100) : 0);

@@ -5,15 +5,14 @@ import {
   AlertCircle, Users, Swords, Crown, Shield
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
-import { useToast, ToastContainer } from '../components/ComOthers/Toast';
+import { useToast, ToastContainer } from '../components/ComFeedback/Toast';
 import { useWorldCup } from '../hooks/HooksOthers/useWorldCup';
-import Footer from '../components/ComOthers/Footer';
 import KnockoutSection from '../components/ComWorldCup/KnockoutSection';
-import GlobalLoader from "../components/ComOthers/GlobalLoader";
+import GlobalLoader from "../components/ComFeedback/GlobalLoader";
 import RightPanelWorld from '../components/ComWorldCup/RightPanelWorld';
 import '../styles/StylesPages/WorldCupPage.css';
 import '../styles/StylesMobile/MobileWorldCup.css';
-import '../styles/StylesOthers/RightPanelWorld.css';
+import '../styles/StylesPanels/RightPanelWorld.css';
 
 /* ============================================================
    DATOS

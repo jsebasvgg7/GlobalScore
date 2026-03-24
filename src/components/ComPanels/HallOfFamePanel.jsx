@@ -1,6 +1,6 @@
 import React from "react";
 import { Crown, Star, Zap, Trophy } from "lucide-react";
-import "../../styles/StylesOthers/HallOfFamePanel.css";
+import "../../styles/StylesPanels/HallOfFamePanel.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
 

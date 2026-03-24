@@ -1,25 +1,5 @@
 import React from "react";
-import "../../styles/StylesOthers/GlobalLoader.css";
-
-/**
- * GlobalLoader — spinner unificado para todo el proyecto
- *
- * Variantes:
- *  - "page"    → pantalla completa, bloquea el layout (reemplaza PageLoader)
- *  - "overlay" → fixed overlay semitransparente (reemplaza LoadingOverlay)
- *  - "inline"  → dentro de un contenedor, flex-centered (reemplaza spinners de secciones)
- *  - "dots"    → tres puntos rebotando, fondo transparente (reemplaza LoadingDots)
- *
- * Tamaños (solo aplica a inline/overlay):
- *  - "sm" → 20px  | "md" → 32px (default) | "lg" → 48px
- *
- * Props:
- *  - variant?  "page" | "overlay" | "inline" | "dots"  (default: "inline")
- *  - size?     "sm" | "md" | "lg"                       (default: "md")
- *  - label?    string — texto opcional bajo el spinner
- *  - message?  string — alias de label para compatibilidad con LoadingOverlay
- *  - color?    string — color CSS (default: var(--accent))
- */
+import "../../styles/StylesFeedback/GlobalLoader.css";
 export default function GlobalLoader({
   variant = "inline",
   size = "md",

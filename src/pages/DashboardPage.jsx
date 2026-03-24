@@ -7,11 +7,11 @@ import {
 import MatchCard          from "../components/ComCards/MatchCard";
 import LeagueCard         from "../components/ComCards/LeagueCard";
 import AwardCard          from "../components/ComCards/AwardCard";
-import NavigationTabs     from "../components/ComOthers/NavigationTabs";
+import NavigationTabs     from "../components/ComNavigation/NavigationTabs";
 import RightPanel         from "../components/ComPanels/RightPanel";
 import MobileDashboard    from "../components/ComMobile/MobileDashboard";
-import { PageLoader, LoadingOverlay } from "../components/ComOthers/LoadingStates";
-import { ToastContainer, useToast }   from "../components/ComOthers/Toast";
+import { PageLoader, LoadingOverlay } from "../components/ComFeedback/LoadingStates";
+import { ToastContainer, useToast }   from "../components/ComFeedback/Toast";
 
 import { useDataLoader } from "../hooks/useDataLoader";
 import { useMatches }    from "../hooks/HooksCards/useMatches";

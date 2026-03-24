@@ -4,7 +4,7 @@ import {
   Clock, Target, Award, BellRing, BellOff
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
-import Footer from '../components/ComOthers/Footer';
+import Footer from '../components/ComLayout/Footer';
 import '../styles/StylesPages/NotificationsPage.css';
 
 const VAPID_PUBLIC_KEY = 'BBxgmAtEOHeYNi1tJQcrWzL_Q-6_Mj16ECGgQSL6JPX0i9XyL5V5LFJHjNdde_TTRxAUXJHSYNtUOvXcAsYS_Xs';

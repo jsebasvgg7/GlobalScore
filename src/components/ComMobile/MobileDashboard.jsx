@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Swords, Trophy, Medal, User } from "lucide-react";
-import UserProfileModal  from "../ComOthers/UserProfileModal";
+import UserProfileModal  from "../ComProfile/UserProfileModal";
 import MobileSubPage     from "./MobileSubPage";
 import "../../styles/StylesMobile/MobileDashboard.css";
 import "../../styles/StylesMobile/MobileSubPage.css";

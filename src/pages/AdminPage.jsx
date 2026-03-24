@@ -25,8 +25,8 @@ import AdminTitlesList       from '../components/ComAdmin/AdminTitlesList';
 import AdminCrownsSection    from '../components/ComAdmin/AdminCrownsSection';
 import AdminBannersList      from '../components/ComAdmin/AdminBannersList';
 import AdminRightPanel       from '../components/ComAdmin/AdminRightPanel';
-import Footer                from '../components/ComOthers/Footer';
-import { ToastContainer, useToast } from '../components/ComOthers/Toast';
+import Footer                from '../components/ComLayout/Footer';
+import { ToastContainer, useToast } from '../components/ComFeedback/Toast';
 
 import '../styles/StylesAdmin/AdminPage.css';
 import '../styles/StylesAdmin/AdminRightPanel.css';

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "./utils/supabaseClient";
 import { ThemeProvider } from "./context/ThemeContext";
 
-import Header from "./components/ComOthers/Header";
-import InstallPWAButton from './components/ComOthers/InstallPWAButton';
+import Header from "./components/ComLayout/Header";
+import InstallPWAButton from './components/ComPWA/InstallPWAButton';
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
@@ -16,7 +16,7 @@ import ProfileSettingsPage from "./pages/ProfileSettingsPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import StatsPage from "./pages/StatsPage";
 import WorldCupPage from "./pages/WorldCupPage";
-import { PageLoader } from "./components/ComOthers/LoadingStates";
+import { PageLoader } from "./components/ComFeedback/LoadingStates";
 import "./styles/layout.css";
 import './styles/mobile-theme.css'; 
 

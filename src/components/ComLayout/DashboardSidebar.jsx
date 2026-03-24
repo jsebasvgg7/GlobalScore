@@ -4,7 +4,7 @@ import {
   CheckCircle2, Clock, Crown, BarChart3
 } from "lucide-react";
 import { supabase } from "../../utils/supabaseClient";
-import GlobalLoader from "./GlobalLoader";
+import GlobalLoader from "../ComFeedback/GlobalLoader";
 import "../../styles/StylesOthers/DashboardSidebar.css";
 
 // ── Helpers ──────────────────────────────────────

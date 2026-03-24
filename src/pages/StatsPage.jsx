@@ -7,8 +7,8 @@ import {
 import { supabase } from '../utils/supabaseClient';
 import StatsRightPanel from '../components/ComPanels/StatsRightPanel';
 import MobileStats from '../components/ComMobile/MobileStats';
-import Footer from '../components/ComOthers/Footer';
-import GlobalLoader from "../components/ComOthers/GlobalLoader";
+import Footer from '../components/ComLayout/Footer';
+import GlobalLoader from "../components/ComFeedback/GlobalLoader";
 import '../styles/StylesPages/StatsPage.css';
 
 const fmt = (n) => Number(n || 0).toLocaleString('es-ES');

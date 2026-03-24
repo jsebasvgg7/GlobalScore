@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { X, Crown, Flame, Star, Shield, Gem, Globe, Heart, Trophy, Calendar, Target, Zap, Users, TrendingUp } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
-import { LoadingDots } from './LoadingSpinner';
-import ImageViewer from './ImageViewer';
+import { LoadingDots } from '../ComFeedback/LoadingSpinner';
+import ImageViewer from '../ComOthers/ImageViewer';
 import '../../styles/StylesProfile/UserProfileModal.css';
 
 /* ─── tiny helpers ─────────────────────────────────── */
