@@ -1362,7 +1362,590 @@
     border-bottom-color: rgba(238,229,218,0.06) !important;
   }
 }
+/* ================================================================
+   MOBILE DARK MODE — ADICIONES FALTANTES
+   Pegar al final de mobile-theme.css
+================================================================ */
 
+/* ================================================================
+   1. KNOCKOUT SECTION — .knockout-* clases usadas en mobile
+      (KnockoutSection.css se carga en MobileWorldCup también)
+================================================================ */
+@media (max-width: 768px) {
+  [data-theme="dark"] .knockout-section { background: transparent; }
+
+  [data-theme="dark"] .knockout-stage {
+    background: #1a1d2e !important;
+    border-color: rgba(238, 229, 218, 0.07) !important;
+  }
+
+  [data-theme="dark"] .knockout-stage-header {
+    background: #0e0f14 !important;
+    border-bottom-color: rgba(238, 229, 218, 0.06) !important;
+  }
+
+  [data-theme="dark"] .knockout-stage-header h2 { color: #EEE5DA !important; }
+  [data-theme="dark"] .knockout-stage-header p  { color: rgba(238,229,218,0.3) !important; }
+
+  [data-theme="dark"] .knockout-side {
+    border-right-color: rgba(238,229,218,0.07) !important;
+  }
+
+  [data-theme="dark"] .knockout-side-title {
+    background: #252936 !important;
+    color: #7A6E65 !important;
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .knockout-quarter-title {
+    background: #2E2B2B !important;
+    color: #7A6E65 !important;
+    border-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .knockout-match-card {
+    background: #2E2B2B !important;
+    border-right-color: rgba(238,229,218,0.07) !important;
+    border-bottom-color: rgba(238,229,218,0.07) !important;
+  }
+
+  [data-theme="dark"] .knockout-match-label  { color: #a599d9 !important; }
+  [data-theme="dark"] .knockout-match-id     { color: #7A6E65 !important; }
+  [data-theme="dark"] .knockout-vs           { color: #7A6E65 !important; }
+
+  [data-theme="dark"] .knockout-team-option {
+    background: #262424 !important;
+    border-color: rgba(238,229,218,0.08) !important;
+  }
+
+  [data-theme="dark"] .knockout-team-option:hover:not(.disabled) {
+    background: rgba(139,127,199,0.08) !important;
+    border-color: rgba(139,127,199,0.3) !important;
+  }
+
+  [data-theme="dark"] .knockout-team-option.selected {
+    background: rgba(52,211,153,0.07) !important;
+    border-color: #34d399 !important;
+  }
+
+  [data-theme="dark"] .knockout-team-name   { color: #EEE5DA !important; }
+  [data-theme="dark"] .knockout-check-icon  { color: #34d399 !important; }
+
+  [data-theme="dark"] .knockout-match-footer {
+    border-top-color: rgba(238,229,218,0.07) !important;
+    color: #34d399 !important;
+  }
+
+  /* Final cards */
+  [data-theme="dark"] .knockout-final-card {
+    border-right-color: rgba(238,229,218,0.07) !important;
+  }
+
+  [data-theme="dark"] .knockout-final-header {
+    background: #0e0f14 !important;
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .knockout-final-header h3    { color: #EEE5DA !important; }
+  [data-theme="dark"] .third-place .knockout-final-header h3 { color: #CD7F32 !important; }
+  [data-theme="dark"] .champion   .knockout-final-header h3  { color: #c9a227 !important; }
+
+  [data-theme="dark"] .knockout-final-description {
+    background: #252936 !important;
+    color: #7A6E65 !important;
+    border-bottom-color: rgba(238,229,218,0.07) !important;
+  }
+
+  /* Empty state */
+  [data-theme="dark"] .knockout-empty-state {
+    background: #1a1d2e !important;
+    border-color: rgba(238,229,218,0.07) !important;
+    color: #7A6E65 !important;
+  }
+
+  [data-theme="dark"] .knockout-empty-state h3 { color: #7A6E65 !important; }
+  [data-theme="dark"] .knockout-empty-state p  { color: #4a5568 !important; }
+}
+
+/* ================================================================
+   2. CHAMPIONSHIPS / CAMPEONATOS — sub-view del perfil
+      clases: pnew-* dentro del championships tab
+================================================================ */
+@media (max-width: 768px) {
+  /* El hero con corona grande */
+  [data-theme="dark"] .pnew-crowns-hero {
+    background: #2E2B2B !important;
+    border-color: rgba(238,229,218,0.08) !important;
+  }
+
+  /* Stats grid del mes actual */
+  [data-theme="dark"] .pnew-month-grid {
+    border-color: rgba(238,229,218,0.08) !important;
+  }
+
+  /* Lista de historial de coronas */
+  [data-theme="dark"] .pnew-crown-list {
+    border-color: rgba(238,229,218,0.08) !important;
+  }
+
+  [data-theme="dark"] .pnew-crown-row {
+    background: #2E2B2B !important;
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .pnew-crown-row:hover { background: #342F2F !important; }
+
+  /* Section header separators */
+  [data-theme="dark"] .pnew-section-hdr {
+    border-bottom-color: rgba(238,229,218,0.08) !important;
+    color: #7A6E65 !important;
+  }
+
+  /* Level track en overview */
+  [data-theme="dark"] .pnew-level-block {
+    background: #2E2B2B !important;
+    border-color: rgba(238,229,218,0.08) !important;
+  }
+
+  [data-theme="dark"] .pnew-level-track {
+    background: rgba(238,229,218,0.08) !important;
+  }
+
+  /* Stats grid: celdas individuales */
+  [data-theme="dark"] .pnew-stat-cell {
+    border-right-color: rgba(238,229,218,0.06) !important;
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  /* History card */
+  [data-theme="dark"] .pnew-hist-list {
+    /* contenedor ya hereda bg */
+  }
+
+  [data-theme="dark"] .pnew-hist-real span { color: #EEE5DA !important; }
+
+  /* Sort modal */
+  [data-theme="dark"] .pnew-sort-modal {
+    background: #2E2B2B !important;
+    border-color: rgba(238,229,218,0.1) !important;
+  }
+
+  [data-theme="dark"] .pnew-sort-opt {
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .pnew-sort-opt:hover { background: #342F2F !important; }
+  [data-theme="dark"] .pnew-sort-opt.active { background: #8b7fc7 !important; color: #EEE5DA !important; }
+
+  /* Botón de sort */
+  [data-theme="dark"] .pnew-sort-btn {
+    background: #2E2B2B !important;
+    border-color: rgba(238,229,218,0.1) !important;
+    color: #7A6E65 !important;
+  }
+
+  [data-theme="dark"] .pnew-sort-btn:hover,
+  [data-theme="dark"] .pnew-sort-btn.active {
+    border-color: #8b7fc7 !important;
+    color: #a599d9 !important;
+  }
+
+  /* Form group label y notas */
+  [data-theme="dark"] .pnew-form-group { color: #EEE5DA; }
+  [data-theme="dark"] .pnew-form-note  { color: #7A6E65 !important; }
+
+  /* Select input dentro de settings */
+  [data-theme="dark"] .pnew-select {
+    background: #2E2B2B !important;
+    border-color: rgba(238,229,218,0.1) !important;
+    color: #EEE5DA !important;
+  }
+
+  [data-theme="dark"] .pnew-select:focus { border-color: #8b7fc7 !important; }
+
+  /* Cancel button */
+  [data-theme="dark"] .pnew-cancel-btn {
+    border-color: rgba(238,229,218,0.1) !important;
+    color: #7A6E65 !important;
+  }
+
+  [data-theme="dark"] .pnew-cancel-btn:hover {
+    border-color: #8b7fc7 !important;
+    color: #a599d9 !important;
+  }
+
+  /* Achievements: título y grid */
+  [data-theme="dark"] .pnew-achievements-grid {
+    border-color: rgba(238,229,218,0.06) !important;
+  }
+
+  /* Active title badge */
+  [data-theme="dark"] .pnew-equipped-tag {
+    background: rgba(139,127,199,0.1) !important;
+    border-color: rgba(139,127,199,0.3) !important;
+    color: #a599d9 !important;
+  }
+
+  /* Locked count */
+  [data-theme="dark"] .pnew-locked-count {
+    color: #7A6E65 !important;
+  }
+
+  /* Delete modal backdrop en mobile */
+  [data-theme="dark"] .pnew-modal-backdrop {
+    background: rgba(0,0,0,0.7) !important;
+  }
+
+  [data-theme="dark"] .pnew-modal-danger {
+    background: #2E2B2B !important;
+    border-color: rgba(220,80,80,0.3) !important;
+  }
+
+  [data-theme="dark"] .pnew-modal-danger h3 { color: #EEE5DA !important; }
+  [data-theme="dark"] .pnew-modal-danger p  { color: #B8A99A !important; }
+}
+
+/* ================================================================
+   3. NOTIFICATIONS — secciones que faltaban en np-* / npm-*
+================================================================ */
+@media (max-width: 768px) {
+  /* Sidebar accent block (solo aparece si se carga en mobile) */
+  [data-theme="dark"] .np-sidebar-accent {
+    background: #8b7fc7 !important;
+  }
+
+  /* Push status badge */
+  [data-theme="dark"] .np-sidebar-push--on {
+    background: rgba(52,211,153,0.08) !important;
+    border-color: rgba(52,211,153,0.2) !important;
+    color: #34d399 !important;
+  }
+
+  /* np-card — tipo de icono */
+  [data-theme="dark"] .np-card-icon-wrap--new {
+    background: rgba(139,127,199,0.1) !important;
+    color: #8b7fc7 !important;
+  }
+
+  [data-theme="dark"] .np-card-icon-wrap--finished {
+    background: rgba(52,211,153,0.08) !important;
+    color: #34d399 !important;
+  }
+
+  /* Badge color dentro del np-card */
+  [data-theme="dark"] .np-card-badge--new      { background: #8b7fc7 !important; }
+  [data-theme="dark"] .np-card-badge--finished { background: #1a6b4a !important; }
+
+  /* Resultado en finalizadas */
+  [data-theme="dark"] .np-card-result {
+    background: rgba(52,211,153,0.07) !important;
+    border-color: rgba(52,211,153,0.2) !important;
+    color: #34d399 !important;
+  }
+
+  /* Meta separador */
+  [data-theme="dark"] .np-card-meta-sep { color: rgba(238,229,218,0.1) !important; }
+  [data-theme="dark"] .np-card-meta-item { color: #7A6E65 !important; }
+
+  /* Spinner en loading */
+  [data-theme="dark"] .np-spinner {
+    border-color: rgba(238,229,218,0.1) !important;
+    border-top-color: #8b7fc7 !important;
+    border-right-color: #8b7fc7 !important;
+  }
+
+  /* Empty state */
+  [data-theme="dark"] .np-empty-icon-wrap {
+    border-color: rgba(238,229,218,0.08) !important;
+    color: rgba(238,229,218,0.12) !important;
+  }
+
+  [data-theme="dark"] .np-empty-title { color: #EEE5DA !important; }
+  [data-theme="dark"] .np-empty-sub   { color: #7A6E65 !important; }
+
+  /* Filters */
+  [data-theme="dark"] .np-filters {
+    background: #2E2B2B !important;
+    border-bottom-color: rgba(238,229,218,0.07) !important;
+  }
+
+  [data-theme="dark"] .np-filter-btn {
+    background: rgba(238,229,218,0.03) !important;
+    border-color: rgba(238,229,218,0.08) !important;
+    color: #7A6E65 !important;
+  }
+
+  [data-theme="dark"] .np-filter-btn:hover  { color: #a599d9 !important; }
+  [data-theme="dark"] .np-filter-btn.active { background: #8b7fc7 !important; border-color: #8b7fc7 !important; color: #EEE5DA !important; }
+  [data-theme="dark"] .np-filter-count      { background: rgba(0,0,0,0.2) !important; }
+
+  /* Banner push */
+  [data-theme="dark"] .np-banner {
+    background: rgba(139,127,199,0.07) !important;
+    border-bottom-color: rgba(139,127,199,0.15) !important;
+    border-left-color: #8b7fc7 !important;
+  }
+
+  [data-theme="dark"] .np-banner-icon  { background: rgba(139,127,199,0.12) !important; color: #a599d9 !important; }
+  [data-theme="dark"] .np-banner-title { color: #EEE5DA !important; }
+  [data-theme="dark"] .np-banner-sub   { color: #7A6E65 !important; }
+  [data-theme="dark"] .np-banner-btn   { background: #8b7fc7 !important; }
+  [data-theme="dark"] .np-banner-btn:hover { background: #7366b3 !important; }
+
+  /* Push button en topbar */
+  [data-theme="dark"] .np-push-btn {
+    background: rgba(238,229,218,0.04) !important;
+    border-color: rgba(238,229,218,0.08) !important;
+    color: #7A6E65 !important;
+  }
+
+  [data-theme="dark"] .np-push-btn--on {
+    background: #8b7fc7 !important;
+    border-color: #8b7fc7 !important;
+    color: #EEE5DA !important;
+  }
+
+  /* Topbar */
+  [data-theme="dark"] .np-topbar {
+    background: #2E2B2B !important;
+    border-bottom-color: rgba(238,229,218,0.07) !important;
+  }
+
+  [data-theme="dark"] .np-topbar-title { color: #7A6E65 !important; }
+  [data-theme="dark"] .np-topbar-count {
+    background: rgba(139,127,199,0.12) !important;
+    color: #a599d9 !important;
+  }
+
+  /* np-list y np-card */
+  [data-theme="dark"] .np-list { /* contenedor */ }
+
+  [data-theme="dark"] .np-card {
+    background: #2E2B2B !important;
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .np-card:hover { background: #342F2F !important; }
+
+  [data-theme="dark"] .np-card-stripe--new      { background: #8b7fc7 !important; }
+  [data-theme="dark"] .np-card-stripe--finished { background: #34d399 !important; }
+
+  [data-theme="dark"] .np-card-title { color: #EEE5DA !important; }
+}
+
+/* ================================================================
+   4. HALL OF FAME — hof-* (componente desktop que se renderiza
+      en la tab del ranking en mobile también)
+================================================================ */
+@media (max-width: 768px) {
+  [data-theme="dark"] .hof-root    { background: #262424 !important; }
+
+  [data-theme="dark"] .hof-header-title { color: #f0c040 !important; }
+  [data-theme="dark"] .hof-header-crown { color: #f0c040 !important; }
+
+  [data-theme="dark"] .hof-sub {
+    color: #7A6E65 !important;
+    border-bottom-color: rgba(238,229,218,0.07) !important;
+  }
+
+  [data-theme="dark"] .hof-carousel-wrap {
+    background: #262424 !important;
+    border-bottom-color: rgba(238,229,218,0.07) !important;
+  }
+
+  [data-theme="dark"] .hof-card {
+    background: #2E2B2B !important;
+    border-color: rgba(238,229,218,0.08) !important;
+  }
+
+  [data-theme="dark"] .hof-card-top { border-bottom-color: rgba(238,229,218,0.07) !important; }
+
+  [data-theme="dark"] .hof-card-stats {
+    background: #262424 !important;
+    border-color: rgba(238,229,218,0.07) !important;
+  }
+
+  [data-theme="dark"] .hof-card-stat-sep  { background: rgba(238,229,218,0.07) !important; }
+  [data-theme="dark"] .hof-card-name      { color: #EEE5DA !important; }
+  [data-theme="dark"] .hof-stat-val       { color: #EEE5DA !important; }
+  [data-theme="dark"] .hof-stat-lbl       { color: #7A6E65 !important; }
+  [data-theme="dark"] .hof-card-counter   { color: #7A6E65 !important; }
+
+  [data-theme="dark"] .hof-dot            { background: rgba(238,229,218,0.12) !important; }
+  [data-theme="dark"] .hof-dot--active    { background: #f0c040 !important; }
+
+  [data-theme="dark"] .hof-top3           { border-top-color: rgba(238,229,218,0.07) !important; }
+
+  [data-theme="dark"] .hof-top3-label {
+    background: #2E2B2B !important;
+    color: #7A6E65 !important;
+    border-bottom-color: rgba(238,229,218,0.07) !important;
+  }
+
+  [data-theme="dark"] .hof-top3-row {
+    background: #262424 !important;
+    border-bottom-color: rgba(238,229,218,0.05) !important;
+  }
+
+  [data-theme="dark"] .hof-top3-row:hover    { background: rgba(238,229,218,0.02) !important; }
+  [data-theme="dark"] .hof-top3-row--active  { background: rgba(201,162,39,0.06) !important; }
+  [data-theme="dark"] .hof-top3-name         { color: #EEE5DA !important; }
+  [data-theme="dark"] .hof-top3-pts          { color: #f0c040 !important; }
+
+  [data-theme="dark"] .hof-empty             { color: #7A6E65 !important; }
+  [data-theme="dark"] .hof-empty-icon        { color: rgba(238,229,218,0.1) !important; }
+  [data-theme="dark"] .hof-empty p           { color: #7A6E65 !important; }
+}
+
+/* ================================================================
+   5. PROFILE — pnew-tab-content: overview, achievements, history
+      secciones que no estaban explícitamente cubiertas
+================================================================ */
+@media (max-width: 768px) {
+  /* Tab content wrapper */
+  [data-theme="dark"] .pnew-tab-content {
+    background: #262424 !important;
+  }
+
+  /* History: body de carta */
+  [data-theme="dark"] .pnew-hist-card {
+    border-color: rgba(238,229,218,0.08) !important;
+  }
+
+  [data-theme="dark"] .pnew-hist-card--exact   { border-left-color: #c9a227 !important; }
+  [data-theme="dark"] .pnew-hist-card--correct { border-left-color: #34d399 !important; }
+  [data-theme="dark"] .pnew-hist-card--wrong   { border-left-color: #e07070 !important; }
+  [data-theme="dark"] .pnew-hist-card--pending { border-left-color: #7A6E65 !important; }
+
+  [data-theme="dark"] .pnew-hist-score {
+    background: rgba(139,127,199,0.1) !important;
+    border-color: rgba(238,229,218,0.08) !important;
+    color: #a599d9 !important;
+  }
+
+  [data-theme="dark"] .pnew-hist-pts {
+    background: #8b7fc7 !important;
+    color: #EEE5DA !important;
+  }
+
+  /* Hist result badges */
+  [data-theme="dark"] .pnew-hist-result--exact {
+    color: #c9a227 !important;
+    border-color: rgba(201,162,39,0.3) !important;
+    background: rgba(201,162,39,0.07) !important;
+  }
+
+  [data-theme="dark"] .pnew-hist-result--correct {
+    color: #34d399 !important;
+    border-color: rgba(52,211,153,0.3) !important;
+    background: rgba(52,211,153,0.06) !important;
+  }
+
+  [data-theme="dark"] .pnew-hist-result--wrong {
+    color: #e07070 !important;
+    border-color: rgba(220,80,80,0.3) !important;
+    background: rgba(220,80,80,0.06) !important;
+  }
+
+  [data-theme="dark"] .pnew-hist-result--pending {
+    color: #7A6E65 !important;
+    border-color: rgba(238,229,218,0.08) !important;
+    background: transparent !important;
+  }
+
+  /* Hist header dentro de la card */
+  [data-theme="dark"] .pnew-hist-card-hdr,
+  [data-theme="dark"] .pnew-hist-card-ftr {
+    background: #342F2F !important;
+    border-color: rgba(238,229,218,0.06) !important;
+  }
+
+  [data-theme="dark"] .pnew-hist-league,
+  [data-theme="dark"] .pnew-hist-date { color: #7A6E65 !important; }
+
+  [data-theme="dark"] .pnew-hist-logo {
+    background: #342F2F !important;
+    border-color: rgba(238,229,218,0.08) !important;
+  }
+
+  /* Achievements: títulos list */
+  [data-theme="dark"] .pnew-titles-list {
+    border-color: rgba(238,229,218,0.08) !important;
+  }
+
+  [data-theme="dark"] .pnew-title-row {
+    background: #2E2B2B !important;
+    border-bottom-color: rgba(238,229,218,0.06) !important;
+  }
+
+  /* Active title border/card */
+  [data-theme="dark"] .pnew-active-title {
+    background: rgba(139,127,199,0.06) !important;
+  }
+
+  /* Settings cards */
+  [data-theme="dark"] .pnew-settings-card {
+    border-color: rgba(238,229,218,0.08) !important;
+  }
+
+  [data-theme="dark"] .pnew-settings-card-body {
+    background: #2E2B2B !important;
+  }
+
+  [data-theme="dark"] .pnew-setting-row--danger {
+    background: rgba(220,80,80,0.04) !important;
+  }
+
+  /* Toggle en settings */
+  [data-theme="dark"] .pnew-toggle {
+    background: rgba(238,229,218,0.12) !important;
+    border-color: rgba(238,229,218,0.15) !important;
+  }
+
+  [data-theme="dark"] .pnew-toggle--on {
+    background: #8b7fc7 !important;
+    border-color: #8b7fc7 !important;
+  }
+
+  [data-theme="dark"] .pnew-toggle-knob { background: #EEE5DA !important; }
+
+  /* Buttons en settings */
+  [data-theme="dark"] .pnew-btn-secondary {
+    background: transparent !important;
+    border-color: rgba(238,229,218,0.1) !important;
+    color: #B8A99A !important;
+  }
+
+  [data-theme="dark"] .pnew-btn-secondary:hover {
+    border-color: #8b7fc7 !important;
+  }
+
+  /* Select */
+  [data-theme="dark"] .pnew-select {
+    background: #2E2B2B !important;
+    border-color: rgba(238,229,218,0.1) !important;
+    color: #EEE5DA !important;
+  }
+
+  /* Nav logout en desktop — también visible si layout cambia */
+  [data-theme="dark"] .pnew-nav-logout {
+    border-top-color: rgba(238,229,218,0.08) !important;
+  }
+
+  /* Form group */
+  [data-theme="dark"] .pnew-form-group label { color: #7A6E65 !important; }
+
+  /* Banner list para editar perfil */
+  [data-theme="dark"] .pnew-banner-opt {
+    background: #2E2B2B !important;
+    border-color: rgba(238,229,218,0.08) !important;
+    color: #EEE5DA !important;
+  }
+
+  [data-theme="dark"] .pnew-banner-opt:hover { border-color: #8b7fc7 !important; }
+  [data-theme="dark"] .pnew-banner-opt.active { border-color: #8b7fc7 !important; }
+  [data-theme="dark"] .pnew-banner-check      { color: #a599d9 !important; }
+}
 /* ================================================================
    SORT / FILTER MODALS MOBILE DARK
 ================================================================ */
