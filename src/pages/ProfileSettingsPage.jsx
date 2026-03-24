@@ -641,7 +641,7 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
         <div className="pnew-tab-content">
           <div className="pnew-section-hdr"><span>INFORMACIÓN</span></div>
           <Card title="App">
-            <Row label="Versión" desc="GlobalScore v21.0.0" />
+            <Row label="Versión" desc="GlobalScore v23.23.03" />
           </Card>
           <Card title="Legal">
             <Row label="Política de privacidad" desc="Cómo manejamos tus datos" />
