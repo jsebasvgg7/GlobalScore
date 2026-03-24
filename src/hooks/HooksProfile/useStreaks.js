@@ -39,7 +39,7 @@ export const useStreaks = (currentUser) => {
         `)
         .eq('user_id', currentUser.id)
         .eq('matches.status', 'finished')
-        .order('matches.date', { ascending: false });
+        .order('created_at', { ascending: false })
 
       if (error) throw error;
 

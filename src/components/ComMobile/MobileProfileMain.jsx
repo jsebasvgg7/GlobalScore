@@ -100,7 +100,7 @@ export default function MobileProfileMain({
           </button>
         </div>
 
-        <div className="mpm-row" onClick={() => go("appearance")}>
+        <div className="mpm-row" onClick={() => go("settings-appearance")}>
           <div className="mpm-row-accent" style={{ background: "#eab308" }} />
           <div className="mpm-icon" style={{ borderColor: "#eab308", background: "rgba(234,179,8,0.1)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -119,7 +119,7 @@ export default function MobileProfileMain({
         <span className="mpm-sec-lbl">Mi actividad</span>
       </div>
       <div className="mpm-group">
-        <div className="mpm-row" onClick={() => go("stats")}>
+        <div className="mpm-row" onClick={() => go("overview")}>
           <div className="mpm-row-accent" style={{ background: "#1d9e75" }} />
           <div className="mpm-icon" style={{ borderColor: "#1d9e75", background: "rgba(29,158,117,0.1)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d9e75" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -185,7 +185,7 @@ export default function MobileProfileMain({
           <ChevronRight size={14} className="mpm-chevron" />
         </div>
 
-        <div className="mpm-row" onClick={() => go("account")}>
+        <div className="mpm-row" onClick={() => go("settings-account")}>
           <div className="mpm-row-accent" style={{ background: "#60519b" }} />
           <div className="mpm-icon" style={{ borderColor: "#60519b", background: "rgba(96,81,155,0.1)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60519b" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>

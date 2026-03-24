@@ -1,8 +1,5 @@
 /* ================================================================
-   MobileProfileMain.css — Brutalista Japonés Retro
-   Fuentes: DM Mono + Sora (ya importadas en MobileDashboard.css)
-   Solo visible en ≤768px
-   Light mode = principal / Dark mode = automático via data-theme
+   MobileProfileMain.css 
 ================================================================ */
 
 /* ================================================================
@@ -59,7 +56,7 @@
   background: var(--mpm-bg);
   font-family: var(--mpm-sans);
   min-height: 100dvh;
-  padding-bottom: 52px;
+  padding-bottom: 62px;
 }
 
 @media screen and (max-width: 768px) {
