@@ -146,6 +146,7 @@ export const countrySlugMap = {
   'TUR': 'turquia',
   'ITA': 'italia',
   'ENG': 'inglaterra',
+  'INT': 'irlandadelnorte',
 
   // América
   'ARG': 'argentina',
