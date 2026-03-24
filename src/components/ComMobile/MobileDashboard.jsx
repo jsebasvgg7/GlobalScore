@@ -311,7 +311,18 @@ export default function MobileDashboard({
 
   const totalPredictable = matches.filter(m => m.status === "pending").length;
   const total            = Math.max(myPredCount, totalPredictable);
-  const progressPct      = total > 0 ? Math.min(100, Math.round((myPredCount / total) * 100)) : 0;
+  const progressPct = totalPredictable > 0
+  ? Math.min(100, Math.round(
+      (matches.filter(m =>
+        m.status === "pending" &&
+        m.predictions?.some(p => p.user_id === currentUser?.id)
+      ).length / totalPredictable) * 100
+    ))
+  : 0;
+  const savedPending = matches.filter(m =>
+  m.status === "pending" &&
+  m.predictions?.some(p => p.user_id === currentUser?.id)
+  ).length;
 
   const previewMatches = pendingMatches.slice(0, 4);
   const previewLeagues = leagues.slice(0, 3);
@@ -338,9 +349,9 @@ export default function MobileDashboard({
       {/* PROGRESS */}
       <div className="mob-progress">
         <div className="mob-progress-row">
-          <span className="mob-progress-lbl">PREDICCIONES TOTALES</span>
-          <span className="mob-progress-count">{myPredCount} / {total}</span>
-        </div>
+        <span className="mob-progress-lbl">PREDICCIONES TOTALES</span>
+        <span className="mob-progress-count">{savedPending} / {totalPredictable}</span>
+      </div>
         <div className="mob-progress-track">
           <div className="mob-progress-fill" style={{ width: `${progressPct}%` }} />
         </div>
