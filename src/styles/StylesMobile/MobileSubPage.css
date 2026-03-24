@@ -1,0 +1,513 @@
+/* ================================================================
+   MobileSubPage
+================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
+
+/* ================================================================
+   PÁGINA BASE — cubre toda la pantalla, slide desde derecha
+================================================================ */
+.msp-page {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Slide-in desde la derecha */
+  animation: msp-slide-in 0.28s cubic-bezier(0.34, 1.1, 0.64, 1) both;
+  font-family: 'Sora', sans-serif;
+}
+
+@keyframes msp-slide-in {
+  from { transform: translateX(100%); opacity: 0.6; }
+  to   { transform: translateX(0);    opacity: 1;   }
+}
+
+/* ================================================================
+   TOP BAR
+================================================================ */
+.msp-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  /* Safe area para notch */
+  padding-top: calc(14px + env(safe-area-inset-top));
+}
+
+.msp-back {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  border-radius: 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+}
+
+.msp-back:active {
+  background: var(--glass);
+}
+
+.msp-topbar-center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  justify-content: center;
+}
+
+.msp-topbar-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.msp-topbar-count {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--glass);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-family: 'DM Mono', monospace;
+}
+
+.msp-filter-toggle {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s;
+}
+
+.msp-filter-toggle.active {
+  background: var(--glass);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.msp-filter-toggle:active {
+  transform: scale(0.95);
+}
+
+/* ================================================================
+   SORT ROW
+================================================================ */
+.msp-sort-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.msp-sort-row::-webkit-scrollbar { display: none; }
+
+.msp-sort-icon {
+  color: var(--muted);
+  flex-shrink: 0;
+  width: 11px;
+  height: 11px;
+}
+
+.msp-sort-pill {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.msp-sort-pill.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+.msp-sort-pill:active {
+  transform: scale(0.97);
+}
+
+/* Chip de filtro activo */
+.msp-active-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: var(--glass);
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: 'Sora', sans-serif;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.msp-active-chip button {
+  display: flex;
+  align-items: center;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  padding: 0;
+  cursor: pointer;
+  margin-left: 2px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ================================================================
+   SEASON LABEL (ligas / premios)
+================================================================ */
+.msp-season-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  flex-shrink: 0;
+}
+
+.msp-season-label span {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ================================================================
+   BODY — scroll principal
+================================================================ */
+.msp-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+
+.msp-body::-webkit-scrollbar { display: none; }
+
+/* ================================================================
+   DATE GROUP
+================================================================ */
+.msp-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 16px 4px;
+}
+
+.msp-group + .msp-group {
+  padding-top: 8px;
+}
+
+.msp-date-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.msp-date-label.first span {
+  color: var(--accent);
+  background: var(--glass);
+  border-color: var(--accent);
+}
+
+.msp-date-label span {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.msp-date-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ================================================================
+   CARDS COLUMN
+   Las MatchCards tienen max-width propio; aquí solo alineamos
+================================================================ */
+.msp-cards-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+/* Forzar que las cards ocupen el ancho disponible */
+.msp-cards-col > * {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Override de MatchCard para mobile sub-page */
+.msp-cards-col .mc-wrap {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.msp-cards-col .mc-card {
+  width: 100% !important;
+}
+
+/* LeagueCard y AwardCard */
+.msp-cards-col .lc-card,
+.msp-cards-col .ac-card {
+  width: 100% !important;
+}
+
+/* ================================================================
+   EMPTY STATE
+================================================================ */
+.msp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 60px 32px;
+}
+
+.msp-empty-box {
+  width: 52px;
+  height: 52px;
+  color: var(--muted);
+  opacity: 0.4;
+}
+
+.msp-empty-box svg {
+  width: 52px;
+  height: 52px;
+}
+
+.msp-empty-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.7;
+  text-align: center;
+}
+
+/* ================================================================
+   FILTER PANEL — lateral desde la derecha
+================================================================ */
+.msp-filter-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 8, 20, 0.5);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 400;
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+
+.msp-filter-panel {
+  width: 264px;
+  max-width: 80vw;
+  height: 100%;
+  background: var(--bg);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  animation: msp-panel-in 0.24s cubic-bezier(0.34, 1.2, 0.64, 1);
+  overflow: hidden;
+}
+
+@keyframes msp-panel-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.msp-filter-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  flex-shrink: 0;
+  padding-top: calc(20px + env(safe-area-inset-top));
+}
+
+.msp-filter-hdr-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.msp-filter-hdr-title svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.msp-filter-hdr-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.msp-filter-reset {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.msp-filter-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.msp-filter-close svg { width: 13px; height: 13px; }
+
+.msp-filter-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 12px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.msp-filter-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.msp-filter-item:active {
+  transform: scale(0.98);
+}
+
+.msp-filter-item.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+.msp-filter-item-icon {
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ================================================================
+   DARK MODE — heredado del sistema, solo overrides específicos
+================================================================ */
+[data-theme="dark"] .msp-page {
+  background: var(--bg);
+}
+
+[data-theme="dark"] .msp-topbar,
+[data-theme="dark"] .msp-sort-row {
+  background: var(--card);
+}
+
+[data-theme="dark"] .msp-filter-panel {
+  background: var(--bg);
+}
+
+[data-theme="dark"] .msp-filter-hdr {
+  background: var(--card);
+}
+
+[data-theme="dark"] .msp-filter-item {
+  background: var(--card);
+}

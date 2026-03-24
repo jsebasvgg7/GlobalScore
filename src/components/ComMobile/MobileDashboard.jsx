@@ -1,27 +1,22 @@
-import React, { useState, useMemo, useRef, useEffect } from "react";
-import { X, Swords, Trophy, Medal, User, Filter, ArrowUpDown } from "lucide-react";
+// src/components/ComMobile/MobileDashboard.jsx
+// ================================================================
+//  MobileDashboard — Dashboard principal mobile
+//  Los modales de Partidos/Ligas/Premios han sido reemplazados
+//  por páginas slide-in (MobileSubPage) para evitar conflictos
+//  con el teclado virtual y animaciones de inputs en Android/iOS
+// ================================================================
+
+import React, { useState, useMemo } from "react";
+import { Swords, Trophy, Medal, User } from "lucide-react";
 import MatchCard         from "../ComCards/MatchCard";
 import LeagueCard        from "../ComCards/LeagueCard";
 import AwardCard         from "../ComCards/AwardCard";
 import UserProfileModal  from "../ComOthers/UserProfileModal";
+import MobileSubPage     from "./MobileSubPage";
 import "../../styles/StylesMobile/MobileDashboard.css";
+import "../../styles/StylesMobile/MobileSubPage.css";
 
-const LEAGUE_CATS = [
-  { id: "all",          name: "Todos",      icon: "🌍", leagues: [] },
-  { id: "europe",       name: "Europa",     icon: "🏆", leagues: ["Champions League","Europa League","Conference League"] },
-  { id: "england",      name: "Inglaterra", icon: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", leagues: ["Premier League","Championship","FA Cup","EFL Cup"] },
-  { id: "spain",        name: "España",     icon: "🇪🇸", leagues: ["La Liga","Copa del Rey","Supercopa"] },
-  { id: "italy",        name: "Italia",     icon: "🇮🇹", leagues: ["Serie A","Coppa Italia","Supercoppa"] },
-  { id: "germany",      name: "Alemania",   icon: "🇩🇪", leagues: ["Bundesliga","DFB Pokal"] },
-  { id: "france",       name: "Francia",    icon: "🇫🇷", leagues: ["Ligue 1","Coupe de France","Coupe de la Ligue"] },
-  { id: "southamerica", name: "Sudamérica", icon: "🌎", leagues: ["Copa Libertadores","Copa Sudamericana"] },
-];
-
-const SORT_OPTS = [
-  { key: "date-asc",  label: "Más próximos" },
-  { key: "date-desc", label: "Más lejanos"  },
-];
-
+// ── Icons brutalistas SVG ────────────────────────────────────────
 const IconMatch = () => (
   <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="1" y="1" width="42" height="42" stroke="currentColor" strokeWidth="0.5"/>
@@ -54,6 +49,7 @@ const IconAward = () => (
   </svg>
 );
 
+// ── Empty state ──────────────────────────────────────────────────
 function EmptyState({ type = "matches" }) {
   const configs = {
     matches: { icon: <IconMatch />, label: "Sin partidos pendientes", sub: "Cuando haya partidos disponibles aparecerán aquí" },
@@ -70,6 +66,7 @@ function EmptyState({ type = "matches" }) {
   );
 }
 
+// ── Skeleton cards ───────────────────────────────────────────────
 function SkeletonMatchCard() {
   return (
     <div className="mob-sk-mcard">
@@ -148,10 +145,12 @@ function SkeletonAwardCard() {
   );
 }
 
+// ── StatusDot ────────────────────────────────────────────────────
 function StatusDot({ mod }) {
   return <span className={`mob-status-dot mob-status-dot--${mod}`} title={mod} />;
 }
 
+// ── Mini cards preview (scroll horizontal) ───────────────────────
 function MiniMatchCard({ match, userPred }) {
   const now       = new Date();
   const deadline  = match.deadline ? new Date(match.deadline) : null;
@@ -285,235 +284,9 @@ function MiniAwardCard({ award, userPrediction }) {
   );
 }
 
-function MobModal({ isOpen, onClose, title, count, children }) {
-  const overlayRef = useRef(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const prev = document.body.style.overflow;
-    const prevPos = document.body.style.position;
-    const prevWidth = document.body.style.width;
-    const prevTop = document.body.style.top;
-    const scrollY = window.scrollY;
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.top = `-${scrollY}px`;
-    return () => {
-      document.body.style.overflow = prev;
-      document.body.style.position = prevPos;
-      document.body.style.width = prevWidth;
-      document.body.style.top = prevTop;
-      window.scrollTo(0, scrollY);
-    };
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
-  return (
-    <div
-      ref={overlayRef}
-      className="mob-modal-overlay"
-      onPointerDown={(e) => {
-        if (e.target === overlayRef.current) onClose();
-      }}
-    >
-      <div
-        className="mob-modal"
-        onPointerDown={(e) => e.stopPropagation()}
-      >
-        <div className="mob-modal-handle" />
-        <div className="mob-modal-header">
-          <div className="mob-modal-title">
-            {title}
-            <span className="mob-modal-title-accent">{count}</span>
-          </div>
-          <button className="mob-modal-close" onPointerDown={onClose}>
-            <X size={14} />
-          </button>
-        </div>
-        <div className="mob-modal-body">{children}</div>
-      </div>
-    </div>
-  );
-}
-
-function MatchModal({ isOpen, onClose, pendingMatches, currentUser, onPredict }) {
-  const [sortOpt,      setSortOpt]      = useState("date-asc");
-  const [leagueFilter, setLeagueFilter] = useState("all");
-  const [showFilter,   setShowFilter]   = useState(false);
-  const overlayRef = useRef(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const scrollY = window.scrollY;
-    const prev = {
-      overflow: document.body.style.overflow,
-      position: document.body.style.position,
-      width:    document.body.style.width,
-      top:      document.body.style.top,
-    };
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width    = '100%';
-    document.body.style.top      = `-${scrollY}px`;
-    return () => {
-      document.body.style.overflow = prev.overflow;
-      document.body.style.position = prev.position;
-      document.body.style.width    = prev.width;
-      document.body.style.top      = prev.top;
-      window.scrollTo(0, scrollY);
-    };
-  }, [isOpen]);
-
-  const processed = useMemo(() => {
-    let list = [...pendingMatches];
-    if (leagueFilter !== "all") {
-      const cat = LEAGUE_CATS.find(c => c.id === leagueFilter);
-      if (cat) list = list.filter(m => cat.leagues.some(l => m.league?.toLowerCase().includes(l.toLowerCase())));
-    }
-    list.sort((a, b) => {
-      const da = new Date(`${a.date}T${a.time || "00:00"}`);
-      const db = new Date(`${b.date}T${b.time || "00:00"}`);
-      return sortOpt === "date-asc" ? da - db : db - da;
-    });
-    return list;
-  }, [pendingMatches, leagueFilter, sortOpt]);
-
-  const grouped = useMemo(() => {
-    const today    = new Date(); today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
-    const groups   = {};
-    processed.forEach(m => {
-      const d     = new Date((m.date || "") + "T00:00:00");
-      const label =
-        d.getTime() === today.getTime()    ? "HOY" :
-        d.getTime() === tomorrow.getTime() ? "MAÑANA" :
-        d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" }).toUpperCase();
-      if (!groups[label]) groups[label] = [];
-      groups[label].push(m);
-    });
-    return groups;
-  }, [processed]);
-
-  const activeCat = LEAGUE_CATS.find(c => c.id === leagueFilter);
-
-  if (!isOpen) return null;
-
-  return (
-    <div
-      ref={overlayRef}
-      className="mob-modal-overlay"
-      onPointerDown={(e) => {
-        if (e.target === overlayRef.current) onClose();
-      }}
-    >
-      <div
-        className="mob-modal mob-modal--tall"
-        onPointerDown={(e) => e.stopPropagation()}
-      >
-        <div className="mob-modal-handle" />
-
-        <div className="mob-modal-header">
-          <div className="mob-modal-title">
-            PARTIDOS
-            <span className="mob-modal-title-accent">{processed.length}</span>
-          </div>
-          <button className="mob-modal-close" onPointerDown={onClose}>
-            <X size={14} />
-          </button>
-        </div>
-
-        <div className="mob-modal-toolbar">
-          <div className="mob-sort-group">
-            <ArrowUpDown size={12} style={{ color: "var(--mob-muted)", flexShrink: 0 }} />
-            {SORT_OPTS.map(opt => (
-              <button
-                key={opt.key}
-                className={`mob-sort-btn${sortOpt === opt.key ? " active" : ""}`}
-                onPointerDown={() => setSortOpt(opt.key)}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-          <button
-            className={`mob-filter-btn${leagueFilter !== "all" ? " active" : ""}`}
-            onPointerDown={() => setShowFilter(true)}
-          >
-            <Filter size={13} />
-            {leagueFilter !== "all"
-              ? <span>{activeCat?.icon} {activeCat?.name}</span>
-              : <span>Liga</span>}
-          </button>
-        </div>
-
-        <div className="mob-modal-body">
-          {processed.length === 0 ? (
-            <EmptyState type="matches" />
-          ) : (
-            Object.entries(grouped).map(([label, group]) => (
-              <div key={label} className="mob-modal-group">
-                <div className="mob-modal-date-label"><span>{label}</span></div>
-                <div className="mob-modal-cards">
-                  {group.map(m => (
-                    <MatchCard
-                      key={m.id}
-                      match={m}
-                      userPred={m.predictions?.find(p => p.user_id === currentUser?.id)}
-                      onPredict={onPredict}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-
-      {showFilter && (
-        <div
-          className="mob-filter-panel-overlay"
-          onPointerDown={(e) => {
-            if (e.target.classList.contains('mob-filter-panel-overlay')) setShowFilter(false);
-          }}
-        >
-          <div className="mob-filter-panel" onPointerDown={(e) => e.stopPropagation()}>
-            <div className="mob-filter-panel-header">
-              <div className="mob-filter-panel-title">
-                <Filter size={13} />
-                FILTRAR LIGA
-              </div>
-              <div style={{ display: "flex", gap: "6px" }}>
-                {leagueFilter !== "all" && (
-                  <button className="mob-filter-panel-reset" onPointerDown={() => { setLeagueFilter("all"); setShowFilter(false); }}>
-                    RESET
-                  </button>
-                )}
-                <button className="mob-modal-close" onPointerDown={() => setShowFilter(false)}>
-                  <X size={14} />
-                </button>
-              </div>
-            </div>
-            <div className="mob-filter-panel-body">
-              {LEAGUE_CATS.map(cat => (
-                <button
-                  key={cat.id}
-                  className={`mob-filter-pill${leagueFilter === cat.id ? " active" : ""}`}
-                  onPointerDown={() => { setLeagueFilter(cat.id); setShowFilter(false); }}
-                >
-                  <span className="mob-filter-icon">{cat.icon}</span>
-                  <span>{cat.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
+// ═══════════════════════════════════════════════════════════════
+//  DASHBOARD PRINCIPAL
+// ═══════════════════════════════════════════════════════════════
 export default function MobileDashboard({
   currentUser,
   users        = [],
@@ -525,9 +298,8 @@ export default function MobileDashboard({
   onLeaguePredict,
   onAwardPredict,
 }) {
-  const [matchModal,   setMatchModal]   = useState(false);
-  const [leagueModal,  setLeagueModal]  = useState(false);
-  const [awardModal,   setAwardModal]   = useState(false);
+  // "matches" | "leagues" | "awards" | null
+  const [activePage, setActivePage] = useState(null);
   const [profileModal, setProfileModal] = useState(false);
 
   const pendingMatches = useMemo(() => matches.filter(m => m.status === "pending"), [matches]);
@@ -548,6 +320,21 @@ export default function MobileDashboard({
   return (
     <div className="mob-root">
 
+      {/* ── Sub-páginas slide-in ── */}
+      {activePage && (
+        <MobileSubPage
+          page={activePage}
+          matches={matches}
+          leagues={leagues}
+          awards={awards}
+          currentUser={currentUser}
+          onPredict={onPredict}
+          onLeaguePredict={onLeaguePredict}
+          onAwardPredict={onAwardPredict}
+          onBack={() => setActivePage(null)}
+        />
+      )}
+
       {/* PROGRESS */}
       <div className="mob-progress">
         <div className="mob-progress-row">
@@ -561,21 +348,21 @@ export default function MobileDashboard({
 
       {/* QUICK ACTIONS */}
       <div className="mob-quick">
-        <div className="mob-qbtn" onPointerDown={() => setMatchModal(true)}>
+        <div className="mob-qbtn" onPointerDown={() => setActivePage("matches")}>
           <div className="mob-qbtn-icon"><Swords size={18} /></div>
           <div>
             <div className="mob-qbtn-txt">PARTIDOS</div>
             <div className="mob-qbtn-sub">{pendingMatches.length} pendientes</div>
           </div>
         </div>
-        <div className="mob-qbtn" onPointerDown={() => setLeagueModal(true)}>
+        <div className="mob-qbtn" onPointerDown={() => setActivePage("leagues")}>
           <div className="mob-qbtn-icon"><Trophy size={18} /></div>
           <div>
             <div className="mob-qbtn-txt">LIGAS</div>
             <div className="mob-qbtn-sub">{leagues.length} activas</div>
           </div>
         </div>
-        <div className="mob-qbtn" onPointerDown={() => setAwardModal(true)}>
+        <div className="mob-qbtn" onPointerDown={() => setActivePage("awards")}>
           <div className="mob-qbtn-icon"><Medal size={18} /></div>
           <div>
             <div className="mob-qbtn-txt">PREMIOS</div>
@@ -594,7 +381,7 @@ export default function MobileDashboard({
       {/* ═══ PARTIDOS ═══ */}
       <div className="mob-sec">
         <span className="mob-sec-title">PARTIDOS</span>
-        <span className="mob-sec-all" onPointerDown={() => setMatchModal(true)}>TODOS »</span>
+        <span className="mob-sec-all" onPointerDown={() => setActivePage("matches")}>TODOS »</span>
       </div>
       <div className="mob-scroll-wrap">
         <div className="mob-hscroll">
@@ -605,10 +392,14 @@ export default function MobileDashboard({
           ) : (
             <>
               {previewMatches.map(m => (
-                <MiniMatchCard key={m.id} match={m} userPred={m.predictions?.find(p => p.user_id === currentUser?.id)} />
+                <MiniMatchCard
+                  key={m.id}
+                  match={m}
+                  userPred={m.predictions?.find(p => p.user_id === currentUser?.id)}
+                />
               ))}
               {pendingMatches.length > 4 && (
-                <div className="mob-more-card" onPointerDown={() => setMatchModal(true)}>
+                <div className="mob-more-card" onPointerDown={() => setActivePage("matches")}>
                   <span className="mob-more-sym">&raquo;</span>
                   <span>MÁS</span>
                 </div>
@@ -621,7 +412,7 @@ export default function MobileDashboard({
       {/* ═══ LIGAS ═══ */}
       <div className="mob-sec">
         <span className="mob-sec-title">LIGAS</span>
-        <span className="mob-sec-all" onPointerDown={() => setLeagueModal(true)}>TODOS »</span>
+        <span className="mob-sec-all" onPointerDown={() => setActivePage("leagues")}>TODOS »</span>
       </div>
       <div className="mob-scroll-wrap">
         <div className="mob-hscroll">
@@ -632,10 +423,14 @@ export default function MobileDashboard({
           ) : (
             <>
               {previewLeagues.map(l => (
-                <MiniLeagueCard key={l.id} league={l} userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)} />
+                <MiniLeagueCard
+                  key={l.id}
+                  league={l}
+                  userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)}
+                />
               ))}
               {leagues.length > 3 && (
-                <div className="mob-more-card" onPointerDown={() => setLeagueModal(true)}>
+                <div className="mob-more-card" onPointerDown={() => setActivePage("leagues")}>
                   <span className="mob-more-sym">&raquo;</span>
                   <span>MÁS</span>
                 </div>
@@ -648,7 +443,7 @@ export default function MobileDashboard({
       {/* ═══ PREMIOS ═══ */}
       <div className="mob-sec">
         <span className="mob-sec-title">PREMIOS</span>
-        <span className="mob-sec-all" onPointerDown={() => setAwardModal(true)}>TODOS »</span>
+        <span className="mob-sec-all" onPointerDown={() => setActivePage("awards")}>TODOS »</span>
       </div>
       <div className="mob-scroll-wrap">
         <div className="mob-hscroll">
@@ -659,10 +454,14 @@ export default function MobileDashboard({
           ) : (
             <>
               {previewAwards.map(a => (
-                <MiniAwardCard key={a.id} award={a} userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)} />
+                <MiniAwardCard
+                  key={a.id}
+                  award={a}
+                  userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)}
+                />
               ))}
               {awards.length > 3 && (
-                <div className="mob-more-card" onPointerDown={() => setAwardModal(true)}>
+                <div className="mob-more-card" onPointerDown={() => setActivePage("awards")}>
                   <span className="mob-more-sym">&raquo;</span>
                   <span>MÁS</span>
                 </div>
@@ -672,33 +471,7 @@ export default function MobileDashboard({
         </div>
       </div>
 
-      {/* MODALES */}
-      <MatchModal
-        isOpen={matchModal}
-        onClose={() => setMatchModal(false)}
-        pendingMatches={pendingMatches}
-        currentUser={currentUser}
-        onPredict={onPredict}
-      />
-
-      <MobModal isOpen={leagueModal} onClose={() => setLeagueModal(false)} title="LIGAS" count={String(leagues.length)}>
-        {leagues.length === 0
-          ? <EmptyState type="leagues" />
-          : leagues.map(l => (
-              <LeagueCard key={l.id} league={l} userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)} onPredict={onLeaguePredict} />
-            ))
-        }
-      </MobModal>
-
-      <MobModal isOpen={awardModal} onClose={() => setAwardModal(false)} title="PREMIOS" count={String(awards.length)}>
-        {awards.length === 0
-          ? <EmptyState type="awards" />
-          : awards.map(a => (
-              <AwardCard key={a.id} award={a} userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)} onPredict={onAwardPredict} />
-            ))
-        }
-      </MobModal>
-
+      {/* Perfil modal (se mantiene igual) */}
       {profileModal && currentUser?.id && (
         <UserProfileModal userId={currentUser.id} onClose={() => setProfileModal(false)} />
       )}
