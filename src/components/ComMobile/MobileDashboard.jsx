@@ -495,7 +495,19 @@ export default function MobileDashboard({
   const [awardModal,   setAwardModal]   = useState(false);
   const [profileModal, setProfileModal] = useState(false);
 
+  const [frozenMatches, setFrozenMatches] = useState([]);
+
   const pendingMatches = useMemo(() => matches.filter(m => m.status === "pending"), [matches]);
+
+  const handleOpenMatchModal = () => {
+    setFrozenMatches(pendingMatches);
+    setMatchModal(true);
+  };
+
+  const handleCloseMatchModal = () => {
+    setMatchModal(false);
+    setFrozenMatches([]);
+  };
 
   const myPredCount = useMemo(
     () => matches.filter(m => m.predictions?.some(p => p.user_id === currentUser?.id)).length,
@@ -526,7 +538,7 @@ export default function MobileDashboard({
 
       {/* QUICK ACTIONS */}
       <div className="mob-quick">
-        <div className="mob-qbtn" onClick={() => setMatchModal(true)}>
+        <div className="mob-qbtn" onClick={() => handleOpenMatchModal()}>
           <div className="mob-qbtn-icon"><Swords size={18} /></div>
           <div>
             <div className="mob-qbtn-txt">PARTIDOS</div>
@@ -559,7 +571,7 @@ export default function MobileDashboard({
       {/* ═══ PARTIDOS ═══ */}
       <div className="mob-sec">
         <span className="mob-sec-title">PARTIDOS</span>
-        <span className="mob-sec-all" onClick={() => setMatchModal(true)}>TODOS »</span>
+        <span className="mob-sec-all" onClick={() => handleOpenMatchModal()}>TODOS »</span>
       </div>
       <div className="mob-scroll-wrap">
         <div className="mob-hscroll">
@@ -574,7 +586,7 @@ export default function MobileDashboard({
                 <MiniMatchCard key={m.id} match={m} userPred={m.predictions?.find(p => p.user_id === currentUser?.id)} />
               ))}
               {pendingMatches.length > 4 && (
-                <div className="mob-more-card" onClick={() => setMatchModal(true)}>
+                <div className="mob-more-card" onClick={() => handleOpenMatchModal()}>
                   <span className="mob-more-sym">&raquo;</span>
                   <span>MÁS</span>
                 </div>
@@ -641,8 +653,8 @@ export default function MobileDashboard({
       {/* MODALES */}
       <MatchModal
         isOpen={matchModal}
-        onClose={() => setMatchModal(false)}
-        pendingMatches={pendingMatches}
+        onClose={handleCloseMatchModal}
+        pendingMatches={matchModal ? frozenMatches : pendingMatches} 
         currentUser={currentUser}
         onPredict={onPredict}
       />
