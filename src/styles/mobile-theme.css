@@ -1402,7 +1402,38 @@
   [data-theme="dark"] .filters-modal-title { color: #7A6E65 !important; }
   [data-theme="dark"] .active-filter-chip { background: #8b7fc7 !important; }
 }
+/* ================================================================
+   GLOBAL LOADER MOBILE DARK
+================================================================ */
+@media (max-width: 768px) {
+  [data-theme="dark"] {
+    --gl-color: #8b7fc7;
+    --gl-muted: rgba(238, 229, 218, 0.1);
+    --gl-bg:    #262424;
+    --gl-card:  #2E2B2B;
+    --gl-text:  #7A6E65;
+  }
 
+  /* Page loader — fondo oscuro cálido */
+  [data-theme="dark"] .gl-page {
+    background: #262424 !important;
+  }
+
+  /* Overlay — tono oscuro cálido */
+  [data-theme="dark"] .gl-overlay {
+    background: rgba(20, 18, 18, 0.75) !important;
+  }
+
+  [data-theme="dark"] .gl-overlay-inner {
+    background: #2E2B2B !important;
+    border-color: rgba(238, 229, 218, 0.1) !important;
+  }
+
+  /* Marca de agua del page loader */
+  [data-theme="dark"] .gl-page-inner::before {
+    border-color: rgba(238, 229, 218, 0.06) !important;
+  }
+}
 /* ================================================================
    MATCH DATE LABELS MOBILE DARK
 ================================================================ */
