@@ -1,475 +1,147 @@
+/* ================================================================
+   GlobalScore 
+================================================================ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* -------------------------------
-   GLOBAL THEME 
----------------------------------*/
-:root, [data-theme="light"] {
-  /* Light Mode Colors */
-  --bg: #f5f6fa;
-  --card: #ffffff;
-  --text-primary: #111111;
+/* ================================================================
+   TOKENS — LIGHT MODE
+================================================================ */
+:root,
+[data-theme="light"] {
+  --bg:             #f5f6fa;
+  --card:           #ffffff;
+  --text-primary:   #111111;
   --text-secondary: #777777;
-  --muted: #777777;
-  --accent: #60519b;
-  --accent-light: #8b7fc7;
-  --accent-hover: #4d4180;
-  --dark-bg: #1e202c;
+  --muted:          #777777;
+  --accent:         #60519b;
+  --accent-light:   #8b7fc7;
+  --accent-hover:   #4d4180;
+  --dark-bg:        #1e202c;
   --dark-secondary: #31323e;
-  --light-text: #bfc0d1;
-  --glass: rgba(96, 81, 155, 0.12);
-  --border: rgba(0,0,0,0.06);
-  --input-bg: #ffffff;
-  --input-border: rgba(0,0,0,0.1);
-  --shadow: 0 8px 30px rgba(96, 81, 155, 0.15);
-  --small-shadow: 0 4px 14px rgba(96, 81, 155, 0.1);
-  --radius-2xl: 20px;
+  --light-text:     #bfc0d1;
+  --glass:          rgba(96, 81, 155, 0.12);
+  --border:         rgba(0, 0, 0, 0.06);
+  --input-bg:       #ffffff;
+  --input-border:   rgba(0, 0, 0, 0.1);
+  --shadow:         0 8px 30px rgba(96, 81, 155, 0.15);
+  --small-shadow:   0 4px 14px rgba(96, 81, 155, 0.1);
+  --radius-2xl:     20px;
 }
 
+/* ================================================================
+   TOKENS — DARK MODE (Desktop)
+================================================================ */
 [data-theme="dark"] {
-  /* Dark Mode Colors - VERSIÓN RELAJADA Y SUAVE */
-  --bg: #2a2f3f;              /* Mucho más claro - gris azulado */
-  --card: #353b4d;            /* Cards visibles pero suaves */
-  --text-primary: #f5f6fa;    /* Texto casi blanco pero suave */
-  --text-secondary: #c5c9d9;  /* Secondary muy legible */
-  --muted: #9ca3b8;           /* Muted más claro */
-  --accent: #8b7fc7;          /* Púrpura mantener */
-  --accent-light: #a599d9;    /* Púrpura claro */
-  --accent-hover: #7366b3;    /* Hover púrpura */
-  --dark-bg: #252a38;         /* Fondos oscuros más claros */
-  --dark-secondary: #2f3544;  /* Secondary backgrounds */
-  --light-text: #dfe1ea;      /* Textos claros muy legibles */
-  --glass: rgba(139, 127, 199, 0.2);   /* Efecto glass más visible */
-  --border: rgba(255,255,255,0.18);    /* Bordes bien visibles */
-  --input-bg: #3a4052;        /* Inputs más claros */
-  --input-border: rgba(255,255,255,0.2);  /* Bordes inputs visibles */
-  --shadow: 0 8px 30px rgba(0, 0, 0, 0.2);  
-  --small-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);  
-  --radius-2xl: 20px;
+  --bg:             #1a1d2e;
+  --card:           #252936;
+  --text-primary:   #f0f1f7;
+  --text-secondary: #b4b8d0;
+  --muted:          #8186a0;
+  --accent:         #8b7fc7;
+  --accent-light:   #a599d9;
+  --accent-hover:   #7366b3;
+  --dark-bg:        #151823;
+  --dark-secondary: #1f2232;
+  --light-text:     #dfe1ea;
+  --glass:          rgba(139, 127, 199, 0.18);
+  --border:         rgba(255, 255, 255, 0.12);
+  --input-bg:       #252936;
+  --input-border:   rgba(255, 255, 255, 0.15);
+  --shadow:         0 8px 30px rgba(0, 0, 0, 0.35);
+  --small-shadow:   0 4px 14px rgba(0, 0, 0, 0.25);
+  --radius-2xl:     20px;
 }
 
-/* Body con gradiente más relajado */
-[data-theme="dark"] body {
-  background: linear-gradient(135deg, #2a2f3f 0%, #353b4d 100%);
-  color: var(--text-primary);
-}
-
-/* ==========================================
-   CLASE GENERAL CLICKABLE AVATAR
-========================================== */
-
-.clickable-avatar {
-  cursor: pointer !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.clickable-avatar::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    135deg, 
-    rgba(255, 255, 255, 0.1) 0%, 
-    transparent 50%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.clickable-avatar:hover {
-  transform: scale(1.05);
-  filter: brightness(0.95);
-}
-
-.clickable-avatar:hover::after {
-  opacity: 1;
-}
-
-.clickable-avatar:active {
-  transform: scale(0.98);
-}
-
-/* Prevenir selección de texto en avatares */
-.clickable-avatar img,
-.clickable-avatar span {
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  pointer-events: none;
-}
-
-/* ==========================================
-   DARK MODE
-========================================== */
-
-[data-theme="dark"] .clickable-avatar:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 8px 24px rgba(139, 127, 199, 0.3);
-}
-
-[data-theme="dark"] .clickable-avatar::after {
-  background: linear-gradient(
-    135deg, 
-    rgba(139, 127, 199, 0.2) 0%, 
-    transparent 50%
-  );
-}
-
-/* ==========================================
-   ESTILOS ESPECÍFICOS POR COMPONENTE
-========================================== */
-
-/* ProfileHero */
-.profile-hero .avatar-circle.clickable-avatar {
-  cursor: pointer;
-}
-
-.profile-hero .avatar-circle.clickable-avatar:hover {
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
-  border-color: var(--profile-primary);
-}
-@media screen and (max-width: 768px) and (orientation: portrait) {
-  .db-root { display: none !important; }
-}
-/* UserProfileModal */
-.user-modal-avatar.clickable-avatar {
-  cursor: pointer;
-}
-
-.user-modal-avatar.clickable-avatar:hover {
-  transform: scale(1.08);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-}
-
-/* RankingPage - Winner Avatars */
-.winner-avatar.clickable-avatar:hover {
-  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.3);
-  border-color: #10B981;
-}
-
-.first .winner-avatar.clickable-avatar:hover {
-  box-shadow: 0 16px 40px rgba(217, 119, 6, 0.35);
-}
-
-/* RankingPage - List Avatars */
-.item-avatar.clickable-avatar:hover {
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
-  border-color: #10B981;
-}
-
-/* Hall of Fame Avatars */
-.hall-item-avatar.clickable-avatar:hover {
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
-  border-color: #F59E0B;
-}
-
-/* AvatarUpload - Preview */
-.avatar-preview-wrapper.clickable-avatar {
-  cursor: pointer;
-}
-
-.avatar-preview-wrapper.clickable-avatar:hover {
-  border-color: var(--profile-primary);
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
-}
-
-.avatar-preview-wrapper.clickable-avatar:hover .avatar-preview-image {
-  transform: scale(1.08);
-  filter: brightness(0.9);
-}
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
-@media (max-width: 768px) {
-  .clickable-avatar:hover {
-    transform: scale(1.03);
-  }
-  
-  .clickable-avatar:active {
-    transform: scale(0.97);
-  }
-}
-
-/* ==========================================
-   ACCESIBILIDAD
-========================================== */
-
-/* Focus visible para navegación por teclado */
-.clickable-avatar:focus-visible {
-  outline: 2px solid var(--profile-primary);
-  outline-offset: 2px;
-}
-
-/* Reducir movimiento si el usuario lo prefiere */
-@media (prefers-reduced-motion: reduce) {
-  .clickable-avatar,
-  .clickable-avatar::after,
-  .clickable-avatar:hover {
-    transition: none;
-    animation: none;
-  }
-  
-  .clickable-avatar:hover {
-    transform: none;
-  }
-}
-
-/* ==========================================
-   LOADING STATE
-========================================== */
-
-.clickable-avatar[data-loading="true"] {
-  pointer-events: none;
-  opacity: 0.6;
-  cursor: wait !important;
-}
-
-.clickable-avatar[data-loading="true"]::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 10;
-}
-/* ================================
-   RESPONSIVE MOBILE - AJUSTADO
-================================ */
-@media (max-width: 768px) {
-  body {
-    padding-bottom: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
-  .container {
-    padding: 0 12px;
-    margin: 16px auto;
-  }
-
-  /* Hacer que las páginas ocupen todo el espacio disponible */
-  .page-container,
-  .vega-score-page,
-  .vega-root,
-  .ranking-page,
-  .admin-page,
-  .profile-page,
-  .notifications-page,
-  .stats-page,
-  .worldcup-page {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    padding-bottom: 80px;
-  }
-
-  .profile-container,
-  .ranking-container,
-  .admin-container,
-  .stats-page-container,
-  .notifications-container,
-  .worldcup-container,
-  .ranking-page-container {
-    flex: 1;
-    padding-bottom: 20px;
-  }
-
-  .matches-container,
-  .ranking-list-premium,
-  .admin-content,
-  .profile-bottom-section,
-  .history-card,
-  .notifications-list {
-    padding-bottom: 20px;
-  }
-
-  .floating-action-btn,
-  .save-predictions-btn,
-  .submit-button,
-  .save-button,
-  .action-button,
-  .form-actions,
-  .button-group,
-  .match-actions {
-    margin-bottom: 15px;
-  }
-
-  .match-card-premium:last-child,
-  .ranking-item-premium:last-child,
-  .history-item:last-child {
-    margin-bottom: 15px;
-  }
-
-  .modal-content,
-  .overlay-content {
-    max-height: calc(100vh - 150px);
-    overflow-y: auto;
-  }
-
-  .scrollable-content {
-    max-height: calc(100vh - 140px);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .bottom-nav ~ * {
-    position: relative;
-    z-index: 1;
-  }
-}
-
-/* ================================
-   RESPONSIVE SMALL MOBILE - AJUSTADO
-================================ */
-@media (max-width: 480px) {
-  .container {
-    padding: 0 10px;
-    margin: 12px auto;
-  }
-
-  .page-container,
-  .vega-score-page,
-  .vega-root,
-  .ranking-page,
-  .admin-page,
-  .profile-page,
-  .notifications-page,
-  .stats-page,
-  .worldcup-page {
-    padding-bottom: 70px;
-  }
-
-  .profile-container,
-  .ranking-container,
-  .admin-container,
-  .stats-page-container,
-  .notifications-container,
-  .worldcup-container,
-  .ranking-page-container {
-    padding-bottom: 15px;
-  }
-
-  .matches-container,
-  .ranking-list-premium,
-  .admin-content,
-  .profile-bottom-section,
-  .history-card,
-  .notifications-list {
-    padding-bottom: 15px;
-  }
-
-  .floating-action-btn,
-  .save-predictions-btn,
-  .submit-button,
-  .save-button,
-  .action-button,
-  .form-actions,
-  .button-group,
-  .match-actions {
-    margin-bottom: 12px;
-  }
-
-  .match-card-premium:last-child,
-  .ranking-item-premium:last-child,
-  .history-item:last-child {
-    margin-bottom: 12px;
-  }
-}
-
-/* ==========================================
-   HEADER - FIX MÓVIL NO DEBE CAMBIAR
-========================================== */
-
-@media (min-width: 769px) {
-  [data-theme="dark"] .app-header {
-    background: linear-gradient(135deg, #1e202c 0%, #31323e 100%);
-    border-bottom-color: rgba(124, 107, 184, 0.2);
-  }
-}
-
-@media (max-width: 768px) {
-  .app-header {
-    background: linear-gradient(135deg, #1e202c 0%, #31323e 100%) !important;
-    border-bottom-color: rgba(96, 81, 155, 0.2) !important;
-  }
-}
-
-/* ================================
-   RESET BASICO
-================================ */
-* { 
+/* ================================================================
+   RESET BÁSICO
+================================================================ */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body, #root {
+html {
   height: 100%;
   width: 100%;
   overflow-x: hidden;
-}
-
-html {
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
   background: var(--bg);
-  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
   color: var(--text-primary);
+  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   min-height: -webkit-fill-available;
   transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Gradiente suave para light mode */
+#root {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
 [data-theme="light"] body {
   background: linear-gradient(135deg, #f5f6fa 0%, #e8e9f3 100%);
 }
 
-/* Gradiente oscuro para dark mode */
 [data-theme="dark"] body {
-  background: linear-gradient(135deg, #0f1015 0%, #1a1c24 100%);
+  background: linear-gradient(135deg, #1a1d2e 0%, #252936 100%);
+  color: var(--text-primary);
 }
 
-/* ================================
-   LAYOUT CON HEADER PERMANENTE
-================================ */
+/* ================================================================
+   FORMS — base
+================================================================ */
+input,
+textarea,
+select {
+  background: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+button {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* ================================================================
+   LAYOUT GLOBAL
+================================================================ */
 .app-header {
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.vega-root,
-.ranking-page,
-.admin-page,
-.profile-page,
-.notifications-page,
-.stats-page {
-  min-height: calc(100vh - 80px);
-}
-
-/* ================================
-   CONTAINER
-================================ */
 .container {
   max-width: 1180px;
   margin: 28px auto;
@@ -492,7 +164,6 @@ body {
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Main grid */
 .main-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -506,36 +177,9 @@ body {
   gap: 18px;
 }
 
-/* ================================
-   INPUTS Y FORMS (Dark mode)
-================================ */
-input, textarea, select {
-  background: var(--input-bg);
-  border-color: var(--input-border);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: var(--text-secondary);
-  opacity: 0.7;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: var(--accent);
-  outline: none;
-}
-
-/* ================================
-   BUTTONS (Dark mode)
-================================ */
-button {
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
+/* ================================================================
+   ICON BUTTONS
+================================================================ */
 .icon-btn {
   background: transparent;
   border: 1px solid var(--border);
@@ -548,261 +192,110 @@ button {
   color: var(--accent);
 }
 
-/* Theme toggle button special styling */
-.theme-btn {
+/* ================================================================
+   CLICKABLE AVATAR
+================================================================ */
+.clickable-avatar {
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
-.theme-btn:hover {
-  background: var(--glass);
-  transform: rotate(20deg);
-  transition: transform 0.3s ease;
+.clickable-avatar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
-/* ================================
-   RESPONSIVE TABLET
-================================ */
-@media (max-width: 1024px) {
-  .main-grid {
-    grid-template-columns: 1fr;
-  }
-  .right-col {
-    order: -1;
+.clickable-avatar:hover {
+  transform: scale(1.05);
+  filter: brightness(0.95);
+}
+
+.clickable-avatar:hover::after { opacity: 1; }
+.clickable-avatar:active { transform: scale(0.98); }
+
+.clickable-avatar img,
+.clickable-avatar span {
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+.clickable-avatar:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] .clickable-avatar:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 8px 24px rgba(139, 127, 199, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clickable-avatar,
+  .clickable-avatar::after,
+  .clickable-avatar:hover {
+    transition: none;
+    animation: none;
+    transform: none;
   }
 }
 
-/* ================================
-   RESPONSIVE MOBILE
-================================ */
+/* ================================================================
+   SCROLLBAR
+================================================================ */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+* { scrollbar-width: thin; scrollbar-color: var(--muted) var(--bg); }
+
+/* ================================================================
+   BOTTOM NAVIGATION — universal
+================================================================ */
+.gs-bottom-nav,
+.bottom-nav {
+  background: var(--card) !important;
+  border-top-color: var(--border) !important;
+}
+
+.bottom-nav-btn,
+.gs-bottom-btn {
+  color: var(--muted) !important;
+}
+
+.bottom-nav-btn.active,
+.gs-bottom-btn--active {
+  color: var(--accent) !important;
+}
+
+/* ================================================================
+   LOADING
+================================================================ */
 @media (max-width: 768px) {
-  body {
-    padding-bottom: 0;
+  .page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--bg);
   }
 
-  .container {
-    padding: 0 12px;
-    margin: 16px auto;
-  }
-
-  .page-container,
-  .vega-score-page,
-  .vega-root,
-  .ranking-page,
-  .admin-page,
-  .profile-page,
-  .notifications-page,
-  .stats-page,
-  .profile-container,
-  .ranking-container,
-  .admin-container {
-    padding-bottom: 100px;
-    min-height: calc(100vh - 140px);
-  }
-
-  .matches-container,
-  .ranking-list-premium,
-  .admin-content,
-  .profile-bottom-section,
-  .history-card,
-  .notifications-list {
-    padding-bottom: 40px;
-  }
-
-  .floating-action-btn,
-  .save-predictions-btn,
-  .submit-button,
-  .save-button,
-  .action-button,
-  .form-actions,
-  .button-group,
-  .match-actions {
-    margin-bottom: 30px;
-  }
-
-  .match-card-premium:last-child,
-  .ranking-item-premium:last-child,
-  .history-item:last-child {
-    margin-bottom: 30px;
-  }
-
-  .modal-content,
-  .overlay-content {
-    max-height: calc(100vh - 150px);
-    overflow-y: auto;
-  }
-
-  .scrollable-content {
-    max-height: calc(100vh - 140px);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    -webkit-overflow-scrolling: touch;
-  }
-
-
-  .bottom-nav ~ * {
-    position: relative;
-    z-index: 1;
+  body.loading {
+    overflow: hidden;
+    height: 100vh;
+    height: -webkit-fill-available;
   }
 }
 
-/* ==========================================
-   BOTTOM NAVIGATION - ADAPTABLE AL TEMA
-========================================== */
-
-/* MODO CLARO - Bottom Nav con fondo claro */
-@media (max-width: 768px) {
-  [data-theme="light"] .bottom-nav {
-    background: #ffffff !important;
-    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08) !important;
-  }
-  
-  /* Barra superior animada en modo claro */
-  [data-theme="light"] .bottom-nav::before {
-    background: linear-gradient(90deg, 
-      transparent,
-      #60519b,
-      #8b7fc7,
-      #60519b,
-      transparent
-    ) !important;
-  }
-  
-  /* Botones en modo claro - texto oscuro */
-  [data-theme="light"] .bottom-nav-btn {
-    color: #6b7280 !important;
-  }
-  
-  /* Hover en modo claro */
-  [data-theme="light"] .bottom-nav-btn:active {
-    background: rgba(96, 81, 155, 0.08) !important;
-  }
-  
-  /* Botón activo en modo claro */
-  [data-theme="light"] .bottom-nav-btn.active {
-    color: #60519b !important;
-    background: rgba(96, 81, 155, 0.12) !important;
-  }
-  
-  [data-theme="light"] .bottom-nav-btn.active span {
-    color: #60519b !important;
-  }
-  
-  [data-theme="light"] .bottom-nav-btn.active svg {
-    filter: drop-shadow(0 0 8px rgba(96, 81, 155, 0.4)) !important;
-  }
-  
-  /* Indicador superior en modo claro */
-  [data-theme="light"] .bottom-nav-btn.active::before {
-    background: linear-gradient(90deg, #60519b, #8b7fc7) !important;
-  }
-}
-
-/* MODO OSCURO - Mantener colores oscuros actuales */
-@media (max-width: 768px) {
-  [data-theme="dark"] .bottom-nav {
-    background: linear-gradient(135deg, #1e202c 0%, #31323e 100%) !important;
-    border-top: 1px solid rgba(96, 81, 155, 0.2) !important;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3) !important;
-  }
-  
-  [data-theme="dark"] .bottom-nav::before {
-    background: linear-gradient(90deg, 
-      transparent,
-      #60519b,
-      #8b7fc7,
-      #60519b,
-      transparent
-    ) !important;
-  }
-  
-  [data-theme="dark"] .bottom-nav-btn {
-    color: #bfc0d1 !important;
-  }
-  
-  [data-theme="dark"] .bottom-nav-btn:active {
-    background: rgba(96, 81, 155, 0.15) !important;
-  }
-  
-  [data-theme="dark"] .bottom-nav-btn.active {
-    color: #ffffff !important;
-    background: rgba(96, 81, 155, 0.2) !important;
-  }
-  
-  [data-theme="dark"] .bottom-nav-btn.active span {
-    color: #8b7fc7 !important;
-  }
-  
-  [data-theme="dark"] .bottom-nav-btn.active svg {
-    filter: drop-shadow(0 0 8px rgba(96, 81, 155, 0.6)) !important;
-  }
-  
-  [data-theme="dark"] .bottom-nav-btn.active::before {
-    background: linear-gradient(90deg, #60519b, #8b7fc7) !important;
-  }
-}
-
-/* ================================
-   RESPONSIVE SMALL MOBILE
-================================ */
-@media (max-width: 480px) {
-  .container {
-    padding: 0 10px;
-    margin: 12px auto;
-  }
-
-  .page-container,
-  .vega-score-page,
-  .vega-root,
-  .ranking-page,
-  .admin-page,
-  .profile-page,
-  .notifications-page,
-  .stats-page,
-  .profile-container,
-  .ranking-container,
-  .admin-container {
-    padding-bottom: 90px;
-    min-height: calc(100vh - 130px);
-  }
-
-  .matches-container,
-  .ranking-list-premium,
-  .admin-content,
-  .profile-bottom-section,
-  .history-card,
-  .notifications-list {
-    padding-bottom: 35px;
-  }
-
-  .floating-action-btn,
-  .save-predictions-btn,
-  .submit-button,
-  .save-button,
-  .action-button,
-  .form-actions,
-  .button-group,
-  .match-actions {
-    margin-bottom: 25px;
-  }
-
-  .match-card-premium:last-child,
-  .ranking-item-premium:last-child,
-  .history-item:last-child {
-    margin-bottom: 25px;
-  }
-}
-
-/* ================================
-   TOAST FIX - POR ENCIMA DEL HEADER
-================================ */
+/* ================================================================
+   TOAST
+================================================================ */
 .toast-container {
   position: fixed !important;
   top: 95px !important;
@@ -823,40 +316,54 @@ button {
   }
 }
 
-@media (max-width: 480px) {
-  .toast-container {
-    top: 78px !important;
-    right: 10px !important;
-    left: 10px !important;
-  }
+/* ================================================================
+   DASHBOARD — ocultar vista desktop en mobile portrait
+================================================================ */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+  .db-root { display: none !important; }
 }
 
-/* ================================
-   PREVENIR PROBLEMAS DE LOADING
-================================ */
+/* ================================================================
+   RESPONSIVE — TABLET
+================================================================ */
+@media (max-width: 1024px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .right-col { order: -1; }
+}
+
+/* ================================================================
+   RESPONSIVE — MOBILE
+================================================================ */
 @media (max-width: 768px) {
-  .page-loader {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: var(--bg);
+  body { padding-bottom: 0; }
+
+  .container { padding: 0 12px; margin: 16px auto; }
+
+  .page-container,
+  .vega-root,
+  .vega-root,
+  .ranking-page,
+  .admin-page,
+  .profile-page,
+  .notifications-page,
+  .stats-page,
+  .worldcup-page {
+    padding-bottom: 80px;
+    min-height: calc(100vh - 140px);
   }
 
-  body.loading {
-    overflow: hidden;
-    height: 100vh;
-    height: -webkit-fill-available;
-  }
+  html { scroll-behavior: smooth; }
 }
 
-/* ================================
-   IOS SAFARI FIXES
-================================ */
-@supports (-webkit-touch-callout: none) {
-  body {
-    min-height: -webkit-fill-available;
-  }
+@media (max-width: 480px) {
+  .container { padding: 0 10px; margin: 12px auto; }
+}
 
+/* ================================================================
+   IOS SAFARI
+================================================================ */
+@supports (-webkit-touch-callout: none) {
+  body,
   .vega-root,
   .ranking-page,
   .admin-page,
@@ -867,70 +374,9 @@ button {
   }
 }
 
-/* ================================
-   SCROLLBAR STYLING (Dark Mode)
-================================ */
-/* Para navegadores Webkit (Chrome, Safari, Edge) */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--muted);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
-}
-
-/* Para Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--muted) var(--bg);
-}
-/* ==========================================
-   MODO OSCURO - Variables y Estilos Base
-   Agregar al final de index.css
-========================================== */
-
-[data-theme="dark"] {
-  --bg: #1a1d2e;            
-  --card: #252936;    
-  --text-primary: #f0f1f7;   
-  --text-secondary: #b4b8d0; 
-  --muted: #8186a0;        
-  --accent: #8b7fc7;         
-  --accent-light: #a599d9;   
-  --accent-hover: #7366b3;    
-  --dark-bg: #151823;        
-  --dark-secondary: #1f2232; 
-  --light-text: #d0d2e1;    
-  --glass: rgba(139, 127, 199, 0.18);  
-  --border: rgba(255,255,255,0.12);  
-  --input-bg: #252936;      
-  --input-border: rgba(255,255,255,0.15); 
-  --shadow: 0 8px 30px rgba(55, 35, 68, 0.377); 
-  --small-shadow: 0 4px 14px rgba(31, 23, 42, 0.923);  
-  --radius-2xl: 20px;
-}
-
-[data-theme="dark"] body {
-  background: linear-gradient(135deg, #1a1d2e 0%, #252936 100%);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .search-modern input[type="text"] {
-  border: 0 !important;
-  box-shadow: none !important;
-  background: transparent !important;
-}
-
+/* ================================================================
+   DARK MODE — DESKTOP — Cards genéricas y componentes
+================================================================ */
 [data-theme="dark"] .card,
 [data-theme="dark"] .stats-card,
 [data-theme="dark"] .level-card,
@@ -945,15 +391,9 @@ button {
   color: var(--text-primary);
 }
 
-/* Inputs y forms */
 [data-theme="dark"] input,
 [data-theme="dark"] textarea,
-[data-theme="dark"] select,
-[data-theme="dark"] .form-input,
-[data-theme="dark"] .form-textarea,
-[data-theme="dark"] .modal-input,
-[data-theme="dark"] .modal-textarea,
-[data-theme="dark"] .modal-select {
+[data-theme="dark"] select {
   background: var(--input-bg);
   border-color: var(--input-border);
   color: var(--text-primary);
@@ -964,7 +404,6 @@ button {
   color: var(--text-secondary);
 }
 
-/* Botones */
 [data-theme="dark"] .icon-btn {
   background: rgba(124, 107, 184, 0.15);
   border-color: rgba(124, 107, 184, 0.3);
@@ -976,268 +415,72 @@ button {
   border-color: rgba(124, 107, 184, 0.5);
 }
 
-/* Toast notifications */
-[data-theme="dark"] .toast-notification {
-  background: var(--card);
-  color: var(--text-primary);
-  border-color: var(--border);
-}
-
-/* Loading states */
-[data-theme="dark"] .page-loader {
-  background: var(--bg);
-}
-/* Match Card Footer */
-[data-theme="dark"] .match-footer-light {
-  border-top-color: var( --border);
-}
-[data-theme="dark"] .league-footer-light {
-  border-top-color: var(--border);
-}
-[data-theme="dark"] .award-footer-light {
-  border-top-color: var(--border);
-}
-
-/* Scrollbar */
-[data-theme="dark"] ::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb {
-  background: var(--muted);
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
-}
-
-/* Bottom Navigation */
 [data-theme="dark"] .bottom-nav {
   background: var(--card);
   border-top-color: var(--border);
 }
 
-/* ==========================================
-   HEADER - Botón de Tema con Color
-========================================== */
-/* Bottom Navigation Buttons - SIEMPRE con texto claro */
-.bottom-nav-btn {
-  color: #bfc0d1 !important;
+/* ================================================================
+   MATCH/LEAGUE/AWARD CARD DARK — footer borders
+================================================================ */
+[data-theme="dark"] .match-footer-light,
+[data-theme="dark"] .league-footer-light,
+[data-theme="dark"] .award-footer-light {
+  border-top-color: var(--border);
 }
 
-.bottom-nav-btn.active {
-  color: #ffffff !important;
-  background: rgba(96, 81, 155, 0.2) !important;
+/* ================================================================
+   SEARCH INPUT — fix borde oscuro
+================================================================ */
+[data-theme="dark"] .search-input-modern,
+[data-theme="dark"] .search-modern input {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
 }
 
-.bottom-nav-btn.active span {
-  color: #8b7fc7 !important;
+[data-theme="dark"] .search-modern {
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Forzar en modo claro también */
-[data-theme="light"] .bottom-nav-btn {
-  color: #bfc0d1 !important;
-}
+/* ================================================================
+   USER PROFILE MODAL — dark
+================================================================ */
+[data-theme="dark"] .user-modal-overlay  { background: rgba(0, 0, 0, 0.85); }
+[data-theme="dark"] .user-modal-container { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .user-modal-header    { background: var(--card); border-bottom-color: var(--border); }
 
-[data-theme="light"] .bottom-nav-btn.active {
-  color: #ffffff !important;
-  background: rgba(96, 81, 155, 0.2) !important;
-}
-
-[data-theme="light"] .bottom-nav-btn.active span {
-  color: #8b7fc7 !important;
-}
-
-/* Botón de tema - Estilo especial */
-.icon-btn.theme-btn {
-  background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
-  border: none;
-  color: #78350F;
-  position: relative;
-  overflow: hidden;
-}
-
-.icon-btn.theme-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.icon-btn.theme-btn:hover::before {
-  width: 100px;
-  height: 100px;
-}
-
-.icon-btn.theme-btn:hover {
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-  transform: translateY(-2px) rotate(15deg);
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
-}
-
-.icon-btn.theme-btn:active {
-  transform: translateY(0) rotate(0deg);
-}
-
-.icon-btn.theme-btn svg {
-  width: 18px;
-  height: 18px;
-  position: relative;
-  z-index: 1;
-  transition: transform 0.3s ease;
-}
-
-.icon-btn.theme-btn:hover svg {
-  transform: scale(1.1);
-}
-
-/* Modo oscuro - Botón de tema púrpura */
-[data-theme="dark"] .icon-btn.theme-btn {
-  background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
-  color: white;
-}
-
-[data-theme="dark"] .icon-btn.theme-btn:hover {
-  background: linear-gradient(135deg, #6D28D9 0%, #4C1D95 100%);
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
-}
-
-/* Animación de rotación al cambiar tema */
-@keyframes themeSwitch {
-  0% {
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    transform: rotate(180deg) scale(1.2);
-  }
-  100% {
-    transform: rotate(360deg) scale(1);
-  }
-}
-
-.icon-btn.theme-btn.switching {
-  animation: themeSwitch 0.6s ease-in-out;
-}
-
-
-/* ==========================================
-   PAGINAS ESPECÍFICAS - MODO OSCURO
-========================================== */
-
-/* ADMIN PAGE */
-[data-theme="dark"] .admin-page {
-  background: var(--bg);
-}
-
-[data-theme="dark"] .admin-page::before {
-  opacity: 0.08;
-}
-
-[data-theme="dark"] .admin-stat-card,
-[data-theme="dark"] .admin-item-card {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .admin-stat-card .stat-value,
-[data-theme="dark"] .item-title,
-[data-theme="dark"] .item-teams {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .admin-nav-tabs {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .admin-nav-tab {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .admin-nav-tab:hover {
-  background: rgba(124, 107, 184, 0.1);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .search-bar {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .search-bar input {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .filter-buttons {
-  background: var(--card);
-}
-
-[data-theme="dark"] .admin-content-area {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-/* RANKING PAGE */
+/* ================================================================
+   RANKING PAGE — dark desktop
+================================================================ */
 [data-theme="dark"] .ranking-page {
-  background: linear-gradient(135deg, #0F1015 0%, #1a1c24 100%);
+  background: linear-gradient(135deg, #1a1d2e 0%, #252936 100%) !important;
 }
 
-[data-theme="dark"] .podium-ultra,
-[data-theme="dark"] .your-rank-modern,
 [data-theme="dark"] .stat-card-modern,
-[data-theme="dark"] .ranking-list-modern {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .hero-title,
-[data-theme="dark"] .podium-title-ultra {
-  text-shadow: 0 0 40px rgba(245, 158, 11, 0.3);
-}
-
-[data-theme="dark"] .player-card,
-[data-theme="dark"] .list-row-modern {
-  background: rgba(26, 28, 36, 0.4);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .player-name-ultra,
-[data-theme="dark"] .user-name-small,
-[data-theme="dark"] .stat-value-modern,
-[data-theme="dark"] .stat-num {
-  color: var(--text-primary);
-}
-
+[data-theme="dark"] .your-rank-modern,
+[data-theme="dark"] .podium-ultra,
+[data-theme="dark"] .ranking-list-modern,
+[data-theme="dark"] .search-modern,
 [data-theme="dark"] .filters-modern,
 [data-theme="dark"] .sorts-modern {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
+  background: rgba(37, 41, 54, 0.6) !important;
+  backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
-[data-theme="dark"] .search-input-modern {
-  color: var(--text-primary);
+[data-theme="dark"] .list-row-modern { border-bottom-color: rgba(255, 255, 255, 0.06); }
+[data-theme="dark"] .list-row-modern:hover { background: rgba(37, 41, 54, 0.4); }
+[data-theme="dark"] .list-row-modern.is-current {
+  background: linear-gradient(90deg, rgba(139, 127, 199, 0.2) 0%, rgba(165, 153, 217, 0.15) 50%, transparent 100%);
+  border-left-color: #8b7fc7;
 }
 
-[data-theme="dark"] .filter-modern,
-[data-theme="dark"] .sort-modern {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .filter-modern:hover,
-[data-theme="dark"] .sort-modern:hover {
-  color: var(--text-primary);
-}
-
-/* PROFILE PAGE */
-[data-theme="dark"] .profile-page {
-  background: var(--bg);
-}
+/* ================================================================
+   PROFILE PAGE — dark desktop
+================================================================ */
+[data-theme="dark"] .profile-page { background: var(--bg); }
 
 [data-theme="dark"] .avatar-card.premium-layout,
 [data-theme="dark"] .edit-form-card {
@@ -1245,49 +488,10 @@ button {
   border-color: var(--border);
 }
 
-[data-theme="dark"] .user-name-new,
-[data-theme="dark"] .stat-value,
-[data-theme="dark"] .title-name,
-[data-theme="dark"] .achievement-name {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .user-email-new,
-[data-theme="dark"] .user-bio-new,
-[data-theme="dark"] .stat-label,
-[data-theme="dark"] .title-description {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .info-badge,
-[data-theme="dark"] .stat-item {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .badge-value,
-[data-theme="dark"] .title-card-name {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .history-item {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .team-name,
-[data-theme="dark"] .score-value {
-  color: var(--text-primary);
-}
-
-/* STATS PAGE */
-[data-theme="dark"] .stats-page {
-  background: var(--bg);
-}
-
-[data-theme="dark"] .stats-page::before {
-  opacity: 0.06;
-}
+/* ================================================================
+   STATS PAGE — dark desktop
+================================================================ */
+[data-theme="dark"] .stats-page { background: var(--bg); }
 
 [data-theme="dark"] .overview-card,
 [data-theme="dark"] .stats-section,
@@ -1296,34 +500,10 @@ button {
   border-color: var(--border);
 }
 
-[data-theme="dark"] .card-value,
-[data-theme="dark"] .result-value,
-[data-theme="dark"] .league-name,
-[data-theme="dark"] .additional-stat-value {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .card-label,
-[data-theme="dark"] .result-label,
-[data-theme="dark"] .league-details {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .result-item,
-[data-theme="dark"] .league-stat-item,
-[data-theme="dark"] .day-stat-card {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .time-range-selector {
-  background: var(--card);
-}
-
-/* NOTIFICATIONS PAGE */
-[data-theme="dark"] .notifications-page {
-  background: var(--bg);
-}
+/* ================================================================
+   NOTIFICATIONS PAGE — dark desktop
+================================================================ */
+[data-theme="dark"] .notifications-page { background: var(--bg); }
 
 [data-theme="dark"] .install-banner,
 [data-theme="dark"] .notification-card {
@@ -1331,58 +511,21 @@ button {
   border-color: var(--border);
 }
 
-[data-theme="dark"] .notif-title,
-[data-theme="dark"] .notif-description {
-  color: var(--text-primary);
-}
+/* ================================================================
+   ADMIN PAGE — dark desktop
+================================================================ */
+[data-theme="dark"] .admin-page { background: var(--bg); }
 
-[data-theme="dark"] .filters-modern {
+[data-theme="dark"] .admin-stat-card,
+[data-theme="dark"] .admin-item-card {
   background: var(--card);
   border-color: var(--border);
 }
 
-/* MATCH, LEAGUE, AWARD CARDS */
-[data-theme="dark"] .match-card-light,
-[data-theme="dark"] .league-card-light,
-[data-theme="dark"] .award-card-light {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .team-name-light,
-[data-theme="dark"] .league-name-light,
-[data-theme="dark"] .award-name-light {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .match-league-info-light,
-[data-theme="dark"] .league-season-light,
-[data-theme="dark"] .award-season-light {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .score-cell-light {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .prediction-input-light,
-[data-theme="dark"] .prediction-input-award {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .match-time-center {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-/* MODALES */
-[data-theme="dark"] .modal-backdrop-premium {
-  background: rgba(0, 0, 0, 0.8);
-}
+/* ================================================================
+   MODALES — dark
+================================================================ */
+[data-theme="dark"] .modal-backdrop-premium { background: rgba(0, 0, 0, 0.8); }
 
 [data-theme="dark"] .modal-premium,
 [data-theme="dark"] .modal-container {
@@ -1390,219 +533,11 @@ button {
   border-color: var(--border);
 }
 
-[data-theme="dark"] .modal-header-premium {
-  background: linear-gradient(135deg, #0a0b0f 0%, #14151d 100%);
-}
-
-[data-theme="dark"] .modal-body-premium {
-  background: var(--card);
-}
-
-[data-theme="dark"] .form-input-premium,
-[data-theme="dark"] .modal-input {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-  color: var(--text-primary);
-}
-
-/* NAVIGATION TABS */
-[data-theme="dark"] .navigation-tabs,
-[data-theme="dark"] .navigation-tabs-two {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .nav-tab,
-[data-theme="dark"] .nav-tab-two {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .nav-tab:hover,
-[data-theme="dark"] .nav-tab-two:hover {
-  color: var(--text-primary);
-}
-
-/* VEGA SCORE PAGE */
-[data-theme="dark"] .matches-section-premium {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .matches-header-premium {
-  background: var(--bg);
-}
-
-[data-theme="dark"] .matches-empty-text {
-  color: var(--small-shadow);
-}
-
-[data-theme="dark"] .matches-empty-subtext {
-  color: var(--small-shadow);
-}
-
-/* ==========================================
-   RANKING PAGE - MODO OSCURO RELAJADO
-========================================== */
-
-/* Fondo principal más claro y relajado */
-[data-theme="dark"] .ranking-page {
-  background: linear-gradient(135deg, #2a2f3f 0%, #353b4d 50%, #3f4556 100%) !important;
-}
-
-[data-theme="dark"] .ranking-page-loading {
-  background: linear-gradient(135deg, #2a2f3f 0%, #353b4d 100%) !important;
-}
-
-/* Orbs de fondo más suaves */
-[data-theme="dark"] .orb {
-  opacity: 0.08;
-}
-/* ==========================================
-   FIX BUSCADOR - Remover línea oscura
-========================================== */
-
-/* Search input - remover borde oscuro */
-[data-theme="dark"] .search-input-modern,
-[data-theme="dark"] .search-modern input {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Si el input tiene foco, mantener sin borde */
-[data-theme="dark"] .search-input-modern:focus,
-[data-theme="dark"] .search-modern input:focus {
-  border: none !important;
-  outline: none !important;
-}
-
-/* Asegurar que el contenedor search-modern no tenga bordes internos extra */
-[data-theme="dark"] .search-modern {
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-/* Cards y contenedores */
-[data-theme="dark"] .stat-card-modern,
-[data-theme="dark"] .your-rank-modern,
-[data-theme="dark"] .podium-ultra,
-[data-theme="dark"] .ranking-list-modern,
-[data-theme="dark"] .search-modern,
-[data-theme="dark"] .filters-modern,
-[data-theme="dark"] .sorts-modern {
-  background: rgba(53, 59, 77, 0.6) !important;
-  backdrop-filter: blur(20px);
-  border-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-/* Player cards del podio */
-[data-theme="dark"] .player-card {
-  background: rgba(53, 59, 77, 0.5) !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
-}
-
-[data-theme="dark"] .gold-card {
-  background: linear-gradient(135deg, rgba(252, 211, 77, 0.2) 0%, rgba(245, 158, 11, 0.15) 100%) !important;
-  border-color: rgba(252, 211, 77, 0.4) !important;
-}
-
-[data-theme="dark"] .silver-card {
-  border-color: rgba(229, 231, 235, 0.3) !important;
-}
-
-[data-theme="dark"] .bronze-card {
-  border-color: rgba(245, 158, 11, 0.25) !important;
-}
-
-/* Textos principales */
-[data-theme="dark"] .hero-title,
-[data-theme="dark"] .podium-title-ultra {
-  background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 50%, #D97706 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: none;
-}
-
-[data-theme="dark"] .hero-subtitle {
-  color: #c5c9d9;
-}
-
-/* Stats values */
-[data-theme="dark"] .stat-value-modern,
-[data-theme="dark"] .stat-num,
-[data-theme="dark"] .points-num,
-[data-theme="dark"] .preds-num {
-  color: #f5f6fa;
-}
-
-[data-theme="dark"] .stat-label-modern,
-[data-theme="dark"] .stat-lab {
-  color: #c5c9d9;
-}
-
-/* Player names */
-[data-theme="dark"] .player-name-ultra,
-[data-theme="dark"] .user-name-small {
-  color: #f5f6fa;
-}
-
-[data-theme="dark"] .champion-name {
-  background: linear-gradient(135deg, #FCD34D, #F59E0B);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Stat values en player cards */
-[data-theme="dark"] .stat-value-ultra {
-  color: #f5f6fa;
-}
-
-[data-theme="dark"] .champion-stat {
-  background: linear-gradient(135deg, #FCD34D, #F59E0B);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Secondary text */
-[data-theme="dark"] .user-correct-small,
-[data-theme="dark"] .badge-total {
-  color: #c5c9d9;
-}
-
-/* Position numbers */
-[data-theme="dark"] .pos-number {
-  color: #c5c9d9;
-}
-
-[data-theme="dark"] .pos-number.top-three {
-  color: #F59E0B;
-}
-
-/* Search input */
-[data-theme="dark"] .search-input-modern {
-  color: #f5f6fa;
-}
-
-[data-theme="dark"] .search-input-modern::placeholder {
-  color: #9ca3b8;
-}
-
-[data-theme="dark"] .search-icon-modern {
-  color: #c5c9d9;
-}
-
-/* Filters y sorts */
+/* ================================================================
+   FILTROS Y CHIPS — dark desktop
+================================================================ */
 [data-theme="dark"] .filter-modern:not(.active),
-[data-theme="dark"] .sort-modern:not(.active) {
-  color: #c5c9d9;
-}
-
-[data-theme="dark"] .filter-modern:not(.active):hover,
-[data-theme="dark"] .sort-modern:not(.active):hover {
-  color: #f5f6fa;
-  background: rgba(139, 127, 199, 0.15);
-}
+[data-theme="dark"] .sort-modern:not(.active) { color: var(--text-secondary); }
 
 [data-theme="dark"] .filter-modern.active,
 [data-theme="dark"] .sort-modern.active {
@@ -1610,1044 +545,9 @@ button {
   color: white;
 }
 
-/* List header */
-[data-theme="dark"] .header-cell {
-  color: #c5c9d9;
-}
-
-/* List rows */
-[data-theme="dark"] .list-row-modern {
-  border-bottom-color: rgba(255, 255, 255, 0.08);
-}
-
-[data-theme="dark"] .list-row-modern:hover {
-  background: rgba(53, 59, 77, 0.4);
-}
-
-[data-theme="dark"] .list-row-modern.is-current {
-  background: linear-gradient(90deg,
-    rgba(139, 127, 199, 0.2) 0%,
-    rgba(165, 153, 217, 0.15) 50%,
-    transparent 100%
-  );
-  border-left-color: #8b7fc7;
-}
-
-[data-theme="dark"] .list-row-modern.is-podium {
-  background: linear-gradient(90deg,
-    rgba(245, 158, 11, 0.1) 0%,
-    transparent 100%
-  );
-}
-
-/* Place heights */
-[data-theme="dark"] .place-height {
-  background: linear-gradient(180deg, rgba(53, 59, 77, 0.6) 0%, rgba(53, 59, 77, 0.4) 100%);
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-/* Progress bars */
-[data-theme="dark"] .acc-bar-modern {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-/* Points display */
-[data-theme="dark"] .points-display {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.15));
-}
-
-/* Loading text */
-[data-theme="dark"] .loading-text {
-  color: #c5c9d9;
-}
-
-/* No results */
-[data-theme="dark"] .no-results-text {
-  color: #c5c9d9;
-}
-
-[data-theme="dark"] .no-results-icon {
-  color: #9ca3b8;
-}
-
-/* Scrollbar para ranking list */
-[data-theme="dark"] .list-body-modern::-webkit-scrollbar-track {
-  background: rgba(53, 59, 77, 0.4);
-}
-
-[data-theme="dark"] .list-body-modern::-webkit-scrollbar-thumb {
-  background: rgba(139, 127, 199, 0.6);
-}
-
-[data-theme="dark"] .list-body-modern::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 127, 199, 0.8);
-}
-
-/* Header cells del ranking */
-[data-theme="dark"] .list-header-modern {
-  background: rgba(42, 47, 63, 0.6);
-  border-bottom-color: rgba(255, 255, 255, 0.12);
-}
-
-/* Clear button */
-[data-theme="dark"] .clear-search-btn {
-  background: linear-gradient(135deg, #8b7fc7, #a599d9);
-}
-
-[data-theme="dark"] .clear-search-btn:hover {
-  box-shadow: 0 8px 20px rgba(139, 127, 199, 0.4);
-}
-
-/* Badge inner */
-[data-theme="dark"] .badge-inner {
-  background: rgba(42, 47, 63, 0.6);
-}
-
-[data-theme="dark"] .rank-badge-modern {
-  background: linear-gradient(135deg, #8b7fc7, #a599d9);
-  box-shadow: 0 10px 30px rgba(139, 127, 199, 0.4);
-}
-
-/* Stat separators */
-[data-theme="dark"] .stat-divider-modern,
-[data-theme="dark"] .stat-separator {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-/* Position badge in rank modern */
-[data-theme="dark"] .badge-position {
-  color: white;
-}
-
-[data-theme="dark"] .position-hash {
-  opacity: 0.8;
-}
-
-/* Icons colors mantener iguales pero asegurar visibilidad */
-[data-theme="dark"] .badge-icon {
-  color: white;
-}
-
-/* You tag */
-[data-theme="dark"] .you-tag {
-  background: linear-gradient(135deg, #8b7fc7, #a599d9);
-  color: white;
-}
-
-/* Champion badge */
-[data-theme="dark"] .champion-badge {
-  background: linear-gradient(135deg, #F59E0B, #D97706);
-  color: white;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
-}
-
-/* Rank stats modern - secondary text */
-[data-theme="dark"] .rank-stats-text {
-  color: #c5c9d9;
-}
-
-/* Asegurar que los iconos mantengan sus colores originales */
-[data-theme="dark"] .rank-icon.gold {
-  color: #FCD34D;
-}
-
-[data-theme="dark"] .rank-icon.silver {
-  color: #E5E7EB;
-}
-
-[data-theme="dark"] .rank-icon.bronze {
-  color: #F59E0B;
-}
-
-[data-theme="dark"] .points-icon-small {
-  color: #F59E0B;
-}
-
-[data-theme="dark"] .acc-percent {
-  color: #10B981;
-}
-
-/* Stat icon colors en cards */
-[data-theme="dark"] .stat-icon-color.points-color {
-  color: #F59E0B;
-}
-
-[data-theme="dark"] .stat-icon-color.accuracy-color {
-  color: #10B981;
-}
-
-/* Medal colors mantener vibrantes */
-[data-theme="dark"] .champion-crown {
-  background: linear-gradient(135deg, #FCD34D, #F59E0B);
-  color: #78350F;
-  box-shadow: 0 15px 40px rgba(245, 158, 11, 0.6);
-}
-
-[data-theme="dark"] .silver-medal {
-  background: linear-gradient(135deg, #E5E7EB, #9CA3AF);
-  box-shadow: 0 10px 30px rgba(156, 163, 175, 0.5);
-}
-
-[data-theme="dark"] .bronze-medal {
-  background: linear-gradient(135deg, #F59E0B, #CD7F32);
-  box-shadow: 0 10px 30px rgba(205, 127, 50, 0.5);
-}
-
-/* Mobile - asegurar fondo blanco */
-@media (max-width: 768px) {
-  [data-theme="light"] .ranking-page {
-    background: #ffffff !important;
-  }
-  
-  [data-theme="light"] .ranking-page-loading {
-    background: #ffffff !important;
-  }
-}
-/* Texto general */
-[data-theme="dark"] .hero-subtitle,
-[data-theme="dark"] .stat-label-modern,
-[data-theme="dark"] .stat-lab {
-  color: var(--text-secondary);
-}
-
-/* Stats cards */
-[data-theme="dark"] .stat-card-inner {
-  color: var(--text-primary);
-}
-
-/* Badges y labels */
-[data-theme="dark"] .badge-total,
-[data-theme="dark"] .you-tag {
-  color: var(--text-primary);
-}
-
-/* User info */
-[data-theme="dark"] .user-correct-small,
-[data-theme="dark"] .rank-stats-text {
-  color: var(--text-secondary);
-}
-
-/* Progress bars */
-[data-theme="dark"] .acc-bar-modern {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-/* Pos numbers */
-[data-theme="dark"] .pos-number {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .pos-number.top-three {
-  color: #F59E0B;
-}
-
-/* Points display */
-[data-theme="dark"] .points-num {
-  color: #F59E0B;
-}
-
-[data-theme="dark"] .preds-num {
-  color: var(--text-primary);
-}
-
-/* Accuracy */
-[data-theme="dark"] .acc-percent {
-  color: #10B981;
-}
-
-/* Place heights (podio) */
-[data-theme="dark"] .place-height {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-/* Loading */
-[data-theme="dark"] .loading-text {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .no-results-text {
-  color: var(--text-secondary);
-}
-
-/* ==========================================
-   PROFILE PAGE - DETALLES ADICIONALES
-========================================== */
-
-/* Level progress */
-[data-theme="dark"] .progress-bar {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .progress-label {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .next-level-points {
-  color: var(--text-secondary);
-}
-
-/* Achievements */
-[data-theme="dark"] .achievement-label {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .achievement-value,
-[data-theme="dark"] .achievement-category {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .achievement-desc {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .achievement-emoji {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-/* Titles */
-[data-theme="dark"] .title-card {
-  background: rgba(26, 28, 36, 0.4);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .title-card:hover {
-  background: rgba(26, 28, 36, 0.6);
-}
-
-[data-theme="dark"] .title-icon-small {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .title-card-desc {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .current-title-display {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--accent);
-}
-
-[data-theme="dark"] .title-main-info {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .title-icon-large {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-/* History */
-[data-theme="dark"] .match-time {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .vs {
-  background: rgba(26, 28, 36, 0.6);
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .score-label {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .status-label {
-  color: var(--text-primary);
-}
-
-/* Form elements */
-[data-theme="dark"] .form-label {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .badge-label {
-  color: var(--text-secondary);
-}
-
-/* ==========================================
-   ADMIN PAGE - DETALLES ADICIONALES
-========================================== */
-
-[data-theme="dark"] .admin-page-title {
-  background: linear-gradient(135deg, #7c6bb8, #9988cc);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-[data-theme="dark"] .stat-detail {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .admin-nav-tab span {
-  color: inherit;
-}
-
-[data-theme="dark"] .search-bar input::placeholder {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .item-meta {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .item-subtitle {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .item-status.pending,
-[data-theme="dark"] .item-status.active {
-  background: rgba(245, 158, 11, 0.15);
-  color: #F59E0B;
-}
-
-[data-theme="dark"] .item-status.finished {
-  background: rgba(16, 185, 129, 0.15);
-  color: #10B981;
-}
-
-[data-theme="dark"] .category-badge {
-  background: rgba(124, 107, 184, 0.15);
-  color: var(--accent-light);
-}
-
-[data-theme="dark"] .admin-empty-state {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .admin-empty-state p {
-  color: var(--text-secondary);
-}
-
-/* ==========================================
-   STATS PAGE - DETALLES ADICIONALES
-========================================== */
-
-[data-theme="dark"] .card-subtitle {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .result-bar {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="dark"] .league-details {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .day-name {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .day-details {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .day-bar {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="dark"] .distribution-label {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .distribution-bar {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="dark"] .additional-stat-label {
-  color: var(--text-secondary);
-}
-/* ==========================================
-   USER PROFILE MODAL - DARK MODE
-========================================== */
-[data-theme="dark"] .user-modal-overlay {
-  background: rgba(0, 0, 0, 0.85);
-}
-
-[data-theme="dark"] .user-modal-container {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .user-modal-header {
-  background: var(--card);
-  border-bottom-color: var(--border);
-}
-
-[data-theme="dark"] .user-modal-close {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-[data-theme="dark"] .user-modal-close:hover {
-  background: #EF4444;
-}
-
-[data-theme="dark"] .user-modal-avatar-section {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .user-modal-badges-grid .user-modal-badge {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .user-modal-badges-grid .user-modal-badge:hover {
-  background: rgba(26, 28, 36, 0.8);
-}
-
-[data-theme="dark"] .user-modal-stat-item {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .user-modal-level-card {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .user-modal-level-card .progress-bar {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="dark"] .streak-item {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .user-modal-active-title {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .current-title-display {
-  background: rgba(26, 28, 36, 0.4);
-}
-
-[data-theme="dark"] .user-modal-achievements {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .achievement-card {
-  background: var(--card);
-}
-
-[data-theme="dark"] .achievement-emoji {
-  background: rgba(26, 28, 36, 0.6);
-}
-
-[data-theme="dark"] .user-modal-name,
-[data-theme="dark"] .user-modal-stat-item .stat-value,
-[data-theme="dark"] .user-modal-level-card h4,
-[data-theme="dark"] .streak-item .streak-value,
-[data-theme="dark"] .title-details h5,
-[data-theme="dark"] .achievement-card .achievement-info h5 {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .user-modal-email,
-[data-theme="dark"] .user-modal-bio,
-[data-theme="dark"] .user-modal-badge .badge-label,
-[data-theme="dark"] .user-modal-stat-item .stat-label,
-[data-theme="dark"] .user-modal-level-card p,
-[data-theme="dark"] .streak-item .streak-label,
-[data-theme="dark"] .title-details p,
-[data-theme="dark"] .achievement-card .achievement-info p {
-  color: var(--text-secondary);
-}
-
-
-/* ==========================================
-   FILTROS Y NOTIFICACIONES - COMPLETOS
-========================================== */
-
-/* Filtros Modern */
-[data-theme="dark"] .filters-modern,
-[data-theme="dark"] .sorts-modern {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .filter-modern,
-[data-theme="dark"] .sort-modern {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .filter-modern:hover,
-[data-theme="dark"] .sort-modern:hover {
-  background: rgba(124, 107, 184, 0.1);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .filter-modern.active,
-[data-theme="dark"] .sort-modern.active {
-  background: linear-gradient(135deg, #7c6bb8, #9988cc);
-  color: white;
-}
-
-/* Notifications Filters - IMPORTANTE */
-[data-theme="dark"] .notifications-filters {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-/* Filter Chip - ESTILOS COMPLETOS */
-[data-theme="dark"] .filter-chip {
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid transparent;
-}
-
-[data-theme="dark"] .filter-chip:hover {
-  background: rgba(124, 107, 184, 0.1);
-  color: var(--text-primary);
-  border-color: rgba(124, 107, 184, 0.2);
-}
-
-[data-theme="dark"] .filter-chip.active {
-  background: linear-gradient(135deg, #7c6bb8, #9988cc);
-  color: white;
-  border-color: transparent;
-  box-shadow: 0 4px 16px rgba(124, 107, 184, 0.3);
-}
-
-/* Chip Count */
-[data-theme="dark"] .chip-count {
-  background: rgba(255, 255, 255, 0.15);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .filter-chip.active .chip-count {
-  background: rgba(255, 255, 255, 0.3);
-  color: white;
-}
-
-/* Notification Details */
-[data-theme="dark"] .notif-details {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .detail-item {
-  background: rgba(26, 28, 36, 0.6);
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
-}
-
-[data-theme="dark"] .detail-item svg {
-  color: var(--muted);
-}
-
-[data-theme="dark"] .detail-item span {
-  color: var(--text-secondary);
-}
-
-/* ==========================================
-   MATCH/LEAGUE/AWARD CARDS - DETALLES ADICIONALES
-========================================== */
-/* Card principal */
-[data-theme="dark"] .match-card-light,
-[data-theme="dark"] .league-card-light,
-[data-theme="dark"] .award-card-light {
-  background: var(--card);
-  border-color: var(--border);
-  box-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.3),
-    0 6px 16px -6px rgba(0, 0, 0, 0.4);
-}
-
-/* Formularios - mismo color que el card, sin degradado */
-[data-theme="dark"] .league-predictions-container,
-[data-theme="dark"] .award-prediction-form {
-  background: var(--card) !important;
-  background-image: none !important;
-}
-
-/* Header */
-[data-theme="dark"] .match-header-light {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .match-league-info-light {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .match-league-info-light .league-icon {
-  color: var(--muted);
-}
-
-[data-theme="dark"] .league-name {
-  color: var(--text-secondary);
-}
-
-/* Date badge - mantener azul pero adaptado */
-[data-theme="dark"] .match-date-badge {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.15) 100%);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #60A5FA;
-  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.2);
-}
-
-/* Team names */
-[data-theme="dark"] .team-name-light {
-  color: var(--text-primary);
-}
-
-/* Team logos - ajustar contraste */
-[data-theme="dark"] .team-logo-img {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)) brightness(1.1);
-}
-
-[data-theme="dark"] .team-logo-emoji {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)) brightness(1.1);
-}
-
-/* Score cells */
-[data-theme="dark"] .score-cell-light {
-  background: rgba(58, 64, 82, 0.6);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .score-cell-light.has-prediction {
-  background: rgba(16, 185, 129, 0.2);
-  border-color: rgba(16, 185, 129, 0.4);
-  color: #34D399;
-}
-
-[data-theme="dark"] .prediction-check-light {
-  background: var(--card);
-  color: #10B981;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-}
-
-/* Score input */
-[data-theme="dark"] .score-input-in-cell {
-  color: inherit;
-  background: transparent;
-}
-
-[data-theme="dark"] .score-input-in-cell:focus {
-  background: rgba(139, 127, 199, 0.1);
-}
-
-[data-theme="dark"] .score-input-in-cell::placeholder {
-  color: var(--muted);
-  opacity: 0.7;
-}
-
-/* Match time center */
-[data-theme="dark"] .match-time-center {
-  background: rgba(42, 47, 63, 0.6);
-  border-color: var(--border);
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .match-time-center svg {
-  color: var(--muted);
-}
-
-[data-theme="dark"] .prediction-status-light {
-  color: var(--border);
-}
-
-/* Predict button */
-[data-theme="dark"] .predict-button-match {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-}
-
-[data-theme="dark"] .predict-button-match:hover {
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
-}
-
-[data-theme="dark"] .predict-button-match:disabled {
-  opacity: 0.5;
-}
-
-/* Status colors específicos */
-[data-theme="dark"] .prediction-status-light svg[style*="color: #059669"],
-[data-theme="dark"] .prediction-status-light svg[style*="color:#059669"] {
-  color: #10B981 !important;
-}
-
-[data-theme="dark"] .prediction-status-light[style*="color: #ef4444"],
-[data-theme="dark"] .prediction-status-light[style*="color:#ef4444"] {
-  color: #EF4444 !important;
-}
-[data-theme="dark"] .match-date-badge {
-  background: rgba(59, 130, 246, 0.15);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #60A5FA;
-}
-
-[data-theme="dark"] .league-season-light,
-[data-theme="dark"] .award-season-light {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .prediction-label-light,
-[data-theme="dark"] .prediction-label-award {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .prediction-input-light::placeholder,
-[data-theme="dark"] .prediction-input-award::placeholder,
-[data-theme="dark"] .score-input-in-cell::placeholder {
-  color: var(--text-secondary);
-  opacity: 0.6;
-}
-
-[data-theme="dark"] .prediction-status-light {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .award-category-badge {
-  background: rgba(245, 158, 11, 0.15);
-  border-color: rgba(245, 158, 11, 0.3);
-  color: #FBBF24;
-}
-
-/* ==========================================
-   MODALES - DETALLES ADICIONALES
-========================================== */
-
-[data-theme="dark"] .modal-title-premium,
-[data-theme="dark"] .modal-title {
-  color: white;
-}
-
-[data-theme="dark"] .modal-subtitle-premium {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-[data-theme="dark"] .form-label-premium {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .form-hint {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .modal-footer-premium {
-  background: rgba(10, 11, 15, 0.6);
-  border-top-color: var(--border);
-}
-
-[data-theme="dark"] .logo-preview-section {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .logo-preview-label {
-  color: var(--text-secondary);
-}
-
-/* ==========================================
-   NAVIGATION TABS - DETALLES ADICIONALES
-========================================== */
-
-[data-theme="dark"] .navigation-tabs::before,
-[data-theme="dark"] .navigation-tabs-two::before {
-  background: rgba(124, 107, 184, 0.1);
-}
-
-[data-theme="dark"] .nav-tab::before,
-[data-theme="dark"] .nav-tab-two::before {
-  background: rgba(124, 107, 184, 0.1);
-}
-
-/* ==========================================
-   VEGA SCORE PAGE - DETALLES ADICIONALES
-========================================== */
-
-[data-theme="dark"] .matches-section-premium::before {
-  background: linear-gradient(90deg, #7c6bb8, #9988cc, #7c6bb8);
-}
-
-[data-theme="dark"] .matches-title-premium {
-  color: white;
-}
-
-[data-theme="dark"] .matches-subtitle-premium {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-[data-theme="dark"] .matches-badge {
-  background: rgba(124, 107, 184, 0.25);
-  color: var(--accent-light);
-  border-color: rgba(124, 107, 184, 0.4);
-}
-
-[data-theme="dark"] .matches-empty-icon {
-  opacity: 0.2;
-}
-
-/* ==========================================
-   AVATARS Y BADGES
-========================================== */
-
-[data-theme="dark"] .user-avatar-small,
-[data-theme="dark"] .rank-avatar-small,
-[data-theme="dark"] .podium-avatar,
-[data-theme="dark"] .player-avatar-ultra,
-[data-theme="dark"] .avatar-placeholder {
-  background: linear-gradient(135deg, #7c6bb8, #9988cc);
-}
-
-[data-theme="dark"] .level-badge-floating {
-  background: linear-gradient(135deg, #7c6bb8, #9988cc);
-  border-color: var(--card);
-}
-
-/* ==========================================
-   BOTONES - DETALLES ADICIONALES
-========================================== */
-
-[data-theme="dark"] .modal-btn-premium.secondary,
-[data-theme="dark"] .cancel-button-secondary {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .modal-btn-premium.secondary:hover,
-[data-theme="dark"] .cancel-button-secondary:hover {
-  background: rgba(26, 28, 36, 0.8);
-}
-
-[data-theme="dark"] .view-all-button {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .view-all-button:hover {
-  background: rgba(26, 28, 36, 0.8);
-  color: var(--accent-light);
-}
-
-[data-theme="dark"] .time-btn {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .time-btn:hover {
-  background: rgba(124, 107, 184, 0.1);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .clear-search-btn {
-  background: linear-gradient(135deg, #7c6bb8, #9988cc);
-}
-
-/* ==========================================
-   RANKINGS - SIDEBAR Y PODIO
-========================================== */
-
-[data-theme="dark"] .ranking-premium {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .ranking-header-premium {
-  background: linear-gradient(135deg, #0a0b0f 0%, #14151d 100%);
-}
-
-[data-theme="dark"] .ranking-title-premium h3 {
-  color: white;
-}
-
-[data-theme="dark"] .ranking-subtitle {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-[data-theme="dark"] .podium-card {
-  background: rgba(26, 28, 36, 0.6);
-}
-
-[data-theme="dark"] .podium-first {
-  background: rgba(124, 107, 184, 0.15);
-  border-color: var(--accent);
-}
-
-[data-theme="dark"] .podium-second {
-  background: rgba(192, 192, 192, 0.1);
-  border-color: rgba(192, 192, 192, 0.3);
-}
-
-[data-theme="dark"] .podium-third {
-  background: rgba(245, 158, 11, 0.1);
-  border-color: rgba(245, 158, 11, 0.3);
-}
-
-[data-theme="dark"] .podium-name {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .podium-points {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .podium-position {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .ranking-item-premium {
-  background: rgba(26, 28, 36, 0.4);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .ranking-item-premium.hovered {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--accent);
-}
-
-[data-theme="dark"] .rank-number {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .rank-name-text {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .points-number {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .points-label {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .rank-progress {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="dark"] .ranking-footer {
-  background: rgba(10, 11, 15, 0.6);
-  border-top-color: var(--border);
-}
-
-[data-theme="dark"] .ranking-stat {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .ranking-divider {
-  border-bottom-color: var(--border);
-}
-
-[data-theme="dark"] .ranking-divider span {
-  color: var(--text-secondary);
-}
-
-/* ==========================================
-   FIXES ESPECÍFICOS PARA ELEMENTOS BLANCOS
-========================================== */
-
-/* Cualquier h1, h2, h3, h4, h5, h6 que no tenga color específico */
+/* ================================================================
+   HEADINGS GLOBALES — dark
+================================================================ */
 [data-theme="dark"] h1:not([style*="color"]),
 [data-theme="dark"] h2:not([style*="color"]),
 [data-theme="dark"] h3:not([style*="color"]),
@@ -2657,1024 +557,11 @@ button {
   color: var(--text-primary);
 }
 
-/* Párrafos y spans */
-[data-theme="dark"] p:not([class*="gradient"]):not([style*="color"]) {
-  color: var(--text-primary);
-}
+[data-theme="dark"] label:not([style*="color"]) { color: var(--text-primary); }
 
-[data-theme="dark"] span:not([class*="gradient"]):not([style*="color"]) {
-  color: inherit;
-}
-
-/* Divs de texto */
-[data-theme="dark"] .text-primary,
-[data-theme="dark"] [class*="-text"]:not([class*="gradient"]) {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .text-secondary,
-[data-theme="dark"] [class*="-subtext"],
-[data-theme="dark"] [class*="-subtitle"] {
-  color: var(--text-secondary);
-}
-
-/* Labels generales */
-[data-theme="dark"] label:not([style*="color"]) {
-  color: var(--text-primary);
-}
-
-/* Iconos lucide-react */
-[data-theme="dark"] svg:not([class*="gradient"]):not([style*="color"]) {
-  color: inherit;
-}
-
-/* ==========================================
-   LOADING STATES
-========================================== */
-
-[data-theme="dark"] .spinner-large,
-[data-theme="dark"] .spinner-premium {
-  border-color: rgba(124, 107, 184, 0.2);
-  border-top-color: var(--accent-light);
-}
-
-[data-theme="dark"] .spinner {
-  color: var(--accent-light);
-}
-
-/* Transiciones suaves */
+/* ================================================================
+   TRANSITIONS GLOBALES DARK
+================================================================ */
 [data-theme="dark"] * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-/* ==========================================
-   LEAGUE CARD Y AWARD CARD - FORMULARIOS
-========================================== */
-
-[data-theme="dark"] .league-predictions-container,
-[data-theme="dark"] .award-prediction-form {
-  background: rgba(26, 28, 36, 0.6);
-}
-
-[data-theme="dark"] .prediction-group,
-[data-theme="dark"] .prediction-field-award {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .prediction-label-light,
-[data-theme="dark"] .prediction-label-award {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .prediction-label-light svg,
-[data-theme="dark"] .prediction-label-award svg {
-  color: var(--muted);
-}
-
-/* ==========================================
-   PROFILE PAGE - CONTENEDORES FALTANTES
-========================================== */
-
-/* Avatar Card - Card Banner */
-[data-theme="dark"] .card-banner {
-  background: linear-gradient(135deg, #7c6bb8 0%, #9988cc 100%);
-}
-
-[data-theme="dark"] .banner-pattern {
-  background-image: 
-    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.05) 10px, rgba(255, 255, 255, 0.05) 20px);
-}
-
-/* Edit Icon Button */
-[data-theme="dark"] .edit-icon-btn {
-  background: rgba(26, 28, 36, 0.9);
-  border-color: var(--border);
-  color: var(--accent-light);
-}
-
-[data-theme="dark"] .edit-icon-btn:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-/* Card Content Wrapper */
-[data-theme="dark"] .card-content-wrapper {
-  color: var(--text-primary);
-}
-
-/* User Info */
-[data-theme="dark"] .name-header,
-[data-theme="dark"] .user-name-new {
-  color: var(--text-primary);
-}
-
-/* User Badges Grid */
-[data-theme="dark"] .user-badges-grid .info-badge {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .user-badges-grid .info-badge:hover {
-  background: rgba(26, 28, 36, 0.8);
-  border-color: rgba(124, 107, 184, 0.3);
-}
-
-/* Stats Card */
-[data-theme="dark"] .stats-card {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .stats-header {
-  color: var(--accent-light);
-}
-
-[data-theme="dark"] .stats-header h3 {
-  color: var(--text-primary);
-}
-
-/* Level Card */
-[data-theme="dark"] .level-card {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .level-title-section {
-  color: var(--accent-light);
-}
-
-[data-theme="dark"] .level-title {
-  background: linear-gradient(135deg, #7c6bb8, #9988cc);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-[data-theme="dark"] .level-points .current-points {
-  color: var(--accent-light);
-}
-
-[data-theme="dark"] .level-points .next-level-points {
-  color: var(--text-secondary);
-}
-
-/* Progress Bar */
-[data-theme="dark"] .progress-bar {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .progress-fill {
-  background: linear-gradient(90deg, #7c6bb8, #9988cc);
-}
-
-/* Mini Achievements Section */
-[data-theme="dark"] .mini-achievements-section {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .mini-achievement {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .mini-achievement:hover {
-  background: rgba(26, 28, 36, 0.8);
-  border-color: rgba(124, 107, 184, 0.3);
-}
-
-[data-theme="dark"] .achievement-icon {
-  background: rgba(124, 107, 184, 0.15);
-  color: var(--accent-light);
-}
-
-/* Streaks Card */
-[data-theme="dark"] .streaks-card {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .streaks-header {
-  color: #F59E0B;
-}
-
-[data-theme="dark"] .streaks-header h3 {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .streak-item {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .streak-item:hover {
-  border-color: #F59E0B;
-}
-
-/* Titles and Achievements Section */
-[data-theme="dark"] .titles-achievements-section {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .active-title-card,
-[data-theme="dark"] .titles-container,
-[data-theme="dark"] .achievements-container {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .active-title-header h3,
-[data-theme="dark"] .titles-header h3,
-[data-theme="dark"] .achievements-header h3 {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .title-active-badge {
-  background: rgba(124, 107, 184, 0.15);
-  border-color: rgba(124, 107, 184, 0.3);
-  color: var(--accent-light);
-}
-
-[data-theme="dark"] .current-title-display {
-  background: rgba(26, 28, 36, 0.6);
-}
-
-[data-theme="dark"] .no-title-message {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .no-title-icon {
-  background: rgba(124, 107, 184, 0.15);
-  color: var(--accent-light);
-}
-
-[data-theme="dark"] .no-title-text h4 {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .no-title-text p {
-  color: var(--text-secondary);
-}
-
-/* Count Badge */
-[data-theme="dark"] .count-badge {
-  background: rgba(124, 107, 184, 0.15);
-  border-color: rgba(124, 107, 184, 0.3);
-  color: var(--accent-light);
-}
-
-/* Admin Action Button */
-[data-theme="dark"] .admin-action-btn {
-  background: rgba(124, 107, 184, 0.15);
-  border-color: rgba(124, 107, 184, 0.3);
-  color: var(--accent-light);
-}
-
-[data-theme="dark"] .admin-action-btn:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
-}
-
-/* View All Button */
-[data-theme="dark"] .view-all-button {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--border);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .view-all-button:hover {
-  background: rgba(26, 28, 36, 0.8);
-  border-color: rgba(124, 107, 184, 0.3);
-  color: var(--accent-light);
-}
-
-
-/* Bottom Navigation - modo oscuro */
-[data-theme="dark"] .bottom-nav {
-  background: var(--card);
-  border-top-color: var(--border);
-}
-
-
-/* ==========================================
-   FILTROS Y NOTIFICACIONES - FALTANTES
-========================================== */
-
-/* Filtros Modern */
-[data-theme="dark"] .filters-modern,
-[data-theme="dark"] .sorts-modern {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .filter-modern,
-[data-theme="dark"] .sort-modern {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .filter-modern:hover,
-[data-theme="dark"] .sort-modern:hover {
-  background: rgba(124, 107, 184, 0.1);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .filter-modern.active,
-[data-theme="dark"] .sort-modern.active {
-  background: linear-gradient(135deg, #7c6bb8, #9988cc);
-  color: white;
-}
-
-/* Notification Details */
-[data-theme="dark"] .notif-details {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .detail-item {
-  background: rgba(26, 28, 36, 0.6);
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .detail-item svg {
-  color: var(--muted);
-}
-
-/* Filter Chip */
-[data-theme="dark"] .filter-chip {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .filter-chip:hover {
-  background: rgba(124, 107, 184, 0.1);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .filter-chip.active {
-  background: linear-gradient(135deg, #7c6bb8, #9988cc);
-  color: white;
-}
-
-[data-theme="dark"] .chip-count {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="dark"] .filter-chip.active .chip-count {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* ==========================================
-   RANKINGS - SIDEBAR Y PODIO
-========================================== */
-
-[data-theme="dark"] .ranking-premium {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .ranking-header-premium {
-  background: linear-gradient(135deg, #0a0b0f 0%, #14151d 100%);
-}
-
-[data-theme="dark"] .ranking-title-premium h3 {
-  color: white;
-}
-
-[data-theme="dark"] .ranking-subtitle {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-[data-theme="dark"] .podium-card {
-  background: rgba(26, 28, 36, 0.6);
-}
-
-[data-theme="dark"] .podium-first {
-  background: rgba(124, 107, 184, 0.15);
-  border-color: var(--accent);
-}
-
-[data-theme="dark"] .podium-second {
-  background: rgba(192, 192, 192, 0.1);
-  border-color: rgba(192, 192, 192, 0.3);
-}
-
-[data-theme="dark"] .podium-third {
-  background: rgba(245, 158, 11, 0.1);
-  border-color: rgba(245, 158, 11, 0.3);
-}
-
-[data-theme="dark"] .podium-name {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .podium-points {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .podium-position {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .ranking-item-premium {
-  background: rgba(26, 28, 36, 0.4);
-  border-color: var(--border);
-}
-
-[data-theme="dark"] .ranking-item-premium.hovered {
-  background: rgba(26, 28, 36, 0.6);
-  border-color: var(--accent);
-}
-
-[data-theme="dark"] .rank-number {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .rank-name-text {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .points-number {
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .points-label {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .rank-progress {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="dark"] .ranking-footer {
-  background: rgba(10, 11, 15, 0.6);
-  border-top-color: var(--border);
-}
-
-[data-theme="dark"] .ranking-stat {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .ranking-divider {
-  border-bottom-color: var(--border);
-}
-
-[data-theme="dark"] .ranking-divider span {
-  color: var(--text-secondary);
-}
-/* ==========================================
-   USER PROFILE MODAL - RESPONSIVE
-========================================== */
-
-/* Tablets */
-@media (max-width: 1024px) {
-  [data-theme="dark"] .user-modal-container,
-  [data-theme="light"] .user-modal-container {
-    max-width: 700px;
-  }
-
-  [data-theme="dark"] .user-modal-stats-grid,
-  [data-theme="light"] .user-modal-stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  [data-theme="dark"] .user-modal-overlay,
-  [data-theme="light"] .user-modal-overlay {
-    padding: 12px;
-  }
-
-  [data-theme="dark"] .user-modal-container,
-  [data-theme="light"] .user-modal-container {
-    max-height: 95vh;
-    border-radius: 20px;
-  }
-
-  [data-theme="dark"] .user-modal-header,
-  [data-theme="light"] .user-modal-header {
-    padding: 18px;
-  }
-
-  [data-theme="dark"] .user-modal-title-section h2,
-  [data-theme="light"] .user-modal-title-section h2 {
-    font-size: 18px;
-  }
-
-  [data-theme="dark"] .user-modal-body,
-  [data-theme="light"] .user-modal-body {
-    padding: 18px;
-    gap: 18px;
-  }
-
-  [data-theme="dark"] .user-modal-banner,
-  [data-theme="light"] .user-modal-banner {
-    height: 90px;
-  }
-
-  [data-theme="dark"] .user-modal-avatar,
-  [data-theme="light"] .user-modal-avatar {
-    width: 90px;
-    height: 90px;
-    font-size: 36px;
-  }
-
-  [data-theme="dark"] .user-modal-level-badge,
-  [data-theme="light"] .user-modal-level-badge {
-    right: calc(50% - 55px);
-  }
-
-  [data-theme="dark"] .user-modal-name,
-  [data-theme="light"] .user-modal-name {
-    font-size: 22px;
-  }
-
-  [data-theme="dark"] .user-modal-badges-grid,
-  [data-theme="light"] .user-modal-badges-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  [data-theme="dark"] .user-modal-stats-grid,
-  [data-theme="light"] .user-modal-stats-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  [data-theme="dark"] .user-modal-stat-item,
-  [data-theme="light"] .user-modal-stat-item {
-    padding: 14px;
-  }
-
-  [data-theme="dark"] .user-modal-stat-item .stat-icon,
-  [data-theme="light"] .user-modal-stat-item .stat-icon {
-    width: 44px;
-    height: 44px;
-  }
-
-  [data-theme="dark"] .user-modal-stat-item .stat-value,
-  [data-theme="light"] .user-modal-stat-item .stat-value {
-    font-size: 22px;
-  }
-
-  [data-theme="dark"] .user-modal-level-card,
-  [data-theme="light"] .user-modal-level-card {
-    padding: 18px;
-  }
-
-  [data-theme="dark"] .user-modal-level-card .level-header,
-  [data-theme="light"] .user-modal-level-card .level-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  [data-theme="dark"] .user-modal-level-card .level-points,
-  [data-theme="light"] .user-modal-level-card .level-points {
-    align-items: flex-start;
-  }
-
-  [data-theme="dark"] .user-modal-streaks,
-  [data-theme="light"] .user-modal-streaks {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  [data-theme="dark"] .streak-item,
-  [data-theme="light"] .streak-item {
-    padding: 14px;
-  }
-
-  [data-theme="dark"] .streak-item .streak-icon,
-  [data-theme="light"] .streak-item .streak-icon {
-    width: 44px;
-    height: 44px;
-  }
-
-  [data-theme="dark"] .streak-item .streak-value,
-  [data-theme="light"] .streak-item .streak-value {
-    font-size: 24px;
-  }
-
-  [data-theme="dark"] .user-modal-active-title,
-  [data-theme="light"] .user-modal-active-title {
-    padding: 18px;
-  }
-
-  [data-theme="dark"] .current-title-display,
-  [data-theme="light"] .current-title-display {
-    padding: 14px;
-  }
-
-  [data-theme="dark"] .title-icon-large,
-  [data-theme="light"] .title-icon-large {
-    width: 48px;
-    height: 48px;
-  }
-
-  [data-theme="dark"] .title-details h5,
-  [data-theme="light"] .title-details h5 {
-    font-size: 16px;
-  }
-
-  [data-theme="dark"] .user-modal-achievements,
-  [data-theme="light"] .user-modal-achievements {
-    padding: 18px;
-  }
-
-  [data-theme="dark"] .achievements-grid,
-  [data-theme="light"] .achievements-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 10px;
-  }
-
-  [data-theme="dark"] .achievement-card,
-  [data-theme="light"] .achievement-card {
-    padding: 12px;
-  }
-
-  [data-theme="dark"] .achievement-emoji,
-  [data-theme="light"] .achievement-emoji {
-    width: 44px;
-    height: 44px;
-    font-size: 24px;
-  }
-
-  /* Clickeable avatars responsive */
-  [data-theme="dark"] .user-avatar-small[style*="cursor: pointer"]:hover,
-  [data-theme="light"] .user-avatar-small[style*="cursor: pointer"]:hover,
-  [data-theme="dark"] .player-avatar-ultra[style*="cursor: pointer"]:hover,
-  [data-theme="light"] .player-avatar-ultra[style*="cursor: pointer"]:hover {
-    transform: scale(1.08);
-  }
-}
-
-/* Small Mobile */
-@media (max-width: 480px) {
-  [data-theme="dark"] .user-modal-overlay,
-  [data-theme="light"] .user-modal-overlay {
-    padding: 10px;
-  }
-
-  [data-theme="dark"] .user-modal-container,
-  [data-theme="light"] .user-modal-container {
-    border-radius: 18px;
-  }
-
-  [data-theme="dark"] .user-modal-header,
-  [data-theme="light"] .user-modal-header {
-    padding: 16px;
-  }
-
-  [data-theme="dark"] .user-modal-title-section h2,
-  [data-theme="light"] .user-modal-title-section h2 {
-    font-size: 16px;
-  }
-
-  [data-theme="dark"] .user-modal-title-section svg,
-  [data-theme="light"] .user-modal-title-section svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  [data-theme="dark"] .user-modal-close,
-  [data-theme="light"] .user-modal-close {
-    width: 32px;
-    height: 32px;
-  }
-
-  [data-theme="dark"] .user-modal-body,
-  [data-theme="light"] .user-modal-body {
-    padding: 16px;
-    gap: 16px;
-  }
-
-  [data-theme="dark"] .user-modal-banner,
-  [data-theme="light"] .user-modal-banner {
-    height: 80px;
-  }
-
-  [data-theme="dark"] .user-modal-avatar,
-  [data-theme="light"] .user-modal-avatar {
-    width: 80px;
-    height: 80px;
-    font-size: 32px;
-    border-width: 3px;
-  }
-
-  [data-theme="dark"] .user-modal-level-badge,
-  [data-theme="light"] .user-modal-level-badge {
-    right: calc(50% - 50px);
-    padding: 3px 10px;
-    font-size: 11px;
-    border-width: 2px;
-  }
-
-  [data-theme="dark"] .user-modal-level-badge svg,
-  [data-theme="light"] .user-modal-level-badge svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  [data-theme="dark"] .user-modal-name,
-  [data-theme="light"] .user-modal-name {
-    font-size: 20px;
-  }
-
-  [data-theme="dark"] .user-modal-email,
-  [data-theme="light"] .user-modal-email {
-    font-size: 13px;
-  }
-
-  [data-theme="dark"] .user-modal-bio,
-  [data-theme="light"] .user-modal-bio {
-    font-size: 13px;
-  }
-
-  [data-theme="dark"] .user-modal-badge,
-  [data-theme="light"] .user-modal-badge {
-    padding: 10px;
-    gap: 8px;
-  }
-
-  [data-theme="dark"] .user-modal-badge .badge-icon,
-  [data-theme="light"] .user-modal-badge .badge-icon {
-    width: 28px;
-    height: 28px;
-  }
-
-  [data-theme="dark"] .user-modal-badge .badge-label,
-  [data-theme="light"] .user-modal-badge .badge-label {
-    font-size: 9px;
-  }
-
-  [data-theme="dark"] .user-modal-badge .badge-value,
-  [data-theme="light"] .user-modal-badge .badge-value {
-    font-size: 12px;
-  }
-
-  [data-theme="dark"] .user-modal-stat-item,
-  [data-theme="light"] .user-modal-stat-item {
-    padding: 12px;
-    gap: 10px;
-  }
-
-  [data-theme="dark"] .user-modal-stat-item .stat-icon,
-  [data-theme="light"] .user-modal-stat-item .stat-icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  [data-theme="dark"] .user-modal-stat-item .stat-icon svg,
-  [data-theme="light"] .user-modal-stat-item .stat-icon svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  [data-theme="dark"] .user-modal-stat-item .stat-label,
-  [data-theme="light"] .user-modal-stat-item .stat-label {
-    font-size: 10px;
-  }
-
-  [data-theme="dark"] .user-modal-stat-item .stat-value,
-  [data-theme="light"] .user-modal-stat-item .stat-value {
-    font-size: 20px;
-  }
-
-  [data-theme="dark"] .user-modal-level-card,
-  [data-theme="light"] .user-modal-level-card {
-    padding: 16px;
-  }
-
-  [data-theme="dark"] .user-modal-level-card h4,
-  [data-theme="light"] .user-modal-level-card h4 {
-    font-size: 16px;
-  }
-
-  [data-theme="dark"] .user-modal-level-card p,
-  [data-theme="light"] .user-modal-level-card p {
-    font-size: 12px;
-  }
-
-  [data-theme="dark"] .user-modal-level-card .current-points,
-  [data-theme="light"] .user-modal-level-card .current-points {
-    font-size: 18px;
-  }
-
-  [data-theme="dark"] .user-modal-level-card .next-level-points,
-  [data-theme="light"] .user-modal-level-card .next-level-points {
-    font-size: 10px;
-  }
-
-  [data-theme="dark"] .user-modal-level-card .progress-bar,
-  [data-theme="light"] .user-modal-level-card .progress-bar {
-    height: 8px;
-  }
-
-  [data-theme="dark"] .user-modal-level-card .progress-label,
-  [data-theme="light"] .user-modal-level-card .progress-label {
-    font-size: 10px;
-  }
-
-  [data-theme="dark"] .streak-item,
-  [data-theme="light"] .streak-item {
-    padding: 12px;
-    gap: 10px;
-  }
-
-  [data-theme="dark"] .streak-item .streak-icon,
-  [data-theme="light"] .streak-item .streak-icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  [data-theme="dark"] .streak-item .streak-icon svg,
-  [data-theme="light"] .streak-item .streak-icon svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  [data-theme="dark"] .streak-item .streak-label,
-  [data-theme="light"] .streak-item .streak-label {
-    font-size: 10px;
-  }
-
-  [data-theme="dark"] .streak-item .streak-value,
-  [data-theme="light"] .streak-item .streak-value {
-    font-size: 22px;
-  }
-
-  [data-theme="dark"] .streak-badge,
-  [data-theme="light"] .streak-badge {
-    top: 10px;
-    right: 10px;
-    padding: 3px 6px;
-    font-size: 9px;
-  }
-
-  [data-theme="dark"] .streak-badge svg,
-  [data-theme="light"] .streak-badge svg {
-    width: 10px;
-    height: 10px;
-  }
-
-  [data-theme="dark"] .user-modal-active-title,
-  [data-theme="light"] .user-modal-active-title {
-    padding: 16px;
-  }
-
-  [data-theme="dark"] .user-modal-active-title h4,
-  [data-theme="light"] .user-modal-active-title h4 {
-    font-size: 14px;
-  }
-
-  [data-theme="dark"] .title-active-badge,
-  [data-theme="light"] .title-active-badge {
-    padding: 3px 8px;
-    font-size: 9px;
-  }
-
-  [data-theme="dark"] .current-title-display,
-  [data-theme="light"] .current-title-display {
-    padding: 12px;
-    gap: 10px;
-  }
-
-  [data-theme="dark"] .title-icon-large,
-  [data-theme="light"] .title-icon-large {
-    width: 44px;
-    height: 44px;
-  }
-
-  [data-theme="dark"] .title-icon-large svg,
-  [data-theme="light"] .title-icon-large svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  [data-theme="dark"] .title-details h5,
-  [data-theme="light"] .title-details h5 {
-    font-size: 15px;
-  }
-
-  [data-theme="dark"] .title-details p,
-  [data-theme="light"] .title-details p {
-    font-size: 12px;
-  }
-
-  [data-theme="dark"] .user-modal-achievements,
-  [data-theme="light"] .user-modal-achievements {
-    padding: 16px;
-  }
-
-  [data-theme="dark"] .section-header h4,
-  [data-theme="light"] .section-header h4 {
-    font-size: 14px;
-  }
-
-  [data-theme="dark"] .section-header svg,
-  [data-theme="light"] .section-header svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  [data-theme="dark"] .count-badge,
-  [data-theme="light"] .count-badge {
-    padding: 3px 8px;
-    font-size: 10px;
-  }
-
-  [data-theme="dark"] .achievements-grid,
-  [data-theme="light"] .achievements-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  [data-theme="dark"] .achievement-card,
-  [data-theme="light"] .achievement-card {
-    padding: 12px;
-  }
-
-  [data-theme="dark"] .achievement-emoji,
-  [data-theme="light"] .achievement-emoji {
-    width: 40px;
-    height: 40px;
-    font-size: 22px;
-  }
-
-  [data-theme="dark"] .achievement-card .achievement-info h5,
-  [data-theme="light"] .achievement-card .achievement-info h5 {
-    font-size: 12px;
-  }
-
-  [data-theme="dark"] .achievement-card .achievement-info p,
-  [data-theme="light"] .achievement-card .achievement-info p {
-    font-size: 10px;
-  }
-
-  [data-theme="dark"] .achievement-category,
-  [data-theme="light"] .achievement-category {
-    font-size: 9px;
-  }
-
-  [data-theme="dark"] .empty-achievements svg,
-  [data-theme="light"] .empty-achievements svg {
-    width: 32px;
-    height: 32px;
-  }
-
-  [data-theme="dark"] .empty-achievements p,
-  [data-theme="light"] .empty-achievements p {
-    font-size: 13px;
-  }
-
-  /* Clickeable avatars small mobile */
-  [data-theme="dark"] .user-avatar-small[style*="cursor: pointer"]:hover,
-  [data-theme="light"] .user-avatar-small[style*="cursor: pointer"]:hover,
-  [data-theme="dark"] .player-avatar-ultra[style*="cursor: pointer"]:hover,
-  [data-theme="light"] .player-avatar-ultra[style*="cursor: pointer"]:hover {
-    transform: scale(1.05);
-  }
-}
-
-/* Landscape Mobile */
-@media (max-height: 600px) and (orientation: landscape) {
-  [data-theme="dark"] .user-modal-container,
-  [data-theme="light"] .user-modal-container {
-    max-height: 90vh;
-  }
-
-  [data-theme="dark"] .user-modal-banner,
-  [data-theme="light"] .user-modal-banner {
-    height: 60px;
-  }
-
-  [data-theme="dark"] .user-modal-avatar,
-  [data-theme="light"] .user-modal-avatar {
-    width: 70px;
-    height: 70px;
-    font-size: 28px;
-  }
-
-  [data-theme="dark"] .user-modal-stats-grid,
-  [data-theme="light"] .user-modal-stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  [data-theme="dark"] .user-modal-streaks,
-  [data-theme="light"] .user-modal-streaks {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* League logo en modo oscuro - mejorar visibilidad */
-[data-theme="dark"] .league-logo-img {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)) brightness(1.15) contrast(1.1);
-}
-
-[data-theme="dark"] .match-league-info-light {
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .match-league-info-light .league-icon {
-  color: var(--muted);
-}
 }
