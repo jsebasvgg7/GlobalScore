@@ -7,52 +7,58 @@
 @tailwind utilities;
 
 /* ================================================================
-   TOKENS — LIGHT MODE
+   TOKENS DEEP DARK — BASE (desktop ≥ 769px)
 ================================================================ */
-:root,
-[data-theme="light"] {
-  --bg:             #f5f6fa;
-  --card:           #ffffff;
-  --text-primary:   #111111;
-  --text-secondary: #777777;
-  --muted:          #777777;
-  --accent:         #60519b;
-  --accent-light:   #8b7fc7;
-  --accent-hover:   #4d4180;
-  --dark-bg:        #1e202c;
-  --dark-secondary: #31323e;
-  --light-text:     #bfc0d1;
-  --glass:          rgba(96, 81, 155, 0.12);
-  --border:         rgba(0, 0, 0, 0.06);
-  --input-bg:       #ffffff;
-  --input-border:   rgba(0, 0, 0, 0.1);
-  --shadow:         0 8px 30px rgba(96, 81, 155, 0.15);
-  --small-shadow:   0 4px 14px rgba(96, 81, 155, 0.1);
-  --radius-2xl:     20px;
-}
+@media (min-width: 769px) {
+  [data-theme="dark"] {
+    --bg:             #0d0e14;
+    --card:           #13151f;
+    --text-primary:   #e8eaf2;
+    --text-secondary: #8b90a8;
+    --muted:          #4a5068;
+    --accent:         #7c6fe8;
+    --accent-light:   #9d93f0;
+    --accent-hover:   #6358d4;
+    --dark-bg:        #080910;
+    --dark-secondary: #0f1018;
+    --light-text:     #c8cce0;
+    --glass:          rgba(124, 111, 232, 0.1);
+    --border:         rgba(255, 255, 255, 0.07);
+    --input-bg:       #13151f;
+    --input-border:   rgba(255, 255, 255, 0.1);
+    --shadow:         0 8px 40px rgba(0, 0, 0, 0.7);
+    --small-shadow:   0 4px 20px rgba(0, 0, 0, 0.5);
 
-/* ================================================================
-   TOKENS — DARK MODE (Desktop)
-================================================================ */
-[data-theme="dark"] {
-  --bg:             #1a1d2e;
-  --card:           #252936;
-  --text-primary:   #f0f1f7;
-  --text-secondary: #b4b8d0;
-  --muted:          #8186a0;
-  --accent:         #8b7fc7;
-  --accent-light:   #a599d9;
-  --accent-hover:   #7366b3;
-  --dark-bg:        #151823;
-  --dark-secondary: #1f2232;
-  --light-text:     #dfe1ea;
-  --glass:          rgba(139, 127, 199, 0.18);
-  --border:         rgba(255, 255, 255, 0.12);
-  --input-bg:       #252936;
-  --input-border:   rgba(255, 255, 255, 0.15);
-  --shadow:         0 8px 30px rgba(0, 0, 0, 0.35);
-  --small-shadow:   0 4px 14px rgba(0, 0, 0, 0.25);
-  --radius-2xl:     20px;
+    /* Tokens brutalistas internos */
+    --lb-cream:    #0d0e14;
+    --lb-surface:  #13151f;
+    --lb-border:   rgba(255, 255, 255, 0.07);
+    --lb-accent:   #7c6fe8;
+
+    --sp-cream:    #0d0e14;
+    --sp-surface:  #13151f;
+    --sp-border:   rgba(255, 255, 255, 0.07);
+    --sp-accent:   #7c6fe8;
+
+    --pnew-cream:    #0d0e14;
+    --pnew-surface:  #13151f;
+    --pnew-border:   rgba(255, 255, 255, 0.07);
+    --pnew-accent:   #7c6fe8;
+
+    --auth-cream:   #0d0e14;
+    --auth-surface: #13151f;
+    --auth-border:  rgba(255, 255, 255, 0.07);
+    --auth-dark:    #e8eaf2;
+    --auth-muted:   #4a5068;
+
+    --wc-cream:    #0d0e14;
+    --wc-surface:  #13151f;
+    --wc-border:   rgba(255, 255, 255, 0.07);
+    --wc-accent:   #7c6fe8;
+    --wc-gold:     #e0b84a;
+    --wc-green:    #3dd68c;
+    --wc-red:      #f07070;
+  }
 }
 
 /* ================================================================
@@ -564,4 +570,2077 @@ button {
 ================================================================ */
 [data-theme="dark"] * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+
+
+
+/* ================================================================
+   BODY & LAYOUT GLOBAL
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] body {
+    background: linear-gradient(135deg, #0d0e14 0%, #111320 100%);
+    color: #e8eaf2;
+  }
+
+  [data-theme="dark"] .db-root,
+  [data-theme="dark"] .db-body,
+  [data-theme="dark"] .db-main,
+  [data-theme="dark"] .db-content {
+    background: #0d0e14;
+  }
+
+  [data-theme="dark"] .card {
+    background: #13151f;
+    border-color: rgba(255, 255, 255, 0.07);
+  }
+}
+
+/* ================================================================
+   SIDEBAR DESKTOP — gs-sidebar
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .gs-sidebar {
+    background: #080910 !important;
+    border-right-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  [data-theme="dark"] .gs-sidebar::after {
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255,255,255,0.015) 20px),
+      repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(255,255,255,0.015) 20px) !important;
+  }
+
+  [data-theme="dark"] .gs-logo-wrap {
+    border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  [data-theme="dark"] .gs-logo-btn::after { color: rgba(255,255,255,0.15) !important; }
+
+  [data-theme="dark"] .gs-sidebar-divider::before {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  [data-theme="dark"] .gs-sidebar-divider span { color: rgba(255,255,255,0.08) !important; }
+
+  [data-theme="dark"] .gs-nav-btn {
+    color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  [data-theme="dark"] .gs-nav-btn[data-index]::before {
+    color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  [data-theme="dark"] .gs-nav-btn:hover {
+    background: rgba(124, 111, 232, 0.12) !important;
+    color: #9d93f0 !important;
+  }
+
+  [data-theme="dark"] .gs-nav-btn--active {
+    background: #7c6fe8 !important;
+    color: #fff !important;
+  }
+
+  [data-theme="dark"] .gs-nav-btn--logout { color: rgba(255,255,255,0.2) !important; }
+  [data-theme="dark"] .gs-nav-btn--logout:hover {
+    background: rgba(240, 112, 112, 0.1) !important;
+    color: #f07070 !important;
+  }
+
+  [data-theme="dark"] .gs-sidebar-bottom {
+    border-top-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  [data-theme="dark"] .gs-season-block {
+    border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  [data-theme="dark"] .gs-season-label { color: rgba(255,255,255,0.12) !important; }
+  [data-theme="dark"] .gs-season-year  { color: #e0b84a !important; }
+
+  [data-theme="dark"] .gs-tooltip {
+    background: #e8eaf2 !important;
+    color: #0d0e14 !important;
+  }
+
+  [data-theme="dark"] .gs-tooltip::before {
+    border-right-color: #e8eaf2 !important;
+  }
+}
+
+/* ================================================================
+   TOPBAR DESKTOP — gs-topbar
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .gs-topbar {
+    background: #080910 !important;
+    border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  [data-theme="dark"] .gs-breadcrumb-app { color: #e8eaf2 !important; }
+  [data-theme="dark"] .gs-breadcrumb-sep { color: rgba(255,255,255,0.1) !important; }
+  [data-theme="dark"] .gs-breadcrumb-page { color: #4a5068 !important; }
+
+  [data-theme="dark"] .gs-clock {
+    border-color: rgba(255,255,255,0.05) !important;
+    color: rgba(255,255,255,0.15) !important;
+  }
+
+  [data-theme="dark"] .gs-topbar-icon-btn {
+    border-color: rgba(255,255,255,0.05) !important;
+    color: rgba(255,255,255,0.2) !important;
+  }
+
+  [data-theme="dark"] .gs-topbar-icon-btn:hover {
+    color: #9d93f0 !important;
+    border-color: rgba(124,111,232,0.3) !important;
+  }
+
+  [data-theme="dark"] .gs-bell-dot {
+    background: #f07070 !important;
+    border-color: #080910 !important;
+  }
+
+  [data-theme="dark"] .gs-user-chip {
+    border-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .gs-user-chip:hover {
+    border-color: rgba(124,111,232,0.3) !important;
+  }
+
+  [data-theme="dark"] .gs-user-avatar {
+    background: #7c6fe8 !important;
+  }
+
+  [data-theme="dark"] .gs-user-name  { color: #e8eaf2 !important; }
+  [data-theme="dark"] .gs-user-role  { color: #4a5068 !important; }
+}
+
+/* ================================================================
+   NAVIGATION TABS — nt-bar
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .nt-bar {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .nt-tab          { color: #4a5068 !important; }
+  [data-theme="dark"] .nt-tab:hover    { color: #e8eaf2 !important; }
+  [data-theme="dark"] .nt-tab--active  { color: #9d93f0 !important; border-bottom-color: #7c6fe8 !important; }
+
+  [data-theme="dark"] .nt-count        { background: rgba(255,255,255,0.05) !important; color: #4a5068 !important; }
+  [data-theme="dark"] .nt-count--active { background: rgba(124,111,232,0.18) !important; color: #9d93f0 !important; }
+
+  [data-theme="dark"] .nt-ctrl-btn {
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .nt-ctrl-btn:hover { color: #9d93f0 !important; }
+  [data-theme="dark"] .nt-ctrl-btn--active { background: #7c6fe8 !important; color: #fff !important; }
+}
+
+/* ================================================================
+   DASHBOARD — DashboardPage
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .db-root { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .matches-date-label::before {
+    background: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .matches-date-label span {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .matches-date-group:first-child .matches-date-label::before {
+    background: rgba(124,111,232,0.2) !important;
+  }
+
+  [data-theme="dark"] .matches-date-group:first-child .matches-date-label span {
+    background: rgba(124,111,232,0.1) !important;
+    border-color: rgba(124,111,232,0.3) !important;
+    color: #9d93f0 !important;
+  }
+
+  [data-theme="dark"] .matches-date-group:first-child .matches-date-label span::before {
+    background: #7c6fe8 !important;
+    box-shadow: 0 0 0 3px rgba(124,111,232,0.2) !important;
+  }
+
+  /* Sort modal */
+  [data-theme="dark"] .sort-modal {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .sort-modal-header {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .sort-option { color: #8b90a8 !important; border-bottom-color: rgba(255,255,255,0.04) !important; }
+  [data-theme="dark"] .sort-option:hover { background: rgba(124,111,232,0.08) !important; color: #9d93f0 !important; }
+  [data-theme="dark"] .sort-option.active { background: #7c6fe8 !important; color: #fff !important; }
+
+  /* Filters modal */
+  [data-theme="dark"] .filters-modal {
+    background: #0d0e14 !important;
+    border-left-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .filters-modal-header {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .filters-modal-title { color: #8b90a8 !important; }
+  [data-theme="dark"] .filters-reset-btn   { color: #4a5068 !important; border-color: rgba(255,255,255,0.07) !important; }
+  [data-theme="dark"] .filters-close-btn   { color: #4a5068 !important; }
+
+  [data-theme="dark"] .filter-pill {
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+    color: #8b90a8 !important;
+  }
+
+  [data-theme="dark"] .filter-pill:hover  { border-color: rgba(124,111,232,0.4) !important; color: #9d93f0 !important; }
+  [data-theme="dark"] .filter-pill.active { background: #7c6fe8 !important; border-color: #7c6fe8 !important; color: #fff !important; }
+
+  [data-theme="dark"] .filter-category-header { border-bottom-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .filter-category-title  { color: #4a5068 !important; }
+
+  /* Grids ligas/premios */
+  [data-theme="dark"] .leagues-grid,
+  [data-theme="dark"] .awards-grid {
+    background: transparent !important;
+  }
+}
+
+/* ================================================================
+   MATCH CARD DESKTOP — mc-card
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .mc-card {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.09) !important;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.5) !important;
+  }
+
+  [data-theme="dark"] .mc-card:not(.mc-card--active):hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+  }
+
+  [data-theme="dark"] .mc-card--active { background: #080910 !important; border-color: #1a1c28 !important; }
+
+  [data-theme="dark"] .mc-header        { border-bottom-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .mc-league-icon   { background: rgba(255,255,255,0.04) !important; border-color: rgba(255,255,255,0.06) !important; }
+  [data-theme="dark"] .mc-league-name   { color: #4a5068 !important; }
+
+  [data-theme="dark"] .mc-pill--pending { background: rgba(255,255,255,0.04) !important; color: #4a5068 !important; border-color: rgba(255,255,255,0.06) !important; }
+  [data-theme="dark"] .mc-pill--saved   { background: rgba(124,111,232,0.12) !important; color: #9d93f0 !important; border-color: rgba(124,111,232,0.2) !important; }
+  [data-theme="dark"] .mc-pill--saving  { background: rgba(224,184,74,0.1) !important; color: #e0b84a !important; border-color: rgba(224,184,74,0.2) !important; }
+  [data-theme="dark"] .mc-pill--expired { background: rgba(240,112,112,0.1) !important; color: #f07070 !important; border-color: rgba(240,112,112,0.2) !important; }
+  [data-theme="dark"] .mc-pill--live    { background: rgba(224,184,74,0.1) !important; color: #e0b84a !important; border-color: rgba(224,184,74,0.2) !important; }
+
+  [data-theme="dark"] .mc-team-block:hover  { background: rgba(255,255,255,0.025) !important; }
+  [data-theme="dark"] .mc-team-block--on    { background: rgba(124,111,232,0.08) !important; }
+  [data-theme="dark"] .mc-team-name--top,
+  [data-theme="dark"] .mc-team-name--bottom { color: #4a5068 !important; }
+  [data-theme="dark"] .mc-team-block--on .mc-team-name--top,
+  [data-theme="dark"] .mc-team-block--on .mc-team-name--bottom { color: #9d93f0 !important; }
+
+  [data-theme="dark"] .mc-shield-wrap {
+    background: rgba(255,255,255,0.05) !important;
+    border-color: rgba(255,255,255,0.1) !important;
+  }
+
+  [data-theme="dark"] .mc-team-block--on .mc-shield-wrap {
+    border-color: #9d93f0 !important;
+  }
+
+  [data-theme="dark"] .mc-adv-badge { border-color: #080910 !important; background: #3dd68c !important; }
+
+  [data-theme="dark"] .mc-score-box {
+    background: rgba(255,255,255,0.04) !important;
+    border-color: rgba(255,255,255,0.1) !important;
+  }
+
+  [data-theme="dark"] .mc-score-box--done {
+    background: rgba(124,111,232,0.1) !important;
+    border-color: rgba(124,111,232,0.2) !important;
+  }
+
+  [data-theme="dark"] .mc-score-input      { color: #e8eaf2 !important; }
+  [data-theme="dark"] .mc-divider-line      { background: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .mc-vs-label          { color: rgba(255,255,255,0.08) !important; }
+  [data-theme="dark"] .mc-swords-icon       { color: #f07070 !important; }
+  [data-theme="dark"] .mc-footer            { border-top-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .mc-footer-divider    { background: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .mc-metric-icon       { color: #4a5068 !important; }
+  [data-theme="dark"] .mc-metric-val        { color: #4a5068 !important; }
+}
+
+/* ================================================================
+   AWARD CARD & LEAGUE CARD — ac-card / lc-card (desktop)
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .ac-card,
+  [data-theme="dark"] .lc-card {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.09) !important;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.5) !important;
+  }
+
+  [data-theme="dark"] .ac-card:hover,
+  [data-theme="dark"] .lc-card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7) !important;
+    border-color: rgba(255,255,255,0.14) !important;
+  }
+
+  [data-theme="dark"] .ac-header,
+  [data-theme="dark"] .lc-header { border-bottom-color: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .ac-logo-box,
+  [data-theme="dark"] .lc-logo-box {
+    background: rgba(255,255,255,0.04) !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .ac-title,
+  [data-theme="dark"] .lc-title { color: #e8eaf2 !important; }
+
+  [data-theme="dark"] .ac-season,
+  [data-theme="dark"] .lc-season { color: #4a5068 !important; }
+
+  [data-theme="dark"] .ac-pill--pending,
+  [data-theme="dark"] .lc-pill--pending  { background: rgba(255,255,255,0.04) !important; color: #4a5068 !important; border-color: rgba(255,255,255,0.06) !important; }
+  [data-theme="dark"] .ac-pill--saved,
+  [data-theme="dark"] .lc-pill--saved    { background: rgba(124,111,232,0.1) !important; color: #9d93f0 !important; border-color: rgba(124,111,232,0.18) !important; }
+  [data-theme="dark"] .ac-pill--expired,
+  [data-theme="dark"] .lc-pill--expired  { background: rgba(240,112,112,0.1) !important; color: #f07070 !important; border-color: rgba(240,112,112,0.18) !important; }
+  [data-theme="dark"] .ac-pill--finished,
+  [data-theme="dark"] .lc-pill--finished { background: rgba(61,214,140,0.08) !important; color: #3dd68c !important; border-color: rgba(61,214,140,0.18) !important; }
+
+  [data-theme="dark"] .ac-label,
+  [data-theme="dark"] .lc-label { color: #4a5068 !important; }
+
+  [data-theme="dark"] .ac-input,
+  [data-theme="dark"] .lc-input {
+    background: rgba(255,255,255,0.04) !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .ac-input:focus,
+  [data-theme="dark"] .lc-input:focus {
+    border-color: #7c6fe8 !important;
+    background: rgba(124,111,232,0.07) !important;
+    box-shadow: 0 0 0 2px rgba(124,111,232,0.12) !important;
+  }
+
+  [data-theme="dark"] .ac-input::placeholder,
+  [data-theme="dark"] .lc-input::placeholder { color: #4a5068 !important; }
+
+  [data-theme="dark"] .ac-input--filled,
+  [data-theme="dark"] .lc-input--filled {
+    background: rgba(124,111,232,0.1) !important;
+    border-color: rgba(124,111,232,0.22) !important;
+  }
+
+  [data-theme="dark"] .lc-field { border-bottom-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .lc-field-row { border-bottom-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .lc-field-cell:first-child { border-right-color: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .ac-footer,
+  [data-theme="dark"] .lc-footer { border-top-color: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .ac-footer-msg--expired,
+  [data-theme="dark"] .lc-footer-msg--expired  { color: #f07070 !important; }
+  [data-theme="dark"] .ac-footer-msg--saved,
+  [data-theme="dark"] .lc-footer-msg--saved    { color: #9d93f0 !important; }
+  [data-theme="dark"] .ac-footer-msg--finished,
+  [data-theme="dark"] .lc-footer-msg--finished { color: #3dd68c !important; }
+
+  [data-theme="dark"] .ac-pts-badge,
+  [data-theme="dark"] .lc-pts-badge { background: #145c3a !important; color: #dcfce7 !important; }
+
+  [data-theme="dark"] .ac-save-btn,
+  [data-theme="dark"] .lc-save-btn  { background: #7c6fe8 !important; }
+  [data-theme="dark"] .ac-save-btn:hover,
+  [data-theme="dark"] .lc-save-btn:hover { background: #6358d4 !important; }
+
+  [data-theme="dark"] .ac-category-row { border-top-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .ac-category-badge {
+    background: rgba(255,255,255,0.04) !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    color: #4a5068 !important;
+  }
+}
+
+/* ================================================================
+   RANKING PAGE — lb-shell, lb-page, lb-grid
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .lb-shell { background: #0d0e14 !important; }
+  [data-theme="dark"] .lb-page  { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .lb-tabs-bar {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .lb-tab          { color: #4a5068 !important; }
+  [data-theme="dark"] .lb-tab:hover    { color: #e8eaf2 !important; }
+  [data-theme="dark"] .lb-tab.active   { color: #9d93f0 !important; border-bottom-color: #7c6fe8 !important; }
+
+  [data-theme="dark"] .lb-stat-block {
+    background: #0d0e14 !important;
+    border-right-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .lb-stat-num { color: #e8eaf2 !important; }
+  [data-theme="dark"] .lb-stat-lbl { color: #4a5068 !important; }
+
+  [data-theme="dark"] .lb-row--sort {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .lb-sort-label { color: #4a5068 !important; }
+
+  [data-theme="dark"] .lb-sort-btn {
+    border-color: rgba(255,255,255,0.06) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .lb-sort-btn:hover:not(.active) {
+    color: #9d93f0 !important;
+    border-color: rgba(124,111,232,0.35) !important;
+  }
+
+  [data-theme="dark"] .lb-sort-btn.active {
+    background: #7c6fe8 !important;
+    border-color: #7c6fe8 !important;
+    color: #fff !important;
+  }
+
+  [data-theme="dark"] .lb-thead {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .lb-thead > span { color: #4a5068 !important; }
+
+  [data-theme="dark"] .lb-trow {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.04) !important;
+  }
+
+  [data-theme="dark"] .lb-trow:hover  { background: rgba(255,255,255,0.02) !important; }
+
+  [data-theme="dark"] .lb-trow--me {
+    background: rgba(124,111,232,0.07) !important;
+    border-left-color: #7c6fe8 !important;
+  }
+
+  [data-theme="dark"] .lb-rnk {
+    background: rgba(255,255,255,0.04) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .lb-uname { color: #e8eaf2 !important; }
+  [data-theme="dark"] .lb-uname-sub { color: #4a5068 !important; }
+  [data-theme="dark"] .lb-you {
+    color: #9d93f0 !important;
+    border-color: rgba(124,111,232,0.3) !important;
+  }
+
+  [data-theme="dark"] .lb-pts  { color: #e0b84a !important; }
+  [data-theme="dark"] .lb-acc  { color: #3dd68c !important; }
+  [data-theme="dark"] .lb-pts-lbl { color: rgba(224,184,74,0.5) !important; }
+
+  [data-theme="dark"] .lb-loading { background: #0d0e14 !important; color: #4a5068 !important; }
+  [data-theme="dark"] .lb-empty   { color: #4a5068 !important; }
+  [data-theme="dark"] .lb-empty p { color: #4a5068 !important; }
+  [data-theme="dark"] .lb-empty-icon { color: rgba(255,255,255,0.05) !important; }
+}
+
+/* ================================================================
+   RANKING RIGHT PANEL — rrp-root
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .rrp-root {
+    background: #0d0e14 !important;
+    border-left-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .rrp-label {
+    color: #4a5068 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .rrp-label-dot { background: rgba(255,255,255,0.08) !important; }
+
+  [data-theme="dark"] .rrp-step { border-bottom-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .rrp-step--gold   { background: rgba(224,184,74,0.06) !important; }
+  [data-theme="dark"] .rrp-step--silver { background: rgba(138,138,138,0.05) !important; }
+  [data-theme="dark"] .rrp-step--bronze { background: rgba(160,101,42,0.05) !important; }
+
+  [data-theme="dark"] .rrp-step-rank { border-right-color: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .rrp-step-medal { color: #4a5068 !important; }
+  [data-theme="dark"] .rrp-step--gold .rrp-step-medal   { color: #e0b84a !important; }
+  [data-theme="dark"] .rrp-step--silver .rrp-step-medal { color: #8a8a8a !important; }
+  [data-theme="dark"] .rrp-step--bronze .rrp-step-medal { color: #b0804a !important; }
+
+  [data-theme="dark"] .rrp-step-avatar { background: rgba(255,255,255,0.06) !important; color: #8b90a8 !important; }
+  [data-theme="dark"] .rrp-step--gold .rrp-step-avatar   { background: rgba(224,184,74,0.15) !important; color: #e0b84a !important; }
+  [data-theme="dark"] .rrp-step--silver .rrp-step-avatar { background: rgba(138,138,138,0.12) !important; color: #6a6a6a !important; }
+  [data-theme="dark"] .rrp-step--bronze .rrp-step-avatar { background: rgba(160,101,42,0.12) !important; color: #b0804a !important; }
+
+  [data-theme="dark"] .rrp-step-name { color: #e8eaf2 !important; }
+
+  [data-theme="dark"] .rrp-step--gold .rrp-step-pts   { color: #e0b84a !important; }
+  [data-theme="dark"] .rrp-step--silver .rrp-step-pts { color: #8a8a8a !important; }
+  [data-theme="dark"] .rrp-step--bronze .rrp-step-pts { color: #b0804a !important; }
+
+  [data-theme="dark"] .rrp-step-stat-val { color: #e8eaf2 !important; }
+  [data-theme="dark"] .rrp-step-stat-lbl { color: #4a5068 !important; }
+  [data-theme="dark"] .rrp-step-stat--acc .rrp-step-stat-val { color: #3dd68c !important; }
+
+  [data-theme="dark"] .rrp-global { background: #7c6fe8 !important; }
+  [data-theme="dark"] .rrp-global-val--leader { color: #e0b84a !important; }
+  [data-theme="dark"] .rrp-global-val--pts    { color: #e0b84a !important; }
+}
+
+/* ================================================================
+   HALL OF FAME — hof-root / hofp-root
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .hof-root    { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .hof-header-title { color: #e0b84a !important; }
+  [data-theme="dark"] .hof-header-crown { color: #e0b84a !important; }
+
+  [data-theme="dark"] .hof-sub {
+    color: #4a5068 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .hof-carousel-wrap {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .hof-card {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .hof-card-top { border-bottom-color: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .hof-card-stats {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .hof-card-stat-sep { background: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .hof-card-name     { color: #e8eaf2 !important; }
+  [data-theme="dark"] .hof-stat-val      { color: #e8eaf2 !important; }
+  [data-theme="dark"] .hof-stat-lbl      { color: #4a5068 !important; }
+  [data-theme="dark"] .hof-card-counter  { color: #4a5068 !important; }
+
+  [data-theme="dark"] .hof-dot       { background: rgba(255,255,255,0.08) !important; }
+  [data-theme="dark"] .hof-dot--active { background: #e0b84a !important; }
+
+  [data-theme="dark"] .hof-top3 { border-top-color: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .hof-top3-label {
+    background: #13151f !important;
+    color: #4a5068 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .hof-top3-row {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.04) !important;
+  }
+
+  [data-theme="dark"] .hof-top3-row:hover   { background: rgba(255,255,255,0.02) !important; }
+  [data-theme="dark"] .hof-top3-row--active { background: rgba(224,184,74,0.05) !important; }
+  [data-theme="dark"] .hof-top3-name        { color: #e8eaf2 !important; }
+  [data-theme="dark"] .hof-top3-pts         { color: #e0b84a !important; }
+
+  /* HOF Panel */
+  [data-theme="dark"] .hofp-root {
+    background: #0d0e14 !important;
+    border-left-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .hofp-label { color: #e0b84a !important; border-bottom-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .hofp-label-dot { background: #e0b84a !important; }
+  [data-theme="dark"] .hofp-step { border-bottom-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .hofp-step-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .hofp-step-stat-lbl { color: #4a5068 !important; }
+  [data-theme="dark"] .hofp-global { background: #e0b84a !important; }
+  [data-theme="dark"] .hofp-global-val--leader { color: #0d0e14 !important; }
+}
+
+/* ================================================================
+   STATS PAGE — sp-shell
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .sp-shell { background: #0d0e14 !important; }
+  [data-theme="dark"] .sp-main  { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .sp-topbar {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .sp-topbar-title { color: #4a5068 !important; }
+  [data-theme="dark"] .sp-topbar-dot   { background: #7c6fe8 !important; }
+
+  [data-theme="dark"] .sp-range-pill {
+    border-color: rgba(255,255,255,0.06) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .sp-range-pill:hover:not(.active) { color: #9d93f0 !important; }
+  [data-theme="dark"] .sp-range-pill.active {
+    background: #7c6fe8 !important;
+    border-color: #7c6fe8 !important;
+    color: #fff !important;
+  }
+
+  [data-theme="dark"] .sp-hero-block {
+    background: #0d0e14 !important;
+    border-right-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .sp-hero-lbl { color: #4a5068 !important; }
+  [data-theme="dark"] .sp-hero-num { color: #e8eaf2 !important; }
+  [data-theme="dark"] .sp-hero-num--accent { color: #9d93f0 !important; }
+  [data-theme="dark"] .sp-hero-num--green  { color: #3dd68c !important; }
+  [data-theme="dark"] .sp-hero-num--amber  { color: #e0b84a !important; }
+  [data-theme="dark"] .sp-hero-sub  { color: #4a5068 !important; }
+
+  [data-theme="dark"] .sp-section { border-bottom-color: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .sp-section-hdr {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .sp-section-title { color: #4a5068 !important; }
+
+  [data-theme="dark"] .sp-league-thead,
+  [data-theme="dark"] .sp-league-row { border-bottom-color: rgba(255,255,255,0.04) !important; }
+
+  [data-theme="dark"] .sp-league-thead .sp-lc { color: #4a5068 !important; }
+  [data-theme="dark"] .sp-league-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .sp-lc          { color: #e8eaf2 !important; }
+  [data-theme="dark"] .sp-lc--pts,
+  [data-theme="dark"] .sp-lc--exact   { color: #e0b84a !important; }
+
+  [data-theme="dark"] .sp-rank-badge {
+    background: rgba(255,255,255,0.04) !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .sp-acc-bar   { background: rgba(255,255,255,0.06) !important; }
+  [data-theme="dark"] .sp-acc-fill  { background: #3dd68c !important; }
+  [data-theme="dark"] .sp-acc-pct   { color: #3dd68c !important; }
+
+  [data-theme="dark"] .sp-result-num  { color: #e8eaf2 !important; }
+  [data-theme="dark"] .sp-result-name { color: #4a5068 !important; }
+  [data-theme="dark"] .sp-result-pts  { color: #3dd68c !important; }
+  [data-theme="dark"] .sp-result-pts--red { color: #f07070 !important; }
+  [data-theme="dark"] .sp-result-bar-wrap { background: rgba(255,255,255,0.06) !important; }
+
+  [data-theme="dark"] .sp-day-lbl    { color: #4a5068 !important; }
+  [data-theme="dark"] .sp-day-pct    { color: #e8eaf2 !important; }
+  [data-theme="dark"] .sp-day-detail { color: #4a5068 !important; }
+  [data-theme="dark"] .sp-day-bar-wrap {
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+  }
+  [data-theme="dark"] .sp-day-fill { background: #7c6fe8 !important; }
+
+  [data-theme="dark"] .sp-loading { background: #0d0e14 !important; color: #4a5068 !important; }
+  [data-theme="dark"] .sp-empty-title { color: #e8eaf2 !important; }
+  [data-theme="dark"] .sp-empty-sub   { color: #4a5068 !important; }
+}
+
+/* ================================================================
+   STATS RIGHT PANEL — srp-root
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .srp-root {
+    background: #0d0e14 !important;
+    border-left-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .srp-block { border-bottom-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .srp-block-label { color: #4a5068 !important; }
+  [data-theme="dark"] .srp-block-label::after { background: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .srp-stat-row  { border-bottom-color: rgba(255,255,255,0.04) !important; }
+  [data-theme="dark"] .srp-stat-lbl  { color: #4a5068 !important; }
+  [data-theme="dark"] .srp-stat-val  { color: #e8eaf2 !important; }
+  [data-theme="dark"] .srp-stat-val--accent { color: #9d93f0 !important; }
+  [data-theme="dark"] .srp-stat-val--green  { color: #3dd68c !important; }
+  [data-theme="dark"] .srp-stat-val--amber  { color: #e0b84a !important; }
+  [data-theme="dark"] .srp-stat-val--red    { color: #f07070 !important; }
+
+  [data-theme="dark"] .srp-dist-name  { color: #4a5068 !important; }
+  [data-theme="dark"] .srp-dist-val   { color: #e8eaf2 !important; }
+  [data-theme="dark"] .srp-dist-track { background: rgba(255,255,255,0.06) !important; }
+
+  [data-theme="dark"] .srp-forecast-item {
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .srp-forecast-val      { color: #e8eaf2 !important; }
+  [data-theme="dark"] .srp-forecast-val--green { color: #3dd68c !important; }
+  [data-theme="dark"] .srp-forecast-lbl      { color: #4a5068 !important; }
+  [data-theme="dark"] .srp-streak { background: #7c6fe8 !important; }
+  [data-theme="dark"] .srp-streak-best-val   { color: #e0b84a !important; }
+}
+
+/* ================================================================
+   PROFILE SETTINGS PAGE — pnew-desktop
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .pnew-page { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .pnew-desktop-right {
+    background: #0d0e14 !important;
+    border-left-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .pnew-desktop-left { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .pnew-hero { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .pnew-hero-avatar {
+    border-color: #0d0e14 !important;
+    background: #7c6fe8 !important;
+  }
+
+  [data-theme="dark"] .pnew-hero-name  { color: #e8eaf2 !important; }
+  [data-theme="dark"] .pnew-hero-email { color: #4a5068 !important; }
+  [data-theme="dark"] .pnew-hero-bio   { color: #4a5068 !important; }
+
+  [data-theme="dark"] .pnew-hero-tag {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .pnew-hero-stats {
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .pnew-hero-stat-sep { width: 0.5px; background: rgba(255,255,255,0.07) !important; }
+
+  /* Nav */
+  [data-theme="dark"] .pnew-nav-item           { color: #4a5068 !important; }
+  [data-theme="dark"] .pnew-nav-item:hover      { background: rgba(255,255,255,0.025) !important; color: #e8eaf2 !important; }
+  [data-theme="dark"] .pnew-nav-item--active    { background: #0d0e14 !important; color: #9d93f0 !important; border-left-color: #7c6fe8 !important; }
+  [data-theme="dark"] .pnew-nav-group-lbl       { color: #4a5068 !important; }
+  [data-theme="dark"] .pnew-nav-logout { border-top-color: rgba(255,255,255,0.06) !important; }
+  [data-theme="dark"] .pnew-nav-logout-btn {
+    background: rgba(240,112,112,0.07) !important;
+    border-color: rgba(240,112,112,0.2) !important;
+    color: #f07070 !important;
+  }
+
+  /* Content */
+  [data-theme="dark"] .pnew-tab-content   { background: #0d0e14 !important; }
+  [data-theme="dark"] .pnew-section-hdr   { border-bottom-color: rgba(255,255,255,0.06) !important; color: #4a5068 !important; }
+
+  [data-theme="dark"] .pnew-level-block {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .pnew-level-track { background: rgba(255,255,255,0.06) !important; }
+  [data-theme="dark"] .pnew-level-fill  { background: #7c6fe8 !important; }
+  [data-theme="dark"] .pnew-level-lbl   { color: #9d93f0 !important; }
+  [data-theme="dark"] .pnew-level-pts,
+  [data-theme="dark"] .pnew-level-next  { color: #4a5068 !important; }
+
+  [data-theme="dark"] .pnew-stats-grid  { border-color: rgba(255,255,255,0.07) !important; }
+
+  [data-theme="dark"] .pnew-stat-cell {
+    background: #0d0e14 !important;
+    border-right-color: rgba(255,255,255,0.05) !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .pnew-stat-val   { color: #e8eaf2 !important; }
+  [data-theme="dark"] .pnew-stat-lbl   { color: #4a5068 !important; }
+
+  [data-theme="dark"] .pnew-achievements-grid { border-color: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .pnew-ach-card {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .pnew-ach-card:hover { background: #13151f !important; }
+  [data-theme="dark"] .pnew-ach-name  { color: #e8eaf2 !important; }
+  [data-theme="dark"] .pnew-ach-desc  { color: #4a5068 !important; }
+
+  [data-theme="dark"] .pnew-crowns-hero {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .pnew-crowns-num { color: #e0b84a !important; }
+  [data-theme="dark"] .pnew-crowns-lbl { color: #4a5068 !important; }
+
+  [data-theme="dark"] .pnew-month-grid { border-color: rgba(255,255,255,0.07) !important; }
+  [data-theme="dark"] .pnew-month-cell {
+    background: #0d0e14 !important;
+    border-right-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .pnew-month-val { color: #e8eaf2 !important; }
+  [data-theme="dark"] .pnew-month-lbl { color: #4a5068 !important; }
+
+  [data-theme="dark"] .pnew-crown-list { border-color: rgba(255,255,255,0.07) !important; }
+  [data-theme="dark"] .pnew-crown-row  {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .pnew-crown-month { color: #e8eaf2 !important; }
+  [data-theme="dark"] .pnew-crown-pts   { color: #3dd68c !important; }
+
+  [data-theme="dark"] .pnew-hist-card {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .pnew-hist-card-hdr,
+  [data-theme="dark"] .pnew-hist-card-ftr {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .pnew-hist-league,
+  [data-theme="dark"] .pnew-hist-date  { color: #4a5068 !important; }
+  [data-theme="dark"] .pnew-hist-tname { color: #e8eaf2 !important; }
+
+  [data-theme="dark"] .pnew-hist-logo {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .pnew-hist-score {
+    background: rgba(124,111,232,0.08) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+    color: #9d93f0 !important;
+  }
+
+  [data-theme="dark"] .pnew-hist-result--exact   { color: #e0b84a !important; border-color: rgba(224,184,74,0.3) !important; background: rgba(224,184,74,0.06) !important; }
+  [data-theme="dark"] .pnew-hist-result--correct { color: #3dd68c !important; border-color: rgba(61,214,140,0.3) !important; background: rgba(61,214,140,0.05) !important; }
+  [data-theme="dark"] .pnew-hist-result--wrong   { color: #f07070 !important; border-color: rgba(240,112,112,0.3) !important; background: rgba(240,112,112,0.05) !important; }
+  [data-theme="dark"] .pnew-hist-result--pending { color: #4a5068 !important; border-color: rgba(255,255,255,0.07) !important; }
+  [data-theme="dark"] .pnew-hist-pts { background: #7c6fe8 !important; color: #fff !important; }
+
+  [data-theme="dark"] .pnew-settings-card { border-color: rgba(255,255,255,0.07) !important; }
+
+  [data-theme="dark"] .pnew-settings-card-hdr {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .pnew-settings-card-body { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .pnew-setting-row {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .pnew-setting-row--danger { background: rgba(240,112,112,0.03) !important; }
+  [data-theme="dark"] .pnew-setting-lbl  { color: #e8eaf2 !important; }
+  [data-theme="dark"] .pnew-setting-desc { color: #4a5068 !important; }
+
+  [data-theme="dark"] .pnew-toggle { background: rgba(255,255,255,0.1) !important; }
+  [data-theme="dark"] .pnew-toggle--on { background: #7c6fe8 !important; }
+  [data-theme="dark"] .pnew-toggle-knob { background: #e8eaf2 !important; }
+
+  [data-theme="dark"] .pnew-form-input {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .pnew-form-input:focus {
+    border-color: #7c6fe8 !important;
+    background: rgba(124,111,232,0.07) !important;
+  }
+
+  [data-theme="dark"] .pnew-save-btn { background: #7c6fe8 !important; }
+  [data-theme="dark"] .pnew-save-btn:hover:not(:disabled) { background: #6358d4 !important; }
+
+  [data-theme="dark"] .pnew-cancel-btn {
+    border-color: rgba(255,255,255,0.08) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .pnew-cancel-btn:hover { border-color: #7c6fe8 !important; color: #9d93f0 !important; }
+
+  [data-theme="dark"] .pnew-count-badge { background: #7c6fe8 !important; }
+
+  [data-theme="dark"] .pnew-equipped-tag {
+    background: rgba(124,111,232,0.1) !important;
+    border-color: rgba(124,111,232,0.3) !important;
+    color: #9d93f0 !important;
+  }
+
+  [data-theme="dark"] .pnew-sort-modal {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.08) !important;
+  }
+
+  [data-theme="dark"] .pnew-sort-opt {
+    color: #e8eaf2 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .pnew-sort-opt:hover { background: #0d0e14 !important; }
+  [data-theme="dark"] .pnew-sort-opt.active { background: #7c6fe8 !important; color: #fff !important; }
+
+  [data-theme="dark"] .pnew-sort-btn {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .pnew-sort-btn.active,
+  [data-theme="dark"] .pnew-sort-btn:hover { border-color: #7c6fe8 !important; color: #9d93f0 !important; }
+
+  [data-theme="dark"] .pnew-select {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .pnew-btn-secondary {
+    background: transparent !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    color: #8b90a8 !important;
+  }
+
+  [data-theme="dark"] .pnew-banner-opt {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .pnew-title-row {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .pnew-titles-list { border-color: rgba(255,255,255,0.07) !important; }
+}
+
+/* ================================================================
+   ADMIN PAGE — admin-page, admin-shell-row
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .admin-page { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .admin-stats-overview { border-bottom-color: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .admin-stat-card {
+    background: #13151f !important;
+    border-right-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .admin-stat-card:hover { background: #0d0e14 !important; }
+  [data-theme="dark"] .admin-stat-card .stat-label { color: #4a5068 !important; }
+  [data-theme="dark"] .admin-stat-card .stat-value { color: #e8eaf2 !important; }
+  [data-theme="dark"] .admin-stat-card .stat-detail { color: #4a5068 !important; }
+
+  [data-theme="dark"] .admin-nav-tabs {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .admin-nav-tab { color: #4a5068 !important; }
+  [data-theme="dark"] .admin-nav-tab:hover:not(.active) { color: #e8eaf2 !important; }
+  [data-theme="dark"] .admin-nav-tab.active { color: #9d93f0 !important; border-bottom-color: #7c6fe8 !important; }
+
+  [data-theme="dark"] .admin-controls {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .search-bar {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .search-bar:focus-within { border-color: #7c6fe8 !important; }
+  [data-theme="dark"] .search-bar input { color: #e8eaf2 !important; }
+
+  [data-theme="dark"] .filter-btn {
+    border-color: rgba(255,255,255,0.06) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .filter-btn:hover { color: #9d93f0 !important; }
+  [data-theme="dark"] .filter-btn.active { background: #7c6fe8 !important; border-color: #7c6fe8 !important; color: #fff !important; }
+
+  [data-theme="dark"] .admin-content-area { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .match-list-header {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .match-list-row {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.04) !important;
+  }
+
+  [data-theme="dark"] .match-list-row:hover { background: rgba(255,255,255,0.02) !important; }
+
+  [data-theme="dark"] .mlr-teams { color: #e8eaf2 !important; }
+  [data-theme="dark"] .mlr-league-name { color: #4a5068 !important; }
+  [data-theme="dark"] .mlr-date { color: #4a5068 !important; }
+
+  [data-theme="dark"] .match-list-footer {
+    background: #13151f !important;
+    border-top-color: rgba(255,255,255,0.05) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .match-list-footer strong { color: #e8eaf2 !important; }
+
+  [data-theme="dark"] .admin-items-grid .admin-item-card {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.04) !important;
+  }
+
+  [data-theme="dark"] .admin-items-grid .admin-item-card:hover { background: rgba(255,255,255,0.02) !important; }
+
+  [data-theme="dark"] .item-title    { color: #e8eaf2 !important; }
+  [data-theme="dark"] .item-subtitle { color: #4a5068 !important; }
+
+  [data-theme="dark"] .top-user-card {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.04) !important;
+  }
+
+  [data-theme="dark"] .top-user-card:hover { background: rgba(255,255,255,0.02) !important; }
+  [data-theme="dark"] .top-user-card .name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .top-user-card .points { color: #3dd68c !important; }
+  [data-theme="dark"] .top-user-card .championships { color: #4a5068 !important; }
+
+  [data-theme="dark"] .top-user-card.top1 .position {
+    background: rgba(224,184,74,0.1) !important;
+    color: #e0b84a !important;
+    border-color: rgba(224,184,74,0.3) !important;
+  }
+
+  [data-theme="dark"] .history-item {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.04) !important;
+  }
+
+  [data-theme="dark"] .history-item:hover { background: rgba(255,255,255,0.02) !important; }
+  [data-theme="dark"] .history-item .month { color: #e8eaf2 !important; }
+  [data-theme="dark"] .history-item .winner { color: #4a5068 !important; }
+  [data-theme="dark"] .history-item .points { color: #3dd68c !important; }
+
+  [data-theme="dark"] .section-header {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .section-header h3 { color: #4a5068 !important; }
+  [data-theme="dark"] .empty-history { color: #4a5068 !important; }
+
+  [data-theme="dark"] .admin-empty-state { color: #4a5068 !important; }
+  [data-theme="dark"] .admin-empty-state p { color: #4a5068 !important; }
+
+  /* Admin Right Panel */
+  [data-theme="dark"] .adm-panel {
+    background: #13151f !important;
+    border-left-color: rgba(255,255,255,0.05) !important;
+    border-top-color: #7c6fe8 !important;
+  }
+
+  [data-theme="dark"] .adm-panel-header {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .adm-panel-header-title { color: #e8eaf2 !important; }
+
+  [data-theme="dark"] .adm-input {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .adm-input:focus { border-color: #7c6fe8 !important; }
+  [data-theme="dark"] .adm-input::placeholder { color: #4a5068 !important; }
+
+  [data-theme="dark"] .adm-label { color: #e8eaf2 !important; }
+  [data-theme="dark"] .adm-hint  { color: #4a5068 !important; }
+
+  [data-theme="dark"] .adm-section-sep {
+    color: #4a5068 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .adm-logo-preview {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .adm-submit-btn   { background: #7c6fe8 !important; }
+  [data-theme="dark"] .adm-submit-btn--green { background: #1D9E75 !important; }
+  [data-theme="dark"] .adm-submit-btn--gold  { background: #c9a227 !important; }
+
+  [data-theme="dark"] .adm-user-list {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .adm-user-item {
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .adm-user-item:hover { background: rgba(255,255,255,0.02) !important; }
+  [data-theme="dark"] .adm-user-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .adm-user-pts  { color: #4a5068 !important; }
+
+  /* Admin Modals */
+  [data-theme="dark"] .am2-shell {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    border-top-color: #7c6fe8 !important;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.8) !important;
+  }
+
+  [data-theme="dark"] .am2-header {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .am2-header-text h2 { color: #e8eaf2 !important; }
+  [data-theme="dark"] .am2-header-text p  { color: #4a5068 !important; }
+
+  [data-theme="dark"] .am2-body { background: #13151f !important; }
+  [data-theme="dark"] .am2-section-title { color: #4a5068 !important; border-bottom-color: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .am2-input {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .am2-input:focus { border-color: #7c6fe8 !important; }
+  [data-theme="dark"] .am2-label { color: #e8eaf2 !important; }
+  [data-theme="dark"] .am2-hint  { color: #4a5068 !important; }
+
+  [data-theme="dark"] .am2-footer {
+    background: #0d0e14 !important;
+    border-top-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .am2-btn--cancel { border-color: rgba(255,255,255,0.08) !important; color: #4a5068 !important; }
+  [data-theme="dark"] .am2-btn--cancel:hover:not(:disabled) { border-color: #e8eaf2 !important; color: #e8eaf2 !important; }
+  [data-theme="dark"] .am2-btn--submit { background: #7c6fe8 !important; border-color: #7c6fe8 !important; }
+}
+
+/* ================================================================
+   NOTIFICATIONS PAGE — np-shell
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .np-page   { background: #0d0e14 !important; }
+  [data-theme="dark"] .np-shell  { background: #0d0e14 !important; }
+  [data-theme="dark"] .np-main   { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .np-topbar {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .np-topbar-title { color: #4a5068 !important; }
+  [data-theme="dark"] .np-topbar-dot   { background: #7c6fe8 !important; }
+  [data-theme="dark"] .np-topbar-count { background: rgba(124,111,232,0.12) !important; color: #9d93f0 !important; }
+
+  [data-theme="dark"] .np-push-btn {
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .np-push-btn--on { background: #7c6fe8 !important; border-color: #7c6fe8 !important; color: #fff !important; }
+
+  [data-theme="dark"] .np-banner {
+    background: rgba(124,111,232,0.06) !important;
+    border-bottom-color: rgba(124,111,232,0.15) !important;
+    border-left-color: #7c6fe8 !important;
+  }
+
+  [data-theme="dark"] .np-banner-icon  { background: rgba(124,111,232,0.1) !important; color: #9d93f0 !important; }
+  [data-theme="dark"] .np-banner-title { color: #e8eaf2 !important; }
+  [data-theme="dark"] .np-banner-sub   { color: #4a5068 !important; }
+  [data-theme="dark"] .np-banner-btn   { background: #7c6fe8 !important; }
+
+  [data-theme="dark"] .np-filters {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .np-filter-btn {
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .np-filter-btn.active { background: #7c6fe8 !important; border-color: #7c6fe8 !important; color: #fff !important; }
+
+  [data-theme="dark"] .np-card {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.04) !important;
+  }
+
+  [data-theme="dark"] .np-card:hover { background: rgba(255,255,255,0.015) !important; }
+  [data-theme="dark"] .np-card-stripe--new      { background: #7c6fe8 !important; }
+  [data-theme="dark"] .np-card-stripe--finished { background: #3dd68c !important; }
+
+  [data-theme="dark"] .np-card-badge--new      { background: #7c6fe8 !important; }
+  [data-theme="dark"] .np-card-badge--finished { background: #145c3a !important; }
+
+  [data-theme="dark"] .np-card-title      { color: #e8eaf2 !important; }
+  [data-theme="dark"] .np-card-meta-item  { color: #4a5068 !important; }
+  [data-theme="dark"] .np-card-meta-sep   { color: rgba(255,255,255,0.06) !important; }
+
+  [data-theme="dark"] .np-card-icon-wrap--new {
+    background: rgba(124,111,232,0.08) !important;
+    color: #7c6fe8 !important;
+  }
+
+  [data-theme="dark"] .np-card-icon-wrap--finished {
+    background: rgba(61,214,140,0.06) !important;
+    color: #3dd68c !important;
+  }
+
+  [data-theme="dark"] .np-card-result {
+    background: rgba(61,214,140,0.06) !important;
+    border-color: rgba(61,214,140,0.18) !important;
+    color: #3dd68c !important;
+  }
+
+  /* Sidebar de notificaciones */
+  [data-theme="dark"] .np-sidebar {
+    background: #0d0e14 !important;
+    border-left-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .np-sidebar-label {
+    color: #4a5068 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .np-sidebar-block-lbl { color: #4a5068 !important; }
+  [data-theme="dark"] .np-sidebar-num       { color: #e8eaf2 !important; }
+  [data-theme="dark"] .np-sidebar-num--accent { color: #9d93f0 !important; }
+  [data-theme="dark"] .np-sidebar-sub       { color: #4a5068 !important; }
+  [data-theme="dark"] .np-sidebar-sep       { background: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .np-sidebar-type {
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .np-sidebar-type-num { color: #e8eaf2 !important; }
+  [data-theme="dark"] .np-sidebar-type-lbl { color: #4a5068 !important; }
+
+  [data-theme="dark"] .np-sidebar-push {
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .np-sidebar-push--on {
+    background: rgba(61,214,140,0.06) !important;
+    border-color: rgba(61,214,140,0.18) !important;
+    color: #3dd68c !important;
+  }
+
+  [data-theme="dark"] .np-sidebar-accent { background: #7c6fe8 !important; }
+
+  [data-theme="dark"] .np-loading { color: #4a5068 !important; }
+  [data-theme="dark"] .np-empty-title { color: #e8eaf2 !important; }
+  [data-theme="dark"] .np-empty-sub   { color: #4a5068 !important; }
+  [data-theme="dark"] .np-empty-icon-wrap {
+    border-color: rgba(255,255,255,0.06) !important;
+    color: rgba(255,255,255,0.08) !important;
+  }
+}
+
+/* ================================================================
+   WORLD CUP PAGE — wcp-shell
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .wcp-shell { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .wcp-hero        { background: #050608 !important; border-bottom-color: #e0b84a !important; }
+  [data-theme="dark"] .wcp-hero-left   { border-right-color: rgba(224,184,74,0.15) !important; }
+  [data-theme="dark"] .wcp-hero-title  { color: #e8eaf2 !important; }
+  [data-theme="dark"] .wcp-hero-subtitle { color: rgba(232,234,242,0.3) !important; }
+  [data-theme="dark"] .wcp-hero-stat   { background: #050608 !important; }
+  [data-theme="dark"] .wcp-hero-stat-lbl { color: rgba(255,255,255,0.2) !important; }
+
+  [data-theme="dark"] .wcp-tabs {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .wcp-tab         { color: #4a5068 !important; }
+  [data-theme="dark"] .wcp-tab:hover   { color: #e8eaf2 !important; }
+  [data-theme="dark"] .wcp-tab.active  { color: #9d93f0 !important; border-bottom-color: #7c6fe8 !important; }
+
+  [data-theme="dark"] .wcp-save-btn { background: #7c6fe8 !important; }
+  [data-theme="dark"] .wcp-save-btn:hover { background: #6358d4 !important; }
+
+  [data-theme="dark"] .wcp-body { background: #0d0e14 !important; }
+
+  [data-theme="dark"] .wcp-section-title { color: #e8eaf2 !important; }
+  [data-theme="dark"] .wcp-section-sub   { color: #4a5068 !important; }
+  [data-theme="dark"] .wcp-section-hdr   { border-bottom-color: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .wcp-section-num {
+    background: rgba(124,111,232,0.08) !important;
+    border-color: rgba(124,111,232,0.2) !important;
+    color: #9d93f0 !important;
+  }
+
+  [data-theme="dark"] .wcp-groups-grid {
+    border-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .wcp-group-card {
+    background: #13151f !important;
+    border-right-color: rgba(255,255,255,0.06) !important;
+    border-bottom-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .wcp-group-card:hover { background: #161825 !important; }
+
+  [data-theme="dark"] .wcp-group-card--active {
+    background: rgba(124,111,232,0.07) !important;
+    border-color: rgba(124,111,232,0.25) !important;
+  }
+
+  [data-theme="dark"] .wcp-group-hdr {
+    background: #1a1d2e !important;
+    border-bottom-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .wcp-group-hdr:hover { background: #1f2238 !important; }
+  [data-theme="dark"] .wcp-group-lbl { color: #e8eaf2 !important; }
+  [data-theme="dark"] .wcp-group-arrow { color: #4a5068 !important; }
+
+  [data-theme="dark"] .wcp-group-table th { background: #0d0e14 !important; color: #4a5068 !important; }
+  [data-theme="dark"] .wcp-group-table tbody tr { border-bottom-color: rgba(255,255,255,0.04) !important; }
+  [data-theme="dark"] .wcp-group-table td { color: #e8eaf2 !important; }
+  [data-theme="dark"] .wcp-team-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .wcp-pts-bold  { color: #e8eaf2 !important; }
+
+  [data-theme="dark"] .wcp-group-hint {
+    background: #1a1d2e !important;
+    color: #4a5068 !important;
+    border-top-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .wcp-group-hint:hover { color: #9d93f0 !important; background: rgba(124,111,232,0.07) !important; }
+
+  [data-theme="dark"] .wcp-thirds-wrap {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .wcp-thirds-hdr  {
+    background: #1a1d2e !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .wcp-thirds-title { color: #e8eaf2 !important; }
+  [data-theme="dark"] .wcp-thirds-table th { color: #4a5068 !important; }
+  [data-theme="dark"] .wcp-thirds-table td { color: #e8eaf2 !important; }
+  [data-theme="dark"] .wcp-thirds-table tbody tr { border-bottom-color: rgba(255,255,255,0.04) !important; }
+
+  [data-theme="dark"] .wcp-grp-badge {
+    background: rgba(124,111,232,0.1) !important;
+    border-color: rgba(124,111,232,0.2) !important;
+    color: #9d93f0 !important;
+  }
+
+  /* Awards WorldCup */
+  [data-theme="dark"] .wcp-awards-grid { border-color: rgba(255,255,255,0.06) !important; }
+
+  [data-theme="dark"] .wcp-award-card {
+    background: #13151f !important;
+    border-right-color: rgba(255,255,255,0.06) !important;
+    border-bottom-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .wcp-award-hdr { background: #050608 !important; border-bottom-color: rgba(255,255,255,0.06) !important; }
+  [data-theme="dark"] .wcp-award-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .wcp-award-category { color: rgba(232,234,242,0.3) !important; }
+
+  [data-theme="dark"] .wcp-award-label {
+    background: #1a1d2e !important;
+    color: #4a5068 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .wcp-award-input {
+    background: #13151f !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .wcp-award-input:focus { background: rgba(224,184,74,0.04) !important; }
+  [data-theme="dark"] .wcp-award-input::placeholder { color: #4a5068 !important; }
+
+  /* WorldCup Right Panel */
+  [data-theme="dark"] .rpw-root {
+    background: #0d0e14 !important;
+    border-left-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .rpw-header {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .rpw-header-title { color: #e8eaf2 !important; }
+  [data-theme="dark"] .rpw-header-sub   { color: #4a5068 !important; }
+  [data-theme="dark"] .rpw-group-badge  { background: #7c6fe8 !important; }
+
+  [data-theme="dark"] .rpw-close-btn {
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .rpw-block         { border-bottom-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .rpw-block-label   { color: #4a5068 !important; }
+  [data-theme="dark"] .rpw-label-line    { background: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .rpw-table th      { background: #0d0e14 !important; color: #4a5068 !important; }
+  [data-theme="dark"] .rpw-table td      { color: #e8eaf2 !important; }
+  [data-theme="dark"] .rpw-table tbody tr { border-bottom-color: rgba(255,255,255,0.04) !important; }
+  [data-theme="dark"] .rpw-table tbody tr:hover { background: rgba(255,255,255,0.02) !important; }
+
+  [data-theme="dark"] .rpw-team-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .rpw-pts       { color: #9d93f0 !important; }
+  [data-theme="dark"] .rpw-gd-pos    { color: #3dd68c !important; }
+  [data-theme="dark"] .rpw-gd-neg    { color: #f07070 !important; }
+  [data-theme="dark"] .rpw-pos       { color: #4a5068 !important; }
+
+  [data-theme="dark"] .rpw-score-input {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .rpw-score-input:focus { border-color: #7c6fe8 !important; box-shadow: 0 0 0 2px rgba(124,111,232,0.12) !important; }
+
+  [data-theme="dark"] .rpw-score-input:not(:placeholder-shown) {
+    background: rgba(61,214,140,0.06) !important;
+    border-color: rgba(61,214,140,0.3) !important;
+    color: #3dd68c !important;
+  }
+
+  [data-theme="dark"] .rpw-score-sep { color: #4a5068 !important; }
+  [data-theme="dark"] .rpw-match-team-name { color: #e8eaf2 !important; }
+
+  [data-theme="dark"] .rpw-legend {
+    background: #13151f !important;
+    border-top-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .rpw-legend-item { color: #4a5068 !important; }
+  [data-theme="dark"] .rpw-legend-dot { background: #3dd68c !important; }
+  [data-theme="dark"] .rpw-legend-dot--t { background: #e0b84a !important; }
+
+  /* Knockout Section inside World Cup */
+  [data-theme="dark"] .knockout-stage {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .knockout-stage-header {
+    background: #050608 !important;
+    border-bottom-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .knockout-stage-header h2 { color: #e8eaf2 !important; }
+  [data-theme="dark"] .knockout-side { border-right-color: rgba(255,255,255,0.06) !important; }
+
+  [data-theme="dark"] .knockout-side-title {
+    background: #1a1d2e !important;
+    color: #4a5068 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .knockout-quarter-title {
+    background: #13151f !important;
+    color: #4a5068 !important;
+    border-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .knockout-match-card {
+    background: #13151f !important;
+    border-right-color: rgba(255,255,255,0.06) !important;
+    border-bottom-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .knockout-match-label { color: #9d93f0 !important; }
+  [data-theme="dark"] .knockout-match-id    { color: #4a5068 !important; }
+  [data-theme="dark"] .knockout-vs          { color: #4a5068 !important; }
+
+  [data-theme="dark"] .knockout-team-option {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .knockout-team-option:hover:not(.disabled) {
+    background: rgba(124,111,232,0.07) !important;
+    border-color: rgba(124,111,232,0.3) !important;
+  }
+
+  [data-theme="dark"] .knockout-team-option.selected {
+    background: rgba(61,214,140,0.06) !important;
+    border-color: #3dd68c !important;
+  }
+
+  [data-theme="dark"] .knockout-team-name   { color: #e8eaf2 !important; }
+  [data-theme="dark"] .knockout-check-icon  { color: #3dd68c !important; }
+
+  [data-theme="dark"] .knockout-match-footer {
+    border-top-color: rgba(255,255,255,0.06) !important;
+    color: #3dd68c !important;
+  }
+
+  [data-theme="dark"] .knockout-final-header {
+    background: #050608 !important;
+    border-bottom-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .knockout-final-description {
+    background: #1a1d2e !important;
+    color: #4a5068 !important;
+    border-bottom-color: rgba(255,255,255,0.06) !important;
+  }
+}
+
+/* ================================================================
+   RIGHT PANEL DASHBOARD — rp-root
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .rp-root {
+    background: #0d0e14 !important;
+    border-left-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .rp-section       { border-bottom-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .rp-section-label { color: #4a5068 !important; }
+  [data-theme="dark"] .rp-section-label::after { background: rgba(255,255,255,0.05) !important; }
+
+  [data-theme="dark"] .rp-user-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .rp-user-role { color: #4a5068 !important; }
+  [data-theme="dark"] .rp-level-track { background: rgba(255,255,255,0.06) !important; }
+  [data-theme="dark"] .rp-level-lbl   { color: #4a5068 !important; }
+
+  [data-theme="dark"] .rp-stat {
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .rp-stat-val { color: #e8eaf2 !important; }
+  [data-theme="dark"] .rp-stat-lbl { color: #4a5068 !important; }
+  [data-theme="dark"] .rp-stat-val--accent { color: #9d93f0 !important; }
+  [data-theme="dark"] .rp-stat-val--green  { color: #3dd68c !important; }
+  [data-theme="dark"] .rp-stat-sub { color: #3dd68c !important; }
+
+  [data-theme="dark"] .rp-rank-item { border-bottom-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .rp-rank-item:hover { background: rgba(124,111,232,0.06) !important; }
+  [data-theme="dark"] .rp-rank-item--me {
+    background: rgba(124,111,232,0.08) !important;
+    border-left-color: #7c6fe8 !important;
+  }
+
+  [data-theme="dark"] .rp-rank-item--outside { border-top-color: rgba(255,255,255,0.05) !important; }
+  [data-theme="dark"] .rp-rank-avatar { background: rgba(255,255,255,0.07) !important; }
+  [data-theme="dark"] .rp-rank-avatar span { color: #8b90a8 !important; }
+  [data-theme="dark"] .rp-rank-name  { color: #e8eaf2 !important; }
+  [data-theme="dark"] .rp-rank-pos   { color: #4a5068 !important; }
+  [data-theme="dark"] .rp-rank-pts   { color: #9d93f0 !important; }
+  [data-theme="dark"] .rp-you-tag    { color: #9d93f0 !important; border-color: rgba(124,111,232,0.3) !important; }
+
+  [data-theme="dark"] .rp-next-match { background: #7c6fe8 !important; }
+  [data-theme="dark"] .rp-next-shield {
+    background: rgba(255,255,255,0.1) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+  }
+
+  [data-theme="dark"] .rp-next-meta  { border-top-color: rgba(255,255,255,0.1) !important; }
+}
+
+/* ================================================================
+   DASHBOARD SIDEBAR — dsb-root
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .dsb-root { /* ya manejado por variables globales */ }
+
+  [data-theme="dark"] .dsb-card {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .dsb-num-box {
+    background: #080910 !important;
+    border-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .dsb-rival-row:hover { background: rgba(255,255,255,0.025) !important; }
+
+  [data-theme="dark"] .dsb-rival-row.dsb-rival-me {
+    background: rgba(124,111,232,0.1) !important;
+    border-color: rgba(124,111,232,0.22) !important;
+  }
+}
+
+/* ================================================================
+   MODALES GENERALES — am2-backdrop / modal-backdrop-premium
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .am2-backdrop,
+  [data-theme="dark"] .modal-backdrop-premium {
+    background: rgba(4, 4, 8, 0.85) !important;
+  }
+
+  [data-theme="dark"] .modal-premium {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    border-top-color: #7c6fe8 !important;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.85) !important;
+  }
+
+  [data-theme="dark"] .modal-header-premium {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .modal-title-premium    { color: #e8eaf2 !important; }
+  [data-theme="dark"] .modal-subtitle-premium { color: #4a5068 !important; }
+
+  [data-theme="dark"] .modal-icon-wrapper {
+    background: rgba(124,111,232,0.08) !important;
+    border-color: rgba(124,111,232,0.18) !important;
+  }
+
+  [data-theme="dark"] .modal-close-btn {
+    border-color: rgba(255,255,255,0.07) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .modal-close-btn:hover {
+    border-color: #f07070 !important;
+    color: #f07070 !important;
+    background: rgba(240,112,112,0.06) !important;
+  }
+
+  [data-theme="dark"] .modal-body-premium { background: #13151f !important; }
+
+  [data-theme="dark"] .form-input-premium {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .form-input-premium:focus { border-color: #7c6fe8 !important; }
+  [data-theme="dark"] .form-input-premium::placeholder { color: #4a5068 !important; }
+
+  [data-theme="dark"] .modal-footer-premium {
+    background: #0d0e14 !important;
+    border-top-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .modal-btn-premium.primary  { background: #7c6fe8 !important; border-color: #7c6fe8 !important; }
+  [data-theme="dark"] .modal-btn-premium.secondary { border-color: rgba(255,255,255,0.08) !important; color: #4a5068 !important; }
+  [data-theme="dark"] .modal-btn-premium.secondary:hover { border-color: #e8eaf2 !important; color: #e8eaf2 !important; }
+
+  [data-theme="dark"] .logo-preview-section {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  /* FM2 — Finish Match Modal */
+  [data-theme="dark"] .fm2-match-card {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .fm2-team-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .fm2-vs > span:first-child { border-color: rgba(255,255,255,0.07) !important; color: #4a5068 !important; }
+
+  [data-theme="dark"] .fm2-score-sep { color: rgba(255,255,255,0.08) !important; }
+
+  [data-theme="dark"] .fm2-team-btn {
+    border-color: rgba(255,255,255,0.07) !important;
+    background: #0d0e14 !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .fm2-team-btn--selected {
+    border-color: #3dd68c !important;
+    background: rgba(61,214,140,0.05) !important;
+  }
+
+  [data-theme="dark"] .fm2-team-btn--selected .fm2-team-btn-name { color: #3dd68c !important; }
+  [data-theme="dark"] .fm2-team-btn-check { color: #3dd68c !important; }
+
+  [data-theme="dark"] .fm2-knockout-section {
+    background: rgba(224,184,74,0.03) !important;
+    border-color: rgba(224,184,74,0.15) !important;
+  }
+
+  [data-theme="dark"] .fm2-info-box {
+    background: rgba(124,111,232,0.04) !important;
+    border-color: rgba(124,111,232,0.12) !important;
+    color: #4a5068 !important;
+  }
+
+  /* Admin Crown Modal */
+  [data-theme="dark"] .admin-crown-modal {
+    background: #13151f !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .modal-header {
+    background: rgba(26,29,46,0.5) !important;
+    border-bottom-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .modal-header h2 { color: #e8eaf2 !important; }
+
+  [data-theme="dark"] .modal-content .user-info {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .modal-content .user-detail .label { color: #4a5068 !important; }
+  [data-theme="dark"] .modal-content .user-detail .value { color: #e8eaf2 !important; }
+
+  [data-theme="dark"] .modal-content .form-group input {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .modal-actions {
+    background: #0d0e14 !important;
+    border-top-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .cancel-btn {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    color: #e8eaf2 !important;
+  }
+
+  /* Banners en modales */
+  [data-theme="dark"] .banners-admin-grid .banner-admin-card {
+    background: #0d0e14 !important;
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .banners-admin-grid .banner-admin-card:hover { background: rgba(255,255,255,0.02) !important; }
+
+  [data-theme="dark"] .banner-admin-preview {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .banner-admin-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .banner-admin-desc { color: #4a5068 !important; }
+
+  [data-theme="dark"] .assign-user-list {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .assign-user-item {
+    border-bottom-color: rgba(255,255,255,0.05) !important;
+  }
+
+  [data-theme="dark"] .assign-user-item:hover { background: rgba(255,255,255,0.02) !important; }
+  [data-theme="dark"] .assign-user-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .assign-user-pts  { color: #4a5068 !important; }
+
+  [data-theme="dark"] .assign-banners-grid .assign-banner-card {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .assign-banners-grid .assign-banner-card.selected {
+    border-color: #3dd68c !important;
+    box-shadow: 0 0 0 1px #3dd68c !important;
+  }
+
+  [data-theme="dark"] .assign-banner-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .assign-banner-tag  { color: #3dd68c !important; }
+  [data-theme="dark"] .assign-banner-check { background: #3dd68c !important; }
+
+  [data-theme="dark"] .assign-banner-chip {
+    background: rgba(124,111,232,0.07) !important;
+    border-color: rgba(124,111,232,0.18) !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .banner-drop-zone {
+    border-color: rgba(255,255,255,0.08) !important;
+    background: #0d0e14 !important;
+  }
+
+  [data-theme="dark"] .banner-drop-zone:hover,
+  [data-theme="dark"] .banner-drop-zone--active {
+    border-color: #7c6fe8 !important;
+    background: rgba(124,111,232,0.04) !important;
+  }
+
+  [data-theme="dark"] .banner-drop-icon {
+    background: rgba(124,111,232,0.08) !important;
+    border-color: rgba(124,111,232,0.15) !important;
+    color: #9d93f0 !important;
+  }
+
+  [data-theme="dark"] .banner-drop-text { color: #e8eaf2 !important; }
+  [data-theme="dark"] .banner-drop-hint { color: #4a5068 !important; }
+}
+
+/* ================================================================
+   USER PROFILE MODAL — desktop
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .user-modal-overlay    { background: rgba(4,4,8,0.88) !important; }
+  [data-theme="dark"] .user-modal-container  { background: #13151f !important; border-color: rgba(255,255,255,0.07) !important; }
+  [data-theme="dark"] .user-modal-header     { background: #0d0e14 !important; border-bottom-color: rgba(255,255,255,0.05) !important; }
+}
+
+/* ================================================================
+   TOAST — desktop
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .toast-notification {
+    background: #13151f !important;
+    border-color: rgba(124,111,232,0.25) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 0 0 1px rgba(124,111,232,0.15) inset !important;
+  }
+
+  /* Typed toasts keep their colors */
+  [data-theme="dark"] .toast-notification.success { background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important; }
+  [data-theme="dark"] .toast-notification.error   { background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important; }
+  [data-theme="dark"] .toast-notification.warning { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important; }
+  [data-theme="dark"] .toast-notification.info    { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important; }
+
+  [data-theme="dark"] .toast-message { color: #e8eaf2 !important; }
+  [data-theme="dark"] .toast-close {
+    background: rgba(255,255,255,0.06) !important;
+    color: #8b90a8 !important;
+  }
+}
+
+/* ================================================================
+   GLOBAL LOADER — desktop deep dark
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] {
+    --gl-color: #7c6fe8;
+    --gl-muted:  rgba(255, 255, 255, 0.07);
+    --gl-bg:     #0d0e14;
+    --gl-card:   #13151f;
+    --gl-text:   #4a5068;
+  }
+
+  [data-theme="dark"] .gl-page         { background: #0d0e14 !important; }
+  [data-theme="dark"] .gl-overlay      { background: rgba(4, 4, 8, 0.75) !important; }
+  [data-theme="dark"] .gl-overlay-inner {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.07) !important;
+  }
+
+  [data-theme="dark"] .gl-page-inner::before {
+    border-color: rgba(255,255,255,0.05) !important;
+  }
+}
+
+/* ================================================================
+   AUTH PAGE — desktop (inside phone frame)
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] .auth-wrapper     { background: #0d0e14 !important; }
+  [data-theme="dark"] .auth-wrapper::before {
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.02) 39px, rgba(255,255,255,0.02) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.02) 39px, rgba(255,255,255,0.02) 40px) !important;
+  }
+
+  [data-theme="dark"] .auth-phone-frame {
+    background: #0d0e14 !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    box-shadow: 6px 6px 0 rgba(124,111,232,0.25) !important;
+  }
+
+  [data-theme="dark"] .auth-phone-status { background: #050608 !important; }
+
+  [data-theme="dark"] .auth-inner { background: #0d0e14 !important; }
+  [data-theme="dark"] .auth-inner::before { background: rgba(124,111,232,0.08) !important; }
+
+  [data-theme="dark"] .auth-form-title { color: #e8eaf2 !important; }
+  [data-theme="dark"] .auth-form-sub   { color: #4a5068 !important; }
+  [data-theme="dark"] .auth-brand-name { color: #e8eaf2 !important; }
+  [data-theme="dark"] .auth-brand-sq   { background: #7c6fe8 !important; }
+
+  [data-theme="dark"] .auth-divider-line { background: rgba(255,255,255,0.06) !important; }
+  [data-theme="dark"] .auth-field-label  { color: #4a5068 !important; }
+  [data-theme="dark"] .auth-field-icon   { color: #4a5068 !important; }
+
+  [data-theme="dark"] .auth-input {
+    background: #13151f !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    color: #e8eaf2 !important;
+  }
+
+  [data-theme="dark"] .auth-input:focus {
+    border-color: #7c6fe8 !important;
+    box-shadow: 0 0 0 2px rgba(124,111,232,0.12) !important;
+  }
+
+  [data-theme="dark"] .auth-input::placeholder { color: #4a5068 !important; }
+
+  [data-theme="dark"] .auth-cta-btn {
+    background: #7c6fe8 !important;
+  }
+
+  [data-theme="dark"] .auth-cta-btn:hover { background: #6358d4 !important; }
+
+  [data-theme="dark"] .auth-btn-secondary {
+    border-color: rgba(255,255,255,0.08) !important;
+    color: #4a5068 !important;
+  }
+
+  [data-theme="dark"] .auth-btn-secondary:hover {
+    border-color: #7c6fe8 !important;
+    color: #9d93f0 !important;
+  }
+
+  [data-theme="dark"] .auth-forgot-link a,
+  [data-theme="dark"] .auth-forgot-link button { color: #9d93f0 !important; }
+
+  [data-theme="dark"] .auth-alt-link { color: #4a5068 !important; }
+  [data-theme="dark"] .auth-alt-link a,
+  [data-theme="dark"] .auth-alt-link button { color: #9d93f0 !important; }
+
+  [data-theme="dark"] .auth-sub-header {
+    background: #13151f !important;
+    border-bottom-color: rgba(255,255,255,0.06) !important;
+  }
+
+  [data-theme="dark"] .auth-back-btn {
+    color: #9d93f0 !important;
+    border-color: rgba(255,255,255,0.08) !important;
+  }
+
+  [data-theme="dark"] .auth-message--error   { background: rgba(240,112,112,0.07) !important; border-color: rgba(240,112,112,0.2) !important; color: #f07070 !important; }
+  [data-theme="dark"] .auth-message--success { background: rgba(61,214,140,0.06) !important; border-color: rgba(61,214,140,0.18) !important; color: #3dd68c !important; }
+  [data-theme="dark"] .auth-message--info    { background: rgba(124,111,232,0.07) !important; border-color: rgba(124,111,232,0.18) !important; color: #9d93f0 !important; }
+
+  [data-theme="dark"] .auth-side-title { color: #e8eaf2 !important; }
+  [data-theme="dark"] .auth-side-desc  { color: #4a5068 !important; }
+}
+
+/* ================================================================
+   SCROLLBARS DEEP DARK
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] ::-webkit-scrollbar-track { background: #0d0e14; }
+  [data-theme="dark"] ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); }
+  [data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: #7c6fe8; }
+  [data-theme="dark"] * { scrollbar-color: rgba(255,255,255,0.08) #0d0e14; }
+}
+
+/* ================================================================
+   BODY GRADIENT DEEP DARK
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] body {
+    background: #0d0e14 !important;
+  }
+}
+
+/* ================================================================
+   HEADINGS & LABELS GLOBALES — deep dark cleanup
+================================================================ */
+@media (min-width: 769px) {
+  [data-theme="dark"] h1:not([style*="color"]),
+  [data-theme="dark"] h2:not([style*="color"]),
+  [data-theme="dark"] h3:not([style*="color"]),
+  [data-theme="dark"] h4:not([style*="color"]),
+  [data-theme="dark"] h5:not([style*="color"]),
+  [data-theme="dark"] h6:not([style*="color"]) {
+    color: #e8eaf2;
+  }
+
+  [data-theme="dark"] label:not([style*="color"]) { color: #e8eaf2; }
+
+  [data-theme="dark"] input,
+  [data-theme="dark"] textarea,
+  [data-theme="dark"] select {
+    background: #13151f;
+    border-color: rgba(255,255,255,0.08);
+    color: #e8eaf2;
+  }
+
+  [data-theme="dark"] input::placeholder,
+  [data-theme="dark"] textarea::placeholder {
+    color: #4a5068;
+    opacity: 1;
+  }
+
+  [data-theme="dark"] input:focus,
+  [data-theme="dark"] textarea:focus,
+  [data-theme="dark"] select:focus {
+    border-color: #7c6fe8;
+  }
 }
