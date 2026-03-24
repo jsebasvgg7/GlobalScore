@@ -3,7 +3,7 @@
 // Optimizado + Offline fallback real
 // ============================================
 
-const CACHE_VERSION = 'globalscore-v4';
+const CACHE_VERSION = 'globalscore-v5'; 
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -12,6 +12,12 @@ const STATIC_ASSETS = [
   '/',
   '/offline.html',
   '/manifest.json',
+
+  // 🆕 TODOS LOS ICONOS
+  '/icons/icon-48x48.png',
+  '/icons/icon-72x72.png',
+  '/icons/icon-96x96.png',
+  '/icons/icon-128x128.png',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png'
 ];
@@ -24,7 +30,15 @@ self.addEventListener('install', event => {
 
   event.waitUntil(
     caches.open(STATIC_CACHE)
-      .then(cache => cache.addAll(STATIC_ASSETS))
+      .then(async cache => {
+        for (const asset of STATIC_ASSETS) {
+          try {
+            await cache.add(asset);
+          } catch (err) {
+            console.warn('❌ Error cacheando:', asset);
+          }
+        }
+      })
       .then(() => self.skipWaiting())
   );
 });
@@ -93,10 +107,10 @@ async function networkFirst(req, cacheName, limit) {
   try {
     const fresh = await fetch(req);
 
-    if (fresh.ok) {
+    if (fresh && fresh.ok) {
       const cache = await caches.open(cacheName);
       cache.put(req, fresh.clone());
-      trimCache(cacheName, limit);
+      if (limit) trimCache(cacheName, limit);
     }
 
     return fresh;
@@ -107,17 +121,19 @@ async function networkFirst(req, cacheName, limit) {
 }
 
 // ============================================
-// NETWORK FIRST PAGE (CLAVE)
+// NETWORK FIRST PAGE (FIX)
 // ============================================
 async function networkFirstPage(req) {
   try {
     const fresh = await fetch(req);
-    return fresh;
+
+    if (fresh && fresh.ok) return fresh;
+
+    throw new Error('Bad response');
 
   } catch {
     console.log('📴 Mostrando offline.html');
 
-    // SI NO HAY INTERNET → offline.html SIEMPRE
     const offline = await caches.match('/offline.html');
     return offline || new Response('Offline', { status: 503 });
   }
@@ -133,7 +149,7 @@ async function cacheFirst(req, cacheName, limit) {
   try {
     const fresh = await fetch(req);
 
-    if (fresh.ok) {
+    if (fresh && fresh.ok) {
       const cache = await caches.open(cacheName);
       cache.put(req, fresh.clone());
       if (limit) trimCache(cacheName, limit);
@@ -147,16 +163,14 @@ async function cacheFirst(req, cacheName, limit) {
 }
 
 // ============================================
-// LIMPIAR CACHE
+// LIMPIAR CACHE (MEJORADO)
 // ============================================
 async function trimCache(name, maxItems) {
   const cache = await caches.open(name);
   const keys = await cache.keys();
 
-  if (keys.length > maxItems) {
-    for (let i = 0; i < keys.length - maxItems; i++) {
-      await cache.delete(keys[i]);
-    }
+  while (keys.length > maxItems) {
+    await cache.delete(keys.shift());
   }
 }
 
