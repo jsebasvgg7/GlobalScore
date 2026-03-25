@@ -2,13 +2,13 @@ import React from 'react';
 import { Trophy, Target, Award, Shield, Package, Crown, Image } from 'lucide-react';
 
 const TAB_LABELS = {
-  matches:      'Partidos',
-  leagues:      'Ligas',
-  awards:       'Premios',
-  achievements: 'Logros',
-  titles:       'Títulos',
-  crowns:       'Coronas',
-  banners:      'Banners',
+  matches:      'Par',
+  leagues:      'Lig',
+  awards:       'Pre',
+  achievements: 'Log',
+  titles:       'Tít',
+  crowns:       'Cor',
+  banners:      'Ban',
 };
 
 export default function AdminNavigationTabs({ activeSection, setActiveSection, stats }) {

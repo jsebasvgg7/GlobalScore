@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { Swords, Trophy, Medal, User } from "lucide-react";
+import React, { useState, useMemo, useRef, useCallback } from "react";
+import { Swords, Trophy, Medal, Fingerprint } from "lucide-react";
 import MobileUserProfile from "../ComProfile/MobileUserProfile";
 import MobileSubPage     from "./MobileSubPage";
 import "../../styles/StylesMobile/MobileDashboard.css";
@@ -290,6 +290,34 @@ export default function MobileDashboard({
   // "matches" | "leagues" | "awards" | null
   const [activePage, setActivePage] = useState(null);
   const [profileModal, setProfileModal] = useState(false);
+  const holdRef = useRef(null);
+  const [holdPct, setHoldPct] = useState(0);
+  const [holding, setHolding] = useState(false);
+
+  const startHold = useCallback(() => {
+    if (!currentUser?.id) return;
+    setHolding(true);
+    setHoldPct(0);
+    const start = Date.now();
+    const duration = 600; // ms para activar
+    holdRef.current = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const pct = Math.min(100, Math.round((elapsed / duration) * 100));
+      setHoldPct(pct);
+      if (pct >= 100) {
+        clearInterval(holdRef.current);
+        setHolding(false);
+        setHoldPct(0);
+        setProfileModal(true);
+      }
+    }, 16);
+  }, [currentUser]);
+
+  const cancelHold = useCallback(() => {
+    clearInterval(holdRef.current);
+    setHolding(false);
+    setHoldPct(0);
+  }, []); 
 
   const pendingMatches = useMemo(() => matches.filter(m => m.status === "pending"), [matches]);
 
@@ -369,11 +397,31 @@ export default function MobileDashboard({
             <div className="mob-qbtn-sub">{awards.length} activos</div>
           </div>
         </div>
-        <div className="mob-qbtn" onPointerDown={() => currentUser?.id && setProfileModal(true)}>
-          <div className="mob-qbtn-icon"><User size={18} /></div>
+        <div
+          className={`mob-qbtn mob-qbtn--hold${holding ? " mob-qbtn--holding" : ""}`}
+          onPointerDown={startHold}
+          onPointerUp={cancelHold}
+          onPointerLeave={cancelHold}
+          onPointerCancel={cancelHold}
+        >
+          <div className="mob-qbtn-icon">
+            <div className="mob-fingerprint-wrap">
+              {/* Capa base — siempre visible en muted */}
+              <Fingerprint size={18} className="mob-fp-base" />
+              {/* Capa accent — se revela de abajo hacia arriba */}
+              <div
+                className="mob-fp-reveal"
+                style={{ height: `${holdPct}%` }}
+              >
+                <Fingerprint size={18} className="mob-fp-accent" />
+              </div>
+              {/* Línea de scan */}
+              {holding && <div className="mob-fp-scanline" style={{ bottom: `${holdPct}%` }} />}
+            </div>
+          </div>
           <div>
             <div className="mob-qbtn-txt">PERFIL</div>
-            <div className="mob-qbtn-sub">Ver stats</div>
+            <div className="mob-qbtn-sub">{holding ? "ESCANEANDO..." : "Ver stats"}</div>
           </div>
         </div>
       </div>

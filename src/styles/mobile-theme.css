@@ -145,6 +145,30 @@
   }
 
   /* Quick actions */
+  [data-theme="dark"] .mob-fp-base {
+    color: #5a5248 !important;
+  }
+
+  [data-theme="dark"] .mob-fp-accent {
+    color: #a599d9 !important;
+  }
+
+  [data-theme="dark"] .mob-fp-scanline {
+    background-image: repeating-linear-gradient(
+      90deg,
+      #a599d9 0px, #a599d9 3px,
+      transparent 3px, transparent 5px
+    ) !important;
+  }
+
+  [data-theme="dark"] .mob-qbtn--holding .mob-fingerprint-wrap {
+    filter: drop-shadow(0 0 4px rgba(139,127,199,0.6)) !important;
+  }
+
+  [data-theme="dark"] .mob-qbtn--holding .mob-qbtn-sub {
+    color: #a599d9 !important;
+  }
+
   [data-theme="dark"] .mob-qbtn {
     background: #1a1a1a !important;
     border-color: #2e2e2e !important;

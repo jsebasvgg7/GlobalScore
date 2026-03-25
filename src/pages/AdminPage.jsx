@@ -14,6 +14,7 @@ import { useAdminBanners }      from '../hooks/HooksAdmin/useAdminBanners';
 import { getFilteredItems, calculateStats } from '../utils/adminFilters';
 
 // Componentes
+import MobileAdminSheet, { MobileAdminFAB, useIsMobile } from '../components/ComMobile/MobileAdmin';
 import AdminStatsOverview    from '../components/ComAdmin/AdminStatsOverview';
 import AdminNavigationTabs   from '../components/ComAdmin/AdminNavigationTabs';
 import AdminControls         from '../components/ComAdmin/AdminControls';
@@ -28,6 +29,7 @@ import AdminRightPanel       from '../components/ComAdmin/AdminRightPanel';
 import Footer                from '../components/ComLayout/Footer';
 import { ToastContainer, useToast } from '../components/ComFeedback/Toast';
 
+import '../styles/StylesMobile/MobileAdmin.css';
 import '../styles/StylesAdmin/AdminPage.css';
 import '../styles/StylesAdmin/AdminRightPanel.css';
 import '../styles/StylesAdmin/AdminBanners.css';
@@ -44,6 +46,8 @@ export default function AdminPage({ currentUser }) {
   const [panelItem, setPanelItem] = useState(null);
 
   const resetPanel = () => { setPanelMode('add'); setPanelItem(null); };
+  const isMobile = useIsMobile();
+  const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
 
   const toast = useToast();
 
@@ -85,12 +89,14 @@ export default function AdminPage({ currentUser }) {
   const handleFinishClick = (item) => {
     setPanelItem(item);
     setPanelMode('finish');
+    if (isMobile) setMobileSheetOpen(true);
   };
 
   // Editar (logros/títulos)
   const handleEditClick = (item) => {
     setPanelItem(item);
     setPanelMode('edit');
+    if (isMobile) setMobileSheetOpen(true); 
   };
 
   // Asignar banner
@@ -201,7 +207,7 @@ export default function AdminPage({ currentUser }) {
               setSearchTerm={setSearchTerm}
               filterStatus={filterStatus}
               setFilterStatus={setFilterStatus}
-              onAddNew={resetPanel}
+              onAddNew={isMobile ? () => { resetPanel(); setMobileSheetOpen(true); } : resetPanel}
             />
 
             <div className="admin-content-area">
@@ -282,6 +288,26 @@ export default function AdminPage({ currentUser }) {
           />
 
         </div>
+        {isMobile && (
+        <>
+          <MobileAdminFAB activeSection={activeSection} onOpen={() => { resetPanel(); setMobileSheetOpen(true); }} />
+          <MobileAdminSheet
+            isOpen={mobileSheetOpen}
+            onClose={() => setMobileSheetOpen(false)}
+            activeSection={activeSection}
+            panelMode={panelMode}
+            panelItem={panelItem}
+            onAdd={handlePanelAdd}
+            onFinish={handlePanelFinish}
+            onSave={handlePanelSave}
+            onDelete={handlePanelDelete}
+            users={users}
+            banners={banners}
+            onAssignBanner={handleAssignBanner}
+            onRevokeBanner={handleRevokeBanner}
+          />
+        </>
+      )}
       </div>
 
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />

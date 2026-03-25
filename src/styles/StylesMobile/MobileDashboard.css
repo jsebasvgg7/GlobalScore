@@ -217,6 +217,69 @@
 }
 
 /* ================================================================
+   FINGERPRINT SCAN — botón perfil BJR
+================================================================ */
+.mob-fingerprint-wrap {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.mob-fp-base {
+  display: block;
+  color: var(--mob-muted);
+}
+
+/* Ventana que crece desde abajo */
+.mob-fp-reveal {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  overflow: hidden;
+  transition: height 0.016s linear;
+}
+
+/* El segundo icono, anclado abajo dentro de la ventana */
+.mob-fp-accent {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  color: var(--mob-accent);
+}
+
+/* Línea de scan dashed */
+.mob-fp-scanline {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  height: 1px;
+  background: var(--mob-accent);
+  opacity: 0.8;
+  /* Guiones brutalistas */
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--mob-accent) 0px,
+    var(--mob-accent) 3px,
+    transparent 3px,
+    transparent 5px
+  );
+}
+
+.mob-qbtn--holding .mob-qbtn-sub {
+  color: var(--mob-accent) !important;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.mob-qbtn--holding .mob-fingerprint-wrap {
+  filter: drop-shadow(0 0 3px var(--mob-accent));
+}
+
+/* ================================================================
    SECTION HEADER — BJR: línea conectada, dot cuadrado, todo mono
 ================================================================ */
 .mob-sec {

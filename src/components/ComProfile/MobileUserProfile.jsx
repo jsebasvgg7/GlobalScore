@@ -71,6 +71,7 @@ function PanelStats({ user }) {
 
   return (
     <div className="mup2-panel">
+      
       {/* Racha */}
       <div className="mup2-sec-hdr">
         <div className="mup2-sec-line" style={{ background: "#ef4444" }} />
@@ -93,25 +94,6 @@ function PanelStats({ user }) {
           <span className="mup2-streak-tag">MEJOR</span>
         </div>
       </div>
-
-      {/* Grid stats */}
-      <div className="mup2-sec-hdr">
-        <div className="mup2-sec-line" style={{ background: "var(--mup2-accent)" }} />
-        <span className="mup2-sec-lbl">ESTADÍSTICAS</span>
-      </div>
-      <div className="mup2-stats-grid">
-        {rows.map((r) => (
-          <div
-            key={r.lbl}
-            className="mup2-stat-row"
-            style={{ "--sr-accent": r.accent }}
-          >
-            <span className="mup2-stat-row-lbl">{r.lbl}</span>
-            <span className="mup2-stat-row-val">{r.val}</span>
-          </div>
-        ))}
-      </div>
-
       {/* Nivel */}
       <div className="mup2-sec-hdr">
         <div className="mup2-sec-line" style={{ background: "#a78bfa" }} />
@@ -131,6 +113,24 @@ function PanelStats({ user }) {
         <span className="mup2-level-sub">
           {500 - ((user.points || 0) % 500)} pts para nivel {(user.level || 1) + 1}
         </span>
+      </div>
+
+      {/* Grid stats */}
+      <div className="mup2-sec-hdr">
+        <div className="mup2-sec-line" style={{ background: "var(--mup2-accent)" }} />
+        <span className="mup2-sec-lbl">ESTADÍSTICAS</span>
+      </div>
+      <div className="mup2-stats-grid">
+        {rows.map((r) => (
+          <div
+            key={r.lbl}
+            className="mup2-stat-row"
+            style={{ "--sr-accent": r.accent }}
+          >
+            <span className="mup2-stat-row-lbl">{r.lbl}</span>
+            <span className="mup2-stat-row-val">{r.val}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
