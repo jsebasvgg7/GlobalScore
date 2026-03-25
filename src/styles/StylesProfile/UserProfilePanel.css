@@ -1,9 +1,6 @@
-/* ================================================================
-   UserProfilePanel.css — Panel lateral de perfil · DESKTOP ONLY
-   Estilo BJR (Brutalismo Japonés Retro)
-   Reemplaza el modal anterior.
-   Solo visible en ≥769px — mobile usa MobileUserProfile.css
-================================================================ */
+/* ==========================================
+   PROFILE
+========================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;700;800&display=swap');
 
