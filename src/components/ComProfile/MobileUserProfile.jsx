@@ -1,533 +1,421 @@
-import React, { useState, useEffect } from 'react';
-import {
-  ArrowLeft, Crown, Flame, Star, Shield, Gem, Globe,
-  Heart, Trophy, Calendar, Target, Zap, TrendingUp, Users,
-  ChevronRight, Lock
-} from 'lucide-react';
-import { supabase } from '../../utils/supabaseClient';
-import { LoadingDots } from '../ComFeedback/LoadingSpinner';
-import ImageViewer from '../ComOthers/ImageViewer';
-import '../../styles/StylesProfile/MobileUserProfile.css';
+import React, { useState, useEffect, useRef } from "react";
+import { X, Crown, Flame, Zap, Target, Star, Lock, ChevronRight } from "lucide-react";
+import { supabase } from "../../utils/supabaseClient";
+import "../../styles/StylesProfile/MobileUserProfile.css";
 
-/* ── helpers ─────────────────────────────────────────── */
-const fmt = (n) => Number(n || 0).toLocaleString('es-ES');
-const acc = (correct, predictions) =>
-  predictions > 0 ? Math.round((correct / predictions) * 100) : 0;
-const levelProgress = (points) => ((points % 20) / 20) * 100;
-const pointsInLevel  = (points) => points % 20;
-const fmtDate = (d) =>
-  new Date(d).toLocaleDateString('es-ES', { year: 'numeric', month: 'short' });
+/* ── helpers ── */
+const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
+const pct = (a, b) => (b > 0 ? Math.round((a / b) * 100) : 0);
 
-/* ── sub-components ───────────────────────────────────── */
-
-function SectionHeader({ label, color, extra }) {
-  return (
-    <div className="mup-sec-hdr">
-      <div className="mup-sec-line" style={{ background: color || 'var(--mup-accent)' }} />
-      <span className="mup-sec-lbl">{label}</span>
-      {extra && <span className="mup-sec-extra">{extra}</span>}
-    </div>
-  );
-}
-
-function StatBlock({ label, value, accent, sub }) {
-  return (
-    <div className="mup-stat-block" style={{ '--sb-accent': accent || 'var(--mup-accent)' }}>
-      <div className="mup-stat-block-val">{value}</div>
-      {sub && <div className="mup-stat-block-sub">{sub}</div>}
-      <div className="mup-stat-block-lbl">{label}</div>
-    </div>
-  );
-}
-
-function BadgeItem({ achievement, index }) {
-  const palette = ['#5b4fd8','#3B82F6','#10B981','#EF4444','#F59E0B','#EC4899','#8B5CF6','#06B6D4'];
-  const color = palette[index % palette.length];
-  return (
-    <div className="mup-badge" title={achievement.name}>
-      <div className="mup-badge-hex" style={{ '--bh-color': color }}>
-        <div className="mup-badge-hex-inner">
-          <span className="mup-badge-emoji">{achievement.icon || '🏆'}</span>
-        </div>
-        <div className="mup-badge-glow" style={{ background: color }} />
-      </div>
-      <span className="mup-badge-name">{achievement.name?.split(' ')[0]}</span>
-    </div>
-  );
-}
-
-function CrownRow({ crown, index }) {
-  return (
-    <div className="mup-crown-row" style={{ animationDelay: `${index * 55}ms` }}>
-      <div className="mup-crown-rank">
-        <Crown size={13} fill="#c9a227" color="#b8920e" />
-        <span>{String(index + 1).padStart(2, '0')}</span>
-      </div>
-      <div className="mup-crown-info">
-        <span className="mup-crown-month">{crown.month_year}</span>
-        <span className="mup-crown-pts">{fmt(crown.points)} pts</span>
-      </div>
-      <div className="mup-crown-badge">CAMPEÓN</div>
-    </div>
-  );
-}
-
-/* ══════════════════════════════════════════════════════
-   MAIN COMPONENT
-══════════════════════════════════════════════════════ */
-export default function MobileUserProfile({ userId, onClose }) {
-  const [userData,      setUserData]      = useState(null);
-  const [loading,       setLoading]       = useState(true);
-  const [activeTab,     setActiveTab]     = useState('stats');
-  const [showImage,     setShowImage]     = useState(false);
-  const [userRanking,   setUserRanking]   = useState({ position: 0, totalUsers: 0 });
-  const [crowns,        setCrowns]        = useState([]);
-  const [streakData,    setStreakData]    = useState({ current_streak: 0, best_streak: 0 });
-  const [achievements,  setAchievements]  = useState([]);
-  const [titles,        setTitles]        = useState([]);
-  const [allAch,        setAllAch]        = useState([]);
-
-  useEffect(() => { loadData(); }, [userId]);
-
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      const [
-        { data: user },
-        { data: allUsers },
-        { data: history },
-        { data: available },
-        { data: availTitles },
-      ] = await Promise.all([
-        supabase.from('users').select('*').eq('id', userId).single(),
-        supabase.from('users').select('id, points').order('points', { ascending: false }),
-        supabase.from('monthly_championship_history').select('*').eq('user_id', userId).order('awarded_at', { ascending: false }),
-        supabase.from('available_achievements').select('*').order('requirement_value', { ascending: true }),
-        supabase.from('available_titles').select('*'),
-      ]);
-
-      setUserData(user);
-      setStreakData({ current_streak: user?.current_streak || 0, best_streak: user?.best_streak || 0 });
-      setCrowns(history || []);
-      setAllAch(available || []);
-
-      if (allUsers) {
-        const idx = allUsers.findIndex(u => u.id === userId);
-        setUserRanking({ position: idx + 1, totalUsers: allUsers.length });
-      }
-
-      if (available && user) {
-        const unlocked = available.filter(a => {
-          switch (a.requirement_type) {
-            case 'points':      return (user.points         || 0) >= a.requirement_value;
-            case 'predictions': return (user.predictions    || 0) >= a.requirement_value;
-            case 'correct':     return (user.correct        || 0) >= a.requirement_value;
-            case 'streak':      return (user.current_streak || 0) >= a.requirement_value;
-            default:            return false;
-          }
-        });
-        setAchievements(unlocked);
-        if (availTitles) {
-          setTitles(availTitles.filter(t =>
-            unlocked.some(a => a.id === t.requirement_achievement_id)
-          ));
-        }
-      }
-    } catch (err) {
-      console.error('Error loading profile:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getActiveTitle = () => {
-    if (!titles.length) return null;
-    return [...titles].sort((a, b) => {
-      const ra = allAch.find(x => x.id === a.requirement_achievement_id);
-      const rb = allAch.find(x => x.id === b.requirement_achievement_id);
-      return (rb?.requirement_value || 0) - (ra?.requirement_value || 0);
-    })[0];
-  };
-
-  /* ── Loading ── */
-  if (loading) {
+/* ── Avatar ── */
+function MupAvatar({ user, size = 56 }) {
+  if (user?.avatar_url) {
     return (
-      <div className="mup-page">
-        <div className="mup-topbar">
-          <button className="mup-back-btn" onClick={onClose}>
-            <ArrowLeft size={15} />
-          </button>
-          <span className="mup-topbar-title">PERFIL</span>
-          <div style={{ width: 36 }} />
-        </div>
-        <div className="mup-loading-state">
-          <div className="mup-loading-icon">
-            <Users size={28} />
-          </div>
-          <span>Cargando perfil</span>
-          <LoadingDots />
-        </div>
-      </div>
+      <img
+        src={user.avatar_url}
+        alt={user.name}
+        className="mup2-avatar"
+        style={{ width: size, height: size }}
+      />
     );
   }
+  return (
+    <div
+      className="mup2-avatar mup2-avatar--ph"
+      style={{ width: size, height: size, fontSize: size * 0.38 }}
+    >
+      {(user?.name || "?")[0].toUpperCase()}
+    </div>
+  );
+}
 
-  if (!userData) return null;
+/* ── Stat block ── */
+function StatBlock({ val, lbl, accent }) {
+  return (
+    <div className="mup2-stat-block" style={accent ? { "--sb-accent": accent } : {}}>
+      <span className="mup2-stat-val">{val}</span>
+      <span className="mup2-stat-lbl">{lbl}</span>
+    </div>
+  );
+}
 
-  const accuracy    = acc(userData.correct, userData.predictions);
-  const lvlProg     = levelProgress(userData.points || 0);
-  const lvlPts      = pointsInLevel(userData.points || 0);
-  const activeTitle = getActiveTitle();
-  const totalCrowns = userData.monthly_championships || 0;
-  const firstName   = userData.name?.split(' ')[0] || 'Jugador';
-  const initials    = (userData.name || 'U').slice(0, 2).toUpperCase();
+/* ── Tab button ── */
+function TabBtn({ id, active, onClick, children }) {
+  return (
+    <button
+      className={`mup2-tab${active ? " mup2-tab--active" : ""}`}
+      onClick={() => onClick(id)}
+    >
+      {children}
+    </button>
+  );
+}
 
-  const tabs = [
-    { id: 'stats',   label: 'STATS',   icon: TrendingUp },
-    { id: 'logros',  label: 'LOGROS',  icon: Star        },
-    { id: 'coronas', label: 'CORONAS', icon: Crown       },
+/* ════════════════════════════════════════════
+   PANEL — STATS
+════════════════════════════════════════════ */
+function PanelStats({ user }) {
+  const acc = pct(user.correct || 0, user.predictions || 0);
+  const mAcc = pct(user.monthly_correct || 0, user.monthly_predictions || 0);
+
+  const rows = [
+    { lbl: "PREDICCIONES", val: fmt(user.predictions || 0), accent: "var(--mup2-accent)" },
+    { lbl: "ACIERTOS",     val: fmt(user.correct     || 0), accent: "#34d399" },
+    { lbl: "PRECISIÓN",    val: `${acc}%`,                  accent: "#f59e0b" },
+    { lbl: "PUNTOS TOTAL", val: fmt(user.points       || 0), accent: "var(--mup2-accent)" },
+    { lbl: "PUNTOS MES",   val: fmt(user.monthly_points || 0), accent: "#a78bfa" },
+    { lbl: "PRED. MES",    val: fmt(user.monthly_predictions || 0), accent: "#34d399" },
+    { lbl: "ACIERTOS MES", val: fmt(user.monthly_correct || 0), accent: "#f59e0b" },
+    { lbl: "PREC. MES",    val: `${mAcc}%`,                accent: "#fb923c" },
   ];
 
-  const topPct = userRanking.totalUsers > 0
-    ? Math.round((userRanking.position / userRanking.totalUsers) * 100)
-    : 0;
-
   return (
-    <>
-      <div className="mup-page">
-
-        {/* ── Topbar ── */}
-        <div className="mup-topbar">
-          <button className="mup-back-btn" onClick={onClose}>
-            <ArrowLeft size={15} />
-          </button>
-          <div className="mup-topbar-center">
-            <span className="mup-topbar-title">PERFIL</span>
-            <span className="mup-topbar-sub">GlobalScore</span>
-          </div>
-          <div className="mup-topbar-rank">
-            <span className="mup-topbar-rank-num">#{userRanking.position}</span>
-          </div>
+    <div className="mup2-panel">
+      {/* Racha */}
+      <div className="mup2-sec-hdr">
+        <div className="mup2-sec-line" style={{ background: "#ef4444" }} />
+        <span className="mup2-sec-lbl">RACHA</span>
+      </div>
+      <div className="mup2-streaks">
+        <div className="mup2-streak-cell">
+          <Flame size={18} color="#ef4444" />
+          <span className="mup2-streak-num" style={{ color: "#ef4444" }}>
+            {user.current_streak || 0}
+          </span>
+          <span className="mup2-streak-tag">ACTUAL</span>
         </div>
-
-        {/* ── Body ── */}
-        <div className="mup-body">
-
-          {/* ── Banner ── */}
-          <div className="mup-banner">
-            {userData.equipped_banner_url ? (
-              <>
-                <img src={userData.equipped_banner_url} alt="" className="mup-banner-img" />
-                <div className="mup-banner-overlay" />
-              </>
-            ) : (
-              <div className="mup-banner-default">
-                <div className="mup-banner-grid-bg" />
-                <div className="mup-banner-gradient-bg" />
-              </div>
-            )}
-            <div className="mup-banner-corner-tag">TEMP 25/26</div>
-          </div>
-
-          {/* ── Hero ── */}
-          <div className="mup-hero">
-            <div className="mup-hero-left">
-              <button
-                className="mup-avatar-wrap"
-                onClick={() => userData.avatar_url && setShowImage(true)}
-              >
-                <div className={`mup-avatar${userData.avatar_url ? ' --clickable' : ''}`}>
-                  {userData.avatar_url
-                    ? <img src={userData.avatar_url} alt={firstName} />
-                    : <span>{initials}</span>
-                  }
-                </div>
-                <div className="mup-level-tag">
-                  <Shield size={7} />
-                  <span>NIV.{userData.level || 1}</span>
-                </div>
-              </button>
-            </div>
-
-            <div className="mup-hero-info">
-              <div className="mup-hero-name-row">
-                <h2 className="mup-name">{userData.name || 'Usuario'}</h2>
-              </div>
-              {activeTitle && (
-                <div
-                  className="mup-title-pill"
-                  style={{ '--tp-color': activeTitle.color || 'var(--mup-accent)' }}
-                >
-                  <Gem size={8} />
-                  {activeTitle.name}
-                </div>
-              )}
-              <div className="mup-hero-meta">
-                {userData.nationality && (
-                  <span className="mup-meta-chip">
-                    <Globe size={8} />
-                    {userData.nationality}
-                  </span>
-                )}
-                {userData.created_at && (
-                  <span className="mup-meta-chip">
-                    <Calendar size={8} />
-                    {fmtDate(userData.created_at)}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* ── Stats header — mismo estilo que mpm-stats ── */}
-          <div className="mup-stats-header">
-            <div className="mup-stat-col">
-              <div className="mup-stat-col-val">{fmt(userData.points)}<span>pts</span></div>
-              <div className="mup-stat-col-lbl">Puntos</div>
-            </div>
-            <div className="mup-stat-div" />
-            <div className="mup-stat-col">
-              <div className="mup-stat-col-val">{accuracy}<span>%</span></div>
-              <div className="mup-stat-col-lbl">Precisión</div>
-            </div>
-            <div className="mup-stat-div" />
-            <div className="mup-stat-col">
-              <div className="mup-stat-col-val">{totalCrowns}</div>
-              <div className="mup-stat-col-lbl">Coronas</div>
-            </div>
-          </div>
-
-          {/* ── Tabs ── */}
-          <div className="mup-tabs">
-            {tabs.map(({ id, label, icon: Icon }) => (
-              <button
-                key={id}
-                className={`mup-tab${activeTab === id ? ' --active' : ''}`}
-                onClick={() => setActiveTab(id)}
-              >
-                <Icon size={11} />
-                {label}
-              </button>
-            ))}
-          </div>
-
-          {/* ══ TAB: STATS ══ */}
-          {activeTab === 'stats' && (
-            <div className="mup-panel">
-
-              {/* Bio */}
-              {userData.bio && (
-                <div className="mup-bio">
-                  <div className="mup-bio-bar" />
-                  <p>{userData.bio}</p>
-                </div>
-              )}
-
-              {/* Ranking global */}
-              <SectionHeader label="RANKING GLOBAL" color="#5b4fd8" />
-              <div className="mup-ranking-block">
-                <div className="mup-ranking-main">
-                  <span className="mup-ranking-pos">#{userRanking.position}</span>
-                  <span className="mup-ranking-of">de {fmt(userRanking.totalUsers)}</span>
-                </div>
-                <div className="mup-ranking-bar-wrap">
-                  <div className="mup-ranking-bar">
-                    <div className="mup-ranking-fill" style={{ width: `${100 - topPct}%` }} />
-                  </div>
-                  <span className="mup-ranking-pct">Top {topPct}%</span>
-                </div>
-              </div>
-
-              {/* Nivel */}
-              <SectionHeader label={`NIVEL ${userData.level || 1}`} color="#8B5CF6" />
-              <div className="mup-level-block">
-                <div className="mup-level-track">
-                  <div className="mup-level-fill" style={{ width: `${lvlProg}%` }} />
-                  <div className="mup-level-glow" style={{ left: `${lvlProg}%` }} />
-                </div>
-                <div className="mup-level-meta">
-                  <span>{lvlPts} / 20 pts</span>
-                  <span>NV.{(userData.level || 1) + 1} →</span>
-                </div>
-              </div>
-
-              {/* Estadísticas */}
-              <SectionHeader label="ESTADÍSTICAS" color="#3B82F6" />
-              <div className="mup-stats-grid">
-                <StatBlock label="PUNTOS TOTALES"   value={fmt(userData.points)}      accent="#5b4fd8" />
-                <StatBlock label="PREDICCIONES"     value={fmt(userData.predictions)} accent="#3B82F6" />
-                <StatBlock label="PRECISIÓN"        value={`${accuracy}%`}            accent="#10B981" />
-                <StatBlock label="CORRECTAS"        value={fmt(userData.correct)}     accent="#F59E0B" />
-              </div>
-
-              {/* Rachas */}
-              <SectionHeader label="RACHAS" color="#EF4444" />
-              <div className="mup-streaks">
-                <div className="mup-streak --fire">
-                  <div className="mup-streak-icon-wrap">
-                    <Flame size={24} fill="#EF4444" color="#DC2626" />
-                  </div>
-                  <div className="mup-streak-data">
-                    <span className="mup-streak-num">{streakData.current_streak}</span>
-                    <span className="mup-streak-tag">RACHA ACTUAL</span>
-                  </div>
-                </div>
-                <div className="mup-streak-sep" />
-                <div className="mup-streak --gold">
-                  <div className="mup-streak-icon-wrap">
-                    <Star size={24} fill="#c9a227" color="#b8920e" />
-                  </div>
-                  <div className="mup-streak-data">
-                    <span className="mup-streak-num">{streakData.best_streak}</span>
-                    <span className="mup-streak-tag">MEJOR RACHA</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Este mes */}
-              <SectionHeader label="ESTE MES" color="#10B981" />
-              <div className="mup-month-row">
-                <div className="mup-month-cell" style={{ '--mc-color': '#8b7fc7' }}>
-                  <span className="mup-month-val">{fmt(userData.monthly_points)}</span>
-                  <span className="mup-month-lbl">PTS MES</span>
-                </div>
-                <div className="mup-month-cell" style={{ '--mc-color': '#6366F1' }}>
-                  <span className="mup-month-val">{fmt(userData.monthly_predictions)}</span>
-                  <span className="mup-month-lbl">PREDS MES</span>
-                </div>
-              </div>
-
-            </div>
-          )}
-
-          {/* ══ TAB: LOGROS ══ */}
-          {activeTab === 'logros' && (
-            <div className="mup-panel">
-
-              {activeTitle && (
-                <>
-                  <SectionHeader label="TÍTULO ACTIVO" color={activeTitle.color || 'var(--mup-accent)'} />
-                  <div
-                    className="mup-active-title-card"
-                    style={{ '--atc-color': activeTitle.color || 'var(--mup-accent)' }}
-                  >
-                    <div className="mup-atc-gem">
-                      <Gem size={22} color={activeTitle.color || 'var(--mup-accent)'} />
-                    </div>
-                    <div className="mup-atc-body">
-                      <strong>{activeTitle.name}</strong>
-                      <p>{activeTitle.description}</p>
-                    </div>
-                    <div className="mup-equipped-badge">
-                      <Star size={7} />
-                      EQUIPADO
-                    </div>
-                  </div>
-                </>
-              )}
-
-              <SectionHeader
-                label="INSIGNIAS"
-                color="#F59E0B"
-                extra={`${achievements.length}/${allAch.length}`}
-              />
-
-              {achievements.length === 0 ? (
-                <div className="mup-empty">
-                  <div className="mup-empty-icon"><Star size={30} /></div>
-                  <span>Haz predicciones para desbloquear insignias</span>
-                </div>
-              ) : (
-                <div className="mup-badges-grid">
-                  {achievements.map((ach, i) => (
-                    <BadgeItem key={ach.id} achievement={ach} index={i} />
-                  ))}
-                </div>
-              )}
-
-              {allAch.length > achievements.length && (
-                <div className="mup-locked-row">
-                  <Lock size={11} />
-                  <span>{allAch.length - achievements.length} insignias por desbloquear</span>
-                </div>
-              )}
-
-            </div>
-          )}
-
-          {/* ══ TAB: CORONAS ══ */}
-          {activeTab === 'coronas' && (
-            <div className="mup-panel">
-
-              <SectionHeader label="CAMPEONATOS" color="#c9a227" />
-
-              {totalCrowns === 0 ? (
-                <div className="mup-empty">
-                  <div className="mup-empty-icon"><Crown size={30} /></div>
-                  <span>¡Aún no has ganado ningún campeonato!</span>
-                </div>
-              ) : (
-                <div className="mup-crowns-hero">
-                  <div className="mup-crowns-hero-left">
-                    <Crown size={40} fill="#c9a227" color="#b8920e" />
-                    <div>
-                      <span className="mup-crowns-big">{totalCrowns}</span>
-                      <span className="mup-crowns-sub">
-                        {totalCrowns === 1 ? 'corona ganada' : 'coronas ganadas'}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="mup-crowns-row-icons">
-                    {Array.from({ length: Math.min(totalCrowns, 5) }).map((_, i) => (
-                      <Crown
-                        key={i}
-                        size={16}
-                        fill="#c9a227"
-                        color="#b8920e"
-                        style={{ opacity: 1 - i * 0.12, transform: `rotate(${(i % 2 === 0 ? -6 : 6)}deg)` }}
-                      />
-                    ))}
-                    {totalCrowns > 5 && <span className="mup-crowns-plus">+{totalCrowns - 5}</span>}
-                  </div>
-                </div>
-              )}
-
-              <SectionHeader label="ESTE MES" color="#8b7fc7" />
-              <div className="mup-month-row">
-                <div className="mup-month-cell" style={{ '--mc-color': '#8b7fc7' }}>
-                  <span className="mup-month-val">{fmt(userData.monthly_points)}</span>
-                  <span className="mup-month-lbl">PTS MES</span>
-                </div>
-                <div className="mup-month-cell" style={{ '--mc-color': '#10B981' }}>
-                  <span className="mup-month-val">{fmt(userData.monthly_correct)}</span>
-                  <span className="mup-month-lbl">CORRECTAS</span>
-                </div>
-              </div>
-
-              {crowns.length > 0 && (
-                <>
-                  <SectionHeader label="HISTORIAL" color="#c9a227" />
-                  <div className="mup-crown-list">
-                    {crowns.map((c, i) => (
-                      <CrownRow key={c.id} crown={c} index={i} />
-                    ))}
-                  </div>
-                </>
-              )}
-
-            </div>
-          )}
-
-          <div style={{ height: 32 }} />
+        <div className="mup2-streak-sep" />
+        <div className="mup2-streak-cell">
+          <Zap size={18} color="#f59e0b" />
+          <span className="mup2-streak-num" style={{ color: "#f59e0b" }}>
+            {user.best_streak || 0}
+          </span>
+          <span className="mup2-streak-tag">MEJOR</span>
         </div>
       </div>
 
-      {showImage && userData.avatar_url && (
-        <ImageViewer
-          imageUrl={userData.avatar_url}
-          userName={userData.name || 'Usuario'}
-          onClose={() => setShowImage(false)}
-        />
+      {/* Grid stats */}
+      <div className="mup2-sec-hdr">
+        <div className="mup2-sec-line" style={{ background: "var(--mup2-accent)" }} />
+        <span className="mup2-sec-lbl">ESTADÍSTICAS</span>
+      </div>
+      <div className="mup2-stats-grid">
+        {rows.map((r) => (
+          <div
+            key={r.lbl}
+            className="mup2-stat-row"
+            style={{ "--sr-accent": r.accent }}
+          >
+            <span className="mup2-stat-row-lbl">{r.lbl}</span>
+            <span className="mup2-stat-row-val">{r.val}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Nivel */}
+      <div className="mup2-sec-hdr">
+        <div className="mup2-sec-line" style={{ background: "#a78bfa" }} />
+        <span className="mup2-sec-lbl">NIVEL</span>
+      </div>
+      <div className="mup2-level-block">
+        <div className="mup2-level-header">
+          <span className="mup2-level-badge">NV {user.level || 1}</span>
+          <span className="mup2-level-pts">{fmt(user.points || 0)} pts</span>
+        </div>
+        <div className="mup2-level-track">
+          <div
+            className="mup2-level-fill"
+            style={{ width: `${Math.min(100, ((user.points || 0) % 500) / 5)}%` }}
+          />
+        </div>
+        <span className="mup2-level-sub">
+          {500 - ((user.points || 0) % 500)} pts para nivel {(user.level || 1) + 1}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════
+   PANEL — CAMPEONATOS
+════════════════════════════════════════════ */
+function PanelChampions({ userId }) {
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const { data } = await supabase
+        .from("monthly_championship_history")
+        .select("*")
+        .eq("user_id", userId)
+        .order("awarded_at", { ascending: false });
+      setHistory(data || []);
+      setLoading(false);
+    })();
+  }, [userId]);
+
+  return (
+    <div className="mup2-panel">
+      <div className="mup2-sec-hdr">
+        <div className="mup2-sec-line" style={{ background: "#c9a227" }} />
+        <span className="mup2-sec-lbl">CORONAS</span>
+        <span className="mup2-sec-extra" style={{ color: "#c9a227" }}>
+          {history.length}
+        </span>
+      </div>
+
+      {loading ? (
+        <div className="mup2-loading-row">
+          <span className="mup2-loading-dot" />
+          <span className="mup2-loading-dot" style={{ animationDelay: "0.15s" }} />
+          <span className="mup2-loading-dot" style={{ animationDelay: "0.3s" }} />
+        </div>
+      ) : history.length === 0 ? (
+        <div className="mup2-empty">
+          <Crown size={32} color="var(--mup2-border)" />
+          <span>Sin campeonatos aún</span>
+        </div>
+      ) : (
+        <div className="mup2-crown-list">
+          {history.map((h, i) => (
+            <div key={i} className="mup2-crown-row">
+              <div className="mup2-crown-icon">
+                <Crown size={14} color="#c9a227" />
+                <span className="mup2-crown-rank">#{i + 1}</span>
+              </div>
+              <div className="mup2-crown-info">
+                <span className="mup2-crown-month">{h.month_year || "—"}</span>
+                <span className="mup2-crown-pts">+{fmt(h.points)} pts</span>
+              </div>
+              <span className="mup2-crown-badge">CAMPEÓN</span>
+            </div>
+          ))}
+        </div>
       )}
-    </>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════
+   PANEL — LOGROS
+════════════════════════════════════════════ */
+const ACHIEVEMENTS_DEFS = [
+  { id: "first_pred",    emoji: "🎯", name: "PRIMER DISPARO",  desc: "Primera predicción",          req: (u) => (u.predictions || 0) >= 1 },
+  { id: "ten_preds",     emoji: "🔟", name: "DIEZ RONDAS",     desc: "10 predicciones",             req: (u) => (u.predictions || 0) >= 10 },
+  { id: "fifty_preds",   emoji: "⚡", name: "CINCUENTA",       desc: "50 predicciones",             req: (u) => (u.predictions || 0) >= 50 },
+  { id: "first_correct", emoji: "✅", name: "ACIERTO",         desc: "Primera predicción correcta", req: (u) => (u.correct || 0) >= 1 },
+  { id: "ten_correct",   emoji: "🏹", name: "ARQUERO",         desc: "10 aciertos",                 req: (u) => (u.correct || 0) >= 10 },
+  { id: "streak_3",      emoji: "🔥", name: "EN LLAMAS",       desc: "Racha de 3",                  req: (u) => (u.best_streak || 0) >= 3 },
+  { id: "streak_7",      emoji: "💥", name: "IMPARABLE",       desc: "Racha de 7",                  req: (u) => (u.best_streak || 0) >= 7 },
+  { id: "accuracy_70",   emoji: "🎖", name: "FRANCOTIRADOR",   desc: "70% precisión",               req: (u) => pct(u.correct, u.predictions) >= 70 },
+  { id: "pts_100",       emoji: "💯", name: "CENTURIA",        desc: "100 puntos",                  req: (u) => (u.points || 0) >= 100 },
+  { id: "pts_500",       emoji: "🏆", name: "MAESTRO",         desc: "500 puntos",                  req: (u) => (u.points || 0) >= 500 },
+  { id: "champion",      emoji: "👑", name: "REY",             desc: "Campeón mensual",             req: (u) => (u.monthly_championships || 0) >= 1 },
+  { id: "triple_crown",  emoji: "🌟", name: "TRIPLE CORONA",   desc: "3 campeonatos",               req: (u) => (u.monthly_championships || 0) >= 3 },
+];
+
+function PanelAchievements({ user }) {
+  const unlocked = ACHIEVEMENTS_DEFS.filter((a) => a.req(user));
+  const locked   = ACHIEVEMENTS_DEFS.filter((a) => !a.req(user));
+
+  return (
+    <div className="mup2-panel">
+      <div className="mup2-sec-hdr">
+        <div className="mup2-sec-line" style={{ background: "#34d399" }} />
+        <span className="mup2-sec-lbl">DESBLOQUEADOS</span>
+        <span className="mup2-sec-extra" style={{ color: "#34d399" }}>
+          {unlocked.length}/{ACHIEVEMENTS_DEFS.length}
+        </span>
+      </div>
+
+      <div className="mup2-ach-grid">
+        {unlocked.map((a) => (
+          <div key={a.id} className="mup2-ach-card mup2-ach-card--on">
+            <span className="mup2-ach-emoji">{a.emoji}</span>
+            <span className="mup2-ach-name">{a.name}</span>
+            <span className="mup2-ach-desc">{a.desc}</span>
+          </div>
+        ))}
+      </div>
+
+      {locked.length > 0 && (
+        <>
+          <div className="mup2-sec-hdr" style={{ marginTop: 8 }}>
+            <div className="mup2-sec-line" style={{ background: "var(--mup2-border)" }} />
+            <span className="mup2-sec-lbl" style={{ opacity: 0.5 }}>BLOQUEADOS</span>
+          </div>
+          <div className="mup2-ach-grid">
+            {locked.map((a) => (
+              <div key={a.id} className="mup2-ach-card mup2-ach-card--off">
+                <Lock size={16} style={{ opacity: 0.3, flexShrink: 0 }} />
+                <span className="mup2-ach-name" style={{ opacity: 0.35 }}>{a.name}</span>
+                <span className="mup2-ach-desc" style={{ opacity: 0.3 }}>{a.desc}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════
+   MAIN COMPONENT
+════════════════════════════════════════════ */
+export default function MobileUserProfile({ userId, onClose }) {
+  const [user,    setUser]    = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [tab,     setTab]     = useState("stats");
+  const [rank,    setRank]    = useState(null);
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    if (!userId) return;
+    (async () => {
+      setLoading(true);
+      const { data: u } = await supabase.from("users").select("*").eq("id", userId).single();
+      if (u) {
+        setUser(u);
+        const { data: all } = await supabase
+          .from("users").select("id, points").order("points", { ascending: false });
+        if (all) {
+          const pos = all.findIndex((x) => x.id === userId) + 1;
+          setRank({ pos, total: all.length });
+        }
+      }
+      setLoading(false);
+    })();
+  }, [userId]);
+
+  // scroll to top on tab change
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, [tab]);
+
+  const acc = user ? pct(user.correct || 0, user.predictions || 0) : 0;
+
+  return (
+    <div className="mup2-overlay" onClick={onClose}>
+      <div className="mup2-window" onClick={(e) => e.stopPropagation()}>
+
+        {/* ═══ FIXED HEADER ═══ */}
+        <div className="mup2-fixed-header">
+
+          {/* Top bar */}
+          <div className="mup2-topbar">
+            <div className="mup2-topbar-id">
+              <span className="mup2-topbar-tag">USER_PROFILE</span>
+              {rank && (
+                <span className="mup2-topbar-rank">#{rank.pos}</span>
+              )}
+            </div>
+            <button className="mup2-close-btn" onClick={onClose}>
+              <X size={14} />
+            </button>
+          </div>
+
+          {/* Hero */}
+          {loading ? (
+            <div className="mup2-hero-skeleton">
+              <div className="mup2-sk mup2-sk--circle" style={{ width: 56, height: 56 }} />
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
+                <div className="mup2-sk" style={{ width: "55%", height: 14 }} />
+                <div className="mup2-sk" style={{ width: "35%", height: 9 }} />
+              </div>
+            </div>
+          ) : user ? (
+            <div className="mup2-hero">
+              <div className="mup2-hero-av-wrap">
+                <MupAvatar user={user} size={56} />
+                <span className="mup2-hero-lv">NV {user.level || 1}</span>
+              </div>
+              <div className="mup2-hero-info">
+                <div className="mup2-hero-name-row">
+                  <span className="mup2-hero-name">{user.name}</span>
+                  {(user.monthly_championships || 0) > 0 && (
+                    <span className="mup2-hero-crown-badge">
+                      <Crown size={9} />
+                      {user.monthly_championships}
+                    </span>
+                  )}
+                </div>
+                {user.active_title && (
+                  <span className="mup2-hero-title">{user.active_title}</span>
+                )}
+              </div>
+              {rank && (
+                <div className="mup2-hero-rank-block">
+                  <span className="mup2-rank-num">#{rank.pos}</span>
+                  <span className="mup2-rank-sub">de {rank.total}</span>
+                </div>
+              )}
+            </div>
+          ) : null}
+
+          {/* Quick stats strip */}
+          {user && (
+            <div className="mup2-quick-strip">
+              <div className="mup2-quick-cell">
+                <span className="mup2-quick-val">{fmt(user.points || 0)}</span>
+                <span className="mup2-quick-lbl">PTS</span>
+              </div>
+              <div className="mup2-quick-sep" />
+              <div className="mup2-quick-cell">
+                <span className="mup2-quick-val">{fmt(user.correct || 0)}</span>
+                <span className="mup2-quick-lbl">✓</span>
+              </div>
+              <div className="mup2-quick-sep" />
+              <div className="mup2-quick-cell">
+                <span className="mup2-quick-val">{acc}%</span>
+                <span className="mup2-quick-lbl">PREC</span>
+              </div>
+              <div className="mup2-quick-sep" />
+              <div className="mup2-quick-cell">
+                <span className="mup2-quick-val" style={{ color: "#ef4444" }}>
+                  {user.current_streak || 0}
+                </span>
+                <span className="mup2-quick-lbl">🔥</span>
+              </div>
+            </div>
+          )}
+
+          {/* Tabs */}
+          <div className="mup2-tabs">
+            <TabBtn id="stats"    active={tab === "stats"}    onClick={setTab}>STATS</TabBtn>
+            <TabBtn id="crowns"   active={tab === "crowns"}   onClick={setTab}>CORONAS</TabBtn>
+            <TabBtn id="logros"   active={tab === "logros"}   onClick={setTab}>LOGROS</TabBtn>
+          </div>
+        </div>
+
+        {/* ═══ SCROLLABLE BODY ═══ */}
+        <div className="mup2-scroll-body" ref={scrollRef}>
+          {loading ? (
+            <div className="mup2-loading-state">
+              <span className="mup2-loading-dot" />
+              <span className="mup2-loading-dot" style={{ animationDelay: "0.15s" }} />
+              <span className="mup2-loading-dot" style={{ animationDelay: "0.3s" }} />
+            </div>
+          ) : !user ? (
+            <div className="mup2-error">Error al cargar usuario</div>
+          ) : (
+            <>
+              {tab === "stats"  && <PanelStats user={user} />}
+              {tab === "crowns" && <PanelChampions userId={userId} />}
+              {tab === "logros" && <PanelAchievements user={user} />}
+            </>
+          )}
+        </div>
+
+        {/* ═══ FOOTER ═══ */}
+        <div className="mup2-footer">
+          <span className="mup2-footer-id">UID_{userId?.toString().slice(0, 8).toUpperCase()}</span>
+          <span className="mup2-footer-dot" />
+          <span className="mup2-footer-tag">GLOBALSCORE</span>
+        </div>
+
+      </div>
+    </div>
   );
 }
