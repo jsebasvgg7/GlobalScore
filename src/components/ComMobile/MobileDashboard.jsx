@@ -404,17 +404,21 @@ export default function MobileDashboard({
           onPointerLeave={cancelHold}
           onPointerCancel={cancelHold}
         >
-          <div className="mob-qbtn-icon">
+          <div className="mob-qbtn-icon" style={{ position: "relative", overflow: "hidden" }}>
             <div className="mob-fingerprint-wrap">
-              {/* Capa base — siempre visible en muted */}
               <Fingerprint size={18} className="mob-fp-base" />
-              {/* Capa accent — se revela de abajo hacia arriba */}
               <div
                 className="mob-fp-reveal"
                 style={{ height: `${holdPct}%` }}
               >
                 <Fingerprint size={18} className="mob-fp-accent" />
               </div>
+              {holding && (
+                <div
+                  className="mob-fp-scanline"
+                  style={{ bottom: `${holdPct}%` }}
+                />
+              )}
               {/* Línea de scan */}
               {holding && <div className="mob-fp-scanline" style={{ bottom: `${holdPct}%` }} />}
             </div>

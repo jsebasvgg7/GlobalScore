@@ -221,14 +221,20 @@
 ================================================================ */
 .mob-fingerprint-wrap {
   position: relative;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
 }
 
 .mob-fp-base {
   display: block;
   color: var(--mob-muted);
+  transition: opacity 0.1s ease;
+}
+
+/* Ocultar base cuando empieza el scan */
+.mob-qbtn--holding .mob-fp-base {
+  opacity: 0;
 }
 
 /* Ventana que crece desde abajo */
@@ -242,7 +248,7 @@
   transition: height 0.016s linear;
 }
 
-/* El segundo icono, anclado abajo dentro de la ventana */
+/* El segundo icono anclado abajo dentro de la ventana */
 .mob-fp-accent {
   display: block;
   position: absolute;
@@ -257,9 +263,7 @@
   left: -2px;
   right: -2px;
   height: 1px;
-  background: var(--mob-accent);
   opacity: 0.8;
-  /* Guiones brutalistas */
   background-image: repeating-linear-gradient(
     90deg,
     var(--mob-accent) 0px,
