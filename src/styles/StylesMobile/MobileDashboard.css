@@ -181,9 +181,8 @@
 }
 
 .mob-qbtn-icon {
-  width: 34px;
-  height: 34px;
-  /* Sin border-radius — cuadrado BJR */
+  width: 36px;
+  height: 36px;
   border-radius: 0;
   background: var(--mob-accent-subtle);
   border: 0.5px solid var(--mob-accent-border);
