@@ -1,8 +1,5 @@
 /* ================================================================
-   MobileWorldCup.css — Mundial Mobile · Brutalista Minimalista
-   Sistema de líneas conectadas · Sin border-radius salvo inputs
-   Solo visible en ≤768px · Tokens del sistema (index.css)
-   +10% en todos los px respecto a la versión anterior
+   GLOBALSCORE - MOBILE
 ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
@@ -377,8 +374,7 @@
   color: var(--mwc-text);
   outline: none;
   transition: border-color .15s;
-  border-radius: 0;    /* brutalista */
-  -moz-appearance: textfield;
+  border-radius: 0;
 }
 
 .mwc-score-input::-webkit-outer-spin-button,

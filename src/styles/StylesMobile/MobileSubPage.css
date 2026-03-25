@@ -1,11 +1,11 @@
 /* ================================================================
-   MobileSubPage
+   GLOBALSCORE - MOBILE
 ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
 /* ================================================================
-   PÁGINA BASE — cubre toda la pantalla, slide desde derecha
+   PÁGINA BASE 
 ================================================================ */
 .msp-page {
   position: fixed;
