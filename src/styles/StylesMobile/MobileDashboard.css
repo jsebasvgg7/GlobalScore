@@ -1110,7 +1110,88 @@
   margin-left: 4px;
   vertical-align: middle;
 }
+/* ================================================================
+   TAB BAR — estilo Nike (agregar al final de MobileDashboard.css)
+   
+   Uso: pegar este bloque al final del archivo existente
+================================================================ */
 
+/* Contenedor de los 3 tabs */
+.mob2-tabbar {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Tab individual */
+.mob2-tab {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  font-family: var(--m-mono);
+  position: relative;
+  padding-bottom: 6px;
+  flex-shrink: 0;
+}
+
+/* Nombre del tab — muted por defecto */
+.mob2-tab-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--m-muted);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  transition: color 0.15s, font-size 0.15s;
+}
+
+/* Contador de items — muted */
+.mob2-tab-count {
+  display: block;
+  font-size: 8px;
+  color: var(--m-muted);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  line-height: 1;
+  transition: color 0.15s;
+  opacity: 0.6;
+}
+
+/* TAB ACTIVO — igual que "Lifestyle" en Nike: más grande, bold, accent */
+.mob2-tab--active .mob2-tab-label {
+  font-size: 20px;
+  color: var(--m-text);
+}
+
+.mob2-tab--active .mob2-tab-count {
+  color: var(--m-accent);
+  opacity: 1;
+}
+
+/* Línea subrayado debajo del tab activo */
+.mob2-tab--active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--m-accent);
+}
+
+/* Dark mode */
+[data-theme="dark"] .mob2-tab--active .mob2-tab-label {
+  color: var(--light-text);
+}
 /* ================================================================
    SKELETONS
 ================================================================ */

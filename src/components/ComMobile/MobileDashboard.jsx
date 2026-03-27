@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useRef, useCallback } from "react";
-import { Swords, Trophy, Medal, Fingerprint, ChevronRight } from "lucide-react";
 import MobileUserProfile from "../ComProfile/MobileUserProfile";
 import MobileSubPage     from "./MobileSubPage";
 import "../../styles/StylesMobile/MobileDashboard.css";
@@ -263,7 +262,7 @@ function ProgressBar({ saved, total }) {
 }
 
 // ── Ranking Strip ─────────────────────────────────────────────
-function RankingStrip({ users, currentUser, onOpen }) {
+function RankingStrip({ users, currentUser }) {
   const sorted = useMemo(
     () => [...users].sort((a, b) => b.points - a.points).slice(0, 4),
     [users]
@@ -307,6 +306,31 @@ function RankingStrip({ users, currentUser, onOpen }) {
   );
 }
 
+// ── Tab Bar ───────────────────────────────────────────────────
+// Inspirado en el diseño Nike: tab activo grande+bold, resto muted+pequeño
+function TabBar({ activeTab, onTabChange, counts }) {
+  const tabs = [
+    { id: "matches", label: "Partidos", count: counts.matches },
+    { id: "leagues", label: "Ligas",    count: counts.leagues },
+    { id: "awards",  label: "Premios",  count: counts.awards  },
+  ];
+
+  return (
+    <div className="mob2-tabbar">
+      {tabs.map(tab => (
+        <button
+          key={tab.id}
+          className={`mob2-tab${activeTab === tab.id ? " mob2-tab--active" : ""}`}
+          onPointerDown={() => onTabChange(tab.id)}
+        >
+          <span className="mob2-tab-label">{tab.label}</span>
+          <span className="mob2-tab-count">{tab.count} items</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════
 //  MAIN
 // ═══════════════════════════════════════════════════════════════
@@ -323,6 +347,10 @@ export default function MobileDashboard({
 }) {
   const [activePage,   setActivePage]   = useState(null);
   const [profileModal, setProfileModal] = useState(false);
+
+  // ── Nuevo estado: tab activo ───────────────────────────────
+  const [activeTab, setActiveTab] = useState("matches");
+
   const holdRef  = useRef(null);
   const [holdPct, setHoldPct]   = useState(0);
   const [holding, setHolding]   = useState(false);
@@ -349,9 +377,7 @@ export default function MobileDashboard({
 
   const pendingMatches = useMemo(() => matches.filter(m => m.status === "pending"), [matches]);
 
-  // Next match: el más próximo pendiente con deadline futuro
   const nextMatch = useMemo(() => {
-    const now = new Date();
     return matches
       .filter(m => m.status === "pending")
       .sort((a, b) => new Date(`${a.date}T${a.time || "00:00"}`) - new Date(`${b.date}T${b.time || "00:00"}`))
@@ -364,11 +390,91 @@ export default function MobileDashboard({
     m.predictions?.some(p => p.user_id === currentUser?.id)
   ).length;
 
+  // ── Previews por tab ───────────────────────────────────────
   const previewMatches = pendingMatches.slice(0, 5);
   const previewLeagues = leagues.slice(0, 3);
   const previewAwards  = awards.slice(0, 3);
 
+  // ── Conteos para la tab bar ────────────────────────────────
+  const tabCounts = {
+    matches: pendingMatches.length,
+    leagues: leagues.length,
+    awards:  awards.length,
+  };
+
+  // ── Página destino del botón "TODOS »" ─────────────────────
+  const allPageMap = { matches: "matches", leagues: "leagues", awards: "awards" };
+
   const handleNavigate = (page) => setActivePage(page);
+
+  // ── Renderiza el contenido del tab activo ──────────────────
+  const renderTabContent = () => {
+    if (activeTab === "matches") {
+      return loading
+        ? [0, 1, 2].map(i => <SkeletonCard key={i} />)
+        : previewMatches.length === 0
+        ? <EmptyMini label="SIN PARTIDOS PENDIENTES" />
+        : <>
+            {previewMatches.map(m => (
+              <MiniMatchCard
+                key={m.id}
+                match={m}
+                userPred={m.predictions?.find(p => p.user_id === currentUser?.id)}
+              />
+            ))}
+            {pendingMatches.length > 5 && (
+              <div className="mob2-more-card" onPointerDown={() => setActivePage("matches")}>
+                <span className="mob2-more-sym">»</span>
+                <span>MÁS</span>
+              </div>
+            )}
+          </>;
+    }
+
+    if (activeTab === "leagues") {
+      return loading
+        ? [0, 1].map(i => <SkeletonCard key={i} wide />)
+        : previewLeagues.length === 0
+        ? <EmptyMini label="SIN LIGAS ACTIVAS" />
+        : <>
+            {previewLeagues.map(l => (
+              <MiniLeagueCard
+                key={l.id}
+                league={l}
+                userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)}
+              />
+            ))}
+            {leagues.length > 3 && (
+              <div className="mob2-more-card" onPointerDown={() => setActivePage("leagues")}>
+                <span className="mob2-more-sym">»</span>
+                <span>MÁS</span>
+              </div>
+            )}
+          </>;
+    }
+
+    if (activeTab === "awards") {
+      return loading
+        ? [0, 1].map(i => <SkeletonCard key={i} wide />)
+        : previewAwards.length === 0
+        ? <EmptyMini label="SIN PREMIOS ACTIVOS" />
+        : <>
+            {previewAwards.map(a => (
+              <MiniAwardCard
+                key={a.id}
+                award={a}
+                userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)}
+              />
+            ))}
+            {awards.length > 3 && (
+              <div className="mob2-more-card" onPointerDown={() => setActivePage("awards")}>
+                <span className="mob2-more-sym">»</span>
+                <span>MÁS</span>
+              </div>
+            )}
+          </>;
+    }
+  };
 
   return (
     <div className="mob2-root">
@@ -398,100 +504,27 @@ export default function MobileDashboard({
         onOpen={handleNavigate}
       />
 
-      {/* ── PARTIDOS ── */}
-      <div className="mob2-sec">
-        <div className="mob2-sec-title">
-          <div className="mob2-sec-sq" />PARTIDOS
-          <span className="mob2-sec-badge">{pendingMatches.length}</span>
-        </div>
-        <div className="mob2-sec-all" onPointerDown={() => setActivePage("matches")}>TODOS »</div>
-      </div>
-      <div className="mob2-hscroll-wrap">
-        <div className="mob2-hscroll">
-          {loading
-            ? [0, 1, 2].map(i => <SkeletonCard key={i} />)
-            : previewMatches.length === 0
-            ? <EmptyMini label="SIN PARTIDOS PENDIENTES" />
-            : <>
-                {previewMatches.map(m => (
-                  <MiniMatchCard
-                    key={m.id}
-                    match={m}
-                    userPred={m.predictions?.find(p => p.user_id === currentUser?.id)}
-                  />
-                ))}
-                {pendingMatches.length > 5 && (
-                  <div className="mob2-more-card" onPointerDown={() => setActivePage("matches")}>
-                    <span className="mob2-more-sym">»</span>
-                    <span>MÁS</span>
-                  </div>
-                )}
-              </>
-          }
+      {/* ── TAB BAR + CONTENIDO UNIFICADO ── */}
+      <div className="mob2-sec" style={{ marginTop: "14px" }}>
+        {/* Barra de tabs estilo Nike */}
+        <TabBar
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          counts={tabCounts}
+        />
+        {/* Botón "TODOS »" para el tab activo */}
+        <div
+          className="mob2-sec-all"
+          onPointerDown={() => setActivePage(allPageMap[activeTab])}
+        >
+          TODOS »
         </div>
       </div>
 
-      {/* ── LIGAS ── */}
-      <div className="mob2-sec">
-        <div className="mob2-sec-title">
-          <div className="mob2-sec-sq" />LIGAS
-        </div>
-        <div className="mob2-sec-all" onPointerDown={() => setActivePage("leagues")}>TODOS »</div>
-      </div>
+      {/* Scroll horizontal con el contenido del tab activo */}
       <div className="mob2-hscroll-wrap">
         <div className="mob2-hscroll">
-          {loading
-            ? [0, 1].map(i => <SkeletonCard key={i} wide />)
-            : previewLeagues.length === 0
-            ? <EmptyMini label="SIN LIGAS ACTIVAS" />
-            : <>
-                {previewLeagues.map(l => (
-                  <MiniLeagueCard
-                    key={l.id}
-                    league={l}
-                    userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)}
-                  />
-                ))}
-                {leagues.length > 3 && (
-                  <div className="mob2-more-card" onPointerDown={() => setActivePage("leagues")}>
-                    <span className="mob2-more-sym">»</span>
-                    <span>MÁS</span>
-                  </div>
-                )}
-              </>
-          }
-        </div>
-      </div>
-
-      {/* ── PREMIOS ── */}
-      <div className="mob2-sec">
-        <div className="mob2-sec-title">
-          <div className="mob2-sec-sq" />PREMIOS
-        </div>
-        <div className="mob2-sec-all" onPointerDown={() => setActivePage("awards")}>TODOS »</div>
-      </div>
-      <div className="mob2-hscroll-wrap">
-        <div className="mob2-hscroll">
-          {loading
-            ? [0, 1].map(i => <SkeletonCard key={i} wide />)
-            : previewAwards.length === 0
-            ? <EmptyMini label="SIN PREMIOS ACTIVOS" />
-            : <>
-                {previewAwards.map(a => (
-                  <MiniAwardCard
-                    key={a.id}
-                    award={a}
-                    userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)}
-                  />
-                ))}
-                {awards.length > 3 && (
-                  <div className="mob2-more-card" onPointerDown={() => setActivePage("awards")}>
-                    <span className="mob2-more-sym">»</span>
-                    <span>MÁS</span>
-                  </div>
-                )}
-              </>
-          }
+          {renderTabContent()}
         </div>
       </div>
 
@@ -505,7 +538,6 @@ export default function MobileDashboard({
         <RankingStrip
           users={users}
           currentUser={currentUser}
-          onOpen={handleNavigate}
         />
       )}
 
