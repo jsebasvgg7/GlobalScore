@@ -477,11 +477,12 @@
   inset: 0;
   background: rgba(0,0,0,0.55);
   backdrop-filter: blur(5px);
-  z-index: 500;
+  z-index: 9999;                   /* encima de topbar (200) y bottom nav (300) */
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: 0 0 env(safe-area-inset-bottom, 0px);
+  /* El modal sube por encima del bottom nav */
+  padding: 0 0 calc(52px + env(safe-area-inset-bottom, 0px));
   animation: mn-fade-in 0.15s ease;
 }
 
