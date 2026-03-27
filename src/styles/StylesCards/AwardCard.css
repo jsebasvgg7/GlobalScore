@@ -12,8 +12,9 @@
 }
 
 .ac-card {
-  background: #ffffff;
-  border: 0.5px solid #dde3f0;
+    background: #e8e4de;
+  border: 1.5px solid #a8a39c;
+  border-top: 3px solid #d84f4f;
   display: flex;
   flex-direction: column;
   font-family: var(--ac-font-sans);
@@ -50,7 +51,7 @@
 .ac-label { display: flex; align-items: center; gap: 4px; font-size: 8px; font-weight: 700; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.1em; font-family: var(--ac-font-mono); }
 .ac-label svg { flex-shrink: 0; opacity: 0.7; }
 
-.ac-input { width: 100%; background: #f4f7fc; border: 0.5px solid #e2e8f0; padding: 6px 8px; font-size: 11px; font-weight: 500; color: #1a202c; font-family: var(--ac-font-mono); outline: none; transition: border-color 0.15s, background 0.15s, box-shadow 0.15s; box-sizing: border-box; border-radius: 0; }
+.ac-input { width: 100%; background: #f4f7fc; border: 0.5px solid #e2e8f0; padding: 6px 8px; font-size: 11px; font-weight: 500; color: #1a202c; font-family: var(--ac-font-mono); outline: none; transition: border-color 0.15s, background 0.15s, box-shadow 0.15s; box-sizing: border-box; border-radius: 0; border-left: 2px solid #5b4fd8; }
 .ac-input:focus { border-color: var(--ac-accent); background: #ffffff; box-shadow: 0 0 0 2px var(--ac-accent-subtle); }
 .ac-input::placeholder { color: #c5cdd9; font-weight: 400; }
 .ac-input:disabled { opacity: 0.45; cursor: not-allowed; background: #f8fafc; }

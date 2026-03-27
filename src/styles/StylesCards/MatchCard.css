@@ -26,8 +26,9 @@
 ================================================================ */
 .mc-card {
   position: relative;
-  background: #ffffff;
-  border: 0.5px solid #dde3f0;
+  background: #e8e4de;
+  border: 1.5px solid #a8a39c;
+  border-top: 3px solid #5b4fd8;
   display: flex;
   flex-direction: column;
   font-family: var(--mc-font-sans);
@@ -51,6 +52,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: #dedad4; 
   padding: 9px 12px;
   border-bottom: 0.5px solid #eef0f8;
   gap: 8px;
@@ -182,7 +184,7 @@
 /* ── Escudo ── */
 .mc-shield-wrap {
   width: 48px; height: 48px;
-  background: #f4f7fc;
+  background: #e8e4de;  
   border: 0.5px solid #e8ecf4;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; position: relative;
@@ -231,14 +233,14 @@
   width: 48px; height: 48px;
   border: 0.5px solid #dde3f0;
   display: flex; align-items: center; justify-content: center;
-  background: #ffffff; flex-shrink: 0;
+  background: #f0ede8; flex-shrink: 0;
   transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
 .mc-card--active .mc-score-box { background: #1a1a2c; border-color: #2a2a3e; }
 
 .mc-score-box--done {
-  background: var(--mc-accent-subtle);
-  border-color: rgba(91, 79, 216, 0.22);
+  background: rgba(91,79,216,0.1);
+  border-color: rgba(91,79,216,0.3);
 }
 .mc-card--active .mc-score-box--done {
   background: rgba(255, 255, 255, 0.07);

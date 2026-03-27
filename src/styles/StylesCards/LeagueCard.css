@@ -12,8 +12,9 @@
 }
 
 .lc-card {
-  background: #ffffff;
-  border: 0.5px solid #dde3f0;
+  background: #e8e4de;
+  border: 1.5px solid #a8a39c;
+  border-top: 3px solid #1D9E75;
   display: flex;
   flex-direction: column;
   font-family: var(--lc-font-sans);
@@ -97,7 +98,7 @@
   padding: 6px 8px; font-size: 11px; font-weight: 500; color: #1a202c;
   font-family: var(--lc-font-mono); outline: none;
   transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
-  box-sizing: border-box; border-radius: 0;
+  box-sizing: border-box; border-radius: 0;border-left: 2px solid #5b4fd8;
 }
 .lc-input:focus { border-color: var(--lc-accent); background: #ffffff; box-shadow: 0 0 0 2px var(--lc-accent-subtle); }
 .lc-input::placeholder { color: #c5cdd9; font-weight: 400; }
