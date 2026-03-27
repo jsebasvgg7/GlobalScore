@@ -1,23 +1,54 @@
 /* ================================================================
-   GLOBALSCORE - MOBILE
+   GLOBALSCORE - MOBILE SUB PAGE
+   Paleta crema alineada con MobileDashboard + estilo BJR
 ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
 /* ================================================================
-   PÁGINA BASE 
+   TOKENS LOCALES — idénticos a mob2-root para coherencia
+================================================================ */
+.msp-page {
+  --msp-bg:          #f0ede8;
+  --msp-card:        #e8e4de;
+  --msp-surface:     #e4e0da;
+  --msp-border:      #c8c3bb;
+  --msp-border-dark: #1a1a1a;
+  --msp-accent:      #5b4fd8;
+  --msp-accent-l:    #8b7fc7;
+  --msp-text:        #1a1a2e;
+  --msp-muted:       #888780;
+  --msp-glass:       rgba(91,79,216,0.08);
+  --msp-mono:        'DM Mono', 'Courier New', monospace;
+  --msp-sora:        'Sora', sans-serif;
+}
+
+[data-theme="dark"] .msp-page {
+  --msp-bg:          #0f0f0f;
+  --msp-card:        #1a1a1a;
+  --msp-surface:     #141414;
+  --msp-border:      #2e2e2e;
+  --msp-border-dark: #3a3a3a;
+  --msp-accent:      #8b7fc7;
+  --msp-accent-l:    #a599d9;
+  --msp-text:        #f0ece6;
+  --msp-muted:       #5a5248;
+  --msp-glass:       rgba(139,127,199,0.08);
+}
+
+/* ================================================================
+   PÁGINA BASE
 ================================================================ */
 .msp-page {
   position: fixed;
   inset: 0;
   z-index: 300;
-  background: var(--bg);
+  background: var(--msp-bg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  /* Slide-in desde la derecha */
   animation: msp-slide-in 0.28s cubic-bezier(0.34, 1.1, 0.64, 1) both;
-  font-family: 'Sora', sans-serif;
+  font-family: var(--msp-sora);
 }
 
 @keyframes msp-slide-in {
@@ -26,18 +57,28 @@
 }
 
 /* ================================================================
-   TOP BAR
+   TOP BAR — franja oscura de cabecera
 ================================================================ */
 .msp-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px 12px;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  /* Safe area para notch */
+  padding: 0 16px 0;
   padding-top: calc(14px + env(safe-area-inset-top));
+  padding-bottom: 12px;
+  background: var(--msp-card);
+  border-bottom: 1px solid var(--msp-border-dark);
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Línea de acento izquierda — detalle BJR */
+.msp-topbar::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--msp-accent);
 }
 
 .msp-back {
@@ -46,19 +87,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border);
+  border: 1px solid var(--msp-border-dark);
   background: transparent;
-  color: var(--accent);
-  border-radius: 10px;
+  color: var(--msp-text);
   cursor: pointer;
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
   transition: background 0.15s;
 }
 
-.msp-back:active {
-  background: var(--glass);
-}
+.msp-back:active { background: var(--msp-glass); }
 
 .msp-topbar-center {
   display: flex;
@@ -69,22 +107,22 @@
 }
 
 .msp-topbar-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
-  color: var(--text-primary);
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.12em;
+  color: var(--msp-text);
+  font-family: var(--msp-mono);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
 .msp-topbar-count {
   font-size: 10px;
   font-weight: 700;
-  color: var(--accent);
-  background: var(--glass);
-  border-radius: 20px;
+  color: var(--msp-accent);
+  background: var(--msp-glass);
+  border: 1px solid rgba(91,79,216,0.25);
   padding: 3px 10px;
-  font-family: 'DM Mono', monospace;
+  font-family: var(--msp-mono);
 }
 
 .msp-filter-toggle {
@@ -93,10 +131,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border);
+  border: 1px solid var(--msp-border-dark);
   background: transparent;
-  color: var(--muted);
-  border-radius: 10px;
+  color: var(--msp-muted);
   cursor: pointer;
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
@@ -104,14 +141,12 @@
 }
 
 .msp-filter-toggle.active {
-  background: var(--glass);
-  border-color: var(--accent);
-  color: var(--accent);
+  background: var(--msp-glass);
+  border-color: var(--msp-accent);
+  color: var(--msp-accent);
 }
 
-.msp-filter-toggle:active {
-  transform: scale(0.95);
-}
+.msp-filter-toggle:active { transform: scale(0.95); }
 
 /* ================================================================
    SORT ROW
@@ -121,8 +156,8 @@
   align-items: center;
   gap: 7px;
   padding: 10px 16px;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
+  background: var(--msp-surface);
+  border-bottom: 1px solid var(--msp-border);
   flex-shrink: 0;
   overflow-x: auto;
   scrollbar-width: none;
@@ -131,55 +166,54 @@
 .msp-sort-row::-webkit-scrollbar { display: none; }
 
 .msp-sort-icon {
-  color: var(--muted);
+  color: var(--msp-muted);
   flex-shrink: 0;
-  width: 11px;
-  height: 11px;
+  width: 11px; height: 11px;
 }
 
 .msp-sort-pill {
-  padding: 6px 12px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
+  padding: 5px 12px;
+  border: 1px solid var(--msp-border);
   background: transparent;
-  font-size: 11px;
-  font-weight: 600;
-  font-family: 'Sora', sans-serif;
-  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--msp-mono);
+  color: var(--msp-muted);
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
   line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   transition: all 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
 
 .msp-sort-pill.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
+  background: var(--msp-text);
+  border-color: var(--msp-text);
+  color: var(--msp-bg);
   font-weight: 700;
 }
 
-.msp-sort-pill:active {
-  transform: scale(0.97);
-}
+.msp-sort-pill:active { transform: scale(0.97); }
 
 /* Chip de filtro activo */
 .msp-active-chip {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 10px;
-  background: var(--glass);
-  border: 1px solid var(--accent);
-  border-radius: 20px;
-  font-size: 11px;
+  padding: 4px 10px;
+  background: var(--msp-glass);
+  border: 1px solid var(--msp-accent);
+  font-size: 10px;
   font-weight: 700;
-  color: var(--accent);
-  font-family: 'Sora', sans-serif;
+  color: var(--msp-accent);
+  font-family: var(--msp-mono);
   white-space: nowrap;
   flex-shrink: 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .msp-active-chip button {
@@ -187,7 +221,7 @@
   align-items: center;
   border: none;
   background: transparent;
-  color: var(--accent);
+  color: var(--msp-accent);
   padding: 0;
   cursor: pointer;
   margin-left: 2px;
@@ -201,17 +235,19 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 16px;
+  padding: 12px 16px;
   flex-shrink: 0;
+  background: var(--msp-surface);
+  border-bottom: 1px solid var(--msp-border);
 }
 
 .msp-season-label span {
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.14em;
+  font-family: var(--msp-mono);
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--msp-muted);
   white-space: nowrap;
 }
 
@@ -226,6 +262,7 @@
   overscroll-behavior: contain;
   scrollbar-width: none;
   padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  background: var(--msp-bg);
 }
 
 .msp-body::-webkit-scrollbar { display: none; }
@@ -240,9 +277,7 @@
   padding: 16px 16px 4px;
 }
 
-.msp-group + .msp-group {
-  padding-top: 8px;
-}
+.msp-group + .msp-group { padding-top: 8px; }
 
 .msp-date-label {
   display: flex;
@@ -250,36 +285,34 @@
   gap: 10px;
 }
 
-.msp-date-label.first span {
-  color: var(--accent);
-  background: var(--glass);
-  border-color: var(--accent);
-}
-
 .msp-date-label span {
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.14em;
+  font-family: var(--msp-mono);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--muted);
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
+  color: var(--msp-muted);
+  background: var(--msp-card);
+  border: 1px solid var(--msp-border);
   padding: 4px 12px;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
+.msp-date-label.first span {
+  color: var(--msp-accent);
+  background: var(--msp-glass);
+  border-color: var(--msp-accent);
+}
+
 .msp-date-line {
   flex: 1;
   height: 1px;
-  background: var(--border);
+  background: var(--msp-border);
 }
 
 /* ================================================================
    CARDS COLUMN
-   Las MatchCards tienen max-width propio; aquí solo alineamos
 ================================================================ */
 .msp-cards-col {
   display: flex;
@@ -289,27 +322,19 @@
   width: 100%;
 }
 
-/* Forzar que las cards ocupen el ancho disponible */
 .msp-cards-col > * {
   width: 100%;
   max-width: 100%;
 }
 
-/* Override de MatchCard para mobile sub-page */
 .msp-cards-col .mc-wrap {
   max-width: 100% !important;
   width: 100% !important;
 }
 
-.msp-cards-col .mc-card {
-  width: 100% !important;
-}
-
-/* LeagueCard y AwardCard */
+.msp-cards-col .mc-card { width: 100% !important; }
 .msp-cards-col .lc-card,
-.msp-cards-col .ac-card {
-  width: 100% !important;
-}
+.msp-cards-col .ac-card { width: 100% !important; }
 
 /* ================================================================
    EMPTY STATE
@@ -323,37 +348,33 @@
 }
 
 .msp-empty-box {
-  width: 52px;
-  height: 52px;
-  color: var(--muted);
+  width: 52px; height: 52px;
+  color: var(--msp-muted);
   opacity: 0.4;
 }
 
-.msp-empty-box svg {
-  width: 52px;
-  height: 52px;
-}
+.msp-empty-box svg { width: 52px; height: 52px; }
 
 .msp-empty-lbl {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.12em;
+  font-family: var(--msp-mono);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--msp-muted);
   opacity: 0.7;
   text-align: center;
 }
 
 /* ================================================================
-   FILTER PANEL — lateral desde la derecha
+   FILTER PANEL — lateral desde la derecha — estilo BJR
 ================================================================ */
 .msp-filter-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 8, 20, 0.5);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  background: rgba(10, 8, 20, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 400;
   display: flex;
   justify-content: flex-end;
@@ -364,8 +385,9 @@
   width: 264px;
   max-width: 80vw;
   height: 100%;
-  background: var(--bg);
-  border-left: 1px solid var(--border);
+  background: var(--msp-bg);
+  border-left: 1px solid var(--msp-border-dark);
+  border-top: 3px solid var(--msp-accent); /* ← detalle BJR en top */
   display: flex;
   flex-direction: column;
   animation: msp-panel-in 0.24s cubic-bezier(0.34, 1.2, 0.64, 1);
@@ -382,8 +404,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 16px 14px;
-  border-bottom: 1px solid var(--border);
-  background: var(--card);
+  border-bottom: 1px solid var(--msp-border);
+  background: var(--msp-card);
   flex-shrink: 0;
   padding-top: calc(20px + env(safe-area-inset-top));
 }
@@ -392,18 +414,15 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.1em;
+  font-family: var(--msp-mono);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-primary);
+  color: var(--msp-text);
 }
 
-.msp-filter-hdr-title svg {
-  color: var(--accent);
-  flex-shrink: 0;
-}
+.msp-filter-hdr-title svg { color: var(--msp-accent); flex-shrink: 0; }
 
 .msp-filter-hdr-actions {
   display: flex;
@@ -413,26 +432,23 @@
 
 .msp-filter-reset {
   padding: 4px 10px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
+  border: 1px solid var(--msp-border-dark);
   background: transparent;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.06em;
+  font-family: var(--msp-mono);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--msp-accent);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
 .msp-filter-close {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
+  width: 30px; height: 30px;
+  border: 1px solid var(--msp-border-dark);
   background: transparent;
-  color: var(--muted);
+  color: var(--msp-muted);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -448,66 +464,96 @@
   padding: 12px 12px 28px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   -webkit-overflow-scrolling: touch;
 }
 
+/* Items de filtro — estilo BJR: rectangulares, sin radius */
 .msp-filter-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 14px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: 'Sora', sans-serif;
-  color: var(--text-primary);
+  padding: 11px 14px;
+  background: var(--msp-card);
+  border: 1px solid var(--msp-border);
+  border-left: 2px solid transparent;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--msp-sora);
+  color: var(--msp-text);
   cursor: pointer;
   text-align: left;
   width: 100%;
-  transition: all 0.15s;
+  transition: all 0.12s;
   -webkit-tap-highlight-color: transparent;
 }
 
-.msp-filter-item:active {
-  transform: scale(0.98);
-}
+.msp-filter-item:active { background: var(--msp-surface); }
 
 .msp-filter-item.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-  font-weight: 700;
+  background: var(--msp-text);
+  border-color: var(--msp-text);
+  border-left-color: var(--msp-accent);
+  color: var(--msp-bg);
 }
 
 .msp-filter-item-icon {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1;
   flex-shrink: 0;
 }
 
 /* ================================================================
-   DARK MODE — heredado del sistema, solo overrides específicos
+   DARK MODE
 ================================================================ */
-[data-theme="dark"] .msp-page {
-  background: var(--bg);
+[data-theme="dark"] .msp-page    { background: #0f0f0f; }
+[data-theme="dark"] .msp-body    { background: #0f0f0f; }
+
+[data-theme="dark"] .msp-topbar {
+  background: #1a1a1a;
+  border-bottom-color: #3a3a3a;
 }
 
-[data-theme="dark"] .msp-topbar,
-[data-theme="dark"] .msp-sort-row {
-  background: var(--card);
+[data-theme="dark"] .msp-topbar::before { background: #8b7fc7; }
+
+[data-theme="dark"] .msp-back,
+[data-theme="dark"] .msp-filter-toggle {
+  border-color: #3a3a3a;
+  color: #f0ece6;
 }
+
+[data-theme="dark"] .msp-back:active     { background: rgba(139,127,199,0.1); }
+[data-theme="dark"] .msp-topbar-title    { color: #f0ece6; }
+[data-theme="dark"] .msp-topbar-count    { color: #a599d9; background: rgba(139,127,199,0.1); border-color: rgba(139,127,199,0.25); }
+[data-theme="dark"] .msp-filter-toggle.active { background: rgba(139,127,199,0.1); border-color: #8b7fc7; color: #a599d9; }
+
+[data-theme="dark"] .msp-sort-row { background: #141414; border-bottom-color: #2e2e2e; }
+[data-theme="dark"] .msp-sort-pill { border-color: #2e2e2e; color: #5a5248; }
+[data-theme="dark"] .msp-sort-pill.active { background: #f0ece6; border-color: #f0ece6; color: #0f0f0f; }
+
+[data-theme="dark"] .msp-active-chip { background: rgba(139,127,199,0.1); border-color: #8b7fc7; color: #a599d9; }
+
+[data-theme="dark"] .msp-season-label { background: #141414; border-bottom-color: #2e2e2e; }
+[data-theme="dark"] .msp-season-label span { color: #5a5248; }
+
+[data-theme="dark"] .msp-date-label span { background: #1a1a1a; border-color: #2e2e2e; color: #5a5248; }
+[data-theme="dark"] .msp-date-label.first span { background: rgba(139,127,199,0.1); border-color: #8b7fc7; color: #a599d9; }
+[data-theme="dark"] .msp-date-line { background: #1e1e1e; }
+
+[data-theme="dark"] .msp-empty-box { color: #5a5248; }
+[data-theme="dark"] .msp-empty-lbl { color: #5a5248; }
 
 [data-theme="dark"] .msp-filter-panel {
-  background: var(--bg);
+  background: #0f0f0f;
+  border-left-color: #3a3a3a;
+  border-top-color: #8b7fc7;
 }
 
-[data-theme="dark"] .msp-filter-hdr {
-  background: var(--card);
-}
+[data-theme="dark"] .msp-filter-hdr { background: #1a1a1a; border-bottom-color: #2e2e2e; }
+[data-theme="dark"] .msp-filter-hdr-title { color: #f0ece6; }
+[data-theme="dark"] .msp-filter-reset { border-color: #3a3a3a; color: #a599d9; }
+[data-theme="dark"] .msp-filter-close { border-color: #3a3a3a; color: #5a5248; }
 
-[data-theme="dark"] .msp-filter-item {
-  background: var(--card);
-}
+[data-theme="dark"] .msp-filter-item { background: #1a1a1a; border-color: #2e2e2e; color: #f0ece6; }
+[data-theme="dark"] .msp-filter-item:active { background: #242424; }
+[data-theme="dark"] .msp-filter-item.active { background: #f0ece6; border-color: #f0ece6; border-left-color: #8b7fc7; color: #0f0f0f; }
