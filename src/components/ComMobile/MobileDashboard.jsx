@@ -208,7 +208,7 @@ function NextMatchBanner({ match, currentUser, onOpen }) {
           <span className="mob2-nm-meta">Proximo Partido · {match.league} · {match.date}</span>
           {!isExp && (
             <button className="mob2-nm-btn">
-              {hasPred ? "VER PRED. →" : "PREDECIR →"}
+              {hasPred ? "VER PRED. >>" : "PREDECIR >>"}
             </button>
           )}
         </div>
