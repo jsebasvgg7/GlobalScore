@@ -75,10 +75,15 @@
   border-color: rgba(124, 107, 184, 0.5);
 }
 
-[data-theme="dark"] .bottom-nav,
 [data-theme="dark"] .gs-bottom-nav {
-  background: #1a1a1a;
-  border-top-color: #2e2e2e;
+  background: #0f0f0f !important;
+  border-top-color: #2e2e2e !important;
+  box-shadow: 0 -4px 20px #000000 !important;
+}
+
+[data-theme="dark"] .gs-bottom-trophy {
+  background: #8b7fc7 !important;
+  box-shadow: 3px 3px 0 #000000 !important;
 }
 
 /* ================================================================
@@ -159,31 +164,31 @@
 
 /* Mobile Header */
 [data-theme="dark"] .gs-mobile-header {
-  background: #1a1a1a;
-  border-bottom-color: #2e2e2e;
+  background: #0f0f0f;
+  border-bottom: none;
 }
 
 [data-theme="dark"] .gs-mobile-name { color: #f0ece6; }
 [data-theme="dark"] .gs-mobile-hey  { color: #5a5248; }
 
-[data-theme="dark"] .gs-mobile-avatar {
-  background: #8b7fc7;
-  border-color: #3a3a3a;
-}
-
 [data-theme="dark"] .gs-mobile-btn {
-  color: #a09080;
-  border-left-color: #2e2e2e;
+  border-color: #2e2e2e;
+  color: #5a5248;
 }
 
 [data-theme="dark"] .gs-mobile-btn:active {
-  background: #242424;
+  background: #1a1a1a;
   color: #f0ece6;
 }
 
 [data-theme="dark"] .gs-mobile-btn-dot {
   background: #c04444;
-  border-color: #1a1a1a;
+  border-color: #0f0f0f;
+}
+
+[data-theme="dark"] .gs-mobile-avatar {
+  background: #8b7fc7;
+  border-color: #2e2e2e;
 }
 
 /* Bottom Nav Mobile */
@@ -195,13 +200,6 @@
 
 [data-theme="dark"] .gs-bottom-btn { color: #5a5248 !important; }
 [data-theme="dark"] .gs-bottom-btn--active { color: #a599d9 !important; }
-
-[data-theme="dark"] .gs-bottom-trophy {
-  background: #8b7fc7 !important;
-  box-shadow: 3px 3px 0 #000000 !important;
-}
-
-[data-theme="dark"] .gs-bottom-trophy--active { background: #7366b3 !important; }
 
 /* ================================================================
    5. NAVIGATION TABS — NavigationTabs.css

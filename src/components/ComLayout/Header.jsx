@@ -178,34 +178,33 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
       {/* ══════════════════════════════════════
           MOBILE — Top Header · BJR
       ══════════════════════════════════════ */}
-      <header className="gs-mobile-header">
-
-        {/* Izquierda: avatar columna + nombre */}
-        <div className="gs-mobile-left">
-          <button className="gs-mobile-avatar" onClick={() => navigate("/profile")} aria-label="Perfil">
-            {currentUser?.avatar_url
-              ? <img src={currentUser.avatar_url} alt={firstName} />
-              : <span>{initials}</span>
-            }
-          </button>
-          <div className="gs-mobile-greeting">
-            <span className="gs-mobile-hey">GlobalScore</span>
-            <span className="gs-mobile-name">{firstName}</span>
-          </div>
+     <header className="gs-mobile-header">
+      {/* Izquierda: Hey + Nombre */}
+      <div className="gs-mobile-left">
+        <div className="gs-mobile-greeting">
+          <span className="gs-mobile-hey">Hey</span>
+          <span className="gs-mobile-name">{firstName}</span>
         </div>
+      </div>
 
-        {/* Derecha: acciones como columnas separadas por borde */}
-        <div className="gs-mobile-actions">
-          <button className="gs-mobile-btn" onClick={toggleTheme} aria-label="Tema">
-            {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
-          </button>
-          <button className="gs-mobile-btn" onClick={() => navigate("/notifications")} aria-label="Notificaciones">
-            <Bell size={15} />
-            <span className="gs-mobile-btn-dot" />
-          </button>
-        </div>
+      {/* Derecha: notificaciones + avatar */}
+      <div className="gs-mobile-actions">
+        <button className="gs-mobile-btn" onClick={toggleTheme} aria-label="Tema">
+          {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
+        </button>
+        <button className="gs-mobile-btn" onClick={() => navigate("/notifications")} aria-label="Notificaciones">
+          <Bell size={15} />
+          <span className="gs-mobile-btn-dot" />
+        </button>
+        <button className="gs-mobile-avatar" onClick={() => navigate("/profile")} aria-label="Perfil">
+          {currentUser?.avatar_url
+            ? <img src={currentUser.avatar_url} alt={firstName} />
+            : <span>{initials}</span>
+          }
+        </button>
+      </div>
 
-      </header>
+    </header>
 
       {/* ══════════════════════════════════════
           MOBILE — Bottom Nav

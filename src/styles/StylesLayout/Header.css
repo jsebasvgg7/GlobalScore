@@ -1,6 +1,5 @@
 /* ================================================================
    Header — Brutalista Japonés Retro  ·  GlobalScore
-   Sidebar: centrado verticalmente, con identidad fuerte
 ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap');
@@ -21,16 +20,16 @@
   --sb-sans:         'Sora', sans-serif;
 
   /* Bottom nav tokens */
-  --bn-h:        52px;
-  --bn-bg-light: #ffffff;
+  --bn-h:        56px;
+  --bn-bg-light: #f0ede8;          /* ← antes: #ffffff */
   --bn-bg-dark:  #0e0f14;
-  --bn-border-light: #e2e0dc;
+  --bn-border-light: #c4bfb8;      /* ← antes: #e2e0dc, más definido */
   --bn-border-dark:  rgba(255,255,255,0.08);
-  --bn-text-light: #9a97b0;
+  --bn-text-light: #888780;        /* ← antes: #9a97b0 */
   --bn-text-dark:  #4a5068;
-  --bn-active-light: #5b4fd8;
+  --bn-active-light: #1a1a2e;      /* ← antes: #5b4fd8, negro en vez de morado */
   --bn-active-dark:  #a899ff;
-  --bn-trophy-bg-light: #5b4fd8;
+  --bn-trophy-bg-light: #1a1a2e;   /* ← antes: #5b4fd8, negro */
   --bn-trophy-bg-dark:  #5b4fd8;
 }
 
@@ -586,85 +585,69 @@
   display: none;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
-  padding: 0 16px;
-  background: var(--bg);
-  border-bottom: 0.5px solid var(--border);
+  height: 60px;
+  padding: 0 20px;
+  background: #f0ede8;          /* mismo que --m-bg del dashboard */
+  border-bottom: none;          /* sin separación */
   position: sticky;
   top: 0;
   z-index: 200;
 }
 
-.gs-mobile-left { display: flex; align-items: center; gap: 10px; }
-
-.gs-mobile-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 0;
-  background: var(--accent);
-  border: 0.5px solid var(--border);
-  cursor: pointer;
+.gs-mobile-left {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  overflow: hidden;
-  flex-shrink: 0;
+  gap: 1px;
 }
 
-.gs-mobile-avatar img  { width: 100%; height: 100%; object-fit: cover; }
-.gs-mobile-avatar span {
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  font-family: 'DM Mono', monospace;
+/* Quitamos el avatar de la izquierda — ya no va aquí */
+.gs-mobile-avatar {
+  display: none;
 }
 
-/* Bloque de texto — padding interno, sin separación extra */
 .gs-mobile-greeting {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 12px;
-  line-height: 1;
-  gap: 3px;
+  padding: 0;
+  gap: 1px;
 }
 
 .gs-mobile-hey {
-  font-size: 7px;
-  color: var(--muted);
+  font-size: 10px;
+  color: var(--m-muted, #888780);
   font-family: 'DM Mono', monospace;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   opacity: 0.7;
+  line-height: 1;
 }
 
 .gs-mobile-name {
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #1a1a2e;
   font-family: 'DM Mono', monospace;
-  letter-spacing: -0.01em;
-}
- 
-/* ── Lado derecho: botones ── */
-.gs-mobile-actions {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  margin-left: auto;
-  position: relative;
-  z-index: 2;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
-/* Cada botón de acción — columna cuadrada con borde izquierdo */
+/* ── Lado derecho: noti + avatar ── */
+.gs-mobile-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
 .gs-mobile-btn {
-  width: 48px;
-  height: 52px;
+  width: 36px;
+  height: 36px;
   border-radius: 0;
-  border: none;
-  border-left: 1px solid var(--border);
+  border: 1.5px solid #c4bfb8;
   background: transparent;
-  color: var(--muted);
+  color: #888780;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -675,20 +658,43 @@
 }
 
 .gs-mobile-btn:active {
-  background: var(--glass);
-  color: var(--accent);
+  background: #e8e4de;
+  color: #1a1a2e;
 }
 
 /* Dot de notificación */
 .gs-mobile-btn-dot {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 6px;
+  right: 6px;
   width: 5px;
   height: 5px;
   background: #d84040;
   border-radius: 50%;
-  border: 1.5px solid var(--bg);
+  border: 1.5px solid #f0ede8;
+}
+
+/* Avatar — ahora va a la derecha */
+.gs-mobile-avatar {
+  display: flex;
+  width: 36px;
+  height: 36px;
+  border-radius: 0;
+  background: #5b4fd8;
+  border: 1.5px solid #c4bfb8;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.gs-mobile-avatar img  { width: 100%; height: 100%; object-fit: cover; }
+.gs-mobile-avatar span {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
 }
 
 /* ================================================================

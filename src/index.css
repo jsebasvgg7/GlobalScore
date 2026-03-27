@@ -259,12 +259,6 @@ button {
 /* ================================================================
    BOTTOM NAVIGATION — universal
 ================================================================ */
-.gs-bottom-nav,
-.bottom-nav {
-  background: var(--card) !important;
-  border-top-color: var(--border) !important;
-}
-
 .bottom-nav-btn,
 .gs-bottom-btn {
   color: var(--muted) !important;
