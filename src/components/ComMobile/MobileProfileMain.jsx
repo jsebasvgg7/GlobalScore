@@ -166,6 +166,22 @@ export default function MobileProfileMain({
           </div>
           <ChevronRight size={14} className="mpm-chevron" />
         </div>
+        {/* NUEVA FILA: Mis Notas */}
+        <div className="mpm-row" onClick={() => go("notes")}>
+          <div className="mpm-row-accent" style={{ background: "#5b4fd8" }} />
+          <div className="mpm-icon" style={{ borderColor: "#5b4fd8", background: "rgba(91,79,216,0.1)" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5b4fd8" strokeWidth="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              <line x1="16" y1="4" x2="20" y2="8"/>
+            </svg>
+          </div>
+          <div className="mpm-row-body">
+            <div className="mpm-row-lbl">Mis Notas</div>
+            <div className="mpm-row-desc">Bloc de notas cifrado</div>
+          </div>
+          <ChevronRight size={14} className="mpm-chevron" />
+        </div>
       </div>
 
       {/* ══ SECCIÓN: CUENTA ══ */}

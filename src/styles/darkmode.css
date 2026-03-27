@@ -1543,7 +1543,22 @@
 [data-theme="dark"] .pnew-mob-row:active { background: #242424; }
 [data-theme="dark"] .pnew-mob-row-lbl { color: #f0ece6; }
 [data-theme="dark"] .pnew-mob-logout { background: #2a1010; border-color: #3d1818; color: #e07070; }
-
+[data-theme="dark"] .np-sidebar,
+[data-theme="dark"] .np-sidebar-header,
+[data-theme="dark"] .np-editor-toolbar,
+[data-theme="dark"] .np-info-panel,
+[data-theme="dark"] .np-info-header {
+  background: #1a1a1a;
+}
+[data-theme="dark"] .np-search-wrap,
+[data-theme="dark"] .np-editor,
+[data-theme="dark"] .np-list-group-label { background: #0f0f0f; }
+[data-theme="dark"] .np-note-item        { background: transparent; }
+[data-theme="dark"] .np-note-item:hover  { background: rgba(139,127,199,0.06); }
+[data-theme="dark"] .np-note-item--active { background: rgba(139,127,199,0.12) !important; }
+[data-theme="dark"] .np-modal            { background: #1a1a1a; border-color: #2e2e2e; }
+[data-theme="dark"] .np-title-input,
+[data-theme="dark"] .np-content-area     { color: #f0ece6; }
 /* ================================================================
    24. MOBILE DASHBOARD — MobileDashboard.css
 ================================================================ */

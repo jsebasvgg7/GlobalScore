@@ -7,13 +7,14 @@ import {
   Save, X, Activity, RotateCcw, ArrowLeft, Settings,
   Lock, Layers, Award, Target, Zap, Flame, Star,
   TrendingUp, Calendar, CheckCircle2, XCircle, Clock,
-  ArrowUpDown, Gamepad2, Image, Filter
+  ArrowUpDown, Gamepad2, Image, Filter, NotebookPen
 } from 'lucide-react';
 
 import { ToastContainer, useToast } from '../components/ComFeedback/Toast';
 import Footer from '../components/ComLayout/Footer';
 import AdminAchievementsModal from '../components/ComAdmin/AdminAchievementsModal';
 import AdminTitlesModal from '../components/ComAdmin/AdminTitlesModal';
+import MobileNotes from "../components/ComMobile/MobileNotes";
 
 import { useProfileData } from '../hooks/HooksProfile/useProfileData';
 import { usePredictionHistory } from '../hooks/HooksProfile/usePredictionHistory';
@@ -45,6 +46,7 @@ const NAV_ITEMS = [
   { id: 'championships', icon: Crown,   label: 'Campeonatos',    group: 'perfil' },
   { id: 'history',       icon: List,    label: 'Historial',      group: 'perfil' },
   { id: 'edit',          icon: Edit2,   label: 'Editar Perfil',  group: 'perfil' },
+  { id: 'notes',         icon: NotebookPen, label: 'Mis Notas',     group: 'perfil'   },
   { id: 'settings-account',       icon: User,     label: 'Cuenta',         group: 'ajustes' },
   { id: 'settings-appearance',    icon: Moon,     label: 'Apariencia',     group: 'ajustes' },
   { id: 'settings-notifications', icon: Bell,     label: 'Notificaciones', group: 'ajustes' },
@@ -842,7 +844,8 @@ function MobileSubView({ tabId, onBack, children }) {
    COMPONENTE PRINCIPAL
 ═══════════════════════════════════════════════════════════════ */
 export default function ProfileSettingsPage({ currentUser, onBack }) {
-  const [mobileView, setMobileView] = useState('main');
+  const [mobileView, setMobileView]   = useState('main');
+  const [showMobileNotes, setShowMobileNotes] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showAdminAchievementsModal, setShowAdminAchievementsModal] = useState(false);
@@ -871,6 +874,13 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
       setActiveTab('overview');
       setMobileView('main');
     });
+  };
+  const handleMobileNavigate = (section) => {
+    if (section === 'notes') {
+      setShowMobileNotes(true);
+      return;
+    }
+    setMobileView(`tab:${section}`);
   };
 
   const handleAvatarUpload = (url) => {
@@ -947,6 +957,8 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
           loadUserData={loadUserData}
           setActiveTab={t => { setActiveTab(t); setMobileView('main'); }}
         />;
+        case 'notes':
+          return null;
       default: return null;
     }
   };
@@ -973,6 +985,13 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
           <MobileSubView tabId={currentMobileTab} onBack={() => setMobileView('main')}>
             {renderContent(currentMobileTab)}
           </MobileSubView>
+        )}
+        {/* ── MOBILE: Vista notas (overlay completo) ── */}
+        {showMobileNotes && (
+          <MobileNotes
+            currentUser={currentUser}
+            onBack={() => { setShowMobileNotes(false); setMobileView('main'); }}
+          />
         )}
       </div>
 

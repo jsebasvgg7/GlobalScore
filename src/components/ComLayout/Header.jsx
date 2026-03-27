@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Trophy, LogOut, User2, Award, Shield, Bell, Home, BarChart3, Moon, Sun, Globe } from "lucide-react";
+import { Trophy, LogOut, User2, Award, Shield, Bell, Home, BarChart3, Moon, Sun, Globe, NotebookPen } from "lucide-react";
 import { supabase } from "../../utils/supabaseClient";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
@@ -38,6 +38,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
     { path: "/stats",   icon: BarChart3, label: "Stats"   },
     { path: "/world",   icon: Globe,     label: "Mundo"   },
     { path: "/profile", icon: User2,     label: "Perfil"  },
+    { path: "/notes",   icon: NotebookPen, label: "Notas" },
     ...(currentUser?.is_admin ? [{ path: "/admin", icon: Shield, label: "Admin" }] : []),
   ];
 

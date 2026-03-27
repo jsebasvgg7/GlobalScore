@@ -16,6 +16,7 @@ import ProfileSettingsPage from "./pages/ProfileSettingsPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import StatsPage from "./pages/StatsPage";
 import WorldCupPage from "./pages/WorldCupPage";
+import NotesPage from "./pages/NotesPage";
 import { PageLoader } from "./components/ComFeedback/LoadingStates";
 import './styles/darkmode.css'
 import "./styles/layout.css";
@@ -258,6 +259,10 @@ export default function App() {
           <Route
             path="/world"
             element={session ? <WorldCupPage currentUser={currentUser} /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/notes"
+            element={session ? <NotesPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
 
           <Route

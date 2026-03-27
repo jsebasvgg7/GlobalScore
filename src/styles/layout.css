@@ -60,6 +60,16 @@
   }
 }
 
+@media (min-width: 769px) {
+  .notes-page {
+    margin-left: var(--sidebar-w, 80px);
+    padding-top: var(--topbar-h, 56px);
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+}
 @media (max-width: 768px) {
   .vega-root,
   .page-root {
