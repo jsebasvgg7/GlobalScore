@@ -319,41 +319,62 @@ export default function MobileUserProfile({ userId, onClose }) {
           {/* Hero */}
           {loading ? (
             <div className="mup2-hero-skeleton">
-              <div className="mup2-sk mup2-sk--circle" style={{ width: 56, height: 56 }} />
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
-                <div className="mup2-sk" style={{ width: "55%", height: 14 }} />
-                <div className="mup2-sk" style={{ width: "35%", height: 9 }} />
+              <div className="mup2-sk mup2-sk--banner" />
+              <div className="mup2-hero-skeleton-row">
+                <div className="mup2-sk mup2-sk--circle" style={{ width: 56, height: 56 }} />
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
+                  <div className="mup2-sk" style={{ width: "55%", height: 14 }} />
+                  <div className="mup2-sk" style={{ width: "35%", height: 9 }} />
+                </div>
               </div>
             </div>
           ) : user ? (
             <div className="mup2-hero">
-              <div className="mup2-hero-av-wrap">
-                <MupAvatar user={user} size={56} />
-                <span className="mup2-hero-lv">NV {user.level || 1}</span>
-              </div>
-              <div className="mup2-hero-info">
-                <div className="mup2-hero-name-row">
-                  <span className="mup2-hero-name">{user.name}</span>
-                  {(user.monthly_championships || 0) > 0 && (
-                    <span className="mup2-hero-crown-badge">
-                      <Crown size={9} />
-                      {user.monthly_championships}
-                    </span>
-                  )}
-                </div>
-                {user.active_title && (
-                  <span className="mup2-hero-title">{user.active_title}</span>
+              {/* Banner */}
+              <div className="mup2-hero-banner">
+                {user.equipped_banner_url ? (
+                  <>
+                    <img src={user.equipped_banner_url} alt="Banner" className="mup2-hero-banner-img" />
+                    <div className="mup2-hero-banner-overlay" />
+                  </>
+                ) : (
+                  <>
+                    <div className="mup2-hero-banner-grid" />
+                    <div className="mup2-hero-banner-orb mup2-hero-banner-orb--1" />
+                    <div className="mup2-hero-banner-orb mup2-hero-banner-orb--2" />
+                  </>
                 )}
               </div>
-              {rank && (
-                <div className="mup2-hero-rank-block">
-                  <span className="mup2-rank-num">#{rank.pos}</span>
-                  <span className="mup2-rank-sub">de {rank.total}</span>
+              {/* Info row */}
+              <div className="mup2-hero-body">
+                <div className="mup2-hero-av-wrap">
+                  <MupAvatar user={user} size={56} />
+                  <span className="mup2-hero-lv">NV {user.level || 1}</span>
                 </div>
-              )}
+                <div className="mup2-hero-info">
+                  <div className="mup2-hero-name-row">
+                    <span className="mup2-hero-name">{user.name}</span>
+                    {(user.monthly_championships || 0) > 0 && (
+                      <span className="mup2-hero-crown-badge">
+                        <Crown size={9} />
+                        {user.monthly_championships}
+                      </span>
+                    )}
+                  </div>
+                  {user.active_title && (
+                    <span className="mup2-hero-title">{user.active_title}</span>
+                  )}
+                </div>
+                {rank && (
+                  <div className="mup2-hero-rank-block">
+                    <span className="mup2-rank-num">#{rank.pos}</span>
+                    <span className="mup2-rank-sub">de {rank.total}</span>
+                  </div>
+                )}
+              </div>
             </div>
           ) : null}
-
+          
           {/* Quick stats strip */}
           {user && (
             <div className="mup2-quick-strip">

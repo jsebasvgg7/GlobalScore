@@ -1,280 +1,372 @@
 import React, { useState, useMemo, useRef, useCallback } from "react";
-import { Swords, Trophy, Medal, Fingerprint } from "lucide-react";
+import { Swords, Trophy, Medal, Fingerprint, ChevronRight } from "lucide-react";
 import MobileUserProfile from "../ComProfile/MobileUserProfile";
 import MobileSubPage     from "./MobileSubPage";
 import "../../styles/StylesMobile/MobileDashboard.css";
 import "../../styles/StylesMobile/MobileSubPage.css";
 
-// ── Icons brutalistas SVG ────────────────────────────────────────
-const IconMatch = () => (
-  <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="1" y="1" width="42" height="42" stroke="currentColor" strokeWidth="0.5"/>
-    <rect x="8" y="8" width="28" height="28" stroke="currentColor" strokeWidth="0.5" strokeDasharray="3 3"/>
-    <line x1="1" y1="22" x2="43" y2="22" stroke="currentColor" strokeWidth="0.5"/>
-    <line x1="22" y1="1" x2="22" y2="43" stroke="currentColor" strokeWidth="0.5"/>
-    <circle cx="22" cy="22" r="5" stroke="currentColor" strokeWidth="1.2" fill="none"/>
+// ── Clock icon inline SVG ─────────────────────────────────────
+const ClockSVG = () => (
+  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/>
   </svg>
 );
 
-const IconLeague = () => (
-  <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="1" y="1" width="42" height="42" stroke="currentColor" strokeWidth="0.5"/>
-    <path d="M22 8 L36 16 L36 28 L22 36 L8 28 L8 16 Z" stroke="currentColor" strokeWidth="1.2" fill="none"/>
-    <path d="M22 14 L30 18.5 L30 27 L22 31.5 L14 27 L14 18.5 Z" stroke="currentColor" strokeWidth="0.5" fill="none" strokeDasharray="2 2"/>
-    <circle cx="22" cy="22" r="2" fill="currentColor" opacity="0.4"/>
+const CalSVG = () => (
+  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <rect x="3" y="4" width="18" height="18"/><line x1="7" y1="2" x2="7" y2="6"/>
+    <line x1="17" y1="2" x2="17" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
   </svg>
 );
 
-const IconAward = () => (
-  <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="1" y="1" width="42" height="42" stroke="currentColor" strokeWidth="0.5"/>
-    <rect x="14" y="9" width="16" height="17" stroke="currentColor" strokeWidth="1.2" fill="none"/>
-    <rect x="8" y="9" width="6" height="10" stroke="currentColor" strokeWidth="0.5" fill="none"/>
-    <rect x="30" y="9" width="6" height="10" stroke="currentColor" strokeWidth="0.5" fill="none"/>
-    <line x1="17" y1="26" x2="17" y2="32" stroke="currentColor" strokeWidth="0.5"/>
-    <line x1="27" y1="26" x2="27" y2="32" stroke="currentColor" strokeWidth="0.5"/>
-    <line x1="12" y1="32" x2="32" y2="32" stroke="currentColor" strokeWidth="1.2"/>
-    <rect x="17" y="32" width="10" height="3" stroke="currentColor" strokeWidth="0.5" fill="none"/>
-  </svg>
-);
-
-// ── Empty state ──────────────────────────────────────────────────
-function EmptyState({ type = "matches" }) {
-  const configs = {
-    matches: { icon: <IconMatch />, label: "Sin partidos pendientes", sub: "Cuando haya partidos disponibles aparecerán aquí" },
-    leagues: { icon: <IconLeague />, label: "Sin ligas activas", sub: "Las ligas de temporada aparecerán aquí" },
-    awards:  { icon: <IconAward />, label: "Sin premios activos", sub: "Los premios de temporada aparecerán aquí" },
-  };
-  const { icon, label, sub } = configs[type] || configs.matches;
+// ── Empty state ───────────────────────────────────────────────
+function EmptyMini({ label }) {
   return (
-    <div className="mob-empty">
-      <div className="mob-empty-icon" style={{ color: "var(--mob-muted)" }}>{icon}</div>
-      <span className="mob-empty-lbl">{label}</span>
-      <span className="mob-empty-sub">{sub}</span>
+    <div className="mob2-empty">
+      <span className="mob2-empty-lbl">{label}</span>
     </div>
   );
 }
 
-// ── Skeleton cards ───────────────────────────────────────────────
-function SkeletonMatchCard() {
+// ── Skeleton ──────────────────────────────────────────────────
+function SkeletonCard({ wide }) {
   return (
-    <div className="mob-sk-mcard">
-      <div className="mob-sk-mcard-head">
-        <div className="mob-sk" style={{ width: 52, height: 9 }} />
-        <div className="mob-sk" style={{ width: 44, height: 14, borderRadius: 20 }} />
-      </div>
-      <div className="mob-sk-mcard-row">
-        <div className="mob-sk-mcard-left">
-          <div className="mob-sk" style={{ width: 28, height: 28, borderRadius: 6 }} />
-          <div className="mob-sk" style={{ width: 52, height: 10 }} />
+    <div className={`mob2-sk-card${wide ? " mob2-sk-card--wide" : ""}`}>
+      <div className="mob2-sk-accent" />
+      <div className="mob2-sk-body">
+        <div className="mob2-sk-row">
+          <div className="mob2-sk mob2-sk--sm" />
+          <div className="mob2-sk mob2-sk--pill" />
         </div>
-        <div className="mob-sk" style={{ width: 32, height: 32 }} />
-      </div>
-      <div className="mob-sk-sep" />
-      <div className="mob-sk-mcard-row">
-        <div className="mob-sk-mcard-left">
-          <div className="mob-sk" style={{ width: 28, height: 28, borderRadius: 6 }} />
-          <div className="mob-sk" style={{ width: 44, height: 10 }} />
-        </div>
-        <div className="mob-sk" style={{ width: 32, height: 32 }} />
-      </div>
-      <div className="mob-sk-mcard-foot">
-        <div className="mob-sk" style={{ width: 28, height: 8 }} />
-        <div className="mob-sk" style={{ width: 40, height: 8 }} />
-      </div>
-    </div>
-  );
-}
-
-function SkeletonLeagueCard() {
-  return (
-    <div className="mob-sk-lcard">
-      <div className="mob-sk-lcard-head">
-        <div className="mob-sk" style={{ width: 34, height: 34, borderRadius: 8 }} />
-        <div className="mob-sk-lcard-info">
-          <div className="mob-sk" style={{ width: 80, height: 10 }} />
-          <div className="mob-sk" style={{ width: 52, height: 8 }} />
-        </div>
-        <div className="mob-sk" style={{ width: 9, height: 9, borderRadius: "50%" }} />
-      </div>
-      <div className="mob-sk-lcard-field">
-        <div className="mob-sk" style={{ width: 52, height: 8 }} />
-        <div className="mob-sk" style={{ width: "100%", height: 26 }} />
-      </div>
-      <div className="mob-sk-lcard-row">
-        <div className="mob-sk-lcard-field">
-          <div className="mob-sk" style={{ width: 52, height: 8 }} />
-          <div className="mob-sk" style={{ width: "100%", height: 26 }} />
-        </div>
-        <div className="mob-sk-lcard-field">
-          <div className="mob-sk" style={{ width: 40, height: 8 }} />
-          <div className="mob-sk" style={{ width: "100%", height: 26 }} />
+        <div className="mob2-sk mob2-sk--team" />
+        <div className="mob2-sk mob2-sk--divider" />
+        <div className="mob2-sk mob2-sk--team" />
+        <div className="mob2-sk-footer">
+          <div className="mob2-sk mob2-sk--xs" />
+          <div className="mob2-sk mob2-sk--xs" />
         </div>
       </div>
     </div>
   );
 }
 
-function SkeletonAwardCard() {
-  return (
-    <div className="mob-sk-acard">
-      <div className="mob-sk-acard-head">
-        <div className="mob-sk" style={{ width: 34, height: 34, borderRadius: 8 }} />
-        <div className="mob-sk-lcard-info">
-          <div className="mob-sk" style={{ width: 80, height: 10 }} />
-          <div className="mob-sk" style={{ width: 52, height: 8 }} />
-        </div>
-        <div className="mob-sk" style={{ width: 9, height: 9, borderRadius: "50%" }} />
-      </div>
-      <div className="mob-sk-lcard-field">
-        <div className="mob-sk" style={{ width: 72, height: 8 }} />
-        <div className="mob-sk" style={{ width: "100%", height: 26 }} />
-      </div>
-    </div>
-  );
-}
-
-// ── StatusDot ────────────────────────────────────────────────────
-function StatusDot({ mod }) {
-  return <span className={`mob-status-dot mob-status-dot--${mod}`} title={mod} />;
-}
-
-// ── Mini cards preview (scroll horizontal) ───────────────────────
+// ── Mini Match Card ───────────────────────────────────────────
 function MiniMatchCard({ match, userPred }) {
-  const now       = new Date();
-  const deadline  = match.deadline ? new Date(match.deadline) : null;
-  const isExpired = deadline && now >= deadline;
-  const isLive    = match.status === "live";
-  const hasPred   = userPred !== undefined;
-  const pillMod   = isLive ? "live" : isExpired ? "expired" : hasPred ? "saved" : "pending";
-  const pillTxt   = isLive ? "VIVO" : isExpired ? "CERRADO" : hasPred ? "GUARDADO" : "PENDIENTE";
+  const now      = new Date();
+  const deadline = match.deadline ? new Date(match.deadline) : null;
+  const isExp    = deadline && now >= deadline;
+  const isLive   = match.status === "live";
+  const hasPred  = userPred !== undefined;
+
+  const pillMod = isLive ? "live" : isExp ? "closed" : hasPred ? "saved" : "pending";
+  const pillTxt = isLive ? "VIVO"  : isExp ? "CERR."  : hasPred ? "GUARD." : "PEND.";
+
+  const accentMod = isLive ? "amber" : hasPred ? "green" : isExp ? "red" : "purple";
 
   return (
-    <div className="mob-mcard">
-      <div className="mob-mcard-head">
-        <div className="mob-mcard-league">
-          <div className="mob-mcard-dot">
-            {match.league_logo_url
-              ? <img src={match.league_logo_url} alt="" onError={e => (e.target.style.display = "none")} />
-              : "🏆"}
+    <div className="mob2-mc">
+      <div className={`mob2-mc-accent mob2-mc-accent--${accentMod}`} />
+      <div className="mob2-mc-inner">
+        <div className="mob2-mc-head">
+          <div className="mob2-mc-league">
+            <div className="mob2-mc-lg-box">
+              {match.league_logo_url
+                ? <img src={match.league_logo_url} alt="" onError={e => (e.target.style.display = "none")} />
+                : "🏆"}
+            </div>
+            <span className="mob2-mc-lg-name">
+              {(match.league || "LIGA").substring(0, 6).toUpperCase()}
+            </span>
           </div>
-          {(match.league || "").substring(0, 6).toUpperCase()}
+          <span className={`mob2-mc-pill mob2-mc-pill--${pillMod}`}>{pillTxt}</span>
         </div>
-        <span className={`mob-pill mob-pill--${pillMod}`}>{pillTxt}</span>
-      </div>
-      <div className="mob-mcard-body">
-        <div className="mob-mcard-team">
-          <div className="mob-team-left">
-            <div className="mob-shield">
+
+        <div className="mob2-mc-teams">
+          <div className="mob2-mc-team">
+            <div className="mob2-mc-flag">
               {match.home_team_logo_url
                 ? <img src={match.home_team_logo_url} alt="" onError={e => (e.target.style.display = "none")} />
                 : "⚽"}
             </div>
-            <span className="mob-team-name">{(match.home_team || "").substring(0, 7)}</span>
+            <span className="mob2-mc-tname">
+              {(match.home_team || "—").substring(0, 8).toUpperCase()}
+            </span>
+            <div className={`mob2-mc-num${hasPred ? " mob2-mc-num--has" : ""}`}>
+              {hasPred ? (userPred.home_score ?? "—") : "—"}
+            </div>
           </div>
-          <div className={`mob-score-box${hasPred ? "" : " empty"}`}>
-            {hasPred ? (userPred.home_score ?? "—") : "—"}
-          </div>
-        </div>
-        <div className="mob-sep" />
-        <div className="mob-mcard-team">
-          <div className="mob-team-left">
-            <div className="mob-shield">
+          <div className="mob2-mc-sep" />
+          <div className="mob2-mc-team">
+            <div className="mob2-mc-flag">
               {match.away_team_logo_url
                 ? <img src={match.away_team_logo_url} alt="" onError={e => (e.target.style.display = "none")} />
                 : "⚽"}
             </div>
-            <span className="mob-team-name">{(match.away_team || "").substring(0, 7)}</span>
-          </div>
-          <div className={`mob-score-box${hasPred ? "" : " empty"}`}>
-            {hasPred ? (userPred.away_score ?? "—") : "—"}
-          </div>
-        </div>
-      </div>
-      <div className="mob-mcard-foot">
-        <span>{isLive ? `${match.minute || "??"}′` : (match.time || "—")}</span>
-        <span>{match.date || "—"}</span>
-      </div>
-    </div>
-  );
-}
-
-function MiniLeagueCard({ league, userPrediction }) {
-  const now        = new Date();
-  const deadline   = league.deadline ? new Date(league.deadline) : null;
-  const isExpired  = deadline && now >= deadline;
-  const isFinished = league.status === "finished";
-  const hasPred    = userPrediction !== undefined;
-  const dotMod     = isFinished ? "finished" : isExpired ? "expired" : hasPred ? "saved" : "pending";
-
-  return (
-    <div className="mob-lcard">
-      <div className="mob-lcard-head">
-        <div className="mob-lcard-logo">
-          {league.logo_url
-            ? <img src={league.logo_url} alt="" onError={e => (e.target.style.display = "none")} />
-            : "🏆"}
-        </div>
-        <div className="mob-lcard-info">
-          <div className="mob-lcard-name">{(league.name || "").toUpperCase()}</div>
-          <div className="mob-lcard-season">{league.season || "—"}</div>
-        </div>
-        <div className="mob-lcard-status"><StatusDot mod={dotMod} /></div>
-      </div>
-      <div className="mob-lcard-body">
-        <div className="mob-lcard-field">
-          <div className="mob-lcard-lbl">CAMPEÓN</div>
-          <div className={`mob-lcard-input${userPrediction?.predicted_champion ? " filled" : ""}`}>
-            {userPrediction?.predicted_champion || "Escribe el equipo..."}
-          </div>
-        </div>
-        <div className="mob-lcard-row">
-          <div className="mob-lcard-field">
-            <div className="mob-lcard-lbl">GOLEADOR</div>
-            <div className={`mob-lcard-input${userPrediction?.predicted_top_scorer ? " filled" : ""}`}>
-              {userPrediction?.predicted_top_scorer || "Jugador..."}
+            <span className="mob2-mc-tname">
+              {(match.away_team || "—").substring(0, 8).toUpperCase()}
+            </span>
+            <div className={`mob2-mc-num${hasPred ? " mob2-mc-num--has" : ""}`}>
+              {hasPred ? (userPred.away_score ?? "—") : "—"}
             </div>
           </div>
         </div>
+
+        <div className="mob2-mc-foot">
+          <span className="mob2-mc-ft"><ClockSVG /> {isLive ? `${match.minute || "??"}′` : (match.time || "—")}</span>
+          <span className="mob2-mc-ft"><CalSVG /> {match.date || "—"}</span>
+        </div>
       </div>
     </div>
   );
 }
 
-function MiniAwardCard({ award, userPrediction }) {
-  const now        = new Date();
-  const deadline   = award.deadline ? new Date(award.deadline) : null;
-  const isExpired  = deadline && now >= deadline;
-  const isFinished = award.status === "finished";
-  const hasPred    = userPrediction !== undefined;
-  const dotMod     = isFinished ? "finished" : isExpired ? "expired" : hasPred ? "saved" : "pending";
+// ── Mini League Card ──────────────────────────────────────────
+function MiniLeagueCard({ league, userPrediction }) {
+  const now      = new Date();
+  const deadline = league.deadline ? new Date(league.deadline) : null;
+  const isExp    = deadline && now >= deadline;
+  const isFin    = league.status === "finished";
+  const hasPred  = userPrediction !== undefined;
+  const dotMod   = isFin ? "finished" : isExp ? "expired" : hasPred ? "saved" : "pending";
 
   return (
-    <div className="mob-acard">
-      <div className="mob-acard-head">
-        <div className="mob-lcard-logo">
-          {award.logo_url && award.logo_url.startsWith("http")
-            ? <img src={award.logo_url} alt="" onError={e => (e.target.style.display = "none")} />
-            : (award.logo || "🏅")}
+    <div className="mob2-lc">
+      <div className={`mob2-mc-accent mob2-mc-accent--${hasPred ? "green" : isExp || isFin ? "red" : "purple"}`} />
+      <div className="mob2-lc-inner">
+        <div className="mob2-lc-head">
+          <div className="mob2-mc-lg-box">
+            {league.logo_url
+              ? <img src={league.logo_url} alt="" onError={e => (e.target.style.display = "none")} />
+              : "🏆"}
+          </div>
+          <div className="mob2-lc-info">
+            <span className="mob2-lc-name">{(league.name || "LIGA").toUpperCase()}</span>
+            <span className="mob2-lc-season">{league.season || "—"}</span>
+          </div>
+          <div className={`mob2-status-dot mob2-status-dot--${dotMod}`} />
         </div>
-        <div className="mob-lcard-info">
-          <div className="mob-lcard-name">{(award.name || "").toUpperCase()}</div>
-          <div className="mob-lcard-season">{award.season || "—"}</div>
+        <div className="mob2-lc-field">
+          <span className="mob2-lc-lbl">CAMPEÓN</span>
+          <div className={`mob2-lc-input${userPrediction?.predicted_champion ? " mob2-lc-input--filled" : ""}`}>
+            {userPrediction?.predicted_champion || "Escribe el equipo..."}
+          </div>
         </div>
-        <div className="mob-lcard-status"><StatusDot mod={dotMod} /></div>
       </div>
-      <div className="mob-acard-body">
-        <div className="mob-lcard-lbl">TU PREDICCIÓN</div>
-        <div className={`mob-lcard-input${userPrediction?.predicted_winner ? " filled" : ""}`}>
-          {userPrediction?.predicted_winner || "Ingresa el nombre..."}
+    </div>
+  );
+}
+
+// ── Mini Award Card ───────────────────────────────────────────
+function MiniAwardCard({ award, userPrediction }) {
+  const now      = new Date();
+  const deadline = award.deadline ? new Date(award.deadline) : null;
+  const isExp    = deadline && now >= deadline;
+  const isFin    = award.status === "finished";
+  const hasPred  = userPrediction !== undefined;
+  const dotMod   = isFin ? "finished" : isExp ? "expired" : hasPred ? "saved" : "pending";
+
+  return (
+    <div className="mob2-ac">
+      <div className={`mob2-mc-accent mob2-mc-accent--${hasPred ? "green" : isExp || isFin ? "red" : "purple"}`} />
+      <div className="mob2-lc-inner">
+        <div className="mob2-lc-head">
+          <div className="mob2-mc-lg-box">
+            {award.logo_url && award.logo_url.startsWith("http")
+              ? <img src={award.logo_url} alt="" onError={e => (e.target.style.display = "none")} />
+              : (award.logo || "🏅")}
+          </div>
+          <div className="mob2-lc-info">
+            <span className="mob2-lc-name">{(award.name || "PREMIO").toUpperCase()}</span>
+            <span className="mob2-lc-season">{award.season || "—"}</span>
+          </div>
+          <div className={`mob2-status-dot mob2-status-dot--${dotMod}`} />
+        </div>
+        <div className="mob2-lc-field">
+          <span className="mob2-lc-lbl">TU PREDICCIÓN</span>
+          <div className={`mob2-lc-input${userPrediction?.predicted_winner ? " mob2-lc-input--filled" : ""}`}>
+            {userPrediction?.predicted_winner || "Ingresa el nombre..."}
+          </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ── Next Match Banner ─────────────────────────────────────────
+function NextMatchBanner({ match, currentUser, onOpen }) {
+  if (!match) return null;
+  const now      = new Date();
+  const deadline = match.deadline ? new Date(match.deadline) : null;
+  const isExp    = deadline && now >= deadline;
+  const isLive   = match.status === "live";
+  const hasPred  = match.predictions?.some(p => p.user_id === currentUser?.id);
+
+  return (
+    <div className="mob2-nm">
+      <div className="mob2-nm-eyebrow">
+        <span className="mob2-nm-tag">// PRÓXIMO PARTIDO</span>
+      </div>
+      <div className="mob2-nm-card" onClick={() => !isExp && onOpen("matches")}>
+        <div className="mob2-nm-teams">
+          <div className="mob2-nm-team">
+            <div className="mob2-nm-flag">
+              {match.home_team_logo_url
+                ? <img src={match.home_team_logo_url} alt="" onError={e => (e.target.style.display = "none")} />
+                : "⚽"}
+            </div>
+            <span className="mob2-nm-tname">{(match.home_team || "LOCAL").toUpperCase()}</span>
+          </div>
+          <div className="mob2-nm-center">
+            <span className="mob2-nm-vs">VS</span>
+            <span className="mob2-nm-time">
+              {isLive ? `${match.minute || "??"}′` : (match.time || "—")}
+            </span>
+          </div>
+          <div className="mob2-nm-team">
+            <div className="mob2-nm-flag">
+              {match.away_team_logo_url
+                ? <img src={match.away_team_logo_url} alt="" onError={e => (e.target.style.display = "none")} />
+                : "⚽"}
+            </div>
+            <span className="mob2-nm-tname">{(match.away_team || "VISIT.").toUpperCase()}</span>
+          </div>
+        </div>
+        <div className="mob2-nm-footer">
+          <span className="mob2-nm-meta">
+            {match.league} · {match.date}
+          </span>
+          {!isExp && (
+            <button className="mob2-nm-btn">
+              {hasPred ? "VER PRED. →" : "PREDECIR →"}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Progress Bar ──────────────────────────────────────────────
+function ProgressBar({ saved, total }) {
+  const pct = total > 0 ? Math.min(100, Math.round((saved / total) * 100)) : 0;
+  return (
+    <div className="mob2-progress">
+      <div className="mob2-progress-row">
+        <span className="mob2-progress-lbl">PREDICCIONES TOTALES</span>
+        <span className="mob2-progress-count">[{saved}/{total}]</span>
+      </div>
+      <div className="mob2-progress-track">
+        <div className="mob2-progress-fill" style={{ width: `${pct}%` }} />
+      </div>
+    </div>
+  );
+}
+
+// ── Hero Card ─────────────────────────────────────────────────
+function HeroCard({ currentUser, users }) {
+  const points   = currentUser?.points || 0;
+  const correct  = currentUser?.correct || 0;
+  const preds    = currentUser?.predictions || 0;
+  const streak   = currentUser?.current_streak || 0;
+  const level    = currentUser?.level || 1;
+  const accuracy = preds > 0 ? Math.round((correct / preds) * 100) : 0;
+  const monthPts = currentUser?.monthly_points || 0;
+
+  const sorted   = [...users].sort((a, b) => b.points - a.points);
+  const pos      = sorted.findIndex(u => u.id === currentUser?.id);
+  const rank     = pos >= 0 ? pos + 1 : "—";
+
+  const firstName = (currentUser?.name || "Jugador").split(" ")[0];
+
+  return (
+    <div className="mob2-hero">
+      <div className="mob2-hero-stripe" />
+      <div className="mob2-hero-inner">
+        <div className="mob2-hero-top">
+          <div className="mob2-hero-left">
+            <div className="mob2-hero-eyebrow">// Jugador activo</div>
+            <div className="mob2-hero-name">{(currentUser?.name || "JUGADOR").toUpperCase()}</div>
+            <div className="mob2-hero-sub">
+              GLOBAL · NIV.{level}
+              {streak > 0 && <> · 🔥 {streak} RACHA</>}
+            </div>
+          </div>
+          <div className="mob2-hero-rank">
+            <span className="mob2-hero-rank-num">#{rank}</span>
+            <span className="mob2-hero-rank-lbl">RANKING</span>
+          </div>
+        </div>
+        <div className="mob2-hero-stats">
+          <div className="mob2-h-stat">
+            <span className="mob2-h-val mob2-h-val--acc">
+              {Number(points).toLocaleString("es-ES")}
+            </span>
+            <span className="mob2-h-lbl">PUNTOS</span>
+          </div>
+          <div className="mob2-h-sep" />
+          <div className="mob2-h-stat">
+            <span className="mob2-h-val">{correct}</span>
+            <span className="mob2-h-lbl">ACIERTOS</span>
+          </div>
+          <div className="mob2-h-sep" />
+          <div className="mob2-h-stat">
+            <span className="mob2-h-val">{accuracy}%</span>
+            <span className="mob2-h-lbl">PRECISIÓN</span>
+          </div>
+        </div>
+      </div>
+      <div className="mob2-hero-corner" />
+    </div>
+  );
+}
+
+// ── Ranking Strip ─────────────────────────────────────────────
+function RankingStrip({ users, currentUser, onOpen }) {
+  const sorted = useMemo(
+    () => [...users].sort((a, b) => b.points - a.points).slice(0, 4),
+    [users]
+  );
+  const maxPts = sorted[0]?.points || 1;
+  const medals = ["g", "s", "b", "n"];
+
+  return (
+    <div className="mob2-rank-wrap">
+      <div className="mob2-rank-hdr">
+        <span className="mob2-rank-hdr-lbl">// CLASIFICACIÓN GLOBAL</span>
+      </div>
+      {sorted.map((u, i) => {
+        const isMe = u.id === currentUser?.id;
+        const pct  = Math.round((u.points / maxPts) * 100);
+        return (
+          <div key={u.id} className={`mob2-rank-row${isMe ? " mob2-rank-row--me" : ""}`}>
+            <span className={`mob2-r-pos mob2-r-pos--${medals[i]}`}>{i + 1}</span>
+            <div className="mob2-r-av">
+              {u.avatar_url
+                ? <img src={u.avatar_url} alt={u.name} />
+                : (u.name || "U")[0].toUpperCase()}
+            </div>
+            <div className="mob2-r-info">
+              <div className="mob2-r-name">
+                {(u.name || "—").toUpperCase()}
+                {isMe && <span className="mob2-you">TÚ</span>}
+              </div>
+              <div className="mob2-r-bar-wrap">
+                <div className="mob2-r-bar" style={{ width: `${pct}%` }} />
+              </div>
+            </div>
+            <div className="mob2-r-pts">
+              {Number(u.points).toLocaleString("es-ES")}
+              <span className="mob2-r-pts-u"> pts</span>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════════
-//  DASHBOARD PRINCIPAL
+//  MAIN
 // ═══════════════════════════════════════════════════════════════
 export default function MobileDashboard({
   currentUser,
@@ -287,27 +379,22 @@ export default function MobileDashboard({
   onLeaguePredict,
   onAwardPredict,
 }) {
-  // "matches" | "leagues" | "awards" | null
-  const [activePage, setActivePage] = useState(null);
+  const [activePage,   setActivePage]   = useState(null);
   const [profileModal, setProfileModal] = useState(false);
-  const holdRef = useRef(null);
-  const [holdPct, setHoldPct] = useState(0);
-  const [holding, setHolding] = useState(false);
+  const holdRef  = useRef(null);
+  const [holdPct, setHoldPct]   = useState(0);
+  const [holding, setHolding]   = useState(false);
 
   const startHold = useCallback(() => {
     if (!currentUser?.id) return;
-    setHolding(true);
-    setHoldPct(0);
-    const start = Date.now();
-    const duration = 600; // ms para activar
+    setHolding(true); setHoldPct(0);
+    const start = Date.now(); const dur = 600;
     holdRef.current = setInterval(() => {
-      const elapsed = Date.now() - start;
-      const pct = Math.min(100, Math.round((elapsed / duration) * 100));
+      const pct = Math.min(100, Math.round(((Date.now() - start) / dur) * 100));
       setHoldPct(pct);
       if (pct >= 100) {
         clearInterval(holdRef.current);
-        setHolding(false);
-        setHoldPct(0);
+        setHolding(false); setHoldPct(0);
         setProfileModal(true);
       }
     }, 16);
@@ -315,41 +402,37 @@ export default function MobileDashboard({
 
   const cancelHold = useCallback(() => {
     clearInterval(holdRef.current);
-    setHolding(false);
-    setHoldPct(0);
-  }, []); 
+    setHolding(false); setHoldPct(0);
+  }, []);
 
   const pendingMatches = useMemo(() => matches.filter(m => m.status === "pending"), [matches]);
 
-  const myPredCount = useMemo(
-    () => matches.filter(m => m.predictions?.some(p => p.user_id === currentUser?.id)).length,
-    [matches, currentUser]
-  );
+  // Next match: el más próximo pendiente con deadline futuro
+  const nextMatch = useMemo(() => {
+    const now = new Date();
+    return matches
+      .filter(m => m.status === "pending")
+      .sort((a, b) => new Date(`${a.date}T${a.time || "00:00"}`) - new Date(`${b.date}T${b.time || "00:00"}`))
+    [0] || null;
+  }, [matches]);
 
-  const totalPredictable = matches.filter(m => m.status === "pending").length;
-  const total            = Math.max(myPredCount, totalPredictable);
-  const progressPct = totalPredictable > 0
-  ? Math.min(100, Math.round(
-      (matches.filter(m =>
-        m.status === "pending" &&
-        m.predictions?.some(p => p.user_id === currentUser?.id)
-      ).length / totalPredictable) * 100
-    ))
-  : 0;
+  const totalPredictable = pendingMatches.length;
   const savedPending = matches.filter(m =>
-  m.status === "pending" &&
-  m.predictions?.some(p => p.user_id === currentUser?.id)
+    m.status === "pending" &&
+    m.predictions?.some(p => p.user_id === currentUser?.id)
   ).length;
 
-  const previewMatches = pendingMatches.slice(0, 4);
+  const previewMatches = pendingMatches.slice(0, 5);
   const previewLeagues = leagues.slice(0, 3);
   const previewAwards  = awards.slice(0, 3);
 
-  return (
-    <div className="mob-root">
+  const handleNavigate = (page) => setActivePage(page);
 
-      {/* ── Sub-páginas slide-in ── */}
-      {activePage && (
+  return (
+    <div className="mob2-root">
+
+      {/* ── Sub-páginas ── */}
+      {activePage && activePage !== "ranking" && (
         <MobileSubPage
           page={activePage}
           matches={matches}
@@ -363,166 +446,133 @@ export default function MobileDashboard({
         />
       )}
 
-      {/* PROGRESS */}
-      <div className="mob-progress">
-        <div className="mob-progress-row">
-        <span className="mob-progress-lbl">PREDICCIONES TOTALES</span>
-        <span className="mob-progress-count">{savedPending} / {totalPredictable}</span>
+      {/* ── HERO ── */}
+      <HeroCard currentUser={currentUser} users={users} />
+
+      {/* ── PROGRESS ── */}
+      <ProgressBar saved={savedPending} total={totalPredictable} />
+
+      {/* ── NEXT MATCH ── */}
+      <NextMatchBanner
+        match={nextMatch}
+        currentUser={currentUser}
+        onOpen={handleNavigate}
+      />
+
+      {/* ── PARTIDOS ── */}
+      <div className="mob2-sec">
+        <div className="mob2-sec-title">
+          <div className="mob2-sec-sq" />PARTIDOS
+          <span className="mob2-sec-badge">{pendingMatches.length}</span>
+        </div>
+        <div className="mob2-sec-all" onPointerDown={() => setActivePage("matches")}>TODOS »</div>
       </div>
-        <div className="mob-progress-track">
-          <div className="mob-progress-fill" style={{ width: `${progressPct}%` }} />
+      <div className="mob2-hscroll-wrap">
+        <div className="mob2-hscroll">
+          {loading
+            ? [0, 1, 2].map(i => <SkeletonCard key={i} />)
+            : previewMatches.length === 0
+            ? <EmptyMini label="SIN PARTIDOS PENDIENTES" />
+            : <>
+                {previewMatches.map(m => (
+                  <MiniMatchCard
+                    key={m.id}
+                    match={m}
+                    userPred={m.predictions?.find(p => p.user_id === currentUser?.id)}
+                  />
+                ))}
+                {pendingMatches.length > 5 && (
+                  <div className="mob2-more-card" onPointerDown={() => setActivePage("matches")}>
+                    <span className="mob2-more-sym">»</span>
+                    <span>MÁS</span>
+                  </div>
+                )}
+              </>
+          }
         </div>
       </div>
 
-      {/* QUICK ACTIONS */}
-      <div className="mob-quick">
-        <div className="mob-qbtn" onPointerDown={() => setActivePage("matches")}>
-          <div className="mob-qbtn-icon"><Swords size={18} /></div>
-          <div>
-            <div className="mob-qbtn-txt">PARTIDOS</div>
-            <div className="mob-qbtn-sub">{pendingMatches.length} pendientes</div>
-          </div>
+      {/* ── LIGAS ── */}
+      <div className="mob2-sec">
+        <div className="mob2-sec-title">
+          <div className="mob2-sec-sq" />LIGAS
         </div>
-        <div className="mob-qbtn" onPointerDown={() => setActivePage("leagues")}>
-          <div className="mob-qbtn-icon"><Trophy size={18} /></div>
-          <div>
-            <div className="mob-qbtn-txt">LIGAS</div>
-            <div className="mob-qbtn-sub">{leagues.length} activas</div>
-          </div>
-        </div>
-        <div className="mob-qbtn" onPointerDown={() => setActivePage("awards")}>
-          <div className="mob-qbtn-icon"><Medal size={18} /></div>
-          <div>
-            <div className="mob-qbtn-txt">PREMIOS</div>
-            <div className="mob-qbtn-sub">{awards.length} activos</div>
-          </div>
-        </div>
-        <div
-          className={`mob-qbtn mob-qbtn--hold${holding ? " mob-qbtn--holding" : ""}`}
-          onPointerDown={startHold}
-          onPointerUp={cancelHold}
-          onPointerLeave={cancelHold}
-          onPointerCancel={cancelHold}
-        >
-          <div className="mob-qbtn-icon" style={{ position: "relative", overflow: "hidden" }}>
-            <div className="mob-fingerprint-wrap">
-              <Fingerprint size={18} className="mob-fp-base" />
-              <div
-                className="mob-fp-reveal"
-                style={{ height: `${holdPct}%` }}
-              >
-                <Fingerprint size={18} className="mob-fp-accent" />
-              </div>
-              {holding && (
-                <div
-                  className="mob-fp-scanline"
-                  style={{ bottom: `${holdPct}%` }}
-                />
-              )}
-              {/* Línea de scan */}
-              {holding && <div className="mob-fp-scanline" style={{ bottom: `${holdPct}%` }} />}
-            </div>
-          </div>
-          <div>
-            <div className="mob-qbtn-txt">PERFIL</div>
-            <div className="mob-qbtn-sub">{holding ? "ESCANEANDO..." : "Ver stats"}</div>
-          </div>
+        <div className="mob2-sec-all" onPointerDown={() => setActivePage("leagues")}>TODOS »</div>
+      </div>
+      <div className="mob2-hscroll-wrap">
+        <div className="mob2-hscroll">
+          {loading
+            ? [0, 1].map(i => <SkeletonCard key={i} wide />)
+            : previewLeagues.length === 0
+            ? <EmptyMini label="SIN LIGAS ACTIVAS" />
+            : <>
+                {previewLeagues.map(l => (
+                  <MiniLeagueCard
+                    key={l.id}
+                    league={l}
+                    userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)}
+                  />
+                ))}
+                {leagues.length > 3 && (
+                  <div className="mob2-more-card" onPointerDown={() => setActivePage("leagues")}>
+                    <span className="mob2-more-sym">»</span>
+                    <span>MÁS</span>
+                  </div>
+                )}
+              </>
+          }
         </div>
       </div>
 
-      {/* ═══ PARTIDOS ═══ */}
-      <div className="mob-sec">
-        <span className="mob-sec-title">PARTIDOS</span>
-        <span className="mob-sec-all" onPointerDown={() => setActivePage("matches")}>TODOS »</span>
+      {/* ── PREMIOS ── */}
+      <div className="mob2-sec">
+        <div className="mob2-sec-title">
+          <div className="mob2-sec-sq" />PREMIOS
+        </div>
+        <div className="mob2-sec-all" onPointerDown={() => setActivePage("awards")}>TODOS »</div>
       </div>
-      <div className="mob-scroll-wrap">
-        <div className="mob-hscroll">
-          {loading ? (
-            [0, 1, 2].map(i => <SkeletonMatchCard key={i} />)
-          ) : previewMatches.length === 0 ? (
-            <EmptyState type="matches" />
-          ) : (
-            <>
-              {previewMatches.map(m => (
-                <MiniMatchCard
-                  key={m.id}
-                  match={m}
-                  userPred={m.predictions?.find(p => p.user_id === currentUser?.id)}
-                />
-              ))}
-              {pendingMatches.length > 4 && (
-                <div className="mob-more-card" onPointerDown={() => setActivePage("matches")}>
-                  <span className="mob-more-sym">&raquo;</span>
-                  <span>MÁS</span>
-                </div>
-              )}
-            </>
-          )}
+      <div className="mob2-hscroll-wrap">
+        <div className="mob2-hscroll">
+          {loading
+            ? [0, 1].map(i => <SkeletonCard key={i} wide />)
+            : previewAwards.length === 0
+            ? <EmptyMini label="SIN PREMIOS ACTIVOS" />
+            : <>
+                {previewAwards.map(a => (
+                  <MiniAwardCard
+                    key={a.id}
+                    award={a}
+                    userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)}
+                  />
+                ))}
+                {awards.length > 3 && (
+                  <div className="mob2-more-card" onPointerDown={() => setActivePage("awards")}>
+                    <span className="mob2-more-sym">»</span>
+                    <span>MÁS</span>
+                  </div>
+                )}
+              </>
+          }
         </div>
       </div>
 
-      {/* ═══ LIGAS ═══ */}
-      <div className="mob-sec">
-        <span className="mob-sec-title">LIGAS</span>
-        <span className="mob-sec-all" onPointerDown={() => setActivePage("leagues")}>TODOS »</span>
-      </div>
-      <div className="mob-scroll-wrap">
-        <div className="mob-hscroll">
-          {loading ? (
-            [0, 1].map(i => <SkeletonLeagueCard key={i} />)
-          ) : previewLeagues.length === 0 ? (
-            <EmptyState type="leagues" />
-          ) : (
-            <>
-              {previewLeagues.map(l => (
-                <MiniLeagueCard
-                  key={l.id}
-                  league={l}
-                  userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)}
-                />
-              ))}
-              {leagues.length > 3 && (
-                <div className="mob-more-card" onPointerDown={() => setActivePage("leagues")}>
-                  <span className="mob-more-sym">&raquo;</span>
-                  <span>MÁS</span>
-                </div>
-              )}
-            </>
-          )}
+      {/* ── RANKING ── */}
+      <div className="mob2-sec" style={{ marginTop: "4px" }}>
+        <div className="mob2-sec-title">
+          <div className="mob2-sec-sq" />RANKING
         </div>
       </div>
+      {users.length > 0 && (
+        <RankingStrip
+          users={users}
+          currentUser={currentUser}
+          onOpen={handleNavigate}
+        />
+      )}
 
-      {/* ═══ PREMIOS ═══ */}
-      <div className="mob-sec">
-        <span className="mob-sec-title">PREMIOS</span>
-        <span className="mob-sec-all" onPointerDown={() => setActivePage("awards")}>TODOS »</span>
-      </div>
-      <div className="mob-scroll-wrap">
-        <div className="mob-hscroll">
-          {loading ? (
-            [0, 1].map(i => <SkeletonAwardCard key={i} />)
-          ) : previewAwards.length === 0 ? (
-            <EmptyState type="awards" />
-          ) : (
-            <>
-              {previewAwards.map(a => (
-                <MiniAwardCard
-                  key={a.id}
-                  award={a}
-                  userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)}
-                />
-              ))}
-              {awards.length > 3 && (
-                <div className="mob-more-card" onPointerDown={() => setActivePage("awards")}>
-                  <span className="mob-more-sym">&raquo;</span>
-                  <span>MÁS</span>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </div>
+      <div style={{ height: "24px" }} />
 
+      {/* ── PROFILE MODAL ── */}
       {profileModal && currentUser?.id && (
         <MobileUserProfile
           userId={currentUser.id}

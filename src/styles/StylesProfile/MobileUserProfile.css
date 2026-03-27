@@ -167,25 +167,87 @@
 .mup2-close-btn:active { background: rgba(239,68,68,0.2); }
 
 /* ── Hero ── */
+/* ── Hero ── */
 .mup2-hero {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px 10px;
-  background: var(--mup2-bg);
+  flex-direction: column;
   border-bottom: 1px solid var(--mup2-border);
   position: relative;
 }
 
-/* Línea diagonal decorativa — firma BJR */
-.mup2-hero::after {
-  content: '';
+/* Banner */
+.mup2-hero-banner {
+  height: 70px;
+  background: #12121f;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid var(--mup2-accent);
+  flex-shrink: 0;
+}
+
+.mup2-hero-banner-img {
   position: absolute;
-  bottom: 0; right: 0;
-  width: 40px; height: 40px;
-  border-bottom: 2px solid var(--mup2-accent-border);
-  border-right: 2px solid var(--mup2-accent-border);
-  pointer-events: none;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mup2-hero-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.45) 100%);
+}
+
+.mup2-hero-banner-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  background-image:
+    repeating-linear-gradient(0deg, #8b7fc7 0, #8b7fc7 1px, transparent 1px, transparent 18px),
+    repeating-linear-gradient(90deg, #8b7fc7 0, #8b7fc7 1px, transparent 1px, transparent 18px);
+}
+
+.mup2-hero-banner-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(22px);
+}
+
+.mup2-hero-banner-orb--1 {
+  width: 90px; height: 90px;
+  background: var(--mup2-accent);
+  opacity: 0.3;
+  top: -30px; right: -10px;
+}
+
+.mup2-hero-banner-orb--2 {
+  width: 60px; height: 60px;
+  background: var(--mup2-gold);
+  opacity: 0.18;
+  bottom: -20px; left: 16px;
+}
+
+/* Body del hero (avatar + info + rank) */
+.mup2-hero-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px 10px;
+  background: var(--mup2-bg);
+  position: relative;
+}
+
+.mup2-hero-body .mup2-hero-av-wrap {
+  margin-top: -20px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.mup2-hero-body .mup2-avatar {
+  border: 2.5px solid var(--mup2-bg);
+  box-shadow: 0 0 0 2px var(--mup2-accent);
 }
 
 .mup2-hero-av-wrap {
@@ -827,11 +889,23 @@
 /* ── Hero skeleton ── */
 .mup2-hero-skeleton {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px 10px;
+  flex-direction: column;
   background: var(--mup2-bg);
   border-bottom: 1px solid var(--mup2-border);
+}
+
+.mup2-sk--banner {
+  width: 100%;
+  height: 70px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.mup2-hero-skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px 12px;
 }
 
 @keyframes mup2-sk-pulse {
@@ -891,7 +965,9 @@
   --mup2-card:          #fefdfb;
   --mup2-border:        rgba(96, 81, 155, 0.12);
 }
-
+[data-theme="dark"] .mup2-hero-banner { background: #0a0a12; }
+[data-theme="dark"] .mup2-hero-body   { background: #0f0f0f; }
+[data-theme="dark"] .mup2-hero-body .mup2-avatar { border-color: #0f0f0f; }
 /* ================================================================
    RESPONSIVE — muy pequeño
 ================================================================ */
