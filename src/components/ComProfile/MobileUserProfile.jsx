@@ -266,11 +266,12 @@ function PanelAchievements({ user }) {
   const isUnlocked = (ach) => {
     const val = ach.requirement_value ?? 0;
     switch (ach.requirement_type) {
-      case "predictions": return (user.predictions    || 0) >= val;
-      case "correct":     return (user.correct        || 0) >= val;
-      case "streak":      return (user.best_streak    || 0) >= val;
-      case "points":      return (user.points         || 0) >= val;
-      default:            return false;
+      case "predictions":           return (user.predictions           || 0) >= val;
+      case "correct":               return (user.correct               || 0) >= val;
+      case "streak":                return (user.best_streak           || 0) >= val;
+      case "points":                return (user.points                || 0) >= val;
+      case "monthly_championships": return (user.monthly_championships || 0) >= val;
+      default:                      return false;
     }
   };
 
