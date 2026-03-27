@@ -17,8 +17,8 @@ import NotificationsPage from "./pages/NotificationsPage";
 import StatsPage from "./pages/StatsPage";
 import WorldCupPage from "./pages/WorldCupPage";
 import { PageLoader } from "./components/ComFeedback/LoadingStates";
+import './styles/darkmode.css'
 import "./styles/layout.css";
-import './styles/mobile-theme.css'; 
 
 export default function App() {
   const [session, setSession] = useState(null);
