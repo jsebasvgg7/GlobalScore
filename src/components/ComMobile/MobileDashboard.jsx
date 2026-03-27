@@ -200,9 +200,20 @@ function NextMatchBanner({ match, currentUser, onOpen }) {
   return (
     <div className="mob2-nm">
       <div className="mob2-nm-eyebrow">
-        <span className="mob2-nm-tag">// PRÓXIMO PARTIDO</span>
       </div>
-      <div className="mob2-nm-card" onClick={() => !isExp && onOpen("matches")}>
+        <div className="mob2-nm-card" onClick={() => !isExp && onOpen("matches")}>
+
+        {/* ← FOOTER ahora arriba */}
+        <div className="mob2-nm-footer">
+          <span className="mob2-nm-meta">Proximo Partido · {match.league} · {match.date}</span>
+          {!isExp && (
+            <button className="mob2-nm-btn">
+              {hasPred ? "VER PRED. →" : "PREDECIR →"}
+            </button>
+          )}
+        </div>
+
+        {/* ← EQUIPOS abajo */}
         <div className="mob2-nm-teams">
           <div className="mob2-nm-team">
             <div className="mob2-nm-flag">
@@ -227,14 +238,7 @@ function NextMatchBanner({ match, currentUser, onOpen }) {
             <span className="mob2-nm-tname">{(match.away_team || "VISIT.").toUpperCase()}</span>
           </div>
         </div>
-        <div className="mob2-nm-footer">
-          <span className="mob2-nm-meta">{match.league} · {match.date}</span>
-          {!isExp && (
-            <button className="mob2-nm-btn">
-              {hasPred ? "VER PRED. →" : "PREDECIR →"}
-            </button>
-          )}
-        </div>
+
       </div>
     </div>
   );
@@ -362,22 +366,6 @@ function StatsPanel({ currentUser }) {
           <div className="mob2-stat-val">{fmt(u.predictions)}</div>
           <div className="mob2-stat-lbl">Predicciones</div>
         </div>
-      </div>
-      <div className="mob2-streak-row">
-        <span className="mob2-streak-icon">🔥</span>
-        <div className="mob2-streak-info">
-          <span className="mob2-streak-name">RACHA ACTUAL</span>
-          <span className="mob2-streak-desc">aciertos consecutivos</span>
-        </div>
-        <span className="mob2-streak-val">{u.current_streak || 0}</span>
-      </div>
-      <div className="mob2-streak-row">
-        <span className="mob2-streak-icon">⚡</span>
-        <div className="mob2-streak-info">
-          <span className="mob2-streak-name">MEJOR RACHA</span>
-          <span className="mob2-streak-desc">récord personal</span>
-        </div>
-        <span className="mob2-streak-val">{u.best_streak || 0}</span>
       </div>
     </div>
   );

@@ -1532,6 +1532,7 @@
 [data-theme="dark"] .np-modal            { background: #1a1a1a; border-color: #2e2e2e; }
 [data-theme="dark"] .np-title-input,
 [data-theme="dark"] .np-content-area     { color: #f0ece6; }
+
 /* ================================================================
    24. MOBILE DASHBOARD — MobileDashboard.css  (DARK MODE)
 ================================================================ */
@@ -1556,7 +1557,7 @@
 }
 
 [data-theme="dark"] .mob2-progress {
-  background: #12121f;
+  background: #0f0f0f;
 }
 
 [data-theme="dark"] .mob2-nm-card,
@@ -1567,10 +1568,6 @@
 [data-theme="dark"] .mob2-bottom-box {
   background: #1a1a1a;
   border-color: #2e2e2e;
-}
-
-[data-theme="dark"] .mob2-world-btn {
-  background: #0d0f1a;
 }
 
 /* ================================================================
