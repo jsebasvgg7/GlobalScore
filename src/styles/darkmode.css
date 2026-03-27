@@ -81,11 +81,6 @@
   box-shadow: 0 -4px 20px #000000 !important;
 }
 
-[data-theme="dark"] .gs-bottom-trophy {
-  background: #8b7fc7 !important;
-  box-shadow: 3px 3px 0 #000000 !important;
-}
-
 /* ================================================================
    4. HEADER — Header.css
 ================================================================ */

@@ -762,7 +762,7 @@
   height: 46px;
   border-radius: 0;
   border: none;
-  background: var(--bn-trophy-bg-light);
+  background: var(--bn-trophy-bg-dark);
   color: rgba(255,255,255,0.75);
   display: flex;
   align-items: center;
@@ -774,19 +774,12 @@
   transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
 }
 
-[data-theme="dark"] .gs-bottom-trophy {
-  background: var(--bn-trophy-bg-dark);
-  box-shadow: 3px 3px 0 rgba(0,0,0,0.4), 0 -2px 20px rgba(91,79,216,0.45);
-  color: rgba(255,255,255,0.8);
-}
-
 .gs-bottom-trophy--active {
   background: #4a3fc7;
   color: #fff;
   box-shadow: 3px 3px 0 rgba(0,0,0,0.3), 0 -2px 24px rgba(91,79,216,0.55);
 }
 
-[data-theme="dark"] .gs-bottom-trophy--active { background: #6d5fff; }
 
 .gs-bottom-trophy:active {
   transform: scale(0.92) translate(2px, 2px);

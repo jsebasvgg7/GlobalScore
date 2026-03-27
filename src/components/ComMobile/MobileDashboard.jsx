@@ -371,63 +371,13 @@ function StatsPanel({ currentUser }) {
   );
 }
 
-// ── Logros panel ──────────────────────────────────────────────
-function LogrosPanel({ currentUser, allAchievements = [] }) {
-  const userAchIds = useMemo(
-    () => new Set((currentUser?.achievements || []).map(a => a.id || a)),
-    [currentUser]
-  );
-
-  const sorted = useMemo(() => {
-    const pending  = allAchievements.filter(a => !userAchIds.has(a.id)).slice(0, 3);
-    const unlocked = allAchievements.filter(a =>  userAchIds.has(a.id)).slice(0, 2);
-    return [...pending, ...unlocked];
-  }, [allAchievements, userAchIds]);
-
-  if (sorted.length === 0) {
-    return <div className="mob2-logros-empty">SIN LOGROS DISPONIBLES</div>;
-  }
-
-  return (
-    <div>
-      {sorted.map(a => {
-        const done    = userAchIds.has(a.id);
-        const userVal =
-          a.requirement_type === "points"      ? (currentUser?.points      || 0) :
-          a.requirement_type === "predictions" ? (currentUser?.predictions || 0) :
-          a.requirement_type === "correct"     ? (currentUser?.correct     || 0) :
-          a.requirement_type === "streak"      ? (currentUser?.best_streak || 0) : 0;
-        const pct = done
-          ? 100
-          : Math.min(99, Math.round((userVal / (a.requirement_value || 1)) * 100));
-
-        return (
-          <div key={a.id} className={`mob2-logro-row${done ? " mob2-logro-row--done" : ""}`}>
-            <div className="mob2-logro-accent" />
-            <div className="mob2-logro-icon">{a.icon || "🎯"}</div>
-            <div className="mob2-logro-info">
-              <span className="mob2-logro-name">{a.name || "Logro"}</span>
-              <span className="mob2-logro-desc">{a.description || ""}</span>
-              <div className="mob2-logro-bar-wrap">
-                <div className="mob2-logro-bar-fill" style={{ width: `${pct}%` }} />
-              </div>
-            </div>
-            <span className="mob2-logro-pct">{done ? "✓" : `${pct}%`}</span>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 // ── Sección inferior (Ranking · Stats · Logros) ───────────────
 function BottomSection({ users, currentUser, allAchievements }) {
   const [activeTab, setActiveTab] = useState("ranking");
 
   const bottomTabs = [
-    { id: "ranking", label: "Ranking", count: users.length },
-    { id: "stats",   label: "Stats",   count: 0            },
-    { id: "logros",  label: "Logros",  count: allAchievements.length },
+    { id: "ranking", label: "Ranking", count: 3 },
+    { id: "stats",   label: "Stats",   count: 4 },
   ];
 
   return (
@@ -447,9 +397,6 @@ function BottomSection({ users, currentUser, allAchievements }) {
       )}
       {activeTab === "stats" && (
         <StatsPanel currentUser={currentUser} />
-      )}
-      {activeTab === "logros" && (
-        <LogrosPanel currentUser={currentUser} allAchievements={allAchievements} />
       )}
     </div>
   );
