@@ -1,30 +1,3 @@
-/* ================================================================
-   DARKMODE.CSS — GlobalScore
-   Paleta Negro Mate Unificada
-   Basada en mobile-theme.css · Cubre TODOS los componentes
-   
-   PALETA BASE:
-   --bg:             #0f0f0f
-   --card:           #1a1a1a
-   --dark-bg:        #0a0a0a
-   --dark-secondary: #242424
-   --text-primary:   #f0ece6
-   --text-secondary: #a09080
-   --muted:          #5a5248
-   --accent:         #8b7fc7
-   --accent-light:   #a599d9
-   --border:         #2e2e2e
-   --input-bg:       #1a1a1a
-   --input-border:   #3a3a3a
-   --glass:          #2a2535
-   --shadow:         0 8px 30px #000000
-   
-   COLORES FUNCIONALES:
-   --green:  #34d399   --green-bg:  #102a1c   --green-bdr: #1a3d28
-   --gold:   #c9a227   --gold-bg:   #2a2410   --gold-bdr:  #3d3518
-   --red:    #e07070   --red-bg:    #2a1010   --red-bdr:   #3d1818
-   --blue:   #60a5fa   --blue-bg:   #0a1a2a   --blue-bdr:  #1a2d3d
-================================================================ */
 
 /* ================================================================
    1. TOKENS GLOBALES
@@ -1560,95 +1533,45 @@
 [data-theme="dark"] .np-title-input,
 [data-theme="dark"] .np-content-area     { color: #f0ece6; }
 /* ================================================================
-   24. MOBILE DASHBOARD — MobileDashboard.css
+   24. MOBILE DASHBOARD — MobileDashboard.css  (DARK MODE)
 ================================================================ */
-[data-theme="dark"] .mob2-root { background: #0f0f0f; }
+[data-theme="dark"] .mob2-root {
+  --m-bg:          #0f0f0f;
+  --m-card:        #1a1a1a;
+  --m-surface:     #1a1a1a;
+  --m-border:      #2e2e2e;
+  --m-border-hard: #3a3a3a;
+  --m-accent:      #8b7fc7;
+  --m-accent-l:    #a599d9;
+  --m-text:        #f0ece6;
+  --m-muted:       #5a5248;
+  --m-glass:       rgba(139,127,199,0.08);
+  --m-green:       #34d399;
+  --m-red:         #e07070;
+  --m-amber:       #c9a227;
+  --m-gold:        #c9a227;
+  --m-silver:      #9ca3af;
+  --m-bronze:      #cd7c30;
+  background: #0f0f0f;
+}
 
-[data-theme="dark"] .mob2-topbar,
-[data-theme="dark"] .mob2-hero,
+[data-theme="dark"] .mob2-progress {
+  background: #12121f;
+}
+
 [data-theme="dark"] .mob2-nm-card,
-[data-theme="dark"] .mob2-qbtn,
 [data-theme="dark"] .mob2-mc,
 [data-theme="dark"] .mob2-lc,
 [data-theme="dark"] .mob2-ac,
-[data-theme="dark"] .mob2-rank-wrap,
-[data-theme="dark"] .mob2-sk-card {
+[data-theme="dark"] .mob2-sk-card,
+[data-theme="dark"] .mob2-bottom-box {
   background: #1a1a1a;
   border-color: #2e2e2e;
 }
 
-[data-theme="dark"] .mob2-progress,
-[data-theme="dark"] .mob2-rank-hdr {
-  background: #242424;
+[data-theme="dark"] .mob2-world-btn {
+  background: #0d0f1a;
 }
-
-[data-theme="dark"] .mob2-greeting-hey  { color: #5a5248; }
-[data-theme="dark"] .mob2-greeting-name { color: #f0ece6; }
-
-[data-theme="dark"] .mob2-hero-name    { color: #f0ece6; }
-[data-theme="dark"] .mob2-hero-rank-num { color: #8b7fc7; }
-[data-theme="dark"] .mob2-hero-rank-lbl { color: #5a5248; }
-[data-theme="dark"] .mob2-h-val  { color: #f0ece6; }
-[data-theme="dark"] .mob2-h-lbl  { color: #5a5248; }
-[data-theme="dark"] .mob2-h-val--acc { color: #8b7fc7; }
-
-[data-theme="dark"] .mob2-progress-lbl   { color: #5a5248; }
-[data-theme="dark"] .mob2-progress-count { color: #a599d9; }
-[data-theme="dark"] .mob2-progress-track { background: #2e2e2e; }
-[data-theme="dark"] .mob2-progress-fill  { background: #8b7fc7; }
-
-[data-theme="dark"] .mob2-sec { border-top-color: #242424; }
-[data-theme="dark"] .mob2-sec-title { color: #5a5248; }
-[data-theme="dark"] .mob2-sec-badge { color: #a599d9; background: #2a2535; border-color: #3d3660; }
-[data-theme="dark"] .mob2-sec-all  { color: #a599d9; }
-
-[data-theme="dark"] .mob2-nm-tag   { color: #5a5248; }
-[data-theme="dark"] .mob2-nm-tname { color: #f0ece6; }
-[data-theme="dark"] .mob2-nm-vs    { color: #5a5248; }
-[data-theme="dark"] .mob2-nm-time  { color: #a599d9; }
-[data-theme="dark"] .mob2-nm-meta  { color: #5a5248; }
-[data-theme="dark"] .mob2-nm-footer { border-top-color: #2e2e2e; }
-[data-theme="dark"] .mob2-nm-btn   { background: #8b7fc7; }
-
-[data-theme="dark"] .mob2-qbtn-icon { background: #2e2e2e; border-color: #3a3a3a; color: #a599d9; }
-[data-theme="dark"] .mob2-qbtn-txt  { color: #f0ece6; }
-[data-theme="dark"] .mob2-qbtn-sub  { color: #5a5248; }
-
-[data-theme="dark"] .mob2-mc-head { border-bottom-color: #2e2e2e; }
-[data-theme="dark"] .mob2-mc-lg-name { color: #5a5248; }
-[data-theme="dark"] .mob2-mc-tname  { color: #f0ece6; }
-[data-theme="dark"] .mob2-mc-team + .mob2-mc-team { border-top-color: #2e2e2e; }
-[data-theme="dark"] .mob2-mc-num    { border-color: #2e2e2e; color: #5a5248; }
-[data-theme="dark"] .mob2-mc-num--has { color: #8b7fc7; border-color: #3d3660; background: #2a2535; }
-[data-theme="dark"] .mob2-mc-foot  { border-top-color: #2e2e2e; }
-
-[data-theme="dark"] .mob2-mc-pill--pending { color: #5a5248; border-color: #2e2e2e; }
-[data-theme="dark"] .mob2-mc-pill--saved   { color: #a599d9; border-color: #3d3660; background: rgba(139,127,199,0.1); }
-[data-theme="dark"] .mob2-mc-pill--closed  { color: #e07070; border-color: #3d1818; background: rgba(224,112,112,0.05); }
-[data-theme="dark"] .mob2-mc-pill--live    { color: #c9a227; border-color: #3d3518; background: rgba(201,162,39,0.06); }
-
-[data-theme="dark"] .mob2-lc-head { border-bottom-color: #2e2e2e; }
-[data-theme="dark"] .mob2-lc-name { color: #f0ece6; }
-[data-theme="dark"] .mob2-lc-season { color: #5a5248; }
-[data-theme="dark"] .mob2-lc-lbl   { color: #5a5248; }
-[data-theme="dark"] .mob2-lc-input { background: #242424; border-color: #2e2e2e; color: #5a5248; }
-[data-theme="dark"] .mob2-lc-input--filled { background: #2a2535; border-color: #3d3660; border-left-color: #8b7fc7; color: #a599d9; }
-
-[data-theme="dark"] .mob2-rank-hdr-lbl { color: #5a5248; }
-[data-theme="dark"] .mob2-rank-all    { color: #a599d9; }
-[data-theme="dark"] .mob2-rank-row    { border-bottom-color: #2e2e2e; }
-[data-theme="dark"] .mob2-rank-row--me { background: rgba(139,127,199,0.04); border-left-color: #8b7fc7; }
-[data-theme="dark"] .mob2-r-av    { border-color: #2e2e2e; }
-[data-theme="dark"] .mob2-r-name  { color: #f0ece6; }
-[data-theme="dark"] .mob2-r-bar-wrap { background: #2e2e2e; }
-[data-theme="dark"] .mob2-r-bar   { background: #8b7fc7; }
-[data-theme="dark"] .mob2-r-pts   { color: #f0ece6; }
-[data-theme="dark"] .mob2-r-pts-u { color: #5a5248; }
-
-[data-theme="dark"] .mob2-more-card { border-color: #3d3660; border-top-color: #8b7fc7; color: #a599d9; }
-
-[data-theme="dark"] .mob2-sk { background: #2e2e2e; }
-[data-theme="dark"] .mob2-sk-accent { background: #2e2e2e; }
 
 /* ================================================================
    25. MOBILE RANKING — MobileRanking.css
@@ -1969,7 +1892,7 @@
 [data-theme="dark"] .mup2-tab  { color: #5a5248; border-right-color: #1e1e1e; }
 [data-theme="dark"] .mup2-tab--active { color: #a599d9; border-bottom-color: #a599d9; background: #2a2535; }
 
-[data-theme="dark"] .mup2-sec-line   { /* set via var */ }
+[data-theme="dark"] .mup2-sec-line   { border-bottom-color: #1e1e1e; }
 [data-theme="dark"] .mup2-sec-lbl    { color: #5a5248; }
 
 [data-theme="dark"] .mup2-streak-cell { background: #1a1a1a; }
@@ -2019,7 +1942,7 @@
 [data-theme="dark"] .upp-lv-ring { border-color: #0a0a0a; }
 [data-theme="dark"] .upp-name { color: #f0ece6; }
 
-[data-theme="dark"] .upp-info-tags { /* using parent variables */ }
+[data-theme="dark"] .upp-info-tags { border-color: #2e2e2e; }
 [data-theme="dark"] .upp-tag { background: rgba(255,255,255,0.04); border-color: #2e2e2e; color: rgba(255,255,255,0.5); }
 [data-theme="dark"] .upp-tag--red   { color: #e07070; }
 [data-theme="dark"] .upp-tag--green { color: #34d399; }
@@ -2278,7 +2201,6 @@
 [data-theme="dark"] ::-webkit-scrollbar-track { background: #0f0f0f; }
 [data-theme="dark"] ::-webkit-scrollbar-thumb { background: #2e2e2e; }
 [data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: #8b7fc7; }
-[data-theme="dark"] * { scrollbar-color: #2e2e2e #0f0f0f; }
 
 /* ================================================================
    43. TRANSICIONES GLOBALES DARK
@@ -2353,7 +2275,6 @@
 [data-theme="dark"] .filters-modern,
 [data-theme="dark"] .sorts-modern {
   background: rgba(26,26,26,0.6) !important;
-  backdrop-filter: blur(20px);
   border-color: #2e2e2e !important;
 }
 

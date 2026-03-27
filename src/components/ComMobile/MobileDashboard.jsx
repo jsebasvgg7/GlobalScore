@@ -1,10 +1,11 @@
-import React, { useState, useMemo, useRef, useCallback } from "react";
+import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import MobileUserProfile from "../ComProfile/MobileUserProfile";
 import MobileSubPage     from "./MobileSubPage";
 import "../../styles/StylesMobile/MobileDashboard.css";
 import "../../styles/StylesMobile/MobileSubPage.css";
 
-// ── Clock icon inline SVG ─────────────────────────────────────
+// ── SVGs inline ───────────────────────────────────────────────
 const ClockSVG = () => (
   <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/>
@@ -18,7 +19,7 @@ const CalSVG = () => (
   </svg>
 );
 
-// ── Empty state ───────────────────────────────────────────────
+// ── Empty mini ────────────────────────────────────────────────
 function EmptyMini({ label }) {
   return (
     <div className="mob2-empty">
@@ -56,10 +57,8 @@ function MiniMatchCard({ match, userPred }) {
   const isExp    = deadline && now >= deadline;
   const isLive   = match.status === "live";
   const hasPred  = userPred !== undefined;
-
-  const pillMod = isLive ? "live" : isExp ? "closed" : hasPred ? "saved" : "pending";
-  const pillTxt = isLive ? "VIVO"  : isExp ? "CERR."  : hasPred ? "GUARD." : "PEND.";
-
+  const pillMod  = isLive ? "live" : isExp ? "closed" : hasPred ? "saved" : "pending";
+  const pillTxt  = isLive ? "VIVO" : isExp ? "CERR." : hasPred ? "GUARD." : "PEND.";
   const accentMod = isLive ? "amber" : hasPred ? "green" : isExp ? "red" : "purple";
 
   return (
@@ -79,7 +78,6 @@ function MiniMatchCard({ match, userPred }) {
           </div>
           <span className={`mob2-mc-pill mob2-mc-pill--${pillMod}`}>{pillTxt}</span>
         </div>
-
         <div className="mob2-mc-teams">
           <div className="mob2-mc-team">
             <div className="mob2-mc-flag">
@@ -109,7 +107,6 @@ function MiniMatchCard({ match, userPred }) {
             </div>
           </div>
         </div>
-
         <div className="mob2-mc-foot">
           <span className="mob2-mc-ft"><ClockSVG /> {isLive ? `${match.minute || "??"}′` : (match.time || "—")}</span>
           <span className="mob2-mc-ft"><CalSVG /> {match.date || "—"}</span>
@@ -231,9 +228,7 @@ function NextMatchBanner({ match, currentUser, onOpen }) {
           </div>
         </div>
         <div className="mob2-nm-footer">
-          <span className="mob2-nm-meta">
-            {match.league} · {match.date}
-          </span>
+          <span className="mob2-nm-meta">{match.league} · {match.date}</span>
           {!isExp && (
             <button className="mob2-nm-btn">
               {hasPred ? "VER PRED. →" : "PREDECIR →"}
@@ -261,55 +256,10 @@ function ProgressBar({ saved, total }) {
   );
 }
 
-// ── Ranking Strip ─────────────────────────────────────────────
-function RankingStrip({ users, currentUser }) {
-  const sorted = useMemo(
-    () => [...users].sort((a, b) => b.points - a.points).slice(0, 4),
-    [users]
-  );
-  const maxPts = sorted[0]?.points || 1;
-  const medals = ["g", "s", "b", "n"];
-
-  return (
-    <div className="mob2-rank-wrap">
-      <div className="mob2-rank-hdr">
-        <span className="mob2-rank-hdr-lbl">// CLASIFICACIÓN GLOBAL</span>
-      </div>
-      {sorted.map((u, i) => {
-        const isMe = u.id === currentUser?.id;
-        const pct  = Math.round((u.points / maxPts) * 100);
-        return (
-          <div key={u.id} className={`mob2-rank-row${isMe ? " mob2-rank-row--me" : ""}`}>
-            <span className={`mob2-r-pos mob2-r-pos--${medals[i]}`}>{i + 1}</span>
-            <div className="mob2-r-av">
-              {u.avatar_url
-                ? <img src={u.avatar_url} alt={u.name} />
-                : (u.name || "U")[0].toUpperCase()}
-            </div>
-            <div className="mob2-r-info">
-              <div className="mob2-r-name">
-                {(u.name || "—").toUpperCase()}
-                {isMe && <span className="mob2-you">TÚ</span>}
-              </div>
-              <div className="mob2-r-bar-wrap">
-                <div className="mob2-r-bar" style={{ width: `${pct}%` }} />
-              </div>
-            </div>
-            <div className="mob2-r-pts">
-              {Number(u.points).toLocaleString("es-ES")}
-              <span className="mob2-r-pts-u"> pts</span>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 // ── Tab Bar ───────────────────────────────────────────────────
-// Inspirado en el diseño Nike: tab activo grande+bold, resto muted+pequeño
-function TabBar({ activeTab, onTabChange, counts }) {
-  const tabs = [
+// Acepta `tabs` (array custom) o `counts` (objeto para predicciones)
+function TabBar({ activeTab, onTabChange, counts, tabs: customTabs }) {
+  const tabs = customTabs || [
     { id: "matches", label: "Partidos", count: counts.matches },
     { id: "leagues", label: "Ligas",    count: counts.leagues },
     { id: "awards",  label: "Premios",  count: counts.awards  },
@@ -331,90 +281,248 @@ function TabBar({ activeTab, onTabChange, counts }) {
   );
 }
 
-// ═══════════════════════════════════════════════════════════════
+// ── Podio top 3 ───────────────────────────────────────────────
+function PodiumPanel({ users, currentUser }) {
+  const sorted = useMemo(
+    () => [...users].sort((a, b) => b.points - a.points).slice(0, 3),
+    [users]
+  );
+
+  if (sorted.length === 0) {
+    return <div className="mob2-logros-empty">SIN DATOS DE RANKING</div>;
+  }
+
+  const visual = [sorted[1], sorted[0], sorted[2]];
+  const cols   = ["2nd", "1st", "3rd"];
+  const medals = ["PLATA", "ORO", "BRONCE"];
+  const fmt    = n => Number(n || 0).toLocaleString("es-ES");
+
+  return (
+    <div className="mob2-podium">
+      <div className="mob2-podium-stage">
+        {visual.map((u, i) => {
+          if (!u) return <div key={i} className={`mob2-pod-col mob2-pod-col--${cols[i]}`} />;
+          const isMe = u.id === currentUser?.id;
+          return (
+            <div key={u.id} className={`mob2-pod-col mob2-pod-col--${cols[i]}`}>
+              <div className="mob2-pod-card">
+                <div className="mob2-pod-av">
+                  {u.avatar_url
+                    ? <img src={u.avatar_url} alt={u.name} />
+                    : (u.name || "U")[0].toUpperCase()}
+                </div>
+                <span className="mob2-pod-name">
+                  {(u.name || "—").substring(0, 8).toUpperCase()}
+                </span>
+                {isMe && <span className="mob2-pod-you">TÚ</span>}
+                <span className="mob2-pod-pts">{fmt(u.points)}</span>
+                <span className="mob2-pod-medal">{medals[i]}</span>
+              </div>
+              <div className="mob2-pod-step" />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Stats panel ───────────────────────────────────────────────
+function StatsPanel({ currentUser }) {
+  const u        = currentUser || {};
+  const accuracy = u.predictions > 0
+    ? Math.round((u.correct / u.predictions) * 100) : 0;
+  const fmt = n => Number(n || 0).toLocaleString("es-ES");
+
+  return (
+    <div>
+      <div className="mob2-stats-grid">
+        <div className="mob2-stat-cell">
+          <div className="mob2-stat-val mob2-stat-val--accent">
+            {fmt(u.points)}<span className="mob2-stat-unit">pts</span>
+          </div>
+          <div className="mob2-stat-lbl">Puntos</div>
+        </div>
+        <div className="mob2-stats-sep" />
+        <div className="mob2-stat-cell">
+          <div className="mob2-stat-val">{fmt(u.correct)}</div>
+          <div className="mob2-stat-lbl">Aciertos</div>
+        </div>
+        <div className="mob2-stat-cell">
+          <div className="mob2-stat-val mob2-stat-val--green">
+            {accuracy}<span className="mob2-stat-unit">%</span>
+          </div>
+          <div className="mob2-stat-lbl">Precisión</div>
+          <div className="mob2-stat-bar-wrap">
+            <div className="mob2-stat-bar-fill" style={{ width: `${accuracy}%` }} />
+          </div>
+        </div>
+        <div className="mob2-stats-sep" />
+        <div className="mob2-stat-cell">
+          <div className="mob2-stat-val">{fmt(u.predictions)}</div>
+          <div className="mob2-stat-lbl">Predicciones</div>
+        </div>
+      </div>
+      <div className="mob2-streak-row">
+        <span className="mob2-streak-icon">🔥</span>
+        <div className="mob2-streak-info">
+          <span className="mob2-streak-name">RACHA ACTUAL</span>
+          <span className="mob2-streak-desc">aciertos consecutivos</span>
+        </div>
+        <span className="mob2-streak-val">{u.current_streak || 0}</span>
+      </div>
+      <div className="mob2-streak-row">
+        <span className="mob2-streak-icon">⚡</span>
+        <div className="mob2-streak-info">
+          <span className="mob2-streak-name">MEJOR RACHA</span>
+          <span className="mob2-streak-desc">récord personal</span>
+        </div>
+        <span className="mob2-streak-val">{u.best_streak || 0}</span>
+      </div>
+    </div>
+  );
+}
+
+// ── Logros panel ──────────────────────────────────────────────
+function LogrosPanel({ currentUser, allAchievements = [] }) {
+  const userAchIds = useMemo(
+    () => new Set((currentUser?.achievements || []).map(a => a.id || a)),
+    [currentUser]
+  );
+
+  const sorted = useMemo(() => {
+    const pending  = allAchievements.filter(a => !userAchIds.has(a.id)).slice(0, 3);
+    const unlocked = allAchievements.filter(a =>  userAchIds.has(a.id)).slice(0, 2);
+    return [...pending, ...unlocked];
+  }, [allAchievements, userAchIds]);
+
+  if (sorted.length === 0) {
+    return <div className="mob2-logros-empty">SIN LOGROS DISPONIBLES</div>;
+  }
+
+  return (
+    <div>
+      {sorted.map(a => {
+        const done    = userAchIds.has(a.id);
+        const userVal =
+          a.requirement_type === "points"      ? (currentUser?.points      || 0) :
+          a.requirement_type === "predictions" ? (currentUser?.predictions || 0) :
+          a.requirement_type === "correct"     ? (currentUser?.correct     || 0) :
+          a.requirement_type === "streak"      ? (currentUser?.best_streak || 0) : 0;
+        const pct = done
+          ? 100
+          : Math.min(99, Math.round((userVal / (a.requirement_value || 1)) * 100));
+
+        return (
+          <div key={a.id} className={`mob2-logro-row${done ? " mob2-logro-row--done" : ""}`}>
+            <div className="mob2-logro-accent" />
+            <div className="mob2-logro-icon">{a.icon || "🎯"}</div>
+            <div className="mob2-logro-info">
+              <span className="mob2-logro-name">{a.name || "Logro"}</span>
+              <span className="mob2-logro-desc">{a.description || ""}</span>
+              <div className="mob2-logro-bar-wrap">
+                <div className="mob2-logro-bar-fill" style={{ width: `${pct}%` }} />
+              </div>
+            </div>
+            <span className="mob2-logro-pct">{done ? "✓" : `${pct}%`}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Sección inferior (Ranking · Stats · Logros) ───────────────
+function BottomSection({ users, currentUser, allAchievements }) {
+  const [activeTab, setActiveTab] = useState("ranking");
+
+  const bottomTabs = [
+    { id: "ranking", label: "Ranking", count: users.length },
+    { id: "stats",   label: "Stats",   count: 0            },
+    { id: "logros",  label: "Logros",  count: allAchievements.length },
+  ];
+
+  return (
+    <div className="mob2-bottom-wrap">
+      {/* TabBar fuera del box — idéntico al de predicciones, sin contenedor blanco */}
+      <div className="mob2-sec" style={{ marginTop: 0 }}>
+        <TabBar
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          tabs={bottomTabs}
+        />
+      </div>
+
+      {/* Contenido directo, sin mob2-bottom-box */}
+      {activeTab === "ranking" && (
+        <PodiumPanel users={users} currentUser={currentUser} />
+      )}
+      {activeTab === "stats" && (
+        <StatsPanel currentUser={currentUser} />
+      )}
+      {activeTab === "logros" && (
+        <LogrosPanel currentUser={currentUser} allAchievements={allAchievements} />
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
 //  MAIN
-// ═══════════════════════════════════════════════════════════════
+// ─────────────────────────────────────────────────────────────
 export default function MobileDashboard({
   currentUser,
-  users        = [],
-  matches      = [],
-  leagues      = [],
-  awards       = [],
-  loading      = false,
+  users            = [],
+  matches          = [],
+  leagues          = [],
+  awards           = [],
+  allAchievements  = [],
+  loading          = false,
   onPredict,
   onLeaguePredict,
   onAwardPredict,
 }) {
+  const navigate = useNavigate();
+
   const [activePage,   setActivePage]   = useState(null);
   const [profileModal, setProfileModal] = useState(false);
+  const [activeTab,    setActiveTab]    = useState("matches");
 
-  // ── Nuevo estado: tab activo ───────────────────────────────
-  const [activeTab, setActiveTab] = useState("matches");
-
-  const holdRef  = useRef(null);
-  const [holdPct, setHoldPct]   = useState(0);
-  const [holding, setHolding]   = useState(false);
-
-  const startHold = useCallback(() => {
-    if (!currentUser?.id) return;
-    setHolding(true); setHoldPct(0);
-    const start = Date.now(); const dur = 600;
-    holdRef.current = setInterval(() => {
-      const pct = Math.min(100, Math.round(((Date.now() - start) / dur) * 100));
-      setHoldPct(pct);
-      if (pct >= 100) {
-        clearInterval(holdRef.current);
-        setHolding(false); setHoldPct(0);
-        setProfileModal(true);
-      }
-    }, 16);
-  }, [currentUser]);
-
-  const cancelHold = useCallback(() => {
-    clearInterval(holdRef.current);
-    setHolding(false); setHoldPct(0);
-  }, []);
-
-  const pendingMatches = useMemo(() => matches.filter(m => m.status === "pending"), [matches]);
+  const pendingMatches = useMemo(
+    () => matches.filter(m => m.status === "pending"),
+    [matches]
+  );
 
   const nextMatch = useMemo(() => {
     return matches
       .filter(m => m.status === "pending")
-      .sort((a, b) => new Date(`${a.date}T${a.time || "00:00"}`) - new Date(`${b.date}T${b.time || "00:00"}`))
-    [0] || null;
+      .sort((a, b) =>
+        new Date(`${a.date}T${a.time || "00:00"}`) -
+        new Date(`${b.date}T${b.time || "00:00"}`)
+      )[0] || null;
   }, [matches]);
 
   const totalPredictable = pendingMatches.length;
-  const savedPending = matches.filter(m =>
+  const savedPending     = matches.filter(m =>
     m.status === "pending" &&
     m.predictions?.some(p => p.user_id === currentUser?.id)
   ).length;
 
-  // ── Previews por tab ───────────────────────────────────────
   const previewMatches = pendingMatches.slice(0, 5);
   const previewLeagues = leagues.slice(0, 3);
   const previewAwards  = awards.slice(0, 3);
 
-  // ── Conteos para la tab bar ────────────────────────────────
-  const tabCounts = {
-    matches: pendingMatches.length,
-    leagues: leagues.length,
-    awards:  awards.length,
-  };
-
-  // ── Página destino del botón "TODOS »" ─────────────────────
+  const tabCounts  = { matches: pendingMatches.length, leagues: leagues.length, awards: awards.length };
   const allPageMap = { matches: "matches", leagues: "leagues", awards: "awards" };
 
-  const handleNavigate = (page) => setActivePage(page);
-
-  // ── Renderiza el contenido del tab activo ──────────────────
   const renderTabContent = () => {
     if (activeTab === "matches") {
       return loading
         ? [0, 1, 2].map(i => <SkeletonCard key={i} />)
         : previewMatches.length === 0
         ? <EmptyMini label="SIN PARTIDOS PENDIENTES" />
-        : <>
+        : (
+          <>
             {previewMatches.map(m => (
               <MiniMatchCard
                 key={m.id}
@@ -428,7 +536,8 @@ export default function MobileDashboard({
                 <span>MÁS</span>
               </div>
             )}
-          </>;
+          </>
+        );
     }
 
     if (activeTab === "leagues") {
@@ -436,7 +545,8 @@ export default function MobileDashboard({
         ? [0, 1].map(i => <SkeletonCard key={i} wide />)
         : previewLeagues.length === 0
         ? <EmptyMini label="SIN LIGAS ACTIVAS" />
-        : <>
+        : (
+          <>
             {previewLeagues.map(l => (
               <MiniLeagueCard
                 key={l.id}
@@ -450,7 +560,8 @@ export default function MobileDashboard({
                 <span>MÁS</span>
               </div>
             )}
-          </>;
+          </>
+        );
     }
 
     if (activeTab === "awards") {
@@ -458,7 +569,8 @@ export default function MobileDashboard({
         ? [0, 1].map(i => <SkeletonCard key={i} wide />)
         : previewAwards.length === 0
         ? <EmptyMini label="SIN PREMIOS ACTIVOS" />
-        : <>
+        : (
+          <>
             {previewAwards.map(a => (
               <MiniAwardCard
                 key={a.id}
@@ -472,15 +584,18 @@ export default function MobileDashboard({
                 <span>MÁS</span>
               </div>
             )}
-          </>;
+          </>
+        );
     }
+
+    return null;
   };
 
   return (
     <div className="mob2-root">
 
-      {/* ── Sub-páginas ── */}
-      {activePage && activePage !== "ranking" && (
+      {/* Sub-páginas */}
+      {activePage && (
         <MobileSubPage
           page={activePage}
           matches={matches}
@@ -494,25 +609,23 @@ export default function MobileDashboard({
         />
       )}
 
-      {/* ── PROGRESS ── */}
+      {/* PROGRESS */}
       <ProgressBar saved={savedPending} total={totalPredictable} />
 
-      {/* ── NEXT MATCH ── */}
+      {/* NEXT MATCH */}
       <NextMatchBanner
         match={nextMatch}
         currentUser={currentUser}
-        onOpen={handleNavigate}
+        onOpen={p => setActivePage(p)}
       />
 
-      {/* ── TAB BAR + CONTENIDO UNIFICADO ── */}
+      {/* TABS + SCROLL de predicciones */}
       <div className="mob2-sec" style={{ marginTop: "14px" }}>
-        {/* Barra de tabs estilo Nike */}
         <TabBar
           activeTab={activeTab}
           onTabChange={setActiveTab}
           counts={tabCounts}
         />
-        {/* Botón "TODOS »" para el tab activo */}
         <div
           className="mob2-sec-all"
           onPointerDown={() => setActivePage(allPageMap[activeTab])}
@@ -521,29 +634,37 @@ export default function MobileDashboard({
         </div>
       </div>
 
-      {/* Scroll horizontal con el contenido del tab activo */}
       <div className="mob2-hscroll-wrap">
         <div className="mob2-hscroll">
           {renderTabContent()}
         </div>
       </div>
 
-      {/* ── RANKING ── */}
-      <div className="mob2-sec" style={{ marginTop: "4px" }}>
-        <div className="mob2-sec-title">
-          <div className="mob2-sec-sq" />RANKING
+      {/* SECCIÓN INFERIOR: Ranking · Stats · Logros */}
+      <BottomSection
+        users={users}
+        currentUser={currentUser}
+        allAchievements={allAchievements}
+      />
+
+      {/* BOTÓN MUNDIAL */}
+      <button
+        className="mob2-world-btn"
+        onClick={() => navigate("/world")}
+      >
+        <div className="mob2-world-left">
+          <span className="mob2-world-emoji">🌍</span>
+          <div className="mob2-world-text">
+            <span className="mob2-world-title">Mundial 2026</span>
+            <span className="mob2-world-sub">predice todos los partidos</span>
+          </div>
         </div>
-      </div>
-      {users.length > 0 && (
-        <RankingStrip
-          users={users}
-          currentUser={currentUser}
-        />
-      )}
+        <span className="mob2-world-arrow">→</span>
+      </button>
 
-      <div style={{ height: "24px" }} />
+      <div style={{ height: "20px" }} />
 
-      {/* ── PROFILE MODAL ── */}
+      {/* PROFILE MODAL */}
       {profileModal && currentUser?.id && (
         <MobileUserProfile
           userId={currentUser.id}
