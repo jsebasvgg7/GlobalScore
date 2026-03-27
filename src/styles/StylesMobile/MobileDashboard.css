@@ -68,7 +68,7 @@
   flex-direction: column;
   background: var(--m-bg);
   font-family: var(--m-mono);
-  padding-bottom: 60px;
+  padding-bottom: 40px;
   min-height: 100dvh;
 }
 
@@ -80,7 +80,7 @@
    PROGRESS BAR
 ================================================================ */
 .mob2-progress {
-  margin: 12px 14px 0;
+  margin: 12px 20px 0;
   background: var(--m-text);
   border-bottom: 2px solid var(--m-border-hard);
   padding: 14px 16px;
@@ -128,7 +128,7 @@
    NEXT MATCH BANNER
 ================================================================ */
 .mob2-nm {
-  margin: 0 14px;
+  margin: 0 20px;
   animation: mob2-fade-up 0.35s ease 0.14s both;
 }
 
@@ -252,7 +252,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 14px 8px;
+  padding: 16px 20px 8px;
   animation: mob2-fade-in 0.3s ease both;
 }
 
@@ -362,7 +362,7 @@
    HORIZONTAL SCROLL
 ================================================================ */
 .mob2-hscroll-wrap {
-  margin: 0 14px;
+  margin: 0 20px;
   overflow: hidden;
 }
 
@@ -700,10 +700,15 @@
    SECCIÓN INFERIOR — Ranking · Stats · Logros
 ================================================================ */
 .mob2-bottom-wrap {
-  margin: 14px 14px 0;
+  margin: 14px 0 0;
+  padding: 0 20px;
   animation: mob2-fade-up 0.35s ease 0.28s both;
 }
-
+/* AGREGAR: */
+.mob2-bottom-wrap .mob2-sec {
+  padding-left: 0;
+  padding-right: 0;
+}
 /* Eyebrow sobre la sección */
 .mob2-bottom-eyebrow {
   display: flex;
@@ -711,7 +716,10 @@
   gap: 8px;
   margin-bottom: 8px;
 }
-
+.mob2-sec--no-hpad {
+  padding-left: 14px;
+  padding-right: 14px;
+}
 .mob2-bottom-eyebrow-lbl {
   font-family: var(--m-mono);
   font-size: 8px;

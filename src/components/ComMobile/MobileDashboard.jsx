@@ -445,7 +445,7 @@ function BottomSection({ users, currentUser, allAchievements }) {
   return (
     <div className="mob2-bottom-wrap">
       {/* TabBar fuera del box — idéntico al de predicciones, sin contenedor blanco */}
-      <div className="mob2-sec" style={{ marginTop: 0 }}>
+      <div className="mob2-sec mob2-sec--no-hpad" style={{ marginTop: 0 }}>
         <TabBar
           activeTab={activeTab}
           onTabChange={setActiveTab}
@@ -646,23 +646,6 @@ export default function MobileDashboard({
         currentUser={currentUser}
         allAchievements={allAchievements}
       />
-
-      {/* BOTÓN MUNDIAL */}
-      <button
-        className="mob2-world-btn"
-        onClick={() => navigate("/world")}
-      >
-        <div className="mob2-world-left">
-          <span className="mob2-world-emoji">🌍</span>
-          <div className="mob2-world-text">
-            <span className="mob2-world-title">Mundial 2026</span>
-            <span className="mob2-world-sub">predice todos los partidos</span>
-          </div>
-        </div>
-        <span className="mob2-world-arrow">→</span>
-      </button>
-
-      <div style={{ height: "20px" }} />
 
       {/* PROFILE MODAL */}
       {profileModal && currentUser?.id && (
