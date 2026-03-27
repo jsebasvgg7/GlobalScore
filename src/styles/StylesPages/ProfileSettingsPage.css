@@ -282,7 +282,181 @@
 
 /* ================================================================
    ACHIEVEMENTS — escalado
-================================================================ */
+================================================================ */ 
+
+/* Barra de progreso global */
+.ach-progress-bar-wrap {
+  height: 4px;
+  background: var(--profile-hover);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0 0 12px;
+}
+
+.ach-progress-bar-fill {
+  height: 100%;
+  background: var(--profile-primary);
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+/* Cabecera de categoría */
+.ach-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0 6px;
+}
+
+.ach-cat-line {
+  width: 3px;
+  height: 12px;
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+.ach-cat-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--profile-text-secondary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.ach-cat-count {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+/* Grid de logros */
+.achievements-grid-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 8px;
+  border: 1px solid var(--profile-border);
+  border-radius: var(--radius-sm, 12px);
+  overflow: hidden;
+}
+
+/* Card individual */
+.achievement-card-modern {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--profile-border);
+  transition: background 0.1s;
+}
+
+.achievement-card-modern:last-child {
+  border-bottom: none;
+}
+
+/* Desbloqueado */
+.achievement-card-modern--on {
+  background: var(--profile-card);
+}
+
+.achievement-card-modern--on:nth-child(even) {
+  background: var(--profile-hover);
+}
+
+.achievement-card-modern--on:hover {
+  background: var(--profile-primary-bg);
+}
+
+/* Bloqueado */
+.achievement-card-modern--off {
+  background: transparent;
+  opacity: 0.75;
+}
+
+/* Icono cuadrado con color de categoría */
+.achievement-icon-wrap {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.achievement-icon-wrap--locked {
+  background: var(--profile-border) !important;
+}
+
+/* Texto */
+.achievement-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.achievement-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--profile-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.achievement-card-desc {
+  font-size: 11px;
+  color: var(--profile-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badge de categoría */
+.achievement-category-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+/* Dark mode */
+[data-theme="dark"] .achievements-grid-modern {
+  border-color: rgba(255,255,255,0.08);
+}
+
+[data-theme="dark"] .achievement-card-modern {
+  border-bottom-color: rgba(255,255,255,0.06);
+}
+
+[data-theme="dark"] .achievement-card-modern--on {
+  background: rgba(255,255,255,0.02);
+}
+
+[data-theme="dark"] .achievement-card-modern--on:nth-child(even) {
+  background: rgba(255,255,255,0.04);
+}
+
+[data-theme="dark"] .achievement-card-modern--on:hover {
+  background: rgba(139,127,199,0.08);
+}
+
+[data-theme="dark"] .achievement-card-name {
+  color: #f0f1f7;
+}
+
+[data-theme="dark"] .achievement-icon-wrap--locked {
+  background: rgba(255,255,255,0.08) !important;
+}
 .pnew-active-title {
   display: flex; align-items: center; gap: 14px;
   border: 2px solid; padding: 14px 16px;
