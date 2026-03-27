@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import {
   User, Bell, Shield, Database, Info, ChevronRight,
   Trophy, Heart, Globe, Crown, Edit2, List,
@@ -16,7 +15,6 @@ import Footer from '../components/ComLayout/Footer';
 import AdminAchievementsModal from '../components/ComAdmin/AdminAchievementsModal';
 import AdminTitlesModal from '../components/ComAdmin/AdminTitlesModal';
 import MobileNotes from "../components/ComMobile/MobileNotes";
-import RightNotesPanel from "../components/ComPanels/RightNotesPanel";
 
 import { useProfileData } from '../hooks/HooksProfile/useProfileData';
 import { usePredictionHistory } from '../hooks/HooksProfile/usePredictionHistory';
@@ -34,20 +32,21 @@ import ImageViewer from '../components/ComOthers/ImageViewer';
 import { supabase } from '../utils/supabaseClient';
 import { getPredictionResult, calculateAccuracy, calculateLevelProgress, getIconEmoji, getCategoryColor } from '../utils/profileUtils';
 
+// ─── CSS unificado incrustado ────────────────────────────────
 import '../styles/StylesPages/ProfileSettingsPage.css';
 
 const fmt = (n) => Number(n || 0).toLocaleString('es-ES');
 
 /* ═══════════════════════════════════════════════════════════════
-   NAV ITEMS
+   NAV ITEMS — panel izquierdo en desktop / lista en mobile
 ═══════════════════════════════════════════════════════════════ */
 const NAV_ITEMS = [
-  { id: 'overview',      icon: Grid3x3,     label: 'Estadísticas',  group: 'perfil'  },
-  { id: 'achievements',  icon: Award,       label: 'Logros',         group: 'perfil'  },
-  { id: 'championships', icon: Crown,       label: 'Campeonatos',    group: 'perfil'  },
-  { id: 'history',       icon: List,        label: 'Historial',      group: 'perfil'  },
-  { id: 'edit',          icon: Edit2,       label: 'Editar Perfil',  group: 'perfil'  },
-  { id: 'notes',         icon: NotebookPen, label: 'Mis Notas',      group: 'perfil'  },
+  { id: 'overview',      icon: Grid3x3, label: 'Estadísticas',  group: 'perfil' },
+  { id: 'achievements',  icon: Award,   label: 'Logros',         group: 'perfil' },
+  { id: 'championships', icon: Crown,   label: 'Campeonatos',    group: 'perfil' },
+  { id: 'history',       icon: List,    label: 'Historial',      group: 'perfil' },
+  { id: 'edit',          icon: Edit2,   label: 'Editar Perfil',  group: 'perfil' },
+  { id: 'notes',         icon: NotebookPen, label: 'Mis Notas',     group: 'perfil'   },
   { id: 'settings-account',       icon: User,     label: 'Cuenta',         group: 'ajustes' },
   { id: 'settings-appearance',    icon: Moon,     label: 'Apariencia',     group: 'ajustes' },
   { id: 'settings-notifications', icon: Bell,     label: 'Notificaciones', group: 'ajustes' },
@@ -66,16 +65,17 @@ function OverviewTab({ userData, currentUser, userRanking }) {
   const { pointsInLevel, pointsToNextLevel, levelProgress } = calculateLevelProgress(userData, currentUser);
 
   const items = [
-    { label: 'Predicciones', value: fmt(currentUser?.predictions || 0), icon: Target,     color: '#c9a227' },
-    { label: 'Puntos',       value: fmt(currentUser?.points || 0),      icon: Zap,        color: '#5b4fd8' },
-    { label: 'Precisión',    value: `${accuracy}%`,                     icon: TrendingUp, color: '#1D9E75' },
-    { label: 'Nivel',        value: userData.level || 1,                icon: Star,       color: '#a0652a' },
-    { label: 'Ranking',      value: `#${userRanking.position || '—'}`,  icon: Trophy,     color: '#8a8a8a' },
-    { label: 'Campeonatos',  value: userData.monthly_championships || 0, icon: Crown,     color: '#c9a227' },
+    { label: 'Predicciones', value: fmt(currentUser?.predictions || 0), icon: Target,    color: '#c9a227' },
+    { label: 'Puntos',       value: fmt(currentUser?.points || 0),      icon: Zap,       color: '#5b4fd8' },
+    { label: 'Precisión',    value: `${accuracy}%`,                     icon: TrendingUp,color: '#1D9E75' },
+    { label: 'Nivel',        value: userData.level || 1,                icon: Star,      color: '#a0652a' },
+    { label: 'Ranking',      value: `#${userRanking.position || '—'}`,  icon: Trophy,    color: '#8a8a8a' },
+    { label: 'Campeonatos',  value: userData.monthly_championships || 0,icon: Crown,     color: '#c9a227' },
   ];
 
   return (
     <div className="pnew-tab-content">
+      {/* Nivel */}
       <div className="pnew-level-block">
         <div className="pnew-level-row">
           <span className="pnew-level-lbl">NIVEL {userData.level || 1}</span>
@@ -86,6 +86,8 @@ function OverviewTab({ userData, currentUser, userRanking }) {
           <div className="pnew-level-fill" style={{ width: `${levelProgress}%` }} />
         </div>
       </div>
+
+      {/* Grid de stats */}
       <div className="pnew-stats-grid">
         {items.map(item => {
           const Icon = item.icon;
@@ -120,6 +122,7 @@ function AchievementsTab({ activeTitle, userTitles, userAchievements, availableA
           <span className="pnew-equipped-tag">EQUIPADO</span>
         </div>
       )}
+
       <div className="pnew-section-hdr">
         <span>TÍTULOS</span><span className="pnew-count-badge">{userTitles.length}</span>
       </div>
@@ -140,6 +143,7 @@ function AchievementsTab({ activeTitle, userTitles, userAchievements, availableA
           ))}
         </div>
       )}
+
       <div className="pnew-section-hdr" style={{ marginTop: 16 }}>
         <span>LOGROS</span>
         <span className="pnew-count-badge">{userAchievements.length}/{availableAchievements.length}</span>
@@ -150,7 +154,7 @@ function AchievementsTab({ activeTitle, userTitles, userAchievements, availableA
         <div className="pnew-empty"><Target size={28} /><p>Haz predicciones para desbloquear logros</p></div>
       ) : (
         <div className="pnew-achievements-grid">
-          {userAchievements.map((ach) => (
+          {userAchievements.map((ach, i) => (
             <div key={ach.id} className="pnew-ach-card">
               <div className="pnew-ach-emoji">{getIconEmoji(ach.icon)}</div>
               <div className="pnew-ach-name">{ach.name}</div>
@@ -175,18 +179,33 @@ function ChampionshipsTab({ userData, crownHistory, monthlyStats, championshipsL
         <div className="pnew-crowns-num" style={{ color: '#c9a227' }}>{total}</div>
         <div className="pnew-crowns-lbl">CAMPEONATOS GANADOS</div>
       </div>
+
       <div className="pnew-month-grid">
-        <div className="pnew-month-cell"><div className="pnew-month-val">{userData?.monthly_points || 0}</div><div className="pnew-month-lbl">PTS MES</div></div>
-        <div className="pnew-month-cell"><div className="pnew-month-val">{userData?.monthly_predictions || 0}</div><div className="pnew-month-lbl">PREDS</div></div>
-        <div className="pnew-month-cell"><div className="pnew-month-val">{userData?.monthly_correct || 0}</div><div className="pnew-month-lbl">ACIERTOS</div></div>
+        <div className="pnew-month-cell">
+          <div className="pnew-month-val">{userData?.monthly_points || 0}</div>
+          <div className="pnew-month-lbl">PTS MES</div>
+        </div>
+        <div className="pnew-month-cell">
+          <div className="pnew-month-val">{userData?.monthly_predictions || 0}</div>
+          <div className="pnew-month-lbl">PREDS</div>
+        </div>
+        <div className="pnew-month-cell">
+          <div className="pnew-month-val">{userData?.monthly_correct || 0}</div>
+          <div className="pnew-month-lbl">ACIERTOS</div>
+        </div>
       </div>
+
       {crownHistory?.length > 0 && (
         <>
-          <div className="pnew-section-hdr" style={{ marginTop: 16 }}><span>HISTORIAL</span></div>
+          <div className="pnew-section-hdr" style={{ marginTop: 16 }}>
+            <span>HISTORIAL</span>
+          </div>
           <div className="pnew-crown-list">
             {crownHistory.map((c, i) => (
               <div key={c.id} className="pnew-crown-row">
-                <div className="pnew-crown-rank" style={{ background: i === 0 ? '#c9a227' : i === 1 ? '#8a8a8a' : '#a0652a' }}>#{i + 1}</div>
+                <div className="pnew-crown-rank" style={{ background: i === 0 ? '#c9a227' : i === 1 ? '#8a8a8a' : '#a0652a' }}>
+                  #{i + 1}
+                </div>
                 <div>
                   <div className="pnew-crown-month">{c.month_year}</div>
                   <div className="pnew-crown-pts">{fmt(c.points)} pts</div>
@@ -235,20 +254,29 @@ function HistoryTab({ predictionHistory, historyLoading }) {
 
   return (
     <div className="pnew-tab-content">
+      {/* Header historial */}
       <div className="pnew-hist-hdr">
-        <div className="pnew-hist-title"><Gamepad2 size={16} /><span>Historial</span></div>
+        <div className="pnew-hist-title">
+          <Gamepad2 size={16} />
+          <span>Historial</span>
+        </div>
         <div style={{ position: 'relative' }}>
           <button className={`pnew-sort-btn${showSort ? ' active' : ''}`} onClick={() => setShowSort(v => !v)}>
-            <ArrowUpDown size={13} /><span>{filterLabel[activeFilter]}</span>
+            <ArrowUpDown size={13} />
+            <span>{filterLabel[activeFilter]}</span>
           </button>
           {showSort && (
             <>
               <div className="pnew-sort-backdrop" onClick={() => setShowSort(false)} />
               <div className="pnew-sort-modal">
                 {Object.entries(filterLabel).map(([key, lbl]) => (
-                  <button key={key} className={`pnew-sort-opt${activeFilter === key ? ' active' : ''}`}
-                    onClick={() => { setActiveFilter(key); setShowSort(false); }}>
-                    <span>{lbl}</span><span className="pnew-sort-count">{counts[key]}</span>
+                  <button
+                    key={key}
+                    className={`pnew-sort-opt${activeFilter === key ? ' active' : ''}`}
+                    onClick={() => { setActiveFilter(key); setShowSort(false); }}
+                  >
+                    <span>{lbl}</span>
+                    <span className="pnew-sort-count">{counts[key]}</span>
                   </button>
                 ))}
               </div>
@@ -257,8 +285,12 @@ function HistoryTab({ predictionHistory, historyLoading }) {
         </div>
         <div className="pnew-count-badge">{counts.all}</div>
       </div>
+
+      {/* Cards */}
       {filtered.length === 0 ? (
-        <div className="pnew-empty" style={{ marginTop: 24 }}><Gamepad2 size={36} /><p>Sin predicciones</p></div>
+        <div className="pnew-empty" style={{ marginTop: 24 }}>
+          <Gamepad2 size={36} /><p>Sin predicciones</p>
+        </div>
       ) : (
         <div className="pnew-hist-list">
           {filtered.map(pred => {
@@ -266,10 +298,14 @@ function HistoryTab({ predictionHistory, historyLoading }) {
             const match = pred.matches;
             return (
               <div key={pred.id} className={`pnew-hist-card pnew-hist-card--${result.status}`}>
+                {/* Header */}
                 <div className="pnew-hist-card-hdr">
                   <span className="pnew-hist-league">{match?.league}</span>
-                  <span className="pnew-hist-date"><Calendar size={10} />{match?.date}</span>
+                  <span className="pnew-hist-date">
+                    <Calendar size={10} />{match?.date}
+                  </span>
                 </div>
+                {/* Body */}
                 <div className="pnew-hist-body">
                   <div className="pnew-hist-team">
                     <div className="pnew-hist-logo">
@@ -279,6 +315,7 @@ function HistoryTab({ predictionHistory, historyLoading }) {
                     </div>
                     <span className="pnew-hist-tname">{match?.home_team}</span>
                   </div>
+
                   <div className="pnew-hist-scores">
                     <div className="pnew-hist-score-wrap">
                       <div className="pnew-hist-score">{pred.home_score}</div>
@@ -292,6 +329,7 @@ function HistoryTab({ predictionHistory, historyLoading }) {
                       </div>
                     )}
                   </div>
+
                   <div className="pnew-hist-team pnew-hist-team--right">
                     <span className="pnew-hist-tname">{match?.away_team}</span>
                     <div className="pnew-hist-logo">
@@ -301,6 +339,7 @@ function HistoryTab({ predictionHistory, historyLoading }) {
                     </div>
                   </div>
                 </div>
+                {/* Footer */}
                 <div className="pnew-hist-card-ftr">
                   <div className={`pnew-hist-result pnew-hist-result--${result.status}`}>
                     {result.status === 'exact'   && <Trophy size={12} />}
@@ -309,7 +348,9 @@ function HistoryTab({ predictionHistory, historyLoading }) {
                     {result.status === 'pending' && <Clock size={12} />}
                     <span>{result.label}</span>
                   </div>
-                  {result.points > 0 && <div className="pnew-hist-pts">+{result.points} pts</div>}
+                  {result.points > 0 && (
+                    <div className="pnew-hist-pts">+{result.points} pts</div>
+                  )}
                 </div>
               </div>
             );
@@ -344,14 +385,15 @@ function EditTab({ userData, setUserData, currentUser, loading, handleSave, hand
   };
 
   const fields = [
-    { key: 'name',            label: 'Nombre',          icon: User,   placeholder: 'Tu nombre' },
-    { key: 'favorite_team',   label: 'Equipo favorito', icon: Trophy, placeholder: 'Ej: Real Madrid' },
-    { key: 'favorite_player', label: 'Jugador favorito',icon: Heart,  placeholder: 'Ej: Messi' },
-    { key: 'nationality',     label: 'Nacionalidad',    icon: Globe,  placeholder: 'Ej: Colombia' },
+    { key: 'name',            label: 'Nombre',          icon: User,    placeholder: 'Tu nombre' },
+    { key: 'favorite_team',   label: 'Equipo favorito', icon: Trophy,  placeholder: 'Ej: Real Madrid' },
+    { key: 'favorite_player', label: 'Jugador favorito',icon: Heart,   placeholder: 'Ej: Messi' },
+    { key: 'nationality',     label: 'Nacionalidad',    icon: Globe,   placeholder: 'Ej: Colombia' },
   ];
 
   return (
     <div className="pnew-tab-content">
+      {/* Avatar */}
       <div className="pnew-edit-avatar">
         <AvatarUpload
           currentUrl={userData.avatar_url}
@@ -360,6 +402,8 @@ function EditTab({ userData, setUserData, currentUser, loading, handleSave, hand
           userLevel={userData.level}
         />
       </div>
+
+      {/* Banner */}
       <div className="pnew-form-group">
         <label className="pnew-form-label"><Image size={13} /> Banner de Perfil</label>
         {bannersLoading ? (
@@ -389,6 +433,8 @@ function EditTab({ userData, setUserData, currentUser, loading, handleSave, hand
           </div>
         )}
       </div>
+
+      {/* Campos */}
       {fields.map(f => {
         const Icon = f.icon;
         return (
@@ -404,9 +450,15 @@ function EditTab({ userData, setUserData, currentUser, loading, handleSave, hand
           </div>
         );
       })}
+
+      {/* Género */}
       <div className="pnew-form-group">
         <label className="pnew-form-label"><User size={13} /> Género</label>
-        <select className="pnew-form-input" value={userData.gender || ''} onChange={e => setUserData({ ...userData, gender: e.target.value })}>
+        <select
+          className="pnew-form-input"
+          value={userData.gender || ''}
+          onChange={e => setUserData({ ...userData, gender: e.target.value })}
+        >
           <option value="">Seleccionar...</option>
           <option value="Masculino">Masculino</option>
           <option value="Femenino">Femenino</option>
@@ -414,14 +466,20 @@ function EditTab({ userData, setUserData, currentUser, loading, handleSave, hand
           <option value="Prefiero no decir">Prefiero no decir</option>
         </select>
       </div>
+
+      {/* Bio */}
       <div className="pnew-form-group">
         <label className="pnew-form-label"><Star size={13} /> Biografía</label>
-        <textarea className="pnew-form-input pnew-form-textarea" rows={3}
+        <textarea
+          className="pnew-form-input pnew-form-textarea"
+          rows={3}
           value={userData.bio || ''}
           onChange={e => setUserData({ ...userData, bio: e.target.value })}
           placeholder="Cuéntanos sobre ti..."
         />
       </div>
+
+      {/* Acciones */}
       <div className="pnew-form-actions">
         <button className="pnew-save-btn" onClick={handleSave} disabled={loading}>
           {loading ? <Activity size={14} className="spinner" /> : <Save size={14} />}
@@ -442,7 +500,11 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
   handleReset, handleExport, setShowDeleteConfirm, currentUser, theme, toggleTheme }) {
 
   const Toggle = ({ checked, onChange, disabled }) => (
-    <button className={`pnew-toggle${checked ? ' pnew-toggle--on' : ''}`} onClick={onChange} disabled={disabled || saving}>
+    <button
+      className={`pnew-toggle${checked ? ' pnew-toggle--on' : ''}`}
+      onClick={onChange}
+      disabled={disabled || saving}
+    >
       <div className="pnew-toggle-knob" />
     </button>
   );
@@ -480,6 +542,7 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
           </Card>
         </div>
       );
+
     case 'appearance':
       return (
         <div className="pnew-tab-content">
@@ -491,7 +554,11 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
           </Card>
           <Card title="Texto">
             <Row label="Tamaño de fuente" desc="Ajusta el tamaño del texto">
-              <select className="pnew-select" value={preferences.font_size} onChange={e => handleSelect('font_size', e.target.value)}>
+              <select
+                className="pnew-select"
+                value={preferences.font_size}
+                onChange={e => handleSelect('font_size', e.target.value)}
+              >
                 <option value="small">Pequeña</option>
                 <option value="medium">Mediana</option>
                 <option value="large">Grande</option>
@@ -500,6 +567,7 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
           </Card>
         </div>
       );
+
     case 'notifications':
       return (
         <div className="pnew-tab-content">
@@ -525,6 +593,7 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
           </Card>
         </div>
       );
+
     case 'privacy':
       return (
         <div className="pnew-tab-content">
@@ -545,6 +614,7 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
           </Card>
         </div>
       );
+
     case 'data':
       return (
         <div className="pnew-tab-content">
@@ -567,6 +637,7 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
           </Card>
         </div>
       );
+
     case 'info':
       return (
         <div className="pnew-tab-content">
@@ -580,12 +651,13 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
           </Card>
         </div>
       );
+
     default: return null;
   }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   HERO DESKTOP
+   HERO DESKTOP (banner + avatar + info)
 ═══════════════════════════════════════════════════════════════ */
 function ProfileHeroDesktop({ userData, currentUser }) {
   const [showViewer, setShowViewer] = useState(false);
@@ -593,6 +665,7 @@ function ProfileHeroDesktop({ userData, currentUser }) {
 
   return (
     <div className="pnew-hero">
+      {/* Banner */}
       <div className="pnew-hero-banner">
         {userData.equipped_banner_url
           ? <img src={userData.equipped_banner_url} alt="banner" className="pnew-hero-banner-img" />
@@ -600,25 +673,36 @@ function ProfileHeroDesktop({ userData, currentUser }) {
         }
         <div className="pnew-hero-banner-overlay" />
       </div>
+
+      {/* Avatar */}
       <div className="pnew-hero-avatar-wrap">
-        <div className={`pnew-hero-avatar${userData.avatar_url ? ' clickable' : ''}`}
-          onClick={() => userData.avatar_url && setShowViewer(true)}>
+        <div
+          className={`pnew-hero-avatar${userData.avatar_url ? ' clickable' : ''}`}
+          onClick={() => userData.avatar_url && setShowViewer(true)}
+        >
           {userData.avatar_url
             ? <img src={userData.avatar_url} alt={userData.name} />
             : <span>{(userData.name || 'U')[0].toUpperCase()}</span>
           }
         </div>
-        <div className="pnew-hero-level"><Crown size={10} /><span>Lvl {userData.level || 1}</span></div>
+        <div className="pnew-hero-level">
+          <Crown size={10} />
+          <span>Lvl {userData.level || 1}</span>
+        </div>
       </div>
+
+      {/* Info */}
       <div className="pnew-hero-body">
         <h2 className="pnew-hero-name">{userData.name || 'Usuario'}</h2>
         <p className="pnew-hero-email">{userData.email}</p>
         {userData.bio && <p className="pnew-hero-bio">{userData.bio}</p>}
+
         <div className="pnew-hero-tags">
-          {userData.favorite_team   && <span className="pnew-hero-tag"><Trophy size={10} />{userData.favorite_team}</span>}
+          {userData.favorite_team && <span className="pnew-hero-tag"><Trophy size={10} />{userData.favorite_team}</span>}
           {userData.favorite_player && <span className="pnew-hero-tag"><Heart size={10} />{userData.favorite_player}</span>}
-          {userData.nationality     && <span className="pnew-hero-tag"><Globe size={10} />{userData.nationality}</span>}
+          {userData.nationality && <span className="pnew-hero-tag"><Globe size={10} />{userData.nationality}</span>}
         </div>
+
         <div className="pnew-hero-stats">
           <div className="pnew-hero-stat">
             <span className="pnew-hero-stat-val" style={{ color: '#5b4fd8' }}>{fmt(currentUser?.points || 0)}</span>
@@ -636,6 +720,7 @@ function ProfileHeroDesktop({ userData, currentUser }) {
           </div>
         </div>
       </div>
+
       {showViewer && userData.avatar_url && (
         <ImageViewer imageUrl={userData.avatar_url} userName={userData.name} onClose={() => setShowViewer(false)} />
       )}
@@ -644,7 +729,95 @@ function ProfileHeroDesktop({ userData, currentUser }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MOBILE SUB-VIEW
+   MOBILE MAIN VIEW
+═══════════════════════════════════════════════════════════════ */
+function MobileMainView({ userData, currentUser, preferences, onTabClick, theme, toggleTheme, onLogout }) {
+  return (
+    <div className="pnew-mob-main">
+ 
+      {/* ── HEADER: banner + avatar superpuesto ── */}
+      <div className="pnew-mob-header">
+        {/* Banner */}
+        <div className="pnew-mob-banner">
+          {userData.equipped_banner_url
+            ? <img src={userData.equipped_banner_url} alt="banner" className="pnew-mob-banner-img" />
+            : <div className="pnew-mob-banner-grad" />
+          }
+          <div className="pnew-mob-banner-overlay" />
+        </div>
+ 
+        {/* Avatar flotante — FUERA del user-row, posición absoluta */}
+        <div className="pnew-mob-avatar-wrap">
+          <div className="pnew-mob-avatar" onClick={() => onTabClick('edit')}>
+            {userData.avatar_url
+              ? <img src={userData.avatar_url} alt={userData.name} />
+              : <span>{userData.name?.charAt(0)?.toUpperCase()}</span>
+            }
+          </div>
+        </div>
+ 
+        {/* User info row — sin avatar adentro */}
+        <div className="pnew-mob-user-row" onClick={() => onTabClick('edit')}>
+          <div className="pnew-mob-user-info">
+            <span className="pnew-mob-name">{userData.name}</span>
+            <span className="pnew-mob-sub">
+              {userData.nationality && userData.nationality !== 'null'
+                ? userData.nationality
+                : userData.email || 'Ver perfil'}
+            </span>
+          </div>
+          <ChevronRight size={16} style={{ color: 'var(--muted)', flexShrink: 0 }} />
+        </div>
+      </div>
+ 
+      {/* ── Lista de opciones ── */}
+      <div className="pnew-mob-list">
+        {/* Dark mode toggle */}
+        <div className="pnew-mob-row pnew-mob-row--toggle">
+          <div className="pnew-mob-row-icon" style={{ background: '#5b4fd8' }}>
+            {theme === 'dark' ? <Moon size={16} color="#fff" /> : <Sun size={16} color="#fff" />}
+          </div>
+          <span className="pnew-mob-row-lbl">Dark Mode</span>
+          <button className={`pnew-toggle${theme === 'dark' ? ' pnew-toggle--on' : ''}`} onClick={toggleTheme}>
+            <div className="pnew-toggle-knob" />
+          </button>
+        </div>
+ 
+        {/* Nav items */}
+        {NAV_ITEMS.map(item => {
+          const Icon = item.icon;
+          const colors = {
+            overview: '#5b4fd8', achievements: '#c9a227', championships: '#a0652a',
+            history: '#1D9E75', edit: '#8a8a8a',
+            'settings-account': '#5b4fd8', 'settings-appearance': '#c9a227',
+            'settings-notifications': '#a0652a', 'settings-privacy': '#1D9E75',
+            'settings-data': '#8a8a8a', 'settings-info': '#5b4fd8'
+          };
+          return (
+            <button key={item.id} className="pnew-mob-row" onClick={() => onTabClick(item.id)}>
+              <div className="pnew-mob-row-icon" style={{ background: colors[item.id] || '#5b4fd8' }}>
+                <Icon size={16} color="#fff" />
+              </div>
+              <span className="pnew-mob-row-lbl">{item.label}</span>
+              <ChevronRight size={15} style={{ color: 'var(--muted)', marginLeft: 'auto' }} />
+            </button>
+          );
+        })}
+      </div>
+ 
+      {/* Logout */}
+      <div className="pnew-mob-logout-wrap">
+        <button className="pnew-mob-logout" onClick={onLogout}>
+          <LogOut size={16} /> Cerrar sesión
+        </button>
+      </div>
+    </div>
+  );
+}
+ 
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE SUB-VIEW (header con back + contenido)
 ═══════════════════════════════════════════════════════════════ */
 function MobileSubView({ tabId, onBack, children }) {
   useEffect(() => {
@@ -657,7 +830,9 @@ function MobileSubView({ tabId, onBack, children }) {
   return (
     <div className="pnew-mob-sub">
       <div className="pnew-mob-sub-hdr">
-        <button className="pnew-mob-back" onClick={onBack}><ArrowLeft size={20} /></button>
+        <button className="pnew-mob-back" onClick={onBack}>
+          <ArrowLeft size={20} />
+        </button>
         <h2 className="pnew-mob-sub-title">{TAB_LABELS[tabId] || ''}</h2>
       </div>
       <div className="pnew-mob-sub-body">{children}</div>
@@ -669,26 +844,12 @@ function MobileSubView({ tabId, onBack, children }) {
    COMPONENTE PRINCIPAL
 ═══════════════════════════════════════════════════════════════ */
 export default function ProfileSettingsPage({ currentUser, onBack }) {
-  const location = useLocation();
-
-  // Detectar si venimos de /notes o del sidebar con openNotes
-  const [activeTab, setActiveTab] = useState(() =>
-    location.state?.openNotes ? 'notes' : 'overview'
-  );
-
-  const [mobileView,       setMobileView]       = useState('main');
-  const [showMobileNotes,  setShowMobileNotes]  = useState(false);
+  const [mobileView, setMobileView]   = useState('main');
+  const [showMobileNotes, setShowMobileNotes] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showAdminAchievementsModal, setShowAdminAchievementsModal] = useState(false);
-  const [showAdminTitlesModal,       setShowAdminTitlesModal]       = useState(false);
-
-  // Si el state cambia (p.ej. usuario hace clic en Notas desde otra página),
-  // sincronizar el tab activo en desktop
-  useEffect(() => {
-    if (location.state?.openNotes) {
-      setActiveTab('notes');
-    }
-  }, [location.state]);
+  const [showAdminTitlesModal, setShowAdminTitlesModal] = useState(false);
 
   const toast = useToast();
   const { theme, toggleTheme } = useTheme();
@@ -714,7 +875,6 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
       setMobileView('main');
     });
   };
-
   const handleMobileNavigate = (section) => {
     if (section === 'notes') {
       setShowMobileNotes(true);
@@ -759,7 +919,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
     else toast.error('Error al eliminar cuenta');
   };
 
-  /* Render del contenido del tab activo (solo para tabs que NO son 'notes') */
+  /* Render del contenido del tab activo */
   const renderContent = (tab) => {
     const settingsProps = {
       preferences, saving, handleToggle, handleSelect,
@@ -797,19 +957,14 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
           loadUserData={loadUserData}
           setActiveTab={t => { setActiveTab(t); setMobileView('main'); }}
         />;
-      case 'notes':
-        return null; // Desktop: lo maneja RightNotesPanel. Mobile: showMobileNotes
-      default:
-        return null;
+        case 'notes':
+          return null;
+      default: return null;
     }
   };
 
   const isMobileSub = mobileView.startsWith('tab:');
   const currentMobileTab = isMobileSub ? mobileView.replace('tab:', '') : null;
-
-  // En desktop, cuando el tab activo es 'notes', ocultamos el panel de contenido
-  // y mostramos RightNotesPanel en lugar del panel derecho vacío
-  const showNotesPanel = activeTab === 'notes';
 
   return (
     <div className="pnew-page page-root">
@@ -831,6 +986,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
             {renderContent(currentMobileTab)}
           </MobileSubView>
         )}
+        {/* ── MOBILE: Vista notas (overlay completo) ── */}
         {showMobileNotes && (
           <MobileNotes
             currentUser={currentUser}
@@ -847,6 +1003,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
           <div className="pnew-desktop-left">
             <ProfileHeroDesktop userData={userData} currentUser={currentUser} />
 
+            {/* Panel nav */}
             <nav className="pnew-nav">
               {['perfil', 'ajustes'].map(group => (
                 <div key={group} className="pnew-nav-group">
@@ -868,6 +1025,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
                   })}
                 </div>
               ))}
+
               <div className="pnew-nav-logout">
                 <button className="pnew-nav-logout-btn" onClick={handleLogout}>
                   <LogOut size={15} /> Cerrar sesión
@@ -876,15 +1034,10 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
             </nav>
           </div>
 
-          {/* COL DERECHA — contenido normal O panel de notas */}
-          {showNotesPanel ? (
-            /* Panel de notas ocupa la columna derecha completa */
-            <RightNotesPanel currentUser={currentUser} />
-          ) : (
-            <div className="pnew-desktop-right">
-              {renderContent(activeTab)}
-            </div>
-          )}
+          {/* COL DERECHA — Contenido */}
+          <div className="pnew-desktop-right">
+            {renderContent(activeTab)}
+          </div>
 
         </div>
       </div>
