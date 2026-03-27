@@ -922,6 +922,174 @@
 .mup2-sk--circle {
   border-radius: 0;
 }
+/* ================================================================
+   LOGROS — añadir al final de MobileUserProfile.css
+   (o crear archivo separado e importarlo)
+================================================================ */
+
+/* ── Resumen global de logros ── */
+.mup2-ach-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 14px 10px;
+  background: var(--mup2-card);
+  border-bottom: 1px solid var(--mup2-border);
+  flex-wrap: wrap;
+}
+
+.mup2-ach-summary-num {
+  font-size: 28px;
+  font-weight: 700;
+  font-family: var(--mup2-mono);
+  color: var(--mup2-accent);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.mup2-ach-summary-sep {
+  font-size: 18px;
+  font-family: var(--mup2-mono);
+  color: var(--mup2-muted);
+  opacity: 0.4;
+}
+
+.mup2-ach-summary-total {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: var(--mup2-mono);
+  color: var(--mup2-muted);
+  opacity: 0.5;
+  line-height: 1;
+}
+
+.mup2-ach-summary-lbl {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: var(--mup2-mono);
+  color: var(--mup2-muted);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  flex: 1;
+  min-width: 100%;
+  order: 1;
+  margin-top: 2px;
+}
+
+.mup2-ach-summary-bar {
+  width: 100%;
+  height: 3px;
+  background: var(--mup2-accent-subtle);
+  border: 1px solid var(--mup2-accent-border);
+  order: 2;
+  overflow: hidden;
+}
+
+.mup2-ach-summary-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--mup2-accent), var(--mup2-accent-light, var(--mup2-accent)));
+  transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Fila de logro (reemplaza mup2-ach-card antigua) ── */
+.mup2-ach-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.mup2-ach-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-bottom: 0.5px solid var(--mup2-border);
+  transition: background 0.1s;
+}
+
+.mup2-ach-card:last-child { border-bottom: none; }
+
+/* Desbloqueado */
+.mup2-ach-card--on {
+  background: var(--mup2-card);
+  border-left: 2px solid var(--ach-color, var(--mup2-accent));
+}
+
+.mup2-ach-card--on:nth-child(even) {
+  background: var(--mup2-bg);
+}
+
+/* Bloqueado */
+.mup2-ach-card--off {
+  background: transparent;
+  border-left: 2px solid var(--mup2-border);
+  opacity: 0.75;
+}
+
+/* Icono cuadrado */
+.mup2-ach-icon-wrap {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ach-color, var(--mup2-accent));
+  /* para bloqueados sobreescribimos con opacity en el padre */
+}
+
+.mup2-ach-card--off .mup2-ach-icon-wrap {
+  background: var(--mup2-border);
+}
+
+/* Texto */
+.mup2-ach-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mup2-ach-name {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mup2-mono);
+  color: var(--mup2-text);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mup2-ach-desc {
+  font-size: 9px;
+  font-family: var(--mup2-mono);
+  color: var(--mup2-muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badge de categoría */
+.mup2-ach-cat-badge {
+  flex-shrink: 0;
+  font-size: 7px;
+  font-weight: 700;
+  font-family: var(--mup2-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+/* ── Dark overrides ── */
+[data-theme="dark"] .mup2-ach-summary      { background: #1a1a1a; }
+[data-theme="dark"] .mup2-ach-card--on     { background: #1a1a1a; }
+[data-theme="dark"] .mup2-ach-card--on:nth-child(even) { background: #0f0f0f; }
+[data-theme="dark"] .mup2-ach-name         { color: #f0ece6; }
 
 /* ================================================================
    DARK MODE OVERRIDES

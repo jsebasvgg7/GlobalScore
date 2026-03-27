@@ -1,23 +1,84 @@
 import React, { useState, useEffect } from 'react';
 import {
-  X, Crown, Flame, Star, Shield, Gem, Globe, Heart,
-  Trophy, Calendar, Target, Zap, Users, TrendingUp, Award
+  X, Crown, Flame, Shield, Gem, Globe, Heart,
+  Trophy, Calendar, Target, Zap, Users, TrendingUp, Award,
+  Star, Lock,
+  // Predicciones
+  Crosshair, Hash, BarChart2, Activity, BookOpen,
+  // Aciertos
+  CheckCircle, Eye, Aperture, Navigation, CheckSquare, Compass, BadgeCheck,
+  // Rachas
+  Repeat2, Cpu, Timer, Infinity, Rocket,
+  // Puntos
+  Circle, CircleDot, Layers, Sparkles,
+  // Especiales
+  Percent, LayoutDashboard, Medal,
 } from 'lucide-react';
 import { supabase } from '../../utils/supabaseClient';
 import { LoadingDots } from '../ComFeedback/LoadingSpinner';
 import ImageViewer from '../ComOthers/ImageViewer';
 import '../../styles/StylesProfile/UserProfilePanel.css';
 
-/* ── helpers ─────────────────────────────────────────── */
+/* ── helpers ── */
 const fmt = (n) => Number(n || 0).toLocaleString();
 const acc = (correct, predictions) =>
   predictions > 0 ? Math.round((correct / predictions) * 100) : 0;
 const levelProgress = (points) => ((points % 20) / 20) * 100;
-const pointsInLevel  = (points) => points % 20;
+const pointsInLevel = (points) => points % 20;
 const fmtDate = (d) =>
   new Date(d).toLocaleDateString('es-ES', { year: 'numeric', month: 'short' });
 
-/* ── sub-components ───────────────────────────────────── */
+/* ── Mapa icon-string → componente Lucide ── */
+const ICON_MAP = {
+  Crosshair, Target, Hash, TrendingUp, Star,
+  BarChart2, Activity, Award, BookOpen,
+  CheckCircle, Eye, Aperture, Navigation, CheckSquare, Compass,
+  ShieldCheck: BadgeCheck, BadgeCheck,
+  Repeat2, Flame, Zap, Calendar, Cpu,
+  Timer, Infinity, Rocket, Shield, Crown,
+  Circle, CircleDot, Layers, Trophy, Gem,
+  Sparkles, Percent, LayoutDashboard, Medal,
+  Default: Star,
+};
+
+function LucideIcon({ name, size = 14, color }) {
+  const Icon = ICON_MAP[name] ?? ICON_MAP.Default;
+  return <Icon size={size} color={color} />;
+}
+
+/* ── Colores y labels por categoría ── */
+const CATEGORY_COLORS = {
+  predictions: '#8b7fc7',
+  accuracy:    '#34d399',
+  streaks:     '#ef4444',
+  points:      '#f59e0b',
+  crowns:      '#c9a227',
+  special:     '#fb923c',
+};
+
+const CATEGORY_LABELS = {
+  predictions: 'Predicciones',
+  accuracy:    'Aciertos',
+  streaks:     'Rachas',
+  points:      'Puntos',
+  crowns:      'Coronas',
+  special:     'Especiales',
+};
+
+/* ── Evalúa si el usuario cumple el requisito de un logro ── */
+function checkUnlocked(ach, user) {
+  const val = ach.requirement_value ?? 0;
+  switch (ach.requirement_type) {
+    case 'points':                return (user.points               || 0) >= val;
+    case 'predictions':           return (user.predictions          || 0) >= val;
+    case 'correct':               return (user.correct              || 0) >= val;
+    case 'streak':                return (user.best_streak          || 0) >= val;
+    case 'monthly_championships': return (user.monthly_championships|| 0) >= val;
+    default:                      return false;
+  }
+}
+
+/* ── Sub-components básicos ── */
 function SectionDivider({ icon: Icon, label, color = '#5b4fd8' }) {
   return (
     <div className="upp-divider">
@@ -45,22 +106,6 @@ function StatCard({ icon: Icon, label, value, accent = '#5b4fd8' }) {
   );
 }
 
-function AchievementBadge({ achievement, index }) {
-  const colors = ['#5b4fd8','#3B82F6','#10B981','#EF4444','#F59E0B','#EC4899'];
-  const color = colors[index % colors.length];
-  return (
-    <div className="upp-badge" title={achievement.name}>
-      <div
-        className="upp-badge-hex"
-        style={{ '--badge-color': color }}
-      >
-        <span className="upp-badge-emoji">{achievement.icon || '🏆'}</span>
-      </div>
-      <span className="upp-badge-name">{achievement.name?.split(' ')[0]}</span>
-    </div>
-  );
-}
-
 function CrownEntry({ crown, index }) {
   return (
     <div className="upp-crown-entry" style={{ animationDelay: `${index * 70}ms` }}>
@@ -74,27 +119,64 @@ function CrownEntry({ crown, index }) {
   );
 }
 
-/* ══════════════════════════════════════════════════════
-   MAIN COMPONENT — Desktop Side Panel
-   
-   IMPORTANTE: Este componente es solo para DESKTOP (≥769px).
-   En mobile, usa MobileUserProfile.jsx en su lugar.
-   
-   Reemplaza el modal. En lugar de centrarse en pantalla,
-   aparece como un panel deslizante desde la derecha sobre
-   el layout de escritorio.
-══════════════════════════════════════════════════════ */
+/* ── Fila individual de logro ── */
+function AchievementRow({ ach, unlocked }) {
+  const color = unlocked
+    ? (CATEGORY_COLORS[ach.category] || '#5b4fd8')
+    : 'transparent';
+
+  return (
+    <div
+      className={`upp-ach-row${unlocked ? ' upp-ach-row--on' : ' upp-ach-row--off'}`}
+      style={{ '--ach-color': CATEGORY_COLORS[ach.category] || '#5b4fd8' }}
+    >
+      {/* Icono cuadrado */}
+      <div
+        className="upp-ach-icon"
+        style={{ background: unlocked ? (CATEGORY_COLORS[ach.category] || '#5b4fd8') : undefined }}
+      >
+        {unlocked
+          ? <LucideIcon name={ach.icon} size={13} color="#fff" />
+          : <Lock size={11} />
+        }
+      </div>
+
+      {/* Texto */}
+      <div className="upp-ach-text">
+        <span className="upp-ach-name">{ach.name}</span>
+        <span className="upp-ach-desc">{ach.description}</span>
+      </div>
+
+      {/* Badge categoría solo si desbloqueado */}
+      {unlocked && (
+        <span
+          className="upp-ach-cat"
+          style={{
+            color: CATEGORY_COLORS[ach.category] || '#5b4fd8',
+            borderColor: CATEGORY_COLORS[ach.category] || '#5b4fd8',
+            background: `${CATEGORY_COLORS[ach.category] || '#5b4fd8'}14`,
+          }}
+        >
+          {CATEGORY_LABELS[ach.category] || ach.category}
+        </span>
+      )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════
+   MAIN COMPONENT
+════════════════════════════════════════════ */
 export default function UserProfilePanel({ userId, onClose }) {
-  const [userData,    setUserData]    = useState(null);
-  const [loading,     setLoading]     = useState(true);
-  const [activeTab,   setActiveTab]   = useState('stats');
-  const [showImage,   setShowImage]   = useState(false);
-  const [userRanking, setUserRanking] = useState({ position: 0, totalUsers: 0 });
-  const [crowns,      setCrowns]      = useState([]);
-  const [streakData,  setStreakData]  = useState({ current_streak: 0, best_streak: 0 });
-  const [achievements, setAchievements] = useState([]);
-  const [titles,       setTitles]       = useState([]);
+  const [userData,     setUserData]     = useState(null);
+  const [loading,      setLoading]      = useState(true);
+  const [activeTab,    setActiveTab]    = useState('stats');
+  const [showImage,    setShowImage]    = useState(false);
+  const [userRanking,  setUserRanking]  = useState({ position: 0, totalUsers: 0 });
+  const [crowns,       setCrowns]       = useState([]);
+  const [streakData,   setStreakData]   = useState({ current_streak: 0, best_streak: 0 });
   const [allAch,       setAllAch]       = useState([]);
+  const [titles,       setTitles]       = useState([]);
   const [mounted,      setMounted]      = useState(false);
 
   useEffect(() => { loadData(); }, [userId]);
@@ -129,22 +211,11 @@ export default function UserProfilePanel({ userId, onClose }) {
         setUserRanking({ position: idx + 1, totalUsers: allUsers.length });
       }
 
-      if (available && user) {
-        const unlocked = available.filter(a => {
-          switch (a.requirement_type) {
-            case 'points':      return (user.points         || 0) >= a.requirement_value;
-            case 'predictions': return (user.predictions    || 0) >= a.requirement_value;
-            case 'correct':     return (user.correct        || 0) >= a.requirement_value;
-            case 'streak':      return (user.current_streak || 0) >= a.requirement_value;
-            default:            return false;
-          }
-        });
-        setAchievements(unlocked);
-        if (availTitles) {
-          setTitles(availTitles.filter(t =>
-            unlocked.some(a => a.id === t.requirement_achievement_id)
-          ));
-        }
+      if (availTitles && available && user) {
+        const unlocked = available.filter(a => checkUnlocked(a, user));
+        setTitles(availTitles.filter(t =>
+          unlocked.some(a => a.id === t.requirement_achievement_id)
+        ));
       }
     } catch (err) {
       console.error('Error loading profile:', err);
@@ -179,41 +250,50 @@ export default function UserProfilePanel({ userId, onClose }) {
 
   if (!userData) return null;
 
-  const accuracy   = acc(userData.correct, userData.predictions);
-  const lvlProg    = levelProgress(userData.points || 0);
-  const lvlPts     = pointsInLevel(userData.points || 0);
+  const accuracy    = acc(userData.correct, userData.predictions);
+  const lvlProg     = levelProgress(userData.points || 0);
+  const lvlPts      = pointsInLevel(userData.points || 0);
   const activeTitle = getActiveTitle();
   const totalCrowns = userData.monthly_championships || 0;
   const firstName   = userData.name?.split(' ')[0] || 'Jugador';
   const initials    = (userData.name || 'U').slice(0, 2).toUpperCase();
 
+  /* Separar logros desbloqueados / bloqueados */
+  const unlocked = allAch.filter(a => checkUnlocked(a, userData));
+  const locked   = allAch.filter(a => !checkUnlocked(a, userData));
+
+  /* Agrupar desbloqueados por categoría */
+  const grouped = unlocked.reduce((acc, a) => {
+    const cat = a.category || 'special';
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(a);
+    return acc;
+  }, {});
+
   const tabs = [
     { id: 'stats',   label: 'Stats',   icon: TrendingUp },
-    { id: 'logros',  label: 'Logros',  icon: Star        },
-    { id: 'coronas', label: 'Coronas', icon: Crown       },
+    { id: 'logros',  label: 'Logros',  icon: Star       },
+    { id: 'coronas', label: 'Coronas', icon: Crown      },
   ];
 
   return (
     <>
-      {/* Backdrop oscuro — click para cerrar */}
       <div
         className={`upp-backdrop${mounted ? ' upp-backdrop--in' : ''}`}
         onClick={onClose}
       />
 
-      {/* Panel lateral */}
       <div
         className={`upp-panel${mounted ? ' upp-panel--in' : ''}`}
         role="dialog"
         aria-modal="true"
         aria-label={`Perfil de ${userData.name}`}
       >
-        {/* ── Cerrar ── */}
         <button className="upp-close" onClick={onClose} aria-label="Cerrar">
           <X size={14} />
         </button>
 
-        {/* ── HEADER: banner + avatar + nombre ── */}
+        {/* ── HEADER ── */}
         <div className="upp-header">
           <div className="upp-banner">
             {userData.equipped_banner_url ? (
@@ -248,10 +328,7 @@ export default function UserProfilePanel({ userId, onClose }) {
             <div className="upp-name-block">
               <h2 className="upp-name">{userData.name || 'Usuario'}</h2>
               {activeTitle && (
-                <div
-                  className="upp-title-badge"
-                  style={{ '--title-color': activeTitle.color || '#5b4fd8' }}
-                >
+                <div className="upp-title-badge" style={{ '--title-color': activeTitle.color || '#5b4fd8' }}>
                   <Gem size={10} />
                   {activeTitle.name}
                 </div>
@@ -264,21 +341,12 @@ export default function UserProfilePanel({ userId, onClose }) {
             </div>
           </div>
 
-          {/* Tags de info */}
           {(userData.nationality || userData.favorite_team || userData.favorite_player || userData.created_at) && (
             <div className="upp-info-tags">
-              {userData.nationality && (
-                <span className="upp-tag"><Globe size={10} />{userData.nationality}</span>
-              )}
-              {userData.favorite_team && (
-                <span className="upp-tag upp-tag--red"><Trophy size={10} />{userData.favorite_team}</span>
-              )}
-              {userData.favorite_player && (
-                <span className="upp-tag upp-tag--green"><Heart size={10} />{userData.favorite_player}</span>
-              )}
-              {userData.created_at && (
-                <span className="upp-tag upp-tag--gold"><Calendar size={10} />Desde {fmtDate(userData.created_at)}</span>
-              )}
+              {userData.nationality   && <span className="upp-tag"><Globe size={10} />{userData.nationality}</span>}
+              {userData.favorite_team && <span className="upp-tag upp-tag--red"><Trophy size={10} />{userData.favorite_team}</span>}
+              {userData.favorite_player && <span className="upp-tag upp-tag--green"><Heart size={10} />{userData.favorite_player}</span>}
+              {userData.created_at    && <span className="upp-tag upp-tag--gold"><Calendar size={10} />Desde {fmtDate(userData.created_at)}</span>}
             </div>
           )}
 
@@ -305,7 +373,7 @@ export default function UserProfilePanel({ userId, onClose }) {
         {/* ── CONTENIDO ── */}
         <div className="upp-content">
 
-          {/* ── STATS ── */}
+          {/* ════ STATS ════ */}
           {activeTab === 'stats' && (
             <div className="upp-tab-panel">
               <SectionDivider icon={Zap} label={`Nivel ${userData.level}`} color="#c9a227" />
@@ -320,12 +388,12 @@ export default function UserProfilePanel({ userId, onClose }) {
 
               <SectionDivider icon={TrendingUp} label="Estadísticas globales" color="#5b4fd8" />
               <div className="upp-stats-grid">
-                <StatCard icon={Zap}       label="Puntos"       value={fmt(userData.points)}       accent="#5b4fd8" />
-                <StatCard icon={Target}    label="Predicciones" value={fmt(userData.predictions)}  accent="#3B82F6" />
-                <StatCard icon={Star}      label="Precisión"    value={`${accuracy}%`}             accent="#10B981" />
-                <StatCard icon={Trophy}    label="Correctas"    value={fmt(userData.correct)}      accent="#F59E0B" />
-                <StatCard icon={Crown}     label="Coronas"      value={totalCrowns}                accent="#c9a227" />
-                <StatCard icon={Award}     label="Posición"     value={`#${userRanking.position}`} accent="#EC4899" />
+                <StatCard icon={Zap}     label="Puntos"       value={fmt(userData.points)}       accent="#5b4fd8" />
+                <StatCard icon={Target}  label="Predicciones" value={fmt(userData.predictions)}  accent="#3B82F6" />
+                <StatCard icon={Star}    label="Precisión"    value={`${accuracy}%`}             accent="#10B981" />
+                <StatCard icon={Trophy}  label="Correctas"    value={fmt(userData.correct)}      accent="#F59E0B" />
+                <StatCard icon={Crown}   label="Coronas"      value={totalCrowns}                accent="#c9a227" />
+                <StatCard icon={Award}   label="Posición"     value={`#${userRanking.position}`} accent="#EC4899" />
               </div>
 
               <SectionDivider icon={Flame} label="Rachas" color="#EF4444" />
@@ -352,60 +420,82 @@ export default function UserProfilePanel({ userId, onClose }) {
             </div>
           )}
 
-          {/* ── LOGROS ── */}
+          {/* ════ LOGROS ════ */}
           {activeTab === 'logros' && (
             <div className="upp-tab-panel">
+
+              {/* Título activo */}
               {activeTitle && (
                 <>
                   <SectionDivider icon={Gem} label="Título activo" color={activeTitle.color || '#5b4fd8'} />
-                  <div
-                    className="upp-active-title"
-                    style={{ '--title-color': activeTitle.color || '#5b4fd8' }}
-                  >
-                    <div className="upp-active-title-icon">
-                      <Gem size={22} />
-                    </div>
+                  <div className="upp-active-title" style={{ '--title-color': activeTitle.color || '#5b4fd8' }}>
+                    <div className="upp-active-title-icon"><Gem size={22} /></div>
                     <div className="upp-active-title-info">
-                      <strong style={{ color: activeTitle.color || '#5b4fd8' }}>
-                        {activeTitle.name}
-                      </strong>
+                      <strong style={{ color: activeTitle.color || '#5b4fd8' }}>{activeTitle.name}</strong>
                       <p>{activeTitle.description}</p>
                     </div>
-                    <div className="upp-equipped-tag">
-                      <Star size={9} />Equipado
-                    </div>
+                    <div className="upp-equipped-tag"><Star size={9} />Equipado</div>
                   </div>
                 </>
               )}
 
-              <SectionDivider
-                icon={Star}
-                label={`Insignias ${achievements.length}/${allAch.length}`}
-                color="#c9a227"
-              />
-              {achievements.length === 0 ? (
+              {/* Resumen de progreso */}
+              <div className="upp-ach-summary">
+                <span className="upp-ach-summary-nums">
+                  <strong>{unlocked.length}</strong>/{allAch.length}
+                </span>
+                <span className="upp-ach-summary-lbl">logros desbloqueados</span>
+                <div className="upp-ach-summary-bar">
+                  <div
+                    className="upp-ach-summary-fill"
+                    style={{ width: `${allAch.length > 0 ? Math.round((unlocked.length / allAch.length) * 100) : 0}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Desbloqueados agrupados por categoría */}
+              {unlocked.length === 0 ? (
                 <div className="upp-empty">
                   <Star size={36} opacity={0.25} />
-                  <p>Haz predicciones para desbloquear insignias</p>
+                  <p>Haz predicciones para desbloquear logros</p>
                 </div>
               ) : (
-                <div className="upp-badges-grid">
-                  {achievements.map((ach, i) => (
-                    <AchievementBadge key={ach.id} achievement={ach} index={i} />
-                  ))}
-                </div>
+                Object.entries(CATEGORY_LABELS).map(([catKey, catLabel]) => {
+                  const items = grouped[catKey];
+                  if (!items || items.length === 0) return null;
+                  const color = CATEGORY_COLORS[catKey];
+                  return (
+                    <React.Fragment key={catKey}>
+                      <div className="upp-ach-cat-hdr">
+                        <div className="upp-ach-cat-line" style={{ background: color }} />
+                        <span className="upp-ach-cat-lbl">{catLabel}</span>
+                        <span className="upp-ach-cat-count" style={{ color }}>{items.length}</span>
+                      </div>
+                      <div className="upp-ach-list">
+                        {items.map(a => <AchievementRow key={a.id} ach={a} unlocked />)}
+                      </div>
+                    </React.Fragment>
+                  );
+                })
               )}
 
-              {allAch.length > achievements.length && (
-                <div className="upp-locked-count">
-                  <Shield size={13} opacity={0.4} />
-                  <span>{allAch.length - achievements.length} insignias por desbloquear</span>
-                </div>
+              {/* Bloqueados */}
+              {locked.length > 0 && (
+                <>
+                  <div className="upp-ach-cat-hdr">
+                    <div className="upp-ach-cat-line" style={{ background: 'var(--sb-border-light, #d4cfc8)', opacity: 0.5 }} />
+                    <span className="upp-ach-cat-lbl" style={{ opacity: 0.45 }}>Bloqueados</span>
+                    <span className="upp-ach-cat-count" style={{ opacity: 0.35 }}>{locked.length}</span>
+                  </div>
+                  <div className="upp-ach-list">
+                    {locked.map(a => <AchievementRow key={a.id} ach={a} unlocked={false} />)}
+                  </div>
+                </>
               )}
             </div>
           )}
 
-          {/* ── CORONAS ── */}
+          {/* ════ CORONAS ════ */}
           {activeTab === 'coronas' && (
             <div className="upp-tab-panel">
               <SectionDivider icon={Crown} label="Campeonatos" color="#c9a227" />
@@ -432,31 +522,27 @@ export default function UserProfilePanel({ userId, onClose }) {
                         size={20}
                         fill="#c9a227"
                         color="#b8920e"
-                        style={{ opacity: 1 - i * 0.06, transform: `rotate(${(i%2===0?-1:1)*5}deg)` }}
+                        style={{ opacity: 1 - i * 0.06, transform: `rotate(${(i % 2 === 0 ? -1 : 1) * 5}deg)` }}
                       />
                     ))}
-                    {totalCrowns > 6 && (
-                      <span className="upp-crowns-more">+{totalCrowns - 6}</span>
-                    )}
+                    {totalCrowns > 6 && <span className="upp-crowns-more">+{totalCrowns - 6}</span>}
                   </div>
                 </div>
               )}
 
               <SectionDivider icon={TrendingUp} label="Este mes" color="#10B981" />
               <div className="upp-stats-grid">
-                <StatCard icon={Zap}    label="Pts mes"   value={fmt(userData.monthly_points)}  accent="#8b7fc7" />
-                <StatCard icon={Target} label="Preds mes" value={fmt(userData.monthly_predictions)} accent="#3B82F6" />
-                <StatCard icon={Star}   label="Correctas" value={fmt(userData.monthly_correct)} accent="#10B981" />
-                <StatCard icon={Crown}  label="Coronas"   value={totalCrowns}                   accent="#c9a227" />
+                <StatCard icon={Zap}    label="Pts mes"    value={fmt(userData.monthly_points)}      accent="#8b7fc7" />
+                <StatCard icon={Target} label="Preds mes"  value={fmt(userData.monthly_predictions)} accent="#3B82F6" />
+                <StatCard icon={Star}   label="Correctas"  value={fmt(userData.monthly_correct)}     accent="#10B981" />
+                <StatCard icon={Crown}  label="Coronas"    value={totalCrowns}                       accent="#c9a227" />
               </div>
 
               {crowns.length > 0 && (
                 <>
                   <SectionDivider icon={Calendar} label="Historial" color="#5b4fd8" />
                   <div className="upp-crown-history">
-                    {crowns.map((c, i) => (
-                      <CrownEntry key={c.id} crown={c} index={i} />
-                    ))}
+                    {crowns.map((c, i) => <CrownEntry key={c.id} crown={c} index={i} />)}
                   </div>
                 </>
               )}

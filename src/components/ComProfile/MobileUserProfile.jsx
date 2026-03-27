@@ -1,5 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
-import { X, Crown, Flame, Zap, Target, Star, Lock, ChevronRight } from "lucide-react";
+import {
+  X, Crown, Flame, Zap, Lock, ChevronRight,
+  // Predicciones
+  Crosshair, Target, Hash, TrendingUp, Star, BarChart2, Activity, Award, BookOpen,
+  // Aciertos
+  CheckCircle, Eye, Aperture, Navigation, CheckSquare, Compass,
+  // Rachas
+  Repeat2, Calendar, Cpu, Timer, Infinity, Rocket, Shield,
+  // Puntos
+  Circle, CircleDot, Layers, Trophy, Gem, Sparkles,
+  // Especiales
+  Percent, LayoutDashboard, Medal,
+  // Coronas
+  BadgeCheck,
+} from "lucide-react";
 import { supabase } from "../../utils/supabaseClient";
 import "../../styles/StylesProfile/MobileUserProfile.css";
 
@@ -7,7 +21,48 @@ import "../../styles/StylesProfile/MobileUserProfile.css";
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
 const pct = (a, b) => (b > 0 ? Math.round((a / b) * 100) : 0);
 
-/* ── Avatar ── */
+/* ── Mapa de nombre-de-icon (string) → componente Lucide ── */
+const ICON_MAP = {
+  Crosshair,  Target,     Hash,         TrendingUp,   Star,
+  BarChart2,  Activity,   Award,        BookOpen,     CheckCircle,
+  Eye,        Aperture,   Navigation,   CheckSquare,  Compass,
+  ShieldCheck: BadgeCheck,
+  Repeat2,    Flame,      Zap,          Calendar,     Cpu,
+  Timer,      Infinity,   Rocket,       Shield,       Crown,
+  Circle,     CircleDot,  Layers,       Trophy,       Gem,
+  Sparkles,   Percent,    LayoutDashboard, Medal,     BadgeCheck,
+  // fallback para nombres que no matcheen
+  Default:    Star,
+};
+
+/** Devuelve el componente Lucide dado un string de nombre */
+function getIcon(iconName, size = 16, color) {
+  const Icon = ICON_MAP[iconName] ?? ICON_MAP.Default;
+  return <Icon size={size} color={color} />;
+}
+
+/* ── Colores por categoría ── */
+const CATEGORY_COLORS = {
+  predictions: "#8b7fc7",
+  accuracy:    "#34d399",
+  streaks:     "#ef4444",
+  points:      "#f59e0b",
+  crowns:      "#c9a227",
+  special:     "#fb923c",
+};
+
+const CATEGORY_LABELS = {
+  predictions: "Predicciones",
+  accuracy:    "Aciertos",
+  streaks:     "Rachas",
+  points:      "Puntos",
+  crowns:      "Coronas",
+  special:     "Especiales",
+};
+
+/* ════════════════════════════════════════════
+   AVATAR
+════════════════════════════════════════════ */
 function MupAvatar({ user, size = 56 }) {
   if (user?.avatar_url) {
     return (
@@ -29,16 +84,6 @@ function MupAvatar({ user, size = 56 }) {
   );
 }
 
-/* ── Stat block ── */
-function StatBlock({ val, lbl, accent }) {
-  return (
-    <div className="mup2-stat-block" style={accent ? { "--sb-accent": accent } : {}}>
-      <span className="mup2-stat-val">{val}</span>
-      <span className="mup2-stat-lbl">{lbl}</span>
-    </div>
-  );
-}
-
 /* ── Tab button ── */
 function TabBtn({ id, active, onClick, children }) {
   return (
@@ -55,23 +100,22 @@ function TabBtn({ id, active, onClick, children }) {
    PANEL — STATS
 ════════════════════════════════════════════ */
 function PanelStats({ user }) {
-  const acc = pct(user.correct || 0, user.predictions || 0);
+  const acc  = pct(user.correct || 0, user.predictions || 0);
   const mAcc = pct(user.monthly_correct || 0, user.monthly_predictions || 0);
 
   const rows = [
-    { lbl: "PREDICCIONES", val: fmt(user.predictions || 0), accent: "var(--mup2-accent)" },
-    { lbl: "ACIERTOS",     val: fmt(user.correct     || 0), accent: "#34d399" },
-    { lbl: "PRECISIÓN",    val: `${acc}%`,                  accent: "#f59e0b" },
-    { lbl: "PUNTOS TOTAL", val: fmt(user.points       || 0), accent: "var(--mup2-accent)" },
-    { lbl: "PUNTOS MES",   val: fmt(user.monthly_points || 0), accent: "#a78bfa" },
+    { lbl: "PREDICCIONES", val: fmt(user.predictions || 0),         accent: "var(--mup2-accent)" },
+    { lbl: "ACIERTOS",     val: fmt(user.correct     || 0),         accent: "#34d399" },
+    { lbl: "PRECISIÓN",    val: `${acc}%`,                          accent: "#f59e0b" },
+    { lbl: "PUNTOS TOTAL", val: fmt(user.points       || 0),        accent: "var(--mup2-accent)" },
+    { lbl: "PUNTOS MES",   val: fmt(user.monthly_points || 0),      accent: "#a78bfa" },
     { lbl: "PRED. MES",    val: fmt(user.monthly_predictions || 0), accent: "#34d399" },
-    { lbl: "ACIERTOS MES", val: fmt(user.monthly_correct || 0), accent: "#f59e0b" },
-    { lbl: "PREC. MES",    val: `${mAcc}%`,                accent: "#fb923c" },
+    { lbl: "ACIERTOS MES", val: fmt(user.monthly_correct || 0),     accent: "#f59e0b" },
+    { lbl: "PREC. MES",    val: `${mAcc}%`,                        accent: "#fb923c" },
   ];
 
   return (
     <div className="mup2-panel">
-      
       {/* Racha */}
       <div className="mup2-sec-hdr">
         <div className="mup2-sec-line" style={{ background: "#ef4444" }} />
@@ -94,6 +138,7 @@ function PanelStats({ user }) {
           <span className="mup2-streak-tag">MEJOR</span>
         </div>
       </div>
+
       {/* Nivel */}
       <div className="mup2-sec-hdr">
         <div className="mup2-sec-line" style={{ background: "#a78bfa" }} />
@@ -199,63 +244,154 @@ function PanelChampions({ userId }) {
 }
 
 /* ════════════════════════════════════════════
-   PANEL — LOGROS
+   PANEL — LOGROS  (carga desde Supabase)
 ════════════════════════════════════════════ */
-const ACHIEVEMENTS_DEFS = [
-  { id: "first_pred",    emoji: "🎯", name: "PRIMER DISPARO",  desc: "Primera predicción",          req: (u) => (u.predictions || 0) >= 1 },
-  { id: "ten_preds",     emoji: "🔟", name: "DIEZ RONDAS",     desc: "10 predicciones",             req: (u) => (u.predictions || 0) >= 10 },
-  { id: "fifty_preds",   emoji: "⚡", name: "CINCUENTA",       desc: "50 predicciones",             req: (u) => (u.predictions || 0) >= 50 },
-  { id: "first_correct", emoji: "✅", name: "ACIERTO",         desc: "Primera predicción correcta", req: (u) => (u.correct || 0) >= 1 },
-  { id: "ten_correct",   emoji: "🏹", name: "ARQUERO",         desc: "10 aciertos",                 req: (u) => (u.correct || 0) >= 10 },
-  { id: "streak_3",      emoji: "🔥", name: "EN LLAMAS",       desc: "Racha de 3",                  req: (u) => (u.best_streak || 0) >= 3 },
-  { id: "streak_7",      emoji: "💥", name: "IMPARABLE",       desc: "Racha de 7",                  req: (u) => (u.best_streak || 0) >= 7 },
-  { id: "accuracy_70",   emoji: "🎖", name: "FRANCOTIRADOR",   desc: "70% precisión",               req: (u) => pct(u.correct, u.predictions) >= 70 },
-  { id: "pts_100",       emoji: "💯", name: "CENTURIA",        desc: "100 puntos",                  req: (u) => (u.points || 0) >= 100 },
-  { id: "pts_500",       emoji: "🏆", name: "MAESTRO",         desc: "500 puntos",                  req: (u) => (u.points || 0) >= 500 },
-  { id: "champion",      emoji: "👑", name: "REY",             desc: "Campeón mensual",             req: (u) => (u.monthly_championships || 0) >= 1 },
-  { id: "triple_crown",  emoji: "🌟", name: "TRIPLE CORONA",   desc: "3 campeonatos",               req: (u) => (u.monthly_championships || 0) >= 3 },
-];
-
 function PanelAchievements({ user }) {
-  const unlocked = ACHIEVEMENTS_DEFS.filter((a) => a.req(user));
-  const locked   = ACHIEVEMENTS_DEFS.filter((a) => !a.req(user));
+  const [allAch, setAllAch]   = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const { data } = await supabase
+        .from("available_achievements")
+        .select("*")
+        .order("requirement_value", { ascending: true });
+      setAllAch(data || []);
+      setLoading(false);
+    })();
+  }, []);
+
+  /** Decide si el usuario cumple el requisito del logro */
+  const isUnlocked = (ach) => {
+    const val = ach.requirement_value ?? 0;
+    switch (ach.requirement_type) {
+      case "predictions": return (user.predictions    || 0) >= val;
+      case "correct":     return (user.correct        || 0) >= val;
+      case "streak":      return (user.best_streak    || 0) >= val;
+      case "points":      return (user.points         || 0) >= val;
+      default:            return false;
+    }
+  };
+
+  const unlocked = allAch.filter(isUnlocked);
+  const locked   = allAch.filter((a) => !isUnlocked(a));
+
+  /* Agrupar desbloqueados por categoría */
+  const groupedUnlocked = unlocked.reduce((acc, a) => {
+    const cat = a.category || "special";
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(a);
+    return acc;
+  }, {});
+
+  if (loading) {
+    return (
+      <div className="mup2-panel">
+        <div className="mup2-loading-row" style={{ padding: "40px 14px" }}>
+          <span className="mup2-loading-dot" />
+          <span className="mup2-loading-dot" style={{ animationDelay: "0.15s" }} />
+          <span className="mup2-loading-dot" style={{ animationDelay: "0.3s" }} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mup2-panel">
-      <div className="mup2-sec-hdr">
-        <div className="mup2-sec-line" style={{ background: "#34d399" }} />
-        <span className="mup2-sec-lbl">DESBLOQUEADOS</span>
-        <span className="mup2-sec-extra" style={{ color: "#34d399" }}>
-          {unlocked.length}/{ACHIEVEMENTS_DEFS.length}
-        </span>
+
+      {/* ── Resumen compacto ── */}
+      <div className="mup2-ach-summary">
+        <div className="mup2-ach-summary-num">{unlocked.length}</div>
+        <div className="mup2-ach-summary-sep">/</div>
+        <div className="mup2-ach-summary-total">{allAch.length}</div>
+        <div className="mup2-ach-summary-lbl">LOGROS DESBLOQUEADOS</div>
+        {/* Barra de progreso global */}
+        <div className="mup2-ach-summary-bar">
+          <div
+            className="mup2-ach-summary-fill"
+            style={{ width: `${allAch.length > 0 ? Math.round((unlocked.length / allAch.length) * 100) : 0}%` }}
+          />
+        </div>
       </div>
 
-      <div className="mup2-ach-grid">
-        {unlocked.map((a) => (
-          <div key={a.id} className="mup2-ach-card mup2-ach-card--on">
-            <span className="mup2-ach-emoji">{a.emoji}</span>
-            <span className="mup2-ach-name">{a.name}</span>
-            <span className="mup2-ach-desc">{a.desc}</span>
-          </div>
-        ))}
-      </div>
+      {/* ── Desbloqueados, agrupados por categoría ── */}
+      {Object.entries(CATEGORY_LABELS).map(([catKey, catLabel]) => {
+        const items = groupedUnlocked[catKey];
+        if (!items || items.length === 0) return null;
+        const color = CATEGORY_COLORS[catKey] || "var(--mup2-accent)";
+        return (
+          <React.Fragment key={catKey}>
+            <div className="mup2-sec-hdr">
+              <div className="mup2-sec-line" style={{ background: color }} />
+              <span className="mup2-sec-lbl">{catLabel.toUpperCase()}</span>
+              <span className="mup2-sec-extra" style={{ color }}>{items.length}</span>
+            </div>
+            <div className="mup2-ach-grid">
+              {items.map((a) => (
+                <AchievementRow key={a.id} ach={a} unlocked />
+              ))}
+            </div>
+          </React.Fragment>
+        );
+      })}
 
+      {/* ── Bloqueados ── */}
       {locked.length > 0 && (
         <>
           <div className="mup2-sec-hdr" style={{ marginTop: 8 }}>
             <div className="mup2-sec-line" style={{ background: "var(--mup2-border)" }} />
-            <span className="mup2-sec-lbl" style={{ opacity: 0.5 }}>BLOQUEADOS</span>
+            <span className="mup2-sec-lbl" style={{ opacity: 0.45 }}>BLOQUEADOS</span>
+            <span className="mup2-sec-extra" style={{ opacity: 0.4 }}>{locked.length}</span>
           </div>
           <div className="mup2-ach-grid">
             {locked.map((a) => (
-              <div key={a.id} className="mup2-ach-card mup2-ach-card--off">
-                <Lock size={16} style={{ opacity: 0.3, flexShrink: 0 }} />
-                <span className="mup2-ach-name" style={{ opacity: 0.35 }}>{a.name}</span>
-                <span className="mup2-ach-desc" style={{ opacity: 0.3 }}>{a.desc}</span>
-              </div>
+              <AchievementRow key={a.id} ach={a} unlocked={false} />
             ))}
           </div>
         </>
+      )}
+    </div>
+  );
+}
+
+/* ── Fila individual de logro ── */
+function AchievementRow({ ach, unlocked }) {
+  const color = unlocked
+    ? (CATEGORY_COLORS[ach.category] || "var(--mup2-accent)")
+    : "var(--mup2-border)";
+
+  return (
+    <div
+      className={`mup2-ach-card ${unlocked ? "mup2-ach-card--on" : "mup2-ach-card--off"}`}
+      style={{ "--ach-color": color }}
+    >
+      {/* Icono Lucide en un cuadrado de acento */}
+      <div className="mup2-ach-icon-wrap">
+        {unlocked
+          ? getIcon(ach.icon, 15, "#fff")
+          : <Lock size={13} style={{ opacity: 0.35 }} />
+        }
+      </div>
+
+      {/* Texto */}
+      <div className="mup2-ach-text">
+        <span className="mup2-ach-name" style={{ opacity: unlocked ? 1 : 0.35 }}>
+          {ach.name}
+        </span>
+        <span className="mup2-ach-desc" style={{ opacity: unlocked ? 0.7 : 0.3 }}>
+          {ach.description}
+        </span>
+      </div>
+
+      {/* Badge de categoría solo si está desbloqueado */}
+      {unlocked && (
+        <span
+          className="mup2-ach-cat-badge"
+          style={{ color, borderColor: color, background: `${color}14` }}
+        >
+          {CATEGORY_LABELS[ach.category] || ach.category}
+        </span>
       )}
     </div>
   );
@@ -289,7 +425,6 @@ export default function MobileUserProfile({ userId, onClose }) {
     })();
   }, [userId]);
 
-  // scroll to top on tab change
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
   }, [tab]);
@@ -307,9 +442,7 @@ export default function MobileUserProfile({ userId, onClose }) {
           <div className="mup2-topbar">
             <div className="mup2-topbar-id">
               <span className="mup2-topbar-tag">USER_PROFILE</span>
-              {rank && (
-                <span className="mup2-topbar-rank">#{rank.pos}</span>
-              )}
+              {rank && <span className="mup2-topbar-rank">#{rank.pos}</span>}
             </div>
             <button className="mup2-close-btn" onClick={onClose}>
               <X size={14} />
@@ -330,7 +463,6 @@ export default function MobileUserProfile({ userId, onClose }) {
             </div>
           ) : user ? (
             <div className="mup2-hero">
-              {/* Banner */}
               <div className="mup2-hero-banner">
                 {user.equipped_banner_url ? (
                   <>
@@ -345,7 +477,6 @@ export default function MobileUserProfile({ userId, onClose }) {
                   </>
                 )}
               </div>
-              {/* Info row */}
               <div className="mup2-hero-body">
                 <div className="mup2-hero-av-wrap">
                   <MupAvatar user={user} size={56} />
@@ -374,7 +505,7 @@ export default function MobileUserProfile({ userId, onClose }) {
               </div>
             </div>
           ) : null}
-          
+
           {/* Quick stats strip */}
           {user && (
             <div className="mup2-quick-strip">
@@ -404,9 +535,9 @@ export default function MobileUserProfile({ userId, onClose }) {
 
           {/* Tabs */}
           <div className="mup2-tabs">
-            <TabBtn id="stats"    active={tab === "stats"}    onClick={setTab}>STATS</TabBtn>
-            <TabBtn id="crowns"   active={tab === "crowns"}   onClick={setTab}>CORONAS</TabBtn>
-            <TabBtn id="logros"   active={tab === "logros"}   onClick={setTab}>LOGROS</TabBtn>
+            <TabBtn id="stats"  active={tab === "stats"}  onClick={setTab}>STATS</TabBtn>
+            <TabBtn id="crowns" active={tab === "crowns"} onClick={setTab}>CORONAS</TabBtn>
+            <TabBtn id="logros" active={tab === "logros"} onClick={setTab}>LOGROS</TabBtn>
           </div>
         </div>
 
