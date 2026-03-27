@@ -262,64 +262,6 @@ function ProgressBar({ saved, total }) {
   );
 }
 
-// ── Hero Card ─────────────────────────────────────────────────
-function HeroCard({ currentUser, users }) {
-  const points   = currentUser?.points || 0;
-  const correct  = currentUser?.correct || 0;
-  const preds    = currentUser?.predictions || 0;
-  const streak   = currentUser?.current_streak || 0;
-  const level    = currentUser?.level || 1;
-  const accuracy = preds > 0 ? Math.round((correct / preds) * 100) : 0;
-  const monthPts = currentUser?.monthly_points || 0;
-
-  const sorted   = [...users].sort((a, b) => b.points - a.points);
-  const pos      = sorted.findIndex(u => u.id === currentUser?.id);
-  const rank     = pos >= 0 ? pos + 1 : "—";
-
-  const firstName = (currentUser?.name || "Jugador").split(" ")[0];
-
-  return (
-    <div className="mob2-hero">
-      <div className="mob2-hero-stripe" />
-      <div className="mob2-hero-inner">
-        <div className="mob2-hero-top">
-          <div className="mob2-hero-left">
-            <div className="mob2-hero-eyebrow">// Jugador activo</div>
-            <div className="mob2-hero-name">{(currentUser?.name || "JUGADOR").toUpperCase()}</div>
-            <div className="mob2-hero-sub">
-              GLOBAL · NIV.{level}
-              {streak > 0 && <> · 🔥 {streak} RACHA</>}
-            </div>
-          </div>
-          <div className="mob2-hero-rank">
-            <span className="mob2-hero-rank-num">#{rank}</span>
-            <span className="mob2-hero-rank-lbl">RANKING</span>
-          </div>
-        </div>
-        <div className="mob2-hero-stats">
-          <div className="mob2-h-stat">
-            <span className="mob2-h-val mob2-h-val--acc">
-              {Number(points).toLocaleString("es-ES")}
-            </span>
-            <span className="mob2-h-lbl">PUNTOS</span>
-          </div>
-          <div className="mob2-h-sep" />
-          <div className="mob2-h-stat">
-            <span className="mob2-h-val">{correct}</span>
-            <span className="mob2-h-lbl">ACIERTOS</span>
-          </div>
-          <div className="mob2-h-sep" />
-          <div className="mob2-h-stat">
-            <span className="mob2-h-val">{accuracy}%</span>
-            <span className="mob2-h-lbl">PRECISIÓN</span>
-          </div>
-        </div>
-      </div>
-      <div className="mob2-hero-corner" />
-    </div>
-  );
-}
-
 // ── Ranking Strip ─────────────────────────────────────────────
 function RankingStrip({ users, currentUser, onOpen }) {
   const sorted = useMemo(
@@ -445,9 +387,6 @@ export default function MobileDashboard({
           onBack={() => setActivePage(null)}
         />
       )}
-
-      {/* ── HERO ── */}
-      <HeroCard currentUser={currentUser} users={users} />
 
       {/* ── PROGRESS ── */}
       <ProgressBar saved={savedPending} total={totalPredictable} />

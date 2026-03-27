@@ -16,7 +16,6 @@ import ProfileSettingsPage from "./pages/ProfileSettingsPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import StatsPage from "./pages/StatsPage";
 import WorldCupPage from "./pages/WorldCupPage";
-import NotesPage from "./pages/NotesPage";
 import { PageLoader } from "./components/ComFeedback/LoadingStates";
 import './styles/darkmode.css'
 import "./styles/layout.css";
@@ -35,10 +34,7 @@ export default function App() {
     } else {
       document.body.classList.remove('loading');
     }
-
-    return () => {
-      document.body.classList.remove('loading');
-    };
+    return () => { document.body.classList.remove('loading'); };
   }, [loading, initialLoad]);
 
   useEffect(() => {
@@ -46,9 +42,7 @@ export default function App() {
 
     supabase.auth.getSession().then(({ data }) => {
       if (!mounted) return;
-
       setSession(data?.session || null);
-      
       if (data?.session) {
         loadUserData(data.session.user.id);
       } else {
@@ -60,7 +54,6 @@ export default function App() {
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         if (!mounted) return;
-
         setSession(session);
         if (session) {
           loadUserData(session.user.id);
@@ -89,7 +82,6 @@ export default function App() {
 
       if (profileError) {
         console.error("❌ Profile error:", profileError);
-        
         if (profileError.message.includes('permission')) {
           console.log("🚪 Signing out due to permission error");
           await supabase.auth.signOut();
@@ -103,9 +95,8 @@ export default function App() {
 
       if (!profile) {
         console.log("📝 Perfil no encontrado, creando uno nuevo...");
-        
         const { data: { user: authUser } } = await supabase.auth.getUser();
-        
+
         if (!authUser) {
           console.error("❌ No se pudo obtener usuario de Auth");
           await supabase.auth.signOut();
@@ -116,9 +107,9 @@ export default function App() {
           return;
         }
 
-        const userName = authUser.user_metadata?.name || 
+        const userName = authUser.user_metadata?.name ||
                         authUser.user_metadata?.display_name ||
-                        authUser.email?.split('@')[0] || 
+                        authUser.email?.split('@')[0] ||
                         "Usuario";
 
         const { data: newProfile, error: createError } = await supabase
@@ -143,14 +134,12 @@ export default function App() {
 
         if (createError) {
           console.error("❌ Error al crear perfil:", createError);
-          
           if (createError.code === '23505') {
             const { data: existingProfile } = await supabase
               .from("users")
               .select("*")
               .eq("auth_id", authId)
               .single();
-            
             if (existingProfile) {
               console.log("✅ Perfil duplicado encontrado:", existingProfile);
               setCurrentUser(existingProfile);
@@ -260,9 +249,15 @@ export default function App() {
             path="/world"
             element={session ? <WorldCupPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
+
+          {/* ── /notes → redirige a /profile abriendo el panel de notas ── */}
           <Route
             path="/notes"
-            element={session ? <NotesPage currentUser={currentUser} /> : <Navigate to="/" replace />}
+            element={
+              session
+                ? <Navigate to="/profile" state={{ openNotes: true }} replace />
+                : <Navigate to="/" replace />
+            }
           />
 
           <Route

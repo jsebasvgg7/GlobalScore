@@ -29,16 +29,23 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
     navigate("/");
   };
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => {
+    if (path === "/notes") {
+      // Activo si estamos en /profile con openNotes, o en /notes
+      return location.pathname === "/notes" ||
+        (location.pathname === "/profile" && location.state?.openNotes === true);
+    }
+    return location.pathname === path;
+  };
 
   /* ── Sidebar / Desktop nav ── */
   const sidebarItems = [
-    { path: "/app",     icon: Home,      label: "Inicio"  },
-    { path: "/ranking", icon: Award,     label: "Ranking" },
-    { path: "/stats",   icon: BarChart3, label: "Stats"   },
-    { path: "/world",   icon: Globe,     label: "Mundo"   },
-    { path: "/profile", icon: User2,     label: "Perfil"  },
-    { path: "/notes",   icon: NotebookPen, label: "Notas" },
+    { path: "/app",     icon: Home,        label: "Inicio"  },
+    { path: "/ranking", icon: Award,       label: "Ranking" },
+    { path: "/stats",   icon: BarChart3,   label: "Stats"   },
+    { path: "/world",   icon: Globe,       label: "Mundo"   },
+    { path: "/profile", icon: User2,       label: "Perfil"  },
+    { path: "/notes",   icon: NotebookPen, label: "Notas"   },
     ...(currentUser?.is_admin ? [{ path: "/admin", icon: Shield, label: "Admin" }] : []),
   ];
 
@@ -56,7 +63,19 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
 
   const firstName = currentUser?.name?.split(" ")[0] || "Jugador";
   const initials  = (currentUser?.name || "U").slice(0, 2).toUpperCase();
-  const pageName  = sidebarItems.find((n) => isActive(n.path))?.label || "GlobalScore";
+
+  // Nombre de página para el breadcrumb — muestra "notas" si el panel está activo
+  const isNotesActive =
+    location.pathname === "/notes" ||
+    (location.pathname === "/profile" && location.state?.openNotes === true);
+  const pageName = isNotesActive
+    ? "Notas"
+    : sidebarItems.find((n) => location.pathname === n.path)?.label || "GlobalScore";
+
+  /* ── Handler especial para el botón Notas ── */
+  const handleNotesClick = () => {
+    navigate("/profile", { state: { openNotes: true } });
+  };
 
   return (
     <>
@@ -77,14 +96,14 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           <span>NAV</span>
         </div>
 
-        {/* Navegación — centrada verticalmente */}
+        {/* Navegación */}
         <nav className="gs-nav">
           {sidebarItems.map(({ path, icon: Icon, label }, index) => (
             <button
               key={path}
               className={`gs-nav-btn${isActive(path) ? " gs-nav-btn--active" : ""}`}
               data-index={String(index + 1).padStart(2, "0")}
-              onClick={() => navigate(path)}
+              onClick={() => path === "/notes" ? handleNotesClick() : navigate(path)}
               onMouseEnter={() => setTooltip(path)}
               onMouseLeave={() => setTooltip(null)}
               aria-label={label}
@@ -95,16 +114,13 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           ))}
         </nav>
 
-        {/* Zona inferior — tema + season info + logout */}
+        {/* Zona inferior */}
         <div className="gs-sidebar-bottom">
-
-          {/* Bloque temporada */}
           <div className="gs-season-block">
             <span className="gs-season-label">TEMP</span>
             <span className="gs-season-year">25/26</span>
           </div>
 
-          {/* Botón tema */}
           <button
             className="gs-nav-btn"
             onClick={toggleTheme}
@@ -118,7 +134,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             )}
           </button>
 
-          {/* Logout */}
           <button
             className="gs-nav-btn gs-nav-btn--logout"
             onClick={handleLogout}
@@ -129,7 +144,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             <LogOut size={15} />
             {tooltip === "logout" && <span className="gs-tooltip">Salir</span>}
           </button>
-
         </div>
       </aside>
 
@@ -176,11 +190,9 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
       </header>
 
       {/* ══════════════════════════════════════
-          MOBILE — Top Header · BJR
+          MOBILE — Top Header
       ══════════════════════════════════════ */}
       <header className="gs-mobile-header">
-
-        {/* Izquierda: avatar columna + nombre */}
         <div className="gs-mobile-left">
           <button className="gs-mobile-avatar" onClick={() => navigate("/profile")} aria-label="Perfil">
             {currentUser?.avatar_url
@@ -193,8 +205,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             <span className="gs-mobile-name">{firstName}</span>
           </div>
         </div>
-
-        {/* Derecha: acciones como columnas separadas por borde */}
         <div className="gs-mobile-actions">
           <button className="gs-mobile-btn" onClick={toggleTheme} aria-label="Tema">
             {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
@@ -204,7 +214,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             <span className="gs-mobile-btn-dot" />
           </button>
         </div>
-
       </header>
 
       {/* ══════════════════════════════════════
@@ -214,7 +223,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
         {mobileBottomItems.slice(0, 2).map(({ path, icon: Icon, label }) => (
           <button
             key={path}
-            className={`gs-bottom-btn${isActive(path) ? " gs-bottom-btn--active" : ""}`}
+            className={`gs-bottom-btn${location.pathname === path ? " gs-bottom-btn--active" : ""}`}
             onClick={() => navigate(path)}
             aria-label={label}
           >
@@ -223,10 +232,9 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           </button>
         ))}
 
-        {/* Copa central */}
         <div className="gs-bottom-center">
           <button
-            className={`gs-bottom-trophy${isActive("/app") ? " gs-bottom-trophy--active" : ""}`}
+            className={`gs-bottom-trophy${location.pathname === "/app" ? " gs-bottom-trophy--active" : ""}`}
             onClick={() => navigate("/app")}
             aria-label="Inicio"
           >
@@ -238,7 +246,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
         {mobileBottomItems.slice(2).map(({ path, icon: Icon, label }) => (
           <button
             key={path}
-            className={`gs-bottom-btn${isActive(path) ? " gs-bottom-btn--active" : ""}`}
+            className={`gs-bottom-btn${location.pathname === path ? " gs-bottom-btn--active" : ""}`}
             onClick={() => navigate(path)}
             aria-label={label}
           >
