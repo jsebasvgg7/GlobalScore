@@ -46,7 +46,6 @@ const NAV_ITEMS = [
   { id: 'championships', icon: Crown,   label: 'Campeonatos',    group: 'perfil' },
   { id: 'history',       icon: List,    label: 'Historial',      group: 'perfil' },
   { id: 'edit',          icon: Edit2,   label: 'Editar Perfil',  group: 'perfil' },
-  { id: 'notes',         icon: NotebookPen, label: 'Mis Notas',     group: 'perfil'   },
   { id: 'settings-account',       icon: User,     label: 'Cuenta',         group: 'ajustes' },
   { id: 'settings-appearance',    icon: Moon,     label: 'Apariencia',     group: 'ajustes' },
   { id: 'settings-notifications', icon: Bell,     label: 'Notificaciones', group: 'ajustes' },
