@@ -635,23 +635,6 @@ export default function MobileDashboard({
         allAchievements={allAchievements}
       />
 
-      {/* BOTÓN MUNDIAL */}
-      <button
-        className="mob2-world-btn"
-        onClick={() => navigate("/world")}
-      >
-        <div className="mob2-world-left">
-          <span className="mob2-world-emoji">🌍</span>
-          <div className="mob2-world-text">
-            <span className="mob2-world-title">Mundial 2026</span>
-            <span className="mob2-world-sub">predice todos los partidos</span>
-          </div>
-        </div>
-        <span className="mob2-world-arrow">→</span>
-      </button>
-
-      <div style={{ height: "20px" }} />
-
       {/* PROFILE MODAL */}
       {profileModal && currentUser?.id && (
         <MobileUserProfile
