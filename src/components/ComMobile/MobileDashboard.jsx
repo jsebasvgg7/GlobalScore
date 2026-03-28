@@ -556,21 +556,12 @@ export default function MobileDashboard({
 
       {/* TABS + SCROLL de predicciones */}
       <div className="mob2-sec" style={{ marginTop: "14px" }}>
-  <TabBar
-    activeTab={activeTab}
-    onTabChange={setActiveTab}
-    counts={tabCounts}
-  />
-  <button
-    className="mob2-sec-play"
-    onPointerDown={() => setActivePage(allPageMap[activeTab])}
-    aria-label="Ver todos"
-  >
-    <svg width="10" height="11" viewBox="0 0 10 11" fill="currentColor">
-      <polygon points="1,0.5 9.5,5.5 1,10.5" />
-    </svg>
-  </button>
-</div>
+        <TabBar
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          counts={tabCounts}
+        />
+      </div>
 
       <div className="mob2-hscroll-wrap">
         <div className="mob2-hscroll">
