@@ -443,7 +443,7 @@ export default function MobileDashboard({
     m.predictions?.some(p => p.user_id === currentUser?.id)
   ).length;
 
-  const previewMatches = pendingMatches.slice(0, 5);
+  const previewMatches = pendingMatches.slice(0, 4);
   const previewLeagues = leagues.slice(0, 3);
   const previewAwards  = awards.slice(0, 3);
 
