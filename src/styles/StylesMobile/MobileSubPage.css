@@ -67,7 +67,6 @@
   padding-top: calc(14px + env(safe-area-inset-top));
   padding-bottom: 12px;
   background: var(--msp-card);
-  border-bottom: 1px solid var(--msp-border-dark);
   flex-shrink: 0;
   position: relative;
 }
@@ -86,7 +85,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--msp-border-dark);
+  border: 0 solid var(--msp-border-dark);
   background: transparent;
   color: var(--msp-text);
   cursor: pointer;
@@ -130,7 +129,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--msp-border-dark);
+  border: 0 solid var(--msp-border-dark);
   background: transparent;
   color: var(--msp-muted);
   cursor: pointer;

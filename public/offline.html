@@ -4,604 +4,532 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sin conexión - GlobalScore</title>
-  
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    /* ==========================================
-       VARIABLES CSS - Consistentes con la app
-    ========================================== */
+    /* ================================================================
+       TOKENS — espejo exacto de Auth.css
+    ================================================================ */
     :root {
-      /* Purple Theme */
-      --accent: #8B5CF6;
-      --accent-light: #A78BFA;
-      --accent-hover: #7C3AED;
-      
-      /* Backgrounds */
-      --bg: #F8FAFC;
-      --card: #FFFFFF;
-      --glass: rgba(255, 255, 255, 0.8);
-      
-      /* Borders & Shadows */
-      --border: #E5E7EB;
-      --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-      --small-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-      
-      /* Text Colors */
-      --text-primary: #1F2937;
-      --text-secondary: #6B7280;
-      --text-muted: #9CA3AF;
-      
-      /* Status Colors */
-      --success: #10B981;
-      --success-bg: rgba(16, 185, 129, 0.1);
-      --error: #EF4444;
-      --error-bg: rgba(239, 68, 68, 0.1);
-      --warning: #F59E0B;
-      --warning-bg: rgba(245, 158, 11, 0.1);
+      --auth-cream:   #f0ede8;
+      --auth-surface: #e8e4de;
+      --auth-border:  #d4cfc8;
+      --auth-dark:    #1e202c;
+      --auth-accent:  #5b4fd8;
+      --auth-red:     #ef4444;
+      --auth-muted:   #b0aaa0;
+      --auth-mono:    'DM Mono', monospace;
+      --auth-sans:    'Sora', sans-serif;
     }
 
-    /* ==========================================
-       RESET & BASE
-    ========================================== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --auth-cream:   #f0ede8;
+        --auth-surface: #e8e4de;
+        --auth-border:  #d4cfc8;
+        --auth-dark:    #1e202c;
+        --auth-muted:   #b0aaa0;
+      }
     }
 
+    /* ================================================================
+       RESET
+    ================================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ================================================================
+       PÁGINA — replica de .welcome-screen
+    ================================================================ */
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-      background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      color: var(--text-primary);
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* ==========================================
-       DECORATIVE BACKGROUND
-    ========================================== */
-    body::before {
-      content: '';
       position: fixed;
-      top: -50%;
-      right: -10%;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      animation: floatSlow 20s ease-in-out infinite;
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      bottom: -30%;
-      left: -10%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      animation: floatSlow 25s ease-in-out infinite reverse;
-    }
-
-    @keyframes floatSlow {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(30px, -30px) scale(1.1); }
-    }
-
-    /* ==========================================
-       CONTAINER
-    ========================================== */
-    .container {
-      position: relative;
-      z-index: 10;
-      max-width: 500px;
-      width: 100%;
-      background: var(--card);
-      border-radius: 24px;
-      padding: 48px 40px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-      animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* ==========================================
-       ICON CONTAINER
-    ========================================== */
-    .icon-container {
-      width: 88px;
-      height: 88px;
-      margin: 0 auto 24px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-
-    .icon-container svg {
-      color: white;
-    }
-
-    /* ==========================================
-       TEXT CONTENT
-    ========================================== */
-    h1 {
-      font-size: 28px;
-      font-weight: 900;
-      text-align: center;
-      color: var(--text-primary);
-      margin-bottom: 8px;
-      letter-spacing: -0.5px;
-    }
-
-    .subtitle {
-      font-size: 16px;
-      font-weight: 600;
-      text-align: center;
-      color: var(--accent);
-      margin-bottom: 20px;
-    }
-
-    .description {
-      font-size: 15px;
-      line-height: 1.6;
-      text-align: center;
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-    }
-
-    /* ==========================================
-       BUTTONS
-    ========================================== */
-    .buttons {
+      inset: 0;
+      background: var(--auth-cream);
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    button {
-      width: 100%;
-      padding: 16px 24px;
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      position: relative;
+      justify-content: space-between;
+      font-family: var(--auth-sans);
+      padding: 52px 36px 52px;
       overflow: hidden;
+      animation: wsFadeIn 0.4s ease both;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      color: white;
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    @keyframes wsFadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
 
-    .btn-primary::before {
+    /* Cuadrícula de fondo — igual que auth-wrapper::before */
+    body::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transform: translateX(-100%);
-      transition: transform 0.6s ease;
+      background-image:
+        repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(212,207,200,0.4) 39px, rgba(212,207,200,0.4) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(212,207,200,0.4) 39px, rgba(212,207,200,0.4) 40px);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    /* Esquina decorativa superior derecha */
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 0 180px 180px 0;
+      border-color: transparent rgba(91,79,216,0.06) transparent transparent;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .btn-primary:hover::before {
-      transform: translateX(100%);
+    /* ================================================================
+       DOTS ROW — igual que .welcome-dots-row
+    ================================================================ */
+    .dots-row {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 5px;
+      align-items: center;
     }
 
-    .btn-primary:active {
-      transform: translateY(0);
+    .dots-row span {
+      display: block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--auth-border);
     }
 
-    .btn-secondary {
-      background: var(--glass);
-      color: var(--text-primary);
-      border: 2px solid var(--border);
-      box-shadow: var(--small-shadow);
+    /* El dot central es el acento, pero aquí en rojo por "offline" */
+    .dots-row span:nth-child(3) {
+      width: 7px; height: 7px;
+      background: var(--auth-red);
+      animation: dotBlink 2s ease-in-out infinite;
     }
 
-    .btn-secondary:hover {
-      background: var(--card);
-      border-color: var(--accent);
-      transform: translateY(-2px);
+    @keyframes dotBlink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.25; }
     }
 
-    .btn-secondary:active {
-      transform: translateY(0);
-    }
-
-    /* ==========================================
-       STATUS INDICATOR
-    ========================================== */
-    .status {
-      padding: 16px;
-      background: var(--error-bg);
-      border: 2px solid rgba(239, 68, 68, 0.2);
-      border-radius: 12px;
+    /* ================================================================
+       HERO — replica de .welcome-hero
+    ================================================================ */
+    .hero {
+      position: relative;
+      z-index: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      margin-bottom: 24px;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* Marco brutalista — igual que .welcome-icon-bg */
+    .icon-frame {
+      position: relative;
+      width: 180px; height: 180px;
+      border: 1.5px solid var(--auth-dark);
+      background: var(--auth-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: iconFloat 4s ease-in-out infinite;
+      box-shadow: 4px 4px 0 var(--auth-dark);
+    }
+
+    /* Borde offset exterior — igual que .welcome-icon-bg::before */
+    .icon-frame::before {
+      content: '';
+      position: absolute;
+      top: -8px; left: -8px; right: 8px; bottom: 8px;
+      border: 0.5px solid rgba(91,79,216,0.2);
+      pointer-events: none;
+    }
+
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    /* Bloque negro interior — igual que .welcome-icon-inner */
+    .icon-inner {
+      width: 90px; height: 90px;
+      background: var(--auth-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Cuadrado giratorio rojo (en welcome era accent, aquí red para offline) */
+    .icon-inner::before {
+      content: '';
+      width: 36px; height: 36px;
+      border: 3px solid var(--auth-red);
+      display: block;
+      animation: rotateSq 3s linear infinite;
+      opacity: 0.85;
+    }
+
+    @keyframes rotateSq {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* Cuadrado blanco central estático */
+    .icon-inner::after {
+      content: '';
+      position: absolute;
+      width: 16px; height: 16px;
+      background: #fff;
+    }
+
+    /* Líneas de señal — 4 barras como antena cortada */
+    .signal-bars {
+      position: absolute;
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .signal-bars span {
+      display: block;
+      width: 5px;
+      background: var(--auth-border);
+      border-radius: 1px;
+    }
+
+    .signal-bars span:nth-child(1) { height: 6px; }
+    .signal-bars span:nth-child(2) { height: 10px; }
+    .signal-bars span:nth-child(3) { height: 14px; background: var(--auth-red); opacity: 0.35; }
+    .signal-bars span:nth-child(4) { height: 18px; background: var(--auth-red); opacity: 0.15; }
+
+    /* ================================================================
+       PARTÍCULAS — igual que .welcome-particle
+    ================================================================ */
+    .particle {
+      position: absolute;
+      background: var(--auth-accent);
+      opacity: 0.15;
+      animation: particleDrift 5s ease-in-out infinite;
+    }
+
+    .p1 { width: 14px; height: 14px; top: 15%; right: 20%; animation-delay: 0s; }
+    .p2 { width: 8px;  height: 8px;  bottom: 20%; left: 18%; animation-delay: 1.5s; }
+    .p3 { width: 6px;  height: 6px;  top: 30%; left: 12%; opacity: 0.1; animation-delay: 0.8s; }
+
+    @keyframes particleDrift {
+      0%, 100% { transform: translate(0,    0)   rotate(0deg);   }
+      33%       { transform: translate(6px,  -8px) rotate(90deg);  }
+      66%       { transform: translate(-4px, 5px)  rotate(180deg); }
+    }
+
+    /* ================================================================
+       BODY TEXT — replica de .welcome-body
+    ================================================================ */
+    .body-text {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0;
+    }
+
+    /* Igual que .welcome-title */
+    .title {
+      margin: 0 0 10px 0;
+      font-size: 28px;
+      font-weight: 800;
+      color: #1a1a2e;
+      letter-spacing: -0.06em;
+      line-height: 1.1;
+      animation: fadeUp 0.5s ease 0.1s both;
+    }
+
+    /* Igual que .welcome-subtitle */
+    .subtitle {
+      margin: 0 0 10px 0;
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.7;
+      font-family: var(--auth-mono);
+      max-width: 280px;
+      animation: fadeUp 0.5s ease 0.2s both;
+      letter-spacing: 0.02em;
+    }
+
+    /* Badge de estado — offline */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0 0 28px 0;
+      padding: 5px 12px;
+      border: 0.5px solid rgba(239,68,68,0.3);
+      background: rgba(239,68,68,0.06);
+      animation: fadeUp 0.5s ease 0.25s both;
     }
 
     .status-dot {
-      width: 10px;
-      height: 10px;
-      background: var(--error);
+      width: 6px; height: 6px;
       border-radius: 50%;
-      animation: blink 2s ease-in-out infinite;
-      box-shadow: 0 0 12px var(--error);
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+      background: var(--auth-red);
+      animation: dotBlink 2s ease-in-out infinite;
     }
 
     .status-text {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--error);
+      font-family: var(--auth-mono);
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--auth-red);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
     }
 
-    /* ==========================================
-       TOAST NOTIFICATION - ARREGLADO PARA MÓVILES
-    ========================================== */
+    /* ================================================================
+       BOTONES — réplica exacta de .welcome-enter-btn
+    ================================================================ */
+    .btn-primary {
+      width: 100%;
+      max-width: 280px;
+      padding: 16px 24px;
+      border: none;
+      background: #1e202c;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--auth-mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 3px 3px 0 rgba(91,79,216,0.3);
+      animation: fadeUp 0.5s ease 0.3s both;
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary:hover {
+      background: var(--auth-accent);
+      box-shadow: 3px 3px 0 #1e202c;
+    }
+
+    .btn-primary:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 rgba(91,79,216,0.3);
+    }
+
+    /* Botón secundario — borde fino */
+    .btn-secondary {
+      width: 100%;
+      max-width: 280px;
+      padding: 13px 24px;
+      border: 0.5px solid var(--auth-border);
+      background: transparent;
+      color: var(--auth-muted);
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--auth-mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      animation: fadeUp 0.5s ease 0.38s both;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--auth-accent);
+      color: var(--auth-accent);
+    }
+
+    .btn-secondary:active {
+      transform: translate(1px, 1px);
+    }
+
+    /* ================================================================
+       TOAST — igual que el original pero con tipografía mono
+    ================================================================ */
     .toast {
       position: fixed;
       top: 20px;
       left: 50%;
-      transform: translateX(-50%) translateY(-120%);
-      background: linear-gradient(135deg, var(--success), #059669);
-      color: white;
-      padding: 16px 32px;
-      border-radius: 12px;
+      transform: translateX(-50%) translateY(-140%);
+      background: #1e202c;
+      color: #fff;
+      padding: 14px 24px;
+      border: 0.5px solid rgba(91,79,216,0.3);
+      box-shadow: 3px 3px 0 rgba(91,79,216,0.3);
+      font-family: var(--auth-mono);
       font-weight: 700;
-      font-size: 15px;
-      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       z-index: 10000;
       display: flex;
       align-items: center;
       gap: 10px;
       transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      /* ARREGLO PARA MÓVILES */
       max-width: calc(100vw - 40px);
-      width: auto;
-      min-width: 280px;
+      white-space: nowrap;
+    }
+
+    .toast::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      flex-shrink: 0;
     }
 
     .toast.show {
       transform: translateX(-50%) translateY(0);
     }
 
-    .toast svg {
-      flex-shrink: 0;
+    /* ================================================================
+       ANIMACIONES
+    ================================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ==========================================
-       RESPONSIVE - TABLET
-    ========================================== */
-    @media (max-width: 768px) {
+    /* ================================================================
+       RESPONSIVE
+    ================================================================ */
+    @media (max-width: 380px) {
+      body { padding: 44px 28px 44px; }
+
+      .icon-frame { width: 160px; height: 160px; }
+      .icon-inner { width: 80px; height: 80px; }
+
+      .title { font-size: 24px; }
+    }
+
+    @media (min-width: 641px) {
       body {
-        padding: 16px;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
       }
 
-      body::before,
-      body::after {
-        width: 400px;
-        height: 400px;
-      }
+      .dots-row { display: none; }
 
-      .container {
-        padding: 40px 32px;
-      }
-
-      h1 {
-        font-size: 26px;
-      }
-
-      .subtitle {
-        font-size: 15px;
-      }
-
-      .description {
-        font-size: 14px;
+      body > .hero {
+        flex: unset;
+        height: 240px;
       }
     }
 
-    /* ==========================================
-       RESPONSIVE - MOBILE
-    ========================================== */
-    @media (max-width: 480px) {
-      body {
-        padding: 12px;
-      }
-
-      body::before,
-      body::after {
-        width: 300px;
-        height: 300px;
-      }
-
-      .container {
-        padding: 32px 24px;
-        border-radius: 20px;
-      }
-
-      .icon-container {
-        width: 72px;
-        height: 72px;
-        margin-bottom: 20px;
-      }
-
-      .icon-container svg {
-        width: 40px;
-        height: 40px;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-
-      .subtitle {
-        font-size: 14px;
-      }
-
-      .description {
-        font-size: 13px;
-        margin-bottom: 24px;
-      }
-
-      button {
-        padding: 14px 20px;
-        font-size: 14px;
-      }
-
-      button svg {
-        width: 18px;
-        height: 18px;
-      }
-
-      .status {
-        padding: 14px;
-        margin-bottom: 20px;
-      }
-
-      .status-text {
-        font-size: 13px;
-      }
-
-      /* TOAST MÓVIL - ARREGLADO */
-      .toast {
-        top: 16px;
-        padding: 12px 20px;
-        font-size: 13px;
-        max-width: calc(100vw - 32px);
-        min-width: 240px;
-        border-radius: 10px;
-      }
-
-      .toast svg {
-        width: 18px;
-        height: 18px;
-      }
-    }
-
-    /* ==========================================
-       DARK MODE SUPPORT (Opcional)
-    ========================================== */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #1A1C24;
-        --card: #252936;
-        --glass: rgba(37, 41, 54, 0.8);
-        --border: rgba(255, 255, 255, 0.1);
-        --text-primary: #F0F1F7;
-        --text-secondary: #B4B8D0;
-        --text-muted: #8186A0;
-      }
-
-      body {
-        background: linear-gradient(135deg, #1A1C24 0%, #252936 100%);
-      }
-
-      body::before {
-        background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
-      }
-
-      body::after {
-        background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
-      }
-
-      .container {
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-      }
-
-      .btn-secondary {
-        background: rgba(37, 41, 54, 0.6);
-        border-color: rgba(255, 255, 255, 0.12);
-      }
-
-      .btn-secondary:hover {
-        background: var(--card);
-        border-color: var(--accent);
-      }
-
-      .status {
-        background: rgba(239, 68, 68, 0.15);
-        border-color: rgba(239, 68, 68, 0.3);
-      }
-    }
-
-    /* ==========================================
-       ACCESSIBILITY
-    ========================================== */
+    /* Reducir movimiento */
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
+      *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
       }
-    }
-
-    /* Focus states para accesibilidad */
-    button:focus-visible {
-      outline: 3px solid var(--accent);
-      outline-offset: 2px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Icon Container con Lucide -->
-    <div class="icon-container">
-      <i data-lucide="wifi-off" width="48" height="48"></i>
+
+  <!-- Dots nav — igual que welcome screen -->
+  <div class="dots-row">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- Hero con el ícono animado -->
+  <div class="hero">
+    <div class="icon-frame">
+      <div class="icon-inner"></div>
+
+      <!-- Barras de señal cortada -->
+      <div class="signal-bars">
+        <span></span><span></span><span></span><span></span>
+      </div>
     </div>
-    
-    <!-- Title & Subtitle -->
-    <h1>Sin conexión</h1>
-    <p class="subtitle">GlobalScore</p>
-    
-    <!-- Description -->
-    <p class="description">
-      No tienes conexión a internet en este momento. 
-      Algunas funciones están limitadas hasta que vuelvas a conectarte.
+
+    <!-- Partículas flotantes -->
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+  </div>
+
+  <!-- Texto y botones -->
+  <div class="body-text">
+
+    <h1 class="title">Sin conexión</h1>
+
+    <p class="subtitle">
+      No hay red disponible.<br />
+      Verifica tu conexión e intenta de nuevo.
     </p>
 
-    <!-- Action Buttons -->
-    <div class="buttons">
-      <button class="btn-primary" onclick="location.reload()">
-        <i data-lucide="refresh-cw" width="20" height="20"></i>
-        <span>Reintentar conexión</span>
-      </button>
-      <button class="btn-secondary" onclick="goHome()">
-        <i data-lucide="home" width="20" height="20"></i>
-        <span>Ir al inicio</span>
-      </button>
+    <!-- Badge de estado -->
+    <div class="status-badge">
+      <span class="status-dot"></span>
+      <span class="status-text">Globalscore · offline</span>
     </div>
 
-    <!-- Status Indicator -->
-    <div class="status">
-      <div class="status-dot"></div>
-      <span class="status-text">Sin conexión a internet</span>
-    </div>
+    <button class="btn-primary" onclick="handleRetry(this)">
+      Reintentar
+    </button>
 
+    <button class="btn-secondary" onclick="goHome()">
+      Ir al inicio
+    </button>
 
   </div>
 
-  <!-- Toast Notification (inicialmente oculto) -->
-  <div class="toast" id="toast">
-    <i data-lucide="check-circle" width="20" height="20"></i>
-    <span>Conexión restaurada - Recargando...</span>
-  </div>
+  <!-- Toast de reconexión -->
+  <div class="toast" id="toast">Conexión restaurada — recargando</div>
 
   <script>
-    // Inicializar iconos de Lucide
-    lucide.createIcons();
-
-    // ==========================================
-    // DETECTAR CUANDO VUELVE LA CONEXIÓN
-    // ==========================================
-    window.addEventListener('online', () => {
-      console.log('✅ Conexión restaurada');
-      
-      // Mostrar toast
-      const toast = document.getElementById('toast');
-      toast.classList.add('show');
-      
-      // Recargar después de 1.5 segundos
+    // ── Reintentar con feedback visual ──────────────────────────────
+    function handleRetry(btn) {
+      const original = btn.textContent;
+      btn.textContent = '···';
+      btn.disabled = true;
       setTimeout(() => {
-        location.reload();
-      }, 1500);
-    });
+        if (navigator.onLine) {
+          location.reload();
+        } else {
+          btn.textContent = original;
+          btn.disabled = false;
+        }
+      }, 800);
+    }
 
-    // ==========================================
-    // FUNCIÓN PARA IR AL INICIO
-    // ==========================================
+    // ── Ir al inicio ─────────────────────────────────────────────────
     function goHome() {
       window.location.href = '/';
     }
 
-    // ==========================================
-    // AUTO-RETRY CADA 10 SEGUNDOS
-    // ==========================================
-    let retryCount = 0;
-    const maxRetries = 6; // 1 minuto total
-    
-    const autoRetry = setInterval(() => {
-      if (navigator.onLine) {
-        clearInterval(autoRetry);
-        location.reload();
-      } else {
-        retryCount++;
-        console.log(`⏳ Reintento ${retryCount}/${maxRetries}`);
-        
-        if (retryCount >= maxRetries) {
-          clearInterval(autoRetry);
-          console.log('⏸️ Auto-retry detenido - Esperando conexión manual');
-        }
-      }
+    // ── Detectar reconexión ──────────────────────────────────────────
+    window.addEventListener('online', () => {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => location.reload(), 1500);
+    });
+
+    // ── Auto-retry cada 10 s (máx. 6 veces) ─────────────────────────
+    let retries = 0;
+    const timer = setInterval(() => {
+      if (navigator.onLine) { clearInterval(timer); location.reload(); }
+      if (++retries >= 6) clearInterval(timer);
     }, 10000);
 
-    // ==========================================
-    // LOG INICIAL
-    // ==========================================
-    console.log('📱 GlobalScore Offline Page v2.0');
-    console.log('🌐 Estado de conexión:', navigator.onLine ? 'Online' : 'Offline');
-    console.log('🔄 Auto-retry activo cada 10 segundos');
-
-    // ==========================================
-    // DETECCIÓN DE VISIBILIDAD DE LA PÁGINA
-    // ==========================================
+    // ── Recargar si la página vuelve a ser visible y hay red ─────────
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && navigator.onLine) {
-        console.log('📱 Página visible y online - recargando...');
-        location.reload();
-      }
+      if (!document.hidden && navigator.onLine) location.reload();
     });
   </script>
 </body>
