@@ -242,7 +242,17 @@
   cursor: pointer;
   transition: background 0.15s;
 }
+/* Next Match card como button */
+.mob2-nm-card {
+  width: 100%;
+  text-align: left;
+  font-family: var(--m-mono);
+}
 
+.mob2-nm-card:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
 .mob2-nm-btn:active {
   background: rgba(255,255,255,0.15);
 }
@@ -302,7 +312,7 @@
 }
 
 /* ================================================================
-   TAB BAR — estilo Nike, 100% DM Mono
+   TAB BAR — Partidos, Ligas, Premios
 ================================================================ */
 .mob2-tabbar {
   display: flex;
@@ -312,7 +322,32 @@
   min-width: 0;
   border-bottom: 1px solid var(--m-border);
 }
+.mob2-sec-play {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1.5px solid var(--m-border-hard);
+  color: var(--m-accent);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
 
+.mob2-sec-play:active {
+  background: var(--m-glass);
+}
+[data-theme="dark"] .mob2-sec-play {
+  border-color: rgba(255, 255, 255, 0.14);
+  color: var(--m-accent);
+}
+
+[data-theme="dark"] .mob2-sec-play:active {
+  background: rgba(139, 127, 199, 0.15);
+}
 .mob2-tab {
   background: none;
   border: none;
@@ -1159,83 +1194,6 @@
 
 .mob2-bottom-box .mob2-sec-all {
   display: none;
-}
-
-/* ================================================================
-   BOTÓN MUNDIAL
-================================================================ */
-.mob2-world-btn {
-  margin: 10px 14px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px; 
-  padding: 11px 16px;
-  background: var(--m-card);
-  border: none;
-  border-left: 3px solid var(--m-gold);
-  cursor: pointer;
-  width: calc(100% - 28px);
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.15s;
-  position: relative;
-  overflow: hidden;
-}
-
-.mob2-world-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.05;
-  background-image:
-    repeating-linear-gradient(0deg, #c9a227 0, #c9a227 1px, transparent 1px, transparent 20px),
-    repeating-linear-gradient(90deg, #c9a227 0, #c9a227 1px, transparent 1px, transparent 20px);
-  pointer-events: none;
-}
-
-.mob2-world-btn:active { opacity: 0.8; }
-
-.mob2-world-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  position: relative;
-  z-index: 1;
-}
-
-.mob2-world-emoji { font-size: 18px; flex-shrink: 0; }
-
-.mob2-world-text {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.mob2-world-title {
-  font-family: var(--m-mono);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--m-text);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.mob2-world-sub {
-  font-family: var(--m-mono);
-  font-size: 8px;
-  color: rgba(201,162,39,0.75);
-  letter-spacing: 0.06em;
-}
-
-.mob2-world-arrow {
-  font-family: var(--m-mono);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--m-gold);
-  flex-shrink: 0;
-  position: relative;
-  z-index: 1;
-  letter-spacing: -0.05em;
 }
 
 /* ================================================================

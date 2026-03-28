@@ -200,21 +200,21 @@ function NextMatchBanner({ match, currentUser, onOpen }) {
 
   return (
     <div className="mob2-nm">
-      <div className="mob2-nm-eyebrow">
-      </div>
-        <div className="mob2-nm-card" onClick={() => !isExp && onOpen("matches")}>
-
-        {/* ← FOOTER ahora arriba */}
+      <div className="mob2-nm-eyebrow" />
+      <button
+        className="mob2-nm-card"
+        onClick={() => onOpen("matches")}
+        disabled={isExp}
+      >
         <div className="mob2-nm-footer">
-          <span className="mob2-nm-meta">Proximo Partido · {match.league} · {match.date}</span>
-          {!isExp && (
-            <button className="mob2-nm-btn">
-              {hasPred ? "VER PRED. >>" : "PREDECIR >>"}
-            </button>
-          )}
+          <span className="mob2-nm-meta">
+            PRÓXIMO PARTIDO · {match.league}
+          </span>
+          <span className="mob2-nm-meta">
+            {match.date}
+          </span>
         </div>
 
-        {/* ← EQUIPOS abajo */}
         <div className="mob2-nm-teams">
           <div className="mob2-nm-team">
             <div className="mob2-nm-flag">
@@ -239,8 +239,7 @@ function NextMatchBanner({ match, currentUser, onOpen }) {
             <span className="mob2-nm-tname">{(match.away_team || "VISIT.").toUpperCase()}</span>
           </div>
         </div>
-
-      </div>
+      </button>
     </div>
   );
 }
@@ -251,7 +250,7 @@ function ProgressBar({ saved, total }) {
   return (
     <div className="mob2-progress">
       <div className="mob2-progress-row">
-        <span className="mob2-progress-lbl">Predicciones totales</span>
+        <span className="mob2-progress-lbl">Predicciones</span>
         <span className="mob2-progress-count">[{saved}/{total}]</span>
       </div>
       <div className="mob2-progress-track">
@@ -557,18 +556,21 @@ export default function MobileDashboard({
 
       {/* TABS + SCROLL de predicciones */}
       <div className="mob2-sec" style={{ marginTop: "14px" }}>
-        <TabBar
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          counts={tabCounts}
-        />
-        <div
-          className="mob2-sec-all"
-          onPointerDown={() => setActivePage(allPageMap[activeTab])}
-        >
-          TODOS »
-        </div>
-      </div>
+  <TabBar
+    activeTab={activeTab}
+    onTabChange={setActiveTab}
+    counts={tabCounts}
+  />
+  <button
+    className="mob2-sec-play"
+    onPointerDown={() => setActivePage(allPageMap[activeTab])}
+    aria-label="Ver todos"
+  >
+    <svg width="10" height="11" viewBox="0 0 10 11" fill="currentColor">
+      <polygon points="1,0.5 9.5,5.5 1,10.5" />
+    </svg>
+  </button>
+</div>
 
       <div className="mob2-hscroll-wrap">
         <div className="mob2-hscroll">
