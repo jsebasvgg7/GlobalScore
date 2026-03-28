@@ -68,7 +68,7 @@
   flex-direction: column;
   background: var(--m-bg);
   font-family: var(--m-mono);
-  padding-bottom: 40px;
+  padding-bottom: 60px;
   min-height: 100dvh;
 }
 

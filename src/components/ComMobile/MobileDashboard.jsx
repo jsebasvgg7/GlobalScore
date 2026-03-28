@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import MobileUserProfile from "../ComProfile/MobileUserProfile";
+import Footer from "../ComLayout/Footer";
 import MobileSubPage     from "./MobileSubPage";
 import "../../styles/StylesMobile/MobileDashboard.css";
 import "../../styles/StylesMobile/MobileSubPage.css";
@@ -589,6 +590,7 @@ export default function MobileDashboard({
           onClose={() => setProfileModal(false)}
         />
       )}
+      <Footer />
     </div>
   );
 }
