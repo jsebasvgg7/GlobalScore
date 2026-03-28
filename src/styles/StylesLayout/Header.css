@@ -589,6 +589,7 @@
   padding: 0 20px;
   background: #f0ede8;          /* mismo que --m-bg del dashboard */
   border-bottom: none;          /* sin separación */
+  border-bottom: 0.5px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 200;
