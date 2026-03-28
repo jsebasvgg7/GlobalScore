@@ -4,6 +4,7 @@ import { supabase } from "../../utils/supabaseClient";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import "../../styles/StylesLayout/Header.css";
+import "../../styles/StylesMobile/HeaderMobile.css";
 
 export default function Header({ currentUser, users = [], onProfileClick }) {
   const navigate  = useNavigate();
