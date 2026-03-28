@@ -589,7 +589,7 @@
   padding: 0 20px;
   background: #f0ede8;
   border-bottom: none;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 200;

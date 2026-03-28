@@ -382,7 +382,7 @@ function BottomSection({ users, currentUser, allAchievements }) {
 
   return (
     <div className="mob2-bottom-wrap">
-      {/* TabBar fuera del box — idéntico al de predicciones, sin contenedor blanco */}
+      {/* TabBar fuera del box */}
       <div className="mob2-sec mob2-sec--no-hpad" style={{ marginTop: 0 }}>
         <TabBar
           activeTab={activeTab}
