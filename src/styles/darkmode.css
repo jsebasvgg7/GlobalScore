@@ -1,24 +1,3 @@
-/* ================================================================
-   DARKMODE.CSS — GlobalScore
-   Paleta: grises violáceos cálidos + acento púrpura
-   Filosofía: jerarquía visual clara con 5 capas de profundidad
-   ─────────────────────────────────────────────────────────────
-   Capa 0 (más profunda)  #0D0B12  — fondo de página
-   Capa 1                 #13111A  — root / body
-   Capa 2                 #1A1824  — cards principales
-   Capa 3                 #221F2E  — surfaces / inputs
-   Capa 4                 #2C2840  — hover states
-   Borde                  #38334F  — bordes y divisores
-   Borde sutil            #2A2638  — bordes de baja prioridad
-   ─────────────────────────────────────────────────────────────
-   Texto primario         #F0EDF8
-   Texto secundario       #B8B0D0
-   Texto muted            #6E6680
-   Acento                 #8B7FC7
-   Acento hover           #7366B3
-   Acento light           #A599D9
-   Acento texto           #C4BBE8
-================================================================ */
 
 /* ================================================================
    1. TOKENS GLOBALES
@@ -1502,6 +1481,7 @@
 [data-theme="dark"] .mrk-tab               { color: #6E6680; }
 [data-theme="dark"] .mrk-tab.active        { color: #A599D9; border-bottom-color: #A599D9; }
 
+[data-theme="dark"] .mrk-hof-carousel { background: var(--dark-bg); }
 [data-theme="dark"] .mrk-stats-row         { background: #1A1824; border-bottom-color: #38334F; }
 [data-theme="dark"] .mrk-stat-num          { color: #F0EDF8; }
 [data-theme="dark"] .mrk-stat-lbl          { color: #6E6680; }

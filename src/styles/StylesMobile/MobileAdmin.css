@@ -1,9 +1,4 @@
 /* ================================================================
-   MobileAdmin.css — Panel Admin Mobile · BJR Redesign
-   Más espacio, mejor legibilidad, jerarquía visual clara
-================================================================ */
-
-/* ================================================================
    OVERLAY + BOTTOM SHEET
 ================================================================ */
 .mba-overlay {
@@ -35,7 +30,6 @@
   animation: mba-sheet-up 0.3s cubic-bezier(0.34, 1.15, 0.64, 1);
   overflow: hidden;
   border-radius: 0;
-  /* Sombra lateral BJR */
   box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.35);
 }
 
@@ -56,7 +50,7 @@
 }
 
 /* ================================================================
-   SHEET HEADER — más alto, más aireado
+   SHEET HEADER 
 ================================================================ */
 .mba-sheet-header {
   display: flex;
@@ -69,7 +63,6 @@
   position: relative;
 }
 
-/* Línea accent izquierda */
 .mba-sheet-header::before {
   content: '';
   position: absolute;
@@ -117,7 +110,7 @@
 }
 
 /* ================================================================
-   SHEET BODY — scrollable con padding generoso
+   SHEET BODY
 ================================================================ */
 .mba-sheet-body {
   flex: 1;
@@ -132,7 +125,7 @@
 .mba-sheet-body::-webkit-scrollbar { display: none; }
 
 /* ================================================================
-   FORM LAYOUT — más espacio entre elementos
+   FORM LAYOUT
 ================================================================ */
 .mba-form {
   padding: 20px 20px 28px;
@@ -148,7 +141,7 @@
 }
 
 /* ================================================================
-   FIELD — label más grande y legible
+   FIELD
 ================================================================ */
 .mba-field {
   display: flex;
@@ -182,7 +175,7 @@
 }
 
 /* ================================================================
-   INPUTS — altura cómoda para móvil
+   INPUTS 
 ================================================================ */
 .mba-input {
   width: 100%;
@@ -230,7 +223,7 @@
 }
 
 /* ================================================================
-   SEPARATOR LABEL — separador de sección visible
+   SEPARATOR LABEL
 ================================================================ */
 .mba-sep-label {
   display: flex;
@@ -253,7 +246,7 @@
 }
 
 /* ================================================================
-   TOGGLE (knockout) — más grande y visible
+   TOGGLE
 ================================================================ */
 .mba-toggle-row {
   display: flex;
@@ -316,7 +309,7 @@
 }
 
 /* ================================================================
-   LOGO PREVIEW — centrado y espacioso
+   LOGO PREVIEW
 ================================================================ */
 .mba-logo-preview {
   display: flex;
@@ -355,7 +348,7 @@
 }
 
 /* ================================================================
-   ICON GRID (achievements) — más grande, más fácil de tocar
+   ICON GRID
 ================================================================ */
 .mba-icon-grid {
   display: grid;
@@ -386,7 +379,7 @@
 }
 
 /* ================================================================
-   MATCH PREVIEW (finish match) — tarjeta destacada
+   MATCH PREVIEW
 ================================================================ */
 .mba-match-preview {
   display: flex;
@@ -401,7 +394,6 @@
   overflow: hidden;
 }
 
-/* Cuadrícula sutil de fondo — BJR */
 .mba-match-preview::before {
   content: '';
   position: absolute;
@@ -466,7 +458,6 @@
   letter-spacing: 0.04em;
 }
 
-/* Score row — inputs grandes y cómodos */
 .mba-score-row {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -575,7 +566,6 @@
   font-weight: 700;
 }
 
-/* Finish title */
 .mba-finish-title {
   font-size: 15px;
   font-weight: 700;
@@ -588,7 +578,6 @@
   letter-spacing: -0.01em;
 }
 
-/* Crown info */
 .mba-crown-info {
   display: flex;
   flex-direction: column;
@@ -611,7 +600,7 @@
 }
 
 /* ================================================================
-   DROP ZONE (banners) — zona cómoda y visual
+   DROP ZONE
 ================================================================ */
 .mba-drop-zone {
   position: relative;
@@ -673,7 +662,7 @@
 .mba-drop-zone:active .mba-drop-overlay { opacity: 1; }
 
 /* ================================================================
-   SUBMIT BUTTONS — altura mayor para mobile
+   SUBMIT BUTTONS
 ================================================================ */
 .mba-submit-btn {
   display: flex;
@@ -723,7 +712,6 @@
 .mba-submit-btn--red   { background: #f25f5c; }
 .mba-submit-btn--gold  { background: #c9a227; }
 
-/* Delete button */
 .mba-delete-btn {
   display: flex;
   align-items: center;
@@ -751,7 +739,6 @@
   border-color: #f25f5c;
 }
 
-/* Form actions row */
 .mba-form-actions {
   display: flex;
   gap: 10px;
@@ -760,7 +747,6 @@
 
 .mba-form-actions .mba-submit-btn { flex: 2; margin-top: 0; }
 
-/* Spinner */
 .mba-spinner {
   width: 16px;
   height: 16px;
@@ -774,7 +760,7 @@
 @keyframes mba-spin { to { transform: rotate(360deg); } }
 
 /* ================================================================
-   FAB — Floating Action Button · más llamativo
+   FAB 
 ================================================================ */
 .mba-fab {
   position: fixed;
@@ -800,174 +786,6 @@
 .mba-fab:active {
   transform: translate(3px, 3px);
   box-shadow: 1px 1px 0 rgba(0,0,0,0.3);
-}
-
-/* ================================================================
-   DARK MODE OVERRIDES
-================================================================ */
-[data-theme="dark"] .mba-overlay {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-[data-theme="dark"] .mba-sheet {
-  background: #0f0f0f;
-  border-top-color: #8b7fc7;
-}
-
-[data-theme="dark"] .mba-sheet-header {
-  background: #1a1a1a;
-  border-bottom-color: #2e2e2e;
-}
-
-[data-theme="dark"] .mba-sheet-header::before {
-  background: #8b7fc7;
-}
-
-[data-theme="dark"] .mba-sheet-title  { color: #f0ece6; }
-[data-theme="dark"] .mba-sheet-close  { border-color: #2e2e2e; color: #5a5248; }
-[data-theme="dark"] .mba-sheet-close:active { border-color: #f25f5c; color: #f25f5c; }
-
-[data-theme="dark"] .mba-handle-bar { background: #3a3a3a; }
-
-/* Inputs dark */
-[data-theme="dark"] .mba-input {
-  background: #1a1a1a;
-  border-color: #2e2e2e;
-  color: #f0ece6;
-  border-left-color: transparent;
-}
-
-[data-theme="dark"] .mba-input:focus {
-  border-color: #8b7fc7;
-  border-left-color: #8b7fc7;
-  background: #242424;
-}
-
-[data-theme="dark"] .mba-input::placeholder { color: #5a5248; }
-
-[data-theme="dark"] .mba-label { color: #f0ece6; }
-[data-theme="dark"] .mba-hint  { color: #5a5248; }
-
-[data-theme="dark"] .mba-sep-label {
-  color: #5a5248;
-}
-
-[data-theme="dark"] .mba-sep-label::after {
-  background: #2e2e2e;
-}
-
-/* Toggle dark */
-[data-theme="dark"] .mba-toggle-row {
-  background: rgba(245,166,35,0.06);
-  border-color: rgba(245,166,35,0.2);
-}
-
-[data-theme="dark"] .mba-toggle-track { background: #2e2e2e; }
-
-/* Logo preview dark */
-[data-theme="dark"] .mba-logo-preview {
-  background: #1a1a1a;
-  border-color: #2e2e2e;
-  border-top-color: #8b7fc7;
-  color: #5a5248;
-}
-
-[data-theme="dark"] .mba-vs { border-color: #2e2e2e; color: #5a5248; }
-
-/* Icon grid dark */
-[data-theme="dark"] .mba-icon-btn {
-  background: #1a1a1a;
-  border-color: #2e2e2e;
-}
-
-[data-theme="dark"] .mba-icon-btn.active {
-  background: #2a2535;
-  border-color: #8b7fc7;
-}
-
-/* Match preview dark */
-[data-theme="dark"] .mba-match-preview {
-  background: #1a1a1a;
-  border-color: #2e2e2e;
-  border-top-color: #1D9E75;
-}
-
-[data-theme="dark"] .mba-match-name  { color: #f0ece6; }
-[data-theme="dark"] .mba-match-vs    { border-color: #2e2e2e; color: #5a5248; }
-[data-theme="dark"] .mba-meta        { color: #5a5248; }
-[data-theme="dark"] .mba-score-sep   { color: #2e2e2e; }
-
-[data-theme="dark"] .mba-score-input {
-  border-top-color: #8b7fc7 !important;
-}
-
-/* KO dark */
-[data-theme="dark"] .mba-ko-section {
-  background: rgba(245,166,35,0.05);
-  border-color: rgba(245,166,35,0.2);
-}
-
-[data-theme="dark"] .mba-ko-btn {
-  background: #1a1a1a;
-  border-color: #2e2e2e;
-  color: #f0ece6;
-}
-
-[data-theme="dark"] .mba-ko-btn.active {
-  border-color: #1D9E75;
-  background: rgba(29,158,117,0.08);
-  color: #34d399;
-}
-
-/* Info / Error dark */
-[data-theme="dark"] .mba-info-box {
-  background: rgba(91,79,216,0.07);
-  border-color: rgba(91,79,216,0.2);
-  border-left-color: #8b7fc7;
-  color: #5a5248;
-}
-
-[data-theme="dark"] .mba-info-box strong { color: #a599d9; }
-
-[data-theme="dark"] .mba-finish-title {
-  background: #1a1a1a;
-  border-color: #2e2e2e;
-  border-left-color: #1D9E75;
-  color: #f0ece6;
-}
-
-[data-theme="dark"] .mba-crown-info {
-  background: rgba(201,162,39,0.06);
-  border-color: rgba(201,162,39,0.2);
-  border-top-color: #c9a227;
-}
-
-[data-theme="dark"] .mba-crown-info p { color: #5a5248; }
-
-/* Drop zone dark */
-[data-theme="dark"] .mba-drop-zone {
-  background: #1a1a1a;
-  border-color: #2e2e2e;
-}
-
-[data-theme="dark"] .mba-drop-content { color: #5a5248; }
-
-/* Botones dark */
-[data-theme="dark"] .mba-submit-btn { /* usa accent que ya está sobreescrito */ }
-
-[data-theme="dark"] .mba-delete-btn {
-  border-color: rgba(242,95,92,0.3);
-  color: #e07070;
-}
-
-[data-theme="dark"] .mba-delete-btn:active {
-  background: #f25f5c;
-  color: #fff;
-}
-
-/* FAB dark */
-[data-theme="dark"] .mba-fab {
-  box-shadow: 4px 4px 0 #000000;
 }
 
 /* ================================================================

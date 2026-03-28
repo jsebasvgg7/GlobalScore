@@ -23,6 +23,15 @@
 }
 
 [data-theme="dark"] .mrk-root {
+  --m-bg:          #1a1d2e;
+  --m-card:        #252936;
+  --m-surface:     #1e2235;
+  --dark-bg:        #0D0B12;
+  --m-border:      rgba(255,255,255,0.08);
+  --m-border-hard: rgba(255,255,255,0.14);
+  --m-text:        #f0f1f7;
+  --m-muted:       #60519b;
+  --m-accent:      #8b7fc7;
   --mrk-accent-border: rgba(139, 127, 199, 0.3);
   --mrk-gold:   #f0c040;
   --mrk-silver: #a0a0a0;
@@ -489,7 +498,6 @@
   border-radius: 0;
 }
 
-/* Derecha */
 .mrk-row-right {
   display: flex;
   flex-direction: column;
@@ -543,10 +551,9 @@
 }
 
 /* ================================================================
-   SALÓN DE LA FAMA — Mobile
+   SALÓN DE LA FAMA
 ================================================================ */
 
-/* Empty */
 .mrk-hof-empty {
   display: flex;
   flex-direction: column;
@@ -567,7 +574,6 @@
   letter-spacing: 0.06em;
 }
 
-/* Carrusel */
 .mrk-hof-carousel {
   display: flex;
   flex-direction: column;
@@ -841,53 +847,11 @@
   flex-shrink: 0;
 }
 
-/* ── Dark mode HOF mobile ── */
-[data-theme="dark"] .mrk-hof-card      { background: var(--card); border-color: rgba(255,255,255,0.08); }
-[data-theme="dark"] .mrk-hof-stats     { background: var(--bg); border-color: rgba(255,255,255,0.07); }
-[data-theme="dark"] .mrk-hof-stat-sep  { background: rgba(255,255,255,0.07); }
-[data-theme="dark"] .mrk-hof-list-label { background: var(--card); border-bottom-color: rgba(255,255,255,0.07); }
-[data-theme="dark"] .mrk-hof-list-row  { background: var(--card); border-bottom-color: rgba(255,255,255,0.05); }
-[data-theme="dark"] .mrk-hof-list-row--active { background: rgba(201,162,39,0.07); }
-[data-theme="dark"] .mrk-hof-nav       { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
-[data-theme="dark"] .mrk-hof-dot       { background: rgba(255,255,255,0.12); }
-/* Fondo de la tabla */
-.mrk-table {
-  background: var(--mrk-card);
-}
-
-/* Fila — quitar el fondo plano y agregar acento purple al hover */
-.mrk-row {
-  background: var(--mrk-card);
-}
-
-.mrk-row:active {
-  background: var(--glass) !important;
-}
-
-/* Fila propia — highlight purple en lugar de neutro */
-.mrk-row--me {
-  background: rgba(96, 81, 155, 0.12) !important;
-  border-left: 3px solid var(--accent) !important;
-}
-
-/* Puntos — purple en lugar de gold */
-.mrk-row-pts {
-  color: var(--accent);
-}
-
-[data-theme="dark"] .mrk-row-pts {
-  color: var(--accent-light);
-}
-
-/* Número de posición sin top 3 — purple subtle */
 .mrk-row-num:not(.mrk-row-num--1):not(.mrk-row-num--2):not(.mrk-row-num--3) {
   background: var(--glass);
   color: var(--accent);
 }
 
-/* Tag TÚ — ya usa var(--mrk-accent) que mapea a var(--accent), ok */
-
-/* Separador de tabla — purple */
 .mrk-table-sep {
   background: var(--accent);
   opacity: 0.3;

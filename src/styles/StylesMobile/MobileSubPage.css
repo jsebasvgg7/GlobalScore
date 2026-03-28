@@ -1,12 +1,7 @@
-/* ================================================================
-   GLOBALSCORE - MOBILE SUB PAGE
-   Paleta crema alineada con MobileDashboard + estilo BJR
-================================================================ */
-
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
 /* ================================================================
-   TOKENS LOCALES — idénticos a mob2-root para coherencia
+   TOKENS
 ================================================================ */
 .msp-page {
   --msp-bg:          #f0ede8;
@@ -226,7 +221,7 @@
 }
 
 /* ================================================================
-   SEASON LABEL (ligas / premios)
+   SEASON LABEL
 ================================================================ */
 .msp-season-label {
   display: flex;
@@ -249,7 +244,7 @@
 }
 
 /* ================================================================
-   BODY — scroll principal
+   BODY
 ================================================================ */
 .msp-body {
   flex: 1;
@@ -265,7 +260,7 @@
 .msp-body::-webkit-scrollbar { display: none; }
 
 /* ================================================================
-   DATE GROUP — partidos
+   DATE GROUP
 ================================================================ */
 .msp-group {
   display: flex;
@@ -309,7 +304,7 @@
 }
 
 /* ================================================================
-   CARDS COLUMN — con padding lateral
+   CARDS COLUMN 
 ================================================================ */
 .msp-cards-col {
   display: flex;
@@ -317,11 +312,9 @@
   align-items: stretch;
   gap: 12px;
   width: 100%;
-  /* ── PADDING LATERAL: separa las cards de los bordes ── */
   padding: 16px 14px 8px;
 }
 
-/* Para grupos de partidos el padding ya viene del .msp-group */
 .msp-group .msp-cards-col {
   padding: 0;
   gap: 14px;
@@ -339,11 +332,9 @@
 
 .msp-cards-col .mc-card { width: 100% !important; }
 
-/* LeagueCard y AwardCard con sombra lateral brutalista */
 .msp-cards-col .lc-card,
 .msp-cards-col .ac-card {
   width: 100% !important;
-  /* sombra desplazada — detalle brutalista */
   box-shadow: 3px 3px 0 var(--msp-border-dark);
 }
 
@@ -378,7 +369,7 @@
 }
 
 /* ================================================================
-   FILTER PANEL — lateral desde la derecha
+   FILTER PANEL
 ================================================================ */
 .msp-filter-overlay {
   position: fixed;
@@ -512,63 +503,3 @@
   line-height: 1;
   flex-shrink: 0;
 }
-
-/* ================================================================
-   DARK MODE
-================================================================ */
-[data-theme="dark"] .msp-page    { background: #0f0f0f; }
-[data-theme="dark"] .msp-body    { background: #0f0f0f; }
-
-[data-theme="dark"] .msp-topbar {
-  background: #1a1a1a;
-  border-bottom-color: #3a3a3a;
-}
-
-[data-theme="dark"] .msp-topbar::before { background: #8b7fc7; }
-
-[data-theme="dark"] .msp-back,
-[data-theme="dark"] .msp-filter-toggle {
-  border-color: #3a3a3a;
-  color: #f0ece6;
-}
-
-[data-theme="dark"] .msp-back:active     { background: rgba(139,127,199,0.1); }
-[data-theme="dark"] .msp-topbar-title    { color: #f0ece6; }
-[data-theme="dark"] .msp-topbar-count    { color: #a599d9; background: rgba(139,127,199,0.1); border-color: rgba(139,127,199,0.25); }
-[data-theme="dark"] .msp-filter-toggle.active { background: rgba(139,127,199,0.1); border-color: #8b7fc7; color: #a599d9; }
-
-[data-theme="dark"] .msp-sort-row { background: #141414; border-bottom-color: #2e2e2e; }
-[data-theme="dark"] .msp-sort-pill { border-color: #2e2e2e; color: #5a5248; }
-[data-theme="dark"] .msp-sort-pill.active { background: #f0ece6; border-color: #f0ece6; color: #0f0f0f; }
-
-[data-theme="dark"] .msp-active-chip { background: rgba(139,127,199,0.1); border-color: #8b7fc7; color: #a599d9; }
-
-[data-theme="dark"] .msp-season-label { background: #141414; border-bottom-color: #2e2e2e; }
-[data-theme="dark"] .msp-season-label span { color: #5a5248; }
-
-[data-theme="dark"] .msp-date-label span { background: #1a1a1a; border-color: #2e2e2e; color: #5a5248; }
-[data-theme="dark"] .msp-date-label.first span { background: rgba(139,127,199,0.1); border-color: #8b7fc7; color: #a599d9; }
-[data-theme="dark"] .msp-date-line { background: #1e1e1e; }
-
-[data-theme="dark"] .msp-empty-box { color: #5a5248; }
-[data-theme="dark"] .msp-empty-lbl { color: #5a5248; }
-
-[data-theme="dark"] .msp-cards-col .lc-card,
-[data-theme="dark"] .msp-cards-col .ac-card {
-  box-shadow: 3px 3px 0 #0a0a0a;
-}
-
-[data-theme="dark"] .msp-filter-panel {
-  background: #0f0f0f;
-  border-left-color: #3a3a3a;
-  border-top-color: #8b7fc7;
-}
-
-[data-theme="dark"] .msp-filter-hdr { background: #1a1a1a; border-bottom-color: #2e2e2e; }
-[data-theme="dark"] .msp-filter-hdr-title { color: #f0ece6; }
-[data-theme="dark"] .msp-filter-reset { border-color: #3a3a3a; color: #a599d9; }
-[data-theme="dark"] .msp-filter-close { border-color: #3a3a3a; color: #5a5248; }
-
-[data-theme="dark"] .msp-filter-item { background: #1a1a1a; border-color: #2e2e2e; color: #f0ece6; }
-[data-theme="dark"] .msp-filter-item:active { background: #242424; }
-[data-theme="dark"] .msp-filter-item.active { background: #f0ece6; border-color: #f0ece6; border-left-color: #8b7fc7; color: #0f0f0f; }

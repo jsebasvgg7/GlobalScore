@@ -1,5 +1,5 @@
 /* ================================================================
-   GlobalScore — Mobile Dashboard CSS
+   GlobalScore
 ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap');
@@ -242,7 +242,7 @@
   cursor: pointer;
   transition: background 0.15s;
 }
-/* Next Match card como button */
+
 .mob2-nm-card {
   width: 100%;
   text-align: left;
@@ -272,7 +272,7 @@
 }
 
 /* ================================================================
-   SECTION HEADER — tabs de predicciones
+   SECTION HEADER 
 ================================================================ */
 .mob2-sec {
   display: flex;
@@ -312,7 +312,7 @@
 }
 
 /* ================================================================
-   TAB BAR — Partidos, Ligas, Premios
+   TAB BAR 
 ================================================================ */
 .mob2-tabbar {
   display: flex;
@@ -756,12 +756,10 @@
   padding: 0 20px;
   animation: mob2-fade-up 0.35s ease 0.28s both;
 }
-/* AGREGAR: */
 .mob2-bottom-wrap .mob2-sec {
   padding-left: 0;
   padding-right: 0;
 }
-/* Eyebrow sobre la sección */
 .mob2-bottom-eyebrow {
   display: flex;
   align-items: center;
@@ -787,13 +785,11 @@
   background: var(--m-border);
 }
 
-/* Contenedor con borde */
 .mob2-bottom-box {
   background: var(--m-surface);
   border: 1px solid var(--m-border);
 }
 
-/* ── Tab bar de la sección inferior ── */
 .mob2-btab-bar {
   display: flex;
   border-bottom: 1px solid var(--m-border);
@@ -844,7 +840,6 @@
 
 .mob2-btab--active .mob2-btab-lbl { color: var(--m-accent); }
 
-/* ── PODIO (Ranking) ── */
 .mob2-podium {
   padding: 14px 12px 10px;
 }
@@ -967,7 +962,6 @@
   letter-spacing: 0.08em;
 }
 
-/* ── STATS panel ── */
 .mob2-stats-grid {
   display: grid;
   grid-template-columns: 1fr 1px 1fr;
@@ -1029,7 +1023,6 @@
   transition: width 0.5s ease;
 }
 
-/* Fila de streak */
 .mob2-streak-row {
   display: flex;
   align-items: center;
@@ -1071,7 +1064,6 @@
   flex-shrink: 0;
 }
 
-/* ── LOGROS panel ── */
 .mob2-logro-row {
   display: flex;
   align-items: center;
@@ -1194,37 +1186,6 @@
 
 .mob2-bottom-box .mob2-sec-all {
   display: none;
-}
-
-/* ================================================================
-   DARK MODE
-================================================================ */
-[data-theme="dark"] .mob2-nm-card {
-  background: var(--m-card);
-  border-color: var(--m-border-hard);
-}
-[data-theme="dark"] .mob2-nm-footer {
-  background: var(--m-border-hard); 
-}
-[data-theme="dark"] .mob2-mc,
-[data-theme="dark"] .mob2-lc,
-[data-theme="dark"] .mob2-ac {
-  background: var(--m-card);
-  border-color: var(--m-border-hard);
-}
-[data-theme="dark"] .mob2-sk-card,
-[data-theme="dark"] .mob2-bottom-box {
-  background: var(--m-surface);
-  border-color: var(--m-border);
-}
-
-[data-theme="dark"] .mob2-btab-bar {
-  background: var(--m-card);
-}
-
-
-[data-theme="dark"] .mob2-world-btn {
-  background: var(--m-card);
 }
 
 /* ================================================================

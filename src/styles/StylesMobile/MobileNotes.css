@@ -1,8 +1,3 @@
-/* ================================================================
-   MobileNotes.css — Bloc de Notas Mobile
-   Estética BJR: DM Mono, brutalista japonés, sin border-radius
-================================================================ */
-
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
 /* ================================================================
@@ -23,7 +18,7 @@
 }
 
 /* ================================================================
-   ROOT — ocupa toda la pantalla
+   ROOT 
 ================================================================ */
 .mn-root {
   position: fixed;
@@ -43,14 +38,13 @@
 }
 
 /* ================================================================
-   BOTÓN VOLVER (sobre la lista)
+   BOTÓN VOLVER 
 ================================================================ */
 .mn-top-back {
   background: var(--mn-surface);
   border-bottom: 0.5px solid var(--mn-border);
   padding: 0;
   flex-shrink: 0;
-  /* safe area para notch */
   padding-top: env(safe-area-inset-top, 0px);
 }
 
@@ -80,7 +74,6 @@
   overflow: hidden;
 }
 
-/* Header */
 .mn-list-header {
   display: flex;
   align-items: center;
@@ -92,7 +85,6 @@
   position: relative;
 }
 
-/* Línea accent izquierda */
 .mn-list-header::before {
   content: '';
   position: absolute;
@@ -138,7 +130,6 @@
 }
 .mn-new-btn:active { background: #7366b3; transform: scale(0.93); }
 
-/* Búsqueda */
 .mn-search-row {
   display: flex;
   align-items: center;
@@ -171,7 +162,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Body lista */
 .mn-list-body {
   flex: 1;
   overflow-y: auto;
@@ -182,7 +172,6 @@
 }
 .mn-list-body::-webkit-scrollbar { display: none; }
 
-/* Label de grupo */
 .mn-group-label {
   display: flex;
   align-items: center;
@@ -197,7 +186,6 @@
   opacity: 0.8;
 }
 
-/* Tarjeta de nota */
 .mn-note-card {
   display: flex;
   align-items: stretch;
@@ -263,7 +251,6 @@
   opacity: 0.7;
 }
 
-/* Skeleton */
 .mn-list-loading { display: flex; flex-direction: column; }
 .mn-sk-card {
   height: 80px;
@@ -276,7 +263,6 @@
   50%      { background: var(--mn-border);  opacity: 0.8; }
 }
 
-/* Empty */
 .mn-list-empty {
   display: flex;
   flex-direction: column;
@@ -302,7 +288,6 @@
   padding-top: env(safe-area-inset-top, 0px);
 }
 
-/* Header editor */
 .mn-editor-header {
   display: flex;
   align-items: center;
@@ -327,7 +312,6 @@
 }
 .mn-back-btn:active { background: rgba(139,127,199,0.1); }
 
-/* Status */
 .mn-editor-status {
   flex: 1;
   display: flex;
@@ -347,7 +331,6 @@
 .mn-st--saved  { color: #1D9E75; border-color: rgba(29,158,117,0.4); background: rgba(29,158,117,0.08); }
 .mn-st--dirty  { color: var(--mn-muted); border-color: var(--mn-border); }
 
-/* Acciones editor */
 .mn-editor-actions {
   display: flex;
   align-items: center;
@@ -375,14 +358,12 @@
 .mn-action-btn--gold:not(.mn-action-btn--danger) { color: #c9a227; border-color: rgba(201,162,39,0.4); }
 .mn-action-btn--danger:active { color: #e07070; border-color: rgba(224,112,112,0.4); background: rgba(224,112,112,0.08); }
 
-/* Barra de color */
 .mn-editor-color-bar {
   height: 3px;
   flex-shrink: 0;
   transition: background 0.3s;
 }
 
-/* Color picker desplegable */
 .mn-color-picker {
   display: flex;
   align-items: center;
@@ -416,7 +397,6 @@
   transform: scale(1.18);
 }
 
-/* Título */
 .mn-title-input {
   width: 100%;
   background: transparent;
@@ -434,7 +414,6 @@
 }
 .mn-title-input::placeholder { color: var(--mn-muted); opacity: 0.4; font-weight: 600; }
 
-/* Textarea */
 .mn-content-textarea {
   flex: 1;
   background: transparent;
@@ -452,7 +431,6 @@
 }
 .mn-content-textarea::placeholder { color: var(--mn-muted); opacity: 0.35; font-style: italic; }
 
-/* Footer */
 .mn-editor-footer {
   display: flex;
   align-items: center;
@@ -477,11 +455,10 @@
   inset: 0;
   background: rgba(0,0,0,0.55);
   backdrop-filter: blur(5px);
-  z-index: 9999;                   /* encima de topbar (200) y bottom nav (300) */
+  z-index: 9999;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  /* El modal sube por encima del bottom nav */
   padding: 0 0 calc(52px + env(safe-area-inset-bottom, 0px));
   animation: mn-fade-in 0.15s ease;
 }

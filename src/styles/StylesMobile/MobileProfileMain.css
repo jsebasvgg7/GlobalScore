@@ -1,8 +1,4 @@
 /* ================================================================
-   GLOBALSCORE - MOBILE
-================================================================ */
-
-/* ================================================================
    TOKENS
 ================================================================ */
 .mpm-root {
@@ -48,7 +44,7 @@
 }
 
 /* ================================================================
-   ROOT — solo mobile
+   ROOT 
 ================================================================ */
 .mpm-root {
   display: none;
@@ -97,7 +93,6 @@
   background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.5) 100%);
 }
 
-/* Cuadrícula brutalista */
 .mpm-banner-grid {
   position: absolute;
   inset: 0;
@@ -290,7 +285,6 @@
 .mpm-row:active { background: var(--mpm-card); }
 .mpm-row--toggle { cursor: default; }
 
-/* Barra lateral de color */
 .mpm-row-accent {
   position: absolute;
   left: 0;
@@ -300,7 +294,6 @@
   flex-shrink: 0;
 }
 
-/* Icono cuadrado */
 .mpm-icon {
   width: 34px;
   height: 34px;
@@ -331,7 +324,6 @@
 
 .mpm-chevron { color: var(--mpm-border-2); flex-shrink: 0; }
 
-/* Badge numérico */
 .mpm-badge {
   font-family: var(--mpm-mono);
   font-size: 11px;
@@ -344,7 +336,6 @@
   flex-shrink: 0;
 }
 
-/* Toggle */
 .mpm-toggle {
   width: 42px;
   height: 24px;
@@ -417,27 +408,6 @@
 
 .mpm-logout-arrow { color: rgba(239, 68, 68, 0.3); flex-shrink: 0; }
 
-/* ================================================================
-   DARK MODE — ajustes específicos
-================================================================ */
-[data-theme="dark"] .mpm-user-row,
-[data-theme="dark"] .mpm-row,
-[data-theme="dark"] .mpm-logout {
-  background: #252936;
-}
-
-[data-theme="dark"] .mpm-user-row:active,
-[data-theme="dark"] .mpm-row:active {
-  background: #1e2235;
-}
-
-[data-theme="dark"] .mpm-sec-hdr {
-  background: #1a1d2e;
-}
-
-[data-theme="dark"] .mpm-stats {
-  background: #12121f;
-}
 /* ================================================================
    ACCESIBILIDAD — sin animaciones si el usuario lo prefiere
 ================================================================ */

@@ -1,14 +1,10 @@
-/* ================================================================
-   GLOBALSCORE - MOBILE
-================================================================ */
-
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
 /* ================================================================
-   TOKENS LOCALES — purple-only palette
+   TOKENS
 ================================================================ */
 .mst-root {
-  --mst-accent:        var(--accent);           /* #60519b light / #8b7fc7 dark */
+  --mst-accent:        var(--accent);         
   --mst-accent-light:  var(--accent-light);
   --mst-accent-subtle: var(--glass);
   --mst-accent-border: rgba(96, 81, 155, 0.25);
@@ -21,14 +17,13 @@
   --mst-muted:         var(--muted);
   --mst-shadow:        var(--small-shadow);
 
-  /* Purple scale — reemplaza verde/ámbar/rojo */
-  --mst-exact:   #7c6fe8;   /* exactos — violeta vibrante */
-  --mst-correct: #a599d9;   /* correctos — lila medio */
-  --mst-wrong:   #c9c0f0;   /* incorrectos — lila suave */
-  --mst-gold:    #9d8fe6;   /* puntos / totales — violeta cálido */
-  --mst-green:   #8b7fc7;   /* antes verde → ahora purple */
-  --mst-amber:   #a599d9;   /* antes ámbar → ahora lila */
-  --mst-red:     #c9c0f0;   /* antes rojo  → ahora lavanda */
+  --mst-exact:   #7c6fe8;   
+  --mst-correct: #a599d9;   
+  --mst-wrong:   #c9c0f0;   
+  --mst-gold:    #9d8fe6;   
+  --mst-green:   #8b7fc7;   
+  --mst-amber:   #a599d9;   
+  --mst-red:     #c9c0f0;  
 }
 
 [data-theme="dark"] .mst-root {
@@ -43,14 +38,14 @@
 }
 
 /* ================================================================
-   ROOT — solo mobile
+   ROOT 
 ================================================================ */
 .mst-root {
   display: none;
   flex-direction: column;
   background: var(--mst-bg);
   font-family: var(--mst-sans);
-  padding-bottom: 54px;   /* ← espacio al fondo: ajusta este valor */
+  padding-bottom: 54px;   
   min-height: 100dvh;
   box-sizing: border-box;
 }
@@ -60,7 +55,7 @@
 }
 
 /* ================================================================
-   TOPBAR DE RANGO — sticky
+   TOPBAR DE RANGO 
 ================================================================ */
 .mst-topbar {
   display: flex;
@@ -121,7 +116,7 @@
 }
 
 /* ================================================================
-   HERO — 2x2 grid de métricas grandes
+   HERO 
 ================================================================ */
 .mst-hero {
   display: grid;
@@ -173,7 +168,6 @@
   margin-top: 2px;
 }
 
-/* Todos los colores ahora dentro de la gama purple */
 .mst-hero-num--accent { color: var(--mst-accent); }
 .mst-hero-num--green  { color: var(--mst-exact); }
 .mst-hero-num--amber  { color: var(--mst-correct); }
@@ -258,11 +252,11 @@
   font-size: 12px;
   font-weight: 700;
   font-family: var(--mst-mono);
-  color: var(--mst-exact);        /* antes verde → violeta */
+  color: var(--mst-exact);      
 }
 
 .mst-result-pts--red {
-  color: var(--mst-wrong);        /* antes rojo  → lavanda */
+  color: var(--mst-wrong);       
 }
 
 .mst-result-name {
@@ -323,7 +317,6 @@
   color: var(--mst-muted);
 }
 
-/* Badges — purple scale */
 .mst-rank-badge {
   width: 24px; height: 24px;
   display: flex; align-items: center; justify-content: center;
@@ -368,13 +361,13 @@
 
 .mst-acc-fill {
   position: absolute; left: 0; top: 0; bottom: 0;
-  background: var(--mst-exact);   /* antes verde → violeta */
+  background: var(--mst-exact);  
 }
 
 .mst-acc-pct {
   font-size: 12px; font-weight: 700;
   font-family: var(--mst-mono);
-  color: var(--mst-exact);        /* antes verde → violeta */
+  color: var(--mst-exact);       
   flex-shrink: 0;
 }
 
@@ -418,7 +411,7 @@
 
 .mst-day-fill {
   width: 100%;
-  background: var(--mst-accent);  /* purple puro */
+  background: var(--mst-accent); 
   transition: height 0.5s ease;
 }
 
@@ -462,7 +455,7 @@
 .mst-dist-fill { height: 4px; transition: width 0.5s ease; }
 
 /* ================================================================
-   PRONÓSTICOS — 2×2 grid
+   PRONÓSTICOS
 ================================================================ */
 .mst-forecast {
   display: grid; grid-template-columns: 1fr 1fr;
