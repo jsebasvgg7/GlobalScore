@@ -15,8 +15,8 @@
   --mnot-mono:          'DM Mono', monospace;
   --mnot-sans:          'Sora', sans-serif;
   --mnot-border:        var(--border);
-  --mnot-bg:            var(--bg);
-  --mnot-card:          var(--card);
+  --mnot-bg:            #f0ede8;
+  --mnot-card:          #e8e4de;
   --mnot-text:          var(--text-primary);
   --mnot-muted:         var(--muted);
   --mnot-shadow:        var(--small-shadow);

@@ -15,8 +15,8 @@
   --mst-mono:          'DM Mono', monospace;
   --mst-sans:          'Sora', sans-serif;
   --mst-border:        var(--border);
-  --mst-bg:            var(--bg);
-  --mst-card:          var(--card);
+  --mst-bg:            #f0ede8;
+  --mst-card:          #e8e4de;
   --mst-text:          var(--text-primary);
   --mst-muted:         var(--muted);
   --mst-shadow:        var(--small-shadow);

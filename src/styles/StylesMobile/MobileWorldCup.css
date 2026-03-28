@@ -15,8 +15,8 @@
   --mwc-mono:          'DM Mono', monospace;
   --mwc-sans:          'Sora', sans-serif;
   --mwc-border:        var(--border);
-  --mwc-bg:            var(--bg);
-  --mwc-card:          var(--card);
+  --mwc-bg:            #f0ede8;
+  --mwc-card:          #e8e4de; 
   --mwc-text:          var(--text-primary);
   --mwc-muted:         var(--muted);
   --mwc-shadow:        var(--small-shadow);

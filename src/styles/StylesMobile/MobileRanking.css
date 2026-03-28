@@ -12,7 +12,7 @@
   --mrk-mono:          'DM Mono', monospace;
   --mrk-sans:          'Sora', sans-serif;
   --mrk-border:        var(--border);
-  --mrk-bg:            var(--bg);
+  --mrk-bg:            #f0ede8;
   --mrk-card:          var(--card);
   --mrk-text:          var(--text-primary);
   --mrk-muted:         var(--muted);
