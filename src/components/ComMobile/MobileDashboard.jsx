@@ -251,7 +251,7 @@ function ProgressBar({ saved, total }) {
   return (
     <div className="mob2-progress">
       <div className="mob2-progress-row">
-        <span className="mob2-progress-lbl">PREDICCIONES TOTALES</span>
+        <span className="mob2-progress-lbl">Predicciones totales</span>
         <span className="mob2-progress-count">[{saved}/{total}]</span>
       </div>
       <div className="mob2-progress-track">

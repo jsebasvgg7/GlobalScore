@@ -11,8 +11,8 @@
 ================================================================ */
 :root,
 [data-theme="light"] {
-  --bg:             #f5f6fa;
-  --card:           #ffffff;
+  --bg:             #f0ede8;
+  --card:           #e8e4de;
   --text-primary:   #111111;
   --text-secondary: #777777;
   --muted:          #777777;
