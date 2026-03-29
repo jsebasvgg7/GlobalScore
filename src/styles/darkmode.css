@@ -1430,138 +1430,39 @@
 [data-theme="dark"] .np-content-area       { color: #F0EDF8; }
 
 /* ================================================================
-   DARKMODE.CSS — Sección 24 · MOBILE DASHBOARD (fusión brutalist + neumorphism)
-   Reemplaza la sección 24 existente con este bloque completo.
+   24. MOBILE DASHBOARD — MobileDashboard.css
 ================================================================ */
-
-/* ── Tokens BRUTALIST dark ── */
-[data-style="brutalist"][data-theme="dark"] .mob2-root {
-  --m-bg:          #1a1d2e;
-  --m-card:        #252936;
-  --m-surface:     #1e2235;
-  --m-border:      rgba(255,255,255,.08);
-  --m-border-hard: rgba(255,255,255,.14);
-  --m-accent:      #8b7fc7;
-  --m-accent-l:    #a599d9;
-  --m-glass:       rgba(139,127,199,.10);
-  --m-text:        #f0f1f7;
-  --m-muted:       #60519b;
-  --m-green:       #34d399;
-  --m-red:         #e07070;
-  --m-amber:       #c9a227;
-  --m-gold:        #c9a227;
-  --m-silver:      #9ca3af;
-  --m-bronze:      #cd7c30;
+[data-theme="dark"] .mob2-root {
+  --m-bg:          #0D0B12;
+  --m-card:        #1A1824;
+  --m-surface:     #1A1824;
+  --m-border:      #38334F;
+  --m-border-hard: #4B43A0;
+  --m-accent:      #8B7FC7;
+  --m-accent-l:    #A599D9;
+  --m-text:        #F0EDF8;
+  --m-muted:       #6E6680;
+  --m-glass:       rgba(139, 127, 199, 0.08);
+  --m-green:       #34D399;
+  --m-red:         #E07070;
+  --m-amber:       #C9A227;
+  --m-gold:        #C9A227;
+  --m-silver:      #9CA3AF;
+  --m-bronze:      #CD7C30;
+  background: #0D0B12;
 }
 
-/* ── Tokens NEUMORPHISM dark ── */
-[data-style="neumorphism"][data-theme="dark"] .mob2-root {
-  --m-bg:          #1E1C28;
-  --m-card:        #1E1C28;
-  --m-surface:     #1E1C28;
-  --nm-light:      rgba(40,37,55,.9);
-  --nm-dark:       rgba(10,9,16,.7);
-  --nm-il:         rgba(40,37,55,.7);
-  --nm-id:         rgba(10,9,16,.6);
-  --m-accent:      #8b7fc7;
-  --m-accent-l:    #a599d9;
-  --m-accent-xl:   #c0b8e8;
-  --m-glass:       rgba(139,127,199,.12);
-  --m-border:      rgba(255,255,255,.05);
-  --m-border-hard: rgba(255,255,255,.09);
-  --m-text:        #E8E6F0;
-  --m-muted:       #5A566E;
-  --m-green:       #34d399;
-  --m-red:         #e07070;
-  --m-amber:       #c9a227;
-  --m-gold:        #c9a227;
-  --m-silver:      #9ca3af;
-  --m-bronze:      #cd7c30;
-}
+[data-theme="dark"] .mob2-progress { background: #0D0B12; }
 
-/* ================================================================
-   PROGRESS BAR
-================================================================ */
-[data-style="brutalist"][data-theme="dark"] .mob2-progress {
-  /* sin background propio, hereda --m-bg */
+[data-theme="dark"] .mob2-nm-card,
+[data-theme="dark"] .mob2-mc,
+[data-theme="dark"] .mob2-lc,
+[data-theme="dark"] .mob2-ac,
+[data-theme="dark"] .mob2-sk-card,
+[data-theme="dark"] .mob2-bottom-box {
+  background: #1A1824;
+  border-color: #38334F;
 }
-[data-style="neumorphism"][data-theme="dark"] .mob2-progress {
-  background: var(--m-bg);
-}
-[data-theme="dark"] .mob2-progress-lbl   { color: var(--m-text); }
-[data-theme="dark"] .mob2-progress-count { color: var(--m-accent); }
-[data-style="brutalist"][data-theme="dark"] .mob2-progress-track { background: var(--m-border-hard); }
-[data-style="neumorphism"][data-theme="dark"] .mob2-progress-track { background: var(--m-bg); }
-[data-theme="dark"] .mob2-progress-fill  { background: var(--m-accent); }
-[data-style="neumorphism"][data-theme="dark"] .mob2-progress-fill {
-  background: linear-gradient(90deg, var(--m-accent), var(--m-accent-l));
-}
-
-/* ================================================================
-   NEXT MATCH BANNER
-================================================================ */
-[data-style="brutalist"][data-theme="dark"] .mob2-nm-card {
-  background: var(--m-card);
-  border-color: var(--m-border-hard);
-}
-[data-style="neumorphism"][data-theme="dark"] .mob2-nm-card {
-  background: var(--m-bg);
-}
-[data-style="brutalist"][data-theme="dark"] .mob2-nm-footer  { background: var(--m-border-hard); }
-[data-style="neumorphism"][data-theme="dark"] .mob2-nm-footer { background: var(--m-glass); }
-[data-theme="dark"] .mob2-nm-meta  { color: var(--m-accent); }
-[data-theme="dark"] .mob2-nm-tname { color: var(--m-muted); }
-[data-theme="dark"] .mob2-nm-vs    { color: var(--m-muted); }
-[data-theme="dark"] .mob2-nm-time  { color: var(--m-text); }
-
-/* ================================================================
-   TAB BAR
-================================================================ */
-[data-style="brutalist"][data-theme="dark"] .mob2-tabbar  { border-bottom-color: var(--m-border); }
-[data-style="neumorphism"][data-theme="dark"] .mob2-tabbar { border-bottom-color: transparent; }
-
-[data-theme="dark"] .mob2-tab-label { color: var(--m-muted); }
-[data-theme="dark"] .mob2-tab-count { color: var(--m-muted); }
-[data-theme="dark"] .mob2-tab--active .mob2-tab-label { color: var(--m-text); }
-[data-theme="dark"] .mob2-tab--active .mob2-tab-count { color: var(--m-accent); }
-
-/* ================================================================
-   MATCH CARD
-================================================================ */
-[data-style="brutalist"][data-theme="dark"] .mob2-mc {
-  background: var(--m-card);
-  border-color: var(--m-border-hard);
-}
-[data-style="neumorphism"][data-theme="dark"] .mob2-mc {
-  background: var(--m-bg);
-}
-[data-theme="dark"] .mob2-mc-lg-name   { color: var(--m-muted); }
-[data-theme="dark"] .mob2-mc-tname     { color: var(--m-text); }
-[data-theme="dark"] .mob2-mc-num       { color: var(--m-muted); }
-[data-style="brutalist"][data-theme="dark"] .mob2-mc-num  {
-  background: var(--m-bg);
-  border-color: var(--m-border);
-}
-[data-style="neumorphism"][data-theme="dark"] .mob2-mc-num { background: var(--m-bg); }
-[data-theme="dark"] .mob2-mc-num--has  { color: var(--m-accent); }
-[data-theme="dark"] .mob2-mc-ft        { color: var(--m-muted); }
-[data-theme="dark"] .mob2-mc-team      { border-top-color: var(--m-border); }
-[data-theme="dark"] .mob2-mc-foot      { border-top-color: var(--m-border); }
-[data-style="brutalist"][data-theme="dark"] .mob2-mc-lg-box {
-  background: var(--m-bg);
-  border-color: var(--m-border);
-}
-[data-style="neumorphism"][data-theme="dark"] .mob2-mc-lg-box { background: var(--m-bg); }
-
-/* pills */
-[data-style="brutalist"][data-theme="dark"] .mob2-mc-pill--pending { color: var(--m-muted); border-color: var(--m-border); }
-[data-style="brutalist"][data-theme="dark"] .mob2-mc-pill--saved   { color: var(--m-green); border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.07); }
-[data-style="brutalist"][data-theme="dark"] .mob2-mc-pill--closed  { color: var(--m-red); border-color: rgba(224,112,112,.3); background: rgba(224,112,112,.07); }
-[data-style="brutalist"][data-theme="dark"] .mob2-mc-pill--live    { color: var(--m-amber); border-color: rgba(201,162,39,.3); background: rgba(201,162,39,.07); }
-[data-style="neumorphism"][data-theme="dark"] .mob2-mc-pill--pending { color: var(--m-muted); background: var(--m-bg); }
-[data-style="neumorphism"][data-theme="dark"] .mob2-mc-pill--saved   { color: var(--m-green); background: var(--m-bg); }
-[data-style="neumorphism"][data-theme="dark"] .mob2-mc-pill--closed  { color: var(--m-red); background: var(--m-bg); }
-[data-style="neumorphism"][data-theme="dark"] .mob2-mc-pill--live    { color: var(--m-amber); background: var(--m-bg); }
 
 /* ================================================================
    LEAGUE / AWARD CARDS
@@ -1673,161 +1574,66 @@
 ================================================================ */
 [data-theme="dark"] .mob2-logros-empty { color: var(--m-muted); }
 /* ================================================================
-   25. MOBILE RANKING 
+   25. MOBILE RANKING — MobileRanking.css
 ================================================================ */
+[data-theme="dark"] .mrk-root { background: #0D0B12; }
 
-/* ── Tokens compartidos para ambos temas en dark ── */
-[data-theme="dark"] .mrk-root {
-  --mrk-gold:          #f0c040;
-  --mrk-silver:        #a0a0a0;
-  --mrk-bronze:        #c0804a;
-  --mrk-green:         #34d399;
+[data-theme="dark"] .mrk-tabs              { background: #1A1824; border-bottom-color: #38334F; }
+[data-theme="dark"] .mrk-tab               { color: #6E6680; }
+[data-theme="dark"] .mrk-tab.active        { color: #A599D9; border-bottom-color: #A599D9; }
+
+[data-theme="dark"] .mrk-hof-carousel { background: var(--dark-bg); }
+[data-theme="dark"] .mrk-stats-row         { background: #1A1824; border-bottom-color: #38334F; }
+[data-theme="dark"] .mrk-stat-num          { color: #F0EDF8; }
+[data-theme="dark"] .mrk-stat-lbl          { color: #6E6680; }
+[data-theme="dark"] .mrk-stat-divider      { background: #38334F; }
+[data-theme="dark"] .mrk-stat-leader-name  { color: #C9A227; }
+[data-theme="dark"] .mrk-stat-leader-pts   { color: #C9A227; opacity: 0.8; }
+
+[data-theme="dark"] .mrk-podium-wrap       { background: #0D0B12; }
+[data-theme="dark"] .mrk-podium-name       { color: #F0EDF8; }
+[data-theme="dark"] .mrk-podium-step--first  { background: rgba(201, 162, 39, 0.08);  border-top-color: #C9A227; }
+[data-theme="dark"] .mrk-podium-step--second { background: rgba(255, 255, 255, 0.04); border-top-color: #6A6A6A; }
+[data-theme="dark"] .mrk-podium-step--third  { background: rgba(205, 124, 48, 0.07);  border-top-color: #CD7C30; }
+
+[data-theme="dark"] .mrk-table             { background: #1A1824; }
+[data-theme="dark"] .mrk-table-header      { background: #1A1824; border-bottom-color: #38334F; }
+[data-theme="dark"] .mrk-table-title       { color: #F0EDF8; }
+[data-theme="dark"] .mrk-table-sub         { color: #6E6680; }
+[data-theme="dark"] .mrk-table-sep         { background: #8B7FC7; opacity: 0.25; }
+
+[data-theme="dark"] .mrk-row               { background: #1A1824; border-bottom-color: #2A2638; }
+[data-theme="dark"] .mrk-row:active        { background: #2C2840; }
+[data-theme="dark"] .mrk-row--me           { background: #2C2840 !important; border-left-color: #8B7FC7 !important; }
+[data-theme="dark"] .mrk-row-name          { color: #F0EDF8; }
+[data-theme="dark"] .mrk-row-sub           { color: #6E6680; }
+[data-theme="dark"] .mrk-row-pts           { color: #A599D9; }
+[data-theme="dark"] .mrk-row-acc           { color: #34D399; }
+[data-theme="dark"] .mrk-row-you           { color: #A599D9; border-color: #4B43A0; }
+
+[data-theme="dark"] .mrk-row-num:not(.mrk-row-num--1):not(.mrk-row-num--2):not(.mrk-row-num--3) {
+  background: #221F2E;
+  color: #6E6680;
 }
 
-/* ── BRUTALIST dark ── */
-[data-style="brutalist"][data-theme="dark"] .mrk-root {
-  --mrk-bg:            #1a1d2e;
-  --mrk-card:          #252936;
-  --mrk-surface:       #1e2235;
-  --mrk-border:        rgba(255,255,255,.08);
-  --mrk-border-hard:   rgba(255,255,255,.14);
-  --mrk-text:          #f0f1f7;
-  --mrk-muted:         #60519b;
-  --mrk-accent:        #8b7fc7;
-  --mrk-accent-light:  #a599d9;
-  --mrk-accent-subtle: rgba(139,127,199,.10);
-  --mrk-accent-border: rgba(139,127,199,.30);
-}
+/* HOF Mobile */
+[data-theme="dark"] .mrk-hof-card         { background: #1A1824; border-color: #38334F; }
+[data-theme="dark"] .mrk-hof-stats        { background: #0D0B12; border-color: #2A2638; }
+[data-theme="dark"] .mrk-hof-stat-sep     { background: #2A2638; }
+[data-theme="dark"] .mrk-hof-name         { color: #F0EDF8; }
+[data-theme="dark"] .mrk-hof-stat-val     { color: #F0EDF8; }
+[data-theme="dark"] .mrk-hof-stat-lbl     { color: #6E6680; }
+[data-theme="dark"] .mrk-hof-dot          { background: #38334F; }
+[data-theme="dark"] .mrk-hof-dot--active  { background: #C9A227; }
 
-/* ── NEUMORPHISM dark ── */
-[data-style="neumorphism"][data-theme="dark"] .mrk-root {
-  --mrk-bg:            #1E1C28;
-  --mrk-card:          #1E1C28;
-  --mrk-surface:       #1E1C28;
-  --nm-light:          rgba(40,37,55,.9);
-  --nm-dark:           rgba(10,9,16,.7);
-  --nm-il:             rgba(40,37,55,.7);
-  --nm-id:             rgba(10,9,16,.6);
-  --mrk-text:          #E8E6F0;
-  --mrk-muted:         #5A566E;
-  --mrk-accent:        #8b7fc7;
-  --mrk-accent-light:  #a599d9;
-  --mrk-accent-subtle: rgba(139,127,199,.12);
-  --mrk-accent-border: rgba(139,127,199,.30);
-  --mrk-border:        rgba(255,255,255,.05);
-  --mrk-border-hard:   rgba(255,255,255,.09);
-}
+[data-theme="dark"] .mrk-hof-list-label   { background: #1A1824; border-bottom-color: #2A2638; color: #6E6680; }
+[data-theme="dark"] .mrk-hof-list-row     { background: #1A1824; border-bottom-color: #13111A; }
+[data-theme="dark"] .mrk-hof-list-name    { color: #F0EDF8; }
+[data-theme="dark"] .mrk-hof-nav          { background: rgba(255, 255, 255, 0.04); border-color: #38334F; }
 
-/* ── Tabs ── */
-[data-theme="dark"] .mrk-tabs              { background: var(--mrk-card, #1a1d2e); border-bottom-color: var(--mrk-border); }
-[data-theme="dark"] .mrk-tab               { color: var(--mrk-muted); }
-[data-theme="dark"] .mrk-tab.active        { color: var(--mrk-accent); border-bottom-color: var(--mrk-accent); }
-[data-style="neumorphism"][data-theme="dark"] .mrk-tab { background: var(--mrk-bg); }
-[data-style="neumorphism"][data-theme="dark"] .mrk-tab.active { color: var(--mrk-accent); }
-
-/* ── Stats row ── */
-[data-theme="dark"] .mrk-stats-row         { background: var(--mrk-card, #1a1d2e); border-bottom-color: var(--mrk-border); }
-[data-theme="dark"] .mrk-stat-num          { color: var(--mrk-text); }
-[data-theme="dark"] .mrk-stat-lbl          { color: var(--mrk-muted); }
-[data-theme="dark"] .mrk-stat-divider      { background: var(--mrk-border); }
-[data-theme="dark"] .mrk-stat-leader-name  { color: var(--mrk-gold); }
-[data-theme="dark"] .mrk-stat-leader-pts   { color: var(--mrk-gold); opacity: .75; }
-
-/* ── Podio wrap ── */
-[data-theme="dark"] .mrk-podium-wrap       { background: var(--mrk-bg); }
-[data-theme="dark"] .mrk-podium-name       { color: var(--mrk-text); }
-
-/* escalones brutalist dark */
-[data-style="brutalist"][data-theme="dark"] .mrk-podium-step--first  { background: rgba(201,162,39,.08); border-top-color: var(--mrk-gold); }
-[data-style="brutalist"][data-theme="dark"] .mrk-podium-step--second { background: rgba(255,255,255,.04); border-top-color: var(--mrk-silver); }
-[data-style="brutalist"][data-theme="dark"] .mrk-podium-step--third  { background: rgba(205,124,48,.07); border-top-color: var(--mrk-bronze); }
-
-/* escalones neumorphism dark — mantienen gradientes, solo re-oscurecer */
-[data-style="neumorphism"][data-theme="dark"] .mrk-podium-step--first  { background: linear-gradient(to bottom,rgba(201,150,26,.12),rgba(201,150,26,.03)); }
-[data-style="neumorphism"][data-theme="dark"] .mrk-podium-step--second { background: linear-gradient(to bottom,rgba(144,149,170,.10),rgba(144,149,170,.02)); }
-[data-style="neumorphism"][data-theme="dark"] .mrk-podium-step--third  { background: linear-gradient(to bottom,rgba(176,112,64,.10),rgba(176,112,64,.02)); }
-
-/* ── Tabla ── */
-[data-style="brutalist"][data-theme="dark"] .mrk-table  { background: var(--mrk-card); border-top-color: var(--mrk-border); }
-[data-style="neumorphism"][data-theme="dark"] .mrk-table { background: var(--mrk-bg); }
-[data-theme="dark"] .mrk-table-header      { background: var(--mrk-card, #1a1d2e); border-bottom-color: var(--mrk-border); }
-[data-theme="dark"] .mrk-table-title       { color: var(--mrk-text); }
-[data-theme="dark"] .mrk-table-sub         { color: var(--mrk-muted); }
-[data-style="neumorphism"][data-theme="dark"] .mrk-table-sub {
-  color: var(--mrk-accent);
-  background: var(--mrk-accent-subtle);
-}
-[data-theme="dark"] .mrk-table-sep         { background: var(--mrk-accent); opacity: .2; }
-
-/* ── Filas ── */
-[data-style="brutalist"][data-theme="dark"] .mrk-row  { background: var(--mrk-card); border-bottom-color: var(--mrk-border); }
-[data-style="neumorphism"][data-theme="dark"] .mrk-row { background: var(--mrk-bg); border-bottom-color: var(--mrk-border); }
-[data-theme="dark"] .mrk-row:active        { background: var(--mrk-accent-subtle); }
-[data-theme="dark"] .mrk-row--me           { background: var(--mrk-accent-subtle) !important; border-left-color: var(--mrk-accent) !important; }
-[data-theme="dark"] .mrk-row-name          { color: var(--mrk-text); }
-[data-theme="dark"] .mrk-row-sub           { color: var(--mrk-muted); }
-[data-theme="dark"] .mrk-row-pts           { color: var(--mrk-gold); }
-[data-theme="dark"] .mrk-row-acc           { color: var(--mrk-green); }
-[data-theme="dark"] .mrk-row-you           { color: var(--mrk-accent); border-color: var(--mrk-accent-border); }
-[data-style="neumorphism"][data-theme="dark"] .mrk-row-you { background: var(--mrk-accent-subtle); }
-
-[data-style="brutalist"][data-theme="dark"] .mrk-row-num:not(.mrk-row-num--1):not(.mrk-row-num--2):not(.mrk-row-num--3) {
-  background: var(--mrk-bg);
-  border-color: var(--mrk-border);
-  color: var(--mrk-muted);
-}
-[data-style="neumorphism"][data-theme="dark"] .mrk-row-num:not(.mrk-row-num--1):not(.mrk-row-num--2):not(.mrk-row-num--3) {
-  color: var(--mrk-muted);
-}
-
-/* ── HOF carousel ── */
-[data-theme="dark"] .mrk-hof-carousel     { background: var(--mrk-bg); }
-
-[data-style="brutalist"][data-theme="dark"] .mrk-hof-card  {
-  background: var(--mrk-card);
-  border-color: var(--mrk-border-hard);
-}
-[data-style="neumorphism"][data-theme="dark"] .mrk-hof-card { background: var(--mrk-bg); }
-
-[data-theme="dark"] .mrk-hof-name         { color: var(--mrk-text); }
-
-[data-style="brutalist"][data-theme="dark"] .mrk-hof-stats  {
-  background: var(--mrk-bg);
-  border-color: var(--mrk-border);
-}
-[data-style="neumorphism"][data-theme="dark"] .mrk-hof-stats { background: var(--mrk-bg); }
-
-[data-theme="dark"] .mrk-hof-stat-sep     { background: var(--mrk-border); }
-[data-theme="dark"] .mrk-hof-stat-val     { color: var(--mrk-text); }
-[data-theme="dark"] .mrk-hof-stat-lbl     { color: var(--mrk-muted); }
-[data-theme="dark"] .mrk-hof-dot          { background: var(--mrk-border); }
-[data-theme="dark"] .mrk-hof-dot--active  { background: var(--mrk-gold); }
-
-[data-style="brutalist"][data-theme="dark"] .mrk-hof-list-label {
-  background: var(--mrk-card);
-  color: var(--mrk-muted);
-  border-bottom-color: var(--mrk-border);
-}
-[data-style="neumorphism"][data-theme="dark"] .mrk-hof-list-label {
-  background: var(--mrk-accent-subtle);
-  color: var(--mrk-accent);
-  border-bottom-color: var(--mrk-border);
-}
-
-[data-style="brutalist"][data-theme="dark"] .mrk-hof-list-row {
-  background: var(--mrk-card);
-  border-bottom-color: var(--mrk-border);
-}
-[data-style="neumorphism"][data-theme="dark"] .mrk-hof-list-row {
-  background: var(--mrk-bg);
-  border-bottom-color: var(--mrk-border);
-}
-
-[data-theme="dark"] .mrk-hof-list-row--active { background: rgba(201,162,39,.06); }
-[data-theme="dark"] .mrk-hof-list-name   { color: var(--mrk-text); }
-[data-theme="dark"] .mrk-hof-empty       { color: var(--mrk-muted); }
-[data-theme="dark"] .mrk-hof-empty p     { color: var(--mrk-muted); }
-[data-theme="dark"] .mrk-hof-empty-icon  { color: var(--mrk-border); }
+[data-theme="dark"] .mrk-hof-empty        { color: #6E6680; }
+[data-theme="dark"] .mrk-hof-empty p      { color: #6E6680; }
+[data-theme="dark"] .mrk-hof-empty-icon   { color: #38334F; }
 
 /* ================================================================
    26. MOBILE STATS — MobileStats.css
