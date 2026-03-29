@@ -1740,7 +1740,6 @@
 [data-theme="dark"] .mrk-tab.active        { color: #A599D9; border-bottom-color: #A599D9; }
 
 [data-theme="dark"] .mrk-hof-carousel { background: var(--dark-bg); }
-[data-theme="dark"] .mrk-stats-row         { background: #1A1824; border-bottom-color: #38334F; }
 [data-theme="dark"] .mrk-stat-num          { color: #F0EDF8; }
 [data-theme="dark"] .mrk-stat-lbl          { color: #6E6680; }
 [data-theme="dark"] .mrk-stat-divider      { background: #38334F; }
@@ -1801,11 +1800,6 @@
 }
 [data-style="neumorphism"][data-theme="dark"] .mrk-tab.active {
   box-shadow: var(--nm-i);
-}
- 
-/* Stats row neu dark */
-[data-style="neumorphism"][data-theme="dark"] .mrk-stats-row {
-  background: var(--mrk-bg);
 }
  
 /* Podium stage neu dark */

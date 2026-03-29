@@ -27,6 +27,7 @@
 [data-style="brutalist"] .mrk-root {
   --mrk-bg:            #f0ede8;
   --mrk-card:          #e8e4de;
+  --mrk-stats-row:     #f0ede8;
   --mrk-surface:       #fff;
   --mrk-border:        #d4cfc8;
   --mrk-border-hard:   #c4bfb8;
@@ -49,6 +50,7 @@
   --mrk-bg:            #1e2235;
   --mrk-card:          #252936;
   --mrk-surface:       #1e2235;
+  --mrk-stats-row:     #0D0B12;
   --mrk-border:        rgba(255,255,255,.08);
   --mrk-border-hard:   rgba(255,255,255,.14);
   --mrk-text:          #f0f1f7;
@@ -278,7 +280,7 @@
   display: flex;
   align-items: center;
   padding: 16px 20px;
-  background: var(--mrk-bg);
+  background: var(--mrk-stats-row); 
   border-bottom: none;
   gap: 0;
   flex-shrink: 0;
