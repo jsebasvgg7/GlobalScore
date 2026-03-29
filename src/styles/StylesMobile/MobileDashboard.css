@@ -39,13 +39,13 @@
 ============================================================== */
 [data-style="neumorphism"] .mob2-root {
   --m-bg:#EAE7E1; --m-card:#EAE7E1; --m-surface:#EAE7E1;
-  --nm-light:rgba(255,255,255,.85); --nm-dark:rgba(166,158,148,.55);
-  --nm-il:rgba(255,255,255,.7); --nm-id:rgba(166,158,148,.45);
-  --nm-s:6px 6px 14px var(--nm-dark),-4px -4px 10px var(--nm-light);
-  --nm-sm:4px 4px 10px var(--nm-dark),-3px -3px 7px var(--nm-light);
-  --nm-lg:8px 8px 20px var(--nm-dark),-6px -6px 16px var(--nm-light);
-  --nm-i:inset 3px 3px 8px var(--nm-id),inset -3px -3px 8px var(--nm-il);
-  --nm-ism:inset 2px 2px 5px var(--nm-id),inset -2px -2px 5px var(--nm-il);
+  --nm-light:rgba(255,255,255,.80); --nm-dark:rgba(166,158,148,.38);
+  --nm-il:rgba(255,255,255,.65); --nm-id:rgba(166,158,148,.30);
+  --nm-s:3px 3px 9px var(--nm-dark),-2px -2px 7px var(--nm-light);
+  --nm-sm:2px 2px 6px var(--nm-dark),-1px -1px 4px var(--nm-light);
+  --nm-lg:4px 4px 12px var(--nm-dark),-3px -3px 9px var(--nm-light);
+  --nm-i:inset 2px 2px 5px var(--nm-id),inset -2px -2px 5px var(--nm-il);
+  --nm-ism:inset 1px 1px 3px var(--nm-id),inset -1px -1px 3px var(--nm-il);
   --m-accent:#60519b; --m-accent-l:#8b7fc7; --m-accent-xl:#a599d9;
   --m-glass:rgba(96,81,155,.10);
   --m-border:rgba(166,158,148,.25); --m-border-hard:rgba(166,158,148,.4);
@@ -158,9 +158,9 @@
 /* ==============================================================
    HSCROLL
 ============================================================== */
-.mob2-hscroll-wrap { margin:0 20px; overflow:hidden; }
+.mob2-hscroll-wrap { margin:0 20px; padding:8px 0; }
 [data-style="brutalist"] .mob2-hscroll { display:flex; gap:10px; padding:4px 0 16px; overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch; scrollbar-width:none; scroll-snap-type:x proximity; animation:mob2-fade-in .25s ease both; }
-[data-style="neumorphism"] .mob2-hscroll { display:flex; gap:14px; padding:10px 0 20px; overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch; scrollbar-width:none; scroll-snap-type:x proximity; animation:mob2-fade-in .25s ease both; }
+[data-style="neumorphism"] .mob2-hscroll { display:flex; gap:14px; padding:10px 4px 20px; overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch; scrollbar-width:none; scroll-snap-type:x proximity; animation:mob2-fade-in .25s ease both; }
 .mob2-hscroll::-webkit-scrollbar { display:none; }
 
 /* ==============================================================

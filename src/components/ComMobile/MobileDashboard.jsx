@@ -5,8 +5,6 @@ import Footer from "../ComLayout/Footer";
 import MobileSubPage     from "./MobileSubPage";
 import "../../styles/StylesMobile/MobileDashboard.css";
 import "../../styles/StylesMobile/MobileSubPage.css";
-import "../../styles/StylesMobile/MobileDashboard.css";
-import "../../styles/StylesMobile/MobileSubPage.css";
 
 // ── SVGs inline ───────────────────────────────────────────────
 const ClockSVG = () => (
