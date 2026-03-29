@@ -1,0 +1,508 @@
+/* ================================================================
+   GlobalScore — MobileSubPage.css
+   Tema: NEUMORPHISM CLEAN / PREMIUM
+================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* ================================================================
+   TOKENS
+================================================================ */
+.msp-page {
+  --msp-bg:          #EAE7E1;
+  --msp-card:        #EAE7E1;
+  --msp-surface:     #EAE7E1;
+  --msp-border:      rgba(166, 158, 148, 0.3);
+  --msp-border-dark: rgba(166, 158, 148, 0.5);
+
+  /* Sombras neumórficas */
+  --nm-light:        rgba(255, 255, 255, 0.85);
+  --nm-dark:         rgba(166, 158, 148, 0.55);
+  --nm-shadow:       6px 6px 14px var(--nm-dark), -4px -4px 10px var(--nm-light);
+  --nm-shadow-sm:    4px 4px 10px var(--nm-dark), -3px -3px 7px var(--nm-light);
+  --nm-inset:        inset 3px 3px 8px var(--nm-dark), inset -3px -3px 8px var(--nm-light);
+  --nm-inset-sm:     inset 2px 2px 5px var(--nm-dark), inset -2px -2px 5px var(--nm-light);
+
+  --msp-accent:      #60519b;
+  --msp-accent-l:    #8b7fc7;
+  --msp-text:        #2A2535;
+  --msp-muted:       #9B95A8;
+  --msp-glass:       rgba(96, 81, 155, 0.08);
+  --msp-font:        'Plus Jakarta Sans', system-ui, sans-serif;
+  --r-sm:   10px;
+  --r-md:   16px;
+  --r-lg:   20px;
+  --r-pill: 100px;
+}
+
+[data-theme="dark"] .msp-page {
+  --msp-bg:          #1E1C28;
+  --msp-card:        #1E1C28;
+  --msp-surface:     #1E1C28;
+  --msp-border:      rgba(255, 255, 255, 0.06);
+  --msp-border-dark: rgba(255, 255, 255, 0.10);
+
+  --nm-light:        rgba(40, 37, 55, 0.9);
+  --nm-dark:         rgba(10, 9, 16, 0.7);
+  --nm-shadow:       6px 6px 14px var(--nm-dark), -4px -4px 10px var(--nm-light);
+  --nm-shadow-sm:    4px 4px 10px var(--nm-dark), -3px -3px 7px var(--nm-light);
+  --nm-inset:        inset 3px 3px 8px var(--nm-dark), inset -3px -3px 8px var(--nm-light);
+  --nm-inset-sm:     inset 2px 2px 5px var(--nm-dark), inset -2px -2px 5px var(--nm-light);
+
+  --msp-accent:      #8b7fc7;
+  --msp-accent-l:    #a599d9;
+  --msp-text:        #E8E6F0;
+  --msp-muted:       #5A566E;
+  --msp-glass:       rgba(139, 127, 199, 0.1);
+}
+
+/* ================================================================
+   PÁGINA BASE
+================================================================ */
+.msp-page {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: var(--msp-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: msp-slide-in 0.3s cubic-bezier(0.34,1.1,0.64,1) both;
+  font-family: var(--msp-font);
+}
+
+@keyframes msp-slide-in {
+  from { transform: translateX(100%); opacity: 0.6; }
+  to   { transform: translateX(0);    opacity: 1;   }
+}
+
+/* ================================================================
+   TOP BAR — extruido
+================================================================ */
+.msp-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 0;
+  padding-top: calc(14px + env(safe-area-inset-top));
+  padding-bottom: 14px;
+  background: var(--msp-bg);
+  flex-shrink: 0;
+  position: relative;
+  box-shadow: 0 4px 12px var(--nm-dark), 0 -2px 6px var(--nm-light);
+}
+
+/* Sin la barra lateral brutalista — en neumorphism usamos
+   profundidad, no bordes de color */
+.msp-topbar::before { display: none; }
+
+.msp-back {
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--msp-bg);
+  border: none;
+  border-radius: var(--r-sm);
+  box-shadow: var(--nm-shadow-sm);
+  color: var(--msp-text);
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: box-shadow 0.15s;
+}
+
+.msp-back:active { box-shadow: var(--nm-inset-sm); }
+
+.msp-topbar-center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  justify-content: center;
+}
+
+.msp-topbar-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--msp-text);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.msp-topbar-count {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--msp-accent);
+  background: var(--msp-bg);
+  box-shadow: var(--nm-inset-sm);
+  border: none;
+  padding: 3px 12px;
+  border-radius: var(--r-pill);
+}
+
+.msp-filter-toggle {
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--msp-bg);
+  border: none;
+  border-radius: var(--r-sm);
+  box-shadow: var(--nm-shadow-sm);
+  color: var(--msp-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: box-shadow 0.15s;
+}
+
+.msp-filter-toggle.active {
+  box-shadow: var(--nm-inset-sm);
+  color: var(--msp-accent);
+}
+
+.msp-filter-toggle:active { box-shadow: var(--nm-inset-sm); transform: scale(0.97); }
+
+/* ================================================================
+   SORT ROW
+================================================================ */
+.msp-sort-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--msp-bg);
+  border-bottom: 1px solid var(--msp-border);
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.msp-sort-row::-webkit-scrollbar { display: none; }
+
+.msp-sort-icon {
+  color: var(--msp-muted);
+  flex-shrink: 0;
+  width: 11px; height: 11px;
+}
+
+/* Pills sort — extruidas */
+.msp-sort-pill {
+  padding: 6px 14px;
+  border: none;
+  background: var(--msp-bg);
+  box-shadow: var(--nm-shadow-sm);
+  border-radius: var(--r-pill);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--msp-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  transition: box-shadow 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.msp-sort-pill.active {
+  box-shadow: var(--nm-inset-sm);
+  color: var(--msp-accent);
+  font-weight: 700;
+}
+
+.msp-sort-pill:active { box-shadow: var(--nm-inset-sm); }
+
+/* Chip activo */
+.msp-active-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: var(--msp-bg);
+  box-shadow: var(--nm-inset-sm), 0 0 0 1.5px rgba(96,81,155,0.35);
+  border-radius: var(--r-pill);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--msp-accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.04em;
+}
+
+.msp-active-chip button {
+  display: flex; align-items: center;
+  border: none; background: transparent;
+  color: var(--msp-accent);
+  padding: 0; cursor: pointer;
+  margin-left: 2px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ================================================================
+   SEASON LABEL
+================================================================ */
+.msp-season-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  flex-shrink: 0;
+  background: var(--msp-bg);
+  border-bottom: 1px solid var(--msp-border);
+}
+
+.msp-season-label span {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--msp-muted);
+  white-space: nowrap;
+}
+
+/* ================================================================
+   BODY
+================================================================ */
+.msp-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  background: var(--msp-bg);
+}
+
+.msp-body::-webkit-scrollbar { display: none; }
+
+/* ================================================================
+   DATE GROUP
+================================================================ */
+.msp-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 16px 4px;
+}
+
+.msp-group + .msp-group { padding-top: 8px; }
+
+.msp-date-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Chip de fecha neumórfico */
+.msp-date-label span {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--msp-muted);
+  background: var(--msp-bg);
+  box-shadow: var(--nm-shadow-sm);
+  border: none;
+  border-radius: var(--r-pill);
+  padding: 5px 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.msp-date-label.first span {
+  color: var(--msp-accent);
+  box-shadow: var(--nm-inset-sm), 0 0 0 1.5px rgba(96,81,155,0.3);
+}
+
+.msp-date-line {
+  flex: 1;
+  height: 1px;
+  background: var(--msp-border);
+}
+
+/* ================================================================
+   CARDS COLUMN
+================================================================ */
+.msp-cards-col {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+  width: 100%;
+  padding: 16px 14px 8px;
+}
+
+.msp-group .msp-cards-col { padding: 0; gap: 14px; }
+
+.msp-cards-col > * { width: 100%; max-width: 100%; }
+.msp-cards-col .mc-wrap { max-width: 100% !important; width: 100% !important; }
+.msp-cards-col .mc-card { width: 100% !important; }
+
+/* Cards full-width — sombra neumórfica, sin box brutalista */
+.msp-cards-col .lc-card,
+.msp-cards-col .ac-card {
+  width: 100% !important;
+  box-shadow: var(--nm-shadow) !important;
+  border-radius: var(--r-lg) !important;
+}
+
+/* ================================================================
+   EMPTY STATE
+================================================================ */
+.msp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 60px 32px;
+}
+
+.msp-empty-box {
+  width: 52px; height: 52px;
+  color: var(--msp-muted);
+  opacity: 0.3;
+}
+
+.msp-empty-box svg { width: 52px; height: 52px; }
+
+.msp-empty-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--msp-muted);
+  opacity: 0.6;
+  text-align: center;
+}
+
+/* ================================================================
+   FILTER PANEL — extruido desde el lateral
+================================================================ */
+.msp-filter-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 8, 20, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 400;
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+
+.msp-filter-panel {
+  width: 268px;
+  max-width: 80vw;
+  height: 100%;
+  background: var(--msp-bg);
+  border-left: none;
+  box-shadow: -8px 0 24px var(--nm-dark);
+  display: flex;
+  flex-direction: column;
+  animation: msp-panel-in 0.26s cubic-bezier(0.34,1.2,0.64,1);
+  overflow: hidden;
+}
+
+@keyframes msp-panel-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.msp-filter-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px 14px;
+  padding-top: calc(20px + env(safe-area-inset-top));
+  border-bottom: 1px solid var(--msp-border);
+  background: var(--msp-bg);
+  flex-shrink: 0;
+}
+
+.msp-filter-hdr-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--msp-text);
+}
+
+.msp-filter-hdr-title svg { color: var(--msp-accent); flex-shrink: 0; }
+
+.msp-filter-hdr-actions { display: flex; align-items: center; gap: 8px; }
+
+.msp-filter-reset {
+  padding: 5px 12px;
+  border: none;
+  background: var(--msp-bg);
+  box-shadow: var(--nm-shadow-sm);
+  border-radius: var(--r-pill);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--msp-accent);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: box-shadow 0.15s;
+}
+
+.msp-filter-reset:active { box-shadow: var(--nm-inset-sm); }
+
+.msp-filter-close {
+  width: 32px; height: 32px;
+  border: none;
+  background: var(--msp-bg);
+  box-shadow: var(--nm-shadow-sm);
+  border-radius: var(--r-sm);
+  color: var(--msp-muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: box-shadow 0.15s;
+}
+
+.msp-filter-close:active { box-shadow: var(--nm-inset-sm); }
+.msp-filter-close svg { width: 13px; height: 13px; }
+
+.msp-filter-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ítem de filtro — extruido, se hunde al activarse */
+.msp-filter-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--msp-bg);
+  border: none;
+  border-radius: var(--r-md);
+  box-shadow: var(--nm-shadow-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--msp-text);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: box-shadow 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.msp-filter-item:active { box-shadow: var(--nm-inset-sm); }
+
+.msp-filter-item.active {
+  box-shadow: var(--nm-inset-sm), 0 0 0 1.5px rgba(96,81,155,0.4);
+  color: var(--msp-accent);
+  font-weight: 700;
+}
+
+.msp-filter-item-icon { font-size: 16px; line-height: 1; flex-shrink: 0; }

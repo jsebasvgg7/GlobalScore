@@ -1,5 +1,7 @@
 /* ================================================================
-   GlobalScore 
+   GlobalScore — index.css
+   Tokens globales actualizados para Neumorphism Clean/Premium.
+   El tema desktop no cambia; solo los tokens mobile se alinean.
 ================================================================ */
 
 @tailwind base;
@@ -11,47 +13,57 @@
 ================================================================ */
 :root,
 [data-theme="light"] {
-  --bg:             #f0ede8;
-  --card:           #e8e4de;
-  --text-primary:   #111111;
-  --text-secondary: #777777;
-  --muted:          #777777;
+  /* Fondo neumórfico — beige cálido igual que mob2-root */
+  --bg:             #EAE7E1;
+  --card:           #EAE7E1;
+
+  --text-primary:   #2A2535;
+  --text-secondary: #7A7490;
+  --muted:          #9B95A8;
+
+  /* Acento del proyecto — sin cambiar */
   --accent:         #60519b;
   --accent-light:   #8b7fc7;
   --accent-hover:   #4d4180;
+
   --dark-bg:        #1e202c;
   --dark-secondary: #31323e;
   --light-text:     #bfc0d1;
-  --glass:          rgba(96, 81, 155, 0.12);
-  --border:         rgba(0, 0, 0, 0.06);
-  --input-bg:       #ffffff;
-  --input-border:   rgba(0, 0, 0, 0.1);
-  --shadow:         0 8px 30px rgba(96, 81, 155, 0.15);
-  --small-shadow:   0 4px 14px rgba(96, 81, 155, 0.1);
+  --glass:          rgba(96, 81, 155, 0.10);
+
+  /* Bordes suaves para neumorphism */
+  --border:         rgba(166, 158, 148, 0.22);
+  --input-bg:       #EAE7E1;
+  --input-border:   rgba(166, 158, 148, 0.35);
+
+  /* Sombras neumórficas globales */
+  --shadow:         6px 6px 16px rgba(166,158,148,0.55), -4px -4px 12px rgba(255,255,255,0.85);
+  --small-shadow:   4px 4px 10px rgba(166,158,148,0.5),  -3px -3px 8px rgba(255,255,255,0.8);
+
   --radius-2xl:     20px;
 }
 
 /* ================================================================
-   TOKENS — DARK MODE (Desktop)
+   TOKENS — DARK MODE
 ================================================================ */
 [data-theme="dark"] {
-  --bg:             #1a1d2e;
-  --card:           #252936;
-  --text-primary:   #f0f1f7;
-  --text-secondary: #b4b8d0;
-  --muted:          #8186a0;
+  --bg:             #1E1C28;
+  --card:           #1E1C28;
+  --text-primary:   #E8E6F0;
+  --text-secondary: #A09CB8;
+  --muted:          #5A566E;
   --accent:         #8b7fc7;
   --accent-light:   #a599d9;
   --accent-hover:   #7366b3;
   --dark-bg:        #151823;
   --dark-secondary: #1f2232;
   --light-text:     #dfe1ea;
-  --glass:          rgba(139, 127, 199, 0.18);
-  --border:         rgba(255, 255, 255, 0.12);
-  --input-bg:       #252936;
-  --input-border:   rgba(255, 255, 255, 0.15);
-  --shadow:         0 8px 30px rgba(0, 0, 0, 0.35);
-  --small-shadow:   0 4px 14px rgba(0, 0, 0, 0.25);
+  --glass:          rgba(139, 127, 199, 0.14);
+  --border:         rgba(255, 255, 255, 0.07);
+  --input-bg:       #1E1C28;
+  --input-border:   rgba(255, 255, 255, 0.12);
+  --shadow:         6px 6px 14px rgba(10,9,16,0.7), -4px -4px 10px rgba(40,37,55,0.9);
+  --small-shadow:   4px 4px 10px rgba(10,9,16,0.65), -3px -3px 7px rgba(40,37,55,0.85);
   --radius-2xl:     20px;
 }
 
@@ -80,7 +92,7 @@ body {
   overflow-x: hidden;
   background: var(--bg);
   color: var(--text-primary);
-  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: 'Plus Jakarta Sans', Inter, "Segoe UI", Roboto, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
@@ -96,11 +108,11 @@ body {
 }
 
 [data-theme="light"] body {
-  background: linear-gradient(135deg, #f5f6fa 0%, #e8e9f3 100%);
+  background: #EAE7E1;
 }
 
 [data-theme="dark"] body {
-  background: linear-gradient(135deg, #1a1d2e 0%, #252936 100%);
+  background: #1E1C28;
   color: var(--text-primary);
 }
 
@@ -130,7 +142,7 @@ select:focus {
 }
 
 button {
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.18s ease;
 }
 
 /* ================================================================
@@ -155,13 +167,14 @@ button {
   min-height: 200px;
 }
 
+/* Card global con sombra neumórfica */
 .card {
   background: var(--card);
   padding: 16px;
   border-radius: var(--radius-2xl);
   box-shadow: var(--small-shadow);
-  border: 1px solid var(--border);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  border: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .main-grid {
@@ -178,17 +191,19 @@ button {
 }
 
 /* ================================================================
-   ICON BUTTONS
+   ICON BUTTONS — neumórficos
 ================================================================ */
 .icon-btn {
-  background: transparent;
-  border: 1px solid var(--border);
+  background: var(--bg);
+  border: none;
+  box-shadow: var(--small-shadow);
   color: var(--text-primary);
+  border-radius: 10px;
 }
 
 .icon-btn:hover {
-  background: var(--glass);
-  border-color: var(--accent);
+  box-shadow: inset 2px 2px 5px rgba(166,158,148,0.45),
+              inset -2px -2px 5px rgba(255,255,255,0.75);
   color: var(--accent);
 }
 
@@ -201,23 +216,11 @@ button {
   position: relative;
 }
 
-.clickable-avatar::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
 .clickable-avatar:hover {
   transform: scale(1.05);
   filter: brightness(0.95);
 }
 
-.clickable-avatar:hover::after { opacity: 1; }
 .clickable-avatar:active { transform: scale(0.98); }
 
 .clickable-avatar img,
@@ -232,14 +235,8 @@ button {
   outline-offset: 2px;
 }
 
-[data-theme="dark"] .clickable-avatar:hover {
-  opacity: 0.9;
-  box-shadow: 0 8px 24px rgba(139, 127, 199, 0.3);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .clickable-avatar,
-  .clickable-avatar::after,
   .clickable-avatar:hover {
     transition: none;
     animation: none;
@@ -250,14 +247,17 @@ button {
 /* ================================================================
    SCROLLBAR
 ================================================================ */
-::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 4px; }
+::-webkit-scrollbar-thumb {
+  background: rgba(166,158,148,0.4);
+  border-radius: 4px;
+}
 ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-* { scrollbar-width: thin; scrollbar-color: var(--muted) var(--bg); }
+* { scrollbar-width: thin; scrollbar-color: rgba(166,158,148,0.4) var(--bg); }
 
 /* ================================================================
-   BOTTOM NAVIGATION — universal
+   BOTTOM NAVIGATION
 ================================================================ */
 .bottom-nav-btn,
 .gs-bottom-btn {
@@ -298,9 +298,7 @@ button {
   pointer-events: none !important;
 }
 
-.toast-notification {
-  pointer-events: all !important;
-}
+.toast-notification { pointer-events: all !important; }
 
 @media (max-width: 768px) {
   .toast-container {
@@ -311,7 +309,7 @@ button {
 }
 
 /* ================================================================
-   DASHBOARD — ocultar vista desktop en mobile portrait
+   DASHBOARD — ocultar desktop en mobile portrait
 ================================================================ */
 @media screen and (max-width: 768px) and (orientation: portrait) {
   .db-root { display: none !important; }
@@ -330,11 +328,9 @@ button {
 ================================================================ */
 @media (max-width: 768px) {
   body { padding-bottom: 0; }
-
   .container { padding: 0 12px; margin: 16px auto; }
 
   .page-container,
-  .vega-root,
   .vega-root,
   .ranking-page,
   .admin-page,
@@ -369,7 +365,7 @@ button {
 }
 
 /* ================================================================
-   DARK MODE — DESKTOP — Cards genéricas y componentes
+   DARK MODE — DESKTOP — Cards y componentes
 ================================================================ */
 [data-theme="dark"] .card,
 [data-theme="dark"] .stats-card,
@@ -381,7 +377,7 @@ button {
 [data-theme="dark"] .titles-container,
 [data-theme="dark"] .achievements-container {
   background: var(--card);
-  border-color: var(--border);
+  border: none;
   color: var(--text-primary);
 }
 
@@ -399,14 +395,14 @@ button {
 }
 
 [data-theme="dark"] .icon-btn {
-  background: rgba(124, 107, 184, 0.15);
-  border-color: rgba(124, 107, 184, 0.3);
+  background: #1E1C28;
+  box-shadow: 4px 4px 10px rgba(10,9,16,0.65), -3px -3px 7px rgba(40,37,55,0.85);
   color: var(--text-primary);
 }
 
 [data-theme="dark"] .icon-btn:hover {
-  background: rgba(124, 107, 184, 0.25);
-  border-color: rgba(124, 107, 184, 0.5);
+  box-shadow: inset 2px 2px 5px rgba(10,9,16,0.6), inset -2px -2px 5px rgba(40,37,55,0.8);
+  color: var(--accent);
 }
 
 [data-theme="dark"] .bottom-nav {
@@ -415,7 +411,7 @@ button {
 }
 
 /* ================================================================
-   MATCH/LEAGUE/AWARD CARD DARK — footer borders
+   MATCH/LEAGUE/AWARD CARD DARK
 ================================================================ */
 [data-theme="dark"] .match-footer-light,
 [data-theme="dark"] .league-footer-light,
@@ -424,7 +420,7 @@ button {
 }
 
 /* ================================================================
-   SEARCH INPUT — fix borde oscuro
+   SEARCH INPUT
 ================================================================ */
 [data-theme="dark"] .search-input-modern,
 [data-theme="dark"] .search-modern input {
@@ -435,21 +431,23 @@ button {
 }
 
 [data-theme="dark"] .search-modern {
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: inset 2px 2px 5px rgba(10,9,16,0.6),
+              inset -2px -2px 5px rgba(40,37,55,0.8) !important;
+  border: none !important;
 }
 
 /* ================================================================
-   USER PROFILE MODAL — dark
+   USER PROFILE MODAL
 ================================================================ */
 [data-theme="dark"] .user-modal-overlay  { background: rgba(0, 0, 0, 0.85); }
-[data-theme="dark"] .user-modal-container { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .user-modal-container { background: var(--card); border: none; }
 [data-theme="dark"] .user-modal-header    { background: var(--card); border-bottom-color: var(--border); }
 
 /* ================================================================
    RANKING PAGE — dark desktop
 ================================================================ */
 [data-theme="dark"] .ranking-page {
-  background: linear-gradient(135deg, #1a1d2e 0%, #252936 100%) !important;
+  background: #1E1C28 !important;
 }
 
 [data-theme="dark"] .stat-card-modern,
@@ -459,72 +457,49 @@ button {
 [data-theme="dark"] .search-modern,
 [data-theme="dark"] .filters-modern,
 [data-theme="dark"] .sorts-modern {
-  background: rgba(37, 41, 54, 0.6) !important;
+  background: rgba(30, 28, 40, 0.8) !important;
   backdrop-filter: blur(20px);
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  border: none !important;
+  box-shadow: 4px 4px 10px rgba(10,9,16,0.65), -3px -3px 7px rgba(40,37,55,0.85) !important;
 }
 
-[data-theme="dark"] .list-row-modern { border-bottom-color: rgba(255, 255, 255, 0.06); }
-[data-theme="dark"] .list-row-modern:hover { background: rgba(37, 41, 54, 0.4); }
+[data-theme="dark"] .list-row-modern { border-bottom-color: rgba(255,255,255,0.05); }
+[data-theme="dark"] .list-row-modern:hover { background: rgba(40,37,55,0.4); }
 [data-theme="dark"] .list-row-modern.is-current {
-  background: linear-gradient(90deg, rgba(139, 127, 199, 0.2) 0%, rgba(165, 153, 217, 0.15) 50%, transparent 100%);
+  background: linear-gradient(90deg, rgba(139,127,199,0.18) 0%, rgba(165,153,217,0.12) 50%, transparent 100%);
   border-left-color: #8b7fc7;
 }
 
 /* ================================================================
-   PROFILE PAGE — dark desktop
+   PROFILE / STATS / NOTIFICATIONS / ADMIN — dark desktop
 ================================================================ */
-[data-theme="dark"] .profile-page { background: var(--bg); }
-
-[data-theme="dark"] .avatar-card.premium-layout,
-[data-theme="dark"] .edit-form-card {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-/* ================================================================
-   STATS PAGE — dark desktop
-================================================================ */
-[data-theme="dark"] .stats-page { background: var(--bg); }
-
-[data-theme="dark"] .overview-card,
-[data-theme="dark"] .stats-section,
-[data-theme="dark"] .additional-stat-card {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-/* ================================================================
-   NOTIFICATIONS PAGE — dark desktop
-================================================================ */
-[data-theme="dark"] .notifications-page { background: var(--bg); }
-
-[data-theme="dark"] .install-banner,
-[data-theme="dark"] .notification-card {
-  background: var(--card);
-  border-color: var(--border);
-}
-
-/* ================================================================
-   ADMIN PAGE — dark desktop
-================================================================ */
+[data-theme="dark"] .profile-page,
+[data-theme="dark"] .stats-page,
+[data-theme="dark"] .notifications-page,
 [data-theme="dark"] .admin-page { background: var(--bg); }
 
+[data-theme="dark"] .avatar-card.premium-layout,
+[data-theme="dark"] .edit-form-card,
+[data-theme="dark"] .overview-card,
+[data-theme="dark"] .stats-section,
+[data-theme="dark"] .additional-stat-card,
+[data-theme="dark"] .install-banner,
+[data-theme="dark"] .notification-card,
 [data-theme="dark"] .admin-stat-card,
 [data-theme="dark"] .admin-item-card {
   background: var(--card);
-  border-color: var(--border);
+  border: none;
 }
 
 /* ================================================================
    MODALES — dark
 ================================================================ */
-[data-theme="dark"] .modal-backdrop-premium { background: rgba(0, 0, 0, 0.8); }
+[data-theme="dark"] .modal-backdrop-premium { background: rgba(0,0,0,0.8); }
 
 [data-theme="dark"] .modal-premium,
 [data-theme="dark"] .modal-container {
   background: var(--card);
-  border-color: var(--border);
+  border: none;
 }
 
 /* ================================================================
@@ -547,9 +522,7 @@ button {
 [data-theme="dark"] h3:not([style*="color"]),
 [data-theme="dark"] h4:not([style*="color"]),
 [data-theme="dark"] h5:not([style*="color"]),
-[data-theme="dark"] h6:not([style*="color"]) {
-  color: var(--text-primary);
-}
+[data-theme="dark"] h6:not([style*="color"]) { color: var(--text-primary); }
 
 [data-theme="dark"] label:not([style*="color"]) { color: var(--text-primary); }
 
@@ -557,5 +530,5 @@ button {
    TRANSITIONS GLOBALES DARK
 ================================================================ */
 [data-theme="dark"] * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
