@@ -19,12 +19,14 @@
   --pnew-red:     #ef4444;
   --pnew-mono:    'DM Mono', monospace;
   --pnew-sans:    'Sora', sans-serif;
+  --pnew-bg:      #f0ede8;
 }
 
 [data-theme="dark"] {
   --pnew-cream:   #1a1d2e;
   --pnew-surface: #1e2235;
   --pnew-border:  rgba(255,255,255,0.08);
+  --pnew-bg:      #0D0B12;
 }
 
 /* ================================================================
@@ -665,8 +667,7 @@
 .pnew-select:focus { border-color: var(--pnew-accent); }
 
 /* ================================================================
-   MOBILE SUB-VIEW (usado desde ProfileSettingsPage cuando se
-   navega a una sección desde MobileProfileMain)
+   MOBILE SUB-VIEW
 ================================================================ */
 .pnew-mob-sub {
   display: flex;
@@ -707,6 +708,7 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   flex: 1;
+  background: var(--pnew-bg);
 }
 
 /* ================================================================

@@ -383,7 +383,7 @@ function BottomSection({ users, currentUser, allAchievements }) {
   return (
     <div className="mob2-bottom-wrap">
       {/* TabBar fuera del box */}
-      <div className="mob2-sec mob2-sec--no-hpad" style={{ marginTop: 0 }}>
+      <div className="mob2-sec mob2-sec--no-hpad" style={{ marginTop: -14 }}>
         <TabBar
           activeTab={activeTab}
           onTabChange={setActiveTab}
