@@ -1,111 +1,330 @@
 /* ================================================================
-   GLOBALSCORE - MOBILE
+   GlobalScore — MobileRanking.css
+   DOS temas controlados por data-style en <html>:
+   [data-style="brutalist"]   → DM Mono, bordes duros, plano
+   [data-style="neumorphism"] → Plus Jakarta Sans, sombras blandas
+   JSX sin cambios.
 ================================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-.mrk-root {
-  --mrk-accent:        var(--accent);
-  --mrk-accent-light:  var(--accent-light);
-  --mrk-accent-subtle: var(--glass);
-  --mrk-accent-border: rgba(96, 81, 155, 0.25);
-  --mrk-mono:          'DM Mono', monospace;
-  --mrk-sans:          'Sora', sans-serif;
-  --mrk-border:        var(--border);
+@keyframes mrk-crown-bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-3px); }
+}
+@keyframes mrk-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes mrk-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ==============================================================
+   BRUTALIST TOKENS
+============================================================== */
+[data-style="brutalist"] .mrk-root {
   --mrk-bg:            #f0ede8;
-  --mrk-card:          var(--card);
-  --mrk-text:          var(--text-primary);
-  --mrk-muted:         var(--muted);
-  --mrk-shadow:        var(--small-shadow);
+  --mrk-card:          #e8e4de;
+  --mrk-surface:       #fff;
+  --mrk-border:        #d4cfc8;
+  --mrk-border-hard:   #c4bfb8;
+  --mrk-accent:        #5b4fd8;
+  --mrk-accent-light:  #8b7fc7;
+  --mrk-accent-subtle: rgba(91,79,216,.08);
+  --mrk-accent-border: rgba(91,79,216,.25);
+  --mrk-text:          #1a1a2e;
+  --mrk-muted:         #888780;
+  --mrk-mono:          'DM Mono','Courier New',monospace;
+  --mrk-sans:          'DM Mono','Courier New',monospace;
   --mrk-gold:          #c9a227;
   --mrk-silver:        #8a8a8a;
   --mrk-bronze:        #a0652a;
+  --mrk-green:         #1D9E75;
+  --mrk-shadow:        none;
 }
 
-[data-theme="dark"] .mrk-root {
-  --m-bg:          #1a1d2e;
-  --m-card:        #252936;
-  --m-surface:     #1e2235;
-  --dark-bg:        #0D0B12;
-  --m-border:      rgba(255,255,255,0.08);
-  --m-border-hard: rgba(255,255,255,0.14);
-  --m-text:        #f0f1f7;
-  --m-muted:       #60519b;
-  --m-accent:      #8b7fc7;
-  --mrk-accent-border: rgba(139, 127, 199, 0.3);
-  --mrk-gold:   #f0c040;
-  --mrk-silver: #a0a0a0;
-  --mrk-bronze: #c0804a;
+[data-style="brutalist"][data-theme="dark"] .mrk-root {
+  --mrk-bg:            #1a1d2e;
+  --mrk-card:          #252936;
+  --mrk-surface:       #1e2235;
+  --mrk-border:        rgba(255,255,255,.08);
+  --mrk-border-hard:   rgba(255,255,255,.14);
+  --mrk-text:          #f0f1f7;
+  --mrk-muted:         #60519b;
+  --mrk-accent:        #8b7fc7;
+  --mrk-accent-light:  #a599d9;
+  --mrk-accent-subtle: rgba(139,127,199,.1);
+  --mrk-accent-border: rgba(139,127,199,.3);
 }
 
-/* ── ROOT — solo mobile ── */
+/* ==============================================================
+   NEUMORPHISM TOKENS
+============================================================== */
+[data-style="neumorphism"] .mrk-root {
+  --mrk-bg:            #EAE7E1;
+  --mrk-card:          #EAE7E1;
+  --mrk-surface:       #EAE7E1;
+  --nm-light:          rgba(255,255,255,.85);
+  --nm-dark:           rgba(166,158,148,.55);
+  --nm-il:             rgba(255,255,255,.7);
+  --nm-id:             rgba(166,158,148,.45);
+  --nm-s:              6px 6px 14px var(--nm-dark),-4px -4px 10px var(--nm-light);
+  --nm-sm:             4px 4px 10px var(--nm-dark),-3px -3px 7px var(--nm-light);
+  --nm-lg:             8px 8px 20px var(--nm-dark),-6px -6px 16px var(--nm-light);
+  --nm-i:              inset 3px 3px 8px var(--nm-id),inset -3px -3px 8px var(--nm-il);
+  --nm-ism:            inset 2px 2px 5px var(--nm-id),inset -2px -2px 5px var(--nm-il);
+  --mrk-accent:        #60519b;
+  --mrk-accent-light:  #8b7fc7;
+  --mrk-accent-subtle: rgba(96,81,155,.10);
+  --mrk-accent-border: rgba(96,81,155,.25);
+  --mrk-border:        rgba(166,158,148,.25);
+  --mrk-border-hard:   rgba(166,158,148,.4);
+  --mrk-text:          #2A2535;
+  --mrk-muted:         #9B95A8;
+  --mrk-mono:          'Plus Jakarta Sans',system-ui,sans-serif;
+  --mrk-sans:          'Plus Jakarta Sans',system-ui,sans-serif;
+  --mrk-gold:          #C9961A;
+  --mrk-silver:        #9095AA;
+  --mrk-bronze:        #B07040;
+  --mrk-green:         #3DAA80;
+  --mrk-shadow:        var(--nm-s);
+  --r-sm:   10px;
+  --r-md:   16px;
+  --r-lg:   20px;
+  --r-xl:   26px;
+  --r-pill: 100px;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .mrk-root {
+  --mrk-bg:            #1E1C28;
+  --mrk-card:          #1E1C28;
+  --mrk-surface:       #1E1C28;
+  --nm-light:          rgba(40,37,55,.9);
+  --nm-dark:           rgba(10,9,16,.7);
+  --nm-il:             rgba(40,37,55,.7);
+  --nm-id:             rgba(10,9,16,.6);
+  --mrk-accent:        #8b7fc7;
+  --mrk-accent-light:  #a599d9;
+  --mrk-accent-subtle: rgba(139,127,199,.12);
+  --mrk-accent-border: rgba(139,127,199,.3);
+  --mrk-border:        rgba(255,255,255,.05);
+  --mrk-border-hard:   rgba(255,255,255,.09);
+  --mrk-text:          #E8E6F0;
+  --mrk-muted:         #5A566E;
+  --mrk-gold:          #f0c040;
+  --mrk-silver:        #a0a0a0;
+  --mrk-bronze:        #c0804a;
+}
+
+/* ==============================================================
+   ROOT
+============================================================== */
 .mrk-root {
   display: none;
   flex-direction: column;
   background: var(--mrk-bg);
-  font-family: var(--mrk-sans);
   padding-bottom: 60px;
   min-height: 100dvh;
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
+
+[data-style="brutalist"] .mrk-root  { font-family: var(--mrk-mono); }
+[data-style="neumorphism"] .mrk-root { font-family: var(--mrk-sans); padding-bottom: 72px; }
 
 @media screen and (max-width: 768px) {
   .mrk-root { display: flex; }
 }
 
-/* ================================================================
+/* ==============================================================
    TABS
-================================================================ */
-.mrk-tabs {
+============================================================== */
+/* brutalist */
+[data-style="brutalist"] .mrk-tabs {
   display: flex;
   align-items: center;
-  height: 48px;
+  height: 44px;
   background: var(--mrk-card);
-  border-bottom: 0.5px solid var(--mrk-border);
+  border-bottom: 1px solid var(--mrk-border-hard);
   flex-shrink: 0;
   position: sticky;
   top: 56px;
   z-index: 50;
 }
 
-.mrk-tab {
+[data-style="brutalist"] .mrk-tab {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   height: 100%;
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 700;
   font-family: var(--mrk-mono);
-  letter-spacing: 0.07em;
+  letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--mrk-muted);
   background: transparent;
   border: none;
   border-bottom: 2px solid transparent;
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
-  margin-bottom: -0.5px;
+  transition: color .15s, border-color .15s;
+  margin-bottom: -1px;
+}
+
+[data-style="brutalist"] .mrk-tab.active {
+  color: var(--mrk-accent);
+  border-bottom-color: var(--mrk-accent);
+}
+
+/* neumorphism */
+[data-style="neumorphism"] .mrk-tabs {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  background: var(--mrk-bg);
+  border-bottom: none;
+  flex-shrink: 0;
+  position: sticky;
+  top: 56px;
+  z-index: 50;
+  padding: 0 16px;
+  gap: 8px;
+  box-shadow: var(--nm-s);
+}
+
+[data-style="neumorphism"] .mrk-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mrk-sans);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--mrk-muted);
+  background: var(--mrk-bg);
+  border: none;
+  border-radius: var(--r-pill);
+  box-shadow: var(--nm-sm);
+  cursor: pointer;
+  transition: box-shadow .18s, color .18s;
+}
+
+[data-style="neumorphism"] .mrk-tab.active {
+  color: var(--mrk-accent);
+  box-shadow: var(--nm-i);
 }
 
 .mrk-tab svg { flex-shrink: 0; }
-.mrk-tab.active { color: var(--mrk-accent); border-bottom-color: var(--mrk-accent); }
-[data-theme="dark"] .mrk-tab.active { color: var(--accent-light); border-bottom-color: var(--accent-light); }
 
-/* ================================================================
+/* ==============================================================
    STATS ROW
-================================================================ */
-.mrk-stats-row {
+============================================================== */
+/* brutalist */
+[data-style="brutalist"] .mrk-stats-row {
   display: flex;
   align-items: center;
-  padding: 14px 16px;
+  padding: 12px 16px;
   background: var(--mrk-card);
-  border-bottom: 0.5px solid var(--mrk-border);
+  border-bottom: 1px solid var(--mrk-border);
   gap: 0;
   flex-shrink: 0;
 }
 
+[data-style="brutalist"] .mrk-stat-num {
+  font-size: 26px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-text);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+[data-style="brutalist"] .mrk-stat-lbl {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--mrk-muted);
+}
+
+[data-style="brutalist"] .mrk-stat-leader-name {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-gold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+[data-style="brutalist"] .mrk-stat-leader-pts {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-gold);
+  opacity: .8;
+}
+
+/* neumorphism */
+[data-style="neumorphism"] .mrk-stats-row {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--mrk-bg);
+  border-bottom: none;
+  gap: 0;
+  flex-shrink: 0;
+  animation: mrk-fade-up .4s cubic-bezier(.16,1,.3,1) both;
+}
+
+[data-style="neumorphism"] .mrk-stat-num {
+  font-size: 30px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-text);
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+
+[data-style="neumorphism"] .mrk-stat-lbl {
+  font-size: 9px;
+  font-weight: 600;
+  font-family: var(--mrk-sans);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--mrk-muted);
+}
+
+[data-style="neumorphism"] .mrk-stat-leader-name {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-gold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+}
+
+[data-style="neumorphism"] .mrk-stat-leader-pts {
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-gold);
+  opacity: .75;
+}
+
+/* shared stats row */
 .mrk-stat-block {
   flex: 1;
   display: flex;
@@ -117,74 +336,34 @@
 .mrk-stat-block--leader { align-items: flex-end; }
 
 .mrk-stat-divider {
-  width: 0.5px;
+  width: 1px;
   height: 32px;
   background: var(--mrk-border);
   flex-shrink: 0;
   margin: 0 12px;
 }
 
-.mrk-stat-num {
-  font-size: 28px;
-  font-weight: 800;
-  font-family: var(--mrk-mono);
-  color: var(--mrk-text);
-  line-height: 1;
-  letter-spacing: -1px;
-}
-
-.mrk-stat-lbl {
-  font-size: 9px;
-  font-weight: 700;
-  font-family: var(--mrk-mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--mrk-muted);
-}
-
-.mrk-stat-leader-name {
-  font-size: 13px;
-  font-weight: 800;
-  font-family: var(--mrk-sans);
-  color: var(--mrk-gold);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 110px;
-}
-
-.mrk-stat-leader-pts {
-  font-size: 11px;
-  font-weight: 700;
-  font-family: var(--mrk-mono);
-  color: var(--mrk-gold);
-  opacity: 0.8;
-}
-
-/* ================================================================
-   PODIO
-================================================================ */
-.mrk-podium-wrap {
-  background: var(--mrk-bg);
-  flex-shrink: 0;
-}
+/* ==============================================================
+   PODIO HEADER
+============================================================== */
+.mrk-podium-wrap { flex-shrink: 0; }
 
 .mrk-podium-header {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 18px 20px 10px;
+  padding: 16px 20px 8px;
 }
 
 .mrk-podium-header-line {
   flex: 1;
-  height: 0.5px;
+  height: 1px;
   max-width: 60px;
 }
 
-.mrk-podium-header-line--left  { background: linear-gradient(90deg, transparent, rgba(201,162,39,0.5)); }
-.mrk-podium-header-line--right { background: linear-gradient(90deg, rgba(201,162,39,0.5), transparent); }
+.mrk-podium-header-line--left  { background: linear-gradient(90deg, transparent, rgba(201,162,39,.5)); }
+.mrk-podium-header-line--right { background: linear-gradient(90deg, rgba(201,162,39,.5), transparent); }
 
 .mrk-podium-crown {
   color: var(--mrk-gold);
@@ -192,61 +371,92 @@
   animation: mrk-crown-bob 3.5s ease-in-out infinite;
 }
 
-@keyframes mrk-crown-bob {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-3px); }
-}
-
-.mrk-podium-title {
-  font-size: 10px;
+[data-style="brutalist"] .mrk-podium-title {
+  font-size: 9px;
   font-weight: 700;
   font-family: var(--mrk-mono);
-  letter-spacing: 0.16em;
+  letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--mrk-gold);
 }
 
-/* Escenario — 3 columnas, alineadas al fondo */
-.mrk-podium-stage {
+[data-style="neumorphism"] .mrk-podium-title {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mrk-sans);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--mrk-gold);
+}
+
+/* ==============================================================
+   PODIO ESCENARIO
+============================================================== */
+/* brutalist */
+[data-style="brutalist"] .mrk-podium-stage {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: flex-end;
   padding: 0 8px;
-  gap: 4px;
-  border-bottom: 0.5px solid var(--mrk-border);
+  gap: 2px;
+  border-bottom: 1px solid var(--mrk-border);
 }
 
-.mrk-podium-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* neumorphism */
+[data-style="neumorphism"] .mrk-podium-stage {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: flex-end;
+  padding: 0 16px;
+  gap: 10px;
+  margin-bottom: 4px;
 }
 
-/* Escalones */
-.mrk-podium-step {
+.mrk-podium-col { display: flex; flex-direction: column; align-items: center; }
+
+/* Escalones brutalist */
+[data-style="brutalist"] .mrk-podium-step { width: 100%; }
+[data-style="brutalist"] .mrk-podium-step--first  { height: 52px; background: rgba(201,162,39,.1);  border-top: 2px solid var(--mrk-gold); }
+[data-style="brutalist"] .mrk-podium-step--second { height: 36px; background: rgba(138,138,138,.1); border-top: 2px solid var(--mrk-silver); }
+[data-style="brutalist"] .mrk-podium-step--third  { height: 20px; background: rgba(160,101,42,.1);  border-top: 2px solid var(--mrk-bronze); }
+
+/* Escalones neumorphism */
+[data-style="neumorphism"] .mrk-podium-step {
   width: 100%;
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  box-shadow: inset 0 3px 8px var(--nm-id), inset 0 -1px 4px var(--nm-il);
 }
+[data-style="neumorphism"] .mrk-podium-step--first  { height: 52px; background: linear-gradient(to bottom,rgba(201,150,26,.18),rgba(201,150,26,.06)); }
+[data-style="neumorphism"] .mrk-podium-step--second { height: 36px; background: linear-gradient(to bottom,rgba(144,149,170,.14),rgba(144,149,170,.04)); }
+[data-style="neumorphism"] .mrk-podium-step--third  { height: 22px; background: linear-gradient(to bottom,rgba(176,112,64,.14),rgba(176,112,64,.04)); }
 
-.mrk-podium-step--first  { height: 52px; background: rgba(201,162,39,0.2);  border-top: 2px solid var(--mrk-gold); }
-.mrk-podium-step--second { height: 36px; background: rgba(138,138,138,0.15); border-top: 2px solid var(--mrk-silver); }
-.mrk-podium-step--third  { height: 20px; background: rgba(160,101,42,0.15);  border-top: 2px solid var(--mrk-bronze); }
-
-/* Tarjeta del podio */
+/* ==============================================================
+   TARJETA DEL PODIO
+============================================================== */
 .mrk-podium-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 10px 4px 18px;
+  gap: 8px;
+  padding: 10px 4px 16px;
   width: 100%;
 }
 
-.mrk-podium-medal {
-  font-size: 8px;
+[data-style="brutalist"] .mrk-podium-medal {
+  font-size: 7px;
   font-weight: 700;
   font-family: var(--mrk-mono);
-  letter-spacing: 0.12em;
+  letter-spacing: .14em;
   text-transform: uppercase;
+}
+
+[data-style="neumorphism"] .mrk-podium-medal {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: var(--mrk-sans);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  opacity: .85;
 }
 
 .mrk-podium-card--gold   .mrk-podium-medal { color: var(--mrk-gold); }
@@ -265,41 +475,86 @@
   align-items: center;
 }
 
-.mrk-podium-av-ring {
+/* Ring brutalist */
+[data-style="brutalist"] .mrk-podium-av-ring {
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+}
+[data-style="brutalist"] .mrk-podium-card--gold   .mrk-podium-av-ring { outline: 2px solid var(--mrk-gold); }
+[data-style="brutalist"] .mrk-podium-card--silver .mrk-podium-av-ring { outline: 2px solid var(--mrk-silver); }
+[data-style="brutalist"] .mrk-podium-card--bronze .mrk-podium-av-ring { outline: 2px solid var(--mrk-bronze); }
+
+/* Ring neumorphism */
+[data-style="neumorphism"] .mrk-podium-av-ring {
   border-radius: 50%;
   padding: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+[data-style="neumorphism"] .mrk-podium-card--gold   .mrk-podium-av-ring { background: linear-gradient(135deg,#c9a227,#f0c040,#c9a227); box-shadow: var(--nm-sm); }
+[data-style="neumorphism"] .mrk-podium-card--silver .mrk-podium-av-ring { background: linear-gradient(135deg,#8a8a8a,#c0c0c0,#8a8a8a); box-shadow: var(--nm-sm); }
+[data-style="neumorphism"] .mrk-podium-card--bronze .mrk-podium-av-ring { background: linear-gradient(135deg,#a0652a,#d4894a,#a0652a); box-shadow: var(--nm-sm); }
 
-.mrk-podium-card--gold   .mrk-podium-av-ring { background: linear-gradient(135deg, #c9a227, #f0c040, #c9a227); }
-.mrk-podium-card--silver .mrk-podium-av-ring { background: linear-gradient(135deg, #8a8a8a, #c0c0c0, #8a8a8a); }
-.mrk-podium-card--bronze .mrk-podium-av-ring { background: linear-gradient(135deg, #a0652a, #d4894a, #a0652a); }
+/* Número sobre avatar */
+[data-style="brutalist"] .mrk-podium-num {
+  position: absolute;
+  bottom: -5px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: #fff;
+  border: 1.5px solid var(--mrk-card);
+  border-radius: 0;
+}
 
-/* Número sobre el avatar */
-.mrk-podium-num {
+[data-style="neumorphism"] .mrk-podium-num {
   position: absolute;
   bottom: -6px;
-  right: -2px;
-  width: 18px;
-  height: 18px;
+  right: -3px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
   font-weight: 800;
-  font-family: var(--mrk-mono);
+  font-family: var(--mrk-sans);
   color: #fff;
-  border: 2px solid var(--mrk-card);
-  border-radius: 0;
+  border: 2px solid var(--mrk-bg);
+  border-radius: var(--r-pill);
+  box-shadow: var(--nm-sm);
 }
 
 .mrk-podium-card--gold   .mrk-podium-num { background: var(--mrk-gold); }
 .mrk-podium-card--silver .mrk-podium-num { background: var(--mrk-silver); }
 .mrk-podium-card--bronze .mrk-podium-num { background: var(--mrk-bronze); }
 
-.mrk-podium-name {
+/* Nombre podio */
+[data-style="brutalist"] .mrk-podium-name {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-text);
+  text-align: center;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 4px;
+  letter-spacing: .02em;
+}
+
+[data-style="neumorphism"] .mrk-podium-name {
   font-size: 11px;
   font-weight: 700;
   font-family: var(--mrk-sans);
@@ -310,148 +565,231 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-top: 6px;
-  line-height: 1.2;
+  letter-spacing: -.01em;
 }
 
-.mrk-podium-pts {
-  font-size: 12px;
-  font-weight: 800;
+/* Puntos podio */
+[data-style="brutalist"] .mrk-podium-pts {
+  font-size: 11px;
+  font-weight: 700;
   font-family: var(--mrk-mono);
+  letter-spacing: -.01em;
+}
+
+[data-style="neumorphism"] .mrk-podium-pts {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  letter-spacing: -.03em;
 }
 
 .mrk-podium-card--gold   .mrk-podium-pts { color: var(--mrk-gold); }
 .mrk-podium-card--silver .mrk-podium-pts { color: var(--mrk-silver); }
 .mrk-podium-card--bronze .mrk-podium-pts { color: var(--mrk-bronze); }
 
-.mrk-podium-stats {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+/* ==============================================================
+   AVATARES
+============================================================== */
+.mrk-av {
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
 }
 
-.mrk-podium-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-}
+[data-style="brutalist"] .mrk-av { border-radius: 0; }
+[data-style="neumorphism"] .mrk-av { border-radius: 50%; }
 
-.mrk-podium-sep {
-  width: 0.5px;
-  height: 18px;
-  background: var(--mrk-border);
+.mrk-av--ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mrk-accent);
+  color: #fff;
+  font-weight: 700;
   flex-shrink: 0;
 }
 
-.mrk-podium-stat-val {
-  font-size: 11px;
-  font-weight: 800;
-  font-family: var(--mrk-mono);
-  color: var(--mrk-text);
-  line-height: 1;
-}
+[data-style="brutalist"] .mrk-av--ph { border-radius: 0; font-family: var(--mrk-mono); }
+[data-style="neumorphism"] .mrk-av--ph { border-radius: 50%; font-family: var(--mrk-sans); }
 
-.mrk-podium-stat-val--acc { color: #1D9E75; }
-[data-theme="dark"] .mrk-podium-stat-val--acc { color: #34d399; }
-
-.mrk-podium-stat-lbl {
-  font-size: 7px;
-  font-weight: 700;
-  font-family: var(--mrk-mono);
-  color: var(--mrk-muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-/* Avatares del podio — tamaños por columna */
+.mrk-av--sm     { width: 40px; height: 40px; font-size: 14px; }
 .mrk-av--podium { width: 52px; height: 52px; font-size: 18px; }
-.mrk-podium-col--first  .mrk-av--podium { width: 80px; height: 80px; font-size: 28px; }
-.mrk-podium-col--second .mrk-av--podium { width: 64px; height: 64px; font-size: 22px; }
-.mrk-podium-col--third  .mrk-av--podium { width: 58px; height: 58px; font-size: 20px; }
 
-/* ================================================================
+.mrk-podium-col--first  .mrk-av--podium { width: 80px; height: 80px; font-size: 28px; }
+.mrk-podium-col--second .mrk-av--podium { width: 62px; height: 62px; font-size: 22px; }
+.mrk-podium-col--third  .mrk-av--podium { width: 56px; height: 56px; font-size: 20px; }
+
+/* ==============================================================
    TABLA
-================================================================ */
-.mrk-table {
+============================================================== */
+/* brutalist */
+[data-style="brutalist"] .mrk-table {
   display: flex;
   flex-direction: column;
   background: var(--mrk-card);
+  border-top: 1px solid var(--mrk-border);
+  animation: mrk-fade-in .25s ease both;
 }
 
-.mrk-table-header {
+[data-style="brutalist"] .mrk-table-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px 10px;
-  border-bottom: 0.5px solid var(--mrk-border);
+  padding: 10px 16px 8px;
+  border-bottom: 1px solid var(--mrk-border-hard);
 }
 
-.mrk-table-title {
-  font-size: 13px;
-  font-weight: 800;
-  font-family: var(--mrk-sans);
+[data-style="brutalist"] .mrk-table-title {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
   color: var(--mrk-text);
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }
 
-.mrk-table-sub {
-  font-size: 9px;
+[data-style="brutalist"] .mrk-table-sub {
+  font-size: 8px;
   font-weight: 700;
   font-family: var(--mrk-mono);
   color: var(--mrk-muted);
-  letter-spacing: 0.1em;
+  letter-spacing: .12em;
   text-transform: uppercase;
+}
+
+/* neumorphism */
+[data-style="neumorphism"] .mrk-table {
+  display: flex;
+  flex-direction: column;
+  background: var(--mrk-bg);
+  margin: 16px 20px 0;
+  border-radius: var(--r-lg);
+  box-shadow: var(--nm-s);
+  overflow: hidden;
+  animation: mrk-fade-in .3s ease both;
+}
+
+[data-style="neumorphism"] .mrk-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--mrk-border);
+  background: var(--mrk-bg);
+}
+
+[data-style="neumorphism"] .mrk-table-title {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-text);
+  letter-spacing: -.02em;
+}
+
+[data-style="neumorphism"] .mrk-table-sub {
+  font-size: 9px;
+  font-weight: 600;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-accent);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  background: var(--mrk-accent-subtle);
+  padding: 2px 10px;
+  border-radius: var(--r-pill);
 }
 
 .mrk-table-sep {
   height: 1px;
   background: var(--mrk-accent);
-  opacity: 0.2;
+  opacity: .2;
 }
 
-/* Fila */
-.mrk-row {
+/* ==============================================================
+   FILA TABLA
+============================================================== */
+/* brutalist */
+[data-style="brutalist"] .mrk-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 11px 16px;
-  border-bottom: 0.5px solid var(--mrk-border);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--mrk-border);
   background: var(--mrk-card);
-  transition: background 0.12s;
+  transition: background .12s;
 }
 
-.mrk-row:last-child { border-bottom: none; }
-.mrk-row:active { background: var(--mrk-accent-subtle); }
-
-.mrk-row--gold   { border-left: 3px solid var(--mrk-gold); }
-.mrk-row--silver { border-left: 3px solid var(--mrk-silver); }
-.mrk-row--bronze { border-left: 3px solid var(--mrk-bronze); }
-
-.mrk-row--me {
+[data-style="brutalist"] .mrk-row:last-child { border-bottom: none; }
+[data-style="brutalist"] .mrk-row:active { background: rgba(91,79,216,.05); }
+[data-style="brutalist"] .mrk-row--gold   { border-left: 3px solid var(--mrk-gold); }
+[data-style="brutalist"] .mrk-row--silver { border-left: 3px solid var(--mrk-silver); }
+[data-style="brutalist"] .mrk-row--bronze { border-left: 3px solid var(--mrk-bronze); }
+[data-style="brutalist"] .mrk-row--me {
   background: var(--mrk-accent-subtle) !important;
   border-left: 3px solid var(--mrk-accent) !important;
 }
 
-/* Número */
-.mrk-row-num {
-  width: 26px;
-  height: 26px;
+/* neumorphism */
+[data-style="neumorphism"] .mrk-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--mrk-border);
+  background: var(--mrk-bg);
+  transition: background .15s;
+}
+
+[data-style="neumorphism"] .mrk-row:last-child { border-bottom: none; }
+[data-style="neumorphism"] .mrk-row:active { background: var(--mrk-accent-subtle); }
+[data-style="neumorphism"] .mrk-row--gold   { border-left: 3px solid var(--mrk-gold); }
+[data-style="neumorphism"] .mrk-row--silver { border-left: 3px solid var(--mrk-silver); }
+[data-style="neumorphism"] .mrk-row--bronze { border-left: 3px solid var(--mrk-bronze); }
+[data-style="neumorphism"] .mrk-row--me {
+  background: var(--mrk-accent-subtle) !important;
+  border-left: 3px solid var(--mrk-accent) !important;
+}
+
+/* Número de fila */
+[data-style="brutalist"] .mrk-row-num {
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
-  font-weight: 800;
+  font-size: 10px;
+  font-weight: 700;
   font-family: var(--mrk-mono);
   background: var(--mrk-bg);
+  border: 1px solid var(--mrk-border);
   color: var(--mrk-muted);
   flex-shrink: 0;
   border-radius: 0;
 }
 
-.mrk-row-num--1 { background: var(--mrk-gold);   color: #fff; }
-.mrk-row-num--2 { background: var(--mrk-silver); color: #fff; }
-.mrk-row-num--3 { background: var(--mrk-bronze); color: #fff; }
+[data-style="neumorphism"] .mrk-row-num {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  background: var(--mrk-bg);
+  box-shadow: var(--nm-ism);
+  color: var(--mrk-muted);
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+}
 
-/* User */
+.mrk-row-num--1 { background: var(--mrk-gold)   !important; color: #fff !important; box-shadow: none !important; border: none !important; }
+.mrk-row-num--2 { background: var(--mrk-silver) !important; color: #fff !important; box-shadow: none !important; border: none !important; }
+.mrk-row-num--3 { background: var(--mrk-bronze) !important; color: #fff !important; box-shadow: none !important; border: none !important; }
+[data-style="neumorphism"] .mrk-row-num--1,
+[data-style="neumorphism"] .mrk-row-num--2,
+[data-style="neumorphism"] .mrk-row-num--3 { border-radius: var(--r-sm); }
+
+/* User button */
 .mrk-row-user {
   display: flex;
   align-items: center;
@@ -467,7 +805,21 @@
 
 .mrk-row-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 
-.mrk-row-name {
+[data-style="brutalist"] .mrk-row-name {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: .02em;
+}
+
+[data-style="neumorphism"] .mrk-row-name {
   font-size: 14px;
   font-weight: 700;
   font-family: var(--mrk-sans);
@@ -478,26 +830,50 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  letter-spacing: -.01em;
 }
 
-.mrk-row-sub {
-  font-size: 10px;
+[data-style="brutalist"] .mrk-row-sub {
+  font-size: 9px;
   font-family: var(--mrk-mono);
+  color: var(--mrk-muted);
+  letter-spacing: .04em;
+}
+
+[data-style="neumorphism"] .mrk-row-sub {
+  font-size: 10px;
+  font-family: var(--mrk-sans);
+  font-weight: 400;
   color: var(--mrk-muted);
 }
 
-.mrk-row-you {
-  font-size: 8px;
+/* YOU badge */
+[data-style="brutalist"] .mrk-row-you {
+  font-size: 7px;
   font-weight: 700;
   font-family: var(--mrk-mono);
   color: var(--mrk-accent);
-  border: 0.5px solid var(--mrk-accent);
+  border: 1px solid var(--mrk-accent);
   padding: 1px 5px;
-  letter-spacing: 0.04em;
+  letter-spacing: .06em;
   flex-shrink: 0;
   border-radius: 0;
 }
 
+[data-style="neumorphism"] .mrk-row-you {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-accent);
+  background: var(--mrk-accent-subtle);
+  border: 1px solid var(--mrk-accent-border);
+  padding: 2px 7px;
+  border-radius: var(--r-pill);
+  letter-spacing: .04em;
+  flex-shrink: 0;
+}
+
+/* Right side */
 .mrk-row-right {
   display: flex;
   flex-direction: column;
@@ -506,79 +882,69 @@
   flex-shrink: 0;
 }
 
-.mrk-row-pts {
+[data-style="brutalist"] .mrk-row-pts {
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
   font-family: var(--mrk-mono);
   color: var(--mrk-gold);
   line-height: 1;
+  letter-spacing: -.01em;
 }
 
-.mrk-row-pts-lbl {
-  font-size: 9px;
+[data-style="neumorphism"] .mrk-row-pts {
+  font-size: 15px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-gold);
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+
+[data-style="brutalist"] .mrk-row-pts-lbl {
+  font-size: 8px;
   font-weight: 600;
-  opacity: 0.55;
+  opacity: .5;
+  margin-left: 1px;
+  font-family: var(--mrk-mono);
+}
+
+[data-style="neumorphism"] .mrk-row-pts-lbl {
+  font-size: 9px;
+  font-weight: 400;
+  opacity: .55;
   margin-left: 2px;
 }
 
-.mrk-row-acc {
-  font-size: 11px;
+[data-style="brutalist"] .mrk-row-acc {
+  font-size: 10px;
   font-weight: 700;
   font-family: var(--mrk-mono);
-  color: #1D9E75;
+  color: var(--mrk-green);
 }
 
-[data-theme="dark"] .mrk-row-acc { color: #34d399; }
-
-/* ================================================================
-   AVATARS
-================================================================ */
-.mrk-av { border-radius: 50%; object-fit: cover; flex-shrink: 0; display: block; }
-.mrk-av--ph { display: flex; align-items: center; justify-content: center; background: var(--mrk-accent); color: #fff; font-weight: 700; font-family: var(--mrk-mono); border-radius: 50%; flex-shrink: 0; }
-.mrk-av--sm { width: 40px; height: 40px; font-size: 14px; }
-
-/* ================================================================
-   EXTRA SMALL
-================================================================ */
-@media screen and (max-width: 380px) {
-.mrk-podium-col--first  .mrk-av--podium { width: 68px; height: 68px; }
-.mrk-podium-col--second .mrk-av--podium { width: 54px; height: 54px; }
-.mrk-podium-col--third  .mrk-av--podium { width: 48px; height: 48px; }
-  .mrk-podium-name { font-size: 10px; max-width: 70px; }
-  .mrk-row         { padding: 10px 12px; }
-  .mrk-row-name    { font-size: 13px; }
-  .mrk-stat-num    { font-size: 24px; }
+[data-style="neumorphism"] .mrk-row-acc {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-green);
 }
 
-/* ================================================================
-   SALÓN DE LA FAMA
-================================================================ */
-
-.mrk-hof-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  padding: 60px 24px;
-  color: var(--mrk-muted);
-  text-align: center;
-}
-
-.mrk-hof-empty-icon { color: var(--mrk-border, #d4cfc8); }
-
-.mrk-hof-empty p {
-  font-size: 12px;
-  font-family: var(--mrk-mono);
-  color: var(--mrk-muted);
-  margin: 0;
-  letter-spacing: 0.06em;
-}
-
-.mrk-hof-carousel {
+/* ==============================================================
+   SALÓN DE LA FAMA — HOF CAROUSEL
+============================================================== */
+[data-style="brutalist"] .mrk-hof-carousel {
   display: flex;
   flex-direction: column;
   align-items: center;
   background: var(--mrk-bg);
+}
+
+[data-style="neumorphism"] .mrk-hof-carousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--mrk-bg);
+  padding-bottom: 8px;
 }
 
 .mrk-hof-card-row {
@@ -586,42 +952,40 @@
   align-items: center;
   gap: 0;
   width: 100%;
-  padding: 20px 12px 12px;
+  padding: 20px 16px 12px;
   justify-content: center;
 }
 
-/* Nav buttons */
-.mrk-hof-nav {
-  width: 34px;
-  height: 34px;
-  border: 0.5px solid var(--mrk-border);
-  background: var(--mrk-card);
-  color: var(--mrk-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border-radius: 0;
-  flex-shrink: 0;
-  transition: color 0.15s;
-}
-
-.mrk-hof-nav:disabled { opacity: 0.3; cursor: default; }
-.mrk-hof-nav:not(:disabled):active { background: var(--mrk-accent-subtle); }
-
-/* Tarjeta campeón */
-.mrk-hof-card {
+/* HOF CARD brutalist */
+[data-style="brutalist"] .mrk-hof-card {
   flex: 1;
-  max-width: 300px;
+  max-width: 320px;
   background: var(--mrk-card);
-  border: 0.5px solid var(--mrk-border);
-  border-top: 2px solid #c9a227;
+  border: 1px solid var(--mrk-border-hard);
+  border-top: 3px solid #c9a227;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   padding: 16px 20px 18px;
-  transition: opacity 0.22s ease, transform 0.22s ease;
+  transition: opacity .22s ease, transform .22s ease;
+}
+
+/* HOF CARD neumorphism */
+[data-style="neumorphism"] .mrk-hof-card {
+  flex: 1;
+  max-width: 320px;
+  background: var(--mrk-bg);
+  border: none;
+  border-top: 4px solid #c9a227;
+  border-radius: var(--r-xl);
+  box-shadow: var(--nm-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 22px 20px;
+  transition: opacity .22s ease, transform .22s ease;
 }
 
 .mrk-hof-card--exit { opacity: 0; transform: translateX(-16px); }
@@ -633,51 +997,83 @@
   width: 100%;
 }
 
-.mrk-hof-medal {
-  font-size: 9px;
+[data-style="brutalist"] .mrk-hof-medal {
+  font-size: 8px;
   font-weight: 700;
   font-family: var(--mrk-mono);
-  letter-spacing: 0.14em;
+  letter-spacing: .16em;
   text-transform: uppercase;
 }
 
-.mrk-hof-pos {
+[data-style="neumorphism"] .mrk-hof-medal {
   font-size: 9px;
-  font-weight: 800;
+  font-weight: 700;
+  font-family: var(--mrk-sans);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+[data-style="brutalist"] .mrk-hof-pos {
+  font-size: 9px;
+  font-weight: 700;
   font-family: var(--mrk-mono);
   color: #fff;
-  padding: 2px 7px;
+  padding: 2px 8px;
   border-radius: 0;
-  letter-spacing: 0.06em;
+  letter-spacing: .06em;
 }
 
-/* Avatar con anillo */
-.mrk-hof-av-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
+[data-style="neumorphism"] .mrk-hof-pos {
+  font-size: 9px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  box-shadow: var(--nm-sm);
+  letter-spacing: .04em;
 }
 
-.mrk-hof-av-ring {
-  padding: 3px;
+/* HOF avatar */
+.mrk-hof-av-btn { background: none; border: none; cursor: pointer; padding: 0; }
+
+[data-style="brutalist"] .mrk-hof-av-ring {
+  padding: 2px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: 2px solid currentColor;
+}
+
+[data-style="neumorphism"] .mrk-hof-av-ring {
+  padding: 4px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: var(--nm-lg);
 }
 
-/* Avatar tamaño HOF */
 .mrk-av--hof { width: 80px; height: 80px; font-size: 28px; }
+[data-style="neumorphism"] .mrk-av--hof { border-radius: 50%; }
 
-.mrk-hof-name {
-  font-size: 18px;
+[data-style="brutalist"] .mrk-hof-name {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-text);
+  text-align: center;
+  letter-spacing: -.01em;
+}
+
+[data-style="neumorphism"] .mrk-hof-name {
+  font-size: 20px;
   font-weight: 800;
   font-family: var(--mrk-sans);
   color: var(--mrk-text);
-  margin: 0;
   text-align: center;
-  letter-spacing: -0.02em;
+  letter-spacing: -.03em;
 }
 
 /* Coronas */
@@ -689,20 +1085,36 @@
   justify-content: center;
 }
 
-.mrk-hof-crowns-extra {
-  font-size: 11px;
-  font-weight: 800;
+[data-style="brutalist"] .mrk-hof-crowns-extra {
+  font-size: 10px;
+  font-weight: 700;
   font-family: var(--mrk-mono);
   margin-left: 2px;
 }
 
-/* Stats */
-.mrk-hof-stats {
+[data-style="neumorphism"] .mrk-hof-crowns-extra {
+  font-size: 11px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  margin-left: 2px;
+}
+
+/* HOF stats */
+[data-style="brutalist"] .mrk-hof-stats {
   display: flex;
   align-items: center;
   width: 100%;
   background: var(--mrk-bg);
-  border: 0.5px solid var(--mrk-border);
+  border: 1px solid var(--mrk-border);
+}
+
+[data-style="neumorphism"] .mrk-hof-stats {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--mrk-bg);
+  border-radius: var(--r-md);
+  box-shadow: var(--nm-ism);
 }
 
 .mrk-hof-stat {
@@ -711,33 +1123,52 @@
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  padding: 9px 4px;
+  padding: 10px 4px;
 }
 
 .mrk-hof-stat-sep {
-  width: 0.5px;
+  width: 1px;
   height: 34px;
   background: var(--mrk-border);
   flex-shrink: 0;
 }
 
-.mrk-hof-stat-val {
+[data-style="brutalist"] .mrk-hof-stat-val {
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   font-family: var(--mrk-mono);
   color: var(--mrk-text);
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -.02em;
 }
 
-.mrk-hof-stat-val--sm { font-size: 11px; letter-spacing: 0; }
+[data-style="neumorphism"] .mrk-hof-stat-val {
+  font-size: 18px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-text);
+  line-height: 1;
+  letter-spacing: -.03em;
+}
 
-.mrk-hof-stat-lbl {
-  font-size: 8px;
+[data-style="brutalist"] .mrk-hof-stat-val--sm  { font-size: 11px; letter-spacing: 0; }
+[data-style="neumorphism"] .mrk-hof-stat-val--sm { font-size: 11px; letter-spacing: -.01em; }
+
+[data-style="brutalist"] .mrk-hof-stat-lbl {
+  font-size: 7px;
   font-weight: 700;
   font-family: var(--mrk-mono);
   color: var(--mrk-muted);
-  letter-spacing: 0.1em;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+[data-style="neumorphism"] .mrk-hof-stat-lbl {
+  font-size: 8px;
+  font-weight: 600;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-muted);
+  letter-spacing: .06em;
   text-transform: uppercase;
 }
 
@@ -749,68 +1180,127 @@
   padding: 8px 0 14px;
 }
 
-.mrk-hof-dot {
+[data-style="brutalist"] .mrk-hof-dot {
   width: 6px;
   height: 6px;
   background: var(--mrk-border);
   border: none;
   cursor: pointer;
   border-radius: 0;
-  transition: background 0.15s, width 0.15s;
+  transition: background .15s, width .15s;
   padding: 0;
 }
 
-.mrk-hof-dot--active {
-  background: #c9a227;
-  width: 18px;
+[data-style="brutalist"] .mrk-hof-dot--active { background: #c9a227; width: 18px; }
+
+[data-style="neumorphism"] .mrk-hof-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--mrk-border);
+  border: none;
+  cursor: pointer;
+  border-radius: var(--r-pill);
+  box-shadow: var(--nm-ism);
+  transition: background .15s, width .15s;
+  padding: 0;
 }
+
+[data-style="neumorphism"] .mrk-hof-dot--active { width: 20px; }
 
 /* Lista top 3 */
-.mrk-hof-list {
+[data-style="brutalist"] .mrk-hof-list {
   width: 100%;
-  border-top: 0.5px solid var(--mrk-border);
+  border-top: 1px solid var(--mrk-border);
 }
 
-.mrk-hof-list-label {
-  padding: 9px 16px 7px;
-  font-size: 9px;
+[data-style="neumorphism"] .mrk-hof-list {
+  width: 100%;
+  border-top: 1px solid var(--mrk-border);
+  margin: 0 0 16px;
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  overflow: hidden;
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+}
+
+[data-style="brutalist"] .mrk-hof-list-label {
+  padding: 8px 16px 6px;
+  font-size: 8px;
   font-weight: 700;
   font-family: var(--mrk-mono);
-  letter-spacing: 0.14em;
+  letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--mrk-muted);
   background: var(--mrk-card);
-  border-bottom: 0.5px solid var(--mrk-border);
+  border-bottom: 1px solid var(--mrk-border);
 }
 
-.mrk-hof-list-row {
+[data-style="neumorphism"] .mrk-hof-list-label {
+  padding: 10px 18px 8px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mrk-sans);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--mrk-accent);
+  background: var(--mrk-accent-subtle);
+  border-bottom: 1px solid var(--mrk-border);
+}
+
+[data-style="brutalist"] .mrk-hof-list-row {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 11px 16px;
-  border-bottom: 0.5px solid var(--mrk-border);
+  border-bottom: 1px solid var(--mrk-border);
   border-left: 3px solid transparent;
   cursor: pointer;
   background: var(--mrk-card);
-  transition: background 0.12s, border-left-color 0.12s;
+  transition: background .12s, border-left-color .12s;
+}
+
+[data-style="neumorphism"] .mrk-hof-list-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--mrk-border);
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  background: var(--mrk-bg);
+  transition: background .15s, border-left-color .15s;
 }
 
 .mrk-hof-list-row:last-child { border-bottom: none; }
-.mrk-hof-list-row--active    { background: rgba(201,162,39,0.05); }
-.mrk-hof-list-row:active     { background: var(--mrk-accent-subtle); }
+.mrk-hof-list-row--active { background: rgba(201,162,39,.06); }
+.mrk-hof-list-row:active  { opacity: .8; }
 
-.mrk-hof-list-badge {
+[data-style="brutalist"] .mrk-hof-list-badge {
   width: 20px;
   height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 700;
   font-family: var(--mrk-mono);
   color: #fff;
   flex-shrink: 0;
   border-radius: 0;
+}
+
+[data-style="neumorphism"] .mrk-hof-list-badge {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  color: #fff;
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  box-shadow: var(--nm-sm);
 }
 
 .mrk-hof-list-info {
@@ -821,7 +1311,18 @@
   min-width: 0;
 }
 
-.mrk-hof-list-name {
+[data-style="brutalist"] .mrk-hof-list-name {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: .02em;
+}
+
+[data-style="neumorphism"] .mrk-hof-list-name {
   font-size: 13px;
   font-weight: 700;
   font-family: var(--mrk-sans);
@@ -829,30 +1330,90 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -.01em;
 }
 
-.mrk-hof-list-crowns {
+[data-style="brutalist"] .mrk-hof-list-crowns {
   display: flex;
   align-items: center;
   gap: 3px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   font-family: var(--mrk-mono);
 }
 
-.mrk-hof-list-pts {
-  font-size: 13px;
-  font-weight: 800;
+[data-style="neumorphism"] .mrk-hof-list-crowns {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: var(--mrk-sans);
+}
+
+[data-style="brutalist"] .mrk-hof-list-pts {
+  font-size: 12px;
+  font-weight: 700;
   font-family: var(--mrk-mono);
   flex-shrink: 0;
+  letter-spacing: -.01em;
 }
 
-.mrk-row-num:not(.mrk-row-num--1):not(.mrk-row-num--2):not(.mrk-row-num--3) {
-  background: var(--glass);
-  color: var(--accent);
+[data-style="neumorphism"] .mrk-hof-list-pts {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: var(--mrk-sans);
+  flex-shrink: 0;
+  letter-spacing: -.02em;
 }
 
-.mrk-table-sep {
-  background: var(--accent);
-  opacity: 0.3;
+/* Empty HOF */
+.mrk-hof-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 60px 24px;
+  color: var(--mrk-muted);
+  text-align: center;
+}
+
+[data-style="brutalist"] .mrk-hof-empty p {
+  font-size: 11px;
+  font-family: var(--mrk-mono);
+  color: var(--mrk-muted);
+  margin: 0;
+  letter-spacing: .08em;
+}
+
+[data-style="neumorphism"] .mrk-hof-empty p {
+  font-size: 12px;
+  font-family: var(--mrk-sans);
+  color: var(--mrk-muted);
+  margin: 0;
+  font-weight: 500;
+}
+
+.mrk-hof-empty-icon { color: var(--mrk-border); }
+
+/* ==============================================================
+   BREAKPOINTS
+============================================================== */
+@media screen and (max-width: 380px) {
+  .mrk-podium-col--first  .mrk-av--podium { width: 66px; height: 66px; }
+  .mrk-podium-col--second .mrk-av--podium { width: 52px; height: 52px; }
+  .mrk-podium-col--third  .mrk-av--podium { width: 46px; height: 46px; }
+  [data-style="brutalist"] .mrk-podium-name  { font-size: 8px; max-width: 68px; }
+  [data-style="neumorphism"] .mrk-podium-name { font-size: 9px; max-width: 72px; }
+  .mrk-row { padding: 10px 12px; }
+  [data-style="brutalist"] .mrk-row-name  { font-size: 12px; }
+  [data-style="neumorphism"] .mrk-row-name { font-size: 13px; }
+  [data-style="brutalist"] .mrk-stat-num  { font-size: 22px; }
+  [data-style="neumorphism"] .mrk-stat-num { font-size: 26px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mrk-podium-crown { animation: none; }
+  .mrk-hof-card--exit { transition: none; }
+  .mrk-podium-wrap, .mrk-table, .mrk-stats-row { animation: none; }
 }
