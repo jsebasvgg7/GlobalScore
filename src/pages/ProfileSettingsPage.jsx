@@ -856,24 +856,21 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
         )}
       </div>
 
-      {/* ─── DESKTOP ─── */}
+     {/* ─── DESKTOP 2 columnas ─── */}
       <div className="pnew-desktop-wrapper">
         <div className="pnew-desktop-layout">
 
-          {/* Columna izquierda — contenido */}
+          {/* COL IZQUIERDA — Hero + Nav */}
           <div className="pnew-desktop-left">
-            {renderContent(activeTab)}
-          </div>
-
-          {/* Columna derecha — hero + nav */}
-          <div className="pnew-desktop-right">
             <ProfileHeroDesktop userData={userData} currentUser={currentUser} />
+
+            {/* Panel nav */}
             <nav className="pnew-nav">
               {['perfil', 'ajustes'].map(group => (
                 <div key={group} className="pnew-nav-group">
                   <div className="pnew-nav-group-lbl">{group.toUpperCase()}</div>
                   {NAV_ITEMS.filter(n => n.group === group).map(item => {
-                    const Icon     = item.icon;
+                    const Icon = item.icon;
                     const isActive = activeTab === item.id;
                     return (
                       <button
@@ -883,17 +880,24 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
                       >
                         <Icon size={16} />
                         <span>{item.label}</span>
+                        {isActive && <div className="pnew-nav-item-indicator" />}
                       </button>
                     );
                   })}
                 </div>
               ))}
+
               <div className="pnew-nav-logout">
                 <button className="pnew-nav-logout-btn" onClick={handleLogout}>
                   <LogOut size={15} /> Cerrar sesión
                 </button>
               </div>
             </nav>
+          </div>
+
+          {/* COL DERECHA — Contenido */}
+          <div className="pnew-desktop-right">
+            {renderContent(activeTab)}
           </div>
 
         </div>
