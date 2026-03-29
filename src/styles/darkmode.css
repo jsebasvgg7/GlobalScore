@@ -1463,7 +1463,163 @@
   background: #1A1824;
   border-color: #38334F;
 }
-
+[data-style="neumorphism"][data-theme="dark"] .mob2-root,
+[data-style="neumorphism"][data-theme="dark"] .mrk-root {
+  --nm-light: rgba(40, 37, 55, 0.0);
+  --nm-dark:  rgba(0, 0, 0, 0.55);
+  --nm-il:    rgba(40, 37, 55, 0.0);
+  --nm-id:    rgba(0, 0, 0, 0.45);
+ 
+  --nm-s:   2px 2px 6px var(--nm-dark), 0 0 0 1px rgba(255,255,255,.055);
+  --nm-sm:  1px 1px 4px var(--nm-dark), 0 0 0 1px rgba(255,255,255,.045);
+  --nm-lg:  3px 3px 8px var(--nm-dark), 0 0 0 1px rgba(255,255,255,.060);
+  --nm-i:   inset 2px 2px 5px var(--nm-id), 0 0 0 1px rgba(255,255,255,.04);
+  --nm-ism: inset 1px 1px 3px var(--nm-id), 0 0 0 1px rgba(255,255,255,.035);
+}
+ 
+ 
+/* ================================================================
+   24. MOBILE DASHBOARD
+================================================================ */
+ 
+/* Progress bar */
+[data-style="neumorphism"][data-theme="dark"] .mob2-progress {
+  background: var(--m-bg);
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-progress-track {
+  background: var(--m-bg);
+  box-shadow: var(--nm-ism);
+}
+ 
+/* Next match card */
+[data-style="neumorphism"][data-theme="dark"] .mob2-nm-card {
+  background: var(--m-bg);
+  box-shadow: var(--nm-lg);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-nm-card:active {
+  box-shadow: var(--nm-i);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-nm-footer {
+  background: var(--m-glass);
+}
+ 
+/* TabBar controles */
+[data-style="neumorphism"][data-theme="dark"] .mob2-sec-all {
+  background: var(--m-bg);
+  box-shadow: var(--nm-sm);
+  border: 1px solid rgba(255,255,255,.045);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-sec-play {
+  background: var(--m-bg);
+  box-shadow: var(--nm-sm);
+  border: 1px solid rgba(255,255,255,.045);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-sec-play:active {
+  box-shadow: var(--nm-ism);
+}
+ 
+/* Match card */
+[data-style="neumorphism"][data-theme="dark"] .mob2-mc {
+  background: var(--m-bg);
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-mc:active {
+  box-shadow: var(--nm-ism);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-mc-lg-box {
+  background: var(--m-bg);
+  box-shadow: var(--nm-sm);
+  border: 1px solid rgba(255,255,255,.04);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-mc-pill {
+  background: var(--m-bg);
+  box-shadow: var(--nm-sm);
+  border: 1px solid rgba(255,255,255,.04);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-mc-num {
+  background: var(--m-bg);
+  box-shadow: var(--nm-ism);
+  border: 1px solid rgba(255,255,255,.035);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-mc-num--has {
+  box-shadow: var(--nm-ism), 0 0 0 1.5px rgba(139,127,199,.3);
+  border-color: rgba(139,127,199,.2);
+}
+ 
+/* League / Award card */
+[data-style="neumorphism"][data-theme="dark"] .mob2-lc,
+[data-style="neumorphism"][data-theme="dark"] .mob2-ac {
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-lc-input {
+  box-shadow: var(--nm-ism);
+  border: 1px solid rgba(255,255,255,.035);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-lc-input--filled {
+  box-shadow: var(--nm-ism), inset 2px 0 0 var(--m-accent);
+  border-color: rgba(139,127,199,.2);
+}
+ 
+/* More card */
+[data-style="neumorphism"][data-theme="dark"] .mob2-more-card {
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-more-card:active {
+  box-shadow: var(--nm-ism);
+}
+ 
+/* Skeleton */
+[data-style="neumorphism"][data-theme="dark"] .mob2-sk-card {
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.045);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-sk {
+  box-shadow: var(--nm-ism);
+}
+ 
+/* Stats grid */
+[data-style="neumorphism"][data-theme="dark"] .mob2-stats-grid {
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-stat-bar-wrap {
+  box-shadow: var(--nm-ism);
+}
+ 
+/* Podio */
+[data-style="neumorphism"][data-theme="dark"] .mob2-podium {
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-pod-col--1st .mob2-pod-av {
+  box-shadow:
+    2px 2px 6px rgba(0,0,0,.55),
+    0 0 0 3px var(--m-bg),
+    0 0 0 4.5px var(--m-gold);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-pod-col--2nd .mob2-pod-av {
+  box-shadow:
+    2px 2px 5px rgba(0,0,0,.5),
+    0 0 0 2.5px var(--m-bg),
+    0 0 0 4px var(--m-silver);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-pod-col--3rd .mob2-pod-av {
+  box-shadow:
+    2px 2px 5px rgba(0,0,0,.5),
+    0 0 0 2.5px var(--m-bg),
+    0 0 0 4px var(--m-bronze);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-pod-you {
+  background: var(--m-bg);
+  box-shadow: var(--nm-sm);
+  border: 1px solid rgba(255,255,255,.04);
+}
 /* ================================================================
    LEAGUE / AWARD CARDS
 ================================================================ */
@@ -1573,6 +1729,7 @@
    LOGROS EMPTY
 ================================================================ */
 [data-theme="dark"] .mob2-logros-empty { color: var(--m-muted); }
+
 /* ================================================================
    25. MOBILE RANKING — MobileRanking.css
 ================================================================ */
@@ -1634,6 +1791,101 @@
 [data-theme="dark"] .mrk-hof-empty        { color: #6E6680; }
 [data-theme="dark"] .mrk-hof-empty p      { color: #6E6680; }
 [data-theme="dark"] .mrk-hof-empty-icon   { color: #38334F; }
+/* Tabs neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mrk-tabs {
+  background: transparent;
+}
+[data-style="neumorphism"][data-theme="dark"] .mrk-tab {
+  background: var(--mrk-bg);
+  box-shadow: var(--nm-sm);
+}
+[data-style="neumorphism"][data-theme="dark"] .mrk-tab.active {
+  box-shadow: var(--nm-i);
+}
+ 
+/* Stats row neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mrk-stats-row {
+  background: var(--mrk-bg);
+}
+ 
+/* Podium stage neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mrk-podium-step--first {
+  box-shadow: inset 0 3px 8px var(--nm-id), inset 0 -1px 4px var(--nm-il);
+}
+[data-style="neumorphism"][data-theme="dark"] .mrk-podium-step--second {
+  box-shadow: inset 0 3px 8px var(--nm-id), inset 0 -1px 4px var(--nm-il);
+}
+[data-style="neumorphism"][data-theme="dark"] .mrk-podium-step--third {
+  box-shadow: inset 0 3px 8px var(--nm-id), inset 0 -1px 4px var(--nm-il);
+}
+ 
+/* Avatar rings podium neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mrk-podium-card--gold   .mrk-podium-av-ring { box-shadow: var(--nm-sm); }
+[data-style="neumorphism"][data-theme="dark"] .mrk-podium-card--silver .mrk-podium-av-ring { box-shadow: var(--nm-sm); }
+[data-style="neumorphism"][data-theme="dark"] .mrk-podium-card--bronze .mrk-podium-av-ring { box-shadow: var(--nm-sm); }
+ 
+/* Podium numero badge neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mrk-podium-num {
+  border-color: var(--mrk-bg);
+  box-shadow: var(--nm-sm);
+}
+ 
+/* Table neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mrk-table {
+  background: var(--mrk-bg);
+  box-shadow: var(--nm-s);
+}
+[data-style="neumorphism"][data-theme="dark"] .mrk-table-header {
+  background: var(--mrk-bg);
+}
+[data-style="neumorphism"][data-theme="dark"] .mrk-table-sub {
+  background: var(--mrk-accent-subtle);
+}
+ 
+/* Row num badge neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mrk-row-num:not(.mrk-row-num--1):not(.mrk-row-num--2):not(.mrk-row-num--3) {
+  background: var(--mrk-bg);
+  box-shadow: var(--nm-ism);
+}
+ 
+/* YOU badge neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mrk-row-you {
+  background: var(--mrk-accent-subtle);
+  border-color: var(--mrk-accent-border);
+}
+ 
+/* HOF card neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mrk-hof-card {
+  background: var(--mrk-bg);
+  box-shadow: var(--nm-lg);
+}
+[data-style="neumorphism"][data-theme="dark"] .mrk-hof-av-ring {
+  box-shadow: var(--nm-lg);
+}
+[data-style="neumorphism"][data-theme="dark"] .mrk-hof-stats {
+  background: var(--mrk-bg);
+  box-shadow: var(--nm-ism);
+}
+ 
+/* HOF dots neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mrk-hof-dot {
+  background: var(--mrk-border);
+  box-shadow: var(--nm-ism);
+}
+ 
+/* HOF list neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mrk-hof-list {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+[data-style="neumorphism"][data-theme="dark"] .mrk-hof-list-label {
+  background: var(--mrk-accent-subtle);
+}
+[data-style="neumorphism"][data-theme="dark"] .mrk-hof-list-row {
+  background: var(--mrk-bg);
+}
+[data-style="neumorphism"][data-theme="dark"] .mrk-hof-list-badge {
+  box-shadow: var(--nm-sm);
+}
 
 /* ================================================================
    26. MOBILE STATS — MobileStats.css
@@ -2607,14 +2859,4 @@
   background: var(--mpm-bg, #1E1C28);
   box-shadow: 2px 2px 5px rgba(10,9,16,.55),
              -1px -1px 4px rgba(40,37,55,.8);
-}
-/* brutalist dark — preview border */
-[data-style="brutalist"][data-theme="dark"] .style-card-preview {
-  border-color: rgba(255,255,255,.12);
-}
-[data-style="brutalist"][data-theme="dark"] .style-card--active .style-card-preview {
-  border-color: #8b7fc7;
-}
-[data-style="brutalist"][data-theme="dark"] .style-card-check {
-  border-color: rgba(255,255,255,.14);
 }
