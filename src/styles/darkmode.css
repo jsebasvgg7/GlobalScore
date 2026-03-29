@@ -1893,61 +1893,186 @@
 /* ================================================================
    27. MOBILE PROFILE — MobileProfileMain.css
 ================================================================ */
-[data-theme="dark"] .mpm-root { background: #0D0B12; }
 
-[data-theme="dark"] .mpm-banner-gradient {
+/* ── BRUTALIST dark (sin cambios) ── */
+[data-style="brutalist"][data-theme="dark"] .mpm-root { background: #0D0B12; }
+
+[data-style="brutalist"][data-theme="dark"] .mpm-banner-gradient {
   background: linear-gradient(135deg, #0D0B12 0%, #1A1824 50%, #13111A 100%);
 }
-[data-theme="dark"] .mpm-banner-tag {
-  color: #A599D9;
-  border-color: #4B43A0;
-  background: #0D0B12;
+[data-style="brutalist"][data-theme="dark"] .mpm-banner-tag {
+  color: #A599D9; border-color: #4B43A0; background: #0D0B12;
 }
+[data-style="brutalist"][data-theme="dark"] .mpm-user-row        { background: #1A1824; border-bottom-color: #38334F; }
+[data-style="brutalist"][data-theme="dark"] .mpm-user-row:active { background: #221F2E; }
+[data-style="brutalist"][data-theme="dark"] .mpm-avatar           { border-color: #8B7FC7; background: #221F2E; color: #F0EDF8; }
+[data-style="brutalist"][data-theme="dark"] .mpm-stats            { background: #0D0B12; }
+[data-style="brutalist"][data-theme="dark"] .mpm-stat-sep         { background: #221F2E; }
+[data-style="brutalist"][data-theme="dark"] .mpm-sec-hdr          { background: #0D0B12; }
+[data-style="brutalist"][data-theme="dark"] .mpm-group            { border-top-color: #38334F; border-bottom-color: #38334F; }
+[data-style="brutalist"][data-theme="dark"] .mpm-row              { background: #1A1824; border-bottom-color: #2A2638; }
+[data-style="brutalist"][data-theme="dark"] .mpm-row:active       { background: #221F2E; }
+[data-style="brutalist"][data-theme="dark"] .mpm-badge            { color: #A599D9; border-color: #4B43A0; background: #2C2840; }
+[data-style="brutalist"][data-theme="dark"] .mpm-toggle           { background: #38334F; border-color: #4B43A0; }
+[data-style="brutalist"][data-theme="dark"] .mpm-toggle--on       { background: #8B7FC7; border-color: #8B7FC7; }
+[data-style="brutalist"][data-theme="dark"] .mpm-logout           { background: #1A1824; border-top-color: rgba(224,112,112,.25); border-bottom-color: rgba(224,112,112,.25); }
+[data-style="brutalist"][data-theme="dark"] .mpm-logout:active    { background: rgba(224,112,112,.06); }
+[data-style="brutalist"][data-theme="dark"] .mpm-logout-icon      { background: rgba(224,112,112,.06); border-color: rgba(224,112,112,.2); }
 
-[data-theme="dark"] .mpm-user-row        { background: #1A1824; border-bottom-color: #38334F; }
-[data-theme="dark"] .mpm-user-row:active { background: #221F2E; }
-
-[data-theme="dark"] .mpm-avatar      { border-color: #8B7FC7; background: #221F2E; color: #F0EDF8; }
-[data-theme="dark"] .mpm-name        { color: #F0EDF8; }
-[data-theme="dark"] .mpm-sub         { color: #6E6680; }
-[data-theme="dark"] .mpm-user-arrow  { color: #38334F; }
-
-[data-theme="dark"] .mpm-stats       { background: #0D0B12; }
-[data-theme="dark"] .mpm-stat-val    { color: #F0EDF8; }
+/* ── Compartidos dark (texto/iconos, aplican a ambos estilos) ── */
+[data-theme="dark"] .mpm-banner-tag    { color: #A599D9; border-color: #4B43A0; background: #0D0B12; }
+[data-theme="dark"] .mpm-name          { color: #F0EDF8; }
+[data-theme="dark"] .mpm-sub           { color: #6E6680; }
+[data-theme="dark"] .mpm-user-arrow    { color: #38334F; }
+[data-theme="dark"] .mpm-stat-val      { color: #F0EDF8; }
 [data-theme="dark"] .mpm-stat-val span { color: #6E6680; }
-[data-theme="dark"] .mpm-stat-lbl    { color: #6E6680; }
-[data-theme="dark"] .mpm-stat-sep    { background: #221F2E; }
+[data-theme="dark"] .mpm-stat-lbl      { color: #6E6680; }
+[data-theme="dark"] .mpm-sec-dot       { background: #8B7FC7; }
+[data-theme="dark"] .mpm-sec-lbl       { color: #6E6680; }
+[data-theme="dark"] .mpm-row-lbl       { color: #F0EDF8; }
+[data-theme="dark"] .mpm-row-desc      { color: #6E6680; }
+[data-theme="dark"] .mpm-chevron       { color: #38334F; }
+[data-theme="dark"] .mpm-toggle-knob   { background: #F0EDF8; }
+[data-theme="dark"] .mpm-logout-lbl    { color: #E07070; }
+[data-theme="dark"] .mpm-logout-arrow  { color: rgba(224,112,112,.25); }
 
-[data-theme="dark"] .mpm-sec-hdr     { background: #0D0B12; }
-[data-theme="dark"] .mpm-sec-dot     { background: #8B7FC7; }
-[data-theme="dark"] .mpm-sec-lbl     { color: #6E6680; }
+/* ── NEUMORPHISM dark ── */
+[data-style="neumorphism"][data-theme="dark"] .mpm-root {
+  background: #1E1C28;
+}
 
-[data-theme="dark"] .mpm-group       { border-top-color: #38334F; border-bottom-color: #38334F; }
-[data-theme="dark"] .mpm-row         { background: #1A1824; border-bottom-color: #2A2638; }
-[data-theme="dark"] .mpm-row:active  { background: #221F2E; }
-[data-theme="dark"] .mpm-row-lbl     { color: #F0EDF8; }
-[data-theme="dark"] .mpm-row-desc    { color: #6E6680; }
-[data-theme="dark"] .mpm-chevron     { color: #38334F; }
-[data-theme="dark"] .mpm-badge {
-  color: #A599D9;
-  border-color: #4B43A0;
+[data-style="neumorphism"][data-theme="dark"] .mpm-banner-gradient {
+  background: linear-gradient(135deg, #13111A 0%, #1E1C28 50%, #171520 100%);
+}
+
+/* user row — flota sobre el fondo sin border visible */
+[data-style="neumorphism"][data-theme="dark"] .mpm-user-row {
+  background: #1E1C28;
+  border-bottom: none;
+  box-shadow:
+    3px 3px 8px rgba(10,9,16,.65),
+    -2px -2px 6px rgba(40,37,55,.85);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-user-row:active {
+  box-shadow:
+    inset 2px 2px 5px rgba(10,9,16,.6),
+    inset -2px -2px 5px rgba(40,37,55,.75);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-avatar {
   background: #2C2840;
+  border: none;
+  box-shadow:
+    3px 3px 8px rgba(10,9,16,.6),
+    -2px -2px 5px rgba(40,37,55,.8);
+  color: #A599D9;
 }
 
-[data-theme="dark"] .mpm-toggle       { background: #38334F; border-color: #4B43A0; }
-[data-theme="dark"] .mpm-toggle--on   { background: #8B7FC7; border-color: #8B7FC7; }
-[data-theme="dark"] .mpm-toggle-knob  { background: #F0EDF8; }
-
-[data-theme="dark"] .mpm-logout       {
-  background: #1A1824;
-  border-top-color: rgba(224, 112, 112, 0.25);
-  border-bottom-color: rgba(224, 112, 112, 0.25);
+/* stats — misma profundidad neu pero con texto claro */
+[data-style="neumorphism"][data-theme="dark"] .mpm-stats {
+  background: #1E1C28;
+  box-shadow:
+    3px 3px 8px rgba(10,9,16,.65),
+    -2px -2px 6px rgba(40,37,55,.85);
+  border-bottom: none;
 }
-[data-theme="dark"] .mpm-logout:active    { background: rgba(224, 112, 112, 0.06); }
-[data-theme="dark"] .mpm-logout-icon      { background: rgba(224, 112, 112, 0.06); border-color: rgba(224, 112, 112, 0.2); }
-[data-theme="dark"] .mpm-logout-lbl       { color: #E07070; }
-[data-theme="dark"] .mpm-logout-arrow     { color: rgba(224, 112, 112, 0.25); }
+[data-style="neumorphism"][data-theme="dark"] .mpm-stat-sep {
+  background: rgba(255,255,255,.06);
+}
+/* override los colores light de .mpm-stats en neu */
+[data-style="neumorphism"][data-theme="dark"] .mpm-stat-val     { color: #E8E6F0; }
+[data-style="neumorphism"][data-theme="dark"] .mpm-stat-val span { color: rgba(232,230,240,.4); }
+[data-style="neumorphism"][data-theme="dark"] .mpm-stat-lbl     { color: rgba(232,230,240,.4); }
 
+/* section headers — transparentes, se funden con el root */
+[data-style="neumorphism"][data-theme="dark"] .mpm-sec-hdr {
+  background: transparent;
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-sec-dot {
+  background: #8B7FC7;
+  box-shadow: 0 0 6px rgba(139,127,199,.5);
+}
+
+/* grupos — card neu sobre el fondo */
+[data-style="neumorphism"][data-theme="dark"] .mpm-group {
+  border: none;
+  box-shadow:
+    3px 3px 8px rgba(10,9,16,.65),
+    -2px -2px 6px rgba(40,37,55,.85);
+  overflow: hidden;
+}
+
+/* filas — mismo fondo que el grupo, sin borde extra */
+[data-style="neumorphism"][data-theme="dark"] .mpm-row {
+  background: #1E1C28;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-row:last-child {
+  border-bottom: none;
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-row:active {
+  background: rgba(139,127,199,.07);
+}
+
+/* icon boxes neu dark */
+[data-style="neumorphism"][data-theme="dark"] .mpm-icon {
+  border: none;
+  box-shadow:
+    2px 2px 5px rgba(10,9,16,.55),
+    -1px -1px 4px rgba(40,37,55,.8);
+}
+
+/* badge */
+[data-style="neumorphism"][data-theme="dark"] .mpm-badge {
+  color: #A599D9;
+  border: none;
+  background: rgba(139,127,199,.15);
+  box-shadow:
+    2px 2px 5px rgba(10,9,16,.5),
+    -1px -1px 4px rgba(40,37,55,.75);
+}
+
+/* toggle */
+[data-style="neumorphism"][data-theme="dark"] .mpm-toggle {
+  background: #1E1C28;
+  border: none;
+  box-shadow:
+    inset 2px 2px 4px rgba(10,9,16,.55),
+    inset -2px -2px 4px rgba(40,37,55,.75);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-toggle--on {
+  background: #8B7FC7;
+  box-shadow:
+    inset 2px 2px 5px rgba(10,9,16,.4),
+    inset -2px -2px 5px rgba(40,37,55,.5);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-toggle-knob {
+  background: #F0EDF8;
+  box-shadow:
+    2px 2px 4px rgba(10,9,16,.5),
+    -1px -1px 3px rgba(40,37,55,.75);
+}
+
+/* logout */
+[data-style="neumorphism"][data-theme="dark"] .mpm-logout {
+  background: #1E1C28;
+  border-top: none;
+  border-bottom: none;
+  border-left: 3px solid rgba(239,68,68,.35);
+  box-shadow:
+    3px 3px 8px rgba(10,9,16,.65),
+    -2px -2px 6px rgba(40,37,55,.85);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-logout:active {
+  box-shadow:
+    inset 2px 2px 5px rgba(10,9,16,.6),
+    inset -2px -2px 5px rgba(40,37,55,.75);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-logout-icon {
+  border: none;
+  box-shadow:
+    2px 2px 5px rgba(10,9,16,.55),
+    -1px -1px 4px rgba(40,37,55,.8);
+}
 /* ================================================================
    28. MOBILE WORLD CUP — MobileWorldCup.css
 ================================================================ */

@@ -1,58 +1,105 @@
 /* ================================================================
-   TOKENS
+   MobileProfileMain.css — v2 CLEAN
+   DOS temas: [data-style="brutalist"] | [data-style="neumorphism"]
+   Dark mode: [data-theme="dark"]
 ================================================================ */
-.mpm-root {
-  --mpm-bg:        #f0ede8;
-  --mpm-card:      #e8e4de;
-  --mpm-surface:   #ffffff;
-  --mpm-border:    #d4cfc8;
-  --mpm-border-2:  #c4bfb8;
-  --mpm-text:      #1a1a2e;
-  --mpm-muted:     #888780;
-  --mpm-accent:    #5b4fd8;
-  --mpm-mono:      'DM Mono', monospace;
-  --mpm-sans:      'Sora', sans-serif;
-}
 
-[data-theme="dark"] .mpm-root {
-  --mpm-bg:        #1a1d2e;
-  --mpm-card:      #252936;
-  --mpm-surface:   #1e2235;
-  --mpm-border:    rgba(255,255,255,0.08);
-  --mpm-border-2:  rgba(255,255,255,0.14);
-  --mpm-text:      #f0f1f7;
-  --mpm-muted:     #60519b;
-  --mpm-accent:    #8b7fc7;
-}
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-/* ================================================================
-   ANIMACIONES DE ENTRADA
-================================================================ */
 @keyframes mpm-fade-up {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes mpm-fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+/* ================================================================
+   BRUTALIST TOKENS
+================================================================ */
+[data-style="brutalist"] .mpm-root {
+  --mpm-bg:      #f0ede8;
+  --mpm-card:    #e8e4de;
+  --mpm-surface: #fff;
+  --mpm-border:  #d4cfc8;
+  --mpm-border2: #c4bfb8;
+  --mpm-text:    #1a1a2e;
+  --mpm-muted:   #888780;
+  --mpm-accent:  #5b4fd8;
+  --mpm-mono:    'DM Mono', monospace;
+  --mpm-sans:    'DM Mono', monospace;
+  --mpm-r-sm:    0px;
+  --mpm-r-md:    0px;
+  --mpm-r-lg:    0px;
+  --mpm-r-pill:  0px;
+  --mpm-shadow:  none;
+  --mpm-shadow-sm: none;
+  --mpm-inset:   none;
 }
 
-@keyframes mpm-slide-right {
-  from { opacity: 0; transform: translateX(-8px); }
-  to   { opacity: 1; transform: translateX(0); }
+[data-style="brutalist"][data-theme="dark"] .mpm-root {
+  --mpm-bg:      #1a1d2e;
+  --mpm-card:    #252936;
+  --mpm-surface: #1e2235;
+  --mpm-border:  rgba(255,255,255,.08);
+  --mpm-border2: rgba(255,255,255,.14);
+  --mpm-text:    #f0f1f7;
+  --mpm-muted:   #60519b;
+  --mpm-accent:  #8b7fc7;
 }
 
 /* ================================================================
-   ROOT 
+   NEUMORPHISM TOKENS
+================================================================ */
+[data-style="neumorphism"] .mpm-root {
+  --mpm-bg:      #EAE7E1;
+  --mpm-card:    #EAE7E1;
+  --mpm-surface: #EAE7E1;
+  --nm-light:    rgba(255,255,255,.85);
+  --nm-dark:     rgba(166,158,148,.55);
+  --nm-il:       rgba(255,255,255,.7);
+  --nm-id:       rgba(166,158,148,.45);
+  --mpm-shadow:    6px 6px 14px var(--nm-dark),-4px -4px 10px var(--nm-light);
+  --mpm-shadow-sm: 4px 4px 10px var(--nm-dark),-3px -3px 7px var(--nm-light);
+  --mpm-inset:     inset 3px 3px 8px var(--nm-id),inset -3px -3px 8px var(--nm-il);
+  --mpm-inset-sm:  inset 2px 2px 5px var(--nm-id),inset -2px -2px 5px var(--nm-il);
+  --mpm-border:  rgba(166,158,148,.25);
+  --mpm-border2: rgba(166,158,148,.4);
+  --mpm-text:    #2A2535;
+  --mpm-muted:   #9B95A8;
+  --mpm-accent:  #60519b;
+  --mpm-mono:    'Plus Jakarta Sans', system-ui, sans-serif;
+  --mpm-sans:    'Plus Jakarta Sans', system-ui, sans-serif;
+  --mpm-r-sm:    10px;
+  --mpm-r-md:    16px;
+  --mpm-r-lg:    20px;
+  --mpm-r-pill:  100px;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .mpm-root {
+  --mpm-bg:      #1E1C28;
+  --mpm-card:    #1E1C28;
+  --mpm-surface: #1E1C28;
+  --nm-light:    rgba(40,37,55,.9);
+  --nm-dark:     rgba(10,9,16,.7);
+  --nm-il:       rgba(40,37,55,.7);
+  --nm-id:       rgba(10,9,16,.6);
+  --mpm-border:  rgba(255,255,255,.05);
+  --mpm-border2: rgba(255,255,255,.09);
+  --mpm-text:    #E8E6F0;
+  --mpm-muted:   #5A566E;
+  --mpm-accent:  #8b7fc7;
+}
+
+/* ================================================================
+   ROOT
 ================================================================ */
 .mpm-root {
   display: none;
   flex-direction: column;
   background: var(--mpm-bg);
-  font-family: var(--mpm-sans);
   min-height: 100dvh;
-  padding-bottom: 60px;
+  padding-bottom: 72px;
+  font-family: var(--mpm-sans);
+  -webkit-font-smoothing: antialiased;
+  animation: mpm-fade-up .35s ease both;
 }
 
 @media screen and (max-width: 768px) {
@@ -64,360 +111,518 @@
 ================================================================ */
 .mpm-banner {
   position: relative;
-  height: 100px;
-  background: var(--mpm-text);
-  border-bottom: 2px solid var(--mpm-accent);
+  height: 108px;
   overflow: hidden;
   flex-shrink: 0;
-  animation: mpm-fade-in 0.4s ease both;
+}
+
+[data-style="brutalist"] .mpm-banner {
+  border-bottom: 2px solid var(--mpm-accent);
+}
+
+[data-style="neumorphism"] .mpm-banner {
+  box-shadow: 0 4px 14px rgba(166,158,148,.4);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .mpm-banner {
+  box-shadow: 0 4px 14px rgba(10,9,16,.6);
 }
 
 .mpm-banner-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
 }
 
 .mpm-banner-gradient {
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   background: linear-gradient(135deg, #1a0533 0%, #2d1b69 50%, #1e3a5f 100%);
 }
 
 .mpm-banner-overlay {
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.5) 100%);
 }
 
-.mpm-banner-grid {
-  position: absolute;
-  inset: 0;
-  opacity: 0.1;
-  background-image:
-    repeating-linear-gradient(0deg, #8b7fc7 0, #8b7fc7 1px, transparent 1px, transparent 28px),
-    repeating-linear-gradient(90deg, #8b7fc7 0, #8b7fc7 1px, transparent 1px, transparent 28px);
+.mpm-banner-tag {
+  position: absolute; bottom: 10px; left: 14px;
+  font-size: 9px; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: #8b7fc7;
 }
 
-.mpm-banner-tag {
-  position: absolute;
-  bottom: 10px;
-  left: 14px;
-  font-family: var(--mpm-mono);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #8b7fc7;
+[data-style="brutalist"] .mpm-banner-tag {
   border: 1px solid #60519b;
-  padding: 3px 8px;
-  background: rgba(10, 8, 20, 0.6);
+  padding: 3px 8px; background: rgba(10,8,20,.6);
+  font-family: var(--mpm-mono);
+}
+
+[data-style="neumorphism"] .mpm-banner-tag {
+  background: rgba(10,8,20,.45);
+  padding: 4px 12px;
+  border-radius: var(--mpm-r-pill);
+  font-family: var(--mpm-sans);
 }
 
 /* ================================================================
    USER ROW
 ================================================================ */
 .mpm-user-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  background: var(--mpm-surface);
-  border-bottom: 1px solid var(--mpm-border-2);
+  display: flex; align-items: center; gap: 14px;
   cursor: pointer;
-  transition: background 0.1s;
-  animation: mpm-fade-up 0.35s ease 0.1s both;
+  transition: background .12s;
 }
 
-.mpm-user-row:active { background: var(--mpm-card); }
+[data-style="brutalist"] .mpm-user-row {
+  padding: 14px 16px;
+  background: var(--mpm-surface);
+  border-bottom: 1px solid var(--mpm-border2);
+}
 
-.mpm-avatar {
-  width: 52px;
-  height: 52px;
-  border: 2px solid var(--mpm-accent);
-  background: var(--mpm-card);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--mpm-mono);
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--mpm-accent);
+[data-style="neumorphism"] .mpm-user-row {
+  margin: 16px 16px 0;
+  padding: 16px;
+  background: var(--mpm-bg);
+  border-radius: var(--mpm-r-lg);
+  box-shadow: var(--mpm-shadow);
+}
+
+[data-style="brutalist"] .mpm-user-row:active  { background: var(--mpm-card); }
+[data-style="neumorphism"] .mpm-user-row:active { box-shadow: var(--mpm-inset); }
+
+/* Avatar wrap */
+.mpm-avatar-wrap {
   flex-shrink: 0;
-  overflow: hidden;
   cursor: pointer;
 }
 
 .mpm-avatar-img {
-  width: 100%;
-  height: 100%;
+  border-radius: 50%;
   object-fit: cover;
+  display: block;
+}
+
+[data-style="brutalist"] .mpm-avatar-img { border-radius: 0; border: 2px solid var(--mpm-accent); }
+
+.mpm-avatar-ph {
+  border-radius: 50%;
+  background: var(--mpm-accent);
+  color: #fff;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--mpm-sans);
+}
+
+[data-style="brutalist"] .mpm-avatar-ph {
+  border-radius: 0;
+  border: 2px solid var(--mpm-accent);
+  font-family: var(--mpm-mono);
+}
+
+[data-style="neumorphism"] .mpm-avatar-ph {
+  box-shadow: var(--mpm-shadow-sm);
 }
 
 .mpm-user-info { flex: 1; min-width: 0; }
 
-.mpm-name {
-  font-family: var(--mpm-sans);
-  font-size: 16px;
+.mpm-user-name {
+  display: block;
   font-weight: 800;
   color: var(--mpm-text);
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-.mpm-sub {
-  font-family: var(--mpm-mono);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--mpm-muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+[data-style="brutalist"] .mpm-user-name  { font-size: 16px; font-family: var(--mpm-mono); letter-spacing: .02em; }
+[data-style="neumorphism"] .mpm-user-name { font-size: 17px; font-family: var(--mpm-sans); letter-spacing: -.02em; }
+
+.mpm-user-sub {
+  display: block;
   margin-top: 2px;
+  color: var(--mpm-muted);
 }
 
-.mpm-user-arrow { color: var(--mpm-border-2); flex-shrink: 0; }
+[data-style="brutalist"] .mpm-user-sub  { font-size: 10px; font-family: var(--mpm-mono); letter-spacing: .1em; text-transform: uppercase; }
+[data-style="neumorphism"] .mpm-user-sub { font-size: 12px; font-family: var(--mpm-sans); font-weight: 500; }
+
+.mpm-user-arrow { color: var(--mpm-border2); flex-shrink: 0; }
 
 /* ================================================================
-   STATS
+   STATS ROW
 ================================================================ */
-.mpm-stats {
-  display: grid;
-  grid-template-columns: 1fr 1px 1fr 1px 1fr;
-  background: var(--mpm-text);
-  border-bottom: 2px solid var(--mpm-border-2);
-  animation: mpm-fade-up 0.35s ease 0.18s both;
+[data-style="brutalist"] .mpm-stats-row {
+  display: flex; align-items: center;
+  background: var(--mpm-card);
+  border-bottom: 1px solid var(--mpm-border);
 }
 
-[data-theme="light"] .mpm-stats { background: #786BB4; }
+[data-style="neumorphism"] .mpm-stats-row {
+  display: flex; align-items: center;
+  margin: 16px 16px 0;
+  border-radius: var(--mpm-r-md);
+  box-shadow: var(--mpm-shadow);
+  background: var(--mpm-bg);
+  overflow: hidden;
+}
 
 .mpm-stat {
-  padding: 14px 8px;
-  text-align: center;
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 3px;
 }
 
-.mpm-stat-sep { background: rgba(255,255,255,0.1); }
+[data-style="brutalist"] .mpm-stat  { padding: 14px 8px; }
+[data-style="neumorphism"] .mpm-stat { padding: 16px 8px; }
 
 .mpm-stat-val {
-  font-family: var(--mpm-mono);
-  font-size: 22px;
-  font-weight: 700;
+  font-weight: 800; line-height: 1;
+  color: var(--mpm-text);
+}
+
+/* Stats van sobre fondo oscuro en brutalist (heredado del mpm-stats estilo header)
+   En neu los colores son del tema */
+[data-style="brutalist"] .mpm-stats-row {
+  background: var(--mpm-text);
+}
+[data-style="brutalist"] .mpm-stat-val {
+  font-size: 22px; font-family: var(--mpm-mono); letter-spacing: -1px;
   color: #f0f1f7;
-  line-height: 1;
-  letter-spacing: -1px;
+}
+[data-style="brutalist"] .mpm-stat-lbl {
+  font-size: 8px; font-family: var(--mpm-mono); letter-spacing: .18em;
+  text-transform: uppercase; color: rgba(240,241,247,.45);
 }
 
-.mpm-stat-val span {
-  font-size: 11px;
-  color: #3a3d52;
-  font-weight: 400;
-  margin-left: 1px;
+[data-style="neumorphism"] .mpm-stat-val {
+  font-size: 24px; font-family: var(--mpm-sans); letter-spacing: -.03em;
+  color: var(--mpm-text);
+}
+[data-style="neumorphism"] .mpm-stat-lbl {
+  font-size: 9px; font-family: var(--mpm-sans); font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--mpm-muted);
 }
 
-.mpm-stat-lbl {
-  font-family: var(--mpm-mono);
-  font-size: 8px;
-  font-weight: 700;
-  color: #3a3d52;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin-top: 4px;
+/* Brutalist dark override */
+[data-style="brutalist"][data-theme="dark"] .mpm-stats-row { background: #0D0B12; }
+
+/* Neumorphism dark override */
+[data-style="neumorphism"][data-theme="dark"] .mpm-stat-val { color: #E8E6F0; }
+[data-style="neumorphism"][data-theme="dark"] .mpm-stat-lbl { color: rgba(232,230,240,.45); }
+
+.mpm-stats-sep {
+  width: 1px; height: 32px; flex-shrink: 0;
+  background: var(--mpm-border);
 }
+
+[data-style="brutalist"] .mpm-stats-sep { background: rgba(255,255,255,.1); }
 
 /* ================================================================
-   SECTION HEADER
+   SECTION LABELS
 ================================================================ */
-.mpm-sec-hdr {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 12px 16px 6px;
-  background: var(--mpm-bg);
-  animation: mpm-fade-in 0.3s ease both;
+.mpm-section-label {
+  padding: 18px 20px 6px;
+  display: flex; align-items: center; gap: 8px;
 }
 
-.mpm-sec-dot {
-  width: 5px;
-  height: 5px;
+.mpm-section-label::before {
+  content: '';
+  width: 5px; height: 5px; flex-shrink: 0;
   background: var(--mpm-accent);
-  flex-shrink: 0;
 }
 
-.mpm-sec-lbl {
+[data-style="brutalist"] .mpm-section-label {
+  font-size: 9px; font-weight: 700; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--mpm-muted);
   font-family: var(--mpm-mono);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--mpm-muted);
+}
+
+[data-style="neumorphism"] .mpm-section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--mpm-muted);
+  font-family: var(--mpm-sans);
+}
+
+[data-style="neumorphism"] .mpm-section-label::before {
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--mpm-accent);
 }
 
 /* ================================================================
-   GROUP + ROW
+   GROUPS
 ================================================================ */
-.mpm-group {
-  border-top: 1px solid var(--mpm-border-2);
-  border-bottom: 1px solid var(--mpm-border-2);
-  animation: mpm-fade-up 0.35s ease both;
+[data-style="brutalist"] .mpm-group {
+  border-top: 1px solid var(--mpm-border2);
+  border-bottom: 1px solid var(--mpm-border2);
 }
 
-.mpm-group:nth-of-type(1) { animation-delay: 0.22s; }
-.mpm-group:nth-of-type(2) { animation-delay: 0.30s; }
-.mpm-group:nth-of-type(3) { animation-delay: 0.38s; }
+[data-style="neumorphism"] .mpm-group {
+  margin: 0 16px;
+  border-radius: var(--mpm-r-lg);
+  box-shadow: var(--mpm-shadow);
+  overflow: hidden;
+}
 
+/* ================================================================
+   ROWS
+================================================================ */
 .mpm-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  display: flex; align-items: center; gap: 14px;
+  width: 100%; border: none; text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .12s;
+}
+
+[data-style="brutalist"] .mpm-row {
   padding: 14px 16px;
   background: var(--mpm-surface);
   border-bottom: 1px solid var(--mpm-border);
-  position: relative;
-  cursor: pointer;
-  transition: background 0.1s;
+}
+
+[data-style="neumorphism"] .mpm-row {
+  padding: 14px 18px;
+  background: var(--mpm-bg);
+  border-bottom: 1px solid var(--mpm-border);
 }
 
 .mpm-row:last-child { border-bottom: none; }
-.mpm-row:active { background: var(--mpm-card); }
-.mpm-row--toggle { cursor: default; }
+.mpm-row--toggle    { cursor: default; }
 
-.mpm-row-accent {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
+[data-style="brutalist"] .mpm-row:active  { background: rgba(91,79,216,.06); }
+[data-style="neumorphism"] .mpm-row:active { background: rgba(96,81,155,.07); }
+
+/* Row icon */
+.mpm-row-icon {
+  width: 36px; height: 36px; min-width: 36px;
+  display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
 
-.mpm-icon {
-  width: 34px;
-  height: 34px;
-  border: 1px solid;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+[data-style="brutalist"] .mpm-row-icon  { border-radius: 0; }
+[data-style="neumorphism"] .mpm-row-icon {
+  border-radius: var(--mpm-r-sm);
+  box-shadow: var(--mpm-shadow-sm);
 }
 
-.mpm-row-body { flex: 1; min-width: 0; }
+/* Row body */
+.mpm-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 
 .mpm-row-lbl {
-  font-family: var(--mpm-sans);
-  font-size: 14px;
-  font-weight: 700;
   color: var(--mpm-text);
-  line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-.mpm-row-desc {
-  font-family: var(--mpm-mono);
-  font-size: 10px;
-  color: var(--mpm-muted);
-  margin-top: 2px;
-  letter-spacing: 0.04em;
-}
+[data-style="brutalist"] .mpm-row-lbl  { font-size: 14px; font-weight: 700; font-family: var(--mpm-mono); letter-spacing: .02em; }
+[data-style="neumorphism"] .mpm-row-lbl { font-size: 15px; font-weight: 700; font-family: var(--mpm-sans); letter-spacing: -.01em; }
 
-.mpm-chevron { color: var(--mpm-border-2); flex-shrink: 0; }
+.mpm-row-desc { color: var(--mpm-muted); }
 
-.mpm-badge {
-  font-family: var(--mpm-mono);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border: 1px solid var(--mpm-accent);
-  background: rgba(96, 81, 155, 0.1);
-  color: var(--mpm-accent);
-  letter-spacing: 0.06em;
-  flex-shrink: 0;
-}
+[data-style="brutalist"] .mpm-row-desc  { font-size: 10px; font-family: var(--mpm-mono); letter-spacing: .04em; }
+[data-style="neumorphism"] .mpm-row-desc { font-size: 11px; font-family: var(--mpm-sans); font-weight: 400; }
 
+.mpm-row-arrow { color: var(--mpm-border2); flex-shrink: 0; }
+
+/* ================================================================
+   TOGGLE
+================================================================ */
 .mpm-toggle {
-  width: 42px;
-  height: 24px;
-  background: var(--mpm-border-2);
-  border: 1px solid var(--mpm-border-2);
-  position: relative;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: background 0.2s, border-color 0.2s;
+  position: relative; flex-shrink: 0;
+  width: 48px; height: 26px;
+  border: none; cursor: pointer;
+  transition: background .25s;
 }
 
-.mpm-toggle--on {
+[data-style="brutalist"] .mpm-toggle {
+  background: var(--mpm-border2);
+  border-radius: 0;
+}
+
+[data-style="brutalist"] .mpm-toggle--on { background: var(--mpm-accent); }
+
+[data-style="neumorphism"] .mpm-toggle {
+  background: var(--mpm-bg);
+  border-radius: var(--mpm-r-pill);
+  box-shadow: var(--mpm-inset-sm);
+}
+
+[data-style="neumorphism"] .mpm-toggle--on {
   background: var(--mpm-accent);
-  border-color: var(--mpm-accent);
+  box-shadow: var(--mpm-inset);
 }
 
 .mpm-toggle-knob {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 18px;
-  height: 18px;
-  background: #fff;
-  transition: transform 0.2s;
+  position: absolute; top: 3px; left: 3px;
+  width: 20px; height: 20px; background: #fff;
+  transition: transform .25s;
 }
 
-.mpm-toggle--on .mpm-toggle-knob {
-  transform: translateX(18px);
+[data-style="brutalist"] .mpm-toggle-knob  { border-radius: 0; box-shadow: 2px 2px 0 rgba(0,0,0,.15); }
+[data-style="neumorphism"] .mpm-toggle-knob {
+  border-radius: 50%;
+  box-shadow: var(--mpm-shadow-sm);
+}
+
+.mpm-toggle--on .mpm-toggle-knob { transform: translateX(22px); }
+
+/* ================================================================
+   APPEARANCE PANEL (StyleSwitcher expandible)
+================================================================ */
+[data-style="brutalist"] .mpm-appearance-panel {
+  border-top: 1px solid var(--mpm-border);
+}
+
+[data-style="neumorphism"] .mpm-appearance-panel {
+  border-top: 1px solid var(--mpm-border);
 }
 
 /* ================================================================
    LOGOUT
 ================================================================ */
+.mpm-logout-wrap {
+  margin: 0;
+}
+
+[data-style="neumorphism"] .mpm-logout-wrap {
+  margin: 0 16px;
+}
+
 .mpm-logout {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; cursor: pointer;
+  transition: background .12s;
+}
+
+[data-style="brutalist"] .mpm-logout {
   padding: 14px 16px;
-  margin-top: 6px;
   background: var(--mpm-surface);
-  border-top: 2px solid rgba(239, 68, 68, 0.25);
-  border-bottom: 2px solid rgba(239, 68, 68, 0.25);
-  cursor: pointer;
-  transition: background 0.1s;
-  animation: mpm-fade-up 0.35s ease 0.46s both;
+  border: none;
+  border-top: 2px solid rgba(239,68,68,.25);
+  border-bottom: 2px solid rgba(239,68,68,.25);
 }
 
-.mpm-logout:active { background: rgba(239, 68, 68, 0.05); }
-
-.mpm-logout-icon {
-  width: 34px;
-  height: 34px;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  background: rgba(239, 68, 68, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+[data-style="neumorphism"] .mpm-logout {
+  padding: 15px 18px;
+  background: var(--mpm-bg);
+  border: none;
+  border-left: 3px solid rgba(239,68,68,.4);
+  border-radius: var(--mpm-r-lg);
+  box-shadow: var(--mpm-shadow);
 }
+
+[data-style="brutalist"] .mpm-logout:active  { background: rgba(239,68,68,.06); }
+[data-style="neumorphism"] .mpm-logout:active { box-shadow: var(--mpm-inset); }
 
 .mpm-logout-lbl {
-  font-family: var(--mpm-mono);
-  font-size: 13px;
-  font-weight: 700;
-  color: #ef4444;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
   flex: 1;
+  font-weight: 700; color: #f87171;
+  text-transform: uppercase;
 }
 
-.mpm-logout-arrow { color: rgba(239, 68, 68, 0.3); flex-shrink: 0; }
+[data-style="brutalist"] .mpm-logout-lbl  { font-size: 13px; font-family: var(--mpm-mono); letter-spacing: .1em; }
+[data-style="neumorphism"] .mpm-logout-lbl { font-size: 14px; font-family: var(--mpm-sans); letter-spacing: .04em; }
+
+.mpm-logout-arrow { color: rgba(248,113,113,.3); flex-shrink: 0; }
 
 /* ================================================================
-   ACCESIBILIDAD — sin animaciones si el usuario lo prefiere
+   BADGE (usado por navrows con counter)
+================================================================ */
+.mpm-badge {
+  font-weight: 700; padding: 2px 8px; flex-shrink: 0;
+  color: var(--mpm-accent);
+}
+
+[data-style="brutalist"] .mpm-badge {
+  font-size: 11px; font-family: var(--mpm-mono);
+  border: 1px solid var(--mpm-accent);
+  background: rgba(91,79,216,.08);
+  border-radius: 0;
+}
+
+[data-style="neumorphism"] .mpm-badge {
+  font-size: 12px; font-family: var(--mpm-sans);
+  background: rgba(96,81,155,.12);
+  border-radius: var(--mpm-r-pill);
+  box-shadow: var(--mpm-shadow-sm);
+  border: none;
+}
+
+/* ================================================================
+   DARK MODE — BRUTALIST overrides
+================================================================ */
+[data-style="brutalist"][data-theme="dark"] .mpm-user-row  { background: #1A1824; border-bottom-color: #38334F; }
+[data-style="brutalist"][data-theme="dark"] .mpm-user-row:active { background: #221F2E; }
+[data-style="brutalist"][data-theme="dark"] .mpm-row       { background: #1A1824; border-bottom-color: #2A2638; }
+[data-style="brutalist"][data-theme="dark"] .mpm-row:active { background: #221F2E; }
+[data-style="brutalist"][data-theme="dark"] .mpm-toggle    { background: #38334F; }
+[data-style="brutalist"][data-theme="dark"] .mpm-toggle--on { background: #8B7FC7; }
+[data-style="brutalist"][data-theme="dark"] .mpm-logout    { background: #1A1824; border-top-color: rgba(239,68,68,.2); border-bottom-color: rgba(239,68,68,.2); }
+[data-style="brutalist"][data-theme="dark"] .mpm-logout:active { background: rgba(239,68,68,.06); }
+[data-style="brutalist"][data-theme="dark"] .mpm-badge     { background: #2C2840; border-color: #4B43A0; color: #A599D9; }
+
+/* ================================================================
+   DARK MODE — NEUMORPHISM overrides
+================================================================ */
+[data-style="neumorphism"][data-theme="dark"] .mpm-banner {
+  box-shadow: 0 4px 14px rgba(10,9,16,.6);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .mpm-user-row {
+  background: var(--mpm-bg);
+  box-shadow: 3px 3px 8px rgba(10,9,16,.65),-2px -2px 6px rgba(40,37,55,.85);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-user-row:active {
+  box-shadow: inset 2px 2px 5px rgba(10,9,16,.6),inset -2px -2px 5px rgba(40,37,55,.75);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .mpm-stats-row {
+  background: var(--mpm-bg);
+  box-shadow: 3px 3px 8px rgba(10,9,16,.65),-2px -2px 6px rgba(40,37,55,.85);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .mpm-group {
+  box-shadow: 3px 3px 8px rgba(10,9,16,.65),-2px -2px 6px rgba(40,37,55,.85);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .mpm-row {
+  background: var(--mpm-bg);
+  border-bottom-color: rgba(255,255,255,.05);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-row:active { background: rgba(139,127,199,.07); }
+[data-style="neumorphism"][data-theme="dark"] .mpm-row:last-child { border-bottom: none; }
+
+[data-style="neumorphism"][data-theme="dark"] .mpm-row-icon {
+  box-shadow: 2px 2px 5px rgba(10,9,16,.55),-1px -1px 4px rgba(40,37,55,.8);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .mpm-toggle {
+  background: var(--mpm-bg);
+  box-shadow: inset 2px 2px 4px rgba(10,9,16,.55),inset -2px -2px 4px rgba(40,37,55,.75);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-toggle--on {
+  background: #8B7FC7;
+  box-shadow: inset 2px 2px 5px rgba(10,9,16,.4),inset -2px -2px 5px rgba(40,37,55,.5);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-toggle-knob {
+  box-shadow: 2px 2px 4px rgba(10,9,16,.5),-1px -1px 3px rgba(40,37,55,.75);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .mpm-logout {
+  background: var(--mpm-bg);
+  border-left-color: rgba(239,68,68,.3);
+  box-shadow: 3px 3px 8px rgba(10,9,16,.65),-2px -2px 6px rgba(40,37,55,.85);
+}
+[data-style="neumorphism"][data-theme="dark"] .mpm-logout:active {
+  box-shadow: inset 2px 2px 5px rgba(10,9,16,.6),inset -2px -2px 5px rgba(40,37,55,.75);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .mpm-badge {
+  background: rgba(139,127,199,.15);
+  box-shadow: 2px 2px 5px rgba(10,9,16,.5),-1px -1px 4px rgba(40,37,55,.75);
+  color: #A599D9;
+}
+
+/* ================================================================
+   REDUCED MOTION
 ================================================================ */
 @media (prefers-reduced-motion: reduce) {
-  .mpm-banner,
-  .mpm-user-row,
-  .mpm-stats,
-  .mpm-sec-hdr,
-  .mpm-group,
-  .mpm-logout {
-    animation: none !important;
-  }
+  .mpm-root { animation: none; }
+  .mpm-toggle-knob { transition: none; }
 }
