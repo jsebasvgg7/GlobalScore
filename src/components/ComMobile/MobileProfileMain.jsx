@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ChevronDown } from "lucide-react";
+import StyleSwitcher from "./StyleSwitcher";
 import "../../styles/StylesMobile/MobileProfileMain.css";
+import "../../styles/StylesMobile/StyleSwitcher.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
 
@@ -14,10 +16,9 @@ export default function MobileProfileMain({
   onAvatarClick,
 }) {
   const navigate = useNavigate();
+  const [appearanceOpen, setAppearanceOpen] = useState(false);
 
-  const go = (section) => {
-    if (onNavigate) onNavigate(section);
-  };
+  const go = (section) => { if (onNavigate) onNavigate(section); };
 
   const accuracy =
     currentUser?.predictions > 0
@@ -34,11 +35,7 @@ export default function MobileProfileMain({
       {/* ── BANNER ── */}
       <div className="mpm-banner">
         {(currentUser?.equipped_banner_url || currentUser?.banner_url) ? (
-          <img
-            src={currentUser.equipped_banner_url || currentUser.banner_url}
-            alt=""
-            className="mpm-banner-img"
-          />
+          <img src={currentUser.equipped_banner_url || currentUser.banner_url} alt="" className="mpm-banner-img" />
         ) : (
           <div className="mpm-banner-gradient" />
         )}
@@ -81,12 +78,14 @@ export default function MobileProfileMain({
         </div>
       </div>
 
-      {/* ══ SECCIÓN: PREFERENCIAS ══ */}
+      {/* ══ PREFERENCIAS ══ */}
       <div className="mpm-sec-hdr">
         <div className="mpm-sec-dot" />
         <span className="mpm-sec-lbl">Preferencias</span>
       </div>
       <div className="mpm-group">
+
+        {/* Dark Mode toggle */}
         <div className="mpm-row mpm-row--toggle">
           <div className="mpm-row-accent" style={{ background: "#6366f1" }} />
           <div className="mpm-icon" style={{ borderColor: "#6366f1", background: "rgba(99,102,241,0.1)" }}>
@@ -100,20 +99,39 @@ export default function MobileProfileMain({
           </button>
         </div>
 
-        <div className="mpm-row" onClick={() => go("settings-appearance")}>
-          <div className="mpm-row-accent" style={{ background: "#eab308" }} />
-          <div className="mpm-icon" style={{ borderColor: "#eab308", background: "rgba(234,179,8,0.1)" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        {/* Apariencia — expandible con StyleSwitcher */}
+        <div>
+          <div
+            className="mpm-row"
+            onClick={() => setAppearanceOpen(o => !o)}
+            style={{ cursor: "pointer" }}
+          >
+            <div className="mpm-row-accent" style={{ background: "#eab308" }} />
+            <div className="mpm-icon" style={{ borderColor: "#eab308", background: "rgba(234,179,8,0.1)" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+              </svg>
+            </div>
+            <div className="mpm-row-body">
+              <div className="mpm-row-lbl">Apariencia</div>
+              <div className="mpm-row-desc">Tema y estilo visual</div>
+            </div>
+            {appearanceOpen
+              ? <ChevronDown size={14} className="mpm-chevron" />
+              : <ChevronRight size={14} className="mpm-chevron" />}
           </div>
-          <div className="mpm-row-body">
-            <div className="mpm-row-lbl">Apariencia</div>
-            <div className="mpm-row-desc">Tema y colores</div>
-          </div>
-          <ChevronRight size={14} className="mpm-chevron" />
+
+          {appearanceOpen && (
+            <div style={{ borderTop: "1px solid var(--mpm-border)" }}>
+              <StyleSwitcher />
+            </div>
+          )}
         </div>
+
       </div>
 
-      {/* ══ SECCIÓN: MI ACTIVIDAD ══ */}
+      {/* ══ MI ACTIVIDAD ══ */}
       <div className="mpm-sec-hdr">
         <div className="mpm-sec-dot" />
         <span className="mpm-sec-lbl">Mi actividad</span>
@@ -166,14 +184,13 @@ export default function MobileProfileMain({
           </div>
           <ChevronRight size={14} className="mpm-chevron" />
         </div>
-        {/* NUEVA FILA: Mis Notas */}
+
         <div className="mpm-row" onClick={() => go("notes")}>
           <div className="mpm-row-accent" style={{ background: "#5b4fd8" }} />
           <div className="mpm-icon" style={{ borderColor: "#5b4fd8", background: "rgba(91,79,216,0.1)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5b4fd8" strokeWidth="2">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-              <line x1="16" y1="4" x2="20" y2="8"/>
             </svg>
           </div>
           <div className="mpm-row-body">
@@ -184,7 +201,7 @@ export default function MobileProfileMain({
         </div>
       </div>
 
-      {/* ══ SECCIÓN: CUENTA ══ */}
+      {/* ══ CUENTA ══ */}
       <div className="mpm-sec-hdr">
         <div className="mpm-sec-dot" />
         <span className="mpm-sec-lbl">Cuenta</span>
@@ -195,9 +212,7 @@ export default function MobileProfileMain({
           <div className="mpm-icon" style={{ borderColor: "#6b7280", background: "rgba(107,114,128,0.1)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </div>
-          <div className="mpm-row-body">
-            <div className="mpm-row-lbl">Editar Perfil</div>
-          </div>
+          <div className="mpm-row-body"><div className="mpm-row-lbl">Editar Perfil</div></div>
           <ChevronRight size={14} className="mpm-chevron" />
         </div>
 
@@ -206,9 +221,7 @@ export default function MobileProfileMain({
           <div className="mpm-icon" style={{ borderColor: "#60519b", background: "rgba(96,81,155,0.1)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60519b" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </div>
-          <div className="mpm-row-body">
-            <div className="mpm-row-lbl">Cuenta</div>
-          </div>
+          <div className="mpm-row-body"><div className="mpm-row-lbl">Cuenta</div></div>
           <ChevronRight size={14} className="mpm-chevron" />
         </div>
 
@@ -217,9 +230,7 @@ export default function MobileProfileMain({
           <div className="mpm-icon" style={{ borderColor: "#f97316", background: "rgba(249,115,22,0.1)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           </div>
-          <div className="mpm-row-body">
-            <div className="mpm-row-lbl">Notificaciones</div>
-          </div>
+          <div className="mpm-row-body"><div className="mpm-row-lbl">Notificaciones</div></div>
           <ChevronRight size={14} className="mpm-chevron" />
         </div>
 
