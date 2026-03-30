@@ -3,8 +3,8 @@ import { Trophy, LogOut, User2, Award, Shield, Bell, Home, BarChart3, Moon, Sun,
 import { supabase } from "../../utils/supabaseClient";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
+import MobileHeader from "../ComLayout/MobileHeader";
 import "../../styles/StylesLayout/Header.css";
-import "../../styles/StylesMobile/HeaderMobile.css";
 
 export default function Header({ currentUser, users = [], onProfileClick }) {
   const navigate  = useNavigate();
@@ -34,25 +34,13 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
 
   /* ── Sidebar / Desktop nav ── */
   const sidebarItems = [
-    { path: "/app",     icon: Home,      label: "Inicio"  },
-    { path: "/ranking", icon: Award,     label: "Ranking" },
-    { path: "/stats",   icon: BarChart3, label: "Stats"   },
-    { path: "/world",   icon: Globe,     label: "Mundo"   },
-    { path: "/profile", icon: User2,     label: "Perfil"  },
-    { path: "/notes",   icon: NotebookPen, label: "Notas" },
+    { path: "/app",     icon: Home,        label: "Inicio"  },
+    { path: "/ranking", icon: Award,       label: "Ranking" },
+    { path: "/stats",   icon: BarChart3,   label: "Stats"   },
+    { path: "/world",   icon: Globe,       label: "Mundo"   },
+    { path: "/profile", icon: User2,       label: "Perfil"  },
+    { path: "/notes",   icon: NotebookPen, label: "Notas"   },
     ...(currentUser?.is_admin ? [{ path: "/admin", icon: Shield, label: "Admin" }] : []),
-  ];
-
-  /* ── Mobile Bottom Nav ── */
-  const leftItems = currentUser?.is_admin
-    ? [{ path: "/admin",   icon: Shield, label: "Admin"   }]
-    : [{ path: "/world",   icon: Globe,  label: "Mundial" }];
-
-  const mobileBottomItems = [
-    ...leftItems,
-    { path: "/ranking", icon: Award,     label: "Ranking" },
-    { path: "/stats",   icon: BarChart3, label: "Stats"   },
-    { path: "/profile", icon: User2,     label: "Perfil"  },
   ];
 
   const firstName = currentUser?.name?.split(" ")[0] || "Jugador";
@@ -61,6 +49,11 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
 
   return (
     <>
+      {/* ══════════════════════════════════════
+          MOBILE HEADER — delegado a MobileHeader
+      ══════════════════════════════════════ */}
+      <MobileHeader currentUser={currentUser} />
+
       {/* ══════════════════════════════════════
           DESKTOP SIDEBAR — Brutalista Japonés
       ══════════════════════════════════════ */}
@@ -175,78 +168,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           </div>
         </div>
       </header>
-
-      {/* ══════════════════════════════════════
-          MOBILE — Top Header · BJR
-      ══════════════════════════════════════ */}
-     <header className="gs-mobile-header">
-      {/* Izquierda: Hey + Nombre */}
-      <div className="gs-mobile-left">
-        <div className="gs-mobile-greeting">
-          <span className="gs-mobile-hey">Hey</span>
-          <span className="gs-mobile-name">{firstName}</span>
-        </div>
-      </div>
-
-      {/* Derecha: notificaciones + avatar */}
-      <div className="gs-mobile-actions">
-        <button className="gs-mobile-btn" onClick={toggleTheme} aria-label="Tema">
-          {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
-        </button>
-        <button className="gs-mobile-btn" onClick={() => navigate("/notifications")} aria-label="Notificaciones">
-          <Bell size={15} />
-          <span className="gs-mobile-btn-dot" />
-        </button>
-        <button className="gs-mobile-avatar" onClick={() => navigate("/profile")} aria-label="Perfil">
-          {currentUser?.avatar_url
-            ? <img src={currentUser.avatar_url} alt={firstName} />
-            : <span>{initials}</span>
-          }
-        </button>
-      </div>
-
-    </header>
-
-      {/* ══════════════════════════════════════
-          MOBILE — Bottom Nav
-      ══════════════════════════════════════ */}
-      <nav className="gs-bottom-nav">
-        {mobileBottomItems.slice(0, 2).map(({ path, icon: Icon, label }) => (
-          <button
-            key={path}
-            className={`gs-bottom-btn${isActive(path) ? " gs-bottom-btn--active" : ""}`}
-            onClick={() => navigate(path)}
-            aria-label={label}
-          >
-            <Icon size={20} />
-            <span className="gs-bottom-label">{label}</span>
-          </button>
-        ))}
-
-        {/* Copa central */}
-        <div className="gs-bottom-center">
-          <button
-            className={`gs-bottom-trophy${isActive("/app") ? " gs-bottom-trophy--active" : ""}`}
-            onClick={() => navigate("/app")}
-            aria-label="Inicio"
-          >
-            <Trophy size={22} />
-          </button>
-          <span className="gs-bottom-label gs-bottom-label--center">Inicio</span>
-        </div>
-
-        {mobileBottomItems.slice(2).map(({ path, icon: Icon, label }) => (
-          <button
-            key={path}
-            className={`gs-bottom-btn${isActive(path) ? " gs-bottom-btn--active" : ""}`}
-            onClick={() => navigate(path)}
-            aria-label={label}
-          >
-            <Icon size={20} />
-            <span className="gs-bottom-label">{label}</span>
-          </button>
-        ))}
-      </nav>
     </>
   );
 }

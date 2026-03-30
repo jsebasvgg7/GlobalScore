@@ -1,0 +1,550 @@
+/* ================================================================
+   MobileHeader.css — GlobalScore
+   Dos temas via [data-style]:
+   [data-style="brutalist"]   → DM Mono, bordes duros, plano
+   [data-style="neumorphism"] → Plus Jakarta Sans, sombras soft
+   Dark mode via [data-theme="dark"] en darkmode.css
+================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* ================================================================
+   VARIABLES — BRUTALIST
+================================================================ */
+[data-style="brutalist"] .mhd-header,
+[data-style="brutalist"] .mhd-bottom-nav {
+  --mhd-bg:          #f0ede8;
+  --mhd-surface:     #e8e4de;
+  --mhd-border:      #c4bfb8;
+  --mhd-text:        #1a1a2e;
+  --mhd-muted:       #888780;
+  --mhd-accent:      #5b4fd8;
+  --mhd-accent-2:    #c9a227;
+  --mhd-red:         #d84040;
+  --mhd-mono:        'DM Mono', 'Courier New', monospace;
+  --mhd-shadow:      none;
+  --mhd-r:           0px;
+  --mhd-r-pill:      0px;
+}
+
+/* ================================================================
+   VARIABLES — NEUMORPHISM
+================================================================ */
+[data-style="neumorphism"] .mhd-header,
+[data-style="neumorphism"] .mhd-bottom-nav {
+  --mhd-bg:          #EAE7E1;
+  --mhd-surface:     #EAE7E1;
+  --nm-light:        rgba(255, 255, 255, 0.85);
+  --nm-dark:         rgba(166, 158, 148, 0.55);
+  --nm-il:           rgba(255, 255, 255, 0.70);
+  --nm-id:           rgba(166, 158, 148, 0.45);
+  --nm-s:            5px 5px 12px var(--nm-dark), -3px -3px 9px var(--nm-light);
+  --nm-sm:           3px 3px 8px var(--nm-dark),  -2px -2px 6px var(--nm-light);
+  --nm-i:            inset 2px 2px 6px var(--nm-id), inset -2px -2px 6px var(--nm-il);
+  --nm-ism:          inset 1px 1px 4px var(--nm-id), inset -1px -1px 4px var(--nm-il);
+  --mhd-border:      rgba(166, 158, 148, 0.28);
+  --mhd-text:        #2A2535;
+  --mhd-muted:       #9B95A8;
+  --mhd-accent:      #60519b;
+  --mhd-accent-2:    #c9a227;
+  --mhd-red:         #D95757;
+  --mhd-mono:        'Plus Jakarta Sans', system-ui, sans-serif;
+  --mhd-shadow:      var(--nm-s);
+  --mhd-r:           12px;
+  --mhd-r-pill:      100px;
+}
+
+/* ================================================================
+   TOP HEADER — BASE (display only on mobile)
+================================================================ */
+.mhd-header {
+  display:         none;
+  align-items:     center;
+  justify-content: space-between;
+  height:          60px;
+  padding:         0 18px;
+  position:        sticky;
+  top:             0;
+  z-index:         200;
+  transition:      background 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .mhd-header { display: flex; }
+}
+
+/* ================================================================
+   TOP HEADER — BRUTALIST
+================================================================ */
+[data-style="brutalist"] .mhd-header {
+  background:    var(--mhd-bg);
+  border-bottom: 1.5px solid var(--mhd-border);
+  font-family:   var(--mhd-mono);
+}
+
+[data-style="brutalist"] .mhd-header--scrolled {
+  background: var(--mhd-surface);
+  border-bottom-color: var(--mhd-accent);
+}
+
+/* ================================================================
+   TOP HEADER — NEUMORPHISM
+================================================================ */
+[data-style="neumorphism"] .mhd-header {
+  background:  var(--mhd-bg);
+  border-bottom: 1px solid var(--mhd-border);
+  font-family: var(--mhd-mono);
+}
+
+[data-style="neumorphism"] .mhd-header--scrolled {
+  box-shadow: 0 4px 14px rgba(166, 158, 148, 0.35);
+}
+
+/* ================================================================
+   LEFT SIDE — Greeting
+================================================================ */
+.mhd-left {
+  display:        flex;
+  align-items:    baseline;
+  gap:            5px;
+  flex-shrink:    0;
+}
+
+[data-style="brutalist"] .mhd-hey {
+  font-size:      10px;
+  font-weight:    500;
+  color:          var(--mhd-muted);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  line-height:    1;
+}
+
+[data-style="brutalist"] .mhd-name {
+  font-size:      19px;
+  font-weight:    700;
+  color:          var(--mhd-text);
+  letter-spacing: -.02em;
+  line-height:    1;
+}
+
+[data-style="neumorphism"] .mhd-hey {
+  font-size:      11px;
+  font-weight:    500;
+  color:          var(--mhd-muted);
+  letter-spacing: .04em;
+  line-height:    1;
+}
+
+[data-style="neumorphism"] .mhd-name {
+  font-size:      20px;
+  font-weight:    800;
+  color:          var(--mhd-text);
+  letter-spacing: -.03em;
+  line-height:    1;
+}
+
+/* ================================================================
+   RIGHT SIDE — Actions row
+================================================================ */
+.mhd-actions {
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+  margin-left: auto;
+}
+
+/* ── Clock chip ── */
+[data-style="brutalist"] .mhd-clock {
+  font-family:    var(--mhd-mono);
+  font-size:      10px;
+  font-weight:    700;
+  color:          var(--mhd-muted);
+  letter-spacing: .1em;
+  border:         1px solid var(--mhd-border);
+  padding:        4px 8px;
+  line-height:    1;
+  user-select:    none;
+}
+
+[data-style="neumorphism"] .mhd-clock {
+  font-size:      10px;
+  font-weight:    600;
+  color:          var(--mhd-muted);
+  letter-spacing: .06em;
+  background:     var(--mhd-bg);
+  padding:        4px 10px;
+  border-radius:  var(--mhd-r-pill);
+  box-shadow:     var(--nm-ism);
+  user-select:    none;
+  line-height:    1;
+}
+
+/* ── Icon Buttons ── */
+.mhd-btn {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  width:           36px;
+  height:          36px;
+  cursor:          pointer;
+  position:        relative;
+  flex-shrink:     0;
+  -webkit-tap-highlight-color: transparent;
+  transition:      background 0.14s, box-shadow 0.14s, transform 0.1s;
+}
+
+[data-style="brutalist"] .mhd-btn {
+  background: transparent;
+  border:     1.5px solid var(--mhd-border);
+  color:      var(--mhd-muted);
+}
+
+[data-style="brutalist"] .mhd-btn:active {
+  background: var(--mhd-surface);
+  color:      var(--mhd-text);
+  transform:  translate(1px, 1px);
+}
+
+[data-style="neumorphism"] .mhd-btn {
+  background:    var(--mhd-bg);
+  border:        none;
+  border-radius: var(--mhd-r);
+  box-shadow:    var(--nm-sm);
+  color:         var(--mhd-muted);
+}
+
+[data-style="neumorphism"] .mhd-btn:active {
+  box-shadow: var(--nm-i);
+  color:      var(--mhd-accent);
+  transform:  scale(0.95);
+}
+
+/* Notification dot */
+.mhd-notif-dot {
+  position:      absolute;
+  top:           7px;
+  right:         7px;
+  width:         6px;
+  height:        6px;
+  background:    var(--mhd-red);
+  border-radius: 50%;
+}
+
+[data-style="brutalist"] .mhd-notif-dot {
+  border:        1.5px solid var(--mhd-bg);
+  border-radius: 0;
+  width:         5px;
+  height:        5px;
+}
+
+[data-style="neumorphism"] .mhd-notif-dot {
+  border:     2px solid var(--mhd-bg);
+  box-shadow: 0 0 5px rgba(217, 87, 87, 0.5);
+}
+
+/* ── Avatar button ── */
+.mhd-avatar {
+  position:        relative;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  width:           36px;
+  height:          36px;
+  cursor:          pointer;
+  flex-shrink:     0;
+  overflow:        hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition:      box-shadow 0.14s, transform 0.1s;
+}
+
+.mhd-avatar img {
+  width:      100%;
+  height:     100%;
+  object-fit: cover;
+}
+
+[data-style="brutalist"] .mhd-avatar {
+  background:    var(--mhd-accent);
+  border:        1.5px solid var(--mhd-border);
+  border-radius: 0;
+}
+
+[data-style="brutalist"] .mhd-avatar span {
+  font-family: var(--mhd-mono);
+  font-size:   12px;
+  font-weight: 700;
+  color:       #fff;
+}
+
+[data-style="brutalist"] .mhd-avatar:active {
+  border-color: var(--mhd-accent);
+  transform:    translate(1px, 1px);
+}
+
+[data-style="neumorphism"] .mhd-avatar {
+  background:    var(--mhd-accent);
+  border:        none;
+  border-radius: 50%;
+  box-shadow:    var(--nm-sm);
+}
+
+[data-style="neumorphism"] .mhd-avatar img {
+  border-radius: 50%;
+}
+
+[data-style="neumorphism"] .mhd-avatar span {
+  font-size:   11px;
+  font-weight: 800;
+  color:       #fff;
+}
+
+[data-style="neumorphism"] .mhd-avatar:active {
+  box-shadow: var(--nm-i);
+  transform:  scale(0.94);
+}
+
+/* Level badge on avatar */
+.mhd-avatar-level {
+  position:    absolute;
+  bottom:      -2px;
+  right:       -2px;
+  font-size:   8px;
+  font-weight: 700;
+  color:       #fff;
+  background:  var(--mhd-accent-2);
+  line-height: 1;
+  z-index:     1;
+}
+
+[data-style="brutalist"] .mhd-avatar-level {
+  padding:     1px 4px;
+  font-family: var(--mhd-mono);
+  letter-spacing: .06em;
+}
+
+[data-style="neumorphism"] .mhd-avatar-level {
+  padding:       2px 5px;
+  border-radius: var(--mhd-r-pill);
+  box-shadow:    0 1px 4px rgba(0,0,0,.25);
+  border:        1.5px solid var(--mhd-bg);
+}
+
+/* ================================================================
+   BOTTOM NAV — BASE
+================================================================ */
+.mhd-bottom-nav {
+  display:    none;
+  position:   fixed;
+  bottom:     0;
+  left:       0;
+  right:      0;
+  height:     56px;
+  flex-direction:  row;
+  align-items:     center;
+  justify-content: space-around;
+  z-index:    300;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (max-width: 768px) {
+  .mhd-bottom-nav { display: flex; }
+
+  body {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ================================================================
+   BOTTOM NAV — BRUTALIST
+================================================================ */
+[data-style="brutalist"] .mhd-bottom-nav {
+  background:  var(--mhd-bg);
+  border-top:  1.5px solid var(--mhd-border);
+  font-family: var(--mhd-mono);
+}
+
+/* ================================================================
+   BOTTOM NAV — NEUMORPHISM
+================================================================ */
+[data-style="neumorphism"] .mhd-bottom-nav {
+  background:  var(--mhd-bg);
+  border-top:  1px solid var(--mhd-border);
+  box-shadow:  0 -4px 16px rgba(166, 158, 148, 0.22);
+  font-family: var(--mhd-mono);
+}
+
+/* ================================================================
+   NAV BUTTONS
+================================================================ */
+.mhd-nav-btn {
+  flex:            1;
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  gap:             3px;
+  height:          100%;
+  background:      transparent;
+  border:          none;
+  cursor:          pointer;
+  padding:         0;
+  -webkit-tap-highlight-color: transparent;
+  transition:      color 0.15s;
+}
+
+/* Brutalist nav btn */
+[data-style="brutalist"] .mhd-nav-btn {
+  color: var(--mhd-muted);
+}
+
+[data-style="brutalist"] .mhd-nav-btn--active {
+  color: var(--mhd-text);
+}
+
+[data-style="brutalist"] .mhd-nav-btn:active {
+  opacity: 0.7;
+}
+
+/* Neumorphism nav btn */
+[data-style="neumorphism"] .mhd-nav-btn {
+  color: var(--mhd-muted);
+}
+
+[data-style="neumorphism"] .mhd-nav-btn--active {
+  color: var(--mhd-accent);
+}
+
+[data-style="neumorphism"] .mhd-nav-btn:active {
+  transform: scale(0.92);
+}
+
+/* ── Icon wrap (for active indicator) ── */
+.mhd-nav-icon-wrap {
+  position:   relative;
+  display:    flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s;
+}
+
+/* ── Nav label ── */
+.mhd-nav-label {
+  display: none;
+}
+
+/* ================================================================
+   CENTER TROPHY
+================================================================ */
+.mhd-nav-center {
+  flex:            1;
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  gap:             0;
+  height:          100%;
+  position:        relative;
+}
+
+.mhd-trophy-btn {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  width:           46px;
+  height:          46px;
+  cursor:          pointer;
+  position:        absolute;
+  top:             -11px;
+  -webkit-tap-highlight-color: transparent;
+  transition:      transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+/* Brutalist trophy */
+[data-style="brutalist"] .mhd-trophy-btn {
+  background:    var(--mhd-accent);
+  border:        none;
+  border-radius: 0;
+  color:         rgba(255, 255, 255, 0.75);
+  box-shadow: 3px 3px 0 rgba(91, 79, 216, 0.4);
+}
+
+[data-style="brutalist"] .mhd-trophy-btn--active {
+  background: var(--mhd-accent);
+  color:      #fff;
+  box-shadow: 3px 3px 0 rgba(91, 79, 216, 0.4);
+}
+
+[data-style="brutalist"] .mhd-trophy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 3px 0 rgba(91, 79, 216, 0.4);
+}
+
+[data-style="brutalist"] .mhd-trophy-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 rgba(91, 79, 216, 0.4);
+}
+
+/* Neumorphism trophy */
+[data-style="neumorphism"] .mhd-trophy-btn {
+  background:    var(--mhd-accent);
+  border:        none;
+  border-radius: 14px;
+  color:         rgba(255, 255, 255, 0.85);
+  box-shadow:    var(--nm-sm), 0 4px 14px rgba(96, 81, 155, 0.35);
+}
+
+[data-style="neumorphism"] .mhd-trophy-btn--active {
+  color:      #fff;
+  box-shadow: var(--nm-i), 0 4px 18px rgba(96, 81, 155, 0.5);
+}
+
+[data-style="neumorphism"] .mhd-trophy-btn:hover {
+  transform:  translateY(-3px);
+  box-shadow: var(--nm-sm), 0 8px 20px rgba(96, 81, 155, 0.45);
+}
+
+[data-style="neumorphism"] .mhd-trophy-btn:active {
+  transform:  scale(0.93);
+  box-shadow: var(--nm-i);
+}
+
+/* Center label */
+.mhd-nav-label--center {
+  display: none;
+}
+
+/* ================================================================
+   ANIMATIONS
+================================================================ */
+@keyframes mhd-dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.4); opacity: 0.7; }
+}
+
+.mhd-notif-dot {
+  animation: mhd-dot-pulse 2.5s ease-in-out infinite;
+}
+
+/* ================================================================
+   RESPONSIVE — small screens
+================================================================ */
+@media (max-width: 360px) {
+  .mhd-header  { padding: 0 14px; }
+  .mhd-actions { gap: 6px; }
+  .mhd-clock   { display: none; }
+
+  [data-style="brutalist"] .mhd-name   { font-size: 17px; }
+  [data-style="neumorphism"] .mhd-name { font-size: 18px; }
+}
+
+/* ================================================================
+   REDUCED MOTION
+================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .mhd-trophy-btn,
+  .mhd-btn,
+  .mhd-avatar,
+  .mhd-nav-btn { transition: none; }
+
+  .mhd-notif-dot { animation: none; }
+}

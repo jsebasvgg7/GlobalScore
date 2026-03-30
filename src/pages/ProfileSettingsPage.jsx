@@ -25,7 +25,6 @@ import { useMonthlyChampionships } from '../hooks/HooksProfile/useMonthlyChampio
 import { useSettings } from '../hooks/HooksSettings/useSettings';
 import { useTheme } from '../context/ThemeContext';
 
-// Mobile component — owns all mobile state & rendering
 import MobileProfileMain from '../components/ComMobile/MobileProfileMain';
 
 import AvatarUpload from '../components/ComProfile/AvatarUpload';
