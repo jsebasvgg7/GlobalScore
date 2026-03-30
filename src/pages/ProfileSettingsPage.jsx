@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-  User, Bell, Shield, Database, Info, ChevronRight,
+  User, Bell, Shield, Database, Info,
   Trophy, Heart, Globe, Crown, Edit2, List,
-  Grid3x3, Moon, Sun, Volume2, VolumeX, Eye, EyeOff,
+  Grid3x3, Moon, Volume2, VolumeX, Eye, EyeOff,
   Download, Trash2, LogOut, AlertTriangle, Check,
   Save, X, Activity, RotateCcw, ArrowLeft, Settings,
-  Lock, Layers, Award, Target, Zap, Flame, Star,
+  Lock, Award, Target, Zap, Flame, Star,
   TrendingUp, Calendar, CheckCircle2, XCircle, Clock,
-  ArrowUpDown, Gamepad2, Image, Filter, NotebookPen
+  ArrowUpDown, Gamepad2, Image, Filter, NotebookPen,
+  Image as ImageIcon,
 } from 'lucide-react';
 
 import { ToastContainer, useToast } from '../components/ComFeedback/Toast';
 import Footer from '../components/ComLayout/Footer';
 import AdminAchievementsModal from '../components/ComAdmin/AdminAchievementsModal';
 import AdminTitlesModal from '../components/ComAdmin/AdminTitlesModal';
-import MobileNotes from "../components/ComMobile/MobileNotes";
 
 import { useProfileData } from '../hooks/HooksProfile/useProfileData';
 import { usePredictionHistory } from '../hooks/HooksProfile/usePredictionHistory';
@@ -23,21 +23,29 @@ import { useAchievements } from '../hooks/HooksProfile/useAchievements';
 import { useUserRanking } from '../hooks/HooksProfile/useUserRanking';
 import { useMonthlyChampionships } from '../hooks/HooksProfile/useMonthlyChampionships';
 import { useSettings } from '../hooks/HooksSettings/useSettings';
-import MobileProfileMain from "../components/ComMobile/MobileProfileMain";
 import { useTheme } from '../context/ThemeContext';
+
+// Mobile component — owns all mobile state & rendering
+import MobileProfileMain from '../components/ComMobile/MobileProfileMain';
 
 import AvatarUpload from '../components/ComProfile/AvatarUpload';
 import ImageViewer from '../components/ComOthers/ImageViewer';
 
 import { supabase } from '../utils/supabaseClient';
-import { getPredictionResult, calculateAccuracy, calculateLevelProgress, getIconEmoji, getCategoryColor } from '../utils/profileUtils';
+import {
+  getPredictionResult,
+  calculateAccuracy,
+  calculateLevelProgress,
+  getIconEmoji,
+  getCategoryColor,
+} from '../utils/profileUtils';
 
 import '../styles/StylesPages/ProfileSettingsPage.css';
 
 const fmt = (n) => Number(n || 0).toLocaleString('es-ES');
 
 /* ═══════════════════════════════════════════════════════════════
-   NAV ITEMS
+   NAV ITEMS — desktop only
 ═══════════════════════════════════════════════════════════════ */
 const NAV_ITEMS = [
   { id: 'overview',      icon: Grid3x3, label: 'Estadísticas',  group: 'perfil' },
@@ -56,7 +64,7 @@ const NAV_ITEMS = [
 const TAB_LABELS = Object.fromEntries(NAV_ITEMS.map(n => [n.id, n.label]));
 
 /* ═══════════════════════════════════════════════════════════════
-   OVERVIEW TAB
+   DESKTOP — OVERVIEW TAB
 ═══════════════════════════════════════════════════════════════ */
 function OverviewTab({ userData, currentUser, userRanking }) {
   const accuracy = calculateAccuracy(currentUser);
@@ -83,7 +91,6 @@ function OverviewTab({ userData, currentUser, userRanking }) {
           <div className="pnew-level-fill" style={{ width: `${levelProgress}%` }} />
         </div>
       </div>
-
       <div className="pnew-stats-grid">
         {items.map(item => {
           const Icon = item.icon;
@@ -103,7 +110,7 @@ function OverviewTab({ userData, currentUser, userRanking }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ACHIEVEMENTS TAB
+   DESKTOP — ACHIEVEMENTS TAB
 ═══════════════════════════════════════════════════════════════ */
 function AchievementsTab({ activeTitle, userTitles, userAchievements, availableAchievements, achievementsLoading }) {
   return (
@@ -118,12 +125,10 @@ function AchievementsTab({ activeTitle, userTitles, userAchievements, availableA
           <span className="pnew-equipped-tag">EQUIPADO</span>
         </div>
       )}
-
       <div className="pnew-section-hdr">
         <span>TÍTULOS</span>
         <span className="pnew-count-badge">{userTitles.length}</span>
       </div>
-
       {achievementsLoading ? (
         <div className="pnew-empty"><Activity size={24} className="spinner" /></div>
       ) : userTitles.length === 0 ? (
@@ -141,12 +146,10 @@ function AchievementsTab({ activeTitle, userTitles, userAchievements, availableA
           ))}
         </div>
       )}
-
       <div className="pnew-section-hdr" style={{ marginTop: 16 }}>
         <span>LOGROS</span>
         <span className="pnew-count-badge">{userAchievements.length}/{availableAchievements.length}</span>
       </div>
-
       {achievementsLoading ? (
         <div className="pnew-empty"><Activity size={24} className="spinner" /></div>
       ) : userAchievements.length === 0 ? (
@@ -167,7 +170,7 @@ function AchievementsTab({ activeTitle, userTitles, userAchievements, availableA
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CHAMPIONSHIPS TAB
+   DESKTOP — CHAMPIONSHIPS TAB
 ═══════════════════════════════════════════════════════════════ */
 function ChampionshipsTab({ userData, crownHistory, monthlyStats, championshipsLoading }) {
   const total = userData?.monthly_championships || 0;
@@ -178,33 +181,18 @@ function ChampionshipsTab({ userData, crownHistory, monthlyStats, championshipsL
         <div className="pnew-crowns-num" style={{ color: '#c9a227' }}>{total}</div>
         <div className="pnew-crowns-lbl">CAMPEONATOS GANADOS</div>
       </div>
-
       <div className="pnew-month-grid">
-        <div className="pnew-month-cell">
-          <div className="pnew-month-val">{userData?.monthly_points || 0}</div>
-          <div className="pnew-month-lbl">PTS MES</div>
-        </div>
-        <div className="pnew-month-cell">
-          <div className="pnew-month-val">{userData?.monthly_predictions || 0}</div>
-          <div className="pnew-month-lbl">PREDS</div>
-        </div>
-        <div className="pnew-month-cell">
-          <div className="pnew-month-val">{userData?.monthly_correct || 0}</div>
-          <div className="pnew-month-lbl">ACIERTOS</div>
-        </div>
+        <div className="pnew-month-cell"><div className="pnew-month-val">{userData?.monthly_points || 0}</div><div className="pnew-month-lbl">PTS MES</div></div>
+        <div className="pnew-month-cell"><div className="pnew-month-val">{userData?.monthly_predictions || 0}</div><div className="pnew-month-lbl">PREDS</div></div>
+        <div className="pnew-month-cell"><div className="pnew-month-val">{userData?.monthly_correct || 0}</div><div className="pnew-month-lbl">ACIERTOS</div></div>
       </div>
-
       {crownHistory?.length > 0 && (
         <>
-          <div className="pnew-section-hdr" style={{ marginTop: 16 }}>
-            <span>HISTORIAL</span>
-          </div>
+          <div className="pnew-section-hdr" style={{ marginTop: 16 }}><span>HISTORIAL</span></div>
           <div className="pnew-crown-list">
             {crownHistory.map((c, i) => (
               <div key={c.id} className="pnew-crown-row">
-                <div className="pnew-crown-rank" style={{ background: i === 0 ? '#c9a227' : i === 1 ? '#8a8a8a' : '#a0652a' }}>
-                  #{i + 1}
-                </div>
+                <div className="pnew-crown-rank" style={{ background: i === 0 ? '#c9a227' : i === 1 ? '#8a8a8a' : '#a0652a' }}>#{i + 1}</div>
                 <div>
                   <div className="pnew-crown-month">{c.month_year}</div>
                   <div className="pnew-crown-pts">{fmt(c.points)} pts</div>
@@ -220,7 +208,7 @@ function ChampionshipsTab({ userData, crownHistory, monthlyStats, championshipsL
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   HISTORY TAB
+   DESKTOP — HISTORY TAB
 ═══════════════════════════════════════════════════════════════ */
 function HistoryTab({ predictionHistory, historyLoading }) {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -257,27 +245,19 @@ function HistoryTab({ predictionHistory, historyLoading }) {
   return (
     <div className="pnew-tab-content">
       <div className="pnew-hist-hdr">
-        <div className="pnew-hist-title">
-          <Gamepad2 size={16} />
-          <span>Historial</span>
-        </div>
+        <div className="pnew-hist-title"><Gamepad2 size={16} /><span>Historial</span></div>
         <div style={{ position: 'relative' }}>
           <button className={`pnew-sort-btn${showSort ? ' active' : ''}`} onClick={() => setShowSort(v => !v)}>
-            <ArrowUpDown size={13} />
-            <span>{filterLabel[activeFilter]}</span>
+            <ArrowUpDown size={13} /><span>{filterLabel[activeFilter]}</span>
           </button>
           {showSort && (
             <>
               <div className="pnew-sort-backdrop" onClick={() => setShowSort(false)} />
               <div className="pnew-sort-modal">
                 {Object.entries(filterLabel).map(([key, lbl]) => (
-                  <button
-                    key={key}
-                    className={`pnew-sort-opt${activeFilter === key ? ' active' : ''}`}
-                    onClick={() => { setActiveFilter(key); setShowSort(false); }}
-                  >
-                    <span>{lbl}</span>
-                    <span className="pnew-sort-count">{counts[key]}</span>
+                  <button key={key} className={`pnew-sort-opt${activeFilter === key ? ' active' : ''}`}
+                    onClick={() => { setActiveFilter(key); setShowSort(false); }}>
+                    <span>{lbl}</span><span className="pnew-sort-count">{counts[key]}</span>
                   </button>
                 ))}
               </div>
@@ -311,7 +291,6 @@ function HistoryTab({ predictionHistory, historyLoading }) {
                     </div>
                     <span className="pnew-hist-tname">{match?.home_team}</span>
                   </div>
-
                   <div className="pnew-hist-scores">
                     <div className="pnew-hist-score-wrap">
                       <div className="pnew-hist-score">{pred.home_score}</div>
@@ -325,7 +304,6 @@ function HistoryTab({ predictionHistory, historyLoading }) {
                       </div>
                     )}
                   </div>
-
                   <div className="pnew-hist-team pnew-hist-team--right">
                     <span className="pnew-hist-tname">{match?.away_team}</span>
                     <div className="pnew-hist-logo">
@@ -343,9 +321,7 @@ function HistoryTab({ predictionHistory, historyLoading }) {
                     {result.status === 'pending' && <Clock size={12} />}
                     <span>{result.label}</span>
                   </div>
-                  {result.points > 0 && (
-                    <div className="pnew-hist-pts">+{result.points} pts</div>
-                  )}
+                  {result.points > 0 && <div className="pnew-hist-pts">+{result.points} pts</div>}
                 </div>
               </div>
             );
@@ -357,23 +333,20 @@ function HistoryTab({ predictionHistory, historyLoading }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   EDIT TAB
+   DESKTOP — EDIT TAB
 ═══════════════════════════════════════════════════════════════ */
 function EditTab({ userData, setUserData, currentUser, loading, handleSave, handleAvatarUpload, loadUserData, setActiveTab }) {
   const [userBanners, setUserBanners]       = useState([]);
   const [bannersLoading, setBannersLoading] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (currentUser?.id) loadUserBanners();
   }, [currentUser?.id]);
 
   const loadUserBanners = async () => {
     setBannersLoading(true);
     try {
-      const { data } = await supabase
-        .from('user_banners')
-        .select('*, available_banners(*)')
-        .eq('user_id', currentUser.id);
+      const { data } = await supabase.from('user_banners').select('*, available_banners(*)').eq('user_id', currentUser.id);
       setUserBanners((data || []).map(r => r.available_banners).filter(Boolean));
     } catch (err) { console.error(err); }
     finally { setBannersLoading(false); }
@@ -389,34 +362,21 @@ function EditTab({ userData, setUserData, currentUser, loading, handleSave, hand
   return (
     <div className="pnew-tab-content">
       <div className="pnew-edit-avatar">
-        <AvatarUpload
-          currentUrl={userData.avatar_url}
-          userId={currentUser.id}
-          onUploadComplete={handleAvatarUpload}
-          userLevel={userData.level}
-        />
+        <AvatarUpload currentUrl={userData.avatar_url} userId={currentUser.id} onUploadComplete={handleAvatarUpload} userLevel={userData.level} />
       </div>
-
       <div className="pnew-form-group">
-        <label className="pnew-form-label"><Image size={13} /> Banner de Perfil</label>
-        {bannersLoading ? (
-          <p className="pnew-form-note">Cargando banners...</p>
-        ) : (
+        <label className="pnew-form-label"><ImageIcon size={13} /> Banner de Perfil</label>
+        {bannersLoading ? <p className="pnew-form-note">Cargando banners...</p> : (
           <div className="pnew-banner-list">
-            <button
-              className={`pnew-banner-opt${!userData.equipped_banner_url ? ' active' : ''}`}
-              onClick={() => setUserData({ ...userData, equipped_banner_url: null })}
-            >
+            <button className={`pnew-banner-opt${!userData.equipped_banner_url ? ' active' : ''}`}
+              onClick={() => setUserData({ ...userData, equipped_banner_url: null })}>
               <div className="pnew-banner-preview pnew-banner-base" />
               <span>Banner Base</span>
               {!userData.equipped_banner_url && <Check size={12} className="pnew-banner-check" />}
             </button>
             {userBanners.map(b => (
-              <button
-                key={b.id}
-                className={`pnew-banner-opt${userData.equipped_banner_url === b.image_url ? ' active' : ''}`}
-                onClick={() => setUserData({ ...userData, equipped_banner_url: b.image_url === userData.equipped_banner_url ? null : b.image_url })}
-              >
+              <button key={b.id} className={`pnew-banner-opt${userData.equipped_banner_url === b.image_url ? ' active' : ''}`}
+                onClick={() => setUserData({ ...userData, equipped_banner_url: b.image_url === userData.equipped_banner_url ? null : b.image_url })}>
                 <img src={b.image_url} alt={b.name} className="pnew-banner-preview" />
                 <span>{b.name}</span>
                 {userData.equipped_banner_url === b.image_url && <Check size={12} className="pnew-banner-check" />}
@@ -426,30 +386,20 @@ function EditTab({ userData, setUserData, currentUser, loading, handleSave, hand
           </div>
         )}
       </div>
-
       {fields.map(f => {
         const Icon = f.icon;
         return (
           <div key={f.key} className="pnew-form-group">
             <label className="pnew-form-label"><Icon size={13} /> {f.label}</label>
-            <input
-              type="text"
-              className="pnew-form-input"
-              value={userData[f.key] || ''}
-              onChange={e => setUserData({ ...userData, [f.key]: e.target.value })}
-              placeholder={f.placeholder}
-            />
+            <input type="text" className="pnew-form-input"
+              value={userData[f.key] || ''} onChange={e => setUserData({ ...userData, [f.key]: e.target.value })}
+              placeholder={f.placeholder} />
           </div>
         );
       })}
-
       <div className="pnew-form-group">
         <label className="pnew-form-label"><User size={13} /> Género</label>
-        <select
-          className="pnew-form-input"
-          value={userData.gender || ''}
-          onChange={e => setUserData({ ...userData, gender: e.target.value })}
-        >
+        <select className="pnew-form-input" value={userData.gender || ''} onChange={e => setUserData({ ...userData, gender: e.target.value })}>
           <option value="">Seleccionar...</option>
           <option value="Masculino">Masculino</option>
           <option value="Femenino">Femenino</option>
@@ -457,18 +407,12 @@ function EditTab({ userData, setUserData, currentUser, loading, handleSave, hand
           <option value="Prefiero no decir">Prefiero no decir</option>
         </select>
       </div>
-
       <div className="pnew-form-group">
         <label className="pnew-form-label"><Star size={13} /> Biografía</label>
-        <textarea
-          className="pnew-form-input pnew-form-textarea"
-          rows={3}
-          value={userData.bio || ''}
-          onChange={e => setUserData({ ...userData, bio: e.target.value })}
-          placeholder="Cuéntanos sobre ti..."
-        />
+        <textarea className="pnew-form-input pnew-form-textarea" rows={3}
+          value={userData.bio || ''} onChange={e => setUserData({ ...userData, bio: e.target.value })}
+          placeholder="Cuéntanos sobre ti..." />
       </div>
-
       <div className="pnew-form-actions">
         <button className="pnew-save-btn" onClick={handleSave} disabled={loading}>
           {loading ? <Activity size={14} className="spinner" /> : <Save size={14} />}
@@ -483,17 +427,13 @@ function EditTab({ userData, setUserData, currentUser, loading, handleSave, hand
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SETTINGS SECTIONS
+   DESKTOP — SETTINGS SECTIONS
 ═══════════════════════════════════════════════════════════════ */
 function SettingsSection({ section, preferences, saving, handleToggle, handleSelect, handleLogout,
   handleReset, handleExport, setShowDeleteConfirm, currentUser, theme, toggleTheme }) {
 
   const Toggle = ({ checked, onChange, disabled }) => (
-    <button
-      className={`pnew-toggle${checked ? ' pnew-toggle--on' : ''}`}
-      onClick={onChange}
-      disabled={disabled || saving}
-    >
+    <button className={`pnew-toggle${checked ? ' pnew-toggle--on' : ''}`} onClick={onChange} disabled={disabled || saving}>
       <div className="pnew-toggle-knob" />
     </button>
   );
@@ -531,7 +471,6 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
           </Card>
         </div>
       );
-
     case 'appearance':
       return (
         <div className="pnew-tab-content">
@@ -552,7 +491,6 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
           </Card>
         </div>
       );
-
     case 'notifications':
       return (
         <div className="pnew-tab-content">
@@ -565,60 +503,54 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
           <Card title="Tipos">
             <Row label="Nuevos partidos"  desc="Cuando se publiquen partidos"><Toggle checked={preferences.notif_new_matches}      onChange={() => handleToggle('notif_new_matches')}      disabled={!preferences.push_enabled} /></Row>
             <Row label="Resultados"       desc="Cuando terminen tus partidos"><Toggle checked={preferences.notif_finished_matches} onChange={() => handleToggle('notif_finished_matches')} disabled={!preferences.push_enabled} /></Row>
-            <Row label="Nuevas ligas"     desc="Ligas y torneos disponibles">  <Toggle checked={preferences.notif_new_leagues}    onChange={() => handleToggle('notif_new_leagues')}     disabled={!preferences.push_enabled} /></Row>
-            <Row label="Sonido"           desc="Reproducir sonido">            <Toggle checked={preferences.notif_sound}          onChange={() => handleToggle('notif_sound')}           disabled={!preferences.push_enabled} /></Row>
+            <Row label="Nuevas ligas"     desc="Ligas y torneos disponibles"> <Toggle checked={preferences.notif_new_leagues}    onChange={() => handleToggle('notif_new_leagues')}     disabled={!preferences.push_enabled} /></Row>
+            <Row label="Sonido"           desc="Reproducir sonido">           <Toggle checked={preferences.notif_sound}          onChange={() => handleToggle('notif_sound')}           disabled={!preferences.push_enabled} /></Row>
           </Card>
         </div>
       );
-
     case 'privacy':
       return (
         <div className="pnew-tab-content">
           <div className="pnew-section-hdr"><span>PRIVACIDAD</span></div>
           <Card title="Visibilidad">
-            <Row label="Perfil público"            desc="Otros usuarios pueden ver tu perfil">  <Toggle checked={preferences.profile_public}          onChange={() => handleToggle('profile_public')} /></Row>
-            <Row label="Estadísticas en ranking"   desc="Aparecer en rankings públicos">        <Toggle checked={preferences.show_stats_in_ranking}  onChange={() => handleToggle('show_stats_in_ranking')} /></Row>
-            <Row label="Compartir actividad"       desc="Mostrar tu actividad reciente">        <Toggle checked={preferences.share_activity}         onChange={() => handleToggle('share_activity')} /></Row>
-            <Row label="Predicciones públicas"     desc="Otros pueden ver tus predicciones">   <Toggle checked={preferences.predictions_public}     onChange={() => handleToggle('predictions_public')} /></Row>
+            <Row label="Perfil público"          desc="Otros usuarios pueden ver tu perfil">  <Toggle checked={preferences.profile_public}         onChange={() => handleToggle('profile_public')} /></Row>
+            <Row label="Estadísticas en ranking" desc="Aparecer en rankings públicos">         <Toggle checked={preferences.show_stats_in_ranking} onChange={() => handleToggle('show_stats_in_ranking')} /></Row>
+            <Row label="Compartir actividad"     desc="Mostrar tu actividad reciente">         <Toggle checked={preferences.share_activity}        onChange={() => handleToggle('share_activity')} /></Row>
+            <Row label="Predicciones públicas"   desc="Otros pueden ver tus predicciones">    <Toggle checked={preferences.predictions_public}    onChange={() => handleToggle('predictions_public')} /></Row>
           </Card>
         </div>
       );
-
     case 'data':
       return (
         <div className="pnew-tab-content">
           <div className="pnew-section-hdr"><span>DATOS</span></div>
           <Card title="Exportar">
-            <Row label="Exportar mis datos"       desc="Descargar toda tu información en JSON"><button className="pnew-btn-primary" onClick={handleExport}>Exportar</button></Row>
-            <Row label="Restaurar configuración"  desc="Volver a los valores por defecto">     <button className="pnew-btn-secondary" onClick={handleReset}>Restaurar</button></Row>
+            <Row label="Exportar mis datos"      desc="Descargar toda tu información en JSON"><button className="pnew-btn-primary"   onClick={handleExport}>Exportar</button></Row>
+            <Row label="Restaurar configuración" desc="Volver a los valores por defecto">     <button className="pnew-btn-secondary" onClick={handleReset}>Restaurar</button></Row>
           </Card>
           <Card title="Zona de peligro">
-            <Row label="Cerrar sesión"  desc="Salir de tu cuenta" danger>                                 <button className="pnew-btn-danger" onClick={handleLogout}>Salir</button></Row>
-            <Row label="Eliminar cuenta" desc="Acción irreversible, elimina todos tus datos" danger>      <button className="pnew-btn-danger" onClick={() => setShowDeleteConfirm(true)}>Eliminar</button></Row>
+            <Row label="Cerrar sesión"   desc="Salir de tu cuenta" danger><button className="pnew-btn-danger" onClick={handleLogout}>Salir</button></Row>
+            <Row label="Eliminar cuenta" desc="Acción irreversible, elimina todos tus datos" danger><button className="pnew-btn-danger" onClick={() => setShowDeleteConfirm(true)}>Eliminar</button></Row>
           </Card>
         </div>
       );
-
     case 'info':
       return (
         <div className="pnew-tab-content">
           <div className="pnew-section-hdr"><span>INFORMACIÓN</span></div>
-          <Card title="App">
-            <Row label="Versión" desc="GlobalScore v21.0.0" />
-          </Card>
+          <Card title="App"><Row label="Versión" desc="GlobalScore v21.0.0" /></Card>
           <Card title="Legal">
             <Row label="Política de privacidad" desc="Cómo manejamos tus datos" />
             <Row label="Términos y condiciones" desc="Reglas de uso de la plataforma" />
           </Card>
         </div>
       );
-
     default: return null;
   }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   HERO DESKTOP
+   DESKTOP — PROFILE HERO
 ═══════════════════════════════════════════════════════════════ */
 function ProfileHeroDesktop({ userData, currentUser }) {
   const [showViewer, setShowViewer] = useState(false);
@@ -629,24 +561,19 @@ function ProfileHeroDesktop({ userData, currentUser }) {
       <div className="pnew-hero-banner">
         {userData.equipped_banner_url
           ? <img src={userData.equipped_banner_url} alt="banner" className="pnew-hero-banner-img" />
-          : <div className="pnew-hero-banner-gradient" />
-        }
+          : <div className="pnew-hero-banner-gradient" />}
         <div className="pnew-hero-banner-overlay" />
       </div>
 
       <div className="pnew-hero-avatar-wrap">
-        <div
-          className={`pnew-hero-avatar${userData.avatar_url ? ' clickable' : ''}`}
-          onClick={() => userData.avatar_url && setShowViewer(true)}
-        >
+        <div className={`pnew-hero-avatar${userData.avatar_url ? ' clickable' : ''}`}
+          onClick={() => userData.avatar_url && setShowViewer(true)}>
           {userData.avatar_url
             ? <img src={userData.avatar_url} alt={userData.name} />
-            : <span>{(userData.name || 'U')[0].toUpperCase()}</span>
-          }
+            : <span>{(userData.name || 'U')[0].toUpperCase()}</span>}
         </div>
         <div className="pnew-hero-level">
-          <Crown size={10} />
-          <span>Lvl {userData.level || 1}</span>
+          <Crown size={10} /><span>Lvl {userData.level || 1}</span>
         </div>
       </div>
 
@@ -654,13 +581,11 @@ function ProfileHeroDesktop({ userData, currentUser }) {
         <h2 className="pnew-hero-name">{userData.name || 'Usuario'}</h2>
         <p className="pnew-hero-email">{userData.email}</p>
         {userData.bio && <p className="pnew-hero-bio">{userData.bio}</p>}
-
         <div className="pnew-hero-tags">
           {userData.favorite_team   && <span className="pnew-hero-tag"><Trophy size={10} />{userData.favorite_team}</span>}
           {userData.favorite_player && <span className="pnew-hero-tag"><Heart size={10} />{userData.favorite_player}</span>}
           {userData.nationality     && <span className="pnew-hero-tag"><Globe size={10} />{userData.nationality}</span>}
         </div>
-
         <div className="pnew-hero-stats">
           <div className="pnew-hero-stat">
             <span className="pnew-hero-stat-val" style={{ color: '#5b4fd8' }}>{fmt(currentUser?.points || 0)}</span>
@@ -687,43 +612,19 @@ function ProfileHeroDesktop({ userData, currentUser }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MOBILE SUB-VIEW
-═══════════════════════════════════════════════════════════════ */
-function MobileSubView({ tabId, onBack, children }) {
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    const header = document.querySelector('.gs-mobile-header');
-    if (header) header.style.display = 'none';
-    return () => { if (header) header.style.display = ''; };
-  }, []);
-
-  return (
-    <div className="pnew-mob-sub">
-      <div className="pnew-mob-sub-hdr">
-        <button className="pnew-mob-back" onClick={onBack}>
-          <ArrowLeft size={20} />
-        </button>
-        <h2 className="pnew-mob-sub-title">{TAB_LABELS[tabId] || ''}</h2>
-      </div>
-      <div className="pnew-mob-sub-body">{children}</div>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
    COMPONENTE PRINCIPAL
 ═══════════════════════════════════════════════════════════════ */
 export default function ProfileSettingsPage({ currentUser, onBack }) {
-  const [mobileView, setMobileView]             = useState('main');
-  const [showMobileNotes, setShowMobileNotes]   = useState(false);
-  const [activeTab, setActiveTab]               = useState('overview');
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  // ── Desktop state ──
+  const [activeTab, setActiveTab]                             = useState('overview');
+  const [showDeleteConfirm, setShowDeleteConfirm]             = useState(false);
   const [showAdminAchievementsModal, setShowAdminAchievementsModal] = useState(false);
   const [showAdminTitlesModal, setShowAdminTitlesModal]             = useState(false);
 
   const toast              = useToast();
   const { theme, toggleTheme } = useTheme();
 
+  // ── Shared hooks (used by both desktop and passed to mobile) ──
   const { userData, setUserData, loading, loadUserData, saveUserData }   = useProfileData(currentUser);
   const { predictionHistory, historyLoading }                             = usePredictionHistory(currentUser);
   const { streakData }                                                    = useStreaks(currentUser);
@@ -735,20 +636,13 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
     handleSaveAchievement, handleDeleteAchievement,
     handleSaveTitle, handleDeleteTitle,
   } = useAchievements(currentUser, streakData);
-
   const { preferences, saving, updatePreference, savePreferences, resetToDefaults, exportUserData, deleteAccount } = useSettings(currentUser);
+
   const activeTitle = getActiveTitle();
 
+  // ── Shared handlers ──
   const handleSave = () => {
-    saveUserData(toast, () => {
-      setActiveTab('overview');
-      setMobileView('main');
-    });
-  };
-
-  const handleMobileNavigate = (section) => {
-    if (section === 'notes') { setShowMobileNotes(true); return; }
-    setMobileView(`tab:${section}`);
+    saveUserData(toast, () => setActiveTab('overview'));
   };
 
   const handleAvatarUpload = (url) => {
@@ -762,28 +656,25 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
   };
 
   const handleSelect  = async (key, val) => { await updatePreference(key, val); };
-
   const handleLogout  = async () => { await supabase.auth.signOut(); window.location.href = '/'; };
-
   const handleReset   = async () => {
     if (!confirm('¿Restaurar configuraciones por defecto?')) return;
     const res = await resetToDefaults();
     if (res.success) toast.success('Configuración restaurada');
     else toast.error('Error al restaurar');
   };
-
   const handleExport  = async () => {
     const res = await exportUserData();
     if (res.success) toast.success('Datos exportados');
     else toast.error('Error al exportar');
   };
-
   const handleDeleteAccount = async () => {
     const res = await deleteAccount();
     if (res.success) { toast.success('Cuenta eliminada'); window.location.href = '/'; }
     else toast.error('Error al eliminar cuenta');
   };
 
+  // ── Desktop renderContent ──
   const renderContent = (tab) => {
     const settingsProps = {
       preferences, saving, handleToggle, handleSelect,
@@ -799,72 +690,74 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
       case 'overview':
         return <OverviewTab userData={userData} currentUser={currentUser} userRanking={userRanking} />;
       case 'achievements':
-        return <AchievementsTab
-          activeTitle={activeTitle} userTitles={userTitles}
+        return <AchievementsTab activeTitle={activeTitle} userTitles={userTitles}
           userAchievements={userAchievements} availableAchievements={availableAchievements}
-          achievementsLoading={achievementsLoading}
-        />;
+          achievementsLoading={achievementsLoading} />;
       case 'championships':
-        return <ChampionshipsTab
-          userData={{ ...userData, ...monthlyStats }}
+        return <ChampionshipsTab userData={{ ...userData, ...monthlyStats }}
           crownHistory={crownHistory} monthlyStats={monthlyStats}
-          championshipsLoading={championshipsLoading}
-        />;
+          championshipsLoading={championshipsLoading} />;
       case 'history':
         return <HistoryTab predictionHistory={predictionHistory} historyLoading={historyLoading} />;
       case 'edit':
-        return <EditTab
-          userData={userData} setUserData={setUserData}
-          currentUser={currentUser} loading={loading}
-          handleSave={handleSave} handleAvatarUpload={handleAvatarUpload}
+        return <EditTab userData={userData} setUserData={setUserData} currentUser={currentUser}
+          loading={loading} handleSave={handleSave} handleAvatarUpload={handleAvatarUpload}
           loadUserData={loadUserData}
-          setActiveTab={t => { setActiveTab(t); setMobileView('main'); }}
-        />;
-      case 'notes': return null;
-      default:      return null;
+          setActiveTab={(t) => setActiveTab(t)} />;
+      default: return null;
     }
   };
-
-  const isMobileSub      = mobileView.startsWith('tab:');
-  const currentMobileTab = isMobileSub ? mobileView.replace('tab:', '') : null;
 
   return (
     <div className="pnew-page page-root">
 
-      {/* ─── MOBILE ─── */}
+      {/* ─── MOBILE — fully self-contained ─── */}
       <div className="pnew-mobile-wrapper">
-        {mobileView === 'main' && (
-          <MobileProfileMain
-            currentUser={{ ...currentUser, ...userData }}
-            isDark={theme === 'dark'}
-            onToggleDark={toggleTheme}
-            onNavigate={handleMobileNavigate}
-            onLogout={handleLogout}
-            onAvatarClick={() => setMobileView('tab:edit')}
-          />
-        )}
-        {isMobileSub && (
-          <MobileSubView tabId={currentMobileTab} onBack={() => setMobileView('main')}>
-            {renderContent(currentMobileTab)}
-          </MobileSubView>
-        )}
-        {showMobileNotes && (
-          <MobileNotes
-            currentUser={currentUser}
-            onBack={() => { setShowMobileNotes(false); setMobileView('main'); }}
-          />
-        )}
+        <MobileProfileMain
+          /* user */
+          currentUser={{ ...currentUser, ...userData }}
+          /* data */
+          userData={userData}
+          setUserData={setUserData}
+          loading={loading}
+          loadUserData={loadUserData}
+          handleSave={handleSave}
+          predictionHistory={predictionHistory}
+          historyLoading={historyLoading}
+          userRanking={userRanking}
+          crownHistory={crownHistory}
+          monthlyStats={monthlyStats}
+          userAchievements={userAchievements}
+          userTitles={userTitles}
+          availableAchievements={availableAchievements}
+          achievementsLoading={achievementsLoading}
+          activeTitle={activeTitle}
+          preferences={preferences}
+          saving={saving}
+          handleToggle={handleToggle}
+          handleSelect={handleSelect}
+          handleReset={handleReset}
+          handleExport={handleExport}
+          /* theme */
+          isDark={theme === 'dark'}
+          onToggleDark={toggleTheme}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          /* handlers */
+          onLogout={handleLogout}
+          handleAvatarUpload={handleAvatarUpload}
+          setShowDeleteConfirm={setShowDeleteConfirm}
+        />
       </div>
 
-     {/* ─── DESKTOP 2 columnas ─── */}
+      {/* ─── DESKTOP — 2 columnas ─── */}
       <div className="pnew-desktop-wrapper">
         <div className="pnew-desktop-layout">
 
-          {/* COL IZQUIERDA — Hero + Nav */}
+          {/* COL IZQUIERDA — contenido */}
           <div className="pnew-desktop-left">
             <ProfileHeroDesktop userData={userData} currentUser={currentUser} />
 
-            {/* Panel nav */}
             <nav className="pnew-nav">
               {['perfil', 'ajustes'].map(group => (
                 <div key={group} className="pnew-nav-group">
@@ -873,20 +766,16 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
                     const Icon = item.icon;
                     const isActive = activeTab === item.id;
                     return (
-                      <button
-                        key={item.id}
+                      <button key={item.id}
                         className={`pnew-nav-item${isActive ? ' pnew-nav-item--active' : ''}`}
-                        onClick={() => setActiveTab(item.id)}
-                      >
-                        <Icon size={16} />
-                        <span>{item.label}</span>
+                        onClick={() => setActiveTab(item.id)}>
+                        <Icon size={16} /><span>{item.label}</span>
                         {isActive && <div className="pnew-nav-item-indicator" />}
                       </button>
                     );
                   })}
                 </div>
               ))}
-
               <div className="pnew-nav-logout">
                 <button className="pnew-nav-logout-btn" onClick={handleLogout}>
                   <LogOut size={15} /> Cerrar sesión
@@ -895,7 +784,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
             </nav>
           </div>
 
-          {/* COL DERECHA — Contenido */}
+          {/* COL DERECHA — contenido activo */}
           <div className="pnew-desktop-right">
             {renderContent(activeTab)}
           </div>
@@ -905,6 +794,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
 
       <div className="pnew-footer-desktop"><Footer /></div>
 
+      {/* Modal eliminar cuenta */}
       {showDeleteConfirm && (
         <>
           <div className="pnew-modal-backdrop" onClick={() => setShowDeleteConfirm(false)} />
@@ -923,18 +813,14 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
 
       {showAdminAchievementsModal && (
-        <AdminAchievementsModal
-          onClose={() => setShowAdminAchievementsModal(false)}
+        <AdminAchievementsModal onClose={() => setShowAdminAchievementsModal(false)}
           onSave={d  => handleSaveAchievement(d, toast)}
-          onDelete={id => handleDeleteAchievement(id, toast)}
-        />
+          onDelete={id => handleDeleteAchievement(id, toast)} />
       )}
       {showAdminTitlesModal && (
-        <AdminTitlesModal
-          onClose={() => setShowAdminTitlesModal(false)}
+        <AdminTitlesModal onClose={() => setShowAdminTitlesModal(false)}
           onSave={d  => handleSaveTitle(d, toast)}
-          onDelete={id => handleDeleteTitle(id, toast)}
-        />
+          onDelete={id => handleDeleteTitle(id, toast)} />
       )}
     </div>
   );
