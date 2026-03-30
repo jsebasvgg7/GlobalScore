@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 import Footer from '../components/ComLayout/Footer';
+import MobileNotifications from '../components/ComMobile/MobileNotifications';
 import '../styles/StylesPages/NotificationsPage.css';
 
 const VAPID_PUBLIC_KEY = 'BBxgmAtEOHeYNi1tJQcrWzL_Q-6_Mj16ECGgQSL6JPX0i9XyL5V5LFJHjNdde_TTRxAUXJHSYNtUOvXcAsYS_Xs';
@@ -261,6 +262,19 @@ export default function NotificationsPage({ currentUser }) {
     <div className="np-page page-root">
 
       {/* ══════════════════════════════════════════
+          MOBILE — delegado al componente
+      ══════════════════════════════════════════ */}
+      <MobileNotifications
+        notifications={notifications}
+        loading={loading}
+        filter={filter}
+        onFilterChange={setFilter}
+        pushEnabled={pushEnabled}
+        pushLoading={pushLoading}
+        onTogglePush={handleTogglePush}
+      />
+
+      {/* ══════════════════════════════════════════
           DESKTOP LAYOUT
       ══════════════════════════════════════════ */}
       <div className="np-shell">
@@ -433,98 +447,6 @@ export default function NotificationsPage({ currentUser }) {
           </div>
         </div>
 
-      </div>
-
-      {/* ══════════════════════════════════════════
-          MOBILE LAYOUT  (≤768px)
-      ══════════════════════════════════════════ */}
-      <div className="np-mobile">
-
-        {/* Topbar mobile */}
-        <div className="npm-topbar">
-          <div className="npm-topbar-left">
-            <div className="npm-dot" />
-            <span className="npm-title">Notificaciones</span>
-          </div>
-          {!pushLoading && (
-            <button
-              className={`npm-push-btn${pushEnabled ? ' npm-push-btn--on' : ''}`}
-              onClick={handleTogglePush}
-            >
-              {pushEnabled ? <BellRing size={13} /> : <BellOff size={13} />}
-              <span>{pushEnabled ? 'Activas' : 'Activar'}</span>
-            </button>
-          )}
-        </div>
-
-        {/* Banner mobile */}
-        {!pushEnabled && !pushLoading && (
-          <div className="npm-banner">
-            <div className="npm-banner-icon"><BellRing size={16} /></div>
-            <div className="npm-banner-text">
-              <div className="npm-banner-title">Activa las notificaciones</div>
-              <div className="npm-banner-sub">Recibe alertas de nuevos partidos</div>
-            </div>
-            <button className="npm-banner-btn" onClick={handleTogglePush}>Activar</button>
-          </div>
-        )}
-
-        {/* Filtros mobile */}
-        <div className="npm-filters">
-          {[
-            { key: 'all',      label: 'Todas',    count: notifications.length },
-            { key: 'new',      label: 'Nuevas',    count: newCount },
-            { key: 'finished', label: 'Final.',    count: finishedCount },
-          ].map(({ key, label, count }) => (
-            <button
-              key={key}
-              className={`npm-filter${filter === key ? ' active' : ''}`}
-              onClick={() => setFilter(key)}
-            >
-              <span>{label}</span>
-              <span className="npm-filter-count">{count}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Lista mobile */}
-        <div className="npm-list">
-          {loading ? (
-            <div className="npm-loading">
-              <div className="npm-spinner" />
-              <span>Cargando...</span>
-            </div>
-          ) : filteredNotifications.length === 0 ? (
-            <div className="npm-empty">
-              <Bell size={36} className="npm-empty-icon" />
-              <div className="npm-empty-title">Sin notificaciones</div>
-              <div className="npm-empty-sub">Aquí aparecerán las novedades</div>
-            </div>
-          ) : (
-            filteredNotifications.map((notif) => (
-              <div key={notif.id} className={`npm-card npm-card--${notif.type}`}>
-                <div className={`npm-card-icon npm-card-icon--${notif.type}`}>
-                  {notif.type === 'new' ? <Trophy size={15} /> : <CheckCircle2 size={15} />}
-                </div>
-                <div className="npm-card-body">
-                  <div className="npm-card-title">{notif.description}</div>
-                  <div className="npm-card-meta">
-                    <span>{notif.league}</span>
-                    <span>·</span>
-                    <span>{notif.date}</span>
-                    {notif.time && <><span>·</span><span>{notif.time}</span></>}
-                  </div>
-                  {notif.result && (
-                    <div className="npm-card-result">{notif.result}</div>
-                  )}
-                </div>
-                <span className={`npm-card-badge npm-card-badge--${notif.type}`}>
-                  {notif.type === 'new' ? 'Nuevo' : 'Final'}
-                </span>
-              </div>
-            ))
-          )}
-        </div>
       </div>
 
     </div>
