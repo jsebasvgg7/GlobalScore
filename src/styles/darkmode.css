@@ -1942,6 +1942,162 @@
 [data-theme="dark"] .mst-empty-sub        { color: #6E6680; }
 [data-theme="dark"] .mst-empty-icon       { opacity: 0.15; }
 
+[data-theme="dark"] .mst-root { background: #0D0B12; }
+ 
+/* ── Topbar ── */
+[data-style="brutalist"][data-theme="dark"] .mst-topbar   { background: #1A1824; border-bottom-color: #38334F; }
+[data-style="neumorphism"][data-theme="dark"] .mst-topbar { background: #0D0B12; }
+ 
+[data-theme="dark"] .mst-topbar-label { color: var(--mst-muted); }
+[data-theme="dark"] .mst-topbar-dot   { background: var(--mst-accent); }
+ 
+[data-style="brutalist"][data-theme="dark"] .mst-range-pill {
+  border-color: #38334F; color: #6E6680;
+}
+[data-style="brutalist"][data-theme="dark"] .mst-range-pill.active {
+  background: #8B7FC7; border-color: #8B7FC7; color: #fff;
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-range-pill {
+  background: var(--mst-bg);
+  box-shadow: var(--nm-sm);
+  color: var(--mst-muted);
+  border: 1px solid rgba(255,255,255,.045);
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-range-pill.active {
+  color: var(--mst-accent);
+  box-shadow: var(--nm-i);
+  border-color: rgba(139,127,199,.2);
+}
+ 
+/* ── Hero blocks ── */
+[data-style="brutalist"][data-theme="dark"] .mst-hero-block {
+  background: #1A1824;
+  border-color: #2A2638;
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-hero-block {
+  background: var(--mst-bg);
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-hero-icon {
+  box-shadow: var(--nm-sm);
+}
+ 
+[data-theme="dark"] .mst-hero-lbl   { color: var(--mst-muted); }
+[data-theme="dark"] .mst-hero-num   { color: var(--mst-text); }
+[data-theme="dark"] .mst-hero-sub   { color: var(--mst-muted); }
+ 
+/* ── Section header ── */
+[data-style="brutalist"][data-theme="dark"] .mst-section-hdr {
+  background: #1A1824; border-bottom-color: #2A2638;
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-section-hdr {
+  background: transparent;
+}
+[data-theme="dark"] .mst-section-title { color: var(--mst-muted); }
+ 
+/* ── Results ── */
+[data-style="brutalist"][data-theme="dark"] .mst-results  { background: #0D0B12; }
+[data-style="neumorphism"][data-theme="dark"] .mst-result-item {
+  background: var(--mst-bg);
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-theme="dark"] .mst-result-num  { color: var(--mst-text); }
+[data-theme="dark"] .mst-result-name { color: var(--mst-muted); }
+[data-theme="dark"] .mst-result-pct  { color: var(--mst-muted); }
+[data-style="neumorphism"][data-theme="dark"] .mst-result-pct { color: var(--mst-accent); }
+[data-style="brutalist"][data-theme="dark"] .mst-result-bar-wrap  { background: #38334F; }
+[data-style="neumorphism"][data-theme="dark"] .mst-result-bar-wrap { box-shadow: var(--nm-ism); background: var(--mst-bg); }
+[data-style="neumorphism"][data-theme="dark"] .mst-result-pts {
+  background: var(--mst-glass);
+}
+ 
+/* ── League table ── */
+[data-style="brutalist"][data-theme="dark"] .mst-league-row { background: #1A1824; border-bottom-color: #13111A; }
+[data-style="brutalist"][data-theme="dark"] .mst-league-row.thead { background: #0D0B12; border-bottom-color: #2A2638; }
+[data-style="neumorphism"][data-theme="dark"] .mst-leagues-scroll {
+  background: var(--mst-bg);
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-league-row { background: var(--mst-bg); border-bottom-color: var(--mst-border); }
+[data-style="neumorphism"][data-theme="dark"] .mst-league-row.thead { background: var(--mst-glass); }
+[data-theme="dark"] .mst-league-name { color: var(--mst-text); }
+[data-theme="dark"] .mst-lc          { color: var(--mst-text); }
+[data-style="brutalist"][data-theme="dark"] .mst-rank-badge {
+  background: #221F2E; border-color: #38334F; color: #6E6680;
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-rank-badge {
+  background: var(--mst-bg);
+  box-shadow: var(--nm-ism);
+  border: 1px solid rgba(255,255,255,.035);
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-acc-bar {
+  box-shadow: var(--nm-ism);
+  background: var(--mst-bg);
+}
+ 
+/* ── Days ── */
+[data-style="brutalist"][data-theme="dark"] .mst-days-scroll  { background: #0D0B12; }
+[data-style="neumorphism"][data-theme="dark"] .mst-days-scroll { background: transparent; }
+[data-theme="dark"] .mst-day-lbl    { color: var(--mst-muted); }
+[data-theme="dark"] .mst-day-pct    { color: var(--mst-text); }
+[data-style="brutalist"][data-theme="dark"] .mst-day-bar-wrap {
+  background: #1A1824; border-color: #2A2638;
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-day-bar-wrap {
+  background: var(--mst-bg);
+  box-shadow: var(--nm-ism);
+  border: 1px solid rgba(255,255,255,.035);
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-day-fill {
+  background: linear-gradient(to top, var(--mst-accent), var(--mst-accent-l));
+}
+[data-theme="dark"] .mst-day-detail { color: var(--mst-muted); }
+ 
+/* ── Distribution ── */
+[data-style="brutalist"][data-theme="dark"] .mst-dist  { background: #0D0B12; }
+[data-style="neumorphism"][data-theme="dark"] .mst-dist-row {
+  background: var(--mst-bg);
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-theme="dark"] .mst-dist-name { color: var(--mst-muted); }
+[data-theme="dark"] .mst-dist-val  { color: var(--mst-text); }
+[data-style="brutalist"][data-theme="dark"] .mst-dist-track  { background: #38334F; }
+[data-style="neumorphism"][data-theme="dark"] .mst-dist-track {
+  background: var(--mst-bg);
+  box-shadow: var(--nm-ism);
+}
+ 
+/* ── Forecast ── */
+[data-style="brutalist"][data-theme="dark"] .mst-forecast  { background: #0D0B12; }
+[data-style="brutalist"][data-theme="dark"] .mst-forecast-item {
+  background: #1A1824; border-color: #2A2638;
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-forecast-item {
+  background: var(--mst-bg);
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-theme="dark"] .mst-forecast-val { color: var(--mst-text); }
+[data-theme="dark"] .mst-forecast-lbl { color: var(--mst-muted); }
+ 
+/* ── Empty / Loading ── */
+[data-theme="dark"] .mst-empty-title  { color: var(--mst-text); }
+[data-theme="dark"] .mst-empty-sub    { color: var(--mst-muted); }
+[data-theme="dark"] .mst-empty-icon   { opacity: .15; }
+[data-style="brutalist"][data-theme="dark"] .mst-spinner {
+  border-color: #38334F;
+  border-top-color: #8B7FC7;
+  border-right-color: #8B7FC7;
+}
+[data-style="neumorphism"][data-theme="dark"] .mst-spinner {
+  box-shadow: var(--nm-sm);
+  border-top-color: var(--mst-accent);
+  border-right-color: var(--mst-accent-l);
+}
 /* ================================================================
    27. MOBILE PROFILE — MobileProfileMain.css
 ================================================================ */
