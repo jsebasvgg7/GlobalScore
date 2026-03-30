@@ -212,6 +212,200 @@
   box-shadow: 3px 3px 0 rgba(0,0,0,0.5), 0 -2px 24px rgba(139,127,199,0.4);
 }
 
+/* ── BRUTALIST dark ── */
+[data-style="brutalist"][data-theme="dark"] .mhd-header {
+  background:    #0e0f14;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-header--scrolled {
+  background:          #13111A;
+  border-bottom-color: #8b7fc7;
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-hey  { color: #38334F; }
+[data-style="brutalist"][data-theme="dark"] .mhd-name { color: #F0EDF8; }
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-clock {
+  border-color: rgba(255, 255, 255, 0.08);
+  color:        #38334F;
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-btn {
+  border-color: rgba(255, 255, 255, 0.10);
+  color:        #6E6680;
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-btn:active {
+  background: rgba(139, 127, 199, 0.08);
+  color:      #A599D9;
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-notif-dot {
+  background:   #E07070;
+  border-color: #0e0f14;
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-avatar {
+  background:  #5b4fd8;
+  border-color: rgba(255, 255, 255, 0.10);
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-avatar-level {
+  background: #c9a227;
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-nav-btn--active .mhd-nav-icon-wrap::after {
+  background: #a899ff;
+}
+ 
+/* Bottom nav brutalist dark */
+[data-style="brutalist"][data-theme="dark"] .mhd-bottom-nav {
+  background:     #0e0f14;
+  border-top-color: rgba(255, 255, 255, 0.08);
+  box-shadow:     0 -4px 20px rgba(0, 0, 0, 0.55);
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-nav-btn {
+  color: #6E6680;
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-nav-btn--active {
+  color: #A599D9;
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-trophy-btn {
+  background:  #5b4fd8;
+  box-shadow:  3px 3px 0 rgba(0, 0, 0, 0.45);
+  color:       rgba(255, 255, 255, 0.85);
+}
+ 
+[data-style="brutalist"][data-theme="dark"] .mhd-trophy-btn--active {
+  background:  #7366b3;
+  box-shadow:  3px 3px 0 rgba(91, 79, 216, 0.5);
+  color:       #fff;
+}
+ 
+/* ── NEUMORPHISM dark ── */
+[data-style="neumorphism"][data-theme="dark"] .mhd-header {
+  --mhd-bg:     #1E1C28;
+  --mhd-border: rgba(255, 255, 255, 0.055);
+  --nm-light:   rgba(40, 37, 55, 0.0);
+  --nm-dark:    rgba(0, 0, 0, 0.55);
+  --nm-il:      rgba(40, 37, 55, 0.0);
+  --nm-id:      rgba(0, 0, 0, 0.45);
+  --nm-s:       2px 2px 6px var(--nm-dark), 0 0 0 1px rgba(255,255,255,.055);
+  --nm-sm:      1px 1px 4px var(--nm-dark), 0 0 0 1px rgba(255,255,255,.045);
+  --nm-i:       inset 2px 2px 5px var(--nm-id), 0 0 0 1px rgba(255,255,255,.04);
+  --nm-ism:     inset 1px 1px 3px var(--nm-id), 0 0 0 1px rgba(255,255,255,.035);
+  --mhd-text:   #E8E6F0;
+  --mhd-muted:  #5A566E;
+  --mhd-accent: #8b7fc7;
+ 
+  background:          #1E1C28;
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-header--scrolled {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-hey  { color: #5A566E; }
+[data-style="neumorphism"][data-theme="dark"] .mhd-name { color: #E8E6F0; }
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-clock {
+  background: #1E1C28;
+  color:      #5A566E;
+  box-shadow: inset 1px 1px 3px rgba(0,0,0,.45),
+              0 0 0 1px rgba(255,255,255,.035);
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-btn {
+  background: #1E1C28;
+  color:      #5A566E;
+  box-shadow: 1px 1px 4px rgba(0,0,0,.5),
+              0 0 0 1px rgba(255,255,255,.045);
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-btn:active {
+  box-shadow: inset 1px 1px 4px rgba(0,0,0,.45),
+              0 0 0 1px rgba(255,255,255,.035);
+  color: #a599d9;
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-notif-dot {
+  background:   #E07070;
+  border-color: #1E1C28;
+  box-shadow:   0 0 5px rgba(217, 87, 87, 0.4);
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-avatar {
+  background: #8b7fc7;
+  box-shadow: 2px 2px 6px rgba(0,0,0,.55),
+              0 0 0 1px rgba(255,255,255,.055);
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-avatar:active {
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,.4),
+              0 0 0 1px rgba(255,255,255,.04);
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-avatar-level {
+  background:  #c9a227;
+  border-color: #1E1C28;
+  box-shadow:  0 1px 4px rgba(0,0,0,.4);
+}
+ 
+/* Bottom nav neumorphism dark */
+[data-style="neumorphism"][data-theme="dark"] .mhd-bottom-nav {
+  --mhd-bg:     #1E1C28;
+  --nm-light:   rgba(40, 37, 55, 0.0);
+  --nm-dark:    rgba(0, 0, 0, 0.55);
+  --nm-il:      rgba(40, 37, 55, 0.0);
+  --nm-id:      rgba(0, 0, 0, 0.45);
+  --nm-sm:      1px 1px 4px var(--nm-dark), 0 0 0 1px rgba(255,255,255,.045);
+  --nm-ism:     inset 1px 1px 3px var(--nm-id), 0 0 0 1px rgba(255,255,255,.035);
+  --mhd-muted:  #5A566E;
+  --mhd-accent: #8b7fc7;
+ 
+  background:     #1E1C28;
+  border-top-color: rgba(255, 255, 255, 0.055);
+  box-shadow:     0 -4px 16px rgba(0, 0, 0, 0.45);
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-nav-btn {
+  color: #5A566E;
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-nav-btn--active {
+  color: #a599d9;
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-nav-btn--active .mhd-nav-icon-wrap {
+  background: #1E1C28;
+  box-shadow: inset 1px 1px 3px rgba(0,0,0,.45),
+              0 0 0 1px rgba(255,255,255,.035);
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-trophy-btn {
+  background: #8b7fc7;
+  box-shadow: 2px 2px 6px rgba(0,0,0,.55),
+              0 4px 14px rgba(139, 127, 199, 0.3),
+              0 0 0 1px rgba(255,255,255,.06);
+  color:      rgba(255, 255, 255, 0.85);
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-trophy-btn--active {
+  color:      #fff;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,.4),
+              0 0 0 1px rgba(255,255,255,.04),
+              0 4px 18px rgba(139, 127, 199, 0.45);
+}
+ 
+[data-style="neumorphism"][data-theme="dark"] .mhd-trophy-btn:active {
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,.4),
+              0 0 0 1px rgba(255,255,255,.04);
+}
 /* ================================================================
    5. NAVIGATION TABS
 ================================================================ */
