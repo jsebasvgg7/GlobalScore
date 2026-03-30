@@ -1,9 +1,12 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { ArrowLeft, Filter, ArrowUpDown, X, SlidersHorizontal } from "lucide-react";
-import MatchCardMobile from "../ComCards/MatchCardMobile";
-import LeagueCard      from "../ComCards/LeagueCard";
-import AwardCard       from "../ComCards/AwardCard";
-import "../../styles/StylesCards/MatchCardMobile.css";
+import {
+  MatchCardMobile,
+  LeagueCardMobile,
+  AwardCardMobile,
+} from "../ComCards/MobileCardsGlobal";
+import "../../styles/StylesCards/MobileCardsGlobal.css";
+import "../../styles/StylesMobile/MobileSubPage.css";
 
 // ── Categorías de liga ──────────────────────────────────────────
 const LEAGUE_CATS = [
@@ -214,7 +217,7 @@ function LeaguesPage({ leagues, currentUser, onPredict, onBack }) {
         ) : (
           <div className="msp-cards-col">
             {leagues.map(l => (
-              <LeagueCard
+              <LeagueCardMobile
                 key={l.id}
                 league={l}
                 userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)}
@@ -255,7 +258,7 @@ function AwardsPage({ awards, currentUser, onPredict, onBack }) {
         ) : (
           <div className="msp-cards-col">
             {awards.map(a => (
-              <AwardCard
+              <AwardCardMobile
                 key={a.id}
                 award={a}
                 userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)}
@@ -273,7 +276,7 @@ function AwardsPage({ awards, currentUser, onPredict, onBack }) {
 //  EXPORT PRINCIPAL — selector de página
 // ═══════════════════════════════════════════════════════════════
 export default function MobileSubPage({
-  page,          // "matches" | "leagues" | "awards"
+  page,
   matches = [],
   leagues = [],
   awards  = [],
