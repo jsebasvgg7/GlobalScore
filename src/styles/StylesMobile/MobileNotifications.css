@@ -1,8 +1,5 @@
 /* ================================================================
-   MobileNotifications.css — v1
-   Componente mobile de notificaciones, desacoplado de NotificationsPage.
-   DOS temas: [data-style="brutalist"] | [data-style="neumorphism"]
-   Dark mode: [data-theme="dark"]
+   MobileNotifications
 ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -41,8 +38,8 @@
 }
 
 [data-style="brutalist"][data-theme="dark"] .mnv-root {
-  --mnv-bg:         #1a1d2e;
-  --mnv-card:       #252936;
+  --mnv-bg:         #0D0B12;
+  --mnv-card:       #1A1824;
   --mnv-surface:    #1e2235;
   --mnv-border:     rgba(255,255,255,.08);
   --mnv-border2:    rgba(255,255,255,.14);
@@ -371,7 +368,6 @@
   background: var(--mnv-bg);
   border: none;
   border-radius: var(--mnv-r-pill);
-  box-shadow: var(--mnv-shadow-sm);
   font-size: 10px;
   color: var(--mnv-muted);
 }

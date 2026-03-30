@@ -1053,97 +1053,9 @@
 [data-theme="dark"] .np-sidebar-push-desc { color: #6E6680; }
 
 /* ================================================================
-   21b. MOBILE NOTIFICATIONS — mnv-* (MobileNotifications.jsx)
-   Brutalist dark — tokens oscuros sobre #1a1d2e
+   21b. MOBILE NOTIFICATIONS 
 ================================================================ */
-[data-style="brutalist"][data-theme="dark"] .mnv-root {
-  --mnv-bg:      #1a1d2e;
-  --mnv-card:    #252936;
-  --mnv-surface: #1e2235;
-  --mnv-border:  rgba(255,255,255,.08);
-  --mnv-border2: rgba(255,255,255,.14);
-  --mnv-text:    #f0f1f7;
-  --mnv-muted:   #60519b;
-  --mnv-accent:  #8b7fc7;
-  --mnv-new:     #8b7fc7;
-  --mnv-new-bg:  rgba(124,111,232,.10);
-  --mnv-new-bdr: rgba(124,111,232,.30);
-  --mnv-fin:     #34d399;
-  --mnv-fin-bg:  rgba(52,211,153,.08);
-  --mnv-fin-bdr: rgba(52,211,153,.25);
-}
- 
-[data-style="brutalist"][data-theme="dark"] .mnv-topbar {
-  background: var(--mnv-card);
-  border-bottom-color: var(--mnv-border2);
-}
-[data-style="brutalist"][data-theme="dark"] .mnv-push-btn {
-  background: var(--mnv-bg);
-  border-color: var(--mnv-border2);
-  color: var(--mnv-muted);
-}
-[data-style="brutalist"][data-theme="dark"] .mnv-push-btn--on {
-  background: var(--mnv-accent);
-  border-color: var(--mnv-accent);
-  color: #fff;
-}
-[data-style="brutalist"][data-theme="dark"] .mnv-banner {
-  background: var(--mnv-card);
-  border-color: var(--mnv-new-bdr);
-  border-left-color: var(--mnv-new);
-}
-[data-style="brutalist"][data-theme="dark"] .mnv-banner-icon  { background: var(--mnv-new-bg); }
-[data-style="brutalist"][data-theme="dark"] .mnv-banner-title { color: var(--mnv-text); }
-[data-style="brutalist"][data-theme="dark"] .mnv-banner-sub   { color: var(--mnv-muted); }
-[data-style="brutalist"][data-theme="dark"] .mnv-banner-btn   { background: var(--mnv-accent); }
- 
-[data-style="brutalist"][data-theme="dark"] .mnv-filters { border-color: var(--mnv-border2); }
-[data-style="brutalist"][data-theme="dark"] .mnv-filter {
-  background: var(--mnv-card);
-  border-right-color: var(--mnv-border2);
-  color: var(--mnv-muted);
-}
-[data-style="brutalist"][data-theme="dark"] .mnv-filter:active    { background: var(--mnv-bg); }
-[data-style="brutalist"][data-theme="dark"] .mnv-filter--active   { background: var(--mnv-accent); color: #fff; }
-[data-style="brutalist"][data-theme="dark"] .mnv-filter-count     { background: var(--mnv-bg); color: var(--mnv-muted); }
-[data-style="brutalist"][data-theme="dark"] .mnv-filter--active .mnv-filter-count { background: rgba(255,255,255,.2); color: #fff; }
- 
-[data-style="brutalist"][data-theme="dark"] .mnv-list   { border-color: var(--mnv-border2); }
-[data-style="brutalist"][data-theme="dark"] .mnv-loading { color: var(--mnv-muted); }
-[data-style="brutalist"][data-theme="dark"] .mnv-spinner {
-  border-color: var(--mnv-border2);
-  border-top-color: var(--mnv-accent);
-  border-right-color: var(--mnv-accent);
-}
-[data-style="brutalist"][data-theme="dark"] .mnv-empty    { background: var(--mnv-card); }
-[data-style="brutalist"][data-theme="dark"] .mnv-empty-icon  { color: var(--mnv-muted); }
-[data-style="brutalist"][data-theme="dark"] .mnv-empty-title { color: var(--mnv-text); }
-[data-style="brutalist"][data-theme="dark"] .mnv-empty-sub   { color: var(--mnv-muted); }
- 
-[data-style="brutalist"][data-theme="dark"] .mnv-card {
-  background: var(--mnv-card);
-  border-bottom-color: var(--mnv-border2);
-}
-[data-style="brutalist"][data-theme="dark"] .mnv-card--new {
-  background: var(--mnv-new-bg);
-  border-left-color: var(--mnv-new);
-}
-[data-style="brutalist"][data-theme="dark"] .mnv-card--finished {
-  background: var(--mnv-fin-bg);
-  border-left-color: var(--mnv-fin);
-}
-[data-style="brutalist"][data-theme="dark"] .mnv-card-icon--new      { background: var(--mnv-new); }
-[data-style="brutalist"][data-theme="dark"] .mnv-card-icon--finished { background: var(--mnv-fin); }
-[data-style="brutalist"][data-theme="dark"] .mnv-card-title  { color: var(--mnv-text); }
-[data-style="brutalist"][data-theme="dark"] .mnv-card-meta   { color: var(--mnv-muted); }
-[data-style="brutalist"][data-theme="dark"] .mnv-card-result {
-  background: var(--mnv-fin-bg);
-  border-color: var(--mnv-fin-bdr);
-  color: var(--mnv-fin);
-}
-[data-style="brutalist"][data-theme="dark"] .mnv-badge--new      { background: var(--mnv-new); }
-[data-style="brutalist"][data-theme="dark"] .mnv-badge--finished { background: var(--mnv-fin); }
- 
+
 /* ================================================================
    21c. MOBILE NOTIFICATIONS — mnv-* (MobileNotifications.jsx)
    Neumorphism dark — base #1E1C28, sombras oscuras
@@ -3267,11 +3179,11 @@
    45. PREVIEWS 
 ════════════════════════════════════════════════ */
 [data-theme="dark"] .style-switcher {
-  background: var(--mpm-bg, #1a1d2e);
+  background: #1A1824;
 }
 
 /* brutalist dark preview */
-[data-theme="dark"] .preview-brutalist { background: #1a1d2e; }
+[data-theme="dark"] .preview-brutalist { background: #1A1824; }
 [data-theme="dark"] .preview-brutalist .pb-card {
   background: #252936;
   border-color: rgba(255,255,255,.12);

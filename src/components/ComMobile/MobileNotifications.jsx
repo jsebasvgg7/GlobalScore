@@ -111,23 +111,6 @@ export default function MobileNotifications({
   return (
     <div className="mnv-root">
 
-      {/* ── TOPBAR ── */}
-      <div className="mnv-topbar">
-        <div className="mnv-topbar-left">
-          <div className="mnv-dot" />
-          <span className="mnv-title">Notificaciones</span>
-        </div>
-        {!pushLoading && (
-          <button
-            className={`mnv-push-btn${pushEnabled ? " mnv-push-btn--on" : ""}`}
-            onClick={onTogglePush}
-          >
-            {pushEnabled ? <BellRing size={13} /> : <BellOff size={13} />}
-            <span>{pushEnabled ? "Activas" : "Activar"}</span>
-          </button>
-        )}
-      </div>
-
       {/* ── BANNER PUSH ── */}
       {!pushEnabled && !pushLoading && (
         <div className="mnv-banner">
