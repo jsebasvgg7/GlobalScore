@@ -1,6 +1,6 @@
-/* ================================================================
-   GlobalScore
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
@@ -12,9 +12,6 @@
 @keyframes mob2-blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 @keyframes mob2-sk-pulse { 0%,100%{opacity:.35} 50%{opacity:.6} }
 
-/* ==============================================================
-   BRUTALIST TOKENS
-============================================================== */
 [data-style="brutalist"] .mob2-root {
   --m-bg:#f0ede8; --m-card:#e8e4de; --m-surface:#fff;
   --m-border:#d4cfc8; --m-border-hard:#c4bfb8;
@@ -30,9 +27,6 @@
   --m-text:#f0f1f7; --m-muted:#60519b; --m-accent:#8b7fc7;
 }
 
-/* ==============================================================
-   NEUMORPHISM TOKENS
-============================================================== */
 [data-style="neumorphism"] .mob2-root {
   --m-bg:#EAE7E1; --m-card:#EAE7E1; --m-surface:#EAE7E1;
   --nm-light:rgba(255,255,255,.80); --nm-dark:rgba(166,158,148,.38);
@@ -60,25 +54,17 @@
   --m-text:#E8E6F0; --m-muted:#5A566E;
 }
 
-/* ==============================================================
-   ROOT — display
-============================================================== */
 .mob2-root { display:none; flex-direction:column; background:var(--m-bg); padding-bottom:60px; min-height:100dvh; -webkit-font-smoothing:antialiased; }
 [data-style="brutalist"] .mob2-root { font-family:var(--m-mono); }
 [data-style="neumorphism"] .mob2-root { font-family:var(--m-font); padding-bottom:72px; }
 @media screen and (max-width:768px) { .mob2-root { display:flex; } }
 
-/* ==============================================================
-   PROGRESS BAR
-============================================================== */
-/* brutalist */
 [data-style="brutalist"] .mob2-progress { margin:12px 20px 0; padding:14px 0 0; animation:mob2-fade-up .35s ease .08s both; }
 [data-style="brutalist"] .mob2-progress-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
 [data-style="brutalist"] .mob2-progress-lbl { font-family:var(--m-mono); font-size:15px; font-weight:700; color:var(--m-text); letter-spacing:-.01em; }
 [data-style="brutalist"] .mob2-progress-count { font-family:var(--m-mono); font-size:13px; font-weight:700; color:var(--m-text); letter-spacing:.08em; }
 [data-style="brutalist"] .mob2-progress-track { height:3px; background:var(--m-border-hard); }
 [data-style="brutalist"] .mob2-progress-fill { height:100%; background:var(--m-accent); transition:width .6s cubic-bezier(.34,1.56,.64,1); }
-/* neumorphism */
 [data-style="neumorphism"] .mob2-progress { margin:20px 20px 0; padding:18px 20px; background:var(--m-bg); border-radius:var(--r-lg); box-shadow:var(--nm-s); animation:mob2-fade-up .4s cubic-bezier(.16,1,.3,1) both; }
 [data-style="neumorphism"] .mob2-progress-row { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
 [data-style="neumorphism"] .mob2-progress-lbl { font-size:15px; font-weight:700; color:var(--m-text); letter-spacing:-.02em; }
@@ -86,10 +72,6 @@
 [data-style="neumorphism"] .mob2-progress-track { height:6px; background:var(--m-bg); border-radius:var(--r-pill); box-shadow:var(--nm-ism); overflow:hidden; }
 [data-style="neumorphism"] .mob2-progress-fill { height:100%; background:linear-gradient(90deg,var(--m-accent),var(--m-accent-l)); border-radius:var(--r-pill); transition:width .7s cubic-bezier(.34,1.56,.64,1); }
 
-/* ==============================================================
-   NEXT MATCH BANNER
-============================================================== */
-/* brutalist */
 [data-style="brutalist"] .mob2-nm { margin:0 20px; animation:mob2-fade-up .35s ease .14s both; }
 [data-style="brutalist"] .mob2-nm-eyebrow { display:flex; align-items:center; gap:8px; padding:12px 0 6px; }
 [data-style="brutalist"] .mob2-nm-card { background:var(--m-card); border:2px solid var(--m-border-hard); padding:0; cursor:pointer; transition:transform .1s; overflow:hidden; position:relative; width:100%; text-align:left; font-family:var(--m-mono); }
@@ -99,7 +81,6 @@
 [data-style="brutalist"] .mob2-nm-tname { display:block; font-family:var(--m-mono); font-size:12px; font-weight:700; color:var(--m-text); letter-spacing:.08em; text-transform:uppercase; }
 [data-style="brutalist"] .mob2-nm-vs { display:block; font-family:var(--m-mono); font-size:7px; color:var(--m-muted); letter-spacing:.3em; }
 [data-style="brutalist"] .mob2-nm-time { display:block; font-family:var(--m-mono); font-size:22px; font-weight:700; color:var(--m-text); letter-spacing:-.02em; line-height:1; }
-/* neumorphism */
 [data-style="neumorphism"] .mob2-nm { margin:16px 20px 0; animation:mob2-fade-up .4s cubic-bezier(.16,1,.3,1) .06s both; }
 [data-style="neumorphism"] .mob2-nm-eyebrow { padding:0; }
 [data-style="neumorphism"] .mob2-nm-tag { display:none; }
@@ -110,7 +91,6 @@
 [data-style="neumorphism"] .mob2-nm-tname { display:block; font-size:11px; font-weight:700; color:var(--m-muted); letter-spacing:.06em; text-transform:uppercase; }
 [data-style="neumorphism"] .mob2-nm-vs { display:block; font-size:9px; font-weight:500; color:var(--m-muted); letter-spacing:.22em; opacity:.6; }
 [data-style="neumorphism"] .mob2-nm-time { display:block; font-size:26px; font-weight:800; color:var(--m-text); letter-spacing:-.04em; line-height:1; }
-/* shared nm-card parts */
 .mob2-nm-card:disabled { cursor:default; opacity:.7; }
 .mob2-nm-teams { display:flex; align-items:center; padding:18px 16px 14px; }
 .mob2-nm-team { flex:1; text-align:center; }
@@ -119,12 +99,7 @@
 [data-style="neumorphism"] .mob2-nm-flag img { border-radius:50%; box-shadow:var(--nm-sm); }
 .mob2-nm-center { width:80px; flex-shrink:0; text-align:center; display:flex; flex-direction:column; align-items:center; gap:2px; }
 
-/* ==============================================================
-   SEC / TAB
-============================================================== */
-.mob2-sec { display:flex; align-items:center; justify-content:space-between; padding:16px 20px 8px; animation:mob2-fade-in .3s ease both; }
-/* brutalist */
-[data-style="brutalist"] .mob2-sec-sq { width:5px; height:5px; background:var(--m-accent); flex-shrink:0; }
+.mob2-sec { display:flex; align-items:center; justify-content:space-between; padding:16px 20px 8px; animation:mob2-fade-in .3s ease both; }[data-style="brutalist"] .mob2-sec-sq { width:5px; height:5px; background:var(--m-accent); flex-shrink:0; }
 [data-style="brutalist"] .mob2-sec-all { font-family:var(--m-mono); font-size:9px; color:var(--m-accent); letter-spacing:.15em; text-transform:uppercase; cursor:pointer; -webkit-tap-highlight-color:transparent; }
 [data-style="brutalist"] .mob2-sec-play { width:28px; height:28px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:transparent; border:1.5px solid var(--m-border-hard); color:var(--m-accent); cursor:pointer; -webkit-tap-highlight-color:transparent; transition:background .15s; }
 [data-style="brutalist"] .mob2-sec-play:active { background:var(--m-glass); }
@@ -136,7 +111,6 @@
 [data-style="brutalist"] .mob2-tab--active .mob2-tab-count { color:var(--m-accent); opacity:1; }
 [data-style="brutalist"] .mob2-tab--active::after { content:''; position:absolute; bottom:0; left:0; width:100%; height:2px; background:var(--m-accent); }
 [data-style="brutalist"][data-theme="dark"] .mob2-tab--active .mob2-tab-label { color:#f0f1f7; }
-/* neumorphism */
 [data-style="neumorphism"] .mob2-sec { padding:20px 20px 12px; }
 [data-style="neumorphism"] .mob2-sec-sq { width:6px; height:6px; background:var(--m-accent); border-radius:50%; flex-shrink:0; box-shadow:0 0 6px var(--m-accent-l); }
 [data-style="neumorphism"] .mob2-sec-all { font-size:11px; font-weight:600; color:var(--m-accent); cursor:pointer; -webkit-tap-highlight-color:transparent; background:var(--m-bg); border-radius:var(--r-pill); box-shadow:var(--nm-sm); padding:4px 12px; }
@@ -151,18 +125,11 @@
 [data-style="neumorphism"] .mob2-tab--active::after { content:''; position:absolute; bottom:0; left:0; width:100%; height:3px; background:linear-gradient(90deg,var(--m-accent),var(--m-accent-l)); border-radius:var(--r-pill); box-shadow:0 0 8px rgba(96,81,155,.4); }
 [data-style="neumorphism"][data-theme="dark"] .mob2-tab--active .mob2-tab-label { color:#E8E6F0; }
 
-/* ==============================================================
-   HSCROLL
-============================================================== */
 .mob2-hscroll-wrap { margin:0 20px; padding:8px 0; }
 [data-style="brutalist"] .mob2-hscroll { display:flex; gap:10px; padding:4px 0 16px; overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch; scrollbar-width:none; scroll-snap-type:x proximity; animation:mob2-fade-in .25s ease both; }
 [data-style="neumorphism"] .mob2-hscroll { display:flex; gap:14px; padding:10px 4px 20px; overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch; scrollbar-width:none; scroll-snap-type:x proximity; animation:mob2-fade-in .25s ease both; }
 .mob2-hscroll::-webkit-scrollbar { display:none; }
 
-/* ==============================================================
-   MATCH CARD
-============================================================== */
-/* brutalist */
 [data-style="brutalist"] .mob2-mc { width:168px; flex-shrink:0; background:var(--m-card); border:1px solid var(--m-border-hard); scroll-snap-align:start; }
 [data-style="brutalist"] .mob2-mc-accent { height:3px; }
 [data-style="brutalist"] .mob2-mc-inner { padding:10px 12px 9px; }
@@ -174,7 +141,6 @@
 [data-style="brutalist"] .mob2-mc-num { width:24px; height:24px; border:1px solid var(--m-border); background:var(--m-bg); display:flex; align-items:center; justify-content:center; font-family:var(--m-mono); font-size:10px; font-weight:700; color:var(--m-muted); flex-shrink:0; }
 [data-style="brutalist"] .mob2-mc-num--has { color:var(--m-accent); border-color:rgba(91,79,216,.3); background:var(--m-glass); font-size:12px; }
 [data-style="brutalist"] .mob2-mc-ft { display:flex; align-items:center; gap:3px; font-family:var(--m-mono); font-size:7px; color:var(--m-muted); letter-spacing:.06em; }
-/* neumorphism */
 [data-style="neumorphism"] .mob2-mc { width:168px; flex-shrink:0; background:var(--m-bg); border:none; border-radius:var(--r-lg); box-shadow:var(--nm-s); scroll-snap-align:start; overflow:hidden; transition:box-shadow .18s,transform .18s; }
 [data-style="neumorphism"] .mob2-mc:active { box-shadow:var(--nm-ism); transform:scale(.97); }
 [data-style="neumorphism"] .mob2-mc-accent { height:4px; border-radius:var(--r-lg) var(--r-lg) 0 0; }
@@ -187,7 +153,6 @@
 [data-style="neumorphism"] .mob2-mc-num { width:26px; height:26px; border:none; border-radius:var(--r-sm); background:var(--m-bg); box-shadow:var(--nm-ism); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--m-muted); flex-shrink:0; }
 [data-style="neumorphism"] .mob2-mc-num--has { color:var(--m-accent); box-shadow:var(--nm-ism),0 0 0 1.5px rgba(96,81,155,.25); font-size:12px; }
 [data-style="neumorphism"] .mob2-mc-ft { display:flex; align-items:center; gap:3px; font-size:8px; font-weight:500; color:var(--m-muted); letter-spacing:.03em; }
-/* shared pill states */
 .mob2-mc-accent--purple,[data-style="brutalist"] .mob2-mc-accent--purple { background:var(--m-accent); }
 .mob2-mc-accent--green, [data-style="brutalist"] .mob2-mc-accent--green  { background:var(--m-green); }
 .mob2-mc-accent--red,   [data-style="brutalist"] .mob2-mc-accent--red    { background:var(--m-red); }
@@ -204,7 +169,6 @@
 [data-style="neumorphism"] .mob2-mc-pill--saved   { color:var(--m-green); }
 [data-style="neumorphism"] .mob2-mc-pill--closed  { color:var(--m-red); }
 [data-style="neumorphism"] .mob2-mc-pill--live    { color:var(--m-amber); animation:mob2-blink 1.4s ease-in-out infinite; }
-/* shared mc */
 .mob2-mc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
 .mob2-mc-league { display:flex; align-items:center; gap:5px; }
 .mob2-mc-teams { display:flex; flex-direction:column; margin-bottom:8px; }
@@ -217,10 +181,6 @@
 .mob2-mc-sep { height:1px; background:var(--m-border); }
 .mob2-mc-foot { display:flex; justify-content:space-between; padding-top:7px; border-top:1px solid var(--m-border); }
 
-/* ==============================================================
-   LEAGUE / AWARD
-============================================================== */
-/* brutalist */
 [data-style="brutalist"] .mob2-lc { width:240px; flex-shrink:0; background:var(--m-card); border:1px solid var(--m-border-hard); scroll-snap-align:start; }
 [data-style="brutalist"] .mob2-ac { width:220px; flex-shrink:0; background:var(--m-card); border:1px solid var(--m-border-hard); scroll-snap-align:start; }
 [data-style="brutalist"] .mob2-lc-name { font-family:var(--m-mono); font-size:10px; font-weight:700; color:var(--m-text); letter-spacing:.04em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -229,7 +189,6 @@
 [data-style="brutalist"] .mob2-lc-input { background:var(--m-bg); border:1px solid var(--m-border); padding:6px 10px; font-family:var(--m-mono); font-size:10px; color:var(--m-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:.04em; }
 [data-style="brutalist"] .mob2-lc-input--filled { background:var(--m-glass); border-color:rgba(91,79,216,.3); border-left:2px solid var(--m-accent); color:var(--m-accent); font-weight:700; }
 [data-style="brutalist"] .mob2-status-dot { width:8px; height:8px; flex-shrink:0; }
-/* neumorphism */
 [data-style="neumorphism"] .mob2-lc { width:240px; flex-shrink:0; background:var(--m-bg); border:none; border-radius:var(--r-lg); box-shadow:var(--nm-s); scroll-snap-align:start; overflow:hidden; }
 [data-style="neumorphism"] .mob2-ac { width:220px; flex-shrink:0; background:var(--m-bg); border:none; border-radius:var(--r-lg); box-shadow:var(--nm-s); scroll-snap-align:start; overflow:hidden; }
 [data-style="neumorphism"] .mob2-lc-name { font-size:11px; font-weight:700; color:var(--m-text); letter-spacing:-.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -238,7 +197,6 @@
 [data-style="neumorphism"] .mob2-lc-input { background:var(--m-bg); border:none; border-radius:var(--r-sm); box-shadow:var(--nm-ism); padding:8px 12px; font-size:10px; font-weight:400; color:var(--m-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 [data-style="neumorphism"] .mob2-lc-input--filled { color:var(--m-accent); font-weight:600; box-shadow:var(--nm-ism),inset 2px 0 0 var(--m-accent); }
 [data-style="neumorphism"] .mob2-status-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; box-shadow:0 0 5px currentColor; }
-/* shared lc */
 .mob2-lc-inner { padding:12px 14px; }
 [data-style="neumorphism"] .mob2-lc-inner { padding:13px 15px 14px; }
 .mob2-lc-head { display:flex; align-items:center; gap:10px; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--m-border); }
@@ -250,25 +208,16 @@
 .mob2-status-dot--finished { background:var(--m-green); }
 [data-style="neumorphism"] .mob2-status-dot--pending { box-shadow:none; }
 
-/* ==============================================================
-   MORE CARD
-============================================================== */
 [data-style="brutalist"] .mob2-more-card { width:60px; flex-shrink:0; background:transparent; border:1px solid rgba(91,79,216,.2); border-top:3px solid var(--m-accent); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; cursor:pointer; color:var(--m-accent); font-family:var(--m-mono); font-size:8px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; min-height:90px; -webkit-tap-highlight-color:transparent; transition:background .15s; }
 [data-style="brutalist"] .mob2-more-card:active { background:var(--m-glass); }
 [data-style="neumorphism"] .mob2-more-card { width:62px; flex-shrink:0; background:var(--m-bg); border:none; border-radius:var(--r-lg); box-shadow:var(--nm-s); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; cursor:pointer; color:var(--m-accent); font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; min-height:90px; -webkit-tap-highlight-color:transparent; transition:box-shadow .15s,transform .15s; }
 [data-style="neumorphism"] .mob2-more-card:active { box-shadow:var(--nm-ism); transform:scale(.96); }
 .mob2-more-sym { font-size:18px; line-height:1; }
 
-/* ==============================================================
-   EMPTY
-============================================================== */
 .mob2-empty { display:flex; align-items:center; justify-content:center; padding:28px 16px; width:200px; min-height:90px; }
 [data-style="brutalist"] .mob2-empty-lbl { font-family:var(--m-mono); font-size:8px; font-weight:700; color:var(--m-muted); letter-spacing:.16em; text-transform:uppercase; opacity:.6; text-align:center; }
 [data-style="neumorphism"] .mob2-empty-lbl { font-size:9px; font-weight:600; color:var(--m-muted); letter-spacing:.1em; text-transform:uppercase; opacity:.55; text-align:center; }
 
-/* ==============================================================
-   SKELETON
-============================================================== */
 [data-style="brutalist"] .mob2-sk-card { width:168px; flex-shrink:0; background:var(--m-surface); border:1px solid var(--m-border); scroll-snap-align:start; }
 [data-style="brutalist"] .mob2-sk-accent { height:3px; background:var(--m-border); animation:mob2-sk-pulse 1.4s ease-in-out infinite; }
 [data-style="brutalist"] .mob2-sk { background:var(--m-border); animation:mob2-sk-pulse 1.4s ease-in-out infinite; }
@@ -288,9 +237,6 @@
 .mob2-sk--xs { width:32px; height:8px; }
 .mob2-sk-footer { display:flex; justify-content:space-between; padding-top:5px; }
 
-/* ==============================================================
-   BOTTOM SECTION
-============================================================== */
 [data-style="brutalist"] .mob2-bottom-wrap { margin:14px 0 0; padding:0 20px; animation:mob2-fade-up .35s ease .28s both; }
 [data-style="neumorphism"] .mob2-bottom-wrap { margin:20px 0 0; padding:0 20px; animation:mob2-fade-up .4s cubic-bezier(.16,1,.3,1) .15s both; }
 .mob2-bottom-wrap .mob2-sec { padding-left:0; padding-right:0; }
@@ -304,9 +250,6 @@
 .mob2-bottom-eyebrow { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
 .mob2-bottom-eyebrow-line { flex:1; height:1px; background:var(--m-border); }
 
-/* ==============================================================
-   PODIO
-============================================================== */
 [data-style="brutalist"] .mob2-podium { padding:14px 12px 10px; }
 [data-style="neumorphism"] .mob2-podium { padding:18px 14px 14px; background:var(--m-bg); border-radius:var(--r-lg); box-shadow:var(--nm-s); }
 .mob2-podium-hdr { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
@@ -322,11 +265,9 @@
 .mob2-pod-av { overflow:hidden; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; flex-shrink:0; }
 [data-style="neumorphism"] .mob2-pod-av { border-radius:50%; }
 .mob2-pod-av img { width:100%; height:100%; object-fit:cover; }
-/* brutalist av */
 [data-style="brutalist"] .mob2-pod-col--1st .mob2-pod-av { width:52px; height:52px; font-size:17px; border:2px solid var(--m-gold); background:var(--m-accent); }
 [data-style="brutalist"] .mob2-pod-col--2nd .mob2-pod-av { width:42px; height:42px; font-size:14px; border:2px solid var(--m-silver); background:var(--m-accent-l); }
 [data-style="brutalist"] .mob2-pod-col--3rd .mob2-pod-av { width:38px; height:38px; font-size:12px; border:2px solid var(--m-bronze); background:var(--m-accent-l); }
-/* neumorphism av */
 [data-style="neumorphism"] .mob2-pod-col--1st .mob2-pod-av { width:54px; height:54px; font-size:18px; background:linear-gradient(135deg,var(--m-accent),var(--m-accent-l)); box-shadow:5px 5px 12px var(--nm-dark),-3px -3px 8px var(--nm-light),0 0 0 3px var(--m-bg),0 0 0 4.5px var(--m-gold); }
 [data-style="neumorphism"] .mob2-pod-col--2nd .mob2-pod-av { width:44px; height:44px; font-size:15px; background:linear-gradient(135deg,#7A7E99,#AAAFCC); box-shadow:4px 4px 10px var(--nm-dark),-3px -3px 8px var(--nm-light),0 0 0 2.5px var(--m-bg),0 0 0 4px var(--m-silver); }
 [data-style="neumorphism"] .mob2-pod-col--3rd .mob2-pod-av { width:38px; height:38px; font-size:13px; background:linear-gradient(135deg,#A0703A,#C89060); box-shadow:4px 4px 10px var(--nm-dark),-3px -3px 8px var(--nm-light),0 0 0 2.5px var(--m-bg),0 0 0 4px var(--m-bronze); }
@@ -353,9 +294,6 @@
 [data-style="brutalist"] .mob2-pod-you { font-family:var(--m-mono); font-size:6px; font-weight:700; color:var(--m-accent); border:1px solid rgba(91,79,216,.3); background:var(--m-glass); padding:1px 4px; letter-spacing:.08em; }
 [data-style="neumorphism"] .mob2-pod-you { font-size:7px; font-weight:700; color:var(--m-accent); background:var(--m-bg); box-shadow:var(--nm-sm); padding:2px 7px; border-radius:var(--r-pill); letter-spacing:.06em; }
 
-/* ==============================================================
-   STATS GRID
-============================================================== */
 [data-style="brutalist"] .mob2-stats-grid { display:grid; grid-template-columns:1fr 1px 1fr; }
 [data-style="neumorphism"] .mob2-stats-grid { display:grid; grid-template-columns:1fr 1px 1fr; background:var(--m-bg); border-radius:var(--r-lg); box-shadow:var(--nm-s); overflow:hidden; }
 .mob2-stats-sep { background:var(--m-border); }
@@ -375,12 +313,8 @@
 [data-style="brutalist"] .mob2-stat-bar-fill { height:100%; background:var(--m-accent); transition:width .5s ease; }
 [data-style="neumorphism"] .mob2-stat-bar-fill { height:100%; background:linear-gradient(90deg,var(--m-accent),var(--m-accent-l)); border-radius:var(--r-pill); transition:width .6s cubic-bezier(.34,1.56,.64,1); }
 
-/* misc */
 .mob2-logros-empty { padding:24px 20px; text-align:center; font-size:9px; font-weight:700; color:var(--m-muted); letter-spacing:.14em; text-transform:uppercase; opacity:.5; }
 
-/* ==============================================================
-   BREAKPOINTS
-============================================================== */
 @media screen and (max-width:380px) {
   .mob2-mc { width:152px; } .mob2-lc { width:218px; } .mob2-ac { width:200px; }
   .mob2-sk-card { width:152px; } .mob2-sk-card--wide { width:218px; }

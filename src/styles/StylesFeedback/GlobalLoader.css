@@ -1,9 +1,7 @@
-/* ================================================================
-   GlobalLoader.css — Spinner unificado · GlobalScore
-   Estética brutalista · DM Mono · variables del sistema (index.css)
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
-/* ── Token único ── */
 :root,
 [data-theme="light"],
 [data-theme="dark"] {
@@ -15,11 +13,6 @@
   --gl-mono:   'DM Mono', monospace;
 }
 
-/* ================================================================
-   RING — el spinner base
-   Un cuadrado rotando. Sin degradados, sin luces — solo línea.
-   Tres tamaños: sm (20px), md (32px), lg (48px)
-================================================================ */
 .gl-ring {
   display: inline-block;
   flex-shrink: 0;
@@ -39,10 +32,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* ================================================================
-   DOTS — tres puntos, fondo transparente
-   Usado dentro de botones o como reemplazo del LoadingDots anterior
-================================================================ */
 .gl-dots {
   display: inline-flex;
   align-items: center;
@@ -69,15 +58,11 @@
   40%           { opacity: 1;   transform: scaleY(1);   }
 }
 
-/* ── Botones: fondo blanco cuando están en botón de acento ── */
 .btn .gl-dot,
 button .gl-dot {
   background: currentColor;
 }
 
-/* ================================================================
-   INLINE — centrado dentro de su contenedor
-================================================================ */
 .gl-inline {
   display: flex;
   flex-direction: column;
@@ -102,9 +87,6 @@ button .gl-dot {
   animation: gl-label-fade 1.2s ease-in-out infinite;
 }
 
-/* ================================================================
-   PAGE — pantalla completa, fija
-================================================================ */
 .gl-page {
   position: fixed;
   inset: 0;
@@ -128,7 +110,6 @@ button .gl-dot {
   gap: 20px;
 }
 
-/* Marca de agua: cuadrado grande atrás */
 .gl-page-inner::before {
   content: '';
   position: absolute;
@@ -154,9 +135,6 @@ button .gl-dot {
   animation: gl-label-fade 1.2s ease-in-out infinite;
 }
 
-/* ================================================================
-   OVERLAY — fixed semitransparente sobre el contenido
-================================================================ */
 .gl-overlay {
   position: fixed;
   inset: 0;
@@ -194,18 +172,11 @@ button .gl-dot {
   animation: gl-label-fade 1.2s ease-in-out infinite;
 }
 
-/* ================================================================
-   ANIMACIÓN LABEL — parpadeo lento
-================================================================ */
 @keyframes gl-label-fade {
   0%, 100% { opacity: 0.5; }
   50%       { opacity: 1;   }
 }
 
-/* ================================================================
-   MOBILE SECTIONS — spinner embebido en secciones móviles
-   Reemplaza .mst-spinner, .mrk-loading, etc.
-================================================================ */
 .mob-section-loading,
 .mst-loading,
 .mrk-loading {
@@ -224,7 +195,6 @@ button .gl-dot {
   color: var(--muted, #a0a0b0);
 }
 
-/* Override del spinner viejo en mobile stats */
 .mst-spinner {
   width: 28px;
   height: 28px;
@@ -235,9 +205,6 @@ button .gl-dot {
   animation: gl-spin 0.75s linear infinite;
 }
 
-/* ================================================================
-   ACCESIBILIDAD
-================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .gl-ring {
     animation-duration: 2s;
@@ -255,10 +222,6 @@ button .gl-dot {
   }
 }
 
-/* ================================================================
-   DARK MODE — las variables del sistema lo manejan solas,
-   pero ajustamos el overlay claro que es hardcoded
-================================================================ */
 [data-theme="dark"] .gl-overlay {
   background: rgba(10, 8, 20, 0.7);
 }

@@ -1,8 +1,9 @@
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-/* ================================================================
-   TOKENS — BRUTALIST (por defecto, sin selector de estilo)
-================================================================ */
 [data-style="brutalist"] .mwc-root {
   --mwc-bg:            #f0ede8;
   --mwc-card:          #e8e4de;
@@ -29,16 +30,10 @@
   --mwc-inset:         none;
 }
 
-/* ================================================================
-   TOKENS — NEUMORPHISM
-================================================================ */
 [data-style="neumorphism"] .mwc-root {
-  /* Superficies */
   --mwc-bg:      #EAE7E1;
   --mwc-card:    #EAE7E1;
   --mwc-surface: #EAE7E1;
-
-  /* Sombras */
   --nm-light:    rgba(255,255,255,.85);
   --nm-dark:     rgba(166,158,148,.55);
   --nm-il:       rgba(255,255,255,.70);
@@ -49,7 +44,6 @@
   --mwc-inset:     inset 3px 3px 8px var(--nm-id),inset -3px -3px 8px var(--nm-il);
   --mwc-inset-sm:  inset 2px 2px 5px var(--nm-id),inset -2px -2px 5px var(--nm-il);
 
-  /* Colores */
   --mwc-accent:        #60519b;
   --mwc-accent-l:      #8b7fc7;
   --mwc-glass:         rgba(96,81,155,.10);
@@ -63,7 +57,6 @@
   --mwc-green:   #3DAA80;
   --mwc-red:     #D95757;
 
-  /* Tipografía y radios */
   --mwc-mono:    'Plus Jakarta Sans', system-ui, sans-serif;
   --mwc-sans:    'Plus Jakarta Sans', system-ui, sans-serif;
   --mwc-r-sm:    10px;
@@ -73,9 +66,6 @@
   --mwc-r-pill:  100px;
 }
 
-/* ================================================================
-   TOKENS — DARK (brutalista)
-================================================================ */
 [data-style="brutalist"][data-theme="dark"] .mwc-root {
   --mwc-bg:            #1a1d2e;
   --mwc-card:          #252936;
@@ -93,9 +83,6 @@
   --mwc-red:           #f87171;
 }
 
-/* ================================================================
-   TOKENS — DARK (neumorphism)
-================================================================ */
 [data-style="neumorphism"][data-theme="dark"] .mwc-root {
   --mwc-bg:      #1E1C28;
   --mwc-card:    #1E1C28;
@@ -125,9 +112,6 @@
   --mwc-red:     #f87171;
 }
 
-/* ================================================================
-   ROOT
-================================================================ */
 .mwc-root {
   display: none;
   flex-direction: column;
@@ -143,9 +127,6 @@
   .mwc-root { display: flex; }
 }
 
-/* ================================================================
-   HERO MOBILE
-================================================================ */
 .mwc-hero {
   display: flex;
   align-items: center;
@@ -153,7 +134,6 @@
   flex-shrink: 0;
 }
 
-/* brutalist */
 [data-style="brutalist"] .mwc-hero {
   background: #12121f;
   padding: 22px 18px 20px;
@@ -182,7 +162,6 @@
   color: rgba(255,255,255,.4); letter-spacing: .07em; margin: 0;
 }
 
-/* neumorphism */
 [data-style="neumorphism"] .mwc-hero {
   padding: 22px 20px 18px;
   background: var(--mwc-bg);
@@ -214,13 +193,8 @@
   text-transform: uppercase; margin: 4px 0 0;
 }
 
-/* shared */
 .mwc-hero-info { display: flex; flex-direction: column; gap: 4px; }
 
-/* ================================================================
-   TABS
-================================================================ */
-/* brutalist */
 [data-style="brutalist"] .mwc-tabs {
   display: flex; align-items: center;
   height: 50px; min-height: 50px;
@@ -247,7 +221,6 @@
   border-bottom-color: var(--mwc-accent);
 }
 
-/* neumorphism */
 [data-style="neumorphism"] .mwc-tabs {
   display: flex; gap: 10px;
   padding: 14px 20px;
@@ -274,10 +247,6 @@
 }
 [data-style="neumorphism"] .mwc-tab:active { box-shadow: var(--mwc-inset); }
 
-/* ================================================================
-   SAVE BAR
-================================================================ */
-/* brutalist */
 [data-style="brutalist"] .mwc-save-bar {
   padding: 13px 18px; background: var(--mwc-card);
   border-bottom: 0.5px solid var(--mwc-border);
@@ -301,7 +270,6 @@
 [data-style="brutalist"] .mwc-save-btn:active   { opacity: .85; }
 [data-style="brutalist"] .mwc-save-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-/* neumorphism */
 [data-style="neumorphism"] .mwc-save-bar {
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px; margin: 0 20px 4px;
@@ -329,12 +297,8 @@
 [data-style="neumorphism"] .mwc-save-btn:active   { box-shadow: var(--mwc-inset); }
 [data-style="neumorphism"] .mwc-save-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-/* shared */
 .mwc-save-btn svg { width: 13px; height: 13px; }
 
-/* ================================================================
-   BODY
-================================================================ */
 [data-style="brutalist"] .mwc-body {
   display: flex; flex-direction: column; gap: 0; padding-bottom: 22px;
 }
@@ -344,9 +308,6 @@
   padding: 14px 20px;
 }
 
-/* ================================================================
-   SECTION HEADER
-================================================================ */
 [data-style="brutalist"] .mwc-sec-hdr {
   display: flex; align-items: center; height: 44px;
   padding: 0 18px; background: var(--mwc-card);
@@ -380,10 +341,6 @@
   letter-spacing: .14em; text-transform: uppercase; color: var(--mwc-muted);
 }
 
-/* ================================================================
-   GROUP CARD MOBILE
-================================================================ */
-/* brutalist */
 [data-style="brutalist"] .mwc-group-card {
   background: var(--mwc-card);
   border-bottom: 0.5px solid var(--mwc-border);
@@ -423,7 +380,6 @@
   background: rgba(29,158,117,.06);
 }
 
-/* neumorphism */
 [data-style="neumorphism"] .mwc-group-card {
   background: var(--mwc-bg);
   border-radius: var(--mwc-r-lg);
@@ -471,7 +427,6 @@
   color: var(--mwc-green);
 }
 
-/* shared group */
 .mwc-group-hdr-left { display: flex; align-items: center; gap: 11px; }
 .mwc-group-chevron  { color: var(--mwc-muted); transition: transform .2s ease; }
 .mwc-group-chevron.open { transform: rotate(180deg); }
@@ -479,9 +434,6 @@
 .mwc-score-input::-webkit-outer-spin-button,
 .mwc-score-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-/* ================================================================
-   GROUP TABLE
-================================================================ */
 .mwc-group-table { width: 100%; border-collapse: collapse; min-width: 360px; }
 
 [data-style="brutalist"] .mwc-group-table thead tr { border-bottom: 0.5px solid var(--mwc-border); }
@@ -522,7 +474,6 @@
 [data-style="neumorphism"] .mwc-group-table tbody tr.mwc-qualified   { background: rgba(61,170,128,.07); }
 [data-style="neumorphism"] .mwc-group-table tbody tr.mwc-third-place { background: rgba(201,150,26,.06); }
 
-/* shared table */
 .mwc-team-cell { display: flex; align-items: center; gap: 6px; }
 
 [data-style="brutalist"] .mwc-team-flag {
@@ -550,9 +501,6 @@
 .mwc-gd-pos { color: var(--mwc-green); font-weight: 700; }
 .mwc-gd-neg { color: var(--mwc-red);   font-weight: 700; }
 
-/* ================================================================
-   GROUP PREDICTIONS
-================================================================ */
 @keyframes mwc-expand {
   from { opacity: 0; transform: translateY(-4px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -597,7 +545,6 @@
 }
 [data-style="neumorphism"] .mwc-match-pred:first-of-type { border-top: none; }
 
-/* shared */
 .mwc-match-team {
   display: flex; align-items: center; gap: 6px;
   font-weight: 700; color: var(--mwc-text); overflow: hidden;
@@ -612,9 +559,6 @@
 [data-style="brutalist"]  .mwc-score-sep { font-size: 13px; font-weight: 700; font-family: var(--mwc-mono); color: var(--mwc-muted); }
 [data-style="neumorphism"] .mwc-score-sep { font-size: 14px; font-weight: 700; color: var(--mwc-muted); }
 
-/* ================================================================
-   MEJORES TERCEROS
-================================================================ */
 [data-style="brutalist"] .mwc-thirds-wrap {
   background: var(--mwc-card);
   border-top: 0.5px solid var(--mwc-border);
@@ -679,7 +623,6 @@
   padding: 10px 12px; font-size: 12px; color: var(--mwc-text);
 }
 
-/* rank badges / group badges — shared logic, style-split */
 [data-style="brutalist"] .mwc-rnk-sm {
   display: inline-flex; align-items: center; justify-content: center;
   width: 24px; height: 24px;
@@ -713,9 +656,6 @@
   font-size: 9px; font-weight: 700; color: var(--mwc-accent);
 }
 
-/* ================================================================
-   KNOCKOUT MOBILE
-================================================================ */
 .mwc-ko-section { display: flex; flex-direction: column; }
 
 [data-style="brutalist"] .mwc-ko-section { /* heredado del KnockoutSection global */ }
@@ -763,7 +703,6 @@
   border-right: none; border-bottom: 1px solid var(--mwc-border);
 }
 
-/* shared ko overrides for mobile */
 .mwc-ko-section .knockout-stage-header h2 { font-size: 15px; }
 .mwc-ko-section .knockout-stage-header p  { font-size: 11px; }
 .mwc-ko-section .knockout-match-card      { padding: 15px 17px; }
@@ -773,7 +712,6 @@
 .mwc-ko-section .knockout-side            { border-right: none; border-bottom: 0.5px solid var(--mwc-border); }
 .mwc-ko-section .knockout-side:last-child { border-bottom: none; }
 
-/* empty KO */
 [data-style="brutalist"] .mwc-ko-empty {
   display: flex; flex-direction: column; align-items: center; gap: 13px;
   padding: 55px 22px; text-align: center; color: var(--mwc-muted);
@@ -797,9 +735,6 @@
   color: var(--mwc-muted); margin: 0; line-height: 1.5; max-width: 260px;
 }
 
-/* ================================================================
-   AWARDS MOBILE
-================================================================ */
 [data-style="brutalist"] .mwc-awards {
   display: flex; flex-direction: column;
   border-top: 0.5px solid var(--mwc-border);
@@ -850,7 +785,6 @@
   border-left: 2px solid var(--mwc-gold);
 }
 
-/* neumorphism awards */
 [data-style="neumorphism"] .mwc-awards {
   display: flex; flex-direction: column; gap: 14px;
 }
@@ -889,7 +823,6 @@
   color: var(--mwc-muted); letter-spacing: .08em; text-transform: uppercase;
 }
 
-/* award input — neumorphism viene del WorldCupPage con clase mwc-award-input directamente */
 [data-style="neumorphism"] .mwc-award-input {
   width: calc(100% - 28px);
   margin: 0 14px 13px;
@@ -907,7 +840,6 @@
 }
 [data-style="neumorphism"] .mwc-award-input::placeholder { color: var(--mwc-muted); font-weight: 400; }
 
-/* award-input-wrap / lbl (estructura alternativa del WorldCupAwardCard) */
 [data-style="neumorphism"] .mwc-award-input-wrap {
   display: flex; flex-direction: column; background: var(--mwc-bg);
 }
@@ -919,9 +851,6 @@
   border-top: 1px solid var(--mwc-border);
 }
 
-/* ================================================================
-   LOADING
-================================================================ */
 .mwc-loading {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
@@ -956,9 +885,6 @@
   letter-spacing: .08em; text-transform: uppercase; color: var(--mwc-muted);
 }
 
-/* ================================================================
-   EXTRA SMALL — ≤380px
-================================================================ */
 @media screen and (max-width: 380px) {
   .mwc-hero-title { font-size: 19px; }
   [data-style="brutalist"]  .mwc-score-input { width: 29px; height: 31px; font-size: 13px; }
@@ -970,9 +896,6 @@
   .mwc-group-letter { width: 28px; height: 28px; }
 }
 
-/* ================================================================
-   REDUCED MOTION
-================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .mwc-group-chevron, .mwc-score-input, .mwc-award-input { transition: none; }
   .mwc-expand, .mwc-spin { animation: none; }

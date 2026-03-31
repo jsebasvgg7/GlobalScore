@@ -1,8 +1,9 @@
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
-/* ================================================================
-   TOKENS
-================================================================ */
 .mn-root {
   --mn-mono:    'DM Mono', monospace;
   --mn-sans:    'Sora', sans-serif;
@@ -17,9 +18,6 @@
   --mn-muted:   var(--muted, #888780);
 }
 
-/* ================================================================
-   ROOT 
-================================================================ */
 .mn-root {
   position: fixed;
   inset: 0;
@@ -37,9 +35,6 @@
   to   { transform: translateX(0);    opacity: 1; }
 }
 
-/* ================================================================
-   BOTÓN VOLVER 
-================================================================ */
 .mn-top-back {
   background: var(--mn-surface);
   border-bottom: 0.5px solid var(--mn-border);
@@ -64,9 +59,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ================================================================
-   VISTA LISTA
-================================================================ */
 .mn-list-view {
   display: flex;
   flex-direction: column;
@@ -276,9 +268,6 @@
 .mn-list-empty p { font-size: 16px; font-weight: 700; margin: 0; font-family: var(--mn-sans); color: var(--mn-text); opacity: 0.5; }
 .mn-list-empty span { font-size: 12px; opacity: 0.45; font-family: var(--mn-sans); }
 
-/* ================================================================
-   VISTA EDITOR
-================================================================ */
 .mn-editor-view {
   display: flex;
   flex-direction: column;
@@ -447,9 +436,6 @@
 }
 .mn-footer-lock { color: var(--mn-accent); opacity: 0.6; }
 
-/* ================================================================
-   MODAL BORRADO
-================================================================ */
 .mn-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -510,9 +496,6 @@
 }
 .mn-modal-confirm:active { background: #c05050; }
 
-/* ================================================================
-   DARK MODE
-================================================================ */
 [data-theme="dark"] .mn-note-card { background: #1a1a1a; }
 [data-theme="dark"] .mn-note-card:active { background: #242424; }
 [data-theme="dark"] .mn-list-header,

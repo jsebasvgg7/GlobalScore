@@ -1,8 +1,9 @@
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 
-/* ================================================================
-   TOKENS BRUTALIST
-================================================================ */
 [data-style="brutalist"] .mcg-match-card,
 [data-style="brutalist"] .mcg-league-card,
 [data-style="brutalist"] .mcg-award-card {
@@ -31,9 +32,6 @@
   --mcg-inset:       none;
 }
 
-/* ================================================================
-   TOKENS NEUMORPHISM
-================================================================ */
 [data-style="neumorphism"] .mcg-match-card,
 [data-style="neumorphism"] .mcg-league-card,
 [data-style="neumorphism"] .mcg-award-card {
@@ -67,9 +65,6 @@
   --mcg-r-pill:      100px;
 }
 
-/* ================================================================
-   DARK — BRUTALIST
-================================================================ */
 [data-style="brutalist"][data-theme="dark"] .mcg-match-card,
 [data-style="brutalist"][data-theme="dark"] .mcg-league-card,
 [data-style="brutalist"][data-theme="dark"] .mcg-award-card {
@@ -91,9 +86,6 @@
   --mcg-key-acc-sh:  #4d3d99;
 }
 
-/* ================================================================
-   DARK — NEUMORPHISM
-================================================================ */
 [data-style="neumorphism"][data-theme="dark"] .mcg-match-card,
 [data-style="neumorphism"][data-theme="dark"] .mcg-league-card,
 [data-style="neumorphism"][data-theme="dark"] .mcg-award-card {
@@ -120,9 +112,6 @@
   --mcg-key-acc-sh:  #4d3d99;
 }
 
-/* ================================================================
-   BASE CARD — compartida por las 3 tarjetas
-================================================================ */
 .mcg-match-card,
 .mcg-league-card,
 .mcg-award-card {
@@ -133,7 +122,6 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Brutalist: bordes duros, sin radio */
 [data-style="brutalist"] .mcg-match-card,
 [data-style="brutalist"] .mcg-league-card,
 [data-style="brutalist"] .mcg-award-card {
@@ -141,7 +129,6 @@
   border-radius: 0;
 }
 
-/* Neumorphism: sombra suave, radio grande */
 [data-style="neumorphism"] .mcg-match-card,
 [data-style="neumorphism"] .mcg-league-card,
 [data-style="neumorphism"] .mcg-award-card {
@@ -150,7 +137,6 @@
   box-shadow: var(--mcg-shadow);
 }
 
-/* ── Accent top bar por tipo ── */
 [data-style="brutalist"] .mcg-match-card  { border-top: 3px solid var(--mcg-accent); }
 [data-style="brutalist"] .mcg-league-card { border-top: 3px solid var(--mcg-green);  }
 [data-style="brutalist"] .mcg-award-card  { border-top: 3px solid var(--mcg-red);    }
@@ -167,18 +153,13 @@
 [data-style="neumorphism"] .mcg-league-card::before { background: linear-gradient(90deg, var(--mcg-green), #56cfa0);  }
 [data-style="neumorphism"] .mcg-award-card::before  { background: linear-gradient(90deg, var(--mcg-red), #e87878);    }
 
-/* ── Estado expired ── */
 .mcg-match-card--expired,
 .mcg-league-card--expired,
 .mcg-award-card--expired { opacity: 0.65; }
 
-/* ── Estado live (solo match) ── */
 [data-style="brutalist"] .mcg-match-card--live    { border-color: rgba(245,158,11,0.5); border-top-color: var(--mcg-amber); }
 [data-style="neumorphism"] .mcg-match-card--live  { box-shadow: var(--mcg-shadow), 0 0 0 1.5px var(--mcg-amber); }
 
-/* ================================================================
-   HEADER
-================================================================ */
 .mcg-header {
   display: flex;
   align-items: center;
@@ -248,7 +229,6 @@
   letter-spacing: 0.06em;
 }
 
-/* KO badge */
 .mcg-ko-badge {
   display: inline-flex; align-items: center; gap: 3px;
   font-size: 7px; font-weight: 700;
@@ -262,9 +242,6 @@
 [data-style="brutalist"] .mcg-ko-badge  { background: rgba(226,75,74,.08); border: 1px solid rgba(226,75,74,.25); }
 [data-style="neumorphism"] .mcg-ko-badge { background: rgba(217,87,87,.08); box-shadow: var(--mcg-shadow-sm); }
 
-/* ================================================================
-   PILL
-================================================================ */
 .mcg-pill {
   display: inline-flex; align-items: center; gap: 4px;
   padding: 3px 8px;
@@ -308,9 +285,6 @@
 }
 @keyframes mcg-spin { to { transform: rotate(360deg); } }
 
-/* ================================================================
-   MATCH CARD — BODY (botones +/-)
-================================================================ */
 .mcg-match-body {
   display: flex;
   flex-direction: column;
@@ -318,7 +292,6 @@
   background: var(--mcg-bg);
 }
 
-/* ── Team row ── */
 .mcg-team-row {
   display: flex;
   align-items: center;
@@ -333,7 +306,6 @@
 [data-style="brutalist"] .mcg-team-row--adv  { background: rgba(91,79,216,.07); }
 [data-style="neumorphism"] .mcg-team-row--adv { background: rgba(96,81,155,.07); }
 
-/* Escudo */
 .mcg-shield {
   width: 40px; height: 40px;
   display: flex; align-items: center; justify-content: center;
@@ -379,7 +351,6 @@
   to   { opacity: 1; transform: scale(1); }
 }
 
-/* Nombre equipo */
 .mcg-team-name {
   flex: 1;
   font-size: 13px; font-weight: 700;
@@ -389,7 +360,6 @@
   font-family: var(--mcg-sans);
 }
 
-/* Controles */
 .mcg-controls {
   display: flex;
   align-items: center;
@@ -397,9 +367,6 @@
   flex-shrink: 0;
 }
 
-/* ================================================================
-   TECLA BRUTALISTA RETRO
-================================================================ */
 .mcg-key {
   position: relative;
   width: 36px; height: 36px;
@@ -458,7 +425,6 @@
   line-height: 1;
 }
 
-/* Pressed */
 .mcg-key--pressed .mcg-key-face,
 .mcg-key:active:not(.mcg-key--disabled) .mcg-key-face {
   transform: translateY(5px);
@@ -466,7 +432,6 @@
 .mcg-key--pressed .mcg-key-shadow,
 .mcg-key:active:not(.mcg-key--disabled) .mcg-key-shadow { height: 3px; }
 
-/* Accent (+) */
 [data-style="brutalist"] .mcg-key--accent .mcg-key-face {
   background: var(--mcg-key-acc-bg);
   border-color: #4a3fc7;
@@ -484,9 +449,6 @@
 .mcg-key--accent .mcg-key-symbol { color: #fff; font-size: 19px; }
 .mcg-key--disabled { opacity: 0.3; cursor: not-allowed; }
 
-/* ================================================================
-   SCORE DISPLAY
-================================================================ */
 .mcg-score-display {
   width: 44px; height: 36px;
   display: flex; align-items: center; justify-content: center;
@@ -523,9 +485,6 @@
 .mcg-score-display--empty .mcg-score-num { font-size: 14px; color: var(--mcg-border-hard); opacity: 0.7; }
 .mcg-score-display--saved .mcg-score-num { color: var(--mcg-accent); }
 
-/* ================================================================
-   VS DIVIDER (match)
-================================================================ */
 .mcg-vs-row {
   display: flex; align-items: center;
   padding: 0 13px; gap: 10px;
@@ -539,9 +498,6 @@
   display: flex; align-items: center;
 }
 
-/* ================================================================
-   FOOTER META (hora/fecha)
-================================================================ */
 .mcg-footer {
   display: flex;
   align-items: center;
@@ -561,10 +517,6 @@
 }
 .mcg-meta svg { flex-shrink: 0; opacity: 0.6; }
 .mcg-footer-sep { width: 1px; height: 11px; background: var(--mcg-border); flex-shrink: 0; }
-
-/* ================================================================
-   LEAGUE CARD — BODY
-================================================================ */
 .mcg-lc-body { display: flex; flex-direction: column; }
 
 .mcg-lc-field {
@@ -576,7 +528,6 @@
 [data-style="neumorphism"] .mcg-lc-field { border-bottom: 1px solid var(--mcg-border); }
 .mcg-lc-field--last { border-bottom: none !important; }
 
-/* Grid goleador + asistidor */
 .mcg-lc-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -591,7 +542,6 @@
 [data-style="brutalist"] .mcg-lc-cell:first-child  { border-right: 1px solid var(--mcg-border); }
 [data-style="neumorphism"] .mcg-lc-cell:first-child { border-right: 1px solid var(--mcg-border); }
 
-/* Labels */
 .mcg-lc-label,
 .mcg-ac-label {
   display: flex; align-items: center; gap: 4px;
@@ -603,7 +553,6 @@
 .mcg-lc-label svg,
 .mcg-ac-label svg { flex-shrink: 0; opacity: 0.7; }
 
-/* Inputs */
 .mcg-lc-input,
 .mcg-ac-input {
   width: 100%;
@@ -656,7 +605,6 @@
 .mcg-lc-input:disabled,
 .mcg-ac-input:disabled { opacity: 0.45; cursor: not-allowed; }
 
-/* Resultado */
 .mcg-lc-result,
 .mcg-ac-result {
   display: flex; align-items: center; gap: 4px;
@@ -669,9 +617,6 @@
 .mcg-lc-correct,
 .mcg-ac-correct { font-weight: 700; margin-left: 2px; color: var(--mcg-green); }
 
-/* ================================================================
-   LEAGUE + AWARD FOOTER
-================================================================ */
 .mcg-lc-footer,
 .mcg-ac-footer {
   display: flex;
@@ -707,7 +652,6 @@
 [data-style="brutalist"]  .mcg-pts-badge  { background: var(--mcg-green); border-radius: 0; }
 [data-style="neumorphism"] .mcg-pts-badge  { background: var(--mcg-green); border-radius: var(--mcg-r-pill); }
 
-/* Save button */
 .mcg-save-btn {
   padding: 7px 18px;
   border: none;
@@ -737,9 +681,6 @@
   transform: scale(0.98);
 }
 
-/* ================================================================
-   AWARD CARD — BODY
-================================================================ */
 .mcg-ac-body { display: flex; flex-direction: column; }
 
 .mcg-ac-field {
@@ -748,7 +689,6 @@
   border-bottom: 1px solid var(--mcg-border);
 }
 
-/* Categoría badge */
 .mcg-ac-category {
   padding: 8px 13px 10px;
 }
@@ -764,9 +704,6 @@
 [data-style="brutalist"]  .mcg-ac-cat-badge { background: var(--mcg-surface); border: 1px solid var(--mcg-border); border-radius: 0; }
 [data-style="neumorphism"] .mcg-ac-cat-badge { background: var(--mcg-bg); border-radius: var(--mcg-r-pill); box-shadow: var(--mcg-shadow-sm); }
 
-/* ================================================================
-   REDUCED MOTION
-================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .mcg-live-dot, .mcg-spin { animation: none; }
   .mcg-key-face, .mcg-key-shadow { transition: none; }

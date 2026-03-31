@@ -1,10 +1,7 @@
 /* ================================================
-   BANNERS — Admin styles
-   Añadir al final de AdminModal.css o en archivo separado
-   e importar en AdminModal.css
+  GLOBALSCORE
 ================================================ */
 
-/* ── Drop zone (crear banner) ─────────────────── */
 .banner-drop-zone {
   position: relative;
   width: 100%;
@@ -94,7 +91,6 @@
   opacity: 1;
 }
 
-/* ── Admin banners grid ───────────────────────── */
 .banners-admin-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -169,7 +165,6 @@
   padding: 10px 14px;
 }
 
-/* ── Assign banner modal styles ──────────────── */
 .assign-user-list {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -255,7 +250,6 @@
   font-size: 13px;
 }
 
-/* Chips de banners ya asignados */
 .assign-banner-chips {
   display: flex;
   flex-wrap: wrap;
@@ -297,7 +291,6 @@
 
 .assign-chip-revoke:hover { background: rgba(242, 95, 92, 0.1); }
 
-/* Grid de banners para asignar */
 .assign-banners-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -383,7 +376,6 @@
   box-shadow: 0 2px 8px rgba(35, 200, 122, 0.5);
 }
 
-/* ── Responsive ──────────────────────────────── */
 @media (max-width: 768px) {
   .banners-admin-grid {
     grid-template-columns: 1fr;

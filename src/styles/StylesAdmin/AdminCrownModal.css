@@ -1,4 +1,7 @@
-/* Overlay */
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 .admin-crown-modal-overlay {
   position: fixed;
   top: 0;
@@ -13,7 +16,6 @@
   padding: 20px;
 }
 
-/* Modal Container */
 .admin-crown-modal {
   background: var(--card);
   border-radius: 20px;
@@ -30,7 +32,6 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Header */
 .modal-header {
   display: flex;
   align-items: center;
@@ -45,7 +46,7 @@
 }
 
 .modal-header .header-icon {
-  color: #F59E0B; /* Dorado para corona */
+  color: #F59E0B;
   flex-shrink: 0;
 }
 
@@ -72,7 +73,6 @@
   color: var(--text-primary);
 }
 
-/* Content */
 .modal-content {
   padding: 24px;
   display: flex;
@@ -157,7 +157,6 @@
   border-radius: 12px;
 }
 
-/* Actions */
 .modal-actions {
   display: flex;
   gap: 12px;
@@ -226,7 +225,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* Responsive */
 @media (max-width: 480px) {
   .admin-crown-modal {
     max-width: 100%;

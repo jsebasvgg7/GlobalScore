@@ -524,9 +524,6 @@
   letter-spacing: 0.06em;
 }
 
-/* ================================================================
-   DESKTOP — mostrar sidebar + topbar
-================================================================ */
 @media (min-width: 769px) {
   .gs-sidebar       { display: flex; }
   .gs-topbar        { display: flex; }

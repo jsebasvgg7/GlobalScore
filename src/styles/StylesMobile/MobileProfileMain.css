@@ -1,6 +1,6 @@
-/* ================================================================
-   MobileProfileMain
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
@@ -11,9 +11,6 @@
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner { animation: spin 0.8s linear infinite; }
 
-/* ================================================================
-   BRUTALIST TOKENS
-================================================================ */
 [data-style="brutalist"] .mpm-root,
 [data-style="brutalist"] .mpm-sub {
   --mpm-bg:      #f0ede8;
@@ -47,9 +44,6 @@
   --mpm-accent:  #8b7fc7;
 }
 
-/* ================================================================
-   NEUMORPHISM TOKENS
-================================================================ */
 [data-style="neumorphism"] .mpm-root,
 [data-style="neumorphism"] .mpm-sub {
   --mpm-bg:      #EAE7E1;
@@ -92,9 +86,6 @@
   --mpm-accent:  #8b7fc7;
 }
 
-/* ================================================================
-   ROOT (main profile list)
-================================================================ */
 .mpm-root {
   display: none;
   flex-direction: column;
@@ -110,9 +101,6 @@
   .mpm-root { display: flex; }
 }
 
-/* ================================================================
-   SUB-VIEW (header + scrollable body)
-================================================================ */
 .mpm-sub {
   display: flex;
   flex-direction: column;
@@ -123,7 +111,6 @@
   animation: mpm-fade-up .25s ease both;
 }
 
-/* Only show on mobile */
 @media (min-width: 769px) {
   .mpm-sub { display: none; }
 }
@@ -201,9 +188,6 @@
   background: var(--mpm-bg);
 }
 
-/* ================================================================
-   BANNER
-================================================================ */
 .mpm-banner {
   position: relative;
   height: 108px;
@@ -258,9 +242,6 @@
   font-family: var(--mpm-sans);
 }
 
-/* ================================================================
-   USER ROW
-================================================================ */
 .mpm-user-row {
   display: flex; align-items: center; gap: 14px;
   cursor: pointer;
@@ -335,9 +316,6 @@
 
 .mpm-user-arrow { color: var(--mpm-border2); flex-shrink: 0; }
 
-/* ================================================================
-   STATS ROW
-================================================================ */
 [data-style="brutalist"] .mpm-stats-row {
   display: flex; align-items: center;
   background: var(--mpm-text);
@@ -395,9 +373,6 @@
 
 [data-style="brutalist"] .mpm-stats-sep { background: rgba(255,255,255,.1); }
 
-/* ================================================================
-   SECTION LABELS
-================================================================ */
 .mpm-section-label {
   padding: 18px 20px 6px;
   display: flex; align-items: center; gap: 8px;
@@ -426,9 +401,6 @@
   box-shadow: 0 0 6px var(--mpm-accent);
 }
 
-/* ================================================================
-   GROUPS
-================================================================ */
 [data-style="brutalist"] .mpm-group {
   border-top: 1px solid var(--mpm-border2);
   border-bottom: 1px solid var(--mpm-border2);
@@ -441,9 +413,6 @@
   overflow: hidden;
 }
 
-/* ================================================================
-   ROWS
-================================================================ */
 .mpm-row {
   display: flex; align-items: center; gap: 14px;
   width: 100%; border: none; text-align: left;
@@ -499,9 +468,6 @@
 
 .mpm-row-arrow { color: var(--mpm-border2); flex-shrink: 0; }
 
-/* ================================================================
-   TOGGLE
-================================================================ */
 .mpm-toggle {
   position: relative; flex-shrink: 0;
   width: 48px; height: 26px;
@@ -539,17 +505,11 @@
 
 .mpm-toggle--on .mpm-toggle-knob { transform: translateX(22px); }
 
-/* ================================================================
-   APPEARANCE PANEL
-================================================================ */
 [data-style="brutalist"] .mpm-appearance-panel,
 [data-style="neumorphism"] .mpm-appearance-panel {
   border-top: 1px solid var(--mpm-border);
 }
 
-/* ================================================================
-   LOGOUT
-================================================================ */
 .mpm-logout-wrap { margin: 0; }
 
 [data-style="neumorphism"] .mpm-logout-wrap { margin: 0 16px; }
@@ -591,9 +551,6 @@
 
 .mpm-logout-arrow { color: rgba(248,113,113,.3); flex-shrink: 0; }
 
-/* ================================================================
-   BADGE
-================================================================ */
 .mpm-badge {
   font-weight: 700; padding: 2px 8px; flex-shrink: 0;
   color: var(--mpm-accent);
@@ -614,9 +571,6 @@
   border: none;
 }
 
-/* ================================================================
-   TAB CONTENT (shared wrapper for all sub-views)
-================================================================ */
 .mpm-tab-content {
   padding: 16px;
   display: flex;
@@ -624,9 +578,6 @@
   gap: 0;
 }
 
-/* ================================================================
-   SECTION HEADER (inside tabs)
-================================================================ */
 .mpm-section-hdr {
   display: flex; align-items: center; gap: 10px;
   padding: 11px 0 9px;
@@ -644,9 +595,6 @@
   border-radius: var(--mpm-r-sm);
 }
 
-/* ================================================================
-   LEVEL BLOCK (Overview)
-================================================================ */
 .mpm-level-block {
   border: 0.5px solid var(--mpm-border);
   background: var(--mpm-surface);
@@ -667,9 +615,6 @@
 .mpm-level-track { height: 5px; background: var(--mpm-border); width: 100%; border-radius: 3px; }
 .mpm-level-fill  { height: 5px; background: var(--mpm-accent); transition: width 0.5s ease; border-radius: 3px; }
 
-/* ================================================================
-   STATS GRID (Overview)
-================================================================ */
 .mpm-stats-grid {
   display: grid; grid-template-columns: 1fr 1fr 1fr;
   border: 0.5px solid var(--mpm-border);
@@ -710,9 +655,6 @@
   font-family: var(--mpm-mono); letter-spacing: 0.1em; text-transform: uppercase;
 }
 
-/* ================================================================
-   ACHIEVEMENTS
-================================================================ */
 .mpm-active-title {
   display: flex; align-items: center; gap: 12px;
   border: 2px solid; padding: 12px 14px;
@@ -759,9 +701,6 @@
 .mpm-ach-name  { font-size: 12px; font-weight: 700; color: var(--mpm-text);  font-family: var(--mpm-sans); }
 .mpm-ach-desc  { font-size: 10px; color: var(--mpm-muted); font-family: var(--mpm-sans); }
 
-/* ================================================================
-   CHAMPIONSHIPS
-================================================================ */
 .mpm-crowns-hero {
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   padding: 24px 16px;
@@ -814,9 +753,6 @@
 .mpm-crown-month { font-size: 14px; font-weight: 700; color: var(--mpm-text); font-family: var(--mpm-sans); }
 .mpm-crown-pts   { font-size: 12px; font-weight: 600; color: #1D9E75; font-family: var(--mpm-mono); margin-top: 2px; }
 
-/* ================================================================
-   HISTORY
-================================================================ */
 .mpm-hist-hdr {
   display: flex; align-items: center; gap: 12px;
   padding: 0 0 14px; border-bottom: 0.5px solid var(--mpm-border);
@@ -955,9 +891,6 @@
   border-radius: var(--mpm-r-sm);
 }
 
-/* ================================================================
-   EDIT TAB
-================================================================ */
 .mpm-edit-avatar {
   display: flex; justify-content: center;
   padding-bottom: 16px; border-bottom: 0.5px solid var(--mpm-border);
@@ -1048,9 +981,6 @@
 }
 .mpm-cancel-btn:hover { border-color: var(--mpm-accent); color: var(--mpm-accent); }
 
-/* ================================================================
-   SETTINGS (inside tabs)
-================================================================ */
 .mpm-settings-card {
   border: 0.5px solid var(--mpm-border);
   margin-bottom: 14px;
@@ -1094,9 +1024,6 @@
 .mpm-btn-secondary { padding: 8px 14px; background: transparent; color: var(--mpm-text); border: 0.5px solid var(--mpm-border); font-size: 12px; font-weight: 700; font-family: var(--mpm-mono); cursor: pointer; border-radius: var(--mpm-r-sm); }
 .mpm-btn-danger    { padding: 8px 14px; background: #ef4444; color: #fff; border: none; font-size: 12px; font-weight: 700; font-family: var(--mpm-mono); cursor: pointer; border-radius: var(--mpm-r-sm); }
 
-/* ================================================================
-   EMPTY STATE
-================================================================ */
 .mpm-empty {
   display: flex; flex-direction: column; align-items: center;
   gap: 12px; padding: 40px 20px; color: var(--mpm-muted); text-align: center;
@@ -1104,9 +1031,6 @@
 .mpm-empty svg { opacity: 0.4; }
 .mpm-empty p   { font-size: 13px; font-weight: 600; font-family: var(--mpm-mono); letter-spacing: 0.08em; margin: 0; }
 
-/* ================================================================
-   DARK MODE — BRUTALIST overrides (main list)
-================================================================ */
 [data-style="brutalist"][data-theme="dark"] .mpm-user-row  { background: #1A1824; border-bottom-color: #38334F; }
 [data-style="brutalist"][data-theme="dark"] .mpm-user-row:active { background: #221F2E; }
 [data-style="brutalist"][data-theme="dark"] .mpm-row       { background: #1A1824; border-bottom-color: #2A2638; }
@@ -1116,9 +1040,6 @@
 [data-style="brutalist"][data-theme="dark"] .mpm-logout    { background: #1A1824; border-top-color: rgba(239,68,68,.2); border-bottom-color: rgba(239,68,68,.2); }
 [data-style="brutalist"][data-theme="dark"] .mpm-badge     { background: #2C2840; border-color: #4B43A0; color: #A599D9; }
 
-/* ================================================================
-   DARK MODE — NEUMORPHISM overrides (main list)
-================================================================ */
 [data-style="neumorphism"][data-theme="dark"] .mpm-user-row {
   box-shadow: 3px 3px 8px rgba(10,9,16,.65),-2px -2px 6px rgba(40,37,55,.85);
 }
@@ -1161,13 +1082,11 @@
   color: #A599D9;
 }
 
-/* Sub-view dark */
 [data-theme="dark"] .mpm-sub-hdr   { background: var(--mpm-bg); border-bottom-color: var(--mpm-border); }
 [data-theme="dark"] .mpm-sub-title { color: var(--mpm-text); }
 [data-style="neumorphism"][data-theme="dark"] .mpm-sub-back { color: #a599d9; }
 [data-style="neumorphism"][data-theme="dark"] .mpm-sub-back:active { background: rgba(165,153,217,.12); }
 
-/* Tab content dark */
 [data-theme="dark"] .mpm-level-block  { background: var(--mpm-card); }
 [data-theme="dark"] .mpm-stat-cell    { background: var(--mpm-card); }
 [data-theme="dark"] .mpm-ach-card     { background: var(--mpm-card); }
@@ -1187,9 +1106,6 @@
 [data-theme="dark"] .mpm-sort-opt.active { background: var(--mpm-accent); color: #fff; }
 [data-theme="dark"] .mpm-title-row    { background: var(--mpm-card); }
 
-/* ================================================================
-   REDUCED MOTION
-================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .mpm-root, .mpm-sub { animation: none; }
   .mpm-toggle-knob { transition: none; }

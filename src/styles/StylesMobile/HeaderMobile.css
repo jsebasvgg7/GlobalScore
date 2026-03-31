@@ -1,14 +1,12 @@
-/* ================================================================
-   HeaderMobile — Brutalista Japonés Retro  ·  GlobalScore
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap');
 
 :root {
   --sidebar-w:  80px;
   --topbar-h:   56px;
-
-  /* Sidebar tokens — retro japonés */
   --sb-bg-light:     #f0ede8;
   --sb-bg-dark:      #0e0f14;
   --sb-border-light: #ccc8c0;
@@ -19,7 +17,6 @@
   --sb-mono:         'DM Mono', monospace;
   --sb-sans:         'Sora', sans-serif;
 
-  /* Bottom nav tokens */
   --bn-h:        56px;
   --bn-bg-light: #f0ede8;      
   --bn-bg-dark:  #0e0f14;
@@ -30,9 +27,7 @@
   --bn-trophy-bg-light: #1a1a2e;  
   --bn-trophy-bg-dark:  #5b4fd8;
 }
-/* ================================================================
-   MOBILE — Top Header
-================================================================ */
+
 .gs-mobile-header {
   display: none;
   align-items: center;
@@ -146,9 +141,6 @@
   font-family: 'DM Mono', monospace;
 }
 
-/* ================================================================
-   MOBILE — Bottom Nav
-================================================================ */
 .gs-bottom-nav {
   display: none;
   position: fixed;
@@ -250,18 +242,12 @@
   background: rgba(255,255,255,0.2);
 }
 
-/* ================================================================
-   MOBILE — mostrar
-================================================================ */
 @media (max-width: 768px) {
   .gs-mobile-header { display: flex; }
   .gs-bottom-nav    { display: flex; }
   body { padding-bottom: calc(var(--bn-h) + env(safe-area-inset-bottom, 0px)); }
 }
 
-/* ================================================================
-   FIX ESPACIO
-================================================================ */
 .db-main > div:empty {
   display: none !important;
   height: 0 !important;

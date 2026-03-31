@@ -1,14 +1,9 @@
-/* ================================================================
-   GlobalScore — MobileSubPage.css
-   DOS temas: [data-style="brutalist"] y [data-style="neumorphism"]
-   JSX sin cambios.
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-/* ==============================================================
-   TOKENS BRUTALIST
-============================================================== */
 [data-style="brutalist"] .msp-page {
   --msp-bg:          #f0ede8;
   --msp-card:        #e8e4de;
@@ -37,9 +32,6 @@
   --msp-glass:       rgba(139,127,199,.1);
 }
 
-/* ==============================================================
-   TOKENS NEUMORPHISM
-============================================================== */
 [data-style="neumorphism"] .msp-page {
   --msp-bg:          #EAE7E1;
   --msp-card:        #EAE7E1;
@@ -81,17 +73,11 @@
   --msp-glass:       rgba(139,127,199,.1);
 }
 
-/* ==============================================================
-   ANIMACIONES
-============================================================== */
 @keyframes msp-slide-in {
   from { transform: translateX(100%); opacity: .6; }
   to   { transform: translateX(0);    opacity: 1; }
 }
 
-/* ==============================================================
-   ROOT
-============================================================== */
 .msp-page {
   position: fixed;
   inset: 0;
@@ -105,10 +91,6 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* ==============================================================
-   TOP BAR
-============================================================== */
-/* brutalist */
 [data-style="brutalist"] .msp-topbar {
   display: flex;
   align-items: center;
@@ -130,7 +112,6 @@
   background: var(--msp-accent);
 }
 
-/* neumorphism */
 [data-style="neumorphism"] .msp-topbar {
   display: flex;
   align-items: center;
@@ -147,7 +128,6 @@
 
 [data-style="neumorphism"] .msp-topbar::before { display: none; }
 
-/* BACK button */
 [data-style="brutalist"] .msp-back {
   width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
@@ -176,7 +156,6 @@
 }
 [data-style="neumorphism"] .msp-back:active { box-shadow: var(--nm-ism); }
 
-/* Center group */
 .msp-topbar-center {
   display: flex;
   align-items: center;
@@ -225,7 +204,6 @@
   font-family: var(--msp-sans);
 }
 
-/* Filter toggle */
 [data-style="brutalist"] .msp-filter-toggle {
   width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
@@ -263,9 +241,6 @@
 }
 [data-style="neumorphism"] .msp-filter-toggle:active { box-shadow: var(--nm-ism); transform: scale(.97); }
 
-/* ==============================================================
-   SORT ROW
-============================================================== */
 [data-style="brutalist"] .msp-sort-row {
   display: flex;
   align-items: center;
@@ -341,7 +316,6 @@
 }
 [data-style="neumorphism"] .msp-sort-pill:active { box-shadow: var(--nm-ism); }
 
-/* Active chip */
 [data-style="brutalist"] .msp-active-chip {
   display: inline-flex;
   align-items: center;
@@ -384,9 +358,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ==============================================================
-   SEASON LABEL
-============================================================== */
 .msp-season-label {
   display: flex;
   align-items: center;
@@ -417,9 +388,6 @@
   white-space: nowrap;
 }
 
-/* ==============================================================
-   BODY
-============================================================== */
 .msp-body {
   flex: 1;
   overflow-y: auto;
@@ -433,9 +401,6 @@
 
 .msp-body::-webkit-scrollbar { display: none; }
 
-/* ==============================================================
-   DATE GROUP
-============================================================== */
 .msp-group {
   display: flex;
   flex-direction: column;
@@ -496,9 +461,6 @@
   background: var(--msp-border);
 }
 
-/* ==============================================================
-   CARDS COLUMN
-============================================================== */
 .msp-cards-col {
   display: flex;
   flex-direction: column;
@@ -527,9 +489,6 @@
   border-radius: var(--r-lg) !important;
 }
 
-/* ==============================================================
-   EMPTY STATE
-============================================================== */
 .msp-empty {
   display: flex;
   flex-direction: column;
@@ -563,9 +522,6 @@
   text-align: center;
 }
 
-/* ==============================================================
-   FILTER PANEL
-============================================================== */
 .msp-filter-overlay {
   position: fixed;
   inset: 0;
@@ -609,7 +565,6 @@
   to   { transform: translateX(0); }
 }
 
-/* Filter header */
 [data-style="brutalist"] .msp-filter-hdr {
   display: flex;
   align-items: center;
@@ -714,7 +669,6 @@
 
 .msp-filter-close svg { width: 13px; height: 13px; }
 
-/* Filter body */
 .msp-filter-body {
   flex: 1;
   overflow-y: auto;
@@ -781,9 +735,6 @@
 
 .msp-filter-item-icon { font-size: 16px; line-height: 1; flex-shrink: 0; }
 
-/* ==============================================================
-   MOTION REDUCE
-============================================================== */
 @media (prefers-reduced-motion: reduce) {
   .msp-page { animation: none; }
   .msp-filter-panel { animation: none; }

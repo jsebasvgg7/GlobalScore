@@ -1,3 +1,7 @@
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 .knockout-match-card {
   padding: 16px;
   background: var(--card);
@@ -13,9 +17,6 @@
   box-shadow: var(--small-shadow);
 }
 
-/* ==========================================
-   HEADER
-========================================== */
 .knockout-match-header {
   display: flex;
   justify-content: space-between;
@@ -42,9 +43,6 @@
   border-radius: 6px;
 }
 
-/* ==========================================
-   TEAM OPTION
-========================================== */
 .knockout-team-option {
   display: flex;
   align-items: center;
@@ -73,7 +71,6 @@
   transform: translateX(0) scale(0.98);
 }
 
-/* Estado Seleccionado */
 .knockout-team-option.selected {
   background: rgba(16, 185, 129, 0.1);
   border-color: #10B981;
@@ -84,16 +81,12 @@
   background: rgba(16, 185, 129, 0.15);
 }
 
-/* Estado Deshabilitado */
 .knockout-team-option.disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
 }
 
-/* ==========================================
-   FLAG CONTAINER
-========================================== */
 .knockout-team-flag-container {
   width: 28px;
   height: 20px;
@@ -119,9 +112,6 @@
   display: none;
 }
 
-/* ==========================================
-   TEAM NAME
-========================================== */
 .knockout-team-name {
   flex: 1;
   font-size: 14px;
@@ -134,9 +124,6 @@
   color: var(--text-secondary);
 }
 
-/* ==========================================
-   CHECK ICON
-========================================== */
 .knockout-check-icon {
   color: #10B981;
   flex-shrink: 0;
@@ -154,9 +141,6 @@
   }
 }
 
-/* ==========================================
-   VS SEPARATOR
-========================================== */
 .knockout-vs {
   text-align: center;
   font-size: 11px;
@@ -166,9 +150,6 @@
   letter-spacing: 1px;
 }
 
-/* ==========================================
-   FOOTER (opcional)
-========================================== */
 .knockout-match-footer {
   display: flex;
   align-items: center;
@@ -182,38 +163,6 @@
   color: #10B981;
 }
 
-/* ==========================================
-   DARK MODE
-========================================== */
-[data-theme="dark"] .knockout-match-card {
-  background: rgba(53, 59, 77, 0.6);
-  backdrop-filter: blur(10px);
-}
-
-[data-theme="dark"] .knockout-match-card:hover {
-  background: rgba(53, 59, 77, 0.8);
-}
-
-[data-theme="dark"] .knockout-team-option {
-  background: rgba(58, 64, 82, 0.6);
-}
-
-[data-theme="dark"] .knockout-team-option:hover:not(.disabled) {
-  background: rgba(58, 64, 82, 0.8);
-}
-
-[data-theme="dark"] .knockout-team-option.selected {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: #10B981;
-}
-
-[data-theme="dark"] .knockout-team-flag {
-  filter: brightness(1.1);
-}
-
-/* ==========================================
-   RESPONSIVE - MOBILE
-========================================== */
 @media (max-width: 768px) {
   .knockout-match-card {
     padding: 14px;
@@ -279,9 +228,6 @@
   }
 }
 
-/* ==========================================
-   RESPONSIVE - SMALL MOBILE
-========================================== */
 @media (max-width: 480px) {
   .knockout-match-card {
     padding: 12px;
@@ -320,9 +266,6 @@
   }
 }
 
-/* ==========================================
-   ACCESSIBILITY
-========================================== */
 .knockout-team-option:focus {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -332,9 +275,6 @@
   outline-color: #10B981;
 }
 
-/* ==========================================
-   ANIMATIONS - CARD ENTRANCE
-========================================== */
 @keyframes cardFadeIn {
   from {
     opacity: 0;
@@ -350,7 +290,6 @@
   animation: cardFadeIn 0.4s ease-out backwards;
 }
 
-/* Stagger animation for multiple cards */
 .knockout-match-card:nth-child(1) { animation-delay: 0.05s; }
 .knockout-match-card:nth-child(2) { animation-delay: 0.1s; }
 .knockout-match-card:nth-child(3) { animation-delay: 0.15s; }
@@ -360,9 +299,6 @@
 .knockout-match-card:nth-child(7) { animation-delay: 0.35s; }
 .knockout-match-card:nth-child(8) { animation-delay: 0.4s; }
 
-/* ==========================================
-   PRINT STYLES
-========================================== */
 @media print {
   .knockout-match-card {
     page-break-inside: avoid;
@@ -383,9 +319,6 @@
   }
 }
 
-/* ==========================================
-   LOADING STATE (opcional)
-========================================== */
 .knockout-match-card.loading {
   opacity: 0.6;
   pointer-events: none;

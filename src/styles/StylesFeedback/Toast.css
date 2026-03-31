@@ -1,3 +1,7 @@
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 .toast-container {
   position: fixed;
   top: 95px;
@@ -52,7 +56,6 @@
   }
 }
 
-/* Icon Container */
 .toast-icon {
   width: 28px;
   height: 28px;
@@ -65,7 +68,6 @@
   color: white;
 }
 
-/* Content */
 .toast-content {
   flex: 1;
   min-width: 0;
@@ -79,7 +81,6 @@
   line-height: 1.4;
 }
 
-/* Close Button */
 .toast-close {
   width: 24px;
   height: 24px;
@@ -100,7 +101,6 @@
   color: #374151;
 }
 
-/* Progress Bar */
 .toast-progress {
   position: absolute;
   bottom: 0;
@@ -121,7 +121,6 @@
   }
 }
 
-/* Toast Types */
 .toast-notification.success {
   background: linear-gradient(135deg, #10B981 0%, #059669 100%);
   border-color: #059669;
@@ -194,9 +193,6 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* ==========================================
-   RESPONSIVE - MOBILE
-========================================== */
 @media (max-width: 768px) {
   .toast-container {
     top: 85px;
@@ -257,9 +253,6 @@
   }
 }
 
-/* ==========================================
-   DARK MODE
-========================================== */
 [data-theme="dark"] .toast-notification {
   background: var(--card);
   border-color: rgba(139, 127, 199, 0.3);
@@ -288,9 +281,6 @@
   border-color: #2563EB;
 }
 
-/* ==========================================
-   ACCESSIBILITY
-========================================== */
 .toast-notification:focus-within {
   outline: 2px solid var(--accent);
   outline-offset: 2px;

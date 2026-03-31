@@ -1,8 +1,9 @@
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-/* ================================================================
-   TOKENS — Brutalist
-================================================================ */
 [data-style="brutalist"] .mst-root {
   --mst-bg:            #f0ede8;
   --mst-card:          #e8e4de;
@@ -23,7 +24,6 @@
   --mst-green:         #8b7fc7;
   --mst-amber:         #a599d9;
   --mst-red:           #c9c0f0;
-  /* sombras neu — no aplican en brutalist */
   --nm-s: none; --nm-sm: none; --nm-lg: none;
   --nm-i: none; --nm-ism: none;
   --r-sm:0; --r-md:0; --r-lg:0; --r-xl:0; --r-pill:0;
@@ -49,9 +49,6 @@
   --mst-red:          #ddd9ff;
 }
 
-/* ================================================================
-   TOKENS — Neumorphism
-================================================================ */
 [data-style="neumorphism"] .mst-root {
   --mst-bg:            #EAE7E1;
   --mst-card:          #EAE7E1;
@@ -117,9 +114,6 @@
   --mst-red:           #ddd9ff;
 }
 
-/* ================================================================
-   ROOT
-================================================================ */
 .mst-root {
   display: none;
   flex-direction: column;
@@ -135,10 +129,6 @@
   .mst-root { display: flex; }
 }
 
-/* ================================================================
-   TOPBAR
-================================================================ */
-/* brutalist */
 [data-style="brutalist"] .mst-topbar {
   display: flex;
   align-items: center;
@@ -153,7 +143,6 @@
   z-index: 50;
 }
 
-/* neumorphism */
 [data-style="neumorphism"] .mst-topbar {
   display: flex;
   align-items: center;
@@ -168,7 +157,6 @@
   z-index: 50;
 }
 
-/* shared */
 .mst-topbar-label {
   display: flex;
   align-items: center;
@@ -208,7 +196,6 @@
 
 .mst-range-pills { display: flex; gap: 4px; }
 
-/* brutalist pill */
 [data-style="brutalist"] .mst-range-pill {
   font-family: var(--mst-mono);
   font-size: 10px;
@@ -230,7 +217,6 @@
   color: #fff;
 }
 
-/* neumorphism pill */
 [data-style="neumorphism"] .mst-range-pill {
   font-family: var(--mst-sans);
   font-size: 10px;
@@ -254,10 +240,6 @@
 
 .mst-range-pill:active { transform: scale(.97); }
 
-/* ================================================================
-   HERO 2×2
-================================================================ */
-/* brutalist */
 [data-style="brutalist"] .mst-hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -280,7 +262,6 @@
 [data-style="brutalist"] .mst-hero-block:nth-child(3),
 [data-style="brutalist"] .mst-hero-block:nth-child(4) { border-bottom: none; }
 
-/* neumorphism */
 [data-style="neumorphism"] .mst-hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -302,7 +283,6 @@
   overflow: hidden;
 }
 
-/* Accent top bar en neu */
 [data-style="neumorphism"] .mst-hero-block::before {
   content: '';
   position: absolute;
@@ -313,7 +293,6 @@
   opacity: .5;
 }
 
-/* Hero icon */
 .mst-hero-icon {
   position: absolute;
   top: 12px; right: 12px;
@@ -330,7 +309,6 @@
   width: 28px; height: 28px;
 }
 
-/* Hero label */
 [data-style="brutalist"] .mst-hero-lbl {
   font-size: 9px;
   font-weight: 700;
@@ -350,7 +328,6 @@
   margin-top: 2px;
 }
 
-/* Hero num */
 [data-style="brutalist"] .mst-hero-num {
   font-size: 38px;
   font-weight: 800;
@@ -391,10 +368,6 @@
   margin-top: 2px;
 }
 
-/* ================================================================
-   SECCIÓN GENÉRICA
-================================================================ */
-/* brutalist */
 [data-style="brutalist"] .mst-section {
   display: flex;
   flex-direction: column;
@@ -415,7 +388,6 @@
   flex-shrink: 0;
 }
 
-/* neumorphism */
 [data-style="neumorphism"] .mst-section {
   display: flex;
   flex-direction: column;
@@ -434,7 +406,6 @@
   flex-shrink: 0;
 }
 
-/* shared section hdr parts */
 .mst-section-dot {
   width: 5px; height: 5px;
   border-radius: 50%;
@@ -461,10 +432,6 @@
   color: var(--mst-muted);
 }
 
-/* ================================================================
-   DESGLOSE DE RESULTADOS
-================================================================ */
-/* brutalist */
 [data-style="brutalist"] .mst-results {
   display: flex;
   flex-direction: column;
@@ -473,7 +440,6 @@
   background: var(--mst-bg);
 }
 
-/* neumorphism */
 [data-style="neumorphism"] .mst-results {
   display: flex;
   flex-direction: column;
@@ -482,7 +448,6 @@
   background: transparent;
 }
 
-/* shared result parts */
 .mst-result-item {
   display: flex;
   flex-direction: column;
@@ -593,17 +558,12 @@
   transition: width .5s ease;
 }
 
-/* ================================================================
-   TABLA DE LIGAS
-================================================================ */
-/* brutalist */
 [data-style="brutalist"] .mst-leagues-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 
-/* neumorphism */
 [data-style="neumorphism"] .mst-leagues-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -616,7 +576,6 @@
 
 .mst-leagues-scroll::-webkit-scrollbar { display: none; }
 
-/* brutalist league row */
 [data-style="brutalist"] .mst-league-row {
   display: flex;
   align-items: center;
@@ -635,7 +594,6 @@
   border-bottom: 1px solid var(--mst-border-hard);
 }
 
-/* neumorphism league row */
 [data-style="neumorphism"] .mst-league-row {
   display: flex;
   align-items: center;
@@ -664,7 +622,6 @@
   color: var(--mst-muted);
 }
 
-/* rank badge */
 [data-style="brutalist"] .mst-rank-badge {
   width: 24px; height: 24px;
   display: flex; align-items: center; justify-content: center;
@@ -697,7 +654,6 @@
 [data-style="neumorphism"] .mst-rank-badge--2,
 [data-style="neumorphism"] .mst-rank-badge--3 { border-radius: var(--r-sm); }
 
-/* league name / lc */
 [data-style="brutalist"] .mst-league-name {
   font-size: 13px; font-weight: 700;
   font-family: var(--mst-mono);
@@ -729,7 +685,6 @@
 
 .mst-lc--pts { color: var(--mst-exact); width: 44px; }
 
-/* accuracy inline */
 .mst-acc-inline {
   display: flex; align-items: center; justify-content: flex-end;
   gap: 6px; width: 80px; flex-shrink: 0;
@@ -770,10 +725,6 @@
   flex-shrink: 0;
 }
 
-/* ================================================================
-   DÍAS DE LA SEMANA
-================================================================ */
-/* brutalist */
 [data-style="brutalist"] .mst-days-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -782,7 +733,6 @@
   background: var(--mst-bg);
 }
 
-/* neumorphism */
 [data-style="neumorphism"] .mst-days-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -870,17 +820,12 @@
   text-align: center;
 }
 
-/* ================================================================
-   DISTRIBUCIÓN DE PUNTOS
-================================================================ */
-/* brutalist */
 [data-style="brutalist"] .mst-dist {
   display: flex; flex-direction: column;
   gap: 12px; padding: 14px 16px;
   background: var(--mst-bg);
 }
 
-/* neumorphism */
 [data-style="neumorphism"] .mst-dist {
   display: flex; flex-direction: column;
   gap: 12px; padding: 0;
@@ -945,10 +890,6 @@
   transition: width .5s ease;
 }
 
-/* ================================================================
-   PRONÓSTICOS
-================================================================ */
-/* brutalist */
 [data-style="brutalist"] .mst-forecast {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 8px; padding: 14px 16px;
@@ -962,7 +903,6 @@
   display: flex; flex-direction: column; gap: 3px;
 }
 
-/* neumorphism */
 [data-style="neumorphism"] .mst-forecast {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 12px; padding: 0;
@@ -989,7 +929,6 @@
   opacity: .4;
 }
 
-/* forecast val/lbl */
 [data-style="brutalist"] .mst-forecast-val {
   font-size: 28px; font-weight: 800;
   font-family: var(--mst-mono);
@@ -1020,9 +959,6 @@
   color: var(--mst-muted);
 }
 
-/* ================================================================
-   LOADING / EMPTY
-================================================================ */
 .mst-loading {
   flex: 1;
   display: flex; flex-direction: column;
@@ -1103,9 +1039,6 @@
   text-align: center;
 }
 
-/* ================================================================
-   BREAKPOINTS
-================================================================ */
 @media screen and (max-width: 380px) {
   [data-style="brutalist"] .mst-hero-num  { font-size: 32px; }
   [data-style="neumorphism"] .mst-hero-num { font-size: 28px; }

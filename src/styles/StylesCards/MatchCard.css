@@ -1,10 +1,9 @@
-/* ================================================================
-   MatchCard — Diseño vertical centrado  ·  v4 (final)
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700&display=swap');
 
-/* ── Tokens ── */
 :root {
   --mc-accent:        #5b4fd8;
   --mc-accent-light:  #7c6fe8;
@@ -14,16 +13,12 @@
   --mc-font-sans:     'Sora', sans-serif;
 }
 
-/* ── Wrapper ── */
 .mc-wrap {
   width: 100%;
   max-width: 210px;
   margin: 0 auto;
 }
 
-/* ================================================================
-   CARD BASE
-================================================================ */
 .mc-card {
   position: relative;
   background: #e8e4de;
@@ -45,9 +40,6 @@
 .mc-card--live    { border-color: rgba(245, 158, 11, 0.35); }
 .mc-card--expired { opacity: 0.70; }
 
-/* ================================================================
-   HEADER
-================================================================ */
 .mc-header {
   display: flex;
   align-items: center;
@@ -88,7 +80,6 @@
 }
 .mc-card--active .mc-league-name { color: #4a4a6a; }
 
-/* ── Pill ── */
 .mc-pill {
   display: inline-flex; align-items: center; gap: 4px;
   padding: 3px 7px;
@@ -122,12 +113,8 @@
 }
 @keyframes mc-spin { to { transform: rotate(360deg); } }
 
-/* ================================================================
-   BODY
-================================================================ */
 .mc-body { display: flex; flex-direction: column; }
 
-/* ── Bloque de equipo ── */
 .mc-team-block {
   display: flex;
   flex-direction: column;
@@ -142,19 +129,16 @@
 .mc-team-block--on    { background: var(--mc-accent-subtle); }
 .mc-card--active .mc-team-block--on { background: rgba(255, 255, 255, 0.04); }
 
-/* Nombre — versión ARRIBA (local) */
 .mc-team-name--top {
   margin-bottom: 8px;
   margin-top: 0;
 }
 
-/* Nombre — versión ABAJO (visitante) */
 .mc-team-name--bottom {
   margin-top: 8px;
   margin-bottom: 0;
 }
 
-/* Estilos comunes del nombre */
 .mc-team-name--top,
 .mc-team-name--bottom {
   font-size: 10px; font-weight: 700;
@@ -173,7 +157,6 @@
 .mc-card--active .mc-team-block--on .mc-team-name--top,
 .mc-card--active .mc-team-block--on .mc-team-name--bottom { color: rgba(255, 255, 255, 0.65); }
 
-/* Fila escudo + score */
 .mc-team-row {
   display: flex;
   align-items: center;
@@ -181,7 +164,6 @@
   gap: 10px;
 }
 
-/* ── Escudo ── */
 .mc-shield-wrap {
   width: 48px; height: 48px;
   background: #e8e4de;  
@@ -193,7 +175,6 @@
   cursor: default;
 }
 
-/* ← cursor pointer SOLO cuando es knockout y está habilitado */
 .mc-shield-wrap--tap {
   cursor: pointer;
 }
@@ -228,7 +209,6 @@
   to   { opacity: 1; transform: scale(1); }
 }
 
-/* ── Score box ── */
 .mc-score-box {
   width: 48px; height: 48px;
   border: 0.5px solid #dde3f0;
@@ -258,15 +238,20 @@
   color: #1a202c; outline: none; padding: 0;
   font-family: var(--mc-font-mono); letter-spacing: -0.02em;
 }
+
 .mc-score-input::placeholder { color: #c5cdd9; font-weight: 400; font-size: 14px; }
+
 .mc-score-input::-webkit-inner-spin-button,
 .mc-score-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
 .mc-score-input:disabled { cursor: not-allowed; opacity: 0.45; }
+
 .mc-card--active .mc-score-input { color: rgba(255, 255, 255, 0.9); }
+
 .mc-card--active .mc-score-input::placeholder { color: #2a2a3e; }
 
-/* ── Divisor VS ── */
 .mc-divider { display: flex; align-items: center; padding: 0 12px; }
+
 .mc-divider-line { flex: 1; height: 0.5px; background: #eef0f8; }
 .mc-card--active .mc-divider-line { background: #2a2a3e; }
 
@@ -291,31 +276,41 @@
   97%            { transform: scale(1.1)  rotate(-4deg); }
 }
 
-/* ================================================================
-   SCALE x1.25
-================================================================ */
 .mc-wrap          { max-width: 262px !important; }
+
 .mc-shield-wrap   { width: 60px !important; height: 60px !important; }
+
 .mc-shield-img    { width: 40px !important; height: 40px !important; }
+
 .mc-shield-emoji  { font-size: 30px !important; }
+
 .mc-score-box     { width: 60px !important; height: 60px !important; }
+
 .mc-score-input   { font-size: 22px !important; }
+
 .mc-league-icon   { width: 25px !important; height: 25px !important; }
+
 .mc-league-logo   { width: 16px !important; height: 16px !important; }
+
 .mc-league-name   { font-size: 12px !important; }
+
 .mc-team-name--top,
 .mc-team-name--bottom { font-size: 12px !important; }
+
 .mc-team-block    { padding: 14px 15px 16px !important; }
+
 .mc-header        { padding: 11px 15px !important; }
+
 .mc-metric        { padding: 10px 15px !important; }
+
 .mc-metric-val    { font-size: 12px !important; }
+
 .mc-adv-badge     { width: 17px !important; height: 17px !important; }
+
 .mc-vs-label      { font-size: 11px !important; padding: 0 12px !important; }
+
 .mc-pill          { font-size: 9px !important; padding: 4px 8px !important; }
 
-/* ================================================================
-   FOOTER
-================================================================ */
 .mc-footer {
   display: flex; align-items: center;
   border-top: 0.5px solid #eef0f8;
@@ -338,9 +333,6 @@
 .mc-footer-divider { width: 0.5px; height: 12px; background: #eef0f8; flex-shrink: 0; }
 .mc-card--active .mc-footer-divider { background: #2a2a3e; }
 
-/* ================================================================
-   DARK MODE (data-theme)
-================================================================ */
 [data-theme="dark"] .mc-card {
   background: #2a2f45;
   border-color: rgba(255,255,255,0.18);

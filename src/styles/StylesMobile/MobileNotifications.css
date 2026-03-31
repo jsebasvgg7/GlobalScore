@@ -1,6 +1,6 @@
-/* ================================================================
-   MobileNotifications
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
@@ -10,9 +10,6 @@
 }
 @keyframes mnv-spin { to { transform: rotate(360deg); } }
 
-/* ================================================================
-   BRUTALIST TOKENS
-================================================================ */
 [data-style="brutalist"] .mnv-root {
   --mnv-bg:         #f0ede8;
   --mnv-card:       #e8e4de;
@@ -54,9 +51,6 @@
   --mnv-fin-bdr:    rgba(52, 211, 153, 0.25);
 }
 
-/* ================================================================
-   NEUMORPHISM TOKENS
-================================================================ */
 [data-style="neumorphism"] .mnv-root {
   --mnv-bg:         #EAE7E1;
   --mnv-card:       #EAE7E1;
@@ -111,9 +105,6 @@
   --mnv-fin-bdr:    rgba(52, 211, 153, 0.25);
 }
 
-/* ================================================================
-   ROOT — solo visible en mobile
-================================================================ */
 .mnv-root {
   display: none;
   flex-direction: column;
@@ -129,9 +120,6 @@
   .mnv-root { display: flex; }
 }
 
-/* ================================================================
-   TOPBAR
-================================================================ */
 .mnv-topbar {
   display: flex;
   align-items: center;
@@ -160,7 +148,6 @@
   gap: 8px;
 }
 
-/* Dot animado */
 .mnv-dot {
   width: 6px;
   height: 6px;
@@ -171,7 +158,6 @@
 
 [data-style="neumorphism"] .mnv-dot { border-radius: 50%; box-shadow: 0 0 6px var(--mnv-accent); }
 
-/* Título */
 .mnv-title {
   font-size: 13px;
   font-weight: 700;
@@ -181,7 +167,6 @@
   font-family: var(--mnv-mono);
 }
 
-/* Botón push */
 .mnv-push-btn {
   display: flex;
   align-items: center;
@@ -222,9 +207,6 @@
 }
 [data-style="neumorphism"] .mnv-push-btn:active { box-shadow: var(--mnv-inset-sm); }
 
-/* ================================================================
-   BANNER PUSH
-================================================================ */
 .mnv-banner {
   display: flex;
   align-items: center;
@@ -312,9 +294,6 @@
 }
 [data-style="neumorphism"] .mnv-banner-btn:active { box-shadow: var(--mnv-inset-sm); }
 
-/* ================================================================
-   FILTROS
-================================================================ */
 .mnv-filters {
   display: flex;
   align-items: stretch;
@@ -378,7 +357,6 @@
   font-weight: 800;
 }
 
-/* Contador */
 .mnv-filter-count {
   font-size: 9px;
   font-weight: 700;
@@ -392,9 +370,6 @@
 [data-style="neumorphism"] .mnv-filter-count       { background: transparent; color: var(--mnv-muted); }
 [data-style="neumorphism"] .mnv-filter--active .mnv-filter-count { color: var(--mnv-accent); }
 
-/* ================================================================
-   LISTA
-================================================================ */
 .mnv-list {
   display: flex;
   flex-direction: column;
@@ -411,7 +386,6 @@
   border: none;
 }
 
-/* ── Loading ── */
 .mnv-loading {
   display: flex;
   flex-direction: column;
@@ -448,7 +422,6 @@
   box-shadow: var(--mnv-shadow-sm);
 }
 
-/* ── Empty ── */
 .mnv-empty {
   display: flex;
   flex-direction: column;
@@ -475,9 +448,6 @@
   line-height: 1.5;
 }
 
-/* ================================================================
-   TARJETA DE NOTIFICACIÓN
-================================================================ */
 .mnv-card {
   display: flex;
   align-items: flex-start;
@@ -501,7 +471,6 @@
   box-shadow: var(--mnv-shadow);
 }
 
-/* Variantes por tipo */
 [data-style="brutalist"] .mnv-card--new {
   border-left-color: var(--mnv-new);
   background: var(--mnv-new-bg);
@@ -518,7 +487,6 @@
   border-left-color: var(--mnv-fin);
 }
 
-/* Icono */
 .mnv-card-icon {
   width: 34px;
   height: 34px;
@@ -537,7 +505,6 @@
 [data-style="neumorphism"] .mnv-card-icon--new      { background: var(--mnv-new-bg); color: var(--mnv-new); box-shadow: var(--mnv-shadow-sm); }
 [data-style="neumorphism"] .mnv-card-icon--finished { background: var(--mnv-fin-bg); color: var(--mnv-fin); box-shadow: var(--mnv-shadow-sm); }
 
-/* Body */
 .mnv-card-body {
   flex: 1;
   min-width: 0;
@@ -587,7 +554,6 @@
 [data-style="brutalist"] .mnv-card-result  { background: var(--mnv-fin-bg); border: 1px solid var(--mnv-fin-bdr); }
 [data-style="neumorphism"] .mnv-card-result { background: var(--mnv-fin-bg); border-radius: var(--mnv-r-pill); box-shadow: var(--mnv-inset-sm); }
 
-/* Badge tipo (posición absoluta top-right) */
 .mnv-badge {
   position: absolute;
   top: 12px;
@@ -610,9 +576,6 @@
 [data-style="neumorphism"] .mnv-badge--new      { background: var(--mnv-new); box-shadow: var(--mnv-shadow-sm); }
 [data-style="neumorphism"] .mnv-badge--finished { background: var(--mnv-fin); box-shadow: var(--mnv-shadow-sm); }
 
-/* ================================================================
-   RESPONSIVE
-================================================================ */
 @media screen and (max-width: 380px) {
   .mnv-topbar-title { font-size: 11px; }
   .mnv-card         { padding: 11px 10px; }

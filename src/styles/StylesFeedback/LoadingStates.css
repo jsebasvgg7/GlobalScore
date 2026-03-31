@@ -1,4 +1,7 @@
-/* Spinner principal con anillo */
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 .spinner-wrapper {
   display: flex;
   justify-content: center;
@@ -15,7 +18,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* Page Loader Minimalista */
 .page-loader {
   position: fixed;
   inset: 0;
@@ -56,7 +58,6 @@
   z-index: 1;
 }
 
-/* Logo loader minimalista con doble anillo */
 .logo-loader {
   width: 80px;
   height: 80px;
@@ -66,7 +67,6 @@
   justify-content: center;
 }
 
-/* Anillo exterior */
 .logo-loader::before {
   content: '';
   position: absolute;
@@ -80,7 +80,6 @@
   filter: drop-shadow(0 0 8px rgba(96, 81, 155, 0.4));
 }
 
-/* Anillo interior */
 .logo-loader::after {
   content: '';
   position: absolute;
@@ -94,7 +93,6 @@
   filter: drop-shadow(0 0 6px rgba(139, 127, 199, 0.4));
 }
 
-/* Skeleton base mejorado */
 .skeleton {
   background: linear-gradient(90deg, 
     #f0f0f0 0%, 
@@ -146,7 +144,6 @@
   to { opacity: 1; }
 }
 
-/* Match Card Skeleton */
 .skeleton-badge {
   width: 120px;
   height: 24px;
@@ -187,7 +184,6 @@
   border-radius: 14px;
 }
 
-/* Ranking Skeleton */
 .skeleton-rank-number {
   width: 40px;
   height: 24px;
@@ -217,7 +213,6 @@
   border-radius: 6px;
 }
 
-/* Stats Card Skeleton */
 .skeleton-stat-icon {
   width: 24px;
   height: 24px;
@@ -238,7 +233,6 @@
   border-radius: 6px;
 }
 
-/* Loading Overlay Minimalista */
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -262,7 +256,6 @@
   justify-content: center;
 }
 
-/* Spinner para overlay con doble anillo */
 .loading-overlay-content .spinner-wrapper {
   width: 64px;
   height: 64px;
@@ -297,13 +290,11 @@
   filter: drop-shadow(0 0 6px rgba(139, 127, 199, 0.5));
 }
 
-/* Button Spinner mejorado */
 .button-spinner {
   animation: spin 1s linear infinite;
   filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
 }
 
-/* Skeleton responsive */
 @media (max-width: 768px) {
   .logo-loader {
     width: 72px;
@@ -361,7 +352,6 @@
   }
 }
 
-/* Animación de entrada suave para todos los loaders */
 .page-loader,
 .loading-overlay {
   animation: loader-appear 0.25s ease;

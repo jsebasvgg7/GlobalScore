@@ -1,3 +1,7 @@
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 .dots-container {
   display: inline-flex;
   align-items: center;
@@ -38,12 +42,10 @@
   }
 }
 
-/* Variante de color primario (morado) */
 .dots-primary .dot {
   background-color: #9b87d8;
 }
 
-/* Responsive - tamaños más pequeños */
 @media (max-width: 768px) {
   .dots-container {
     gap: 5px;
@@ -90,7 +92,6 @@
   }
 }
 
-/* Accesibilidad - reduce motion */
 @media (prefers-reduced-motion: reduce) {
   .dot {
     animation: dot-fade 2s infinite ease-in-out both;
@@ -106,7 +107,6 @@
   }
 }
 
-/* Dark mode */
 [data-theme="dark"] .dot {
   background-color: white;
   box-shadow: 0 2px 6px rgba(255, 255, 255, 0.15);

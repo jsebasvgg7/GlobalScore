@@ -1,15 +1,12 @@
-/* ================================================================
-   StyleSwitcher.css
-   Panel selector de tema visual — brutalist + neumorphism
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
-/* ── Wrapper ── */
 .style-switcher {
   padding: 16px 16px 20px;
   background: var(--mpm-bg, #f0ede8);
 }
 
-/* ── Título ── */
 [data-style="brutalist"] .style-switcher-title {
   font-family: 'DM Mono', monospace;
   font-size: 8px;
@@ -30,7 +27,6 @@
   margin-bottom: 16px;
 }
 
-/* ── Grid — siempre 2 columnas, gap uniforme ── */
 .style-switcher-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -38,9 +34,6 @@
   align-items: start;
 }
 
-/* ════════════════════════════════════════════════
-   TARJETA
-════════════════════════════════════════════════ */
 .style-card {
   position: relative;
   display: flex;
@@ -56,7 +49,6 @@
 
 .style-card:active { transform: scale(0.97); }
 
-/* ── Preview wrapper ── */
 .style-card-preview {
   width: 100%;
   aspect-ratio: 3 / 4;
@@ -64,7 +56,6 @@
   position: relative;
 }
 
-/* brutalist: borde recto + outline de acento si activo */
 [data-style="brutalist"] .style-card-preview {
   border: 1.5px solid var(--mpm-border-2, #c4bfb8);
   border-radius: 0;
@@ -75,7 +66,6 @@
   border-width: 2px;
 }
 
-/* neumorphism: card extruida, hundida si activo */
 [data-style="neumorphism"] .style-card-preview {
   border-radius: 14px;
   border: none;
@@ -90,7 +80,6 @@
               0 0 0 2px var(--mpm-accent, #60519b);
 }
 
-/* ── Label row (nombre + check) — siempre dentro del flujo ── */
 .style-card-label {
   display: flex;
   align-items: center;
@@ -117,7 +106,6 @@
   letter-spacing: -0.01em;
 }
 
-/* ── Check indicator ── */
 [data-style="brutalist"] .style-card-check {
   width: 18px;
   height: 18px;
@@ -157,13 +145,9 @@
               inset -1px -1px 2px rgba(255,255,255,.1);
 }
 
-/* check svg: oculto por defecto, visible si activo */
 .style-card-check svg { display: none; }
 .style-card--active .style-card-check svg { display: block; }
 
-/* ════════════════════════════════════════════════
-   PREVIEW BRUTALIST — contenido interior
-════════════════════════════════════════════════ */
 .preview-brutalist {
   width: 100%;
   height: 100%;
@@ -216,9 +200,6 @@
   flex: 1;
 }
 
-/* ════════════════════════════════════════════════
-   PREVIEW NEUMORPHISM — contenido interior
-════════════════════════════════════════════════ */
 .preview-neumorphism {
   width: 100%;
   height: 100%;

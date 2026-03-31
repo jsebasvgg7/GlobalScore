@@ -1,6 +1,7 @@
-/* ================================================================
-   OVERLAY + BOTTOM SHEET
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 .mba-overlay {
   position: fixed;
   inset: 0;
@@ -38,7 +39,6 @@
   to   { transform: translateY(0);     opacity: 1; }
 }
 
-/* Asa de arrastre */
 .mba-handle-bar {
   width: 40px;
   height: 3px;
@@ -49,9 +49,6 @@
   border-radius: 0;
 }
 
-/* ================================================================
-   SHEET HEADER 
-================================================================ */
 .mba-sheet-header {
   display: flex;
   align-items: center;
@@ -109,9 +106,6 @@
   background: rgba(242,95,92,0.08);
 }
 
-/* ================================================================
-   SHEET BODY
-================================================================ */
 .mba-sheet-body {
   flex: 1;
   overflow-y: auto;
@@ -124,9 +118,6 @@
 
 .mba-sheet-body::-webkit-scrollbar { display: none; }
 
-/* ================================================================
-   FORM LAYOUT
-================================================================ */
 .mba-form {
   padding: 20px 20px 28px;
   display: flex;
@@ -140,9 +131,6 @@
   gap: 12px;
 }
 
-/* ================================================================
-   FIELD
-================================================================ */
 .mba-field {
   display: flex;
   flex-direction: column;
@@ -174,9 +162,6 @@
   line-height: 1.5;
 }
 
-/* ================================================================
-   INPUTS 
-================================================================ */
 .mba-input {
   width: 100%;
   padding: 13px 14px;
@@ -191,7 +176,6 @@
   outline: none;
   -webkit-appearance: none;
   appearance: none;
-  /* Accent izquierdo al focus */
   border-left: 2px solid transparent;
 }
 
@@ -222,9 +206,6 @@
   font-size: 14px;
 }
 
-/* ================================================================
-   SEPARATOR LABEL
-================================================================ */
 .mba-sep-label {
   display: flex;
   align-items: center;
@@ -245,9 +226,6 @@
   background: var(--border);
 }
 
-/* ================================================================
-   TOGGLE
-================================================================ */
 .mba-toggle-row {
   display: flex;
   align-items: center;
@@ -308,9 +286,6 @@
   letter-spacing: 0.04em;
 }
 
-/* ================================================================
-   LOGO PREVIEW
-================================================================ */
 .mba-logo-preview {
   display: flex;
   align-items: center;
@@ -347,9 +322,6 @@
   letter-spacing: 0.1em;
 }
 
-/* ================================================================
-   ICON GRID
-================================================================ */
 .mba-icon-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -378,9 +350,6 @@
   background: rgba(91, 79, 216, 0.08);
 }
 
-/* ================================================================
-   MATCH PREVIEW
-================================================================ */
 .mba-match-preview {
   display: flex;
   align-items: center;
@@ -534,7 +503,6 @@
   color: #1D9E75;
 }
 
-/* Error / Info */
 .mba-error {
   display: flex;
   align-items: flex-start;
@@ -599,9 +567,6 @@
   letter-spacing: 0.02em;
 }
 
-/* ================================================================
-   DROP ZONE
-================================================================ */
 .mba-drop-zone {
   position: relative;
   width: 100%;
@@ -661,9 +626,6 @@
 
 .mba-drop-zone:active .mba-drop-overlay { opacity: 1; }
 
-/* ================================================================
-   SUBMIT BUTTONS
-================================================================ */
 .mba-submit-btn {
   display: flex;
   align-items: center;
@@ -684,7 +646,6 @@
   margin-top: 6px;
   border-radius: 0;
   -webkit-tap-highlight-color: transparent;
-  /* Diagonal stripes — BJR */
   position: relative;
   overflow: hidden;
 }
@@ -759,9 +720,6 @@
 
 @keyframes mba-spin { to { transform: rotate(360deg); } }
 
-/* ================================================================
-   FAB 
-================================================================ */
 .mba-fab {
   position: fixed;
   bottom: calc(72px + env(safe-area-inset-bottom, 0px));
@@ -777,7 +735,6 @@
   cursor: pointer;
   z-index: 200;
   transition: transform 0.15s, box-shadow 0.15s;
-  /* Esquina cortada BJR */
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
   -webkit-tap-highlight-color: transparent;
   box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
@@ -788,9 +745,6 @@
   box-shadow: 1px 1px 0 rgba(0,0,0,0.3);
 }
 
-/* ================================================================
-   SOLO VISIBLE EN MOBILE
-================================================================ */
 @media (min-width: 769px) {
   .mba-fab     { display: none !important; }
   .mba-overlay { display: none !important; }

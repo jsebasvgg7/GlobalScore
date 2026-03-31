@@ -1,14 +1,9 @@
-/* ================================================================
-   AdminModal.css — Brutalista Japonés Retro · Rediseño Total
-   Coherente con RankingPage.css · StatsPage.css · AdminPage.css
-   DM Mono + Sora · Sin border-radius exagerado · Líneas 0.5px
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
-/* ================================================================
-   BACKDROP
-================================================================ */
 .am2-backdrop,
 .modal-backdrop-premium {
   position: fixed;
@@ -29,9 +24,6 @@
   to   { opacity: 1; }
 }
 
-/* ================================================================
-   SHELL — flat, sin border-radius grande
-================================================================ */
 .am2-shell {
   width: 100%;
   max-width: 560px;
@@ -49,7 +41,6 @@
 
 .am2-shell--narrow { max-width: 480px; }
 
-/* Shell verde para Finalizar */
 .am2-shell--green  { border-top-color: #1D9E75; }
 
 @keyframes am2-pop {
@@ -57,9 +48,6 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ================================================================
-   HEADER
-================================================================ */
 .am2-header {
   display: flex;
   align-items: center;
@@ -128,9 +116,6 @@
   background: rgba(242, 95, 92, 0.06);
 }
 
-/* ================================================================
-   BODY
-================================================================ */
 .am2-body {
   padding: 20px 24px;
   overflow-y: auto;
@@ -144,9 +129,6 @@
 .am2-body::-webkit-scrollbar-track { background: transparent; }
 .am2-body::-webkit-scrollbar-thumb { background: var(--border); }
 
-/* ================================================================
-   SECTION TITLE — separador interno
-================================================================ */
 .am2-section-title {
   display: flex;
   align-items: center;
@@ -161,18 +143,12 @@
   border-bottom: 0.5px solid var(--border);
 }
 
-/* ================================================================
-   GRID 2 COLUMNAS
-================================================================ */
 .am2-row-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-/* ================================================================
-   FIELD
-================================================================ */
 .am2-field {
   display: flex;
   flex-direction: column;
@@ -226,9 +202,6 @@
 .am2-input[type="date"],
 .am2-input[type="time"] { color-scheme: light dark; }
 
-/* ================================================================
-   KNOCKOUT TOGGLE
-================================================================ */
 .am2-knockout-toggle {
   display: flex;
   align-items: center;
@@ -290,9 +263,6 @@
   color: var(--muted);
 }
 
-/* ================================================================
-   LOGO PREVIEW
-================================================================ */
 .am2-logo-preview-row {
   display: flex;
   align-items: center;
@@ -336,9 +306,6 @@
   align-self: center;
 }
 
-/* ================================================================
-   FOOTER
-================================================================ */
 .am2-footer {
   display: flex;
   gap: 8px;
@@ -417,11 +384,6 @@
 
 @keyframes am2-spin { to { transform: rotate(360deg); } }
 
-/* ================================================================
-   FINISH MATCH MODAL — específico
-================================================================ */
-
-/* Tarjeta de equipos */
 .fm2-match-card {
   display: flex;
   align-items: center;
@@ -486,7 +448,6 @@
   color: var(--muted);
 }
 
-/* Score row */
 .fm2-score-row {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -514,7 +475,6 @@
   letter-spacing: -1px;
 }
 
-/* Knockout section */
 .fm2-knockout-section {
   padding: 14px;
   background: rgba(245, 166, 35, 0.03);
@@ -586,7 +546,6 @@
   color: #1D9E75;
 }
 
-/* Error */
 .fm2-error {
   display: flex;
   align-items: center;
@@ -606,7 +565,6 @@
   75% { transform: translateX(5px); }
 }
 
-/* Info box */
 .fm2-info-box {
   padding: 12px 14px;
   background: rgba(91, 79, 216, 0.04);
@@ -619,9 +577,6 @@
 
 .fm2-info-box strong { color: var(--text-primary); }
 
-/* ================================================================
-   MODAL PREMIUM (legacy — logros, títulos, ligas, premios)
-================================================================ */
 .modal-backdrop-premium {
   position: fixed;
   inset: 0;
@@ -725,7 +680,6 @@
 .modal-body-premium::-webkit-scrollbar-track { background: transparent; }
 .modal-body-premium::-webkit-scrollbar-thumb { background: var(--border); }
 
-/* Form groups */
 .form-group-premium { margin-bottom: 16px; }
 
 .form-label-premium {
@@ -777,7 +731,6 @@
   margin-bottom: 16px;
 }
 
-/* Logo input */
 .logo-input-wrapper {
   position: relative;
   display: flex;
@@ -793,7 +746,6 @@
   pointer-events: none;
 }
 
-/* Logo preview section */
 .logo-preview-section {
   display: flex;
   gap: 16px;
@@ -823,7 +775,6 @@
 .logo-preview-img  { width: 40px; height: 40px; object-fit: contain; }
 .logo-preview-emoji { font-size: 40px; }
 
-/* Footer premium */
 .modal-footer-premium {
   padding: 14px 24px;
   background: var(--bg);
@@ -874,7 +825,6 @@
   color: var(--text-primary);
 }
 
-/* Knockout checkbox legacy */
 .form-label-premium.checkbox-label {
   display: flex;
   align-items: center;
@@ -914,11 +864,6 @@
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
 
-/* ================================================================
-   BANNERS — drop zone y asignación
-================================================================ */
-
-/* Drop zone */
 .banner-drop-zone {
   position: relative;
   width: 100%;
@@ -1004,7 +949,6 @@ input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
 
 .banner-drop-zone:hover .banner-preview-overlay { opacity: 1; }
 
-/* Admin banners grid */
 .banners-admin-grid {
   display: flex;
   flex-direction: column;
@@ -1075,7 +1019,6 @@ input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
   gap: 5px;
 }
 
-/* Assign modal */
 .assign-user-list {
   background: var(--bg);
   border: 0.5px solid var(--border);
@@ -1270,9 +1213,6 @@ input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
   justify-content: center;
 }
 
-/* ================================================================
-   RESPONSIVE
-================================================================ */
 @media (max-width: 768px) {
   .am2-backdrop,
   .modal-backdrop-premium { padding: 0; align-items: flex-end; }

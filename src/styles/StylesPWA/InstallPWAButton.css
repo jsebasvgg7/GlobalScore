@@ -1,3 +1,7 @@
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 .install-pwa-banner {
   position: fixed;
   bottom: 20px;
@@ -89,10 +93,9 @@
   opacity: 1;
 }
 
-/* Responsive */
 @media (max-width: 640px) {
   .install-pwa-banner {
-    bottom: 80px; /* Sobre la navegación móvil */
+    bottom: 80px;
     left: 10px;
     right: 10px;
     transform: none;
@@ -104,6 +107,6 @@
   }
 
   .install-pwa-subtitle {
-    display: none; /* Ocultar en móvil para ahorrar espacio */
+    display: none;
   }
 }

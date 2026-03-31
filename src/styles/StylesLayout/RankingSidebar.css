@@ -1,3 +1,7 @@
+/* ================================================
+  GLOBALSCORE
+================================================ */
+
 .ranking-premium {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 24px;
@@ -284,7 +288,6 @@
   font-weight: 600;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .ranking-premium {
     border-radius: 20px;

@@ -1,15 +1,9 @@
-/* ================================================================
-   AdminPage.css — Brutalista Japonés Retro · Rediseño Total
-   Coherente con RankingPage.css · StatsPage.css · DashboardPage.css
-   Variables del sistema · DM Mono + Sora · Líneas 0.5px
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
-/* ================================================================
-   SHELL — fila horizontal de altura completa
-   panel derecho va desde el tope hasta el fondo
-================================================================ */
 .admin-page {
   display: flex;
   flex-direction: column;
@@ -20,7 +14,6 @@
   box-sizing: border-box;
 }
 
-/* Fila principal: izquierda + panel derecho */
 .admin-shell-row {
   flex: 1;
   display: flex;
@@ -28,7 +21,6 @@
   overflow: hidden;
 }
 
-/* Columna izquierda: stats + tabs + controles + lista */
 .admin-left-col {
   flex: 1;
   min-width: 0;
@@ -37,21 +29,15 @@
   overflow: hidden;
 }
 
-/* admin-page-container ya no se usa pero lo dejamos vacío para no romper nada */
 .admin-page-container {
   display: contents;
 }
 
-/* BODY ROW y MAIN COL legacy — ya no se usan pero no rompen */
 .admin-body-row,
 .admin-main-col {
   display: contents;
 }
 
-/* ================================================================
-   TOPBAR — STATS OVERVIEW
-   Fila horizontal fija como lb-row--stats
-================================================================ */
 .admin-stats-overview {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -75,7 +61,6 @@
 .admin-stat-card:last-child { border-right: none; }
 .admin-stat-card:hover { background: var(--bg); }
 
-/* Línea superior de color */
 .admin-stat-card::before {
   content: '';
   position: absolute;
@@ -134,9 +119,6 @@
   margin-top: 2px;
 }
 
-/* ================================================================
-   NAV TABS — barra horizontal estilo lb-tabs-bar
-================================================================ */
 .admin-nav-tabs {
   display: flex !important;
   align-items: center !important;
@@ -189,7 +171,6 @@
   flex-direction: row !important;
 }
 
-/* Mostrar el texto en las tabs */
 .admin-nav-tab span:not(.tab-badge) {
   display: inline !important;
   width: auto !important;
@@ -250,10 +231,6 @@
   z-index: 2 !important;
 }
 
-/* ================================================================
-   CONTROLS — barra de búsqueda + filtros + botón
-   Misma altura y estilo que lb-row--sort
-================================================================ */
 .admin-controls {
   display: flex;
   align-items: center;
@@ -363,9 +340,6 @@
 .add-new-btn:hover { background: var(--accent-light, var(--accent)); }
 .add-new-btn svg { width: 13px; height: 13px; }
 
-/* ================================================================
-   BODY ROW — lista izquierda + panel derecho
-================================================================ */
 .admin-body-row {
   flex: 1;
   display: flex;
@@ -381,9 +355,6 @@
   overflow: hidden;
 }
 
-/* ================================================================
-   CONTENT AREA — scrollable
-================================================================ */
 .admin-content-area {
   flex: 1;
   overflow-y: auto;
@@ -397,9 +368,6 @@
 .admin-content-area::-webkit-scrollbar-thumb { background: var(--border); }
 [data-theme="dark"] .admin-content-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* ================================================================
-   MATCH LIST — tabla estilo brutal, sin cards redondeadas
-================================================================ */
 .match-list-wrap {
   display: flex;
   flex-direction: column;
@@ -623,10 +591,6 @@
   font-weight: 700;
 }
 
-/* ================================================================
-   ITEMS GRID — ligas, premios, logros, títulos
-   Tabla flat en lugar de cards redondeadas
-================================================================ */
 .admin-items-grid {
   display: flex;
   flex-direction: column;
@@ -800,9 +764,6 @@
   border-color: #f25f5c;
 }
 
-/* ================================================================
-   CROWNS SECTION
-================================================================ */
 .admin-crowns-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -810,7 +771,6 @@
   min-height: 100%;
 }
 
-/* Panel izquierdo: top10 */
 .admin-crowns-section > .section-header:first-child,
 .admin-crowns-section > div:nth-child(1),
 .admin-crowns-section > div:nth-child(2) {
@@ -843,7 +803,6 @@
   display: none;
 }
 
-/* reset btn en crowns */
 .reset-stats-btn {
   display: flex;
   align-items: center;
@@ -1006,9 +965,6 @@
   text-transform: uppercase;
 }
 
-/* ================================================================
-   EMPTY STATE
-================================================================ */
 .admin-empty-state {
   display: flex;
   flex-direction: column;
@@ -1031,9 +987,6 @@
   margin: 0;
 }
 
-/* ================================================================
-   LOADING
-================================================================ */
 .admin-page-loading {
   min-height: 100vh;
   display: flex;
@@ -1075,9 +1028,6 @@
 .match-list-row:nth-child(7)  { animation-delay: .21s; }
 .match-list-row:nth-child(8)  { animation-delay: .24s; }
 
-/* ================================================================
-   RESPONSIVE — TABLET (≤1200px)
-================================================================ */
 @media (max-width: 1200px) {
   .admin-stats-overview {
     grid-template-columns: repeat(2, 1fr);
@@ -1106,9 +1056,6 @@
   }
 }
 
-/* ================================================================
-   RESPONSIVE — MOBILE (≤768px)
-================================================================ */
 @media (max-width: 768px) {
   .admin-page {
     height: auto;
@@ -1138,7 +1085,6 @@
     height: auto;
   }
 
-  /* Stats: 2 col */
   .admin-stats-overview {
     grid-template-columns: 1fr 1fr;
   }
@@ -1156,7 +1102,6 @@
   .admin-stat-card { padding: 16px 16px 12px; }
   .admin-stat-card .stat-value { font-size: 36px; letter-spacing: -2px; }
 
-  /* Tabs: scroll horizontal */
   .admin-nav-tabs {
     overflow-x: auto !important;
   }
@@ -1166,7 +1111,6 @@
     font-size: 10px !important;
   }
 
-  /* Controls */
   .admin-controls {
     height: auto;
     flex-direction: column;
@@ -1190,7 +1134,6 @@
     justify-content: center;
   }
 
-  /* Match list: simplificar columnas */
   .match-list-header,
   .match-list-row {
     grid-template-columns: 1fr 120px;
@@ -1204,15 +1147,12 @@
   .match-list-row { min-height: 52px; }
   .mlr-team-name { max-width: 65px; }
 
-  /* Items grid */
   .admin-item-card { padding: 12px 14px; gap: 10px; flex-wrap: wrap; }
   .item-title { font-size: 13px; }
   .item-actions { flex-wrap: nowrap; }
 
-  /* Section header */
   .section-header { padding: 0 14px; height: 38px; }
 
-  /* Crowns */
   .admin-crowns-section {
     grid-template-columns: 1fr;
   }
@@ -1222,9 +1162,6 @@
   .admin-empty-state { padding: 60px 20px; }
 }
 
-/* ================================================================
-   RESPONSIVE — SMALL PHONES (≤480px)
-================================================================ */
 @media (max-width: 480px) {
   .admin-stat-card .stat-value { font-size: 28px; letter-spacing: -1px; }
   .admin-stat-card .stat-detail { display: none; }
