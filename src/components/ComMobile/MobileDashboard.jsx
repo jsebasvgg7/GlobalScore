@@ -261,7 +261,6 @@ function ProgressBar({ saved, total }) {
 }
 
 // ── Tab Bar ───────────────────────────────────────────────────
-// Acepta `tabs` (array custom) o `counts` (objeto para predicciones)
 function TabBar({ activeTab, onTabChange, counts, tabs: customTabs }) {
   const tabs = customTabs || [
     { id: "matches", label: "Partidos", count: counts.matches },
@@ -371,7 +370,7 @@ function StatsPanel({ currentUser }) {
   );
 }
 
-// ── Sección inferior (Ranking · Stats · Logros) ───────────────
+// ── Sección inferior (Ranking · Stats) ───────────────────────
 function BottomSection({ users, currentUser, allAchievements }) {
   const [activeTab, setActiveTab] = useState("ranking");
 
@@ -382,7 +381,6 @@ function BottomSection({ users, currentUser, allAchievements }) {
 
   return (
     <div className="mob2-bottom-wrap">
-      {/* TabBar fuera del box */}
       <div className="mob2-sec mob2-sec--no-hpad" style={{ marginTop: -14 }}>
         <TabBar
           activeTab={activeTab}
@@ -391,7 +389,6 @@ function BottomSection({ users, currentUser, allAchievements }) {
         />
       </div>
 
-      {/* Contenido directo, sin mob2-bottom-box */}
       {activeTab === "ranking" && (
         <PodiumPanel users={users} currentUser={currentUser} />
       )}
@@ -447,80 +444,97 @@ export default function MobileDashboard({
   const previewLeagues = leagues.slice(0, 3);
   const previewAwards  = awards.slice(0, 3);
 
-  const tabCounts  = { matches: pendingMatches.length, leagues: leagues.length, awards: awards.length };
-  const allPageMap = { matches: "matches", leagues: "leagues", awards: "awards" };
+  const tabCounts = { matches: pendingMatches.length, leagues: leagues.length, awards: awards.length };
 
   const renderTabContent = () => {
     if (activeTab === "matches") {
-      return loading
-        ? [0, 1, 2].map(i => <SkeletonCard key={i} />)
-        : previewMatches.length === 0
-        ? <EmptyMini label="SIN PARTIDOS PENDIENTES" />
-        : (
+      if (loading) return [0, 1, 2].map(i => <SkeletonCard key={i} />);
+      if (previewMatches.length === 0) {
+        return (
           <>
-            {previewMatches.map(m => (
-              <MiniMatchCard
-                key={m.id}
-                match={m}
-                userPred={m.predictions?.find(p => p.user_id === currentUser?.id)}
-              />
-            ))}
-            {pendingMatches.length > 5 && (
-              <div className="mob2-more-card" onPointerDown={() => setActivePage("matches")}>
-                <span className="mob2-more-sym">»</span>
-                <span>MÁS</span>
-              </div>
-            )}
+            <EmptyMini label="SIN PARTIDOS PENDIENTES" />
+            <div className="mob2-more-card" onPointerDown={() => setActivePage("matches")}>
+              <span className="mob2-more-sym">»</span>
+              <span>TODOS</span>
+            </div>
           </>
         );
+      }
+      return (
+        <>
+          {previewMatches.map(m => (
+            <MiniMatchCard
+              key={m.id}
+              match={m}
+              userPred={m.predictions?.find(p => p.user_id === currentUser?.id)}
+            />
+          ))}
+          <div className="mob2-more-card" onPointerDown={() => setActivePage("matches")}>
+            <span className="mob2-more-sym">»</span>
+            <span>TODOS</span>
+          </div>
+        </>
+      );
     }
 
     if (activeTab === "leagues") {
-      return loading
-        ? [0, 1].map(i => <SkeletonCard key={i} wide />)
-        : previewLeagues.length === 0
-        ? <EmptyMini label="SIN LIGAS ACTIVAS" />
-        : (
+      if (loading) return [0, 1].map(i => <SkeletonCard key={i} wide />);
+      if (previewLeagues.length === 0) {
+        return (
           <>
-            {previewLeagues.map(l => (
-              <MiniLeagueCard
-                key={l.id}
-                league={l}
-                userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)}
-              />
-            ))}
-            {leagues.length > 3 && (
-              <div className="mob2-more-card" onPointerDown={() => setActivePage("leagues")}>
-                <span className="mob2-more-sym">»</span>
-                <span>MÁS</span>
-              </div>
-            )}
+            <EmptyMini label="SIN LIGAS ACTIVAS" />
+            <div className="mob2-more-card" onPointerDown={() => setActivePage("leagues")}>
+              <span className="mob2-more-sym">»</span>
+              <span>TODOS</span>
+            </div>
           </>
         );
+      }
+      return (
+        <>
+          {previewLeagues.map(l => (
+            <MiniLeagueCard
+              key={l.id}
+              league={l}
+              userPrediction={l.league_predictions?.find(p => p.user_id === currentUser?.id)}
+            />
+          ))}
+          <div className="mob2-more-card" onPointerDown={() => setActivePage("leagues")}>
+            <span className="mob2-more-sym">»</span>
+            <span>VER TODO</span>
+          </div>
+        </>
+      );
     }
 
     if (activeTab === "awards") {
-      return loading
-        ? [0, 1].map(i => <SkeletonCard key={i} wide />)
-        : previewAwards.length === 0
-        ? <EmptyMini label="SIN PREMIOS ACTIVOS" />
-        : (
+      if (loading) return [0, 1].map(i => <SkeletonCard key={i} wide />);
+      if (previewAwards.length === 0) {
+        return (
           <>
-            {previewAwards.map(a => (
-              <MiniAwardCard
-                key={a.id}
-                award={a}
-                userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)}
-              />
-            ))}
-            {awards.length > 3 && (
-              <div className="mob2-more-card" onPointerDown={() => setActivePage("awards")}>
-                <span className="mob2-more-sym">»</span>
-                <span>MÁS</span>
-              </div>
-            )}
+            <EmptyMini label="SIN PREMIOS ACTIVOS" />
+            <div className="mob2-more-card" onPointerDown={() => setActivePage("awards")}>
+              <span className="mob2-more-sym">»</span>
+              <span>VER TODO</span>
+            </div>
           </>
         );
+      }
+      return (
+        <>
+          {previewAwards.map(a => (
+            <MiniAwardCard
+              key={a.id}
+              award={a}
+              userPrediction={a.award_predictions?.find(p => p.user_id === currentUser?.id)}
+            />
+          ))}
+          <div className="mob2-more-card" onPointerDown={() => setActivePage("awards")}>
+            <span className="mob2-more-sym">»</span>
+            <span>VER TODO</span>
+          </div>
+        </>
+      );
     }
 
     return null;
@@ -569,7 +583,7 @@ export default function MobileDashboard({
         </div>
       </div>
 
-      {/* SECCIÓN INFERIOR: Ranking · Stats · Logros */}
+      {/* SECCIÓN INFERIOR: Ranking · Stats */}
       <BottomSection
         users={users}
         currentUser={currentUser}
