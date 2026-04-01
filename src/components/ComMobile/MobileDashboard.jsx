@@ -654,7 +654,6 @@ export default function MobileDashboard({
           onClose={() => setProfileModal(false)}
         />
       )}
-      <Footer />
     </div>
   );
 }
