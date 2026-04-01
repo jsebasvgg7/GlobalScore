@@ -1,6 +1,6 @@
-/* ==========================================
-   PROFILE
-========================================== */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 .history-header-compact {
   display: flex;
@@ -96,10 +96,6 @@
   flex-shrink: 0;
 }
 
-/* ==========================================
-   RESPONSIVE - MOBILE
-========================================== */
-
 @media (max-width: 768px) {
   .history-header-compact {
     gap: 12px;
@@ -178,7 +174,6 @@
   }
 }
 
-/* Ocultar texto "Historial" en mobile muy pequeño */
 @media (max-width: 360px) {
   .history-title-compact span {
     display: none;
@@ -208,7 +203,6 @@
   border-color: #cbd5e1;
 }
 
-/* Border de color según estado */
 .history-match-card.exact {
   border-left: 4px solid #F59E0B;
 }
@@ -224,10 +218,6 @@
 .history-match-card.pending {
   border-left: 4px solid #94A3B8;
 }
-
-/* ========================================
-   HEADER - Liga y Fecha
-======================================== */
 
 .history-match-header {
   padding: 16px 20px;
@@ -292,10 +282,6 @@
   opacity: 0.8;
 }
 
-/* ========================================
-   CONTENT - Equipos y Predicción
-======================================== */
-
 .history-match-content {
   padding: 24px 20px;
   display: grid;
@@ -303,10 +289,6 @@
   align-items: center;
   gap: 20px;
 }
-
-/* ========================================
-   SECCIÓN DE EQUIPOS
-======================================== */
 
 .history-team-section {
   display: flex;
@@ -361,10 +343,6 @@
   word-break: break-word;
 }
 
-/* ========================================
-   SECCIÓN DE PREDICCIÓN
-======================================== */
-
 .history-prediction-section {
   display: flex;
   flex-direction: column;
@@ -397,7 +375,6 @@
   color: #065f46;
 }
 
-/* Resultado Real */
 .history-real-result {
   display: flex;
   flex-direction: column;
@@ -434,10 +411,6 @@
   font-weight: 800;
   color: #cbd5e1;
 }
-
-/* ========================================
-   FOOTER - Estado y Puntos
-======================================== */
 
 .history-match-footer {
   padding: 16px 20px;
@@ -504,10 +477,6 @@
   white-space: nowrap;
   box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
 }
-
-/* ========================================
-   MODO OSCURO
-======================================== */
 
 [data-theme="dark"] .history-match-card {
   background: var(--card);
@@ -619,10 +588,6 @@
   border-color: rgba(148, 163, 184, 0.25);
 }
 
-/* ==========================================
-   RESPONSIVE - TABLET (768px - 1024px)
-========================================== */
-
 @media (max-width: 1024px) {
   .history-match-card {
     border-radius: 14px;
@@ -664,10 +629,6 @@
     font-size: 22px;
   }
 }
-
-/* ==========================================
-   RESPONSIVE - MOBILE (481px - 767px)
-========================================== */
 
 @media (max-width: 767px) {
   .history-match-card {
@@ -748,79 +709,77 @@ padding: 7px 12px;
 font-size: 13px;
 }
 }
-/* ==========================================
-RESPONSIVE - MOBILE PEQUEÑO (≤480px)
-========================================== */
+
 @media (max-width: 480px) {
-.history-match-card {
-border-radius: 12px;
-}
-.history-match-header {
-padding: 12px 14px;
-}
-.history-league-logo,
-.history-league-icon-fallback {
-width: 18px;
-height: 18px;
-}
-.history-league-name {
-font-size: 12px;
-}
-.history-match-date {
-padding: 4px 9px;
-font-size: 11px;
-gap: 4px;
-}
-.history-match-content {
-padding: 16px 14px;
-gap: 12px;
-}
-.history-team-logo-wrapper {
-width: 52px;
-height: 52px;
-border-radius: 10px;
-}
-.history-team-logo {
-width: 40px;
-height: 40px;
-}
-.history-team-emoji {
-font-size: 36px;
-}
-.history-team-name {
-font-size: 13px;
-}
-.history-prediction-section {
-min-width: 110px;
-gap: 9px;
-}
-.history-score-box {
-width: 46px;
-height: 46px;
-border-radius: 10px;
-}
-.history-score-value {
-font-size: 18px;
-}
-.history-real-result {
-padding: 6px 9px;
-}
-.history-real-score {
-font-size: 15px;
-}
-.history-match-footer {
-padding: 12px 14px;
-min-height: 52px;
-}
-.history-result-indicator {
-font-size: 11px;
-gap: 5px;
-padding: 6px 10px;
-}
-.history-points-badge {
-padding: 6px 10px;
-font-size: 12px;
-}
+  .history-match-card {
+  border-radius: 12px;
+  }
+  .history-match-header {
+  padding: 12px 14px;
+  }
+  .history-league-logo,
+  .history-league-icon-fallback {
+  width: 18px;
+  height: 18px;
+  }
+  .history-league-name {
+  font-size: 12px;
+  }
+  .history-match-date {
+  padding: 4px 9px;
+  font-size: 11px;
+  gap: 4px;
+  }
+  .history-match-content {
+  padding: 16px 14px;
+  gap: 12px;
+  }
+  .history-team-logo-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  }
+  .history-team-logo {
+  width: 40px;
+  height: 40px;
+  }
+  .history-team-emoji {
+  font-size: 36px;
+  }
+  .history-team-name {
+  font-size: 13px;
+  }
+  .history-prediction-section {
+  min-width: 110px;
+  gap: 9px;
+  }
+  .history-score-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  }
+  .history-score-value {
+  font-size: 18px;
+  }
+  .history-real-result {
+  padding: 6px 9px;
+  }
+  .history-real-score {
+  font-size: 15px;
+  }
+  .history-match-footer {
+  padding: 12px 14px;
+  min-height: 52px;
+  }
+  .history-result-indicator {
+  font-size: 11px;
+  gap: 5px;
+  padding: 6px 10px;
+  }
+  .history-points-badge {
+  padding: 6px 10px;
+  font-size: 12px;
+  }
 }
 
 /* ==========================================

@@ -1,6 +1,6 @@
-/* ==========================================
-   PROFILE
-========================================== */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 .profile-hero {
   background: var(--profile-card);
@@ -9,10 +9,6 @@
   border-bottom: 1px solid var(--profile-border);
   position: relative;
 }
-
-/* ==========================================
-   AVATAR SECTION
-========================================== */
 
 .avatar-section {
   position: relative;
@@ -50,7 +46,6 @@
   font-weight: 700;
 }
 
-/* Level Badge - Estilo más limpio */
 .level-badge-modern {
   position: absolute;
   bottom: 0;
@@ -73,10 +68,6 @@
   height: 14px;
 }
 
-/* ==========================================
-   USER INFO SECTION
-========================================== */
-
 .user-info-section {
   text-align: center;
   position: relative;
@@ -96,7 +87,6 @@
   margin: 0 0 var(--spacing-sm) 0;
 }
 
-/* Bio */
 .user-bio-display {
   font-size: 14px;
   color: var(--profile-text-secondary);
@@ -105,7 +95,6 @@
   line-height: 1.5;
 }
 
-/* Tags */
 .user-tags {
   display: flex;
   flex-wrap: wrap;
@@ -137,7 +126,6 @@
   opacity: 0.7;
 }
 
-/* Stats Mini Row - Rediseñar más limpio */
 .stats-mini-row {
   display: flex;
   align-items: center;
@@ -175,10 +163,6 @@
   height: 32px;
   background: var(--profile-border);
 }
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
 
 @media (max-width: 480px) {
   .profile-hero {

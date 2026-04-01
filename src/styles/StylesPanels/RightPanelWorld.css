@@ -1,14 +1,9 @@
-/* ================================================================
-   RightPanelWorld.css
-   Panel derecho para predicciones de grupos — WorldCupPage
-   Mismo sistema brutalista japonés retro que los demás paneles
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
-/* ================================================================
-   ROOT
-================================================================ */
 .rpw-root {
   width: 360px;
   flex-shrink: 0;
@@ -37,9 +32,6 @@
 .rpw-root::-webkit-scrollbar-thumb { background: #c8c3bb; border-radius: 2px; }
 [data-theme="dark"] .rpw-root::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); }
 
-/* ================================================================
-   HEADER
-================================================================ */
 .rpw-header {
   display: flex;
   align-items: center;
@@ -132,9 +124,6 @@
   background: rgba(239, 68, 68, 0.08);
 }
 
-/* ================================================================
-   BLOQUE GENÉRICO
-================================================================ */
 .rpw-block {
   padding: 16px 18px;
   border-bottom: 0.5px solid #d4cfc8;
@@ -171,9 +160,6 @@
 
 [data-theme="dark"] .rpw-label-line { background: rgba(255, 255, 255, 0.07); }
 
-/* ================================================================
-   TABLA DE CLASIFICACIÓN
-================================================================ */
 .rpw-table {
   width: 100%;
   border-collapse: collapse;
@@ -216,7 +202,6 @@
 .rpw-table tbody tr:hover { background: rgba(91, 79, 216, 0.04); }
 [data-theme="dark"] .rpw-table tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
 
-/* Clasificados */
 .rpw-table tbody tr.rpw-qualified {
   border-left: 2px solid #1D9E75;
 }
@@ -225,7 +210,6 @@
   border-left-color: #34d399;
 }
 
-/* Mejor tercero */
 .rpw-table tbody tr.rpw-third {
   border-left: 2px solid #c9a227;
 }
@@ -296,9 +280,6 @@
 [data-theme="dark"] .rpw-gd-pos { color: #34d399 !important; }
 [data-theme="dark"] .rpw-gd-neg { color: #f87171 !important; }
 
-/* ================================================================
-   LISTA DE PARTIDOS
-================================================================ */
 .rpw-matches-list {
   display: flex;
   flex-direction: column;
@@ -320,7 +301,6 @@
 .rpw-match-row:hover { background: rgba(91, 79, 216, 0.03); }
 [data-theme="dark"] .rpw-match-row:hover { background: rgba(255, 255, 255, 0.02); }
 
-/* Fila con predicción completa */
 .rpw-match-row--filled {
   background: rgba(29, 158, 117, 0.04);
 }
@@ -353,7 +333,6 @@
 
 [data-theme="dark"] .rpw-match-team-name { color: #f0f1f7; }
 
-/* Score pair */
 .rpw-score-pair {
   display: flex;
   align-items: center;
@@ -416,9 +395,6 @@
 
 [data-theme="dark"] .rpw-score-sep { color: #4a5568; }
 
-/* ================================================================
-   LEYENDA
-================================================================ */
 .rpw-legend {
   display: flex;
   align-items: center;
@@ -462,9 +438,6 @@
 [data-theme="dark"] .rpw-legend-dot { background: #34d399; }
 [data-theme="dark"] .rpw-legend-dot--t { background: #f0c040; }
 
-/* ================================================================
-   RESPONSIVE — ocultar en pantallas pequeñas
-================================================================ */
 @media (max-width: 1024px) {
   .rpw-root { display: none; }
 }

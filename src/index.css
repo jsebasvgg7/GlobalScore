@@ -1,19 +1,13 @@
-/* ================================================================
-   GlobalScore — index.css
-   Tokens globales actualizados para Neumorphism Clean/Premium.
-   El tema desktop no cambia; solo los tokens mobile se alinean.
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ================================================================
-   TOKENS — LIGHT MODE
-================================================================ */
 :root,
 [data-theme="light"] {
-  /* Fondo neumórfico — beige cálido igual que mob2-root */
   --bg:             #EAE7E1;
   --card:           #EAE7E1;
 
@@ -21,7 +15,6 @@
   --text-secondary: #7A7490;
   --muted:          #9B95A8;
 
-  /* Acento del proyecto — sin cambiar */
   --accent:         #60519b;
   --accent-light:   #8b7fc7;
   --accent-hover:   #4d4180;
@@ -31,21 +24,16 @@
   --light-text:     #bfc0d1;
   --glass:          rgba(96, 81, 155, 0.10);
 
-  /* Bordes suaves para neumorphism */
   --border:         rgba(166, 158, 148, 0.22);
   --input-bg:       #EAE7E1;
   --input-border:   rgba(166, 158, 148, 0.35);
 
-  /* Sombras neumórficas globales */
   --shadow:         6px 6px 16px rgba(166,158,148,0.55), -4px -4px 12px rgba(255,255,255,0.85);
   --small-shadow:   4px 4px 10px rgba(166,158,148,0.5),  -3px -3px 8px rgba(255,255,255,0.8);
 
   --radius-2xl:     20px;
 }
 
-/* ================================================================
-   TOKENS — DARK MODE
-================================================================ */
 [data-theme="dark"] {
   --bg:             #1E1C28;
   --card:           #1E1C28;
@@ -67,9 +55,6 @@
   --radius-2xl:     20px;
 }
 
-/* ================================================================
-   RESET BÁSICO
-================================================================ */
 *,
 *::before,
 *::after {
@@ -116,9 +101,6 @@ body {
   color: var(--text-primary);
 }
 
-/* ================================================================
-   FORMS — base
-================================================================ */
 input,
 textarea,
 select {
@@ -145,9 +127,6 @@ button {
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.18s ease;
 }
 
-/* ================================================================
-   LAYOUT GLOBAL
-================================================================ */
 .app-header {
   position: sticky;
   top: 0;
@@ -167,7 +146,6 @@ button {
   min-height: 200px;
 }
 
-/* Card global con sombra neumórfica */
 .card {
   background: var(--card);
   padding: 16px;
@@ -190,9 +168,6 @@ button {
   gap: 18px;
 }
 
-/* ================================================================
-   ICON BUTTONS — neumórficos
-================================================================ */
 .icon-btn {
   background: var(--bg);
   border: none;
@@ -207,9 +182,6 @@ button {
   color: var(--accent);
 }
 
-/* ================================================================
-   CLICKABLE AVATAR
-================================================================ */
 .clickable-avatar {
   cursor: pointer !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -244,9 +216,6 @@ button {
   }
 }
 
-/* ================================================================
-   SCROLLBAR
-================================================================ */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb {
@@ -256,9 +225,6 @@ button {
 ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 * { scrollbar-width: thin; scrollbar-color: rgba(166,158,148,0.4) var(--bg); }
 
-/* ================================================================
-   BOTTOM NAVIGATION
-================================================================ */
 .bottom-nav-btn,
 .gs-bottom-btn {
   color: var(--muted) !important;
@@ -269,9 +235,6 @@ button {
   color: var(--accent) !important;
 }
 
-/* ================================================================
-   LOADING
-================================================================ */
 @media (max-width: 768px) {
   .page-loader {
     position: fixed;
@@ -287,9 +250,6 @@ button {
   }
 }
 
-/* ================================================================
-   TOAST
-================================================================ */
 .toast-container {
   position: fixed !important;
   top: 95px !important;
@@ -308,24 +268,15 @@ button {
   }
 }
 
-/* ================================================================
-   DASHBOARD — ocultar desktop en mobile portrait
-================================================================ */
 @media screen and (max-width: 768px) and (orientation: portrait) {
   .db-root { display: none !important; }
 }
 
-/* ================================================================
-   RESPONSIVE — TABLET
-================================================================ */
 @media (max-width: 1024px) {
   .main-grid { grid-template-columns: 1fr; }
   .right-col { order: -1; }
 }
 
-/* ================================================================
-   RESPONSIVE — MOBILE
-================================================================ */
 @media (max-width: 768px) {
   body { padding-bottom: 0; }
   .container { padding: 0 12px; margin: 16px auto; }
@@ -349,9 +300,6 @@ button {
   .container { padding: 0 10px; margin: 12px auto; }
 }
 
-/* ================================================================
-   IOS SAFARI
-================================================================ */
 @supports (-webkit-touch-callout: none) {
   body,
   .vega-root,
@@ -364,9 +312,6 @@ button {
   }
 }
 
-/* ================================================================
-   DARK MODE — DESKTOP — Cards y componentes
-================================================================ */
 [data-theme="dark"] .card,
 [data-theme="dark"] .stats-card,
 [data-theme="dark"] .level-card,
@@ -410,18 +355,12 @@ button {
   border-top-color: var(--border);
 }
 
-/* ================================================================
-   MATCH/LEAGUE/AWARD CARD DARK
-================================================================ */
 [data-theme="dark"] .match-footer-light,
 [data-theme="dark"] .league-footer-light,
 [data-theme="dark"] .award-footer-light {
   border-top-color: var(--border);
 }
 
-/* ================================================================
-   SEARCH INPUT
-================================================================ */
 [data-theme="dark"] .search-input-modern,
 [data-theme="dark"] .search-modern input {
   border: none !important;
@@ -436,16 +375,10 @@ button {
   border: none !important;
 }
 
-/* ================================================================
-   USER PROFILE MODAL
-================================================================ */
 [data-theme="dark"] .user-modal-overlay  { background: rgba(0, 0, 0, 0.85); }
 [data-theme="dark"] .user-modal-container { background: var(--card); border: none; }
 [data-theme="dark"] .user-modal-header    { background: var(--card); border-bottom-color: var(--border); }
 
-/* ================================================================
-   RANKING PAGE — dark desktop
-================================================================ */
 [data-theme="dark"] .ranking-page {
   background: #1E1C28 !important;
 }
@@ -470,9 +403,6 @@ button {
   border-left-color: #8b7fc7;
 }
 
-/* ================================================================
-   PROFILE / STATS / NOTIFICATIONS / ADMIN — dark desktop
-================================================================ */
 [data-theme="dark"] .profile-page,
 [data-theme="dark"] .stats-page,
 [data-theme="dark"] .notifications-page,
@@ -491,9 +421,6 @@ button {
   border: none;
 }
 
-/* ================================================================
-   MODALES — dark
-================================================================ */
 [data-theme="dark"] .modal-backdrop-premium { background: rgba(0,0,0,0.8); }
 
 [data-theme="dark"] .modal-premium,
@@ -502,9 +429,6 @@ button {
   border: none;
 }
 
-/* ================================================================
-   FILTROS Y CHIPS — dark desktop
-================================================================ */
 [data-theme="dark"] .filter-modern:not(.active),
 [data-theme="dark"] .sort-modern:not(.active) { color: var(--text-secondary); }
 
@@ -514,9 +438,6 @@ button {
   color: white;
 }
 
-/* ================================================================
-   HEADINGS GLOBALES — dark
-================================================================ */
 [data-theme="dark"] h1:not([style*="color"]),
 [data-theme="dark"] h2:not([style*="color"]),
 [data-theme="dark"] h3:not([style*="color"]),
@@ -526,9 +447,6 @@ button {
 
 [data-theme="dark"] label:not([style*="color"]) { color: var(--text-primary); }
 
-/* ================================================================
-   TRANSITIONS GLOBALES DARK
-================================================================ */
 [data-theme="dark"] * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }

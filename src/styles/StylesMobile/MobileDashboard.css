@@ -71,7 +71,357 @@
 [data-style="neumorphism"] .mob2-progress-count { font-size:13px; font-weight:500; color:var(--m-accent); background:var(--m-glass); padding:2px 10px; border-radius:var(--r-pill); }
 [data-style="neumorphism"] .mob2-progress-track { height:6px; background:var(--m-bg); border-radius:var(--r-pill); box-shadow:var(--nm-ism); overflow:hidden; }
 [data-style="neumorphism"] .mob2-progress-fill { height:100%; background:linear-gradient(90deg,var(--m-accent),var(--m-accent-l)); border-radius:var(--r-pill); transition:width .7s cubic-bezier(.34,1.56,.64,1); }
-
+.mob2-nm--empty { cursor: default; }
+ 
+/* ── BRUTALIST ── */
+[data-style="brutalist"] .mob2-nm-empty-brut {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  background: var(--m-card);
+  border: 2px solid var(--m-border-hard);
+  border-left: 4px solid var(--m-accent);
+  min-height: 96px;
+  overflow: hidden;
+  position: relative;
+  animation: mob2-fade-up .35s ease .14s both;
+}
+ 
+[data-style="neumorphism"] .mob2-nm-empty-brut { display: none; }
+ 
+[data-style="brutalist"] .mob2-nm-empty-brut-left {
+  width: 72px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px 10px;
+  border-right: 1px solid var(--m-border-hard);
+  background: var(--m-bg);
+}
+ 
+[data-style="brutalist"] .mob2-nm-empty-brut-zero {
+  font-family: var(--m-mono);
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--m-border-hard);
+  line-height: 1;
+  letter-spacing: -2px;
+}
+ 
+[data-style="brutalist"] .mob2-nm-empty-brut-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  padding: 0 2px;
+}
+ 
+[data-style="brutalist"] .mob2-nm-empty-brut-bar {
+  height: 2px;
+  background: var(--m-border-hard);
+}
+[data-style="brutalist"] .mob2-nm-empty-brut-bar--a { width: 100%; }
+[data-style="brutalist"] .mob2-nm-empty-brut-bar--b { width: 70%; }
+[data-style="brutalist"] .mob2-nm-empty-brut-bar--c { width: 45%; }
+ 
+[data-style="brutalist"] .mob2-nm-empty-brut-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 14px 16px;
+}
+ 
+[data-style="brutalist"] .mob2-nm-empty-brut-eyebrow {
+  font-family: var(--m-mono);
+  font-size: 7px;
+  font-weight: 700;
+  color: var(--m-accent);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+ 
+[data-style="brutalist"] .mob2-nm-empty-brut-heading {
+  font-family: var(--m-mono);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--m-text);
+  letter-spacing: -.01em;
+  line-height: 1.1;
+}
+ 
+[data-style="brutalist"] .mob2-nm-empty-brut-rule {
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: var(--m-accent);
+  margin: 2px 0;
+}
+ 
+[data-style="brutalist"] .mob2-nm-empty-brut-caption {
+  font-family: var(--m-mono);
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--m-muted);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+ 
+/* ── NEUMORPHISM ── */
+[data-style="brutalist"] .mob2-nm-empty-neu { display: none; }
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  background: var(--m-bg);
+  border-radius: var(--r-xl);
+  box-shadow: var(--nm-lg);
+  padding: 18px 20px;
+  animation: mob2-fade-up .4s cubic-bezier(.16,1,.3,1) .06s both;
+}
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu-icon-wrap {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid var(--m-border);
+}
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu-ring--outer {
+  inset: 0;
+  box-shadow: var(--nm-sm);
+}
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu-ring--inner {
+  inset: 10px;
+  box-shadow: var(--nm-ism);
+  border-style: dashed;
+  border-color: var(--m-accent);
+  opacity: .35;
+  animation: mob2-spin-slow 8s linear infinite;
+}
+ 
+@keyframes mob2-spin-slow { to { transform: rotate(360deg); } }
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu-center {
+  position: relative;
+  z-index: 1;
+  color: var(--m-accent);
+  opacity: .6;
+}
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu-dot {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--m-green);
+  box-shadow: 0 0 6px var(--m-green);
+}
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--m-accent);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--m-text);
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu-sub {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--m-muted);
+  letter-spacing: -.01em;
+}
+ 
+[data-style="neumorphism"] .mob2-nm-empty-neu-check {
+  width: 32px; height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--m-bg);
+  border-radius: 50%;
+  box-shadow: var(--nm-ism), 0 0 0 2px rgba(61,170,128,.3);
+  color: var(--m-green);
+  font-size: 16px;
+  font-weight: 700;
+}
+ 
+/* ──────────────────────────────────────────────────────────────
+   EMPTY MATCHES EN SCROLL HORIZONTAL
+────────────────────────────────────────────────────────────── */
+ 
+/* ── BRUTALIST ── */
+[data-style="brutalist"] .mob2-empty-matches-brut {
+  width: 140px;
+  min-height: 90px;
+  flex-shrink: 0;
+  background: var(--m-bg);
+  border: 1px solid var(--m-border-hard);
+  border-top: 3px solid var(--m-accent);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+ 
+[data-style="neumorphism"] .mob2-empty-matches-brut { display: none; }
+ 
+[data-style="brutalist"] .mob2-emb-accent {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--m-accent);
+  opacity: .4;
+}
+ 
+[data-style="brutalist"] .mob2-emb-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 14px;
+}
+ 
+[data-style="brutalist"] .mob2-emb-num {
+  font-family: var(--m-mono);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--m-border-hard);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+ 
+[data-style="brutalist"] .mob2-emb-divider {
+  width: 24px;
+  height: 1.5px;
+  background: var(--m-accent);
+}
+ 
+[data-style="brutalist"] .mob2-emb-label {
+  font-family: var(--m-mono);
+  font-size: 7px;
+  font-weight: 700;
+  color: var(--m-muted);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.5;
+}
+ 
+[data-style="brutalist"] .mob2-emb-corner {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-color: var(--m-accent);
+  border-style: solid;
+  opacity: .5;
+}
+[data-style="brutalist"] .mob2-emb-corner--tl {
+  top: 4px; left: 4px;
+  border-width: 1.5px 0 0 1.5px;
+}
+[data-style="brutalist"] .mob2-emb-corner--br {
+  bottom: 4px; right: 4px;
+  border-width: 0 1.5px 1.5px 0;
+}
+ 
+/* ── NEUMORPHISM ── */
+[data-style="brutalist"] .mob2-empty-matches-neu { display: none; }
+ 
+[data-style="neumorphism"] .mob2-empty-matches-neu {
+  width: 130px;
+  min-height: 90px;
+  flex-shrink: 0;
+  background: var(--m-bg);
+  border: none;
+  border-radius: var(--r-lg);
+  box-shadow: var(--nm-s);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px 12px;
+  scroll-snap-align: start;
+}
+ 
+[data-style="neumorphism"] .mob2-emn-ball {
+  font-size: 24px;
+  line-height: 1;
+  filter: grayscale(.5);
+  opacity: .55;
+}
+ 
+[data-style="neumorphism"] .mob2-emn-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--m-text);
+  letter-spacing: -.01em;
+  text-align: center;
+}
+ 
+[data-style="neumorphism"] .mob2-emn-sub {
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--m-muted);
+  text-align: center;
+  line-height: 1.4;
+}
+ 
+/* ── dark mode overrides ── */
+[data-style="neumorphism"][data-theme="dark"] .mob2-nm-empty-neu {
+  box-shadow: var(--nm-lg);
+  border: 1px solid rgba(255,255,255,.055);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-nm-empty-neu-ring--outer {
+  box-shadow: var(--nm-sm);
+  border: 1px solid rgba(255,255,255,.04);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-nm-empty-neu-check {
+  box-shadow: var(--nm-ism), 0 0 0 1.5px rgba(52,211,153,.3);
+  border: 1px solid rgba(255,255,255,.035);
+}
+[data-style="neumorphism"][data-theme="dark"] .mob2-empty-matches-neu {
+  box-shadow: var(--nm-s);
+  border: 1px solid rgba(255,255,255,.055);
+}
+ 
+@media (prefers-reduced-motion: reduce) {
+  .mob2-nm-empty-neu-ring--inner { animation: none; }
+}
 [data-style="brutalist"] .mob2-nm { margin:0 20px; animation:mob2-fade-up .35s ease .14s both; }
 [data-style="brutalist"] .mob2-nm-eyebrow { display:flex; align-items:center; gap:8px; padding:12px 0 6px; }
 [data-style="brutalist"] .mob2-nm-card { background:var(--m-card); border:2px solid var(--m-border-hard); padding:0; cursor:pointer; transition:transform .1s; overflow:hidden; position:relative; width:100%; text-align:left; font-family:var(--m-mono); }

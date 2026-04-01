@@ -1,12 +1,9 @@
-/* ==========================================
-   PROFILE
-========================================== */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;700;800&display=swap');
 
-/* ================================================================
-   TOKENS
-================================================================ */
 .upp-panel {
   --upp-mono:   'DM Mono', monospace;
   --upp-sans:   'Sora', sans-serif;
@@ -16,9 +13,6 @@
   --upp-green:  #1D9E75;
 }
 
-/* ================================================================
-   BACKDROP
-================================================================ */
 .upp-backdrop {
   position: fixed;
   inset: 0;
@@ -31,10 +25,6 @@
   background: rgba(0, 0, 0, 0.45);
 }
 
-/* ================================================================
-   PANEL PRINCIPAL
-   Slide desde la derecha, ancho fijo en desktop.
-================================================================ */
 .upp-panel {
   position: fixed;
   top: 0;
@@ -57,7 +47,6 @@
   transform: translateX(0);
 }
 
-/* Borde izquierdo de acento — firma BJR */
 .upp-panel::before {
   content: '';
   position: absolute;
@@ -76,9 +65,6 @@
   box-shadow: -8px 0 40px rgba(0, 0, 0, 0.5);
 }
 
-/* ================================================================
-   BOTÓN CERRAR
-================================================================ */
 .upp-close {
   position: absolute;
   top: 14px;
@@ -102,14 +88,10 @@
   transform: scale(1.08);
 }
 
-/* ================================================================
-   HEADER — banner + avatar + info
-================================================================ */
 .upp-header {
   flex-shrink: 0;
 }
 
-/* Banner */
 .upp-banner {
   height: 100px;
   background: #12121f;
@@ -165,7 +147,6 @@
   background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.5) 100%);
 }
 
-/* Avatar row */
 .upp-avatar-row {
   display: flex;
   align-items: flex-end;
@@ -288,7 +269,6 @@
   margin-left: 2px;
 }
 
-/* Info tags */
 .upp-info-tags {
   display: flex;
   flex-wrap: wrap;
@@ -324,7 +304,6 @@
 [data-theme="dark"] .upp-tag--green { color: #34d399; }
 [data-theme="dark"] .upp-tag--gold  { color: #f0c040; }
 
-/* Bio */
 .upp-bio {
   font-size: 12px;
   font-family: var(--upp-sans);
@@ -342,9 +321,6 @@
   color: rgba(240,237,232,0.5);
 }
 
-/* ================================================================
-   TABS
-================================================================ */
 .upp-tabs {
   display: flex;
   background: var(--sb-bg-light, #f0ede8);
@@ -390,9 +366,6 @@
 .upp-tab--active { color: var(--upp-accent); border-bottom-color: var(--upp-accent); }
 [data-theme="dark"] .upp-tab--active { color: #a899ff; border-bottom-color: #a899ff; }
 
-/* ================================================================
-   CONTENT
-================================================================ */
 .upp-content {
   flex: 1;
   overflow-y: auto;
@@ -418,9 +391,6 @@
   to   { opacity: 1; }
 }
 
-/* ================================================================
-   SECTION DIVIDER
-================================================================ */
 .upp-divider {
   display: flex;
   align-items: center;
@@ -448,9 +418,6 @@
   white-space: nowrap;
 }
 
-/* ================================================================
-   NIVEL
-================================================================ */
 .upp-lvl-block {
   padding: 0 18px 14px;
 }
@@ -493,9 +460,6 @@
   white-space: nowrap;
 }
 
-/* ================================================================
-   STAT CARDS GRID
-================================================================ */
 .upp-stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -573,9 +537,6 @@
   text-transform: uppercase;
 }
 
-/* ================================================================
-   RACHAS
-================================================================ */
 .upp-streaks-row {
   display: flex;
   margin: 0 18px 4px;
@@ -629,9 +590,6 @@
   text-transform: uppercase;
 }
 
-/* ================================================================
-   TÍTULO ACTIVO
-================================================================ */
 .upp-active-title {
   display: flex;
   align-items: center;
@@ -692,9 +650,6 @@
   background: rgba(91,79,216,0.06);
 }
 
-/* ================================================================
-   BADGES GRID
-================================================================ */
 .upp-badges-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -749,11 +704,6 @@
   letter-spacing: 0.06em;
 }
 
-/* ================================================================
-   LOGROS 
-================================================================ */
-
-/* ── Resumen global ── */
 .upp-ach-summary {
   display: flex;
   align-items: center;
@@ -810,7 +760,6 @@
   transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── Cabecera de categoría ── */
 .upp-ach-cat-hdr {
   display: flex;
   align-items: center;
@@ -841,7 +790,6 @@
   letter-spacing: 0.04em;
 }
 
-/* ── Lista de logros ── */
 .upp-ach-list {
   display: flex;
   flex-direction: column;
@@ -855,7 +803,6 @@
   border-color: rgba(255,255,255,0.07);
 }
 
-/* ── Fila individual ── */
 .upp-ach-row {
   display: flex;
   align-items: center;
@@ -871,7 +818,6 @@
   border-bottom-color: rgba(255,255,255,0.06);
 }
 
-/* Desbloqueado */
 .upp-ach-row--on {
   border-left: 2px solid var(--ach-color, var(--upp-accent));
   background: var(--sb-bg-light, #f0ede8);
@@ -897,13 +843,11 @@
   background: rgba(139, 127, 199, 0.07);
 }
 
-/* Bloqueado */
 .upp-ach-row--off {
   border-left: 2px solid transparent;
   opacity: 0.65;
 }
 
-/* ── Icono cuadrado ── */
 .upp-ach-icon {
   width: 28px;
   height: 28px;
@@ -922,7 +866,6 @@
   background: rgba(255,255,255,0.05) !important;
 }
 
-/* ── Texto ── */
 .upp-ach-text {
   flex: 1;
   display: flex;
@@ -954,7 +897,6 @@
   text-overflow: ellipsis;
 }
 
-/* ── Badge de categoría ── */
 .upp-ach-cat {
   flex-shrink: 0;
   font-size: 7px;
@@ -966,9 +908,7 @@
   border: 0.5px solid;
   white-space: nowrap;
 }
-/* ================================================================
-   CORONAS SHOWCASE
-================================================================ */
+
 .upp-crowns-showcase {
   display: flex;
   align-items: center;
@@ -1019,7 +959,6 @@
   margin-left: 4px;
 }
 
-/* Crown history */
 .upp-crown-history {
   display: flex;
   flex-direction: column;
@@ -1079,9 +1018,6 @@
   letter-spacing: 0.04em;
 }
 
-/* ================================================================
-   EMPTY STATES
-================================================================ */
 .upp-empty {
   display: flex;
   flex-direction: column;
@@ -1096,9 +1032,6 @@
 .upp-empty p    { font-size: 13px; font-weight: 600; margin: 0; color: var(--text-secondary, #888); }
 .upp-empty span { font-size: 11px; font-family: var(--upp-mono); letter-spacing: 0.04em; }
 
-/* ================================================================
-   LOADING
-================================================================ */
 .upp-loading {
   flex: 1;
   display: flex;

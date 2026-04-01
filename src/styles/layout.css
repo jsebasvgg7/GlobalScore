@@ -1,6 +1,6 @@
-/* =========================================
-   Layout Global — GlobalScore
-========================================= */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 .vega-root {
   min-height: 100vh;
@@ -21,7 +21,6 @@
     padding-top: 56px;
   }
 
-  /* page-root: layout fijo tipo app, sin scroll de página */
   .page-root {
     margin-left: 72px;
     padding-top: 56px;

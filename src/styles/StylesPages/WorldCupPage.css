@@ -1,6 +1,6 @@
-/* ================================================================
-   WorldCupPage.css 
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
@@ -25,7 +25,6 @@
   --wc-red:     #f87171;
 }
 
-/* ── SHELL ── */
 .wcp-shell {
   display: flex;
   flex-direction: column;
@@ -35,9 +34,6 @@
 }
 [data-theme="dark"] .wcp-shell { background: #1a1d2e; }
 
-/* ================================================================
-   HERO — +10%
-================================================================ */
 .wcp-hero {
   position: relative;
   background: #12121f;
@@ -147,9 +143,6 @@
 [data-theme="dark"] .wcp-hero-title   { color:#fff; }
 [data-theme="dark"] .wcp-hero-subtitle { color:rgba(255,255,255,.4); }
 
-/* ================================================================
-   TABS — +10%
-================================================================ */
 .wcp-tabs {
   display: flex; align-items: center;
   height: 57px; min-height: 57px;
@@ -199,9 +192,6 @@
 .wcp-save-btn:disabled { opacity:.5; cursor:not-allowed; }
 .wcp-save-btn svg      { width:14px; height:14px; }
 
-/* ================================================================
-   LAYOUT + BODY
-================================================================ */
 .wcp-layout { display: flex; flex: 1; min-height: 0; overflow: hidden; }
 .wcp-body {
   flex: 1; min-width: 0;
@@ -214,9 +204,6 @@
 .wcp-body::-webkit-scrollbar-thumb { background: #c8c3bb; border-radius: 2px; }
 [data-theme="dark"] .wcp-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* ================================================================
-   SECTION HEADER — +10%
-================================================================ */
 .wcp-section-hdr {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 0 15px;
@@ -249,9 +236,6 @@
 }
 [data-theme="dark"] .wcp-section-sub { color:#4a5568; }
 
-/* ================================================================
-   GROUPS GRID — +10%
-================================================================ */
 .wcp-groups-grid {
   display: grid; grid-template-columns: repeat(4, 1fr);
   gap: 0; border: 0.5px solid var(--wc-border);
@@ -375,9 +359,6 @@
 [data-theme="dark"] .wcp-group-hint:hover { color:#7c6fe8; background:rgba(124,111,232,0.08); }
 .wcp-group-hint svg { flex-shrink: 0; }
 
-/* ================================================================
-   MEJORES TERCEROS — +10%
-================================================================ */
 .wcp-thirds-wrap { margin-top:26px; border:0.5px solid var(--wc-border); background:#fff; }
 [data-theme="dark"] .wcp-thirds-wrap { background:#1e2235; border-color:rgba(255,255,255,0.07); }
 .wcp-thirds-hdr {
@@ -422,15 +403,8 @@
 }
 [data-theme="dark"] .wcp-grp-badge { background:rgba(124,111,232,.1); border-color:rgba(124,111,232,.25); color:#7c6fe8; }
 
-/* ================================================================
-   KNOCKOUT wrapper
-================================================================ */
 .wcp-knockout { display:flex; flex-direction:column; }
 
-/* ================================================================
-   AWARDS — BRUTALISMO JAPONÉS RETRO COMPLETO
-   Header oscuro FIFA · icono en columna · label + input conectados
-================================================================ */
 .wcp-awards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -531,14 +505,10 @@
 .wcp-award-input:not(:placeholder-shown) { background: rgba(201,162,39,.04); }
 [data-theme="dark"] .wcp-award-input:not(:placeholder-shown) { background: rgba(201,162,39,.07); }
 
-/* Borde dorado izquierdo cuando tiene predicción */
 .wcp-award-card:has(.wcp-award-input:not(:placeholder-shown)) {
   border-left: 2px solid var(--wc-gold);
 }
 
-/* ================================================================
-   RESPONSIVE — +10%
-================================================================ */
 @media (max-width:1280px) {
   .wcp-hero-title    { font-size:42px; }
   .wcp-hero-left     { padding:31px 40px; }

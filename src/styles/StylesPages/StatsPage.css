@@ -1,14 +1,9 @@
-/* ================================================================
-   StatsPage.css
-   Página de Estadísticas — Brutalista japonés retro
-   Layout fijo tipo app: header + body con scroll interno
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap');
 
-/* ================================================================
-   VARIABLES
-================================================================ */
 :root {
   --sp-cream:   #f0ede8;
   --sp-surface: #e8e4de;
@@ -21,11 +16,6 @@
   --sp-sans:    'Sora', sans-serif;
 }
 
-/* ================================================================
-   SHELL — mismo patrón exacto que lb-shell en RankingPage
-   margin-left: 72px (sidebar) + margin-top: 56px (topbar)
-   NO usa page-root, gestiona su propio layout
-================================================================ */
 .sp-shell {
   display: flex;
   align-items: stretch;
@@ -38,7 +28,6 @@
 
 [data-theme="dark"] .sp-shell { background: #1a1d2e; }
 
-/* ── DESKTOP wrapper — oculto en mobile ── */
 .sp-desktop {
   display: contents;
 }
@@ -47,7 +36,6 @@
   .sp-shell { display: none !important; }
 }
 
-/* ── MAIN ── */
 .sp-main {
   flex: 1;
   min-width: 0;
@@ -70,9 +58,6 @@
 .sp-scroll::-webkit-scrollbar-thumb { background: var(--sp-border); border-radius: 2px; }
 [data-theme="dark"] .sp-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* ================================================================
-   TOPBAR INTERNO — rango de tiempo
-================================================================ */
 .sp-topbar {
   height: 54px;
   background: var(--sp-surface);
@@ -137,9 +122,6 @@
 [data-theme="dark"] .sp-range-pill { border-color: rgba(255,255,255,0.08); color: #4a5568; }
 [data-theme="dark"] .sp-range-pill:hover:not(.active) { color: #8b7fc7; }
 
-/* ================================================================
-   HERO ROW — 4 métricas grandes
-================================================================ */
 .sp-hero {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -218,9 +200,6 @@
 
 [data-theme="dark"] .sp-hero-sub { color: #4a5568; }
 
-/* ================================================================
-   SECCIÓN GENÉRICA
-================================================================ */
 .sp-section {
   border-bottom: 0.5px solid var(--sp-border);
   flex-shrink: 0;
@@ -264,9 +243,6 @@
 
 [data-theme="dark"] .sp-section-title { color: #4a5568; }
 
-/* ================================================================
-   DESGLOSE DE RESULTADOS — 3 columnas
-================================================================ */
 .sp-results {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -330,9 +306,6 @@
   transition: width 0.5s ease;
 }
 
-/* ================================================================
-   TABLA DE LIGAS
-================================================================ */
 .sp-league-thead,
 .sp-league-row {
   display: grid;
@@ -446,9 +419,6 @@
 
 [data-theme="dark"] .sp-acc-pct { color: #34d399; }
 
-/* ================================================================
-   DÍAS DE LA SEMANA
-================================================================ */
 .sp-days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -517,9 +487,6 @@
 
 [data-theme="dark"] .sp-day-detail { color: #4a5568; }
 
-/* ================================================================
-   ESTADOS VACÍOS / LOADING
-================================================================ */
 .sp-loading {
   flex: 1;
   display: flex;
@@ -582,9 +549,6 @@
 
 [data-theme="dark"] .sp-empty-sub { color: #4a5568; }
 
-/* ================================================================
-   RESPONSIVE
-================================================================ */
 @media (max-width: 1100px) {
   .sp-hero {
     grid-template-columns: 1fr 1fr;

@@ -20,12 +20,82 @@ const CalSVG = () => (
   </svg>
 );
 
-// ── Empty mini ────────────────────────────────────────────────
-function EmptyMini({ label }) {
+// ── No-Match Banner — aparece cuando no hay próximo partido ───
+function NoMatchBanner() {
   return (
-    <div className="mob2-empty">
-      <span className="mob2-empty-lbl">{label}</span>
+    <div className="mob2-nm mob2-nm--empty">
+
+      {/* ── BRUTALIST: bloques geométricos + número cero ── */}
+      <div className="mob2-nm-empty-brut">
+        <div className="mob2-nm-empty-brut-left">
+          <span className="mob2-nm-empty-brut-zero">0</span>
+          <div className="mob2-nm-empty-brut-bars">
+            <div className="mob2-nm-empty-brut-bar mob2-nm-empty-brut-bar--a" />
+            <div className="mob2-nm-empty-brut-bar mob2-nm-empty-brut-bar--b" />
+            <div className="mob2-nm-empty-brut-bar mob2-nm-empty-brut-bar--c" />
+          </div>
+        </div>
+        <div className="mob2-nm-empty-brut-right">
+          <span className="mob2-nm-empty-brut-eyebrow">// PRÓXIMO PARTIDO</span>
+          <span className="mob2-nm-empty-brut-heading">SIN<br/>PARTIDOS</span>
+          <span className="mob2-nm-empty-brut-rule" />
+          <span className="mob2-nm-empty-brut-caption">TEMPORADA AL DÍA</span>
+        </div>
+      </div>
+
+      {/* ── NEUMORPHISM: reloj con órbita suave ── */}
+      <div className="mob2-nm-empty-neu">
+        <div className="mob2-nm-empty-neu-icon-wrap">
+          <div className="mob2-nm-empty-neu-ring mob2-nm-empty-neu-ring--outer" />
+          <div className="mob2-nm-empty-neu-ring mob2-nm-empty-neu-ring--inner" />
+          <div className="mob2-nm-empty-neu-center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <circle cx="12" cy="12" r="9"/>
+              <polyline points="12 7 12 12 15 14"/>
+            </svg>
+          </div>
+          <div className="mob2-nm-empty-neu-dot" />
+        </div>
+        <div className="mob2-nm-empty-neu-text">
+          <span className="mob2-nm-empty-neu-label">Próximo partido</span>
+          <span className="mob2-nm-empty-neu-title">Todo al día</span>
+          <span className="mob2-nm-empty-neu-sub">No hay partidos pendientes</span>
+        </div>
+        <div className="mob2-nm-empty-neu-check">✓</div>
+      </div>
+
     </div>
+  );
+}
+
+// ── Empty matches en scroll (cuando tab Partidos está vacío) ──
+function EmptyMatchesScroll({ onOpen }) {
+  return (
+    <>
+      {/* BRUTALIST */}
+      <div className="mob2-empty-matches-brut">
+        <div className="mob2-emb-accent" />
+        <div className="mob2-emb-inner">
+          <span className="mob2-emb-num">00</span>
+          <div className="mob2-emb-divider" />
+          <span className="mob2-emb-label">SIN<br/>PARTIDOS<br/>PEND.</span>
+        </div>
+        <div className="mob2-emb-corner mob2-emb-corner--tl" />
+        <div className="mob2-emb-corner mob2-emb-corner--br" />
+      </div>
+
+      {/* NEUMORPHISM */}
+      <div className="mob2-empty-matches-neu">
+        <div className="mob2-emn-ball">⚽</div>
+        <span className="mob2-emn-title">Estás al día</span>
+        <span className="mob2-emn-sub">Sin pendientes</span>
+      </div>
+
+      <div className="mob2-more-card" onPointerDown={() => onOpen("matches")}>
+        <span className="mob2-more-sym">»</span>
+        <span>VER TODO</span>
+      </div>
+    </>
   );
 }
 
@@ -191,12 +261,12 @@ function MiniAwardCard({ award, userPrediction }) {
 
 // ── Next Match Banner ─────────────────────────────────────────
 function NextMatchBanner({ match, currentUser, onOpen }) {
-  if (!match) return null;
+  if (!match) return <NoMatchBanner />;
+
   const now      = new Date();
   const deadline = match.deadline ? new Date(match.deadline) : null;
   const isExp    = deadline && now >= deadline;
   const isLive   = match.status === "live";
-  const hasPred  = match.predictions?.some(p => p.user_id === currentUser?.id);
 
   return (
     <div className="mob2-nm">
@@ -207,14 +277,9 @@ function NextMatchBanner({ match, currentUser, onOpen }) {
         disabled={isExp}
       >
         <div className="mob2-nm-footer">
-          <span className="mob2-nm-meta">
-            PRÓXIMO PARTIDO · {match.league}
-          </span>
-          <span className="mob2-nm-meta">
-            {match.date}
-          </span>
+          <span className="mob2-nm-meta">PRÓXIMO PARTIDO · {match.league}</span>
+          <span className="mob2-nm-meta">{match.date}</span>
         </div>
-
         <div className="mob2-nm-teams">
           <div className="mob2-nm-team">
             <div className="mob2-nm-flag">
@@ -450,15 +515,7 @@ export default function MobileDashboard({
     if (activeTab === "matches") {
       if (loading) return [0, 1, 2].map(i => <SkeletonCard key={i} />);
       if (previewMatches.length === 0) {
-        return (
-          <>
-            <EmptyMini label="SIN PARTIDOS PENDIENTES" />
-            <div className="mob2-more-card" onPointerDown={() => setActivePage("matches")}>
-              <span className="mob2-more-sym">»</span>
-              <span>TODOS</span>
-            </div>
-          </>
-        );
+        return <EmptyMatchesScroll onOpen={p => setActivePage(p)} />;
       }
       return (
         <>
@@ -482,10 +539,10 @@ export default function MobileDashboard({
       if (previewLeagues.length === 0) {
         return (
           <>
-            <EmptyMini label="SIN LIGAS ACTIVAS" />
+            <div className="mob2-empty"><span className="mob2-empty-lbl">SIN LIGAS ACTIVAS</span></div>
             <div className="mob2-more-card" onPointerDown={() => setActivePage("leagues")}>
               <span className="mob2-more-sym">»</span>
-              <span>TODOS</span>
+              <span>VER TODO</span>
             </div>
           </>
         );
@@ -512,7 +569,7 @@ export default function MobileDashboard({
       if (previewAwards.length === 0) {
         return (
           <>
-            <EmptyMini label="SIN PREMIOS ACTIVOS" />
+            <div className="mob2-empty"><span className="mob2-empty-lbl">SIN PREMIOS ACTIVOS</span></div>
             <div className="mob2-more-card" onPointerDown={() => setActivePage("awards")}>
               <span className="mob2-more-sym">»</span>
               <span>VER TODO</span>
@@ -561,7 +618,7 @@ export default function MobileDashboard({
       {/* PROGRESS */}
       <ProgressBar saved={savedPending} total={totalPredictable} />
 
-      {/* NEXT MATCH */}
+      {/* NEXT MATCH — o estado vacío */}
       <NextMatchBanner
         match={nextMatch}
         currentUser={currentUser}

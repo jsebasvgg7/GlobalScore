@@ -1,9 +1,8 @@
-/* ==========================================
-   PROFILE
-========================================== */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 :root {
-  /* Colores Base - Más limpios y clínicos */
   --profile-bg: #F8F9FA;
   --profile-card: #FFFFFF;
   --profile-text: #1A1A1A;
@@ -11,13 +10,9 @@
   --profile-text-muted: #999999;
   --profile-border: #E5E5E5;
   --profile-hover: #F5F5F5;
-  
-  /* Color Principal - Púrpura suave */
   --profile-primary: #667eea;
   --profile-primary-light: #764ba2;
   --profile-primary-bg: rgba(102, 126, 234, 0.08);
-  
-  /* Colores de Íconos - Según imagen */
   --icon-yellow-bg: #FFF9E6;
   --icon-yellow: #FFA726;
   --icon-pink-bg: #FFE6F0;
@@ -31,19 +26,16 @@
   --icon-blue-bg: #E6F0FF;
   --icon-blue: #42A5F5;
   
-  /* Sombras - Más sutiles */
   --profile-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   --profile-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
   --profile-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
   
-  /* Espaciado */
   --spacing-xs: 8px;
   --spacing-sm: 12px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
   
-  /* Border Radius */
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 20px;
@@ -52,7 +44,6 @@
 }
 
 [data-theme="dark"] {
-  /* Usar EXACTAMENTE los mismos colores del index.css */
   --profile-bg: #1a1d2e;
   --profile-card: #252936;
   --profile-text: #f0f1f7;
@@ -60,13 +51,9 @@
   --profile-text-muted: #8186a0;
   --profile-border: rgba(255,255,255,0.12);
   --profile-hover: #2f3544;
-  
-  /* Color Principal - Púrpura del index.css */
   --profile-primary: #8b7fc7;
   --profile-primary-light: #a599d9;
   --profile-primary-bg: rgba(139, 127, 199, 0.18);
-  
-  /* Colores de Íconos - iguales al index.css */
   --icon-yellow-bg: rgba(255, 167, 38, 0.15);
   --icon-yellow: #FFA726;
   --icon-pink-bg: rgba(236, 64, 122, 0.15);
@@ -80,15 +67,10 @@
   --icon-blue-bg: rgba(66, 165, 245, 0.15);
   --icon-blue: #42A5F5;
   
-  /* Sombras - del index.css */
   --profile-shadow: 0 8px 30px rgba(55, 35, 68, 0.377);
   --profile-shadow-md: 0 4px 14px rgba(31, 23, 42, 0.923);
   --profile-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
-
-/* ==========================================
-   LAYOUT BASE
-========================================== */
 
 .profile-page-modern {
   min-height: 100vh;
@@ -103,17 +85,12 @@
   background: var(--profile-bg); 
 }
 
-/* ==========================================
-   TYPOGRAPHY
-========================================== */
-
 .profile-page-modern {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Títulos */
 .section-title {
   font-size: 18px;
   font-weight: 700;
@@ -122,7 +99,6 @@
   letter-spacing: -0.3px;
 }
 
-/* Texto de items */
 .item-title {
   font-size: 15px;
   font-weight: 600;
@@ -135,10 +111,6 @@
   color: var(--profile-text-secondary);
   margin-top: 2px;
 }
-
-/* ==========================================
-   AVATAR UPLOAD - DISEÑO PROFESIONAL
-========================================== */
 
 .avatar-upload-container {
   width: 100%;
@@ -185,7 +157,6 @@
     transparent 50%);
 }
 
-/* Avatar Container con Badge */
 .avatar-container-new {
   position: relative;
   flex-shrink: 0;
@@ -267,7 +238,6 @@
   filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.2));
 }
 
-/* Loading Overlay */
 .avatar-loading-overlay {
   position: absolute;
   inset: 0;
@@ -281,7 +251,6 @@
   border-radius: 50%;
 }
 
-/* Camera Overlay */
 .camera-overlay {
   position: absolute;
   inset: 0;
@@ -305,7 +274,6 @@
   opacity: 1;
 }
 
-/* Level Badge Floating */
 .level-badge-floating {
   position: absolute;
   bottom: -4px;
@@ -340,7 +308,6 @@
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-/* Avatar Actions Side */
 .avatar-actions-side {
   display: flex;
   flex-direction: column;
@@ -412,12 +379,10 @@
   transform: none !important;
 }
 
-/* Spinner en botones */
 .avatar-btn .spinner {
   animation: spin 1s linear infinite;
 }
 
-/* Tooltips informativos (opcional) */
 .avatar-btn::after {
   content: attr(title);
   position: absolute;
@@ -446,11 +411,6 @@
   color: #1A1D29;
 }
 
-/* ==========================================
-   UTILITIES
-========================================== */
-
-/* Fade In Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -466,7 +426,6 @@
   animation: fadeIn 0.3s ease;
 }
 
-/* Spinner */
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
@@ -475,7 +434,6 @@
   animation: spin 1s linear infinite;
 }
 
-/* Touch Feedback */
 .touchable {
   cursor: pointer;
   transition: all 0.2s ease;
@@ -488,10 +446,6 @@
   opacity: 0.9;
 }
 
-/* ==========================================
-   ACCESSIBILITY
-========================================== */
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -502,41 +456,37 @@
   }
 }
 
-/* Focus visible para navegación por teclado */
 .touchable:focus-visible {
   outline: 2px solid var(--profile-primary);
   outline-offset: 2px;
 }
 
-/* ==========================================
-   RESPONSIVE BASE
-========================================== */
 @media (max-width: 768px) {
-/* Avatar Upload Mobile */
+  
 .avatar-upload-horizontal-group {
-padding: 1.25rem;
+  padding: 1.25rem;
 }
 
 .avatar-preview-wrapper {
-width: 100px;
-height: 100px;
+  width: 100px;
+  height: 100px;
 }
 
 .level-badge-floating {
-bottom: -3px;
-right: -3px;
-padding: 5px 10px;
-font-size: 0.75rem;
+  bottom: -3px;
+  right: -3px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
 }
 
 .avatar-btn {
-width: 44px;
-height: 44px;
+  width: 44px;
+  height: 44px;
 }
 } 
+
 @media (max-width: 480px) {
-/* Avatar Upload Small Mobile */
-.avatar-upload-horizontal-group {
+¿.avatar-upload-horizontal-group {
 padding: 1rem;
 gap: 1.25rem;
 }
@@ -588,21 +538,18 @@ height: 15px;
     justify-content: center;
   }
 }
-/* Mobile First - Base para 375px+ */
 @media (max-width: 428px) {
   .profile-container-modern {
     max-width: 100%;
   }
 }
 
-/* Tablet */
 @media (min-width: 768px) {
   .profile-container-modern {
     max-width: 680px;
   }
 }
 
-/* Desktop */
 @media (min-width: 1024px) {
   .profile-container-modern {
     max-width: 800px;

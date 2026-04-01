@@ -1,6 +1,6 @@
-/* ==========================================
-   PROFILE 
-========================================== */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 .profile-tabs-modern {
   display: flex;
@@ -12,10 +12,6 @@
   padding: 0 var(--spacing-xs);
   box-shadow: var(--profile-shadow);
 }
-
-/* ==========================================
-   TAB BUTTONS 
-========================================== */
 
 .tab-btn-modern {
   flex: 1;
@@ -32,7 +28,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Ocultar texto en mobile */
 .tab-btn-modern span {
   display: none;
 }
@@ -43,28 +38,20 @@
   transition: all 0.2s ease;
 }
 
-/* ==========================================
-   ESTADOS
-========================================== */
-
-/* Hover (solo desktop) */
 @media (hover: hover) {
   .tab-btn-modern:hover {
     color: var(--profile-primary);
   }
 }
 
-/* Active State */
 .tab-btn-modern:active {
   transform: scale(0.95);
 }
 
-/* Selected Tab */
 .tab-btn-modern.active {
   color: var(--profile-primary);
 }
 
-/* Indicador de tab activa */
 .tab-btn-modern.active::after {
   content: '';
   position: absolute;
@@ -76,11 +63,6 @@
   border-radius: 3px 3px 0 0;
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
-/* Tablet y Desktop - Mostrar texto */
 @media (min-width: 768px) {
   .tab-btn-modern {
     flex-direction: column;
@@ -102,7 +84,6 @@
   }
 }
 
-/* Small Mobile */
 @media (max-width: 360px) {
   .profile-tabs-modern {
     padding: 0 4px;

@@ -1,6 +1,6 @@
-/* ================================================================
-   DashboardPage — Wireframe Brutalist  ·  1080p optimized
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap');
 
@@ -50,9 +50,6 @@
 .db-content::-webkit-scrollbar-thumb { background: #d4cfc8; }
 [data-theme="dark"] .db-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* ================================================================
-   DATE GROUP HEADERS
-================================================================ */
 .matches-date-group {
   display: flex;
   flex-direction: column;
@@ -128,9 +125,6 @@
   color: #a599d9;
 }
 
-/* ================================================================
-   MATCHES CONTAINER
-================================================================ */
 .matches-container {
   display: grid;
   grid-template-columns: repeat(3, 262px);
@@ -155,9 +149,6 @@
   width: 262px !important;
 }
 
-/* ================================================================
-   EMPTY STATE — centrado y con estilo brutalista
-================================================================ */
 .matches-container:has(.matches-empty-state) {
   display: flex;
   align-items: center;
@@ -179,7 +170,6 @@
   max-width: 340px;
 }
 
-/* Cuadrado decorativo con la X brutalista */
 .matches-empty-icon-wrap {
   position: relative;
   width: 88px;
@@ -217,7 +207,6 @@
   justify-content: center;
 }
 
-/* SVG del balón o ícono — usando stroke lines para el brutalismo */
 .matches-empty-icon-inner svg {
   width: 32px;
   height: 32px;
@@ -230,7 +219,6 @@
   stroke: rgba(255,255,255,0.15);
 }
 
-/* Líneas decorativas laterales */
 .matches-empty-deco {
   display: flex;
   align-items: center;
@@ -253,7 +241,6 @@
   opacity: 0.4;
 }
 
-/* Título principal */
 .matches-empty-title {
   font-size: 12px;
   font-weight: 700;
@@ -266,7 +253,6 @@
 
 [data-theme="dark"] .matches-empty-title { color: #4a5568; }
 
-/* Subtítulo */
 .matches-empty-sub {
   font-size: 11px;
   font-family: 'DM Mono', monospace;
@@ -277,7 +263,6 @@
 
 [data-theme="dark"] .matches-empty-sub { color: #2d3147; }
 
-/* Chip de filtro activo dentro del empty */
 .matches-empty-filter-chip {
   margin-top: 20px;
   display: inline-flex;
@@ -322,9 +307,6 @@
 
 .show-all-btn:hover { background: #4a3fc7; }
 
-/* ================================================================
-   SORT MODAL
-================================================================ */
 .sort-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.25); z-index: 1000; }
 
 .sort-modal {
@@ -386,9 +368,6 @@
 [data-theme="dark"] .sort-option:hover { background: rgba(124,111,232,0.1); color: #7c6fe8; }
 [data-theme="dark"] .sort-option.active { background: #5b4fd8; color: #fff; }
 
-/* ================================================================
-   FILTER MODAL
-================================================================ */
 .filters-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 2000; }
 
 .filters-modal {
@@ -534,50 +513,10 @@
 
 .clear-filter-btn:hover { background: rgba(255,255,255,0.35); }
 
-/* ================================================================
-   RESPONSIVE
-================================================================ */
-@media (max-width: 1100px) {
   .matches-container {
     grid-template-columns: repeat(2, 210px);
   }
-}
 
-@media (max-width: 1024px) {
-  .db-body    { overflow: visible; flex-direction: column; }
-  .db-main    { overflow: visible; }
-  .db-content { overflow: visible; height: auto; }
-}
-
-@media (max-width: 768px) {
-  .matches-container {
-    grid-template-columns: repeat(2, 1fr);
-    justify-content: stretch;
-  }
-  .matches-container > *,
-  .matches-container .mc-wrap,
-  .matches-container .mc-card {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  .db-content { padding: 0 12px 20px; }
-  .sort-modal { top: auto; bottom: 0; right: 0; left: 0; width: 100%; }
-  .filters-modal { width: 85vw; }
-
-  .matches-container:has(.matches-empty-state) {
-    min-height: 50vh;
-  }
-}
-
-@media (max-width: 480px) {
-  .matches-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ================================================================
-   GRID PROPIO PARA LIGAS Y PREMIOS
-================================================================ */
 .leagues-grid,
 .awards-grid {
   display: grid;

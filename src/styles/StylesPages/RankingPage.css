@@ -1,8 +1,6 @@
-/* =============================================
-   RANKING PAGE — Brutalista Japonés Retro
-   Escalado definitivo ~110% · Grid conectado
-   Mobile en MobileRanking.css
-============================================= */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap');
 
@@ -15,9 +13,6 @@
   --lb-sans:    'Sora', sans-serif;
 }
 
-/* ================================================================
-   SHELL
-================================================================ */
 .lb-shell {
   display: flex;
   align-items: stretch;
@@ -47,9 +42,6 @@
 .lb-page::-webkit-scrollbar-thumb { background: var(--lb-border); }
 [data-theme="dark"] .lb-page::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* ================================================================
-   LOADING
-================================================================ */
 .lb-loading {
   flex: 1;
   display: flex;
@@ -78,13 +70,10 @@
 
 @keyframes lb-spin { to { transform: rotate(360deg); } }
 
-/* ================================================================
-   TABS BAR
-================================================================ */
 .lb-tabs-bar {
   display: flex;
   align-items: center;
-  height: 54px;                          /* ↑ 48→54 */
+  height: 54px;                     
   border-bottom: 0.5px solid var(--lb-border);
   background: var(--lb-surface);
   flex-shrink: 0;
@@ -100,9 +89,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 24px;                       /* ↑ 20→24 */
+  padding: 0 24px;                 
   height: 100%;
-  font-size: 12px;                       /* ↑ 11→12 */
+  font-size: 12px;                 
   font-weight: 700;
   font-family: var(--lb-mono);
   letter-spacing: 0.08em;
@@ -118,7 +107,7 @@
   white-space: nowrap;
 }
 
-.lb-tab svg { flex-shrink: 0; width: 15px; height: 15px; } /* ↑ 13→15 */
+.lb-tab svg { flex-shrink: 0; width: 15px; height: 15px; } 
 .lb-tab:hover:not(.active) { color: #1a1a2e; }
 .lb-tab.active { color: var(--lb-accent); border-bottom-color: var(--lb-accent); }
 
@@ -126,19 +115,12 @@
 [data-theme="dark"] .lb-tab:hover   { color: #f0f1f7; }
 [data-theme="dark"] .lb-tab.active  { color: #7c6fe8; border-bottom-color: #7c6fe8; }
 
-/* ================================================================
-   HOF WRAP
-================================================================ */
 .lb-hof-wrap {
   flex: 1;
   overflow-y: auto;
   padding: 0;
 }
  
-
-/* ================================================================
-   GRID CONECTADO
-================================================================ */
 .lb-grid {
   flex: 1;
   display: flex;
@@ -156,7 +138,7 @@
 
 .lb-stat-block {
   position: relative;
-  padding: 22px 28px;                    /* ↑ 18/22→22/28 */
+  padding: 22px 28px;             
   border-right: 0.5px solid var(--lb-border);
   display: flex;
   flex-direction: column;
@@ -172,7 +154,7 @@
 }
 
 .lb-stat-num {
-  font-size: 52px;                       /* ↑ 42→52 */
+  font-size: 52px;               
   font-weight: 800;
   font-family: var(--lb-mono);
   color: #1a1a2e;
@@ -183,7 +165,7 @@
 [data-theme="dark"] .lb-stat-num { color: #f0f1f7; }
 
 .lb-stat-lbl {
-  font-size: 10px;                       /* ↑ 9→10 */
+  font-size: 10px;                  
   font-weight: 700;
   font-family: var(--lb-mono);
   letter-spacing: 0.12em;
@@ -195,7 +177,7 @@
   position: absolute;
   top: 22px;
   right: 22px;
-  width: 30px;                           /* ↑ 26→30 */
+  width: 30px;                     
   height: 30px;
   display: flex;
   align-items: center;
@@ -213,7 +195,7 @@
 }
 
 .lb-stat-period {
-  font-size: 16px;                       /* ↑ 14→16 */
+  font-size: 16px;                   
   font-weight: 700;
   font-family: var(--lb-sans);
   color: var(--lb-accent);
@@ -223,23 +205,17 @@
 [data-theme="dark"] .lb-stat-period { color: #7c6fe8; }
 
 .lb-stat-sub {
-  font-size: 12px;                       /* ↑ 11→12 */
+  font-size: 12px;                     
   font-family: var(--lb-mono);
   color: #b0aaa0;
 }
 
-/* ── FILA SORT ──
-   Era height 42px → 48px
-   Padding era 20px → 24px
-   Lbl era 9px → 10px
-   Btn era height 26px → 30px, font 9px → 10px, padding 11px → 14px
-*/
 .lb-row--sort {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 48px;                          /* ↑ 42→48 */
-  padding: 0 24px;                       /* ↑ 20→24 */
+  height: 48px;                        
+  padding: 0 24px;                     
   border-bottom: 0.5px solid var(--lb-border);
   background: var(--lb-surface);
   flex-shrink: 0;
@@ -251,8 +227,7 @@
   border-bottom-color: rgba(255,255,255,0.07);
 }
 
-.lb-sort-label {
-  font-size: 10px;                       /* ↑ 9→10 */
+.lb-sort-label {  
   font-weight: 700;
   font-family: var(--lb-mono);
   letter-spacing: 0.12em;
@@ -269,12 +244,12 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  height: 30px;                          /* ↑ 26→30 */
-  padding: 0 14px;                       /* ↑ 11→14 */
+  height: 30px;                      
+  padding: 0 14px;                 
   border: 0.5px solid var(--lb-border);
   background: transparent;
   color: #888;
-  font-size: 10px;                       /* ↑ 9→10 */
+  font-size: 10px;                     
   font-weight: 700;
   font-family: var(--lb-mono);
   letter-spacing: 0.08em;
@@ -285,7 +260,7 @@
   white-space: nowrap;
 }
 
-.lb-sort-btn svg { width: 12px; height: 12px; } /* ↑ 11→12 */
+.lb-sort-btn svg { width: 12px; height: 12px; }
 .lb-sort-btn:hover:not(.active) { color: var(--lb-accent); border-color: rgba(91,79,216,0.45); }
 .lb-sort-btn.active { background: var(--lb-accent); border-color: var(--lb-accent); color: #fff; }
 
@@ -293,17 +268,12 @@
 [data-theme="dark"] .lb-sort-btn:hover:not(.active) { color: #7c6fe8; border-color: rgba(124,111,232,0.4); }
 [data-theme="dark"] .lb-sort-btn.active { background: var(--lb-accent); border-color: var(--lb-accent); color: #fff; }
 
-/* ── THEAD ──
-   Era height 36px → 42px
-   Padding era 20px → 24px
-   Cols era 52/100/100/90/90 → 60/1fr/110/110/100/100
-   Font era 9px → 10px
-*/
+
 .lb-thead {
   display: grid;
-  grid-template-columns: 60px 1fr 110px 110px 100px 100px;  /* ↑ */
-  padding: 0 24px;                       /* ↑ 20→24 */
-  height: 42px;                          /* ↑ 36→42 */
+  grid-template-columns: 60px 1fr 110px 110px 100px 100px;  
+  padding: 0 24px;                    
+  height: 42px;                        
   align-items: center;
   background: var(--lb-surface);
   border-bottom: 0.5px solid var(--lb-border);
@@ -319,7 +289,7 @@
 }
 
 .lb-thead > span {
-  font-size: 10px;                       /* ↑ 9→10 */
+  font-size: 10px;                    
   font-weight: 700;
   font-family: var(--lb-mono);
   color: #b0aaa0;
@@ -329,7 +299,6 @@
 
 [data-theme="dark"] .lb-thead > span { color: #4a5568; }
 
-/* ── TBODY WRAP ── */
 .lb-tbody-wrap {
   flex: 1;
   overflow-y: auto;
@@ -342,16 +311,11 @@
 .lb-tbody-wrap::-webkit-scrollbar-thumb { background: var(--lb-border); }
 [data-theme="dark"] .lb-tbody-wrap::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* ── FILAS ──
-   Grid cols mismas que thead
-   Era height 48px → 58px
-   Padding era 20px → 24px
-*/
 .lb-trow {
   display: grid;
-  grid-template-columns: 60px 1fr 110px 110px 100px 100px;  /* ↑ igual que thead */
-  padding: 0 24px;                       /* ↑ 20→24 */
-  height: 58px;                          /* ↑ 48→58 */
+  grid-template-columns: 60px 1fr 110px 110px 100px 100px; 
+  padding: 0 24px;                    
+  height: 58px;                        
   align-items: center;
   border-bottom: 0.5px solid var(--lb-border);
   background: var(--lb-cream);
@@ -375,20 +339,18 @@
 
 [data-theme="dark"] .lb-trow--me { background: rgba(124,111,232,0.1) !important; }
 
-/* ── COLUMNAS ── */
 .lbc-rank { display: flex; align-items: center; }
 .lbc-user { display: flex; align-items: center; min-width: 0; }
 .lbc-num  { font-size: 14px; font-weight: 700; font-family: var(--lb-mono); color: #1a1a2e; } /* ↑ 13→14 */
 [data-theme="dark"] .lbc-num { color: #f0f1f7; }
 
-/* Rank badge — era 26px → 32px, font 11px → 13px */
 .lb-rnk {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;                           /* ↑ 26→32 */
+  width: 32px;                        
   height: 32px;
-  font-size: 13px;                       /* ↑ 11→13 */
+  font-size: 13px;                    
   font-weight: 800;
   font-family: var(--lb-mono);
   background: var(--lb-surface);
@@ -403,11 +365,10 @@
 .lb-rnk-2 { background: #8a8a8a; color: #fff; }
 .lb-rnk-3 { background: #a0652a; color: #fff; }
 
-/* User cell */
 .lb-ucell {
   display: flex;
   align-items: center;
-  gap: 12px;                             /* ↑ 10→12 */
+  gap: 12px;                          
   background: none;
   border: none;
   cursor: pointer;
@@ -423,7 +384,7 @@
 .lb-uinfo { display: flex; flex-direction: column; min-width: 0; gap: 1px; }
 
 .lb-uname {
-  font-size: 15px;                       /* ↑ 13→15 */
+  font-size: 15px;                
   font-weight: 700;
   font-family: var(--lb-sans);
   color: #1a1a2e;
@@ -439,34 +400,33 @@
 [data-theme="dark"] .lb-uname { color: #f0f1f7; }
 
 .lb-uname-sub {
-  font-size: 11px;                       /* ↑ 10→11 */
+  font-size: 11px;                    
   font-family: var(--lb-mono);
   color: #b0aaa0;
   display: none;
 }
 
 .lb-you {
-  font-size: 9px;                        /* ↑ 8→9 */
+  font-size: 9px;                     
   font-weight: 700;
   font-family: var(--lb-mono);
   color: var(--lb-accent);
   border: 0.5px solid var(--lb-accent);
-  padding: 2px 6px;                      /* ↑ 1/5→2/6 */
+  padding: 2px 6px;                    
   letter-spacing: 0.04em;
   flex-shrink: 0;
   border-radius: 0;
 }
 
-/* Puntos y precisión — era 13px → 15px */
 .lb-pts {
   color: #c9a227;
   font-weight: 800;
   font-family: var(--lb-mono);
-  font-size: 15px;                       /* ↑ 13→15 */
+  font-size: 15px;                     
 }
 
 .lb-pts-lbl {
-  font-size: 10px;                       /* ↑ 9→10 */
+  font-size: 10px;                      
   font-weight: 600;
   opacity: 0.55;
   margin-left: 2px;
@@ -477,13 +437,12 @@
   color: #1D9E75;
   font-weight: 700;
   font-family: var(--lb-mono);
-  font-size: 15px;                       /* ↑ 13→15 */
+  font-size: 15px;                  
 }
 
 [data-theme="dark"] .lb-pts { color: #f0c040; }
 [data-theme="dark"] .lb-acc { color: #34d399; }
 
-/* Empty */
 .lb-empty {
   display: flex;
   flex-direction: column;
@@ -497,15 +456,11 @@
 .lb-empty p    { font-size: 12px; font-weight: 700; font-family: var(--lb-mono); color: #a0a0b0; margin: 0; letter-spacing: 0.08em; text-transform: uppercase; }
 .lb-empty-icon { color: var(--lb-border); }
 
-/* ── AVATARS — era 32px → 40px ── */
 .lb-av    { border-radius: 50%; object-fit: cover; flex-shrink: 0; display: block; }
 .lb-av-ph { display: flex; align-items: center; justify-content: center; background: var(--lb-accent); color: #fff; font-weight: 700; font-family: var(--lb-mono); border-radius: 50%; flex-shrink: 0; }
 .lb-av-sm { width: 40px; height: 40px; font-size: 14px; }  /* ↑ 32→40 */
 .lb-av-md { width: 48px; height: 48px; font-size: 17px; }  /* ↑ 42→48 */
 
-/* ================================================================
-   TABLET
-================================================================ */
 @media (max-width: 1024px) {
   .lb-shell  { display: block; height: auto; overflow: visible; margin-left: 72px; margin-top: 56px; }
   .lb-page   { overflow: visible; height: auto; }
@@ -519,9 +474,6 @@
   .lbc-hide-sm { display: none !important; }
 }
 
-/* ================================================================
-   MOBILE — todo en MobileRanking.css
-================================================================ */
 @media (max-width: 768px) {
   .lb-shell { display: none !important; }
 }

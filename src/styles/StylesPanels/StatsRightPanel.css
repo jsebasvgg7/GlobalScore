@@ -1,14 +1,9 @@
-/* ================================================================
-   StatsRightPanel.css
-   Panel derecho de Stats — Brutalista japonés retro
-   Mismo sistema que RankingRightPanel / RightPanel
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap');
 
-/* ================================================================
-   ROOT
-================================================================ */
 .srp-root {
   width: 280px;
   flex-shrink: 0;
@@ -31,9 +26,6 @@
 .srp-root::-webkit-scrollbar-thumb { background: #c8c3bb; border-radius: 2px; }
 [data-theme="dark"] .srp-root::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* ================================================================
-   BLOQUE GENÉRICO
-================================================================ */
 .srp-block {
   padding: 16px 20px;
   border-bottom: 0.5px solid #d4cfc8;
@@ -66,9 +58,6 @@
 
 [data-theme="dark"] .srp-block-label::after { background: rgba(255,255,255,0.07); }
 
-/* ================================================================
-   STAT ROWS
-================================================================ */
 .srp-stat-row {
   display: flex;
   align-items: center;
@@ -109,9 +98,6 @@
 [data-theme="dark"] .srp-stat-val--amber  { color: #f0c040; }
 [data-theme="dark"] .srp-stat-val--red    { color: #f87171; }
 
-/* ================================================================
-   DISTRIBUCIÓN DE PUNTOS
-================================================================ */
 .srp-dist {
   display: flex;
   flex-direction: column;
@@ -163,9 +149,6 @@
   transition: width 0.5s ease;
 }
 
-/* ================================================================
-   PRONÓSTICOS (ligas/premios)
-================================================================ */
 .srp-forecast-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -211,9 +194,6 @@
 
 [data-theme="dark"] .srp-forecast-lbl { color: #4a5568; }
 
-/* ================================================================
-   BLOQUE RACHA — al fondo, acento fuerte
-================================================================ */
 .srp-streak {
   background: #5b4fd8;
   padding: 20px 20px;
@@ -272,9 +252,6 @@
   color: #f0c040;
 }
 
-/* ================================================================
-   RESPONSIVE   — se oculta en pantallas pequeñas, ya que el espacio es limitado y no se puede hacer un diseño móvil decente sin reestructurar todo
-================================================================ */
  @media (max-width: 1024px) {
   .srp-root { display: none; }          
 }
@@ -290,9 +267,6 @@
 .srp-root::-webkit-scrollbar-thumb { background: #c8c3bb; border-radius: 2px; }
 [data-theme="dark"] .srp-root::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* ================================================================
-   BLOQUE GENÉRICO
-================================================================ */
 .srp-block {
   padding: 14px 18px;
   border-bottom: 0.5px solid #d4cfc8;
@@ -325,9 +299,6 @@
 
 [data-theme="dark"] .srp-block-label::after { background: rgba(255,255,255,0.07); }
 
-/* ================================================================
-   STAT ROWS
-================================================================ */
 .srp-stat-row {
   display: flex;
   align-items: center;
@@ -368,9 +339,6 @@
 [data-theme="dark"] .srp-stat-val--amber  { color: #f0c040; }
 [data-theme="dark"] .srp-stat-val--red    { color: #f87171; }
 
-/* ================================================================
-   DISTRIBUCIÓN DE PUNTOS
-================================================================ */
 .srp-dist {
   display: flex;
   flex-direction: column;
@@ -422,9 +390,6 @@
   transition: width 0.5s ease;
 }
 
-/* ================================================================
-   PRONÓSTICOS (ligas/premios)
-================================================================ */
 .srp-forecast-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -470,9 +435,6 @@
 
 [data-theme="dark"] .srp-forecast-lbl { color: #4a5568; }
 
-/* ================================================================
-   BLOQUE RACHA — al fondo, acento fuerte
-================================================================ */
 .srp-streak {
   background: #5b4fd8;
   padding: 18px 18px;
@@ -531,9 +493,6 @@
   color: #f0c040;
 }
 
-/* ================================================================
-   RESPONSIVE
-================================================================ */
 @media (max-width: 1024px) {
   .srp-root { display: none; }
 }

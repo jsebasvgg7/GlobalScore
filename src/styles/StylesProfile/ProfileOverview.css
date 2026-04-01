@@ -1,15 +1,11 @@
-/* ==========================================
-   PROFILE
-========================================== */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 .tab-content-wrapper {
   padding: var(--spacing-md);
   animation: fadeIn 0.3s ease;
 }
-
-/* ==========================================
-   CLINICAL LIST 
-========================================== */
 
 .clinical-list {
   background: var(--profile-card);
@@ -38,10 +34,6 @@
   transform: scale(0.98);
 }
 
-/* ==========================================
-   ICON WRAPPER 
-========================================== */
-
 .icon-wrapper {
   width: 48px;
   height: 48px;
@@ -58,7 +50,6 @@
   transform: scale(0.95);
 }
 
-/* Colores según la imagen */
 .icon-wrapper.yellow {
   background: var(--icon-yellow-bg);
   color: var(--icon-yellow);
@@ -94,10 +85,6 @@
   height: 22px;
 }
 
-/* ==========================================
-   ITEM CONTENT
-========================================== */
-
 .item-content {
   flex: 1;
   min-width: 0;
@@ -124,10 +111,6 @@
   color: var(--profile-text-secondary);
 }
 
-/* ==========================================
-   BADGES Y COUNTS
-========================================== */
-
 .item-count {
   display: inline-flex;
   align-items: center;
@@ -149,10 +132,6 @@
   border: 1px solid var(--profile-border);
 }
 
-/* ==========================================
-   CHEVRON ICON
-========================================== */
-
 .chevron {
   color: var(--profile-text-muted);
   flex-shrink: 0;
@@ -168,10 +147,6 @@
 .clinical-item:active .chevron {
   transform: translateX(2px);
 }
-
-/* ==========================================
-   STATS CARDS
-========================================== */
 
 .stats-cards-grid {
   display: grid;
@@ -208,10 +183,6 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-
-/* ==========================================
-   LEVEL CARD 
-========================================== */
 
 .level-card-modern {
   background: var(--profile-card);
@@ -285,10 +256,6 @@
   transition: width 0.6s ease;
 }
 
-/* ==========================================
-   RANKING CARD
-========================================== */
-
 .ranking-card-modern {
   background: var(--profile-card);
   border-radius: var(--radius-md);
@@ -332,10 +299,6 @@
   color: var(--profile-text-secondary);
   font-weight: 600;
 }
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
 
 @media (max-width: 480px) {
   .stats-cards-grid {

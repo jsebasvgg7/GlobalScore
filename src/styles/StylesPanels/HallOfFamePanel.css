@@ -1,7 +1,6 @@
-/* ================================================================
-   HallOfFamePanel.css
-   Panel derecho Salón de la Fama — mismo estilo que RankingRightPanel
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap');
 
@@ -27,7 +26,6 @@
 .hofp-root::-webkit-scrollbar-thumb { background: #c8c3bb; }
 [data-theme="dark"] .hofp-root::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* ── LABEL ── */
 .hofp-label {
   display: flex;
   align-items: center;
@@ -58,9 +56,6 @@
 
 [data-theme="dark"] .hofp-label-dot { background: #f0c040; }
 
-/* ================================================================
-   PODIO ESCALERA — igual que RankingRightPanel
-================================================================ */
 .hofp-podium {
   display: flex;
   flex-direction: column;
@@ -77,7 +72,6 @@
 
 [data-theme="dark"] .hofp-step { border-bottom-color: rgba(255,255,255,0.07); }
 
-/* Número lateral */
 .hofp-step-rank {
   width: 32px;
   flex-shrink: 0;
@@ -194,9 +188,6 @@
 
 [data-theme="dark"] .hofp-step-stat-lbl { color: #4a5568; }
 
-/* ================================================================
-   STATS GLOBALES — al fondo, fondo dorado
-================================================================ */
 .hofp-global {
   background: #c9a227;
   padding: 20px 22px;
@@ -241,9 +232,6 @@
 .hofp-global-val--gold   { color: #fff; font-size: 17px; }
 .hofp-global-val--leader { color: #1a1a2e; font-weight: 800; }
 
-/* ================================================================
-   RESPONSIVE
-================================================================ */
 @media (max-width: 1024px) {
   .hofp-root { display: none; }
 }

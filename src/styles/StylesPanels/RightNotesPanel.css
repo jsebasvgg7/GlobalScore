@@ -1,14 +1,9 @@
-    /* ================================================================
-   RightNotesPanel.css — Panel derecho de Notas
-   Sistema BJR: DM Mono, Sora, brutalista japonés retro
-   Mismo patrón que RankingRightPanel / StatsRightPanel
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
-/* ================================================================
-   ROOT
-================================================================ */
 .rnp-root {
   width: 300px;
   flex-shrink: 0;
@@ -31,9 +26,6 @@
   border-left-color: rgba(255, 255, 255, 0.08);
 }
 
-/* ================================================================
-   LABEL — "· NOTAS CIFRADAS ·" — igual que rrp-label
-================================================================ */
 .rnp-label {
   display: flex;
   align-items: center;
@@ -64,9 +56,6 @@
 
 [data-theme="dark"] .rnp-label-dot { background: #a99de8; }
 
-/* ================================================================
-   VISTA LISTA
-================================================================ */
 .rnp-list-view {
   display: flex;
   flex-direction: column;
@@ -140,7 +129,6 @@
 .rnp-new-btn:hover  { background: #7366b3; }
 .rnp-new-btn:active { transform: scale(0.93); }
 
-/* Búsqueda */
 .rnp-search-row {
   display: flex;
   align-items: center;
@@ -180,7 +168,6 @@
 .rnp-search-clear:hover { color: #1a1a2e; }
 [data-theme="dark"] .rnp-search-clear:hover { color: #f0ece6; }
 
-/* Cuerpo lista */
 .rnp-list-body {
   flex: 1;
   overflow-y: auto;
@@ -192,7 +179,6 @@
 .rnp-list-body::-webkit-scrollbar-thumb { background: #d4cfc8; }
 [data-theme="dark"] .rnp-list-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 
-/* Label de grupo */
 .rnp-group-label {
   display: flex;
   align-items: center;
@@ -214,7 +200,6 @@
   color: #4a5568;
 }
 
-/* Tarjeta de nota */
 .rnp-note-card {
   display: flex;
   align-items: stretch;
@@ -293,7 +278,6 @@
   font-family: 'DM Mono', monospace;
 }
 
-/* Skeleton */
 .rnp-list-loading { display: flex; flex-direction: column; }
 .rnp-sk-card {
   height: 68px;
@@ -313,7 +297,6 @@
   50%      { background: #2a2a2a; }
 }
 
-/* Empty */
 .rnp-list-empty {
   display: flex;
   flex-direction: column;
@@ -331,9 +314,6 @@
 [data-theme="dark"] .rnp-list-empty p { color: #f0f1f7; }
 .rnp-list-empty span { font-size: 10px; opacity: 0.45; font-family: 'Sora', sans-serif; }
 
-/* ================================================================
-   VISTA EDITOR
-================================================================ */
 .rnp-editor-view {
   display: flex;
   flex-direction: column;
@@ -341,7 +321,6 @@
   overflow: hidden;
 }
 
-/* Header editor */
 .rnp-editor-header {
   display: flex;
   align-items: center;
@@ -416,14 +395,12 @@
 .rnp-action-btn--gold { color: #c9a227 !important; border-color: rgba(201,162,39,0.4) !important; }
 .rnp-action-btn--danger:hover { color: #e07070 !important; border-color: rgba(224,112,112,0.4) !important; background: rgba(224,112,112,0.08) !important; }
 
-/* Barra de color */
 .rnp-editor-color-bar {
   height: 3px;
   flex-shrink: 0;
   transition: background 0.3s;
 }
 
-/* Selector de colores */
 .rnp-color-picker {
   display: flex;
   align-items: center;
@@ -462,7 +439,6 @@
 }
 [data-theme="dark"] .rnp-cp-dot--active { border-color: #f0f1f7; }
 
-/* Título */
 .rnp-title-input {
   width: 100%;
   background: transparent;
@@ -485,7 +461,6 @@
 }
 .rnp-title-input::placeholder { color: #888780; opacity: 0.4; font-weight: 600; }
 
-/* Textarea */
 .rnp-content-textarea {
   flex: 1;
   background: transparent;
@@ -510,7 +485,6 @@
 }
 .rnp-content-textarea::placeholder { color: #888780; opacity: 0.35; font-style: italic; }
 
-/* Footer */
 .rnp-editor-footer {
   display: flex;
   align-items: center;
@@ -533,9 +507,6 @@
 
 .rnp-footer-lock { color: #8b7fc7; opacity: 0.6; }
 
-/* ================================================================
-   MODAL BORRADO
-================================================================ */
 .rnp-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -598,9 +569,6 @@
 }
 .rnp-modal-confirm:hover { background: #d44; }
 
-/* ================================================================
-   RESPONSIVE — ocultar en mobile/tablet
-================================================================ */
 @media (max-width: 1024px) {
   .rnp-root { display: none; }
 }

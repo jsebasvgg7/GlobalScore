@@ -1,14 +1,9 @@
-/* ================================================================
-   ProfileSettingsPage.css — v3 CLEAN
-   Sin estilos mobile (manejados por MobileProfileMain.css)
-   Layout desktop: contenido IZQUIERDA | nav DERECHA
-================================================================ */
+/* ================================================
+  GLOBALSCORE
+================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
-/* ================================================================
-   TOKENS
-================================================================ */
 :root {
   --pnew-cream:   #f0ede8;
   --pnew-surface: #e8e4de;
@@ -29,9 +24,6 @@
   --pnew-bg:      #0D0B12;
 }
 
-/* ================================================================
-   PAGE ROOT
-================================================================ */
 .pnew-page {
   background: var(--pnew-cream);
   min-height: 100vh;
@@ -48,9 +40,6 @@
   .pnew-footer-desktop  { display: block; }
 }
 
-/* ================================================================
-   DESKTOP LAYOUT — contenido izq | nav der
-================================================================ */
 .pnew-desktop-layout {
   display: grid;
   grid-template-columns: 1fr 500px;
@@ -58,7 +47,6 @@
   align-items: stretch;
 }
 
-/* Columna izquierda — contenido scrolleable */
 .pnew-desktop-left {
   order: 1;
   background: var(--pnew-cream);
@@ -69,7 +57,6 @@
 .pnew-desktop-left::-webkit-scrollbar { width: 3px; }
 .pnew-desktop-left::-webkit-scrollbar-thumb { background: var(--pnew-border); }
 
-/* Columna derecha — hero + nav, sticky */
 .pnew-desktop-right {
   order: 2;
   display: flex;
@@ -87,9 +74,6 @@
 .pnew-desktop-right::-webkit-scrollbar { width: 3px; }
 .pnew-desktop-right::-webkit-scrollbar-thumb { background: var(--pnew-border); }
 
-/* ================================================================
-   HERO
-================================================================ */
 .pnew-hero {
   display: flex;
   flex-direction: column;
@@ -186,9 +170,6 @@
 .pnew-hero-stat-lbl { font-size: 9px; font-weight: 700; color: var(--muted); font-family: var(--pnew-mono); letter-spacing: 0.1em; }
 .pnew-hero-stat-sep { width: 0.5px; height: 36px; background: var(--pnew-border); flex-shrink: 0; }
 
-/* ================================================================
-   NAV PANEL
-================================================================ */
 .pnew-nav {
   display: flex; flex-direction: column;
   flex: 1; padding: 14px 0; min-height: 0;
@@ -240,17 +221,11 @@
 }
 .pnew-nav-logout-btn:hover { background: rgba(239,68,68,0.14); }
 
-/* ================================================================
-   CONTENT AREA (desktop)
-================================================================ */
 .pnew-tab-content {
   padding: 28px 32px;
   display: flex; flex-direction: column; gap: 0;
 }
 
-/* ================================================================
-   SECTION HEADER
-================================================================ */
 .pnew-section-hdr {
   display: flex; align-items: center; gap: 10px;
   padding: 11px 0 9px;
@@ -266,9 +241,6 @@
   padding: 2px 8px; letter-spacing: 0.04em;
 }
 
-/* ================================================================
-   LEVEL BLOCK
-================================================================ */
 .pnew-level-block {
   border: 0.5px solid var(--pnew-border);
   background: var(--pnew-surface);
@@ -283,9 +255,6 @@
 .pnew-level-track { height: 5px; background: var(--pnew-border); width: 100%; }
 .pnew-level-fill  { height: 5px; background: var(--pnew-accent); transition: width 0.5s ease; }
 
-/* ================================================================
-   STATS GRID
-================================================================ */
 .pnew-stats-grid {
   display: grid; grid-template-columns: 1fr 1fr 1fr;
   border: 0.5px solid var(--pnew-border); margin-bottom: 0;
@@ -310,9 +279,6 @@
 .pnew-stat-val { font-size: 32px; font-weight: 800; font-family: var(--pnew-mono); color: var(--text-primary); line-height: 1; letter-spacing: -0.03em; }
 .pnew-stat-lbl { font-size: 10px; font-weight: 700; color: var(--muted); font-family: var(--pnew-mono); letter-spacing: 0.1em; text-transform: uppercase; }
 
-/* ================================================================
-   ACHIEVEMENTS
-================================================================ */
 .pnew-active-title {
   display: flex; align-items: center; gap: 14px;
   border: 2px solid; padding: 14px 16px;
@@ -356,9 +322,6 @@
 .pnew-ach-name  { font-size: 13px; font-weight: 700; color: var(--text-primary); font-family: var(--pnew-sans); }
 .pnew-ach-desc  { font-size: 11px; color: var(--muted); font-family: var(--pnew-sans); }
 
-/* ================================================================
-   CHAMPIONSHIPS
-================================================================ */
 .pnew-crowns-hero {
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   padding: 30px 20px; border: 0.5px solid var(--pnew-border);
@@ -396,9 +359,6 @@
 .pnew-crown-month { font-size: 15px; font-weight: 700; color: var(--text-primary); font-family: var(--pnew-sans); }
 .pnew-crown-pts   { font-size: 12px; font-weight: 600; color: var(--pnew-green); font-family: var(--pnew-mono); margin-top: 2px; }
 
-/* ================================================================
-   HISTORY
-================================================================ */
 .pnew-hist-hdr {
   display: flex; align-items: center; gap: 12px;
   padding: 0 0 16px; border-bottom: 0.5px solid var(--pnew-border);
@@ -529,9 +489,6 @@
   color: #fff; background: var(--pnew-accent); padding: 4px 10px;
 }
 
-/* ================================================================
-   EDIT TAB
-================================================================ */
 .pnew-edit-avatar {
   display: flex; justify-content: center;
   padding-bottom: 20px; border-bottom: 0.5px solid var(--pnew-border);
@@ -607,9 +564,6 @@
 }
 .pnew-cancel-btn:hover { border-color: var(--pnew-accent); color: var(--pnew-accent); }
 
-/* ================================================================
-   SETTINGS
-================================================================ */
 .pnew-settings-card { border: 0.5px solid var(--pnew-border); margin-bottom: 16px; }
 
 .pnew-settings-card-hdr {
@@ -666,9 +620,6 @@
 }
 .pnew-select:focus { border-color: var(--pnew-accent); }
 
-/* ================================================================
-   MOBILE SUB-VIEW
-================================================================ */
 .pnew-mob-sub {
   display: flex;
   flex-direction: column;
@@ -711,9 +662,6 @@
   background: var(--pnew-bg);
 }
 
-/* ================================================================
-   EMPTY STATE
-================================================================ */
 .pnew-empty {
   display: flex; flex-direction: column; align-items: center;
   gap: 12px; padding: 44px 20px; color: var(--muted); text-align: center;
@@ -721,9 +669,6 @@
 .pnew-empty svg { opacity: 0.4; }
 .pnew-empty p   { font-size: 13px; font-weight: 600; font-family: var(--pnew-mono); letter-spacing: 0.08em; margin: 0; }
 
-/* ================================================================
-   MODAL ELIMINAR CUENTA
-================================================================ */
 .pnew-modal-backdrop {
   position: fixed; inset: 0; background: rgba(0,0,0,0.6);
   z-index: 2000; backdrop-filter: blur(2px);
@@ -745,15 +690,9 @@
 .pnew-modal-actions .pnew-btn-secondary { flex: 1; padding: 12px; }
 .pnew-modal-actions .pnew-btn-danger    { flex: 1; padding: 12px; }
 
-/* ================================================================
-   SPINNER
-================================================================ */
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner { animation: spin 0.8s linear infinite; }
 
-/* ================================================================
-   DARK MODE PATCHES — desktop
-================================================================ */
 [data-theme="dark"] .pnew-stat-cell,
 [data-theme="dark"] .pnew-hist-card,
 [data-theme="dark"] .pnew-crown-row,
@@ -782,9 +721,6 @@
 [data-theme="dark"] .pnew-mob-back    { color: #a599d9; }
 [data-theme="dark"] .pnew-mob-back:active { background: rgba(165,153,217,0.12); }
 
-/* ================================================================
-   RESPONSIVE DESKTOP
-================================================================ */
 @media (max-width: 1400px) {
   .pnew-desktop-layout { grid-template-columns: 1fr 440px; }
   .pnew-desktop-right  { width: 440px; }

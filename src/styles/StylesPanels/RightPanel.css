@@ -1,8 +1,6 @@
-/* ================================================================
-   RightPanel — Dashboard derecho  ·  Amplio y fresco
-   Basado en la imagen guía: secciones con aire, tipografía legible
-================================================================ */
-
+/* ================================================
+  GLOBALSCORE
+================================================ */
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap');
 
 :root {
@@ -16,7 +14,6 @@
   --rp-surface:  #e8e4de;
 }
 
-/* ── Root ── */
 .rp-root {
   width: 340px;
   flex-shrink: 0;
@@ -32,7 +29,6 @@
 .rp-root::-webkit-scrollbar-track { background: transparent; }
 .rp-root::-webkit-scrollbar-thumb { background: #c8c3bb; border-radius: 2px; }
 
-/* ── Sección genérica ── */
 .rp-section {
   padding: 16px 18px;
   border-bottom: 0.5px solid #d4cfc8;
@@ -41,7 +37,6 @@
 
 .rp-section--profile { padding-bottom: 14px; }
 
-/* Label de sección — pequeño, allcaps, con línea */
 .rp-section-label {
   font-size: 9px;
   font-weight: 700;
@@ -62,9 +57,6 @@
   background: #d4cfc8;
 }
 
-/* ================================================================
-   PERFIL
-================================================================ */
 .rp-user-row {
   display: flex;
   align-items: center;
@@ -112,7 +104,6 @@
   letter-spacing: 0.04em;
 }
 
-/* Barra de nivel */
 .rp-level-wrap { margin-top: 4px; }
 
 .rp-level-row {
@@ -151,9 +142,6 @@
   transition: width 0.5s ease;
 }
 
-/* ================================================================
-   ESTADÍSTICAS — grid 2x2 con números grandes
-================================================================ */
 .rp-stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -202,9 +190,6 @@
   margin-top: 1px;
 }
 
-/* ================================================================
-   RANKING — lista con más espacio y legibilidad
-================================================================ */
 .rp-rank-list {
   display: flex;
   flex-direction: column;
@@ -308,9 +293,6 @@
   flex-shrink: 0;
 }
 
-/* ================================================================
-   PRÓXIMO PARTIDO — acento visual fuerte al fondo
-================================================================ */
 .rp-next-match {
   background: #5b4fd8;
   padding: 16px 18px;
@@ -411,9 +393,6 @@
   text-overflow: ellipsis;
 }
 
-/* ================================================================
-   DARK MODE
-================================================================ */
 [data-theme="dark"] .rp-root {
   background: #1a1d2e;
   border-left-color: rgba(255,255,255,0.08);
@@ -452,9 +431,6 @@
 [data-theme="dark"] .rp-rank-pos   { color: #4a5568; }
 [data-theme="dark"] .rp-rank-pos--top { color: #fbbf24; }
 
-/* ================================================================
-   RESPONSIVE — ocultar en pantallas pequeñas
-================================================================ */
 @media (max-width: 1280px) {
   .rp-root { width: 300px; }
 }
