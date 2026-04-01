@@ -590,7 +590,6 @@
 [data-style="brutalist"] .mob2-bottom-wrap { margin:14px 0 0; padding:0 20px; animation:mob2-fade-up .35s ease .28s both; }
 [data-style="neumorphism"] .mob2-bottom-wrap { margin:20px 0 0; padding:0 20px; animation:mob2-fade-up .4s cubic-bezier(.16,1,.3,1) .15s both; }
 .mob2-bottom-wrap .mob2-sec { padding-left:0; padding-right:0; }
-[data-style="brutalist"] .mob2-sec--no-hpad { padding-left:14px; padding-right:14px; }
 [data-style="neumorphism"] .mob2-sec--no-hpad { padding-left:0; padding-right:0; }
 [data-style="brutalist"] .mob2-bottom-box { background:var(--m-surface); border:1px solid var(--m-border); }
 [data-style="neumorphism"] .mob2-bottom-box { background:var(--m-bg); border:none; border-radius:var(--r-lg); box-shadow:var(--nm-s); overflow:hidden; }
