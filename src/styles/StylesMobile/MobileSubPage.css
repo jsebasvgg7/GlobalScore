@@ -131,7 +131,7 @@
 [data-style="brutalist"] .msp-back {
   width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
-  border: 1px solid var(--msp-border-dark);
+  border: 1px solid transparent;
   background: transparent;
   color: var(--msp-text);
   cursor: pointer;
@@ -207,7 +207,7 @@
 [data-style="brutalist"] .msp-filter-toggle {
   width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
-  border: 1px solid var(--msp-border-dark);
+  border: 1px solid transparent;
   background: transparent;
   color: var(--msp-muted);
   cursor: pointer;
@@ -286,7 +286,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 [data-style="brutalist"] .msp-sort-pill.active {
-  background: var(--msp-text);
+  background: var(--msp-accent);
   border-color: var(--msp-text);
   color: var(--msp-bg);
 }
