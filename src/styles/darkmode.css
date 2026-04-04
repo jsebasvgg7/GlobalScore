@@ -3384,3 +3384,56 @@
   box-shadow: 2px 2px 5px rgba(10,9,16,.55),
              -1px -1px 4px rgba(40,37,55,.8);
 }
+/* ================================================================
+   DARK MODE PATCHES
+================================================================ */
+[data-theme="dark"] .np-sidebar,
+[data-theme="dark"] .np-sidebar-header,
+[data-theme="dark"] .np-editor-toolbar,
+[data-theme="dark"] .np-info-panel,
+[data-theme="dark"] .np-info-header,
+[data-theme="dark"] .np-list-group-label {
+  background: var(--np-surface);
+}
+
+[data-theme="dark"] .np-search-wrap,
+[data-theme="dark"] .np-editor {
+  background: var(--np-bg);
+}
+
+[data-theme="dark"] .np-note-item:hover    { background: rgba(139,127,199,0.06); }
+[data-theme="dark"] .np-note-item--active  { background: rgba(139,127,199,0.12) !important; }
+[data-theme="dark"] .np-modal             { background: #1A1824; border-color: #38334F; }
+[data-theme="dark"] .np-title-input       { color: var(--np-text); }
+[data-theme="dark"] .np-content-area      { color: var(--np-text); }
+
+[data-theme="dark"] .np-sidebar-title     { color: #6E6680; }
+[data-theme="dark"] .np-ni-title          { color: #F0EDF8; }
+[data-theme="dark"] .np-ni-preview        { color: #6E6680; }
+[data-theme="dark"] .np-ni-date           { color: #6E6680; }
+[data-theme="dark"] .np-list-group-label  { color: #6E6680; }
+
+[data-theme="dark"] .np-info-enc-desc     { color: #6E6680; }
+[data-theme="dark"] .np-info-stat span:first-child { color: #6E6680; }
+[data-theme="dark"] .np-info-stat span:last-child  { color: #F0EDF8; }
+[data-theme="dark"] .np-info-date-label   { color: #6E6680; }
+[data-theme="dark"] .np-info-date-val     { color: #F0EDF8; }
+[data-theme="dark"] .np-info-label        { color: #6E6680; }
+[data-theme="dark"] .np-info-block-label  { color: #6E6680; }
+
+[data-theme="dark"] .np-status--dirty     { color: #6E6680; border-color: #38334F; }
+[data-theme="dark"] .np-toolbar-btn       { border-color: #38334F; color: #6E6680; }
+[data-theme="dark"] .np-toolbar-btn:hover { background: #13111A; color: #F0EDF8; border-color: #8B7FC7; }
+
+[data-theme="dark"] .np-search-input      { color: #13111A; }
+[data-theme="dark"] .np-search-input::placeholder { color: #6E6680; opacity: 0.6; }
+[data-theme="dark"] .np-search-icon       { color: #6E6680; }
+[data-theme="dark"] .np-search-clear      { color: #6E6680; }
+[data-theme="dark"] .np-search-clear:hover { color: #F0EDF8; }
+
+[data-theme="dark"] .np-editor-empty h2   { color: #F0EDF8; }
+[data-theme="dark"] .np-editor-empty p    { color: #6E6680; }
+[data-theme="dark"] .np-editor-empty svg  { opacity: 0.15; }
+
+[data-theme="dark"] .np-list-empty p      { color: #F0EDF8; }
+[data-theme="dark"] .np-list-empty span   { color: #6E6680; }

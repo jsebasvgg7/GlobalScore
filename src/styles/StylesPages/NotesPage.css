@@ -25,12 +25,12 @@
 }
 
 [data-theme="dark"] .np-root {
-  --np-bg:      #0f0f0f;
-  --np-surface: #1a1a1a;
-  --np-card:    #1a1a1a;
-  --np-border:  #2e2e2e;
-  --np-text:    #f0ece6;
-  --np-muted:   #5a5248;
+  --np-bg:      #13111A;
+  --np-surface: #1A1824;
+  --np-card:    #1A1824;
+  --np-border:  #38334F;
+  --np-text:    #F0EDF8;
+  --np-muted:   #6E6680;
 }
 
 /* ================================================================
@@ -584,25 +584,3 @@
   cursor: pointer; letter-spacing: 0.08em; transition: background 0.15s;
 }
 .np-modal-confirm:hover { background: #d44; }
-
-/* ================================================================
-   DARK MODE PATCHES
-================================================================ */
-[data-theme="dark"] .np-sidebar,
-[data-theme="dark"] .np-sidebar-header,
-[data-theme="dark"] .np-editor-toolbar,
-[data-theme="dark"] .np-info-panel,
-[data-theme="dark"] .np-info-header,
-[data-theme="dark"] .np-list-group-label {
-  background: var(--np-surface);
-}
-
-[data-theme="dark"] .np-search-wrap,
-[data-theme="dark"] .np-editor {
-  background: var(--np-bg);
-}
-
-[data-theme="dark"] .np-note-item--active { background: rgba(139,127,199,0.12) !important; }
-[data-theme="dark"] .np-modal { background: #1a1a1a; border-color: #2e2e2e; }
-[data-theme="dark"] .np-title-input { color: var(--np-text); }
-[data-theme="dark"] .np-content-area { color: var(--np-text); }
