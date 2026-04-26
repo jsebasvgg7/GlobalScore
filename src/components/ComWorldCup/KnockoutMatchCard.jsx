@@ -5,17 +5,17 @@ import { supabase } from '../../utils/supabaseClient';
 
 const TEAM_LOGO_MAP = {
   'Mexico':'mexico','South Africa':'sudafrica','Korea Republic':'coreadelsur',
-  'Denmark*':'dinamarca','Canada':'canada','Italy*':'italia','Qatar':'qatar',
+  'Czechia':'chequia','Canada':'canada','Bosnia':'bosnia','Qatar':'qatar',
   'Switzerland':'suiza','Brazil':'brasil','Morocco':'marruecos','Haiti':'haiti',
   'Scotland':'escocia','USA':'usa','Paraguay':'paraguay','Australia':'australia',
-  'Turkey*':'turquia','Germany':'alemania','Curacao':'curacao',
+  'Turkey':'turquia','Germany':'alemania','Curacao':'curacao',
   'Ivory Coast':'costamarfil','Ecuador':'ecuador','Netherlands':'paisesbajos',
-  'Japan':'japon','Poland*':'polonia','Tunisia':'tunez','Belgium':'belgica',
+  'Japan':'japon','Sweden':'suecia','Tunisia':'tunez','Belgium':'belgica',
   'Egypt':'egipto','Iran':'iran','New Zealand':'nuevazelanda','Spain':'espana',
   'Cabo Verde':'caboverde','Saudi Arabia':'arabiasaudita','Uruguay':'uruguay',
-  'France':'francia','Senegal':'senegal','Bolivia*':'bolivia','Norway':'noruega',
+  'France':'francia','Senegal':'senegal','Iraq':'irak','Norway':'noruega',
   'Argentina':'argentina','Algeria':'argelia','Austria':'austria','Jordan':'jordan',
-  'Portugal':'portugal','Congo*':'congo','Uzbekistan':'uzbekistan','Colombia':'colombia',
+  'Portugal':'portugal','Congo':'congo','Uzbekistan':'uzbekistan','Colombia':'colombia',
   'England':'inglaterra','Croatia':'croacia','Ghana':'ghana','Panama':'panama',
 };
 

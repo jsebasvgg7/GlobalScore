@@ -274,8 +274,6 @@ export default function App() {
             }
           />
         </Routes>
-
-        <InstallPWAButton />
       </BrowserRouter>
     </ThemeProvider>
   );

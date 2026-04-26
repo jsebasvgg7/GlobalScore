@@ -63,18 +63,18 @@ const SEMIS_BRACKETS = [
 function useQualifiedTeams(groupPredictions) {
   return useMemo(() => {
     const GROUPS_DATA = {
-      A: ['Mexico','South Africa','Korea Republic','Denmark*'],
-      B: ['Canada','Italy*','Qatar','Switzerland'],
-      C: ['Brazil','Morocco','Haiti','Scotland'],
-      D: ['USA','Paraguay','Australia','Turkey*'],
-      E: ['Germany','Curacao','Ivory Coast','Ecuador'],
-      F: ['Netherlands','Japan','Poland*','Tunisia'],
-      G: ['Belgium','Egypt','Iran','New Zealand'],
-      H: ['Spain','Cabo Verde','Saudi Arabia','Uruguay'],
-      I: ['France','Senegal','Bolivia*','Norway'],
-      J: ['Argentina','Algeria','Austria','Jordan'],
-      K: ['Portugal','Congo*','Uzbekistan','Colombia'],
-      L: ['England','Croatia','Ghana','Panama'],
+      A: ['Mexico', 'South Africa', 'Korea Republic', 'Czechia'],
+      B: ['Canada', 'Bosnia', 'Qatar', 'Switzerland'],
+      C: ['Brazil', 'Morocco', 'Haiti', 'Scotland'],
+      D: ['USA', 'Paraguay', 'Australia', 'Turkey'],
+      E: ['Germany', 'Curacao', 'Ivory Coast', 'Ecuador'],
+      F: ['Netherlands', 'Japan', 'Sweden', 'Tunisia'],
+      G: ['Belgium', 'Egypt', 'Iran', 'New Zealand'],
+      H: ['Spain', 'Cabo Verde', 'Saudi Arabia', 'Uruguay'],
+      I: ['France', 'Senegal', 'Iraq', 'Norway'],
+      J: ['Argentina', 'Algeria', 'Austria', 'Jordan'],
+      K: ['Portugal', 'Congo', 'Uzbekistan', 'Colombia'],
+      L: ['England', 'Croatia', 'Ghana', 'Panama'],
     };
 
     const GROUPS = Object.keys(GROUPS_DATA);

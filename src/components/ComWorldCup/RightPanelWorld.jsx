@@ -6,33 +6,33 @@ import { supabase } from '../../utils/supabaseClient';
    DATOS
 ============================================================ */
 const GROUPS_DATA = {
-  A: ['Mexico', 'South Africa', 'Korea Republic', 'Denmark*'],
-  B: ['Canada', 'Italy*', 'Qatar', 'Switzerland'],
+  A: ['Mexico', 'South Africa', 'Korea Republic', 'Czechia'],
+  B: ['Canada', 'Bosnia', 'Qatar', 'Switzerland'],
   C: ['Brazil', 'Morocco', 'Haiti', 'Scotland'],
-  D: ['USA', 'Paraguay', 'Australia', 'Turkey*'],
+  D: ['USA', 'Paraguay', 'Australia', 'Turkey'],
   E: ['Germany', 'Curacao', 'Ivory Coast', 'Ecuador'],
-  F: ['Netherlands', 'Japan', 'Poland*', 'Tunisia'],
+  F: ['Netherlands', 'Japan', 'Sweden', 'Tunisia'],
   G: ['Belgium', 'Egypt', 'Iran', 'New Zealand'],
   H: ['Spain', 'Cabo Verde', 'Saudi Arabia', 'Uruguay'],
-  I: ['France', 'Senegal', 'Bolivia*', 'Norway'],
+  I: ['France', 'Senegal', 'Iraq', 'Norway'],
   J: ['Argentina', 'Algeria', 'Austria', 'Jordan'],
-  K: ['Portugal', 'Congo*', 'Uzbekistan', 'Colombia'],
+  K: ['Portugal', 'Congo', 'Uzbekistan', 'Colombia'],
   L: ['England', 'Croatia', 'Ghana', 'Panama'],
 };
 
 const TEAM_LOGO_MAP = {
   'Mexico': 'mexico', 'South Africa': 'sudafrica', 'Korea Republic': 'coreadelsur',
-  'Denmark*': 'dinamarca', 'Canada': 'canada', 'Italy*': 'italia', 'Qatar': 'qatar',
+  'Czechia': 'chequia', 'Canada': 'canada', 'Bosnia': 'bosnia', 'Qatar': 'qatar',
   'Switzerland': 'suiza', 'Brazil': 'brasil', 'Morocco': 'marruecos', 'Haiti': 'haiti',
   'Scotland': 'escocia', 'USA': 'usa', 'Paraguay': 'paraguay', 'Australia': 'australia',
-  'Turkey*': 'turquia', 'Germany': 'alemania', 'Curacao': 'curacao',
+  'Turkey': 'turquia', 'Germany': 'alemania', 'Curacao': 'curacao',
   'Ivory Coast': 'costamarfil', 'Ecuador': 'ecuador', 'Netherlands': 'paisesbajos',
-  'Japan': 'japon', 'Poland*': 'polonia', 'Tunisia': 'tunez', 'Belgium': 'belgica',
+  'Japan': 'japon', 'Sweden': 'suecia', 'Tunisia': 'tunez', 'Belgium': 'belgica',
   'Egypt': 'egipto', 'Iran': 'iran', 'New Zealand': 'nuevazelanda', 'Spain': 'espana',
   'Cabo Verde': 'caboverde', 'Saudi Arabia': 'arabiasaudita', 'Uruguay': 'uruguay',
-  'France': 'francia', 'Senegal': 'senegal', 'Bolivia*': 'bolivia', 'Norway': 'noruega',
+  'France': 'francia', 'Senegal': 'senegal', 'Iraq': 'irak', 'Norway': 'noruega',
   'Argentina': 'argentina', 'Algeria': 'argelia', 'Austria': 'austria', 'Jordan': 'jordan',
-  'Portugal': 'portugal', 'Congo*': 'congo', 'Uzbekistan': 'uzbekistan', 'Colombia': 'colombia',
+  'Portugal': 'portugal', 'Congo': 'congo', 'Uzbekistan': 'uzbekistan', 'Colombia': 'colombia',
   'England': 'inglaterra', 'Croatia': 'croacia', 'Ghana': 'ghana', 'Panama': 'panama',
 };
 
