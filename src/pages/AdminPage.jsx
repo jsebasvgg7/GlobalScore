@@ -26,6 +26,7 @@ import AdminTitlesList       from '../components/ComAdmin/AdminTitlesList';
 import AdminCrownsSection    from '../components/ComAdmin/AdminCrownsSection';
 import AdminBannersList      from '../components/ComAdmin/AdminBannersList';
 import AdminRightPanel       from '../components/ComAdmin/AdminRightPanel';
+import AdminHistorical       from '../components/ComAdmin/AdminHistorical';
 import Footer                from '../components/ComLayout/Footer';
 import { ToastContainer, useToast } from '../components/ComFeedback/Toast';
 
@@ -33,6 +34,7 @@ import '../styles/StylesMobile/MobileAdmin.css';
 import '../styles/StylesAdmin/AdminPage.css';
 import '../styles/StylesAdmin/AdminRightPanel.css';
 import '../styles/StylesAdmin/AdminBanners.css';
+import '../styles/StylesAdmin/AdminHistorical.css';
 
 export default function AdminPage({ currentUser }) {
   // ── UI state ──────────────────────────────────────────────────
@@ -40,8 +42,7 @@ export default function AdminPage({ currentUser }) {
   const [searchTerm,    setSearchTerm]    = useState('');
   const [filterStatus,  setFilterStatus]  = useState('all');
 
-  // ── Panel derecho: mode + item ────────────────────────────────
-  // mode: 'add' | 'finish' | 'edit' | 'assign'
+  // ── Panel derecho ─────────────────────────────────────────────
   const [panelMode, setPanelMode] = useState('add');
   const [panelItem, setPanelItem] = useState(null);
 
@@ -83,29 +84,25 @@ export default function AdminPage({ currentUser }) {
     resetPanel();
   };
 
-  // ── Handlers para el panel ────────────────────────────────────
-
-  // Finalizar: carga el item en el panel
+  // ── Handlers panel ────────────────────────────────────────────
   const handleFinishClick = (item) => {
     setPanelItem(item);
     setPanelMode('finish');
     if (isMobile) setMobileSheetOpen(true);
   };
 
-  // Editar (logros/títulos)
   const handleEditClick = (item) => {
     setPanelItem(item);
     setPanelMode('edit');
-    if (isMobile) setMobileSheetOpen(true); 
+    if (isMobile) setMobileSheetOpen(true);
   };
 
-  // Asignar banner
   const handleAssignClick = () => {
     setPanelMode('assign');
     setPanelItem(null);
   };
 
-  // ── Wrappers que cierran el panel tras acción ─────────────────
+  // ── Wrappers con reset ────────────────────────────────────────
   const handleFinishMatchPanel = async (id, home, away, advancing) => {
     await handleFinishMatch(id, home, away, advancing);
     resetPanel();
@@ -121,7 +118,6 @@ export default function AdminPage({ currentUser }) {
     resetPanel();
   };
 
-  // Handler unificado para el panel según sección
   const handlePanelAdd = async (data) => {
     switch (activeSection) {
       case 'matches':      await handleAddMatch(data);           break;
@@ -174,7 +170,10 @@ export default function AdminPage({ currentUser }) {
   );
 
   const stats = calculateStats({ matches, leagues, awards, achievements, titles, crownHistory, banners });
-  const currentMonth = new Date().toISOString().slice(0, 7);
+
+  // ── La sección histórica tiene su propio layout completo ──────
+  // No necesita el panel derecho ni los controles normales
+  const isHistorical = activeSection === 'historical';
 
   if (loading) {
     return (
@@ -187,13 +186,17 @@ export default function AdminPage({ currentUser }) {
 
   return (
     <>
-      {/* Shell principal: fila horizontal que ocupa toda la altura */}
       <div className="admin-page page-root">
-        <div className="admin-shell-row">
 
-          {/* ── Columna izquierda: stats + tabs + controles + lista ── */}
-          <div className="admin-left-col">
-            <AdminStatsOverview stats={stats} />
+        {/* ── Tabs de navegación — siempre visibles ── */}
+        {/* Pasamos la sección histórica a AdminNavigationTabs */}
+        <div className={isHistorical ? 'admin-shell-historical' : 'admin-shell-row'}>
+
+          {/* ── Columna izquierda (solo en secciones normales) ── */}
+          <div className={isHistorical ? 'admin-hist-left' : 'admin-left-col'}>
+
+            {/* Stats: ocultar en histórico para no confundir */}
+            {!isHistorical && <AdminStatsOverview stats={stats} />}
 
             <AdminNavigationTabs
               activeSection={activeSection}
@@ -201,113 +204,128 @@ export default function AdminPage({ currentUser }) {
               stats={stats}
             />
 
-            <AdminControls
-              activeSection={activeSection}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              filterStatus={filterStatus}
-              setFilterStatus={setFilterStatus}
-              onAddNew={isMobile ? () => { resetPanel(); setMobileSheetOpen(true); } : resetPanel}
-            />
+            {/* Controles de búsqueda/filtro: solo en secciones normales */}
+            {!isHistorical && (
+              <AdminControls
+                activeSection={activeSection}
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                filterStatus={filterStatus}
+                setFilterStatus={setFilterStatus}
+                onAddNew={isMobile ? () => { resetPanel(); setMobileSheetOpen(true); } : resetPanel}
+              />
+            )}
 
-            <div className="admin-content-area">
-              {activeSection === 'matches' && (
-                <AdminMatchesList
-                  matches={Array.isArray(filteredItems) ? filteredItems : []}
-                  onFinish={handleFinishClick}
-                  onDelete={handleDeleteMatch}
-                />
-              )}
-              {activeSection === 'leagues' && (
-                <AdminLeaguesList
-                  leagues={Array.isArray(filteredItems) ? filteredItems : []}
-                  onFinish={handleFinishClick}
-                  onDelete={handleDeleteLeague}
-                />
-              )}
-              {activeSection === 'awards' && (
-                <AdminAwardsList
-                  awards={Array.isArray(filteredItems) ? filteredItems : []}
-                  onFinish={handleFinishClick}
-                  onDelete={handleDeleteAward}
-                />
-              )}
-              {activeSection === 'achievements' && (
-                <AdminAchievementsList
-                  achievements={Array.isArray(filteredItems) ? filteredItems : []}
-                  onEdit={handleEditClick}
-                  onDelete={handleDeleteAchievement}
-                />
-              )}
-              {activeSection === 'titles' && (
-                <AdminTitlesList
-                  titles={Array.isArray(filteredItems) ? filteredItems : []}
-                  onEdit={handleEditClick}
-                  onDelete={handleDeleteTitle}
-                />
-              )}
-              {activeSection === 'crowns' && (
-                <AdminCrownsSection
-                  top10={filteredItems.top10}
-                  history={filteredItems.history}
-                  onResetStats={handleResetMonthlyStats}
-                />
-              )}
-              {activeSection === 'banners' && (
-                <AdminBannersList
-                  banners={Array.isArray(filteredItems) ? filteredItems : banners}
-                  onDelete={handleDeleteBanner}
-                  onAssign={handleAssignClick}
-                />
-              )}
+            {/* ── Contenido principal ── */}
+            {isHistorical ? (
+              // La sección histórica maneja todo su estado internamente
+              <AdminHistorical />
+            ) : (
+              <div className="admin-content-area">
+                {activeSection === 'matches' && (
+                  <AdminMatchesList
+                    matches={Array.isArray(filteredItems) ? filteredItems : []}
+                    onFinish={handleFinishClick}
+                    onDelete={handleDeleteMatch}
+                  />
+                )}
+                {activeSection === 'leagues' && (
+                  <AdminLeaguesList
+                    leagues={Array.isArray(filteredItems) ? filteredItems : []}
+                    onFinish={handleFinishClick}
+                    onDelete={handleDeleteLeague}
+                  />
+                )}
+                {activeSection === 'awards' && (
+                  <AdminAwardsList
+                    awards={Array.isArray(filteredItems) ? filteredItems : []}
+                    onFinish={handleFinishClick}
+                    onDelete={handleDeleteAward}
+                  />
+                )}
+                {activeSection === 'achievements' && (
+                  <AdminAchievementsList
+                    achievements={Array.isArray(filteredItems) ? filteredItems : []}
+                    onEdit={handleEditClick}
+                    onDelete={handleDeleteAchievement}
+                  />
+                )}
+                {activeSection === 'titles' && (
+                  <AdminTitlesList
+                    titles={Array.isArray(filteredItems) ? filteredItems : []}
+                    onEdit={handleEditClick}
+                    onDelete={handleDeleteTitle}
+                  />
+                )}
+                {activeSection === 'crowns' && (
+                  <AdminCrownsSection
+                    top10={filteredItems.top10}
+                    history={filteredItems.history}
+                    onResetStats={handleResetMonthlyStats}
+                  />
+                )}
+                {activeSection === 'banners' && (
+                  <AdminBannersList
+                    banners={Array.isArray(filteredItems) ? filteredItems : banners}
+                    onDelete={handleDeleteBanner}
+                    onAssign={handleAssignClick}
+                  />
+                )}
 
-              {Array.isArray(filteredItems) && filteredItems.length === 0 &&
-                activeSection !== 'crowns' && (
-                <div className="admin-empty-state">
-                  <AlertCircle size={40} />
-                  <p>No hay {activeSection} para mostrar</p>
-                </div>
-              )}
-            </div>
+                {Array.isArray(filteredItems) && filteredItems.length === 0 &&
+                  activeSection !== 'crowns' && (
+                  <div className="admin-empty-state">
+                    <AlertCircle size={40} />
+                    <p>No hay {activeSection} para mostrar</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* ── Panel derecho: altura completa desde el tope ── */}
-          <AdminRightPanel
-            activeSection={activeSection}
-            panelMode={panelMode}
-            panelItem={panelItem}
-            onAdd={handlePanelAdd}
-            onFinish={handlePanelFinish}
-            onSave={handlePanelSave}
-            onDelete={handlePanelDelete}
-            onResetPanel={resetPanel}
-            users={users}
-            banners={banners}
-            onAssignBanner={handleAssignBanner}
-            onRevokeBanner={handleRevokeBanner}
-          />
-
+          {/* ── Panel derecho: solo en secciones normales ── */}
+          {!isHistorical && (
+            <AdminRightPanel
+              activeSection={activeSection}
+              panelMode={panelMode}
+              panelItem={panelItem}
+              onAdd={handlePanelAdd}
+              onFinish={handlePanelFinish}
+              onSave={handlePanelSave}
+              onDelete={handlePanelDelete}
+              onResetPanel={resetPanel}
+              users={users}
+              banners={banners}
+              onAssignBanner={handleAssignBanner}
+              onRevokeBanner={handleRevokeBanner}
+            />
+          )}
         </div>
-        {isMobile && (
-        <>
-          <MobileAdminFAB activeSection={activeSection} onOpen={() => { resetPanel(); setMobileSheetOpen(true); }} />
-          <MobileAdminSheet
-            isOpen={mobileSheetOpen}
-            onClose={() => setMobileSheetOpen(false)}
-            activeSection={activeSection}
-            panelMode={panelMode}
-            panelItem={panelItem}
-            onAdd={handlePanelAdd}
-            onFinish={handlePanelFinish}
-            onSave={handlePanelSave}
-            onDelete={handlePanelDelete}
-            users={users}
-            banners={banners}
-            onAssignBanner={handleAssignBanner}
-            onRevokeBanner={handleRevokeBanner}
-          />
-        </>
-      )}
+
+        {/* ── FAB + BottomSheet mobile (solo en secciones normales) ── */}
+        {isMobile && !isHistorical && (
+          <>
+            <MobileAdminFAB
+              activeSection={activeSection}
+              onOpen={() => { resetPanel(); setMobileSheetOpen(true); }}
+            />
+            <MobileAdminSheet
+              isOpen={mobileSheetOpen}
+              onClose={() => setMobileSheetOpen(false)}
+              activeSection={activeSection}
+              panelMode={panelMode}
+              panelItem={panelItem}
+              onAdd={handlePanelAdd}
+              onFinish={handlePanelFinish}
+              onSave={handlePanelSave}
+              onDelete={handlePanelDelete}
+              users={users}
+              banners={banners}
+              onAssignBanner={handleAssignBanner}
+              onRevokeBanner={handleRevokeBanner}
+            />
+          </>
+        )}
       </div>
 
       <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
