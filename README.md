@@ -24,6 +24,7 @@
 
 - [Sobre el Proyecto](#-sobre-el-proyecto)
 - [Características Principales](#-características-principales)
+- [🖥️ Arquitectura Desktop vs Mobile](#️-arquitectura-desktop-vs-mobile)
 - [Tech Stack](#️-tech-stack)
 - [Instalación](#-instalación)
 - [Configuración](#️-configuración)
@@ -49,6 +50,7 @@ Disponible como **PWA instalable** en Android e iOS, y como **app nativa en Goog
 - **Ranking Dinámico**: Podios visuales, Hall of Fame y tablas de posiciones en tiempo real
 - **Push Notifications**: Recibe alertas de nuevos partidos en tiempo real via VAPID/Web Push
 - **Instalable**: Funciona como app nativa en Android (TWA) e iOS vía PWA
+- **Sistema de Notas**: Toma notas personales sobre predicciones y análisis
 
 ---
 
@@ -132,6 +134,12 @@ Disponible como **PWA instalable** en Android e iOS, y como **app nativa en Goog
 🏆 Campeonatos Mensuales
 ├── Registro histórico de campeones por mes
 └── Tab dedicado en el perfil del usuario
+
+📝 Sistema de Notas (NUEVO)
+├── Crea y gestiona notas privadas
+├── Vincula notas a predicciones
+├── Historial completo de análisis personal
+└── Accesible desde página dedicada
 ```
 
 ### 📊 Estadísticas y Analytics
@@ -143,6 +151,7 @@ Disponible como **PWA instalable** en Android e iOS, y como **app nativa en Goog
 - **Estadísticas Semanales**: Reset automático cada lunes con mini-ranking
 - **Gráficas Interactivas**: Precisión por día de la semana
 - **Hall of Fame**: Galería permanente de los mejores jugadores históricos
+- **Análisis de Notas**: Seguimiento de tus análisis personales
 
 ### 🔔 Notificaciones Push
 
@@ -171,11 +180,326 @@ Sistema de Push Notifications (VAPID/Web Push)
 - **Toast Notifications**: Feedback visual elegante
 - **Offline Support**: Service Worker con página offline y sincronización pendiente
 - **PWA Completa**: Instalable, Service Worker, manifest, íconos adaptativos
+- **Style Switcher**: Personalización de temas y estilos en mobile
 
-### 🛡️ Panel de Administración
+---
+
+## 🖥️ Arquitectura Desktop vs Mobile
+
+GlobalScore implementa una **arquitectura adaptativa completa** que proporciona experiencias optimizadas tanto para desktop como para mobile. No es un simple responsive design, sino dos conjuntos de componentes especializados que se adaptan al contexto del usuario.
+
+### 📱 Estrategia General
 
 ```
-Admin Dashboard
+┌─────────────────────────────────────────────────────────┐
+│          GlobalScore - Arquitectura Adaptativa          │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  App Router (App.jsx)                                   │
+│  └─ useMediaQuery Hook (detect: width < 768px)          │
+│     ├─ Desktop View (width ≥ 768px)                     │
+│     │  └─ Componentes Desktop + Paneles Laterales       │
+│     │                                                   │
+│     └─ Mobile View (width < 768px)                      │
+│        └─ Componentes Mobile Optimizados                │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 🖥️ DESKTOP - Experiencia Completa (≥768px)
+
+La versión desktop está diseñada para usuarios en computadoras y tablets grandes. Maximiza la información visible y permite multi-tasking.
+
+#### Layout Desktop Base
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                     HEADER / NAVEGACIÓN                      │
+│         (Logo, Búsqueda, Usuario, Notificaciones)            │
+├──────────┬───────────────────────────────────┬───────────────┤
+│          │                                   │               │
+│ SIDEBAR  │          CONTENIDO PRINCIPAL      │  PANEL DERECHO│
+│          │                                   │               │
+│ - Logo   │        (Dashboard, Stats,         │  - Ranking    │
+│ - Menú   │         Ranking, Admin)           │  - Hall Fame  │
+│ - Stats  │                                   │ - Stats Rápido│
+│ - User   │                                   |- Notifications│
+│          │                                   |               │
+└──────────┴───────────────────────────────────┴───────────────┘
+```
+
+#### Componentes Desktop Principales
+
+**Estructura de Navegación:**
+- `Header.jsx` - Barra superior con logo, búsqueda, usuario
+- `DashboardSidebar.jsx` - Sidebar izquierdo con navegación y stats
+- `Footer.jsx` - Pie de página con enlaces
+
+**Paneles Laterales Derechos (ComPanels/):**
+- `RightPanel.jsx` - Panel por defecto en Dashboard
+  - Muestra: Ranking top 5, Hall of Fame, puntos destacados
+  
+- `RankingRightPanel.jsx` - Panel en página de Ranking
+  - Muestra: Estadísticas de usuario, progreso, logros próximos
+  
+- `StatsRightPanel.jsx` - Panel en página de Stats
+  - Muestra: Gráficos semanales, análisis, precisión
+  
+- `RightNotesPanel.jsx` - Panel en página de Notas (NUEVO)
+  - Muestra: Últimas notas, análisis, filtros
+  
+- `HallOfFamePanel.jsx` - Panel dedicado al Hall of Fame
+  - Muestra: Ranking histórico, badges, logros
+
+**Tarjetas y Elementos (ComCards/):**
+- `MatchCard.jsx` - Tarjeta de partido con predicción
+- `LeagueCard.jsx` - Tarjeta de liga con pronóstico
+- `AwardCard.jsx` - Tarjeta de premios individuales
+- `KnockoutMatchCard.jsx` - Tarjeta de playoff en el Mundial
+
+**Páginas Desktop:**
+- `DashboardPage.jsx` - Inicio con últimos partidos
+- `RankingPage.jsx` - Ranking global con paneles
+- `StatsPage.jsx` - Estadísticas detalladas
+- `AdminPage.jsx` - Panel de administración completo
+- `WorldCupPage.jsx` - Mundial 2026 con bracket visual
+- `NotesPage.jsx` - Gestión de notas personales (NUEVO)
+- `NotificationsPage.jsx` - Centro de notificaciones
+- `ProfileSettingsPage.jsx` - Configuración de perfil
+
+**Paneles Laterales Especializados:**
+- Perfil de usuario expandido en modal
+- Historial de predicciones con filtros
+- Logros y coronas desbloqueables
+- Banners y personalización
+
+#### Características Desktop Exclusivas
+
+```
+✅ Multi-panel display
+   ├─ Sidebar + Contenido + Panel Derecho simultáneamente
+   └─ Transiciones suaves entre secciones
+
+✅ Interacciones avanzadas
+   ├─ Hover effects en tarjetas
+   ├─ Drag & drop en admin
+   ├─ Modales amplios con múltiples tabs
+   └─ Tooltips contextuales
+
+✅ Información densa
+   ├─ Tablas con 10+ columnas
+   ├─ Gráficos grandes e interactivos
+   ├─ Listados sin paginación (scroll)
+   └─ Vista de cuadrícula flexible
+
+✅ Productividad
+   ├─ Atajos de teclado
+   ├─ Búsqueda global
+   ├─ Filtros avanzados
+   └─ Exportación de datos
+```
+
+---
+
+### 📱 MOBILE - Experiencia Optimizada (<768px)
+
+La versión mobile está diseñada para usuarios en smartphones y tablets pequeños. Prioriza la usabilidad táctil y minimiza la navegación.
+
+#### Layout Mobile Base
+
+```
+┌──────────────────────────────────┐
+│      MOBILE HEADER               │
+│ (Logo, Búsqueda, Menu Tres Rayas)│
+├──────────────────────────────────┤
+│                                  │
+│                                  │
+│      CONTENIDO PRINCIPAL         │
+│      (Una columna, full-width)   │
+│                                  │
+│                                  │
+│                                  │
+├──────────────────────────────────┤
+│    BOTTOM NAVIGATION TABS        │
+│ 🏠 Home |  Stat | 🏆 Ranking    │
+│ 🌍 World | Perfil | ⚙️ Menú     │
+└──────────────────────────────────┘
+```
+
+#### Componentes Mobile Principales (ComMobile/)
+
+**Navegación y Layout:**
+- `MobileHeader.jsx` - Header adaptado con menú toggle
+- `NavigationTabs.jsx` - Bottom navigation con 5-6 tabs principales
+- `MobileSubPage.jsx` - Wrapper para sub-páginas
+
+**Vistas Especializadas por Página:**
+
+1. **MobileDashboard.jsx** - Dashboard móvil
+   - Cards de partidos apiladas verticalmente
+   - Filtros simplificados (Liga, Estado)
+   - Predicción inline rápida
+   - Últimas predicciones en accordion
+
+2. **MobileRanking.jsx** - Ranking móvil
+   - Podio comprimido (3 posiciones destacadas)
+   - Lista scrollable de posiciones 4-N
+   - Búsqueda de usuario integrada
+   - Avatar del usuario actual sticky en top
+
+3. **MobileStats.jsx** - Estadísticas móvil
+   - Tabs horizontales (Resumen, Por Liga, Semanal)
+   - Gráficos comprimidos pero legibles
+   - Metricas principales en cards
+   - Scroll horizontal para tablas
+
+4. **MobileAdmin.jsx** - Admin móvil
+   - Tabs de navegación: Partidos, Ligas, Premios, Logros, Banners, Coronas
+   - Cada tab tiene lista + modal para crear/editar
+   - Botón FAB flotante para crear nuevos items
+   - Swipe left para eliminar (con confirmación)
+
+5. **MobileProfileMain.jsx** - Perfil móvil
+   - Hero comprimido (avatar, nivel, título)
+   - Tabs: Overview, Historial, Logros, Campeonatos
+   - Cada tab con contenido adaptado
+   - Avatar upload en modal
+
+6. **MobileNotifications.jsx** - Notificaciones móvil
+   - Toggle de push notifications prominent
+   - Lista de notificaciones recientes
+   - Notificaciones by type (Partidos, Sistema, Logros)
+
+7. **MobileNotes.jsx** - Notas móvil (NUEVO)
+   - Crear nota rápida (textarea + botón)
+   - Lista de notas ordenadas por fecha
+   - Cada nota: preview + opciones (editar, eliminar)
+   - Búsqueda de notas por contenido
+
+8. **StyleSwitcher.jsx** - Selector de estilos (NUEVO)
+   - Toggle entre temas disponibles
+   - Colores adaptativos
+   - Persistencia en localStorage
+
+**Tarjetas Mobile:**
+- `MobileCardsGlobal.jsx` - Envoltorio adaptativo para MatchCard, LeagueCard, etc.
+  - Reduce padding/margen en mobile
+  - Oculta información secundaria
+  - Acciones en dropdown menú
+
+#### Características Mobile Exclusivas
+
+```
+✅ Bottom Navigation
+   ├─ 5-6 tabs siempre visibles
+   ├─ Tap para navegar entre secciones
+   ├─ Activo/inactivo con indicador visual
+   └─ Atajos a las 5 páginas principales
+
+✅ Interacciones táctiles
+   ├─ Swipe horizontales para cambiar tabs
+   ├─ Swipe left para opciones (editar, eliminar)
+   ├─ Pull-to-refresh en listas
+   ├─ Tap & hold para menú contextual
+   └─ FAB (Floating Action Button) para crear
+
+✅ Optimización visual
+   ├─ Single column layout
+   ├─ Texto más grande (16px base)
+   ├─ Espaciado vertical aumentado (42px botones)
+   ├─ Iconos grandes y claros
+   └─ Colores de alto contraste
+
+✅ Menos información, más profundidad
+   ├─ Listados cortos con paginación/lazy-load
+   ├─ Modales a full-screen
+   ├─ Accordion para agrupar contenido
+   ├─ Tabs horizontales comprimidas
+   └─ Ocultar información secundaria
+
+✅ Rendimiento
+   ├─ Imágenes optimizadas (srcset)
+   ├─ Lazy loading de componentes
+   ├─ CSS-in-JS minimizado
+   └─ No hay animaciones pesadas
+```
+
+---
+
+### 🔄 Cambio Dinámico Desktop ↔ Mobile
+
+El cambio entre desktop y mobile es **completamente transparente** para el usuario:
+
+```javascript
+// En App.jsx - Hook para detectar cambios
+const isMobile = useMediaQuery('(max-width: 768px)');
+
+// El router redirige automáticamente:
+return isMobile ? <MobileDashboard /> : <DashboardPage />
+```
+
+**Beneficios:**
+- ✅ Sin recargas de página
+- ✅ Sin pérdida de scroll position
+- ✅ Estado sincronizado entre vistas
+- ✅ Transición suave al rotar dispositivo
+
+---
+
+### 🎨 Theming y Estilos
+
+**Colores Base (Purple Theme):**
+```css
+Primary:     #8B5CF6 (Púrpura)
+Secondary:   #EC4899 (Rosa)
+Success:     #10B981 (Verde)
+Warning:     #F59E0B (Ámbar)
+Error:       #EF4444 (Rojo)
+Background:  #F9FAFB (Gris muy claro)
+Text:        #1F2937 (Gris oscuro)
+```
+
+**Responsividad CSS:**
+```css
+/* Desktop (≥768px) */
+@media (min-width: 768px) {
+  .sidebar { display: block; width: 250px; }
+  .right-panel { display: block; width: 300px; }
+  .main-content { flex: 1; }
+}
+
+/* Mobile (<768px) */
+@media (max-width: 767px) {
+  .sidebar { display: none; }
+  .right-panel { display: none; }
+  .main-content { width: 100%; }
+  .nav-tabs { position: fixed; bottom: 0; }
+}
+```
+
+---
+
+### 📊 Comparativa Desktop vs Mobile
+
+| Aspecto | Desktop | Mobile |
+|---------|---------|--------|
+| **Layout** | Sidebar + Contenido + Panel | Single Column |
+| **Nav** | Sidebar + Header | Bottom Tabs + Header |
+| **Información** | Multi-panel, densa | Secuencial, profunda |
+| **Ancho Pantalla** | ≥768px | <768px |
+| **Modales** | Ancho fijo (80vw) | Full-screen |
+| **Tablas** | Múltiples columnas | Cards o tabs |
+| **Interacción** | Click + Keyboard | Touch + Swipe |
+| **Scroll** | Vertical principal | Vertical + Horizontal |
+| **Animaciones** | Complejas | Simples |
+| **Imágenes** | Tamaño completo | Optimizadas, srcset |
+
+---
+
+## 🛡️ Panel de Administración
+
+```
+Admin Dashboard (Responsive: Desktop + Mobile)
 ├── 📋 Gestión de Partidos
 │   ├── Crear/Editar/Eliminar
 │   ├── Logos automáticos de equipos
@@ -198,7 +522,15 @@ Admin Dashboard
 └── 🔧 Panel de Diagnóstico (AdminDiagnosticPanel)
 ```
 
-### 🔐 Autenticación Completa
+**Componentes Admin:**
+- `AdminControls.jsx` - Controles principales
+- `AdminNavigationTabs.jsx` - Navegación entre secciones
+- `AdminRightPanel.jsx` - Panel de opciones avanzadas
+- `AdminModalsContainer.jsx` - Contenedor de modales
+
+---
+
+## 🔐 Autenticación Completa
 
 - Registro de nuevos usuarios (`RegisterPage`)
 - Login con email y contraseña
@@ -220,7 +552,8 @@ Admin Dashboard
   "routing": "React Router DOM 7.0.1",
   "icons": "Lucide React 0.469.0",
   "styling": "Tailwind CSS + Custom CSS",
-  "stateManagement": "React Context API + Custom Hooks"
+  "stateManagement": "React Context API + Custom Hooks",
+  "responsiveness": "CSS Media Queries + useMediaQuery Hook"
 }
 ```
 
@@ -253,7 +586,7 @@ Admin Dashboard
 ### Características Técnicas
 
 - ⚡ **Vite**: Build ultrarrápido con HMR
-- 🎣 **Custom Hooks Granulares**: Organizados por dominio (`HooksAdmin`, `HooksCards`, `HooksProfile`, `HooksOthers`, `HooksSettings`)
+- 🎣 **Custom Hooks Granulares**: Organizados por dominio (`HooksAdmin`, `HooksCards`, `HooksProfile`, `HooksNotes`, `HooksOthers`, `HooksSettings`)
 - 🎨 **Tailwind CSS + CSS Variables**: Theming dinámico y utilitarios
 - 🖼️ **Lazy Loading**: Optimización de imágenes
 - 📱 **PWA Completa**: Service Worker, manifest, íconos maskables, página offline, sincronización offline
@@ -262,6 +595,7 @@ Admin Dashboard
 - 🤖 **TWA Android**: App nativa compilada y firmada para Google Play
 - 🔄 **GitHub Actions**: Reset semanal automatizado de estadísticas (cron: lunes 00:00 UTC)
 - 🛠️ **Scripts de diagnóstico**: Utilidades para mantener la base de datos
+- 📱 **Responsive Design**: Arquitectura Desktop + Mobile completa
 
 ---
 
@@ -359,8 +693,8 @@ award-logos/
 ├── botadeoro.png
 └── ...
 
-avatars/           ← Nuevo: fotos de perfil de usuarios
-banners/           ← Nuevo: banners de perfil personalizados
+avatars/           ← Fotos de perfil de usuarios
+banners/           ← Banners de perfil personalizados
 ```
 
 #### 3. Configurar Edge Function de Push Notifications
@@ -413,73 +747,255 @@ globalscore/
 │       └── res/                    # Recursos Android (iconos, colores, strings)
 │
 ├── scripts/
-│   └── generate-vapid-keys.cjs     # Generador de claves VAPID
+│   ├── generate-vapid-keys.cjs     # Generador de claves VAPID
+│   ├── diagnoseDatabase.js         # Diagnóstico de BD
+│   ├── checkDatabaseFunctions.js   # Verificación de funciones
+│   ├── reset-weekly.js             # Reset semanal de stats
+│   ├── listLeagues.js              # Listar ligas
+│   ├── listTeams.js                # Listar equipos
+│   ├── updateLeagueLogos.js        # Actualizar logos
+│   └── ... (más scripts de utilidad)
 │
 ├── src/
 │   ├── components/
 │   │   ├── ComAdmin/               # Panel de administración (23 componentes)
+│   │   │   ├── AdminAchievementsList.jsx
+│   │   │   ├── AdminAchievementsModal.jsx
+│   │   │   ├── AdminAssignBannerModal.jsx
+│   │   │   ├── AdminAwardModal.jsx
+│   │   │   ├── AdminAwardsList.jsx
+│   │   │   ├── AdminBannerModal.jsx
+│   │   │   ├── AdminBannersList.jsx
+│   │   │   ├── AdminControls.jsx
+│   │   │   ├── AdminCrownModal.jsx
+│   │   │   ├── AdminCrownsSection.jsx
+│   │   │   ├── AdminDiagnosticPanel.jsx
+│   │   │   ├── AdminLeagueModal.jsx
+│   │   │   ├── AdminLeaguesList.jsx
+│   │   │   ├── AdminMatchesList.jsx
+│   │   │   ├── AdminModal.jsx
+│   │   │   ├── AdminModalsContainer.jsx
+│   │   │   ├── AdminNavigationTabs.jsx
+│   │   │   ├── AdminRightPanel.jsx
+│   │   │   ├── AdminStatsOverview.jsx
+│   │   │   ├── AdminTitlesList.jsx
+│   │   │   ├── AdminTitlesModal.jsx
+│   │   │   ├── FinishAwardModal.jsx
+│   │   │   ├── FinishLeagueModal.jsx
+│   │   │   └── FinishMatchModal.jsx
+│   │   │
 │   │   ├── ComAuth/                # Rutas protegidas
-│   │   ├── ComCards/               # Tarjetas (Match, League, Award)
+│   │   │   ├── ProtectedRoute.jsx
+│   │   │   └── RequireAuth.jsx
+│   │   │
+│   │   ├── ComCards/               # Tarjetas reutilizables
+│   │   │   ├── AwardCard.jsx
+│   │   │   ├── LeagueCard.jsx
+│   │   │   ├── MatchCard.jsx
+│   │   │   └── MobileCardsGlobal.jsx
+│   │   │
 │   │   ├── ComFeedback/            # Loaders, spinners, toasts
-│   │   ├── ComLayout/              # Sidebar, header, footer
-│   │   ├── ComMobile/              # Vistas móviles dedicadas
-│   │   ├── ComNavigation/          # Tabs de navegación
-│   │   ├── ComNotis/               # Toggle de push notifications
-│   │   ├── ComOthers/              # HallOfFame, AchievementsSection, ImageViewer
-│   │   ├── ComPanels/              # Paneles laterales (Ranking, Stats, World)
-│   │   ├── ComProfile/             # Perfil completo (tabs, hero, historial, logros)
-│   │   ├── ComPWA/                 # Botón de instalación PWA
-│   │   └── ComWorldCup/            # Mundial 2026 (grupos, bracket, knockout)
+│   │   │   ├── GlobalLoader.jsx
+│   │   │   ├── LoadingSpinner.jsx
+│   │   │   ├── LoadingStates.jsx
+│   │   │   └── Toast.jsx
+│   │   │
+│   │   ├── ComLayout/              # Layout base
+│   │   │   ├── DashboardSidebar.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Header.jsx
+│   │   │   └── MobileHeader.jsx
+│   │   │
+│   │   ├── ComMobile/              # Vistas móviles (9 componentes)
+│   │   │   ├── MobileAdmin.jsx
+│   │   │   ├── MobileDashboard.jsx
+│   │   │   ├── MobileNotes.jsx           # NUEVO
+│   │   │   ├── MobileNotifications.jsx
+│   │   │   ├── MobileProfileMain.jsx
+│   │   │   ├── MobileRanking.jsx
+│   │   │   ├── MobileStats.jsx
+│   │   │   ├── MobileSubPage.jsx
+│   │   │   └── StyleSwitcher.jsx         # NUEVO
+│   │   │
+│   │   ├── ComNavigation/          # Navegación
+│   │   │   └── NavigationTabs.jsx
+│   │   │
+│   │   ├── ComNotis/               # Push notifications
+│   │   │   └── PushNotificationsToggle.jsx
+│   │   │
+│   │   ├── ComOthers/              # Componentes especiales
+│   │   │   ├── AchievementsSection.jsx
+│   │   │   ├── HallOfFame.jsx
+│   │   │   ├── HistoryPanel.jsx
+│   │   │   ├── HistoryTriggerCard.jsx
+│   │   │   └── ImageViewer.jsx
+│   │   │
+│   │   ├── ComPanels/              # Paneles laterales
+│   │   │   ├── HallOfFamePanel.jsx
+│   │   │   ├── RankingRightPanel.jsx
+│   │   │   ├── RightNotesPanel.jsx      # NUEVO
+│   │   │   ├── RightPanel.jsx
+│   │   │   └── StatsRightPanel.jsx
+│   │   │
+│   │   ├── ComProfile/             # Perfil completo
+│   │   │   ├── AchievementsTab.jsx
+│   │   │   ├── AvatarUpload.jsx
+│   │   │   ├── EditTab.jsx
+│   │   │   ├── HistoryTab.jsx
+│   │   │   ├── MobileUserProfile.jsx
+│   │   │   ├── MonthlyChampionshipsTab.jsx
+│   │   │   ├── OverviewTab.jsx
+│   │   │   ├── ProfileHero.jsx
+│   │   │   ├── ProfileTabs.jsx
+│   │   │   └── UserProfilePanel.jsx
+│   │   │
+│   │   ├── ComPWA/                 # PWA
+│   │   │   └── InstallPWAButton.jsx
+│   │   │
+│   │   └── ComWorldCup/            # Mundial 2026
+│   │       ├── KnockoutMatchCard.jsx
+│   │       ├── KnockoutSection.jsx
+│   │       ├── RightPanelWorld.jsx
+│   │       ├── WorldCupAwardCard.jsx
+│   │       └── WorldCupNavigationTabs.jsx
 │   │
 │   ├── context/
 │   │   └── ThemeContext.jsx
 │   │
 │   ├── hooks/
-│   │   ├── HooksAdmin/             # useAdminMatches, useAdminLeagues, useAdminBanners, etc.
-│   │   ├── HooksCards/             # useMatches, useLeagues, useAwards
-│   │   ├── HooksOthers/            # useWorldCup, useKnockoutBracket, usePushNotifications
-│   │   ├── HooksProfile/           # useProfileData, useAchievements, useStreaks,
-│   │   │                           # usePredictionHistory, useMonthlyChampionships, useUserRanking
-│   │   ├── HooksSettings/          # useSettings
+│   │   ├── index.js
 │   │   ├── useDataLoader.js
-│   │   └── usePWA.js
+│   │   ├── usePWA.js
+│   │   ├── HooksAdmin/             # Hooks de admin (7 hooks)
+│   │   │   ├── index.js
+│   │   │   ├── useAdminAchievements.js
+│   │   │   ├── useAdminAwards.js
+│   │   │   ├── useAdminBanners.js
+│   │   │   ├── useAdminCrowns.js
+│   │   │   ├── useAdminData.js
+│   │   │   ├── useAdminLeagues.js
+│   │   │   └── useAdminMatches.js
+│   │   ├── HooksCards/             # Hooks de tarjetas (3 hooks)
+│   │   │   ├── useAwards.js
+│   │   │   ├── useLeagues.js
+│   │   │   └── useMatches.js
+│   │   ├── HooksNotes/             # Hooks de notas (NUEVO)
+│   │   │   └── useNotes.js
+│   │   ├── HooksOthers/            # Hooks especiales (3 hooks)
+│   │   │   ├── useKnockoutBracket.js
+│   │   │   ├── usePushNotifications.js
+│   │   │   └── useWorldCup.js
+│   │   ├── HooksProfile/           # Hooks de perfil (6 hooks)
+│   │   │   ├── useAchievements.js
+│   │   │   ├── useMonthlyChampionships.js
+│   │   │   ├── usePredictionHistory.js
+│   │   │   ├── useProfileData.js
+│   │   │   ├── useStreaks.js
+│   │   │   └── useUserRanking.js
+│   │   └── HooksSettings/          # Hooks de configuración (1 hook)
+│   │       ├── index.js
+│   │       └── useSettings.js
 │   │
 │   ├── pages/
 │   │   ├── AdminPage.jsx
 │   │   ├── DashboardPage.jsx
-│   │   ├── ForgotPasswordPage.jsx  ← Nuevo
+│   │   ├── ForgotPasswordPage.jsx
 │   │   ├── LoginPage.jsx
-│   │   ├── NotificationsPage.jsx   ← Nuevo
-│   │   ├── ProfileSettingsPage.jsx ← Nuevo
+│   │   ├── NotesPage.jsx           # NUEVO - Gestión de notas
+│   │   ├── NotificationsPage.jsx
+│   │   ├── ProfileSettingsPage.jsx
 │   │   ├── RankingPage.jsx
-│   │   ├── RegisterPage.jsx        ← Nuevo
-│   │   ├── ResetPasswordPage.jsx   ← Nuevo
+│   │   ├── RegisterPage.jsx
+│   │   ├── ResetPasswordPage.jsx
 │   │   ├── StatsPage.jsx
 │   │   └── WorldCupPage.jsx
+│   │
+│   ├── scripts/
+│   │   ├── checkDatabaseFunctions.js
+│   │   ├── diagnoseDatabase.js
+│   │   ├── listLeagues.js
+│   │   ├── listTeams.js
+│   │   ├── reset-weekly.js
+│   │   └── ... (más scripts)
 │   │
 │   ├── services/
 │   │   ├── offlineSync.js          # Sincronización offline
 │   │   ├── pushManager.js          # Gestión de push notifications
 │   │   └── pwaService.js           # Helpers de PWA
 │   │
-│   ├── scripts/                    # Utilidades de mantenimiento de BD
-│   │   ├── diagnoseDatabase.js
-│   │   ├── checkDatabaseFunctions.js
-│   │   ├── reset-weekly.js
-│   │   └── ...
-│   │
-│   ├── styles/                     # CSS organizado por dominio
-│   │   ├── StylesAdmin/
-│   │   ├── StylesCards/
-│   │   ├── StylesFeedback/
-│   │   ├── StylesLayout/
-│   │   ├── StylesMobile/
-│   │   ├── StylesNavigation/
-│   │   ├── StylesOthers/
-│   │   ├── StylesPages/
-│   │   ├── StylesPanels/
-│   │   ├── StylesProfile/
-│   │   └── StylesPWA/
+│   ├── styles/
+│   │   ├── layout.css              # Estilos generales
+│   │   ├── StylesAdmin/            # Estilos admin
+│   │   │   ├── AdminBanners.css
+│   │   │   ├── AdminCrownModal.css
+│   │   │   ├── AdminModal.css
+│   │   │   ├── AdminPage.css
+│   │   │   ├── AdminPanel.css
+│   │   │   └── AdminRightPanel.css
+│   │   ├── StylesCards/            # Estilos de tarjetas
+│   │   │   ├── AwardCard.css
+│   │   │   ├── KnockoutMatchCard.css
+│   │   │   ├── LeagueCard.css
+│   │   │   ├── MatchCard.css
+│   │   │   └── MobileCardsGlobal.css
+│   │   ├── StylesFeedback/         # Estilos de feedback
+│   │   │   ├── GlobalLoader.css
+│   │   │   ├── LoadingSpinner.css
+│   │   │   ├── LoadingStates.css
+│   │   │   └── Toast.css
+│   │   ├── StylesLayout/           # Estilos de layout
+│   │   │   ├── DashboardSidebar.css
+│   │   │   ├── Footer.css
+│   │   │   ├── Header.css
+│   │   │   ├── MobileHeader.css
+│   │   │   └── RankingSidebar.css
+│   │   ├── StylesMobile/           # Estilos móviles
+│   │   │   ├── HeaderMobile.css
+│   │   │   ├── MobileAdmin.css
+│   │   │   ├── MobileDashboard.css
+│   │   │   ├── MobileNotes.css
+│   │   │   ├── MobileNotifications.css
+│   │   │   ├── MobileProfileMain.css
+│   │   │   ├── MobileRanking.css
+│   │   │   ├── MobileStats.css
+│   │   │   └── StyleSwitcher.css
+│   │   ├── StylesNavigation/       # Estilos navegación
+│   │   │   └── NavigationTabs.css
+│   │   ├── StylesNotis/            # Estilos notificaciones
+│   │   │   └── PushNotificationsToggle.css
+│   │   ├── StylesOthers/           # Estilos especiales
+│   │   │   ├── AchievementsSection.css
+│   │   │   ├── HallOfFame.css
+│   │   │   ├── HistoryPanel.css
+│   │   │   └── ImageViewer.css
+│   │   ├── StylesPages/            # Estilos de páginas
+│   │   │   ├── LoginPage.css
+│   │   │   ├── RankingPage.css
+│   │   │   ├── StatsPage.css
+│   │   │   └── WorldCupPage.css
+│   │   ├── StylesPanels/           # Estilos paneles
+│   │   │   ├── HallOfFamePanel.css
+│   │   │   ├── RankingRightPanel.css
+│   │   │   ├── RightNotesPanel.css
+│   │   │   ├── RightPanel.css
+│   │   │   └── StatsRightPanel.css
+│   │   ├── StylesProfile/          # Estilos perfil
+│   │   │   ├── AchievementsTab.css
+│   │   │   ├── AvatarUpload.css
+│   │   │   ├── EditTab.css
+│   │   │   ├── HistoryTab.css
+│   │   │   ├── MonthlyChampionshipsTab.css
+│   │   │   ├── OverviewTab.css
+│   │   │   ├── ProfileHero.css
+│   │   │   ├── ProfileTabs.css
+│   │   │   └── UserProfilePanel.css
+│   │   ├── StylesPWA/              # Estilos PWA
+│   │   │   └── InstallPWAButton.css
+│   │   └── StylesWorldCup/         # Estilos Mundial
+│   │       ├── KnockoutMatchCard.css
+│   │       ├── KnockoutSection.css
+│   │       ├── RightPanelWorld.css
+│   │       └── WorldCupNavigationTabs.css
 │   │
 │   └── utils/
 │       ├── adminFilters.js
@@ -508,11 +1024,43 @@ globalscore/
 
 ---
 
+## ✨ Novedades en v1.2
+
+### 🎯 Nuevos Componentes
+
+- **NotesPage.jsx** - Página completa de gestión de notas personales
+- **MobileNotes.jsx** - Vista móvil optimizada para notas
+- **RightNotesPanel.jsx** - Panel lateral para notas en desktop
+- **useNotes.js** - Hook personalizado para lógica de notas
+- **StyleSwitcher.jsx** - Selector de temas en mobile (NUEVO)
+
+### 🔄 Componentes Mejorados
+
+- **MobileAdmin.jsx** - Ahora con mejor UX y FAB flotante
+- **MobileRanking.jsx** - Rediseño con busca de usuario integrada
+- **AdminModalsContainer.jsx** - Gestión centralizada de modales
+- **NavigationTabs.jsx** - Bottom nav con indicadores visuales
+
+### 🎨 Estilos Nuevos
+
+- `StylesMobile/MobileNotes.css` - Estilos para notas móvil
+- `StylesMobile/StyleSwitcher.css` - Selector de temas
+- `StylesPanels/RightNotesPanel.css` - Panel de notas desktop
+
+### 🛠️ Mejoras Técnicas
+
+- **Mejor detección de dispositivo** - Hook `useMediaQuery` más eficiente
+- **Optimización de lazy loading** - Componentes Mobile con React.lazy
+- **CSS Variables dinámicas** - Temas adaptables
+- **Transiciones suaves** - Desktop ↔ Mobile sin recargas
+
+---
+
 ## 🗺️ Roadmap
 
-### ✅ Completado (v1.0 — v1.1)
+### ✅ Completado (v1.0 — v1.2)
 
-- [x] Sistema de autenticación completo (registro, login, recuperación de contraseña)
+- [x] Sistema de autenticación completo
 - [x] Predicciones de partidos con puntos
 - [x] Predicciones de ligas y premios individuales
 - [x] Sistema de logros, títulos y coronas
@@ -521,26 +1069,25 @@ globalscore/
 - [x] Ranking global con podio y Hall of Fame
 - [x] Campeonatos mensuales con historial
 - [x] Panel de administración completo
-- [x] Panel de diagnóstico de base de datos
 - [x] Mundial 2026 (Fase de grupos + Eliminatorias)
-- [x] Responsive design + vistas móviles dedicadas
-- [x] **Push Notifications** vía VAPID/Web Push (Edge Function Deno)
-- [x] Soporte offline con Service Worker y sincronización pendiente
-- [x] PWA completa (instalable, Service Worker, manifest)
+- [x] **Responsive design + vistas móviles dedicadas** ⭐ MEJORADO
+- [x] Push Notifications vía VAPID/Web Push
+- [x] Soporte offline con Service Worker
+- [x] PWA completa
 - [x] App Android compilada y firmada via TWA
-- [x] GitHub Actions para reset semanal automatizado
-- [x] Digital Asset Links configurados
+- [x] GitHub Actions para reset semanal
+- [x] **Sistema de Notas Personales** ⭐ NUEVO
+- [x] **StyleSwitcher en Mobile** ⭐ NUEVO
 
-### 🚧 En Progreso (v1.2)
+### 🚧 En Progreso (v1.3)
 
-- [ ] **Google Play Store**: Publicación oficial de la app
+- [ ] **Google Play Store**: Publicación oficial
 - [ ] **Chat Global**: Comunidad integrada
 - [ ] **Ligas Privadas**: Competencias entre grupos cerrados
-- [ ] **Multidioma**: Español, Inglés, Portugués
 
 ### 📋 Planeado (v2.0)
 
-- [ ] **Integración con APIs**: Resultados automáticos de partidos
+- [ ] **Integración con APIs**: Resultados automáticos
 - [ ] **Sistema de Monedas**: Economía virtual
 - [ ] **Tienda**: Compra de avatares y temas
 - [ ] **Torneos Personalizados**: Crea tus propias ligas
@@ -549,8 +1096,8 @@ globalscore/
 
 ### 🔮 Futuro (v3.0)
 
-- [ ] **AI Predictions**: Asistente con IA para sugerencias
-- [ ] **Analytics Avanzados**: ML para recomendaciones personalizadas
+- [ ] **AI Predictions**: Asistente con IA
+- [ ] **Analytics Avanzados**: ML para recomendaciones
 
 ---
 
@@ -574,6 +1121,7 @@ globalscore/
 - ✅ Carpetas de hooks con prefijo `Hooks` (`HooksAdmin/`, `HooksProfile/`, etc.)
 - ✅ CSS classes en **kebab-case**
 - ✅ Commits siguiendo [Conventional Commits](https://www.conventionalcommits.org/)
+- ✅ Responsive: Siempre considerar Desktop Y Mobile
 
 ### Reportar Bugs
 
@@ -582,6 +1130,7 @@ Usa el [issue tracker](https://github.com/jsebasvgg7/GlobalScore/issues) con:
 - Pasos para reproducirlo
 - Comportamiento esperado vs actual
 - Screenshots si es posible
+- Device info (Desktop/Mobile, navegador, tamaño pantalla)
 
 ---
 
@@ -598,7 +1147,7 @@ Usa el [issue tracker](https://github.com/jsebasvgg7/GlobalScore/issues) con:
 
 ---
 
-## 🫱🏼‍🫲🏼 Colaborador
+## 🫱🏼‍🫲🏼 Colaboradores
 
 - [The Brainy](https://www.instagram.com/brainy_bh) — Diseño y feedback
 
@@ -614,7 +1163,7 @@ Usa el [issue tracker](https://github.com/jsebasvgg7/GlobalScore/issues) con:
 - [Render](https://render.com/) — Hosting
 - [Bubblewrap](https://github.com/GoogleChromeLabs/bubblewrap) — TWA para Android
 
-## 🙏 Agradecimientos Personales
+### 🙏 Agradecimientos Personales
 
 - [Francisco Diaz](https://www.instagram.com/f_dixxz7)
 - [Bryan Tuñon](https://www.instagram.com/bry4n._tdc)
