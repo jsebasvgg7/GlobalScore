@@ -1,6 +1,5 @@
 /* ================================================
-  GLOBALSCORE · HistoryTriggerCard
-  Brutalist Japanese retro dark
+  GLOBALSCORE 
 ================================================ */
 
 .htc-root {
@@ -10,7 +9,7 @@
   gap: 10px;
   width: 100%;
   padding: 11px 16px;
-  background: var(--card, #1e2235);
+  background: var(--card, #0D0B12);
   border: none;
   border-bottom: 0.5px solid var(--border, rgba(255,255,255,0.08));
   border-top: 2px solid transparent;
