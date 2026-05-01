@@ -12,24 +12,29 @@
   background: var(--bg);
 }
 
-/* ── Stats strip ─────────────────────────────────────────────── */
+/* ── Stats strip — COMPACTA (fila única, 44px) ───────────────── */
 .ah-stats-strip {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;              /* fila en vez de grid */
+  flex-direction: row;
   border-bottom: 0.5px solid var(--border);
   flex-shrink: 0;
+  height: 44px;
+  overflow: hidden;
 }
 
 .ah-stat-cell {
+  flex: 1;
   display: flex;
+  flex-direction: row;        /* ícono + texto en línea */
   align-items: center;
-  gap: 10px;
-  padding: 16px 20px;
+  gap: 8px;
+  padding: 0 16px;
   border-right: 0.5px solid var(--border);
   background: var(--card);
   position: relative;
   overflow: hidden;
   transition: background 0.12s;
+  min-width: 0;
 }
 
 .ah-stat-cell:last-child { border-right: none; }
@@ -47,31 +52,33 @@
 .ah-stat-cell:hover::before { opacity: 1; }
 
 .ah-stat-icon-wrap {
-  width: 36px;
-  height: 36px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--accent);
-  background: rgba(91,79,216,0.08);
-  border: 0.5px solid rgba(91,79,216,0.15);
+  opacity: 0.7;
   flex-shrink: 0;
 }
 
 .ah-stat-body {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;        /* número + label en línea */
+  align-items: baseline;
+  gap: 5px;
   flex: 1;
   min-width: 0;
 }
 
 .ah-stat-n {
-  font-size: 2.2rem;
+  font-size: 18px;            /* era 2.2rem — reducido */
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: var(--text-primary);
   line-height: 1;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
+  flex-shrink: 0;
 }
 
 .ah-stat-lbl {
@@ -79,9 +86,11 @@
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.10em;
   color: var(--muted);
-  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ah-stat-pub {
@@ -89,7 +98,8 @@
   font-family: 'DM Mono', monospace;
   color: var(--muted);
   white-space: nowrap;
-  align-self: flex-end;
+  flex-shrink: 0;
+  opacity: 0.7;
 }
 
 /* ── Shell: list + panel ─────────────────────────────────────── */
@@ -275,7 +285,6 @@
   opacity: 0.25;
 }
 
-/* Spin for loading state */
 .ah-spin {
   animation: ah-spin 1s linear infinite;
 }
@@ -349,9 +358,7 @@
 .ah-list-row:hover { background: var(--card); }
 .ah-list-row:hover::before { opacity: 1; }
 
-.ah-list-row--active {
-  background: var(--card);
-}
+.ah-list-row--active { background: var(--card); }
 .ah-list-row--active::before { opacity: 1; background: #1D9E75; }
 
 [data-theme="dark"] .ah-list-row:hover { background: rgba(255,255,255,0.02); }
@@ -434,21 +441,14 @@
   color: #1D9E75;
   border-color: rgba(29,158,117,0.3);
 }
-.ah-pub-pill--on:hover {
-  background: #1D9E75;
-  color: #fff;
-  border-color: #1D9E75;
-}
+.ah-pub-pill--on:hover { background: #1D9E75; color: #fff; border-color: #1D9E75; }
 
 .ah-pub-pill--off {
   background: var(--glass);
   color: var(--muted);
   border-color: var(--border);
 }
-.ah-pub-pill--off:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
+.ah-pub-pill--off:hover { border-color: var(--accent); color: var(--accent); }
 
 /* Botones de acción en la lista */
 .ah-list-btn {
@@ -465,15 +465,13 @@
   flex-shrink: 0;
 }
 
-.ah-list-btn--edit:hover { border-color: #3b82f6; background: rgba(59,130,246,0.08); }
-.ah-list-btn--del:hover  { border-color: #f25f5c; background: rgba(242,95,92,0.08); }
+.ah-list-btn--edit:hover  { border-color: #3b82f6; background: rgba(59,130,246,0.08); color: #3b82f6; }
+.ah-list-btn--del:hover   { border-color: #f25f5c; background: rgba(242,95,92,0.08);  color: #f25f5c; }
 
 .ah-list-btn--confirm {
   border-color: rgba(242,95,92,0.4);
   background: rgba(242,95,92,0.08);
   color: #f25f5c;
-  font-size: 10px;
-  font-weight: 700;
 }
 .ah-list-btn--confirm:hover { background: #f25f5c; color: #fff; border-color: #f25f5c; }
 
@@ -481,7 +479,6 @@
   border-color: var(--border);
   background: transparent;
   color: var(--muted);
-  font-size: 10px;
 }
 .ah-list-btn--cancel-del:hover { color: var(--text-primary); border-color: var(--text-primary); }
 
@@ -819,6 +816,9 @@
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 .ah-add-link-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 
@@ -985,7 +985,16 @@
 
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 1200px) {
-  .ah-stats-strip { grid-template-columns: repeat(2, 1fr); }
+  /* Volvemos a 2x2 grid solo en la strip cuando no hay espacio */
+  .ah-stats-strip {
+    flex-wrap: wrap;
+    height: auto;
+  }
+  .ah-stat-cell {
+    flex: 1 1 50%;
+    min-width: 0;
+    height: 44px;
+  }
   .ah-stat-cell:nth-child(2) { border-right: none; }
   .ah-stat-cell:nth-child(3) { border-top: 0.5px solid var(--border); border-right: 0.5px solid var(--border); }
   .ah-stat-cell:nth-child(4) { border-top: 0.5px solid var(--border); border-right: none; }
@@ -1000,7 +1009,17 @@
 @media (max-width: 768px) {
   .ah-root { height: auto; overflow: visible; }
 
-  .ah-stats-strip { grid-template-columns: 1fr 1fr; }
+  .ah-stats-strip {
+    flex-wrap: wrap;
+    height: auto;
+  }
+  .ah-stat-cell {
+    flex: 1 1 50%;
+    height: 44px;
+  }
+  .ah-stat-cell:nth-child(2) { border-right: none; }
+  .ah-stat-cell:nth-child(3) { border-top: 0.5px solid var(--border); border-right: 0.5px solid var(--border); }
+  .ah-stat-cell:nth-child(4) { border-top: 0.5px solid var(--border); border-right: none; }
 
   .ah-shell {
     flex-direction: column;
@@ -1027,15 +1046,15 @@
   .ah-panel-form { min-height: 200px; }
 
   .ah-tab { padding: 0 12px; font-size: 10px; }
-  .ah-controls { padding: 0 14px; height: auto; padding: 8px 14px; }
+  .ah-controls { padding: 8px 14px; height: auto; }
   .ah-search { max-width: none; }
 
-  .ah-stat-n { font-size: 1.8rem; }
-  .ah-stat-cell { padding: 12px 14px; }
+  .ah-stat-n { font-size: 16px; }
+  .ah-stat-cell { padding: 0 12px; }
 }
 
 @media (max-width: 480px) {
   .ah-tab span:not(.ah-tab-count) { display: none; }
   .ah-tab { padding: 0 14px; }
-  .ah-stat-n { font-size: 1.4rem; letter-spacing: -1px; }
+  .ah-stat-lbl { display: none; }   /* en móvil muy pequeño solo número + ícono */
 }

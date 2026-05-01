@@ -100,7 +100,6 @@ function PublishToggle({ checked, onChange }) {
   );
 }
 
-// Campo reutilizable del panel
 function PField({ label, required, hint, children }) {
   return (
     <div className="ah-pfield">
@@ -590,7 +589,7 @@ function HistoricalList({ items, onEdit, onDelete, onTogglePublish, renderTitle,
 // ══════════════════════════════════════════════════════════════════════════════
 export default function AdminHistorical() {
   const [activeTab, setActiveTab] = useState("players");
-  const [panel, setPanel]         = useState(null); // { type, data }
+  const [panel, setPanel]         = useState(null);
   const [search, setSearch]       = useState("");
 
   const {
@@ -614,23 +613,12 @@ export default function AdminHistorical() {
   const openEdit   = (data) => setPanel({ type: activeTab, data });
   const closePanel = () => setPanel(null);
 
-  const handleSavePlayer = async (form, file) => {
-    if (form.id) return updatePlayer(form.id, form, file);
-    return createPlayer(form, file);
-  };
-  const handleSaveTeam = async (form, file) => {
-    if (form.id) return updateTeam(form.id, form, file);
-    return createTeam(form, file);
-  };
-  const handleSaveCompetition = async (form, file) => {
-    if (form.id) return updateCompetition(form.id, form, file);
-    return createCompetition(form, file);
-  };
-  const handleSaveEvent = async (form, file) => {
-    if (form.id) return updateEvent(form.id, form, file);
-    return createEvent(form, file);
-  };
+  const handleSavePlayer      = async (form, file) => form.id ? updatePlayer(form.id, form, file)      : createPlayer(form, file);
+  const handleSaveTeam        = async (form, file) => form.id ? updateTeam(form.id, form, file)        : createTeam(form, file);
+  const handleSaveCompetition = async (form, file) => form.id ? updateCompetition(form.id, form, file) : createCompetition(form, file);
+  const handleSaveEvent       = async (form, file) => form.id ? updateEvent(form.id, form, file)       : createEvent(form, file);
 
+  // ── Stats compactas: ícono pequeño + número + label + pub ──
   const stats = [
     { label: "Jugadores",    count: players.length,      pub: players.filter(x => x.is_published).length,      Icon: Users2  },
     { label: "Equipos",      count: teams.length,        pub: teams.filter(x => x.is_published).length,        Icon: Shield  },
@@ -649,22 +637,7 @@ export default function AdminHistorical() {
 
   return (
     <div className="ah-root">
-
-      {/* ── Stats strip ── */}
-      <div className="ah-stats-strip">
-        {stats.map(s => (
-          <div key={s.label} className="ah-stat-cell">
-            <div className="ah-stat-icon-wrap"><s.Icon size={18} /></div>
-            <div className="ah-stat-body">
-              <span className="ah-stat-n">{s.count}</span>
-              <span className="ah-stat-lbl">{s.label}</span>
-            </div>
-            <span className="ah-stat-pub">{s.pub} pub.</span>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Shell: list + panel ── */}
+      {/* ── Shell: list + panel (ocupa todo el espacio restante) ── */}
       <div className="ah-shell">
 
         {/* ── LEFT: tabs + search + list ── */}
@@ -717,11 +690,8 @@ export default function AdminHistorical() {
               <>
                 {activeTab === "players" && (
                   <HistoricalList
-                    items={filteredPlayers}
-                    selectedId={selectedId}
-                    onEdit={openEdit}
-                    onDelete={deletePlayer}
-                    onTogglePublish={togglePlayerPublished}
+                    items={filteredPlayers} selectedId={selectedId}
+                    onEdit={openEdit} onDelete={deletePlayer} onTogglePublish={togglePlayerPublished}
                     renderTitle={p => p.name}
                     renderMeta={p => [p.country, p.position, p.era, p.legacy_type].filter(Boolean).join(" · ")}
                     emptyMsg="No hay jugadores históricos."
@@ -729,11 +699,8 @@ export default function AdminHistorical() {
                 )}
                 {activeTab === "teams" && (
                   <HistoricalList
-                    items={filteredTeams}
-                    selectedId={selectedId}
-                    onEdit={openEdit}
-                    onDelete={deleteTeam}
-                    onTogglePublish={toggleTeamPublished}
+                    items={filteredTeams} selectedId={selectedId}
+                    onEdit={openEdit} onDelete={deleteTeam} onTogglePublish={toggleTeamPublished}
                     renderTitle={t => t.name}
                     renderMeta={t => [t.country, t.era_dominance, t.legacy_type].filter(Boolean).join(" · ")}
                     emptyMsg="No hay equipos históricos."
@@ -741,11 +708,8 @@ export default function AdminHistorical() {
                 )}
                 {activeTab === "competitions" && (
                   <HistoricalList
-                    items={filteredCompetitions}
-                    selectedId={selectedId}
-                    onEdit={openEdit}
-                    onDelete={deleteCompetition}
-                    onTogglePublish={toggleCompetitionPublished}
+                    items={filteredCompetitions} selectedId={selectedId}
+                    onEdit={openEdit} onDelete={deleteCompetition} onTogglePublish={toggleCompetitionPublished}
                     renderTitle={c => c.name}
                     renderMeta={c => [c.type, c.year ? String(c.year) : null].filter(Boolean).join(" · ")}
                     emptyMsg="No hay competencias."
@@ -753,11 +717,8 @@ export default function AdminHistorical() {
                 )}
                 {activeTab === "events" && (
                   <HistoricalList
-                    items={filteredEvents}
-                    selectedId={selectedId}
-                    onEdit={openEdit}
-                    onDelete={deleteEvent}
-                    onTogglePublish={toggleEventPublished}
+                    items={filteredEvents} selectedId={selectedId}
+                    onEdit={openEdit} onDelete={deleteEvent} onTogglePublish={toggleEventPublished}
                     renderTitle={e => e.title}
                     renderMeta={e => [e.event_type, e.event_date].filter(Boolean).join(" · ")}
                     emptyMsg="No hay eventos históricos."
@@ -770,13 +731,14 @@ export default function AdminHistorical() {
 
         {/* ── RIGHT: panel ── */}
         <aside className="ah-right">
-          {/* Panel header */}
           <div className="ah-panel-header">
             <div className="ah-panel-header-left">
               <span className="ah-panel-dot" />
               <span className="ah-panel-title">
                 {panel
-                  ? (panel.data ? `Editar ${TABS.find(t => t.key === activeTab)?.label.slice(0,-1)}` : `Nuevo ${TABS.find(t => t.key === activeTab)?.label.slice(0,-1)}`)
+                  ? (panel.data
+                      ? `Editar ${TABS.find(t => t.key === activeTab)?.label.slice(0,-1)}`
+                      : `Nuevo ${TABS.find(t => t.key === activeTab)?.label.slice(0,-1)}`)
                   : "Panel"}
               </span>
             </div>
@@ -787,45 +749,30 @@ export default function AdminHistorical() {
             )}
           </div>
 
-          {/* Panel body */}
           <div className="ah-panel-body">
             {!panel && <EmptyPanel activeTab={activeTab} />}
 
             {panel?.type === "players" && (
               <PlayerPanel
-                player={panel.data}
-                teams={teams}
-                onSave={handleSavePlayer}
-                onClose={closePanel}
-                onGetPlayerTeams={getPlayerTeams}
-                onSetPlayerTeams={setPlayerTeams}
+                player={panel.data} teams={teams}
+                onSave={handleSavePlayer} onClose={closePanel}
+                onGetPlayerTeams={getPlayerTeams} onSetPlayerTeams={setPlayerTeams}
               />
             )}
             {panel?.type === "teams" && (
-              <TeamPanel
-                team={panel.data}
-                onSave={handleSaveTeam}
-                onClose={closePanel}
-              />
+              <TeamPanel team={panel.data} onSave={handleSaveTeam} onClose={closePanel} />
             )}
             {panel?.type === "competitions" && (
               <CompetitionPanel
-                competition={panel.data}
-                teams={teams}
-                onSave={handleSaveCompetition}
-                onClose={closePanel}
+                competition={panel.data} teams={teams}
+                onSave={handleSaveCompetition} onClose={closePanel}
               />
             )}
             {panel?.type === "events" && (
               <EventPanel
-                event={panel.data}
-                players={players}
-                teams={teams}
-                competitions={competitions}
-                onSave={handleSaveEvent}
-                onClose={closePanel}
-                onGetRelations={getEventRelations}
-                onSetRelations={setEventRelations}
+                event={panel.data} players={players} teams={teams} competitions={competitions}
+                onSave={handleSaveEvent} onClose={closePanel}
+                onGetRelations={getEventRelations} onSetRelations={setEventRelations}
               />
             )}
           </div>
