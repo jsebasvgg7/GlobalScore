@@ -1,8 +1,3 @@
-/* ============================================================
-   HistoryPage.css — GlobalScore · Sección Histórica
-   Sistema: DM Mono + Sora, bordes 0.5px, sin border-radius,
-   purple theme, consistente con AdminHistorical.css
-   ============================================================ */
 
 /* ── Root ──────────────────────────────────────────────────── */
 .hp-root {
@@ -830,7 +825,68 @@
   color: var(--muted);
   font-style: italic;
 }
+/* ============================================================
+   AGREGAR AL FINAL DE src/styles/StylesPages/HistoryPage.css
+   ============================================================ */
 
+/* ── Shell: layout principal + panel derecho ─────────────── */
+.hp-shell {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* La columna izquierda ocupa el espacio restante y scrollea */
+.hp-shell .hp-root {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Vista detalle también en shell */
+.hp-root--detail {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+/* ── Card activa (jugador seleccionado) ──────────────────── */
+.hp-player-card--active {
+  background: var(--card) !important;
+}
+
+.hp-player-card--active::before {
+  opacity: 1 !important;
+}
+
+.hp-player-card--active .hp-card-sig-bar {
+  opacity: 0.4 !important;
+}
+
+/* ── Responsive del shell ────────────────────────────────── */
+@media (max-width: 1024px) {
+  /* En tablet/mobile el shell deja de ser flex row */
+  .hp-shell {
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+
+  .hp-shell .hp-root,
+  .hp-root--detail {
+    height: auto;
+    overflow: visible;
+    min-height: 100vh;
+  }
+}
 /* ══════════════════════════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════════════════════════ */

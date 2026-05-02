@@ -1,0 +1,575 @@
+/* ============================================================
+   HistoryRightPanel.css — GlobalScore
+   Sistema: DM Mono + Sora, 0.5px borders, sin border-radius
+   Consistente con RightPanel.css / RankingRightPanel.css
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
+
+/* ── Root ─────────────────────────────────────────────────── */
+.hrp-root {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #e8e4de;
+  border-left: 0.5px solid #d4cfc8;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+[data-theme="dark"] .hrp-root {
+  background: #1a1d2e;
+  border-left-color: rgba(255, 255, 255, 0.08);
+}
+
+.hrp-root::-webkit-scrollbar { width: 3px; }
+.hrp-root::-webkit-scrollbar-track { background: transparent; }
+.hrp-root::-webkit-scrollbar-thumb { background: #c8c3bb; }
+[data-theme="dark"] .hrp-root::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+
+/* ── Label superior ───────────────────────────────────────── */
+.hrp-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px 12px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.18em;
+  color: #8b7fc7;
+  border-bottom: 0.5px solid #d4cfc8;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .hrp-label {
+  color: #a99de8;
+  border-bottom-color: rgba(255,255,255,0.07);
+}
+
+.hrp-label-dot {
+  width: 5px;
+  height: 5px;
+  background: #8b7fc7;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .hrp-label-dot { background: #a99de8; }
+
+/* ── Bloque genérico ──────────────────────────────────────── */
+.hrp-block {
+  padding: 14px 18px;
+  border-bottom: 0.5px solid #d4cfc8;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .hrp-block { border-bottom-color: rgba(255,255,255,0.07); }
+
+.hrp-block--top { padding-bottom: 10px; }
+
+.hrp-section {
+  padding: 14px 18px;
+  border-bottom: 0.5px solid #d4cfc8;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .hrp-section { border-bottom-color: rgba(255,255,255,0.07); }
+
+/* ── Label de bloque ──────────────────────────────────────── */
+.hrp-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b0aaa0;
+  margin-bottom: 12px;
+}
+
+[data-theme="dark"] .hrp-block-label { color: #4a5568; }
+
+.hrp-block-label svg { opacity: 0.8; }
+
+.hrp-block-label::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: #d4cfc8;
+}
+
+[data-theme="dark"] .hrp-block-label::after { background: rgba(255,255,255,0.07); }
+
+/* ── Stat row genérico ────────────────────────────────────── */
+.hrp-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 0.5px solid #d4cfc8;
+}
+
+.hrp-stat-row:last-child { border-bottom: none; }
+
+[data-theme="dark"] .hrp-stat-row { border-bottom-color: rgba(255,255,255,0.05); }
+
+.hrp-stat-lbl {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: #888780;
+  letter-spacing: 0.02em;
+}
+
+[data-theme="dark"] .hrp-stat-lbl { color: #4a5568; }
+
+.hrp-stat-val {
+  font-size: 16px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: #1a1a2e;
+  letter-spacing: -0.5px;
+}
+
+[data-theme="dark"] .hrp-stat-val { color: #f0f1f7; }
+
+.hrp-val--accent { color: #5b4fd8; }
+.hrp-val--gold   { color: #c9a227; }
+
+[data-theme="dark"] .hrp-val--accent { color: #8b7fc7; }
+[data-theme="dark"] .hrp-val--gold   { color: #f0c040; }
+
+/* ══════════════════════════════════════════════════════════
+   JUGADOR SELECCIONADO
+══════════════════════════════════════════════════════════ */
+.hrp-selected-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 0 10px;
+  color: #c8c3bb;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+[data-theme="dark"] .hrp-selected-empty { color: #2a3040; }
+
+.hrp-selected-empty svg { opacity: 0.3; }
+
+.hrp-selected-card {
+  display: flex;
+  align-items: stretch;
+  background: #f0ede8;
+  border: 0.5px solid #d4cfc8;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .hrp-selected-card {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.08);
+}
+
+.hrp-selected-accent {
+  width: 3px;
+  flex-shrink: 0;
+}
+
+.hrp-selected-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 12px 12px 10px;
+  min-width: 0;
+}
+
+.hrp-selected-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Mini avatar */
+.hrp-mini-av {
+  flex-shrink: 0;
+  background: rgba(91,79,216,0.1);
+  border: 0.5px solid rgba(91,79,216,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hrp-mini-av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hrp-mini-av span {
+  font-size: 11px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: #5b4fd8;
+}
+
+[data-theme="dark"] .hrp-mini-av { background: rgba(139,127,199,0.12); border-color: rgba(139,127,199,0.25); }
+[data-theme="dark"] .hrp-mini-av span { color: #a99de8; }
+
+.hrp-selected-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hrp-selected-name {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: 'Sora', sans-serif;
+  color: #1a1a2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.2px;
+}
+
+[data-theme="dark"] .hrp-selected-name { color: #f0f1f7; }
+
+.hrp-selected-meta {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: #888780;
+  letter-spacing: 0.04em;
+}
+
+[data-theme="dark"] .hrp-selected-meta { color: #4a5568; }
+
+.hrp-selected-era {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: #5b4fd8;
+  letter-spacing: 0.04em;
+}
+
+[data-theme="dark"] .hrp-selected-era { color: #8b7fc7; }
+
+/* Barra de significancia */
+.hrp-selected-sig {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hrp-sig-bar-wrap {
+  display: flex;
+  gap: 2px;
+  flex: 1;
+}
+
+.hrp-sig-segment {
+  flex: 1;
+  height: 3px;
+  background: #d4cfc8;
+}
+
+.hrp-sig-segment--on { background: #5b4fd8; }
+
+[data-theme="dark"] .hrp-sig-segment { background: rgba(255,255,255,0.1); }
+[data-theme="dark"] .hrp-sig-segment--on { background: #8b7fc7; }
+
+.hrp-selected-sig-lbl {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: #5b4fd8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .hrp-selected-sig-lbl { color: #8b7fc7; }
+
+/* Badge */
+.hrp-selected-badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 2px 8px;
+  border: 0.5px solid color-mix(in srgb, var(--badge-c, #5b4fd8) 40%, transparent);
+  background: color-mix(in srgb, var(--badge-c, #5b4fd8) 8%, transparent);
+  color: var(--badge-c, #5b4fd8);
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Frase de impacto */
+.hrp-selected-impact {
+  font-size: 10px;
+  font-family: 'Sora', sans-serif;
+  color: #888780;
+  line-height: 1.6;
+  margin: 0;
+  font-style: italic;
+  border-left: 2px solid #5b4fd8;
+  padding-left: 8px;
+}
+
+[data-theme="dark"] .hrp-selected-impact { color: #4a5568; border-left-color: #8b7fc7; }
+
+/* ══════════════════════════════════════════════════════════
+   POR POSICIÓN
+══════════════════════════════════════════════════════════ */
+.hrp-pos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hrp-pos-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.hrp-pos-icon {
+  font-size: 11px;
+  flex-shrink: 0;
+  width: 16px;
+  text-align: center;
+}
+
+.hrp-pos-name {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: #888780;
+  width: 72px;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .hrp-pos-name { color: #4a5568; }
+
+.hrp-pos-track {
+  flex: 1;
+  height: 3px;
+  background: #d4cfc8;
+}
+
+[data-theme="dark"] .hrp-pos-track { background: rgba(255,255,255,0.08); }
+
+.hrp-pos-fill {
+  height: 100%;
+  background: #5b4fd8;
+  transition: width 0.4s ease;
+}
+
+[data-theme="dark"] .hrp-pos-fill { background: #8b7fc7; }
+
+.hrp-pos-count {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: #5b4fd8;
+  width: 16px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .hrp-pos-count { color: #8b7fc7; }
+
+/* ══════════════════════════════════════════════════════════
+   TIPOS DE LEGADO
+══════════════════════════════════════════════════════════ */
+.hrp-legacy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.hrp-legacy-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hrp-legacy-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+}
+
+.hrp-legacy-name {
+  flex: 1;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: #888780;
+}
+
+[data-theme="dark"] .hrp-legacy-name { color: #4a5568; }
+
+.hrp-legacy-count {
+  font-size: 13px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ══════════════════════════════════════════════════════════
+   TOP LEYENDAS
+══════════════════════════════════════════════════════════ */
+.hrp-top-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.hrp-top-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 0;
+  border-bottom: 0.5px solid #d4cfc8;
+  background: transparent;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+  width: 100%;
+}
+
+.hrp-top-row:last-child { border-bottom: none; }
+
+.hrp-top-row:hover { background: rgba(91,79,216,0.05); }
+
+[data-theme="dark"] .hrp-top-row { border-bottom-color: rgba(255,255,255,0.05); }
+[data-theme="dark"] .hrp-top-row:hover { background: rgba(139,127,199,0.06); }
+
+.hrp-top-rank {
+  font-size: 11px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: #c8c3bb;
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .hrp-top-rank { color: #2a3040; }
+
+.hrp-top-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.hrp-top-name {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: #1a1a2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-theme="dark"] .hrp-top-name { color: #f0f1f7; }
+
+.hrp-top-meta {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: #888780;
+}
+
+[data-theme="dark"] .hrp-top-meta { color: #4a5568; }
+
+.hrp-top-sig {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.hrp-top-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PIE: GOAT
+══════════════════════════════════════════════════════════ */
+.hrp-goat {
+  background: #5b4fd8;
+  padding: 16px 18px;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.hrp-goat-label {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 10px;
+}
+
+.hrp-goat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hrp-goat-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hrp-goat-name {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: 'Sora', sans-serif;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hrp-goat-meta {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255,255,255,0.5);
+}
+
+.hrp-goat-chip {
+  font-size: 20px;
+  line-height: 1;
+  color: #f0c040;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(240,192,64,0.5));
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .hrp-root { display: none; }
+}

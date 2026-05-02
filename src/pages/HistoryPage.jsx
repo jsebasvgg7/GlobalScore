@@ -5,6 +5,7 @@ import {
   useHistoricalPlayerDetail,
   getHistoricalImageUrl,
 } from "../hooks/HooksHistory/useHistoricalPlayers";
+import HistoryRightPanel from "../components/ComPanels/HistoryRightPanel";
 import "../styles/StylesPages/HistoryPage.css";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -67,9 +68,14 @@ function PlayerAvatar({ imagePath, name, size = "md" }) {
 }
 
 // ─── Card de jugador ──────────────────────────────────────────────────────────
-function PlayerCard({ player, onClick }) {
+function PlayerCard({ player, onClick, isActive, onMouseEnter, onMouseLeave }) {
   return (
-    <article className="hp-player-card" onClick={() => onClick(player)}>
+    <article
+      className={`hp-player-card${isActive ? " hp-player-card--active" : ""}`}
+      onClick={() => onClick(player)}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <div className="hp-card-sig-bar" style={{ "--sig": player.significance_level || 1 }} />
 
       <PlayerAvatar imagePath={player.image_path} name={player.name} size="lg" />
@@ -291,6 +297,7 @@ function PlayerDetail({ playerId, onBack }) {
 // ─── Página principal ─────────────────────────────────────────────────────────
 export default function HistoryPage() {
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
+  const [hoveredPlayer, setHoveredPlayer]       = useState(null);
   const [showFilters, setShowFilters]           = useState(false);
 
   const {
@@ -310,13 +317,26 @@ export default function HistoryPage() {
     setFilterLegacy("");
   };
 
+  // El jugador que se muestra en el panel derecho:
+  // primero el hovereado, luego el seleccionado si hay detalle abierto, sino null
+  const panelPlayer = hoveredPlayer || (selectedPlayerId
+    ? allPlayers.find((p) => p.id === selectedPlayerId) || null
+    : null);
+
   // ── Vista detalle ──
   if (selectedPlayerId) {
     return (
-      <div className="hp-root">
-        <PlayerDetail
-          playerId={selectedPlayerId}
-          onBack={() => setSelectedPlayerId(null)}
+      <div className="hp-shell">
+        <div className="hp-root hp-root--detail">
+          <PlayerDetail
+            playerId={selectedPlayerId}
+            onBack={() => setSelectedPlayerId(null)}
+          />
+        </div>
+        <HistoryRightPanel
+          allPlayers={allPlayers}
+          selectedPlayer={panelPlayer}
+          onSelectPlayer={(p) => setSelectedPlayerId(p.id)}
         />
       </div>
     );
@@ -324,161 +344,176 @@ export default function HistoryPage() {
 
   // ── Vista listado ──
   return (
-    <div className="hp-root">
+    <div className="hp-shell">
 
-      {/* Header de sección */}
-      <header className="hp-header">
-        <div className="hp-header-left">
-          <div className="hp-header-icon">
-            <Users2 size={18} strokeWidth={1.5} />
-          </div>
-          <div>
-            <h1 className="hp-header-title">Sección Histórica</h1>
-            <p className="hp-header-sub">
-              {allPlayers.length} leyendas del fútbol mundial
-            </p>
-          </div>
-        </div>
+      {/* ── COLUMNA PRINCIPAL ── */}
+      <div className="hp-root">
 
-        {/* Search */}
-        <div className="hp-search-wrap">
-          <div className="hp-search">
-            <Search size={13} className="hp-search-ico" />
-            <input
-              className="hp-search-input"
-              placeholder="Buscar jugador, país..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            {search && (
-              <button className="hp-search-clear" onClick={() => setSearch("")}>
-                <X size={11} />
-              </button>
-            )}
-          </div>
-
-          <button
-            className={`hp-filter-btn ${hasActiveFilters ? "hp-filter-btn--active" : ""}`}
-            onClick={() => setShowFilters((v) => !v)}
-          >
-            <Filter size={12} />
-            Filtros
-            {hasActiveFilters && <span className="hp-filter-dot" />}
-          </button>
-        </div>
-      </header>
-
-      {/* Panel de filtros */}
-      {showFilters && (
-        <div className="hp-filters-panel">
-          <div className="hp-filters-row">
-            <div className="hp-filter-group">
-              <label className="hp-filter-label">Posición</label>
-              <select
-                className="hp-filter-select"
-                value={filterPosition}
-                onChange={(e) => setFilterPosition(e.target.value)}
-              >
-                <option value="">Todas</option>
-                {positions.map((p) => <option key={p}>{p}</option>)}
-              </select>
+        {/* Header de sección */}
+        <header className="hp-header">
+          <div className="hp-header-left">
+            <div className="hp-header-icon">
+              <Users2 size={18} strokeWidth={1.5} />
             </div>
-
-            <div className="hp-filter-group">
-              <label className="hp-filter-label">Era</label>
-              <select
-                className="hp-filter-select"
-                value={filterEra}
-                onChange={(e) => setFilterEra(e.target.value)}
-              >
-                <option value="">Todas</option>
-                {eras.map((e) => <option key={e}>{e}</option>)}
-              </select>
+            <div>
+              <h1 className="hp-header-title">Sección Histórica</h1>
+              <p className="hp-header-sub">
+                {allPlayers.length} leyendas del fútbol mundial
+              </p>
             </div>
-
-            <div className="hp-filter-group">
-              <label className="hp-filter-label">Legado</label>
-              <select
-                className="hp-filter-select"
-                value={filterLegacy}
-                onChange={(e) => setFilterLegacy(e.target.value)}
-              >
-                <option value="">Todos</option>
-                {legacies.map((l) => <option key={l}>{l}</option>)}
-              </select>
-            </div>
-
-            {hasActiveFilters && (
-              <button className="hp-clear-filters" onClick={clearFilters}>
-                <X size={11} /> Limpiar
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Estado: cargando */}
-      {loading && (
-        <div className="hp-state-msg">
-          <RefreshCw size={18} className="hp-spin" />
-          <span>Cargando leyendas...</span>
-        </div>
-      )}
-
-      {/* Estado: error */}
-      {error && !loading && (
-        <div className="hp-state-error">
-          <AlertCircle size={18} />
-          <p>{error}</p>
-          <button className="hp-retry-btn" onClick={reload}>
-            <RefreshCw size={12} /> Reintentar
-          </button>
-        </div>
-      )}
-
-      {/* Estado: sin resultados */}
-      {!loading && !error && players.length === 0 && (
-        <div className="hp-state-empty">
-          <Users2 size={28} strokeWidth={1} />
-          <p className="hp-empty-title">
-            {allPlayers.length === 0
-              ? "Aún no hay jugadores históricos"
-              : "No hay coincidencias"}
-          </p>
-          <p className="hp-empty-sub">
-            {allPlayers.length === 0
-              ? "El administrador publicará las leyendas pronto."
-              : "Prueba con otro nombre o ajusta los filtros."}
-          </p>
-          {hasActiveFilters && (
-            <button className="hp-retry-btn" onClick={clearFilters}>
-              <X size={11} /> Limpiar filtros
-            </button>
-          )}
-        </div>
-      )}
-
-      {/* Grid de jugadores */}
-      {!loading && !error && players.length > 0 && (
-        <>
-          <div className="hp-results-bar">
-            <span className="hp-results-count">
-              {players.length} jugador{players.length !== 1 ? "es" : ""}
-              {hasActiveFilters || search ? " encontrado" + (players.length !== 1 ? "s" : "") : ""}
-            </span>
           </div>
 
-          <div className="hp-grid">
-            {players.map((player) => (
-              <PlayerCard
-                key={player.id}
-                player={player}
-                onClick={(p) => setSelectedPlayerId(p.id)}
+          {/* Search */}
+          <div className="hp-search-wrap">
+            <div className="hp-search">
+              <Search size={13} className="hp-search-ico" />
+              <input
+                className="hp-search-input"
+                placeholder="Buscar jugador, país..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
-            ))}
+              {search && (
+                <button className="hp-search-clear" onClick={() => setSearch("")}>
+                  <X size={11} />
+                </button>
+              )}
+            </div>
+
+            <button
+              className={`hp-filter-btn ${hasActiveFilters ? "hp-filter-btn--active" : ""}`}
+              onClick={() => setShowFilters((v) => !v)}
+            >
+              <Filter size={12} />
+              Filtros
+              {hasActiveFilters && <span className="hp-filter-dot" />}
+            </button>
           </div>
-        </>
-      )}
+        </header>
+
+        {/* Panel de filtros */}
+        {showFilters && (
+          <div className="hp-filters-panel">
+            <div className="hp-filters-row">
+              <div className="hp-filter-group">
+                <label className="hp-filter-label">Posición</label>
+                <select
+                  className="hp-filter-select"
+                  value={filterPosition}
+                  onChange={(e) => setFilterPosition(e.target.value)}
+                >
+                  <option value="">Todas</option>
+                  {positions.map((p) => <option key={p}>{p}</option>)}
+                </select>
+              </div>
+
+              <div className="hp-filter-group">
+                <label className="hp-filter-label">Era</label>
+                <select
+                  className="hp-filter-select"
+                  value={filterEra}
+                  onChange={(e) => setFilterEra(e.target.value)}
+                >
+                  <option value="">Todas</option>
+                  {eras.map((e) => <option key={e}>{e}</option>)}
+                </select>
+              </div>
+
+              <div className="hp-filter-group">
+                <label className="hp-filter-label">Legado</label>
+                <select
+                  className="hp-filter-select"
+                  value={filterLegacy}
+                  onChange={(e) => setFilterLegacy(e.target.value)}
+                >
+                  <option value="">Todos</option>
+                  {legacies.map((l) => <option key={l}>{l}</option>)}
+                </select>
+              </div>
+
+              {hasActiveFilters && (
+                <button className="hp-clear-filters" onClick={clearFilters}>
+                  <X size={11} /> Limpiar
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Estado: cargando */}
+        {loading && (
+          <div className="hp-state-msg">
+            <RefreshCw size={18} className="hp-spin" />
+            <span>Cargando leyendas...</span>
+          </div>
+        )}
+
+        {/* Estado: error */}
+        {error && !loading && (
+          <div className="hp-state-error">
+            <AlertCircle size={18} />
+            <p>{error}</p>
+            <button className="hp-retry-btn" onClick={reload}>
+              <RefreshCw size={12} /> Reintentar
+            </button>
+          </div>
+        )}
+
+        {/* Estado: sin resultados */}
+        {!loading && !error && players.length === 0 && (
+          <div className="hp-state-empty">
+            <Users2 size={28} strokeWidth={1} />
+            <p className="hp-empty-title">
+              {allPlayers.length === 0
+                ? "Aún no hay jugadores históricos"
+                : "No hay coincidencias"}
+            </p>
+            <p className="hp-empty-sub">
+              {allPlayers.length === 0
+                ? "El administrador publicará las leyendas pronto."
+                : "Prueba con otro nombre o ajusta los filtros."}
+            </p>
+            {hasActiveFilters && (
+              <button className="hp-retry-btn" onClick={clearFilters}>
+                <X size={11} /> Limpiar filtros
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Grid de jugadores */}
+        {!loading && !error && players.length > 0 && (
+          <>
+            <div className="hp-results-bar">
+              <span className="hp-results-count">
+                {players.length} jugador{players.length !== 1 ? "es" : ""}
+                {hasActiveFilters || search ? " encontrado" + (players.length !== 1 ? "s" : "") : ""}
+              </span>
+            </div>
+
+            <div className="hp-grid">
+              {players.map((player) => (
+                <PlayerCard
+                  key={player.id}
+                  player={player}
+                  isActive={player.id === selectedPlayerId}
+                  onClick={(p) => setSelectedPlayerId(p.id)}
+                  onMouseEnter={() => setHoveredPlayer(player)}
+                  onMouseLeave={() => setHoveredPlayer(null)}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* ── PANEL DERECHO ── */}
+      <HistoryRightPanel
+        allPlayers={allPlayers}
+        selectedPlayer={panelPlayer}
+        onSelectPlayer={(p) => setSelectedPlayerId(p.id)}
+      />
+
     </div>
   );
 }

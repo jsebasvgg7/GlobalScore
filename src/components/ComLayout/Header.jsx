@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Trophy, LogOut, User2, Award, Shield, Bell, Home, BarChart3, Moon, Sun, Globe, NotebookPen, BookMarked } from "lucide-react";
+import { Trophy, LogOut, User2, Award, Shield, Bell, Home, BarChart3, Moon, Sun, Globe, NotebookPen, History } from "lucide-react";
 import { supabase } from "../../utils/supabaseClient";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
@@ -34,12 +34,13 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
 
   /* ── Sidebar / Desktop nav ── */
   const sidebarItems = [
-    { path: "/app",     icon: Home,        label: "Inicio"  },
-    { path: "/ranking", icon: Award,       label: "Ranking" },
-    { path: "/stats",   icon: BarChart3,   label: "Stats"   },
-    { path: "/world",   icon: Globe,       label: "Mundo"   },
-    { path: "/profile", icon: User2,       label: "Perfil"  },
-    { path: "/notes",   icon: NotebookPen, label: "Notas"   },
+    { path: "/app",     icon: Home,        label: "Inicio"    },
+    { path: "/ranking", icon: Award,       label: "Ranking"   },
+    { path: "/stats",   icon: BarChart3,   label: "Stats"     },
+    { path: "/world",   icon: Globe,       label: "Mundo"     },
+    { path: "/history", icon: History,     label: "Histórico" },
+    { path: "/profile", icon: User2,       label: "Perfil"    },
+    { path: "/notes",   icon: NotebookPen, label: "Notas"     },
     ...(currentUser?.is_admin ? [{ path: "/admin", icon: Shield, label: "Admin" }] : []),
   ];
 

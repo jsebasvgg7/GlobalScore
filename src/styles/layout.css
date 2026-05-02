@@ -1,5 +1,5 @@
 /* ================================================
-  GLOBALSCORE
+  GLOBALSCORE — layout.css
 ================================================ */
 
 .vega-root {
@@ -15,9 +15,21 @@
 }
 
 @media (min-width: 769px) {
+  /* ── Raíz individual de history ── */
   .hp-root {
     margin-left: 80px;
     margin-top: 56px;
+  }
+
+  /* ── Shell de history (contiene main + panel derecho) ── */
+  .hp-shell {
+    padding-top: 16px;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
   }
 
   .vega-root {
@@ -75,9 +87,14 @@
 @media (max-width: 768px) {
   .vega-root,
   .page-root,
-  .notes-page {
+  .notes-page,
+  .hp-shell {
     margin-left: 0;
     padding-top: 0;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    display: block;
   }
 
   .container,
