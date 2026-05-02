@@ -460,7 +460,84 @@
 .mhd-nav-label--center {
   display: none;
 }
+/* ================================================
+   BOOKMARK TAB — separador de libro flotante
+================================================ */
+.mhd-bookmark-tab {
+  display:         none;
+  position:        fixed;
+  right:           -2px;
+  top:             50%;
+  transform:       translateY(-50%);
+  z-index:         250;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  gap:             5px;
+  width:           34px;
+  padding:         14px 0;
+  cursor:          pointer;
+  border:          none;
+  -webkit-tap-highlight-color: transparent;
+  transition:      transform 0.2s ease, right 0.2s ease;
+}
 
+@media (max-width: 768px) {
+  .mhd-bookmark-tab { display: flex; }
+}
+
+[data-style="brutalist"] .mhd-bookmark-tab {
+  background:    var(--mhd-accent);
+  border-radius: 0;
+  color:         rgba(255, 255, 255, 0.8);
+  box-shadow:    -3px 3px 0 rgba(91, 79, 216, 0.35);
+  clip-path: polygon(0 6px, 6px 0, 100% 0, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+}
+
+[data-style="neumorphism"] .mhd-bookmark-tab {
+  background:    var(--mhd-accent);
+  border-radius: 8px 0 0 8px;
+  color:         rgba(255, 255, 255, 0.85);
+  box-shadow:    -3px 0 12px rgba(96, 81, 155, 0.35);
+}
+
+.mhd-bookmark-tab:active {
+  right: 0px;
+  transform: translateY(-50%) scale(0.96);
+}
+
+.mhd-bookmark-tab--active {
+  right: 0px !important;
+}
+
+[data-style="brutalist"] .mhd-bookmark-tab--active {
+  background: #4a3fc7;
+  color:      #fff;
+}
+
+[data-style="neumorphism"] .mhd-bookmark-tab--active {
+  background: #4a3fc7;
+  color:      #fff;
+}
+
+.mhd-bookmark-label {
+  font-size:      7px;
+  font-weight:    700;
+  font-family:    var(--mhd-mono);
+  letter-spacing: 0.1em;
+  color:          rgba(255, 255, 255, 0.65);
+  writing-mode:   vertical-rl;
+  text-orientation: mixed;
+  line-height:    1;
+}
+
+.mhd-bookmark-tab--active .mhd-bookmark-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mhd-bookmark-tab { transition: none; }
+}
 @keyframes mhd-dot-pulse {
   0%, 100% { transform: scale(1); opacity: 1; }
   50%       { transform: scale(1.4); opacity: 0.7; }

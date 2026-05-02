@@ -17,12 +17,12 @@
 @media (min-width: 769px) {
 
   .vega-root {
-    margin-left: 72px;
+    margin-left: 80px;
     padding-top: 56px;
   }
 
   .page-root {
-    margin-left: 72px;
+    margin-left: 80px;
     padding-top: 56px;
     height: 100vh;
     max-height: 100vh;
@@ -32,6 +32,15 @@
 
   .lb-page.page-root {
     padding-top: 24px;
+  }
+
+  .notes-page {
+    margin-left: 80px;
+    padding-top: 56px;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
   }
 
   .container,
@@ -59,19 +68,10 @@
   }
 }
 
-@media (min-width: 769px) {
-  .notes-page {
-    margin-left: var(--sidebar-w, 80px);
-    padding-top: var(--topbar-h, 56px);
-    height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
-    box-sizing: border-box;
-  }
-}
 @media (max-width: 768px) {
   .vega-root,
-  .page-root {
+  .page-root,
+  .notes-page {
     margin-left: 0;
     padding-top: 0;
   }

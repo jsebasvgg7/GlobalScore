@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import HistoryPage from "./pages/HistoryPage";
 import DashboardPage from "./pages/DashboardPage";
 import RankingPage from "./pages/RankingPage";
 import AdminPage from "./pages/AdminPage";
@@ -264,7 +265,10 @@ export default function App() {
             path="/notes"
             element={session ? <NotesPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
-
+          <Route
+            path="/history"
+            element={session ? <HistoryPage currentUser={currentUser} /> : <Navigate to="/" replace />}
+          />
           <Route
             path="/profile"
             element={

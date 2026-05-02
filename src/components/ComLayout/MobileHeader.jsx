@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Bell, Moon, Sun, Trophy, Award, BarChart3, Globe, User2, NotebookPen, Shield, Home } from "lucide-react";
+import { Bell, Moon, Sun, Trophy, Award, BarChart3, Globe, User2, NotebookPen, Shield, Home, BookMarked } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import "../../styles/StylesLayout/MobileHeader.css";
@@ -148,6 +148,17 @@ export default function MobileHeader({ currentUser }) {
         ))}
 
       </nav>
+      {/* ══════════════════════════════════════════════
+    BOOKMARK — separador de libro flotante hacia Historia
+══════════════════════════════════════════════ */}
+<button
+  className={`mhd-bookmark-tab${isActive("/history") ? " mhd-bookmark-tab--active" : ""}`}
+  onClick={() => navigate("/history")}
+  aria-label="Historia"
+>
+  <BookMarked size={15} strokeWidth={2} />
+  <span className="mhd-bookmark-label">HIST</span>
+</button>
     </>
   );
 }
