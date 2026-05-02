@@ -144,6 +144,135 @@ export function useAdminHistorical() {
   };
 
   // ══════════════════════════════════════════════════════════════════════════
+  //  PLAYER CAREER — trayectoria en clubes
+  // ══════════════════════════════════════════════════════════════════════════
+  const getPlayerCareer = async (playerId) => {
+    const { data, error } = await supabase
+      .from("historical_player_career")
+      .select("*")
+      .eq("player_id", playerId)
+      .order("start_year", { ascending: true });
+    if (error) throw error;
+    return data || [];
+  };
+
+  /**
+   * Reemplaza toda la trayectoria de clubes de un jugador.
+   * rows = [{ team_name, team_country, start_year, end_year, appearances, goals, assists, role_note, sort_order }]
+   */
+  const setPlayerCareer = async (playerId, rows) => {
+    const { error: delErr } = await supabase
+      .from("historical_player_career")
+      .delete()
+      .eq("player_id", playerId);
+    if (delErr) throw delErr;
+
+    if (!rows || rows.length === 0) return;
+
+    const toInsert = rows.map((r, idx) => ({
+      player_id:    playerId,
+      team_name:    r.team_name    || null,
+      team_country: r.team_country || null,
+      start_year:   r.start_year   ? parseInt(r.start_year)   : null,
+      end_year:     r.end_year     ? parseInt(r.end_year)     : null,
+      appearances:  r.appearances  ? parseInt(r.appearances)  : null,
+      goals:        r.goals        ? parseInt(r.goals)        : null,
+      assists:      r.assists      ? parseInt(r.assists)      : null,
+      role_note:    r.role_note    || null,
+      sort_order:   r.sort_order   ?? idx,
+    }));
+
+    const { error: insErr } = await supabase
+      .from("historical_player_career")
+      .insert(toInsert);
+    if (insErr) throw insErr;
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  PLAYER NATIONAL — trayectoria en selección
+  // ══════════════════════════════════════════════════════════════════════════
+  const getPlayerNational = async (playerId) => {
+    const { data, error } = await supabase
+      .from("historical_player_national")
+      .select("*")
+      .eq("player_id", playerId)
+      .order("start_year", { ascending: true });
+    if (error) throw error;
+    return data || [];
+  };
+
+  /**
+   * Reemplaza toda la trayectoria de selección de un jugador.
+   * rows = [{ country, start_year, end_year, caps, goals, assists, role_note }]
+   */
+  const setPlayerNational = async (playerId, rows) => {
+    const { error: delErr } = await supabase
+      .from("historical_player_national")
+      .delete()
+      .eq("player_id", playerId);
+    if (delErr) throw delErr;
+
+    if (!rows || rows.length === 0) return;
+
+    const toInsert = rows.map((r) => ({
+      player_id:  playerId,
+      country:    r.country    || null,
+      start_year: r.start_year ? parseInt(r.start_year) : null,
+      end_year:   r.end_year   ? parseInt(r.end_year)   : null,
+      caps:       r.caps       ? parseInt(r.caps)       : null,
+      goals:      r.goals      ? parseInt(r.goals)      : null,
+      assists:    r.assists     ? parseInt(r.assists)    : null,
+      role_note:  r.role_note  || null,
+    }));
+
+    const { error: insErr } = await supabase
+      .from("historical_player_national")
+      .insert(toInsert);
+    if (insErr) throw insErr;
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  PLAYER TITLES — palmarés individual
+  // ══════════════════════════════════════════════════════════════════════════
+  const getPlayerTitles = async (playerId) => {
+    const { data, error } = await supabase
+      .from("historical_player_titles")
+      .select("*")
+      .eq("player_id", playerId)
+      .order("year", { ascending: true });
+    if (error) throw error;
+    return data || [];
+  };
+
+  /**
+   * Reemplaza todo el palmarés de un jugador.
+   * rows = [{ title_category, title_name, year, team_name, quantity }]
+   */
+  const setPlayerTitles = async (playerId, rows) => {
+    const { error: delErr } = await supabase
+      .from("historical_player_titles")
+      .delete()
+      .eq("player_id", playerId);
+    if (delErr) throw delErr;
+
+    if (!rows || rows.length === 0) return;
+
+    const toInsert = rows.map((r) => ({
+      player_id:      playerId,
+      title_category: r.title_category || "club",
+      title_name:     r.title_name     || null,
+      year:           r.year           ? parseInt(r.year) : null,
+      team_name:      r.team_name      || null,
+      quantity:       r.quantity       ? parseInt(r.quantity) : 1,
+    }));
+
+    const { error: insErr } = await supabase
+      .from("historical_player_titles")
+      .insert(toInsert);
+    if (insErr) throw insErr;
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
   //  TEAMS CRUD
   // ══════════════════════════════════════════════════════════════════════════
   const createTeam = async (formData, imageFile) => {
@@ -199,11 +328,6 @@ export function useAdminHistorical() {
   // ══════════════════════════════════════════════════════════════════════════
   //  TEAM LINEUP — 11 titular
   // ══════════════════════════════════════════════════════════════════════════
-
-  /**
-   * Devuelve los 11 jugadores del lineup de un equipo.
-   * Ordenados por shirt_number.
-   */
   const getTeamLineup = async (teamId) => {
     const { data, error } = await supabase
       .from("historical_team_lineup")
@@ -214,20 +338,13 @@ export function useAdminHistorical() {
     return data || [];
   };
 
-  /**
-   * Reemplaza toda la alineación de un equipo.
-   * lineupRows = [{ shirt_number, player_name, position_role, pos_x, pos_y, player_id? }]
-   * Elimina los registros anteriores e inserta los nuevos en una sola operación.
-   */
   const setTeamLineup = async (teamId, lineupRows) => {
-    // 1. Borrar alineación existente
     const { error: delErr } = await supabase
       .from("historical_team_lineup")
       .delete()
       .eq("team_id", teamId);
     if (delErr) throw delErr;
 
-    // 2. Insertar nueva si hay jugadores
     if (!lineupRows || lineupRows.length === 0) return;
 
     const rows = lineupRows.map((r) => ({
@@ -247,12 +364,8 @@ export function useAdminHistorical() {
   };
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  TEAM TITLES — palmarés
+  //  TEAM TITLES — palmarés de equipo
   // ══════════════════════════════════════════════════════════════════════════
-
-  /**
-   * Devuelve los títulos de un equipo, ordenados por año.
-   */
   const getTeamTitles = async (teamId) => {
     const { data, error } = await supabase
       .from("historical_team_titles")
@@ -263,20 +376,13 @@ export function useAdminHistorical() {
     return data || [];
   };
 
-  /**
-   * Reemplaza todos los títulos de un equipo.
-   * titleRows = [{ title_name, year, competition_id? }]
-   * También actualiza el campo titles_count en historical_teams.
-   */
   const setTeamTitles = async (teamId, titleRows) => {
-    // 1. Borrar títulos existentes
     const { error: delErr } = await supabase
       .from("historical_team_titles")
       .delete()
       .eq("team_id", teamId);
     if (delErr) throw delErr;
 
-    // 2. Insertar nuevos si hay
     if (titleRows && titleRows.length > 0) {
       const rows = titleRows.map((r) => ({
         team_id:        teamId,
@@ -290,7 +396,6 @@ export function useAdminHistorical() {
       if (insErr) throw insErr;
     }
 
-    // 3. Sincronizar titles_count en historical_teams
     const count = titleRows?.length ?? 0;
     const { data: updatedTeam, error: updErr } = await supabase
       .from("historical_teams")
@@ -299,8 +404,6 @@ export function useAdminHistorical() {
       .select()
       .single();
     if (updErr) throw updErr;
-
-    // 4. Actualizar estado local
     setTeams((prev) => prev.map((t) => (t.id === teamId ? updatedTeam : t)));
   };
 
@@ -489,20 +592,26 @@ export function useAdminHistorical() {
     loading, error,
     // Reload
     loadAll, loadPlayers, loadTeams, loadCompetitions, loadEvents,
-    // Players
+    // Players CRUD
     createPlayer, updatePlayer, deletePlayer, togglePlayerPublished,
-    // Teams
+    // Player career ← NUEVO
+    getPlayerCareer, setPlayerCareer,
+    // Player national ← NUEVO
+    getPlayerNational, setPlayerNational,
+    // Player titles ← NUEVO
+    getPlayerTitles, setPlayerTitles,
+    // Teams CRUD
     createTeam, updateTeam, deleteTeam, toggleTeamPublished,
-    // Team lineup ← NUEVO
+    // Team lineup
     getTeamLineup, setTeamLineup,
-    // Team titles ← NUEVO
+    // Team titles
     getTeamTitles, setTeamTitles,
-    // Competitions
+    // Competitions CRUD
     createCompetition, updateCompetition, deleteCompetition, toggleCompetitionPublished,
-    // Events
+    // Events CRUD
     createEvent, updateEvent, deleteEvent, toggleEventPublished,
     // Relations
     getPlayerTeams, setPlayerTeams,
     getEventRelations, setEventRelations,
   };
-}
+} 

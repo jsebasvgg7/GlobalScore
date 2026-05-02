@@ -244,7 +244,7 @@ function TeamDetail({ teamId, onBack }) {
 
       {/* ── Botón volver ── */}
       <button className="htp-back-btn" onClick={onBack}>
-        <ArrowLeft size={14} /> Volver a equipos
+        <ArrowLeft size={14} /> 
       </button>
 
       {/* ── HERO ── */}
@@ -460,7 +460,7 @@ export default function HistoricalTeamsPage({ rightPanelRef }) {
         <div className="htp-header-left">
           <div className="htp-header-icon"><Shield size={18} strokeWidth={1.5} /></div>
           <div>
-            <h1 className="htp-header-title">Equipos Históricos</h1>
+            <h1 className="htp-header-title">EQUIPOS HISTORICOS</h1>
             <p className="htp-header-sub">{teams.length} equipos legendarios</p>
           </div>
         </div>

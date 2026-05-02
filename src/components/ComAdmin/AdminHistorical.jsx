@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Users2, Shield, Trophy, Zap, Search, Camera, Pencil,
   Trash2, Check, X, ChevronLeft, Plus, Star, Eye, EyeOff,
@@ -576,6 +576,7 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
 // ══════════════════════════════════════════════════════════════════════════════
 //  PANEL: EQUIPO
 // ══════════════════════════════════════════════════════════════════════════════
+
 function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLineup, onGetTitles, onSetTitles }) {
   const isEdit = !!team?.id;
   const [form, setForm]           = useState(team?.id ? { ...team } : { ...TEAM_EMPTY });
@@ -584,14 +585,15 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
   const [error, setError]         = useState(null);
   const [tab, setTab]             = useState("info");
   const [loadingData, setLoadingData] = useState(false);
-
+ 
   const [lineup, setLineup] = useState(
     Array.from({ length: 11 }, (_, i) => EMPTY_LINEUP_PLAYER(i + 1))
   );
   const [titles, setTitles]     = useState([]);
   const [newTitle, setNewTitle] = useState({ title_name: "", year: "", competition_id: "" });
-
-  useState(() => {
+ 
+  // ✅ BUG 1 CORREGIDO: useEffect en lugar de useState para cargar datos async
+  useEffect(() => {
     if (!isEdit) return;
     setLoadingData(true);
     Promise.all([onGetLineup(team.id), onGetTitles(team.id)])
@@ -601,21 +603,34 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
             Array.from({ length: 11 }, (_, i) => {
               const found = lin.find(p => p.shirt_number === i + 1);
               return found
-                ? { shirt_number: i + 1, player_name: found.player_name || "",
+                ? {
+                    shirt_number:  i + 1,
+                    player_name:   found.player_name || "",
                     position_role: found.position_role || "",
-                    pos_x: found.pos_x ?? 50, pos_y: found.pos_y ?? 50 }
+                    pos_x:         found.pos_x ?? 50,
+                    pos_y:         found.pos_y ?? 50,
+                  }
                 : EMPTY_LINEUP_PLAYER(i + 1);
             })
           );
         }
-        setTitles(tit || []);
+        // ✅ BUG 2 CORREGIDO: guardamos solo los campos que necesitamos de los títulos existentes
+        setTitles(
+          (tit || []).map(t => ({
+            _dbId:          t.id,            // referencia interna, no se envía a Supabase
+            title_name:     t.title_name,
+            year:           t.year || "",
+            competition_id: t.competition_id || "",
+          }))
+        );
       })
       .catch(() => {})
       .finally(() => setLoadingData(false));
-  }, []);
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // solo al montar
+ 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
-
+ 
   const applyFormation = (formation) => {
     const defaults = FORMATION_DEFAULTS[formation];
     if (!defaults) return;
@@ -627,35 +642,60 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
     );
     set("formation", formation);
   };
-
+ 
   const updateLineupPlayer = (num, field, val) =>
     setLineup(prev => prev.map(p => p.shirt_number === num ? { ...p, [field]: val } : p));
-
+ 
   const addTitle = () => {
     if (!newTitle.title_name.trim()) return;
-    setTitles(prev => [...prev, { ...newTitle, _temp: Date.now() }]);
+    setTitles(prev => [
+      ...prev,
+      {
+        title_name:     newTitle.title_name.trim(),
+        year:           newTitle.year || "",
+        competition_id: newTitle.competition_id || "",
+      },
+    ]);
     setNewTitle({ title_name: "", year: "", competition_id: "" });
   };
-
+ 
   const removeTitle = (idx) => setTitles(prev => prev.filter((_, i) => i !== idx));
+ 
+const handleSubmit = async () => {
+  if (!form.name.trim()) { setError("El nombre es obligatorio"); return; }
+  setSaving(true); setError(null);
+  try {
+    console.log("1. Guardando form...");
+    const saved = await onSave(form, imageFile);
+    console.log("2. Equipo guardado:", saved);
+    const id = saved?.id || team?.id;
+    console.log("3. ID del equipo:", id);
+    console.log("4. Títulos a guardar:", titles);
+    
+    if (id) {
+      const lineupToSave = lineup.filter(p => p.player_name && p.player_name.trim() !== "");
+      console.log("5. Lineup a guardar:", lineupToSave);
+      await onSetLineup(id, lineupToSave);
+      console.log("6. Lineup guardado OK");
 
-  const handleSubmit = async () => {
-    if (!form.name.trim()) { setError("El nombre es obligatorio"); return; }
-    setSaving(true); setError(null);
-    try {
-      const saved = await onSave(form, imageFile);
-      const id = saved?.id || team?.id;
-      if (id) {
-        const lineupToSave = lineup.filter(p => p.player_name && p.player_name.trim() !== "");
-        await onSetLineup(id, lineupToSave);
-        // eslint-disable-next-line no-unused-vars
-        await onSetTitles(id, titles.map(({ _temp, ...t }) => t));
-      }
-      onClose();
-    } catch (err) { setError(err.message); }
-    finally { setSaving(false); }
-  };
-
+      const titlesToSave = titles.map(({ title_name, year, competition_id }) => ({
+        title_name,
+        year: year ? parseInt(year, 10) : null,
+        competition_id: competition_id || null,
+      }));
+      console.log("7. titlesToSave:", titlesToSave);
+      await onSetTitles(id, titlesToSave);
+      console.log("8. Títulos guardados OK");
+    }
+    onClose();
+  } catch (err) {
+    console.error("ERROR:", err);
+    setError(err.message);
+  } finally {
+    setSaving(false);
+  }
+};
+ 
   return (
     <div className="ah-panel-form">
       <div className="ah-inner-tabs">
@@ -667,7 +707,7 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
           </button>
         ))}
       </div>
-
+ 
       {tab === "info" && <>
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Imagen</span>
@@ -742,7 +782,7 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
           <PublishToggle checked={form.is_published} onChange={v => set("is_published", v)} />
         </div>
       </>}
-
+ 
       {tab === "lineup" && (
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Formación y 11 titular</span>
@@ -796,50 +836,72 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
           </span>
         </div>
       )}
-
+ 
       {tab === "titles" && (
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Palmarés</span>
-          {titles.length > 0 && (
-            <div className="ah-team-chips">
-              {titles.map((t, i) => (
-                <div key={t.id || t._temp || i} className="ah-team-chip">
-                  <span className="ah-tc-name">{t.title_name}</span>
-                  {t.year && <span className="ah-tc-years">{t.year}</span>}
-                  <button type="button" className="ah-tc-remove" onClick={() => removeTitle(i)}>
-                    <X size={10} />
-                  </button>
-                </div>
-              ))}
+ 
+          {loadingData ? (
+            <div className="ah-loading-msg">
+              <RefreshCw size={12} className="ah-spin" /> Cargando...
             </div>
+          ) : (
+            <>
+              {titles.length > 0 && (
+                <div className="ah-team-chips">
+                  {titles.map((t, i) => (
+                    <div key={i} className="ah-team-chip">
+                      <span className="ah-tc-name">{t.title_name}</span>
+                      {t.year && <span className="ah-tc-years">{t.year}</span>}
+                      <button type="button" className="ah-tc-remove" onClick={() => removeTitle(i)}>
+                        <X size={10} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+ 
+              <div className="ah-pgrid-2" style={{ marginTop: 10 }}>
+                <PField label="Nombre del título" required>
+                  <PInput
+                    value={newTitle.title_name}
+                    onChange={e => setNewTitle(t => ({ ...t, title_name: e.target.value }))}
+                    placeholder="Copa del Mundo 1974"
+                    onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); addTitle(); } }}
+                  />
+                </PField>
+                <PField label="Año">
+                  <PInput
+                    type="number"
+                    value={newTitle.year}
+                    onChange={e => setNewTitle(t => ({ ...t, year: e.target.value }))}
+                    placeholder="1974"
+                  />
+                </PField>
+              </div>
+              <PField label="Competencia (opcional)">
+                <PSelect
+                  value={newTitle.competition_id}
+                  onChange={e => setNewTitle(t => ({ ...t, competition_id: e.target.value }))}>
+                  <option value="">— Ninguna —</option>
+                  {(competitions || []).map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </PSelect>
+              </PField>
+              <button
+                type="button"
+                className="ah-add-link-btn"
+                style={{ width: "100%", justifyContent: "center", marginTop: 8 }}
+                onClick={addTitle}
+                disabled={!newTitle.title_name.trim()}>
+                <Plus size={12} /> Añadir título
+              </button>
+            </>
           )}
-          <div className="ah-pgrid-2" style={{ marginTop: 10 }}>
-            <PField label="Nombre del título" required>
-              <PInput value={newTitle.title_name}
-                onChange={e => setNewTitle(t => ({ ...t, title_name: e.target.value }))}
-                placeholder="Copa del Mundo 1974" />
-            </PField>
-            <PField label="Año">
-              <PInput type="number" value={newTitle.year}
-                onChange={e => setNewTitle(t => ({ ...t, year: e.target.value }))}
-                placeholder="1974" />
-            </PField>
-          </div>
-          <PField label="Competencia (opcional)">
-            <PSelect value={newTitle.competition_id}
-              onChange={e => setNewTitle(t => ({ ...t, competition_id: e.target.value }))}>
-              <option value="">— Ninguna —</option>
-              {(competitions || []).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </PSelect>
-          </PField>
-          <button type="button" className="ah-add-link-btn"
-            style={{ width: "100%", justifyContent: "center", marginTop: 8 }}
-            onClick={addTitle}>
-            <Plus size={12} /> Añadir título
-          </button>
         </div>
       )}
-
+ 
       {error && <div className="ah-panel-error">{error}</div>}
       <div className="ah-panel-actions">
         <button className="ah-paction-cancel" onClick={onClose}>Cancelar</button>

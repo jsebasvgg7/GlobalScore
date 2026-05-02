@@ -377,7 +377,7 @@
 .hp-badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
+  padding: 2px 28px;
   border: 0.5px solid color-mix(in srgb, var(--badge-color) 40%, transparent);
   background: color-mix(in srgb, var(--badge-color) 8%, transparent);
   color: var(--badge-color);
@@ -868,6 +868,302 @@
 
 .hp-player-card--active .hp-card-sig-bar {
   opacity: 0.4 !important;
+}
+/* ============================================================
+   HistoryPage.css — ADICIONES
+   Stats strip · Tabla de carrera · Palmarés · Selección
+   Agrega esto al final de HistoryPage.css
+   ============================================================ */
+
+/* ══════════════════════════════════════════════════════════
+   STATS STRIP — fila de números rápida bajo el hero
+══════════════════════════════════════════════════════════ */
+.hp-stats-strip {
+  display: flex;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--card);
+  flex-shrink: 0;
+}
+
+.hp-stat-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 10px;
+  border-right: 0.5px solid var(--border);
+  gap: 3px;
+  position: relative;
+  transition: background 0.12s;
+}
+
+.hp-stat-cell:last-child { border-right: none; }
+.hp-stat-cell:hover { background: var(--bg); }
+
+.hp-stat-cell::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.hp-stat-cell:hover::after { opacity: 1; }
+
+/* Variante selección — acento verde */
+.hp-stat-cell--national::after { background: #1D9E75; }
+.hp-stat-cell--national .hp-stat-n { color: #1D9E75; }
+
+/* Variante oro — títulos */
+.hp-stat-cell--gold::after { background: #f59e0b; }
+.hp-stat-cell--gold .hp-stat-n { color: #f59e0b; }
+
+.hp-stat-n {
+  font-size: 28px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -1.5px;
+}
+
+.hp-stat-lbl {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════
+   TABLA DE CARRERA (clubes y selección)
+══════════════════════════════════════════════════════════ */
+.hp-career-table-wrap {
+  overflow-x: auto;
+  border: 0.5px solid var(--border);
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.hp-career-table-wrap::-webkit-scrollbar { height: 3px; }
+.hp-career-table-wrap::-webkit-scrollbar-thumb { background: var(--accent); }
+
+.hp-career-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'DM Mono', monospace;
+  min-width: 520px;
+}
+
+/* Cabecera */
+.hp-career-table thead tr {
+  background: var(--card);
+  border-bottom: 0.5px solid var(--border);
+}
+
+.hp-career-table thead th {
+  padding: 8px 12px;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-align: left;
+  white-space: nowrap;
+  border-right: 0.5px solid var(--border);
+}
+
+.hp-career-table thead th:last-child { border-right: none; }
+
+.hp-th-num { text-align: center !important; }
+
+/* Filas */
+.hp-career-table tbody tr {
+  border-bottom: 0.5px solid var(--border);
+  transition: background 0.1s;
+}
+
+.hp-career-table tbody tr:last-child { border-bottom: none; }
+
+.hp-career-table tbody tr:hover { background: var(--card); }
+
+/* Celda genérica */
+.hp-career-table tbody td {
+  padding: 10px 12px;
+  border-right: 0.5px solid var(--border);
+  vertical-align: middle;
+}
+
+.hp-career-table tbody td:last-child { border-right: none; }
+
+/* Tipos de celda */
+.hp-td-club {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.hp-td-country {
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.hp-td-period {
+  font-size: 11px;
+  color: var(--accent);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.hp-td-num {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.hp-td-note {
+  font-size: 10px;
+  color: var(--muted);
+  font-style: italic;
+  min-width: 80px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PALMARÉS
+══════════════════════════════════════════════════════════ */
+.hp-titles-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Grupo por categoría */
+.hp-titles-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hp-titles-cat-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--cat-color);
+  padding-bottom: 6px;
+  border-bottom: 0.5px solid color-mix(in srgb, var(--cat-color) 25%, transparent);
+}
+
+.hp-titles-cat-label::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cat-color);
+  flex-shrink: 0;
+}
+
+/* Lista de títulos */
+.hp-titles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.hp-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-left: 2px solid var(--cat-color);
+  transition: background 0.1s;
+}
+
+.hp-title-row:hover { background: var(--card); }
+
+.hp-title-icon {
+  color: var(--cat-color);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.hp-title-name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hp-title-team {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.hp-title-year {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: var(--cat-color);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.hp-title-qty {
+  font-size: 10px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  border: 0.5px solid rgba(245, 158, 11, 0.3);
+  padding: 1px 6px;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════ */
+@media (max-width: 680px) {
+  .hp-stats-strip { flex-wrap: wrap; }
+  .hp-stat-cell {
+    flex: 1 1 33%;
+    min-width: 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .hp-stat-n { font-size: 22px; }
+
+  .hp-career-table { min-width: 420px; }
+
+  .hp-title-row { padding: 7px 10px; gap: 8px; }
+  .hp-title-name { font-size: 12px; }
+}
+
+@media (max-width: 420px) {
+  .hp-stat-cell { flex: 1 1 50%; }
+  .hp-career-table thead th,
+  .hp-career-table tbody td { padding: 7px 8px; }
 }
 
 /* ── Responsive del shell ────────────────────────────────── */

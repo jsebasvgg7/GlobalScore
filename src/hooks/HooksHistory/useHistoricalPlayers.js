@@ -80,11 +80,14 @@ export function useHistoricalPlayers() {
 
 // ─── Hook: detalle de un jugador + relaciones ────────────────────────────────
 export function useHistoricalPlayerDetail(playerId) {
-  const [player, setPlayer] = useState(null);
-  const [teams, setTeams]   = useState([]);
-  const [events, setEvents] = useState([]);
+  const [player,  setPlayer]  = useState(null);
+  const [teams,   setTeams]   = useState([]);
+  const [events,  setEvents]  = useState([]);
+  const [career,  setCareer]  = useState([]);
+  const [national, setNational] = useState([]);
+  const [titles,  setTitles]  = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState(null);
+  const [error,   setError]   = useState(null);
 
   const load = useCallback(async () => {
     if (!playerId) return;
@@ -103,7 +106,7 @@ export function useHistoricalPlayerDetail(playerId) {
       if (playerErr) throw playerErr;
       setPlayer(playerData);
 
-      // 2. Equipos donde jugó
+      // 2. Equipos donde jugó (relación legacy)
       const { data: teamsData, error: teamsErr } = await supabase
         .from("historical_player_teams")
         .select(`
@@ -145,6 +148,36 @@ export function useHistoricalPlayerDetail(playerId) {
         });
       setEvents(publishedEvents);
 
+      // 4. Trayectoria en clubes
+      const { data: careerData, error: careerErr } = await supabase
+        .from("historical_player_career")
+        .select("*")
+        .eq("player_id", playerId)
+        .order("start_year", { ascending: true });
+
+      if (careerErr) throw careerErr;
+      setCareer(careerData || []);
+
+      // 5. Trayectoria en selección
+      const { data: nationalData, error: nationalErr } = await supabase
+        .from("historical_player_national")
+        .select("*")
+        .eq("player_id", playerId)
+        .order("start_year", { ascending: true });
+
+      if (nationalErr) throw nationalErr;
+      setNational(nationalData || []);
+
+      // 6. Palmarés
+      const { data: titlesData, error: titlesErr } = await supabase
+        .from("historical_player_titles")
+        .select("*")
+        .eq("player_id", playerId)
+        .order("year", { ascending: true });
+
+      if (titlesErr) throw titlesErr;
+      setTitles(titlesData || []);
+
     } catch (e) {
       setError(e.message);
     } finally {
@@ -154,7 +187,7 @@ export function useHistoricalPlayerDetail(playerId) {
 
   useEffect(() => { load(); }, [load]);
 
-  return { player, teams, events, loading, error, reload: load };
+  return { player, teams, events, career, national, titles, loading, error, reload: load };
 }
 
 // ─── Hook: listado de eventos ─────────────────────────────────────────────────
