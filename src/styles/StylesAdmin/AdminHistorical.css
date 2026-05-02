@@ -14,7 +14,7 @@
 
 /* ── Stats strip — COMPACTA (fila única, 44px) ───────────────── */
 .ah-stats-strip {
-  display: flex;              /* fila en vez de grid */
+  display: flex;
   flex-direction: row;
   border-bottom: 0.5px solid var(--border);
   flex-shrink: 0;
@@ -25,7 +25,7 @@
 .ah-stat-cell {
   flex: 1;
   display: flex;
-  flex-direction: row;        /* ícono + texto en línea */
+  flex-direction: row;
   align-items: center;
   gap: 8px;
   padding: 0 16px;
@@ -64,7 +64,7 @@
 
 .ah-stat-body {
   display: flex;
-  flex-direction: row;        /* número + label en línea */
+  flex-direction: row;
   align-items: baseline;
   gap: 5px;
   flex: 1;
@@ -72,7 +72,7 @@
 }
 
 .ah-stat-n {
-  font-size: 18px;            /* era 2.2rem — reducido */
+  font-size: 18px;
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: var(--text-primary);
@@ -260,6 +260,7 @@
 /* ── List area ───────────────────────────────────────────────── */
 .ah-list-area {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -488,6 +489,7 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  min-height: 0;               /* CLAVE: permite que flex respete el overflow */
   overflow: hidden;
   background: var(--card);
   border-top: 2px solid var(--accent);
@@ -546,16 +548,26 @@
 }
 .ah-panel-back:hover { color: var(--text-primary); border-color: var(--text-primary); }
 
-/* Panel body */
+/* Panel body — ES EL ÚNICO QUE SCROLLEA */
 .ah-panel-body {
   flex: 1;
+  min-height: 0;               /* CLAVE: sin esto el scroll no funciona en flex */
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-.ah-panel-body::-webkit-scrollbar { width: 3px; }
-.ah-panel-body::-webkit-scrollbar-track { background: transparent; }
-.ah-panel-body::-webkit-scrollbar-thumb { background: var(--border); }
+.ah-panel-body::-webkit-scrollbar { width: 6px; }
+.ah-panel-body::-webkit-scrollbar-track {
+  background: var(--bg);
+  border-left: 0.5px solid var(--border);
+}
+.ah-panel-body::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  opacity: 0.6;
+}
+.ah-panel-body::-webkit-scrollbar-thumb:hover {
+  filter: brightness(1.2);
+}
 
 /* ── Empty panel ─────────────────────────────────────────────── */
 .ah-empty-panel {
@@ -597,6 +609,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
+  /* SIN height fija, SIN overflow — deja que .ah-panel-body scrollee */
 }
 
 .ah-panel-section {
@@ -605,6 +618,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex-shrink: 0;              /* evita que las secciones se compriman */
 }
 
 .ah-panel-section:last-child { border-bottom: none; }
@@ -920,9 +934,10 @@
   color: #f25f5c;
   font-size: 11px;
   font-family: 'DM Mono', monospace;
+  flex-shrink: 0;
 }
 
-/* Actions footer */
+/* Actions footer — sticky dentro del scroll container */
 .ah-panel-actions {
   display: flex;
   gap: 6px;
@@ -932,6 +947,7 @@
   flex-shrink: 0;
   position: sticky;
   bottom: 0;
+  z-index: 10;
 }
 
 .ah-paction-cancel {
@@ -985,7 +1001,6 @@
 
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 1200px) {
-  /* Volvemos a 2x2 grid solo en la strip cuando no hay espacio */
   .ah-stats-strip {
     flex-wrap: wrap;
     height: auto;
@@ -1034,15 +1049,25 @@
     border-bottom: 0.5px solid var(--border);
   }
 
-  .ah-list-area { overflow: visible; height: auto; }
+  .ah-list-area { overflow: visible; height: auto; min-height: unset; }
 
   .ah-right {
     width: 100%;
     height: auto;
+    min-height: unset;
     border-top: 2px solid var(--accent);
   }
 
-  .ah-panel-body { height: auto; overflow: visible; }
+  .ah-panel-body {
+    height: auto;
+    overflow: visible;
+    min-height: unset;
+  }
+
+  .ah-panel-actions {
+    position: static;  /* en móvil no hace falta sticky */
+  }
+
   .ah-panel-form { min-height: 200px; }
 
   .ah-tab { padding: 0 12px; font-size: 10px; }
@@ -1056,5 +1081,5 @@
 @media (max-width: 480px) {
   .ah-tab span:not(.ah-tab-count) { display: none; }
   .ah-tab { padding: 0 14px; }
-  .ah-stat-lbl { display: none; }   /* en móvil muy pequeño solo número + ícono */
+  .ah-stat-lbl { display: none; }
 }
