@@ -7,6 +7,7 @@ import {
 import { useHistoricalTeams, useHistoricalTeamDetail } from "../../hooks/HooksHistory/useHistoricalTeams";
 import { getHistoricalImageUrl } from "../../hooks/HooksHistory/useHistoricalPlayers";
 import "../../styles/StylesHistory/HistoricalTeamsPage.css";
+import "../../styles/StylesMobile/HistoricalTeamsPageMobile.css";
 
 // ─── Mapas de traducción ──────────────────────────────────────
 const LEGACY_TEAM_LABEL = {
@@ -328,35 +329,8 @@ function TeamDetail({ teamId, onBack }) {
           </div>
         )}
       </section>
-
-      {/* ═══════════════════════════════════════
-          SECCIÓN 2: HISTORIA
-      ═══════════════════════════════════════ */}
-      <section ref={sectionRefs.history} className="htp-section" id="history">
-        <div className="htp-section-header">
-          <span className="htp-section-label"><Trophy size={11}/> Por qué es histórico</span>
-        </div>
-
-        {team.historical_note ? (
-          <div className="htp-history-body">
-            {team.historical_note.split("\n").map((p, i) =>
-              p.trim() ? <p key={i}>{p.trim()}</p> : null
-            )}
-          </div>
-        ) : team.description ? (
-          <div className="htp-history-body">
-            {team.description.split("\n").map((p, i) =>
-              p.trim() ? <p key={i}>{p.trim()}</p> : null
-            )}
-          </div>
-        ) : (
-          <p className="htp-history-empty">Sin descripción histórica.</p>
-        )}
-
-      </section>
-
-      {/* ═══════════════════════════════════════
-          SECCIÓN 3: PALMARÉS
+       {/* ═══════════════════════════════════════
+          SECCIÓN 2: PALMARÉS
       ═══════════════════════════════════════ */}
       <section ref={sectionRefs.titles} className="htp-section htp-section--last" id="titles">
         <div className="htp-section-header">
@@ -384,9 +358,37 @@ function TeamDetail({ teamId, onBack }) {
           </div>
         )}
       </section>
+
+
+      {/* ═══════════════════════════════════════
+          SECCIÓN 3: HISTORIA
+      ═══════════════════════════════════════ */}
+      <section ref={sectionRefs.history} className="htp-section" id="history">
+        <div className="htp-section-header">
+          <span className="htp-section-label"><Trophy size={11}/> Por qué es histórico</span>
+        </div>
+
+        {team.historical_note ? (
+          <div className="htp-history-body">
+            {team.historical_note.split("\n").map((p, i) =>
+              p.trim() ? <p key={i}>{p.trim()}</p> : null
+            )}
+          </div>
+        ) : team.description ? (
+          <div className="htp-history-body">
+            {team.description.split("\n").map((p, i) =>
+              p.trim() ? <p key={i}>{p.trim()}</p> : null
+            )}
+          </div>
+        ) : (
+          <p className="htp-history-empty">Sin descripción histórica.</p>
+        )}
+
+      </section>
     </div>
   );
 }
+     
 
 // ══════════════════════════════════════════════════════════════
 //  CARD DE EQUIPO EN LA GRILLA

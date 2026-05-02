@@ -13,6 +13,7 @@ import TeamsRightPanel from "../components/ComPanels/TeamsRightPanel";
 import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
 import HistorySectionNav from "../components/ComHistory/HistorySectionNav.jsx";
 import "../styles/StylesPages/HistoryPage.css";
+import "../styles/StylesMobile/HistoryPageMobile.css";
 
 // ─── Helpers ──────────────────────────────────────────────────
 const LEGACY_COLOR = {
