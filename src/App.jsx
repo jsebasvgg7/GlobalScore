@@ -11,6 +11,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import DashboardPage from "./pages/DashboardPage";
 import RankingPage from "./pages/RankingPage";
+import HistoryPage from "./pages/HistoryPage";
 import AdminPage from "./pages/AdminPage";
 import ProfileSettingsPage from "./pages/ProfileSettingsPage";
 import NotificationsPage from "./pages/NotificationsPage";
@@ -251,6 +252,10 @@ export default function App() {
           <Route
             path="/admin"
             element={session ? <AdminPage currentUser={currentUser} users={users} /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/history"
+            element={session ? <HistoryPage /> : <Navigate to="/" replace />}
           />
           <Route
             path="/stats"
