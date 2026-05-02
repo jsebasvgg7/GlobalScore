@@ -1,8 +1,3 @@
-/* ============================================================
-   AdminHistorical.css — GlobalScore · Panel Layout
-   Sigue el sistema: DM Mono + Sora, bordes 0.5px, sin border-radius
-   ============================================================ */
-
 /* ── Root ──────────────────────────────────────────────────── */
 .ah-root {
   display: flex;
@@ -11,10 +6,6 @@
   overflow: hidden;
   background: var(--bg);
 }
-/* ============================================================
-   AGREGAR AL FINAL DE AdminHistorical.css
-   Estilos para TeamPanel: tabs internos, lineup, colores
-   ============================================================ */
 
 /* ── Tabs internos del panel ─────────────────────────────── */
 .ah-inner-tabs {
@@ -791,6 +782,19 @@
   grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
+.ah-pgrid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+@media (max-width: 1024px) {
+  .ah-pgrid-3 { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .ah-pgrid-3 { grid-template-columns: 1fr; }
+}
 
 /* Significance */
 .ah-significance {
@@ -1093,6 +1097,349 @@
   border-radius: 50%;
   animation: ah-spin 0.7s linear infinite;
   flex-shrink: 0;
+}
+/* ============================================================
+   AdminHistorical.css — ADICIONES
+   Tablas editables · Palmarés · Trayectoria · Tabs scroll
+   Agrega esto al final de AdminHistorical.css
+   ============================================================ */
+
+/* ── Panel section especial para tablas (más padding lateral) ── */
+.ah-panel-section--table {
+  padding: 14px 12px;
+  gap: 8px;
+}
+
+/* ── Tabs internos con scroll horizontal (versión jugador: 5 tabs) ── */
+.ah-inner-tabs--scroll {
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-wrap: nowrap;
+}
+.ah-inner-tabs--scroll::-webkit-scrollbar { display: none; }
+.ah-inner-tabs--scroll .ah-inner-tab {
+  flex: 0 0 auto;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TABLA EDITABLE (EditableTable)
+══════════════════════════════════════════════════════════════ */
+
+.ah-etable-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 0.5px solid var(--border);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+/* Contenedor scrolleable horizontal para tablas anchas */
+.ah-etable {
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.ah-etable::-webkit-scrollbar { height: 3px; }
+.ah-etable::-webkit-scrollbar-track { background: transparent; }
+.ah-etable::-webkit-scrollbar-thumb { background: var(--accent); opacity: 0.5; }
+
+/* ── Cabecera ── */
+.ah-etable-head {
+  display: flex;
+  align-items: center;
+  min-width: max-content;
+  background: var(--card);
+  border-bottom: 0.5px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.ah-etable-th {
+  padding: 0 8px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  border-right: 0.5px solid var(--border);
+  flex-shrink: 0;
+  min-width: 60px;
+  white-space: nowrap;
+}
+
+.ah-etable-th:last-child { border-right: none; }
+
+/* Columna de eliminar — ancho fijo pequeño */
+.ah-etable-th--del {
+  min-width: 28px;
+  max-width: 28px;
+  flex: 0 0 28px !important;
+  padding: 0;
+  justify-content: center;
+}
+
+/* ── Filas ── */
+.ah-etable-row {
+  display: flex;
+  align-items: center;
+  min-width: max-content;
+  border-bottom: 0.5px solid var(--border);
+  transition: background 0.1s;
+  position: relative;
+}
+
+.ah-etable-row:last-child { border-bottom: none; }
+
+.ah-etable-row:hover { background: var(--card); }
+
+.ah-etable-row::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.ah-etable-row:hover::before { opacity: 1; }
+
+/* Input dentro de la tabla */
+.ah-etable-input {
+  height: 34px !important;
+  padding: 6px 8px !important;
+  font-size: 11px !important;
+  border-radius: 0 !important;
+  border: none !important;
+  border-right: 0.5px solid var(--border) !important;
+  background: transparent !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.ah-etable-input:focus {
+  background: rgba(91, 79, 216, 0.04) !important;
+  border-right-color: var(--accent) !important;
+  outline: none;
+}
+
+.ah-etable-input::placeholder {
+  color: var(--muted);
+  opacity: 0.45;
+  font-size: 10px;
+}
+
+/* Botón eliminar fila */
+.ah-etable-del {
+  width: 28px;
+  height: 34px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.12s;
+}
+
+.ah-etable-del:hover {
+  background: rgba(242, 95, 92, 0.08);
+  color: #f25f5c;
+}
+
+/* Estado vacío de la tabla */
+.ah-etable-empty {
+  padding: 20px 14px;
+  text-align: center;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  background: var(--bg);
+  border-bottom: 0.5px solid var(--border);
+}
+
+/* Botón añadir fila — anclado abajo del wrap */
+.ah-etable-add {
+  width: 100%;
+  border-top: 0.5px solid var(--border) !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  height: 32px;
+  font-size: 9px !important;
+  letter-spacing: 0.1em !important;
+  background: rgba(91, 79, 216, 0.03) !important;
+  justify-content: center;
+}
+
+.ah-etable-add:hover {
+  background: var(--accent) !important;
+  color: #fff !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PALMARÉS — Leyenda de categorías
+══════════════════════════════════════════════════════════════ */
+
+.ah-titles-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.ah-tleg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border: 0.5px solid transparent;
+}
+
+/* Categoría: Club */
+.ah-tleg--club {
+  background: rgba(91, 79, 216, 0.07);
+  color: var(--accent);
+  border-color: rgba(91, 79, 216, 0.25);
+}
+
+.ah-tleg--club::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* Categoría: Selección */
+.ah-tleg--national {
+  background: rgba(29, 158, 117, 0.07);
+  color: #1D9E75;
+  border-color: rgba(29, 158, 117, 0.3);
+}
+
+.ah-tleg--national::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #1D9E75;
+  flex-shrink: 0;
+}
+
+/* Categoría: Individual */
+.ah-tleg--individual {
+  background: rgba(245, 158, 11, 0.07);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.ah-tleg--individual::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #f59e0b;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MEJORAS VISUALES — Panel derecho más ancho cuando hay tablas
+══════════════════════════════════════════════════════════════ */
+
+/*
+  Las tablas de trayectoria y palmarés son anchas.
+  Ampliar el panel derecho de 30% → 42% cuando el body
+  contiene una sección --table activa se logra con:
+*/
+.ah-right {
+  width: 42%;   /* sobreescribe el 30% original */
+}
+
+/* Ajuste compensatorio para la columna izquierda */
+.ah-left {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TABLA: colores de columna de categoría en Palmarés
+   (select de title_category dentro de EditableTable)
+══════════════════════════════════════════════════════════════ */
+
+/* Highlight visual por valor de categoría — via attr trick no funciona en CSS puro,
+   pero sí podemos dar estilo global al select de categoría dentro de etable */
+.ah-etable-row select.ah-etable-input option[value="club"]       { color: var(--accent); }
+.ah-etable-row select.ah-etable-input option[value="national"]   { color: #1D9E75; }
+.ah-etable-row select.ah-etable-input option[value="individual"] { color: #f59e0b; }
+
+/* ══════════════════════════════════════════════════════════════
+   MEJORAS GENERALES DE DENSIDAD Y LEGIBILIDAD
+══════════════════════════════════════════════════════════════ */
+
+/* Separador de sección con ícono SVG dentro del sep */
+.ah-panel-sep svg {
+  opacity: 0.6;
+  margin-right: 4px;
+  vertical-align: middle;
+  margin-top: -1px;
+}
+
+/* Hint debajo de tablas */
+.ah-panel-section--table .ah-phint {
+  padding: 0 2px;
+  line-height: 1.5;
+}
+
+/* Loading dentro de sección-tabla */
+.ah-panel-section--table .ah-loading-msg {
+  padding: 16px;
+  font-size: 10px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — tablas en panel lateral
+══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1200px) {
+  .ah-right { width: 50%; }
+}
+
+@media (max-width: 1024px) {
+  .ah-right { width: 55%; }
+  .ah-etable-input { font-size: 10px !important; }
+}
+
+@media (max-width: 768px) {
+  .ah-right { width: 100%; }
+
+  .ah-etable-wrap { overflow-x: auto; }
+
+  .ah-inner-tabs--scroll .ah-inner-tab {
+    padding: 0 10px;
+    font-size: 9px;
+  }
+
+  .ah-titles-legend { gap: 5px; }
+  .ah-tleg-item { font-size: 7px; padding: 2px 6px; }
 }
 
 @keyframes ah-spin { to { transform: rotate(360deg); } }

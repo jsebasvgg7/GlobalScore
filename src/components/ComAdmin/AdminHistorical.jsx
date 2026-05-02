@@ -404,7 +404,7 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
         </div>
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Identidad</span>
-          <div className="ah-pgrid-2">
+          <div className="ah-pgrid-3">
             <PField label="Nombre" required>
               <PInput value={form.name} onChange={e => set("name", e.target.value)} placeholder="Pelé" />
             </PField>
@@ -675,7 +675,7 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
         </div>
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Datos básicos</span>
-          <div className="ah-pgrid-2">
+          <div className="ah-pgrid-3">
             <PField label="Nombre" required>
               <PInput value={form.name} onChange={e => set("name", e.target.value)} placeholder="FC Barcelona" />
             </PField>
@@ -704,7 +704,7 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
         </div>
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Colores del equipo</span>
-          <div className="ah-pgrid-2">
+          <div className="ah-pgrid-3">
             <PField label="Color primario (camiseta)">
               <div className="ah-color-row">
                 <input type="color" className="ah-color-pick"
