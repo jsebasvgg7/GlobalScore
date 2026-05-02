@@ -15,6 +15,10 @@
 }
 
 @media (min-width: 769px) {
+  .hp-root {
+    margin-left: 80px;
+    margin-top: 56px;
+  }
 
   .vega-root {
     margin-left: 80px;

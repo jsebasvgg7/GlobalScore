@@ -148,17 +148,6 @@ export default function MobileHeader({ currentUser }) {
         ))}
 
       </nav>
-      {/* ══════════════════════════════════════════════
-    BOOKMARK — separador de libro flotante hacia Historia
-══════════════════════════════════════════════ */}
-<button
-  className={`mhd-bookmark-tab${isActive("/history") ? " mhd-bookmark-tab--active" : ""}`}
-  onClick={() => navigate("/history")}
-  aria-label="Historia"
->
-  <BookMarked size={15} strokeWidth={2} />
-  <span className="mhd-bookmark-label">HIST</span>
-</button>
     </>
   );
 }
