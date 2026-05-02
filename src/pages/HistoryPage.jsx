@@ -159,11 +159,6 @@ function PlayerDetail({ playerId, onBack }) {
   return (
     <div className="hp-detail">
 
-      {/* ── Back ── */}
-      <button className="hp-detail-back" onClick={onBack}>
-        <ArrowLeft size={14} /><span></span>
-      </button>
-
       {/* ── Hero ── */}
       <div className="hp-detail-hero">
         <div className="hp-detail-hero-img-wrap">

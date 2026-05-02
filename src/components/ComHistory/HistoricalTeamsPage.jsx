@@ -243,11 +243,6 @@ function TeamDetail({ teamId, onBack }) {
   return (
     <div className="htp-detail">
 
-      {/* ── Botón volver ── */}
-      <button className="htp-back-btn" onClick={onBack}>
-        <ArrowLeft size={14} /> 
-      </button>
-
       {/* ── HERO ── */}
       <div
         className="htp-hero"
