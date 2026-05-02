@@ -15,12 +15,29 @@ const LEGACY_COLOR = {
   "Goalkeeper":  "#ec4899",
 };
 
+const LEGACY_LABEL = {
+  "Goal Scorer": "Goleador",
+  "Tactician":   "Táctico",
+  "Innovator":   "Innovador",
+  "Leader":      "Líder",
+  "Goalkeeper":  "Portero",
+};
+
+const POSITION_LABEL = {
+  "Forward":    "Delantero",
+  "Midfielder": "Centrocampista",
+  "Defender":   "Defensor",
+  "Goalkeeper": "Portero",
+};
+
 const POSITION_ICON = {
   "Forward":    "⚡",
   "Midfielder": "🎯",
   "Defender":   "🛡️",
   "Goalkeeper": "🧤",
 };
+
+const SIGNIFICANCE_LABEL = ["", "Histórico", "Notable", "Estrella", "Leyenda", "GOAT Status"];
 
 // ── Sub-componentes ───────────────────────────────────────────
 function MiniAvatar({ imagePath, name, size = 32 }) {
@@ -68,9 +85,7 @@ function SelectedPlayerBlock({ player }) {
   }
 
   const color = LEGACY_COLOR[player.legacy_type] || "var(--accent)";
-  const sigLabel = ["", "Histórico", "Notable", "Estrella", "Leyenda", "GOAT Status"][
-    player.significance_level || 0
-  ];
+  const sigLabel = SIGNIFICANCE_LABEL[player.significance_level || 0];
 
   return (
     <div className="hrp-selected-card">
@@ -81,7 +96,7 @@ function SelectedPlayerBlock({ player }) {
           <div className="hrp-selected-info">
             <span className="hrp-selected-name">{player.name}</span>
             <span className="hrp-selected-meta">
-              {[player.country, player.position].filter(Boolean).join(" · ")}
+              {[player.country, POSITION_LABEL[player.position] || player.position].filter(Boolean).join(" · ")}
             </span>
             {player.era && (
               <span className="hrp-selected-era">{player.era}</span>
@@ -99,7 +114,7 @@ function SelectedPlayerBlock({ player }) {
             className="hrp-selected-badge"
             style={{ "--badge-c": color }}
           >
-            {player.legacy_type}
+            {LEGACY_LABEL[player.legacy_type] || player.legacy_type}
           </span>
         )}
 
@@ -128,7 +143,7 @@ function CatalogStats({ allPlayers }) {
     return acc;
   }, {});
 
-  const goats = allPlayers.filter((p) => p.significance_level === 5).length;
+  const goats     = allPlayers.filter((p) => p.significance_level === 5).length;
   const published = allPlayers.filter((p) => p.is_published !== false).length;
 
   const topPositions = Object.entries(byPosition)
@@ -153,7 +168,7 @@ function CatalogStats({ allPlayers }) {
           <span className="hrp-stat-val hrp-val--accent">{total}</span>
         </div>
         <div className="hrp-stat-row">
-          <span className="hrp-stat-lbl">GOAT Status</span>
+          <span className="hrp-stat-lbl">Estado GOAT</span>
           <span className="hrp-stat-val hrp-val--gold">{goats}</span>
         </div>
         <div className="hrp-stat-row">
@@ -175,7 +190,7 @@ function CatalogStats({ allPlayers }) {
               return (
                 <div key={pos} className="hrp-pos-row">
                   <span className="hrp-pos-icon">{POSITION_ICON[pos] || "•"}</span>
-                  <span className="hrp-pos-name">{pos}</span>
+                  <span className="hrp-pos-name">{POSITION_LABEL[pos] || pos}</span>
                   <div className="hrp-pos-track">
                     <div
                       className="hrp-pos-fill"
@@ -206,7 +221,7 @@ function CatalogStats({ allPlayers }) {
                     className="hrp-legacy-dot"
                     style={{ background: color }}
                   />
-                  <span className="hrp-legacy-name">{legacy}</span>
+                  <span className="hrp-legacy-name">{LEGACY_LABEL[legacy] || legacy}</span>
                   <span
                     className="hrp-legacy-count"
                     style={{ color }}
@@ -251,7 +266,7 @@ function TopPlayersBlock({ allPlayers, onSelect }) {
               <div className="hrp-top-info">
                 <span className="hrp-top-name">{p.name}</span>
                 <span className="hrp-top-meta">
-                  {[p.country, p.position].filter(Boolean).join(" · ")}
+                  {[p.country, POSITION_LABEL[p.position] || p.position].filter(Boolean).join(" · ")}
                 </span>
               </div>
               <div className="hrp-top-sig">
@@ -280,7 +295,7 @@ function GoatFooter({ allPlayers }) {
 
   return (
     <div className="hrp-goat">
-      <div className="hrp-goat-label">GOAT STATUS</div>
+      <div className="hrp-goat-label">ESTADO GOAT</div>
       <div className="hrp-goat-row">
         <MiniAvatar imagePath={goat.image_path} name={goat.name} size={40} />
         <div className="hrp-goat-info">

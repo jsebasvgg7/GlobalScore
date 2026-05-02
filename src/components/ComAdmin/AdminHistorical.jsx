@@ -10,7 +10,7 @@ import {
 } from "../../hooks/HooksAdmin/useAdminHistorical";
 import "../../styles/StylesAdmin/AdminHistorical.css";
 
-// ─── Constantes ───────────────────────────────────────────────────────────────
+// ─── Constantes (valores DB — no modificar) ───────────────────────────────────
 const TABS = [
   { key: "players",      label: "Jugadores",    Icon: Users2  },
   { key: "teams",        label: "Equipos",      Icon: Shield  },
@@ -18,12 +18,50 @@ const TABS = [
   { key: "events",       label: "Eventos",      Icon: Zap     },
 ];
 
-const POSITIONS    = ["Forward", "Midfielder", "Defender", "Goalkeeper"];
+const POSITIONS     = ["Forward", "Midfielder", "Defender", "Goalkeeper"];
 const LEGACY_PLAYER = ["Goal Scorer", "Tactician", "Innovator", "Leader", "Goalkeeper"];
 const LEGACY_TEAM   = ["Dynastic", "Innovative", "Continental", "National"];
 const EVENT_TYPES   = ["Championship", "Historic Match", "Legendary Performance", "Era Defining", "Record"];
 const COMP_TYPES    = ["International", "Continental", "Domestic"];
 
+// ─── Mapas de traducción (solo para mostrar en UI) ────────────────────────────
+const POSITION_LABEL = {
+  "Forward":    "Delantero",
+  "Midfielder": "Centrocampista",
+  "Defender":   "Defensor",
+  "Goalkeeper": "Portero",
+};
+
+const LEGACY_PLAYER_LABEL = {
+  "Goal Scorer": "Goleador",
+  "Tactician":   "Táctico",
+  "Innovator":   "Innovador",
+  "Leader":      "Líder",
+  "Goalkeeper":  "Portero",
+};
+
+const LEGACY_TEAM_LABEL = {
+  "Dynastic":     "Dinástico",
+  "Innovative":   "Innovador",
+  "Continental":  "Continental",
+  "National":     "Nacional",
+};
+
+const EVENT_TYPE_LABEL = {
+  "Championship":          "Campeonato",
+  "Historic Match":        "Partido Histórico",
+  "Legendary Performance": "Actuación Legendaria",
+  "Era Defining":          "Definió una Era",
+  "Record":                "Récord",
+};
+
+const COMP_TYPE_LABEL = {
+  "International": "Internacional",
+  "Continental":   "Continental",
+  "Domestic":      "Nacional / Doméstico",
+};
+
+// ─── Objetos vacíos ───────────────────────────────────────────────────────────
 const PLAYER_EMPTY = {
   name: "", country: "", position: "", birth_year: "", death_year: "",
   era: "", legacy_type: "", significance_level: 3,
@@ -181,13 +219,17 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
           <PField label="Posición">
             <PSelect value={form.position || ""} onChange={e => set("position", e.target.value)}>
               <option value="">— Selecciona —</option>
-              {POSITIONS.map(p => <option key={p}>{p}</option>)}
+              {POSITIONS.map(p => (
+                <option key={p} value={p}>{POSITION_LABEL[p] || p}</option>
+              ))}
             </PSelect>
           </PField>
           <PField label="Tipo de legado">
             <PSelect value={form.legacy_type || ""} onChange={e => set("legacy_type", e.target.value)}>
               <option value="">— Selecciona —</option>
-              {LEGACY_PLAYER.map(l => <option key={l}>{l}</option>)}
+              {LEGACY_PLAYER.map(l => (
+                <option key={l} value={l}>{LEGACY_PLAYER_LABEL[l] || l}</option>
+              ))}
             </PSelect>
           </PField>
           <PField label="Año nac.">
@@ -227,7 +269,10 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
                 <div key={pt.team_id} className="ah-team-chip">
                   <span className="ah-tc-name">{team?.name || pt.team_id}</span>
                   <span className="ah-tc-years">{pt.start_year || "?"} – {pt.end_year || "?"}</span>
-                  <button type="button" className="ah-tc-remove" onClick={() => setPlayerTeams(prev => prev.filter(t => t.team_id !== pt.team_id))}><X size={10} /></button>
+                  <button type="button" className="ah-tc-remove"
+                    onClick={() => setPlayerTeams(prev => prev.filter(t => t.team_id !== pt.team_id))}>
+                    <X size={10} />
+                  </button>
                 </div>
               );
             })}
@@ -238,9 +283,13 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
             <option value="">— Equipo —</option>
             {teams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
           </PSelect>
-          <PInput type="number" placeholder="Desde" value={teamLink.start_year} onChange={e => setTeamLink(t => ({ ...t, start_year: e.target.value }))} />
-          <PInput type="number" placeholder="Hasta" value={teamLink.end_year} onChange={e => setTeamLink(t => ({ ...t, end_year: e.target.value }))} />
-          <button type="button" className="ah-add-link-btn" onClick={addTeamLink}><Plus size={12} /> Añadir</button>
+          <PInput type="number" placeholder="Desde" value={teamLink.start_year}
+            onChange={e => setTeamLink(t => ({ ...t, start_year: e.target.value }))} />
+          <PInput type="number" placeholder="Hasta" value={teamLink.end_year}
+            onChange={e => setTeamLink(t => ({ ...t, end_year: e.target.value }))} />
+          <button type="button" className="ah-add-link-btn" onClick={addTeamLink}>
+            <Plus size={12} /> Añadir
+          </button>
         </div>
       </div>
 
@@ -296,7 +345,7 @@ function TeamPanel({ team, onSave, onClose }) {
           <PField label="País">
             <PInput value={form.country || ""} onChange={e => set("country", e.target.value)} placeholder="España" />
           </PField>
-          <PField label="Año fundación">
+          <PField label="Año de fundación">
             <PInput type="number" value={form.founded_year || ""} onChange={e => set("founded_year", e.target.value)} placeholder="1899" />
           </PField>
           <PField label="Era de dominancia">
@@ -305,7 +354,9 @@ function TeamPanel({ team, onSave, onClose }) {
           <PField label="Tipo de legado">
             <PSelect value={form.legacy_type || ""} onChange={e => set("legacy_type", e.target.value)}>
               <option value="">— Selecciona —</option>
-              {LEGACY_TEAM.map(l => <option key={l}>{l}</option>)}
+              {LEGACY_TEAM.map(l => (
+                <option key={l} value={l}>{LEGACY_TEAM_LABEL[l] || l}</option>
+              ))}
             </PSelect>
           </PField>
         </div>
@@ -358,12 +409,14 @@ function CompetitionPanel({ competition, teams, onSave, onClose }) {
         <span className="ah-panel-sep">Datos</span>
         <div className="ah-pgrid-2">
           <PField label="Nombre" required>
-            <PInput value={form.name} onChange={e => set("name", e.target.value)} placeholder="World Cup 1986" />
+            <PInput value={form.name} onChange={e => set("name", e.target.value)} placeholder="Copa del Mundo 1986" />
           </PField>
           <PField label="Tipo">
             <PSelect value={form.type || ""} onChange={e => set("type", e.target.value)}>
               <option value="">— Selecciona —</option>
-              {COMP_TYPES.map(t => <option key={t}>{t}</option>)}
+              {COMP_TYPES.map(t => (
+                <option key={t} value={t}>{COMP_TYPE_LABEL[t] || t}</option>
+              ))}
             </PSelect>
           </PField>
           <PField label="Año">
@@ -455,7 +508,9 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
           <PField label="Tipo de evento">
             <PSelect value={form.event_type || ""} onChange={e => set("event_type", e.target.value)}>
               <option value="">— Selecciona —</option>
-              {EVENT_TYPES.map(t => <option key={t}>{t}</option>)}
+              {EVENT_TYPES.map(t => (
+                <option key={t} value={t}>{EVENT_TYPE_LABEL[t] || t}</option>
+              ))}
             </PSelect>
           </PField>
           <PField label="Fecha">
@@ -480,7 +535,7 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
       </div>
 
       <div className="ah-panel-section">
-        <span className="ah-panel-sep">Equipos</span>
+        <span className="ah-panel-sep">Equipos involucrados</span>
         <div className="ah-check-list">
           {teams.map(t => (
             <label key={t.id} className="ah-check-item">
@@ -492,7 +547,7 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
       </div>
 
       <div className="ah-panel-section">
-        <span className="ah-panel-sep">Competencias</span>
+        <span className="ah-panel-sep">Competencias involucradas</span>
         <div className="ah-check-list">
           {competitions.map(c => (
             <label key={c.id} className="ah-check-item">
@@ -530,7 +585,7 @@ function EmptyPanel({ activeTab }) {
     <div className="ah-empty-panel">
       <div className="ah-ep-icon"><Icon size={28} strokeWidth={1.2} /></div>
       <p className="ah-ep-title">Selecciona un registro</p>
-      <p className="ah-ep-sub">Haz click en <Pencil size={11} /> para editar, o usa el botón "Nuevo" para crear.</p>
+      <p className="ah-ep-sub">Haz clic en <Pencil size={11} /> para editar, o usa el botón "Nuevo" para crear.</p>
     </div>
   );
 }
@@ -561,21 +616,30 @@ function HistoricalList({ items, onEdit, onDelete, onTogglePublish, renderTitle,
             <button
               className={`ah-pub-pill ${item.is_published ? "ah-pub-pill--on" : "ah-pub-pill--off"}`}
               onClick={() => onTogglePublish(item.id, item.is_published)}
-              title={item.is_published ? "Publicado — click para ocultar" : "Borrador — click para publicar"}
+              title={item.is_published ? "Publicado — clic para ocultar" : "Borrador — clic para publicar"}
             >
               {item.is_published
                 ? <><Eye size={10} /> Pub</>
-                : <><EyeOff size={10} /> Draft</>
+                : <><EyeOff size={10} /> Borrador</>
               }
             </button>
-            <button className="ah-list-btn ah-list-btn--edit" onClick={() => onEdit(item)} title="Editar"><Pencil size={12} /></button>
+            <button className="ah-list-btn ah-list-btn--edit" onClick={() => onEdit(item)} title="Editar">
+              <Pencil size={12} />
+            </button>
             {confirmId === item.id ? (
               <>
-                <button className="ah-list-btn ah-list-btn--confirm" onClick={() => { onDelete(item.id); setConfirmId(null); }}><Check size={12} /></button>
-                <button className="ah-list-btn ah-list-btn--cancel-del" onClick={() => setConfirmId(null)}><X size={12} /></button>
+                <button className="ah-list-btn ah-list-btn--confirm"
+                  onClick={() => { onDelete(item.id); setConfirmId(null); }}>
+                  <Check size={12} />
+                </button>
+                <button className="ah-list-btn ah-list-btn--cancel-del" onClick={() => setConfirmId(null)}>
+                  <X size={12} />
+                </button>
               </>
             ) : (
-              <button className="ah-list-btn ah-list-btn--del" onClick={() => setConfirmId(item.id)} title="Eliminar"><Trash2 size={12} /></button>
+              <button className="ah-list-btn ah-list-btn--del" onClick={() => setConfirmId(item.id)} title="Eliminar">
+                <Trash2 size={12} />
+              </button>
             )}
           </div>
         </div>
@@ -618,29 +682,37 @@ export default function AdminHistorical() {
   const handleSaveCompetition = async (form, file) => form.id ? updateCompetition(form.id, form, file) : createCompetition(form, file);
   const handleSaveEvent       = async (form, file) => form.id ? updateEvent(form.id, form, file)       : createEvent(form, file);
 
-  // ── Stats compactas: ícono pequeño + número + label + pub ──
-  const stats = [
-    { label: "Jugadores",    count: players.length,      pub: players.filter(x => x.is_published).length,      Icon: Users2  },
-    { label: "Equipos",      count: teams.length,        pub: teams.filter(x => x.is_published).length,        Icon: Shield  },
-    { label: "Competencias", count: competitions.length, pub: competitions.filter(x => x.is_published).length, Icon: Trophy  },
-    { label: "Eventos",      count: events.length,       pub: events.filter(x => x.is_published).length,       Icon: Zap     },
-  ];
-
   const tabCounts = {
-    players: players.length,
-    teams: teams.length,
+    players:      players.length,
+    teams:        teams.length,
     competitions: competitions.length,
-    events: events.length,
+    events:       events.length,
   };
 
   const selectedId = panel?.data?.id || null;
 
+  // Metas en lista — traducidas para mostrar al admin
+  const renderPlayerMeta = (p) =>
+    [p.country, POSITION_LABEL[p.position] || p.position, p.era, LEGACY_PLAYER_LABEL[p.legacy_type] || p.legacy_type]
+      .filter(Boolean).join(" · ");
+
+  const renderTeamMeta = (t) =>
+    [t.country, t.era_dominance, LEGACY_TEAM_LABEL[t.legacy_type] || t.legacy_type]
+      .filter(Boolean).join(" · ");
+
+  const renderCompMeta = (c) =>
+    [COMP_TYPE_LABEL[c.type] || c.type, c.year ? String(c.year) : null]
+      .filter(Boolean).join(" · ");
+
+  const renderEventMeta = (e) =>
+    [EVENT_TYPE_LABEL[e.event_type] || e.event_type, e.event_date]
+      .filter(Boolean).join(" · ");
+
   return (
     <div className="ah-root">
-      {/* ── Shell: list + panel (ocupa todo el espacio restante) ── */}
       <div className="ah-shell">
 
-        {/* ── LEFT: tabs + search + list ── */}
+        {/* ── LEFT: tabs + búsqueda + lista ── */}
         <div className="ah-left">
 
           {/* Tabs */}
@@ -658,7 +730,7 @@ export default function AdminHistorical() {
             ))}
           </div>
 
-          {/* Controls bar */}
+          {/* Barra de controles */}
           <div className="ah-controls">
             <div className="ah-search">
               <Search size={12} className="ah-search-ico" />
@@ -668,7 +740,11 @@ export default function AdminHistorical() {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
               />
-              {search && <button className="ah-search-clear" onClick={() => setSearch("")}><X size={11} /></button>}
+              {search && (
+                <button className="ah-search-clear" onClick={() => setSearch("")}>
+                  <X size={11} />
+                </button>
+              )}
             </div>
             <button className="ah-new-btn" onClick={openCreate}>
               <Plus size={12} />
@@ -676,14 +752,20 @@ export default function AdminHistorical() {
             </button>
           </div>
 
-          {/* List */}
+          {/* Lista */}
           <div className="ah-list-area">
-            {loading && <div className="ah-loading-msg"><RefreshCw size={14} className="ah-spin" /> Cargando...</div>}
+            {loading && (
+              <div className="ah-loading-msg">
+                <RefreshCw size={14} className="ah-spin" /> Cargando...
+              </div>
+            )}
             {error && (
               <div className="ah-error-msg">
                 <AlertCircle size={16} />
                 <p>{error}</p>
-                <button className="ah-retry-btn" onClick={loadAll}><RefreshCw size={11} /> Reintentar</button>
+                <button className="ah-retry-btn" onClick={loadAll}>
+                  <RefreshCw size={11} /> Reintentar
+                </button>
               </div>
             )}
             {!loading && !error && (
@@ -693,7 +775,7 @@ export default function AdminHistorical() {
                     items={filteredPlayers} selectedId={selectedId}
                     onEdit={openEdit} onDelete={deletePlayer} onTogglePublish={togglePlayerPublished}
                     renderTitle={p => p.name}
-                    renderMeta={p => [p.country, p.position, p.era, p.legacy_type].filter(Boolean).join(" · ")}
+                    renderMeta={renderPlayerMeta}
                     emptyMsg="No hay jugadores históricos."
                   />
                 )}
@@ -702,7 +784,7 @@ export default function AdminHistorical() {
                     items={filteredTeams} selectedId={selectedId}
                     onEdit={openEdit} onDelete={deleteTeam} onTogglePublish={toggleTeamPublished}
                     renderTitle={t => t.name}
-                    renderMeta={t => [t.country, t.era_dominance, t.legacy_type].filter(Boolean).join(" · ")}
+                    renderMeta={renderTeamMeta}
                     emptyMsg="No hay equipos históricos."
                   />
                 )}
@@ -711,7 +793,7 @@ export default function AdminHistorical() {
                     items={filteredCompetitions} selectedId={selectedId}
                     onEdit={openEdit} onDelete={deleteCompetition} onTogglePublish={toggleCompetitionPublished}
                     renderTitle={c => c.name}
-                    renderMeta={c => [c.type, c.year ? String(c.year) : null].filter(Boolean).join(" · ")}
+                    renderMeta={renderCompMeta}
                     emptyMsg="No hay competencias."
                   />
                 )}
@@ -720,7 +802,7 @@ export default function AdminHistorical() {
                     items={filteredEvents} selectedId={selectedId}
                     onEdit={openEdit} onDelete={deleteEvent} onTogglePublish={toggleEventPublished}
                     renderTitle={e => e.title}
-                    renderMeta={e => [e.event_type, e.event_date].filter(Boolean).join(" · ")}
+                    renderMeta={renderEventMeta}
                     emptyMsg="No hay eventos históricos."
                   />
                 )}
@@ -737,8 +819,8 @@ export default function AdminHistorical() {
               <span className="ah-panel-title">
                 {panel
                   ? (panel.data
-                      ? `Editar ${TABS.find(t => t.key === activeTab)?.label.slice(0,-1)}`
-                      : `Nuevo ${TABS.find(t => t.key === activeTab)?.label.slice(0,-1)}`)
+                      ? `Editar ${TABS.find(t => t.key === activeTab)?.label.slice(0, -1)}`
+                      : `Nuevo ${TABS.find(t => t.key === activeTab)?.label.slice(0, -1)}`)
                   : "Panel"}
               </span>
             </div>

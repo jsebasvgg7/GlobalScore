@@ -17,13 +17,31 @@ const LEGACY_COLOR = {
   "Goalkeeper":  "#ec4899",
 };
 
-const EVENT_TYPE_LABEL = {
-  "Championship":           "Campeonato",
-  "Historic Match":         "Partido Histórico",
-  "Legendary Performance":  "Actuación Legendaria",
-  "Era Defining":           "Definió una Era",
-  "Record":                 "Récord",
+// Mapas de traducción para valores almacenados en DB
+const POSITION_LABEL = {
+  "Forward":    "Delantero",
+  "Midfielder": "Centrocampista",
+  "Defender":   "Defensor",
+  "Goalkeeper": "Portero",
 };
+
+const LEGACY_LABEL = {
+  "Goal Scorer": "Goleador",
+  "Tactician":   "Táctico",
+  "Innovator":   "Innovador",
+  "Leader":      "Líder",
+  "Goalkeeper":  "Portero",
+};
+
+const EVENT_TYPE_LABEL = {
+  "Championship":          "Campeonato",
+  "Historic Match":        "Partido Histórico",
+  "Legendary Performance": "Actuación Legendaria",
+  "Era Defining":          "Definió una Era",
+  "Record":                "Récord",
+};
+
+const SIGNIFICANCE_LABEL = ["", "Histórico", "Notable", "Estrella", "Leyenda", "GOAT Status"];
 
 function SignificanceStars({ value }) {
   return (
@@ -45,7 +63,7 @@ function LegacyBadge({ type }) {
   const color = LEGACY_COLOR[type] || "var(--accent)";
   return (
     <span className="hp-badge" style={{ "--badge-color": color }}>
-      {type}
+      {LEGACY_LABEL[type] || type}
     </span>
   );
 }
@@ -94,7 +112,7 @@ function PlayerCard({ player, onClick, isActive, onMouseEnter, onMouseLeave }) {
             <span className="hp-card-sep">·</span>
           )}
           {player.position && (
-            <span className="hp-card-position">{player.position}</span>
+            <span className="hp-card-position">{POSITION_LABEL[player.position] || player.position}</span>
           )}
           {player.era && (
             <>
@@ -149,7 +167,7 @@ function PlayerDetail({ playerId, onBack }) {
 
   return (
     <div className="hp-detail">
-      {/* Back button */}
+      {/* Botón volver */}
       <button className="hp-detail-back" onClick={onBack}>
         <ArrowLeft size={14} />
         <span>Volver a jugadores</span>
@@ -175,7 +193,7 @@ function PlayerDetail({ playerId, onBack }) {
 
           <div className="hp-detail-chips">
             {player.country  && <span className="hp-detail-chip hp-chip--country">{player.country}</span>}
-            {player.position && <span className="hp-detail-chip hp-chip--pos">{player.position}</span>}
+            {player.position && <span className="hp-detail-chip hp-chip--pos">{POSITION_LABEL[player.position] || player.position}</span>}
             {player.era      && <span className="hp-detail-chip hp-chip--era">{player.era}</span>}
             {lifespan        && <span className="hp-detail-chip hp-chip--life">{lifespan}</span>}
           </div>
@@ -183,7 +201,7 @@ function PlayerDetail({ playerId, onBack }) {
           <div className="hp-detail-sig-row">
             <SignificanceStars value={player.significance_level || 0} />
             <span className="hp-detail-sig-label">
-              {["", "Histórico", "Notable", "Estrella", "Leyenda", "GOAT Status"][player.significance_level || 0]}
+              {SIGNIFICANCE_LABEL[player.significance_level || 0]}
             </span>
           </div>
 
@@ -317,8 +335,6 @@ export default function HistoryPage() {
     setFilterLegacy("");
   };
 
-  // El jugador que se muestra en el panel derecho:
-  // primero el hovereado, luego el seleccionado si hay detalle abierto, sino null
   const panelPlayer = hoveredPlayer || (selectedPlayerId
     ? allPlayers.find((p) => p.id === selectedPlayerId) || null
     : null);
@@ -349,7 +365,7 @@ export default function HistoryPage() {
       {/* ── COLUMNA PRINCIPAL ── */}
       <div className="hp-root">
 
-        {/* Header de sección */}
+        {/* Encabezado de sección */}
         <header className="hp-header">
           <div className="hp-header-left">
             <div className="hp-header-icon">
@@ -358,12 +374,12 @@ export default function HistoryPage() {
             <div>
               <h1 className="hp-header-title">Sección Histórica</h1>
               <p className="hp-header-sub">
-                {allPlayers.length} leyendas del fútbol mundial
+                {allPlayers.length} leyenda{allPlayers.length !== 1 ? "s" : ""} del fútbol mundial
               </p>
             </div>
           </div>
 
-          {/* Search */}
+          {/* Búsqueda */}
           <div className="hp-search-wrap">
             <div className="hp-search">
               <Search size={13} className="hp-search-ico" />
@@ -403,7 +419,9 @@ export default function HistoryPage() {
                   onChange={(e) => setFilterPosition(e.target.value)}
                 >
                   <option value="">Todas</option>
-                  {positions.map((p) => <option key={p}>{p}</option>)}
+                  {positions.map((p) => (
+                    <option key={p} value={p}>{POSITION_LABEL[p] || p}</option>
+                  ))}
                 </select>
               </div>
 
@@ -420,14 +438,16 @@ export default function HistoryPage() {
               </div>
 
               <div className="hp-filter-group">
-                <label className="hp-filter-label">Legado</label>
+                <label className="hp-filter-label">Tipo de legado</label>
                 <select
                   className="hp-filter-select"
                   value={filterLegacy}
                   onChange={(e) => setFilterLegacy(e.target.value)}
                 >
                   <option value="">Todos</option>
-                  {legacies.map((l) => <option key={l}>{l}</option>)}
+                  {legacies.map((l) => (
+                    <option key={l} value={l}>{LEGACY_LABEL[l] || l}</option>
+                  ))}
                 </select>
               </div>
 
@@ -466,7 +486,7 @@ export default function HistoryPage() {
             <p className="hp-empty-title">
               {allPlayers.length === 0
                 ? "Aún no hay jugadores históricos"
-                : "No hay coincidencias"}
+                : "Sin coincidencias"}
             </p>
             <p className="hp-empty-sub">
               {allPlayers.length === 0
@@ -481,7 +501,7 @@ export default function HistoryPage() {
           </div>
         )}
 
-        {/* Grid de jugadores */}
+        {/* Grilla de jugadores */}
         {!loading && !error && players.length > 0 && (
           <>
             <div className="hp-results-bar">
