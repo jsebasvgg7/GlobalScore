@@ -11,7 +11,105 @@
   overflow: hidden;
   background: var(--bg);
 }
+/* ============================================================
+   AGREGAR AL FINAL DE AdminHistorical.css
+   Estilos para TeamPanel: tabs internos, lineup, colores
+   ============================================================ */
 
+/* ── Tabs internos del panel ─────────────────────────────── */
+.ah-inner-tabs {
+  display: flex;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+.ah-inner-tab {
+  flex: 1;
+  height: 38px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -0.5px;
+}
+
+.ah-inner-tab:hover { color: var(--text-primary); }
+
+.ah-inner-tab--active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ── Color picker row ────────────────────────────────────── */
+.ah-color-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ah-color-pick {
+  width: 34px;
+  height: 34px;
+  border: 0.5px solid var(--border);
+  padding: 2px;
+  background: var(--bg);
+  cursor: pointer;
+  flex-shrink: 0;
+  border-radius: 0;
+}
+
+/* ── Formación row ───────────────────────────────────────── */
+.ah-formation-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* ── Lineup list ─────────────────────────────────────────── */
+.ah-lineup-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ah-lineup-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ah-lineup-num {
+  width: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--accent);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* Inputs X/Y de posición */
+.ah-pos-inputs {
+  display: flex;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.ah-pos-xy {
+  width: 44px !important;
+  padding: 8px 4px !important;
+  text-align: center;
+  font-size: 11px !important;
+}
 /* ── Stats strip — COMPACTA (fila única, 44px) ───────────────── */
 .ah-stats-strip {
   display: flex;

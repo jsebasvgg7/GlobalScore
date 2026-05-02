@@ -10,7 +10,7 @@ import {
 } from "../../hooks/HooksAdmin/useAdminHistorical";
 import "../../styles/StylesAdmin/AdminHistorical.css";
 
-// ─── Constantes (valores DB — no modificar) ───────────────────────────────────
+// ─── Constantes ───────────────────────────────────────────────────────────────
 const TABS = [
   { key: "players",      label: "Jugadores",    Icon: Users2  },
   { key: "teams",        label: "Equipos",      Icon: Shield  },
@@ -23,42 +23,86 @@ const LEGACY_PLAYER = ["Goal Scorer", "Tactician", "Innovator", "Leader", "Goalk
 const LEGACY_TEAM   = ["Dynastic", "Innovative", "Continental", "National"];
 const EVENT_TYPES   = ["Championship", "Historic Match", "Legendary Performance", "Era Defining", "Record"];
 const COMP_TYPES    = ["International", "Continental", "Domestic"];
+const FORMATIONS    = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "5-3-2", "3-4-3"];
+const POSITION_ROLES = ["GK","CB","LB","RB","CDM","CM","CAM","LM","RM","LW","RW","ST","SS"];
 
-// ─── Mapas de traducción (solo para mostrar en UI) ────────────────────────────
+// ─── Mapas de traducción ──────────────────────────────────────────────────────
 const POSITION_LABEL = {
-  "Forward":    "Delantero",
-  "Midfielder": "Centrocampista",
-  "Defender":   "Defensor",
-  "Goalkeeper": "Portero",
+  "Forward": "Delantero", "Midfielder": "Centrocampista",
+  "Defender": "Defensor", "Goalkeeper": "Portero",
 };
-
 const LEGACY_PLAYER_LABEL = {
-  "Goal Scorer": "Goleador",
-  "Tactician":   "Táctico",
-  "Innovator":   "Innovador",
-  "Leader":      "Líder",
-  "Goalkeeper":  "Portero",
+  "Goal Scorer": "Goleador", "Tactician": "Táctico",
+  "Innovator": "Innovador", "Leader": "Líder", "Goalkeeper": "Portero",
 };
-
 const LEGACY_TEAM_LABEL = {
-  "Dynastic":     "Dinástico",
-  "Innovative":   "Innovador",
-  "Continental":  "Continental",
-  "National":     "Nacional",
+  "Dynastic": "Dinástico", "Innovative": "Innovador",
+  "Continental": "Continental", "National": "Nacional",
 };
-
 const EVENT_TYPE_LABEL = {
-  "Championship":          "Campeonato",
-  "Historic Match":        "Partido Histórico",
+  "Championship": "Campeonato", "Historic Match": "Partido Histórico",
   "Legendary Performance": "Actuación Legendaria",
-  "Era Defining":          "Definió una Era",
-  "Record":                "Récord",
+  "Era Defining": "Definió una Era", "Record": "Récord",
+};
+const COMP_TYPE_LABEL = {
+  "International": "Internacional", "Continental": "Continental",
+  "Domestic": "Nacional / Doméstico",
 };
 
-const COMP_TYPE_LABEL = {
-  "International": "Internacional",
-  "Continental":   "Continental",
-  "Domestic":      "Nacional / Doméstico",
+// ─── Posiciones por defecto según formación ───────────────────────────────────
+const FORMATION_DEFAULTS = {
+  "4-3-3": [
+    { shirt_number:1,  position_role:"GK",  pos_x:50, pos_y:88 },
+    { shirt_number:2,  position_role:"RB",  pos_x:20, pos_y:70 },
+    { shirt_number:3,  position_role:"CB",  pos_x:40, pos_y:70 },
+    { shirt_number:4,  position_role:"CB",  pos_x:60, pos_y:70 },
+    { shirt_number:5,  position_role:"LB",  pos_x:80, pos_y:70 },
+    { shirt_number:6,  position_role:"CDM", pos_x:50, pos_y:52 },
+    { shirt_number:7,  position_role:"CM",  pos_x:30, pos_y:52 },
+    { shirt_number:8,  position_role:"CM",  pos_x:70, pos_y:52 },
+    { shirt_number:9,  position_role:"ST",  pos_x:50, pos_y:20 },
+    { shirt_number:10, position_role:"LW",  pos_x:80, pos_y:20 },
+    { shirt_number:11, position_role:"RW",  pos_x:20, pos_y:20 },
+  ],
+  "4-4-2": [
+    { shirt_number:1,  position_role:"GK", pos_x:50, pos_y:88 },
+    { shirt_number:2,  position_role:"RB", pos_x:20, pos_y:70 },
+    { shirt_number:3,  position_role:"CB", pos_x:38, pos_y:70 },
+    { shirt_number:4,  position_role:"CB", pos_x:62, pos_y:70 },
+    { shirt_number:5,  position_role:"LB", pos_x:80, pos_y:70 },
+    { shirt_number:6,  position_role:"RM", pos_x:20, pos_y:46 },
+    { shirt_number:7,  position_role:"CM", pos_x:38, pos_y:46 },
+    { shirt_number:8,  position_role:"CM", pos_x:62, pos_y:46 },
+    { shirt_number:9,  position_role:"LM", pos_x:80, pos_y:46 },
+    { shirt_number:10, position_role:"ST", pos_x:38, pos_y:18 },
+    { shirt_number:11, position_role:"ST", pos_x:62, pos_y:18 },
+  ],
+  "3-5-2": [
+    { shirt_number:1,  position_role:"GK",  pos_x:50, pos_y:88 },
+    { shirt_number:2,  position_role:"CB",  pos_x:25, pos_y:70 },
+    { shirt_number:3,  position_role:"CB",  pos_x:50, pos_y:70 },
+    { shirt_number:4,  position_role:"CB",  pos_x:75, pos_y:70 },
+    { shirt_number:5,  position_role:"RM",  pos_x:15, pos_y:50 },
+    { shirt_number:6,  position_role:"CM",  pos_x:35, pos_y:50 },
+    { shirt_number:7,  position_role:"CDM", pos_x:50, pos_y:50 },
+    { shirt_number:8,  position_role:"CM",  pos_x:65, pos_y:50 },
+    { shirt_number:9,  position_role:"LM",  pos_x:85, pos_y:50 },
+    { shirt_number:10, position_role:"ST",  pos_x:35, pos_y:18 },
+    { shirt_number:11, position_role:"ST",  pos_x:65, pos_y:18 },
+  ],
+  "4-2-3-1": [
+    { shirt_number:1,  position_role:"GK",  pos_x:50, pos_y:88 },
+    { shirt_number:2,  position_role:"RB",  pos_x:20, pos_y:70 },
+    { shirt_number:3,  position_role:"CB",  pos_x:40, pos_y:70 },
+    { shirt_number:4,  position_role:"CB",  pos_x:60, pos_y:70 },
+    { shirt_number:5,  position_role:"LB",  pos_x:80, pos_y:70 },
+    { shirt_number:6,  position_role:"CDM", pos_x:38, pos_y:56 },
+    { shirt_number:7,  position_role:"CDM", pos_x:62, pos_y:56 },
+    { shirt_number:8,  position_role:"RW",  pos_x:20, pos_y:36 },
+    { shirt_number:9,  position_role:"CAM", pos_x:50, pos_y:36 },
+    { shirt_number:10, position_role:"LW",  pos_x:80, pos_y:36 },
+    { shirt_number:11, position_role:"ST",  pos_x:50, pos_y:16 },
+  ],
 };
 
 // ─── Objetos vacíos ───────────────────────────────────────────────────────────
@@ -69,7 +113,10 @@ const PLAYER_EMPTY = {
 };
 const TEAM_EMPTY = {
   name: "", country: "", founded_year: "", era_dominance: "",
-  legacy_type: "", description: "", is_published: false,
+  legacy_type: "", description: "", historical_note: "",
+  primary_color: "#5b4fd8", secondary_color: "#ffffff",
+  formation: "4-3-3", titles_count: 0,
+  active_years: "", manager: "", is_published: false,
 };
 const COMP_EMPTY = {
   name: "", type: "", year: "", description: "",
@@ -80,32 +127,29 @@ const EVENT_EMPTY = {
   description: "", is_published: false,
 };
 
+const EMPTY_LINEUP_PLAYER = (num) => ({
+  shirt_number: num, player_name: "", position_role: "", pos_x: 50, pos_y: 50,
+});
+
 // ══════════════════════════════════════════════════════════════════════════════
 //  SUB-COMPONENTES COMPARTIDOS
 // ══════════════════════════════════════════════════════════════════════════════
-
 function ImageUploader({ currentPath, onFile, label = "Imagen" }) {
   const ref = useRef();
   const [preview, setPreview] = useState(null);
   const url = preview || getHistoricalImageUrl(currentPath);
-
   const handleChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setPreview(URL.createObjectURL(file));
     onFile(file);
   };
-
   return (
     <div className="ah-img-uploader" onClick={() => ref.current.click()}>
-      {url ? (
-        <img src={url} alt={label} className="ah-img-preview" />
-      ) : (
-        <div className="ah-img-placeholder">
-          <Camera size={22} strokeWidth={1.5} />
-          <span>{label}</span>
-        </div>
-      )}
+      {url
+        ? <img src={url} alt={label} className="ah-img-preview" />
+        : <div className="ah-img-placeholder"><Camera size={22} strokeWidth={1.5} /><span>{label}</span></div>
+      }
       <input ref={ref} type="file" accept="image/*" style={{ display: "none" }} onChange={handleChange} />
       <div className="ah-img-overlay"><span>Cambiar</span></div>
     </div>
@@ -131,7 +175,7 @@ function SignificancePicker({ value, onChange }) {
 function PublishToggle({ checked, onChange }) {
   return (
     <label className="ah-pub-toggle">
-      <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} />
+      <input type="checkbox" checked={!!checked} onChange={e => onChange(e.target.checked)} />
       <span className="ah-pub-track"><span className="ah-pub-thumb" /></span>
       <span className="ah-pub-label">{checked ? "Publicado" : "Borrador"}</span>
     </label>
@@ -150,9 +194,7 @@ function PField({ label, required, hint, children }) {
   );
 }
 
-function PInput(props) {
-  return <input className="ah-pinput" {...props} />;
-}
+function PInput(props) { return <input className="ah-pinput" {...props} />; }
 function PSelect({ children, ...props }) {
   return <select className="ah-pinput" {...props}>{children}</select>;
 }
@@ -165,17 +207,15 @@ function PTextarea(props) {
 // ══════════════════════════════════════════════════════════════════════════════
 function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPlayerTeams }) {
   const isEdit = !!player?.id;
-  const [form, setForm] = useState(player?.id ? { ...player } : { ...PLAYER_EMPTY });
+  const [form, setForm]         = useState(player?.id ? { ...player } : { ...PLAYER_EMPTY });
   const [imageFile, setImageFile] = useState(null);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState(null);
+  const [saving, setSaving]     = useState(false);
+  const [error, setError]       = useState(null);
   const [playerTeams, setPlayerTeams] = useState([]);
   const [teamLink, setTeamLink] = useState({ team_id: "", start_year: "", end_year: "", roles: "" });
 
   useState(() => {
-    if (isEdit) {
-      onGetPlayerTeams(player.id).then(setPlayerTeams);
-    }
+    if (isEdit) onGetPlayerTeams(player.id).then(setPlayerTeams);
   }, []);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -193,11 +233,8 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
       const saved = await onSave(form, imageFile);
       if (saved?.id) await onSetPlayerTeams(saved.id, playerTeams);
       onClose();
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setSaving(false);
-    }
+    } catch (err) { setError(err.message); }
+    finally { setSaving(false); }
   };
 
   return (
@@ -206,7 +243,6 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
         <span className="ah-panel-sep">Imagen</span>
         <ImageUploader currentPath={form.image_path} onFile={setImageFile} label="Foto del jugador" />
       </div>
-
       <div className="ah-panel-section">
         <span className="ah-panel-sep">Identidad</span>
         <div className="ah-pgrid-2">
@@ -219,17 +255,13 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
           <PField label="Posición">
             <PSelect value={form.position || ""} onChange={e => set("position", e.target.value)}>
               <option value="">— Selecciona —</option>
-              {POSITIONS.map(p => (
-                <option key={p} value={p}>{POSITION_LABEL[p] || p}</option>
-              ))}
+              {POSITIONS.map(p => <option key={p} value={p}>{POSITION_LABEL[p] || p}</option>)}
             </PSelect>
           </PField>
           <PField label="Tipo de legado">
             <PSelect value={form.legacy_type || ""} onChange={e => set("legacy_type", e.target.value)}>
               <option value="">— Selecciona —</option>
-              {LEGACY_PLAYER.map(l => (
-                <option key={l} value={l}>{LEGACY_PLAYER_LABEL[l] || l}</option>
-              ))}
+              {LEGACY_PLAYER.map(l => <option key={l} value={l}>{LEGACY_PLAYER_LABEL[l] || l}</option>)}
             </PSelect>
           </PField>
           <PField label="Año nac.">
@@ -243,22 +275,19 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
           </PField>
         </div>
       </div>
-
       <div className="ah-panel-section">
         <span className="ah-panel-sep">Significancia histórica</span>
         <SignificancePicker value={form.significance_level || 3} onChange={v => set("significance_level", v)} />
       </div>
-
       <div className="ah-panel-section">
         <span className="ah-panel-sep">Narrativa</span>
-        <PField label="Descripción (2-3 párrafos)">
+        <PField label="Descripción">
           <PTextarea rows={4} value={form.description || ""} onChange={e => set("description", e.target.value)} placeholder="Biografía e historia..." />
         </PField>
-        <PField label="Por qué importa (1 párrafo)">
+        <PField label="Por qué importa">
           <PTextarea rows={2} value={form.impact_summary || ""} onChange={e => set("impact_summary", e.target.value)} placeholder="Su impacto en la historia..." />
         </PField>
       </div>
-
       <div className="ah-panel-section">
         <span className="ah-panel-sep">Equipos donde jugó</span>
         {playerTeams.length > 0 && (
@@ -292,14 +321,11 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
           </button>
         </div>
       </div>
-
       <div className="ah-panel-section">
         <span className="ah-panel-sep">Visibilidad</span>
         <PublishToggle checked={form.is_published} onChange={v => set("is_published", v)} />
       </div>
-
       {error && <div className="ah-panel-error">{error}</div>}
-
       <div className="ah-panel-actions">
         <button className="ah-paction-cancel" onClick={onClose}>Cancelar</button>
         <button className="ah-paction-save" onClick={handleSubmit} disabled={saving}>
@@ -314,60 +340,289 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
 // ══════════════════════════════════════════════════════════════════════════════
 //  PANEL: EQUIPO
 // ══════════════════════════════════════════════════════════════════════════════
-function TeamPanel({ team, onSave, onClose }) {
+function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLineup, onGetTitles, onSetTitles }) {
   const isEdit = !!team?.id;
-  const [form, setForm] = useState(team?.id ? { ...team } : { ...TEAM_EMPTY });
+  const [form, setForm]           = useState(team?.id ? { ...team } : { ...TEAM_EMPTY });
   const [imageFile, setImageFile] = useState(null);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState(null);
+  const [saving, setSaving]       = useState(false);
+  const [error, setError]         = useState(null);
+  const [tab, setTab]             = useState("info");
+  const [loadingData, setLoadingData] = useState(false);
+
+  // Lineup: 11 slots fijos
+  const [lineup, setLineup] = useState(
+    Array.from({ length: 11 }, (_, i) => EMPTY_LINEUP_PLAYER(i + 1))
+  );
+
+  // Títulos
+  const [titles, setTitles]     = useState([]);
+  const [newTitle, setNewTitle] = useState({ title_name: "", year: "", competition_id: "" });
+
+  // Cargar datos si es edición
+  useState(() => {
+    if (!isEdit) return;
+    setLoadingData(true);
+    Promise.all([onGetLineup(team.id), onGetTitles(team.id)])
+      .then(([lin, tit]) => {
+        if (lin && lin.length > 0) {
+          setLineup(
+            Array.from({ length: 11 }, (_, i) => {
+              const found = lin.find(p => p.shirt_number === i + 1);
+              return found
+                ? { shirt_number: i + 1, player_name: found.player_name || "",
+                    position_role: found.position_role || "",
+                    pos_x: found.pos_x ?? 50, pos_y: found.pos_y ?? 50 }
+                : EMPTY_LINEUP_PLAYER(i + 1);
+            })
+          );
+        }
+        setTitles(tit || []);
+      })
+      .catch(() => {})
+      .finally(() => setLoadingData(false));
+  }, []);
+
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const applyFormation = (formation) => {
+    const defaults = FORMATION_DEFAULTS[formation];
+    if (!defaults) return;
+    setLineup(prev =>
+      prev.map(p => {
+        const def = defaults.find(d => d.shirt_number === p.shirt_number);
+        return def ? { ...p, position_role: def.position_role, pos_x: def.pos_x, pos_y: def.pos_y } : p;
+      })
+    );
+    set("formation", formation);
+  };
+
+  const updateLineupPlayer = (num, field, val) =>
+    setLineup(prev => prev.map(p => p.shirt_number === num ? { ...p, [field]: val } : p));
+
+  const addTitle = () => {
+    if (!newTitle.title_name.trim()) return;
+    setTitles(prev => [...prev, { ...newTitle, _temp: Date.now() }]);
+    setNewTitle({ title_name: "", year: "", competition_id: "" });
+  };
+
+  const removeTitle = (idx) => setTitles(prev => prev.filter((_, i) => i !== idx));
 
   const handleSubmit = async () => {
     if (!form.name.trim()) { setError("El nombre es obligatorio"); return; }
     setSaving(true); setError(null);
-    try { await onSave(form, imageFile); onClose(); }
-    catch (err) { setError(err.message); }
+    try {
+      const saved = await onSave(form, imageFile);
+      const id = saved?.id || team?.id;
+      if (id) {
+        const lineupToSave = lineup.filter(p => p.player_name && p.player_name.trim() !== "");
+        await onSetLineup(id, lineupToSave);
+        // eslint-disable-next-line no-unused-vars
+        await onSetTitles(id, titles.map(({ _temp, ...t }) => t));
+      }
+      onClose();
+    } catch (err) { setError(err.message); }
     finally { setSaving(false); }
   };
 
   return (
     <div className="ah-panel-form">
-      <div className="ah-panel-section">
-        <span className="ah-panel-sep">Imagen</span>
-        <ImageUploader currentPath={form.image_path} onFile={setImageFile} label="Escudo / Logo" />
+
+      {/* Tabs internos */}
+      <div className="ah-inner-tabs">
+        {[["info","Info"], ["lineup","Alineación"], ["titles","Títulos"]].map(([k, l]) => (
+          <button key={k} type="button"
+            className={`ah-inner-tab ${tab === k ? "ah-inner-tab--active" : ""}`}
+            onClick={() => setTab(k)}>
+            {l}
+          </button>
+        ))}
       </div>
-      <div className="ah-panel-section">
-        <span className="ah-panel-sep">Datos del equipo</span>
-        <div className="ah-pgrid-2">
-          <PField label="Nombre" required>
-            <PInput value={form.name} onChange={e => set("name", e.target.value)} placeholder="FC Barcelona" />
+
+      {/* ── TAB INFO ── */}
+      {tab === "info" && <>
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Imagen</span>
+          <ImageUploader currentPath={form.image_path} onFile={setImageFile} label="Escudo / Logo" />
+        </div>
+
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Datos básicos</span>
+          <div className="ah-pgrid-2">
+            <PField label="Nombre" required>
+              <PInput value={form.name} onChange={e => set("name", e.target.value)} placeholder="FC Barcelona" />
+            </PField>
+            <PField label="País">
+              <PInput value={form.country || ""} onChange={e => set("country", e.target.value)} placeholder="España" />
+            </PField>
+            <PField label="Año fundación">
+              <PInput type="number" value={form.founded_year || ""} onChange={e => set("founded_year", e.target.value)} placeholder="1899" />
+            </PField>
+            <PField label="Era de dominancia">
+              <PInput value={form.era_dominance || ""} onChange={e => set("era_dominance", e.target.value)} placeholder="2008-2015" />
+            </PField>
+            <PField label="Años activos">
+              <PInput value={form.active_years || ""} onChange={e => set("active_years", e.target.value)} placeholder="1974-1982" />
+            </PField>
+            <PField label="DT Emblemático">
+              <PInput value={form.manager || ""} onChange={e => set("manager", e.target.value)} placeholder="Johan Cruyff" />
+            </PField>
+            <PField label="Tipo de legado">
+              <PSelect value={form.legacy_type || ""} onChange={e => set("legacy_type", e.target.value)}>
+                <option value="">— Selecciona —</option>
+                {LEGACY_TEAM.map(l => <option key={l} value={l}>{LEGACY_TEAM_LABEL[l] || l}</option>)}
+              </PSelect>
+            </PField>
+          </div>
+        </div>
+
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Colores del equipo</span>
+          <div className="ah-pgrid-2">
+            <PField label="Color primario (camiseta)">
+              <div className="ah-color-row">
+                <input type="color" className="ah-color-pick"
+                  value={form.primary_color || "#5b4fd8"}
+                  onChange={e => set("primary_color", e.target.value)} />
+                <PInput value={form.primary_color || "#5b4fd8"}
+                  onChange={e => set("primary_color", e.target.value)} placeholder="#5b4fd8" />
+              </div>
+            </PField>
+            <PField label="Color secundario (detalles)">
+              <div className="ah-color-row">
+                <input type="color" className="ah-color-pick"
+                  value={form.secondary_color || "#ffffff"}
+                  onChange={e => set("secondary_color", e.target.value)} />
+                <PInput value={form.secondary_color || "#ffffff"}
+                  onChange={e => set("secondary_color", e.target.value)} placeholder="#ffffff" />
+              </div>
+            </PField>
+          </div>
+        </div>
+
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Narrativa</span>
+          <PField label="Descripción general">
+            <PTextarea rows={3} value={form.description || ""}
+              onChange={e => set("description", e.target.value)} placeholder="Historia del equipo..." />
           </PField>
-          <PField label="País">
-            <PInput value={form.country || ""} onChange={e => set("country", e.target.value)} placeholder="España" />
-          </PField>
-          <PField label="Año de fundación">
-            <PInput type="number" value={form.founded_year || ""} onChange={e => set("founded_year", e.target.value)} placeholder="1899" />
-          </PField>
-          <PField label="Era de dominancia">
-            <PInput value={form.era_dominance || ""} onChange={e => set("era_dominance", e.target.value)} placeholder="2008-2015" />
-          </PField>
-          <PField label="Tipo de legado">
-            <PSelect value={form.legacy_type || ""} onChange={e => set("legacy_type", e.target.value)}>
-              <option value="">— Selecciona —</option>
-              {LEGACY_TEAM.map(l => (
-                <option key={l} value={l}>{LEGACY_TEAM_LABEL[l] || l}</option>
-              ))}
-            </PSelect>
+          <PField label="Por qué es histórico">
+            <PTextarea rows={3} value={form.historical_note || ""}
+              onChange={e => set("historical_note", e.target.value)}
+              placeholder="Lo que lo hace único e irrepetible..." />
           </PField>
         </div>
-        <PField label="Descripción histórica">
-          <PTextarea rows={4} value={form.description || ""} onChange={e => set("description", e.target.value)} placeholder="Historia y legado del equipo..." />
-        </PField>
-      </div>
-      <div className="ah-panel-section">
-        <span className="ah-panel-sep">Visibilidad</span>
-        <PublishToggle checked={form.is_published} onChange={v => set("is_published", v)} />
-      </div>
+
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Visibilidad</span>
+          <PublishToggle checked={form.is_published} onChange={v => set("is_published", v)} />
+        </div>
+      </>}
+
+      {/* ── TAB ALINEACIÓN ── */}
+      {tab === "lineup" && (
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Formación y 11 titular</span>
+
+          <div className="ah-formation-row">
+            <PSelect value={form.formation || "4-3-3"}
+              onChange={e => set("formation", e.target.value)}
+              style={{ flex: 1 }}>
+              {FORMATIONS.map(f => <option key={f} value={f}>{f}</option>)}
+            </PSelect>
+            <button type="button" className="ah-add-link-btn"
+              onClick={() => applyFormation(form.formation || "4-3-3")}>
+              Auto-posicionar
+            </button>
+          </div>
+
+          {loadingData ? (
+            <div className="ah-loading-msg">
+              <RefreshCw size={12} className="ah-spin" /> Cargando...
+            </div>
+          ) : (
+            <div className="ah-lineup-list">
+              {lineup.map(p => (
+                <div key={p.shirt_number} className="ah-lineup-row">
+                  <span className="ah-lineup-num">{p.shirt_number}</span>
+                  <PInput
+                    placeholder="Nombre del jugador"
+                    value={p.player_name || ""}
+                    onChange={e => updateLineupPlayer(p.shirt_number, "player_name", e.target.value)}
+                    style={{ flex: 2 }}
+                  />
+                  <PSelect
+                    value={p.position_role || ""}
+                    onChange={e => updateLineupPlayer(p.shirt_number, "position_role", e.target.value)}
+                    style={{ flex: 1 }}>
+                    <option value="">Pos.</option>
+                    {POSITION_ROLES.map(r => <option key={r} value={r}>{r}</option>)}
+                  </PSelect>
+                  <div className="ah-pos-inputs">
+                    <input type="number" min="0" max="100" className="ah-pinput ah-pos-xy"
+                      title="Pos X" placeholder="X"
+                      value={p.pos_x ?? 50}
+                      onChange={e => updateLineupPlayer(p.shirt_number, "pos_x", parseFloat(e.target.value) || 0)} />
+                    <input type="number" min="0" max="100" className="ah-pinput ah-pos-xy"
+                      title="Pos Y" placeholder="Y"
+                      value={p.pos_y ?? 50}
+                      onChange={e => updateLineupPlayer(p.shirt_number, "pos_y", parseFloat(e.target.value) || 0)} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          <span className="ah-phint" style={{ marginTop: 6, display: "block" }}>
+            X/Y 0–100. Y=88 portero · Y=16 delantero. Usa "Auto-posicionar" para rellenar desde la formación.
+          </span>
+        </div>
+      )}
+
+      {/* ── TAB TÍTULOS ── */}
+      {tab === "titles" && (
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Palmarés</span>
+
+          {titles.length > 0 && (
+            <div className="ah-team-chips">
+              {titles.map((t, i) => (
+                <div key={t.id || t._temp || i} className="ah-team-chip">
+                  <span className="ah-tc-name">{t.title_name}</span>
+                  {t.year && <span className="ah-tc-years">{t.year}</span>}
+                  <button type="button" className="ah-tc-remove" onClick={() => removeTitle(i)}>
+                    <X size={10} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="ah-pgrid-2" style={{ marginTop: 10 }}>
+            <PField label="Nombre del título" required>
+              <PInput value={newTitle.title_name}
+                onChange={e => setNewTitle(t => ({ ...t, title_name: e.target.value }))}
+                placeholder="Copa del Mundo 1974" />
+            </PField>
+            <PField label="Año">
+              <PInput type="number" value={newTitle.year}
+                onChange={e => setNewTitle(t => ({ ...t, year: e.target.value }))}
+                placeholder="1974" />
+            </PField>
+          </div>
+          <PField label="Competencia (opcional)">
+            <PSelect value={newTitle.competition_id}
+              onChange={e => setNewTitle(t => ({ ...t, competition_id: e.target.value }))}>
+              <option value="">— Ninguna —</option>
+              {(competitions || []).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </PSelect>
+          </PField>
+          <button type="button" className="ah-add-link-btn"
+            style={{ width: "100%", justifyContent: "center", marginTop: 8 }}
+            onClick={addTitle}>
+            <Plus size={12} /> Añadir título
+          </button>
+        </div>
+      )}
+
       {error && <div className="ah-panel-error">{error}</div>}
       <div className="ah-panel-actions">
         <button className="ah-paction-cancel" onClick={onClose}>Cancelar</button>
@@ -385,10 +640,10 @@ function TeamPanel({ team, onSave, onClose }) {
 // ══════════════════════════════════════════════════════════════════════════════
 function CompetitionPanel({ competition, teams, onSave, onClose }) {
   const isEdit = !!competition?.id;
-  const [form, setForm] = useState(competition?.id ? { ...competition } : { ...COMP_EMPTY });
+  const [form, setForm]           = useState(competition?.id ? { ...competition } : { ...COMP_EMPTY });
   const [imageFile, setImageFile] = useState(null);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState(null);
+  const [saving, setSaving]       = useState(false);
+  const [error, setError]         = useState(null);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   const handleSubmit = async () => {
@@ -414,9 +669,7 @@ function CompetitionPanel({ competition, teams, onSave, onClose }) {
           <PField label="Tipo">
             <PSelect value={form.type || ""} onChange={e => set("type", e.target.value)}>
               <option value="">— Selecciona —</option>
-              {COMP_TYPES.map(t => (
-                <option key={t} value={t}>{COMP_TYPE_LABEL[t] || t}</option>
-              ))}
+              {COMP_TYPES.map(t => <option key={t} value={t}>{COMP_TYPE_LABEL[t] || t}</option>)}
             </PSelect>
           </PField>
           <PField label="Año">
@@ -454,10 +707,10 @@ function CompetitionPanel({ competition, teams, onSave, onClose }) {
 // ══════════════════════════════════════════════════════════════════════════════
 function EventPanel({ event, players, teams, competitions, onSave, onClose, onGetRelations, onSetRelations }) {
   const isEdit = !!event?.id;
-  const [form, setForm] = useState(event?.id ? { ...event } : { ...EVENT_EMPTY });
+  const [form, setForm]           = useState(event?.id ? { ...event } : { ...EVENT_EMPTY });
   const [imageFile, setImageFile] = useState(null);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState(null);
+  const [saving, setSaving]       = useState(false);
+  const [error, setError]         = useState(null);
   const [relations, setRelations] = useState({ playerIds: [], teamIds: [], competitionIds: [] });
 
   useState(() => {
@@ -474,12 +727,11 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-  const toggleId = (key, id) => {
+  const toggleId = (key, id) =>
     setRelations(r => ({
       ...r,
       [key]: r[key].includes(id) ? r[key].filter(x => x !== id) : [...r[key], id],
     }));
-  };
 
   const handleSubmit = async () => {
     if (!form.title.trim()) { setError("El título es obligatorio"); return; }
@@ -488,9 +740,8 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
       const saved = await onSave(form, imageFile);
       if (saved?.id) await onSetRelations(saved.id, relations);
       onClose();
-    } catch (err) {
-      setError(err.message);
-    } finally { setSaving(false); }
+    } catch (err) { setError(err.message); }
+    finally { setSaving(false); }
   };
 
   return (
@@ -508,9 +759,7 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
           <PField label="Tipo de evento">
             <PSelect value={form.event_type || ""} onChange={e => set("event_type", e.target.value)}>
               <option value="">— Selecciona —</option>
-              {EVENT_TYPES.map(t => (
-                <option key={t} value={t}>{EVENT_TYPE_LABEL[t] || t}</option>
-              ))}
+              {EVENT_TYPES.map(t => <option key={t} value={t}>{EVENT_TYPE_LABEL[t] || t}</option>)}
             </PSelect>
           </PField>
           <PField label="Fecha">
@@ -521,7 +770,6 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
           <PTextarea rows={4} value={form.description || ""} onChange={e => set("description", e.target.value)} placeholder="Descripción detallada..." />
         </PField>
       </div>
-
       <div className="ah-panel-section">
         <span className="ah-panel-sep">Jugadores involucrados</span>
         <div className="ah-check-list">
@@ -533,7 +781,6 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
           ))}
         </div>
       </div>
-
       <div className="ah-panel-section">
         <span className="ah-panel-sep">Equipos involucrados</span>
         <div className="ah-check-list">
@@ -545,7 +792,6 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
           ))}
         </div>
       </div>
-
       <div className="ah-panel-section">
         <span className="ah-panel-sep">Competencias involucradas</span>
         <div className="ah-check-list">
@@ -557,12 +803,10 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
           ))}
         </div>
       </div>
-
       <div className="ah-panel-section">
         <span className="ah-panel-sep">Visibilidad</span>
         <PublishToggle checked={form.is_published} onChange={v => set("is_published", v)} />
       </div>
-
       {error && <div className="ah-panel-error">{error}</div>}
       <div className="ah-panel-actions">
         <button className="ah-paction-cancel" onClick={onClose}>Cancelar</button>
@@ -576,7 +820,7 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  PANEL VACÍO (placeholder)
+//  PANEL VACÍO
 // ══════════════════════════════════════════════════════════════════════════════
 function EmptyPanel({ activeTab }) {
   const tab = TABS.find(t => t.key === activeTab);
@@ -585,7 +829,7 @@ function EmptyPanel({ activeTab }) {
     <div className="ah-empty-panel">
       <div className="ah-ep-icon"><Icon size={28} strokeWidth={1.2} /></div>
       <p className="ah-ep-title">Selecciona un registro</p>
-      <p className="ah-ep-sub">Haz clic en <Pencil size={11} /> para editar, o usa el botón "Nuevo" para crear.</p>
+      <p className="ah-ep-sub">Haz clic en <Pencil size={11} /> para editar, o usa "Nuevo" para crear.</p>
     </div>
   );
 }
@@ -595,19 +839,15 @@ function EmptyPanel({ activeTab }) {
 // ══════════════════════════════════════════════════════════════════════════════
 function HistoricalList({ items, onEdit, onDelete, onTogglePublish, renderTitle, renderMeta, emptyMsg, selectedId }) {
   const [confirmId, setConfirmId] = useState(null);
-
-  if (items.length === 0)
-    return <p className="ah-list-empty">{emptyMsg}</p>;
-
+  if (items.length === 0) return <p className="ah-list-empty">{emptyMsg}</p>;
   return (
     <div className="ah-list">
       {items.map(item => (
         <div key={item.id} className={`ah-list-row ${item.id === selectedId ? "ah-list-row--active" : ""}`}>
-          {item.image_path ? (
-            <img src={getHistoricalImageUrl(item.image_path)} alt="" className="ah-list-img" />
-          ) : (
-            <div className="ah-list-img-ph">📷</div>
-          )}
+          {item.image_path
+            ? <img src={getHistoricalImageUrl(item.image_path)} alt="" className="ah-list-img" />
+            : <div className="ah-list-img-ph">📷</div>
+          }
           <div className="ah-list-info">
             <span className="ah-list-title">{renderTitle(item)}</span>
             <span className="ah-list-meta">{renderMeta(item)}</span>
@@ -615,15 +855,10 @@ function HistoricalList({ items, onEdit, onDelete, onTogglePublish, renderTitle,
           <div className="ah-list-actions">
             <button
               className={`ah-pub-pill ${item.is_published ? "ah-pub-pill--on" : "ah-pub-pill--off"}`}
-              onClick={() => onTogglePublish(item.id, item.is_published)}
-              title={item.is_published ? "Publicado — clic para ocultar" : "Borrador — clic para publicar"}
-            >
-              {item.is_published
-                ? <><Eye size={10} /> Pub</>
-                : <><EyeOff size={10} /> Borrador</>
-              }
+              onClick={() => onTogglePublish(item.id, item.is_published)}>
+              {item.is_published ? <><Eye size={10} /> Pub</> : <><EyeOff size={10} /> Borrador</>}
             </button>
-            <button className="ah-list-btn ah-list-btn--edit" onClick={() => onEdit(item)} title="Editar">
+            <button className="ah-list-btn ah-list-btn--edit" onClick={() => onEdit(item)}>
               <Pencil size={12} />
             </button>
             {confirmId === item.id ? (
@@ -637,7 +872,7 @@ function HistoricalList({ items, onEdit, onDelete, onTogglePublish, renderTitle,
                 </button>
               </>
             ) : (
-              <button className="ah-list-btn ah-list-btn--del" onClick={() => setConfirmId(item.id)} title="Eliminar">
+              <button className="ah-list-btn ah-list-btn--del" onClick={() => setConfirmId(item.id)}>
                 <Trash2 size={12} />
               </button>
             )}
@@ -661,6 +896,8 @@ export default function AdminHistorical() {
     loading, error, loadAll,
     createPlayer, updatePlayer, deletePlayer, togglePlayerPublished,
     createTeam, updateTeam, deleteTeam, toggleTeamPublished,
+    getTeamLineup, setTeamLineup,
+    getTeamTitles, setTeamTitles,
     createCompetition, updateCompetition, deleteCompetition, toggleCompetitionPublished,
     createEvent, updateEvent, deleteEvent, toggleEventPublished,
     getPlayerTeams, setPlayerTeams,
@@ -677,21 +914,17 @@ export default function AdminHistorical() {
   const openEdit   = (data) => setPanel({ type: activeTab, data });
   const closePanel = () => setPanel(null);
 
-  const handleSavePlayer      = async (form, file) => form.id ? updatePlayer(form.id, form, file)      : createPlayer(form, file);
-  const handleSaveTeam        = async (form, file) => form.id ? updateTeam(form.id, form, file)        : createTeam(form, file);
-  const handleSaveCompetition = async (form, file) => form.id ? updateCompetition(form.id, form, file) : createCompetition(form, file);
-  const handleSaveEvent       = async (form, file) => form.id ? updateEvent(form.id, form, file)       : createEvent(form, file);
+  const handleSavePlayer      = (form, file) => form.id ? updatePlayer(form.id, form, file)      : createPlayer(form, file);
+  const handleSaveTeam        = (form, file) => form.id ? updateTeam(form.id, form, file)        : createTeam(form, file);
+  const handleSaveCompetition = (form, file) => form.id ? updateCompetition(form.id, form, file) : createCompetition(form, file);
+  const handleSaveEvent       = (form, file) => form.id ? updateEvent(form.id, form, file)       : createEvent(form, file);
 
   const tabCounts = {
-    players:      players.length,
-    teams:        teams.length,
-    competitions: competitions.length,
-    events:       events.length,
+    players: players.length, teams: teams.length,
+    competitions: competitions.length, events: events.length,
   };
-
   const selectedId = panel?.data?.id || null;
 
-  // Metas en lista — traducidas para mostrar al admin
   const renderPlayerMeta = (p) =>
     [p.country, POSITION_LABEL[p.position] || p.position, p.era, LEGACY_PLAYER_LABEL[p.legacy_type] || p.legacy_type]
       .filter(Boolean).join(" · ");
@@ -701,28 +934,22 @@ export default function AdminHistorical() {
       .filter(Boolean).join(" · ");
 
   const renderCompMeta = (c) =>
-    [COMP_TYPE_LABEL[c.type] || c.type, c.year ? String(c.year) : null]
-      .filter(Boolean).join(" · ");
+    [COMP_TYPE_LABEL[c.type] || c.type, c.year ? String(c.year) : null].filter(Boolean).join(" · ");
 
   const renderEventMeta = (e) =>
-    [EVENT_TYPE_LABEL[e.event_type] || e.event_type, e.event_date]
-      .filter(Boolean).join(" · ");
+    [EVENT_TYPE_LABEL[e.event_type] || e.event_type, e.event_date].filter(Boolean).join(" · ");
 
   return (
     <div className="ah-root">
       <div className="ah-shell">
 
-        {/* ── LEFT: tabs + búsqueda + lista ── */}
+        {/* ── LEFT ── */}
         <div className="ah-left">
-
-          {/* Tabs */}
           <div className="ah-tabs">
             {TABS.map(t => (
-              <button
-                key={t.key}
+              <button key={t.key}
                 className={`ah-tab ${activeTab === t.key ? "ah-tab--active" : ""}`}
-                onClick={() => { setActiveTab(t.key); setSearch(""); closePanel(); }}
-              >
+                onClick={() => { setActiveTab(t.key); setSearch(""); closePanel(); }}>
                 <t.Icon size={13} />
                 <span>{t.label}</span>
                 <span className="ah-tab-count">{tabCounts[t.key]}</span>
@@ -730,20 +957,14 @@ export default function AdminHistorical() {
             ))}
           </div>
 
-          {/* Barra de controles */}
           <div className="ah-controls">
             <div className="ah-search">
               <Search size={12} className="ah-search-ico" />
-              <input
-                className="ah-search-input"
+              <input className="ah-search-input"
                 placeholder={`Buscar ${TABS.find(t => t.key === activeTab)?.label.toLowerCase()}...`}
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              />
+                value={search} onChange={e => setSearch(e.target.value)} />
               {search && (
-                <button className="ah-search-clear" onClick={() => setSearch("")}>
-                  <X size={11} />
-                </button>
+                <button className="ah-search-clear" onClick={() => setSearch("")}><X size={11} /></button>
               )}
             </div>
             <button className="ah-new-btn" onClick={openCreate}>
@@ -752,66 +973,46 @@ export default function AdminHistorical() {
             </button>
           </div>
 
-          {/* Lista */}
           <div className="ah-list-area">
             {loading && (
-              <div className="ah-loading-msg">
-                <RefreshCw size={14} className="ah-spin" /> Cargando...
-              </div>
+              <div className="ah-loading-msg"><RefreshCw size={14} className="ah-spin" /> Cargando...</div>
             )}
             {error && (
               <div className="ah-error-msg">
-                <AlertCircle size={16} />
-                <p>{error}</p>
-                <button className="ah-retry-btn" onClick={loadAll}>
-                  <RefreshCw size={11} /> Reintentar
-                </button>
+                <AlertCircle size={16} /><p>{error}</p>
+                <button className="ah-retry-btn" onClick={loadAll}><RefreshCw size={11} /> Reintentar</button>
               </div>
             )}
-            {!loading && !error && (
-              <>
-                {activeTab === "players" && (
-                  <HistoricalList
-                    items={filteredPlayers} selectedId={selectedId}
-                    onEdit={openEdit} onDelete={deletePlayer} onTogglePublish={togglePlayerPublished}
-                    renderTitle={p => p.name}
-                    renderMeta={renderPlayerMeta}
-                    emptyMsg="No hay jugadores históricos."
-                  />
-                )}
-                {activeTab === "teams" && (
-                  <HistoricalList
-                    items={filteredTeams} selectedId={selectedId}
-                    onEdit={openEdit} onDelete={deleteTeam} onTogglePublish={toggleTeamPublished}
-                    renderTitle={t => t.name}
-                    renderMeta={renderTeamMeta}
-                    emptyMsg="No hay equipos históricos."
-                  />
-                )}
-                {activeTab === "competitions" && (
-                  <HistoricalList
-                    items={filteredCompetitions} selectedId={selectedId}
-                    onEdit={openEdit} onDelete={deleteCompetition} onTogglePublish={toggleCompetitionPublished}
-                    renderTitle={c => c.name}
-                    renderMeta={renderCompMeta}
-                    emptyMsg="No hay competencias."
-                  />
-                )}
-                {activeTab === "events" && (
-                  <HistoricalList
-                    items={filteredEvents} selectedId={selectedId}
-                    onEdit={openEdit} onDelete={deleteEvent} onTogglePublish={toggleEventPublished}
-                    renderTitle={e => e.title}
-                    renderMeta={renderEventMeta}
-                    emptyMsg="No hay eventos históricos."
-                  />
-                )}
-              </>
-            )}
+            {!loading && !error && <>
+              {activeTab === "players" && (
+                <HistoricalList items={filteredPlayers} selectedId={selectedId}
+                  onEdit={openEdit} onDelete={deletePlayer} onTogglePublish={togglePlayerPublished}
+                  renderTitle={p => p.name} renderMeta={renderPlayerMeta}
+                  emptyMsg="No hay jugadores históricos." />
+              )}
+              {activeTab === "teams" && (
+                <HistoricalList items={filteredTeams} selectedId={selectedId}
+                  onEdit={openEdit} onDelete={deleteTeam} onTogglePublish={toggleTeamPublished}
+                  renderTitle={t => t.name} renderMeta={renderTeamMeta}
+                  emptyMsg="No hay equipos históricos." />
+              )}
+              {activeTab === "competitions" && (
+                <HistoricalList items={filteredCompetitions} selectedId={selectedId}
+                  onEdit={openEdit} onDelete={deleteCompetition} onTogglePublish={toggleCompetitionPublished}
+                  renderTitle={c => c.name} renderMeta={renderCompMeta}
+                  emptyMsg="No hay competencias." />
+              )}
+              {activeTab === "events" && (
+                <HistoricalList items={filteredEvents} selectedId={selectedId}
+                  onEdit={openEdit} onDelete={deleteEvent} onTogglePublish={toggleEventPublished}
+                  renderTitle={e => e.title} renderMeta={renderEventMeta}
+                  emptyMsg="No hay eventos históricos." />
+              )}
+            </>}
           </div>
         </div>
 
-        {/* ── RIGHT: panel ── */}
+        {/* ── RIGHT ── */}
         <aside className="ah-right">
           <div className="ah-panel-header">
             <div className="ah-panel-header-left">
@@ -841,15 +1042,27 @@ export default function AdminHistorical() {
                 onGetPlayerTeams={getPlayerTeams} onSetPlayerTeams={setPlayerTeams}
               />
             )}
+
             {panel?.type === "teams" && (
-              <TeamPanel team={panel.data} onSave={handleSaveTeam} onClose={closePanel} />
+              <TeamPanel
+                team={panel.data}
+                competitions={competitions}
+                onSave={handleSaveTeam}
+                onClose={closePanel}
+                onGetLineup={getTeamLineup}
+                onSetLineup={setTeamLineup}
+                onGetTitles={getTeamTitles}
+                onSetTitles={setTeamTitles}
+              />
             )}
+
             {panel?.type === "competitions" && (
               <CompetitionPanel
                 competition={panel.data} teams={teams}
                 onSave={handleSaveCompetition} onClose={closePanel}
               />
             )}
+
             {panel?.type === "events" && (
               <EventPanel
                 event={panel.data} players={players} teams={teams} competitions={competitions}

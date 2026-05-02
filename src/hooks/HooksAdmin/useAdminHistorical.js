@@ -18,7 +18,7 @@ export const uploadHistoricalImage = async (file, folder) => {
     .from("historical")
     .upload(fileName, file, { upsert: false });
   if (error) throw error;
-  return fileName; // guardamos el path relativo en la BD
+  return fileName;
 };
 
 // ─── Helper: eliminar imagen del bucket ──────────────────────────────────────
@@ -95,9 +95,7 @@ export function useAdminHistorical() {
   // ══════════════════════════════════════════════════════════════════════════
   const createPlayer = async (formData, imageFile) => {
     let image_path = null;
-    if (imageFile) {
-      image_path = await uploadHistoricalImage(imageFile, "players");
-    }
+    if (imageFile) image_path = await uploadHistoricalImage(imageFile, "players");
     const { data, error } = await supabase
       .from("historical_players")
       .insert({ ...formData, image_path })
@@ -111,7 +109,6 @@ export function useAdminHistorical() {
   const updatePlayer = async (id, formData, imageFile) => {
     let updates = { ...formData };
     if (imageFile) {
-      // eliminar imagen anterior si existe
       const old = players.find((p) => p.id === id);
       if (old?.image_path) await deleteHistoricalImage(old.image_path);
       updates.image_path = await uploadHistoricalImage(imageFile, "players");
@@ -130,10 +127,7 @@ export function useAdminHistorical() {
   const deletePlayer = async (id) => {
     const old = players.find((p) => p.id === id);
     if (old?.image_path) await deleteHistoricalImage(old.image_path);
-    const { error } = await supabase
-      .from("historical_players")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabase.from("historical_players").delete().eq("id", id);
     if (error) throw error;
     setPlayers((prev) => prev.filter((p) => p.id !== id));
   };
@@ -203,6 +197,114 @@ export function useAdminHistorical() {
   };
 
   // ══════════════════════════════════════════════════════════════════════════
+  //  TEAM LINEUP — 11 titular
+  // ══════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Devuelve los 11 jugadores del lineup de un equipo.
+   * Ordenados por shirt_number.
+   */
+  const getTeamLineup = async (teamId) => {
+    const { data, error } = await supabase
+      .from("historical_team_lineup")
+      .select("*")
+      .eq("team_id", teamId)
+      .order("shirt_number");
+    if (error) throw error;
+    return data || [];
+  };
+
+  /**
+   * Reemplaza toda la alineación de un equipo.
+   * lineupRows = [{ shirt_number, player_name, position_role, pos_x, pos_y, player_id? }]
+   * Elimina los registros anteriores e inserta los nuevos en una sola operación.
+   */
+  const setTeamLineup = async (teamId, lineupRows) => {
+    // 1. Borrar alineación existente
+    const { error: delErr } = await supabase
+      .from("historical_team_lineup")
+      .delete()
+      .eq("team_id", teamId);
+    if (delErr) throw delErr;
+
+    // 2. Insertar nueva si hay jugadores
+    if (!lineupRows || lineupRows.length === 0) return;
+
+    const rows = lineupRows.map((r) => ({
+      team_id:       teamId,
+      shirt_number:  r.shirt_number,
+      player_name:   r.player_name,
+      position_role: r.position_role || null,
+      pos_x:         r.pos_x ?? 50,
+      pos_y:         r.pos_y ?? 50,
+      player_id:     r.player_id || null,
+    }));
+
+    const { error: insErr } = await supabase
+      .from("historical_team_lineup")
+      .insert(rows);
+    if (insErr) throw insErr;
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  TEAM TITLES — palmarés
+  // ══════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Devuelve los títulos de un equipo, ordenados por año.
+   */
+  const getTeamTitles = async (teamId) => {
+    const { data, error } = await supabase
+      .from("historical_team_titles")
+      .select("*, historical_competitions(id, name)")
+      .eq("team_id", teamId)
+      .order("year");
+    if (error) throw error;
+    return data || [];
+  };
+
+  /**
+   * Reemplaza todos los títulos de un equipo.
+   * titleRows = [{ title_name, year, competition_id? }]
+   * También actualiza el campo titles_count en historical_teams.
+   */
+  const setTeamTitles = async (teamId, titleRows) => {
+    // 1. Borrar títulos existentes
+    const { error: delErr } = await supabase
+      .from("historical_team_titles")
+      .delete()
+      .eq("team_id", teamId);
+    if (delErr) throw delErr;
+
+    // 2. Insertar nuevos si hay
+    if (titleRows && titleRows.length > 0) {
+      const rows = titleRows.map((r) => ({
+        team_id:        teamId,
+        title_name:     r.title_name,
+        year:           r.year || null,
+        competition_id: r.competition_id || null,
+      }));
+      const { error: insErr } = await supabase
+        .from("historical_team_titles")
+        .insert(rows);
+      if (insErr) throw insErr;
+    }
+
+    // 3. Sincronizar titles_count en historical_teams
+    const count = titleRows?.length ?? 0;
+    const { data: updatedTeam, error: updErr } = await supabase
+      .from("historical_teams")
+      .update({ titles_count: count })
+      .eq("id", teamId)
+      .select()
+      .single();
+    if (updErr) throw updErr;
+
+    // 4. Actualizar estado local
+    setTeams((prev) => prev.map((t) => (t.id === teamId ? updatedTeam : t)));
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
   //  COMPETITIONS CRUD
   // ══════════════════════════════════════════════════════════════════════════
   const createCompetition = async (formData, imageFile) => {
@@ -239,10 +341,7 @@ export function useAdminHistorical() {
   const deleteCompetition = async (id) => {
     const old = competitions.find((c) => c.id === id);
     if (old?.image_path) await deleteHistoricalImage(old.image_path);
-    const { error } = await supabase
-      .from("historical_competitions")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabase.from("historical_competitions").delete().eq("id", id);
     if (error) throw error;
     setCompetitions((prev) => prev.filter((c) => c.id !== id));
   };
@@ -312,10 +411,8 @@ export function useAdminHistorical() {
   };
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  RELACIONES
+  //  RELACIONES — jugadores ↔ equipos
   // ══════════════════════════════════════════════════════════════════════════
-
-  // Jugador ↔ Equipos
   const getPlayerTeams = async (playerId) => {
     const { data, error } = await supabase
       .from("historical_player_teams")
@@ -326,7 +423,6 @@ export function useAdminHistorical() {
   };
 
   const setPlayerTeams = async (playerId, teamLinks) => {
-    // teamLinks = [{ team_id, start_year, end_year, roles }]
     await supabase.from("historical_player_teams").delete().eq("player_id", playerId);
     if (teamLinks.length === 0) return;
     const rows = teamLinks.map((t) => ({ player_id: playerId, ...t }));
@@ -334,9 +430,11 @@ export function useAdminHistorical() {
     if (error) throw error;
   };
 
-  // Evento ↔ Jugadores / Equipos / Competencias
+  // ══════════════════════════════════════════════════════════════════════════
+  //  RELACIONES — eventos ↔ jugadores / equipos / competencias
+  // ══════════════════════════════════════════════════════════════════════════
   const getEventRelations = async (eventId) => {
-    const [players, teams, comps] = await Promise.all([
+    const [pRes, tRes, cRes] = await Promise.all([
       supabase
         .from("historical_player_events")
         .select("*, historical_players(id, name)")
@@ -351,14 +449,13 @@ export function useAdminHistorical() {
         .eq("event_id", eventId),
     ]);
     return {
-      players: players.data || [],
-      teams: teams.data || [],
-      competitions: comps.data || [],
+      players:      pRes.data || [],
+      teams:        tRes.data || [],
+      competitions: cRes.data || [],
     };
   };
 
   const setEventRelations = async (eventId, { playerIds, teamIds, competitionIds }) => {
-    // Limpiar y reinsertar
     await Promise.all([
       supabase.from("historical_player_events").delete().eq("event_id", eventId),
       supabase.from("historical_event_teams").delete().eq("event_id", eventId),
@@ -368,20 +465,17 @@ export function useAdminHistorical() {
     const inserts = [];
     if (playerIds?.length)
       inserts.push(
-        supabase
-          .from("historical_player_events")
+        supabase.from("historical_player_events")
           .insert(playerIds.map((id) => ({ event_id: eventId, player_id: id })))
       );
     if (teamIds?.length)
       inserts.push(
-        supabase
-          .from("historical_event_teams")
+        supabase.from("historical_event_teams")
           .insert(teamIds.map((id) => ({ event_id: eventId, team_id: id })))
       );
     if (competitionIds?.length)
       inserts.push(
-        supabase
-          .from("historical_event_competitions")
+        supabase.from("historical_event_competitions")
           .insert(competitionIds.map((id) => ({ event_id: eventId, competition_id: id })))
       );
 
@@ -399,6 +493,10 @@ export function useAdminHistorical() {
     createPlayer, updatePlayer, deletePlayer, togglePlayerPublished,
     // Teams
     createTeam, updateTeam, deleteTeam, toggleTeamPublished,
+    // Team lineup ← NUEVO
+    getTeamLineup, setTeamLineup,
+    // Team titles ← NUEVO
+    getTeamTitles, setTeamTitles,
     // Competitions
     createCompetition, updateCompetition, deleteCompetition, toggleCompetitionPublished,
     // Events
