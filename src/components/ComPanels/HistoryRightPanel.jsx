@@ -24,10 +24,10 @@ const LEGACY_LABEL = {
 };
 
 const POSITION_LABEL = {
-  "Forward":    "Delantero",
-  "Midfielder": "Centrocampista",
-  "Defender":   "Defensor",
-  "Goalkeeper": "Portero",
+  "Forward":    "DEL",
+  "Midfielder": "MED",
+  "Defender":   "DEF",
+  "Goalkeeper": "POR",
 };
 
 const POSITION_ICON = {

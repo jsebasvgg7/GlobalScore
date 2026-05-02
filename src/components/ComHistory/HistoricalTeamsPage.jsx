@@ -353,13 +353,6 @@ function TeamDetail({ teamId, onBack }) {
           <p className="htp-history-empty">Sin descripción histórica.</p>
         )}
 
-        {/* Stats en grid */}
-        <div className="htp-stats-grid">
-          {team.active_years  && <div className="htp-stat-box"><span className="htp-stat-val">{team.active_years}</span><span className="htp-stat-lbl">Años activos</span></div>}
-          {team.titles_count  > 0 && <div className="htp-stat-box"><span className="htp-stat-val">{team.titles_count}</span><span className="htp-stat-lbl">Títulos</span></div>}
-          {team.founded_year  && <div className="htp-stat-box"><span className="htp-stat-val">{team.founded_year}</span><span className="htp-stat-lbl">Fundación</span></div>}
-          {team.manager       && <div className="htp-stat-box"><span className="htp-stat-val">{team.manager}</span><span className="htp-stat-lbl">DT Emblemático</span></div>}
-        </div>
       </section>
 
       {/* ═══════════════════════════════════════
