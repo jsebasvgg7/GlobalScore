@@ -15,23 +15,6 @@
 }
 
 @media (min-width: 769px) {
-  /* ── Raíz individual de history ── */
-  .hp-root {
-    margin-left: 80px;
-    margin-top: 56px;
-  }
-
-  /* ── Shell de history (contiene main + panel derecho) ── */
-  .hp-shell {
-    padding-top: 16px;
-    height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-  }
-
   .vega-root {
     margin-left: 80px;
     padding-top: 56px;
@@ -57,6 +40,26 @@
     max-height: 100vh;
     overflow: hidden;
     box-sizing: border-box;
+  }
+
+  /* ── Shell de history ── */
+  .hp-shell {
+    margin-left: 80px;
+    padding-top: 56px;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+  }
+
+  /* hp-root dentro del shell NO necesita offset propio */
+  .hp-shell .hp-root,
+  .hp-shell .hp-root--detail {
+    margin-left: 0;
+    margin-top: 0;
+    padding-top: 0;
   }
 
   .container,

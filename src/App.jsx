@@ -19,7 +19,6 @@ import StatsPage from "./pages/StatsPage";
 import WorldCupPage from "./pages/WorldCupPage";
 import NotesPage from "./pages/NotesPage";
 import { PageLoader } from "./components/ComFeedback/LoadingStates";
-import './styles/darkmode.css'
 import "./styles/layout.css";
 
 export default function App() {
