@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="app-footer">
       <span className="footer-text">
         <span className="footer-text">
-        © {currentYear} Hermanos Vega · All rights reserved · v23.0</span>
+          © {currentYear} Hermanos Vega · All rights reserved · v25.0</span>
       </span>
     </footer>
   );
