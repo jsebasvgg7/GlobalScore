@@ -4,11 +4,21 @@
    KEYFRAMES
 ════════════════════════════════════════════════ */
 @keyframes hp-mob-fade-up {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 @keyframes hp-mob-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ════════════════════════════════════════════════
@@ -16,42 +26,42 @@
 ════════════════════════════════════════════════ */
 [data-style="brutalist"] .hp-shell,
 [data-style="brutalist"] .hp-root {
-  --hp-bg:          #f0ede8;
-  --hp-card:        #e8e4de;
-  --hp-surface:     #fff;
-  --hp-border:      #d4cfc8;
+  --hp-bg: #f0ede8;
+  --hp-card: #e8e4de;
+  --hp-surface: #fff;
+  --hp-border: #d4cfc8;
   --hp-border-hard: #c4bfb8;
-  --hp-accent:      #5b4fd8;
-  --hp-accent-l:    #8b7fc7;
-  --hp-glass:       rgba(91,79,216,.08);
-  --hp-text:        #1a1a2e;
-  --hp-muted:       #888780;
-  --hp-mono:        'DM Mono', monospace;
-  --hp-sans:        'DM Mono', monospace;
-  --hp-gold:        #f59e0b;
-  --hp-green:       #10b981;
-  --hp-r-sm:        0px;
-  --hp-r-md:        0px;
-  --hp-r-lg:        0px;
-  --hp-r-pill:      0px;
-  --hp-shadow:      none;
-  --hp-shadow-sm:   none;
-  --hp-inset:       none;
+  --hp-accent: #5b4fd8;
+  --hp-accent-l: #8b7fc7;
+  --hp-glass: rgba(91, 79, 216, .08);
+  --hp-text: #1a1a2e;
+  --hp-muted: #888780;
+  --hp-mono: 'DM Mono', monospace;
+  --hp-sans: 'DM Mono', monospace;
+  --hp-gold: #f59e0b;
+  --hp-green: #10b981;
+  --hp-r-sm: 0px;
+  --hp-r-md: 0px;
+  --hp-r-lg: 0px;
+  --hp-r-pill: 0px;
+  --hp-shadow: none;
+  --hp-shadow-sm: none;
+  --hp-inset: none;
 }
 
 /* ── BRUTALIST DARK ── */
 [data-style="brutalist"][data-theme="dark"] .hp-root,
 [data-style="brutalist"][data-theme="dark"] .hp-detail {
-  --hp-bg:          #1E1C28;
-  --hp-card:        #252230;
-  --hp-surface:     #1E1C28;
-  --hp-border:      rgba(255,255,255,.05);
-  --hp-border-hard: rgba(255,255,255,.09);
-  --hp-accent:      #8b7fc7;
-  --hp-accent-l:    #a599d9;
-  --hp-glass:       rgba(139,127,199,.12);
-  --hp-text:        #E8E6F0;
-  --hp-muted:       #5A566E;
+  --hp-bg: #1E1C28;
+  --hp-card: #252230;
+  --hp-surface: #1E1C28;
+  --hp-border: rgba(255, 255, 255, .05);
+  --hp-border-hard: rgba(255, 255, 255, .09);
+  --hp-accent: #8b7fc7;
+  --hp-accent-l: #a599d9;
+  --hp-glass: rgba(139, 127, 199, .12);
+  --hp-text: #E8E6F0;
+  --hp-muted: #5A566E;
 }
 
 /* ════════════════════════════════════════
@@ -59,57 +69,57 @@
 ════════════════════════════════════════════════ */
 [data-style="neumorphism"] .hp-shell,
 [data-style="neumorphism"] .hp-root {
-  --hp-bg:          #EAE7E1;
-  --hp-card:        #EAE7E1;
-  --hp-surface:     #EAE7E1;
-  --nm-light:       rgba(255,255,255,.80);
-  --nm-dark:        rgba(166,158,148,.38);
-  --nm-il:          rgba(255,255,255,.65);
-  --nm-id:          rgba(166,158,148,.30);
-  --hp-shadow:      3px 3px 9px var(--nm-dark), -2px -2px 7px var(--nm-light);
-  --hp-shadow-sm:   2px 2px 6px var(--nm-dark), -1px -1px 4px var(--nm-light);
-  --hp-shadow-lg:   4px 4px 12px var(--nm-dark), -3px -3px 9px var(--nm-light);
-  --hp-inset:       inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
-  --hp-inset-sm:    inset 1px 1px 3px var(--nm-id), inset -1px -1px 3px var(--nm-il);
-  --hp-border:      rgba(166,158,148,.25);
-  --hp-border-hard: rgba(166,158,148,.4);
-  --hp-accent:      #60519b;
-  --hp-accent-l:    #8b7fc7;
-  --hp-glass:       rgba(96,81,155,.10);
-  --hp-text:        #2A2535;
-  --hp-muted:       #9B95A8;
-  --hp-mono:        'Plus Jakarta Sans', system-ui, sans-serif;
-  --hp-sans:        'Plus Jakarta Sans', system-ui, sans-serif;
-  --hp-gold:        #C9961A;
-  --hp-green:       #3DAA80;
-  --hp-r-sm:        10px;
-  --hp-r-md:        16px;
-  --hp-r-lg:        20px;
-  --hp-r-pill:      100px;
+  --hp-bg: #EAE7E1;
+  --hp-card: #EAE7E1;
+  --hp-surface: #EAE7E1;
+  --nm-light: rgba(255, 255, 255, .80);
+  --nm-dark: rgba(166, 158, 148, .38);
+  --nm-il: rgba(255, 255, 255, .65);
+  --nm-id: rgba(166, 158, 148, .30);
+  --hp-shadow: 3px 3px 9px var(--nm-dark), -2px -2px 7px var(--nm-light);
+  --hp-shadow-sm: 2px 2px 6px var(--nm-dark), -1px -1px 4px var(--nm-light);
+  --hp-shadow-lg: 4px 4px 12px var(--nm-dark), -3px -3px 9px var(--nm-light);
+  --hp-inset: inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
+  --hp-inset-sm: inset 1px 1px 3px var(--nm-id), inset -1px -1px 3px var(--nm-il);
+  --hp-border: rgba(166, 158, 148, .25);
+  --hp-border-hard: rgba(166, 158, 148, .4);
+  --hp-accent: #60519b;
+  --hp-accent-l: #8b7fc7;
+  --hp-glass: rgba(96, 81, 155, .10);
+  --hp-text: #2A2535;
+  --hp-muted: #9B95A8;
+  --hp-mono: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --hp-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --hp-gold: #C9961A;
+  --hp-green: #3DAA80;
+  --hp-r-sm: 10px;
+  --hp-r-md: 16px;
+  --hp-r-lg: 20px;
+  --hp-r-pill: 100px;
 }
 
 /* ── NEUMORPHISM DARK ── */
 [data-style="neumorphism"][data-theme="dark"] .hp-shell,
 [data-style="neumorphism"][data-theme="dark"] .hp-root {
-  --hp-bg:          #1E1C28;
-  --hp-card:        #1E1C28;
-  --hp-surface:     #1E1C28;
-  --nm-light:       rgba(40,37,55,.9);
-  --nm-dark:        rgba(10,9,16,.7);
-  --nm-il:          rgba(40,37,55,.7);
-  --nm-id:          rgba(10,9,16,.6);
-  --hp-shadow:      3px 3px 8px var(--nm-dark), -2px -2px 6px var(--nm-light);
-  --hp-shadow-sm:   2px 2px 5px var(--nm-dark), -1px -1px 4px var(--nm-light);
-  --hp-shadow-lg:   4px 4px 12px var(--nm-dark), -3px -3px 8px var(--nm-light);
-  --hp-inset:       inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
-  --hp-inset-sm:    inset 1px 1px 3px var(--nm-id), inset -1px -1px 3px var(--nm-il);
-  --hp-border:      rgba(255,255,255,.05);
-  --hp-border-hard: rgba(255,255,255,.09);
-  --hp-accent:      #8b7fc7;
-  --hp-accent-l:    #a599d9;
-  --hp-glass:       rgba(139,127,199,.12);
-  --hp-text:        #E8E6F0;
-  --hp-muted:       #5A566E;
+  --hp-bg: #1E1C28;
+  --hp-card: #1E1C28;
+  --hp-surface: #1E1C28;
+  --nm-light: rgba(40, 37, 55, .9);
+  --nm-dark: rgba(10, 9, 16, .7);
+  --nm-il: rgba(40, 37, 55, .7);
+  --nm-id: rgba(10, 9, 16, .6);
+  --hp-shadow: 3px 3px 8px var(--nm-dark), -2px -2px 6px var(--nm-light);
+  --hp-shadow-sm: 2px 2px 5px var(--nm-dark), -1px -1px 4px var(--nm-light);
+  --hp-shadow-lg: 4px 4px 12px var(--nm-dark), -3px -3px 8px var(--nm-light);
+  --hp-inset: inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
+  --hp-inset-sm: inset 1px 1px 3px var(--nm-id), inset -1px -1px 3px var(--nm-il);
+  --hp-border: rgba(255, 255, 255, .05);
+  --hp-border-hard: rgba(255, 255, 255, .09);
+  --hp-accent: #8b7fc7;
+  --hp-accent-l: #a599d9;
+  --hp-glass: rgba(139, 127, 199, .12);
+  --hp-text: #E8E6F0;
+  --hp-muted: #5A566E;
 }
 
 /* ════════════════════════════════════════════════
@@ -126,7 +136,7 @@
   }
 
   /* El panel derecho se oculta en mobile */
-  .hp-shell > *:last-child:not(.hp-root) {
+  .hp-shell>*:last-child:not(.hp-root) {
     display: none !important;
   }
 
@@ -154,7 +164,8 @@
     gap: 10px;
     padding: 16px 16px 12px;
     position: sticky;
-    top: 44px; /* debajo del HistorySectionNav */
+    top: 44px;
+    /* debajo del HistorySectionNav */
     z-index: 20;
     background: var(--hp-bg, var(--card));
   }
@@ -248,7 +259,8 @@
   }
 
   .hp-card-summary {
-    display: none; /* Ocultar resumen en mobile para ahorrar espacio */
+    display: none;
+    /* Ocultar resumen en mobile para ahorrar espacio */
   }
 
   /* ════════ ESTADOS ════════ */
@@ -426,9 +438,19 @@
     color: var(--hp-muted);
   }
 
-  [data-style="brutalist"] .hp-chip--country { color: var(--hp-text); }
-  [data-style="brutalist"] .hp-chip--pos     { color: var(--hp-accent); border-color: rgba(91,79,216,.3); }
-  [data-style="brutalist"] .hp-chip--era     { color: var(--hp-accent); border-color: rgba(91,79,216,.3); }
+  [data-style="brutalist"] .hp-chip--country {
+    color: var(--hp-text);
+  }
+
+  [data-style="brutalist"] .hp-chip--pos {
+    color: var(--hp-accent);
+    border-color: rgba(91, 79, 216, .3);
+  }
+
+  [data-style="brutalist"] .hp-chip--era {
+    color: var(--hp-accent);
+    border-color: rgba(91, 79, 216, .3);
+  }
 
   [data-style="brutalist"] .hp-goat-chip {
     border-radius: 0;
@@ -436,7 +458,7 @@
     font-size: 8px;
     letter-spacing: .14em;
     border: 1px solid #f59e0b;
-    background: rgba(245,158,11,.12);
+    background: rgba(245, 158, 11, .12);
     color: #f59e0b;
   }
 
@@ -498,7 +520,7 @@
     color: var(--hp-accent);
     border-radius: 0;
     background: var(--hp-glass);
-    border: 1px solid rgba(91,79,216,.25);
+    border: 1px solid rgba(91, 79, 216, .25);
     padding: 2px 8px;
   }
 
@@ -538,7 +560,7 @@
     color: var(--hp-accent);
     border-radius: 0;
     background: var(--hp-glass);
-    border: 1px solid rgba(91,79,216,.25);
+    border: 1px solid rgba(91, 79, 216, .25);
     padding: 2px 7px;
   }
 
@@ -796,12 +818,12 @@
   [data-style="neumorphism"] .hp-detail-hero {
     border-radius: 0 0 var(--hp-r-xl) var(--hp-r-xl);
     background: var(--hp-bg);
-    box-shadow: 0 4px 16px rgba(166,158,148,.3);
+    box-shadow: 0 4px 16px rgba(166, 158, 148, .3);
     padding: 24px 20px;
   }
 
   [data-style="neumorphism"][data-theme="dark"] .hp-detail-hero {
-    box-shadow: 0 4px 16px rgba(10,9,16,.5);
+    box-shadow: 0 4px 16px rgba(10, 9, 16, .5);
   }
 
   [data-style="neumorphism"] .hp-detail-hero-img-wrap {
@@ -849,7 +871,7 @@
   [data-style="neumorphism"] .hp-chip--era {
     color: var(--hp-accent);
     background: var(--hp-glass);
-    box-shadow: var(--hp-shadow-sm), inset 0 0 0 1px rgba(96,81,155,.15);
+    box-shadow: var(--hp-shadow-sm), inset 0 0 0 1px rgba(96, 81, 155, .15);
   }
 
   [data-style="neumorphism"] .hp-goat-chip {
@@ -1032,11 +1054,11 @@
   [data-style="neumorphism"] .hp-header {
     background: var(--hp-bg);
     border-bottom: none;
-    box-shadow: 0 2px 12px rgba(166,158,148,.25);
+    box-shadow: 0 2px 12px rgba(166, 158, 148, .25);
   }
 
   [data-style="neumorphism"][data-theme="dark"] .hp-header {
-    box-shadow: 0 2px 12px rgba(10,9,16,.4);
+    box-shadow: 0 2px 12px rgba(10, 9, 16, .4);
   }
 
   [data-style="neumorphism"] .hp-header-title {
@@ -1140,7 +1162,7 @@
   }
 
   [data-style="neumorphism"] .hp-filter-select:focus {
-    box-shadow: var(--hp-inset), 0 0 0 2px rgba(96,81,155,.2);
+    box-shadow: var(--hp-inset), 0 0 0 2px rgba(96, 81, 155, .2);
   }
 
   [data-style="neumorphism"] .hp-clear-filters {
@@ -1217,16 +1239,18 @@
 
   /* ════ Reducir movimiento ════ */
   @media (prefers-reduced-motion: reduce) {
+
     .hp-player-card,
     .hp-root {
       animation: none;
     }
+
     [data-style="neumorphism"] .hp-player-card {
       transition: none;
     }
   }
 
-} 
+}
 
 @media (max-width: 768px) {
   .hp-detail-chips {
@@ -1237,19 +1261,60 @@
     max-width: 320px;
     margin: 0 auto;
   }
-  
-  [data-style="brutalist"] 
-    .hp-detail-hero .hp-badge,
 
-  [data-style="neumorphism"] 
-    .hp-detail-hero .hp-badge {
-      align-self: center;
-      margin: 0 auto; 
+  [data-style="brutalist"] .hp-detail-hero .hp-badge,
+
+  [data-style="neumorphism"] .hp-detail-hero .hp-badge {
+    align-self: center;
+    margin: 0 auto;
   }
+
   .hp-detail-hero {
     align-items: center;
   }
+
+  .hp-title-row {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 10px 14px;
+  }
+
+  /* Icono fijo a la izquierda */
+  .hp-title-icon {
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  /* Nombre ocupa toda la línea */
+  .hp-title-name {
+    flex: 1 1 100%;
+    white-space: normal;
+    /* permite que el texto haga wrap */
+    overflow: visible;
+    text-overflow: unset;
+    font-size: 15px;
+    line-height: 1.3;
+  }
+
+  /* Año, equipo y cantidad van en la segunda línea */
+  .hp-title-team,
+  .hp-title-year,
+  .hp-title-qty {
+    flex-shrink: 0;
+    flex-basis: auto;
+    font-size: 12px;
+  }
+
+  /* Contenedor de los metadatos (año · equipo · ×N) */
+  .hp-title-row .hp-title-team,
+  .hp-title-row .hp-title-year,
+  .hp-title-row .hp-title-qty {
+    margin-top: 0;
+  }
+
 }
+
 /* ════════════════════════════════════════════════
    PANTALLAS MUY PEQUEÑAS — ≤380px
 ════════════════════════════════════════════════ */
