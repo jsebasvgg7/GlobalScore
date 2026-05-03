@@ -179,7 +179,7 @@ function ImageUploader({ currentPath, onFile, label = "Imagen" }) {
 }
 
 function SignificancePicker({ value, onChange }) {
-  const labels = ["", "Histórico", "Notable", "Estrella", "Leyenda", "GOAT Status"];
+  const labels = ["", "Histórico", "Notable", "De Culto", "Leyenda", "GOAT Status"];
   return (
     <div className="ah-significance">
       {[1, 2, 3, 4, 5].map(n => (

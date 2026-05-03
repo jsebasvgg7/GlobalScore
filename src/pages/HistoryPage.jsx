@@ -39,7 +39,7 @@ const TITLE_CAT_LABEL = {
 const TITLE_CAT_COLOR = {
   "club": "var(--accent)", "national": "#1D9E75", "individual": "#f59e0b",
 };
-const SIGNIFICANCE_LABEL = ["", "Histórico", "Notable", "Estrella", "Leyenda", "GOAT"];
+const SIGNIFICANCE_LABEL = ["", "Histórico", "Notable", "De Culto", "Leyenda", "GOAT"];
 
 // ─── Micro-componentes ────────────────────────────────────────
 function SignificanceStars({ value }) {
