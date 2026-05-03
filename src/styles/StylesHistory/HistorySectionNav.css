@@ -51,24 +51,7 @@
   background: var(--accent);
 }
 
-
-
 @media (max-width: 884px) {
-  .hsn-inner {
-    padding: 0 16px;
-  }
-
-  .hsn-btn {
-    padding: 0 16px;
-    font-size: 13px;
-    height: 52px;
-  }
-
-  .hsn-indicator {
-    left: 16px;
-    right: 16px;
-  }
-
   .hsn-inner {
     padding: 0 16px;
     justify-content: center;
@@ -83,5 +66,25 @@
   .hsn-indicator {
     left: 16px;
     right: 16px;
+  }
+}
+
+/* ── Solo iconos en mobile ── */
+@media (max-width: 600px) {
+  .hsn-btn {
+    flex: 1;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+    height: 48px;
+  }
+
+  .hsn-btn span:not(.hsn-indicator) {
+    display: none;
+  }
+
+  .hsn-indicator {
+    left: 25%;
+    right: 25%;
   }
 }
