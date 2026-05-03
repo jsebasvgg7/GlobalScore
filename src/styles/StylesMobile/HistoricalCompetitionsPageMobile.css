@@ -1675,3 +1675,283 @@
     margin: 0 12px 8px;
   }
 }
+
+/* ════════════════════════════════════════════════
+   NUEVOS ELEMENTOS — meta-grid + hero limpio
+════════════════════════════════════════════════ */
+
+/* ── META GRID en tab Información ── */
+@media screen and (max-width: 768px) {
+
+  .hcp-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-bottom: 0.5px solid var(--border, #d4cfc8);
+  }
+
+  .hcp-meta-item {
+    padding: 16px 18px;
+    gap: 12px;
+    border-right: 0.5px solid var(--border, #d4cfc8);
+    border-bottom: 0.5px solid var(--border, #d4cfc8);
+  }
+
+  .hcp-meta-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .hcp-meta-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  .hcp-meta-value {
+    font-size: 14px;
+  }
+
+  .hcp-info-divider {
+    padding: 18px 18px 0;
+    margin-bottom: 14px;
+  }
+
+  .hcp-detail-desc {
+    padding: 0 18px 24px;
+  }
+
+  /* ── Hero simplificado en mobile ── */
+  .hcp-detail-hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 16px 22px;
+    gap: 14px;
+  }
+
+  .hcp-detail-logo-wrap {
+    width: 82px;
+    height: 82px;
+  }
+
+  .hcp-detail-name {
+    font-size: 20px;
+    letter-spacing: -0.4px;
+  }
+
+  .hcp-detail-winner {
+    align-self: center;
+  }
+
+  /* ── BRUTALIST meta-grid ── */
+  [data-style="brutalist"] .hcp-meta-grid {
+    border-bottom: 1px solid var(--hcp-border-hard);
+  }
+
+  [data-style="brutalist"] .hcp-meta-item {
+    border-right: 1px solid var(--hcp-border-hard);
+    border-bottom: 1px solid var(--hcp-border-hard);
+    background: var(--hcp-card);
+    padding: 14px 16px;
+    gap: 10px;
+  }
+
+  [data-style="brutalist"] .hcp-meta-item:hover {
+    background: var(--hcp-surface);
+  }
+
+  [data-style="brutalist"] .hcp-meta-icon {
+    border: 1px solid var(--hcp-border-hard);
+    background: var(--hcp-bg);
+    border-radius: 0;
+  }
+
+  [data-style="brutalist"] .hcp-meta-label {
+    font-family: var(--hcp-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--hcp-muted);
+  }
+
+  [data-style="brutalist"] .hcp-meta-value {
+    font-family: var(--hcp-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--hcp-text);
+  }
+
+  [data-style="brutalist"] .hcp-info-divider {
+    padding: 16px 16px 0;
+  }
+
+  [data-style="brutalist"] .hcp-detail-desc {
+    padding: 0 16px 20px;
+  }
+
+  [data-style="brutalist"] .hcp-detail-hero {
+    background: var(--hcp-card);
+    border-bottom: 1px solid var(--hcp-border-hard);
+    padding: 20px 16px;
+  }
+
+  [data-style="brutalist"] .hcp-detail-logo-wrap {
+    border: 2px solid var(--hcp-accent);
+    background: rgba(91, 79, 216, 0.05);
+    border-radius: 0;
+  }
+
+  [data-style="brutalist"] .hcp-detail-name {
+    font-family: var(--hcp-mono);
+    font-weight: 700;
+    color: var(--hcp-text);
+  }
+
+  [data-style="brutalist"] .hcp-detail-winner {
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    background: rgba(245, 158, 11, 0.06);
+    border-radius: 0;
+    padding: 6px 12px;
+  }
+
+  [data-style="brutalist"] .hcp-winner-label {
+    font-family: var(--hcp-mono);
+    font-size: 9px;
+  }
+
+  [data-style="brutalist"] .hcp-winner-name {
+    font-family: var(--hcp-mono);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  /* ── NEUMORPHISM meta-grid ── */
+  [data-style="neumorphism"] .hcp-meta-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 16px;
+    border: none;
+    background: var(--hcp-bg);
+  }
+
+  [data-style="neumorphism"] .hcp-meta-item {
+    border: none;
+    border-radius: var(--hcp-r-md);
+    box-shadow: var(--hcp-shadow-sm);
+    background: var(--hcp-bg);
+    padding: 14px 16px;
+    gap: 10px;
+    transition: box-shadow 0.18s;
+  }
+
+  [data-style="neumorphism"] .hcp-meta-item:hover {
+    box-shadow: var(--hcp-inset-sm);
+    background: var(--hcp-bg);
+  }
+
+  [data-style="neumorphism"] .hcp-meta-icon {
+    border: none;
+    border-radius: var(--hcp-r-sm);
+    background: var(--hcp-glass);
+    box-shadow: var(--hcp-shadow-sm);
+    width: 32px;
+    height: 32px;
+  }
+
+  [data-style="neumorphism"] .hcp-meta-label {
+    font-family: var(--hcp-sans);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--hcp-muted);
+  }
+
+  [data-style="neumorphism"] .hcp-meta-value {
+    font-family: var(--hcp-sans);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--hcp-text);
+  }
+
+  [data-style="neumorphism"] .hcp-info-divider {
+    padding: 4px 16px 0;
+  }
+
+  [data-style="neumorphism"] .hcp-detail-desc {
+    padding: 0 16px 20px;
+  }
+
+  [data-style="neumorphism"] .hcp-detail-hero {
+    background: var(--hcp-bg);
+    border-bottom: none;
+    box-shadow: 0 4px 16px rgba(166, 158, 148, 0.2);
+    border-radius: 0 0 var(--hcp-r-xl) var(--hcp-r-xl);
+    overflow: hidden;
+    padding: 22px 16px;
+  }
+
+  [data-style="neumorphism"][data-theme="dark"] .hcp-detail-hero {
+    box-shadow: 0 4px 16px rgba(10, 9, 16, 0.5);
+  }
+
+  [data-style="neumorphism"] .hcp-detail-logo-wrap {
+    border: none;
+    border-radius: var(--hcp-r-lg);
+    box-shadow: var(--hcp-shadow-lg);
+    overflow: hidden;
+    background: var(--hcp-bg);
+  }
+
+  [data-style="neumorphism"] .hcp-detail-name {
+    font-family: var(--hcp-sans);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--hcp-text);
+  }
+
+  [data-style="neumorphism"] .hcp-detail-winner {
+    border: none;
+    border-radius: var(--hcp-r-pill);
+    background: rgba(201, 150, 26, 0.08);
+    box-shadow: var(--hcp-shadow-sm);
+    padding: 8px 16px;
+    align-self: center;
+  }
+
+  [data-style="neumorphism"] .hcp-winner-label {
+    font-family: var(--hcp-sans);
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  [data-style="neumorphism"] .hcp-winner-name {
+    font-family: var(--hcp-sans);
+    font-size: 15px;
+    font-weight: 800;
+  }
+}
+
+/* ── 420px: meta-grid a 1 columna ── */
+@media screen and (max-width: 420px) {
+  .hcp-meta-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hcp-meta-item {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .hcp-meta-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .hcp-meta-value {
+    font-size: 13px;
+  }
+
+  [data-style="neumorphism"] .hcp-meta-grid {
+    gap: 8px;
+    padding: 12px;
+  }
+}

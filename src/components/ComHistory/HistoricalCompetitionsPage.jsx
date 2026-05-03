@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import {
   Trophy, Search, X, ChevronLeft, Globe, Layers,
   Shield, RefreshCw, AlertCircle, Award, Flag,
-  ChevronRight, Star, Minus
+  ChevronRight, Star, Minus, Calendar, Hash, Users, Shuffle
 } from "lucide-react";
 import {
   useHistoricalCompetitions,
@@ -117,7 +117,7 @@ function GroupTable({ groupName, rows }) {
           <tbody>
             {rows.map((row, i) => {
               const pj = (row.wins || 0) + (row.draws || 0) + (row.losses || 0);
-              const advancing = i < 2; // top 2 clasifican
+              const advancing = i < 2;
               return (
                 <tr key={row.id || i} className={`hcp-tr ${advancing ? "hcp-tr--adv" : ""}`}>
                   <td className="hcp-td hcp-td--pos">
@@ -202,7 +202,6 @@ function LeagueTable({ standings }) {
 //  LLAVE ELIMINATORIA
 // ══════════════════════════════════════════════════════════════════════════════
 function KnockoutBracket({ knockout }) {
-  // Agrupar por ronda
   const byRound = useMemo(() => {
     return knockout.reduce((acc, m) => {
       const r = m.round || "Final";
@@ -248,6 +247,76 @@ function KnockoutBracket({ knockout }) {
                 </div>
               );
             })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  FICHA DE DATOS (en tab Información)
+// ══════════════════════════════════════════════════════════════════════════════
+function InfoMetaGrid({ competition }) {
+  const fmt = competition.format;
+  const typeStr = TYPE_LABEL[competition.type] || competition.type || null;
+
+  const items = [
+    competition.year && {
+      icon: <Calendar size={13} />,
+      label: "Año",
+      value: competition.year,
+      accent: true,
+    },
+    competition.country && {
+      icon: <Globe size={13} />,
+      label: "Sede",
+      value: competition.country,
+    },
+    typeStr && {
+      icon: <Flag size={13} />,
+      label: "Tipo",
+      value: typeStr,
+      color: typeColor(competition.type),
+    },
+    fmt && {
+      icon: <Shuffle size={13} />,
+      label: "Formato",
+      value: FORMAT_LABEL[fmt] || fmt,
+    },
+    competition.num_teams && {
+      icon: <Users size={13} />,
+      label: "Equipos",
+      value: competition.num_teams,
+      green: true,
+    },
+    competition.edition && {
+      icon: <Hash size={13} />,
+      label: "Edición",
+      value: competition.edition,
+    },
+  ].filter(Boolean);
+
+  if (items.length === 0) return null;
+
+  return (
+    <div className="hcp-meta-grid">
+      {items.map((item, i) => (
+        <div key={i} className="hcp-meta-item">
+          <span
+            className="hcp-meta-icon"
+            style={item.color ? { color: item.color } : item.accent ? { color: "var(--accent)" } : item.green ? { color: "#10b981" } : {}}
+          >
+            {item.icon}
+          </span>
+          <div className="hcp-meta-content">
+            <span className="hcp-meta-label">{item.label}</span>
+            <span
+              className="hcp-meta-value"
+              style={item.color ? { color: item.color } : item.accent ? { color: "var(--accent)" } : item.green ? { color: "#10b981" } : {}}
+            >
+              {item.value}
+            </span>
           </div>
         </div>
       ))}
@@ -309,8 +378,8 @@ function CompetitionDetail({ competitionId, onBack }) {
   return (
     <div className="hcp-detail">
 
-      {/* Hero */}
-      <div className="hcp-detail-hero">
+      {/* ── HERO: solo logo + nombre + campeón ── */}
+      <div className="hcp-detail-hero" style={{ "--type-color": typeColor(competition.type) }}>
         <div className="hcp-detail-logo-wrap">
           {imgUrl
             ? <img src={imgUrl} alt={competition.name} className="hcp-detail-logo" />
@@ -321,24 +390,12 @@ function CompetitionDetail({ competitionId, onBack }) {
         <div className="hcp-detail-hero-info">
           <h1 className="hcp-detail-name">{competition.name}</h1>
 
-          <div className="hcp-detail-chips">
-            {competition.year && <span className="hcp-chip hcp-chip--year">{competition.year}</span>}
-            {competition.country && <span className="hcp-chip hcp-chip--country"><Globe size={9} />{competition.country}</span>}
-            {competition.type && <span className="hcp-chip hcp-chip--type" style={{ "--tc": typeColor(competition.type) }}>{TYPE_LABEL[competition.type] || competition.type}</span>}
-            {fmt && <span className="hcp-chip hcp-chip--format">{FORMAT_ICON[fmt]}{FORMAT_LABEL[fmt]}</span>}
-            {competition.num_teams && <span className="hcp-chip hcp-chip--teams"><Shield size={9} />{competition.num_teams} equipos</span>}
-          </div>
-
           {winner && (
             <div className="hcp-detail-winner">
               <Trophy size={14} />
               <span className="hcp-winner-label">Campeón:</span>
               <span className="hcp-winner-name">{winner}</span>
             </div>
-          )}
-
-          {competition.edition && (
-            <p className="hcp-detail-edition">{competition.edition}</p>
           )}
         </div>
       </div>
@@ -358,12 +415,17 @@ function CompetitionDetail({ competitionId, onBack }) {
         </nav>
       )}
 
-      {/* ── INFO ── */}
+      {/* ── INFO: ficha de datos + descripción ── */}
       {activeTab === "info" && (
-        <div className="hcp-section">
-          {competition.description ? (
+        <div className="hcp-section hcp-section--info">
+
+          {/* Ficha de metadatos */}
+          <InfoMetaGrid competition={competition} />
+
+          {/* Separador solo si hay descripción */}
+          {competition.description && (
             <>
-              <div className="hcp-section-header">
+              <div className="hcp-info-divider">
                 <span className="hcp-section-label"><Globe size={10} /> Contexto Histórico</span>
               </div>
               <div className="hcp-detail-desc">
@@ -372,8 +434,10 @@ function CompetitionDetail({ competitionId, onBack }) {
                 ))}
               </div>
             </>
-          ) : (
-            <p className="hcp-empty-note">Sin descripción registrada.</p>
+          )}
+
+          {!competition.description && (
+            <p className="hcp-empty-note" style={{ marginTop: 24 }}>Sin descripción registrada.</p>
           )}
         </div>
       )}
@@ -439,7 +503,6 @@ export default function HistoricalCompetitionsPage() {
   const handleSelect = (comp) => setSelectedId(comp.id);
   const handleBack = () => setSelectedId(null);
 
-  // Vista detalle
   if (selectedId) {
     return (
       <div className="hcp-root hcp-root--detail">
@@ -448,10 +511,8 @@ export default function HistoricalCompetitionsPage() {
     );
   }
 
-  // Vista listado
   return (
     <div className="hcp-root">
-      {/* Header */}
       <header className="hcp-header">
         <div className="hcp-header-left">
           <div className="hcp-header-icon">
@@ -490,7 +551,6 @@ export default function HistoricalCompetitionsPage() {
         </div>
       </header>
 
-      {/* Filtros */}
       {showFilters && (
         <div className="hcp-filters-panel">
           <div className="hcp-filters-row">
@@ -517,14 +577,12 @@ export default function HistoricalCompetitionsPage() {
         </div>
       )}
 
-      {/* Barra de resultados */}
       <div className="hcp-results-bar">
         <span className="hcp-results-count">
           {competitions.length} competición{competitions.length !== 1 ? "es" : ""}
         </span>
       </div>
 
-      {/* Estado: cargando */}
       {loading && (
         <div className="hcp-state hcp-state--loading">
           <RefreshCw size={15} className="hcp-spin" />
@@ -532,7 +590,6 @@ export default function HistoricalCompetitionsPage() {
         </div>
       )}
 
-      {/* Estado: error */}
       {!loading && error && (
         <div className="hcp-state hcp-state--error">
           <AlertCircle size={18} />
@@ -543,7 +600,6 @@ export default function HistoricalCompetitionsPage() {
         </div>
       )}
 
-      {/* Estado: vacío */}
       {!loading && !error && competitions.length === 0 && (
         <div className="hcp-state hcp-state--empty">
           <Trophy size={32} strokeWidth={1} />
@@ -556,7 +612,6 @@ export default function HistoricalCompetitionsPage() {
         </div>
       )}
 
-      {/* Grid */}
       {!loading && !error && competitions.length > 0 && (
         <div className="hcp-grid">
           {competitions.map(comp => (
