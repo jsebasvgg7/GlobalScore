@@ -11,6 +11,7 @@ import {
 import HistoryRightPanel from "../components/ComPanels/HistoryRightPanel";
 import TeamsRightPanel from "../components/ComPanels/TeamsRightPanel";
 import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
+import HistoricalCompetitionsPage from "../components/ComHistory/HistoricalCompetitionsPage";
 import HistorySectionNav from "../components/ComHistory/HistorySectionNav.jsx";
 import Footer from '../components/ComLayout/Footer';
 import "../styles/StylesPages/HistoryPage.css";
@@ -106,7 +107,7 @@ function PlayerCard({ player, onClick, isActive, onMouseEnter, onMouseLeave }) {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  DETALLE DE JUGADOR — expandido con carrera, selección, palmarés
+//  DETALLE DE JUGADOR
 // ══════════════════════════════════════════════════════════════
 function PlayerDetail({ playerId, onBack }) {
   const { player, teams, events, career, national, titles, loading, error, reload } =
@@ -129,7 +130,6 @@ function PlayerDetail({ playerId, onBack }) {
     ? `${player.birth_year}${player.death_year ? ` – ${player.death_year}` : " – presente"}`
     : null;
 
-  // Agrupar títulos por categoría
   const titlesByCategory = (titles || []).reduce((acc, t) => {
     const cat = t.title_category || "club";
     if (!acc[cat]) acc[cat] = [];
@@ -137,7 +137,6 @@ function PlayerDetail({ playerId, onBack }) {
     return acc;
   }, {});
 
-  // Calcular stats de carrera
   const careerTotals = (career || []).reduce(
     (acc, r) => ({
       apps: acc.apps + (parseInt(r.appearances) || 0),
@@ -440,19 +439,26 @@ export default function HistoryPage() {
   const clearFilters = () => { setFilterPosition(""); setFilterEra(""); setFilterLegacy(""); };
   const panelPlayer = hoveredPlayer || (selectedPlayerId ? allPlayers.find((p) => p.id === selectedPlayerId) || null : null);
 
+  // Helper para cambiar sección y resetear estado de jugadores
+  const handleSectionChange = (section) => {
+    setActiveSection(section);
+    setSelectedPlayerId(null);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
   // ── Vista detalle jugador ──
   if (activeSection === "players" && selectedPlayerId) {
     return (
       <div className="hp-shell">
         <div className="hp-root hp-root--detail">
-          <HistorySectionNav active={activeSection} onChange={(s) => {
-            setActiveSection(s);
-            setSelectedPlayerId(null);
-            window.scrollTo({ top: 0, behavior: "instant" });
-          }} />
+          <HistorySectionNav active={activeSection} onChange={handleSectionChange} />
           <PlayerDetail playerId={selectedPlayerId} onBack={() => setSelectedPlayerId(null)} />
         </div>
-        <HistoryRightPanel allPlayers={allPlayers} selectedPlayer={panelPlayer} onSelectPlayer={(p) => setSelectedPlayerId(p.id)} />
+        <HistoryRightPanel
+          allPlayers={allPlayers}
+          selectedPlayer={panelPlayer}
+          onSelectPlayer={(p) => setSelectedPlayerId(p.id)}
+        />
       </div>
     );
   }
@@ -462,10 +468,22 @@ export default function HistoryPage() {
     return (
       <div className="hp-shell">
         <div className="hp-root">
-          <HistorySectionNav active={activeSection} onChange={setActiveSection} />
+          <HistorySectionNav active={activeSection} onChange={handleSectionChange} />
           <HistoricalTeamsPage />
         </div>
         <TeamsRightPanel />
+      </div>
+    );
+  }
+
+  // ── Vista competiciones ──
+  if (activeSection === "competitions") {
+    return (
+      <div className="hp-shell">
+        <div className="hp-root">
+          <HistorySectionNav active={activeSection} onChange={handleSectionChange} />
+          <HistoricalCompetitionsPage />
+        </div>
       </div>
     );
   }
@@ -474,7 +492,7 @@ export default function HistoryPage() {
   return (
     <div className="hp-shell">
       <div className="hp-root">
-        <HistorySectionNav active={activeSection} onChange={setActiveSection} />
+        <HistorySectionNav active={activeSection} onChange={handleSectionChange} />
 
         <header className="hp-header">
           <div className="hp-header-left">
@@ -487,10 +505,22 @@ export default function HistoryPage() {
           <div className="hp-search-wrap">
             <div className="hp-search">
               <Search size={13} className="hp-search-ico" />
-              <input className="hp-search-input" placeholder="Buscar jugador, país..." value={search} onChange={(e) => setSearch(e.target.value)} />
-              {search && <button className="hp-search-clear" onClick={() => setSearch("")}><X size={11} /></button>}
+              <input
+                className="hp-search-input"
+                placeholder="Buscar jugador, país..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              {search && (
+                <button className="hp-search-clear" onClick={() => setSearch("")}>
+                  <X size={11} />
+                </button>
+              )}
             </div>
-            <button className={`hp-filter-btn ${hasActiveFilters ? "hp-filter-btn--active" : ""}`} onClick={() => setShowFilters((v) => !v)}>
+            <button
+              className={`hp-filter-btn ${hasActiveFilters ? "hp-filter-btn--active" : ""}`}
+              onClick={() => setShowFilters((v) => !v)}
+            >
               <Filter size={12} /> Filtros {hasActiveFilters && <span className="hp-filter-dot" />}
             </button>
           </div>
@@ -521,10 +551,11 @@ export default function HistoryPage() {
                 </select>
               </div>
               {hasActiveFilters && (
-                <button className="hp-clear-filters" onClick={clearFilters}><X size={11} /> Limpiar</button>
+                <button className="hp-clear-filters" onClick={clearFilters}>
+                  <X size={11} /> Limpiar
+                </button>
               )}
             </div>
-
           </div>
         )}
 
@@ -542,9 +573,19 @@ export default function HistoryPage() {
         {!loading && !error && players.length === 0 && (
           <div className="hp-state-empty">
             <Users2 size={28} strokeWidth={1} />
-            <p className="hp-empty-title">{allPlayers.length === 0 ? "Aún no hay jugadores históricos" : "Sin coincidencias"}</p>
-            <p className="hp-empty-sub">{allPlayers.length === 0 ? "El administrador publicará las leyendas pronto." : "Prueba con otro nombre o ajusta los filtros."}</p>
-            {hasActiveFilters && <button className="hp-retry-btn" onClick={clearFilters}><X size={11} /> Limpiar filtros</button>}
+            <p className="hp-empty-title">
+              {allPlayers.length === 0 ? "Aún no hay jugadores históricos" : "Sin coincidencias"}
+            </p>
+            <p className="hp-empty-sub">
+              {allPlayers.length === 0
+                ? "El administrador publicará las leyendas pronto."
+                : "Prueba con otro nombre o ajusta los filtros."}
+            </p>
+            {hasActiveFilters && (
+              <button className="hp-retry-btn" onClick={clearFilters}>
+                <X size={11} /> Limpiar filtros
+              </button>
+            )}
           </div>
         )}
 
@@ -581,7 +622,6 @@ export default function HistoryPage() {
         selectedPlayer={panelPlayer}
         onSelectPlayer={(p) => setSelectedPlayerId(p.id)}
       />
-
     </div>
   );
 }

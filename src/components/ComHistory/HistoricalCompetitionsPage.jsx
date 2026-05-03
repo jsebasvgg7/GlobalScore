@@ -10,24 +10,25 @@ import {
   getHistoricalImageUrl,
 } from "../../hooks/HooksHistory/useHistoricalCompetitions";
 import "../../styles/StylesHistory/HistoricalCompetitionsPage.css";
+import "../../styles/StylesMobile/HistoricalCompetitionsPageMobile.css"
 
 // ─── Mapas de etiquetas ───────────────────────────────────────────────────────
 const TYPE_LABEL = {
   International: "Internacional",
-  Continental:   "Continental",
-  Domestic:      "Nacional",
+  Continental: "Continental",
+  Domestic: "Nacional",
 };
 
 const FORMAT_LABEL = {
   groups_knockout: "Grupos + Elim.",
-  league_only:     "Liga",
-  knockout_only:   "Eliminatorias",
+  league_only: "Liga",
+  knockout_only: "Eliminatorias",
 };
 
 const FORMAT_ICON = {
-  groups_knockout: <Layers   size={10} />,
-  league_only:     <Shield   size={10} />,
-  knockout_only:   <Trophy   size={10} />,
+  groups_knockout: <Layers size={10} />,
+  league_only: <Shield size={10} />,
+  knockout_only: <Trophy size={10} />,
 };
 
 const ROUND_ORDER = ["Octavos", "Cuartos", "Semifinal", "Tercero", "Final"];
@@ -42,10 +43,10 @@ const gd = (f, c) => {
 //  CARD DE COMPETICIÓN (listado)
 // ══════════════════════════════════════════════════════════════════════════════
 function CompetitionCard({ comp, onClick, active }) {
-  const imgUrl  = getHistoricalImageUrl(comp.image_path);
-  const winner  = comp.historical_teams?.name || comp.winner_text || null;
+  const imgUrl = getHistoricalImageUrl(comp.image_path);
+  const winner = comp.historical_teams?.name || comp.winner_text || null;
   const typeStr = TYPE_LABEL[comp.type] || comp.type || "";
-  const fmtStr  = FORMAT_LABEL[comp.format] || "";
+  const fmtStr = FORMAT_LABEL[comp.format] || "";
 
   return (
     <button
@@ -129,10 +130,10 @@ function GroupTable({ groupName, rows }) {
                   </td>
                   <td className="hcp-td hcp-td--team">{row.team_name}</td>
                   <td className="hcp-td hcp-td--num">{pj || "–"}</td>
-                  <td className="hcp-td hcp-td--num">{row.wins    ?? "–"}</td>
-                  <td className="hcp-td hcp-td--num">{row.draws   ?? "–"}</td>
-                  <td className="hcp-td hcp-td--num">{row.losses  ?? "–"}</td>
-                  <td className="hcp-td hcp-td--num">{row.goals_for    ?? "–"}</td>
+                  <td className="hcp-td hcp-td--num">{row.wins ?? "–"}</td>
+                  <td className="hcp-td hcp-td--num">{row.draws ?? "–"}</td>
+                  <td className="hcp-td hcp-td--num">{row.losses ?? "–"}</td>
+                  <td className="hcp-td hcp-td--num">{row.goals_for ?? "–"}</td>
                   <td className="hcp-td hcp-td--num">{row.goals_against ?? "–"}</td>
                   <td className="hcp-td hcp-td--num hcp-td--gd">{gd(row.goals_for, row.goals_against)}</td>
                   <td className="hcp-td hcp-td--pts">{row.points ?? "–"}</td>
@@ -183,10 +184,10 @@ function LeagueTable({ standings }) {
                   {row.champion && <span className="hcp-champion-tag">Campeón</span>}
                 </td>
                 <td className="hcp-td hcp-td--num">{pj || "–"}</td>
-                <td className="hcp-td hcp-td--num">{row.wins    ?? "–"}</td>
-                <td className="hcp-td hcp-td--num">{row.draws   ?? "–"}</td>
-                <td className="hcp-td hcp-td--num">{row.losses  ?? "–"}</td>
-                <td className="hcp-td hcp-td--num">{row.goals_for    ?? "–"}</td>
+                <td className="hcp-td hcp-td--num">{row.wins ?? "–"}</td>
+                <td className="hcp-td hcp-td--num">{row.draws ?? "–"}</td>
+                <td className="hcp-td hcp-td--num">{row.losses ?? "–"}</td>
+                <td className="hcp-td hcp-td--num">{row.goals_for ?? "–"}</td>
                 <td className="hcp-td hcp-td--num">{row.goals_against ?? "–"}</td>
                 <td className="hcp-td hcp-td--num hcp-td--gd">{gd(row.goals_for, row.goals_against)}</td>
                 <td className="hcp-td hcp-td--pts">{row.points ?? "–"}</td>
@@ -225,8 +226,8 @@ function KnockoutBracket({ knockout }) {
             {byRound[round].map((m, i) => {
               const winA = m.winner === "team_a";
               const winB = m.winner === "team_b";
-              const sa   = m.score_a != null ? m.score_a : null;
-              const sb   = m.score_b != null ? m.score_b : null;
+              const sa = m.score_a != null ? m.score_a : null;
+              const sb = m.score_b != null ? m.score_b : null;
               const hasPen = m.penalties_a != null || m.penalties_b != null;
               return (
                 <div key={i} className="hcp-match-card">
@@ -290,7 +291,7 @@ function CompetitionDetail({ competitionId, onBack }) {
     );
   }
 
-  const fmt    = competition.format;
+  const fmt = competition.format;
   const imgUrl = getHistoricalImageUrl(competition.image_path);
   const winner =
     competition.historical_teams?.name ||
@@ -298,13 +299,13 @@ function CompetitionDetail({ competitionId, onBack }) {
     null;
 
   const tabs = [
-    { key: "info",      label: "Información" },
+    { key: "info", label: "Información" },
     fmt === "groups_knockout" && Object.keys(groupedGroups).length > 0 &&
-      { key: "groups",    label: "Fase de Grupos" },
+    { key: "groups", label: "Fase de Grupos" },
     fmt === "league_only" && standings.length > 0 &&
-      { key: "standings", label: "Clasificación" },
+    { key: "standings", label: "Clasificación" },
     (fmt === "groups_knockout" || fmt === "knockout_only") && knockout.length > 0 &&
-      { key: "knockout",  label: "Eliminatorias" },
+    { key: "knockout", label: "Eliminatorias" },
   ].filter(Boolean);
 
   return (
@@ -327,10 +328,10 @@ function CompetitionDetail({ competitionId, onBack }) {
           <h1 className="hcp-detail-name">{competition.name}</h1>
 
           <div className="hcp-detail-chips">
-            {competition.year    && <span className="hcp-chip hcp-chip--year">{competition.year}</span>}
+            {competition.year && <span className="hcp-chip hcp-chip--year">{competition.year}</span>}
             {competition.country && <span className="hcp-chip hcp-chip--country"><Globe size={9} />{competition.country}</span>}
-            {competition.type    && <span className="hcp-chip hcp-chip--type" style={{ "--tc": typeColor(competition.type) }}>{TYPE_LABEL[competition.type] || competition.type}</span>}
-            {fmt                 && <span className="hcp-chip hcp-chip--format">{FORMAT_ICON[fmt]}{FORMAT_LABEL[fmt]}</span>}
+            {competition.type && <span className="hcp-chip hcp-chip--type" style={{ "--tc": typeColor(competition.type) }}>{TYPE_LABEL[competition.type] || competition.type}</span>}
+            {fmt && <span className="hcp-chip hcp-chip--format">{FORMAT_ICON[fmt]}{FORMAT_LABEL[fmt]}</span>}
             {competition.num_teams && <span className="hcp-chip hcp-chip--teams"><Shield size={9} />{competition.num_teams} equipos</span>}
           </div>
 
@@ -442,7 +443,7 @@ export default function HistoricalCompetitionsPage() {
   const hasFilters = filterType || filterFormat;
 
   const handleSelect = (comp) => setSelectedId(comp.id);
-  const handleBack   = () => setSelectedId(null);
+  const handleBack = () => setSelectedId(null);
 
   // Vista detalle
   if (selectedId) {
@@ -463,7 +464,7 @@ export default function HistoricalCompetitionsPage() {
             <Trophy size={22} strokeWidth={1.5} />
           </div>
           <div>
-            <h1 className="hcp-header-title">Competiciones Históricas</h1>
+            <h1 className="hcp-header-title">COMPETICIONES HISTORICAS</h1>
             <p className="hcp-header-sub">Torneos que definieron una era</p>
           </div>
         </div>
@@ -582,8 +583,8 @@ export default function HistoricalCompetitionsPage() {
 function typeColor(type) {
   switch (type) {
     case "International": return "#e8a020";
-    case "Continental":   return "#3daa80";
-    case "Domestic":      return "#5b4fd8";
-    default:              return "#888780";
+    case "Continental": return "#3daa80";
+    case "Domestic": return "#5b4fd8";
+    default: return "#888780";
   }
 }

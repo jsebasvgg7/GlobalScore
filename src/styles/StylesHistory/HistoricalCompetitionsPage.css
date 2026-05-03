@@ -1,0 +1,1356 @@
+/* ══════════════════════════════════════════════════════════
+   ROOT
+══════════════════════════════════════════════════════════ */
+.hcp-root {
+    min-height: 100%;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+}
+
+.hcp-root--detail {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+}
+
+/* ══════════════════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════════════════ */
+.hcp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 26px 36px 21px;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--card);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.hcp-header-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.hcp-header-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(91, 79, 216, 0.08);
+    border: 0.5px solid rgba(91, 79, 216, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.hcp-header-title {
+    font-size: 23px;
+    font-weight: 800;
+    font-family: 'Sora', sans-serif;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: -0.4px;
+}
+
+.hcp-header-sub {
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    margin: 4px 0 0;
+}
+
+/* ── Search + filtros ────────────────────────────────────── */
+.hcp-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.hcp-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 47px;
+    padding: 0 16px;
+    border: 0.5px solid var(--border);
+    background: var(--bg);
+    transition: border-color 0.15s;
+    min-width: 286px;
+}
+
+.hcp-search:focus-within {
+    border-color: var(--accent);
+}
+
+.hcp-search-ico {
+    color: var(--muted);
+    flex-shrink: 0;
+}
+
+.hcp-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-primary);
+    background: transparent;
+    min-width: 0;
+}
+
+.hcp-search-input::placeholder {
+    color: var(--muted);
+    opacity: 0.6;
+}
+
+.hcp-search-clear {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 2px 5px;
+    transition: color 0.12s;
+    display: flex;
+    align-items: center;
+}
+
+.hcp-search-clear:hover {
+    color: var(--accent);
+}
+
+/* Botón filtros */
+.hcp-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 47px;
+    padding: 0 18px;
+    border: 0.5px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    white-space: nowrap;
+}
+
+.hcp-filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.hcp-filter-btn--active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(91, 79, 216, 0.06);
+}
+
+.hcp-filter-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PANEL DE FILTROS
+══════════════════════════════════════════════════════════ */
+.hcp-filters-panel {
+    padding: 18px 36px;
+    background: var(--card);
+    border-bottom: 0.5px solid var(--border);
+}
+
+.hcp-filters-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.hcp-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.hcp-filter-label {
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+}
+
+.hcp-filter-select {
+    height: 42px;
+    padding: 0 13px;
+    border: 0.5px solid var(--border);
+    background: var(--bg);
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.15s;
+    border-radius: 0;
+    cursor: pointer;
+    min-width: 195px;
+}
+
+.hcp-filter-select:focus {
+    border-color: var(--accent);
+}
+
+.hcp-clear-filters {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 42px;
+    padding: 0 16px;
+    border: 0.5px solid rgba(242, 95, 92, 0.3);
+    background: rgba(242, 95, 92, 0.05);
+    color: #f25f5c;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.15s;
+    align-self: flex-end;
+}
+
+.hcp-clear-filters:hover {
+    background: #f25f5c;
+    color: #fff;
+    border-color: #f25f5c;
+}
+
+/* ══════════════════════════════════════════════════════════
+   BARRA DE RESULTADOS
+══════════════════════════════════════════════════════════ */
+.hcp-results-bar {
+    padding: 13px 36px;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--bg);
+}
+
+.hcp-results-count {
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* ══════════════════════════════════════════════════════════
+   GRID DE COMPETICIONES
+══════════════════════════════════════════════════════════ */
+.hcp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
+    gap: 0;
+    border-left: 0.5px solid var(--border);
+    border-top: 0.5px solid var(--border);
+}
+
+/* ══════════════════════════════════════════════════════════
+   CARD DE COMPETICIÓN
+══════════════════════════════════════════════════════════ */
+.hcp-card {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    border-right: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    transition: background 0.13s;
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+    border-top: none;
+    border-left: none;
+    width: 100%;
+}
+
+.hcp-card:hover {
+    background: var(--card);
+}
+
+.hcp-card--active {
+    background: var(--card);
+}
+
+/* Franja lateral de color por tipo */
+.hcp-card-stripe {
+    width: 4px;
+    align-self: stretch;
+    flex-shrink: 0;
+    background: var(--type-color, var(--accent));
+    opacity: 0.75;
+    transition: opacity 0.15s;
+}
+
+.hcp-card:hover .hcp-card-stripe,
+.hcp-card--active .hcp-card-stripe {
+    opacity: 1;
+}
+
+/* Logo / imagen */
+.hcp-card-logo-wrap {
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+    margin: 21px 18px 21px 20px;
+    border: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: rgba(91, 79, 216, 0.04);
+    color: var(--muted);
+}
+
+.hcp-card-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.hcp-card-logo-ph {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    opacity: 0.4;
+}
+
+/* Cuerpo de la card */
+.hcp-card-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 21px 0;
+}
+
+.hcp-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.hcp-card-name {
+    font-size: 17px;
+    font-weight: 800;
+    font-family: 'Sora', sans-serif;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+.hcp-card-year {
+    font-size: 13px;
+    font-weight: 800;
+    font-family: 'DM Mono', monospace;
+    color: var(--accent);
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+}
+
+.hcp-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    flex-wrap: wrap;
+}
+
+.hcp-sep {
+    opacity: 0.4;
+}
+
+.hcp-card-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+/* Badge de formato */
+.hcp-format-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 9px;
+    border: 0.5px solid var(--border);
+    background: var(--glass, rgba(255, 255, 255, 0.03));
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+}
+
+/* Chip del ganador */
+.hcp-winner-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 9px;
+    border: 0.5px solid rgba(245, 158, 11, 0.35);
+    background: rgba(245, 158, 11, 0.07);
+    color: #f59e0b;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+/* Chevron */
+.hcp-card-chevron {
+    color: var(--border);
+    flex-shrink: 0;
+    margin: 0 18px;
+    transition: color 0.15s, transform 0.15s;
+}
+
+.hcp-card:hover .hcp-card-chevron {
+    color: var(--accent);
+    transform: translateX(4px);
+}
+
+.hcp-card--active .hcp-card-chevron {
+    color: var(--accent);
+}
+
+/* ══════════════════════════════════════════════════════════
+   ESTADOS (loading / error / empty)
+══════════════════════════════════════════════════════════ */
+.hcp-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 83px 31px;
+    gap: 16px;
+    text-align: center;
+    flex: 1;
+}
+
+.hcp-state--loading {
+    flex-direction: row;
+    font-size: 16px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    padding: 52px 31px;
+}
+
+.hcp-state--error {
+    color: #f25f5c;
+}
+
+.hcp-state--empty {
+    color: var(--muted);
+}
+
+.hcp-empty-title {
+    font-size: 17px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 0;
+}
+
+.hcp-empty-sub {
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    opacity: 0.6;
+    max-width: 390px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.hcp-retry-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 21px;
+    border: 0.5px solid var(--border);
+    background: transparent;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 5px;
+}
+
+.hcp-retry-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+.hcp-spin {
+    animation: hcp-spin 1s linear infinite;
+}
+
+@keyframes hcp-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ══════════════════════════════════════════════════════════
+   DETALLE DE COMPETICIÓN
+══════════════════════════════════════════════════════════ */
+.hcp-detail {
+    display: flex;
+    flex-direction: column;
+    max-width: 1170px;
+    margin: 0 auto;
+    width: 100%;
+    padding-bottom: 73px;
+}
+
+/* Botón volver */
+.hcp-detail-back {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 18px 36px;
+    border: none;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: color 0.15s;
+    width: 100%;
+    text-align: left;
+}
+
+.hcp-detail-back:hover {
+    color: var(--text-primary);
+}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hcp-detail-hero {
+    display: flex;
+    align-items: flex-start;
+    gap: 31px;
+    padding: 31px 36px;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--card);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Franja de color superior */
+.hcp-detail-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--type-color, var(--accent));
+}
+
+/* Logo grande */
+.hcp-detail-logo-wrap {
+    width: 114px;
+    height: 114px;
+    flex-shrink: 0;
+    border: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: rgba(91, 79, 216, 0.04);
+    color: var(--muted);
+}
+
+.hcp-detail-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.hcp-detail-logo-ph {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    opacity: 0.35;
+}
+
+/* Info del hero */
+.hcp-detail-hero-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.hcp-detail-name {
+    font-size: 34px;
+    font-weight: 800;
+    font-family: 'Sora', sans-serif;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.6px;
+    line-height: 1.1;
+}
+
+.hcp-detail-edition {
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Chips del hero */
+.hcp-detail-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.hcp-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border: 0.5px solid var(--border);
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.hcp-chip--year {
+    color: var(--accent);
+    border-color: rgba(91, 79, 216, 0.3);
+    background: rgba(91, 79, 216, 0.05);
+}
+
+.hcp-chip--country {
+    color: var(--text-primary);
+    background: var(--glass, rgba(255, 255, 255, 0.03));
+}
+
+.hcp-chip--type {
+    color: var(--tc, var(--accent));
+    border-color: color-mix(in srgb, var(--tc, var(--accent)) 35%, transparent);
+    background: color-mix(in srgb, var(--tc, var(--accent)) 8%, transparent);
+}
+
+.hcp-chip--format {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.hcp-chip--teams {
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.06);
+}
+
+/* Bloque del ganador */
+.hcp-detail-winner {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 16px;
+    border: 0.5px solid rgba(245, 158, 11, 0.35);
+    background: rgba(245, 158, 11, 0.06);
+    color: #f59e0b;
+    align-self: flex-start;
+}
+
+.hcp-winner-label {
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+}
+
+.hcp-winner-name {
+    font-size: 16px;
+    font-weight: 800;
+    font-family: 'Sora', sans-serif;
+    letter-spacing: -0.2px;
+}
+
+/* ── NAV DE SECCIONES ─────────────────────────────────────── */
+.hcp-section-nav {
+    display: flex;
+    background: var(--card);
+    border-bottom: 0.5px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.hcp-section-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.hcp-snav-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 26px;
+    height: 55px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    margin-bottom: -0.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.hcp-snav-btn:hover {
+    color: var(--text-primary);
+}
+
+.hcp-snav-btn--active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* ── SECCIONES GENÉRICAS ──────────────────────────────────── */
+.hcp-section {
+    padding: 36px;
+    border-bottom: 0.5px solid var(--border);
+}
+
+.hcp-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 26px;
+    padding-bottom: 16px;
+    border-bottom: 0.5px solid var(--border);
+}
+
+.hcp-section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+}
+
+/* ── INFO / DESCRIPCIÓN ───────────────────────────────────── */
+.hcp-detail-desc {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.hcp-detail-desc p {
+    font-size: 17px;
+    font-family: 'Sora', sans-serif;
+    color: var(--text-primary);
+    line-height: 1.7;
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* ══════════════════════════════════════════════════════════
+   TABLAS COMPARTIDAS (grupos y liga)
+══════════════════════════════════════════════════════════ */
+.hcp-table-wrap {
+    overflow-x: auto;
+    border: 0.5px solid var(--border);
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+}
+
+.hcp-table-wrap::-webkit-scrollbar {
+    height: 4px;
+}
+
+.hcp-table-wrap::-webkit-scrollbar-thumb {
+    background: var(--accent);
+}
+
+.hcp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'DM Mono', monospace;
+    min-width: 540px;
+}
+
+/* Cabecera */
+.hcp-table thead tr {
+    background: var(--card);
+    border-bottom: 0.5px solid var(--border);
+}
+
+.hcp-th {
+    padding: 10px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-align: left;
+    white-space: nowrap;
+    border-right: 0.5px solid var(--border);
+}
+
+.hcp-th:last-child {
+    border-right: none;
+}
+
+.hcp-th--pos {
+    width: 34px;
+    text-align: center;
+    padding: 10px 8px;
+}
+
+.hcp-th--team {
+    text-align: left;
+}
+
+.hcp-th--num {
+    text-align: center;
+}
+
+.hcp-th--pts {
+    text-align: center;
+    color: var(--accent);
+}
+
+/* Filas */
+.hcp-tr {
+    border-bottom: 0.5px solid var(--border);
+    transition: background 0.1s;
+}
+
+.hcp-tr:last-child {
+    border-bottom: none;
+}
+
+.hcp-tr:hover {
+    background: var(--card);
+}
+
+/* Fila clasificada (verde suave) */
+.hcp-tr--adv {
+    background: rgba(16, 185, 129, 0.04);
+}
+
+.hcp-tr--adv:hover {
+    background: rgba(16, 185, 129, 0.08);
+}
+
+/* Fila campeón (dorado suave) */
+.hcp-tr--champion {
+    background: rgba(245, 158, 11, 0.05);
+}
+
+.hcp-tr--champion:hover {
+    background: rgba(245, 158, 11, 0.09);
+}
+
+/* Celdas */
+.hcp-td {
+    padding: 12px 14px;
+    border-right: 0.5px solid var(--border);
+    vertical-align: middle;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.hcp-td:last-child {
+    border-right: none;
+}
+
+.hcp-td--pos {
+    text-align: center;
+    padding: 12px 8px;
+}
+
+.hcp-td--team {
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Sora', sans-serif;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.hcp-td--num {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.hcp-td--gd {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.hcp-td--pts {
+    text-align: center;
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--accent);
+}
+
+/* Punto de clasificado */
+.hcp-adv-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    flex-shrink: 0;
+}
+
+/* Posición numérica */
+.hcp-pos-num {
+    font-size: 12px;
+    font-weight: 800;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+}
+
+/* Estrella de campeón */
+.hcp-champion-star {
+    color: #f59e0b;
+}
+
+/* Tag campeón inline */
+.hcp-champion-tag {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    padding: 1px 7px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #f59e0b;
+    border: 0.5px solid rgba(245, 158, 11, 0.4);
+    background: rgba(245, 158, 11, 0.08);
+}
+
+/* ══════════════════════════════════════════════════════════
+   FASE DE GRUPOS
+══════════════════════════════════════════════════════════ */
+.hcp-groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 26px;
+}
+
+.hcp-group-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.hcp-group-name {
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    padding: 8px 14px;
+    border: 0.5px solid var(--border);
+    border-bottom: none;
+    background: rgba(91, 79, 216, 0.05);
+}
+
+/* Leyenda de grupos */
+.hcp-groups-legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 21px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    opacity: 0.7;
+}
+
+/* Tabla de liga — variante ampliada */
+.hcp-table--league {
+    min-width: 600px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   LLAVE ELIMINATORIA (bracket)
+══════════════════════════════════════════════════════════ */
+.hcp-bracket {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    border: 0.5px solid var(--border);
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+}
+
+.hcp-bracket::-webkit-scrollbar {
+    height: 4px;
+}
+
+.hcp-bracket::-webkit-scrollbar-thumb {
+    background: var(--accent);
+}
+
+/* Columna por ronda */
+.hcp-bracket-col {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 200px;
+    border-right: 0.5px solid var(--border);
+}
+
+.hcp-bracket-col:last-child {
+    border-right: none;
+}
+
+.hcp-bracket-round-label {
+    padding: 10px 16px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    background: var(--card);
+    border-bottom: 0.5px solid var(--border);
+    white-space: nowrap;
+}
+
+.hcp-bracket-matches {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex: 1;
+}
+
+/* Tarjeta de partido */
+.hcp-match-card {
+    padding: 14px 16px;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--bg);
+    transition: background 0.1s;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.hcp-match-card:last-child {
+    border-bottom: none;
+}
+
+.hcp-match-card:hover {
+    background: var(--card);
+}
+
+/* Fila de equipo dentro de la tarjeta */
+.hcp-match-team {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 0;
+}
+
+.hcp-match-team-name {
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Sora', sans-serif;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+    transition: color 0.15s;
+}
+
+.hcp-match-score {
+    font-size: 16px;
+    font-weight: 800;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    flex-shrink: 0;
+    min-width: 22px;
+    text-align: right;
+    transition: color 0.15s;
+}
+
+/* Ganador */
+.hcp-match-team--win .hcp-match-team-name,
+.hcp-match-team--win .hcp-match-score {
+    color: var(--text-primary);
+}
+
+/* Perdedor */
+.hcp-match-team--lose .hcp-match-team-name,
+.hcp-match-team--lose .hcp-match-score {
+    opacity: 0.4;
+}
+
+/* Divisor central */
+.hcp-match-divider {
+    height: 0.5px;
+    background: var(--border);
+    margin: 2px 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Penaltis */
+.hcp-pen-label {
+    position: absolute;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    background: var(--bg);
+    padding: 0 6px;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+}
+
+.hcp-match-card:hover .hcp-pen-label {
+    background: var(--card);
+}
+
+/* Notas del partido */
+.hcp-match-notes {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 0.5px dashed var(--border);
+    opacity: 0.7;
+    letter-spacing: 0.03em;
+}
+
+/* ── Nota vacía genérica ──────────────────────────────────── */
+.hcp-empty-note {
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    font-style: italic;
+    padding: 21px 0;
+    opacity: 0.6;
+    margin: 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════ */
+@media (max-width: 1170px) {
+    .hcp-grid {
+        grid-template-columns: repeat(auto-fill, minmax(338px, 1fr));
+    }
+
+    .hcp-groups-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 884px) {
+    .hcp-header {
+        padding: 21px 23px 18px;
+        gap: 13px;
+    }
+
+    .hcp-search-wrap {
+        width: 100%;
+    }
+
+    .hcp-search {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .hcp-grid {
+        grid-template-columns: 1fr;
+        border-left: none;
+    }
+
+    .hcp-results-bar,
+    .hcp-filters-panel {
+        padding: 13px 23px;
+    }
+
+    .hcp-filters-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .hcp-filter-select {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .hcp-detail {
+        max-width: 100%;
+    }
+
+    .hcp-detail-hero {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 26px 23px;
+        gap: 18px;
+    }
+
+    .hcp-detail-name {
+        font-size: 29px;
+    }
+
+    .hcp-detail-chips {
+        justify-content: center;
+    }
+
+    .hcp-detail-winner {
+        align-self: center;
+    }
+
+    .hcp-section {
+        padding: 26px 23px;
+    }
+
+    .hcp-detail-back {
+        padding: 16px 23px;
+    }
+
+    .hcp-snav-btn {
+        padding: 0 18px;
+        font-size: 12px;
+    }
+
+    .hcp-bracket-col {
+        min-width: 168px;
+    }
+}
+
+@media (max-width: 624px) {
+    .hcp-card-logo-wrap {
+        width: 58px;
+        height: 58px;
+        margin: 16px 14px 16px 16px;
+    }
+
+    .hcp-card-name {
+        font-size: 15px;
+    }
+
+    .hcp-card-year {
+        font-size: 12px;
+    }
+
+    .hcp-header-title {
+        font-size: 21px;
+    }
+
+    .hcp-detail-logo-wrap {
+        width: 94px;
+        height: 94px;
+    }
+
+    .hcp-detail-name {
+        font-size: 26px;
+    }
+
+    .hcp-groups-grid {
+        gap: 18px;
+    }
+
+    .hcp-bracket-col {
+        min-width: 148px;
+    }
+}
