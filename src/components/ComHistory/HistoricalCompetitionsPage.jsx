@@ -87,8 +87,6 @@ function CompetitionCard({ comp, onClick, active }) {
           )}
         </div>
       </div>
-
-      <ChevronRight size={13} className="hcp-card-chevron" />
     </button>
   );
 }
