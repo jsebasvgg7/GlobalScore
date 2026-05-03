@@ -26,7 +26,7 @@ const POSITION_LABEL = {
 };
 const LEGACY_LABEL = {
   "Goal Scorer": "Goleador", "Tactician": "Táctico",
-  "Innovator": "Innovador", "Leader": "Líder", "Goalkeeper": "Portero",
+  "Innovator": "Genio", "Leader": "Líder", "Goalkeeper": "Portero",
 };
 const EVENT_TYPE_LABEL = {
   "Championship": "Campeonato", "Historic Match": "Partido Histórico",

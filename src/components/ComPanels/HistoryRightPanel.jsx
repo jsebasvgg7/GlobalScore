@@ -18,7 +18,7 @@ const LEGACY_COLOR = {
 const LEGACY_LABEL = {
   "Goal Scorer": "Goleador",
   "Tactician":   "Táctico",
-  "Innovator":   "Innovador",
+  "Innovator":   "Genio",
   "Leader":      "Líder",
   "Goalkeeper":  "Portero",
 };
