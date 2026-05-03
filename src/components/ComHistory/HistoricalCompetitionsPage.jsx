@@ -289,11 +289,7 @@ function InfoMetaGrid({ competition }) {
       value: competition.num_teams,
       green: true,
     },
-    competition.edition && {
-      icon: <Hash size={13} />,
-      label: "Edición",
-      value: competition.edition,
-    },
+
   ].filter(Boolean);
 
   if (items.length === 0) return null;

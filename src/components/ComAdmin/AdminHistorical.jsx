@@ -1222,9 +1222,6 @@ function CompetitionPanel({
             <PField label="País / Sede">
               <PInput value={form.country || ""} onChange={e => set("country", e.target.value)} placeholder="México" />
             </PField>
-            <PField label="Edición">
-              <PInput value={form.edition || ""} onChange={e => set("edition", e.target.value)} placeholder="IX Copa del Mundo" />
-            </PField>
             <PField label="Nº equipos">
               <PInput type="number" value={form.num_teams || ""} onChange={e => set("num_teams", e.target.value)} placeholder="16" />
             </PField>
