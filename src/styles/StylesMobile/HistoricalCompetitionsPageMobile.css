@@ -1489,8 +1489,6 @@
     position: relative;
   }
 
-  [data-style="neumorphism"] .hcp-card>*:not(.hcp-card-stripe) {}
-
   .hcp-table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;

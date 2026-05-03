@@ -66,7 +66,6 @@ function CompetitionCard({ comp, onClick, active }) {
       <div className="hcp-card-body">
         <div className="hcp-card-top">
           <span className="hcp-card-name">{comp.name}</span>
-          {comp.year && <span className="hcp-card-year">{comp.year}</span>}
         </div>
 
         <div className="hcp-card-meta">
