@@ -139,18 +139,18 @@ function PlayerDetail({ playerId, onBack }) {
   // Calcular stats de carrera
   const careerTotals = (career || []).reduce(
     (acc, r) => ({
-      apps:    acc.apps    + (parseInt(r.appearances) || 0),
-      goals:   acc.goals   + (parseInt(r.goals)       || 0),
-      assists: acc.assists + (parseInt(r.assists)      || 0),
-      clubs:   acc.clubs   + 1,
+      apps: acc.apps + (parseInt(r.appearances) || 0),
+      goals: acc.goals + (parseInt(r.goals) || 0),
+      assists: acc.assists + (parseInt(r.assists) || 0),
+      clubs: acc.clubs + 1,
     }),
     { apps: 0, goals: 0, assists: 0, clubs: 0 }
   );
 
   const nationalTotals = (national || []).reduce(
     (acc, r) => ({
-      caps:    acc.caps    + (parseInt(r.caps)    || 0),
-      goals:   acc.goals   + (parseInt(r.goals)   || 0),
+      caps: acc.caps + (parseInt(r.caps) || 0),
+      goals: acc.goals + (parseInt(r.goals) || 0),
       assists: acc.assists + (parseInt(r.assists) || 0),
     }),
     { caps: 0, goals: 0, assists: 0 }
@@ -165,18 +165,18 @@ function PlayerDetail({ playerId, onBack }) {
           {imageUrl
             ? <img src={imageUrl} alt={player.name} className="hp-detail-hero-img" />
             : <div className="hp-detail-hero-placeholder">
-                {player.name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase()}
-              </div>
+              {player.name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase()}
+            </div>
           }
           {player.significance_level === 5 && <span className="hp-goat-chip">GOAT</span>}
         </div>
         <div className="hp-detail-hero-info">
           <h1 className="hp-detail-name">{player.name}</h1>
           <div className="hp-detail-chips">
-            {player.country  && <span className="hp-detail-chip hp-chip--country">{player.country}</span>}
+            {player.country && <span className="hp-detail-chip hp-chip--country">{player.country}</span>}
             {player.position && <span className="hp-detail-chip hp-chip--pos">{POSITION_LABEL[player.position] || player.position}</span>}
-            {player.era      && <span className="hp-detail-chip hp-chip--era">{player.era}</span>}
-            {lifespan        && <span className="hp-detail-chip hp-chip--life">{lifespan}</span>}
+            {player.era && <span className="hp-detail-chip hp-chip--era">{player.era}</span>}
+            {lifespan && <span className="hp-detail-chip hp-chip--life">{lifespan}</span>}
           </div>
           <div className="hp-detail-sig-row">
             <SignificanceStars value={player.significance_level || 0} />
@@ -423,8 +423,8 @@ function PlayerDetail({ playerId, onBack }) {
 export default function HistoryPage() {
   const [activeSection, setActiveSection] = useState("players");
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
-  const [hoveredPlayer, setHoveredPlayer]       = useState(null);
-  const [showFilters, setShowFilters]           = useState(false);
+  const [hoveredPlayer, setHoveredPlayer] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
 
   const {
     players, allPlayers, loading, error, reload,
@@ -444,7 +444,11 @@ export default function HistoryPage() {
     return (
       <div className="hp-shell">
         <div className="hp-root hp-root--detail">
-          <HistorySectionNav active={activeSection} onChange={(s) => { setActiveSection(s); setSelectedPlayerId(null); }} />
+          <HistorySectionNav active={activeSection} onChange={(s) => {
+            setActiveSection(s);
+            setSelectedPlayerId(null);
+            window.scrollTo({ top: 0, behavior: "instant" });
+          }} />
           <PlayerDetail playerId={selectedPlayerId} onBack={() => setSelectedPlayerId(null)} />
         </div>
         <HistoryRightPanel allPlayers={allPlayers} selectedPlayer={panelPlayer} onSelectPlayer={(p) => setSelectedPlayerId(p.id)} />
@@ -556,7 +560,10 @@ export default function HistoryPage() {
                   key={player.id}
                   player={player}
                   isActive={player.id === selectedPlayerId}
-                  onClick={(p) => setSelectedPlayerId(p.id)}
+                  onClick={(p) => {
+                    setSelectedPlayerId(p.id);
+                    window.scrollTo({ top: 0, behavior: "instant" });
+                  }}
                   onMouseEnter={() => setHoveredPlayer(player)}
                   onMouseLeave={() => setHoveredPlayer(null)}
                 />
