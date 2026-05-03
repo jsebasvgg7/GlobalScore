@@ -1227,15 +1227,7 @@
   }
 
 } 
-[data-style="brutalist"] .hp-detail-hero .hp-badge,
-[data-style="neumorphism"] .hp-detail-hero .hp-badge {
-  align-self: center;
-  margin: 0 auto;
-}
 
-.hp-detail-hero {
-  align-items: center;
-}
 @media (max-width: 768px) {
   .hp-detail-chips {
     display: grid;
@@ -1244,6 +1236,18 @@
     width: 100%;
     max-width: 320px;
     margin: 0 auto;
+  }
+  
+  [data-style="brutalist"] 
+    .hp-detail-hero .hp-badge,
+
+  [data-style="neumorphism"] 
+    .hp-detail-hero .hp-badge {
+      align-self: center;
+      margin: 0 auto; 
+  }
+  .hp-detail-hero {
+    align-items: center;
   }
 }
 /* ════════════════════════════════════════════════

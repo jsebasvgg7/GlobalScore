@@ -34,7 +34,7 @@ const POSITION_LABEL = {
 };
 const LEGACY_PLAYER_LABEL = {
   "Goal Scorer": "Goleador", "Tactician": "Táctico",
-  "Innovator": "Innovador", "Leader": "Líder", "Goalkeeper": "Portero",
+  "Innovator": "Genio", "Leader": "Líder", "Goalkeeper": "Portero",
 };
 const LEGACY_TEAM_LABEL = {
   "Dynastic": "Dinástico", "Innovative": "Innovador",
