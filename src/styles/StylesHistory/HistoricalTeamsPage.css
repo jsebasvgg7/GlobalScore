@@ -16,8 +16,8 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 12px;
-  padding: 20px 28px 16px;
+  gap: 16px;
+  padding: 26px 36px 21px;
   border-bottom: 0.5px solid var(--border);
   background: var(--card);
   position: sticky;
@@ -28,12 +28,12 @@
 .htp-header-left {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
 }
 
 .htp-header-icon {
-  width: 40px;
-  height: 40px;
+  width: 52px;
+  height: 52px;
   background: rgba(91,79,216,0.08);
   border: 0.5px solid rgba(91,79,216,0.25);
   display: flex;
@@ -44,7 +44,7 @@
 }
 
 .htp-header-title {
-  font-size: 18px;
+  font-size: 23px;
   font-weight: 800;
   font-family: 'Sora', sans-serif;
   color: var(--text-primary);
@@ -54,24 +54,24 @@
 }
 
 .htp-header-sub {
-  font-size: 10px;
+  font-size: 13px;
   font-family: 'DM Mono', monospace;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.10em;
-  margin: 3px 0 0;
+  margin: 4px 0 0;
 }
 
 /* Search */
 .htp-search-wrap {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   border: 0.5px solid var(--border);
   background: var(--bg);
-  height: 36px;
-  padding: 0 12px;
-  min-width: 220px;
+  height: 47px;
+  padding: 0 16px;
+  min-width: 286px;
   transition: border-color 0.15s;
 }
 .htp-search-wrap:focus-within { border-color: var(--accent); }
@@ -82,7 +82,7 @@
   flex: 1;
   border: none;
   outline: none;
-  font-size: 12px;
+  font-size: 16px;
   font-family: 'DM Mono', monospace;
   color: var(--text-primary);
   background: transparent;
@@ -95,7 +95,7 @@
   background: transparent;
   color: var(--muted);
   cursor: pointer;
-  padding: 2px 4px;
+  padding: 2px 5px;
   transition: color 0.12s;
   display: flex;
   align-items: center;
@@ -107,7 +107,7 @@
 ══════════════════════════════════════════════════════════ */
 .htp-teams-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
   gap: 0;
   border-left: 0.5px solid var(--border);
   border-top: 0.5px solid var(--border);
@@ -129,7 +129,7 @@
 
 /* Franja de color superior */
 .htp-tc-stripe {
-  height: 3px;
+  height: 4px;
   background: var(--tc, var(--accent));
   width: 100%;
   opacity: 0.85;
@@ -140,15 +140,15 @@
 .htp-tc-body {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 16px 18px;
+  gap: 18px;
+  padding: 21px 23px;
   position: relative;
 }
 
 /* Escudo */
 .htp-tc-shield {
-  width: 52px;
-  height: 52px;
+  width: 68px;
+  height: 68px;
   flex-shrink: 0;
   border: 0.5px solid var(--border);
   display: flex;
@@ -171,11 +171,11 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
 
 .htp-tc-name {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 800;
   font-family: 'Sora', sans-serif;
   color: var(--text-primary);
@@ -189,8 +189,8 @@
 .htp-tc-meta {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 10px;
+  gap: 5px;
+  font-size: 13px;
   font-family: 'DM Mono', monospace;
   color: var(--muted);
   flex-wrap: wrap;
@@ -202,11 +202,11 @@
 .htp-tc-badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
+  padding: 2px 10px;
   border: 0.5px solid color-mix(in srgb, var(--lc, var(--accent)) 40%, transparent);
   background: color-mix(in srgb, var(--lc, var(--accent)) 8%, transparent);
   color: var(--lc, var(--accent));
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
@@ -218,8 +218,8 @@
 .htp-tc-titles {
   display: flex;
   align-items: center;
-  gap: 3px;
-  font-size: 10px;
+  gap: 4px;
+  font-size: 13px;
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: #f59e0b;
@@ -234,7 +234,7 @@
 }
 .htp-team-card:hover .htp-tc-chevron {
   color: var(--accent);
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -247,24 +247,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 64px 24px;
-  gap: 12px;
+  padding: 83px 31px;
+  gap: 16px;
   text-align: center;
   flex: 1;
 }
 
 .htp-state-loading {
   flex-direction: row;
-  font-size: 12px;
+  font-size: 16px;
   font-family: 'DM Mono', monospace;
   color: var(--muted);
-  padding: 40px 24px;
+  padding: 52px 31px;
 }
 
 .htp-state-error { color: #f25f5c; }
 
 .htp-empty-title {
-  font-size: 13px;
+  font-size: 17px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
@@ -274,11 +274,11 @@
 }
 
 .htp-empty-sub {
-  font-size: 11px;
+  font-size: 14px;
   font-family: 'DM Mono', monospace;
   color: var(--muted);
   opacity: 0.6;
-  max-width: 300px;
+  max-width: 390px;
   line-height: 1.6;
   margin: 0;
 }
@@ -286,19 +286,19 @@
 .htp-retry-btn {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 7px 16px;
+  gap: 6px;
+  padding: 9px 21px;
   border: 0.5px solid var(--border);
   background: transparent;
   color: var(--accent);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   cursor: pointer;
   transition: all 0.15s;
-  margin-top: 4px;
+  margin-top: 5px;
 }
 .htp-retry-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 
@@ -311,23 +311,23 @@
 .htp-detail {
   display: flex;
   flex-direction: column;
-  max-width: 900px;
+  max-width: 1170px;
   margin: 0 auto;
   width: 100%;
-  padding-bottom: 56px;
+  padding-bottom: 73px;
 }
 
 /* Botón volver */
 .htp-back-btn {
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 14px 28px;
+  gap: 9px;
+  padding: 18px 36px;
   border: none;
   border-bottom: 0.5px solid var(--border);
   background: var(--card);
   color: var(--muted);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
@@ -349,21 +349,21 @@
 
 /* Franja de color del equipo arriba del hero */
 .htp-hero-color-strip {
-  height: 4px;
+  height: 5px;
   background: var(--team-primary, var(--accent));
 }
 
 .htp-hero-body {
   display: flex;
   align-items: flex-start;
-  gap: 24px;
-  padding: 24px 28px;
+  gap: 31px;
+  padding: 31px 36px;
 }
 
 /* Escudo grande */
 .htp-hero-shield {
-  width: 88px;
-  height: 88px;
+  width: 114px;
+  height: 114px;
   flex-shrink: 0;
   border: 0.5px solid var(--border);
   display: flex;
@@ -386,11 +386,11 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 13px;
 }
 
 .htp-hero-name {
-  font-size: 26px;
+  font-size: 34px;
   font-weight: 800;
   font-family: 'Sora', sans-serif;
   color: var(--text-primary);
@@ -402,16 +402,16 @@
 .htp-hero-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
 .htp-chip {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 9px;
+  gap: 5px;
+  padding: 4px 12px;
   border: 0.5px solid var(--border);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
@@ -427,7 +427,7 @@
 .htp-hero-bottom {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -435,11 +435,11 @@
 .htp-legacy-badge {
   display: inline-flex;
   align-items: center;
-  padding: 3px 10px;
+  padding: 4px 13px;
   border: 0.5px solid color-mix(in srgb, var(--lc, var(--accent)) 40%, transparent);
   background: color-mix(in srgb, var(--lc, var(--accent)) 10%, transparent);
   color: var(--lc, var(--accent));
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
@@ -449,12 +449,12 @@
 .htp-titles-chip {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
+  gap: 5px;
+  padding: 4px 13px;
   border: 0.5px solid rgba(245,158,11,0.35);
   background: rgba(245,158,11,0.07);
   color: #f59e0b;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
 }
@@ -472,14 +472,14 @@
 .htp-snav-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 0 20px;
-  height: 42px;
+  gap: 8px;
+  padding: 0 26px;
+  height: 55px;
   border: none;
   border-bottom: 2px solid transparent;
   background: transparent;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
@@ -499,7 +499,7 @@
 
 /* ── SECCIONES GENÉRICAS ──────────────────────────────────── */
 .htp-section {
-  padding: 28px;
+  padding: 36px;
   border-bottom: 0.5px solid var(--border);
 }
 
@@ -509,16 +509,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
+  margin-bottom: 26px;
+  padding-bottom: 16px;
   border-bottom: 0.5px solid var(--border);
 }
 
 .htp-section-label {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 9px;
+  gap: 8px;
+  font-size: 12px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
@@ -527,11 +527,11 @@
 }
 
 .htp-formation-tag {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: #10b981;
-  padding: 2px 8px;
+  padding: 2px 10px;
   border: 0.5px solid rgba(16,185,129,0.3);
   background: rgba(16,185,129,0.06);
   letter-spacing: 0.06em;
@@ -542,15 +542,15 @@
 ══════════════════════════════════════════════════════════ */
 .htp-squad-layout {
   display: grid;
-  grid-template-columns: 1fr 200px;
-  gap: 24px;
+  grid-template-columns: 1fr 260px;
+  gap: 31px;
   align-items: start;
 }
 
 /* ── Campo retro ──────────────────────────────────────────── */
 .htp-field-wrap {
   width: 100%;
-  max-width: 340px;
+  max-width: 442px;
   margin: 0 auto;
 }
 
@@ -560,7 +560,7 @@
   padding-bottom: 140%; /* ratio 300:420 */
   overflow: hidden;
   border: 0.5px solid rgba(255,255,255,0.15);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  box-shadow: 0 5px 31px rgba(0,0,0,0.35);
 }
 
 .htp-field-lines {
@@ -588,9 +588,9 @@
 
 /* Camiseta SVG */
 .htp-shirt {
-  width: 32px;
-  height: 32px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  width: 42px;
+  height: 42px;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
   transition: transform 0.15s;
 }
 
@@ -600,13 +600,13 @@
 
 /* Nombre bajo la camiseta */
 .htp-token-name {
-  font-size: 7px;
+  font-size: 9px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   text-align: center;
   letter-spacing: 0.04em;
   white-space: nowrap;
-  max-width: 52px;
+  max-width: 68px;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1;
@@ -615,12 +615,12 @@
 /* Tooltip al hacer hover */
 .htp-token-tooltip {
   position: absolute;
-  bottom: calc(100% + 6px);
+  bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
   background: #0e0f14;
   border: 0.5px solid rgba(255,255,255,0.15);
-  padding: 6px 10px;
+  padding: 8px 13px;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -631,12 +631,12 @@
 }
 
 @keyframes htp-tt {
-  from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+  from { opacity: 0; transform: translateX(-50%) translateY(5px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 .htp-tt-num {
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   color: rgba(255,255,255,0.45);
@@ -644,7 +644,7 @@
 }
 
 .htp-tt-name {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
   font-family: 'Sora', sans-serif;
   color: #fff;
@@ -652,7 +652,7 @@
 }
 
 .htp-tt-role {
-  font-size: 9px;
+  font-size: 12px;
   font-family: 'DM Mono', monospace;
   color: rgba(255,255,255,0.45);
   letter-spacing: 0.04em;
@@ -664,10 +664,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px 24px;
-  gap: 10px;
+  padding: 62px 31px;
+  gap: 13px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 14px;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -685,8 +685,8 @@
 .htp-lineup-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
+  gap: 13px;
+  padding: 10px 16px;
   border-bottom: 0.5px solid var(--border);
   background: var(--bg);
   transition: background 0.1s;
@@ -696,12 +696,12 @@
 .htp-lineup-row:hover { background: var(--card); }
 
 .htp-lineup-num {
-  width: 22px;
-  height: 22px;
+  width: 29px;
+  height: 29px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: #fff;
@@ -717,7 +717,7 @@
 }
 
 .htp-lineup-name {
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
   font-family: 'Sora', sans-serif;
   color: var(--text-primary);
@@ -727,7 +727,7 @@
 }
 
 .htp-lineup-role {
-  font-size: 9px;
+  font-size: 12px;
   font-family: 'DM Mono', monospace;
   color: var(--muted);
   letter-spacing: 0.04em;
@@ -739,12 +739,12 @@
 .htp-history-body {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 26px;
 }
 
 .htp-history-body p {
-  font-size: 13px;
+  font-size: 17px;
   font-family: 'Sora', sans-serif;
   color: var(--text-primary);
   line-height: 1.7;
@@ -753,37 +753,37 @@
 }
 
 .htp-history-empty {
-  font-size: 11px;
+  font-size: 14px;
   font-family: 'DM Mono', monospace;
   color: var(--muted);
   font-style: italic;
-  padding: 16px 0;
+  padding: 21px 0;
   opacity: 0.6;
 }
 
 /* Stats en grid */
 .htp-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
   gap: 0;
   border: 0.5px solid var(--border);
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .htp-stat-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px 12px;
+  padding: 21px 16px;
   border-right: 0.5px solid var(--border);
-  gap: 4px;
+  gap: 5px;
   text-align: center;
 }
 
 .htp-stat-box:last-child { border-right: none; }
 
 .htp-stat-val {
-  font-size: 16px;
+  font-size: 21px;
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: var(--accent);
@@ -792,7 +792,7 @@
 }
 
 .htp-stat-lbl {
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   color: var(--muted);
@@ -812,8 +812,8 @@
 .htp-title-row {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 12px 0;
+  gap: 18px;
+  padding: 16px 0;
   border-bottom: 0.5px solid var(--border);
   animation: htp-fadein 0.3s ease both;
   animation-delay: calc(var(--i, 0) * 0.05s);
@@ -822,13 +822,13 @@
 .htp-title-row:last-child { border-bottom: none; }
 
 @keyframes htp-fadein {
-  from { opacity: 0; transform: translateX(-6px); }
+  from { opacity: 0; transform: translateX(-8px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 
 .htp-title-icon {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -841,11 +841,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 13px;
 }
 
 .htp-title-name {
-  font-size: 13px;
+  font-size: 17px;
   font-weight: 700;
   font-family: 'Sora', sans-serif;
   color: var(--text-primary);
@@ -855,7 +855,7 @@
 }
 
 .htp-title-year {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: var(--accent);
@@ -868,10 +868,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 24px;
-  gap: 10px;
+  padding: 52px 31px;
+  gap: 13px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 14px;
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -882,10 +882,10 @@
 /* ══════════════════════════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
+@media (max-width: 998px) {
   .htp-header {
-    padding: 16px 18px 14px;
-    gap: 10px;
+    padding: 21px 23px 18px;
+    gap: 13px;
   }
 
   .htp-search-wrap {
@@ -904,24 +904,24 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 20px 18px;
-    gap: 14px;
+    padding: 26px 23px;
+    gap: 18px;
   }
 
-  .htp-hero-name { font-size: 22px; }
+  .htp-hero-name { font-size: 29px; }
 
   .htp-hero-chips,
   .htp-hero-bottom { justify-content: center; }
 
-  .htp-section { padding: 20px 18px; }
+  .htp-section { padding: 26px 23px; }
 
-  .htp-back-btn { padding: 12px 18px; }
+  .htp-back-btn { padding: 16px 23px; }
 
   .htp-squad-layout {
     grid-template-columns: 1fr;
   }
 
-  .htp-field-wrap { max-width: 280px; }
+  .htp-field-wrap { max-width: 364px; }
 
   .htp-lineup-list { border: 0.5px solid var(--border); }
 
@@ -934,13 +934,13 @@
 
   .htp-section-nav { overflow-x: auto; scrollbar-width: none; }
   .htp-section-nav::-webkit-scrollbar { display: none; }
-  .htp-snav-btn { padding: 0 14px; font-size: 9px; }
+  .htp-snav-btn { padding: 0 18px; font-size: 12px; }
 }
 
-@media (max-width: 480px) {
-  .htp-tc-body { padding: 12px 14px; }
-  .htp-tc-shield { width: 44px; height: 44px; }
-  .htp-tc-name { font-size: 13px; }
-  .htp-header-title { font-size: 16px; }
-  .htp-hero-shield { width: 72px; height: 72px; }
+@media (max-width: 624px) {
+  .htp-tc-body { padding: 16px 18px; }
+  .htp-tc-shield { width: 57px; height: 57px; }
+  .htp-tc-name { font-size: 17px; }
+  .htp-header-title { font-size: 21px; }
+  .htp-hero-shield { width: 94px; height: 94px; }
 }
