@@ -32,12 +32,12 @@ export const deleteHistoricalImage = async (imagePath) => {
 // ══════════════════════════════════════════════════════════════════════════════
 export function useAdminHistorical() {
   // ── State ────────────────────────────────────────────────────────────────
-  const [players, setPlayers]           = useState([]);
-  const [teams, setTeams]               = useState([]);
+  const [players, setPlayers] = useState([]);
+  const [teams, setTeams] = useState([]);
   const [competitions, setCompetitions] = useState([]);
-  const [events, setEvents]             = useState([]);
-  const [loading, setLoading]           = useState(false);
-  const [error, setError]               = useState(null);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // ── Loaders ──────────────────────────────────────────────────────────────
   const loadPlayers = useCallback(async () => {
@@ -170,16 +170,16 @@ export function useAdminHistorical() {
     if (!rows || rows.length === 0) return;
 
     const toInsert = rows.map((r, idx) => ({
-      player_id:    playerId,
-      team_name:    r.team_name    || null,
+      player_id: playerId,
+      team_name: r.team_name || null,
       team_country: r.team_country || null,
-      start_year:   r.start_year   ? parseInt(r.start_year)   : null,
-      end_year:     r.end_year     ? parseInt(r.end_year)     : null,
-      appearances:  r.appearances  ? parseInt(r.appearances)  : null,
-      goals:        r.goals        ? parseInt(r.goals)        : null,
-      assists:      r.assists      ? parseInt(r.assists)      : null,
-      role_note:    r.role_note    || null,
-      sort_order:   r.sort_order   ?? idx,
+      start_year: r.start_year ? parseInt(r.start_year) : null,
+      end_year: r.end_year ? parseInt(r.end_year) : null,
+      appearances: r.appearances ? parseInt(r.appearances) : null,
+      goals: r.goals ? parseInt(r.goals) : null,
+      assists: r.assists ? parseInt(r.assists) : null,
+      role_note: r.role_note || null,
+      sort_order: r.sort_order ?? idx,
     }));
 
     const { error: insErr } = await supabase
@@ -215,14 +215,14 @@ export function useAdminHistorical() {
     if (!rows || rows.length === 0) return;
 
     const toInsert = rows.map((r) => ({
-      player_id:  playerId,
-      country:    r.country    || null,
+      player_id: playerId,
+      country: r.country || null,
       start_year: r.start_year ? parseInt(r.start_year) : null,
-      end_year:   r.end_year   ? parseInt(r.end_year)   : null,
-      caps:       r.caps       ? parseInt(r.caps)       : null,
-      goals:      r.goals      ? parseInt(r.goals)      : null,
-      assists:    r.assists     ? parseInt(r.assists)    : null,
-      role_note:  r.role_note  || null,
+      end_year: r.end_year ? parseInt(r.end_year) : null,
+      caps: r.caps ? parseInt(r.caps) : null,
+      goals: r.goals ? parseInt(r.goals) : null,
+      assists: r.assists ? parseInt(r.assists) : null,
+      role_note: r.role_note || null,
     }));
 
     const { error: insErr } = await supabase
@@ -239,7 +239,7 @@ export function useAdminHistorical() {
       .from("historical_player_titles")
       .select("*")
       .eq("player_id", playerId)
-      .order("year", { ascending: true });
+      .order("sort_order", { ascending: true });
     if (error) throw error;
     return data || [];
   };
@@ -258,12 +258,12 @@ export function useAdminHistorical() {
     if (!rows || rows.length === 0) return;
 
     const toInsert = rows.map((r) => ({
-      player_id:      playerId,
+      player_id: playerId,
       title_category: r.title_category || "club",
-      title_name:     r.title_name     || null,
-      year:           r.year           ? parseInt(r.year) : null,
-      team_name:      r.team_name      || null,
-      quantity:       r.quantity       ? parseInt(r.quantity) : 1,
+      title_name: r.title_name || null,
+      year: r.year ? String(r.year).trim() : null,
+      team_name: r.team_name || null,
+      quantity: r.quantity ? parseInt(r.quantity) : 1,
     }));
 
     const { error: insErr } = await supabase
@@ -348,13 +348,13 @@ export function useAdminHistorical() {
     if (!lineupRows || lineupRows.length === 0) return;
 
     const rows = lineupRows.map((r) => ({
-      team_id:       teamId,
-      shirt_number:  r.shirt_number,
-      player_name:   r.player_name,
+      team_id: teamId,
+      shirt_number: r.shirt_number,
+      player_name: r.player_name,
       position_role: r.position_role || null,
-      pos_x:         r.pos_x ?? 50,
-      pos_y:         r.pos_y ?? 50,
-      player_id:     r.player_id || null,
+      pos_x: r.pos_x ?? 50,
+      pos_y: r.pos_y ?? 50,
+      player_id: r.player_id || null,
     }));
 
     const { error: insErr } = await supabase
@@ -385,9 +385,9 @@ export function useAdminHistorical() {
 
     if (titleRows && titleRows.length > 0) {
       const rows = titleRows.map((r) => ({
-        team_id:        teamId,
-        title_name:     r.title_name,
-        year:           r.year || null,
+        team_id: teamId,
+        title_name: r.title_name,
+        year: r.year || null,
         competition_id: r.competition_id || null,
       }));
       const { error: insErr } = await supabase
@@ -552,8 +552,8 @@ export function useAdminHistorical() {
         .eq("event_id", eventId),
     ]);
     return {
-      players:      pRes.data || [],
-      teams:        tRes.data || [],
+      players: pRes.data || [],
+      teams: tRes.data || [],
       competitions: cRes.data || [],
     };
   };

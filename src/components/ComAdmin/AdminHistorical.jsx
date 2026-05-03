@@ -12,19 +12,19 @@ import "../../styles/StylesAdmin/AdminHistorical.css";
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
 const TABS = [
-  { key: "players",      label: "Jugadores",    Icon: Users2  },
-  { key: "teams",        label: "Equipos",      Icon: Shield  },
-  { key: "competitions", label: "Competencias", Icon: Trophy  },
-  { key: "events",       label: "Eventos",      Icon: Zap     },
+  { key: "players", label: "Jugadores", Icon: Users2 },
+  { key: "teams", label: "Equipos", Icon: Shield },
+  { key: "competitions", label: "Competencias", Icon: Trophy },
+  { key: "events", label: "Eventos", Icon: Zap },
 ];
 
-const POSITIONS      = ["Forward", "Midfielder", "Defender", "Goalkeeper"];
-const LEGACY_PLAYER  = ["Goal Scorer", "Tactician", "Innovator", "Leader", "Goalkeeper"];
-const LEGACY_TEAM    = ["Dynastic", "Innovative", "Continental", "National"];
-const EVENT_TYPES    = ["Championship", "Historic Match", "Legendary Performance", "Era Defining", "Record"];
-const COMP_TYPES     = ["International", "Continental", "Domestic"];
-const FORMATIONS     = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "5-3-2", "3-4-3"];
-const POSITION_ROLES = ["GK","CB","LB","RB","CDM","CM","CAM","LM","RM","LW","RW","ST","SS"];
+const POSITIONS = ["Forward", "Midfielder", "Defender", "Goalkeeper"];
+const LEGACY_PLAYER = ["Goal Scorer", "Tactician", "Innovator", "Leader", "Goalkeeper"];
+const LEGACY_TEAM = ["Dynastic", "Innovative", "Continental", "National"];
+const EVENT_TYPES = ["Championship", "Historic Match", "Legendary Performance", "Era Defining", "Record"];
+const COMP_TYPES = ["International", "Continental", "Domestic"];
+const FORMATIONS = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "5-3-2", "3-4-3"];
+const POSITION_ROLES = ["GK", "CB", "LB", "RB", "CDM", "CM", "CAM", "LM", "RM", "LW", "RW", "ST", "SS"];
 const TITLE_CATEGORIES = ["club", "national", "individual"];
 
 // ─── Mapas de traducción ──────────────────────────────────────────────────────
@@ -56,56 +56,56 @@ const TITLE_CAT_LABEL = {
 // ─── Posiciones por defecto según formación ───────────────────────────────────
 const FORMATION_DEFAULTS = {
   "4-3-3": [
-    { shirt_number:1,  position_role:"GK",  pos_x:50, pos_y:88 },
-    { shirt_number:2,  position_role:"RB",  pos_x:20, pos_y:70 },
-    { shirt_number:3,  position_role:"CB",  pos_x:40, pos_y:70 },
-    { shirt_number:4,  position_role:"CB",  pos_x:60, pos_y:70 },
-    { shirt_number:5,  position_role:"LB",  pos_x:80, pos_y:70 },
-    { shirt_number:6,  position_role:"CDM", pos_x:50, pos_y:52 },
-    { shirt_number:7,  position_role:"CM",  pos_x:30, pos_y:52 },
-    { shirt_number:8,  position_role:"CM",  pos_x:70, pos_y:52 },
-    { shirt_number:9,  position_role:"ST",  pos_x:50, pos_y:20 },
-    { shirt_number:10, position_role:"LW",  pos_x:80, pos_y:20 },
-    { shirt_number:11, position_role:"RW",  pos_x:20, pos_y:20 },
+    { shirt_number: 1, position_role: "GK", pos_x: 50, pos_y: 88 },
+    { shirt_number: 2, position_role: "RB", pos_x: 20, pos_y: 70 },
+    { shirt_number: 3, position_role: "CB", pos_x: 40, pos_y: 70 },
+    { shirt_number: 4, position_role: "CB", pos_x: 60, pos_y: 70 },
+    { shirt_number: 5, position_role: "LB", pos_x: 80, pos_y: 70 },
+    { shirt_number: 6, position_role: "CDM", pos_x: 50, pos_y: 52 },
+    { shirt_number: 7, position_role: "CM", pos_x: 30, pos_y: 52 },
+    { shirt_number: 8, position_role: "CM", pos_x: 70, pos_y: 52 },
+    { shirt_number: 9, position_role: "ST", pos_x: 50, pos_y: 20 },
+    { shirt_number: 10, position_role: "LW", pos_x: 80, pos_y: 20 },
+    { shirt_number: 11, position_role: "RW", pos_x: 20, pos_y: 20 },
   ],
   "4-4-2": [
-    { shirt_number:1,  position_role:"GK", pos_x:50, pos_y:88 },
-    { shirt_number:2,  position_role:"RB", pos_x:20, pos_y:70 },
-    { shirt_number:3,  position_role:"CB", pos_x:38, pos_y:70 },
-    { shirt_number:4,  position_role:"CB", pos_x:62, pos_y:70 },
-    { shirt_number:5,  position_role:"LB", pos_x:80, pos_y:70 },
-    { shirt_number:6,  position_role:"RM", pos_x:20, pos_y:46 },
-    { shirt_number:7,  position_role:"CM", pos_x:38, pos_y:46 },
-    { shirt_number:8,  position_role:"CM", pos_x:62, pos_y:46 },
-    { shirt_number:9,  position_role:"LM", pos_x:80, pos_y:46 },
-    { shirt_number:10, position_role:"ST", pos_x:38, pos_y:18 },
-    { shirt_number:11, position_role:"ST", pos_x:62, pos_y:18 },
+    { shirt_number: 1, position_role: "GK", pos_x: 50, pos_y: 88 },
+    { shirt_number: 2, position_role: "RB", pos_x: 20, pos_y: 70 },
+    { shirt_number: 3, position_role: "CB", pos_x: 38, pos_y: 70 },
+    { shirt_number: 4, position_role: "CB", pos_x: 62, pos_y: 70 },
+    { shirt_number: 5, position_role: "LB", pos_x: 80, pos_y: 70 },
+    { shirt_number: 6, position_role: "RM", pos_x: 20, pos_y: 46 },
+    { shirt_number: 7, position_role: "CM", pos_x: 38, pos_y: 46 },
+    { shirt_number: 8, position_role: "CM", pos_x: 62, pos_y: 46 },
+    { shirt_number: 9, position_role: "LM", pos_x: 80, pos_y: 46 },
+    { shirt_number: 10, position_role: "ST", pos_x: 38, pos_y: 18 },
+    { shirt_number: 11, position_role: "ST", pos_x: 62, pos_y: 18 },
   ],
   "3-5-2": [
-    { shirt_number:1,  position_role:"GK",  pos_x:50, pos_y:88 },
-    { shirt_number:2,  position_role:"CB",  pos_x:25, pos_y:70 },
-    { shirt_number:3,  position_role:"CB",  pos_x:50, pos_y:70 },
-    { shirt_number:4,  position_role:"CB",  pos_x:75, pos_y:70 },
-    { shirt_number:5,  position_role:"RM",  pos_x:15, pos_y:50 },
-    { shirt_number:6,  position_role:"CM",  pos_x:35, pos_y:50 },
-    { shirt_number:7,  position_role:"CDM", pos_x:50, pos_y:50 },
-    { shirt_number:8,  position_role:"CM",  pos_x:65, pos_y:50 },
-    { shirt_number:9,  position_role:"LM",  pos_x:85, pos_y:50 },
-    { shirt_number:10, position_role:"ST",  pos_x:35, pos_y:18 },
-    { shirt_number:11, position_role:"ST",  pos_x:65, pos_y:18 },
+    { shirt_number: 1, position_role: "GK", pos_x: 50, pos_y: 88 },
+    { shirt_number: 2, position_role: "CB", pos_x: 25, pos_y: 70 },
+    { shirt_number: 3, position_role: "CB", pos_x: 50, pos_y: 70 },
+    { shirt_number: 4, position_role: "CB", pos_x: 75, pos_y: 70 },
+    { shirt_number: 5, position_role: "RM", pos_x: 15, pos_y: 50 },
+    { shirt_number: 6, position_role: "CM", pos_x: 35, pos_y: 50 },
+    { shirt_number: 7, position_role: "CDM", pos_x: 50, pos_y: 50 },
+    { shirt_number: 8, position_role: "CM", pos_x: 65, pos_y: 50 },
+    { shirt_number: 9, position_role: "LM", pos_x: 85, pos_y: 50 },
+    { shirt_number: 10, position_role: "ST", pos_x: 35, pos_y: 18 },
+    { shirt_number: 11, position_role: "ST", pos_x: 65, pos_y: 18 },
   ],
   "4-2-3-1": [
-    { shirt_number:1,  position_role:"GK",  pos_x:50, pos_y:88 },
-    { shirt_number:2,  position_role:"RB",  pos_x:20, pos_y:70 },
-    { shirt_number:3,  position_role:"CB",  pos_x:40, pos_y:70 },
-    { shirt_number:4,  position_role:"CB",  pos_x:60, pos_y:70 },
-    { shirt_number:5,  position_role:"LB",  pos_x:80, pos_y:70 },
-    { shirt_number:6,  position_role:"CDM", pos_x:38, pos_y:56 },
-    { shirt_number:7,  position_role:"CDM", pos_x:62, pos_y:56 },
-    { shirt_number:8,  position_role:"RW",  pos_x:20, pos_y:36 },
-    { shirt_number:9,  position_role:"CAM", pos_x:50, pos_y:36 },
-    { shirt_number:10, position_role:"LW",  pos_x:80, pos_y:36 },
-    { shirt_number:11, position_role:"ST",  pos_x:50, pos_y:16 },
+    { shirt_number: 1, position_role: "GK", pos_x: 50, pos_y: 88 },
+    { shirt_number: 2, position_role: "RB", pos_x: 20, pos_y: 70 },
+    { shirt_number: 3, position_role: "CB", pos_x: 40, pos_y: 70 },
+    { shirt_number: 4, position_role: "CB", pos_x: 60, pos_y: 70 },
+    { shirt_number: 5, position_role: "LB", pos_x: 80, pos_y: 70 },
+    { shirt_number: 6, position_role: "CDM", pos_x: 38, pos_y: 56 },
+    { shirt_number: 7, position_role: "CDM", pos_x: 62, pos_y: 56 },
+    { shirt_number: 8, position_role: "RW", pos_x: 20, pos_y: 36 },
+    { shirt_number: 9, position_role: "CAM", pos_x: 50, pos_y: 36 },
+    { shirt_number: 10, position_role: "LW", pos_x: 80, pos_y: 36 },
+    { shirt_number: 11, position_role: "ST", pos_x: 50, pos_y: 16 },
   ],
 };
 
@@ -182,7 +182,7 @@ function SignificancePicker({ value, onChange }) {
   const labels = ["", "Histórico", "Notable", "Estrella", "Leyenda", "GOAT Status"];
   return (
     <div className="ah-significance">
-      {[1,2,3,4,5].map(n => (
+      {[1, 2, 3, 4, 5].map(n => (
         <button key={n} type="button"
           className={`ah-star ${n <= value ? "ah-star--on" : ""}`}
           onClick={() => onChange(n)}>
@@ -282,20 +282,20 @@ function EditableTable({ columns, rows, onAdd, onRemove, onUpdate, addLabel = "A
 function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPlayerTeams,
   onGetCareer, onSetCareer, onGetNational, onSetNational, onGetTitles, onSetTitles }) {
   const isEdit = !!player?.id;
-  const [form, setForm]           = useState(player?.id ? { ...player } : { ...PLAYER_EMPTY });
+  const [form, setForm] = useState(player?.id ? { ...player } : { ...PLAYER_EMPTY });
   const [imageFile, setImageFile] = useState(null);
-  const [saving, setSaving]       = useState(false);
-  const [error, setError]         = useState(null);
-  const [tab, setTab]             = useState("info");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+  const [tab, setTab] = useState("info");
 
   // Equipos donde jugó (relación legacy)
   const [playerTeams, setPlayerTeams] = useState([]);
-  const [teamLink, setTeamLink]       = useState({ team_id: "", start_year: "", end_year: "", roles: "" });
+  const [teamLink, setTeamLink] = useState({ team_id: "", start_year: "", end_year: "", roles: "" });
 
   // Nuevas secciones
-  const [career, setCareer]   = useState([]);
+  const [career, setCareer] = useState([]);
   const [national, setNational] = useState([]);
-  const [titles, setTitles]   = useState([]);
+  const [titles, setTitles] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
 
   useState(() => {
@@ -303,15 +303,15 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
     setLoadingData(true);
     Promise.all([
       onGetPlayerTeams(player.id),
-      onGetCareer   ? onGetCareer(player.id)   : Promise.resolve([]),
+      onGetCareer ? onGetCareer(player.id) : Promise.resolve([]),
       onGetNational ? onGetNational(player.id) : Promise.resolve([]),
-      onGetTitles   ? onGetTitles(player.id)   : Promise.resolve([]),
+      onGetTitles ? onGetTitles(player.id) : Promise.resolve([]),
     ]).then(([pt, ca, na, ti]) => {
       setPlayerTeams(pt || []);
       setCareer((ca || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
       setNational((na || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
       setTitles((ti || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
-    }).catch(() => {}).finally(() => setLoadingData(false));
+    }).catch(() => { }).finally(() => setLoadingData(false));
   }, []);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -334,9 +334,9 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
       const id = saved?.id || player?.id;
       if (id) {
         await onSetPlayerTeams(id, playerTeams);
-        if (onSetCareer)   await onSetCareer(id, career.map(({ _id, ...r }) => r));
+        if (onSetCareer) await onSetCareer(id, career.map(({ _id, ...r }) => r));
         if (onSetNational) await onSetNational(id, national.map(({ _id, ...r }) => r));
-        if (onSetTitles)   await onSetTitles(id, titles.map(({ _id, ...r }) => r));
+        if (onSetTitles) await onSetTitles(id, titles.map(({ _id, ...r }) => r));
       }
       onClose();
     } catch (err) { setError(err.message); }
@@ -345,24 +345,24 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
 
   // Columnas de tablas
   const careerCols = [
-    { key: "team_name",    label: "Club",      flex: 2, placeholder: "FC Barcelona" },
-    { key: "team_country", label: "País",      flex: 1, placeholder: "España" },
-    { key: "start_year",   label: "Desde",     flex: 1, type: "number", placeholder: "1995" },
-    { key: "end_year",     label: "Hasta",     flex: 1, type: "number", placeholder: "2000" },
-    { key: "appearances",  label: "PJ",        flex: 1, type: "number", placeholder: "0" },
-    { key: "goals",        label: "Goles",     flex: 1, type: "number", placeholder: "0" },
-    { key: "assists",      label: "Asist.",    flex: 1, type: "number", placeholder: "0" },
-    { key: "role_note",    label: "Nota",      flex: 1, placeholder: "Capitán..." },
+    { key: "team_name", label: "Club", flex: 2, placeholder: "FC Barcelona" },
+    { key: "team_country", label: "País", flex: 1, placeholder: "España" },
+    { key: "start_year", label: "Desde", flex: 1, type: "number", placeholder: "1995" },
+    { key: "end_year", label: "Hasta", flex: 1, type: "number", placeholder: "2000" },
+    { key: "appearances", label: "PJ", flex: 1, type: "number", placeholder: "0" },
+    { key: "goals", label: "Goles", flex: 1, type: "number", placeholder: "0" },
+    { key: "assists", label: "Asist.", flex: 1, type: "number", placeholder: "0" },
+    { key: "role_note", label: "Nota", flex: 1, placeholder: "Capitán..." },
   ];
 
   const nationalCols = [
-    { key: "country",    label: "Selección", flex: 2, placeholder: "Argentina" },
-    { key: "start_year", label: "Desde",     flex: 1, type: "number", placeholder: "1995" },
-    { key: "end_year",   label: "Hasta",     flex: 1, type: "number", placeholder: "2006" },
-    { key: "caps",       label: "Partidos",  flex: 1, type: "number", placeholder: "0" },
-    { key: "goals",      label: "Goles",     flex: 1, type: "number", placeholder: "0" },
-    { key: "assists",    label: "Asist.",    flex: 1, type: "number", placeholder: "0" },
-    { key: "role_note",  label: "Nota",      flex: 1, placeholder: "Capitán..." },
+    { key: "country", label: "Selección", flex: 2, placeholder: "Argentina" },
+    { key: "start_year", label: "Desde", flex: 1, type: "number", placeholder: "1995" },
+    { key: "end_year", label: "Hasta", flex: 1, type: "number", placeholder: "2006" },
+    { key: "caps", label: "Partidos", flex: 1, type: "number", placeholder: "0" },
+    { key: "goals", label: "Goles", flex: 1, type: "number", placeholder: "0" },
+    { key: "assists", label: "Asist.", flex: 1, type: "number", placeholder: "0" },
+    { key: "role_note", label: "Nota", flex: 1, placeholder: "Capitán..." },
   ];
 
   const titleCols = [
@@ -370,18 +370,18 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
       key: "title_category", label: "Categoría", flex: 1, type: "select",
       options: TITLE_CATEGORIES.map(c => ({ value: c, label: TITLE_CAT_LABEL[c] })),
     },
-    { key: "title_name", label: "Título",    flex: 2, placeholder: "Champions League" },
-    { key: "year",       label: "Año",       flex: 1, type: "number", placeholder: "2002" },
-    { key: "team_name",  label: "Con",       flex: 2, placeholder: "Real Madrid" },
-    { key: "quantity",   label: "×",         flex: 1, type: "number", placeholder: "1" },
+    { key: "title_name", label: "Título", flex: 2, placeholder: "Champions League" },
+    { key: "year", label: "Año", flex: 1, type: "text", placeholder: "2000" },
+    { key: "team_name", label: "Con", flex: 2, placeholder: "Real Madrid" },
+    { key: "quantity", label: "×", flex: 1, type: "number", placeholder: "1" },
   ];
 
   const PLAYER_TABS = [
-    { key: "info",     label: "Info" },
-    { key: "career",   label: "Trayectoria Clubes" },
+    { key: "info", label: "Info" },
+    { key: "career", label: "Trayectoria Clubes" },
     { key: "national", label: "Selección" },
-    { key: "titles",   label: "Palmarés" },
-    { key: "teams",    label: "Vínculos" },
+    { key: "titles", label: "Palmarés" },
+    { key: "teams", label: "Vínculos" },
   ];
 
   return (
@@ -579,19 +579,19 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
 
 function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLineup, onGetTitles, onSetTitles }) {
   const isEdit = !!team?.id;
-  const [form, setForm]           = useState(team?.id ? { ...team } : { ...TEAM_EMPTY });
+  const [form, setForm] = useState(team?.id ? { ...team } : { ...TEAM_EMPTY });
   const [imageFile, setImageFile] = useState(null);
-  const [saving, setSaving]       = useState(false);
-  const [error, setError]         = useState(null);
-  const [tab, setTab]             = useState("info");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+  const [tab, setTab] = useState("info");
   const [loadingData, setLoadingData] = useState(false);
- 
+
   const [lineup, setLineup] = useState(
     Array.from({ length: 11 }, (_, i) => EMPTY_LINEUP_PLAYER(i + 1))
   );
-  const [titles, setTitles]     = useState([]);
+  const [titles, setTitles] = useState([]);
   const [newTitle, setNewTitle] = useState({ title_name: "", year: "", competition_id: "" });
- 
+
   // ✅ BUG 1 CORREGIDO: useEffect en lugar de useState para cargar datos async
   useEffect(() => {
     if (!isEdit) return;
@@ -604,12 +604,12 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
               const found = lin.find(p => p.shirt_number === i + 1);
               return found
                 ? {
-                    shirt_number:  i + 1,
-                    player_name:   found.player_name || "",
-                    position_role: found.position_role || "",
-                    pos_x:         found.pos_x ?? 50,
-                    pos_y:         found.pos_y ?? 50,
-                  }
+                  shirt_number: i + 1,
+                  player_name: found.player_name || "",
+                  position_role: found.position_role || "",
+                  pos_x: found.pos_x ?? 50,
+                  pos_y: found.pos_y ?? 50,
+                }
                 : EMPTY_LINEUP_PLAYER(i + 1);
             })
           );
@@ -617,20 +617,20 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
         // ✅ BUG 2 CORREGIDO: guardamos solo los campos que necesitamos de los títulos existentes
         setTitles(
           (tit || []).map(t => ({
-            _dbId:          t.id,            // referencia interna, no se envía a Supabase
-            title_name:     t.title_name,
-            year:           t.year || "",
+            _dbId: t.id,            // referencia interna, no se envía a Supabase
+            title_name: t.title_name,
+            year: t.year || "",
             competition_id: t.competition_id || "",
           }))
         );
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoadingData(false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // solo al montar
- 
+
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
- 
+
   const applyFormation = (formation) => {
     const defaults = FORMATION_DEFAULTS[formation];
     if (!defaults) return;
@@ -642,64 +642,64 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
     );
     set("formation", formation);
   };
- 
+
   const updateLineupPlayer = (num, field, val) =>
     setLineup(prev => prev.map(p => p.shirt_number === num ? { ...p, [field]: val } : p));
- 
+
   const addTitle = () => {
     if (!newTitle.title_name.trim()) return;
     setTitles(prev => [
       ...prev,
       {
-        title_name:     newTitle.title_name.trim(),
-        year:           newTitle.year || "",
+        title_name: newTitle.title_name.trim(),
+        year: newTitle.year || "",
         competition_id: newTitle.competition_id || "",
       },
     ]);
     setNewTitle({ title_name: "", year: "", competition_id: "" });
   };
- 
-  const removeTitle = (idx) => setTitles(prev => prev.filter((_, i) => i !== idx));
- 
-const handleSubmit = async () => {
-  if (!form.name.trim()) { setError("El nombre es obligatorio"); return; }
-  setSaving(true); setError(null);
-  try {
-    console.log("1. Guardando form...");
-    const saved = await onSave(form, imageFile);
-    console.log("2. Equipo guardado:", saved);
-    const id = saved?.id || team?.id;
-    console.log("3. ID del equipo:", id);
-    console.log("4. Títulos a guardar:", titles);
-    
-    if (id) {
-      const lineupToSave = lineup.filter(p => p.player_name && p.player_name.trim() !== "");
-      console.log("5. Lineup a guardar:", lineupToSave);
-      await onSetLineup(id, lineupToSave);
-      console.log("6. Lineup guardado OK");
 
-      const titlesToSave = titles.map(({ title_name, year, competition_id }) => ({
-        title_name,
-        year: year ? parseInt(year, 10) : null,
-        competition_id: competition_id || null,
-      }));
-      console.log("7. titlesToSave:", titlesToSave);
-      await onSetTitles(id, titlesToSave);
-      console.log("8. Títulos guardados OK");
+  const removeTitle = (idx) => setTitles(prev => prev.filter((_, i) => i !== idx));
+
+  const handleSubmit = async () => {
+    if (!form.name.trim()) { setError("El nombre es obligatorio"); return; }
+    setSaving(true); setError(null);
+    try {
+      console.log("1. Guardando form...");
+      const saved = await onSave(form, imageFile);
+      console.log("2. Equipo guardado:", saved);
+      const id = saved?.id || team?.id;
+      console.log("3. ID del equipo:", id);
+      console.log("4. Títulos a guardar:", titles);
+
+      if (id) {
+        const lineupToSave = lineup.filter(p => p.player_name && p.player_name.trim() !== "");
+        console.log("5. Lineup a guardar:", lineupToSave);
+        await onSetLineup(id, lineupToSave);
+        console.log("6. Lineup guardado OK");
+
+        const titlesToSave = titles.map(({ title_name, year, competition_id }) => ({
+          title_name,
+          year: year ? String(year).trim() : null,
+          competition_id: competition_id || null,
+        }));
+        console.log("7. titlesToSave:", titlesToSave);
+        await onSetTitles(id, titlesToSave);
+        console.log("8. Títulos guardados OK");
+      }
+      onClose();
+    } catch (err) {
+      console.error("ERROR:", err);
+      setError(err.message);
+    } finally {
+      setSaving(false);
     }
-    onClose();
-  } catch (err) {
-    console.error("ERROR:", err);
-    setError(err.message);
-  } finally {
-    setSaving(false);
-  }
-};
- 
+  };
+
   return (
     <div className="ah-panel-form">
       <div className="ah-inner-tabs">
-        {[["info","Info"], ["lineup","Alineación"], ["titles","Títulos"]].map(([k, l]) => (
+        {[["info", "Info"], ["lineup", "Alineación"], ["titles", "Títulos"]].map(([k, l]) => (
           <button key={k} type="button"
             className={`ah-inner-tab ${tab === k ? "ah-inner-tab--active" : ""}`}
             onClick={() => setTab(k)}>
@@ -707,7 +707,7 @@ const handleSubmit = async () => {
           </button>
         ))}
       </div>
- 
+
       {tab === "info" && <>
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Imagen</span>
@@ -782,7 +782,7 @@ const handleSubmit = async () => {
           <PublishToggle checked={form.is_published} onChange={v => set("is_published", v)} />
         </div>
       </>}
- 
+
       {tab === "lineup" && (
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Formación y 11 titular</span>
@@ -836,11 +836,11 @@ const handleSubmit = async () => {
           </span>
         </div>
       )}
- 
+
       {tab === "titles" && (
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Palmarés</span>
- 
+
           {loadingData ? (
             <div className="ah-loading-msg">
               <RefreshCw size={12} className="ah-spin" /> Cargando...
@@ -860,7 +860,7 @@ const handleSubmit = async () => {
                   ))}
                 </div>
               )}
- 
+
               <div className="ah-pgrid-2" style={{ marginTop: 10 }}>
                 <PField label="Nombre del título" required>
                   <PInput
@@ -872,10 +872,10 @@ const handleSubmit = async () => {
                 </PField>
                 <PField label="Año">
                   <PInput
-                    type="number"
+                    type="text"
                     value={newTitle.year}
+                    placeholder="1974 o 1971-1975"
                     onChange={e => setNewTitle(t => ({ ...t, year: e.target.value }))}
-                    placeholder="1974"
                   />
                 </PField>
               </div>
@@ -901,7 +901,7 @@ const handleSubmit = async () => {
           )}
         </div>
       )}
- 
+
       {error && <div className="ah-panel-error">{error}</div>}
       <div className="ah-panel-actions">
         <button className="ah-paction-cancel" onClick={onClose}>Cancelar</button>
@@ -919,10 +919,10 @@ const handleSubmit = async () => {
 // ══════════════════════════════════════════════════════════════════════════════
 function CompetitionPanel({ competition, teams, onSave, onClose }) {
   const isEdit = !!competition?.id;
-  const [form, setForm]           = useState(competition?.id ? { ...competition } : { ...COMP_EMPTY });
+  const [form, setForm] = useState(competition?.id ? { ...competition } : { ...COMP_EMPTY });
   const [imageFile, setImageFile] = useState(null);
-  const [saving, setSaving]       = useState(false);
-  const [error, setError]         = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   const handleSubmit = async () => {
@@ -986,18 +986,18 @@ function CompetitionPanel({ competition, teams, onSave, onClose }) {
 // ══════════════════════════════════════════════════════════════════════════════
 function EventPanel({ event, players, teams, competitions, onSave, onClose, onGetRelations, onSetRelations }) {
   const isEdit = !!event?.id;
-  const [form, setForm]           = useState(event?.id ? { ...event } : { ...EVENT_EMPTY });
+  const [form, setForm] = useState(event?.id ? { ...event } : { ...EVENT_EMPTY });
   const [imageFile, setImageFile] = useState(null);
-  const [saving, setSaving]       = useState(false);
-  const [error, setError]         = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
   const [relations, setRelations] = useState({ playerIds: [], teamIds: [], competitionIds: [] });
 
   useState(() => {
     if (isEdit && event?.id) {
       onGetRelations(event.id).then(rel => {
         setRelations({
-          playerIds:      rel.players.map(p => p.player_id),
-          teamIds:        rel.teams.map(t => t.team_id),
+          playerIds: rel.players.map(p => p.player_id),
+          teamIds: rel.teams.map(t => t.team_id),
           competitionIds: rel.competitions.map(c => c.competition_id),
         });
       });
@@ -1166,8 +1166,8 @@ function HistoricalList({ items, onEdit, onDelete, onTogglePublish, renderTitle,
 // ══════════════════════════════════════════════════════════════════════════════
 export default function AdminHistorical() {
   const [activeTab, setActiveTab] = useState("players");
-  const [panel, setPanel]         = useState(null);
-  const [search, setSearch]       = useState("");
+  const [panel, setPanel] = useState(null);
+  const [search, setSearch] = useState("");
 
   const {
     players, teams, competitions, events,
@@ -1181,25 +1181,25 @@ export default function AdminHistorical() {
     getPlayerTeams, setPlayerTeams,
     getEventRelations, setEventRelations,
     // Nuevas funciones (agregar al hook)
-    getPlayerCareer,   setPlayerCareer,
+    getPlayerCareer, setPlayerCareer,
     getPlayerNational, setPlayerNational,
-    getPlayerTitles,   setPlayerTitles,
+    getPlayerTitles, setPlayerTitles,
   } = useAdminHistorical();
 
   const q = search.toLowerCase();
-  const filteredPlayers      = players.filter(p => p.name.toLowerCase().includes(q));
-  const filteredTeams        = teams.filter(t => t.name.toLowerCase().includes(q));
+  const filteredPlayers = players.filter(p => p.name.toLowerCase().includes(q));
+  const filteredTeams = teams.filter(t => t.name.toLowerCase().includes(q));
   const filteredCompetitions = competitions.filter(c => c.name.toLowerCase().includes(q));
-  const filteredEvents       = events.filter(e => e.title.toLowerCase().includes(q));
+  const filteredEvents = events.filter(e => e.title.toLowerCase().includes(q));
 
   const openCreate = () => setPanel({ type: activeTab, data: null });
-  const openEdit   = (data) => setPanel({ type: activeTab, data });
+  const openEdit = (data) => setPanel({ type: activeTab, data });
   const closePanel = () => setPanel(null);
 
-  const handleSavePlayer      = (form, file) => form.id ? updatePlayer(form.id, form, file)      : createPlayer(form, file);
-  const handleSaveTeam        = (form, file) => form.id ? updateTeam(form.id, form, file)        : createTeam(form, file);
+  const handleSavePlayer = (form, file) => form.id ? updatePlayer(form.id, form, file) : createPlayer(form, file);
+  const handleSaveTeam = (form, file) => form.id ? updateTeam(form.id, form, file) : createTeam(form, file);
   const handleSaveCompetition = (form, file) => form.id ? updateCompetition(form.id, form, file) : createCompetition(form, file);
-  const handleSaveEvent       = (form, file) => form.id ? updateEvent(form.id, form, file)       : createEvent(form, file);
+  const handleSaveEvent = (form, file) => form.id ? updateEvent(form.id, form, file) : createEvent(form, file);
 
   const tabCounts = {
     players: players.length, teams: teams.length,
@@ -1302,8 +1302,8 @@ export default function AdminHistorical() {
               <span className="ah-panel-title">
                 {panel
                   ? (panel.data
-                      ? `Editar ${TABS.find(t => t.key === activeTab)?.label.slice(0, -1)}`
-                      : `Nuevo ${TABS.find(t => t.key === activeTab)?.label.slice(0, -1)}`)
+                    ? `Editar ${TABS.find(t => t.key === activeTab)?.label.slice(0, -1)}`
+                    : `Nuevo ${TABS.find(t => t.key === activeTab)?.label.slice(0, -1)}`)
                   : "Panel"}
               </span>
             </div>
@@ -1322,9 +1322,9 @@ export default function AdminHistorical() {
                 player={panel.data} teams={teams}
                 onSave={handleSavePlayer} onClose={closePanel}
                 onGetPlayerTeams={getPlayerTeams} onSetPlayerTeams={setPlayerTeams}
-                onGetCareer={getPlayerCareer}     onSetCareer={setPlayerCareer}
+                onGetCareer={getPlayerCareer} onSetCareer={setPlayerCareer}
                 onGetNational={getPlayerNational} onSetNational={setPlayerNational}
-                onGetTitles={getPlayerTitles}     onSetTitles={setPlayerTitles}
+                onGetTitles={getPlayerTitles} onSetTitles={setPlayerTitles}
               />
             )}
 
