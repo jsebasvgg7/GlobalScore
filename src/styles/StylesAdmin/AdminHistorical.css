@@ -1707,6 +1707,340 @@
   color: #f0f1f7;
 }
 
+/* ══════════════════════════════════════════════════════════════════════════════
+   DataImporter — añadir al final de AdminHistorical.css
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Trigger ─────────────────────────────────────────────────────────────────── */
+.di-root {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 8px;
+}
+
+.di-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 10px;
+  border: 0.5px dashed rgba(91, 79, 216, 0.4);
+  background: rgba(91, 79, 216, 0.04);
+  color: var(--accent);
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  cursor: pointer;
+  transition: all 0.15s;
+  align-self: flex-start;
+}
+
+.di-trigger:hover,
+.di-trigger--active {
+  background: rgba(91, 79, 216, 0.09);
+  border-color: var(--accent);
+  border-style: solid;
+}
+
+/* ── Panel ────────────────────────────────────────────────────────────────────── */
+.di-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 0.5px solid var(--accent);
+  background: var(--bg);
+  padding: 10px 12px 12px;
+  margin-top: 2px;
+  box-shadow: 0 4px 20px rgba(91, 79, 216, 0.08);
+  animation: di-slide-in 0.15s ease;
+}
+
+@keyframes di-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.di-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.di-panel-title {
+  font-size: 8px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+}
+
+.di-close {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 4px;
+  transition: color 0.12s;
+}
+
+.di-close:hover {
+  color: #f25f5c;
+}
+
+/* ── Hint box ────────────────────────────────────────────────────────────────── */
+.di-hint-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  background: rgba(91, 79, 216, 0.04);
+  border: 0.5px solid rgba(91, 79, 216, 0.15);
+}
+
+.di-hint-label {
+  font-size: 8px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.di-hint-cols {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: var(--accent);
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.di-example-details {
+  margin-top: 2px;
+}
+
+.di-example-summary {
+  font-size: 8px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  transition: opacity 0.12s;
+}
+
+.di-example-summary:hover {
+  opacity: 1;
+}
+
+.di-example-pre {
+  margin: 6px 0 0;
+  padding: 8px;
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-primary);
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  overflow-x: auto;
+  line-height: 1.7;
+  white-space: pre;
+  opacity: 0.85;
+}
+
+/* ── Textarea ─────────────────────────────────────────────────────────────────── */
+.di-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 0.5px solid var(--border);
+  background: var(--card);
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-primary);
+  resize: vertical;
+  min-height: 80px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s;
+  line-height: 1.6;
+  tab-size: 2;
+  border-radius: 0;
+}
+
+.di-textarea:focus {
+  border-color: var(--accent);
+  background: var(--bg);
+}
+
+.di-textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.4;
+  font-size: 8.5px;
+}
+
+/* ── Modo ─────────────────────────────────────────────────────────────────────── */
+.di-mode-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.di-mode-label {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.di-radio {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.di-radio input[type="radio"] {
+  accent-color: var(--accent);
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+}
+
+/* ── Resultado parse ──────────────────────────────────────────────────────────── */
+.di-result {
+  padding: 7px 10px;
+  border: 0.5px solid;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.di-result--ok {
+  background: rgba(29, 158, 117, 0.05);
+  border-color: rgba(29, 158, 117, 0.3);
+}
+
+.di-result--warn {
+  background: rgba(245, 158, 11, 0.05);
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.di-result-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: #1D9E75;
+  font-weight: 700;
+}
+
+.di-result--warn .di-result-summary {
+  color: #f59e0b;
+}
+
+.di-result-errs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #f59e0b;
+  font-size: 9px;
+  margin-left: 6px;
+}
+
+.di-errors-list {
+  margin: 0;
+  padding: 0 0 0 14px;
+  font-size: 8.5px;
+  font-family: 'DM Mono', monospace;
+  color: #f59e0b;
+  line-height: 1.6;
+}
+
+/* ── Acciones ─────────────────────────────────────────────────────────────────── */
+.di-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.di-btn {
+  height: 28px;
+  padding: 0 12px;
+  border: 0.5px solid;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 0;
+}
+
+.di-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.di-btn--parse {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+.di-btn--parse:not(:disabled):hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(91, 79, 216, 0.05);
+}
+
+.di-btn--confirm {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  flex: 1;
+  justify-content: center;
+}
+
+.di-btn--confirm:not(:disabled):hover {
+  filter: brightness(1.1);
+}
+
+/* ── Dark mode ────────────────────────────────────────────────────────────────── */
+[data-theme="dark"] .di-panel {
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .di-textarea {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] .di-textarea:focus {
+  background: rgba(255, 255, 255, 0.05);
+}
+
 /* ══════════════════════════════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════════════════════════════ */

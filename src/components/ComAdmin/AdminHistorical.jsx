@@ -8,6 +8,7 @@ import {
   useAdminHistorical,
   getHistoricalImageUrl,
 } from "../../hooks/HooksAdmin/useAdminHistorical";
+import { DataImporter } from "../ComOthers/DataImporter";
 import "../../styles/StylesAdmin/AdminHistorical.css";
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
@@ -35,8 +36,8 @@ export const COMP_FORMATS = [
 
 export const COMP_FORMAT_LABEL = {
   groups_knockout: "Grupos + Eliminatorias",
-  league_only:     "Solo Liga",
-  knockout_only:   "Solo Eliminatorias",
+  league_only: "Solo Liga",
+  knockout_only: "Solo Eliminatorias",
 };
 
 export const KNOCKOUT_ROUNDS = [
@@ -143,60 +144,60 @@ const TEAM_EMPTY = {
 };
 // Filas vacías para las tablas
 const EMPTY_GROUP_ROW = (groupName = "Grupo A") => ({
-  _id:           Date.now() + Math.random(),
-  group_name:    groupName,
-  team_name:     "",
-  position:      "",
-  points:        "",
-  wins:          "",
-  draws:         "",
-  losses:        "",
-  goals_for:     "",
+  _id: Date.now() + Math.random(),
+  group_name: groupName,
+  team_name: "",
+  position: "",
+  points: "",
+  wins: "",
+  draws: "",
+  losses: "",
+  goals_for: "",
   goals_against: "",
-  sort_order:    0,
+  sort_order: 0,
 });
 
 const EMPTY_STANDING_ROW = (position = 1) => ({
-  _id:           Date.now() + Math.random(),
-  position:      String(position),
-  team_name:     "",
-  points:        "",
-  wins:          "",
-  draws:         "",
-  losses:        "",
-  goals_for:     "",
+  _id: Date.now() + Math.random(),
+  position: String(position),
+  team_name: "",
+  points: "",
+  wins: "",
+  draws: "",
+  losses: "",
+  goals_for: "",
   goals_against: "",
-  champion:      false,
+  champion: false,
 });
 
 const EMPTY_KNOCKOUT_ROW = (sort = 0) => ({
-  _id:          Date.now() + Math.random(),
-  round:        "Final",
+  _id: Date.now() + Math.random(),
+  round: "Final",
   match_number: "1",
-  team_a:       "",
-  team_b:       "",
-  score_a:      "",
-  score_b:      "",
-  penalties_a:  "",
-  penalties_b:  "",
-  winner:       "",
-  notes:        "",
-  sort_order:   sort,
+  team_a: "",
+  team_b: "",
+  score_a: "",
+  score_b: "",
+  penalties_a: "",
+  penalties_b: "",
+  winner: "",
+  notes: "",
+  sort_order: sort,
 });
 
 const COMP_EMPTY_V2 = {
-  name:            "",
-  type:            "",
-  format:          "",
-  year:            "",
-  country:         "",
-  edition:         "",
-  num_teams:       "",
-  description:     "",
-  winner_team_id:  "",
-  winner_text:     "",
+  name: "",
+  type: "",
+  format: "",
+  year: "",
+  country: "",
+  edition: "",
+  num_teams: "",
+  description: "",
+  winner_team_id: "",
+  winner_text: "",
   use_winner_text: false,
-  is_published:    false,
+  is_published: false,
 };
 const EVENT_EMPTY = {
   title: "", event_type: "", event_date: "",
@@ -991,46 +992,46 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
 // ══════════════════════════════════════════════════════════════════════════════
 function CompetitionPanel({
   competition, teams, onSave, onClose,
-  onGetGroups,     onSetGroups,
-  onGetStandings,  onSetStandings,
-  onGetKnockout,   onSetKnockout,
+  onGetGroups, onSetGroups,
+  onGetStandings, onSetStandings,
+  onGetKnockout, onSetKnockout,
 }) {
   const isEdit = !!competition?.id;
 
   // Combinar campos del objeto existente con nuevos campos
   const baseForm = competition?.id
     ? {
-        ...COMP_EMPTY_V2,
-        ...competition,
-        use_winner_text: !!competition.winner_text && !competition.winner_team_id,
-      }
+      ...COMP_EMPTY_V2,
+      ...competition,
+      use_winner_text: !!competition.winner_text && !competition.winner_team_id,
+    }
     : { ...COMP_EMPTY_V2 };
 
-  const [form, setForm]           = useState(baseForm);
+  const [form, setForm] = useState(baseForm);
   const [imageFile, setImageFile] = useState(null);
-  const [saving, setSaving]       = useState(false);
-  const [error, setError]         = useState(null);
-  const [tab, setTab]             = useState("info");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+  const [tab, setTab] = useState("info");
   const [loadingData, setLoadingData] = useState(false);
 
   // Datos de las 3 sub-secciones
-  const [groups,    setGroups]    = useState([]);
+  const [groups, setGroups] = useState([]);
   const [standings, setStandings] = useState([]);
-  const [knockout,  setKnockout]  = useState([]);
+  const [knockout, setKnockout] = useState([]);
 
   // Cargar datos al editar
   useEffect(() => {
     if (!isEdit) return;
     setLoadingData(true);
     Promise.all([
-      onGetGroups    ? onGetGroups(competition.id)    : Promise.resolve([]),
+      onGetGroups ? onGetGroups(competition.id) : Promise.resolve([]),
       onGetStandings ? onGetStandings(competition.id) : Promise.resolve([]),
-      onGetKnockout  ? onGetKnockout(competition.id)  : Promise.resolve([]),
+      onGetKnockout ? onGetKnockout(competition.id) : Promise.resolve([]),
     ]).then(([g, s, k]) => {
-      setGroups(   (g || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
+      setGroups((g || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
       setStandings((s || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
-      setKnockout( (k || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
-    }).catch(() => {}).finally(() => setLoadingData(false));
+      setKnockout((k || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
+    }).catch(() => { }).finally(() => setLoadingData(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -1042,31 +1043,31 @@ function CompetitionPanel({
 
   // ── Columnas tablas ────────────────────────────────────────────────────────
   const groupCols = [
-    { key: "group_name",    label: "Grupo",  flex: 1, placeholder: "Grupo A" },
-    { key: "team_name",     label: "Equipo", flex: 2, placeholder: "Brasil" },
-    { key: "position",      label: "Pos.",   flex: 1, type: "number", placeholder: "1" },
-    { key: "points",        label: "Pts",    flex: 1, type: "number", placeholder: "6" },
-    { key: "wins",          label: "G",      flex: 1, type: "number", placeholder: "2" },
-    { key: "draws",         label: "E",      flex: 1, type: "number", placeholder: "0" },
-    { key: "losses",        label: "P",      flex: 1, type: "number", placeholder: "1" },
-    { key: "goals_for",     label: "GF",     flex: 1, type: "number", placeholder: "5" },
-    { key: "goals_against", label: "GC",     flex: 1, type: "number", placeholder: "2" },
+    { key: "group_name", label: "Grupo", flex: 1, placeholder: "Grupo A" },
+    { key: "team_name", label: "Equipo", flex: 2, placeholder: "Brasil" },
+    { key: "position", label: "Pos.", flex: 1, type: "number", placeholder: "1" },
+    { key: "points", label: "Pts", flex: 1, type: "number", placeholder: "6" },
+    { key: "wins", label: "G", flex: 1, type: "number", placeholder: "2" },
+    { key: "draws", label: "E", flex: 1, type: "number", placeholder: "0" },
+    { key: "losses", label: "P", flex: 1, type: "number", placeholder: "1" },
+    { key: "goals_for", label: "GF", flex: 1, type: "number", placeholder: "5" },
+    { key: "goals_against", label: "GC", flex: 1, type: "number", placeholder: "2" },
   ];
 
   const standingCols = [
-    { key: "position",      label: "#",      flex: 1, type: "number", placeholder: "1" },
-    { key: "team_name",     label: "Equipo", flex: 2, placeholder: "Inter de Milán" },
-    { key: "points",        label: "Pts",    flex: 1, type: "number", placeholder: "72" },
-    { key: "wins",          label: "G",      flex: 1, type: "number", placeholder: "22" },
-    { key: "draws",         label: "E",      flex: 1, type: "number", placeholder: "6" },
-    { key: "losses",        label: "P",      flex: 1, type: "number", placeholder: "6" },
-    { key: "goals_for",     label: "GF",     flex: 1, type: "number", placeholder: "60" },
-    { key: "goals_against", label: "GC",     flex: 1, type: "number", placeholder: "30" },
+    { key: "position", label: "#", flex: 1, type: "number", placeholder: "1" },
+    { key: "team_name", label: "Equipo", flex: 2, placeholder: "Inter de Milán" },
+    { key: "points", label: "Pts", flex: 1, type: "number", placeholder: "72" },
+    { key: "wins", label: "G", flex: 1, type: "number", placeholder: "22" },
+    { key: "draws", label: "E", flex: 1, type: "number", placeholder: "6" },
+    { key: "losses", label: "P", flex: 1, type: "number", placeholder: "6" },
+    { key: "goals_for", label: "GF", flex: 1, type: "number", placeholder: "60" },
+    { key: "goals_against", label: "GC", flex: 1, type: "number", placeholder: "30" },
     {
       key: "champion", label: "🏆", flex: 1, type: "select",
       options: [
         { value: "false", label: "—" },
-        { value: "true",  label: "Campeón" },
+        { value: "true", label: "Campeón" },
       ],
     },
   ];
@@ -1077,19 +1078,19 @@ function CompetitionPanel({
       options: KNOCKOUT_ROUNDS.map(r => ({ value: r, label: r })),
     },
     { key: "match_number", label: "Nº", flex: 1, type: "number", placeholder: "1" },
-    { key: "team_a",       label: "Local",   flex: 2, placeholder: "Brasil" },
-    { key: "score_a",      label: "G(L)",    flex: 1, type: "number", placeholder: "4" },
-    { key: "score_b",      label: "G(V)",    flex: 1, type: "number", placeholder: "1" },
-    { key: "team_b",       label: "Visitante", flex: 2, placeholder: "Italia" },
-    { key: "penalties_a",  label: "Pen.L",   flex: 1, type: "number", placeholder: "" },
-    { key: "penalties_b",  label: "Pen.V",   flex: 1, type: "number", placeholder: "" },
+    { key: "team_a", label: "Local", flex: 2, placeholder: "Brasil" },
+    { key: "score_a", label: "G(L)", flex: 1, type: "number", placeholder: "4" },
+    { key: "score_b", label: "G(V)", flex: 1, type: "number", placeholder: "1" },
+    { key: "team_b", label: "Visitante", flex: 2, placeholder: "Italia" },
+    { key: "penalties_a", label: "Pen.L", flex: 1, type: "number", placeholder: "" },
+    { key: "penalties_b", label: "Pen.V", flex: 1, type: "number", placeholder: "" },
     {
       key: "winner", label: "Ganador", flex: 1, type: "select",
       options: [
-        { value: "",       label: "—" },
+        { value: "", label: "—" },
         { value: "team_a", label: "Local" },
         { value: "team_b", label: "Visitante" },
-        { value: "draw",   label: "Empate" },
+        { value: "draw", label: "Empate" },
       ],
     },
     { key: "notes", label: "Nota", flex: 1, placeholder: "Prórroga..." },
@@ -1097,15 +1098,15 @@ function CompetitionPanel({
 
   // ── Determinar qué tabs mostrar según formato ──────────────────────────────
   const fmt = form.format;
-  const showGroups    = fmt === "groups_knockout";
+  const showGroups = fmt === "groups_knockout";
   const showStandings = fmt === "league_only";
-  const showKnockout  = fmt === "groups_knockout" || fmt === "knockout_only";
+  const showKnockout = fmt === "groups_knockout" || fmt === "knockout_only";
 
   const COMP_TABS = [
-    { key: "info",      label: "Info" },
-    showGroups    && { key: "groups",    label: "Grupos" },
+    { key: "info", label: "Info" },
+    showGroups && { key: "groups", label: "Grupos" },
     showStandings && { key: "standings", label: "Tabla Liga" },
-    showKnockout  && { key: "knockout",  label: "Eliminatorias" },
+    showKnockout && { key: "knockout", label: "Eliminatorias" },
   ].filter(Boolean);
 
   // Si el tab activo ya no es válido (cambió el formato), volver a info
@@ -1114,6 +1115,14 @@ function CompetitionPanel({
     if (!validKeys.includes(tab)) setTab("info");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fmt]);
+
+  const handleImport = (setter, currentRows) => (newRows, mode) => {
+    if (mode === "append") {
+      setter(prev => [...prev, ...newRows]);
+    } else {
+      setter(newRows);
+    }
+  };
 
   // ── Guardar ────────────────────────────────────────────────────────────────
   const handleSubmit = async () => {
@@ -1134,9 +1143,9 @@ function CompetitionPanel({
 
       if (id) {
         const cleanRows = (arr) => arr.map(({ _id, id: _rid, ...r }) => r);
-        if (onSetGroups)    await onSetGroups(id, cleanRows(groups));
+        if (onSetGroups) await onSetGroups(id, cleanRows(groups));
         if (onSetStandings) await onSetStandings(id, cleanRows(standings));
-        if (onSetKnockout)  await onSetKnockout(id, cleanRows(knockout));
+        if (onSetKnockout) await onSetKnockout(id, cleanRows(knockout));
       }
       onClose();
     } catch (err) { setError(err.message); }
@@ -1245,6 +1254,12 @@ function CompetitionPanel({
           <p className="ah-phint" style={{ marginBottom: 8 }}>
             Agrupa los equipos por nombre de grupo (ej. "Grupo A"). Ordena por posición dentro de cada grupo.
           </p>
+
+          <DataImporter
+            mode="groups"
+            onImport={handleImport(setGroups, groups)}
+          />
+
           {loadingData ? (
             <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
           ) : (
@@ -1272,6 +1287,12 @@ function CompetitionPanel({
       {tab === "standings" && (
         <div className="ah-panel-section ah-panel-section--table">
           <span className="ah-panel-sep">Clasificación Final de Liga</span>
+
+          <DataImporter
+            mode="standings"
+            onImport={handleImport(setStandings, standings)}
+          />
+
           {loadingData ? (
             <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
           ) : (
@@ -1298,6 +1319,12 @@ function CompetitionPanel({
           <p className="ah-phint" style={{ marginBottom: 8 }}>
             Ordena de fases previas a la final. "Nº" sirve para diferenciar SF1/SF2, etc.
           </p>
+
+          <DataImporter
+            mode="knockout"
+            onImport={handleImport(setKnockout, knockout)}
+          />
+
           {loadingData ? (
             <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
           ) : (
@@ -1354,8 +1381,8 @@ function KnockoutPreview({ rows }) {
           {byRound[rnd].map((m, i) => {
             const winA = m.winner === "team_a";
             const winB = m.winner === "team_b";
-            const sa   = m.score_a !== "" && m.score_a != null ? m.score_a : "–";
-            const sb   = m.score_b !== "" && m.score_b != null ? m.score_b : "–";
+            const sa = m.score_a !== "" && m.score_a != null ? m.score_a : "–";
+            const sb = m.score_b !== "" && m.score_b != null ? m.score_b : "–";
             return (
               <div key={i} className="ah-ko-match">
                 <span className={`ah-ko-team ${winA ? "ah-ko-team--win" : ""}`}>{m.team_a || "—"}</span>
@@ -1734,9 +1761,9 @@ export default function AdminHistorical() {
               <CompetitionPanel
                 competition={panel.data} teams={teams}
                 onSave={handleSaveCompetition} onClose={closePanel}
-                onGetGroups={getCompetitionGroups}       onSetGroups={setCompetitionGroups}
+                onGetGroups={getCompetitionGroups} onSetGroups={setCompetitionGroups}
                 onGetStandings={getCompetitionStandings} onSetStandings={setCompetitionStandings}
-                onGetKnockout={getCompetitionKnockout}   onSetKnockout={setCompetitionKnockout}
+                onGetKnockout={getCompetitionKnockout} onSetKnockout={setCompetitionKnockout}
               />
             )}
 
