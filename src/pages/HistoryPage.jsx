@@ -12,6 +12,7 @@ import HistoryRightPanel from "../components/ComPanels/HistoryRightPanel";
 import TeamsRightPanel from "../components/ComPanels/TeamsRightPanel";
 import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
 import HistorySectionNav from "../components/ComHistory/HistorySectionNav.jsx";
+import Footer from '../components/ComLayout/Footer';
 import "../styles/StylesPages/HistoryPage.css";
 import "../styles/StylesMobile/HistoryPageMobile.css";
 
@@ -523,6 +524,7 @@ export default function HistoryPage() {
                 <button className="hp-clear-filters" onClick={clearFilters}><X size={11} /> Limpiar</button>
               )}
             </div>
+
           </div>
         )}
 
@@ -571,6 +573,7 @@ export default function HistoryPage() {
             </div>
           </>
         )}
+        <Footer />
       </div>
 
       <HistoryRightPanel
@@ -578,6 +581,7 @@ export default function HistoryPage() {
         selectedPlayer={panelPlayer}
         onSelectPlayer={(p) => setSelectedPlayerId(p.id)}
       />
+
     </div>
   );
 }
