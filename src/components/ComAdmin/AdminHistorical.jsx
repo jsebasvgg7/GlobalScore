@@ -389,6 +389,14 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
+  const handleImport = (setter) => (newRows, mode) => {
+    if (mode === "append") {
+      setter(prev => [...prev, ...newRows]);
+    } else {
+      setter(newRows);
+    }
+  };
+
   // Helpers para tablas
   const updateRow = (setter) => (idx, key, val) =>
     setter(prev => prev.map((r, i) => i === idx ? { ...r, [key]: val } : r));
@@ -530,6 +538,12 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
       {tab === "career" && (
         <div className="ah-panel-section ah-panel-section--table">
           <span className="ah-panel-sep"><Shield size={10} /> Trayectoria en Clubes</span>
+
+          <DataImporter
+            mode="career"
+            onImport={handleImport(setCareer)}
+          />
+
           {loadingData ? (
             <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
           ) : (
@@ -552,6 +566,12 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
       {tab === "national" && (
         <div className="ah-panel-section ah-panel-section--table">
           <span className="ah-panel-sep"><Flag size={10} /> Trayectoria en Selección</span>
+
+          <DataImporter
+            mode="national"
+            onImport={handleImport(setNational)}
+          />
+
           {loadingData ? (
             <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
           ) : (
@@ -574,6 +594,12 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
       {tab === "titles" && (
         <div className="ah-panel-section ah-panel-section--table">
           <span className="ah-panel-sep"><Award size={10} /> Palmarés</span>
+
+          <DataImporter
+            mode="titles"
+            onImport={handleImport(setTitles)}
+          />
+
           {loadingData ? (
             <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
           ) : (

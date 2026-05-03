@@ -310,10 +310,6 @@ function CompetitionDetail({ competitionId, onBack }) {
 
   return (
     <div className="hcp-detail">
-      {/* Back */}
-      <button className="hcp-detail-back" onClick={onBack}>
-        <ChevronLeft size={13} /> Volver a competiciones
-      </button>
 
       {/* Hero */}
       <div className="hcp-detail-hero">
