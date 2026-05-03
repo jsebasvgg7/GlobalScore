@@ -5,8 +5,8 @@ import { useTheme } from "../../context/ThemeContext";
 import "../../styles/StylesLayout/MobileHeader.css";
 
 export default function MobileHeader({ currentUser }) {
-  const navigate  = useNavigate();
-  const location  = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { theme, toggleTheme } = useTheme();
   const [clock, setClock] = useState("");
   const [scrolled, setScrolled] = useState(false);
@@ -31,18 +31,19 @@ export default function MobileHeader({ currentUser }) {
   const isActive = (path) => location.pathname === path;
 
   const firstName = currentUser?.name?.split(" ")[0] || "Jugador";
-  const initials  = (currentUser?.name || "U").slice(0, 2).toUpperCase();
+  const initials = (currentUser?.name || "U").slice(0, 2).toUpperCase();
 
   /* ── Bottom nav items ── */
   const leftItems = currentUser?.is_admin
-    ? [{ path: "/admin",   icon: Shield,  label: "Admin"    }]
-    : [{ path: "/World", icon: Globe,   label: "Mundial"  }];
+    ? [{ path: "/admin", icon: Shield, label: "Admin" }]
+    //: [{ path: "/World", icon: Globe,   label: "Mundial"  }];
+    : [{ path: "/history", icon: Globe, label: "History" }];
 
   const mobileBottomItems = [
     ...leftItems,
-    { path: "/ranking", icon: Award,     label: "Ranking" },
-    { path: "/stats",   icon: BarChart3, label: "Stats"   },
-    { path: "/profile", icon: User2,     label: "Perfil"  },
+    { path: "/ranking", icon: Award, label: "Ranking" },
+    { path: "/stats", icon: BarChart3, label: "Stats" },
+    { path: "/profile", icon: User2, label: "Perfil" },
   ];
 
   return (
@@ -60,12 +61,12 @@ export default function MobileHeader({ currentUser }) {
         {/* Right: actions */}
         <div className="mhd-actions">
           <button
-          className="mhd-btn"
-          onClick={() => navigate("/history")}
-          aria-label="Histórico"
-        >
-          <Notebook size={15} strokeWidth={2} />
-         </button>
+            className="mhd-btn"
+            onClick={() => navigate("/history")}
+            aria-label="Histórico"
+          >
+            <Notebook size={15} strokeWidth={2} />
+          </button>
 
           {/* Theme toggle */}
           <button
@@ -75,7 +76,7 @@ export default function MobileHeader({ currentUser }) {
           >
             {theme === "light"
               ? <Moon size={15} strokeWidth={2} />
-              : <Sun  size={15} strokeWidth={2} />
+              : <Sun size={15} strokeWidth={2} />
             }
           </button>
 

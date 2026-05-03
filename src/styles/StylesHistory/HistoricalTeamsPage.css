@@ -379,7 +379,7 @@
 
 /* ── HERO ─────────────────────────────────────────────────── */
 .htp-hero {
-  background: var(--card);
+  background: var(--bg);
   border-bottom: 0.5px solid var(--border);
   position: relative;
   overflow: hidden;

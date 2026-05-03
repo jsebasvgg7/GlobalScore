@@ -18,7 +18,7 @@ const TABS = [
   { key: "events", label: "Eventos", Icon: Zap },
 ];
 
-const POSITIONS = ["Forward", "Midfielder", "Defender", "Goalkeeper"];
+const POSITIONS = ["Forward", "Midfielder", "All-rounder", "Defender", "Goalkeeper"];
 const LEGACY_PLAYER = ["Goal Scorer", "Tactician", "Innovator", "Leader", "Goalkeeper"];
 const LEGACY_TEAM = ["Dynastic", "Innovative", "Continental", "National"];
 const EVENT_TYPES = ["Championship", "Historic Match", "Legendary Performance", "Era Defining", "Record"];
@@ -29,7 +29,7 @@ const TITLE_CATEGORIES = ["club", "national", "individual"];
 
 // ─── Mapas de traducción ──────────────────────────────────────────────────────
 const POSITION_LABEL = {
-  "Forward": "Delantero", "Midfielder": "Centrocampista",
+  "Forward": "Delantero", "Midfielder": "Centrocampista", "All-rounder": "Todocampista",
   "Defender": "Defensor", "Goalkeeper": "Portero",
 };
 const LEGACY_PLAYER_LABEL = {
