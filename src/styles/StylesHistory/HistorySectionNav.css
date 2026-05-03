@@ -50,8 +50,16 @@
   background: var(--accent);
 }
 
+
+
 @media (max-width: 680px) {
   .hsn-inner { padding: 0 12px; }
+  .hsn-btn { padding: 0 12px; font-size: 10px; height: 40px; }
+  .hsn-indicator { left: 12px; right: 12px; }
+  .hsn-inner { 
+    padding: 0 12px;
+    justify-content: center;
+  }
   .hsn-btn { padding: 0 12px; font-size: 10px; height: 40px; }
   .hsn-indicator { left: 12px; right: 12px; }
 }
