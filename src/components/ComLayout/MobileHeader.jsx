@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Bell, Moon, Sun, Trophy, Award, BarChart3, Globe, User2, NotebookPen, Shield, Home } from "lucide-react";
+import { Bell, Moon, Sun, Trophy, Award, BarChart3, Globe, User2, NotebookPen, Shield, History, Notebook } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import "../../styles/StylesLayout/MobileHeader.css";
@@ -35,8 +35,8 @@ export default function MobileHeader({ currentUser }) {
 
   /* ── Bottom nav items ── */
   const leftItems = currentUser?.is_admin
-    ? [{ path: "/admin",  icon: Shield,    label: "Admin"   }]
-    : [{ path: "/world",  icon: Globe,     label: "Mundial" }];
+    ? [{ path: "/admin",   icon: Shield,  label: "Admin"    }]
+    : [{ path: "/history", icon: History, label: "Historia" }];
 
   const mobileBottomItems = [
     ...leftItems,
@@ -59,6 +59,13 @@ export default function MobileHeader({ currentUser }) {
 
         {/* Right: actions */}
         <div className="mhd-actions">
+          <button
+          className="mhd-btn"
+          onClick={() => navigate("/history")}
+          aria-label="Histórico"
+        >
+          <Notebook size={15} strokeWidth={2} />
+         </button>
 
           {/* Theme toggle */}
           <button

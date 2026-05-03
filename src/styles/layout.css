@@ -1,5 +1,5 @@
 /* ================================================
-  GLOBALSCORE
+  GLOBALSCORE — layout.css
 ================================================ */
 
 .vega-root {
@@ -15,14 +15,13 @@
 }
 
 @media (min-width: 769px) {
-
   .vega-root {
-    margin-left: 72px;
+    margin-left: 80px;
     padding-top: 56px;
   }
 
   .page-root {
-    margin-left: 72px;
+    margin-left: 80px;
     padding-top: 56px;
     height: 100vh;
     max-height: 100vh;
@@ -32,6 +31,35 @@
 
   .lb-page.page-root {
     padding-top: 24px;
+  }
+
+  .notes-page {
+    margin-left: 80px;
+    padding-top: 56px;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  /* ── Shell de history ── */
+  .hp-shell {
+    margin-left: 80px;
+    padding-top: 56px;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+  }
+
+  /* hp-root dentro del shell NO necesita offset propio */
+  .hp-shell .hp-root,
+  .hp-shell .hp-root--detail {
+    margin-left: 0;
+    margin-top: 0;
+    padding-top: 0;
   }
 
   .container,
@@ -59,21 +87,17 @@
   }
 }
 
-@media (min-width: 769px) {
-  .notes-page {
-    margin-left: var(--sidebar-w, 80px);
-    padding-top: var(--topbar-h, 56px);
-    height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
-    box-sizing: border-box;
-  }
-}
 @media (max-width: 768px) {
   .vega-root,
-  .page-root {
+  .page-root,
+  .notes-page,
+  .hp-shell {
     margin-left: 0;
     padding-top: 0;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    display: block;
   }
 
   .container,

@@ -1,0 +1,1277 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* ════════════════════════════════════════════════
+   KEYFRAMES
+════════════════════════════════════════════════ */
+@keyframes hp-mob-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes hp-mob-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ════════════════════════════════════════════════
+   VARIABLES — BRUTALIST LIGHT
+════════════════════════════════════════════════ */
+[data-style="brutalist"] .hp-shell,
+[data-style="brutalist"] .hp-root {
+  --hp-bg:          #f0ede8;
+  --hp-card:        #e8e4de;
+  --hp-surface:     #fff;
+  --hp-border:      #d4cfc8;
+  --hp-border-hard: #c4bfb8;
+  --hp-accent:      #5b4fd8;
+  --hp-accent-l:    #8b7fc7;
+  --hp-glass:       rgba(91,79,216,.08);
+  --hp-text:        #1a1a2e;
+  --hp-muted:       #888780;
+  --hp-mono:        'DM Mono', monospace;
+  --hp-sans:        'DM Mono', monospace;
+  --hp-gold:        #f59e0b;
+  --hp-green:       #10b981;
+  --hp-r-sm:        0px;
+  --hp-r-md:        0px;
+  --hp-r-lg:        0px;
+  --hp-r-pill:      0px;
+  --hp-shadow:      none;
+  --hp-shadow-sm:   none;
+  --hp-inset:       none;
+}
+
+/* ── BRUTALIST DARK ── */
+[data-style="brutalist"][data-theme="dark"] .hp-root,
+[data-style="brutalist"][data-theme="dark"] .hp-detail {
+  --hp-bg:          #1E1C28;
+  --hp-card:        #252230;
+  --hp-surface:     #1E1C28;
+  --hp-border:      rgba(255,255,255,.05);
+  --hp-border-hard: rgba(255,255,255,.09);
+  --hp-accent:      #8b7fc7;
+  --hp-accent-l:    #a599d9;
+  --hp-glass:       rgba(139,127,199,.12);
+  --hp-text:        #E8E6F0;
+  --hp-muted:       #5A566E;
+}
+
+/* ════════════════════════════════════════
+   VARIABLES — NEUMORPHISM LIGHT
+════════════════════════════════════════════════ */
+[data-style="neumorphism"] .hp-shell,
+[data-style="neumorphism"] .hp-root {
+  --hp-bg:          #EAE7E1;
+  --hp-card:        #EAE7E1;
+  --hp-surface:     #EAE7E1;
+  --nm-light:       rgba(255,255,255,.80);
+  --nm-dark:        rgba(166,158,148,.38);
+  --nm-il:          rgba(255,255,255,.65);
+  --nm-id:          rgba(166,158,148,.30);
+  --hp-shadow:      3px 3px 9px var(--nm-dark), -2px -2px 7px var(--nm-light);
+  --hp-shadow-sm:   2px 2px 6px var(--nm-dark), -1px -1px 4px var(--nm-light);
+  --hp-shadow-lg:   4px 4px 12px var(--nm-dark), -3px -3px 9px var(--nm-light);
+  --hp-inset:       inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
+  --hp-inset-sm:    inset 1px 1px 3px var(--nm-id), inset -1px -1px 3px var(--nm-il);
+  --hp-border:      rgba(166,158,148,.25);
+  --hp-border-hard: rgba(166,158,148,.4);
+  --hp-accent:      #60519b;
+  --hp-accent-l:    #8b7fc7;
+  --hp-glass:       rgba(96,81,155,.10);
+  --hp-text:        #2A2535;
+  --hp-muted:       #9B95A8;
+  --hp-mono:        'Plus Jakarta Sans', system-ui, sans-serif;
+  --hp-sans:        'Plus Jakarta Sans', system-ui, sans-serif;
+  --hp-gold:        #C9961A;
+  --hp-green:       #3DAA80;
+  --hp-r-sm:        10px;
+  --hp-r-md:        16px;
+  --hp-r-lg:        20px;
+  --hp-r-pill:      100px;
+}
+
+/* ── NEUMORPHISM DARK ── */
+[data-style="neumorphism"][data-theme="dark"] .hp-shell,
+[data-style="neumorphism"][data-theme="dark"] .hp-root {
+  --hp-bg:          #1E1C28;
+  --hp-card:        #1E1C28;
+  --hp-surface:     #1E1C28;
+  --nm-light:       rgba(40,37,55,.9);
+  --nm-dark:        rgba(10,9,16,.7);
+  --nm-il:          rgba(40,37,55,.7);
+  --nm-id:          rgba(10,9,16,.6);
+  --hp-shadow:      3px 3px 8px var(--nm-dark), -2px -2px 6px var(--nm-light);
+  --hp-shadow-sm:   2px 2px 5px var(--nm-dark), -1px -1px 4px var(--nm-light);
+  --hp-shadow-lg:   4px 4px 12px var(--nm-dark), -3px -3px 8px var(--nm-light);
+  --hp-inset:       inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
+  --hp-inset-sm:    inset 1px 1px 3px var(--nm-id), inset -1px -1px 3px var(--nm-il);
+  --hp-border:      rgba(255,255,255,.05);
+  --hp-border-hard: rgba(255,255,255,.09);
+  --hp-accent:      #8b7fc7;
+  --hp-accent-l:    #a599d9;
+  --hp-glass:       rgba(139,127,199,.12);
+  --hp-text:        #E8E6F0;
+  --hp-muted:       #5A566E;
+}
+
+/* ════════════════════════════════════════════════
+   MOBILE OVERRIDES — solo ≤768px
+════════════════════════════════════════════════ */
+@media screen and (max-width: 768px) {
+
+  /* ── Shell: quitar layout de 2 columnas ── */
+  .hp-shell {
+    display: flex;
+    flex-direction: column;
+    background: var(--hp-bg);
+    min-height: 100dvh;
+  }
+
+  /* El panel derecho se oculta en mobile */
+  .hp-shell > *:last-child:not(.hp-root) {
+    display: none !important;
+  }
+
+  /* ── Root ── */
+  .hp-root {
+    width: 100%;
+    min-width: 0;
+    background: var(--hp-bg);
+    padding-bottom: 80px;
+    animation: hp-mob-fade-up .35s ease both;
+  }
+
+  /* ── HistorySectionNav ── */
+  .hsn-root {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: var(--hp-card, var(--card));
+  }
+
+  /* ════════ HEADER ════════ */
+  .hp-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 16px 16px 12px;
+    position: sticky;
+    top: 44px; /* debajo del HistorySectionNav */
+    z-index: 20;
+    background: var(--hp-bg, var(--card));
+  }
+
+  .hp-header-left {
+    width: 100%;
+  }
+
+  .hp-header-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .hp-header-title {
+    font-size: 16px;
+  }
+
+  /* Search + filtros full-width */
+  .hp-search-wrap {
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .hp-search {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hp-filter-btn {
+    flex-shrink: 0;
+  }
+
+  /* ════════ FILTROS PANEL ════════ */
+  .hp-filters-panel {
+    padding: 12px 16px;
+  }
+
+  .hp-filters-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hp-filter-group {
+    width: 100%;
+  }
+
+  .hp-filter-select {
+    width: 100%;
+  }
+
+  /* ════════ RESULTS BAR ════════ */
+  .hp-results-bar {
+    padding: 8px 16px;
+  }
+
+  /* ════════ GRID DE JUGADORES ════════ */
+  .hp-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+  }
+
+  /* ── Player Card ── */
+  .hp-player-card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 0.5px solid var(--hp-border, var(--border));
+    animation: hp-mob-fade-up .3s ease both;
+  }
+
+  /* Sig-bar más ancha en mobile */
+  .hp-card-sig-bar {
+    width: 4px;
+  }
+
+  .hp-avatar--lg {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+
+  .hp-card-body {
+    padding: 12px 14px 12px 0;
+  }
+
+  .hp-card-name {
+    font-size: 14px;
+  }
+
+  .hp-card-summary {
+    display: none; /* Ocultar resumen en mobile para ahorrar espacio */
+  }
+
+  /* ════════ ESTADOS ════════ */
+  .hp-state-msg,
+  .hp-state-error,
+  .hp-state-empty {
+    padding: 48px 20px;
+  }
+
+  /* ════════ VISTA DETALLE — JUGADOR ════════ */
+  .hp-root--detail {
+    padding-bottom: 80px;
+  }
+
+  .hp-detail {
+    padding: 0 0 24px;
+  }
+
+  .hp-detail-back {
+    padding: 12px 16px;
+    font-size: 11px;
+  }
+
+  /* Hero en columna */
+  .hp-detail-hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    padding: 20px 16px;
+  }
+
+  .hp-detail-hero-img-wrap {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+  }
+
+  .hp-detail-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hp-detail-hero-placeholder {
+    font-size: 28px;
+  }
+
+  .hp-detail-name {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .hp-detail-chips {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hp-detail-sig-row {
+    justify-content: center;
+  }
+
+  /* Secciones del detalle */
+  .hp-detail-section {
+    padding: 16px;
+    margin: 0 0 4px;
+  }
+
+  /* Equipos */
+  .hp-team-row {
+    padding: 10px 16px;
+  }
+
+  .hp-team-logo-wrap {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Eventos */
+  .hp-event-row {
+    padding: 10px 16px;
+    gap: 10px;
+  }
+
+  .hp-event-img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+  }
+
+  /* ════════ BRUTALIST — mobile overrides ════════ */
+  [data-style="brutalist"] .hp-player-card {
+    border-bottom: 1px solid var(--hp-border-hard);
+    border-left: 3px solid transparent;
+    background: var(--hp-card);
+    transition: border-left-color .12s;
+  }
+
+  [data-style="brutalist"] .hp-player-card:active {
+    border-left-color: var(--hp-accent);
+    background: var(--hp-surface);
+  }
+
+  [data-style="brutalist"] .hp-card-name {
+    font-family: var(--hp-mono);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: var(--hp-text);
+  }
+
+  [data-style="brutalist"] .hp-card-meta {
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    letter-spacing: .08em;
+  }
+
+  [data-style="brutalist"] .hp-card-country {
+    font-family: var(--hp-mono);
+  }
+
+  [data-style="brutalist"] .hp-badge {
+    border-radius: 0;
+    font-family: var(--hp-mono);
+    font-size: 8px;
+    letter-spacing: .1em;
+  }
+
+  [data-style="brutalist"] .hp-avatar--lg {
+    border-radius: 0;
+    border: 1px solid var(--hp-border-hard);
+  }
+
+  [data-style="brutalist"] .hp-avatar-initials {
+    font-family: var(--hp-mono);
+    font-weight: 700;
+    border-radius: 0;
+  }
+
+  /* Detalle brutalist */
+  [data-style="brutalist"] .hp-detail-hero {
+    border-bottom: 1px solid var(--hp-border-hard);
+    background: var(--hp-card);
+  }
+
+  [data-style="brutalist"] .hp-detail-hero-img-wrap {
+    border: 2px solid var(--hp-accent);
+    border-radius: 0;
+  }
+
+  [data-style="brutalist"] .hp-detail-hero-placeholder {
+    border-radius: 0;
+    border: 2px solid var(--hp-accent);
+    font-family: var(--hp-mono);
+    font-weight: 700;
+  }
+
+  [data-style="brutalist"] .hp-detail-name {
+    font-family: var(--hp-mono);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: var(--hp-text);
+  }
+
+  [data-style="brutalist"] .hp-detail-chip {
+    border-radius: 0;
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    border: 1px solid var(--hp-border-hard);
+    background: var(--hp-bg);
+    padding: 3px 8px;
+    color: var(--hp-muted);
+  }
+
+  [data-style="brutalist"] .hp-chip--country { color: var(--hp-text); }
+  [data-style="brutalist"] .hp-chip--pos     { color: var(--hp-accent); border-color: rgba(91,79,216,.3); }
+  [data-style="brutalist"] .hp-chip--era     { color: var(--hp-accent); border-color: rgba(91,79,216,.3); }
+
+  [data-style="brutalist"] .hp-goat-chip {
+    border-radius: 0;
+    font-family: var(--hp-mono);
+    font-size: 8px;
+    letter-spacing: .14em;
+    border: 1px solid #f59e0b;
+    background: rgba(245,158,11,.12);
+    color: #f59e0b;
+  }
+
+  [data-style="brutalist"] .hp-detail-sep {
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--hp-muted);
+  }
+
+  [data-style="brutalist"] .hp-detail-impact {
+    font-family: var(--hp-mono);
+    font-size: 13px;
+    color: var(--hp-text);
+    line-height: 1.65;
+  }
+
+  [data-style="brutalist"] .hp-detail-desc p {
+    font-family: var(--hp-mono);
+    font-size: 12px;
+    color: var(--hp-text);
+    line-height: 1.7;
+    opacity: .85;
+  }
+
+  [data-style="brutalist"] .hp-team-logo {
+    border-radius: 0;
+    border: 1px solid var(--hp-border);
+  }
+
+  [data-style="brutalist"] .hp-team-logo-ph {
+    border-radius: 0;
+    background: var(--hp-bg);
+    border: 1px solid var(--hp-border-hard);
+    color: var(--hp-muted);
+  }
+
+  [data-style="brutalist"] .hp-team-name {
+    font-family: var(--hp-mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: var(--hp-text);
+  }
+
+  [data-style="brutalist"] .hp-team-country {
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    color: var(--hp-muted);
+    letter-spacing: .08em;
+  }
+
+  [data-style="brutalist"] .hp-team-years {
+    font-family: var(--hp-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--hp-accent);
+    border-radius: 0;
+    background: var(--hp-glass);
+    border: 1px solid rgba(91,79,216,.25);
+    padding: 2px 8px;
+  }
+
+  [data-style="brutalist"] .hp-team-role {
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    color: var(--hp-muted);
+    border-radius: 0;
+    border: 1px solid var(--hp-border);
+    padding: 2px 7px;
+    background: var(--hp-bg);
+  }
+
+  [data-style="brutalist"] .hp-event-title {
+    font-family: var(--hp-mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: var(--hp-text);
+  }
+
+  [data-style="brutalist"] .hp-event-type {
+    font-family: var(--hp-mono);
+    font-size: 8px;
+    letter-spacing: .1em;
+    border-radius: 0;
+    border: 1px solid var(--hp-border-hard);
+    background: var(--hp-bg);
+    color: var(--hp-muted);
+    padding: 2px 7px;
+  }
+
+  [data-style="brutalist"] .hp-event-year {
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--hp-accent);
+    border-radius: 0;
+    background: var(--hp-glass);
+    border: 1px solid rgba(91,79,216,.25);
+    padding: 2px 7px;
+  }
+
+  [data-style="brutalist"] .hp-detail-back {
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--hp-muted);
+    background: var(--hp-card);
+    border-bottom: 1px solid var(--hp-border-hard);
+    border-radius: 0;
+    transition: color .12s;
+  }
+
+  [data-style="brutalist"] .hp-detail-back:active {
+    color: var(--hp-text);
+  }
+
+  [data-style="brutalist"] .hp-retry-btn {
+    border-radius: 0;
+    font-family: var(--hp-mono);
+    border: 1px solid var(--hp-border-hard);
+    background: transparent;
+    color: var(--hp-accent);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+  }
+
+  [data-style="brutalist"] .hp-retry-btn:active {
+    background: var(--hp-accent);
+    color: #fff;
+  }
+
+  [data-style="brutalist"] .hp-header {
+    background: var(--hp-card);
+    border-bottom: 1px solid var(--hp-border-hard);
+  }
+
+  [data-style="brutalist"] .hp-header-title {
+    font-family: var(--hp-mono);
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: var(--hp-text);
+  }
+
+  [data-style="brutalist"] .hp-header-sub {
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--hp-muted);
+  }
+
+  [data-style="brutalist"] .hp-search {
+    border: 1px solid var(--hp-border-hard);
+    border-radius: 0;
+    background: var(--hp-bg);
+  }
+
+  [data-style="brutalist"] .hp-search-input {
+    font-family: var(--hp-mono);
+    font-size: 12px;
+    color: var(--hp-text);
+    background: transparent;
+  }
+
+  [data-style="brutalist"] .hp-filter-btn {
+    border-radius: 0;
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border: 1px solid var(--hp-border-hard);
+    background: var(--hp-bg);
+    color: var(--hp-muted);
+    padding: 0 12px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: background .12s, color .12s;
+  }
+
+  [data-style="brutalist"] .hp-filter-btn:active,
+  [data-style="brutalist"] .hp-filter-btn--active {
+    background: var(--hp-accent);
+    color: #fff;
+    border-color: var(--hp-accent);
+  }
+
+  [data-style="brutalist"] .hp-filter-dot {
+    width: 5px;
+    height: 5px;
+    background: #f59e0b;
+    border-radius: 0;
+    flex-shrink: 0;
+  }
+
+  [data-style="brutalist"] .hp-filters-panel {
+    background: var(--hp-card);
+    border-bottom: 1px solid var(--hp-border-hard);
+    padding: 12px 16px;
+  }
+
+  [data-style="brutalist"] .hp-filter-label {
+    font-family: var(--hp-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--hp-muted);
+  }
+
+  [data-style="brutalist"] .hp-filter-select {
+    font-family: var(--hp-mono);
+    font-size: 12px;
+    border: 1px solid var(--hp-border-hard);
+    border-radius: 0;
+    background: var(--hp-bg);
+    color: var(--hp-text);
+    padding: 8px 10px;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  [data-style="brutalist"] .hp-filter-select:focus {
+    border-color: var(--hp-accent);
+  }
+
+  [data-style="brutalist"] .hp-clear-filters {
+    border-radius: 0;
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    border: 1px solid var(--hp-border-hard);
+    background: transparent;
+    color: var(--hp-muted);
+    padding: 7px 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: background .12s, color .12s;
+    align-self: flex-end;
+  }
+
+  [data-style="brutalist"] .hp-clear-filters:active {
+    background: var(--hp-accent);
+    color: #fff;
+    border-color: var(--hp-accent);
+  }
+
+  [data-style="brutalist"] .hp-results-count {
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--hp-muted);
+  }
+
+  [data-style="brutalist"] .hp-stars svg {
+    stroke-width: 1.5;
+  }
+
+  [data-style="brutalist"] .hp-card-chevron {
+    color: var(--hp-border-hard);
+    transition: color .12s, transform .12s;
+  }
+
+  [data-style="brutalist"] .hp-player-card:active .hp-card-chevron {
+    color: var(--hp-accent);
+    transform: translateX(3px);
+  }
+
+  /* ════════ NEUMORPHISM — mobile overrides ════════ */
+  [data-style="neumorphism"] .hp-player-card {
+    margin: 8px 16px;
+    border-radius: var(--hp-r-lg);
+    box-shadow: var(--hp-shadow);
+    border: none;
+    background: var(--hp-bg);
+    transition: box-shadow .18s, transform .18s;
+    animation: hp-mob-fade-up .3s ease both;
+  }
+
+  [data-style="neumorphism"] .hp-player-card:active {
+    box-shadow: var(--hp-inset);
+    transform: scale(.98);
+  }
+
+  /* Quitar border-bottom en neumorphism porque cada card tiene su propia sombra */
+  [data-style="neumorphism"] .hp-grid {
+    gap: 0;
+    padding: 4px 0 8px;
+  }
+
+  [data-style="neumorphism"] .hp-card-name {
+    font-family: var(--hp-sans);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: var(--hp-text);
+  }
+
+  [data-style="neumorphism"] .hp-card-meta {
+    font-family: var(--hp-sans);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--hp-muted);
+  }
+
+  [data-style="neumorphism"] .hp-badge {
+    border-radius: var(--hp-r-pill);
+    font-family: var(--hp-sans);
+    font-size: 7px;
+    font-weight: 700;
+    border: none;
+    box-shadow: var(--hp-shadow-sm);
+    align-items: center;
+  }
+
+  [data-style="neumorphism"] .hp-avatar--lg {
+    border-radius: var(--hp-r-md);
+    box-shadow: var(--hp-shadow-sm);
+  }
+
+  [data-style="neumorphism"] .hp-avatar-initials {
+    font-family: var(--hp-sans);
+    font-weight: 800;
+    border-radius: var(--hp-r-md);
+  }
+
+  [data-style="neumorphism"] .hp-card-chevron {
+    color: var(--hp-border-hard);
+    transition: color .18s, transform .18s;
+  }
+
+  [data-style="neumorphism"] .hp-player-card:active .hp-card-chevron {
+    color: var(--hp-accent);
+    transform: translateX(4px);
+  }
+
+  /* Detalle neumorphism */
+  [data-style="neumorphism"] .hp-detail-hero {
+    border-radius: 0 0 var(--hp-r-xl) var(--hp-r-xl);
+    background: var(--hp-bg);
+    box-shadow: 0 4px 16px rgba(166,158,148,.3);
+    padding: 24px 20px;
+  }
+
+  [data-style="neumorphism"][data-theme="dark"] .hp-detail-hero {
+    box-shadow: 0 4px 16px rgba(10,9,16,.5);
+  }
+
+  [data-style="neumorphism"] .hp-detail-hero-img-wrap {
+    border-radius: var(--hp-r-lg);
+    box-shadow: var(--hp-shadow-lg);
+    overflow: hidden;
+  }
+
+  [data-style="neumorphism"] .hp-detail-hero-placeholder {
+    border-radius: var(--hp-r-lg);
+    background: linear-gradient(135deg, var(--hp-accent), var(--hp-accent-l));
+    color: #fff;
+    font-family: var(--hp-sans);
+    font-weight: 800;
+    font-size: 32px;
+    box-shadow: var(--hp-shadow-lg);
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  [data-style="neumorphism"] .hp-detail-name {
+    font-family: var(--hp-sans);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.04em;
+    color: var(--hp-text);
+  }
+
+  [data-style="neumorphism"] .hp-detail-chip {
+    border-radius: var(--hp-r-pill);
+    font-family: var(--hp-sans);
+    font-size: 10px;
+    font-weight: 700;
+    border: none;
+    box-shadow: var(--hp-shadow-sm);
+    padding: 4px 12px;
+    color: var(--hp-muted);
+    background: var(--hp-bg);
+  }
+
+  [data-style="neumorphism"] .hp-chip--pos,
+  [data-style="neumorphism"] .hp-chip--era {
+    color: var(--hp-accent);
+    background: var(--hp-glass);
+    box-shadow: var(--hp-shadow-sm), inset 0 0 0 1px rgba(96,81,155,.15);
+  }
+
+  [data-style="neumorphism"] .hp-goat-chip {
+    border-radius: var(--hp-r-pill);
+    font-family: var(--hp-sans);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    background: linear-gradient(135deg, #c9a227, #f0c040);
+    color: #fff;
+    box-shadow: var(--hp-shadow-sm);
+    border: none;
+    padding: 4px 12px;
+  }
+
+  [data-style="neumorphism"] .hp-detail-sep {
+    font-family: var(--hp-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--hp-muted);
+  }
+
+  [data-style="neumorphism"] .hp-detail-impact {
+    font-family: var(--hp-sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--hp-text);
+    line-height: 1.7;
+  }
+
+  [data-style="neumorphism"] .hp-detail-desc p {
+    font-family: var(--hp-sans);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--hp-text);
+    line-height: 1.75;
+    opacity: .88;
+  }
+
+  [data-style="neumorphism"] .hp-detail-section {
+    background: var(--hp-bg);
+    margin: 12px 16px 0;
+    border-radius: var(--hp-r-lg);
+    box-shadow: var(--hp-shadow);
+    padding: 16px;
+    border: none;
+  }
+
+  [data-style="neumorphism"] .hp-team-logo {
+    border-radius: var(--hp-r-sm);
+    box-shadow: var(--hp-shadow-sm);
+  }
+
+  [data-style="neumorphism"] .hp-team-logo-ph {
+    border-radius: var(--hp-r-sm);
+    background: var(--hp-bg);
+    box-shadow: var(--hp-inset-sm);
+    color: var(--hp-muted);
+  }
+
+  [data-style="neumorphism"] .hp-team-name {
+    font-family: var(--hp-sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: var(--hp-text);
+  }
+
+  [data-style="neumorphism"] .hp-team-country {
+    font-family: var(--hp-sans);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--hp-muted);
+  }
+
+  [data-style="neumorphism"] .hp-team-years {
+    font-family: var(--hp-sans);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--hp-accent);
+    border-radius: var(--hp-r-pill);
+    background: var(--hp-glass);
+    box-shadow: var(--hp-shadow-sm);
+    border: none;
+    padding: 3px 10px;
+  }
+
+  [data-style="neumorphism"] .hp-team-role {
+    font-family: var(--hp-sans);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--hp-muted);
+    border-radius: var(--hp-r-pill);
+    background: var(--hp-bg);
+    box-shadow: var(--hp-shadow-sm);
+    border: none;
+    padding: 3px 10px;
+  }
+
+  [data-style="neumorphism"] .hp-event-title {
+    font-family: var(--hp-sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: var(--hp-text);
+  }
+
+  [data-style="neumorphism"] .hp-event-type {
+    font-family: var(--hp-sans);
+    font-size: 9px;
+    font-weight: 600;
+    border-radius: var(--hp-r-pill);
+    background: var(--hp-glass);
+    box-shadow: var(--hp-shadow-sm);
+    color: var(--hp-accent);
+    border: none;
+    padding: 3px 10px;
+    letter-spacing: .04em;
+  }
+
+  [data-style="neumorphism"] .hp-event-year {
+    font-family: var(--hp-sans);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--hp-accent);
+    border-radius: var(--hp-r-pill);
+    background: var(--hp-glass);
+    box-shadow: var(--hp-shadow-sm);
+    border: none;
+    padding: 3px 10px;
+  }
+
+  [data-style="neumorphism"] .hp-detail-back {
+    font-family: var(--hp-sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .01em;
+    color: var(--hp-accent);
+    background: var(--hp-bg);
+    border: none;
+    border-bottom: 1px solid var(--hp-border);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: color .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  [data-style="neumorphism"] .hp-detail-back:active {
+    color: var(--hp-text);
+  }
+
+  [data-style="neumorphism"] .hp-retry-btn {
+    border-radius: var(--hp-r-pill);
+    font-family: var(--hp-sans);
+    border: none;
+    background: var(--hp-bg);
+    box-shadow: var(--hp-shadow-sm);
+    color: var(--hp-accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    padding: 9px 18px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: box-shadow .15s, transform .12s;
+  }
+
+  [data-style="neumorphism"] .hp-retry-btn:active {
+    box-shadow: var(--hp-inset);
+    transform: scale(.97);
+  }
+
+  [data-style="neumorphism"] .hp-header {
+    background: var(--hp-bg);
+    border-bottom: none;
+    box-shadow: 0 2px 12px rgba(166,158,148,.25);
+  }
+
+  [data-style="neumorphism"][data-theme="dark"] .hp-header {
+    box-shadow: 0 2px 12px rgba(10,9,16,.4);
+  }
+
+  [data-style="neumorphism"] .hp-header-title {
+    font-family: var(--hp-sans);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    color: var(--hp-text);
+  }
+
+  [data-style="neumorphism"] .hp-header-sub {
+    font-family: var(--hp-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    color: var(--hp-muted);
+  }
+
+  [data-style="neumorphism"] .hp-search {
+    border: none;
+    border-radius: var(--hp-r-pill);
+    background: var(--hp-bg);
+    box-shadow: var(--hp-inset-sm);
+    height: 40px;
+    padding: 0 14px;
+  }
+
+  [data-style="neumorphism"] .hp-search-input {
+    font-family: var(--hp-sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--hp-text);
+    background: transparent;
+  }
+
+  [data-style="neumorphism"] .hp-filter-btn {
+    border-radius: var(--hp-r-pill);
+    font-family: var(--hp-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    border: none;
+    background: var(--hp-bg);
+    box-shadow: var(--hp-shadow-sm);
+    color: var(--hp-muted);
+    padding: 0 14px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: box-shadow .15s, color .15s;
+  }
+
+  [data-style="neumorphism"] .hp-filter-btn:active,
+  [data-style="neumorphism"] .hp-filter-btn--active {
+    box-shadow: var(--hp-inset);
+    color: var(--hp-accent);
+  }
+
+  [data-style="neumorphism"] .hp-filter-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--hp-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--hp-gold);
+    flex-shrink: 0;
+  }
+
+  [data-style="neumorphism"] .hp-filters-panel {
+    margin: 0 16px 8px;
+    background: var(--hp-bg);
+    border-radius: var(--hp-r-lg);
+    box-shadow: var(--hp-shadow);
+    padding: 16px;
+    border: none;
+  }
+
+  [data-style="neumorphism"] .hp-filter-label {
+    font-family: var(--hp-sans);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--hp-muted);
+  }
+
+  [data-style="neumorphism"] .hp-filter-select {
+    font-family: var(--hp-sans);
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--hp-r-md);
+    background: var(--hp-bg);
+    box-shadow: var(--hp-inset-sm);
+    color: var(--hp-text);
+    padding: 10px 14px;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    transition: box-shadow .15s;
+  }
+
+  [data-style="neumorphism"] .hp-filter-select:focus {
+    box-shadow: var(--hp-inset), 0 0 0 2px rgba(96,81,155,.2);
+  }
+
+  [data-style="neumorphism"] .hp-clear-filters {
+    border-radius: var(--hp-r-pill);
+    font-family: var(--hp-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    border: none;
+    background: var(--hp-bg);
+    box-shadow: var(--hp-shadow-sm);
+    color: var(--hp-muted);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: box-shadow .15s, color .15s;
+    align-self: flex-end;
+  }
+
+  [data-style="neumorphism"] .hp-clear-filters:active {
+    box-shadow: var(--hp-inset);
+    color: var(--hp-accent);
+  }
+
+  [data-style="neumorphism"] .hp-results-count {
+    font-family: var(--hp-sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--hp-muted);
+  }
+
+  [data-style="neumorphism"] .hp-results-bar {
+    padding: 8px 20px;
+  }
+
+  [data-style="neumorphism"] .hp-card-body {
+    padding: 14px 16px 14px 0;
+  }
+
+  [data-style="neumorphism"] .hp-card-footer {
+    margin-top: 6px;
+  }
+
+  /* Estado vacío neumorphism */
+  [data-style="neumorphism"] .hp-state-empty,
+  [data-style="neumorphism"] .hp-state-error,
+  [data-style="neumorphism"] .hp-state-msg {
+    margin: 20px 16px;
+    background: var(--hp-bg);
+    border-radius: var(--hp-r-lg);
+    box-shadow: var(--hp-shadow);
+    padding: 48px 20px;
+    border: none;
+  }
+
+  [data-style="neumorphism"] .hp-empty-title {
+    font-family: var(--hp-sans);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: var(--hp-text);
+  }
+
+  [data-style="neumorphism"] .hp-empty-sub {
+    font-family: var(--hp-sans);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--hp-muted);
+  }
+
+  /* ════ Reducir movimiento ════ */
+  @media (prefers-reduced-motion: reduce) {
+    .hp-player-card,
+    .hp-root {
+      animation: none;
+    }
+    [data-style="neumorphism"] .hp-player-card {
+      transition: none;
+    }
+  }
+
+} 
+[data-style="brutalist"] .hp-detail-hero .hp-badge,
+[data-style="neumorphism"] .hp-detail-hero .hp-badge {
+  align-self: center;
+  margin: 0 auto;
+}
+
+.hp-detail-hero {
+  align-items: center;
+}
+@media (max-width: 768px) {
+  .hp-detail-chips {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+}
+/* ════════════════════════════════════════════════
+   PANTALLAS MUY PEQUEÑAS — ≤380px
+════════════════════════════════════════════════ */
+@media screen and (max-width: 380px) {
+  .hp-avatar--lg {
+    width: 44px;
+    height: 44px;
+  }
+
+  .hp-card-name {
+    font-size: 13px;
+  }
+
+  .hp-detail-name {
+    font-size: 18px;
+  }
+
+  [data-style="neumorphism"] .hp-player-card {
+    margin: 6px 12px;
+  }
+
+  [data-style="neumorphism"] .hp-filters-panel {
+    margin: 0 12px 8px;
+  }
+
+  [data-style="neumorphism"] .hp-detail-section {
+    margin: 10px 12px 0;
+  }
+}

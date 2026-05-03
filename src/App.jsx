@@ -11,6 +11,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import DashboardPage from "./pages/DashboardPage";
 import RankingPage from "./pages/RankingPage";
+import HistoryPage from "./pages/HistoryPage";
 import AdminPage from "./pages/AdminPage";
 import ProfileSettingsPage from "./pages/ProfileSettingsPage";
 import NotificationsPage from "./pages/NotificationsPage";
@@ -18,7 +19,6 @@ import StatsPage from "./pages/StatsPage";
 import WorldCupPage from "./pages/WorldCupPage";
 import NotesPage from "./pages/NotesPage";
 import { PageLoader } from "./components/ComFeedback/LoadingStates";
-import './styles/darkmode.css'
 import "./styles/layout.css";
 
 export default function App() {
@@ -253,6 +253,10 @@ export default function App() {
             element={session ? <AdminPage currentUser={currentUser} users={users} /> : <Navigate to="/" replace />}
           />
           <Route
+            path="/history"
+            element={session ? <HistoryPage /> : <Navigate to="/" replace />}
+          />
+          <Route
             path="/stats"
             element={session ? <StatsPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
@@ -264,7 +268,6 @@ export default function App() {
             path="/notes"
             element={session ? <NotesPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
-
           <Route
             path="/profile"
             element={
