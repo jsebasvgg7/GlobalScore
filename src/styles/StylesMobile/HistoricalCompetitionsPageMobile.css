@@ -1481,17 +1481,149 @@
   }
 }
 
-[data-style="neumorphism"] .hcp-card {
-  display: flex;
-  flex-direction: column;
+@media screen and (max-width: 768px) {
+
+  [data-style="neumorphism"] .hcp-card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  [data-style="neumorphism"] .hcp-card>*:not(.hcp-card-stripe) {}
+
+  .hcp-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+
+  .hcp-table {
+    min-width: 480px;
+  }
+
+  .hcp-th--team,
+  .hcp-td--team {
+    min-width: 100px;
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hcp-th--num,
+  .hcp-td--num {
+    min-width: 32px;
+    text-align: center;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
+
+  .hcp-th--pos,
+  .hcp-td--pos {
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .hcp-th--pts,
+  .hcp-td--pts {
+    min-width: 32px;
+    text-align: center;
+  }
+
+  .hcp-group-block {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .hcp-groups-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .hcp-bracket {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 0;
+    border: 0.5px solid var(--border, #d4cfc8);
+    border-radius: 0;
+    padding-bottom: 2px;
+  }
+
+  [data-style="neumorphism"] .hcp-bracket {
+    border: none;
+    border-radius: var(--hcp-r-md);
+    box-shadow: var(--hcp-shadow);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .hcp-bracket-col {
+    min-width: 160px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 380px) {
+    .hcp-bracket-col {
+      min-width: 130px;
+    }
+
+    .hcp-table {
+      min-width: 420px;
+    }
+  }
+
+  .hcp-section {
+    padding-left: 0;
+    padding-right: 0;
+    overflow: hidden;
+  }
+
+  .hcp-section-header {
+    padding: 0 16px 10px;
+  }
+
+  .hcp-groups-legend {
+    padding: 8px 16px 0;
+  }
+
+  [data-style="neumorphism"] .hcp-section {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  [data-style="neumorphism"] .hcp-section-header {
+    padding: 16px 16px 10px;
+  }
+
+  [data-style="neumorphism"] .hcp-detail-desc {
+    padding: 12px 16px 0;
+  }
+
+  [data-style="neumorphism"] .hcp-groups-legend {
+    padding: 8px 16px 16px;
+  }
+
+  [data-style="brutalist"] .hcp-section {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  [data-style="brutalist"] .hcp-section-header {
+    padding: 0 16px 10px;
+  }
+
+  [data-style="brutalist"] .hcp-groups-legend {
+    padding: 8px 16px 0;
+  }
+
+  [data-style="brutalist"] .hcp-detail-desc {
+    padding: 0 16px;
+  }
 }
 
-[data-style="neumorphism"] .hcp-card-inner {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-}
 
 /* ════════════════════════════════════════════════
    PANTALLAS MUY PEQUEÑAS — ≤380px
