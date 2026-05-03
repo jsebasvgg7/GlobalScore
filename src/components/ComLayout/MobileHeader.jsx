@@ -36,7 +36,7 @@ export default function MobileHeader({ currentUser }) {
   /* ── Bottom nav items ── */
   const leftItems = currentUser?.is_admin
     ? [{ path: "/admin",   icon: Shield,  label: "Admin"    }]
-    : [{ path: "/history", icon: History, label: "Historia" }];
+    : [{ path: "/World", icon: Globe,   label: "Mundial"  }];
 
   const mobileBottomItems = [
     ...leftItems,
