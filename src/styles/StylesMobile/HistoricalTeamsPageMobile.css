@@ -8,15 +8,33 @@
    KEYFRAMES
 ════════════════════════════════════════════════ */
 @keyframes htp-mob-fade-up {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 @keyframes htp-mob-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
+
 @keyframes htp-mob-fadein {
-  from { opacity: 0; transform: translateX(-6px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* ════════════════════════════════════════════════
@@ -24,44 +42,44 @@
 ════════════════════════════════════════════════ */
 [data-style="brutalist"] .htp-root,
 [data-style="brutalist"] .htp-detail {
-  --htp-bg:          #f0ede8;
-  --htp-card:        #e8e4de;
-  --htp-surface:     #fff;
-  --htp-border:      #d4cfc8;
+  --htp-bg: #f0ede8;
+  --htp-card: #e8e4de;
+  --htp-surface: #fff;
+  --htp-border: #d4cfc8;
   --htp-border-hard: #c4bfb8;
-  --htp-accent:      #5b4fd8;
-  --htp-accent-l:    #8b7fc7;
-  --htp-glass:       rgba(91,79,216,.08);
-  --htp-text:        #1a1a2e;
-  --htp-muted:       #888780;
-  --htp-mono:        'DM Mono', monospace;
-  --htp-sans:        'DM Mono', monospace;
-  --htp-gold:        #f59e0b;
-  --htp-green:       #10b981;
-  --htp-r-sm:        0px;
-  --htp-r-md:        0px;
-  --htp-r-lg:        0px;
-  --htp-r-xl:        0px;
-  --htp-r-pill:      0px;
-  --htp-shadow:      none;
-  --htp-shadow-sm:   none;
-  --htp-inset:       none;
-  --htp-inset-sm:    none;
+  --htp-accent: #5b4fd8;
+  --htp-accent-l: #8b7fc7;
+  --htp-glass: rgba(91, 79, 216, .08);
+  --htp-text: #1a1a2e;
+  --htp-muted: #888780;
+  --htp-mono: 'DM Mono', monospace;
+  --htp-sans: 'DM Mono', monospace;
+  --htp-gold: #f59e0b;
+  --htp-green: #10b981;
+  --htp-r-sm: 0px;
+  --htp-r-md: 0px;
+  --htp-r-lg: 0px;
+  --htp-r-xl: 0px;
+  --htp-r-pill: 0px;
+  --htp-shadow: none;
+  --htp-shadow-sm: none;
+  --htp-inset: none;
+  --htp-inset-sm: none;
 }
 
 /* ── BRUTALIST DARK ── */
 [data-style="brutalist"][data-theme="dark"] .htp-root,
 [data-style="brutalist"][data-theme="dark"] .htp-detail {
-  --htp-bg:          #1E1C28;
-  --htp-card:        #252230;
-  --htp-surface:     #1E1C28;
-  --htp-border:      rgba(255,255,255,.05);
-  --htp-border-hard: rgba(255,255,255,.09);
-  --htp-accent:      #8b7fc7;
-  --htp-accent-l:    #a599d9;
-  --htp-glass:       rgba(139,127,199,.12);
-  --htp-text:        #E8E6F0;
-  --htp-muted:       #5A566E;
+  --htp-bg: #1E1C28;
+  --htp-card: #252230;
+  --htp-surface: #1E1C28;
+  --htp-border: rgba(255, 255, 255, .05);
+  --htp-border-hard: rgba(255, 255, 255, .09);
+  --htp-accent: #8b7fc7;
+  --htp-accent-l: #a599d9;
+  --htp-glass: rgba(139, 127, 199, .12);
+  --htp-text: #E8E6F0;
+  --htp-muted: #5A566E;
 }
 
 /* ════════════════════════════════════════════════
@@ -69,58 +87,58 @@
 ════════════════════════════════════════════════ */
 [data-style="neumorphism"] .htp-root,
 [data-style="neumorphism"] .htp-detail {
-  --htp-bg:          #EAE7E1;
-  --htp-card:        #EAE7E1;
-  --htp-surface:     #EAE7E1;
-  --nm-light:        rgba(255,255,255,.80);
-  --nm-dark:         rgba(166,158,148,.38);
-  --nm-il:           rgba(255,255,255,.65);
-  --nm-id:           rgba(166,158,148,.30);
-  --htp-shadow:      3px 3px 9px var(--nm-dark), -2px -2px 7px var(--nm-light);
-  --htp-shadow-sm:   2px 2px 6px var(--nm-dark), -1px -1px 4px var(--nm-light);
-  --htp-shadow-lg:   4px 4px 12px var(--nm-dark), -3px -3px 9px var(--nm-light);
-  --htp-inset:       inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
-  --htp-inset-sm:    inset 1px 1px 3px var(--nm-id), inset -1px -1px 3px var(--nm-il);
-  --htp-border:      rgba(166,158,148,.25);
-  --htp-border-hard: rgba(166,158,148,.4);
-  --htp-accent:      #60519b;
-  --htp-accent-l:    #8b7fc7;
-  --htp-glass:       rgba(96,81,155,.10);
-  --htp-text:        #2A2535;
-  --htp-muted:       #9B95A8;
-  --htp-mono:        'Plus Jakarta Sans', system-ui, sans-serif;
-  --htp-sans:        'Plus Jakarta Sans', system-ui, sans-serif;
-  --htp-gold:        #C9961A;
-  --htp-green:       #3DAA80;
-  --htp-r-sm:        10px;
-  --htp-r-md:        16px;
-  --htp-r-lg:        20px;
-  --htp-r-xl:        26px;
-  --htp-r-pill:      100px;
+  --htp-bg: #EAE7E1;
+  --htp-card: #EAE7E1;
+  --htp-surface: #EAE7E1;
+  --nm-light: rgba(255, 255, 255, .80);
+  --nm-dark: rgba(166, 158, 148, .38);
+  --nm-il: rgba(255, 255, 255, .65);
+  --nm-id: rgba(166, 158, 148, .30);
+  --htp-shadow: 3px 3px 9px var(--nm-dark), -2px -2px 7px var(--nm-light);
+  --htp-shadow-sm: 2px 2px 6px var(--nm-dark), -1px -1px 4px var(--nm-light);
+  --htp-shadow-lg: 4px 4px 12px var(--nm-dark), -3px -3px 9px var(--nm-light);
+  --htp-inset: inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
+  --htp-inset-sm: inset 1px 1px 3px var(--nm-id), inset -1px -1px 3px var(--nm-il);
+  --htp-border: rgba(166, 158, 148, .25);
+  --htp-border-hard: rgba(166, 158, 148, .4);
+  --htp-accent: #60519b;
+  --htp-accent-l: #8b7fc7;
+  --htp-glass: rgba(96, 81, 155, .10);
+  --htp-text: #2A2535;
+  --htp-muted: #9B95A8;
+  --htp-mono: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --htp-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --htp-gold: #C9961A;
+  --htp-green: #3DAA80;
+  --htp-r-sm: 10px;
+  --htp-r-md: 16px;
+  --htp-r-lg: 20px;
+  --htp-r-xl: 26px;
+  --htp-r-pill: 100px;
 }
 
 /* ── NEUMORPHISM DARK ── */
 [data-style="neumorphism"][data-theme="dark"] .htp-root,
 [data-style="neumorphism"][data-theme="dark"] .htp-detail {
-  --htp-bg:          #1E1C28;
-  --htp-card:        #1E1C28;
-  --htp-surface:     #1E1C28;
-  --nm-light:        rgba(40,37,55,.9);
-  --nm-dark:         rgba(10,9,16,.7);
-  --nm-il:           rgba(40,37,55,.7);
-  --nm-id:           rgba(10,9,16,.6);
-  --htp-shadow:      3px 3px 8px var(--nm-dark), -2px -2px 6px var(--nm-light);
-  --htp-shadow-sm:   2px 2px 5px var(--nm-dark), -1px -1px 4px var(--nm-light);
-  --htp-shadow-lg:   4px 4px 12px var(--nm-dark), -3px -3px 8px var(--nm-light);
-  --htp-inset:       inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
-  --htp-inset-sm:    inset 1px 1px 3px var(--nm-id), inset -1px -1px 3px var(--nm-il);
-  --htp-border:      rgba(255,255,255,.05);
-  --htp-border-hard: rgba(255,255,255,.09);
-  --htp-accent:      #8b7fc7;
-  --htp-accent-l:    #a599d9;
-  --htp-glass:       rgba(139,127,199,.12);
-  --htp-text:        #E8E6F0;
-  --htp-muted:       #5A566E;
+  --htp-bg: #1E1C28;
+  --htp-card: #1E1C28;
+  --htp-surface: #1E1C28;
+  --nm-light: rgba(40, 37, 55, .9);
+  --nm-dark: rgba(10, 9, 16, .7);
+  --nm-il: rgba(40, 37, 55, .7);
+  --nm-id: rgba(10, 9, 16, .6);
+  --htp-shadow: 3px 3px 8px var(--nm-dark), -2px -2px 6px var(--nm-light);
+  --htp-shadow-sm: 2px 2px 5px var(--nm-dark), -1px -1px 4px var(--nm-light);
+  --htp-shadow-lg: 4px 4px 12px var(--nm-dark), -3px -3px 8px var(--nm-light);
+  --htp-inset: inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
+  --htp-inset-sm: inset 1px 1px 3px var(--nm-id), inset -1px -1px 3px var(--nm-il);
+  --htp-border: rgba(255, 255, 255, .05);
+  --htp-border-hard: rgba(255, 255, 255, .09);
+  --htp-accent: #8b7fc7;
+  --htp-accent-l: #a599d9;
+  --htp-glass: rgba(139, 127, 199, .12);
+  --htp-text: #E8E6F0;
+  --htp-muted: #5A566E;
 }
 
 /* ════════════════════════════════════════════════
@@ -140,11 +158,14 @@
   .htp-header {
     padding: 14px 16px 12px;
     gap: 10px;
-    top: 44px; /* debajo del HistorySectionNav */
+    top: 44px;
+    /* debajo del HistorySectionNav */
     background: var(--htp-bg, var(--card));
   }
 
-  .htp-header-left { width: 100%; }
+  .htp-header-left {
+    width: 100%;
+  }
 
   .htp-header-icon {
     width: 34px;
@@ -264,8 +285,8 @@
 
   /* Tokens más pequeños en mobile */
   .htp-shirt {
-    width: 26px;
-    height: 26px;
+    width: 62px;
+    height: 62px;
   }
 
   .htp-token-name {
@@ -415,7 +436,7 @@
   [data-style="brutalist"] .htp-hero-shield {
     border-radius: 0;
     border: 2px solid var(--htp-accent);
-    background: rgba(91,79,216,.05);
+    background: rgba(91, 79, 216, .05);
     color: var(--htp-muted);
   }
 
@@ -438,9 +459,19 @@
     background: var(--htp-bg);
   }
 
-  [data-style="brutalist"] .htp-chip--country { color: var(--htp-text); }
-  [data-style="brutalist"] .htp-chip--era     { color: var(--htp-accent); border-color: rgba(91,79,216,.3); }
-  [data-style="brutalist"] .htp-chip--form    { color: #10b981; border-color: rgba(16,185,129,.3); }
+  [data-style="brutalist"] .htp-chip--country {
+    color: var(--htp-text);
+  }
+
+  [data-style="brutalist"] .htp-chip--era {
+    color: var(--htp-accent);
+    border-color: rgba(91, 79, 216, .3);
+  }
+
+  [data-style="brutalist"] .htp-chip--form {
+    color: #10b981;
+    border-color: rgba(16, 185, 129, .3);
+  }
 
   [data-style="brutalist"] .htp-legacy-badge {
     border-radius: 0;
@@ -457,8 +488,8 @@
     color: var(--htp-gold);
     font-size: 9px;
     font-weight: 700;
-    border: 1px solid rgba(245,158,11,.35);
-    background: rgba(245,158,11,.07);
+    border: 1px solid rgba(245, 158, 11, .35);
+    background: rgba(245, 158, 11, .07);
     padding: 3px 9px;
   }
 
@@ -511,8 +542,8 @@
     font-weight: 800;
     color: #10b981;
     border-radius: 0;
-    border: 1px solid rgba(16,185,129,.3);
-    background: rgba(16,185,129,.06);
+    border: 1px solid rgba(16, 185, 129, .3);
+    background: rgba(16, 185, 129, .06);
     padding: 2px 8px;
   }
 
@@ -624,11 +655,11 @@
   [data-style="neumorphism"] .htp-header {
     background: var(--htp-bg);
     border-bottom: none;
-    box-shadow: 0 2px 12px rgba(166,158,148,.25);
+    box-shadow: 0 2px 12px rgba(166, 158, 148, .25);
   }
 
   [data-style="neumorphism"][data-theme="dark"] .htp-header {
-    box-shadow: 0 2px 12px rgba(10,9,16,.4);
+    box-shadow: 0 2px 12px rgba(10, 9, 16, .4);
   }
 
   [data-style="neumorphism"] .htp-header-title {
@@ -760,13 +791,13 @@
   [data-style="neumorphism"] .htp-hero {
     background: var(--htp-bg);
     border-bottom: none;
-    box-shadow: 0 4px 16px rgba(166,158,148,.2);
+    box-shadow: 0 4px 16px rgba(166, 158, 148, .2);
     border-radius: 0 0 var(--htp-r-xl) var(--htp-r-xl);
     overflow: hidden;
   }
 
   [data-style="neumorphism"][data-theme="dark"] .htp-hero {
-    box-shadow: 0 4px 16px rgba(10,9,16,.5);
+    box-shadow: 0 4px 16px rgba(10, 9, 16, .5);
   }
 
   [data-style="neumorphism"] .htp-hero-shield {
@@ -799,13 +830,13 @@
   [data-style="neumorphism"] .htp-chip--era {
     color: var(--htp-accent);
     background: var(--htp-glass);
-    box-shadow: var(--htp-shadow-sm), inset 0 0 0 1px rgba(96,81,155,.15);
+    box-shadow: var(--htp-shadow-sm), inset 0 0 0 1px rgba(96, 81, 155, .15);
   }
 
   [data-style="neumorphism"] .htp-chip--form {
     color: var(--htp-green);
-    background: rgba(61,170,128,.06);
-    box-shadow: var(--htp-shadow-sm), inset 0 0 0 1px rgba(61,170,128,.2);
+    background: rgba(61, 170, 128, .06);
+    box-shadow: var(--htp-shadow-sm), inset 0 0 0 1px rgba(61, 170, 128, .2);
   }
 
   [data-style="neumorphism"] .htp-legacy-badge {
@@ -825,7 +856,7 @@
     font-size: 10px;
     font-weight: 700;
     border: none;
-    background: rgba(201,150,26,.08);
+    background: rgba(201, 150, 26, .08);
     padding: 4px 12px;
     box-shadow: var(--htp-shadow-sm);
   }
@@ -834,7 +865,7 @@
   [data-style="neumorphism"] .htp-section-nav {
     background: var(--htp-bg);
     border-bottom: none;
-    box-shadow: 0 2px 8px rgba(166,158,148,.2);
+    box-shadow: 0 2px 8px rgba(166, 158, 148, .2);
     padding: 0 14px;
     gap: 4px;
     height: 48px;
@@ -843,7 +874,7 @@
   }
 
   [data-style="neumorphism"][data-theme="dark"] .htp-section-nav {
-    box-shadow: 0 2px 8px rgba(10,9,16,.35);
+    box-shadow: 0 2px 8px rgba(10, 9, 16, .35);
   }
 
   [data-style="neumorphism"] .htp-snav-btn {
@@ -904,7 +935,7 @@
     color: var(--htp-green);
     border-radius: var(--htp-r-pill);
     border: none;
-    background: rgba(61,170,128,.08);
+    background: rgba(61, 170, 128, .08);
     box-shadow: var(--htp-shadow-sm);
     padding: 3px 12px;
   }
@@ -924,7 +955,7 @@
   }
 
   [data-style="neumorphism"] .htp-lineup-row:active {
-    background: rgba(96,81,155,.06);
+    background: rgba(96, 81, 155, .06);
   }
 
   [data-style="neumorphism"] .htp-lineup-num {
@@ -1098,16 +1129,20 @@
 
   /* ════ Reducir movimiento ════ */
   @media (prefers-reduced-motion: reduce) {
+
     .htp-team-card,
     .htp-root {
       animation: none;
     }
+
     [data-style="neumorphism"] .htp-team-card {
       transition: none;
     }
   }
 
-} /* end @media 768px */
+}
+
+/* end @media 768px */
 
 /* ════════════════════════════════════════════════
    PANTALLAS MUY PEQUEÑAS — ≤380px
