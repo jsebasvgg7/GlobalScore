@@ -515,9 +515,6 @@ export default function HistoricalEventsPage({ selectedEvent, onEventSelect }) {
     return (
       <div className="hep-root hep-root--detail">
         <div className="hep-detail-back-bar">
-          <button className="hep-back-btn" onClick={() => onEventSelect && onEventSelect(null)}>
-            ← Volver a Eventos
-          </button>
         </div>
         <EventDetail eventId={selectedId} />
       </div>
