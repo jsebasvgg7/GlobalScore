@@ -10,7 +10,7 @@ import {
   getHistoricalImageUrl,
 } from "../../hooks/HooksHistory/useHistoricalEvents";
 import "../../styles/StylesHistory/HistoricalEventsPage.css";
-// import "../../styles/StylesMobile/HistoricalEventsPageMobile.css";
+import "../../styles/StylesMobile/HistoricalEventsPageMobile.css";
 
 // ─── Mapas ────────────────────────────────────────────────────────────────────
 const EVENT_TYPE_LABEL = {
