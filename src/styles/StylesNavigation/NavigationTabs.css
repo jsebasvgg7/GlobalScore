@@ -1,6 +1,11 @@
-/* ================================================
-  GLOBALSCORE
-================================================ */
+/* ════════════════════════════════════════════════
+   ███╗   ██╗ █████╗ ██╗   ██╗
+   ████╗  ██║██╔══██╗██║   ██║
+   ██╔██╗ ██║███████║██║   ██║
+   ██║╚██╗██║██╔══██║╚██╗ ██╔╝
+   ██║ ╚████║██║  ██║ ╚████╔╝ 
+   NAVIGATION — user flow
+════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700&display=swap');
 
@@ -18,7 +23,7 @@
 
 [data-theme="dark"] .nt-bar {
   background: #1e2235;
-  border-bottom-color: rgba(255,255,255,0.06);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
 }
 
 .nt-group {
@@ -49,12 +54,27 @@
   white-space: nowrap;
 }
 
-.nt-tab:hover { color: #1a1a2e; }
-.nt-tab--active { color: #5b4fd8; border-bottom-color: #5b4fd8; }
+.nt-tab:hover {
+  color: #1a1a2e;
+}
 
-[data-theme="dark"] .nt-tab         { color: #4a5568; }
-[data-theme="dark"] .nt-tab:hover   { color: #f0f1f7; }
-[data-theme="dark"] .nt-tab--active { color: #7c6fe8; border-bottom-color: #7c6fe8; }
+.nt-tab--active {
+  color: #5b4fd8;
+  border-bottom-color: #5b4fd8;
+}
+
+[data-theme="dark"] .nt-tab {
+  color: #4a5568;
+}
+
+[data-theme="dark"] .nt-tab:hover {
+  color: #f0f1f7;
+}
+
+[data-theme="dark"] .nt-tab--active {
+  color: #7c6fe8;
+  border-bottom-color: #7c6fe8;
+}
 
 .nt-count {
   font-size: 10px;
@@ -66,12 +86,19 @@
 }
 
 .nt-count--active {
-  background: rgba(91,79,216,0.15);
+  background: rgba(91, 79, 216, 0.15);
   color: #5b4fd8;
 }
 
-[data-theme="dark"] .nt-count        { background: rgba(255,255,255,0.08); color: #4a5568; }
-[data-theme="dark"] .nt-count--active { background: rgba(124,111,232,0.2); color: #7c6fe8; }
+[data-theme="dark"] .nt-count {
+  background: rgba(255, 255, 255, 0.08);
+  color: #4a5568;
+}
+
+[data-theme="dark"] .nt-count--active {
+  background: rgba(124, 111, 232, 0.2);
+  color: #7c6fe8;
+}
 
 .nt-controls {
   display: flex;
@@ -80,22 +107,40 @@
 }
 
 .nt-ctrl-btn {
-  width: 32px; height: 32px;
+  width: 32px;
+  height: 32px;
   border: 0.5px solid #d4cfc8;
   background: #f0ede8;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   color: #888;
   transition: color 0.15s, border-color 0.15s;
 }
 
-.nt-ctrl-btn:hover  { color: #5b4fd8; border-color: rgba(91,79,216,0.35); }
-.nt-ctrl-btn--active { background: #5b4fd8; border-color: #5b4fd8; color: #fff; }
+.nt-ctrl-btn:hover {
+  color: #5b4fd8;
+  border-color: rgba(91, 79, 216, 0.35);
+}
+
+.nt-ctrl-btn--active {
+  background: #5b4fd8;
+  border-color: #5b4fd8;
+  color: #fff;
+}
 
 [data-theme="dark"] .nt-ctrl-btn {
-  background: rgba(255,255,255,0.04);
-  border-color: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
   color: #4a5568;
 }
-[data-theme="dark"] .nt-ctrl-btn:hover { color: #7c6fe8; }
-[data-theme="dark"] .nt-ctrl-btn--active { background: #5b4fd8; color: #fff; }
+
+[data-theme="dark"] .nt-ctrl-btn:hover {
+  color: #7c6fe8;
+}
+
+[data-theme="dark"] .nt-ctrl-btn--active {
+  background: #5b4fd8;
+  color: #fff;
+}

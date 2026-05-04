@@ -1,13 +1,18 @@
-/* ================================================
-  GLOBALSCORE
-================================================ */
+/* ════════════════════════════════════════════════
+   ██╗      █████╗ ██╗   ██╗ ██████╗ ██╗   ██╗████████╗
+   ██║     ██╔══██╗╚██╗ ██╔╝██╔═══██╗██║   ██║╚══██╔══╝
+   ██║     ███████║ ╚████╔╝ ██║   ██║██║   ██║   ██║   
+   ██║     ██╔══██║  ╚██╔╝  ██║   ██║██║   ██║   ██║   
+   ███████╗██║  ██║   ██║   ╚██████╔╝╚██████╔╝   ██║   
+   LAYOUT UI — structure pieces
+════════════════════════════════════════════════ */
 
 .ranking-premium {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid rgba(96, 81, 155, 0.1);
-  box-shadow: 
+  box-shadow:
     0 4px 20px rgba(96, 81, 155, 0.12),
     0 0 0 1px rgba(255, 255, 255, 0.5) inset;
 }
@@ -43,9 +48,19 @@
 }
 
 @keyframes trophy-float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  25% { transform: translateY(-4px) rotate(-2deg); }
-  75% { transform: translateY(-4px) rotate(2deg); }
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
+
+  75% {
+    transform: translateY(-4px) rotate(2deg);
+  }
 }
 
 .podium-container {
@@ -95,10 +110,24 @@
   gap: 4px;
 }
 
-.rank-icon.gold { color: #60519b; filter: drop-shadow(0 2px 4px rgba(96, 81, 155, 0.5)); }
-.rank-icon.silver { color: #c0c0c0; filter: drop-shadow(0 2px 4px rgba(192, 192, 192, 0.4)); }
-.rank-icon.bronze { color: #cd7f32; filter: drop-shadow(0 2px 4px rgba(205, 127, 50, 0.4)); }
-.rank-icon.regular { color: #999; }
+.rank-icon.gold {
+  color: #60519b;
+  filter: drop-shadow(0 2px 4px rgba(96, 81, 155, 0.5));
+}
+
+.rank-icon.silver {
+  color: #c0c0c0;
+  filter: drop-shadow(0 2px 4px rgba(192, 192, 192, 0.4));
+}
+
+.rank-icon.bronze {
+  color: #cd7f32;
+  filter: drop-shadow(0 2px 4px rgba(205, 127, 50, 0.4));
+}
+
+.rank-icon.regular {
+  color: #999;
+}
 
 .podium-position {
   font-size: 12px;
@@ -151,7 +180,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .ranking-list-premium {

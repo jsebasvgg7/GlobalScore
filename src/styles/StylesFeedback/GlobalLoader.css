@@ -1,16 +1,21 @@
-/* ================================================
-  GLOBALSCORE
-================================================ */
+/* ════════════════════════════════════════════════
+   ███████╗███████╗███████╗██████╗ ██████╗  █████╗ 
+   ██╔════╝██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗
+   █████╗  █████╗  █████╗  ██████╔╝██████╔╝███████║
+   ██╔══╝  ██╔══╝  ██╔══╝  ██╔═══╝ ██╔══██╗██╔══██║
+   ██║     ███████╗███████╗██║     ██║  ██║██║  ██║
+   FEEDBACK — system response
+════════════════════════════════════════════════ */
 
 :root,
 [data-theme="light"],
 [data-theme="dark"] {
   --gl-color: var(--accent, #5b4fd8);
-  --gl-muted:  var(--border, #d4cfc8);
-  --gl-bg:     var(--bg, #f0ede8);
-  --gl-card:   var(--card, #ffffff);
-  --gl-text:   var(--muted, #a0a0b0);
-  --gl-mono:   'DM Mono', monospace;
+  --gl-muted: var(--border, #d4cfc8);
+  --gl-bg: var(--bg, #f0ede8);
+  --gl-card: var(--card, #ffffff);
+  --gl-text: var(--muted, #a0a0b0);
+  --gl-mono: 'DM Mono', monospace;
 }
 
 .gl-ring {
@@ -18,18 +23,34 @@
   flex-shrink: 0;
   border-style: solid;
   border-color: var(--gl-muted);
-  border-radius: 0;                   /* cuadrado: brutalismo puro  */
+  border-radius: 0;
   border-top-color: var(--gl-color);
   border-right-color: var(--gl-color);
   animation: gl-spin 0.75s linear infinite;
 }
 
-.gl-ring--sm  { width: 20px; height: 20px; border-width: 1.5px; }
-.gl-ring--md  { width: 32px; height: 32px; border-width: 2px;   }
-.gl-ring--lg  { width: 48px; height: 48px; border-width: 2.5px; }
+.gl-ring--sm {
+  width: 20px;
+  height: 20px;
+  border-width: 1.5px;
+}
+
+.gl-ring--md {
+  width: 32px;
+  height: 32px;
+  border-width: 2px;
+}
+
+.gl-ring--lg {
+  width: 48px;
+  height: 48px;
+  border-width: 2.5px;
+}
 
 @keyframes gl-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .gl-dots {
@@ -49,13 +70,31 @@
   animation: gl-dot-blink 0.9s ease-in-out infinite both;
 }
 
-.gl-dot:nth-child(1) { animation-delay: -0.30s; }
-.gl-dot:nth-child(2) { animation-delay: -0.15s; }
-.gl-dot:nth-child(3) { animation-delay:  0s;    }
+.gl-dot:nth-child(1) {
+  animation-delay: -0.30s;
+}
+
+.gl-dot:nth-child(2) {
+  animation-delay: -0.15s;
+}
+
+.gl-dot:nth-child(3) {
+  animation-delay: 0s;
+}
 
 @keyframes gl-dot-blink {
-  0%, 80%, 100% { opacity: 0.2; transform: scaleY(0.7); }
-  40%           { opacity: 1;   transform: scaleY(1);   }
+
+  0%,
+  80%,
+  100% {
+    opacity: 0.2;
+    transform: scaleY(0.7);
+  }
+
+  40% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
 }
 
 .btn .gl-dot,
@@ -73,9 +112,20 @@ button .gl-dot {
   padding: 40px 0;
 }
 
-.gl-inline--sm { padding: 16px 0; gap: 8px;  }
-.gl-inline--md { padding: 32px 0; gap: 10px; }
-.gl-inline--lg { padding: 48px 0; gap: 14px; }
+.gl-inline--sm {
+  padding: 16px 0;
+  gap: 8px;
+}
+
+.gl-inline--md {
+  padding: 32px 0;
+  gap: 10px;
+}
+
+.gl-inline--lg {
+  padding: 48px 0;
+  gap: 14px;
+}
 
 .gl-inline-label {
   font-size: 9px;
@@ -99,8 +149,13 @@ button .gl-dot {
 }
 
 @keyframes gl-page-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .gl-page-inner {
@@ -173,8 +228,15 @@ button .gl-dot {
 }
 
 @keyframes gl-label-fade {
-  0%, 100% { opacity: 0.5; }
-  50%       { opacity: 1;   }
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .mob-section-loading,
@@ -209,13 +271,23 @@ button .gl-dot {
   .gl-ring {
     animation-duration: 2s;
   }
+
   .gl-dot {
     animation: gl-dot-blink-reduced 1.5s ease-in-out infinite both;
   }
+
   @keyframes gl-dot-blink-reduced {
-    0%, 100% { opacity: 0.3; }
-    50%       { opacity: 1;   }
+
+    0%,
+    100% {
+      opacity: 0.3;
+    }
+
+    50% {
+      opacity: 1;
+    }
   }
+
   .gl-page-inner::before {
     animation: none;
     opacity: 0.15;

@@ -1,6 +1,11 @@
-/* ================================================
-  GLOBALSCORE
-================================================ */
+/* ════════════════════════════════════════════════
+   ██████╗ ██████╗  ██████╗ ███████╗██╗██╗     ███████╗
+   ██╔══██╗██╔══██╗██╔═══██╗██╔════╝██║██║     ██╔════╝
+   ██████╔╝██████╔╝██║   ██║█████╗  ██║██║     █████╗  
+   ██╔═══╝ ██╔══██╗██║   ██║██╔══╝  ██║██║     ██╔══╝  
+   ██║     ██║  ██║╚██████╔╝██║     ██║███████╗███████╗
+   PROFILE — user identity
+════════════════════════════════════════════════ */
 
 .history-header-compact {
   display: flex;
@@ -190,14 +195,14 @@
   border: 1px solid #e5e7eb;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 
+  box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.06),
     0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .history-match-card:hover {
   transform: translateY(-3px);
-  box-shadow: 
+  box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.1),
     0 8px 24px rgba(0, 0, 0, 0.06);
   border-color: #cbd5e1;
@@ -634,151 +639,186 @@
   .history-match-card {
     border-radius: 12px;
   }
-  
+
   .history-match-header {
     padding: 12px 16px;
     gap: 10px;
   }
+
   .history-league-info {
-gap: 8px;
-}
-.history-league-logo,
-.history-league-icon-fallback {
-width: 20px;
-height: 20px;
-}
-.history-league-name {
-font-size: 13px;
-}
-.history-match-date {
-padding: 5px 10px;
-font-size: 11px;
-gap: 5px;
-}
-.history-match-content {
-padding: 18px 16px;
-gap: 14px;
-}
-.history-team-logo-wrapper {
-width: 56px;
-height: 56px;
-border-radius: 10px;
-}
-.history-team-logo {
-width: 44px;
-height: 44px;
-}
-.history-team-emoji {
-font-size: 40px;
-}
-.history-team-name {
-font-size: 14px;
-}
-.history-prediction-section {
-min-width: 120px;
-gap: 10px;
-}
-.history-score-box {
-width: 50px;
-height: 50px;
-border-radius: 12px;
-}
-.history-score-value {
-font-size: 20px;
-}
-.history-real-result {
-padding: 7px 10px;
-}
-.history-real-label {
-font-size: 10px;
-}
-.history-real-score {
-font-size: 16px;
-}
-.history-match-footer {
-padding: 14px 16px;
-min-height: 56px;
-}
-.history-result-indicator {
-font-size: 12px;
-gap: 6px;
-padding: 7px 12px;
-}
-.history-points-badge {
-padding: 7px 12px;
-font-size: 13px;
-}
+    gap: 8px;
+  }
+
+  .history-league-logo,
+  .history-league-icon-fallback {
+    width: 20px;
+    height: 20px;
+  }
+
+  .history-league-name {
+    font-size: 13px;
+  }
+
+  .history-match-date {
+    padding: 5px 10px;
+    font-size: 11px;
+    gap: 5px;
+  }
+
+  .history-match-content {
+    padding: 18px 16px;
+    gap: 14px;
+  }
+
+  .history-team-logo-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+  }
+
+  .history-team-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .history-team-emoji {
+    font-size: 40px;
+  }
+
+  .history-team-name {
+    font-size: 14px;
+  }
+
+  .history-prediction-section {
+    min-width: 120px;
+    gap: 10px;
+  }
+
+  .history-score-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+  }
+
+  .history-score-value {
+    font-size: 20px;
+  }
+
+  .history-real-result {
+    padding: 7px 10px;
+  }
+
+  .history-real-label {
+    font-size: 10px;
+  }
+
+  .history-real-score {
+    font-size: 16px;
+  }
+
+  .history-match-footer {
+    padding: 14px 16px;
+    min-height: 56px;
+  }
+
+  .history-result-indicator {
+    font-size: 12px;
+    gap: 6px;
+    padding: 7px 12px;
+  }
+
+  .history-points-badge {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 480px) {
   .history-match-card {
-  border-radius: 12px;
+    border-radius: 12px;
   }
+
   .history-match-header {
-  padding: 12px 14px;
+    padding: 12px 14px;
   }
+
   .history-league-logo,
   .history-league-icon-fallback {
-  width: 18px;
-  height: 18px;
+    width: 18px;
+    height: 18px;
   }
+
   .history-league-name {
-  font-size: 12px;
+    font-size: 12px;
   }
+
   .history-match-date {
-  padding: 4px 9px;
-  font-size: 11px;
-  gap: 4px;
+    padding: 4px 9px;
+    font-size: 11px;
+    gap: 4px;
   }
+
   .history-match-content {
-  padding: 16px 14px;
-  gap: 12px;
+    padding: 16px 14px;
+    gap: 12px;
   }
+
   .history-team-logo-wrapper {
-  width: 52px;
-  height: 52px;
-  border-radius: 10px;
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
   }
+
   .history-team-logo {
-  width: 40px;
-  height: 40px;
+    width: 40px;
+    height: 40px;
   }
+
   .history-team-emoji {
-  font-size: 36px;
+    font-size: 36px;
   }
+
   .history-team-name {
-  font-size: 13px;
+    font-size: 13px;
   }
+
   .history-prediction-section {
-  min-width: 110px;
-  gap: 9px;
+    min-width: 110px;
+    gap: 9px;
   }
+
   .history-score-box {
-  width: 46px;
-  height: 46px;
-  border-radius: 10px;
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
   }
+
   .history-score-value {
-  font-size: 18px;
+    font-size: 18px;
   }
+
   .history-real-result {
-  padding: 6px 9px;
+    padding: 6px 9px;
   }
+
   .history-real-score {
-  font-size: 15px;
+    font-size: 15px;
   }
+
   .history-match-footer {
-  padding: 12px 14px;
-  min-height: 52px;
+    padding: 12px 14px;
+    min-height: 52px;
   }
+
   .history-result-indicator {
-  font-size: 11px;
-  gap: 5px;
-  padding: 6px 10px;
+    font-size: 11px;
+    gap: 5px;
+    padding: 6px 10px;
   }
+
   .history-points-badge {
-  padding: 6px 10px;
-  font-size: 12px;
+    padding: 6px 10px;
+    font-size: 12px;
   }
 }
 
@@ -860,7 +900,7 @@ font-size: 13px;
   border: 1px solid var(--profile-border);
   border-radius: 14px;
   min-width: 220px;
-  box-shadow: 
+  box-shadow:
     0 4px 6px rgba(0, 0, 0, 0.05),
     0 10px 25px rgba(0, 0, 0, 0.1);
   z-index: 1001;
@@ -869,8 +909,13 @@ font-size: 13px;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideDown {
@@ -878,6 +923,7 @@ font-size: 13px;
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -911,14 +957,14 @@ font-size: 13px;
 /* Modo oscuro para el modal */
 [data-theme="dark"] .sort-modal {
   background: var(--profile-card) !important;
-  border-color: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
   color: #ffffff !important;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
 }
 
 [data-theme="dark"] .sort-modal .sort-modal-header {
   background: var(--profile-hover) !important;
-  border-bottom-color: rgba(255,255,255,0.06) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
 }
 
 [data-theme="dark"] .sort-modal .sort-modal-header h4,

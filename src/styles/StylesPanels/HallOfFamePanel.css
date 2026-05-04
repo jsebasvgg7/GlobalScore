@@ -1,6 +1,11 @@
-/* ================================================
-  GLOBALSCORE
-================================================ */
+/* ════════════════════════════════════════════════
+   ██████╗  █████╗ ███╗   ██╗███████╗██╗     
+   ██╔══██╗██╔══██╗████╗  ██║██╔════╝██║     
+   ██████╔╝███████║██╔██╗ ██║█████╗  ██║     
+   ██╔═══╝ ██╔══██║██║╚██╗██║██╔══╝  ██║     
+   ██║     ██║  ██║██║ ╚████║███████╗███████╗
+   PANELS — side systems
+════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap');
 
@@ -18,13 +23,24 @@
 
 [data-theme="dark"] .hofp-root {
   background: #1a1d2e;
-  border-left-color: rgba(255,255,255,0.08);
+  border-left-color: rgba(255, 255, 255, 0.08);
 }
 
-.hofp-root::-webkit-scrollbar { width: 3px; }
-.hofp-root::-webkit-scrollbar-track { background: transparent; }
-.hofp-root::-webkit-scrollbar-thumb { background: #c8c3bb; }
-[data-theme="dark"] .hofp-root::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+.hofp-root::-webkit-scrollbar {
+  width: 3px;
+}
+
+.hofp-root::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hofp-root::-webkit-scrollbar-thumb {
+  background: #c8c3bb;
+}
+
+[data-theme="dark"] .hofp-root::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
 
 .hofp-label {
   display: flex;
@@ -43,7 +59,7 @@
 
 [data-theme="dark"] .hofp-label {
   color: #f0c040;
-  border-bottom-color: rgba(255,255,255,0.07);
+  border-bottom-color: rgba(255, 255, 255, 0.07);
 }
 
 .hofp-label-dot {
@@ -54,7 +70,9 @@
   flex-shrink: 0;
 }
 
-[data-theme="dark"] .hofp-label-dot { background: #f0c040; }
+[data-theme="dark"] .hofp-label-dot {
+  background: #f0c040;
+}
 
 .hofp-podium {
   display: flex;
@@ -70,7 +88,9 @@
   border-left: 3px solid transparent;
 }
 
-[data-theme="dark"] .hofp-step { border-bottom-color: rgba(255,255,255,0.07); }
+[data-theme="dark"] .hofp-step {
+  border-bottom-color: rgba(255, 255, 255, 0.07);
+}
 
 .hofp-step-rank {
   width: 32px;
@@ -85,7 +105,7 @@
   writing-mode: vertical-rl;
   text-orientation: mixed;
   letter-spacing: 0.08em;
-  border-right: 0.5px solid rgba(255,255,255,0.2);
+  border-right: 0.5px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Cuerpo */
@@ -152,7 +172,9 @@
   text-overflow: ellipsis;
 }
 
-[data-theme="dark"] .hofp-step-name { color: #f0f1f7; }
+[data-theme="dark"] .hofp-step-name {
+  color: #f0f1f7;
+}
 
 .hofp-step-pts {
   font-size: 12px;
@@ -186,7 +208,9 @@
   letter-spacing: 0.06em;
 }
 
-[data-theme="dark"] .hofp-step-stat-lbl { color: #4a5568; }
+[data-theme="dark"] .hofp-step-stat-lbl {
+  color: #4a5568;
+}
 
 .hofp-global {
   background: #c9a227;
@@ -203,7 +227,7 @@
   font-weight: 700;
   font-family: 'DM Mono', monospace;
   letter-spacing: 0.14em;
-  color: rgba(255,255,255,0.55);
+  color: rgba(255, 255, 255, 0.55);
   margin-bottom: 4px;
 }
 
@@ -217,7 +241,7 @@
 .hofp-global-lbl {
   font-size: 12px;
   font-family: 'DM Mono', monospace;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255, 255, 255, 0.65);
   letter-spacing: 0.04em;
 }
 
@@ -229,9 +253,18 @@
   text-align: right;
 }
 
-.hofp-global-val--gold   { color: #fff; font-size: 17px; }
-.hofp-global-val--leader { color: #1a1a2e; font-weight: 800; }
+.hofp-global-val--gold {
+  color: #fff;
+  font-size: 17px;
+}
+
+.hofp-global-val--leader {
+  color: #1a1a2e;
+  font-weight: 800;
+}
 
 @media (max-width: 1024px) {
-  .hofp-root { display: none; }
+  .hofp-root {
+    display: none;
+  }
 }

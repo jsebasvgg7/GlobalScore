@@ -1,6 +1,11 @@
-/* ================================================
-  GLOBALSCORE 
-================================================ */
+/* ════════════════════════════════════════════════
+   ██████╗ ████████╗██╗  ██╗███████╗██████╗ ███████╗
+   ██╔═══██╗╚══██╔══╝██║  ██║██╔════╝██╔══██╗██╔════╝
+   ██║   ██║   ██║   ███████║█████╗  ██████╔╝███████╗
+   ██║   ██║   ██║   ██╔══██║██╔══╝  ██╔══██╗╚════██║
+   ╚██████╔╝   ██║   ██║  ██║███████╗██║  ██║███████║
+   OTHERS — miscellaneous
+════════════════════════════════════════════════ */
 
 .htc-root {
   position: relative;
@@ -11,7 +16,7 @@
   padding: 11px 16px;
   background: var(--card, #0D0B12);
   border: none;
-  border-bottom: 0.5px solid var(--border, rgba(255,255,255,0.08));
+  border-bottom: 0.5px solid var(--border, rgba(255, 255, 255, 0.08));
   border-top: 2px solid transparent;
   cursor: pointer;
   text-align: left;
@@ -117,17 +122,20 @@
   left: -100%;
   width: 60%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(91, 79, 216, 0.08) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(91, 79, 216, 0.08) 50%,
+      transparent 100%);
   animation: htc-scan-move 2.4s linear infinite;
   pointer-events: none;
 }
 
 @keyframes htc-scan-move {
-  from { left: -60%; }
-  to   { left: 110%; }
+  from {
+    left: -60%;
+  }
+
+  to {
+    left: 110%;
+  }
 }

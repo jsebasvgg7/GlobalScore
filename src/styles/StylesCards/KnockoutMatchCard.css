@@ -1,6 +1,11 @@
-/* ================================================
-  GLOBALSCORE
-================================================ */
+/* ════════════════════════════════════════════════
+   ██████╗ █████╗ ██████╗ ██████╗ ███████╗
+  ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔════╝
+  ██║     ███████║██████╔╝██║  ██║███████╗
+  ██║     ██╔══██║██╔══██╗██║  ██║╚════██║
+  ╚██████╗██║  ██║██║  ██║██████╔╝███████║
+  CARDS — visual modules
+════════════════════════════════════════════════ */
 
 .knockout-match-card {
   padding: 16px;
@@ -135,6 +140,7 @@
     opacity: 0;
     transform: scale(0.5) rotate(-45deg);
   }
+
   100% {
     opacity: 1;
     transform: scale(1) rotate(0deg);
@@ -280,6 +286,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -290,14 +297,37 @@
   animation: cardFadeIn 0.4s ease-out backwards;
 }
 
-.knockout-match-card:nth-child(1) { animation-delay: 0.05s; }
-.knockout-match-card:nth-child(2) { animation-delay: 0.1s; }
-.knockout-match-card:nth-child(3) { animation-delay: 0.15s; }
-.knockout-match-card:nth-child(4) { animation-delay: 0.2s; }
-.knockout-match-card:nth-child(5) { animation-delay: 0.25s; }
-.knockout-match-card:nth-child(6) { animation-delay: 0.3s; }
-.knockout-match-card:nth-child(7) { animation-delay: 0.35s; }
-.knockout-match-card:nth-child(8) { animation-delay: 0.4s; }
+.knockout-match-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.knockout-match-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.knockout-match-card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.knockout-match-card:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.knockout-match-card:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.knockout-match-card:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+.knockout-match-card:nth-child(7) {
+  animation-delay: 0.35s;
+}
+
+.knockout-match-card:nth-child(8) {
+  animation-delay: 0.4s;
+}
 
 @media print {
   .knockout-match-card {
@@ -336,9 +366,12 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.5;
   }
+
   50% {
     opacity: 0.8;
   }

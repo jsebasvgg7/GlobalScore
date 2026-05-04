@@ -1,6 +1,11 @@
-/* ================================================
-  GLOBALSCORE
-================================================ */
+/* ════════════════════════════════════════════════
+   ███████╗███████╗███████╗██████╗ ██████╗  █████╗ 
+   ██╔════╝██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗
+   █████╗  █████╗  █████╗  ██████╔╝██████╔╝███████║
+   ██╔══╝  ██╔══╝  ██╔══╝  ██╔═══╝ ██╔══██╗██╔══██║
+   ██║     ███████╗███████╗██║     ██║  ██║██║  ██║
+   FEEDBACK — system response
+════════════════════════════════════════════════ */
 
 .toast-container {
   position: fixed;
@@ -35,6 +40,7 @@
     opacity: 0;
     transform: translateX(100px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -50,6 +56,7 @@
     opacity: 1;
     transform: translateX(0);
   }
+
   to {
     opacity: 0;
     transform: translateX(100px);
@@ -116,6 +123,7 @@
   from {
     transform: scaleX(1);
   }
+
   to {
     transform: scaleX(0);
   }
@@ -256,7 +264,7 @@
 [data-theme="dark"] .toast-notification {
   background: var(--card);
   border-color: rgba(139, 127, 199, 0.3);
-  box-shadow: 
+  box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(139, 127, 199, 0.2) inset;
 }
@@ -290,12 +298,12 @@
   .toast-notification {
     animation: none;
   }
-  
+
   .toast-notification.toast-exit {
     animation: none;
     opacity: 0;
   }
-  
+
   .toast-progress {
     animation: none;
   }

@@ -1,6 +1,11 @@
-/* ================================================
-  GLOBALSCORE
-================================================ */
+/* ════════════════════════════════════════════════
+   ███████╗███████╗███████╗██████╗ ██████╗  █████╗ 
+   ██╔════╝██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗
+   █████╗  █████╗  █████╗  ██████╔╝██████╔╝███████║
+   ██╔══╝  ██╔══╝  ██╔══╝  ██╔═══╝ ██╔══██╗██╔══██║
+   ██║     ███████╗███████╗██║     ██║  ██║██║  ██║
+   FEEDBACK — system response
+════════════════════════════════════════════════ */
 
 .dots-container {
   display: inline-flex;
@@ -32,10 +37,14 @@
 }
 
 @keyframes dot-bounce {
-  0%, 80%, 100% {
+
+  0%,
+  80%,
+  100% {
     opacity: 0.3;
     transform: scale(0.7) translateY(0);
   }
+
   40% {
     opacity: 1;
     transform: scale(1.2) translateY(-8px);
@@ -51,17 +60,21 @@
     gap: 5px;
     height: 18px;
   }
-  
+
   .dot {
     width: 6px;
     height: 6px;
   }
-  
+
   @keyframes dot-bounce {
-    0%, 80%, 100% {
+
+    0%,
+    80%,
+    100% {
       opacity: 0.3;
       transform: scale(0.7) translateY(0);
     }
+
     40% {
       opacity: 1;
       transform: scale(1.2) translateY(-6px);
@@ -74,17 +87,21 @@
     gap: 4px;
     height: 16px;
   }
-  
+
   .dot {
     width: 5px;
     height: 5px;
   }
-  
+
   @keyframes dot-bounce {
-    0%, 80%, 100% {
+
+    0%,
+    80%,
+    100% {
       opacity: 0.3;
       transform: scale(0.7) translateY(0);
     }
+
     40% {
       opacity: 1;
       transform: scale(1.2) translateY(-5px);
@@ -96,11 +113,14 @@
   .dot {
     animation: dot-fade 2s infinite ease-in-out both;
   }
-  
+
   @keyframes dot-fade {
-    0%, 100% {
+
+    0%,
+    100% {
       opacity: 0.4;
     }
+
     50% {
       opacity: 1;
     }
