@@ -10,6 +10,8 @@ import {
 } from "../hooks/HooksHistory/useHistoricalPlayers";
 import HistoryRightPanel from "../components/ComPanels/HistoryRightPanel";
 import TeamsRightPanel from "../components/ComPanels/TeamsRightPanel";
+import EventsRigtPanel from "../components/ComPanels/EventsRightPanel";
+import HistoricalEventsPage from "../components/ComHistory/HistoricalEventsPage";
 import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
 import HistoricalCompetitionsPage from "../components/ComHistory/HistoricalCompetitionsPage";
 import HistorySectionNav from "../components/ComHistory/HistorySectionNav.jsx";

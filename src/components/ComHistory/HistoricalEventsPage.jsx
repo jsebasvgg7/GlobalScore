@@ -10,6 +10,7 @@ import {
   getHistoricalImageUrl,
 } from "../../hooks/HooksHistory/useHistoricalEvents";
 import "../../styles/StylesHistory/HistoricalEventsPage.css";
+
 import "../../styles/StylesMobile/HistoricalEventsPageMobile.css";
 
 // ─── Mapas ────────────────────────────────────────────────────────────────────
@@ -22,7 +23,7 @@ const EVENT_TYPE_LABEL = {
 };
 
 const CAT_LABEL = { player: "Jugador", team: "Equipo" };
-const CAT_ICON  = { player: <Users2 size={10} />, team: <Shield size={10} /> };
+const CAT_ICON = { player: <Users2 size={10} />, team: <Shield size={10} /> };
 const CAT_COLOR = { player: "#8b5cf6", team: "#3b82f6" };
 
 const POSITION_ROLE_LABEL = {
@@ -41,8 +42,8 @@ const gd = (f, c) => { const d = (f || 0) - (c || 0); return d > 0 ? `+${d}` : `
 //  CARD DEL GRID
 // ══════════════════════════════════════════════════════════════════════════════
 function EventCard({ event, onClick }) {
-  const bannerUrl  = getHistoricalImageUrl(event.banner_image_path);
-  const imageUrl   = getHistoricalImageUrl(event.image_path);
+  const bannerUrl = getHistoricalImageUrl(event.banner_image_path);
+  const imageUrl = getHistoricalImageUrl(event.image_path);
   const protagonist = event.event_category === "player"
     ? event.historical_players
     : event.historical_teams;
@@ -420,8 +421,8 @@ function EventDetail({ eventId }) {
   );
 
   const bannerUrl = getHistoricalImageUrl(event.banner_image_path);
-  const imageUrl  = getHistoricalImageUrl(event.image_path);
-  const heroUrl   = bannerUrl || imageUrl;
+  const imageUrl = getHistoricalImageUrl(event.image_path);
+  const heroUrl = bannerUrl || imageUrl;
   const year = event.event_date ? new Date(event.event_date).getFullYear() : null;
   const catColor = CAT_COLOR[event.event_category] || "var(--accent)";
 
