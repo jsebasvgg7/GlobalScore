@@ -85,7 +85,7 @@
 [data-style="neumorphism"] .hcp-detail {
   --hcp-bg: #EAE7E1;
   --hcp-card: #EAE7E1;
-  --hcp-surface: #EAE7E1;
+  --hcp-surface: #F2EFE9;
   --nm-light: rgba(255, 255, 255, .80);
   --nm-dark: rgba(166, 158, 148, .38);
   --nm-il: rgba(255, 255, 255, .65);
@@ -1589,7 +1589,7 @@
 
   [data-style="neumorphism"] .hcp-section {
     padding: 0;
-    overflow: hidden;
+    overflow: visible;
   }
 
   [data-style="neumorphism"] .hcp-section-header {
@@ -1674,11 +1674,7 @@
   }
 }
 
-/* ════════════════════════════════════════════════
-   NUEVOS ELEMENTOS — meta-grid + hero limpio
-════════════════════════════════════════════════ */
 
-/* ── META GRID en tab Información ── */
 @media screen and (max-width: 768px) {
 
   .hcp-meta-grid {
@@ -1829,21 +1825,22 @@
     padding: 16px;
     border: none;
     background: var(--hcp-bg);
+    border-bottom: none;
   }
 
   [data-style="neumorphism"] .hcp-meta-item {
     border: none;
     border-radius: var(--hcp-r-md);
     box-shadow: var(--hcp-shadow-sm);
-    background: var(--hcp-bg);
-    padding: 14px 16px;
+    background: var(--hcp-surface, var(--hcp-bg));
+    padding: 10px 12px;
     gap: 10px;
     transition: box-shadow 0.18s;
   }
 
   [data-style="neumorphism"] .hcp-meta-item:hover {
     box-shadow: var(--hcp-inset-sm);
-    background: var(--hcp-bg);
+    background: var(--hcp-surface, var(--hcp-bg));
   }
 
   [data-style="neumorphism"] .hcp-meta-icon {

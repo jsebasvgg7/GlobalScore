@@ -427,10 +427,6 @@ function EventsSectionWrapper() {
   const { allEvents } = useHistoricalEvents();
   const [selectedEvent, setSelectedEvent] = useState(null);
 
-  // HistoricalEventsPage maneja su propio selectedId internamente,
-  // pero necesitamos sincronizar el evento seleccionado con el panel.
-  // Lo hacemos escuchando clics a través de un wrapper que intercepta
-  // el evento seleccionado vía callback.
   return (
     <>
       <HistoricalEventsPage
@@ -511,6 +507,7 @@ export default function HistoryPage() {
           <HistorySectionNav active={activeSection} onChange={handleSectionChange} />
           <EventsSectionWrapper />
         </div>
+        <EventsRightPanel />
       </div>
     );
   }
