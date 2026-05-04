@@ -44,6 +44,11 @@ const VALID_EVENT_FIELDS = new Set([
   "impact_text",
   "protagonist_id",
   "team_protagonist_id",
+  // ── Marcador del partido ──────────────────────
+  "score_a",
+  "score_b",
+  "team_a_name",
+  "team_b_name",
 ]);
 
 const cleanEventPayload = (formData) => {

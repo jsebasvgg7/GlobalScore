@@ -217,13 +217,18 @@ const EVENT_EMPTY = {
   title: "",
   event_type: "",
   event_date: "",
-  event_category: "player",   // ← NUEVO
-  context_text: "",           // ← NUEVO
-  impact_text: "",            // ← NUEVO
-  protagonist_id: "",         // ← NUEVO (FK a player)
-  team_protagonist_id: "",    // ← NUEVO (FK a team)
+  event_category: "player",
+  context_text: "",
+  impact_text: "",
+  protagonist_id: "",
+  team_protagonist_id: "",
   description: "",
   is_published: false,
+  // ── Marcador del partido ──────────────────────
+  score_a: "",
+  score_b: "",
+  team_a_name: "",
+  team_b_name: "",
 };
 
 // Fila vacía de alineación de evento
@@ -1549,10 +1554,7 @@ function EventPanel({
   // Alineaciones (evento jugador): filas team_a y team_b por separado
   const [lineupA, setLineupA] = useState([]);
   const [lineupB, setLineupB] = useState([]);
-  const [teamAName, setTeamAName] = useState("");
-  const [teamBName, setTeamBName] = useState("");
-  const [scoreA, setScoreA] = useState("");
-  const [scoreB, setScoreB] = useState("");
+  // team_a_name, team_b_name, score_a, score_b viven en form
 
   // Plantel (evento equipo)
   const [squad, setSquad] = useState([]);
@@ -1587,8 +1589,9 @@ function EventPanel({
       const lb = (lins || []).filter(r => r.team_side === "team_b")
         .map(r => ({ ...r, _id: r.id || Date.now() + Math.random() }));
 
-      if (la.length > 0) setTeamAName(la[0].team_name || "");
-      if (lb.length > 0) setTeamBName(lb[0].team_name || "");
+      // Recuperar nombres de equipo desde las filas de alineación (solo si el form no los tiene ya)
+      if (la.length > 0 && !form.team_a_name) set("team_a_name", la[0].team_name || "");
+      if (lb.length > 0 && !form.team_b_name) set("team_b_name", lb[0].team_name || "");
       setLineupA(la);
       setLineupB(lb);
 
@@ -1732,8 +1735,8 @@ function EventPanel({
         // Alineaciones: unir team_a + team_b con team_name inyectado
         if (onSetEventLineups) {
           const allLineup = [
-            ...lineupA.map(({ _id, ...r }) => ({ ...r, team_side: "team_a", team_name: teamAName })),
-            ...lineupB.map(({ _id, ...r }) => ({ ...r, team_side: "team_b", team_name: teamBName })),
+            ...lineupA.map(({ _id, ...r }) => ({ ...r, team_side: "team_a", team_name: form.team_a_name || "" })),
+            ...lineupB.map(({ _id, ...r }) => ({ ...r, team_side: "team_b", team_name: form.team_b_name || "" })),
           ];
           await onSetEventLineups(id, allLineup);
         }
@@ -1859,34 +1862,34 @@ function EventPanel({
           <div className="ah-event-score-row">
             <PInput
               placeholder="Equipo A"
-              value={teamAName}
-              onChange={e => setTeamAName(e.target.value)}
+              value={form.team_a_name || ""}
+              onChange={e => set("team_a_name", e.target.value)}
               style={{ flex: 2 }}
             />
             <PInput
               type="number" placeholder="0"
-              value={scoreA}
-              onChange={e => setScoreA(e.target.value)}
+              value={form.score_a ?? ""}
+              onChange={e => set("score_a", e.target.value)}
               style={{ flex: 1, textAlign: "center" }}
             />
             <span className="ah-event-score-sep">–</span>
             <PInput
               type="number" placeholder="0"
-              value={scoreB}
-              onChange={e => setScoreB(e.target.value)}
+              value={form.score_b ?? ""}
+              onChange={e => set("score_b", e.target.value)}
               style={{ flex: 1, textAlign: "center" }}
             />
             <PInput
               placeholder="Equipo B"
-              value={teamBName}
-              onChange={e => setTeamBName(e.target.value)}
+              value={form.team_b_name || ""}
+              onChange={e => set("team_b_name", e.target.value)}
               style={{ flex: 2 }}
             />
           </div>
 
           {/* Alineación Equipo A */}
           <span className="ah-panel-sep" style={{ marginTop: 8 }}>
-            Equipo A — {teamAName || "Local"}
+            Equipo A — {form.team_a_name || "Local"}
           </span>
           {loadingData ? (
             <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
@@ -1906,7 +1909,7 @@ function EventPanel({
 
           {/* Alineación Equipo B */}
           <span className="ah-panel-sep" style={{ marginTop: 8 }}>
-            Equipo B — {teamBName || "Visitante"}
+            Equipo B — {form.team_b_name || "Visitante"}
           </span>
           {loadingData ? (
             <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
