@@ -1734,3 +1734,54 @@
     margin: 0 12px 8px;
   }
 }
+
+/* ════════════════════════════════════════════════
+   MARCADOR DEL PARTIDO — Responsive
+════════════════════════════════════════════════ */
+@media (max-width: 884px) {
+  .hep-match-score {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hep-match-score-team--a,
+  .hep-match-score-team--b {
+    text-align: center;
+    border-right: none;
+    border-left: none;
+    border-bottom: 0.5px solid var(--border);
+    padding: 12px 16px;
+  }
+
+  .hep-match-score-team--b {
+    border-bottom: none;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .hep-match-score-box {
+    justify-content: center;
+    padding: 10px 20px;
+  }
+
+  .hep-match-score-num {
+    font-size: 28px;
+  }
+
+  .hep-match-score-sep {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hep-match-score-num {
+    font-size: 24px;
+  }
+
+  .hep-match-score-sep {
+    font-size: 18px;
+  }
+
+  .hep-match-score-team {
+    font-size: 12px;
+  }
+}

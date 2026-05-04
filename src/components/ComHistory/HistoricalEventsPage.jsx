@@ -147,9 +147,11 @@ function PlayerEventDetail({ event, lineups }) {
   const protagonist = event.historical_players;
   const protoImg = getHistoricalImageUrl(protagonist?.image_path);
 
-  // Identificar equipo A y B, y nombres de equipo
-  const teamAName = lineups.team_a[0]?.team_name || "Equipo A";
-  const teamBName = lineups.team_b[0]?.team_name || "Equipo B";
+  // Priorizar nombres y marcador guardados en el evento
+  const teamAName = event.team_a_name || lineups.team_a[0]?.team_name || "Equipo A";
+  const teamBName = event.team_b_name || lineups.team_b[0]?.team_name || "Equipo B";
+  const hasScore = event.score_a !== "" && event.score_a != null
+    && event.score_b !== "" && event.score_b != null;
 
   return (
     <>
@@ -189,9 +191,23 @@ function PlayerEventDetail({ event, lineups }) {
           <div className="hep-section-header">
             <span className="hep-section-label"><Shield size={10} /> El Enfrentamiento</span>
           </div>
+
+          {/* Marcador del partido */}
+          {hasScore && (
+            <div className="hep-match-score">
+              <span className="hep-match-score-team hep-match-score-team--a">{teamAName}</span>
+              <div className="hep-match-score-box">
+                <span className="hep-match-score-num">{event.score_a}</span>
+                <span className="hep-match-score-sep">–</span>
+                <span className="hep-match-score-num">{event.score_b}</span>
+              </div>
+              <span className="hep-match-score-team hep-match-score-team--b">{teamBName}</span>
+            </div>
+          )}
+
           <div className="hep-duel-layout">
             <LineupColumn players={lineups.team_a} teamName={teamAName} />
-            <div className="hep-duel-vs">VS</div>
+            <div className="hep-duel-vs">{hasScore ? "" : "VS"}</div>
             <LineupColumn players={lineups.team_b} teamName={teamBName} right />
           </div>
         </section>
@@ -481,7 +497,7 @@ function EventDetail({ eventId }) {
 // ══════════════════════════════════════════════════════════════════════════════
 //  PÁGINA PRINCIPAL
 // ══════════════════════════════════════════════════════════════════════════════
-export default function HistoricalEventsPage() {
+export default function HistoricalEventsPage({ selectedEvent, onEventSelect }) {
   const {
     events, allEvents, loading, error, reload,
     search, setSearch,
@@ -490,8 +506,8 @@ export default function HistoricalEventsPage() {
     types,
   } = useHistoricalEvents();
 
-  const [selectedId, setSelectedId] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
+  const selectedId = selectedEvent?.id;
 
   const hasFilters = filterCategory || filterType;
 
@@ -499,7 +515,7 @@ export default function HistoricalEventsPage() {
     return (
       <div className="hep-root hep-root--detail">
         <div className="hep-detail-back-bar">
-          <button className="hep-back-btn" onClick={() => setSelectedId(null)}>
+          <button className="hep-back-btn" onClick={() => onEventSelect && onEventSelect(null)}>
             ← Volver a Eventos
           </button>
         </div>
@@ -608,7 +624,7 @@ export default function HistoricalEventsPage() {
       {!loading && !error && events.length > 0 && (
         <div className="hep-grid">
           {events.map((ev) => (
-            <EventCard key={ev.id} event={ev} onClick={(e) => setSelectedId(e.id)} />
+            <EventCard key={ev.id} event={ev} onClick={(e) => onEventSelect && onEventSelect(e)} />
           ))}
         </div>
       )}

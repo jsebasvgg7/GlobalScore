@@ -421,23 +421,27 @@ function PlayerDetail({ playerId, onBack }) {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  WRAPPER DE EVENTOS (para exponer estado al panel derecho)
+//  WRAPPER DE EVENTOS (estado unificado)
 // ══════════════════════════════════════════════════════════════
-function EventsSectionWrapper() {
+function EventsSectionWrapper({ activeSection, handleSectionChange }) {
   const { allEvents } = useHistoricalEvents();
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   return (
-    <>
-      <HistoricalEventsPage
-        onEventSelect={(ev) => setSelectedEvent(ev)}
-      />
+    <div className="hp-shell">
+      <div className="hp-root">
+        <HistorySectionNav active={activeSection} onChange={handleSectionChange} />
+        <HistoricalEventsPage
+          selectedEvent={selectedEvent}
+          onEventSelect={(ev) => setSelectedEvent(ev)}
+        />
+      </div>
       <EventsRightPanel
         allEvents={allEvents}
         selectedEvent={selectedEvent}
         onSelectEvent={(ev) => setSelectedEvent(ev)}
       />
-    </>
+    </div>
   );
 }
 
@@ -501,15 +505,7 @@ export default function HistoryPage() {
 
   // ── Vista eventos ──
   if (activeSection === "events") {
-    return (
-      <div className="hp-shell">
-        <div className="hp-root">
-          <HistorySectionNav active={activeSection} onChange={handleSectionChange} />
-          <EventsSectionWrapper />
-        </div>
-        <EventsRightPanel />
-      </div>
-    );
+    return <EventsSectionWrapper activeSection={activeSection} handleSectionChange={handleSectionChange} />;
   }
 
   // ── Vista competiciones ──

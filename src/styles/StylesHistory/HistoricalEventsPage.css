@@ -867,6 +867,66 @@
 }
 
 /* ══════════════════════════════════════════════════════════
+   DETALLE: MARCADOR DEL PARTIDO
+══════════════════════════════════════════════════════════ */
+.hep-match-score {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 20px;
+  border: 0.5px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.hep-match-score-team {
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 800;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hep-match-score-team--a {
+  text-align: right;
+  border-right: 0.5px solid var(--border);
+}
+
+.hep-match-score-team--b {
+  text-align: left;
+  border-left: 0.5px solid var(--border);
+}
+
+.hep-match-score-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 26px;
+}
+
+.hep-match-score-num {
+  font-size: 38px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-primary);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.hep-match-score-sep {
+  font-size: 28px;
+  font-weight: 400;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  opacity: 0.4;
+  line-height: 1;
+}
+
+/* ══════════════════════════════════════════════════════════
    DETALLE: ENFRENTAMIENTO (duel layout)
 ══════════════════════════════════════════════════════════ */
 .hep-duel-layout {
