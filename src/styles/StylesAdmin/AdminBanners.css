@@ -1,6 +1,11 @@
-/* ================================================
-  GLOBALSCORE
-================================================ */
+/* ════════════════════════════════════════════════
+   █████╗ ██████╗ ███╗   ███╗██╗███╗   ██╗
+  ██╔══██╗██╔══██╗████╗ ████║██║████╗  ██║
+  ███████║██║  ██║██╔████╔██║██║██╔██╗ ██║
+  ██╔══██║██║  ██║██║╚██╔╝██║██║██║╚██╗██║
+  ██║  ██║██████╔╝██║ ╚═╝ ██║██║██║ ╚████║
+  ADMIN — control layer
+════════════════════════════════════════════════ */
 
 .banner-drop-zone {
   position: relative;
@@ -188,9 +193,13 @@
   font-family: inherit;
 }
 
-.assign-user-item:last-child { border-bottom: none; }
+.assign-user-item:last-child {
+  border-bottom: none;
+}
 
-.assign-user-item:hover { background: var(--card); }
+.assign-user-item:hover {
+  background: var(--card);
+}
 
 .assign-user-avatar {
   width: 34px;
@@ -289,7 +298,9 @@
   transition: background 0.15s;
 }
 
-.assign-chip-revoke:hover { background: rgba(242, 95, 92, 0.1); }
+.assign-chip-revoke:hover {
+  background: rgba(242, 95, 92, 0.1);
+}
 
 .assign-banners-grid {
   display: grid;

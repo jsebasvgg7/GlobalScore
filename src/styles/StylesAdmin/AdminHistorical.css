@@ -1,4 +1,12 @@
-/* ── Root ──────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════
+   █████╗ ██████╗ ███╗   ███╗██╗███╗   ██╗
+  ██╔══██╗██╔══██╗████╗ ████║██║████╗  ██║
+  ███████║██║  ██║██╔████╔██║██║██╔██╗ ██║
+  ██╔══██║██║  ██║██║╚██╔╝██║██║██║╚██╗██║
+  ██║  ██║██████╔╝██║ ╚═╝ ██║██║██║ ╚████║
+  ADMIN — control layer
+════════════════════════════════════════════════ */
+
 .ah-root {
   display: flex;
   flex-direction: column;
@@ -667,7 +675,8 @@
 ══════════════════════════════════════════════════════════════ */
 .ah-overlay {
   position: fixed;
-  top: var(--topbar-h, 56px);        /* respeta el header */
+  top: var(--topbar-h, 56px);
+  /* respeta el header */
   left: 0;
   right: 0;
   bottom: 0;
@@ -690,7 +699,8 @@
 ══════════════════════════════════════════════════════════════ */
 .ah-right {
   position: fixed;
-  top: var(--topbar-h, 56px);        /* queda bajo el header superior */
+  top: var(--topbar-h, 56px);
+  /* queda bajo el header superior */
   right: 0;
   width: min(60%, 800px);
   height: calc(100vh - var(--topbar-h, 56px));
@@ -704,7 +714,8 @@
   transform: translateX(100%);
   transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.28s ease;
-  z-index: 101;                       /* < topbar(200) y sidebar(300) */
+  z-index: 101;
+  /* < topbar(200) y sidebar(300) */
   box-shadow: none;
 }
 
@@ -2520,7 +2531,8 @@
   }
 
   .ah-right {
-    top: 0;                           /* en móvil no hay topbar desktop */
+    top: 0;
+    /* en móvil no hay topbar desktop */
     width: 100vw;
     height: 100dvh;
     border-left: none;
