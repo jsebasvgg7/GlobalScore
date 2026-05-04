@@ -8,9 +8,10 @@ import {
   useHistoricalPlayerDetail,
   getHistoricalImageUrl,
 } from "../hooks/HooksHistory/useHistoricalPlayers";
+import { useHistoricalEvents } from "../hooks/HooksHistory/useHistoricalEvents";
 import HistoryRightPanel from "../components/ComPanels/HistoryRightPanel";
 import TeamsRightPanel from "../components/ComPanels/TeamsRightPanel";
-import EventsRigtPanel from "../components/ComPanels/EventsRightPanel";
+import EventsRightPanel from "../components/ComPanels/EventsRightPanel";
 import HistoricalEventsPage from "../components/ComHistory/HistoricalEventsPage";
 import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
 import HistoricalCompetitionsPage from "../components/ComHistory/HistoricalCompetitionsPage";
@@ -420,6 +421,31 @@ function PlayerDetail({ playerId, onBack }) {
 }
 
 // ══════════════════════════════════════════════════════════════
+//  WRAPPER DE EVENTOS (para exponer estado al panel derecho)
+// ══════════════════════════════════════════════════════════════
+function EventsSectionWrapper() {
+  const { allEvents } = useHistoricalEvents();
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  // HistoricalEventsPage maneja su propio selectedId internamente,
+  // pero necesitamos sincronizar el evento seleccionado con el panel.
+  // Lo hacemos escuchando clics a través de un wrapper que intercepta
+  // el evento seleccionado vía callback.
+  return (
+    <>
+      <HistoricalEventsPage
+        onEventSelect={(ev) => setSelectedEvent(ev)}
+      />
+      <EventsRightPanel
+        allEvents={allEvents}
+        selectedEvent={selectedEvent}
+        onSelectEvent={(ev) => setSelectedEvent(ev)}
+      />
+    </>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
 //  PÁGINA PRINCIPAL
 // ══════════════════════════════════════════════════════════════
 export default function HistoryPage() {
@@ -441,7 +467,6 @@ export default function HistoryPage() {
   const clearFilters = () => { setFilterPosition(""); setFilterEra(""); setFilterLegacy(""); };
   const panelPlayer = hoveredPlayer || (selectedPlayerId ? allPlayers.find((p) => p.id === selectedPlayerId) || null : null);
 
-  // Helper para cambiar sección y resetear estado de jugadores
   const handleSectionChange = (section) => {
     setActiveSection(section);
     setSelectedPlayerId(null);
@@ -474,6 +499,18 @@ export default function HistoryPage() {
           <HistoricalTeamsPage />
         </div>
         <TeamsRightPanel />
+      </div>
+    );
+  }
+
+  // ── Vista eventos ──
+  if (activeSection === "events") {
+    return (
+      <div className="hp-shell">
+        <div className="hp-root">
+          <HistorySectionNav active={activeSection} onChange={handleSectionChange} />
+          <EventsSectionWrapper />
+        </div>
       </div>
     );
   }

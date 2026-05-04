@@ -1,9 +1,10 @@
-import { Users2, Shield, Trophy } from "lucide-react";
+import { Users2, Shield, Trophy, Zap } from "lucide-react";
 import "../../styles/StylesHistory/HistorySectionNav.css";
 
 const SECTIONS = [
   { key: "players", label: "Jugadores", icon: Users2 },
   { key: "teams", label: "Equipos", icon: Shield },
+  { key: "events", label: "Momentos", icon: Zap },
   { key: "competitions", label: "Competiciones", icon: Trophy },
 ];
 
