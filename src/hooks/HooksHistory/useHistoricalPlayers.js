@@ -14,12 +14,12 @@ export function getHistoricalImageUrl(imagePath) {
 export function useHistoricalPlayers() {
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState(null);
+  const [error, setError] = useState(null);
 
-  const [search, setSearch]                 = useState("");
+  const [search, setSearch] = useState("");
   const [filterPosition, setFilterPosition] = useState("");
-  const [filterEra, setFilterEra]           = useState("");
-  const [filterLegacy, setFilterLegacy]     = useState("");
+  const [filterBallonDor, setFilterBallonDor] = useState("");  // "yes" | ""
+  const [filterLegacy, setFilterLegacy] = useState("");
 
   const loadPlayers = useCallback(async () => {
     setLoading(true);
@@ -43,7 +43,6 @@ export function useHistoricalPlayers() {
 
   useEffect(() => { loadPlayers(); }, [loadPlayers]);
 
-  // Filtrado en cliente (dataset pequeño)
   const filtered = players.filter((p) => {
     const q = search.toLowerCase();
     const matchSearch =
@@ -52,17 +51,15 @@ export function useHistoricalPlayers() {
       (p.country || "").toLowerCase().includes(q) ||
       (p.description || "").toLowerCase().includes(q);
 
-    const matchPos    = !filterPosition || p.position === filterPosition;
-    const matchEra    = !filterEra      || p.era === filterEra;
-    const matchLegacy = !filterLegacy   || p.legacy_type === filterLegacy;
+    const matchPos = !filterPosition || p.position === filterPosition;
+    const matchBallonDor = !filterBallonDor || (filterBallonDor === "yes" && p.ballon_dor_count > 0);
+    const matchLegacy = !filterLegacy || p.legacy_type === filterLegacy;
 
-    return matchSearch && matchPos && matchEra && matchLegacy;
+    return matchSearch && matchPos && matchBallonDor && matchLegacy;
   });
 
-  // Opciones únicas para los selectores
   const positions = [...new Set(players.map((p) => p.position).filter(Boolean))].sort();
-  const eras      = [...new Set(players.map((p) => p.era).filter(Boolean))].sort();
-  const legacies  = [...new Set(players.map((p) => p.legacy_type).filter(Boolean))].sort();
+  const legacies = [...new Set(players.map((p) => p.legacy_type).filter(Boolean))].sort();
 
   return {
     players: filtered,
@@ -72,22 +69,22 @@ export function useHistoricalPlayers() {
     reload: loadPlayers,
     search, setSearch,
     filterPosition, setFilterPosition,
-    filterEra, setFilterEra,
+    filterBallonDor, setFilterBallonDor,
     filterLegacy, setFilterLegacy,
-    positions, eras, legacies,
+    positions, legacies,
   };
 }
 
 // ─── Hook: detalle de un jugador + relaciones ────────────────────────────────
 export function useHistoricalPlayerDetail(playerId) {
-  const [player,  setPlayer]  = useState(null);
-  const [teams,   setTeams]   = useState([]);
-  const [events,  setEvents]  = useState([]);
-  const [career,  setCareer]  = useState([]);
+  const [player, setPlayer] = useState(null);
+  const [teams, setTeams] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [career, setCareer] = useState([]);
   const [national, setNational] = useState([]);
-  const [titles,  setTitles]  = useState([]);
+  const [titles, setTitles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(null);
+  const [error, setError] = useState(null);
 
   const load = useCallback(async () => {
     if (!playerId) return;
@@ -192,9 +189,9 @@ export function useHistoricalPlayerDetail(playerId) {
 
 // ─── Hook: listado de eventos ─────────────────────────────────────────────────
 export function useHistoricalEvents() {
-  const [events, setEvents]   = useState([]);
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     (async () => {

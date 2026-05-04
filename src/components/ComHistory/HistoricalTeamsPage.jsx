@@ -11,17 +11,17 @@ import "../../styles/StylesMobile/HistoricalTeamsPageMobile.css";
 
 // ─── Mapas de traducción ──────────────────────────────────────
 const LEGACY_TEAM_LABEL = {
-  "Dynastic":    "Dinástico",
-  "Innovative":  "Innovador",
+  "Dynastic": "Dinástico",
+  "Innovative": "Innovador",
   "Continental": "Continental",
-  "National":    "Nacional",
+  "National": "Nacional",
 };
 
 const LEGACY_COLOR = {
-  "Dynastic":    "#f59e0b",
-  "Innovative":  "#8b5cf6",
+  "Dynastic": "#f59e0b",
+  "Innovative": "#8b5cf6",
   "Continental": "#3b82f6",
-  "National":    "#10b981",
+  "National": "#10b981",
 };
 
 const POSITION_ROLE_LABEL = {
@@ -34,9 +34,9 @@ const POSITION_ROLE_LABEL = {
 
 // ── Secciones de navegación ───────────────────────────────────
 const SECTIONS = [
-  { key: "squad",   label: "Alineación",  icon: Shield  },
-  { key: "history", label: "Historia",    icon: Trophy  },
-  { key: "titles",  label: "Palmarés",    icon: Star    },
+  { key: "squad", label: "Alineación", icon: Shield },
+  { key: "history", label: "Historia", icon: Trophy },
+  { key: "titles", label: "Palmarés", icon: Star },
 ];
 
 // ══════════════════════════════════════════════════════════════
@@ -54,7 +54,7 @@ function RetroField({ lineup, primaryColor, secondaryColor }) {
     return (r * 0.299 + g * 0.587 + b * 0.114) < 128;
   };
   const textColor = isDark(primaryColor) ? "#fff" : "#111";
-  const numColor  = isDark(primaryColor) ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.75)";
+  const numColor = isDark(primaryColor) ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.75)";
 
   return (
     <div className="htp-field-wrap">
@@ -65,49 +65,49 @@ function RetroField({ lineup, primaryColor, secondaryColor }) {
           {/* Fondo césped */}
           <defs>
             <pattern id="grass" x="0" y="0" width="300" height="30" patternUnits="userSpaceOnUse">
-              <rect width="300" height="15" fill="#2d7a2d"/>
-              <rect y="15" width="300" height="15" fill="#267226"/>
+              <rect width="300" height="15" fill="#2d7a2d" />
+              <rect y="15" width="300" height="15" fill="#267226" />
             </pattern>
           </defs>
-          <rect width="300" height="420" fill="url(#grass)" rx="4"/>
+          <rect width="300" height="420" fill="url(#grass)" rx="4" />
 
           {/* Borde campo */}
-          <rect x="12" y="12" width="276" height="396" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5"/>
+          <rect x="12" y="12" width="276" height="396" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" />
 
           {/* Línea central */}
-          <line x1="12" y1="210" x2="288" y2="210" stroke="rgba(255,255,255,0.7)" strokeWidth="1.2"/>
+          <line x1="12" y1="210" x2="288" y2="210" stroke="rgba(255,255,255,0.7)" strokeWidth="1.2" />
 
           {/* Círculo central */}
-          <circle cx="150" cy="210" r="42" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.2"/>
-          <circle cx="150" cy="210" r="2.5" fill="rgba(255,255,255,0.8)"/>
+          <circle cx="150" cy="210" r="42" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.2" />
+          <circle cx="150" cy="210" r="2.5" fill="rgba(255,255,255,0.8)" />
 
           {/* Área grande arriba */}
-          <rect x="72" y="12" width="156" height="58" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.2"/>
+          <rect x="72" y="12" width="156" height="58" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.2" />
           {/* Área pequeña arriba */}
-          <rect x="108" y="12" width="84" height="26" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1"/>
+          <rect x="108" y="12" width="84" height="26" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1" />
           {/* Punto penalti arriba */}
-          <circle cx="150" cy="56" r="2" fill="rgba(255,255,255,0.75)"/>
+          <circle cx="150" cy="56" r="2" fill="rgba(255,255,255,0.75)" />
           {/* Arco área arriba */}
-          <path d="M 106 70 A 44 44 0 0 0 194 70" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1"/>
+          <path d="M 106 70 A 44 44 0 0 0 194 70" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1" />
 
           {/* Área grande abajo */}
-          <rect x="72" y="350" width="156" height="58" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.2"/>
+          <rect x="72" y="350" width="156" height="58" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.2" />
           {/* Área pequeña abajo */}
-          <rect x="108" y="382" width="84" height="26" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1"/>
+          <rect x="108" y="382" width="84" height="26" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1" />
           {/* Punto penalti abajo */}
-          <circle cx="150" cy="364" r="2" fill="rgba(255,255,255,0.75)"/>
+          <circle cx="150" cy="364" r="2" fill="rgba(255,255,255,0.75)" />
           {/* Arco área abajo */}
-          <path d="M 106 350 A 44 44 0 0 1 194 350" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1"/>
+          <path d="M 106 350 A 44 44 0 0 1 194 350" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1" />
 
           {/* Porterías */}
-          <rect x="120" y="6" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1"/>
-          <rect x="120" y="404" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1"/>
+          <rect x="120" y="6" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
+          <rect x="120" y="404" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
 
           {/* Banderines */}
-          <circle cx="12" cy="12" r="3" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1"/>
-          <circle cx="288" cy="12" r="3" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1"/>
-          <circle cx="12" cy="408" r="3" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1"/>
-          <circle cx="288" cy="408" r="3" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1"/>
+          <circle cx="12" cy="12" r="3" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1" />
+          <circle cx="288" cy="12" r="3" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1" />
+          <circle cx="12" cy="408" r="3" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1" />
+          <circle cx="288" cy="408" r="3" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1" />
         </svg>
 
         {/* Jugadores sobre el campo */}
@@ -123,7 +123,7 @@ function RetroField({ lineup, primaryColor, secondaryColor }) {
               className={`htp-player-token ${hovered === player.id ? "htp-player-token--hovered" : ""}`}
               style={{
                 left: `${(cx / 300) * 100}%`,
-                top:  `${(cy / 420) * 100}%`,
+                top: `${(cy / 420) * 100}%`,
               }}
               onMouseEnter={() => setHovered(player.id)}
               onMouseLeave={() => setHovered(null)}
@@ -210,9 +210,9 @@ function TeamDetail({ teamId, onBack }) {
   const { team, lineup, titles, loading, error, reload } = useHistoricalTeamDetail(teamId);
   const [activeSection, setActiveSection] = useState("squad");
   const sectionRefs = {
-    squad:   useRef(null),
+    squad: useRef(null),
     history: useRef(null),
-    titles:  useRef(null),
+    titles: useRef(null),
   };
 
   const scrollTo = (key) => {
@@ -237,7 +237,7 @@ function TeamDetail({ teamId, onBack }) {
     </div>
   );
 
-  const imgUrl  = getHistoricalImageUrl(team.image_path);
+  const imgUrl = getHistoricalImageUrl(team.image_path);
   const legColor = LEGACY_COLOR[team.legacy_type] || "var(--accent)";
 
   return (
@@ -262,11 +262,11 @@ function TeamDetail({ teamId, onBack }) {
           <div className="htp-hero-info">
             <h1 className="htp-hero-name">{team.name}</h1>
             <div className="htp-hero-chips">
-              {team.country       && <span className="htp-chip htp-chip--country"><MapPin size={9}/>{team.country}</span>}
-              {team.founded_year  && <span className="htp-chip"><Calendar size={9}/>{team.founded_year}</span>}
+              {team.country && <span className="htp-chip htp-chip--country"><MapPin size={9} />{team.country}</span>}
+              {team.founded_year && <span className="htp-chip"><Calendar size={9} />{team.founded_year}</span>}
               {team.era_dominance && <span className="htp-chip htp-chip--era">{team.era_dominance}</span>}
-              {team.formation     && <span className="htp-chip htp-chip--form">{team.formation}</span>}
-              {team.manager       && <span className="htp-chip"><User2 size={9}/>{team.manager}</span>}
+              {team.formation && <span className="htp-chip htp-chip--form">{team.formation}</span>}
+              {team.manager && <span className="htp-chip"><User2 size={9} />{team.manager}</span>}
             </div>
             <div className="htp-hero-bottom">
               {team.legacy_type && (
@@ -291,7 +291,7 @@ function TeamDetail({ teamId, onBack }) {
             key={key}
             className={`htp-snav-btn ${activeSection === key ? "htp-snav-btn--active" : ""}`}
             onClick={() => scrollTo(key)}
-            style={ activeSection === key ? { "--snav-c": team.primary_color || "var(--accent)" } : {} }
+            style={activeSection === key ? { "--snav-c": team.primary_color || "var(--accent)" } : {}}
           >
             <Icon size={12} />
             {label}
@@ -299,37 +299,38 @@ function TeamDetail({ teamId, onBack }) {
         ))}
       </nav>
 
+
       {/* ═══════════════════════════════════════
-          SECCIÓN 1: ALINEACIÓN
+          SECCIÓN 1: HISTORIA
       ═══════════════════════════════════════ */}
-      <section ref={sectionRefs.squad} className="htp-section" id="squad">
+      <section ref={sectionRefs.history} className="htp-section" id="history">
         <div className="htp-section-header">
-          <span className="htp-section-label"><Shield size={11}/> Alineación Histórica</span>
-          {team.formation && <span className="htp-formation-tag">{team.formation}</span>}
+          <span className="htp-section-label"><Trophy size={11} /> Por qué es histórico</span>
         </div>
 
-        {lineup.length === 0 ? (
-          <div className="htp-empty-lineup">
-            <Shield size={28} strokeWidth={1} />
-            <p>Alineación no disponible</p>
+        {team.historical_note ? (
+          <div className="htp-history-body">
+            {team.historical_note.split("\n").map((p, i) =>
+              p.trim() ? <p key={i}>{p.trim()}</p> : null
+            )}
+          </div>
+        ) : team.description ? (
+          <div className="htp-history-body">
+            {team.description.split("\n").map((p, i) =>
+              p.trim() ? <p key={i}>{p.trim()}</p> : null
+            )}
           </div>
         ) : (
-          <div className="htp-squad-layout">
-            <RetroField
-              lineup={lineup}
-              primaryColor={team.primary_color}
-              secondaryColor={team.secondary_color}
-            />
-            <LineupList lineup={lineup} primaryColor={team.primary_color} />
-          </div>
+          <p className="htp-history-empty">Sin descripción histórica.</p>
         )}
+
       </section>
-       {/* ═══════════════════════════════════════
+      {/* ═══════════════════════════════════════
           SECCIÓN 2: PALMARÉS
       ═══════════════════════════════════════ */}
       <section ref={sectionRefs.titles} className="htp-section htp-section--last" id="titles">
         <div className="htp-section-header">
-          <span className="htp-section-label"><Star size={11}/> Palmarés</span>
+          <span className="htp-section-label"><Star size={11} /> Palmarés</span>
         </div>
 
         {titles.length === 0 ? (
@@ -353,43 +354,42 @@ function TeamDetail({ teamId, onBack }) {
           </div>
         )}
       </section>
-
-
       {/* ═══════════════════════════════════════
-          SECCIÓN 3: HISTORIA
+          SECCIÓN 3: ALINEACIÓN
       ═══════════════════════════════════════ */}
-      <section ref={sectionRefs.history} className="htp-section" id="history">
+      <section ref={sectionRefs.squad} className="htp-section" id="squad">
         <div className="htp-section-header">
-          <span className="htp-section-label"><Trophy size={11}/> Por qué es histórico</span>
+          <span className="htp-section-label"><Shield size={11} /> Alineación Histórica</span>
+          {team.formation && <span className="htp-formation-tag">{team.formation}</span>}
         </div>
 
-        {team.historical_note ? (
-          <div className="htp-history-body">
-            {team.historical_note.split("\n").map((p, i) =>
-              p.trim() ? <p key={i}>{p.trim()}</p> : null
-            )}
-          </div>
-        ) : team.description ? (
-          <div className="htp-history-body">
-            {team.description.split("\n").map((p, i) =>
-              p.trim() ? <p key={i}>{p.trim()}</p> : null
-            )}
+        {lineup.length === 0 ? (
+          <div className="htp-empty-lineup">
+            <Shield size={28} strokeWidth={1} />
+            <p>Alineación no disponible</p>
           </div>
         ) : (
-          <p className="htp-history-empty">Sin descripción histórica.</p>
+          <div className="htp-squad-layout">
+            <RetroField
+              lineup={lineup}
+              primaryColor={team.primary_color}
+              secondaryColor={team.secondary_color}
+            />
+            <LineupList lineup={lineup} primaryColor={team.primary_color} />
+          </div>
         )}
-
       </section>
+
     </div>
   );
 }
-     
+
 
 // ══════════════════════════════════════════════════════════════
 //  CARD DE EQUIPO EN LA GRILLA
 // ══════════════════════════════════════════════════════════════
 function TeamCard({ team, onClick }) {
-  const imgUrl   = getHistoricalImageUrl(team.image_path);
+  const imgUrl = getHistoricalImageUrl(team.image_path);
   const legColor = LEGACY_COLOR[team.legacy_type] || "var(--accent)";
 
   return (
@@ -469,7 +469,7 @@ export default function HistoricalTeamsPage({ rightPanelRef }) {
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
-          {search && <button className="htp-search-clear" onClick={() => setSearch("")}><X size={11}/></button>}
+          {search && <button className="htp-search-clear" onClick={() => setSearch("")}><X size={11} /></button>}
         </div>
       </header>
 
@@ -483,7 +483,7 @@ export default function HistoricalTeamsPage({ rightPanelRef }) {
       {error && !loading && (
         <div className="htp-state-error">
           <AlertCircle size={18} /><p>{error}</p>
-          <button className="htp-retry-btn" onClick={reload}><RefreshCw size={12}/> Reintentar</button>
+          <button className="htp-retry-btn" onClick={reload}><RefreshCw size={12} /> Reintentar</button>
         </div>
       )}
       {!loading && !error && teams.length === 0 && (

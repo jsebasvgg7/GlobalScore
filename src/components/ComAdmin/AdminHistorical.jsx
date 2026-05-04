@@ -144,7 +144,7 @@ const FORMATION_DEFAULTS = {
 // ─── Objetos vacíos ───────────────────────────────────────────────────────────
 const PLAYER_EMPTY = {
   name: "", country: "", position: "", birth_year: "", death_year: "",
-  era: "", legacy_type: "", significance_level: 3,
+  ballon_dor_count: 0, legacy_type: "", significance_level: 3,
   description: "", impact_summary: "", is_published: false,
 };
 const TEAM_EMPTY = {
@@ -616,8 +616,15 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
             <PField label="Año fallec.">
               <PInput type="number" value={form.death_year || ""} onChange={e => set("death_year", e.target.value)} placeholder="(si aplica)" />
             </PField>
-            <PField label="Era" hint="Ej: 1956-1977">
-              <PInput value={form.era || ""} onChange={e => set("era", e.target.value)} placeholder="1956-1977" />
+            <PField label="Balones de Oro" hint="0 si no tiene">
+              <PInput
+                type="number"
+                min="0"
+                max="10"
+                value={form.ballon_dor_count ?? 0}
+                onChange={e => set("ballon_dor_count", parseInt(e.target.value) || 0)}
+                placeholder="0"
+              />
             </PField>
           </div>
         </div>
@@ -2222,8 +2229,12 @@ export default function AdminHistorical() {
   const selectedId = panel?.data?.id || null;
 
   const renderPlayerMeta = (p) =>
-    [p.country, POSITION_LABEL[p.position] || p.position, p.era, LEGACY_PLAYER_LABEL[p.legacy_type] || p.legacy_type]
-      .filter(Boolean).join(" · ");
+    [
+      p.country,
+      POSITION_LABEL[p.position] || p.position,
+      p.ballon_dor_count > 0 ? ` ${p.ballon_dor_count} Balón${p.ballon_dor_count > 1 ? "es" : ""} de Oro` : null,
+      LEGACY_PLAYER_LABEL[p.legacy_type] || p.legacy_type,
+    ].filter(Boolean).join(" · ");
 
   const renderTeamMeta = (t) =>
     [t.country, t.era_dominance, LEGACY_TEAM_LABEL[t.legacy_type] || t.legacy_type]

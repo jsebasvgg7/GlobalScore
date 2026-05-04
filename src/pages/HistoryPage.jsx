@@ -97,7 +97,14 @@ function PlayerCard({ player, onClick, isActive, onMouseEnter, onMouseLeave }) {
         <div className="hp-card-meta">
           {player.country && <span className="hp-card-country">{player.country}</span>}
           {player.position && <><span className="hp-card-sep">·</span><span className="hp-card-position">{POSITION_LABEL[player.position] || player.position}</span></>}
-          {player.era && <><span className="hp-card-sep">·</span><span className="hp-card-era">{player.era}</span></>}
+          {player.ballon_dor_count > 0 && (
+            <>
+              <span className="hp-card-sep">·</span>
+              <span className="hp-card-era" title="Balones de Oro">
+                {player.ballon_dor_count}
+              </span>
+            </>
+          )}
         </div>
         {player.impact_summary && <p className="hp-card-summary">{player.impact_summary}</p>}
         <div className="hp-card-footer">
@@ -178,7 +185,11 @@ function PlayerDetail({ playerId, onBack }) {
           <div className="hp-detail-chips">
             {player.country && <span className="hp-detail-chip hp-chip--country">{player.country}</span>}
             {player.position && <span className="hp-detail-chip hp-chip--pos">{POSITION_LABEL[player.position] || player.position}</span>}
-            {player.era && <span className="hp-detail-chip hp-chip--era">{player.era}</span>}
+            {player.ballon_dor_count > 0 && (
+              <span className="hp-detail-chip hp-chip--era">
+                {player.ballon_dor_count} Balón{player.ballon_dor_count > 1 ? "es" : ""} de Oro
+              </span>
+            )}
             {lifespan && <span className="hp-detail-chip hp-chip--life">{lifespan}</span>}
           </div>
           <div className="hp-detail-sig-row">
@@ -458,13 +469,12 @@ export default function HistoryPage() {
     players, allPlayers, loading, error, reload,
     search, setSearch,
     filterPosition, setFilterPosition,
-    filterEra, setFilterEra,
+    filterBallonDor, setFilterBallonDor,
     filterLegacy, setFilterLegacy,
-    positions, eras, legacies,
+    positions, legacies,
   } = useHistoricalPlayers();
 
-  const hasActiveFilters = filterPosition || filterEra || filterLegacy;
-  const clearFilters = () => { setFilterPosition(""); setFilterEra(""); setFilterLegacy(""); };
+  const hasActiveFilters = filterPosition || filterBallonDor || filterLegacy; const clearFilters = () => { setFilterPosition(""); setFilterBallonDor(""); setFilterLegacy(""); };
   const panelPlayer = hoveredPlayer || (selectedPlayerId ? allPlayers.find((p) => p.id === selectedPlayerId) || null : null);
 
   const handleSectionChange = (section) => {
@@ -569,10 +579,14 @@ export default function HistoryPage() {
                 </select>
               </div>
               <div className="hp-filter-group">
-                <label className="hp-filter-label">Era</label>
-                <select className="hp-filter-select" value={filterEra} onChange={(e) => setFilterEra(e.target.value)}>
-                  <option value="">Todas</option>
-                  {eras.map((e) => <option key={e}>{e}</option>)}
+                <label className="hp-filter-label">Balón de Oro</label>
+                <select
+                  className="hp-filter-select"
+                  value={filterBallonDor}
+                  onChange={(e) => setFilterBallonDor(e.target.value)}
+                >
+                  <option value="">Todos</option>
+                  <option value="yes">Con Balón de Oro</option>
                 </select>
               </div>
               <div className="hp-filter-group">

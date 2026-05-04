@@ -9,31 +9,31 @@ import "../../styles/StylesPanels/HistoryRightPanel.css";
 // ── Helpers ───────────────────────────────────────────────────
 const LEGACY_COLOR = {
   "Goal Scorer": "#f59e0b",
-  "Tactician":   "#3b82f6",
-  "Innovator":   "#8b5cf6",
-  "Leader":      "#10b981",
-  "Goalkeeper":  "#ec4899",
+  "Tactician": "#3b82f6",
+  "Innovator": "#8b5cf6",
+  "Leader": "#10b981",
+  "Goalkeeper": "#ec4899",
 };
 
 const LEGACY_LABEL = {
   "Goal Scorer": "Goleador",
-  "Tactician":   "Táctico",
-  "Innovator":   "Genio",
-  "Leader":      "Líder",
-  "Goalkeeper":  "Portero",
+  "Tactician": "Táctico",
+  "Innovator": "Genio",
+  "Leader": "Líder",
+  "Goalkeeper": "Portero",
 };
 
 const POSITION_LABEL = {
-  "Forward":    "DEL",
+  "Forward": "DEL",
   "Midfielder": "MED",
-  "Defender":   "DEF",
+  "Defender": "DEF",
   "Goalkeeper": "POR",
 };
 
 const POSITION_ICON = {
-  "Forward":    "⚡",
+  "Forward": "⚡",
   "Midfielder": "🎯",
-  "Defender":   "🛡️",
+  "Defender": "🛡️",
   "Goalkeeper": "🧤",
 };
 
@@ -98,8 +98,10 @@ function SelectedPlayerBlock({ player }) {
             <span className="hrp-selected-meta">
               {[player.country, POSITION_LABEL[player.position] || player.position].filter(Boolean).join(" · ")}
             </span>
-            {player.era && (
-              <span className="hrp-selected-era">{player.era}</span>
+            {player.ballon_dor_count > 0 && (
+              <span className="hrp-selected-era">
+                {player.ballon_dor_count} Balón{player.ballon_dor_count > 1 ? "es" : ""} de Oro
+              </span>
             )}
           </div>
         </div>
@@ -143,7 +145,7 @@ function CatalogStats({ allPlayers }) {
     return acc;
   }, {});
 
-  const goats     = allPlayers.filter((p) => p.significance_level === 5).length;
+  const goats = allPlayers.filter((p) => p.significance_level === 5).length;
   const published = allPlayers.filter((p) => p.is_published !== false).length;
 
   const topPositions = Object.entries(byPosition)
@@ -270,7 +272,7 @@ function TopPlayersBlock({ allPlayers, onSelect }) {
                 </span>
               </div>
               <div className="hrp-top-sig">
-                {[1,2,3,4,5].map((n) => (
+                {[1, 2, 3, 4, 5].map((n) => (
                   <div
                     key={n}
                     className="hrp-top-dot"
@@ -301,7 +303,10 @@ function GoatFooter({ allPlayers }) {
         <div className="hrp-goat-info">
           <span className="hrp-goat-name">{goat.name}</span>
           <span className="hrp-goat-meta">
-            {[goat.country, goat.era].filter(Boolean).join(" · ")}
+            {[
+              goat.country,
+              goat.ballon_dor_count > 0 ? ` ${goat.ballon_dor_count}` : null
+            ].filter(Boolean).join(" · ")}
           </span>
         </div>
         <span className="hrp-goat-chip">★</span>
