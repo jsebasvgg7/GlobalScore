@@ -302,14 +302,20 @@
   /* ── Duel layout ── */
   .hep-duel-layout {
     grid-template-columns: 1fr;
+    gap: 20px;
+    border: none;
+    background: transparent;
+  }
+
+  .hep-lineup-col {
+    border: 0.5px solid var(--border);
+    background: var(--card);
+    border-radius: var(--hep-r-md, 8px);
+    overflow: hidden;
   }
 
   .hep-duel-vs {
-    border-left: none;
-    border-right: none;
-    border-top: 0.5px solid var(--border);
-    border-bottom: 0.5px solid var(--border);
-    padding: 10px 0;
+    display: none; /* Hide VS when stacked and separated */
   }
 
   .hep-lineup-col--right .hep-lineup-row {
@@ -1283,9 +1289,16 @@
   /* Duel layout neumorphism */
   [data-style="neumorphism"] .hep-duel-layout {
     border: none;
-    border-radius: var(--hep-r-md);
+    box-shadow: none;
+    background: transparent;
+    gap: 16px;
+  }
+
+  [data-style="neumorphism"] .hep-lineup-col {
+    background: var(--hep-bg);
+    border-radius: var(--hep-r-lg);
     box-shadow: var(--hep-shadow);
-    overflow: hidden;
+    border: none;
   }
 
   [data-style="neumorphism"] .hep-lineup-team-name {
