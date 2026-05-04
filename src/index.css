@@ -211,10 +211,16 @@ button {
   outline-offset: 2px;
 }
 
+/* ════════════════════════════════════════════════
+   ██████╗  █████╗ ██████╗ ██╗  ██╗
+   ██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝
+   ██║  ██║███████║██████╔╝█████╔╝ 
+   ██║  ██║██╔══██║██╔══██╗██╔═██╗ 
+   ██████╔╝██║  ██║██║  ██║██║  ██╗
+   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
+   DARK — brutalist night system
+════════════════════════════════════════════════ */
 
-/* ================================================================
-   1. TOKENS GLOBALES
-================================================================ */
 [data-theme="dark"] {
   --bg: #13111A;
   --card: #1A1824;
@@ -492,7 +498,7 @@ button {
 
 /* ── BRUTALIST dark ── */
 [data-style="brutalist"][data-theme="dark"] .mhd-header {
-  background: #0e0f14;
+  background: #1A1824;
   border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
@@ -544,7 +550,7 @@ button {
 
 /* Bottom nav brutalist dark */
 [data-style="brutalist"][data-theme="dark"] .mhd-bottom-nav {
-  background: #0e0f14;
+  background: #1A1824;
   border-top-color: rgba(255, 255, 255, 0.08);
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.55);
 }

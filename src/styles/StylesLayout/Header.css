@@ -77,17 +77,6 @@
   z-index: 0;
 }
 
-[data-theme="dark"] .gs-sidebar {
-  background: var(--sb-bg-dark);
-  border-right-color: var(--sb-border-dark);
-}
-
-[data-theme="dark"] .gs-sidebar::after {
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(255, 255, 255, 0.02) 20px),
-    repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(255, 255, 255, 0.02) 20px);
-}
-
 .gs-logo-wrap {
   width: 100%;
   height: var(--topbar-h);
@@ -167,14 +156,6 @@
   letter-spacing: 0.08em;
   color: #ccc;
   writing-mode: horizontal-tb;
-}
-
-[data-theme="dark"] .gs-sidebar-divider::before {
-  background: var(--sb-border-dark);
-}
-
-[data-theme="dark"] .gs-sidebar-divider span {
-  color: #2a2d38;
 }
 
 .gs-nav {
@@ -352,10 +333,6 @@
   position: relative;
   z-index: 2;
   flex-shrink: 0;
-}
-
-[data-theme="dark"] .gs-sidebar-bottom {
-  border-top-color: var(--sb-border-dark);
 }
 
 .gs-season-block {
@@ -661,4 +638,276 @@
   .vega-root .nt-bar {
     margin-top: 0 !important;
   }
+}
+
+/* ════════════════════════════════════════════════
+   ██████╗  █████╗ ██████╗ ██╗  ██╗
+   ██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝
+   ██║  ██║███████║██████╔╝█████╔╝ 
+   ██║  ██║██╔══██║██╔══██╗██╔═██╗ 
+   ██████╔╝██║  ██║██║  ██║██║  ██╗
+   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
+   DARK — brutalist night system
+════════════════════════════════════════════════ */
+
+[data-theme="dark"] .gs-sidebar {
+  background: #0D0B12;
+  border-right-color: #2A2638;
+}
+
+[data-theme="dark"] .gs-sidebar::after {
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(139, 127, 199, 0.03) 20px),
+    repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(139, 127, 199, 0.03) 20px);
+}
+
+[data-theme="dark"] .gs-logo-wrap {
+  border-bottom-color: #2A2638;
+}
+
+[data-theme="dark"] .gs-logo-btn::after {
+  color: #38334F;
+}
+
+[data-theme="dark"] .gs-sidebar-divider::before {
+  background: #2A2638;
+}
+
+[data-theme="dark"] .gs-sidebar-divider span {
+  color: #38334F;
+}
+
+[data-theme="dark"] .gs-nav-btn {
+  color: #6E6680;
+}
+
+[data-theme="dark"] .gs-nav-btn[data-index]::before {
+  color: #38334F;
+}
+
+[data-theme="dark"] .gs-nav-btn:hover {
+  background: rgba(139, 127, 199, 0.1);
+  color: #C4BBE8;
+}
+
+[data-theme="dark"] .gs-nav-btn--active {
+  background: #7366B3;
+  color: #fff !important;
+}
+
+[data-theme="dark"] .gs-nav-btn--active[data-index]::before {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+[data-theme="dark"] .gs-nav-btn--active:hover {
+  background: #8B7FC7 !important;
+}
+
+[data-theme="dark"] .gs-tooltip {
+  background: #F0EDF8;
+  color: #0D0B12;
+}
+
+[data-theme="dark"] .gs-tooltip::before {
+  border-right-color: #F0EDF8;
+}
+
+[data-theme="dark"] .gs-season-block {
+  border-bottom-color: #2A2638;
+}
+
+[data-theme="dark"] .gs-season-label {
+  color: #38334F;
+}
+
+[data-theme="dark"] .gs-season-year {
+  color: #C9A227;
+}
+
+[data-theme="dark"] .gs-sidebar-bottom {
+  border-top-color: #2A2638;
+}
+
+/* Topbar */
+[data-theme="dark"] .gs-topbar {
+  background: #0D0B12;
+  border-bottom-color: #2A2638;
+}
+
+[data-theme="dark"] .gs-breadcrumb-app {
+  color: #F0EDF8;
+}
+
+[data-theme="dark"] .gs-breadcrumb-sep {
+  color: #38334F;
+}
+
+[data-theme="dark"] .gs-breadcrumb-page {
+  color: #6E6680;
+}
+
+[data-theme="dark"] .gs-clock {
+  border-color: #2A2638;
+  color: #6E6680;
+}
+
+[data-theme="dark"] .gs-topbar-icon-btn {
+  border-color: #2A2638;
+  color: #6E6680;
+}
+
+[data-theme="dark"] .gs-topbar-icon-btn:hover {
+  color: #A599D9;
+  border-color: #38334F;
+}
+
+[data-theme="dark"] .gs-bell-dot {
+  border-color: #0D0B12;
+}
+
+[data-theme="dark"] .gs-user-chip {
+  border-color: #2A2638;
+}
+
+[data-theme="dark"] .gs-user-chip:hover {
+  border-color: rgba(139, 127, 199, 0.5);
+}
+
+[data-theme="dark"] .gs-user-name {
+  color: #F0EDF8;
+}
+
+[data-theme="dark"] .gs-user-role {
+  color: #6E6680;
+}
+
+[data-theme="dark"] .gs-sidebar {
+  background: #0D0B12;
+  border-right-color: #2A2638;
+}
+
+[data-theme="dark"] .gs-sidebar::after {
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(139, 127, 199, 0.03) 20px),
+    repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(139, 127, 199, 0.03) 20px);
+}
+
+[data-theme="dark"] .gs-logo-wrap {
+  border-bottom-color: #2A2638;
+}
+
+[data-theme="dark"] .gs-logo-btn::after {
+  color: #38334F;
+}
+
+[data-theme="dark"] .gs-sidebar-divider::before {
+  background: #2A2638;
+}
+
+[data-theme="dark"] .gs-sidebar-divider span {
+  color: #38334F;
+}
+
+[data-theme="dark"] .gs-nav-btn {
+  color: #6E6680;
+}
+
+[data-theme="dark"] .gs-nav-btn[data-index]::before {
+  color: #38334F;
+}
+
+[data-theme="dark"] .gs-nav-btn:hover {
+  background: rgba(139, 127, 199, 0.1);
+  color: #C4BBE8;
+}
+
+[data-theme="dark"] .gs-nav-btn--active {
+  background: #7366B3;
+  color: #fff !important;
+}
+
+[data-theme="dark"] .gs-nav-btn--active[data-index]::before {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+[data-theme="dark"] .gs-nav-btn--active:hover {
+  background: #8B7FC7 !important;
+}
+
+[data-theme="dark"] .gs-tooltip {
+  background: #F0EDF8;
+  color: #0D0B12;
+}
+
+[data-theme="dark"] .gs-tooltip::before {
+  border-right-color: #F0EDF8;
+}
+
+[data-theme="dark"] .gs-season-block {
+  border-bottom-color: #2A2638;
+}
+
+[data-theme="dark"] .gs-season-label {
+  color: #38334F;
+}
+
+[data-theme="dark"] .gs-season-year {
+  color: #C9A227;
+}
+
+[data-theme="dark"] .gs-sidebar-bottom {
+  border-top-color: #2A2638;
+}
+
+/* Topbar */
+[data-theme="dark"] .gs-topbar {
+  background: #0D0B12;
+  border-bottom-color: #2A2638;
+}
+
+[data-theme="dark"] .gs-breadcrumb-app {
+  color: #F0EDF8;
+}
+
+[data-theme="dark"] .gs-breadcrumb-sep {
+  color: #38334F;
+}
+
+[data-theme="dark"] .gs-breadcrumb-page {
+  color: #6E6680;
+}
+
+[data-theme="dark"] .gs-clock {
+  border-color: #2A2638;
+  color: #6E6680;
+}
+
+[data-theme="dark"] .gs-topbar-icon-btn {
+  border-color: #2A2638;
+  color: #6E6680;
+}
+
+[data-theme="dark"] .gs-topbar-icon-btn:hover {
+  color: #A599D9;
+  border-color: #38334F;
+}
+
+[data-theme="dark"] .gs-bell-dot {
+  border-color: #0D0B12;
+}
+
+[data-theme="dark"] .gs-user-chip {
+  border-color: #2A2638;
+}
+
+[data-theme="dark"] .gs-user-chip:hover {
+  border-color: rgba(139, 127, 199, 0.5);
+}
+
+[data-theme="dark"] .gs-user-name {
+  color: #F0EDF8;
+}
+
+[data-theme="dark"] .gs-user-role {
+  color: #6E6680;
 }

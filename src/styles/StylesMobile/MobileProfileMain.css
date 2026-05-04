@@ -54,9 +54,9 @@
 
 [data-style="brutalist"][data-theme="dark"] .mpm-root,
 [data-style="brutalist"][data-theme="dark"] .mpm-sub {
-  --mpm-bg: #1a1d2e;
-  --mpm-card: #252936;
-  --mpm-surface: #1e2235;
+  --mpm-bg: #1A1824;
+  --mpm-card: #1A1824;
+  --mpm-surface: #0D0B12;
   --mpm-border: rgba(255, 255, 255, .08);
   --mpm-border2: rgba(255, 255, 255, .14);
   --mpm-text: #f0f1f7;
