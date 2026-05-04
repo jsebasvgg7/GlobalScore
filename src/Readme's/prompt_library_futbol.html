@@ -1,0 +1,403 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.container { padding: 1.5rem 0; }
+.header { margin-bottom: 1.5rem; }
+.header h2 { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.header p { font-size: 13px; color: var(--color-text-secondary); }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 12px; overflow: hidden; }
+.card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; user-select: none; }
+.card-header:hover { background: var(--color-background-secondary); }
+.card-left { display: flex; align-items: center; gap: 12px; }
+.badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+.badge-1 { background: #EEEDFE; color: #3C3489; }
+.badge-2 { background: #E1F5EE; color: #085041; }
+.badge-3 { background: #E6F1FB; color: #0C447C; }
+.badge-4 { background: #FAEEDA; color: #633806; }
+.badge-5 { background: #FAECE7; color: #712B13; }
+.card-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.card-meta { font-size: 12px; color: var(--color-text-secondary); }
+.chevron { font-size: 12px; color: var(--color-text-secondary); transition: transform 0.2s; }
+.chevron.open { transform: rotate(180deg); }
+.card-body { display: none; padding: 0 16px 16px; }
+.card-body.open { display: block; }
+.prompt-box { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 14px; font-family: var(--font-mono); font-size: 12px; line-height: 1.7; color: var(--color-text-primary); white-space: pre-wrap; word-break: break-word; border: 0.5px solid var(--color-border-tertiary); max-height: 280px; overflow-y: auto; margin-bottom: 12px; }
+.btn-copy { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; transition: background 0.15s; }
+.btn-copy:hover { background: var(--color-background-secondary); }
+.btn-copy.copied { color: #0F6E56; border-color: #5DCAA5; background: #E1F5EE; }
+.icon { width: 14px; height: 14px; }
+</style>
+
+<div class="container">
+  <div class="header">
+    <h2>Biblioteca de prompts de fútbol</h2>
+    <p>Haz clic en una tarjeta para expandir y copiar el prompt al portapapeles.</p>
+  </div>
+  <div id="cards"></div>
+</div>
+
+<script>
+const prompts = [
+  {
+    id: 1,
+    title: "Ficha de futbolista",
+    meta: "Datos, trayectoria, palmarés",
+    badge: "badge-1",
+    text: `SIEMPRE responde en formato de terminal.
+
+[]
+
+Crea una ficha completa y detallada de un futbolista profesional siguiendo estrictamente la siguiente estructura:
+
+DATOS BÁSICOS:
+- País de nacimiento
+- Año de nacimiento
+- Año de fallecimiento (si aplica)
+- Posición
+- Era dominante
+
+────────────────────────────
+
+Historia (100 palabras):
+Redacta un resumen narrativo de la vida y carrera del jugador, incluyendo su origen, formación, estilo de juego y momentos más importantes.
+
+¿Por qué importa en el fútbol? (50 palabras):
+Explica de forma breve el impacto del jugador en el fútbol, su legado, influencia o relevancia histórica.
+
+────────────────────────────
+
+IMPORTANTE:
+Las siguientes secciones deben generarse en formato TABULADO (usar TAB real, no "|").
+
+NO incluir encabezados.
+NO incluir explicaciones.
+SOLO filas de datos.
+
+────────────────────────────
+
+TRAYECTORIA CLUBES (FORMATO IMPORT):
+Formato:
+Club\tPaís\tAño inicio\tAño fin\tPartidos\tGoles\tAsistencias\tPuntuación
+
+Ejemplo:
+FC Barcelona\tEspaña\t1995\t2000\t186\t85\t35\t9.8
+
+Generar múltiples filas en orden cronológico.
+
+────────────────────────────
+
+TRAYECTORIA SELECCIÓN (FORMATO IMPORT):
+Formato:
+Selección\tAño inicio\tAño fin\tPartidos\tGoles\tAsistencias\tPuntuación
+
+Ejemplo:
+Argentina\t1993\t2006\t91\t34\t12\t9.5
+
+────────────────────────────
+
+PALMARÉS (FORMATO IMPORT):
+Formato:
+Tipo\tTítulo\tAño\tCompeticiónID\tCantidad
+
+Tipos válidos:
+club | seleccion | individual
+
+Ejemplo:
+club\tLa Liga\t1998-99\t\t1
+seleccion\tCopa América\t1993\t\t1
+individual\tBalón de Oro\t2001\t\t1
+
+────────────────────────────
+
+REGLAS:
+- Usar tabulaciones reales (no usar "|")
+- No añadir encabezados en secciones de importación
+- Mantener coherencia histórica
+- Campos vacíos se dejan vacíos
+- Puntuación entre 1 y 10 con decimal permitido
+- Orden cronológico obligatorio en trayectorias`
+  },
+  {
+    id: 2,
+    title: "Ficha de equipo",
+    meta: "Plantilla, palmarés, narrativa",
+    badge: "badge-2",
+    text: `SIEMPRE responde en formato de terminal.
+[]
+Crea una ficha completa y detallada de un equipo de fútbol siguiendo estrictamente la siguiente estructura:
+
+DATOS BÁSICOS:
+- Nombre del equipo
+- País
+- Año de fundación
+- Era de dominancia (ej: 2008-2015)
+- Años activos (si aplica, ej: 1974-1982)
+- Director Técnico emblemático
+- Tipo de legado (ej: Dominante, Revolucionario, Histórico, etc.)
+- Color primario (hex)
+- Color secundario (hex)
+
+NARRATIVA:
+
+Descripción general (100 palabras):
+Resumen de la historia del equipo, estilo de juego, identidad y contexto histórico.
+
+¿Por qué es histórico? (50 palabras):
+Explica qué lo hace único, influyente o legendario en el fútbol.
+
+ALINEACIÓN TITULAR (11 jugadores):
+Usa el siguiente formato:
+Número | Nombre del jugador | Posición (role) |
+
+Debe haber exactamente 11 jugadores.
+
+PALMARÉS:
+Lista los títulos del equipo usando el siguiente formato:
+Nombre del título | Año (puede ser único o rango, ej: 1974 o 1971-1975)
+
+Reglas:
+- No omitir ningún campo
+- Mantener coherencia histórica
+- Usar nombres reales cuando sea posible
+- Respetar formato exacto para facilitar guardado en base de datos`
+  },
+  {
+    id: 3,
+    title: "Ficha de competición",
+    meta: "Grupos, eliminatorias, liga",
+    badge: "badge-3",
+    text: `SIEMPRE responde en formato de terminal.
+
+Crea una ficha estructurada de una competición de fútbol siguiendo este formato optimizado para importación masiva.
+
+────────────────────────────
+
+DATOS BÁSICOS:
+
+Nombre: 
+Tipo: 
+Formato: (groups_knockout | league_only | knockout_only)
+Año: 
+País / Sede: 
+Edición: 
+Número de equipos: 
+
+CAMPEÓN:
+- Equipo registrado: Nombre
+O
+- Texto libre: Nombre
+
+CONTEXTO HISTÓRICO (300 palabras EXACTAS, dividido en 3 párrafos):
+- Deben ser exactamente 3 párrafos
+- Cada párrafo debe aportar información (no relleno)
+- Incluir contexto, desarrollo del torneo y relevancia histórica
+
+────────────────────────────
+
+IMPORTANTE:
+Las siguientes secciones deben generarse en formato TABULADO (separado por TABS reales, no espacios).
+NO incluir encabezados.
+NO incluir explicaciones.
+SOLO filas de datos.
+
+────────────────────────────
+
+SI el formato es "groups_knockout":
+
+FASE DE GRUPOS (TAB):
+Formato esperado (ejemplo):
+Grupo A\tBrasil\t1\t6\t2\t0\t1\t5\t2
+Grupo A\tAlemania\t2\t4\t1\t1\t1\t3\t3
+
+ELIMINATORIAS (TAB):
+Formato esperado (ejemplo):
+Cuartos\t1\tBrasil\t3\t1\tPolonia\t\t\tteam_a\t
+Semifinal\t1\tBrasil\t3\t2\tAlemania\t\t\tteam_a\tPrórroga
+Final\t1\tBrasil\t4\t1\tItalia\t\t\tteam_a\t
+
+────────────────────────────
+
+SI el formato es "league_only":
+
+TABLA FINAL (TAB):
+Formato esperado (ejemplo):
+1\tInter de Milán\t72\t22\t6\t6\t60\t30\ttrue
+2\tJuventus\t65\t19\t8\t7\t58\t35\tfalse
+
+────────────────────────────
+
+SI el formato es "knockout_only":
+
+ELIMINATORIAS (TAB):
+Formato esperado (ejemplo):
+Final\t1\tBrasil\t4\t1\tItalia\t\t\tteam_a\t
+
+────────────────────────────
+
+REGLAS:
+- Usar tabulaciones reales (copiar exactamente el formato del ejemplo)
+- No usar "|", comas ni texto decorativo
+- No añadir encabezados
+- Mantener consistencia histórica
+- Campos vacíos se dejan vacíos (como en los ejemplos)
+- Respetar el orden exacto de columnas`
+  },
+  {
+    id: 4,
+    title: "Evento histórico — jugador",
+    meta: "Partido, alineación, impacto",
+    badge: "badge-4",
+    text: `SIEMPRE responde en formato de terminal.
+
+[]
+
+Crea un evento histórico centrado en un futbolista siguiendo estrictamente la siguiente estructura:
+
+DATOS DEL EVENTO:
+- Título
+- Tipo de evento (ej: Partido histórico, Actuación individual, Final, etc.)
+- Fecha (YYYY-MM-DD)
+- Contexto (3 líneas explicando la situación previa)
+- Descripción (3 líneas explicando qué ocurrió)
+
+PARTIDO:
+Formato:
+Equipo A | Goles | Goles | Equipo B
+
+ALINEACIONES:
+
+Equipo A:
+Número | Jugador | Posición | Protagonista (true/false)
+
+Equipo B:
+Número | Jugador | Posición | Protagonista (true/false)
+
+Reglas:
+- Deben haber mínimo 11 jugadores por equipo
+- EXACTAMENTE 1 jugador con "true" como protagonista en todo el evento
+- Usar posiciones reales (GK, DF, MF, FW o similares)
+
+IMPORTACIÓN (DATA IMPORT - LINEUP):
+Genera también el formato listo para importar:
+
+Ejemplo:
+10\tMaradona\tFW\ttrue
+
+(Separado por tabulación)
+
+IMPACTO:
+(100 palabras obligatorias en 3 párrafos)
+Explica el impacto histórico del evento, consecuencias y legado en el fútbol.`
+  },
+  {
+    id: 5,
+    title: "Evento histórico — equipo",
+    meta: "Plantel, competición, legado",
+    badge: "badge-5",
+    text: `SIEMPRE responde en formato de terminal.
+
+[]
+
+Crea un evento histórico centrado en un equipo siguiendo estrictamente la siguiente estructura:
+
+DATOS DEL EVENTO:
+- Título
+- Tipo de evento (ej: Temporada histórica, Campeonato, Invicto, etc.)
+- Fecha (YYYY-MM-DD)
+- Contexto (3 líneas explicando la situación previa)
+- Descripción (3 líneas explicando qué ocurrió)
+
+PLANTEL:
+Formato:
+Número | Jugador | Posición | Jugador clave (true/false)
+
+Reglas:
+- Mínimo 11 jugadores
+- Puedes marcar varios como "true"
+- Usar posiciones reales
+
+IMPORTACIÓN (DATA IMPORT - SQUAD):
+Ejemplo:
+10\tWirtz\tMF\ttrue
+
+(Separado por tabulación)
+
+COMPETICIÓN:
+
+Elegir uno:
+
+1) FORMATO LIGA:
+Tabla:
+Posición | Equipo | Pts | G | E | P | GF | GC | Campeón(true/false)
+
+IMPORTACIÓN:
+1\tBayer Leverkusen\t90\t28\t6\t0\t89\t24\ttrue
+
+---
+
+2) FORMATO ELIMINATORIA:
+Partidos:
+Ronda | Local | Goles | Goles | Visitante | Ganador(team_a/team_b) | Decisivo(true/false)
+
+IMPORTACIÓN:
+Final\tLeverkusen\t1\t0\tKaiserslautern\tteam_a\ttrue
+
+---
+
+IMPACTO:
+(100 palabras obligatorias en 3 párrafos)
+Explica la importancia histórica del equipo o evento, legado y consecuencias en el fútbol.`
+  }
+];
+
+const container = document.getElementById('cards');
+
+prompts.forEach(p => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-header" onclick="toggle(${p.id})">
+      <div class="card-left">
+        <span class="badge ${p.badge}">#${p.id}</span>
+        <div>
+          <div class="card-title">${p.title}</div>
+          <div class="card-meta">${p.meta}</div>
+        </div>
+      </div>
+      <span class="chevron" id="chev-${p.id}">▼</span>
+    </div>
+    <div class="card-body" id="body-${p.id}">
+      <div class="prompt-box">${p.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      <button class="btn-copy" id="btn-${p.id}" onclick="copyPrompt(${p.id})">
+        <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="5" y="5" width="9" height="9" rx="1.5"/>
+          <path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/>
+        </svg>
+        Copiar prompt
+      </button>
+    </div>
+  `;
+  container.appendChild(card);
+});
+
+function toggle(id) {
+  const body = document.getElementById('body-' + id);
+  const chev = document.getElementById('chev-' + id);
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+function copyPrompt(id) {
+  const p = prompts.find(x => x.id === id);
+  navigator.clipboard.writeText(p.text).then(() => {
+    const btn = document.getElementById('btn-' + id);
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 8.5l3.5 3.5 7-7"/></svg> ¡Copiado!`;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/></svg> Copiar prompt`;
+    }, 2000);
+  });
+}
+</script>
