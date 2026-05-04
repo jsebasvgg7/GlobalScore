@@ -51,12 +51,12 @@ export const KNOCKOUT_ROUNDS = [
 // Categorías de evento
 const EVENT_CATEGORIES = [
   { value: "player", label: "🎭 Jugador" },
-  { value: "team",   label: "🏆 Equipo"  },
+  { value: "team", label: "🏆 Equipo" },
 ];
 
 // Tipos de competición para eventos de equipo
 const EVENT_COMP_TYPES = [
-  { value: "league",   label: "Liga / Tabla" },
+  { value: "league", label: "Liga / Tabla" },
   { value: "knockout", label: "Eliminatorias" },
 ];
 // ─── Mapas de traducción ──────────────────────────────────────────────────────
@@ -1529,10 +1529,10 @@ function EventPanel({
   event, players, teams, competitions, onSave, onClose,
   onGetRelations, onSetRelations,
   // Nuevas props de datos de evento
-  onGetEventLineups,   onSetEventLineups,
-  onGetEventSquad,     onSetEventSquad,
+  onGetEventLineups, onSetEventLineups,
+  onGetEventSquad, onSetEventSquad,
   onGetEventStandings, onSetEventStandings,
-  onGetEventKnockout,  onSetEventKnockout,
+  onGetEventKnockout, onSetEventKnockout,
 }) {
   const isEdit = !!event?.id;
   const [form, setForm] = useState(event?.id ? { ...EVENT_EMPTY, ...event } : { ...EVENT_EMPTY });
@@ -1570,14 +1570,14 @@ function EventPanel({
     // Cargar relaciones legacy + nuevas tablas
     Promise.all([
       onGetRelations(event.id),
-      onGetEventLineups   ? onGetEventLineups(event.id)   : Promise.resolve([]),
-      onGetEventSquad     ? onGetEventSquad(event.id)     : Promise.resolve([]),
+      onGetEventLineups ? onGetEventLineups(event.id) : Promise.resolve([]),
+      onGetEventSquad ? onGetEventSquad(event.id) : Promise.resolve([]),
       onGetEventStandings ? onGetEventStandings(event.id) : Promise.resolve([]),
-      onGetEventKnockout  ? onGetEventKnockout(event.id)  : Promise.resolve([]),
+      onGetEventKnockout ? onGetEventKnockout(event.id) : Promise.resolve([]),
     ]).then(([rel, lins, sq, sts, ko]) => {
       setRelations({
-        playerIds:      rel.players.map(p => p.player_id),
-        teamIds:        rel.teams.map(t => t.team_id),
+        playerIds: rel.players.map(p => p.player_id),
+        teamIds: rel.teams.map(t => t.team_id),
         competitionIds: rel.competitions.map(c => c.competition_id),
       });
 
@@ -1599,7 +1599,7 @@ function EventPanel({
       setEventKnockout(koData);
       if (koData.length > 0) setEventCompType("knockout");
 
-    }).catch(() => {}).finally(() => setLoadingData(false));
+    }).catch(() => { }).finally(() => setLoadingData(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -1612,11 +1612,30 @@ function EventPanel({
 
   const updateRow = (setter) => (idx, key, val) =>
     setter(prev => prev.map((r, i) => i === idx ? { ...r, [key]: val } : r));
+  const handleEventImport = (rows, importMode, subMode) => {
+    const apply = (setter) => {
+      if (importMode === "append") {
+        setter(prev => [...prev, ...rows]);
+      } else {
+        setter(rows);
+      }
+    };
+
+    switch (subMode) {
+      case "event_lineup_a": apply(setLineupA); break;
+      case "event_lineup_b": apply(setLineupB); break;
+      case "event_squad": apply(setSquad); break;
+      case "event_standings": apply(setEventStandings); break;
+      case "event_knockout": apply(setEventKnockout); break;
+      default: break;
+    }
+  };
+
 
   // ── Columnas tablas ────────────────────────────────────────────────────────
   const lineupCols = [
-    { key: "shirt_number",  label: "#",       flex: 0.6, type: "number", placeholder: "10" },
-    { key: "player_name",   label: "Jugador", flex: 2,   placeholder: "Maradona" },
+    { key: "shirt_number", label: "#", flex: 0.6, type: "number", placeholder: "10" },
+    { key: "player_name", label: "Jugador", flex: 2, placeholder: "Maradona" },
     {
       key: "position_role", label: "Pos.", flex: 1, type: "select",
       options: [{ value: "", label: "—" }, ...POSITION_ROLES.map(r => ({ value: r, label: r }))],
@@ -1628,8 +1647,8 @@ function EventPanel({
   ];
 
   const squadCols = [
-    { key: "shirt_number",  label: "#",      flex: 0.6, type: "number", placeholder: "10" },
-    { key: "player_name",   label: "Nombre", flex: 2,   placeholder: "Wirtz" },
+    { key: "shirt_number", label: "#", flex: 0.6, type: "number", placeholder: "10" },
+    { key: "player_name", label: "Nombre", flex: 2, placeholder: "Wirtz" },
     {
       key: "position_role", label: "Pos.", flex: 1, type: "select",
       options: [{ value: "", label: "—" }, ...POSITION_ROLES.map(r => ({ value: r, label: r }))],
@@ -1641,14 +1660,14 @@ function EventPanel({
   ];
 
   const evStandingCols = [
-    { key: "position",      label: "#",      flex: 0.6, type: "number", placeholder: "1" },
-    { key: "team_name",     label: "Equipo", flex: 2,   placeholder: "Bayer Leverkusen" },
-    { key: "points",        label: "Pts",    flex: 0.8, type: "number", placeholder: "90" },
-    { key: "wins",          label: "G",      flex: 0.7, type: "number", placeholder: "28" },
-    { key: "draws",         label: "E",      flex: 0.7, type: "number", placeholder: "6" },
-    { key: "losses",        label: "P",      flex: 0.7, type: "number", placeholder: "0" },
-    { key: "goals_for",     label: "GF",     flex: 0.7, type: "number", placeholder: "89" },
-    { key: "goals_against", label: "GC",     flex: 0.7, type: "number", placeholder: "24" },
+    { key: "position", label: "#", flex: 0.6, type: "number", placeholder: "1" },
+    { key: "team_name", label: "Equipo", flex: 2, placeholder: "Bayer Leverkusen" },
+    { key: "points", label: "Pts", flex: 0.8, type: "number", placeholder: "90" },
+    { key: "wins", label: "G", flex: 0.7, type: "number", placeholder: "28" },
+    { key: "draws", label: "E", flex: 0.7, type: "number", placeholder: "6" },
+    { key: "losses", label: "P", flex: 0.7, type: "number", placeholder: "0" },
+    { key: "goals_for", label: "GF", flex: 0.7, type: "number", placeholder: "89" },
+    { key: "goals_against", label: "GC", flex: 0.7, type: "number", placeholder: "24" },
     {
       key: "is_champion", label: "🏆", flex: 0.7, type: "select",
       options: [{ value: "false", label: "—" }, { value: "true", label: "🏆" }],
@@ -1660,14 +1679,14 @@ function EventPanel({
       key: "round", label: "Ronda", flex: 1.5, type: "select",
       options: KNOCKOUT_ROUNDS.map(r => ({ value: r, label: r })),
     },
-    { key: "team_a",  label: "Local",    flex: 2, placeholder: "Leverkusen" },
-    { key: "score_a", label: "G(L)",     flex: 0.7, type: "number", placeholder: "1" },
-    { key: "score_b", label: "G(V)",     flex: 0.7, type: "number", placeholder: "0" },
-    { key: "team_b",  label: "Visitante",flex: 2, placeholder: "Kaiserslautern" },
+    { key: "team_a", label: "Local", flex: 2, placeholder: "Leverkusen" },
+    { key: "score_a", label: "G(L)", flex: 0.7, type: "number", placeholder: "1" },
+    { key: "score_b", label: "G(V)", flex: 0.7, type: "number", placeholder: "0" },
+    { key: "team_b", label: "Visitante", flex: 2, placeholder: "Kaiserslautern" },
     {
       key: "winner", label: "Ganador", flex: 1, type: "select",
       options: [
-        { value: "",       label: "—" },
+        { value: "", label: "—" },
         { value: "team_a", label: "Local" },
         { value: "team_b", label: "Visitante" },
       ],
@@ -1680,15 +1699,15 @@ function EventPanel({
 
   // ── Tabs dinámicas ─────────────────────────────────────────────────────────
   const isPlayer = form.event_category === "player";
-  const isTeam   = form.event_category === "team";
+  const isTeam = form.event_category === "team";
 
   const EVENT_TABS = [
-    { key: "info",    label: "Info" },
-    isPlayer && { key: "lineup",  label: "Alineaciones" },
-    isTeam   && { key: "squad",   label: "Plantel" },
-    isTeam   && { key: "tabla",   label: "Competición" },
+    { key: "info", label: "Info" },
+    isPlayer && { key: "lineup", label: "Alineaciones" },
+    isTeam && { key: "squad", label: "Plantel" },
+    isTeam && { key: "tabla", label: "Competición" },
     { key: "impacto", label: "Impacto" },
-    { key: "vinculos",label: "Vínculos" },
+    { key: "vinculos", label: "Vínculos" },
   ].filter(Boolean);
 
   // Si el tab activo dejó de ser válido al cambiar categoría, volver a info
@@ -1821,6 +1840,13 @@ function EventPanel({
       {/* ── TAB ALINEACIONES (evento jugador) ── */}
       {tab === "lineup" && (
         <div className="ah-panel-section">
+
+          <DataImporter
+            mode="event_lineup_a"
+            allowModeSwitch={true}
+            onImport={handleEventImport}
+          />
+
           <span className="ah-panel-sep">Protagonista</span>
           <PField label="Jugador protagonista">
             <PSelect value={form.protagonist_id || ""} onChange={e => set("protagonist_id", e.target.value)}>
@@ -1904,6 +1930,12 @@ function EventPanel({
       {/* ── TAB PLANTEL (evento equipo) ── */}
       {tab === "squad" && (
         <div className="ah-panel-section ah-panel-section--table">
+          <DataImporter
+            mode="event_squad"
+            allowModeSwitch={false}
+            onImport={(rows, importMode) => handleEventImport(rows, importMode, "event_squad")}
+          />
+
           <span className="ah-panel-sep">Equipo protagonista</span>
           <PField label="Equipo">
             <PSelect value={form.team_protagonist_id || ""} onChange={e => set("team_protagonist_id", e.target.value)}>
@@ -1935,6 +1967,13 @@ function EventPanel({
       {/* ── TAB COMPETICIÓN (evento equipo) ── */}
       {tab === "tabla" && (
         <div className="ah-panel-section ah-panel-section--table">
+
+          <DataImporter
+            mode="event_standings"
+            allowModeSwitch={false}
+            onImport={(rows, importMode) => handleEventImport(rows, importMode, "event_standings")}
+          />
+
           <span className="ah-panel-sep">Tipo de competición</span>
           <div className="ah-event-comptype-toggle">
             {EVENT_COMP_TYPES.map(({ value, label }) => (
@@ -1969,6 +2008,12 @@ function EventPanel({
           </>}
 
           {eventCompType === "knockout" && <>
+            <DataImporter
+              mode="event_knockout"
+              allowModeSwitch={false}
+              onImport={(rows, importMode) => handleEventImport(rows, importMode, "event_knockout")}
+            />
+
             <span className="ah-panel-sep" style={{ marginTop: 8 }}>Partidos clave</span>
             {loadingData ? (
               <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
@@ -2143,10 +2188,10 @@ export default function AdminHistorical() {
     getCompetitionGroups, setCompetitionGroups,
     getCompetitionStandings, setCompetitionStandings,
     getCompetitionKnockout, setCompetitionKnockout,
-    getEventLineups,    setEventLineups,
-    getEventSquad,      setEventSquad,
-    getEventStandings,  setEventStandings,
-    getEventKnockout,   setEventKnockout,
+    getEventLineups, setEventLineups,
+    getEventSquad, setEventSquad,
+    getEventStandings, setEventStandings,
+    getEventKnockout, setEventKnockout,
   } = useAdminHistorical();
 
   const q = search.toLowerCase();
@@ -2317,11 +2362,11 @@ export default function AdminHistorical() {
               <EventPanel
                 event={panel.data} players={players} teams={teams} competitions={competitions}
                 onSave={handleSaveEvent} onClose={closePanel}
-                onGetRelations={getEventRelations}    onSetRelations={setEventRelations}
-                onGetEventLineups={getEventLineups}   onSetEventLineups={setEventLineups}
-                onGetEventSquad={getEventSquad}       onSetEventSquad={setEventSquad}
+                onGetRelations={getEventRelations} onSetRelations={setEventRelations}
+                onGetEventLineups={getEventLineups} onSetEventLineups={setEventLineups}
+                onGetEventSquad={getEventSquad} onSetEventSquad={setEventSquad}
                 onGetEventStandings={getEventStandings} onSetEventStandings={setEventStandings}
-                onGetEventKnockout={getEventKnockout}  onSetEventKnockout={setEventKnockout}
+                onGetEventKnockout={getEventKnockout} onSetEventKnockout={setEventKnockout}
               />
             )}
           </div>

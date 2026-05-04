@@ -2507,6 +2507,171 @@
   }
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   DATAIMPORTER — Patch de estilos para sub-modos de Eventos
+   Añade esto al final de tu archivo DataImporter.css existente
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── Selector de sub-modo (allowModeSwitch) ──────────────────────── */
+.di-mode-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 10px 12px;
+  background: var(--bg, #f5f4f2);
+  border-bottom: 1px solid var(--border, #e2ddd8);
+}
+
+.di-mode-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border, #e2ddd8);
+  background: var(--card, #fff);
+  color: var(--text-muted, #888);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s, box-shadow 0.12s;
+  white-space: nowrap;
+}
+
+.di-mode-switch-btn:hover {
+  border-color: var(--accent, #5b4fd8);
+  color: var(--accent, #5b4fd8);
+  background: var(--accent-glass, rgba(91, 79, 216, 0.05));
+}
+
+.di-mode-switch-btn--active {
+  background: var(--accent, #5b4fd8);
+  border-color: var(--accent, #5b4fd8);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(91, 79, 216, 0.25);
+}
+
+.di-mode-switch-btn--active:hover {
+  background: var(--accent, #5b4fd8);
+  color: #fff;
+}
+
+/* ── Indicador visual del sub-modo activo en el header ───────────── */
+.di-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Animación de transición al cambiar sub-modo ─────────────────── */
+.di-hint-box,
+.di-textarea {
+  animation: di-fade-in 0.15s ease both;
+}
+
+@keyframes di-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Pills de columnas — colores por tipo de sub-modo ────────────── */
+
+/* Alineaciones — azul */
+.di-root[data-mode="event_lineup_a"] .di-hint-col-pill,
+.di-root[data-mode="event_lineup_b"] .di-hint-col-pill {
+  background: rgba(91, 79, 216, 0.07);
+  border-color: rgba(91, 79, 216, 0.2);
+  color: var(--accent, #5b4fd8);
+}
+
+.di-root[data-mode="event_lineup_a"] .di-hint-col-n,
+.di-root[data-mode="event_lineup_b"] .di-hint-col-n {
+  background: var(--accent, #5b4fd8);
+  color: #fff;
+}
+
+/* Plantel — verde */
+.di-root[data-mode="event_squad"] .di-hint-col-pill {
+  background: rgba(16, 185, 129, 0.07);
+  border-color: rgba(16, 185, 129, 0.2);
+  color: #0d9668;
+}
+
+.di-root[data-mode="event_squad"] .di-hint-col-n {
+  background: #10b981;
+  color: #fff;
+}
+
+/* Tabla de posiciones — dorado */
+.di-root[data-mode="event_standings"] .di-hint-col-pill {
+  background: rgba(245, 158, 11, 0.07);
+  border-color: rgba(245, 158, 11, 0.2);
+  color: #b97a0a;
+}
+
+.di-root[data-mode="event_standings"] .di-hint-col-n {
+  background: #f59e0b;
+  color: #fff;
+}
+
+/* Eliminatorias — rojo */
+.di-root[data-mode="event_knockout"] .di-hint-col-pill {
+  background: rgba(239, 68, 68, 0.07);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #c53030;
+}
+
+.di-root[data-mode="event_knockout"] .di-hint-col-n {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* ── Resultado OK/WARN — refuerzo visual para eventos ────────────── */
+.di-result--ok .di-result-summary {
+  color: #0d9668;
+}
+
+.di-result--warn .di-result-summary {
+  color: #b97a0a;
+}
+
+/* ── Preview table — compacta para columnas de alineación ────────── */
+.di-preview-table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.di-preview-th,
+.di-preview-td {
+  min-width: 60px;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Columna # más estrecha */
+.di-preview-th:first-child,
+.di-preview-td:first-child {
+  min-width: 28px;
+  max-width: 36px;
+  text-align: center;
+}
+
+/* Columna booleana (is_protagonist, is_key_player, is_decisive) */
+.di-preview-td:last-child {
+  text-align: center;
+  font-weight: 700;
+}
+
 /* ── Responsive ───────────────────────────────────────────────────────────── */
 @media (max-width: 691px) {
   .ah-event-images-row {

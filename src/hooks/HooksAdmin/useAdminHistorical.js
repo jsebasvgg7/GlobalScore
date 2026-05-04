@@ -16,7 +16,11 @@ export const uploadHistoricalImage = async (file, folder) => {
   const fileName = `${folder}/${crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage
     .from("historical")
-    .upload(fileName, file, { upsert: false });
+    .upload(fileName, file, {
+      upsert: false,
+      contentType: file.type || "image/jpeg",
+      cacheControl: "3600",
+    });
   if (error) throw error;
   return fileName;
 };
@@ -26,6 +30,26 @@ export const deleteHistoricalImage = async (imagePath) => {
   if (!imagePath) return;
   await supabase.storage.from("historical").remove([imagePath]);
 };
+
+const VALID_EVENT_FIELDS = new Set([
+  "title",
+  "event_type",
+  "event_date",
+  "description",
+  "is_published",
+  "image_path",
+  "banner_image_path",
+  "event_category",
+  "context_text",
+  "impact_text",
+  "protagonist_id",
+  "team_protagonist_id",
+]);
+
+const cleanEventPayload = (formData) =>
+  Object.fromEntries(
+    Object.entries(formData).filter(([key]) => VALID_EVENT_FIELDS.has(key))
+  );
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  HOOK PRINCIPAL
@@ -435,16 +459,19 @@ export function useAdminHistorical() {
   };
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  EVENTS CRUD — extendido con banner_image_path
+  //  EVENTS CRUD — con cleanEventPayload guard
   // ══════════════════════════════════════════════════════════════════════════
   const createEvent = async (formData, imageFile, bannerFile) => {
     let image_path = null;
     let banner_image_path = null;
     if (imageFile) image_path = await uploadHistoricalImage(imageFile, "events");
     if (bannerFile) banner_image_path = await uploadHistoricalImage(bannerFile, "events/banners");
+
+    const payload = cleanEventPayload({ ...formData, image_path, banner_image_path });
+
     const { data, error } = await supabase
       .from("historical_events")
-      .insert({ ...formData, image_path, banner_image_path })
+      .insert(payload)
       .select()
       .single();
     if (error) throw error;
@@ -453,8 +480,8 @@ export function useAdminHistorical() {
   };
 
   const updateEvent = async (id, formData, imageFile, bannerFile) => {
-    let updates = { ...formData };
     const old = events.find((e) => e.id === id);
+    let updates = cleanEventPayload({ ...formData });
 
     if (imageFile) {
       if (old?.image_path) await deleteHistoricalImage(old.image_path);
@@ -566,9 +593,9 @@ export function useAdminHistorical() {
     await Promise.all(inserts);
   };
 
-  // ──────────────────────────────────────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════════════════════
   //  COMPETITION GROUPS
-  // ──────────────────────────────────────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════════════════════
   const getCompetitionGroups = async (competitionId) => {
     const { data, error } = await supabase
       .from("historical_competition_groups")
@@ -607,9 +634,9 @@ export function useAdminHistorical() {
     if (insErr) throw insErr;
   };
 
-  // ──────────────────────────────────────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════════════════════
   //  COMPETITION STANDINGS (Liga)
-  // ──────────────────────────────────────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════════════════════
   const getCompetitionStandings = async (competitionId) => {
     const { data, error } = await supabase
       .from("historical_competition_standings")
@@ -646,9 +673,9 @@ export function useAdminHistorical() {
     if (insErr) throw insErr;
   };
 
-  // ──────────────────────────────────────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════════════════════
   //  COMPETITION KNOCKOUT
-  // ──────────────────────────────────────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════════════════════
   const getCompetitionKnockout = async (competitionId) => {
     const { data, error } = await supabase
       .from("historical_competition_knockout")
@@ -704,11 +731,6 @@ export function useAdminHistorical() {
     return data || [];
   };
 
-  /**
-   * Reemplaza todas las alineaciones de un evento.
-   * rows = [{ team_side, team_name, team_id?, shirt_number, player_name,
-   *           position_role, is_protagonist, sort_order }]
-   */
   const setEventLineups = async (eventId, rows) => {
     const { error: delErr } = await supabase
       .from("historical_event_lineups")
@@ -746,10 +768,6 @@ export function useAdminHistorical() {
     return data || [];
   };
 
-  /**
-   * Reemplaza todo el plantel de un evento.
-   * rows = [{ player_name, player_id?, shirt_number, position_role, is_key_player, sort_order }]
-   */
   const setEventSquad = async (eventId, rows) => {
     const { error: delErr } = await supabase
       .from("historical_event_squad")
@@ -785,11 +803,6 @@ export function useAdminHistorical() {
     return data || [];
   };
 
-  /**
-   * Reemplaza la tabla de posiciones de un evento.
-   * rows = [{ position, team_name, team_id?, points, wins, draws, losses,
-   *           goals_for, goals_against, is_champion }]
-   */
   const setEventStandings = async (eventId, rows) => {
     const { error: delErr } = await supabase
       .from("historical_event_standings")
@@ -829,11 +842,6 @@ export function useAdminHistorical() {
     return data || [];
   };
 
-  /**
-   * Reemplaza los partidos eliminatorios de un evento.
-   * rows = [{ round, match_number, team_a, team_b, score_a, score_b,
-   *           winner, is_decisive, sort_order }]
-   */
   const setEventKnockout = async (eventId, rows) => {
     const { error: delErr } = await supabase
       .from("historical_event_knockout")
@@ -894,13 +902,13 @@ export function useAdminHistorical() {
     getEventRelations, setEventRelations,
     // Player ↔ Team relations
     getPlayerTeams, setPlayerTeams,
-    // Event lineups ← NUEVO
+    // Event lineups
     getEventLineups, setEventLineups,
-    // Event squad ← NUEVO
+    // Event squad
     getEventSquad, setEventSquad,
-    // Event standings ← NUEVO
+    // Event standings
     getEventStandings, setEventStandings,
-    // Event knockout ← NUEVO
+    // Event knockout
     getEventKnockout, setEventKnockout,
   };
 }
