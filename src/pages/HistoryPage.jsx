@@ -334,43 +334,7 @@ function PlayerDetail({ playerId, onBack }) {
         </section>
       )}
 
-      {/* ── Palmarés ── */}
-      {(titles || []).length > 0 && (
-        <section className="hp-detail-section">
-          <span className="hp-detail-sep"><Award size={11} /> Palmarés</span>
-          <div className="hp-titles-wrap">
-            {["club", "national", "individual"].map((cat) => {
-              const catTitles = titlesByCategory[cat];
-              if (!catTitles || catTitles.length === 0) return null;
-              return (
-                <div key={cat} className="hp-titles-group">
-                  <span
-                    className="hp-titles-cat-label"
-                    style={{ "--cat-color": TITLE_CAT_COLOR[cat] }}
-                  >
-                    {TITLE_CAT_LABEL[cat]}
-                  </span>
-                  <div className="hp-titles-list">
-                    {catTitles.map((t, i) => (
-                      <div key={i} className="hp-title-row" style={{ "--cat-color": TITLE_CAT_COLOR[cat] }}>
-                        <Trophy size={10} className="hp-title-icon" />
-                        <span className="hp-title-name">{t.title_name}</span>
-                        {t.team_name && (
-                          <span className="hp-title-team">{t.team_name}</span>
-                        )}
-                        {t.year && <span className="hp-title-year">{t.year}</span>}
-                        {t.quantity > 1 && (
-                          <span className="hp-title-qty">×{t.quantity}</span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
+
 
       {/* ── Equipos vinculados (legacy) ── */}
       {teams.length > 0 && (
@@ -420,6 +384,43 @@ function PlayerDetail({ playerId, onBack }) {
                       {year && <span className="hp-event-year">{year}</span>}
                     </div>
                     {row.role_note && <span className="hp-event-role">{row.role_note}</span>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+      {/* ── Palmarés ── */}
+      {(titles || []).length > 0 && (
+        <section className="hp-detail-section">
+          <span className="hp-detail-sep"><Award size={11} /> Palmarés</span>
+          <div className="hp-titles-wrap">
+            {["club", "national", "individual"].map((cat) => {
+              const catTitles = titlesByCategory[cat];
+              if (!catTitles || catTitles.length === 0) return null;
+              return (
+                <div key={cat} className="hp-titles-group">
+                  <span
+                    className="hp-titles-cat-label"
+                    style={{ "--cat-color": TITLE_CAT_COLOR[cat] }}
+                  >
+                    {TITLE_CAT_LABEL[cat]}
+                  </span>
+                  <div className="hp-titles-list">
+                    {catTitles.map((t, i) => (
+                      <div key={i} className="hp-title-row" style={{ "--cat-color": TITLE_CAT_COLOR[cat] }}>
+                        <Trophy size={10} className="hp-title-icon" />
+                        <span className="hp-title-name">{t.title_name}</span>
+                        {t.team_name && (
+                          <span className="hp-title-team">{t.team_name}</span>
+                        )}
+                        {t.year && <span className="hp-title-year">{t.year}</span>}
+                        {t.quantity > 1 && (
+                          <span className="hp-title-qty">×{t.quantity}</span>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               );

@@ -559,11 +559,18 @@ export function useAdminHistorical() {
   const setPlayerTeams = async (playerId, teamLinks) => {
     await supabase.from("historical_player_teams").delete().eq("player_id", playerId);
     if (teamLinks.length === 0) return;
-    const rows = teamLinks.map((t) => ({ player_id: playerId, ...t }));
+
+    const rows = teamLinks.map((t) => ({
+      player_id: playerId,
+      team_id: t.team_id,
+      start_year: t.start_year ? parseInt(t.start_year) : null,
+      end_year: t.end_year ? parseInt(t.end_year) : null,
+      roles: t.roles || null,
+    }));
+
     const { error } = await supabase.from("historical_player_teams").insert(rows);
     if (error) throw error;
   };
-
   // ══════════════════════════════════════════════════════════════════════════
   //  RELACIONES — eventos ↔ jugadores / equipos / competencias (legacy)
   // ══════════════════════════════════════════════════════════════════════════
