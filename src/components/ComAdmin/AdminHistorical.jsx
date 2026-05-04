@@ -47,6 +47,18 @@ export const KNOCKOUT_ROUNDS = [
   "Tercero",
   "Final",
 ];
+
+// Categorías de evento
+const EVENT_CATEGORIES = [
+  { value: "player", label: "🎭 Jugador" },
+  { value: "team",   label: "🏆 Equipo"  },
+];
+
+// Tipos de competición para eventos de equipo
+const EVENT_COMP_TYPES = [
+  { value: "league",   label: "Liga / Tabla" },
+  { value: "knockout", label: "Eliminatorias" },
+];
 // ─── Mapas de traducción ──────────────────────────────────────────────────────
 const POSITION_LABEL = {
   "Forward": "Delantero", "Midfielder": "Centrocampista", "All-rounder": "Todocampista",
@@ -199,10 +211,70 @@ const COMP_EMPTY_V2 = {
   use_winner_text: false,
   is_published: false,
 };
+
+// REEMPLAZA el EVENT_EMPTY actual
 const EVENT_EMPTY = {
-  title: "", event_type: "", event_date: "",
-  description: "", is_published: false,
+  title: "",
+  event_type: "",
+  event_date: "",
+  event_category: "player",   // ← NUEVO
+  context_text: "",           // ← NUEVO
+  impact_text: "",            // ← NUEVO
+  protagonist_id: "",         // ← NUEVO (FK a player)
+  team_protagonist_id: "",    // ← NUEVO (FK a team)
+  description: "",
+  is_published: false,
 };
+
+// Fila vacía de alineación de evento
+const EMPTY_EVENT_LINEUP_ROW = (side = "team_a", num = 1) => ({
+  _id: Date.now() + Math.random(),
+  team_side: side,
+  team_name: "",
+  shirt_number: num,
+  player_name: "",
+  position_role: "",
+  is_protagonist: false,
+  sort_order: 0,
+});
+
+// Fila vacía de plantel de evento
+const EMPTY_EVENT_SQUAD_ROW = () => ({
+  _id: Date.now() + Math.random(),
+  player_name: "",
+  shirt_number: "",
+  position_role: "",
+  is_key_player: false,
+  sort_order: 0,
+});
+
+// Fila vacía de standings de evento
+const EMPTY_EVENT_STANDING_ROW = (pos = 1) => ({
+  _id: Date.now() + Math.random(),
+  position: String(pos),
+  team_name: "",
+  points: "",
+  wins: "",
+  draws: "",
+  losses: "",
+  goals_for: "",
+  goals_against: "",
+  is_champion: false,
+});
+
+// Fila vacía de knockout de evento
+const EMPTY_EVENT_KNOCKOUT_ROW = (sort = 0) => ({
+  _id: Date.now() + Math.random(),
+  round: "Final",
+  match_number: "1",
+  team_a: "",
+  team_b: "",
+  score_a: "",
+  score_b: "",
+  winner: "",
+  is_decisive: false,
+  sort_order: sort,
+});
 
 const EMPTY_LINEUP_PLAYER = (num) => ({
   shirt_number: num, player_name: "", position_role: "", pos_x: 50, pos_y: 50,
@@ -247,6 +319,35 @@ function ImageUploader({ currentPath, onFile, label = "Imagen" }) {
       }
       <input ref={ref} type="file" accept="image/*" style={{ display: "none" }} onChange={handleChange} />
       <div className="ah-img-overlay"><span>Cambiar</span></div>
+    </div>
+  );
+}
+
+// ── Banner panorámico (16:9) ──────────────────────────────────────────────────
+function BannerUploader({ currentPath, onFile }) {
+  const ref = useRef();
+  const [preview, setPreview] = useState(null);
+  const url = preview || getHistoricalImageUrl(currentPath);
+  const handleChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setPreview(URL.createObjectURL(file));
+    onFile(file);
+  };
+  return (
+    <div className="ah-banner-uploader" onClick={() => ref.current.click()}>
+      {url
+        ? <img src={url} alt="Banner" className="ah-banner-preview" />
+        : (
+          <div className="ah-banner-placeholder">
+            <Camera size={20} strokeWidth={1.5} />
+            <span>Banner panorámico (16:9)</span>
+          </div>
+        )
+      }
+      <input ref={ref} type="file" accept="image/*"
+        style={{ display: "none" }} onChange={handleChange} />
+      <div className="ah-banner-overlay"><span>Cambiar Banner</span></div>
     </div>
   );
 }
@@ -1424,24 +1525,82 @@ function KnockoutPreview({ rows }) {
 // ══════════════════════════════════════════════════════════════════════════════
 //  PANEL: EVENTO
 // ══════════════════════════════════════════════════════════════════════════════
-function EventPanel({ event, players, teams, competitions, onSave, onClose, onGetRelations, onSetRelations }) {
+function EventPanel({
+  event, players, teams, competitions, onSave, onClose,
+  onGetRelations, onSetRelations,
+  // Nuevas props de datos de evento
+  onGetEventLineups,   onSetEventLineups,
+  onGetEventSquad,     onSetEventSquad,
+  onGetEventStandings, onSetEventStandings,
+  onGetEventKnockout,  onSetEventKnockout,
+}) {
   const isEdit = !!event?.id;
-  const [form, setForm] = useState(event?.id ? { ...event } : { ...EVENT_EMPTY });
+  const [form, setForm] = useState(event?.id ? { ...EVENT_EMPTY, ...event } : { ...EVENT_EMPTY });
   const [imageFile, setImageFile] = useState(null);
+  const [bannerFile, setBannerFile] = useState(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [tab, setTab] = useState("info");
+  const [loadingData, setLoadingData] = useState(false);
+
+  // Relaciones legacy
   const [relations, setRelations] = useState({ playerIds: [], teamIds: [], competitionIds: [] });
 
-  useState(() => {
-    if (isEdit && event?.id) {
-      onGetRelations(event.id).then(rel => {
-        setRelations({
-          playerIds: rel.players.map(p => p.player_id),
-          teamIds: rel.teams.map(t => t.team_id),
-          competitionIds: rel.competitions.map(c => c.competition_id),
-        });
+  // Alineaciones (evento jugador): filas team_a y team_b por separado
+  const [lineupA, setLineupA] = useState([]);
+  const [lineupB, setLineupB] = useState([]);
+  const [teamAName, setTeamAName] = useState("");
+  const [teamBName, setTeamBName] = useState("");
+  const [scoreA, setScoreA] = useState("");
+  const [scoreB, setScoreB] = useState("");
+
+  // Plantel (evento equipo)
+  const [squad, setSquad] = useState([]);
+
+  // Competición (evento equipo)
+  const [eventCompType, setEventCompType] = useState("league"); // "league" | "knockout"
+  const [eventStandings, setEventStandings] = useState([]);
+  const [eventKnockout, setEventKnockout] = useState([]);
+
+  // Cargar datos al editar
+  useEffect(() => {
+    if (!isEdit) return;
+    setLoadingData(true);
+
+    // Cargar relaciones legacy + nuevas tablas
+    Promise.all([
+      onGetRelations(event.id),
+      onGetEventLineups   ? onGetEventLineups(event.id)   : Promise.resolve([]),
+      onGetEventSquad     ? onGetEventSquad(event.id)     : Promise.resolve([]),
+      onGetEventStandings ? onGetEventStandings(event.id) : Promise.resolve([]),
+      onGetEventKnockout  ? onGetEventKnockout(event.id)  : Promise.resolve([]),
+    ]).then(([rel, lins, sq, sts, ko]) => {
+      setRelations({
+        playerIds:      rel.players.map(p => p.player_id),
+        teamIds:        rel.teams.map(t => t.team_id),
+        competitionIds: rel.competitions.map(c => c.competition_id),
       });
-    }
+
+      // Alineaciones: separar por team_side
+      const la = (lins || []).filter(r => r.team_side === "team_a")
+        .map(r => ({ ...r, _id: r.id || Date.now() + Math.random() }));
+      const lb = (lins || []).filter(r => r.team_side === "team_b")
+        .map(r => ({ ...r, _id: r.id || Date.now() + Math.random() }));
+
+      if (la.length > 0) setTeamAName(la[0].team_name || "");
+      if (lb.length > 0) setTeamBName(lb[0].team_name || "");
+      setLineupA(la);
+      setLineupB(lb);
+
+      setSquad((sq || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
+      setEventStandings((sts || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
+
+      const koData = (ko || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() }));
+      setEventKnockout(koData);
+      if (koData.length > 0) setEventCompType("knockout");
+
+    }).catch(() => {}).finally(() => setLoadingData(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -1451,80 +1610,437 @@ function EventPanel({ event, players, teams, competitions, onSave, onClose, onGe
       [key]: r[key].includes(id) ? r[key].filter(x => x !== id) : [...r[key], id],
     }));
 
+  const updateRow = (setter) => (idx, key, val) =>
+    setter(prev => prev.map((r, i) => i === idx ? { ...r, [key]: val } : r));
+
+  // ── Columnas tablas ────────────────────────────────────────────────────────
+  const lineupCols = [
+    { key: "shirt_number",  label: "#",       flex: 0.6, type: "number", placeholder: "10" },
+    { key: "player_name",   label: "Jugador", flex: 2,   placeholder: "Maradona" },
+    {
+      key: "position_role", label: "Pos.", flex: 1, type: "select",
+      options: [{ value: "", label: "—" }, ...POSITION_ROLES.map(r => ({ value: r, label: r }))],
+    },
+    {
+      key: "is_protagonist", label: "★", flex: 0.5, type: "select",
+      options: [{ value: "false", label: "—" }, { value: "true", label: "★" }],
+    },
+  ];
+
+  const squadCols = [
+    { key: "shirt_number",  label: "#",      flex: 0.6, type: "number", placeholder: "10" },
+    { key: "player_name",   label: "Nombre", flex: 2,   placeholder: "Wirtz" },
+    {
+      key: "position_role", label: "Pos.", flex: 1, type: "select",
+      options: [{ value: "", label: "—" }, ...POSITION_ROLES.map(r => ({ value: r, label: r }))],
+    },
+    {
+      key: "is_key_player", label: "⭐ Clave", flex: 0.8, type: "select",
+      options: [{ value: "false", label: "—" }, { value: "true", label: "⭐" }],
+    },
+  ];
+
+  const evStandingCols = [
+    { key: "position",      label: "#",      flex: 0.6, type: "number", placeholder: "1" },
+    { key: "team_name",     label: "Equipo", flex: 2,   placeholder: "Bayer Leverkusen" },
+    { key: "points",        label: "Pts",    flex: 0.8, type: "number", placeholder: "90" },
+    { key: "wins",          label: "G",      flex: 0.7, type: "number", placeholder: "28" },
+    { key: "draws",         label: "E",      flex: 0.7, type: "number", placeholder: "6" },
+    { key: "losses",        label: "P",      flex: 0.7, type: "number", placeholder: "0" },
+    { key: "goals_for",     label: "GF",     flex: 0.7, type: "number", placeholder: "89" },
+    { key: "goals_against", label: "GC",     flex: 0.7, type: "number", placeholder: "24" },
+    {
+      key: "is_champion", label: "🏆", flex: 0.7, type: "select",
+      options: [{ value: "false", label: "—" }, { value: "true", label: "🏆" }],
+    },
+  ];
+
+  const evKnockoutCols = [
+    {
+      key: "round", label: "Ronda", flex: 1.5, type: "select",
+      options: KNOCKOUT_ROUNDS.map(r => ({ value: r, label: r })),
+    },
+    { key: "team_a",  label: "Local",    flex: 2, placeholder: "Leverkusen" },
+    { key: "score_a", label: "G(L)",     flex: 0.7, type: "number", placeholder: "1" },
+    { key: "score_b", label: "G(V)",     flex: 0.7, type: "number", placeholder: "0" },
+    { key: "team_b",  label: "Visitante",flex: 2, placeholder: "Kaiserslautern" },
+    {
+      key: "winner", label: "Ganador", flex: 1, type: "select",
+      options: [
+        { value: "",       label: "—" },
+        { value: "team_a", label: "Local" },
+        { value: "team_b", label: "Visitante" },
+      ],
+    },
+    {
+      key: "is_decisive", label: "🔑", flex: 0.5, type: "select",
+      options: [{ value: "false", label: "—" }, { value: "true", label: "🔑" }],
+    },
+  ];
+
+  // ── Tabs dinámicas ─────────────────────────────────────────────────────────
+  const isPlayer = form.event_category === "player";
+  const isTeam   = form.event_category === "team";
+
+  const EVENT_TABS = [
+    { key: "info",    label: "Info" },
+    isPlayer && { key: "lineup",  label: "Alineaciones" },
+    isTeam   && { key: "squad",   label: "Plantel" },
+    isTeam   && { key: "tabla",   label: "Competición" },
+    { key: "impacto", label: "Impacto" },
+    { key: "vinculos",label: "Vínculos" },
+  ].filter(Boolean);
+
+  // Si el tab activo dejó de ser válido al cambiar categoría, volver a info
+  useEffect(() => {
+    const keys = EVENT_TABS.map(t => t.key);
+    if (!keys.includes(tab)) setTab("info");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.event_category]);
+
+  // ── Guardar ────────────────────────────────────────────────────────────────
   const handleSubmit = async () => {
     if (!form.title.trim()) { setError("El título es obligatorio"); return; }
     setSaving(true); setError(null);
     try {
-      const saved = await onSave(form, imageFile);
-      if (saved?.id) await onSetRelations(saved.id, relations);
+      const saved = await onSave(form, imageFile, bannerFile);
+      const id = saved?.id || event?.id;
+
+      if (id) {
+        // Relaciones legacy
+        await onSetRelations(id, relations);
+
+        // Alineaciones: unir team_a + team_b con team_name inyectado
+        if (onSetEventLineups) {
+          const allLineup = [
+            ...lineupA.map(({ _id, ...r }) => ({ ...r, team_side: "team_a", team_name: teamAName })),
+            ...lineupB.map(({ _id, ...r }) => ({ ...r, team_side: "team_b", team_name: teamBName })),
+          ];
+          await onSetEventLineups(id, allLineup);
+        }
+
+        if (onSetEventSquad) {
+          await onSetEventSquad(id, squad.map(({ _id, ...r }) => r));
+        }
+        if (onSetEventStandings) {
+          await onSetEventStandings(id, eventStandings.map(({ _id, ...r }) => r));
+        }
+        if (onSetEventKnockout) {
+          await onSetEventKnockout(id, eventKnockout.map(({ _id, ...r }) => r));
+        }
+      }
       onClose();
     } catch (err) { setError(err.message); }
     finally { setSaving(false); }
   };
 
+  // ═══════════════════════════════════════════════════════════════════════════
   return (
     <div className="ah-panel-form">
-      <div className="ah-panel-section">
-        <span className="ah-panel-sep">Imagen</span>
-        <ImageUploader currentPath={form.image_path} onFile={setImageFile} label="Foto del evento" />
+      {/* Tabs */}
+      <div className="ah-inner-tabs ah-inner-tabs--scroll">
+        {EVENT_TABS.map(({ key, label }) => (
+          <button key={key} type="button"
+            className={`ah-inner-tab ${tab === key ? "ah-inner-tab--active" : ""}`}
+            onClick={() => setTab(key)}>
+            {label}
+          </button>
+        ))}
       </div>
-      <div className="ah-panel-section">
-        <span className="ah-panel-sep">Datos del evento</span>
-        <PField label="Título" required>
-          <PInput value={form.title} onChange={e => set("title", e.target.value)} placeholder="La Mano de Dios" />
-        </PField>
-        <div className="ah-pgrid-2">
-          <PField label="Tipo de evento">
-            <PSelect value={form.event_type || ""} onChange={e => set("event_type", e.target.value)}>
+
+      {/* ── TAB INFO ── */}
+      {tab === "info" && <>
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Imágenes</span>
+          <div className="ah-event-images-row">
+            <div className="ah-event-img-col">
+              <span className="ah-phint" style={{ marginBottom: 4 }}>Principal (1:1)</span>
+              <ImageUploader
+                currentPath={form.image_path}
+                onFile={setImageFile}
+                label="Imagen principal" />
+            </div>
+            <div className="ah-event-banner-col">
+              <span className="ah-phint" style={{ marginBottom: 4 }}>Banner panorámico (16:9)</span>
+              <BannerUploader
+                currentPath={form.banner_image_path}
+                onFile={setBannerFile} />
+            </div>
+          </div>
+        </div>
+
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Datos del evento</span>
+
+          {/* Categoría */}
+          <div className="ah-event-category-toggle">
+            {EVENT_CATEGORIES.map(({ value, label }) => (
+              <label key={value} className="ah-ecat-opt">
+                <input
+                  type="radio"
+                  name="event_category"
+                  checked={form.event_category === value}
+                  onChange={() => set("event_category", value)} />
+                <span>{label}</span>
+              </label>
+            ))}
+          </div>
+
+          <PField label="Título" required>
+            <PInput value={form.title} onChange={e => set("title", e.target.value)} placeholder="Maradona vs Inglaterra" />
+          </PField>
+          <div className="ah-pgrid-2">
+            <PField label="Tipo de evento">
+              <PSelect value={form.event_type || ""} onChange={e => set("event_type", e.target.value)}>
+                <option value="">— Selecciona —</option>
+                {EVENT_TYPES.map(t => <option key={t} value={t}>{EVENT_TYPE_LABEL[t] || t}</option>)}
+              </PSelect>
+            </PField>
+            <PField label="Fecha">
+              <PInput type="date" value={form.event_date || ""} onChange={e => set("event_date", e.target.value)} />
+            </PField>
+          </div>
+          <PField label="Contexto (setup del momento)">
+            <PTextarea rows={3} value={form.context_text || ""}
+              onChange={e => set("context_text", e.target.value)}
+              placeholder="El telón de fondo del evento histórico..." />
+          </PField>
+          <PField label="Descripción general">
+            <PTextarea rows={3} value={form.description || ""}
+              onChange={e => set("description", e.target.value)}
+              placeholder="Descripción breve del evento..." />
+          </PField>
+        </div>
+
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Visibilidad</span>
+          <PublishToggle checked={form.is_published} onChange={v => set("is_published", v)} />
+        </div>
+      </>}
+
+      {/* ── TAB ALINEACIONES (evento jugador) ── */}
+      {tab === "lineup" && (
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Protagonista</span>
+          <PField label="Jugador protagonista">
+            <PSelect value={form.protagonist_id || ""} onChange={e => set("protagonist_id", e.target.value)}>
               <option value="">— Selecciona —</option>
-              {EVENT_TYPES.map(t => <option key={t} value={t}>{EVENT_TYPE_LABEL[t] || t}</option>)}
+              {players.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
             </PSelect>
           </PField>
-          <PField label="Fecha">
-            <PInput type="date" value={form.event_date || ""} onChange={e => set("event_date", e.target.value)} />
+
+          <span className="ah-panel-sep" style={{ marginTop: 8 }}>Resultado del partido</span>
+          <div className="ah-event-score-row">
+            <PInput
+              placeholder="Equipo A"
+              value={teamAName}
+              onChange={e => setTeamAName(e.target.value)}
+              style={{ flex: 2 }}
+            />
+            <PInput
+              type="number" placeholder="0"
+              value={scoreA}
+              onChange={e => setScoreA(e.target.value)}
+              style={{ flex: 1, textAlign: "center" }}
+            />
+            <span className="ah-event-score-sep">–</span>
+            <PInput
+              type="number" placeholder="0"
+              value={scoreB}
+              onChange={e => setScoreB(e.target.value)}
+              style={{ flex: 1, textAlign: "center" }}
+            />
+            <PInput
+              placeholder="Equipo B"
+              value={teamBName}
+              onChange={e => setTeamBName(e.target.value)}
+              style={{ flex: 2 }}
+            />
+          </div>
+
+          {/* Alineación Equipo A */}
+          <span className="ah-panel-sep" style={{ marginTop: 8 }}>
+            Equipo A — {teamAName || "Local"}
+          </span>
+          {loadingData ? (
+            <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
+          ) : (
+            <EditableTable
+              columns={lineupCols}
+              rows={lineupA}
+              onAdd={() => setLineupA(prev => [...prev, EMPTY_EVENT_LINEUP_ROW("team_a", prev.length + 1)])}
+              onRemove={idx => setLineupA(prev => prev.filter((_, i) => i !== idx))}
+              onUpdate={(idx, key, val) => {
+                const parsed = key === "is_protagonist" ? val === "true" : val;
+                updateRow(setLineupA)(idx, key, parsed);
+              }}
+              addLabel="Añadir jugador (A)"
+            />
+          )}
+
+          {/* Alineación Equipo B */}
+          <span className="ah-panel-sep" style={{ marginTop: 8 }}>
+            Equipo B — {teamBName || "Visitante"}
+          </span>
+          {loadingData ? (
+            <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
+          ) : (
+            <EditableTable
+              columns={lineupCols}
+              rows={lineupB}
+              onAdd={() => setLineupB(prev => [...prev, EMPTY_EVENT_LINEUP_ROW("team_b", prev.length + 1)])}
+              onRemove={idx => setLineupB(prev => prev.filter((_, i) => i !== idx))}
+              onUpdate={(idx, key, val) => {
+                const parsed = key === "is_protagonist" ? val === "true" : val;
+                updateRow(setLineupB)(idx, key, parsed);
+              }}
+              addLabel="Añadir jugador (B)"
+            />
+          )}
+          <span className="ah-phint">★ marca al jugador protagonista del evento.</span>
+        </div>
+      )}
+
+      {/* ── TAB PLANTEL (evento equipo) ── */}
+      {tab === "squad" && (
+        <div className="ah-panel-section ah-panel-section--table">
+          <span className="ah-panel-sep">Equipo protagonista</span>
+          <PField label="Equipo">
+            <PSelect value={form.team_protagonist_id || ""} onChange={e => set("team_protagonist_id", e.target.value)}>
+              <option value="">— Selecciona —</option>
+              {teams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+            </PSelect>
+          </PField>
+
+          <span className="ah-panel-sep" style={{ marginTop: 8 }}>Plantel del evento</span>
+          {loadingData ? (
+            <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
+          ) : (
+            <EditableTable
+              columns={squadCols}
+              rows={squad}
+              onAdd={() => setSquad(prev => [...prev, EMPTY_EVENT_SQUAD_ROW()])}
+              onRemove={idx => setSquad(prev => prev.filter((_, i) => i !== idx))}
+              onUpdate={(idx, key, val) => {
+                const parsed = key === "is_key_player" ? val === "true" : val;
+                updateRow(setSquad)(idx, key, parsed);
+              }}
+              addLabel="Añadir jugador"
+            />
+          )}
+          <span className="ah-phint">⭐ marca a los jugadores clave del momento histórico.</span>
+        </div>
+      )}
+
+      {/* ── TAB COMPETICIÓN (evento equipo) ── */}
+      {tab === "tabla" && (
+        <div className="ah-panel-section ah-panel-section--table">
+          <span className="ah-panel-sep">Tipo de competición</span>
+          <div className="ah-event-comptype-toggle">
+            {EVENT_COMP_TYPES.map(({ value, label }) => (
+              <label key={value} className="ah-ecat-opt">
+                <input
+                  type="radio"
+                  name="ev_comp_type"
+                  checked={eventCompType === value}
+                  onChange={() => setEventCompType(value)} />
+                <span>{label}</span>
+              </label>
+            ))}
+          </div>
+
+          {eventCompType === "league" && <>
+            <span className="ah-panel-sep" style={{ marginTop: 8 }}>Tabla de posiciones</span>
+            {loadingData ? (
+              <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
+            ) : (
+              <EditableTable
+                columns={evStandingCols}
+                rows={eventStandings}
+                onAdd={() => setEventStandings(prev => [...prev, EMPTY_EVENT_STANDING_ROW(prev.length + 1)])}
+                onRemove={idx => setEventStandings(prev => prev.filter((_, i) => i !== idx))}
+                onUpdate={(idx, key, val) => {
+                  const parsed = key === "is_champion" ? val === "true" : val;
+                  updateRow(setEventStandings)(idx, key, parsed);
+                }}
+                addLabel="Añadir equipo"
+              />
+            )}
+          </>}
+
+          {eventCompType === "knockout" && <>
+            <span className="ah-panel-sep" style={{ marginTop: 8 }}>Partidos clave</span>
+            {loadingData ? (
+              <div className="ah-loading-msg"><RefreshCw size={12} className="ah-spin" /> Cargando...</div>
+            ) : (
+              <EditableTable
+                columns={evKnockoutCols}
+                rows={eventKnockout}
+                onAdd={() => setEventKnockout(prev => [...prev, EMPTY_EVENT_KNOCKOUT_ROW(prev.length)])}
+                onRemove={idx => setEventKnockout(prev => prev.filter((_, i) => i !== idx))}
+                onUpdate={(idx, key, val) => {
+                  const parsed = key === "is_decisive" ? val === "true" : val;
+                  updateRow(setEventKnockout)(idx, key, parsed);
+                }}
+                addLabel="Añadir partido"
+              />
+            )}
+          </>}
+        </div>
+      )}
+
+      {/* ── TAB IMPACTO ── */}
+      {tab === "impacto" && (
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Legado e impacto</span>
+          <PField label="Impacto y legado">
+            <PTextarea rows={5} value={form.impact_text || ""}
+              onChange={e => set("impact_text", e.target.value)}
+              placeholder="Las consecuencias y el legado que dejó este momento..." />
           </PField>
         </div>
-        <PField label="Narrativa completa">
-          <PTextarea rows={4} value={form.description || ""} onChange={e => set("description", e.target.value)} placeholder="Descripción detallada..." />
-        </PField>
-      </div>
-      <div className="ah-panel-section">
-        <span className="ah-panel-sep">Jugadores involucrados</span>
-        <div className="ah-check-list">
-          {players.map(p => (
-            <label key={p.id} className="ah-check-item">
-              <input type="checkbox" checked={relations.playerIds.includes(p.id)} onChange={() => toggleId("playerIds", p.id)} />
-              <span>{p.name}</span>
-            </label>
-          ))}
+      )}
+
+      {/* ── TAB VÍNCULOS (legacy) ── */}
+      {tab === "vinculos" && <>
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Jugadores involucrados</span>
+          <div className="ah-check-list">
+            {players.map(p => (
+              <label key={p.id} className="ah-check-item">
+                <input type="checkbox" checked={relations.playerIds.includes(p.id)}
+                  onChange={() => toggleId("playerIds", p.id)} />
+                <span>{p.name}</span>
+              </label>
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="ah-panel-section">
-        <span className="ah-panel-sep">Equipos involucrados</span>
-        <div className="ah-check-list">
-          {teams.map(t => (
-            <label key={t.id} className="ah-check-item">
-              <input type="checkbox" checked={relations.teamIds.includes(t.id)} onChange={() => toggleId("teamIds", t.id)} />
-              <span>{t.name}</span>
-            </label>
-          ))}
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Equipos involucrados</span>
+          <div className="ah-check-list">
+            {teams.map(t => (
+              <label key={t.id} className="ah-check-item">
+                <input type="checkbox" checked={relations.teamIds.includes(t.id)}
+                  onChange={() => toggleId("teamIds", t.id)} />
+                <span>{t.name}</span>
+              </label>
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="ah-panel-section">
-        <span className="ah-panel-sep">Competencias involucradas</span>
-        <div className="ah-check-list">
-          {competitions.map(c => (
-            <label key={c.id} className="ah-check-item">
-              <input type="checkbox" checked={relations.competitionIds.includes(c.id)} onChange={() => toggleId("competitionIds", c.id)} />
-              <span>{c.name}</span>
-            </label>
-          ))}
+        <div className="ah-panel-section">
+          <span className="ah-panel-sep">Competencias involucradas</span>
+          <div className="ah-check-list">
+            {competitions.map(c => (
+              <label key={c.id} className="ah-check-item">
+                <input type="checkbox" checked={relations.competitionIds.includes(c.id)}
+                  onChange={() => toggleId("competitionIds", c.id)} />
+                <span>{c.name}</span>
+              </label>
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="ah-panel-section">
-        <span className="ah-panel-sep">Visibilidad</span>
-        <PublishToggle checked={form.is_published} onChange={v => set("is_published", v)} />
-      </div>
+      </>}
+
       {error && <div className="ah-panel-error">{error}</div>}
       <div className="ah-panel-actions">
         <button className="ah-paction-cancel" onClick={onClose}>Cancelar</button>
@@ -1627,6 +2143,10 @@ export default function AdminHistorical() {
     getCompetitionGroups, setCompetitionGroups,
     getCompetitionStandings, setCompetitionStandings,
     getCompetitionKnockout, setCompetitionKnockout,
+    getEventLineups,    setEventLineups,
+    getEventSquad,      setEventSquad,
+    getEventStandings,  setEventStandings,
+    getEventKnockout,   setEventKnockout,
   } = useAdminHistorical();
 
   const q = search.toLowerCase();
@@ -1642,7 +2162,10 @@ export default function AdminHistorical() {
   const handleSavePlayer = (form, file) => form.id ? updatePlayer(form.id, form, file) : createPlayer(form, file);
   const handleSaveTeam = (form, file) => form.id ? updateTeam(form.id, form, file) : createTeam(form, file);
   const handleSaveCompetition = (form, file) => form.id ? updateCompetition(form.id, form, file) : createCompetition(form, file);
-  const handleSaveEvent = (form, file) => form.id ? updateEvent(form.id, form, file) : createEvent(form, file);
+  const handleSaveEvent = (form, imageFile, bannerFile) =>
+    form.id
+      ? updateEvent(form.id, form, imageFile, bannerFile)
+      : createEvent(form, imageFile, bannerFile);
 
   const tabCounts = {
     players: players.length, teams: teams.length,
@@ -1794,7 +2317,11 @@ export default function AdminHistorical() {
               <EventPanel
                 event={panel.data} players={players} teams={teams} competitions={competitions}
                 onSave={handleSaveEvent} onClose={closePanel}
-                onGetRelations={getEventRelations} onSetRelations={setEventRelations}
+                onGetRelations={getEventRelations}    onSetRelations={setEventRelations}
+                onGetEventLineups={getEventLineups}   onSetEventLineups={setEventLineups}
+                onGetEventSquad={getEventSquad}       onSetEventSquad={setEventSquad}
+                onGetEventStandings={getEventStandings} onSetEventStandings={setEventStandings}
+                onGetEventKnockout={getEventKnockout}  onSetEventKnockout={setEventKnockout}
               />
             )}
           </div>
