@@ -1739,6 +1739,7 @@
   /* ── BRUTALIST meta-grid ── */
   [data-style="brutalist"] .hcp-meta-grid {
     border-bottom: 1px solid var(--hcp-border-hard);
+    margin-top: 0;
   }
 
   [data-style="brutalist"] .hcp-meta-item {
@@ -1747,6 +1748,12 @@
     background: var(--hcp-card);
     padding: 14px 16px;
     gap: 10px;
+    margin-top: 0;
+  }
+
+  [data-style="brutalist"] .hcp-section:has(.hcp-meta-grid) {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   [data-style="brutalist"] .hcp-meta-item:hover {

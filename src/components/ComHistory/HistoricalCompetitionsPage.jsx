@@ -278,11 +278,6 @@ function InfoMetaGrid({ competition }) {
       value: typeStr,
       color: typeColor(competition.type),
     },
-    fmt && {
-      icon: <Shuffle size={13} />,
-      label: "Formato",
-      value: FORMAT_LABEL[fmt] || fmt,
-    },
     competition.num_teams && {
       icon: <Users size={13} />,
       label: "Equipos",
