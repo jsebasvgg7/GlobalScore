@@ -1818,24 +1818,36 @@
     font-weight: 700;
   }
 
-  /* ── NEUMORPHISM meta-grid ── */
+  [data-style="neumorphism"] .hcp-section:has(.hcp-meta-grid) {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+  }
+
   [data-style="neumorphism"] .hcp-meta-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 16px;
+    gap: 12px;
+    padding: 16px 16px 8px;
     border: none;
-    background: var(--hcp-bg);
     border-bottom: none;
+    background: transparent;
   }
 
   [data-style="neumorphism"] .hcp-meta-item {
     border: none;
     border-radius: var(--hcp-r-md);
-    box-shadow: var(--hcp-shadow-sm);
-    background: var(--hcp-surface, var(--hcp-bg));
-    padding: 10px 12px;
+    box-shadow: var(--hcp-shadow);
+    background: var(--hcp-bg);
+    padding: 14px 16px;
     gap: 10px;
-    transition: box-shadow 0.18s;
+    transition: box-shadow 0.18s, transform 0.15s;
+  }
+
+  [data-style="neumorphism"] .hcp-meta-item:active {
+    box-shadow: var(--hcp-inset-sm);
+    transform: scale(0.97);
   }
 
   [data-style="neumorphism"] .hcp-meta-item:hover {
@@ -1947,6 +1959,7 @@
 
   [data-style="neumorphism"] .hcp-meta-grid {
     gap: 8px;
-    padding: 12px;
+    padding: 12px 12px 6px;
+    background: transparent;
   }
 }
