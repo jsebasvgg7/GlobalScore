@@ -958,8 +958,6 @@
   flex-direction: column;
 }
 
-.hep-lineup-col--right .hep-lineup-list {}
-
 .hep-lineup-col--right .hep-lineup-row {
   flex-direction: row;
 }
