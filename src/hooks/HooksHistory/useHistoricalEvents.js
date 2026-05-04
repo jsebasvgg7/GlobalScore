@@ -83,7 +83,7 @@ export function useHistoricalEventDetail(eventId) {
         .from("historical_events")
         .select(`
           *,
-          historical_players!historical_events_protagonist_id_fkey(id, name, image_path, country, position, era, legacy_type, impact_summary),
+          historical_players!historical_events_protagonist_id_fkey(id, name, image_path, country, position, legacy_type, impact_summary),
           historical_teams!historical_events_team_protagonist_id_fkey(id, name, image_path, primary_color, secondary_color, country, formation, manager)
         `)
         .eq("id", eventId)

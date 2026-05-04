@@ -174,8 +174,6 @@ function PlayerEventDetail({ event, lineups }) {
                 {protagonist.country && <span>{protagonist.country}</span>}
                 {protagonist.position && <span className="hep-meta-sep">·</span>}
                 {protagonist.position && <span>{protagonist.position}</span>}
-                {protagonist.era && <span className="hep-meta-sep">·</span>}
-                {protagonist.era && <span className="hep-proto-era">{protagonist.era}</span>}
               </div>
               {protagonist.impact_summary && (
                 <p className="hep-proto-impact">"{protagonist.impact_summary.slice(0, 160)}{protagonist.impact_summary.length > 160 ? "…" : ""}"</p>
