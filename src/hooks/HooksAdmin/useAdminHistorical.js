@@ -46,10 +46,26 @@ const VALID_EVENT_FIELDS = new Set([
   "team_protagonist_id",
 ]);
 
-const cleanEventPayload = (formData) =>
-  Object.fromEntries(
+const cleanEventPayload = (formData) => {
+  const filtered = Object.fromEntries(
     Object.entries(formData).filter(([key]) => VALID_EVENT_FIELDS.has(key))
   );
+
+  // Sanitizar campos UUID: string vacío → null
+  const uuidFields = ["protagonist_id", "team_protagonist_id"];
+  for (const field of uuidFields) {
+    if (field in filtered && !filtered[field]) {
+      filtered[field] = null;
+    }
+  }
+
+  // Sanitizar event_date: string vacío → null
+  if ("event_date" in filtered && !filtered.event_date) {
+    filtered.event_date = null;
+  }
+
+  return filtered;
+};
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  HOOK PRINCIPAL
