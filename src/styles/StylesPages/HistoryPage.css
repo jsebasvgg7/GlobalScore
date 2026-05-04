@@ -1350,6 +1350,7 @@
   .hp-shell>*:last-child:not(.hp-root):not(.hp-root--detail) {
     display: none !important;
   }
+
 }
 
 /* ── Responsive del shell ────────────────────────────────── */
@@ -1368,6 +1369,7 @@
     overflow: visible;
     min-height: 100vh;
   }
+
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1383,11 +1385,6 @@
   .hp-header {
     padding: 21px 23px 18px;
     gap: 13px;
-  }
-
-  .hp-badge {
-    align-self: center;
-    margin: 0 auto;
   }
 
   .hp-search-wrap {
