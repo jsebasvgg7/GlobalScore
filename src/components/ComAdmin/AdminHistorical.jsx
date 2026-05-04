@@ -2232,6 +2232,18 @@ export default function AdminHistorical() {
   const renderEventMeta = (e) =>
     [EVENT_TYPE_LABEL[e.event_type] || e.event_type, e.event_date].filter(Boolean).join(" · ");
 
+  // ── Bloquear scroll del body cuando el drawer está abierto ──
+  useEffect(() => {
+    if (panel) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [panel]);
+
+  const isOpen = !!panel;
+
   return (
     <div className="ah-root">
       <div className="ah-shell">
@@ -2305,26 +2317,48 @@ export default function AdminHistorical() {
           </div>
         </div>
 
-        {/* ── RIGHT (50%) ── */}
-        <aside className="ah-right">
+        {/* ── OVERLAY ── */}
+        <div
+          className={`ah-overlay ${isOpen ? "ah-overlay--visible" : ""}`}
+          onClick={closePanel}
+          aria-hidden="true"
+        />
+
+        {/* ── DRAWER (right panel) ── */}
+        <aside
+          className={`ah-right ${isOpen ? "ah-right--open" : ""}`}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Panel de edición"
+        >
+          {/* Header */}
           <div className="ah-panel-header">
             <div className="ah-panel-header-left">
               <span className="ah-panel-dot" />
               <span className="ah-panel-title">
                 {panel
-                  ? (panel.data
-                    ? `Editar ${TABS.find(t => t.key === activeTab)?.label.slice(0, -1)}`
-                    : `Nuevo ${TABS.find(t => t.key === activeTab)?.label.slice(0, -1)}`)
+                  ? TABS.find(t => t.key === activeTab)?.label.slice(0, -1) ?? "Registro"
                   : "Panel"}
               </span>
+              {panel && (
+                <span className={`ah-panel-badge ${panel.data ? "ah-panel-badge--edit" : "ah-panel-badge--new"}`}>
+                  {panel.data ? "Editar" : "Nuevo"}
+                </span>
+              )}
             </div>
+
             {panel && (
-              <button className="ah-panel-back" onClick={closePanel}>
-                <ChevronLeft size={12} /> Volver
+              <button
+                className="ah-panel-back"
+                onClick={closePanel}
+                aria-label="Cerrar panel"
+              >
+                <X size={13} />
               </button>
             )}
           </div>
 
+          {/* Body */}
           <div className="ah-panel-body">
             {!panel && <EmptyPanel activeTab={activeTab} />}
 
