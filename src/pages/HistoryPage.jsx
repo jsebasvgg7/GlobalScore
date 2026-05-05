@@ -14,6 +14,7 @@ import TeamsRightPanel from "../components/ComPanels/TeamsRightPanel";
 import EventsRightPanel from "../components/ComPanels/EventsRightPanel";
 import HistoricalEventsPage from "../components/ComHistory/HistoricalEventsPage";
 import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
+import HistoryWelcomeScreen from "../components/ComHistory/HistoryWelcomeScreen";
 import HistoricalCompetitionsPage from "../components/ComHistory/HistoricalCompetitionsPage";
 import HistorySectionNav from "../components/ComHistory/HistorySectionNav.jsx";
 import Footer from '../components/ComLayout/Footer';
@@ -465,6 +466,7 @@ export default function HistoryPage() {
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
   const [hoveredPlayer, setHoveredPlayer] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [historyUnlocked, setHistoryUnlocked] = useState(false);
 
   const {
     players, allPlayers, loading, error, reload,
@@ -483,7 +485,14 @@ export default function HistoryPage() {
     setSelectedPlayerId(null);
     window.scrollTo({ top: 0, behavior: "instant" });
   };
-
+  if (!historyUnlocked) {
+    return (
+      <HistoryWelcomeScreen
+        style="brutalist"
+        onEnter={() => setHistoryUnlocked(true)}
+      />
+    );
+  }
   // ── Vista detalle jugador ──
   if (activeSection === "players" && selectedPlayerId) {
     return (

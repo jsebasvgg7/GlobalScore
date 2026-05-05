@@ -1,0 +1,909 @@
+/* ════════════════════════════════════════════════
+   ██╗  ██╗██╗███████╗████████╗ ██████╗ ██████╗ ██╗   ██╗
+   ██║  ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗╚██╗ ██╔╝
+   ███████║██║███████╗   ██║   ██║   ██║██████╔╝ ╚████╔╝
+   ██╔══██║██║╚════██║   ██║   ██║   ██║██╔══██╗  ╚██╔╝
+   ██║  ██║██║███████║   ██║   ╚██████╔╝██║  ██║   ██║
+   WELCOME SCREEN — brutalist + neumorphism
+════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════
+   KEYFRAMES
+════════════════════════════════════════════════ */
+@keyframes hws-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hws-lock-bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-8px);
+  }
+
+  60% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes hws-unlock-shake {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(-8deg);
+  }
+
+  40% {
+    transform: rotate(8deg);
+  }
+
+  60% {
+    transform: rotate(-4deg);
+  }
+
+  80% {
+    transform: rotate(4deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes hws-flash {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.35;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes hws-particle-float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--rot, 0deg));
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(var(--rot, 0deg));
+  }
+}
+
+@keyframes hws-key-turn {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hws-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hws-ring-pulse {
+
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+
+  50% {
+    opacity: 0.32;
+  }
+}
+
+@keyframes hws-spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hws-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+}
+
+/* ════════════════════════════════════════════════
+   ROOT — SHARED
+════════════════════════════════════════════════ */
+.hws-root {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  animation: hws-fade-in 0.4s ease both;
+}
+
+/* Exit phase */
+.hws-phase--exiting {
+  animation: hws-exit 0.5s ease forwards;
+}
+
+/* Flash overlay */
+.hws-flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  pointer-events: none;
+  z-index: 50;
+  animation: hws-flash 0.6s ease forwards;
+}
+
+/* ════════════════════════════════════════════════
+   ██████╗ ██████╗ ██╗   ██╗████████╗ █████╗ ██╗
+   ██╔══██╗██╔══██╗██║   ██║╚══██╔══╝██╔══██╗██║
+   ██████╔╝██████╔╝██║   ██║   ██║   ███████║██║
+   ██╔══██╗██╔══██╗██║   ██║   ██║   ██╔══██║██║
+   ██████╔╝██║  ██║╚██████╔╝   ██║   ██║  ██║███████╗
+   BRUTALIST
+════════════════════════════════════════════════ */
+
+[data-style="brutalist"] .hws-root--bru {
+  background: #f0ede8;
+  color: #1a1a2e;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-root--bru {
+  background: #1E1C28;
+  color: #E8E6F0;
+}
+
+/* ── Grid background pattern ── */
+.hws-bg-pattern {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  color: #c4bfb8;
+  z-index: 0;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-bg-pattern {
+  color: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Particles ── */
+.hws-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hws-particle {
+  position: absolute;
+  background: #5b4fd8;
+  opacity: 0.18;
+  animation: hws-particle-float 4s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-particle {
+  background: #8b7fc7;
+  opacity: 0.22;
+}
+
+/* ── Year decoration ── */
+.hws-year-deco {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #c4bfb8;
+  z-index: 1;
+  pointer-events: none;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-year-deco {
+  color: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Card ── */
+[data-style="brutalist"] .hws-card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border: 1.5px solid #c4bfb8;
+  border-bottom: 4px solid #5b4fd8;
+  padding: 36px 32px 32px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 6px 6px 0 #5b4fd8;
+  animation: hws-slide-up 0.45s cubic-bezier(.16, 1, .3, 1) 0.1s both;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-card {
+  background: #252230;
+  border-color: rgba(255, 255, 255, 0.09);
+  border-bottom-color: #8b7fc7;
+  box-shadow: 6px 6px 0 #8b7fc7;
+}
+
+/* ── Eyebrow ── */
+.hws-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.hws-eyebrow-line {
+  flex: 1;
+  height: 1px;
+  background: #c4bfb8;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-eyebrow-line {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.hws-eyebrow-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #888780;
+  white-space: nowrap;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-eyebrow-text {
+  color: #5A566E;
+}
+
+/* ── Lock wrapper ── */
+[data-style="brutalist"] .hws-lock-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  animation: hws-lock-bounce 3s ease-in-out infinite;
+}
+
+[data-style="brutalist"] .hws-lock-wrap--unlocked {
+  animation: hws-unlock-shake 0.5s ease forwards;
+}
+
+.hws-lock-glow {
+  position: absolute;
+  inset: -8px;
+  background: radial-gradient(circle, rgba(91, 79, 216, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Lock SVG — Brutalist ── */
+[data-style="brutalist"] .hws-lock-svg {
+  width: 56px;
+  height: 70px;
+}
+
+[data-style="brutalist"] .hws-lock-body {
+  fill: none;
+  stroke: #1a1a2e;
+}
+
+[data-style="brutalist"] .hws-lock-shackle {
+  fill: none;
+  stroke: #1a1a2e;
+  transform-origin: center;
+  transition: transform 0.4s cubic-bezier(.34, 1.56, .64, 1), stroke 0.3s;
+}
+
+[data-style="brutalist"] .hws-lock-shackle--open {
+  transform: translateY(-8px) rotate(-30deg);
+  stroke: #5b4fd8;
+}
+
+[data-style="brutalist"] .hws-lock-eye {
+  fill: #1a1a2e;
+  transition: fill 0.3s;
+}
+
+[data-style="brutalist"] .hws-lock-slot {
+  fill: #1a1a2e;
+  transition: fill 0.3s;
+}
+
+[data-style="brutalist"] .hws-lock-wrap--unlocked .hws-lock-body {
+  stroke: #5b4fd8;
+}
+
+[data-style="brutalist"] .hws-lock-wrap--unlocked .hws-lock-eye,
+[data-style="brutalist"] .hws-lock-wrap--unlocked .hws-lock-slot {
+  fill: #5b4fd8;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-lock-body,
+[data-style="brutalist"][data-theme="dark"] .hws-lock-shackle {
+  stroke: #E8E6F0;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-lock-eye,
+[data-style="brutalist"][data-theme="dark"] .hws-lock-slot {
+  fill: #E8E6F0;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-lock-wrap--unlocked .hws-lock-body,
+[data-style="brutalist"][data-theme="dark"] .hws-lock-wrap--unlocked .hws-lock-shackle {
+  stroke: #8b7fc7;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-lock-wrap--unlocked .hws-lock-eye,
+[data-style="brutalist"][data-theme="dark"] .hws-lock-wrap--unlocked .hws-lock-slot {
+  fill: #8b7fc7;
+}
+
+/* ── Title — Brutalist ── */
+[data-style="brutalist"] .hws-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.hws-title-line1 {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #888780;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-title-line1 {
+  color: #5A566E;
+}
+
+.hws-title-line2 {
+  font-family: 'DM Mono', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #5b4fd8;
+  line-height: 1.05;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-title-line2 {
+  color: #8b7fc7;
+}
+
+/* ── Subtitle ── */
+[data-style="brutalist"] .hws-subtitle {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: #888780;
+  margin: 0 0 28px;
+  line-height: 1.7;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-subtitle {
+  color: #5A566E;
+}
+
+/* ── Key Button — Brutalist ── */
+[data-style="brutalist"] .hws-key-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 18px;
+  background: #1a1a2e;
+  border: none;
+  cursor: pointer;
+  gap: 14px;
+  transition: box-shadow 0.1s, transform 0.1s;
+  box-shadow: 3px 3px 0 #5b4fd8;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[data-style="brutalist"] .hws-key-btn:active:not(:disabled) {
+  box-shadow: 1px 1px 0 #5b4fd8;
+  transform: translate(2px, 2px);
+}
+
+[data-style="brutalist"] .hws-key-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-key-btn {
+  background: #5b4fd8;
+  box-shadow: 3px 3px 0 #8b7fc7;
+}
+
+/* Turning state */
+[data-style="brutalist"] .hws-key-btn--turning .hws-key-icon-wrap {
+  animation: hws-key-turn 0.6s linear;
+}
+
+.hws-key-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.hws-key-icon-wrap {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* ── Key SVG — Brutalist ── */
+[data-style="brutalist"] .hws-key-svg {
+  width: 64px;
+  height: 22px;
+}
+
+[data-style="brutalist"] .hws-key-head,
+[data-style="brutalist"] .hws-key-shaft,
+[data-style="brutalist"] .hws-key-teeth {
+  stroke: #fff;
+}
+
+[data-style="brutalist"] .hws-key-inner {
+  stroke: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Hint ── */
+[data-style="brutalist"] .hws-hint {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: #888780;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-hint {
+  color: #5A566E;
+}
+
+.hws-hint-dot {
+  width: 5px;
+  height: 5px;
+  background: #5b4fd8;
+  flex-shrink: 0;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hws-hint-dot {
+  background: #8b7fc7;
+}
+
+
+/* ════════════════════════════════════════════════
+   ███╗   ██╗███████╗██╗   ██╗
+   ████╗  ██║██╔════╝██║   ██║
+   ██╔██╗ ██║█████╗  ██║   ██║
+   ██║╚██╗██║██╔══╝  ██║   ██║
+   NEUMORPHISM
+════════════════════════════════════════════════ */
+
+[data-style="neumorphism"] .hws-root {
+  background: #EAE7E1;
+  --nm-light: rgba(255, 255, 255, .85);
+  --nm-dark: rgba(166, 158, 148, .55);
+  --nm-il: rgba(255, 255, 255, .70);
+  --nm-id: rgba(166, 158, 148, .45);
+  --nm-s: 6px 6px 14px var(--nm-dark), -4px -4px 10px var(--nm-light);
+  --nm-sm: 4px 4px 10px var(--nm-dark), -3px -3px 7px var(--nm-light);
+  --nm-lg: 8px 8px 20px var(--nm-dark), -6px -6px 16px var(--nm-light);
+  --nm-i: inset 3px 3px 8px var(--nm-id), inset -3px -3px 8px var(--nm-il);
+  --nm-ism: inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
+  --hws-accent: #60519b;
+  --hws-accent-l: #8b7fc7;
+  --hws-gold: #C9961A;
+  --hws-text: #2A2535;
+  --hws-muted: #9B95A8;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hws-root {
+  background: #1E1C28;
+  --nm-light: rgba(40, 37, 55, .9);
+  --nm-dark: rgba(10, 9, 16, .7);
+  --nm-il: rgba(40, 37, 55, .7);
+  --nm-id: rgba(10, 9, 16, .6);
+  --nm-s: 3px 3px 8px var(--nm-dark), -2px -2px 6px var(--nm-light);
+  --nm-sm: 2px 2px 5px var(--nm-dark), -1px -1px 4px var(--nm-light);
+  --nm-lg: 4px 4px 12px var(--nm-dark), -3px -3px 8px var(--nm-light);
+  --nm-i: inset 2px 2px 5px var(--nm-id), inset -2px -2px 5px var(--nm-il);
+  --nm-ism: inset 1px 1px 3px var(--nm-id), inset -1px -1px 3px var(--nm-il);
+  --hws-accent: #8b7fc7;
+  --hws-accent-l: #a599d9;
+  --hws-gold: #D4A832;
+  --hws-text: #E8E6F0;
+  --hws-muted: #5A566E;
+}
+
+/* ── Arcs background ── */
+.hws-neu-arcs {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  animation: hws-ring-pulse 5s ease-in-out infinite;
+}
+
+/* ── Medallion wrapper ── */
+[data-style="neumorphism"] .hws-neu-medallion {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 340px;
+  text-align: center;
+  padding-bottom: 8px;
+  animation: hws-slide-up 0.5s cubic-bezier(.16, 1, .3, 1) 0.08s both;
+}
+
+/* ── Ring system ── */
+[data-style="neumorphism"] .hws-neu-ring-wrap {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin-bottom: 28px;
+  flex-shrink: 0;
+}
+
+[data-style="neumorphism"] .hws-neu-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(96, 81, 155, 0.15);
+}
+
+[data-style="neumorphism"] .hws-neu-ring--1 {
+  inset: 0;
+  box-shadow: var(--nm-s);
+  background: transparent;
+}
+
+[data-style="neumorphism"] .hws-neu-ring--2 {
+  inset: 16px;
+  border-color: rgba(96, 81, 155, 0.1);
+  box-shadow: var(--nm-sm);
+}
+
+[data-style="neumorphism"] .hws-neu-ring--3 {
+  inset: 32px;
+  border-color: rgba(96, 81, 155, 0.08);
+  border-style: dashed;
+  animation: hws-spin-slow 16s linear infinite;
+}
+
+/* ── Cardinal dots ── */
+[data-style="neumorphism"] .hws-neu-dot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--hws-accent);
+  box-shadow: 0 0 8px rgba(96, 81, 155, 0.4);
+  opacity: 0.6;
+}
+
+/* ── Central disc ── */
+[data-style="neumorphism"] .hws-neu-disc {
+  position: absolute;
+  inset: 44px;
+  border-radius: 50%;
+  background: #EAE7E1;
+  box-shadow: var(--nm-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.4s ease;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hws-neu-disc {
+  background: #1E1C28;
+}
+
+[data-style="neumorphism"] .hws-neu-disc--unlocked {
+  box-shadow: var(--nm-i);
+}
+
+/* ── Lock wrapper — Neumorphism ── */
+[data-style="neumorphism"] .hws-lock-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: hws-lock-bounce 3s ease-in-out infinite;
+}
+
+[data-style="neumorphism"] .hws-lock-wrap--unlocked {
+  animation: hws-unlock-shake 0.5s ease forwards;
+}
+
+/* ── Lock SVG — Neumorphism ── */
+[data-style="neumorphism"] .hws-lock-svg {
+  width: 44px;
+  height: 56px;
+  filter: drop-shadow(0 2px 6px rgba(96, 81, 155, 0.2));
+}
+
+[data-style="neumorphism"] .hws-lock-body {
+  fill: none;
+  stroke: var(--hws-accent);
+}
+
+[data-style="neumorphism"] .hws-lock-shackle {
+  fill: none;
+  stroke: var(--hws-accent);
+  transform-origin: center;
+  transition: transform 0.4s cubic-bezier(.34, 1.56, .64, 1), stroke 0.3s;
+}
+
+[data-style="neumorphism"] .hws-lock-shackle--open {
+  transform: translateY(-8px) rotate(-30deg);
+  stroke: var(--hws-gold);
+}
+
+[data-style="neumorphism"] .hws-lock-eye {
+  fill: var(--hws-accent);
+  transition: fill 0.3s;
+}
+
+[data-style="neumorphism"] .hws-lock-slot {
+  fill: var(--hws-accent);
+  transition: fill 0.3s;
+}
+
+[data-style="neumorphism"] .hws-lock-wrap--unlocked .hws-lock-body,
+[data-style="neumorphism"] .hws-lock-wrap--unlocked .hws-lock-shackle {
+  stroke: var(--hws-gold);
+}
+
+[data-style="neumorphism"] .hws-lock-wrap--unlocked .hws-lock-eye,
+[data-style="neumorphism"] .hws-lock-wrap--unlocked .hws-lock-slot {
+  fill: var(--hws-gold);
+}
+
+/* ── Overline ── */
+[data-style="neumorphism"] .hws-neu-overline {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--hws-muted);
+  margin-bottom: 10px;
+}
+
+/* ── Title — Neumorphism ── */
+[data-style="neumorphism"] .hws-neu-title {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--hws-text);
+  line-height: 1.1;
+  margin: 0 0 10px;
+}
+
+[data-style="neumorphism"] .hws-neu-title em {
+  font-style: normal;
+  color: var(--hws-accent);
+}
+
+/* ── Rule ── */
+[data-style="neumorphism"] .hws-neu-rule {
+  width: 36px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--hws-accent), var(--hws-accent-l));
+  border-radius: 100px;
+  margin: 0 auto 12px;
+  box-shadow: 0 0 8px rgba(96, 81, 155, 0.35);
+}
+
+/* ── Subtitle — Neumorphism ── */
+[data-style="neumorphism"] .hws-neu-sub {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--hws-muted);
+  line-height: 1.7;
+  margin: 0 0 28px;
+}
+
+/* ── Button wrap — Neumorphism ── */
+[data-style="neumorphism"] .hws-neu-btn-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/* ── Main button — Neumorphism ── */
+[data-style="neumorphism"] .hws-neu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 16px 14px 22px;
+  background: #EAE7E1;
+  border: none;
+  border-radius: 100px;
+  box-shadow: var(--nm-s);
+  cursor: pointer;
+  gap: 12px;
+  transition: box-shadow 0.18s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hws-neu-btn {
+  background: #1E1C28;
+}
+
+[data-style="neumorphism"] .hws-neu-btn--pressed {
+  box-shadow: var(--nm-i);
+}
+
+[data-style="neumorphism"] .hws-neu-btn:active:not(:disabled) {
+  box-shadow: var(--nm-i);
+  transform: scale(0.98);
+}
+
+[data-style="neumorphism"] .hws-neu-btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+/* Button text */
+[data-style="neumorphism"] .hws-neu-btn-text {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hws-text);
+  flex: 1;
+  text-align: left;
+}
+
+/* ── Key cap — Neumorphism ── */
+[data-style="neumorphism"] .hws-neu-key-cap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--hws-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--nm-sm);
+  transition: transform 0.3s ease;
+}
+
+[data-style="neumorphism"] .hws-neu-key-cap--spinning {
+  animation: hws-key-turn 0.6s linear;
+}
+
+/* ── Hint — Neumorphism ── */
+[data-style="neumorphism"] .hws-neu-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--hws-muted);
+}
+
+[data-style="neumorphism"] .hws-neu-hint-pip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hws-gold);
+  box-shadow: 0 0 6px rgba(201, 150, 26, 0.5);
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE — ≤380px
+════════════════════════════════════════════════ */
+@media screen and (max-width: 380px) {
+  [data-style="brutalist"] .hws-card {
+    padding: 28px 20px 26px;
+    max-width: 320px;
+  }
+
+  .hws-title-line2 {
+    font-size: 26px;
+  }
+
+  [data-style="neumorphism"] .hws-neu-ring-wrap {
+    width: 150px;
+    height: 150px;
+  }
+
+  [data-style="neumorphism"] .hws-neu-title {
+    font-size: 28px;
+  }
+
+  [data-style="neumorphism"] .hws-neu-btn {
+    padding: 12px 14px 12px 18px;
+  }
+}
+
+/* ════════════════════════════════════════════════
+   REDUCED MOTION
+════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+
+  .hws-root,
+  .hws-lock-wrap,
+  .hws-particle,
+  .hws-neu-ring--3,
+  .hws-neu-arcs {
+    animation: none !important;
+  }
+
+  [data-style="neumorphism"] .hws-neu-btn {
+    transition: box-shadow 0.1s;
+  }
+}
