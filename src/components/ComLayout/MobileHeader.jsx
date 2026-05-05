@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Bell, Moon, Sun, Trophy, Award, BarChart3, Globe, User2, NotebookPen, Shield, History, Notebook } from "lucide-react";
+import { Bell, Moon, Sun, Trophy, Award, BarChart3, Globe, User2, NotebookPen, Shield, History, Notebook, Landmark } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import "../../styles/StylesLayout/MobileHeader.css";
@@ -64,7 +64,7 @@ export default function MobileHeader({ currentUser }) {
             onClick={() => navigate("/history")}
             aria-label="Histórico"
           >
-            <Notebook size={15} strokeWidth={2} />
+            <Landmark size={15} strokeWidth={2} />
           </button>
 
           {/* Theme toggle */}
