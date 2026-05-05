@@ -25,7 +25,7 @@ function EventsCard({ events, loading, onClick }) {
         setIdx(i => (i + 1) % events.length);
         setFade(true);
       }, 300);
-    }, 6000);
+    }, 9000);
     return () => clearInterval(t);
   }, [events.length]);
 
