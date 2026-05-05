@@ -320,6 +320,8 @@
   grid-row: 1;
   min-height: 280px;
   animation-delay: 0.05s;
+  display: flex;
+  flex-direction: column;
 }
 
 .hmd-item--competitions {
@@ -456,19 +458,22 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(to top,
-      rgba(0, 0, 0, 0.92) 0%,
-      rgba(0, 0, 0, 0.45) 45%,
-      rgba(0, 0, 0, 0.05) 100%);
+      rgba(0, 0, 0, 0.90) 0%,
+      rgba(0, 0, 0, 0.60) 25%,
+      rgba(0, 0, 0, 0.10) 60%,
+      rgba(0, 0, 0, 0.00) 100%);
 }
 
 .hmd-player-content {
-  position: relative;
+  position: absolute;
+  bottom: 48px;
+  left: 0;
+  right: 0;
   z-index: 2;
-  margin-top: auto;
-  padding: 20px 24px 0;
+  padding: 16px 24px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   transition: opacity 0.3s ease;
 }
 
