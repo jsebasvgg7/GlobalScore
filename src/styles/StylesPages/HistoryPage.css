@@ -1361,6 +1361,41 @@
 
 }
 
+@media screen and (max-width: 768px) {
+
+  /* Teams */
+  .htp-root {
+    padding-bottom: 5px;
+  }
+
+  .htp-detail {
+    padding-bottom: 5px;
+  }
+
+  /* Quitar margin-bottom excesivo en sección last neumorphism */
+  [data-style="neumorphism"] .htp-section--last {
+    margin-bottom: 4px;
+  }
+
+  /* Events */
+  .hep-root {
+    padding-bottom: 5px;
+  }
+
+  .hep-detail {
+    padding-bottom: 5px;
+  }
+
+  /* Competitions */
+  .hcp-root {
+    padding-bottom: 5px;
+  }
+
+  .hcp-detail {
+    padding-bottom: 5px;
+  }
+}
+
 /* ── Responsive del shell ────────────────────────────────── */
 @media (max-width: 1331px) {
 
