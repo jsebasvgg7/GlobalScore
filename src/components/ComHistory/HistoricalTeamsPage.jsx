@@ -242,6 +242,9 @@ function TeamDetail({ teamId, onBack }) {
 
   return (
     <div className="htp-detail">
+      <button className="htp-back-section-btn" onClick={onBack}>
+        <ArrowLeft size={13} /> Equipos
+      </button>
 
       {/* ── HERO ── */}
       <div
@@ -441,7 +444,7 @@ function TeamCard({ team, onClick }) {
 // ══════════════════════════════════════════════════════════════
 //  COMPONENTE PRINCIPAL — HistoricalTeamsPage
 // ══════════════════════════════════════════════════════════════
-export default function HistoricalTeamsPage({ rightPanelRef }) {
+export default function HistoricalTeamsPage({ rightPanelRef, onBack }) {
   const [selectedId, setSelectedId] = useState(null);
   const { teams, loading, error, reload, search, setSearch } = useHistoricalTeams();
 
@@ -452,7 +455,6 @@ export default function HistoricalTeamsPage({ rightPanelRef }) {
   return (
     <div className="htp-root">
 
-      {/* Header */}
       <header className="htp-header">
         <div className="htp-header-left">
           <div className="htp-header-icon"><Shield size={18} strokeWidth={1.5} /></div>
@@ -461,15 +463,22 @@ export default function HistoricalTeamsPage({ rightPanelRef }) {
             <p className="htp-header-sub">{teams.length} equipos legendarios</p>
           </div>
         </div>
-        <div className="htp-search-wrap">
-          <Search size={12} className="htp-search-ico" />
-          <input
-            className="htp-search-input"
-            placeholder="Buscar equipo, país..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-          {search && <button className="htp-search-clear" onClick={() => setSearch("")}><X size={11} /></button>}
+
+        {/* ANTES tenías solo htp-search-wrap, ahora agrupa los dos */}
+        <div className="htp-header-right">
+          <div className="htp-search-wrap">
+            <Search size={12} className="htp-search-ico" />
+            <input
+              className="htp-search-input"
+              placeholder="Buscar equipo, país..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+            {search && <button className="htp-search-clear" onClick={() => setSearch("")}><X size={11} /></button>}
+          </div>
+          <button className="htp-back-vault-btn" onClick={onBack}>
+            Volver
+          </button>
         </div>
       </header>
 

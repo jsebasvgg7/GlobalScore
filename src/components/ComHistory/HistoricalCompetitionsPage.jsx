@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import {
   Trophy, Search, X, ChevronLeft, Globe, Layers,
   Shield, RefreshCw, AlertCircle, Award, Flag,
-  ChevronRight, Star, Minus, Calendar, Hash, Users, Shuffle
+  ChevronRight, Star, Minus, Calendar, Hash, Users, Shuffle, ArrowLeft,
 } from "lucide-react";
 import {
   useHistoricalCompetitions,
@@ -518,7 +518,9 @@ function CompetitionDetail({ competitionId, onBack }) {
 
   return (
     <div className="hcp-detail">
-
+      <button className="hcp-back-section-btn" onClick={onBack}>
+        <ArrowLeft size={13} /> Competiciones
+      </button>
       {/* ── HERO: solo logo + nombre + campeón ── */}
       <div className="hcp-detail-hero" style={{ "--type-color": typeColor(competition.type) }}>
         <div className="hcp-detail-logo-wrap">
@@ -625,7 +627,7 @@ function CompetitionDetail({ competitionId, onBack }) {
 // ══════════════════════════════════════════════════════════════════════════════
 //  PÁGINA PRINCIPAL
 // ══════════════════════════════════════════════════════════════════════════════
-export default function HistoricalCompetitionsPage() {
+export default function HistoricalCompetitionsPage({ onBack }) {
   const {
     competitions, loading, error, reload,
     search, setSearch,
@@ -686,6 +688,9 @@ export default function HistoricalCompetitionsPage() {
             <Layers size={12} />
             Filtros
             {hasFilters && <span className="hcp-filter-dot" />}
+          </button>
+          <button className="hp-back-vault-btn" onClick={onBack}>
+            Volver
           </button>
         </div>
       </header>

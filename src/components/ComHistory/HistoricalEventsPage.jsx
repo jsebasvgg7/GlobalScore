@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import {
   Zap, Search, X, RefreshCw, AlertCircle,
   Users2, Shield, Trophy, ChevronRight,
-  Calendar, Star, Globe, Filter,
+  Calendar, Star, Globe, Filter, ArrowLeft,
 } from "lucide-react";
 import {
   useHistoricalEvents,
@@ -416,7 +416,7 @@ function SquadRow({ player, highlight }) {
 // ══════════════════════════════════════════════════════════════════════════════
 //  VISTA DETALLE (router entre tipos)
 // ══════════════════════════════════════════════════════════════════════════════
-function EventDetail({ eventId }) {
+function EventDetail({ eventId, onBack }) {
   const { event, lineups, squad, standings, knockout, loading, error, reload } =
     useHistoricalEventDetail(eventId);
 
@@ -441,7 +441,9 @@ function EventDetail({ eventId }) {
 
   return (
     <div className="hep-detail">
-
+      <button className="hep-back-section-btn" onClick={onBack}>
+        <ArrowLeft size={13} /> Momentos
+      </button>
       {/* ── HERO BANNER ── */}
       <div className="hep-hero" style={{ "--cat-c": catColor }}>
         <div className="hep-hero-img-wrap">
@@ -495,7 +497,7 @@ function EventDetail({ eventId }) {
 // ══════════════════════════════════════════════════════════════════════════════
 //  PÁGINA PRINCIPAL
 // ══════════════════════════════════════════════════════════════════════════════
-export default function HistoricalEventsPage({ selectedEvent, onEventSelect }) {
+export default function HistoricalEventsPage({ selectedEvent, onEventSelect, onBack }) {
   const {
     events, allEvents, loading, error, reload,
     search, setSearch,
@@ -512,9 +514,10 @@ export default function HistoricalEventsPage({ selectedEvent, onEventSelect }) {
   if (selectedId) {
     return (
       <div className="hep-root hep-root--detail">
-        <div className="hep-detail-back-bar">
-        </div>
-        <EventDetail eventId={selectedId} />
+        <EventDetail
+          eventId={selectedId}
+          onBack={() => onEventSelect(null)}
+        />
       </div>
     );
   }
@@ -554,6 +557,9 @@ export default function HistoricalEventsPage({ selectedEvent, onEventSelect }) {
             <Filter size={12} />
             Filtros
             {hasFilters && <span className="hep-filter-dot" />}
+          </button>
+          <button className="hep-back-btn-vault" onClick={onBack}>
+            Volver
           </button>
         </div>
       </header>
