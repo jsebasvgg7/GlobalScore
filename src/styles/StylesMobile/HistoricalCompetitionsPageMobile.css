@@ -991,24 +991,187 @@
     }
   }
 
-  /* ════════ NEUMORPHISM — mobile overrides ════════ */
+  /* ════════════════════════════════════════════════
+   BRACKET SVG — mobile vertical layout ≤768px
+════════════════════════════════════════════════ */
+  @media screen and (max-width: 768px) {
 
-  /* Header */
-  [data-style="neumorphism"] .hcp-header {
-    background: var(--hcp-bg);
-    border-bottom: none;
-    box-shadow: 0 2px 12px rgba(166, 158, 148, .25);
-  }
+    /* Wrapper del bracket SVG: scroll horizontal */
+    .hcp-bk-wrapper {
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent, #8b7fc7) transparent;
+      margin: 0 -16px;
+      padding: 8px 16px 16px;
+    }
 
-  [data-style="neumorphism"][data-theme="dark"] .hcp-header {
-    box-shadow: 0 2px 12px rgba(10, 9, 16, .4);
-  }
+    .hcp-bk-wrapper::-webkit-scrollbar {
+      height: 4px;
+      display: block;
+    }
 
-  [data-style="neumorphism"] .hcp-header-title {
-    font-family: var(--hcp-sans);
-    font-weight: 800;
-    letter-spacing: -.03em;
-    color: var(--hcp-text);
+    .hcp-bk-wrapper::-webkit-scrollbar-thumb {
+      background: var(--accent, #8b7fc7);
+      border-radius: 2px;
+    }
+
+    /* El SVG no colapsa */
+    .hcp-bk-svg {
+      min-width: 260px;
+    }
+
+    /* Sección knockout sin padding lateral que recorte */
+    .hcp-section--knockout {
+      padding-left: 0;
+      padding-right: 0;
+      overflow: hidden;
+    }
+
+    /* ── BRUTALIST mobile bracket ── */
+    [data-style="brutalist"] .hcp-bk-wrapper {
+      margin: 0 -12px;
+      padding: 8px 12px 16px;
+    }
+
+    [data-style="brutalist"] .hcp-bk-card-bg {
+      fill: var(--hcp-card, #e8e4de);
+      stroke: var(--hcp-border-hard, #c4bfb8);
+      stroke-width: 1;
+    }
+
+    [data-style="brutalist"] .hcp-bk-card-shadow {
+      fill: rgba(0, 0, 0, 0.08);
+    }
+
+    [data-style="brutalist"] .hcp-bk-divider {
+      stroke: var(--hcp-border-hard, #c4bfb8);
+      stroke-width: 1;
+    }
+
+    [data-style="brutalist"] .hcp-bk-connector {
+      stroke: var(--hcp-border-hard, #c4bfb8);
+      stroke-dasharray: 3 3;
+      opacity: 0.5;
+    }
+
+    [data-style="brutalist"] .hcp-bk-round-label {
+      font-family: var(--hcp-mono, 'DM Mono', monospace);
+      letter-spacing: 0.14em;
+      fill: var(--hcp-muted, #888780);
+    }
+
+    [data-style="brutalist"] .hcp-bk-round-label--final {
+      fill: var(--hcp-gold, #f59e0b);
+    }
+
+    [data-style="brutalist"] .hcp-bk-team-name {
+      font-family: var(--hcp-mono, 'DM Mono', monospace);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    [data-style="brutalist"] .hcp-bk-score {
+      font-family: var(--hcp-mono, 'DM Mono', monospace);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    [data-style="brutalist"] .hcp-bk-pen-text {
+      font-family: var(--hcp-mono, 'DM Mono', monospace);
+      fill: var(--hcp-muted, #888780);
+    }
+
+    [data-style="brutalist"] .hcp-section--knockout {
+      background: var(--hcp-bg);
+      border-bottom: 1px solid var(--hcp-border);
+    }
+
+    /* ════════ NEUMORPHISM — mobile overrides ════════ */
+
+    /* Header */
+    [data-style="neumorphism"] .hcp-header {
+      background: var(--hcp-bg);
+      border-bottom: none;
+      box-shadow: 0 2px 12px rgba(166, 158, 148, .25);
+    }
+
+    [data-style="neumorphism"][data-theme="dark"] .hcp-header {
+      box-shadow: 0 2px 12px rgba(10, 9, 16, .4);
+    }
+
+    [data-style="neumorphism"] .hcp-header-title {
+      font-family: var(--hcp-sans);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      color: var(--hcp-text);
+    }
+
+    /* ── NEUMORPHISM mobile bracket ── */
+    [data-style="neumorphism"] .hcp-bk-wrapper {
+      margin: 0;
+      padding: 8px 0 16px;
+    }
+
+    [data-style="neumorphism"] .hcp-bk-card-bg {
+      fill: var(--hcp-bg, #EAE7E1);
+      /* Stroke desactivado — el shadow se hace desde CSS en foreignObject */
+      stroke: var(--hcp-border, rgba(166, 158, 148, .25));
+      stroke-width: 0.5;
+    }
+
+    [data-style="neumorphism"] .hcp-bk-card-shadow {
+      fill: rgba(166, 158, 148, 0.25);
+    }
+
+    [data-style="neumorphism"] .hcp-bk-divider {
+      stroke: var(--hcp-border, rgba(166, 158, 148, .25));
+    }
+
+    [data-style="neumorphism"] .hcp-bk-connector {
+      stroke: var(--hcp-border-hard, rgba(166, 158, 148, .4));
+      stroke-dasharray: 3 4;
+      opacity: 0.45;
+    }
+
+    [data-style="neumorphism"] .hcp-bk-round-label {
+      font-family: var(--hcp-sans, 'Plus Jakarta Sans', sans-serif);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      fill: var(--hcp-muted, #9B95A8);
+    }
+
+    [data-style="neumorphism"] .hcp-bk-round-label--final {
+      fill: var(--hcp-gold, #C9961A);
+    }
+
+    [data-style="neumorphism"] .hcp-bk-team-name {
+      font-family: var(--hcp-sans, 'Plus Jakarta Sans', sans-serif);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    [data-style="neumorphism"] .hcp-bk-score {
+      font-family: var(--hcp-sans, 'Plus Jakarta Sans', sans-serif);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    [data-style="neumorphism"] .hcp-bk-pen-text {
+      font-family: var(--hcp-sans, 'Plus Jakarta Sans', sans-serif);
+      fill: var(--hcp-muted, #9B95A8);
+    }
+
+    [data-style="neumorphism"] .hcp-section--knockout {
+      margin: 12px 16px 0;
+      background: var(--hcp-bg);
+      border-radius: var(--hcp-r-lg);
+      box-shadow: var(--hcp-shadow);
+      padding: 16px;
+      border: none;
+      overflow: hidden;
+    }
   }
 
   [data-style="neumorphism"] .hcp-header-sub {
@@ -2177,5 +2340,18 @@
     gap: 8px;
     padding: 12px 12px 6px;
     background: transparent;
+  }
+}
+
+/* ── 380px: cards un poco más pequeñas ── */
+@media screen and (max-width: 380px) {
+  .hcp-bk-wrapper {
+    margin: 0 -14px;
+    padding: 6px 14px 14px;
+  }
+
+  [data-style="neumorphism"] .hcp-section--knockout {
+    margin: 10px 12px 0;
+    padding: 12px;
   }
 }

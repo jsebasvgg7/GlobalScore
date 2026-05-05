@@ -1,0 +1,347 @@
+/* ════════════════════════════════════════════════
+   BRACKET MOBILE — layout vertical por ronda
+   Solo se usa en ≤768px vía KnockoutBracketMobile
+════════════════════════════════════════════════ */
+
+@keyframes hcp-mb-slide-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Contenedor principal ── */
+.hcp-mb-bracket {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 4px 0 8px;
+}
+
+/* ── Bloque de ronda ── */
+.hcp-mb-round-wrap {
+  display: flex;
+  flex-direction: column;
+  animation: hcp-mb-slide-in 0.38s ease both;
+  animation-delay: var(--round-delay, 0ms);
+}
+
+/* ── Header de ronda ── */
+.hcp-mb-round-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border: 0.5px solid;
+  border-radius: 0;
+  margin-bottom: 10px;
+}
+
+.hcp-mb-round-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hcp-mb-round-label {
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  flex: 1;
+}
+
+.hcp-mb-round-count {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+/* ── Columna de partidos ── */
+.hcp-mb-matches-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Tarjeta de partido ── */
+.hcp-mb-match {
+  border: 0.5px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
+  transition: background 0.12s;
+}
+
+.hcp-mb-match--final {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.03);
+}
+
+/* ── Fila de equipo ── */
+.hcp-mb-team {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 14px;
+  min-height: 42px;
+}
+
+.hcp-mb-team-name {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--muted);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.12s;
+}
+
+.hcp-mb-score {
+  font-size: 17px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  flex-shrink: 0;
+  min-width: 22px;
+  text-align: right;
+  transition: color 0.12s;
+}
+
+/* Ganador */
+.hcp-mb-team--win .hcp-mb-team-name {
+  color: var(--text-primary);
+}
+.hcp-mb-team--win .hcp-mb-score {
+  color: var(--mb-win, var(--accent));
+  font-size: 19px;
+}
+
+/* Perdedor */
+.hcp-mb-team--lose .hcp-mb-team-name,
+.hcp-mb-team--lose .hcp-mb-score {
+  opacity: 0.32;
+}
+
+/* ── Divisor ── */
+.hcp-mb-divider {
+  height: 1px;
+  background: var(--border);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 12px;
+}
+
+.hcp-mb-pen {
+  position: absolute;
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  background: var(--card);
+  padding: 0 6px;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+.hcp-mb-match--final .hcp-mb-pen {
+  background: transparent;
+}
+
+/* ── Notas ── */
+.hcp-mb-notes {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  font-style: italic;
+  padding: 6px 14px 10px;
+  border-top: 0.5px dashed var(--border);
+  opacity: 0.65;
+}
+
+/* ── Flecha de progresión entre rondas ── */
+.hcp-mb-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 4px 0;
+  gap: 0;
+}
+
+.hcp-mb-arrow-line {
+  width: 1.5px;
+  height: 20px;
+  background: linear-gradient(to bottom, var(--border), var(--accent));
+  opacity: 0.45;
+}
+
+.hcp-mb-arrow-icon {
+  color: var(--accent);
+  opacity: 0.5;
+  margin-top: -2px;
+}
+
+/* ════════════════════════════════════════════════
+   BRUTALIST overrides
+════════════════════════════════════════════════ */
+[data-style="brutalist"] .hcp-mb-round-header {
+  border-radius: 0;
+  border-width: 1px;
+}
+
+[data-style="brutalist"] .hcp-mb-round-label {
+  font-family: var(--hcp-mono, 'DM Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+[data-style="brutalist"] .hcp-mb-round-count {
+  font-family: var(--hcp-mono, 'DM Mono', monospace);
+  font-size: 9px;
+}
+
+[data-style="brutalist"] .hcp-mb-match {
+  border: 1px solid var(--hcp-border-hard, #c4bfb8);
+  background: var(--hcp-card, #e8e4de);
+  border-radius: 0;
+}
+
+[data-style="brutalist"] .hcp-mb-match--final {
+  border-color: rgba(245, 158, 11, 0.45);
+  background: rgba(245, 158, 11, 0.04);
+}
+
+[data-style="brutalist"] .hcp-mb-team-name {
+  font-family: var(--hcp-mono, 'DM Mono', monospace);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+[data-style="brutalist"] .hcp-mb-score {
+  font-family: var(--hcp-mono, 'DM Mono', monospace);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+[data-style="brutalist"] .hcp-mb-team--win .hcp-mb-score {
+  font-size: 17px;
+}
+
+[data-style="brutalist"] .hcp-mb-divider {
+  background: var(--hcp-border-hard, #c4bfb8);
+  margin: 0 10px;
+}
+
+[data-style="brutalist"] .hcp-mb-pen {
+  font-family: var(--hcp-mono, 'DM Mono', monospace);
+  color: var(--hcp-muted, #888780);
+  background: var(--hcp-card, #e8e4de);
+  font-size: 8px;
+}
+
+[data-style="brutalist"] .hcp-mb-notes {
+  font-family: var(--hcp-mono, 'DM Mono', monospace);
+  border-top: 1px dashed var(--hcp-border-hard, #c4bfb8);
+}
+
+[data-style="brutalist"] .hcp-mb-arrow-line {
+  background: linear-gradient(to bottom,
+    var(--hcp-border-hard, #c4bfb8),
+    var(--hcp-accent, #5b4fd8));
+}
+
+[data-style="brutalist"] .hcp-mb-arrow-icon {
+  color: var(--hcp-accent, #5b4fd8);
+}
+
+/* ════════════════════════════════════════════════
+   NEUMORPHISM overrides
+════════════════════════════════════════════════ */
+[data-style="neumorphism"] .hcp-mb-round-header {
+  border: none;
+  border-radius: var(--hcp-r-md, 16px);
+  box-shadow: var(--hcp-shadow-sm);
+}
+
+[data-style="neumorphism"] .hcp-mb-round-label {
+  font-family: var(--hcp-sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+[data-style="neumorphism"] .hcp-mb-round-count {
+  font-family: var(--hcp-sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+[data-style="neumorphism"] .hcp-mb-match {
+  border: none;
+  border-radius: var(--hcp-r-md, 16px);
+  background: var(--hcp-bg, #EAE7E1);
+  box-shadow: var(--hcp-shadow);
+  overflow: hidden;
+}
+
+[data-style="neumorphism"] .hcp-mb-match--final {
+  box-shadow: var(--hcp-shadow),
+              0 0 0 1px rgba(245, 158, 11, 0.2);
+}
+
+[data-style="neumorphism"] .hcp-mb-team-name {
+  font-family: var(--hcp-sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+[data-style="neumorphism"] .hcp-mb-score {
+  font-family: var(--hcp-sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+[data-style="neumorphism"] .hcp-mb-team--win .hcp-mb-score {
+  font-size: 18px;
+}
+
+[data-style="neumorphism"] .hcp-mb-divider {
+  background: var(--hcp-border, rgba(166,158,148,.25));
+  margin: 0 14px;
+}
+
+[data-style="neumorphism"] .hcp-mb-pen {
+  font-family: var(--hcp-sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 9px;
+  font-weight: 600;
+  background: var(--hcp-bg);
+  color: var(--hcp-muted);
+  border-radius: 100px;
+  padding: 0 8px;
+}
+
+[data-style="neumorphism"] .hcp-mb-notes {
+  font-family: var(--hcp-sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 11px;
+  font-weight: 400;
+  border-top: 1px dashed var(--hcp-border);
+}
+
+[data-style="neumorphism"] .hcp-mb-arrow-line {
+  background: linear-gradient(to bottom,
+    var(--hcp-border-hard, rgba(166,158,148,.4)),
+    var(--hcp-accent, #60519b));
+  border-radius: 2px;
+}
+
+[data-style="neumorphism"] .hcp-mb-arrow-icon {
+  color: var(--hcp-accent, #60519b);
+}

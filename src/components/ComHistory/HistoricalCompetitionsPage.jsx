@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Trophy, Search, X, ChevronLeft, Globe, Layers,
   Shield, RefreshCw, AlertCircle, Award, Flag,
@@ -9,8 +9,24 @@ import {
   useHistoricalCompetitionDetail,
   getHistoricalImageUrl,
 } from "../../hooks/HooksHistory/useHistoricalCompetitions";
+import KnockoutBracketMobile from "./KnockoutBracketMobile";
 import "../../styles/StylesHistory/HistoricalCompetitionsPage.css";
-import "../../styles/StylesMobile/HistoricalCompetitionsPageMobile.css"
+import "../../styles/StylesMobile/HistoricalCompetitionsPageMobile.css";
+import "../../styles/StylesMobile/KnockoutBracketMobile.css";
+
+// ─── Hook: detecta si es mobile ──────────────────────────────────────────────
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth <= breakpoint : false
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, [breakpoint]);
+  return isMobile;
+}
 
 // ─── Mapas de etiquetas ───────────────────────────────────────────────────────
 const TYPE_LABEL = {
@@ -198,8 +214,87 @@ function LeagueTable({ standings }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  LLAVE ELIMINATORIA
+//  LLAVE ELIMINATORIA — árbol SVG con líneas bezier
 // ══════════════════════════════════════════════════════════════════════════════
+
+const CARD_W = 210;
+const CARD_H = 88;
+const TEAM_H = 38;
+const COL_GAP = 72;
+const ROW_GAP = 24;
+
+function BracketMatchCard({ match, x, y, isFinal, animDelay }) {
+  const winA = match.winner === "team_a";
+  const winB = match.winner === "team_b";
+  const hasPen = match.penalties_a != null || match.penalties_b != null;
+  const GOLD = "#f59e0b";
+
+  const dividerY = y + TEAM_H;
+  const remainH = CARD_H - TEAM_H;
+
+  return (
+    <g className="hcp-bk-match-group" style={{ animationDelay: `${animDelay}ms` }}>
+      {/* Drop shadow rect */}
+      <rect x={x + 2} y={y + 3} width={CARD_W} height={CARD_H} rx={4} className="hcp-bk-card-shadow" />
+      {/* Card background */}
+      <rect x={x} y={y} width={CARD_W} height={CARD_H} rx={4} className="hcp-bk-card-bg" />
+      {/* Winner accent stripe */}
+      {(winA || winB) && (
+        <rect x={x} y={y} width={3} height={CARD_H} rx={2}
+          fill={isFinal ? GOLD : "var(--accent)"}
+          opacity={0.9}
+        />
+      )}
+      {/* Divider */}
+      <line x1={x + 10} y1={dividerY} x2={x + CARD_W - 10} y2={dividerY} className="hcp-bk-divider" />
+
+      {/* Team A */}
+      <foreignObject x={x} y={y} width={CARD_W} height={TEAM_H}>
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+          className={`hcp-bk-team-row ${winA ? "hcp-bk-team--win" : winB ? "hcp-bk-team--lose" : ""}`}
+          style={winA && isFinal ? { "--bk-win-color": GOLD } : {}}
+        >
+          <span className="hcp-bk-team-name">{match.team_a || "—"}</span>
+          <span className="hcp-bk-score">{match.score_a ?? "–"}</span>
+        </div>
+      </foreignObject>
+
+      {/* Team B */}
+      <foreignObject x={x} y={dividerY} width={CARD_W} height={remainH}>
+        <div
+          xmlns="http://www.w3.org/1999/xhtml"
+          className={`hcp-bk-team-row ${winB ? "hcp-bk-team--win" : winA ? "hcp-bk-team--lose" : ""}`}
+          style={winB && isFinal ? { "--bk-win-color": GOLD } : {}}
+        >
+          <span className="hcp-bk-team-name">{match.team_b || "—"}</span>
+          <span className="hcp-bk-score">{match.score_b ?? "–"}</span>
+        </div>
+      </foreignObject>
+
+      {/* Penalties label */}
+      {hasPen && (
+        <text
+          x={x + CARD_W / 2} y={dividerY}
+          className="hcp-bk-pen-text"
+          textAnchor="middle" dominantBaseline="middle"
+        >
+          ({match.penalties_a ?? "–"} – {match.penalties_b ?? "–"}) pen.
+        </text>
+      )}
+
+      {/* Champion star on Final */}
+      {isFinal && (winA || winB) && (
+        <text
+          x={x + CARD_W - 14} y={y + CARD_H / 2}
+          textAnchor="middle" dominantBaseline="middle"
+          fontSize={14} fill={GOLD} opacity={0.9}
+        >★</text>
+      )}
+    </g>
+  );
+}
+
 function KnockoutBracket({ knockout }) {
   const byRound = useMemo(() => {
     return knockout.reduce((acc, m) => {
@@ -213,42 +308,97 @@ function KnockoutBracket({ knockout }) {
   const rounds = ROUND_ORDER.filter(r => byRound[r]);
   if (rounds.length === 0) return <p className="hcp-empty-note">Sin partidos registrados.</p>;
 
+  const PAD_X = 20;
+  const PAD_Y = 40;
+  const maxMatches = Math.max(...rounds.map(r => byRound[r].length));
+
+  const svgH = PAD_Y + maxMatches * CARD_H + (maxMatches - 1) * ROW_GAP + PAD_Y;
+  const svgW = PAD_X + rounds.length * (CARD_W + COL_GAP) - COL_GAP + PAD_X;
+
+  const getPositions = (colIdx) => {
+    const count = byRound[rounds[colIdx]].length;
+    const totalH = count * CARD_H + (count - 1) * ROW_GAP;
+    const startY = PAD_Y + (svgH - PAD_Y * 2 - totalH) / 2;
+    return Array.from({ length: count }, (_, i) => startY + i * (CARD_H + ROW_GAP));
+  };
+
+  const bezier = (x1, cy1, x2, cy2) => {
+    const mx = (x1 + x2) / 2;
+    return `M ${x1} ${cy1} C ${mx} ${cy1}, ${mx} ${cy2}, ${x2} ${cy2}`;
+  };
+
   return (
-    <div className="hcp-bracket">
-      {rounds.map(round => (
-        <div key={round} className="hcp-bracket-col">
-          <div className="hcp-bracket-round-label">{round}</div>
-          <div className="hcp-bracket-matches">
-            {byRound[round].map((m, i) => {
-              const winA = m.winner === "team_a";
-              const winB = m.winner === "team_b";
-              const sa = m.score_a != null ? m.score_a : null;
-              const sb = m.score_b != null ? m.score_b : null;
-              const hasPen = m.penalties_a != null || m.penalties_b != null;
-              return (
-                <div key={i} className="hcp-match-card">
-                  <div className={`hcp-match-team ${winA ? "hcp-match-team--win" : winB ? "hcp-match-team--lose" : ""}`}>
-                    <span className="hcp-match-team-name">{m.team_a || "—"}</span>
-                    <span className="hcp-match-score">{sa ?? "–"}</span>
-                  </div>
-                  <div className="hcp-match-divider">
-                    {hasPen && (
-                      <span className="hcp-pen-label">
-                        ({m.penalties_a ?? "–"} – {m.penalties_b ?? "–"}) pen.
-                      </span>
-                    )}
-                  </div>
-                  <div className={`hcp-match-team ${winB ? "hcp-match-team--win" : winA ? "hcp-match-team--lose" : ""}`}>
-                    <span className="hcp-match-team-name">{m.team_b || "—"}</span>
-                    <span className="hcp-match-score">{sb ?? "–"}</span>
-                  </div>
-                  {m.notes && <div className="hcp-match-notes">{m.notes}</div>}
-                </div>
+    <div className="hcp-bk-wrapper">
+      <svg
+        viewBox={`0 0 ${svgW} ${svgH}`}
+        width="100%"
+        style={{ minWidth: Math.min(svgW, 300), maxWidth: svgW, display: "block" }}
+        className="hcp-bk-svg"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* ── Conectores Bezier ── */}
+        {rounds.slice(0, -1).map((round, colIdx) => {
+          const posA = getPositions(colIdx);
+          const posB = getPositions(colIdx + 1);
+          const xR = PAD_X + colIdx * (CARD_W + COL_GAP) + CARD_W;
+          const xL = PAD_X + (colIdx + 1) * (CARD_W + COL_GAP);
+          const nextCount = byRound[rounds[colIdx + 1]].length;
+          const paths = [];
+
+          for (let j = 0; j < nextCount; j++) {
+            const cy2 = posB[j] + CARD_H / 2;
+            const iA = j * 2;
+            const iB = j * 2 + 1;
+            if (posA[iA] !== undefined) {
+              paths.push(
+                <path key={`${colIdx}-${j}-a`}
+                  d={bezier(xR, posA[iA] + CARD_H / 2, xL, cy2)}
+                  className="hcp-bk-connector"
+                />
               );
-            })}
-          </div>
-        </div>
-      ))}
+            }
+            if (posA[iB] !== undefined) {
+              paths.push(
+                <path key={`${colIdx}-${j}-b`}
+                  d={bezier(xR, posA[iB] + CARD_H / 2, xL, cy2)}
+                  className="hcp-bk-connector"
+                />
+              );
+            }
+          }
+          return <g key={colIdx}>{paths}</g>;
+        })}
+
+        {/* ── Tarjetas de partido ── */}
+        {rounds.map((round, colIdx) => {
+          const isFinal = round === "Final";
+          const positions = getPositions(colIdx);
+          const x = PAD_X + colIdx * (CARD_W + COL_GAP);
+
+          return (
+            <g key={round}>
+              <text
+                x={x + CARD_W / 2} y={PAD_Y - 14}
+                textAnchor="middle"
+                className={`hcp-bk-round-label ${isFinal ? "hcp-bk-round-label--final" : ""}`}
+              >
+                {round}
+              </text>
+
+              {byRound[round].map((match, i) => (
+                <BracketMatchCard
+                  key={i}
+                  match={match}
+                  x={x}
+                  y={positions[i]}
+                  isFinal={isFinal}
+                  animDelay={colIdx * 90 + i * 55}
+                />
+              ))}
+            </g>
+          );
+        })}
+      </svg>
     </div>
   );
 }
@@ -322,6 +472,7 @@ function CompetitionDetail({ competitionId, onBack }) {
     useHistoricalCompetitionDetail(competitionId);
 
   const [activeTab, setActiveTab] = useState("info");
+  const isMobile = useIsMobile();
 
   if (loading) {
     return (
@@ -408,11 +559,7 @@ function CompetitionDetail({ competitionId, onBack }) {
       {/* ── INFO: ficha de datos + descripción ── */}
       {activeTab === "info" && (
         <div className="hcp-section hcp-section--info">
-
-          {/* Ficha de metadatos */}
           <InfoMetaGrid competition={competition} />
-
-          {/* Separador solo si hay descripción */}
           {competition.description && (
             <>
               <div className="hcp-info-divider">
@@ -425,7 +572,6 @@ function CompetitionDetail({ competitionId, onBack }) {
               </div>
             </>
           )}
-
           {!competition.description && (
             <p className="hcp-empty-note" style={{ marginTop: 24 }}>Sin descripción registrada.</p>
           )}
@@ -462,11 +608,14 @@ function CompetitionDetail({ competitionId, onBack }) {
 
       {/* ── ELIMINATORIAS ── */}
       {activeTab === "knockout" && (
-        <div className="hcp-section">
+        <div className="hcp-section hcp-section--knockout">
           <div className="hcp-section-header">
             <span className="hcp-section-label"><Trophy size={10} /> Fase Eliminatoria</span>
           </div>
-          <KnockoutBracket knockout={knockout} />
+          {isMobile
+            ? <KnockoutBracketMobile knockout={knockout} />
+            : <KnockoutBracket knockout={knockout} />
+          }
         </div>
       )}
     </div>

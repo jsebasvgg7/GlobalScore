@@ -1192,6 +1192,181 @@
 }
 
 /* ══════════════════════════════════════════════════════════
+   BRACKET SVG — árbol eliminatorio con conectores bezier
+══════════════════════════════════════════════════════════ */
+
+/* Contenedor scrollable */
+.hcp-bk-wrapper {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+    padding: 8px 0 16px;
+}
+
+.hcp-bk-wrapper::-webkit-scrollbar {
+    height: 4px;
+}
+
+.hcp-bk-wrapper::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+/* El SVG en sí */
+.hcp-bk-svg {
+    overflow: visible;
+}
+
+/* ── Conectores bezier ── */
+.hcp-bk-connector {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 3;
+    stroke-linecap: round;
+    opacity: 0.55;
+    transition: opacity 0.2s;
+}
+
+/* ── Tarjeta de partido ── */
+.hcp-bk-match-group {
+    animation: hcp-bk-fadein 0.4s ease both;
+}
+
+@keyframes hcp-bk-fadein {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hcp-bk-card-shadow {
+    fill: rgba(0, 0, 0, 0.18);
+}
+
+.hcp-bk-card-bg {
+    fill: var(--card);
+    stroke: var(--border);
+    stroke-width: 0.5;
+    transition: fill 0.15s;
+}
+
+.hcp-bk-match-group:hover .hcp-bk-card-bg {
+    fill: color-mix(in srgb, var(--card) 85%, var(--accent) 15%);
+}
+
+.hcp-bk-match-group:hover .hcp-bk-connector {
+    opacity: 0.9;
+    stroke: var(--accent);
+}
+
+/* ── Divisor entre equipos ── */
+.hcp-bk-divider {
+    stroke: var(--border);
+    stroke-width: 0.5;
+}
+
+/* ── Filas de equipo (foreignObject) ── */
+.hcp-bk-team-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    height: 100%;
+    padding: 0 12px 0 14px;
+    box-sizing: border-box;
+}
+
+.hcp-bk-team-name {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Sora', sans-serif;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+    transition: color 0.15s;
+}
+
+.hcp-bk-score {
+    font-size: 15px;
+    font-weight: 800;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    flex-shrink: 0;
+    min-width: 20px;
+    text-align: right;
+    transition: color 0.15s;
+}
+
+/* Ganador */
+.hcp-bk-team--win .hcp-bk-team-name {
+    color: var(--text-primary);
+}
+
+.hcp-bk-team--win .hcp-bk-score {
+    color: var(--bk-win-color, var(--accent));
+}
+
+/* Perdedor */
+.hcp-bk-team--lose .hcp-bk-team-name,
+.hcp-bk-team--lose .hcp-bk-score {
+    opacity: 0.35;
+}
+
+/* ── Texto de penales ── */
+.hcp-bk-pen-text {
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    fill: var(--muted);
+    letter-spacing: 0.04em;
+}
+
+/* ── Etiqueta de ronda ── */
+.hcp-bk-round-label {
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    fill: var(--muted);
+}
+
+.hcp-bk-round-label--final {
+    font-size: 11px;
+    fill: #f59e0b;
+    letter-spacing: 0.18em;
+}
+
+/* ── Sección que contiene el bracket ── */
+.hcp-section--knockout {
+    padding-bottom: 40px;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .hcp-bk-wrapper {
+        margin: 0 -16px;
+        padding: 8px 16px 16px;
+    }
+
+    .hcp-section--knockout {
+        padding-left: 0;
+        padding-right: 0;
+        overflow: hidden;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════════════════════════ */
 @media (max-width: 1170px) {
