@@ -93,16 +93,15 @@
   flex-wrap: wrap;
   gap: 16px;
   padding: 20px 28px 18px;
-  border-bottom: 2px solid var(--text-primary);
+  border-bottom: 1.5px solid color-mix(in srgb, var(--border) 80%, transparent);
   background: var(--card);
   position: sticky;
   top: 0;
   z-index: 20;
   animation: hmd-fade-up 0.5s ease both;
-  /* Relieve inferior */
   box-shadow:
-    0 3px 0 color-mix(in srgb, var(--text-primary) 15%, transparent),
-    0 4px 0 color-mix(in srgb, var(--text-primary) 6%, transparent);
+    0 3px 0 color-mix(in srgb, var(--border) 40%, transparent),
+    0 4px 0 color-mix(in srgb, var(--border) 15%, transparent);
 }
 
 .hmd-header-left {
@@ -211,16 +210,12 @@
   overflow: hidden;
   padding: 0;
   animation: hmd-fade-up 0.5s ease both;
-  /* Marco exterior: borde grueso + relieves en capas */
-  outline: 2px solid var(--text-primary);
+  outline: 1.5px solid color-mix(in srgb, var(--border) 70%, transparent);
   outline-offset: 0;
   box-shadow:
-    /* relieve exterior izquierdo/superior (luz) */
-    inset 1px 1px 0 color-mix(in srgb, var(--text-primary) 8%, transparent),
-    /* sombra exterior derecha/inferior */
-    3px 3px 0 color-mix(in srgb, var(--text-primary) 25%, transparent),
-    5px 5px 0 color-mix(in srgb, var(--text-primary) 10%, transparent),
-    7px 7px 0 color-mix(in srgb, var(--text-primary) 4%, transparent);
+    inset 1px 1px 0 color-mix(in srgb, var(--border) 15%, transparent),
+    2px 2px 0 color-mix(in srgb, var(--border) 35%, transparent),
+    4px 4px 0 color-mix(in srgb, var(--border) 12%, transparent);
   transition:
     box-shadow 0.15s ease,
     transform 0.15s ease,
