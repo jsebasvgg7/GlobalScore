@@ -1,22 +1,23 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { Crown, Landmark } from "lucide-react";
 import MobileUserProfile from "../ComProfile/MobileUserProfile";
 import Footer from "../ComLayout/Footer";
-import MobileSubPage     from "./MobileSubPage";
+import MobileSubPage from "./MobileSubPage";
 import "../../styles/StylesMobile/MobileDashboard.css";
 import "../../styles/StylesMobile/MobileSubPage.css";
 
 // ── SVGs inline ───────────────────────────────────────────────
 const ClockSVG = () => (
   <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/>
+    <circle cx="12" cy="12" r="9" /><polyline points="12 7 12 12 15 14" />
   </svg>
 );
 
 const CalSVG = () => (
   <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="4" width="18" height="18"/><line x1="7" y1="2" x2="7" y2="6"/>
-    <line x1="17" y1="2" x2="17" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+    <rect x="3" y="4" width="18" height="18" /><line x1="7" y1="2" x2="7" y2="6" />
+    <line x1="17" y1="2" x2="17" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
   </svg>
 );
 
@@ -37,7 +38,7 @@ function NoMatchBanner() {
         </div>
         <div className="mob2-nm-empty-brut-right">
           <span className="mob2-nm-empty-brut-eyebrow">// PRÓXIMO PARTIDO</span>
-          <span className="mob2-nm-empty-brut-heading">SIN<br/>PARTIDOS</span>
+          <span className="mob2-nm-empty-brut-heading">SIN<br />PARTIDOS</span>
           <span className="mob2-nm-empty-brut-rule" />
           <span className="mob2-nm-empty-brut-caption">TEMPORADA AL DÍA</span>
         </div>
@@ -50,8 +51,8 @@ function NoMatchBanner() {
           <div className="mob2-nm-empty-neu-ring mob2-nm-empty-neu-ring--inner" />
           <div className="mob2-nm-empty-neu-center">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-              <circle cx="12" cy="12" r="9"/>
-              <polyline points="12 7 12 12 15 14"/>
+              <circle cx="12" cy="12" r="9" />
+              <polyline points="12 7 12 12 15 14" />
             </svg>
           </div>
           <div className="mob2-nm-empty-neu-dot" />
@@ -78,7 +79,7 @@ function EmptyMatchesScroll({ onOpen }) {
         <div className="mob2-emb-inner">
           <span className="mob2-emb-num">00</span>
           <div className="mob2-emb-divider" />
-          <span className="mob2-emb-label">SIN<br/>PARTIDOS<br/>PEND.</span>
+          <span className="mob2-emb-label">SIN<br />PARTIDOS<br />PEND.</span>
         </div>
         <div className="mob2-emb-corner mob2-emb-corner--tl" />
         <div className="mob2-emb-corner mob2-emb-corner--br" />
@@ -123,13 +124,13 @@ function SkeletonCard({ wide }) {
 
 // ── Mini Match Card ───────────────────────────────────────────
 function MiniMatchCard({ match, userPred }) {
-  const now      = new Date();
+  const now = new Date();
   const deadline = match.deadline ? new Date(match.deadline) : null;
-  const isExp    = deadline && now >= deadline;
-  const isLive   = match.status === "live";
-  const hasPred  = userPred !== undefined;
-  const pillMod  = isLive ? "live" : isExp ? "closed" : hasPred ? "saved" : "pending";
-  const pillTxt  = isLive ? "VIVO" : isExp ? "CERR." : hasPred ? "GUARD." : "PEND.";
+  const isExp = deadline && now >= deadline;
+  const isLive = match.status === "live";
+  const hasPred = userPred !== undefined;
+  const pillMod = isLive ? "live" : isExp ? "closed" : hasPred ? "saved" : "pending";
+  const pillTxt = isLive ? "VIVO" : isExp ? "CERR." : hasPred ? "GUARD." : "PEND.";
   const accentMod = isLive ? "amber" : hasPred ? "green" : isExp ? "red" : "purple";
 
   return (
@@ -189,12 +190,12 @@ function MiniMatchCard({ match, userPred }) {
 
 // ── Mini League Card ──────────────────────────────────────────
 function MiniLeagueCard({ league, userPrediction }) {
-  const now      = new Date();
+  const now = new Date();
   const deadline = league.deadline ? new Date(league.deadline) : null;
-  const isExp    = deadline && now >= deadline;
-  const isFin    = league.status === "finished";
-  const hasPred  = userPrediction !== undefined;
-  const dotMod   = isFin ? "finished" : isExp ? "expired" : hasPred ? "saved" : "pending";
+  const isExp = deadline && now >= deadline;
+  const isFin = league.status === "finished";
+  const hasPred = userPrediction !== undefined;
+  const dotMod = isFin ? "finished" : isExp ? "expired" : hasPred ? "saved" : "pending";
 
   return (
     <div className="mob2-lc">
@@ -225,12 +226,12 @@ function MiniLeagueCard({ league, userPrediction }) {
 
 // ── Mini Award Card ───────────────────────────────────────────
 function MiniAwardCard({ award, userPrediction }) {
-  const now      = new Date();
+  const now = new Date();
   const deadline = award.deadline ? new Date(award.deadline) : null;
-  const isExp    = deadline && now >= deadline;
-  const isFin    = award.status === "finished";
-  const hasPred  = userPrediction !== undefined;
-  const dotMod   = isFin ? "finished" : isExp ? "expired" : hasPred ? "saved" : "pending";
+  const isExp = deadline && now >= deadline;
+  const isFin = award.status === "finished";
+  const hasPred = userPrediction !== undefined;
+  const dotMod = isFin ? "finished" : isExp ? "expired" : hasPred ? "saved" : "pending";
 
   return (
     <div className="mob2-ac">
@@ -263,10 +264,10 @@ function MiniAwardCard({ award, userPrediction }) {
 function NextMatchBanner({ match, currentUser, onOpen }) {
   if (!match) return <NoMatchBanner />;
 
-  const now      = new Date();
+  const now = new Date();
   const deadline = match.deadline ? new Date(match.deadline) : null;
-  const isExp    = deadline && now >= deadline;
-  const isLive   = match.status === "live";
+  const isExp = deadline && now >= deadline;
+  const isLive = match.status === "live";
 
   return (
     <div className="mob2-nm">
@@ -310,13 +311,18 @@ function NextMatchBanner({ match, currentUser, onOpen }) {
 }
 
 // ── Progress Bar ──────────────────────────────────────────────
-function ProgressBar({ saved, total }) {
+function ProgressBar({ saved, total, onNavigate }) {
   const pct = total > 0 ? Math.min(100, Math.round((saved / total) * 100)) : 0;
   return (
     <div className="mob2-progress">
       <div className="mob2-progress-row">
-        <span className="mob2-progress-lbl">Predicciones</span>
-        <span className="mob2-progress-count">[{saved}/{total}]</span>
+        <div className="mob2-progress-row-left">
+          <span className="mob2-progress-lbl">Predic.</span>
+          <span className="mob2-progress-count">[{saved}/{total}]</span>
+        </div>
+        <button className="mob2-history-cta-icon" onClick={onNavigate} aria-label="Historial">
+          <Landmark size={18} />
+        </button>
       </div>
       <div className="mob2-progress-track">
         <div className="mob2-progress-fill" style={{ width: `${pct}%` }} />
@@ -324,13 +330,12 @@ function ProgressBar({ saved, total }) {
     </div>
   );
 }
-
 // ── Tab Bar ───────────────────────────────────────────────────
 function TabBar({ activeTab, onTabChange, counts, tabs: customTabs }) {
   const tabs = customTabs || [
     { id: "matches", label: "Partidos", count: counts.matches },
-    { id: "leagues", label: "Ligas",    count: counts.leagues },
-    { id: "awards",  label: "Premios",  count: counts.awards  },
+    { id: "leagues", label: "Ligas", count: counts.leagues },
+    { id: "awards", label: "Premios", count: counts.awards },
   ];
 
   return (
@@ -361,9 +366,9 @@ function PodiumPanel({ users, currentUser }) {
   }
 
   const visual = [sorted[1], sorted[0], sorted[2]];
-  const cols   = ["2nd", "1st", "3rd"];
+  const cols = ["2nd", "1st", "3rd"];
   const medals = ["PLATA", "ORO", "BRONCE"];
-  const fmt    = n => Number(n || 0).toLocaleString("es-ES");
+  const fmt = n => Number(n || 0).toLocaleString("es-ES");
 
   return (
     <div className="mob2-podium">
@@ -397,7 +402,7 @@ function PodiumPanel({ users, currentUser }) {
 
 // ── Stats panel ───────────────────────────────────────────────
 function StatsPanel({ currentUser }) {
-  const u        = currentUser || {};
+  const u = currentUser || {};
   const accuracy = u.predictions > 0
     ? Math.round((u.correct / u.predictions) * 100) : 0;
   const fmt = n => Number(n || 0).toLocaleString("es-ES");
@@ -441,7 +446,7 @@ function BottomSection({ users, currentUser, allAchievements }) {
 
   const bottomTabs = [
     { id: "ranking", label: "Ranking", count: 3 },
-    { id: "stats",   label: "Stats",   count: 4 },
+    { id: "stats", label: "Stats", count: 4 },
   ];
 
   return (
@@ -469,21 +474,21 @@ function BottomSection({ users, currentUser, allAchievements }) {
 // ─────────────────────────────────────────────────────────────
 export default function MobileDashboard({
   currentUser,
-  users            = [],
-  matches          = [],
-  leagues          = [],
-  awards           = [],
-  allAchievements  = [],
-  loading          = false,
+  users = [],
+  matches = [],
+  leagues = [],
+  awards = [],
+  allAchievements = [],
+  loading = false,
   onPredict,
   onLeaguePredict,
   onAwardPredict,
 }) {
   const navigate = useNavigate();
 
-  const [activePage,   setActivePage]   = useState(null);
+  const [activePage, setActivePage] = useState(null);
   const [profileModal, setProfileModal] = useState(false);
-  const [activeTab,    setActiveTab]    = useState("matches");
+  const [activeTab, setActiveTab] = useState("matches");
 
   const pendingMatches = useMemo(
     () => matches.filter(m => m.status === "pending"),
@@ -500,14 +505,14 @@ export default function MobileDashboard({
   }, [matches]);
 
   const totalPredictable = pendingMatches.length;
-  const savedPending     = matches.filter(m =>
+  const savedPending = matches.filter(m =>
     m.status === "pending" &&
     m.predictions?.some(p => p.user_id === currentUser?.id)
   ).length;
 
   const previewMatches = pendingMatches.slice(0, 4);
   const previewLeagues = leagues.slice(0, 3);
-  const previewAwards  = awards.slice(0, 3);
+  const previewAwards = awards.slice(0, 3);
 
   const tabCounts = { matches: pendingMatches.length, leagues: leagues.length, awards: awards.length };
 
@@ -615,9 +620,8 @@ export default function MobileDashboard({
         />
       )}
 
-      {/* PROGRESS */}
-      <ProgressBar saved={savedPending} total={totalPredictable} />
-
+      {/* PROGRESS + HISTORY */}
+      <ProgressBar saved={savedPending} total={totalPredictable} onNavigate={() => navigate("/history")} />
       {/* NEXT MATCH — o estado vacío */}
       <NextMatchBanner
         match={nextMatch}
