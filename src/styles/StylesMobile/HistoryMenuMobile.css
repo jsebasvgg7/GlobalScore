@@ -1,0 +1,1012 @@
+/* ════════════════════════════════════════════════
+   ██╗  ██╗███╗   ███╗███╗   ███╗
+   ██║  ██║████╗ ████║████╗ ████║
+   ███████║██╔████╔██║██╔████╔██║
+   ██╔══██║██║╚██╔╝██║██║╚██╔╝██║
+   ██║  ██║██║ ╚═╝ ██║██║ ╚═╝ ██║
+   HISTORY MENU MOBILE — editorial chaos
+════════════════════════════════════════════════ */
+
+/* ────────────────────────────────────────────────
+   KEYFRAMES
+──────────────────────────────────────────────── */
+@keyframes hmm-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hmm-pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: .4; transform: scale(.7); }
+}
+
+@keyframes hmm-shimmer {
+  0%   { left: -120%; }
+  100% { left: 120%; }
+}
+
+@keyframes hmm-skel {
+  0%, 100% { opacity: .4; }
+  50%       { opacity: .8; }
+}
+
+/* ────────────────────────────────────────────────
+   ROOT
+──────────────────────────────────────────────── */
+.hmm-root {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  min-height: 100dvh;
+  padding-bottom: 80px;
+  animation: hmm-fade-up .4s ease both;
+}
+
+/* ────────────────────────────────────────────────
+   SKELETON
+──────────────────────────────────────────────── */
+.hmm-skel {
+  border-radius: 3px;
+  background: var(--border);
+  animation: hmm-skel 1.4s ease infinite;
+}
+
+/* ════════════════════════════════════════════════
+   ÍTEM 1 — HEADER
+════════════════════════════════════════════════ */
+.hmm-header {
+  position: relative;
+  overflow: hidden;
+  padding: 36px 24px 28px;
+  background: var(--card);
+  border-bottom: 0.5px solid var(--border);
+}
+
+/* Grid paper fondo */
+.hmm-header-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: .5;
+  pointer-events: none;
+}
+
+/* Eyebrow */
+.hmm-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.hmm-eyebrow-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  max-width: 48px;
+}
+
+.hmm-eyebrow-text {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .22em;
+  color: var(--accent);
+}
+
+/* Título bloque editorial asimétrico */
+.hmm-title-block {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 16px;
+}
+
+.hmm-title-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--muted);
+  border: 0.5px solid var(--border);
+  padding: 2px 10px;
+  margin-bottom: 4px;
+  background: var(--bg);
+}
+
+.hmm-title-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  line-height: 1;
+}
+
+.hmm-title-h {
+  font-size: 52px;
+  font-weight: 800;
+  font-family: 'Sora', sans-serif;
+  letter-spacing: -.04em;
+  color: var(--text-primary);
+  line-height: .95;
+}
+
+.hmm-title-h--outline {
+  -webkit-text-stroke: 1.5px var(--accent);
+  color: transparent;
+  margin-left: 2px;
+}
+
+/* Sticker decorativo hex */
+.hmm-header-sticker {
+  position: absolute;
+  top: 24px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  font-size: 24px;
+  color: var(--accent);
+  opacity: .25;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hmm-sticker-text {
+  font-size: 7px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: .6;
+}
+
+.hmm-header-sub {
+  position: relative;
+  z-index: 1;
+  font-size: 13px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 340px;
+  letter-spacing: .01em;
+}
+
+/* ════════════════════════════════════════════════
+   ETIQUETA DE SECCIÓN (compartida)
+════════════════════════════════════════════════ */
+.hmm-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+/* Separador meta */
+.hmm-sep {
+  opacity: .35;
+  margin: 0 2px;
+}
+
+/* ════════════════════════════════════════════════
+   BARRA BROWSER (ventana decorativa)
+════════════════════════════════════════════════ */
+.hmm-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  background: var(--card);
+  border-bottom: 0.5px solid var(--border);
+  flex-shrink: 0;
+}
+
+.hmm-browser-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hmm-browser-dot--r { background: #f25f5c; }
+.hmm-browser-dot--y { background: #f59e0b; }
+.hmm-browser-dot--g { background: #10b981; }
+
+.hmm-browser-url {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  letter-spacing: .04em;
+  margin-left: 6px;
+  opacity: .6;
+}
+
+/* ════════════════════════════════════════════════
+   BASE DE ÍTEM-BOTÓN
+════════════════════════════════════════════════ */
+.hmm-item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: none;
+  background: var(--bg);
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  border-bottom: 0.5px solid var(--border);
+  transition: background .14s;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hmm-item:active {
+  background: var(--card);
+}
+
+.hmm-item:disabled {
+  cursor: default;
+  opacity: .7;
+}
+
+/* Shimmer al hacer tap */
+.hmm-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+  transform: skewX(-18deg);
+  left: -120%;
+  pointer-events: none;
+}
+
+.hmm-item:active::after {
+  animation: hmm-shimmer .4s ease forwards;
+}
+
+/* Flecha común */
+.hmm-arrow {
+  color: var(--border);
+  flex-shrink: 0;
+  transition: color .14s, transform .14s;
+}
+
+.hmm-item:active .hmm-arrow {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+/* ════════════════════════════════════════════════
+   ÍTEM 2 — JUGADOR
+════════════════════════════════════════════════ */
+.hmm-item--player {
+  background: var(--bg);
+}
+
+.hmm-player-body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 16px;
+}
+
+/* Wrap del avatar con badge "HIST" */
+.hmm-player-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.hmm-player-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(91,79,216,.08);
+  font-size: 18px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.hmm-player-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Badge "HIST" / Live */
+.hmm-live-badge {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 7px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .1em;
+  white-space: nowrap;
+}
+
+.hmm-live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff;
+  flex-shrink: 0;
+  animation: hmm-pulse-dot 1.2s ease infinite;
+}
+
+/* Info jugador */
+.hmm-player-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hmm-player-legacy {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--accent);
+  border: 0.5px solid rgba(91,79,216,.35);
+  background: rgba(91,79,216,.06);
+  padding: 1px 6px;
+  align-self: flex-start;
+  margin-bottom: 2px;
+}
+
+.hmm-player-name {
+  font-size: 20px;
+  font-weight: 800;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -.3px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hmm-player-meta {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.hmm-ballon-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border: 0.5px solid rgba(245,158,11,.35);
+  background: rgba(245,158,11,.07);
+  color: #f59e0b;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  margin-top: 5px;
+  align-self: flex-start;
+}
+
+/* ════════════════════════════════════════════════
+   ÍTEM 3a — COMPETICIÓN VISUAL (no botón)
+════════════════════════════════════════════════ */
+.hmm-comp-visual {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--card);
+  border-bottom: 0.5px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hmm-comp-visual--loading {
+  opacity: .6;
+}
+
+/* Franja acento izquierda */
+.hmm-comp-visual::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  opacity: .6;
+}
+
+.hmm-comp-logo-wrap {
+  width: 52px;
+  height: 52px;
+  border: 0.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: rgba(91,79,216,.04);
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.hmm-comp-logo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.hmm-comp-visual-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hmm-comp-visual-name {
+  font-size: 15px;
+  font-weight: 800;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -.1px;
+}
+
+.hmm-comp-visual-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+}
+
+.hmm-comp-year-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: .02em;
+}
+
+/* Número decorativo */
+.hmm-comp-num-deco {
+  font-size: 48px;
+  font-weight: 900;
+  font-family: 'Sora', sans-serif;
+  color: var(--border);
+  line-height: 1;
+  letter-spacing: -.04em;
+  pointer-events: none;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════════════
+   ÍTEM 3b — BOTÓN COMPETICIONES
+════════════════════════════════════════════════ */
+.hmm-item--comp-btn {
+  background: var(--bg);
+}
+
+.hmm-comp-btn-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px;
+  width: 100%;
+}
+
+.hmm-comp-btn-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hmm-comp-btn-name {
+  font-size: 16px;
+  font-weight: 800;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hmm-comp-btn-winner {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: #f59e0b;
+}
+
+.hmm-comp-type-badge {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+  border: 0.5px solid var(--border);
+  padding: 1px 6px;
+  align-self: flex-start;
+}
+
+/* Flecha CTA */
+.hmm-comp-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  color: var(--accent);
+  transition: transform .14s;
+}
+
+.hmm-item--comp-btn:active .hmm-comp-cta {
+  transform: translateX(4px);
+}
+
+.hmm-comp-cta-text {
+  font-size: 7px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  white-space: nowrap;
+  opacity: .7;
+}
+
+/* Sticker TOP COMP */
+.hmm-comp-sticker {
+  position: absolute;
+  top: 0;
+  right: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 8px;
+  background: var(--accent);
+  color: #fff;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.hmm-comp-sticker > span:first-child {
+  font-size: 10px;
+  font-weight: 900;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .08em;
+}
+
+.hmm-comp-sticker-sub {
+  font-size: 7px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .1em;
+  opacity: .8;
+}
+
+/* ════════════════════════════════════════════════
+   ÍTEM 4 — EQUIPO
+════════════════════════════════════════════════ */
+.hmm-item--team {
+  background: var(--bg);
+}
+
+/* Franja de color del equipo */
+.hmm-team-stripe {
+  height: 4px;
+  width: 100%;
+  background: var(--tc, var(--accent));
+  opacity: .8;
+  transition: opacity .14s;
+  flex-shrink: 0;
+}
+
+.hmm-item--team:active .hmm-team-stripe {
+  opacity: 1;
+}
+
+.hmm-team-body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 16px;
+}
+
+/* Logo equipo grande */
+.hmm-team-logo-wrap {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.5px solid var(--border);
+  background: rgba(91,79,216,.04);
+  overflow: hidden;
+  color: var(--muted);
+}
+
+.hmm-team-logo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Info equipo */
+.hmm-team-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hmm-team-name {
+  font-size: 19px;
+  font-weight: 800;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -.3px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hmm-team-meta {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  flex-wrap: wrap;
+  margin-top: 1px;
+}
+
+.hmm-team-legacy {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--lc, var(--accent));
+  border: 0.5px solid color-mix(in srgb, var(--lc, var(--accent)) 40%, transparent);
+  background: color-mix(in srgb, var(--lc, var(--accent)) 8%, transparent);
+  padding: 1px 6px;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.hmm-team-titles {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: #f59e0b;
+  margin-top: 2px;
+}
+
+/* ════════════════════════════════════════════════
+   ÍTEM 5 — MOMENTO HISTÓRICO
+════════════════════════════════════════════════ */
+.hmm-item--event {
+  background: var(--bg);
+}
+
+/* Imagen a ancho completo */
+.hmm-event-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: var(--card);
+  flex-shrink: 0;
+}
+
+.hmm-event-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .35s ease;
+}
+
+.hmm-item--event:active .hmm-event-img-wrap img {
+  transform: scale(1.03);
+}
+
+.hmm-event-img-ph {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  opacity: .2;
+  background: var(--card);
+}
+
+/* Overlay degradado */
+.hmm-event-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.02) 0%,
+    rgba(0,0,0,.25) 60%,
+    rgba(0,0,0,.65) 100%
+  );
+  pointer-events: none;
+}
+
+/* Badges sobre imagen */
+.hmm-event-badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.hmm-event-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  backdrop-filter: blur(4px);
+}
+
+.hmm-event-badge--section {
+  background: rgba(91,79,216,.72);
+  border: 0.5px solid rgba(139,127,199,.5);
+  color: #fff;
+}
+
+.hmm-event-badge--year {
+  background: rgba(0,0,0,.5);
+  border: 0.5px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.85);
+}
+
+/* Sticker HISTÓRICO tipo "Live at your Channel" */
+.hmm-event-live-sticker {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px 10px;
+  background: var(--accent);
+  color: #fff;
+  pointer-events: none;
+  transform: rotate(-2deg);
+}
+
+.hmm-event-live-sticker > span:first-child {
+  font-size: 13px;
+  font-weight: 900;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .06em;
+  line-height: 1;
+}
+
+.hmm-event-live-sub {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .14em;
+  opacity: .85;
+  line-height: 1;
+}
+
+/* Cuerpo del evento */
+.hmm-event-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 16px 18px;
+}
+
+.hmm-event-title {
+  font-size: 20px;
+  font-weight: 800;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -.3px;
+  line-height: 1.2;
+}
+
+/* Protagonista */
+.hmm-event-protagonist {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hmm-event-proto-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(91,79,216,.08);
+  font-size: 9px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.hmm-event-proto-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hmm-event-proto-name {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-primary);
+  letter-spacing: .02em;
+}
+
+.hmm-event-type {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--muted);
+  border: 0.5px solid var(--border);
+  padding: 1px 7px;
+  align-self: flex-start;
+}
+
+.hmm-event-desc {
+  font-size: 13px;
+  font-family: 'Sora', sans-serif;
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* CTA inferior */
+.hmm-event-cta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 0.5px solid var(--border);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--accent);
+  margin-top: 4px;
+}
+
+.hmm-empty-note {
+  font-size: 13px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  font-style: italic;
+  opacity: .6;
+  margin: 0;
+}
+
+/* ════════════════════════════════════════════════
+   FOOTER DECORATIVO
+════════════════════════════════════════════════ */
+.hmm-footer-deco {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 24px 24px;
+  opacity: .3;
+}
+
+.hmm-footer-line {
+  flex: 1;
+  height: 0.5px;
+  background: var(--border);
+}
+
+.hmm-footer-icon {
+  font-size: 18px;
+  color: var(--accent);
+}
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE — pantallas muy pequeñas ≤380px
+════════════════════════════════════════════════ */
+@media (max-width: 380px) {
+  .hmm-title-h { font-size: 42px; }
+  .hmm-player-avatar { width: 60px; height: 60px; }
+  .hmm-player-name { font-size: 17px; }
+  .hmm-team-logo-wrap { width: 62px; height: 62px; }
+  .hmm-team-name { font-size: 16px; }
+  .hmm-event-img-wrap { height: 170px; }
+  .hmm-event-title { font-size: 17px; }
+}
+
+/* ════════════════════════════════════════════════
+   REDUCED MOTION
+════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .hmm-root { animation: none; }
+  .hmm-live-dot { animation: none; }
+  .hmm-item::after { display: none; }
+}
