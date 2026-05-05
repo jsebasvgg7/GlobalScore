@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Search, X, Star, ChevronRight, ArrowLeft, RefreshCw, AlertCircle,
   Shield, Zap, Filter, Users2, Flag, Award, Trophy, TrendingUp,
@@ -12,6 +12,8 @@ import { useHistoricalEvents } from "../hooks/HooksHistory/useHistoricalEvents";
 import HistoryRightPanel from "../components/ComPanels/HistoryRightPanel";
 import TeamsRightPanel from "../components/ComPanels/TeamsRightPanel";
 import EventsRightPanel from "../components/ComPanels/EventsRightPanel";
+import HistoryMenuDesktop from "../components/ComHistory/HistoryMenuDesktop";
+import HistoryMenuMobile from "../components/ComMobile/HistoryMenuMobile";
 import HistoricalEventsPage from "../components/ComHistory/HistoricalEventsPage";
 import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
 import HistoricalCompetitionsPage from "../components/ComHistory/HistoricalCompetitionsPage";
@@ -59,6 +61,17 @@ function SignificanceStars({ value }) {
       ))}
     </span>
   );
+}
+
+// ─── Detectar mobile ────────────────────────────────────────
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth <= breakpoint);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, [breakpoint]);
+  return isMobile;
 }
 
 function LegacyBadge({ type }) {
@@ -467,6 +480,8 @@ export default function HistoryPage() {
   const [hoveredPlayer, setHoveredPlayer] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
+  const [showMenu, setShowMenu] = useState(true);
+  const isMobile = useIsMobile();
   const {
     players, allPlayers, loading, error, reload,
     search, setSearch,
@@ -486,6 +501,25 @@ export default function HistoryPage() {
   };
   if (showWelcome) {
     return <HistoryWelcomeScreen onEnter={() => setShowWelcome(false)} />;
+  }
+  if (showMenu) {
+    return isMobile
+      ? (
+        <HistoryMenuMobile
+          onSectionChange={(key) => {
+            setShowMenu(false);
+            handleSectionChange(key);
+          }}
+        />
+      )
+      : (
+        <HistoryMenuDesktop
+          onSectionChange={(key) => {
+            setShowMenu(false);
+            handleSectionChange(key);
+          }}
+        />
+      );
   }
   // ── Vista detalle jugador ──
   if (activeSection === "players" && selectedPlayerId) {
