@@ -49,7 +49,7 @@
   flex-direction: column;
   background: var(--bg);
   min-height: 100dvh;
-  padding-bottom: 40px;
+  padding-bottom: 60px;
   animation: hmm-fade-up .35s ease both;
 }
 
@@ -737,6 +737,21 @@
   outline: 1px solid rgba(139, 127, 199, .4);
 }
 
+[data-style="brutalist"][data-theme="dark"] .hmm-search-box {
+  background: #1E1C28;
+  border-color: rgba(139, 127, 199, .4);
+  border-radius: 0;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hmm-search-input {
+  background: transparent;
+  color: #E8E6F0;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hmm-search-input::placeholder {
+  color: rgba(232, 230, 240, .4);
+}
+
 /* ══════════════════════════════════════════════
    TEMA: NEUMORPHISM
 ══════════════════════════════════════════════ */
@@ -974,6 +989,23 @@
 [data-style="neumorphism"][data-theme="dark"] .hmm-row-event-img {
   background: #1E1C28;
   box-shadow: 3px 3px 7px rgba(10, 9, 16, .6), -2px -2px 5px rgba(40, 37, 55, .8);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-search-box {
+  background: #1E1C28;
+  box-shadow: inset 3px 3px 7px rgba(10, 9, 16, .6),
+    inset -2px -2px 5px rgba(40, 37, 55, .8);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-search-input {
+  background: transparent;
+  color: #E8E6F0;
+  caret-color: #8b7fc7;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-search-input::placeholder {
+  color: rgba(232, 230, 240, .35);
+  opacity: 1;
 }
 
 /* ══════════════════════════════════════════════

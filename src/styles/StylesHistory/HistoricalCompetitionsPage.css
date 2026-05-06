@@ -751,6 +751,30 @@
     border-right: none;
 }
 
+.hcp-back-section-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 36px;
+    border: none;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: color 0.15s;
+    width: 100%;
+    text-align: left;
+}
+
+.hcp-back-section-btn:hover {
+    color: var(--text-primary);
+}
+
 .hcp-meta-icon {
     display: flex;
     align-items: center;

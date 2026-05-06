@@ -311,8 +311,7 @@ export default function HistoryMenuMobile({ onSectionChange }) {
   const [query, setQuery] = useState("");
   const listRef = useRef(null);
 
-  const nav = (key) => onSectionChange?.(key);
-
+  const nav = (key, item = null) => onSectionChange?.(key, item);
   const totalCounts = allPlayers.length + teams.length + events.length + competitions.length;
 
   // ── Búsqueda global ──────────────────────────────────────────────────────
@@ -388,7 +387,7 @@ export default function HistoryMenuMobile({ onSectionChange }) {
           <PlayerRow
             key={item.data.id || idx}
             player={item.data}
-            onClick={() => nav("players")}
+            onClick={() => nav("players", item.data)}
           />
         );
       case "team":
@@ -396,7 +395,7 @@ export default function HistoryMenuMobile({ onSectionChange }) {
           <TeamRow
             key={item.data.id || idx}
             team={item.data}
-            onClick={() => nav("teams")}
+            onClick={() => nav("teams", item.data)}
           />
         );
       case "event":
@@ -404,7 +403,7 @@ export default function HistoryMenuMobile({ onSectionChange }) {
           <EventRow
             key={item.data.id || idx}
             event={item.data}
-            onClick={() => nav("events")}
+            onClick={() => nav("events", item.data)}
           />
         );
       case "competition":
@@ -412,7 +411,7 @@ export default function HistoryMenuMobile({ onSectionChange }) {
           <CompRow
             key={item.data.id || idx}
             competition={item.data}
-            onClick={() => nav("competitions")}
+            onClick={() => nav("competitions", item.data)}
           />
         );
       default:

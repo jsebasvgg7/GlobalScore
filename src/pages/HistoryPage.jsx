@@ -381,9 +381,9 @@ function PlayerDetail({ playerId, onBack }) {
 // ══════════════════════════════════════════════════════════════
 //  WRAPPER DE EVENTOS
 // ══════════════════════════════════════════════════════════════
-function EventsSectionWrapper({ onBack }) {
+function EventsSectionWrapper({ onBack, initialEvent }) {
   const { allEvents } = useHistoricalEvents();
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(initialEvent || null);
 
   return (
     <div className="hp-shell">
@@ -409,7 +409,9 @@ function EventsSectionWrapper({ onBack }) {
 export default function HistoryPage() {
   const [activeSection, setActiveSection] = useState("players");
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
-  const [hoveredPlayer, setHoveredPlayer] = useState(null);
+  const [preselectedTeamId, setPreselectedTeamId] = useState(null);
+  const [preselectedEvent, setPreselectedEvent] = useState(null);
+  const [preselectedCompId, setPreselectedCompId] = useState(null); const [hoveredPlayer, setHoveredPlayer] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
   const [showWelcome, setShowWelcome] = useState(
     () => !sessionStorage.getItem("vault_visited")
@@ -436,9 +438,17 @@ export default function HistoryPage() {
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
-  const handleSectionChange = (section) => {
+  const handleSectionChange = (section, item = null) => {
     setActiveSection(section);
     setSelectedPlayerId(null);
+
+    if (item) {
+      if (section === "players") setSelectedPlayerId(item.id);
+      if (section === "teams") setPreselectedTeamId(item.id);
+      if (section === "events") setPreselectedEvent(item);
+      if (section === "competitions") setPreselectedCompId(item.id);
+    }
+
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
@@ -457,8 +467,7 @@ export default function HistoryPage() {
   // ── Menú principal ──
   if (showMenu) {
     return isMobile
-      ? <HistoryMenuMobile onSectionChange={(key) => { setShowMenu(false); handleSectionChange(key); }} />
-      : <HistoryMenuDesktop onSectionChange={(key) => { setShowMenu(false); handleSectionChange(key); }} />;
+      ? <HistoryMenuMobile onSectionChange={(key, item) => { setShowMenu(false); handleSectionChange(key, item); }} /> : <HistoryMenuDesktop onSectionChange={(key) => { setShowMenu(false); handleSectionChange(key); }} />;
   }
 
   // ── Detalle jugador ──
@@ -482,8 +491,10 @@ export default function HistoryPage() {
     return (
       <div className="hp-shell">
         <div className="hp-root">
-          <HistoricalTeamsPage onBack={handleBackToMenu} />
-        </div>
+          <HistoricalTeamsPage
+            initialSelectedId={preselectedTeamId}
+            onBack={handleBackToMenu}
+          />        </div>
         <TeamsRightPanel />
       </div>
     );
@@ -491,7 +502,7 @@ export default function HistoryPage() {
 
   // ── Vista eventos ──
   if (activeSection === "events") {
-    return <EventsSectionWrapper onBack={handleBackToMenu} />;
+    return <EventsSectionWrapper onBack={handleBackToMenu} initialEvent={preselectedEvent} />;
   }
 
   // ── Vista competiciones ──
@@ -499,8 +510,10 @@ export default function HistoryPage() {
     return (
       <div className="hp-shell">
         <div className="hp-root">
-          <HistoricalCompetitionsPage onBack={handleBackToMenu} />
-        </div>
+          <HistoricalCompetitionsPage
+            initialSelectedId={preselectedCompId}
+            onBack={handleBackToMenu}
+          />        </div>
       </div>
     );
   }

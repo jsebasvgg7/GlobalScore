@@ -444,8 +444,8 @@ function TeamCard({ team, onClick }) {
 // ══════════════════════════════════════════════════════════════
 //  COMPONENTE PRINCIPAL — HistoricalTeamsPage
 // ══════════════════════════════════════════════════════════════
-export default function HistoricalTeamsPage({ rightPanelRef, onBack }) {
-  const [selectedId, setSelectedId] = useState(null);
+export default function HistoricalTeamsPage({ rightPanelRef, onBack, initialSelectedId }) {
+  const [selectedId, setSelectedId] = useState(initialSelectedId || null);
   const { teams, loading, error, reload, search, setSearch } = useHistoricalTeams();
 
   if (selectedId) {

@@ -627,7 +627,7 @@ function CompetitionDetail({ competitionId, onBack }) {
 // ══════════════════════════════════════════════════════════════════════════════
 //  PÁGINA PRINCIPAL
 // ══════════════════════════════════════════════════════════════════════════════
-export default function HistoricalCompetitionsPage({ onBack }) {
+export default function HistoricalCompetitionsPage({ onBack, initialSelectedId }) {
   const {
     competitions, loading, error, reload,
     search, setSearch,
@@ -636,7 +636,7 @@ export default function HistoricalCompetitionsPage({ onBack }) {
     types, formats,
   } = useHistoricalCompetitions();
 
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState(initialSelectedId || null);
   const [showFilters, setShowFilters] = useState(false);
 
   const hasFilters = filterType || filterFormat;
