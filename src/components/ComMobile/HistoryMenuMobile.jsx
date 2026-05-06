@@ -4,6 +4,7 @@ import { useHistoricalPlayers, getHistoricalImageUrl } from "../../hooks/HooksHi
 import { useHistoricalCompetitions } from "../../hooks/HooksHistory/useHistoricalCompetitions";
 import { useHistoricalTeams } from "../../hooks/HooksHistory/useHistoricalTeams";
 import { useHistoricalEvents } from "../../hooks/HooksHistory/useHistoricalEvents";
+import Footer from '../../components/ComLayout/Footer';
 import "../../styles/StylesMobile/HistoryMenuMobile.css";
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
@@ -459,7 +460,7 @@ export default function HistoryMenuMobile({ onSectionChange }) {
             : <EmptyState section={activeSection} query={query} />
         }
       </div>
-
+      <Footer />
     </div>
   );
 }
