@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { Users2, Trophy, Shield, Zap, Search, X, ChevronRight, Star } from "lucide-react";
+import { Users2, Trophy, Shield, Zap, Search, X, ChevronRight, Filter, Star, } from "lucide-react";
 import { useHistoricalPlayers, getHistoricalImageUrl } from "../../hooks/HooksHistory/useHistoricalPlayers";
 import { useHistoricalCompetitions } from "../../hooks/HooksHistory/useHistoricalCompetitions";
 import { useHistoricalTeams } from "../../hooks/HooksHistory/useHistoricalTeams";
@@ -44,7 +44,78 @@ const LEGACY_COLOR = {
   Dynastic: "#f59e0b", Innovative: "#8b5cf6",
   Continental: "#3b82f6", National: "#10b981",
 };
-
+const SECTION_FILTERS = {
+  players: [
+    {
+      key: "position", label: "Posición", options: [
+        { value: "Forward", label: "Delantero" },
+        { value: "Midfielder", label: "Centrocampista" },
+        { value: "Defender", label: "Defensor" },
+        { value: "Goalkeeper", label: "Portero" },
+        { value: "All-rounder", label: "Todocampista" },
+      ]
+    },
+    {
+      key: "legacy_type", label: "Legado", options: [
+        { value: "Goal Scorer", label: "Goleador" },
+        { value: "Tactician", label: "Táctico" },
+        { value: "Innovator", label: "Genio" },
+        { value: "Leader", label: "Líder" },
+        { value: "Goalkeeper", label: "Portero" },
+      ]
+    },
+    {
+      key: "significance_level", label: "Nivel", options: [
+        { value: "5", label: "GOAT" },
+        { value: "4", label: "Leyenda" },
+        { value: "3", label: "De Culto" },
+      ]
+    },
+  ],
+  teams: [
+    {
+      key: "legacy_type", label: "Tipo", options: [
+        { value: "Dynastic", label: "Dinástico" },
+        { value: "Innovative", label: "Innovador" },
+        { value: "Continental", label: "Continental" },
+        { value: "National", label: "Nacional" },
+      ]
+    },
+  ],
+  events: [
+    {
+      key: "event_category", label: "Categoría", options: [
+        { value: "player", label: "Jugador" },
+        { value: "team", label: "Equipo" },
+      ]
+    },
+    {
+      key: "event_type", label: "Tipo", options: [
+        { value: "Championship", label: "Campeonato" },
+        { value: "Historic Match", label: "Partido Histórico" },
+        { value: "Legendary Performance", label: "Actuación Legendaria" },
+        { value: "Era Defining", label: "Definió una Era" },
+        { value: "Record", label: "Récord" },
+      ]
+    },
+  ],
+  competitions: [
+    {
+      key: "type", label: "Tipo", options: [
+        { value: "International", label: "Internacional" },
+        { value: "Continental", label: "Continental" },
+        { value: "Domestic", label: "Nacional" },
+      ]
+    },
+    {
+      key: "format", label: "Formato", options: [
+        { value: "groups_knockout", label: "Grupos + Elim." },
+        { value: "league_only", label: "Liga" },
+        { value: "knockout_only", label: "Eliminatorias" },
+      ]
+    },
+  ],
+};
 const POSITION_LABEL = {
   Forward: "Delantero", Midfielder: "Centrocampista",
   "All-rounder": "Todocampista", Defender: "Defensor", Goalkeeper: "Portero",
@@ -270,6 +341,36 @@ function CompRow({ competition, onClick }) {
 }
 
 // ─── LISTA VACÍA ─────────────────────────────────────────────────────────────
+function FilterPanel({ section, activeFilters, onChange, onClear }) {
+  const filters = SECTION_FILTERS[section] || [];
+  if (filters.length === 0) return null;
+
+  return (
+    <div className="hmm-filter-panel">
+      {filters.map(({ key, label, options }) => (
+        <div key={key} className="hmm-filter-group">
+          <span className="hmm-filter-group-label">{label}</span>
+          <div className="hmm-filter-options">
+            {options.map(({ value, label: optLabel }) => (
+              <button
+                key={value}
+                className={`hmm-filter-chip ${activeFilters[key] === value ? "hmm-filter-chip--active" : ""}`}
+                onClick={() => onChange(key, activeFilters[key] === value ? null : value)}
+              >
+                {optLabel}
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+      {Object.values(activeFilters).some(Boolean) && (
+        <button className="hmm-filter-clear" onClick={onClear}>
+          <X size={11} /> Limpiar filtros
+        </button>
+      )}
+    </div>
+  );
+}
 function EmptyState({ section, query }) {
   const icons = { players: Users2, teams: Shield, events: Zap, competitions: Trophy };
   const Icon = icons[section] || Zap;
@@ -309,6 +410,8 @@ export default function HistoryMenuMobile({ onSectionChange }) {
 
   const [activeSection, setActiveSection] = useState("players");
   const [query, setQuery] = useState("");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState({});
   const listRef = useRef(null);
 
   const nav = (key, item = null) => onSectionChange?.(key, item);
@@ -366,12 +469,29 @@ export default function HistoryMenuMobile({ onSectionChange }) {
     competitions: loadingComps,
   };
 
-  const displayItems = searchResults !== null ? searchResults : sectionItems;
+  const hasActiveFilters = Object.keys(activeFilters).length > 0;
+
+  const filteredItems = useMemo(() => {
+    const base = searchResults !== null ? searchResults : sectionItems;
+    if (!hasActiveFilters) return base;
+
+    return base.filter(({ data }) => {
+      return Object.entries(activeFilters).every(([key, value]) => {
+        if (!value) return true;
+        if (key === "significance_level") return String(data[key]) === value;
+        return data[key] === value;
+      });
+    });
+  }, [searchResults, sectionItems, activeFilters, hasActiveFilters]);
+
+  const displayItems = filteredItems;
   const loading = searchResults !== null ? false : isLoading[activeSection];
 
   const handleSectionChange = (key) => {
     setActiveSection(key);
     setQuery("");
+    setActiveFilters({});
+    setFilterOpen(false);
     listRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -426,13 +546,35 @@ export default function HistoryMenuMobile({ onSectionChange }) {
       <Header totalCounts={totalCounts} />
 
       {/* ── Buscador global ── */}
-      <GlobalSearch
-        query={query}
-        onChange={setQuery}
-        onClear={handleClear}
-        resultCount={searchResults?.length || 0}
-        searching={false}
-      />
+      <div className="hmm-search-row">
+        <GlobalSearch
+          query={query}
+          onChange={setQuery}
+          onClear={handleClear}
+          resultCount={displayItems.length}
+          searching={false}
+        />
+        {SECTION_FILTERS[activeSection]?.length > 0 && (
+          <button
+            className={`hmm-filter-toggle ${filterOpen ? "hmm-filter-toggle--active" : ""} ${hasActiveFilters ? "hmm-filter-toggle--has" : ""}`}
+            onClick={() => setFilterOpen(v => !v)}
+          >
+            <Filter size={15} />
+            {hasActiveFilters && <span className="hmm-filter-dot" />}
+          </button>
+        )}
+      </div>
+
+      {filterOpen && (
+        <FilterPanel
+          section={activeSection}
+          activeFilters={activeFilters}
+          onChange={(key, value) => setActiveFilters(prev =>
+            value === null ? (() => { const n = { ...prev }; delete n[key]; return n; })() : { ...prev, [key]: value }
+          )}
+          onClear={() => setActiveFilters({})}
+        />
+      )}
 
       {/* ── Nav secciones (oculto si hay búsqueda activa) ── */}
       {!query && (
