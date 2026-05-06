@@ -477,7 +477,7 @@ export default function HistoricalTeamsPage({ rightPanelRef, onBack }) {
             {search && <button className="htp-search-clear" onClick={() => setSearch("")}><X size={11} /></button>}
           </div>
           <button className="htp-back-vault-btn" onClick={onBack}>
-            Volver
+            <ArrowLeft size={15} className="htp-back-vault-icon" />
           </button>
         </div>
       </header>
