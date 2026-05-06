@@ -152,7 +152,7 @@
 
 .matches-container {
   display: grid;
-  grid-template-columns: repeat(3, 262px);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 262px));
   justify-content: center;
   gap: 42px;
   padding: 12px 0;
@@ -160,18 +160,18 @@
 
 .matches-container>* {
   margin: 0 !important;
-  width: 262px !important;
+  width: 100% !important;
   max-width: 262px !important;
 }
 
 .matches-container .mc-wrap {
-  width: 262px !important;
+  width: 100% !important;
   max-width: 262px !important;
   margin: 0 !important;
 }
 
 .matches-container .mc-card {
-  width: 262px !important;
+  width: 100% !important;
 }
 
 .matches-container:has(.matches-empty-state) {

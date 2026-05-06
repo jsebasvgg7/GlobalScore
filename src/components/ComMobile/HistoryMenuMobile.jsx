@@ -48,11 +48,11 @@ const SECTION_FILTERS = {
   players: [
     {
       key: "position", label: "Posición", options: [
-        { value: "Forward", label: "Delantero" },
-        { value: "Midfielder", label: "Centrocampista" },
-        { value: "Defender", label: "Defensor" },
-        { value: "Goalkeeper", label: "Portero" },
-        { value: "All-rounder", label: "Todocampista" },
+        { value: "Forward", label: "Del" },
+        { value: "Midfielder", label: "Med" },
+        { value: "Defender", label: "Def" },
+        { value: "Goalkeeper", label: "Por" },
+        { value: "All-rounder", label: "Tod" },
       ]
     },
     {
