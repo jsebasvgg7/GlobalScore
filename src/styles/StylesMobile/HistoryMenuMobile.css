@@ -545,44 +545,109 @@
   transform: translateX(3px);
 }
 
-/* ── Jugador ── */
-.hmm-row-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  overflow: hidden;
-  flex-shrink: 0;
-  border: 1.5px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
-  font-size: 13px;
-  font-weight: 800;
-  font-family: 'DM Mono', monospace;
-  color: var(--accent);
-  position: relative;
+/* ── Jugador — Grid Card ── */
+.hmm-list--players {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 14px 14px 24px;
 }
 
-.hmm-row-avatar img {
+.hmm-player-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .12s, box-shadow .12s;
+}
+
+.hmm-player-card:active {
+  transform: scale(.97);
+}
+
+.hmm-player-card-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg));
+  position: relative;
+  flex-shrink: 0;
+}
+
+.hmm-player-card-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
+  display: block;
 }
 
-.hmm-row-goat {
+.hmm-player-card-initials {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--accent);
+}
+
+.hmm-player-card-goat {
   position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 6px;
+  top: 8px;
+  left: 8px;
+  font-size: 7px;
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   letter-spacing: .1em;
   background: #f59e0b;
   color: #000;
-  padding: 1px 4px;
+  padding: 2px 6px;
+  z-index: 2;
+}
+
+.hmm-player-card-body {
+  padding: 9px 10px 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  text-align: center;
+}
+
+.hmm-player-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  letter-spacing: -.2px;
+}
+
+.hmm-player-card-meta {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hmm-player-card-stars {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
 }
 
 .hmm-row-stars {
@@ -591,48 +656,116 @@
   align-items: center;
 }
 
-/* ── Equipo ── */
-.hmm-row--team {
-  padding-left: 0;
+/* ── Equipo — Grid Card ── */
+.hmm-list--teams {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 14px 14px 24px;
 }
 
-.hmm-row-tc-stripe {
-  width: 4px;
-  align-self: stretch;
-  flex-shrink: 0;
-  background: var(--tc, var(--accent));
-  opacity: .8;
-  transition: opacity .12s;
-}
-
-.hmm-row--team:active .hmm-row-tc-stripe {
-  opacity: 1;
-}
-
-.hmm-row-shield {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
+.hmm-team-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
   border: 0.5px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .12s;
+}
+
+.hmm-team-card:active {
+  transform: scale(.97);
+}
+
+.hmm-team-card-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg));
+  position: relative;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  background: rgba(91, 79, 216, .04);
-  color: var(--muted);
-  margin-left: 10px;
 }
 
-.hmm-row-shield img {
-  width: 100%;
-  height: 100%;
+.hmm-team-card-img img {
+  width: 75%;
+  height: 75%;
   object-fit: contain;
+  display: block;
 }
 
-.hmm-row-badge {
+.hmm-team-card-placeholder {
+  color: var(--muted);
+  opacity: .3;
+}
+
+.hmm-team-card-stripe {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--tc, var(--accent));
+  opacity: .8;
+}
+
+.hmm-team-card-titles {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: #f59e0b;
+  background: rgba(0, 0, 0, .45);
+  padding: 2px 6px;
+  z-index: 2;
+}
+
+.hmm-team-card-body {
+  padding: 9px 10px 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  text-align: center;
+}
+
+.hmm-team-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  line-height: 1.2;
+  letter-spacing: -.2px;
+}
+
+.hmm-team-card-meta {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.hmm-team-card-badge {
   display: inline-flex;
   align-items: center;
-  padding: 1px 7px;
+  padding: 2px 8px;
   border: 0.5px solid color-mix(in srgb, var(--bc, var(--accent)) 40%, transparent);
   background: color-mix(in srgb, var(--bc, var(--accent)) 8%, transparent);
   color: var(--bc, var(--accent));
@@ -641,18 +774,7 @@
   font-family: 'DM Mono', monospace;
   text-transform: uppercase;
   letter-spacing: .08em;
-  align-self: flex-start;
-}
-
-.hmm-row-titles {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 11px;
-  font-weight: 800;
-  font-family: 'DM Mono', monospace;
-  color: #f59e0b;
-  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 /* ── Evento ── */
@@ -707,42 +829,130 @@
   align-self: flex-start;
 }
 
-/* ── Competición ── */
-.hmm-row-comp-logo {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
+/* ── Competencia — Grid Card ── */
+.hmm-list--competitions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 14px 14px 24px;
+}
+
+.hmm-comp-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
   border: 0.5px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .12s;
+}
+
+.hmm-comp-card:active {
+  transform: scale(.97);
+}
+
+.hmm-comp-card-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg));
+  position: relative;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  background: rgba(91, 79, 216, .04);
-  color: var(--muted);
 }
 
-.hmm-row-comp-logo img {
-  width: 100%;
-  height: 100%;
+.hmm-comp-card-img img {
+  width: 75%;
+  height: 75%;
   object-fit: contain;
+  display: block;
 }
 
-.hmm-row-year {
-  color: var(--accent);
+.hmm-comp-card-placeholder {
+  color: var(--muted);
+  opacity: .3;
+}
+
+.hmm-comp-card-year {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 9px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: #fff;
+  background: rgba(0, 0, 0, .5);
+  padding: 2px 6px;
+  z-index: 2;
+  letter-spacing: .04em;
+}
+
+.hmm-comp-card-type {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 7px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent);
+  padding: 2px 6px;
+  z-index: 2;
+}
+
+.hmm-comp-card-body {
+  padding: 9px 10px 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  text-align: center;
+}
+
+.hmm-comp-card-name {
+  font-size: 13px;
   font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  line-height: 1.2;
+  letter-spacing: -.2px;
 }
 
-.hmm-row-winner {
+.hmm-comp-card-meta {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.hmm-comp-card-winner {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 9px;
+  font-size: 8px;
   font-family: 'DM Mono', monospace;
   color: #f59e0b;
-  padding: 1px 6px;
+  padding: 2px 7px;
   border: 0.5px solid rgba(245, 158, 11, .35);
   background: rgba(245, 158, 11, .07);
-  align-self: flex-start;
+  margin-top: 2px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ── Skeleton rows ── */
@@ -883,6 +1093,66 @@
 
 [data-style="brutalist"][data-theme="dark"] .hmm-search-input::placeholder {
   color: rgba(232, 230, 240, .4);
+}
+
+[data-style="brutalist"] .hmm-player-card {
+  border: 1px solid var(--border);
+  border-radius: 0;
+}
+
+[data-style="brutalist"] .hmm-player-card:active {
+  outline: 1px solid var(--accent);
+}
+
+[data-style="brutalist"] .hmm-player-card-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .02em;
+}
+
+[data-style="brutalist"] .hmm-player-card-goat {
+  background: #8b7fc7;
+  color: #1a1a2e;
+}
+
+[data-style="brutalist"] .hmm-team-card {
+  border: 1px solid var(--border);
+  border-radius: 0;
+}
+
+[data-style="brutalist"] .hmm-team-card:active {
+  outline: 1px solid var(--accent);
+}
+
+[data-style="brutalist"] .hmm-team-card-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .02em;
+}
+
+[data-style="brutalist"] .hmm-team-card-badge {
+  border-radius: 0;
+  font-family: 'DM Mono', monospace;
+}
+
+[data-style="brutalist"] .hmm-comp-card {
+  border: 1px solid var(--border);
+  border-radius: 0;
+}
+
+[data-style="brutalist"] .hmm-comp-card:active {
+  outline: 1px solid var(--accent);
+}
+
+[data-style="brutalist"] .hmm-comp-card-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .02em;
+}
+
+[data-style="brutalist"] .hmm-comp-card-type {
+  background: #8b7fc7;
+  border-radius: 0;
 }
 
 /* ══════════════════════════════════════════════
@@ -1183,6 +1453,163 @@
 
 [data-style="neumorphism"] .hmm-empty {
   color: rgba(42, 37, 53, .4);
+}
+
+[data-style="neumorphism"] .hmm-list--players {
+  gap: 14px;
+  padding: 16px;
+}
+
+[data-style="neumorphism"] .hmm-player-card {
+  border: none;
+  border-radius: 16px;
+  background: var(--bg);
+  box-shadow: 3px 3px 9px rgba(166, 158, 148, .45), -2px -2px 7px rgba(255, 255, 255, .75);
+  overflow: hidden;
+}
+
+[data-style="neumorphism"] .hmm-player-card:active {
+  transform: scale(.96);
+  box-shadow: inset 2px 2px 5px rgba(166, 158, 148, .45), inset -2px -2px 5px rgba(255, 255, 255, .65);
+}
+
+[data-style="neumorphism"] .hmm-player-card-img {
+  background: color-mix(in srgb, #60519b 8%, var(--bg));
+}
+
+[data-style="neumorphism"] .hmm-player-card-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: #2A2535;
+}
+
+[data-style="neumorphism"] .hmm-player-card-meta {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 10px;
+  color: #9B95A8;
+}
+
+[data-style="neumorphism"] .hmm-player-card-goat {
+  background: #60519b;
+  color: #fff;
+  border-radius: 4px;
+}
+
+/* dark */
+[data-style="neumorphism"][data-theme="dark"] .hmm-player-card {
+  box-shadow: 3px 3px 7px rgba(10, 9, 16, .6), -2px -2px 5px rgba(40, 37, 55, .8);
+  background: #1E1C28;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-player-card:active {
+  box-shadow: inset 2px 2px 5px rgba(10, 9, 16, .55), inset -2px -2px 5px rgba(40, 37, 55, .7);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-player-card-name {
+  color: #E8E6F0;
+}
+
+[data-style="neumorphism"] .hmm-list--teams {
+  gap: 14px;
+  padding: 16px;
+}
+
+[data-style="neumorphism"] .hmm-team-card {
+  border: none;
+  border-radius: 16px;
+  background: var(--bg);
+  box-shadow: 3px 3px 9px rgba(166, 158, 148, .45), -2px -2px 7px rgba(255, 255, 255, .75);
+  overflow: hidden;
+}
+
+[data-style="neumorphism"] .hmm-team-card:active {
+  transform: scale(.96);
+  box-shadow: inset 2px 2px 5px rgba(166, 158, 148, .45), inset -2px -2px 5px rgba(255, 255, 255, .65);
+}
+
+[data-style="neumorphism"] .hmm-team-card-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: #2A2535;
+}
+
+[data-style="neumorphism"] .hmm-team-card-meta {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 10px;
+  color: #9B95A8;
+}
+
+[data-style="neumorphism"] .hmm-team-card-badge {
+  border-radius: 100px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-team-card {
+  box-shadow: 3px 3px 7px rgba(10, 9, 16, .6), -2px -2px 5px rgba(40, 37, 55, .8);
+  background: #1E1C28;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-team-card:active {
+  box-shadow: inset 2px 2px 5px rgba(10, 9, 16, .55), inset -2px -2px 5px rgba(40, 37, 55, .7);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-team-card-name {
+  color: #E8E6F0;
+}
+
+[data-style="neumorphism"] .hmm-list--competitions {
+  gap: 14px;
+  padding: 16px;
+}
+
+[data-style="neumorphism"] .hmm-comp-card {
+  border: none;
+  border-radius: 16px;
+  background: var(--bg);
+  box-shadow: 3px 3px 9px rgba(166, 158, 148, .45), -2px -2px 7px rgba(255, 255, 255, .75);
+  overflow: hidden;
+}
+
+[data-style="neumorphism"] .hmm-comp-card:active {
+  transform: scale(.96);
+  box-shadow: inset 2px 2px 5px rgba(166, 158, 148, .45), inset -2px -2px 5px rgba(255, 255, 255, .65);
+}
+
+[data-style="neumorphism"] .hmm-comp-card-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: #2A2535;
+}
+
+[data-style="neumorphism"] .hmm-comp-card-meta {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 10px;
+  color: #9B95A8;
+}
+
+[data-style="neumorphism"] .hmm-comp-card-type {
+  border-radius: 100px;
+  background: #60519b;
+}
+
+[data-style="neumorphism"] .hmm-comp-card-winner {
+  border-radius: 100px;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-comp-card {
+  box-shadow: 3px 3px 7px rgba(10, 9, 16, .6), -2px -2px 5px rgba(40, 37, 55, .8);
+  background: #1E1C28;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-comp-card:active {
+  box-shadow: inset 2px 2px 5px rgba(10, 9, 16, .55), inset -2px -2px 5px rgba(40, 37, 55, .7);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-comp-card-name {
+  color: #E8E6F0;
 }
 
 /* ── Neumorphism dark ── */

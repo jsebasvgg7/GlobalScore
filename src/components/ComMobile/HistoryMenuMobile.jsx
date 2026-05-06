@@ -204,26 +204,23 @@ function SectionNav({ active, onChange }) {
 function PlayerRow({ player, onClick }) {
   const imgUrl = getHistoricalImageUrl(player.image_path);
   return (
-    <button className="hmm-row hmm-row--player" onClick={onClick}>
-      <div className="hmm-row-avatar">
+    <button className="hmm-player-card" onClick={onClick}>
+      <div className="hmm-player-card-img">
         {imgUrl
           ? <img src={imgUrl} alt={player.name} />
-          : <span>{player.name?.slice(0, 2).toUpperCase()}</span>
+          : <span className="hmm-player-card-initials">{player.name?.slice(0, 2).toUpperCase()}</span>
         }
         {player.significance_level === 5 && (
-          <span className="hmm-row-goat">GOAT</span>
+          <span className="hmm-player-card-goat">GOAT</span>
         )}
       </div>
-      <div className="hmm-row-info">
-        <span className="hmm-row-name">{player.name}</span>
-        <div className="hmm-row-meta">
-          {player.country && <span>{player.country}</span>}
-          {player.position && (
-            <><span className="hmm-dot">·</span><span>{POSITION_LABEL[player.position] || player.position}</span></>
-          )}
-        </div>
+      <div className="hmm-player-card-body">
+        <span className="hmm-player-card-name">{player.name}</span>
+        <span className="hmm-player-card-meta">
+          {player.country}{player.position ? ` · ${POSITION_LABEL[player.position] || player.position}` : ""}
+        </span>
         {player.significance_level > 0 && (
-          <div className="hmm-row-stars">
+          <div className="hmm-player-card-stars">
             {[1, 2, 3, 4, 5].map(n => (
               <Star key={n} size={8}
                 fill={n <= player.significance_level ? "#f59e0b" : "none"}
@@ -233,7 +230,6 @@ function PlayerRow({ player, onClick }) {
           </div>
         )}
       </div>
-      <ChevronRight size={15} className="hmm-row-chevron" />
     </button>
   );
 }
@@ -244,41 +240,34 @@ function TeamRow({ team, onClick }) {
   const legColor = LEGACY_COLOR[team.legacy_type] || "var(--accent)";
   return (
     <button
-      className="hmm-row hmm-row--team"
+      className="hmm-team-card"
       onClick={onClick}
-      style={{ "--tc": team.primary_color || legColor }}
+      style={{ "--tc": team.primary_color || legColor, "--bc": legColor }}
     >
-      <div className="hmm-row-tc-stripe" />
-      <div className="hmm-row-shield">
+      <div className="hmm-team-card-img">
         {imgUrl
           ? <img src={imgUrl} alt={team.name} />
-          : <Shield size={20} strokeWidth={1.2} />
+          : <span className="hmm-team-card-placeholder"><Shield size={36} strokeWidth={1} /></span>
         }
-      </div>
-      <div className="hmm-row-info">
-        <span className="hmm-row-name">{team.name}</span>
-        <div className="hmm-row-meta">
-          {team.country && <span>{team.country}</span>}
-          {team.era_dominance && (
-            <><span className="hmm-dot">·</span><span>{team.era_dominance}</span></>
-          )}
-        </div>
-        {team.legacy_type && (
-          <span className="hmm-row-badge" style={{ "--bc": legColor }}>
-            {team.legacy_type}
+        <div className="hmm-team-card-stripe" />
+        {team.titles_count > 0 && (
+          <span className="hmm-team-card-titles">
+            <Trophy size={8} />{team.titles_count}
           </span>
         )}
       </div>
-      {team.titles_count > 0 && (
-        <span className="hmm-row-titles">
-          <Trophy size={9} />{team.titles_count}
+      <div className="hmm-team-card-body">
+        <span className="hmm-team-card-name">{team.name}</span>
+        <span className="hmm-team-card-meta">
+          {team.country}{team.era_dominance ? ` · ${team.era_dominance}` : ""}
         </span>
-      )}
-      <ChevronRight size={15} className="hmm-row-chevron" />
+        {team.legacy_type && (
+          <span className="hmm-team-card-badge">{team.legacy_type}</span>
+        )}
+      </div>
     </button>
   );
 }
-
 // Evento
 function EventRow({ event, onClick }) {
   const bannerUrl = getHistoricalImageUrl(event.banner_image_path || event.image_path);
@@ -316,26 +305,30 @@ function CompRow({ competition, onClick }) {
   const imgUrl = getHistoricalImageUrl(competition.image_path);
   const winner = competition.historical_teams?.name || competition.winner_text;
   return (
-    <button className="hmm-row hmm-row--comp" onClick={onClick}>
-      <div className="hmm-row-comp-logo">
+    <button className="hmm-comp-card" onClick={onClick}>
+      <div className="hmm-comp-card-img">
         {imgUrl
           ? <img src={imgUrl} alt={competition.name} />
-          : <Trophy size={18} strokeWidth={1.2} />
+          : <span className="hmm-comp-card-placeholder"><Trophy size={36} strokeWidth={1} /></span>
         }
-      </div>
-      <div className="hmm-row-info">
-        <span className="hmm-row-name hmm-row-name--sm">{competition.name}</span>
-        <div className="hmm-row-meta">
-          {competition.year && <span className="hmm-row-year">{competition.year}</span>}
-          {competition.country && (
-            <><span className="hmm-dot">·</span><span>{competition.country}</span></>
-          )}
-        </div>
-        {winner && (
-          <span className="hmm-row-winner"><Trophy size={8} />{winner}</span>
+        {competition.year && (
+          <span className="hmm-comp-card-year">{competition.year}</span>
+        )}
+        {competition.type && (
+          <span className="hmm-comp-card-type">{competition.type}</span>
         )}
       </div>
-      <ChevronRight size={15} className="hmm-row-chevron" />
+      <div className="hmm-comp-card-body">
+        <span className="hmm-comp-card-name">{competition.name}</span>
+        <span className="hmm-comp-card-meta">
+          {competition.country || ""}
+        </span>
+        {winner && (
+          <span className="hmm-comp-card-winner">
+            <Trophy size={8} />{winner}
+          </span>
+        )}
+      </div>
     </button>
   );
 }
@@ -593,7 +586,7 @@ export default function HistoryMenuMobile({ onSectionChange }) {
       </div>
 
       {/* ── Lista ── */}
-      <div className="hmm-list" ref={listRef}>
+      <div className={`hmm-list${activeSection === "players" && !query ? " hmm-list--players" : activeSection === "teams" && !query ? " hmm-list--teams" : activeSection === "competitions" && !query ? " hmm-list--competitions" : ""}`} ref={listRef}>
         {loading
           ? <LoadingRows />
           : displayItems.length > 0
