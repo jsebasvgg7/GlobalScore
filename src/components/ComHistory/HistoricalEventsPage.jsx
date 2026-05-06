@@ -555,11 +555,10 @@ export default function HistoricalEventsPage({ selectedEvent, onEventSelect, onB
             onClick={() => setShowFilters((v) => !v)}
           >
             <Filter size={12} />
-            Filtros
             {hasFilters && <span className="hep-filter-dot" />}
           </button>
           <button className="hep-back-btn-vault" onClick={onBack}>
-            Volver
+            <ArrowLeft size={12} />
           </button>
         </div>
       </header>

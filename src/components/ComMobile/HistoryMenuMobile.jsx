@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Users2, Trophy, Shield, Zap, ArrowRight, ChevronRight } from "lucide-react";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { Users2, Trophy, Shield, Zap, Search, X, ChevronRight, Star } from "lucide-react";
 import { useHistoricalPlayers, getHistoricalImageUrl } from "../../hooks/HooksHistory/useHistoricalPlayers";
 import { useHistoricalCompetitions } from "../../hooks/HooksHistory/useHistoricalCompetitions";
 import { useHistoricalTeams } from "../../hooks/HooksHistory/useHistoricalTeams";
@@ -7,398 +7,293 @@ import { useHistoricalEvents } from "../../hooks/HooksHistory/useHistoricalEvent
 import "../../styles/StylesMobile/HistoryMenuMobile.css";
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
-function Skel({ w = "100%", h = 16, style = {} }) {
+function Skel({ w = "100%", h = 16, round = false }) {
   return (
     <span
       className="hmm-skel"
-      style={{ width: w, height: h, display: "block", ...style }}
+      style={{ width: w, height: h, borderRadius: round ? "50%" : 3, display: "block" }}
     />
   );
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  ÍTEM 1 — HEADER (no navega)
-// ══════════════════════════════════════════════════════════════════════════════
-function MenuHeader() {
-  return (
-    <div className="hmm-header">
-      {/* Ruido de fondo tipo grid paper */}
-      <div className="hmm-header-grid" aria-hidden="true" />
-
-      {/* Eyebrow */}
-      <div className="hmm-eyebrow">
-        <span className="hmm-eyebrow-line" />
-        <span className="hmm-eyebrow-text">Archivo Histórico</span>
-        <span className="hmm-eyebrow-line" />
-      </div>
-
-      {/* Título estilo editorial asimétrico */}
-      <div className="hmm-title-block">
-        <div className="hmm-title-tag">BÓVEDA</div>
-        <div className="hmm-title-main">
-          <span className="hmm-title-h">Histó</span>
-          <span className="hmm-title-h hmm-title-h--outline">rica</span>
-        </div>
-      </div>
-
-      {/* Sticker decorativo */}
-      <div className="hmm-header-sticker" aria-hidden="true">
-        <span>⬡</span>
-        <span className="hmm-sticker-text">ACCESO</span>
-      </div>
-
-      <p className="hmm-header-sub">
-        Selecciona una sección del archivo para explorar las leyendas del fútbol mundial.
-      </p>
-    </div>
-  );
+// ─── Tema activo (lee del DOM) ────────────────────────────────────────────────
+function useTheme() {
+  const [theme, setTheme] = useState(() => {
+    return document.documentElement.dataset.style || "default";
+  });
+  useEffect(() => {
+    const obs = new MutationObserver(() => {
+      setTheme(document.documentElement.dataset.style || "default");
+    });
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-style"] });
+    return () => obs.disconnect();
+  }, []);
+  return theme;
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  ÍTEM 2 — JUGADOR HISTÓRICO (navega → players)
-// ══════════════════════════════════════════════════════════════════════════════
-function PlayerItem({ player, loading, onClick }) {
-  const imgUrl = player ? getHistoricalImageUrl(player.image_path) : null;
+// ─── Constantes ───────────────────────────────────────────────────────────────
+const SECTIONS = [
+  { key: "players", label: "Jug", icon: Users2 },
+  { key: "teams", label: "Equi", icon: Shield },
+  { key: "events", label: "Eve", icon: Zap },
+  { key: "competitions", label: "Coms", icon: Trophy },
+];
 
-  return (
-    <button
-      className="hmm-item hmm-item--player"
-      onClick={onClick}
-      disabled={loading || !player}
-      aria-label="Ir a Jugadores Históricos"
-    >
-      {/* Ventana estilo browser (decorativa) */}
-      <div className="hmm-browser-bar" aria-hidden="true">
-        <span className="hmm-browser-dot hmm-browser-dot--r" />
-        <span className="hmm-browser-dot hmm-browser-dot--y" />
-        <span className="hmm-browser-dot hmm-browser-dot--g" />
-        <span className="hmm-browser-url">jugadores/</span>
-      </div>
-
-      <div className="hmm-player-body">
-        {/* Foto circular */}
-        <div className="hmm-player-avatar-wrap">
-          <div className="hmm-player-avatar">
-            {loading ? (
-              <Skel w={72} h={72} />
-            ) : imgUrl ? (
-              <img src={imgUrl} alt={player?.name} />
-            ) : (
-              <span>{player?.name?.slice(0, 2).toUpperCase() || "??"}</span>
-            )}
-          </div>
-          {/* Badge "Live" estilo referencia */}
-          <span className="hmm-live-badge">
-            <span className="hmm-live-dot" />
-            HIST
-          </span>
-        </div>
-
-        {/* Info */}
-        <div className="hmm-player-info">
-          <span className="hmm-section-label">
-            <Users2 size={10} /> Jugador Histórico
-          </span>
-          {loading ? (
-            <>
-              <Skel w="85%" h={20} style={{ marginBottom: 6 }} />
-              <Skel w="60%" h={13} />
-            </>
-          ) : player ? (
-            <>
-              {player.legacy_type && (
-                <span className="hmm-player-legacy">{player.legacy_type}</span>
-              )}
-              <h2 className="hmm-player-name">{player.name}</h2>
-              <div className="hmm-player-meta">
-                {player.country && <span>{player.country}</span>}
-                {player.position && (
-                  <><span className="hmm-sep">·</span><span>{player.position}</span></>
-                )}
-              </div>
-              {player.ballon_dor_count > 0 && (
-                <span className="hmm-ballon-chip">
-                  {player.ballon_dor_count} Balón{player.ballon_dor_count > 1 ? "es" : ""} de Oro
-                </span>
-              )}
-            </>
-          ) : null}
-        </div>
-
-        <ChevronRight size={18} className="hmm-arrow" />
-      </div>
-    </button>
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════════════════
-//  ÍTEM 3a — COMPETICIÓN VISUAL (solo visual, no navega)
-// ══════════════════════════════════════════════════════════════════════════════
-function CompVisual({ competition }) {
-  if (!competition) return null;
-  const imgUrl = getHistoricalImageUrl(competition.image_path);
-
-  return (
-    <div className="hmm-comp-visual" aria-hidden="true">
-      <div className="hmm-comp-logo-wrap">
-        {imgUrl
-          ? <img src={imgUrl} alt={competition.name} />
-          : <Trophy size={22} strokeWidth={1.2} />
-        }
-      </div>
-      <div className="hmm-comp-visual-info">
-        <span className="hmm-comp-visual-name">{competition.name}</span>
-        <div className="hmm-comp-visual-meta">
-          {competition.year && <span className="hmm-comp-year-tag">{competition.year}</span>}
-          {competition.country && <span>{competition.country}</span>}
-        </div>
-      </div>
-      {/* Decoración numérica */}
-      <span className="hmm-comp-num-deco">01</span>
-    </div>
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════════════════
-//  ÍTEM 3b — BOTÓN COMPETICIONES (navega → competitions)
-// ══════════════════════════════════════════════════════════════════════════════
-function CompButton({ competition, loading, onClick }) {
-  const winner = competition?.historical_teams?.name || competition?.winner_text;
-
-  return (
-    <button
-      className="hmm-item hmm-item--comp-btn"
-      onClick={onClick}
-      disabled={loading}
-      aria-label="Ir a Competiciones Históricas"
-    >
-      <div className="hmm-comp-btn-body">
-        <div className="hmm-comp-btn-left">
-          <span className="hmm-section-label">
-            <Trophy size={10} /> Competiciones
-          </span>
-          {loading ? (
-            <>
-              <Skel w="90%" h={18} style={{ marginBottom: 5 }} />
-              <Skel w="55%" h={12} />
-            </>
-          ) : competition ? (
-            <>
-              <p className="hmm-comp-btn-name">{competition.name}</p>
-              {winner && (
-                <span className="hmm-comp-btn-winner">
-                  <Trophy size={9} /> Campeón: {winner}
-                </span>
-              )}
-              {competition.type && (
-                <span className="hmm-comp-type-badge">{competition.type}</span>
-              )}
-            </>
-          ) : null}
-        </div>
-
-        {/* Flecha CTA estilo referencia */}
-        <div className="hmm-comp-cta">
-          <span className="hmm-comp-cta-text">Ver torneos</span>
-          <ArrowRight size={16} />
-        </div>
-      </div>
-
-      {/* Sticker decorativo "Live at your Channel" equivalente */}
-      <div className="hmm-comp-sticker" aria-hidden="true">
-        <span>TOP</span>
-        <span className="hmm-comp-sticker-sub">COMP</span>
-      </div>
-    </button>
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════════════════
-//  ÍTEM 4 — EQUIPO (navega → teams)
-// ══════════════════════════════════════════════════════════════════════════════
 const LEGACY_COLOR = {
-  Dynastic: "#f59e0b",
-  Innovative: "#8b5cf6",
-  Continental: "#3b82f6",
-  National: "#10b981",
+  Dynastic: "#f59e0b", Innovative: "#8b5cf6",
+  Continental: "#3b82f6", National: "#10b981",
 };
 
-function TeamItem({ team, loading, onClick }) {
-  const imgUrl = team ? getHistoricalImageUrl(team.image_path) : null;
-  const legColor = team ? (LEGACY_COLOR[team.legacy_type] || "var(--accent)") : "var(--accent)";
+const POSITION_LABEL = {
+  Forward: "Delantero", Midfielder: "Centrocampista",
+  "All-rounder": "Todocampista", Defender: "Defensor", Goalkeeper: "Portero",
+};
 
+// ─── HEADER ──────────────────────────────────────────────────────────────────
+function Header({ totalCounts }) {
   return (
-    <button
-      className="hmm-item hmm-item--team"
-      onClick={onClick}
-      disabled={loading || !team}
-      style={{ "--tc": team?.primary_color || legColor }}
-      aria-label="Ir a Equipos Históricos"
-    >
-      {/* Ventana browser */}
-      <div className="hmm-browser-bar" aria-hidden="true">
-        <span className="hmm-browser-dot hmm-browser-dot--r" />
-        <span className="hmm-browser-dot hmm-browser-dot--y" />
-        <span className="hmm-browser-dot hmm-browser-dot--g" />
-        <span className="hmm-browser-url">equipos/</span>
+    <div className="hmm-header">
+      <div className="hmm-header-bg" aria-hidden="true" />
+      <div className="hmm-header-inner">
+        <div className="hmm-eyebrow">
+          <span className="hmm-eyebrow-line" />
+          <span className="hmm-eyebrow-text">Archivo Histórico</span>
+          <span className="hmm-eyebrow-line" />
+        </div>
+        <h1 className="hmm-title">
+          <span className="hmm-title-solid">BÓVEDA</span>
+          <span className="hmm-title-outline">HISTÓRICA</span>
+        </h1>
+        <p className="hmm-subtitle">
+          {totalCounts} registros del fútbol mundial
+        </p>
       </div>
+    </div>
+  );
+}
 
-      {/* Franja de color del equipo */}
-      <div className="hmm-team-stripe" />
+// ─── BUSCADOR GLOBAL ─────────────────────────────────────────────────────────
+function GlobalSearch({ query, onChange, onClear, resultCount, searching }) {
+  const inputRef = useRef(null);
+  return (
+    <div className="hmm-search-wrap">
+      <div className={`hmm-search-box ${query ? "hmm-search-box--active" : ""}`}>
+        <Search size={15} className="hmm-search-icon" />
+        <input
+          ref={inputRef}
+          className="hmm-search-input"
+          placeholder="Buscar jugador, equipo, momento..."
+          value={query}
+          onChange={e => onChange(e.target.value)}
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
+        />
+        {query && (
+          <button className="hmm-search-clear" onClick={onClear} aria-label="Limpiar">
+            <X size={13} />
+          </button>
+        )}
+      </div>
+      {query && (
+        <div className="hmm-search-hint">
+          {searching
+            ? <span>Buscando…</span>
+            : <span><strong>{resultCount}</strong> resultado{resultCount !== 1 ? "s" : ""}</span>
+          }
+        </div>
+      )}
+    </div>
+  );
+}
 
-      <div className="hmm-team-body">
-        {/* Logo grande centrado */}
-        <div className="hmm-team-logo-wrap">
-          {loading ? (
-            <Skel w={80} h={80} />
-          ) : imgUrl ? (
-            <img src={imgUrl} alt={team?.name} />
-          ) : (
-            <Shield size={32} strokeWidth={1.2} />
+// ─── NAV DE SECCIONES ────────────────────────────────────────────────────────
+function SectionNav({ active, onChange }) {
+  return (
+    <nav className="hmm-nav">
+      {SECTIONS.map(({ key, label, icon: Icon }) => (
+        <button
+          key={key}
+          className={`hmm-nav-btn ${active === key ? "hmm-nav-btn--active" : ""}`}
+          onClick={() => onChange(key)}
+        >
+          <Icon size={14} strokeWidth={active === key ? 2.2 : 1.6} />
+          <span>{label}</span>
+          {active === key && <span className="hmm-nav-indicator" />}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+// ─── ITEMS DE CADA SECCIÓN ────────────────────────────────────────────────────
+
+// Jugador
+function PlayerRow({ player, onClick }) {
+  const imgUrl = getHistoricalImageUrl(player.image_path);
+  return (
+    <button className="hmm-row hmm-row--player" onClick={onClick}>
+      <div className="hmm-row-avatar">
+        {imgUrl
+          ? <img src={imgUrl} alt={player.name} />
+          : <span>{player.name?.slice(0, 2).toUpperCase()}</span>
+        }
+        {player.significance_level === 5 && (
+          <span className="hmm-row-goat">GOAT</span>
+        )}
+      </div>
+      <div className="hmm-row-info">
+        <span className="hmm-row-name">{player.name}</span>
+        <div className="hmm-row-meta">
+          {player.country && <span>{player.country}</span>}
+          {player.position && (
+            <><span className="hmm-dot">·</span><span>{POSITION_LABEL[player.position] || player.position}</span></>
           )}
         </div>
-
-        <div className="hmm-team-info">
-          <span className="hmm-section-label">
-            <Shield size={10} /> Equipo Histórico
-          </span>
-          {loading ? (
-            <>
-              <Skel w="80%" h={22} style={{ marginBottom: 6 }} />
-              <Skel w="50%" h={13} />
-            </>
-          ) : team ? (
-            <>
-              <h2 className="hmm-team-name">{team.name}</h2>
-              <div className="hmm-team-meta">
-                {team.country && <span>{team.country}</span>}
-                {team.era_dominance && (
-                  <><span className="hmm-sep">·</span><span>{team.era_dominance}</span></>
-                )}
-              </div>
-              {team.legacy_type && (
-                <span
-                  className="hmm-team-legacy"
-                  style={{ "--lc": legColor }}
-                >
-                  {team.legacy_type}
-                </span>
-              )}
-              {team.titles_count > 0 && (
-                <span className="hmm-team-titles">
-                  <Trophy size={10} /> {team.titles_count} título{team.titles_count !== 1 ? "s" : ""}
-                </span>
-              )}
-            </>
-          ) : null}
-        </div>
-
-        <ChevronRight size={18} className="hmm-arrow" />
+        {player.significance_level > 0 && (
+          <div className="hmm-row-stars">
+            {[1, 2, 3, 4, 5].map(n => (
+              <Star key={n} size={8}
+                fill={n <= player.significance_level ? "#f59e0b" : "none"}
+                stroke={n <= player.significance_level ? "#f59e0b" : "var(--border)"}
+              />
+            ))}
+          </div>
+        )}
       </div>
+      <ChevronRight size={15} className="hmm-row-chevron" />
     </button>
   );
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  ÍTEM 5 — MOMENTO HISTÓRICO (navega → events)
-// ══════════════════════════════════════════════════════════════════════════════
-function EventItem({ event, loading, onClick }) {
-  const bannerUrl = event
-    ? getHistoricalImageUrl(event.banner_image_path || event.image_path)
-    : null;
-  const protagonist =
-    event?.event_category === "player"
-      ? event.historical_players
-      : event?.historical_teams;
-  const year = event?.event_date
-    ? new Date(event.event_date).getFullYear()
-    : null;
-
+// Equipo
+function TeamRow({ team, onClick }) {
+  const imgUrl = getHistoricalImageUrl(team.image_path);
+  const legColor = LEGACY_COLOR[team.legacy_type] || "var(--accent)";
   return (
     <button
-      className="hmm-item hmm-item--event"
+      className="hmm-row hmm-row--team"
       onClick={onClick}
-      disabled={loading}
-      aria-label="Ir a Momentos Históricos"
+      style={{ "--tc": team.primary_color || legColor }}
     >
-      {/* Imagen a ancho completo */}
-      <div className="hmm-event-img-wrap">
-        {loading ? (
-          <Skel w="100%" h={200} />
-        ) : bannerUrl ? (
-          <img src={bannerUrl} alt={event?.title} />
-        ) : (
-          <div className="hmm-event-img-ph">
-            <Zap size={36} strokeWidth={1} />
-          </div>
-        )}
-        <div className="hmm-event-img-overlay" />
-
-        {/* Badges sobre imagen */}
-        <div className="hmm-event-badges">
-          <span className="hmm-event-badge hmm-event-badge--section">
-            <Zap size={10} /> Momentos
-          </span>
-          {year && (
-            <span className="hmm-event-badge hmm-event-badge--year">{year}</span>
+      <div className="hmm-row-tc-stripe" />
+      <div className="hmm-row-shield">
+        {imgUrl
+          ? <img src={imgUrl} alt={team.name} />
+          : <Shield size={20} strokeWidth={1.2} />
+        }
+      </div>
+      <div className="hmm-row-info">
+        <span className="hmm-row-name">{team.name}</span>
+        <div className="hmm-row-meta">
+          {team.country && <span>{team.country}</span>}
+          {team.era_dominance && (
+            <><span className="hmm-dot">·</span><span>{team.era_dominance}</span></>
           )}
         </div>
+        {team.legacy_type && (
+          <span className="hmm-row-badge" style={{ "--bc": legColor }}>
+            {team.legacy_type}
+          </span>
+        )}
+      </div>
+      {team.titles_count > 0 && (
+        <span className="hmm-row-titles">
+          <Trophy size={9} />{team.titles_count}
+        </span>
+      )}
+      <ChevronRight size={15} className="hmm-row-chevron" />
+    </button>
+  );
+}
 
-        {/* Sticker "Live" equivalente */}
-        {!loading && event && (
-          <div className="hmm-event-live-sticker">
-            <span>HIST</span>
-            <span className="hmm-event-live-sub">ÓRICO</span>
+// Evento
+function EventRow({ event, onClick }) {
+  const bannerUrl = getHistoricalImageUrl(event.banner_image_path || event.image_path);
+  const protagonist = event.event_category === "player"
+    ? event.historical_players : event.historical_teams;
+  const year = event.event_date ? new Date(event.event_date).getFullYear() : null;
+
+  return (
+    <button className="hmm-row hmm-row--event" onClick={onClick}>
+      <div className="hmm-row-event-img">
+        {bannerUrl
+          ? <img src={bannerUrl} alt={event.title} />
+          : <div className="hmm-row-event-ph"><Zap size={18} strokeWidth={1} /></div>
+        }
+        {year && <span className="hmm-row-event-year">{year}</span>}
+      </div>
+      <div className="hmm-row-info">
+        <span className="hmm-row-name hmm-row-name--sm">{event.title}</span>
+        {protagonist && (
+          <div className="hmm-row-meta">
+            <span>{protagonist.name}</span>
           </div>
         )}
-      </div>
-
-      {/* Info bajo la imagen */}
-      <div className="hmm-event-body">
-        {loading ? (
-          <>
-            <Skel w="85%" h={22} style={{ marginBottom: 8 }} />
-            <Skel w="55%" h={14} />
-          </>
-        ) : event ? (
-          <>
-            <h2 className="hmm-event-title">{event.title}</h2>
-            {protagonist && (
-              <div className="hmm-event-protagonist">
-                <div className="hmm-event-proto-avatar">
-                  {getHistoricalImageUrl(protagonist.image_path) ? (
-                    <img
-                      src={getHistoricalImageUrl(protagonist.image_path)}
-                      alt={protagonist.name}
-                    />
-                  ) : (
-                    <span>{protagonist.name?.slice(0, 2).toUpperCase()}</span>
-                  )}
-                </div>
-                <span className="hmm-event-proto-name">{protagonist.name}</span>
-              </div>
-            )}
-            {event.event_type && (
-              <span className="hmm-event-type">{event.event_type}</span>
-            )}
-            {event.description && (
-              <p className="hmm-event-desc">
-                {event.description.slice(0, 90)}
-                {event.description.length > 90 ? "…" : ""}
-              </p>
-            )}
-          </>
-        ) : (
-          <p className="hmm-empty-note">Sin momentos históricos</p>
+        {event.event_type && (
+          <span className="hmm-row-type">{event.event_type}</span>
         )}
-
-        {/* CTA */}
-        <div className="hmm-event-cta">
-          <span>Explorar todos los momentos</span>
-          <ArrowRight size={14} />
-        </div>
       </div>
+      <ChevronRight size={15} className="hmm-row-chevron" />
     </button>
+  );
+}
+
+// Competición
+function CompRow({ competition, onClick }) {
+  const imgUrl = getHistoricalImageUrl(competition.image_path);
+  const winner = competition.historical_teams?.name || competition.winner_text;
+  return (
+    <button className="hmm-row hmm-row--comp" onClick={onClick}>
+      <div className="hmm-row-comp-logo">
+        {imgUrl
+          ? <img src={imgUrl} alt={competition.name} />
+          : <Trophy size={18} strokeWidth={1.2} />
+        }
+      </div>
+      <div className="hmm-row-info">
+        <span className="hmm-row-name hmm-row-name--sm">{competition.name}</span>
+        <div className="hmm-row-meta">
+          {competition.year && <span className="hmm-row-year">{competition.year}</span>}
+          {competition.country && (
+            <><span className="hmm-dot">·</span><span>{competition.country}</span></>
+          )}
+        </div>
+        {winner && (
+          <span className="hmm-row-winner"><Trophy size={8} />{winner}</span>
+        )}
+      </div>
+      <ChevronRight size={15} className="hmm-row-chevron" />
+    </button>
+  );
+}
+
+// ─── LISTA VACÍA ─────────────────────────────────────────────────────────────
+function EmptyState({ section, query }) {
+  const icons = { players: Users2, teams: Shield, events: Zap, competitions: Trophy };
+  const Icon = icons[section] || Zap;
+  return (
+    <div className="hmm-empty">
+      <Icon size={28} strokeWidth={1} />
+      <p>{query ? `Sin resultados para "${query}"` : "Sin datos disponibles"}</p>
+    </div>
+  );
+}
+
+// ─── SKELETONS DE CARGA ───────────────────────────────────────────────────────
+function LoadingRows() {
+  return (
+    <>
+      {[1, 2, 3, 4, 5].map(i => (
+        <div key={i} className="hmm-row-skel">
+          <Skel w={44} h={44} round />
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
+            <Skel w="65%" h={14} />
+            <Skel w="45%" h={11} />
+          </div>
+        </div>
+      ))}
+    </>
   );
 }
 
@@ -411,75 +306,160 @@ export default function HistoryMenuMobile({ onSectionChange }) {
   const { teams, loading: loadingTeams } = useHistoricalTeams();
   const { events, loading: loadingEvents } = useHistoricalEvents();
 
-  // Un jugador aleatorio, calculado una vez al montar
-  const [featuredPlayer, setFeaturedPlayer] = useState(null);
-
-  useEffect(() => {
-    if (allPlayers.length > 0) {
-      const idx = Math.floor(Math.random() * allPlayers.length);
-      setFeaturedPlayer(allPlayers[idx]);
-    }
-  }, [allPlayers]);
+  const [activeSection, setActiveSection] = useState("players");
+  const [query, setQuery] = useState("");
+  const listRef = useRef(null);
 
   const nav = (key) => onSectionChange?.(key);
 
-  const firstComp = competitions[0] || null;
-  const firstTeam = teams[0] || null;
-  const firstEvent = events[0] || null;
+  const totalCounts = allPlayers.length + teams.length + events.length + competitions.length;
+
+  // ── Búsqueda global ──────────────────────────────────────────────────────
+  const searchResults = useMemo(() => {
+    if (!query.trim()) return null;
+    const q = query.toLowerCase().trim();
+
+    const matchPlayers = allPlayers.filter(p =>
+      p.name?.toLowerCase().includes(q) ||
+      p.country?.toLowerCase().includes(q) ||
+      p.position?.toLowerCase().includes(q) ||
+      p.legacy_type?.toLowerCase().includes(q)
+    ).map(p => ({ type: "player", data: p }));
+
+    const matchTeams = teams.filter(t =>
+      t.name?.toLowerCase().includes(q) ||
+      t.country?.toLowerCase().includes(q) ||
+      t.era_dominance?.toLowerCase().includes(q)
+    ).map(t => ({ type: "team", data: t }));
+
+    const matchEvents = events.filter(e =>
+      e.title?.toLowerCase().includes(q) ||
+      e.historical_players?.name?.toLowerCase().includes(q) ||
+      e.historical_teams?.name?.toLowerCase().includes(q) ||
+      e.event_type?.toLowerCase().includes(q)
+    ).map(e => ({ type: "event", data: e }));
+
+    const matchComps = competitions.filter(c =>
+      c.name?.toLowerCase().includes(q) ||
+      c.country?.toLowerCase().includes(q) ||
+      c.historical_teams?.name?.toLowerCase().includes(q)
+    ).map(c => ({ type: "competition", data: c }));
+
+    return [...matchPlayers, ...matchTeams, ...matchEvents, ...matchComps];
+  }, [query, allPlayers, teams, events, competitions]);
+
+  // ── Items de sección activa ──────────────────────────────────────────────
+  const sectionItems = useMemo(() => {
+    switch (activeSection) {
+      case "players": return allPlayers.map(p => ({ type: "player", data: p }));
+      case "teams": return teams.map(t => ({ type: "team", data: t }));
+      case "events": return events.map(e => ({ type: "event", data: e }));
+      case "competitions": return competitions.map(c => ({ type: "competition", data: c }));
+      default: return [];
+    }
+  }, [activeSection, allPlayers, teams, events, competitions]);
+
+  const isLoading = {
+    players: loadingPlayers,
+    teams: loadingTeams,
+    events: loadingEvents,
+    competitions: loadingComps,
+  };
+
+  const displayItems = searchResults !== null ? searchResults : sectionItems;
+  const loading = searchResults !== null ? false : isLoading[activeSection];
+
+  const handleSectionChange = (key) => {
+    setActiveSection(key);
+    setQuery("");
+    listRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleClear = () => {
+    setQuery("");
+  };
+
+  // ── Render de un item (polimórfico) ──────────────────────────────────────
+  const renderItem = (item, idx) => {
+    switch (item.type) {
+      case "player":
+        return (
+          <PlayerRow
+            key={item.data.id || idx}
+            player={item.data}
+            onClick={() => nav("players")}
+          />
+        );
+      case "team":
+        return (
+          <TeamRow
+            key={item.data.id || idx}
+            team={item.data}
+            onClick={() => nav("teams")}
+          />
+        );
+      case "event":
+        return (
+          <EventRow
+            key={item.data.id || idx}
+            event={item.data}
+            onClick={() => nav("events")}
+          />
+        );
+      case "competition":
+        return (
+          <CompRow
+            key={item.data.id || idx}
+            competition={item.data}
+            onClick={() => nav("competitions")}
+          />
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="hmm-root">
-      {/* ── 1. Header ─────────────────────────────────────────── */}
-      <MenuHeader />
 
-      {/* ── 2. Jugador histórico ──────────────────────────────── */}
-      <PlayerItem
-        player={featuredPlayer}
-        loading={loadingPlayers}
-        onClick={() => nav("players")}
+      {/* ── Header ── */}
+      <Header totalCounts={totalCounts} />
+
+      {/* ── Buscador global ── */}
+      <GlobalSearch
+        query={query}
+        onChange={setQuery}
+        onClear={handleClear}
+        resultCount={searchResults?.length || 0}
+        searching={false}
       />
 
-      {/* ── 3a. Competición visual (decorativa) ───────────────── */}
-      {!loadingComps && firstComp && (
-        <CompVisual competition={firstComp} />
-      )}
-      {loadingComps && (
-        <div className="hmm-comp-visual hmm-comp-visual--loading">
-          <Skel w={52} h={52} />
-          <div style={{ flex: 1 }}>
-            <Skel w="75%" h={16} style={{ marginBottom: 6 }} />
-            <Skel w="45%" h={12} />
-          </div>
-        </div>
+      {/* ── Nav secciones (oculto si hay búsqueda activa) ── */}
+      {!query && (
+        <SectionNav active={activeSection} onChange={handleSectionChange} />
       )}
 
-      {/* ── 3b. Botón competiciones ───────────────────────────── */}
-      <CompButton
-        competition={firstComp}
-        loading={loadingComps}
-        onClick={() => nav("competitions")}
-      />
-
-      {/* ── 4. Equipo ─────────────────────────────────────────── */}
-      <TeamItem
-        team={firstTeam}
-        loading={loadingTeams}
-        onClick={() => nav("teams")}
-      />
-
-      {/* ── 5. Momento histórico ──────────────────────────────── */}
-      <EventItem
-        event={firstEvent}
-        loading={loadingEvents}
-        onClick={() => nav("events")}
-      />
-
-      {/* Separador final decorativo */}
-      <div className="hmm-footer-deco" aria-hidden="true">
-        <span className="hmm-footer-line" />
-        <span className="hmm-footer-icon">⬡</span>
-        <span className="hmm-footer-line" />
+      {/* ── Etiqueta de sección o búsqueda ── */}
+      <div className="hmm-list-label">
+        {query
+          ? <><Search size={10} /> Resultados para "{query}"</>
+          : <>{SECTIONS.find(s => s.key === activeSection)?.label || ""}</>
+        }
+        {!query && !loading && (
+          <span className="hmm-list-count">{sectionItems.length}</span>
+        )}
       </div>
+
+      {/* ── Lista ── */}
+      <div className="hmm-list" ref={listRef}>
+        {loading
+          ? <LoadingRows />
+          : displayItems.length > 0
+            ? displayItems.map((item, idx) => renderItem(item, idx))
+            : <EmptyState section={activeSection} query={query} />
+        }
+      </div>
+
     </div>
   );
 }

@@ -362,6 +362,32 @@
     background: transparent;
   }
 
+  [data-style="brutalist"] .htp-back-vault-btn {
+    border-radius: 0;
+    font-family: var(--hep-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border: 1px solid var(--hep-border-hard);
+    background: var(--hep-bg);
+    color: var(--hep-muted);
+    padding: 0 12px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: background .12s, color .12s;
+  }
+
+  [data-style="brutalist"] .htp-back-vault-btn:active,
+  [data-style="brutalist"] .htp-back-vault-btn--active {
+    background: var(--hep-accent);
+    color: #fff;
+    border-color: var(--hep-accent);
+  }
+
   /* Team cards */
   [data-style="brutalist"] .htp-team-card {
     border-left: 3px solid transparent;
@@ -689,6 +715,31 @@
     box-shadow: var(--htp-inset-sm);
     height: 40px;
     padding: 0 14px;
+  }
+
+  [data-style="neumorphism"] .htp-back-vault-btn {
+    border-radius: var(--htp-r-pill);
+    font-family: var(--htp-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    border: none;
+    background: var(--htp-bg);
+    box-shadow: var(--htp-shadow-sm);
+    color: var(--htp-muted);
+    padding: 0 14px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: box-shadow .15s, color .15s;
+  }
+
+  [data-style="neumorphism"] .htp-back-vault-btn:active,
+  [data-style="neumorphism"] .htp-back-vault-btn--active {
+    box-shadow: var(--htp-inset);
+    color: var(--htp-accent);
   }
 
   [data-style="neumorphism"] .htp-search-input {

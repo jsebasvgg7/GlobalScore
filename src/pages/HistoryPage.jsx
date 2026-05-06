@@ -533,11 +533,11 @@ export default function HistoryPage() {
               className={`hp-filter-btn ${hasActiveFilters ? "hp-filter-btn--active" : ""}`}
               onClick={() => setShowFilters((v) => !v)}
             >
-              <Filter size={12} /> Filtros {hasActiveFilters && <span className="hp-filter-dot" />}
+              <Filter size={12} /> {hasActiveFilters && <span className="hp-filter-dot" />}
             </button>
             {/* Botón volver al menú */}
             <button className="hp-back-vault-btn" onClick={handleBackToMenu}>
-              Volver
+              <ArrowLeft size={12} />
             </button>
           </div>
         </header>

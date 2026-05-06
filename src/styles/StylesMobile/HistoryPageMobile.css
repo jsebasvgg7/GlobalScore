@@ -652,8 +652,8 @@
     border: 1px solid var(--hp-border-hard);
     background: var(--hp-bg);
     color: var(--hp-muted);
-    padding: 0 12px;
-    height: 36px;
+    padding: 0 14px;
+    height: 44px;
     display: flex;
     align-items: center;
     gap: 5px;
@@ -663,6 +663,32 @@
 
   [data-style="brutalist"] .hp-filter-btn:active,
   [data-style="brutalist"] .hp-filter-btn--active {
+    background: var(--hp-accent);
+    color: #fff;
+    border-color: var(--hp-accent);
+  }
+
+  [data-style="brutalist"] .hp-back-vault-btn {
+    border-radius: 0;
+    font-family: var(--hp-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border: 1px solid var(--hp-border-hard);
+    background: var(--hp-bg);
+    color: var(--hp-muted);
+    padding: 0 14px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: background .12s, color .12s;
+  }
+
+  [data-style="brutalist"] .hp-back-vault-btn:active,
+  [data-style="brutalist"] .hp-back-vault-btn--active {
     background: var(--hp-accent);
     color: #fff;
     border-color: var(--hp-accent);
@@ -1122,6 +1148,31 @@
 
   [data-style="neumorphism"] .hp-filter-btn:active,
   [data-style="neumorphism"] .hp-filter-btn--active {
+    box-shadow: var(--hp-inset);
+    color: var(--hp-accent);
+  }
+
+  [data-style="neumorphism"] .hp-back-vault-btn {
+    border-radius: var(--hp-r-pill);
+    font-family: var(--hp-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    border: none;
+    background: var(--hp-bg);
+    box-shadow: var(--hp-shadow-sm);
+    color: var(--hp-muted);
+    padding: 0 14px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: box-shadow .15s, color .15s;
+  }
+
+  [data-style="neumorphism"] .hp-back-vault-btn:active,
+  [data-style="neumorphism"] .hp-back-vault-btn--active {
     box-shadow: var(--hp-inset);
     color: var(--hp-accent);
   }

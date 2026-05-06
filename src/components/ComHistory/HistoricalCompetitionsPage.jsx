@@ -686,11 +686,10 @@ export default function HistoricalCompetitionsPage({ onBack }) {
             onClick={() => setShowFilters(v => !v)}
           >
             <Layers size={12} />
-            Filtros
             {hasFilters && <span className="hcp-filter-dot" />}
           </button>
           <button className="hp-back-vault-btn" onClick={onBack}>
-            Volver
+            <ArrowLeft size={12} />
           </button>
         </div>
       </header>

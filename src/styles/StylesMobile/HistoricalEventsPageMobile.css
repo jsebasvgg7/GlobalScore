@@ -403,6 +403,32 @@
     background: transparent;
   }
 
+  [data-style="brutalist"] .hep-back-btn-vault {
+    border-radius: 0;
+    font-family: var(--hep-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border: 1px solid var(--hep-border-hard);
+    background: var(--hep-bg);
+    color: var(--hep-muted);
+    padding: 0 14px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: background .12s, color .12s;
+  }
+
+  [data-style="brutalist"] .hep-back-btn-vault:active,
+  [data-style="brutalist"] .hep-back-btn-vault--active {
+    background: var(--hep-accent);
+    color: #fff;
+    border-color: var(--hep-accent);
+  }
+
   [data-style="brutalist"] .hep-filter-btn {
     border-radius: 0;
     font-family: var(--hep-mono);
@@ -413,8 +439,8 @@
     border: 1px solid var(--hep-border-hard);
     background: var(--hep-bg);
     color: var(--hep-muted);
-    padding: 0 12px;
-    height: 36px;
+    padding: 0 14px;
+    height: 44px;
     display: flex;
     align-items: center;
     gap: 5px;
@@ -965,6 +991,31 @@
     background: transparent;
   }
 
+  [data-style="neumorphism"] .hep-back-btn-vault {
+    border-radius: var(--hep-r-pill);
+    font-family: var(--hep-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    border: none;
+    background: var(--hep-bg);
+    box-shadow: var(--hep-shadow-sm);
+    color: var(--hep-muted);
+    padding: 0 14px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: box-shadow .15s, color .15s;
+  }
+
+  [data-style="neumorphism"] .hep-back-btn-vault:active,
+  [data-style="neumorphism"] .hep-back-btn-vault--active {
+    box-shadow: var(--hep-inset);
+    color: var(--hep-accent);
+  }
+
   [data-style="neumorphism"] .hep-filter-btn {
     border-radius: var(--hep-r-pill);
     font-family: var(--hep-sans);
@@ -976,7 +1027,7 @@
     box-shadow: var(--hep-shadow-sm);
     color: var(--hep-muted);
     padding: 0 14px;
-    height: 40px;
+    height: 44px;
     display: flex;
     align-items: center;
     gap: 6px;

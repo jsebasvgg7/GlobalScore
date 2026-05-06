@@ -389,8 +389,8 @@
     border: 1px solid var(--hcp-border-hard);
     background: var(--hcp-bg);
     color: var(--hcp-muted);
-    padding: 0 12px;
-    height: 36px;
+    padding: 0 14px;
+    height: 44px;
     display: flex;
     align-items: center;
     gap: 5px;
