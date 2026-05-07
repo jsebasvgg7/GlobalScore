@@ -36,7 +36,7 @@ export default function MobileHeader({ currentUser }) {
   /* ── Bottom nav items ── */
   const leftItems = currentUser?.is_admin
     ? [{ path: "/admin", icon: Shield, label: "Admin" }]
-    : [{ path: "/World", icon: Globe, label: "Mundial" }];
+    : [{ path: "/history", icon: Landmark, label: "Historias" }];
 
   const mobileBottomItems = [
     ...leftItems,
@@ -61,10 +61,10 @@ export default function MobileHeader({ currentUser }) {
         <div className="mhd-actions">
           <button
             className="mhd-btn"
-            onClick={() => navigate("/history")}
-            aria-label="Histórico"
+            onClick={() => navigate("world")}
+            aria-label="Mundial"
           >
-            <Landmark size={15} strokeWidth={2} />
+            <Globe size={15} strokeWidth={2} />
           </button>
 
           {/* Theme toggle */}
