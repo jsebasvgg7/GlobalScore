@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   Search, X, Star, ChevronRight, ArrowLeft, RefreshCw, AlertCircle,
@@ -71,6 +72,8 @@ function useIsMobile(breakpoint = 768) {
   }, [breakpoint]);
   return isMobile;
 }
+
+
 
 function LegacyBadge({ type }) {
   if (!type) return null;
@@ -418,6 +421,17 @@ export default function HistoryPage() {
     () => !sessionStorage.getItem("vault_visited")
   ); const [showMenu, setShowMenu] = useState(true);
   const isMobile = useIsMobile();
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.reset) {
+      setShowMenu(true);
+      setActiveSection("players");
+      setSelectedPlayerId(null);
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }, [location.state?.reset]);
 
   const {
     players, allPlayers, loading, error, reload,

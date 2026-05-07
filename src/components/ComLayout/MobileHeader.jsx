@@ -114,7 +114,13 @@ export default function MobileHeader({ currentUser }) {
           <button
             key={path}
             className={`mhd-nav-btn${isActive(path) ? " mhd-nav-btn--active" : ""}`}
-            onClick={() => navigate(path)}
+            onClick={() => {
+              if (location.pathname === path && path === "/history") {
+                navigate("/history", { state: { reset: Date.now() } });
+              } else {
+                navigate(path);
+              }
+            }}
             aria-label={label}
             aria-current={isActive(path) ? "page" : undefined}
           >
