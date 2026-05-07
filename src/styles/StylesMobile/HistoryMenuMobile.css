@@ -777,56 +777,117 @@
   margin-top: 2px;
 }
 
-/* ── Evento ── */
-.hmm-row-event-img {
-  width: 64px;
-  height: 44px;
-  flex-shrink: 0;
-  border: 0.5px solid var(--border);
-  overflow: hidden;
-  position: relative;
-  background: var(--card);
+/* ── Evento — Feed Card ── */
+.hmm-list--events {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 14px 24px;
 }
 
-.hmm-row-event-img img {
+.hmm-event-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .12s;
+}
+
+.hmm-event-card:active {
+  transform: scale(.99);
+}
+
+.hmm-event-card-banner {
+  width: 100%;
+  aspect-ratio: 6 / 2;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+  position: relative;
+  flex-shrink: 0;
+}
+
+.hmm-event-card-banner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.hmm-row-event-ph {
+.hmm-event-card-placeholder {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--muted);
-  opacity: .3;
+  opacity: .25;
 }
 
-.hmm-row-event-year {
+.hmm-event-card-year {
   position: absolute;
-  bottom: 2px;
-  left: 3px;
-  font-size: 7px;
+  bottom: 10px;
+  left: 12px;
+  font-size: 11px;
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: #fff;
-  background: rgba(0, 0, 0, .6);
-  padding: 1px 4px;
-  letter-spacing: .04em;
+  background: rgba(0, 0, 0, .55);
+  padding: 3px 8px;
+  letter-spacing: .06em;
+  z-index: 2;
 }
 
-.hmm-row-type {
+.hmm-event-card-type {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
   font-size: 8px;
-  font-weight: 700;
+  font-weight: 800;
   font-family: 'DM Mono', monospace;
-  text-transform: uppercase;
   letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent);
+  padding: 3px 8px;
+  z-index: 2;
+}
+
+.hmm-event-card-body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hmm-event-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  line-height: 1.25;
+  letter-spacing: -.2px;
+}
+
+.hmm-event-card-protagonist {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
   color: var(--muted);
-  border: 0.5px solid var(--border);
-  padding: 1px 6px;
-  align-self: flex-start;
+}
+
+.hmm-event-card-protagonist-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  opacity: .6;
 }
 
 /* ── Competencia — Grid Card ── */
@@ -1073,6 +1134,31 @@
 [data-style="brutalist"] .hmm-row-goat {
   background: #8b7fc7;
   color: #1a1a2e;
+}
+
+[data-style="brutalist"] .hmm-event-card {
+  border: 1px solid var(--border);
+  border-radius: 0;
+}
+
+[data-style="brutalist"] .hmm-event-card:active {
+  outline: 1px solid var(--accent);
+}
+
+[data-style="brutalist"] .hmm-event-card-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+[data-style="brutalist"] .hmm-event-card-type {
+  background: #8b7fc7;
+  border-radius: 0;
+}
+
+[data-style="brutalist"] .hmm-event-card-year {
+  border-radius: 0;
 }
 
 /* Efecto brutal en row active */
@@ -1494,6 +1580,59 @@
   background: #60519b;
   color: #fff;
   border-radius: 4px;
+}
+
+[data-style="neumorphism"] .hmm-list--events {
+  gap: 16px;
+  padding: 16px;
+}
+
+[data-style="neumorphism"] .hmm-event-card {
+  border: none;
+  border-radius: 16px;
+  background: var(--bg);
+  box-shadow: 3px 3px 9px rgba(166, 158, 148, .45), -2px -2px 7px rgba(255, 255, 255, .75);
+  overflow: hidden;
+}
+
+[data-style="neumorphism"] .hmm-event-card:active {
+  transform: scale(.98);
+  box-shadow: inset 2px 2px 5px rgba(166, 158, 148, .4), inset -2px -2px 5px rgba(255, 255, 255, .6);
+}
+
+[data-style="neumorphism"] .hmm-event-card-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: #2A2535;
+}
+
+[data-style="neumorphism"] .hmm-event-card-protagonist {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  color: #9B95A8;
+}
+
+[data-style="neumorphism"] .hmm-event-card-type {
+  border-radius: 100px;
+  background: #60519b;
+}
+
+[data-style="neumorphism"] .hmm-event-card-year {
+  border-radius: 6px;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-event-card {
+  box-shadow: 3px 3px 7px rgba(10, 9, 16, .6), -2px -2px 5px rgba(40, 37, 55, .8);
+  background: #1E1C28;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-event-card:active {
+  box-shadow: inset 2px 2px 5px rgba(10, 9, 16, .55), inset -2px -2px 5px rgba(40, 37, 55, .7);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-event-card-title {
+  color: #E8E6F0;
 }
 
 /* dark */

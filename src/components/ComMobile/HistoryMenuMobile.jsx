@@ -268,7 +268,7 @@ function TeamRow({ team, onClick }) {
     </button>
   );
 }
-// Evento
+// Evento — Feed Card
 function EventRow({ event, onClick }) {
   const bannerUrl = getHistoricalImageUrl(event.banner_image_path || event.image_path);
   const protagonist = event.event_category === "player"
@@ -276,26 +276,24 @@ function EventRow({ event, onClick }) {
   const year = event.event_date ? new Date(event.event_date).getFullYear() : null;
 
   return (
-    <button className="hmm-row hmm-row--event" onClick={onClick}>
-      <div className="hmm-row-event-img">
+    <button className="hmm-event-card" onClick={onClick}>
+      <div className="hmm-event-card-banner">
         {bannerUrl
           ? <img src={bannerUrl} alt={event.title} />
-          : <div className="hmm-row-event-ph"><Zap size={18} strokeWidth={1} /></div>
+          : <div className="hmm-event-card-placeholder"><Zap size={40} strokeWidth={1} /></div>
         }
-        {year && <span className="hmm-row-event-year">{year}</span>}
+        {year && <span className="hmm-event-card-year">{year}</span>}
+        {event.event_type && <span className="hmm-event-card-type">{event.event_type}</span>}
       </div>
-      <div className="hmm-row-info">
-        <span className="hmm-row-name hmm-row-name--sm">{event.title}</span>
+      <div className="hmm-event-card-body">
+        <span className="hmm-event-card-title">{event.title}</span>
         {protagonist && (
-          <div className="hmm-row-meta">
-            <span>{protagonist.name}</span>
+          <div className="hmm-event-card-protagonist">
+            <span className="hmm-event-card-protagonist-dot" />
+            {protagonist.name}
           </div>
         )}
-        {event.event_type && (
-          <span className="hmm-row-type">{event.event_type}</span>
-        )}
       </div>
-      <ChevronRight size={15} className="hmm-row-chevron" />
     </button>
   );
 }
@@ -586,7 +584,12 @@ export default function HistoryMenuMobile({ onSectionChange }) {
       </div>
 
       {/* ── Lista ── */}
-      <div className={`hmm-list${activeSection === "players" && !query ? " hmm-list--players" : activeSection === "teams" && !query ? " hmm-list--teams" : activeSection === "competitions" && !query ? " hmm-list--competitions" : ""}`} ref={listRef}>
+      <div className={`hmm-list${activeSection === "players" && !query ? " hmm-list--players"
+        : activeSection === "teams" && !query ? " hmm-list--teams"
+          : activeSection === "competitions" && !query ? " hmm-list--competitions"
+            : activeSection === "events" && !query ? " hmm-list--events"
+              : ""
+        }`} ref={listRef}>
         {loading
           ? <LoadingRows />
           : displayItems.length > 0
