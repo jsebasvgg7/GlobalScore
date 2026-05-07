@@ -1367,6 +1367,27 @@
 
 }
 
+/* ── Mobile/Desktop header toggle ── */
+@media screen and (max-width: 768px) {
+
+  .hp-header--desktop,
+  .htp-header--desktop,
+  .hep-header--desktop,
+  .hcp-header--desktop {
+    display: none !important;
+  }
+}
+
+@media screen and (min-width: 769px) {
+
+  .hp-mobile-header-wrap,
+  .htp-mobile-header-wrap,
+  .hep-mobile-header-wrap,
+  .hcp-mobile-header-wrap {
+    display: none !important;
+  }
+}
+
 /* ════════════════════════════════════════════════
    PANTALLAS MUY PEQUEÑAS — ≤380px
 ════════════════════════════════════════════════ */

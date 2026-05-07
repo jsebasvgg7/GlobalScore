@@ -18,6 +18,7 @@ import HistoricalEventsPage from "../components/ComHistory/HistoricalEventsPage"
 import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
 import HistoricalCompetitionsPage from "../components/ComHistory/HistoricalCompetitionsPage";
 import HistoryWelcomeScreen from "../components/ComHistory/HistoryWelcomeScreen";
+import SectionHeaderMobile from "../components/ComMobile/SectionHeaderMobile";
 import Footer from '../components/ComLayout/Footer';
 import "../styles/StylesPages/HistoryPage.css";
 import "../styles/StylesMobile/HistoryPageMobile.css";
@@ -523,7 +524,21 @@ export default function HistoryPage() {
     <div className="hp-shell">
       <div className="hp-root">
 
-        <header className="hp-header">
+        {/* Header mobile */}
+        <div className="hp-mobile-header-wrap">
+          <SectionHeaderMobile
+            section="players"
+            items={allPlayers}
+            onRandomSelect={(p) => {
+              setSelectedPlayerId(p.id);
+              window.scrollTo({ top: 0, behavior: "instant" });
+            }}
+            onBack={handleBackToMenu}
+          />
+        </div>
+
+        {/* Header desktop */}
+        <header className="hp-header hp-header--desktop">
           <div className="hp-header-left">
             <div className="hp-header-icon"><Users2 size={18} strokeWidth={1.5} /></div>
             <div>

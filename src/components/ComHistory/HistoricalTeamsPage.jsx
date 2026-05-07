@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { useHistoricalTeams, useHistoricalTeamDetail } from "../../hooks/HooksHistory/useHistoricalTeams";
 import { getHistoricalImageUrl } from "../../hooks/HooksHistory/useHistoricalPlayers";
+import SectionHeaderMobile from "../ComMobile/SectionHeaderMobile";
 import "../../styles/StylesHistory/HistoricalTeamsPage.css";
 import "../../styles/StylesMobile/HistoricalTeamsPageMobile.css";
 
@@ -455,7 +456,18 @@ export default function HistoricalTeamsPage({ rightPanelRef, onBack, initialSele
   return (
     <div className="htp-root">
 
-      <header className="htp-header">
+      {/* Header mobile */}
+      <div className="htp-mobile-header-wrap">
+        <SectionHeaderMobile
+          section="teams"
+          items={teams}
+          onRandomSelect={(team) => setSelectedId(team.id)}
+          onBack={onBack}
+        />
+      </div>
+
+      {/* Header desktop (oculto en mobile) */}
+      <header className="htp-header htp-header--desktop">
         <div className="htp-header-left">
           <div className="htp-header-icon"><Shield size={18} strokeWidth={1.5} /></div>
           <div>
@@ -463,8 +475,6 @@ export default function HistoricalTeamsPage({ rightPanelRef, onBack, initialSele
             <p className="htp-header-sub">{teams.length} equipos legendarios</p>
           </div>
         </div>
-
-        {/* ANTES tenías solo htp-search-wrap, ahora agrupa los dos */}
         <div className="htp-header-right">
           <div className="htp-search-wrap">
             <Search size={12} className="htp-search-ico" />
@@ -481,7 +491,6 @@ export default function HistoricalTeamsPage({ rightPanelRef, onBack, initialSele
           </button>
         </div>
       </header>
-
       {/* Estados */}
       {loading && (
         <div className="htp-state-loading">

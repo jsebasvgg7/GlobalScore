@@ -9,6 +9,7 @@ import {
   useHistoricalEventDetail,
   getHistoricalImageUrl,
 } from "../../hooks/HooksHistory/useHistoricalEvents";
+import SectionHeaderMobile from "../ComMobile/SectionHeaderMobile";
 import "../../styles/StylesHistory/HistoricalEventsPage.css";
 import "../../styles/StylesMobile/HistoricalEventsPageMobile.css";
 
@@ -524,8 +525,19 @@ export default function HistoricalEventsPage({ selectedEvent, onEventSelect, onB
 
   return (
     <div className="hep-root">
-      {/* Header */}
-      <header className="hep-header">
+
+      {/* Header mobile */}
+      <div className="hep-mobile-header-wrap">
+        <SectionHeaderMobile
+          section="events"
+          items={allEvents}
+          onRandomSelect={(ev) => onEventSelect && onEventSelect(ev)}
+          onBack={onBack}
+        />
+      </div>
+
+      {/* Header desktop */}
+      <header className="hep-header hep-header--desktop">
         <div className="hep-header-left">
           <div className="hep-header-icon"><Zap size={22} strokeWidth={1.5} /></div>
           <div>
@@ -533,7 +545,6 @@ export default function HistoricalEventsPage({ selectedEvent, onEventSelect, onB
             <p className="hep-header-sub">Eventos que definieron el fútbol</p>
           </div>
         </div>
-
         <div className="hep-search-wrap">
           <div className="hep-search">
             <Search size={13} className="hep-search-ico" />
@@ -549,7 +560,6 @@ export default function HistoricalEventsPage({ selectedEvent, onEventSelect, onB
               </button>
             )}
           </div>
-
           <button
             className={`hep-filter-btn ${showFilters ? "hep-filter-btn--active" : ""}`}
             onClick={() => setShowFilters((v) => !v)}

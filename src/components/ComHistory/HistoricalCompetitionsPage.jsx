@@ -10,6 +10,7 @@ import {
   getHistoricalImageUrl,
 } from "../../hooks/HooksHistory/useHistoricalCompetitions";
 import KnockoutBracketMobile from "./KnockoutBracketMobile";
+import SectionHeaderMobile from "../ComMobile/SectionHeaderMobile";
 import "../../styles/StylesHistory/HistoricalCompetitionsPage.css";
 import "../../styles/StylesMobile/HistoricalCompetitionsPageMobile.css";
 import "../../styles/StylesMobile/KnockoutBracketMobile.css";
@@ -654,7 +655,19 @@ export default function HistoricalCompetitionsPage({ onBack, initialSelectedId }
 
   return (
     <div className="hcp-root">
-      <header className="hcp-header">
+
+      {/* Header mobile */}
+      <div className="hcp-mobile-header-wrap">
+        <SectionHeaderMobile
+          section="competitions"
+          items={competitions}
+          onRandomSelect={(comp) => setSelectedId(comp.id)}
+          onBack={onBack}
+        />
+      </div>
+
+      {/* Header desktop */}
+      <header className="hcp-header hcp-header--desktop">
         <div className="hcp-header-left">
           <div className="hcp-header-icon">
             <Trophy size={22} strokeWidth={1.5} />
@@ -664,7 +677,6 @@ export default function HistoricalCompetitionsPage({ onBack, initialSelectedId }
             <p className="hcp-header-sub">Torneos que definieron una era</p>
           </div>
         </div>
-
         <div className="hcp-search-wrap">
           <div className="hcp-search">
             <Search size={13} className="hcp-search-ico" />
@@ -680,7 +692,6 @@ export default function HistoricalCompetitionsPage({ onBack, initialSelectedId }
               </button>
             )}
           </div>
-
           <button
             className={`hcp-filter-btn ${showFilters ? "hcp-filter-btn--active" : ""}`}
             onClick={() => setShowFilters(v => !v)}
