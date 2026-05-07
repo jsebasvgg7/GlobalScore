@@ -319,7 +319,7 @@
 
 /* ── Next Match Banner ── */
 [data-style="brutalist"] .mob2-nm {
-  margin: 0 18px;
+  margin: 13px 18px 0;
   animation: mob2-fade-up .3s ease .12s both;
 }
 
@@ -1268,6 +1268,10 @@
 
 [data-style="brutalist"][data-theme="dark"] .mob2-lc-input {
   box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .3);
+}
+
+[data-style="brutalist"] .mob2-nm-empty-neu {
+  display: none;
 }
 
 /* ════════════════════════════════════════════════

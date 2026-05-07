@@ -1,33 +1,37 @@
 import { useState, useEffect, useCallback } from "react";
+import { uploadToCloudinary } from "../../utils/cloudinaryUpload";
 import { supabase } from "../../utils/supabaseClient";
 
 // ─── Helper: URL pública de imagen ───────────────────────────────────────────
 export const getHistoricalImageUrl = (imagePath) => {
   if (!imagePath) return null;
+
+  // Si ya es URL completa (Cloudinary)
+  if (
+    typeof imagePath === "string" &&
+    imagePath.startsWith("http")
+  ) {
+    return imagePath;
+  }
+
+  // Compatibilidad con imágenes antiguas de Supabase Storage
   const { data } = supabase.storage
     .from("historical")
     .getPublicUrl(imagePath);
+
   return data?.publicUrl || null;
 };
 
 // ─── Helper: subir imagen al bucket ──────────────────────────────────────────
 export const uploadHistoricalImage = async (file, folder) => {
-  const ext = file.name.split(".").pop();
-  const fileName = `${folder}/${crypto.randomUUID()}.${ext}`;
-  const { error } = await supabase.storage
-    .from("historical")
-    .upload(fileName, file, {
-      upsert: false,
-      contentType: file.type || "image/jpeg",
-      cacheControl: "3600",
-    });
-  if (error) throw error;
-  return fileName;
+  const url = await uploadToCloudinary(file, folder);
+  return url;
 };
 
 // ─── Helper: eliminar imagen del bucket ──────────────────────────────────────
 export const deleteHistoricalImage = async (imagePath) => {
   if (!imagePath) return;
+  if (imagePath.startsWith("http")) return;
   await supabase.storage.from("historical").remove([imagePath]);
 };
 
