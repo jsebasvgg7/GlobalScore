@@ -30,7 +30,7 @@ const LEGACY_COLOR = {
   "Innovator": "#8b5cf6", "Leader": "#10b981", "Goalkeeper": "#ec4899",
 };
 const POSITION_LABEL = {
-  "Forward": "Delantero", "Midfielder": "Centrocampista", "All-rounder": "Todocampista",
+  "Forward": "Delantero", "Midfielder": "Centrocampista", "All-rounder": "Todocampista", "Playmaker": "Media Punta",
   "Defender": "Defensor", "Goalkeeper": "Portero",
 };
 const LEGACY_LABEL = {
