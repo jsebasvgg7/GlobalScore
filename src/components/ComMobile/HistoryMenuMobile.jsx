@@ -68,7 +68,9 @@ const SECTION_FILTERS = {
       key: "significance_level", label: "Nivel", options: [
         { value: "5", label: "GOAT" },
         { value: "4", label: "Leyenda" },
-        { value: "3", label: "De Culto" },
+        { value: "3", label: "Iconico" },
+        { value: "2", label: "Notable" },
+        { value: "1", label: "Actual" },
       ]
     },
   ],

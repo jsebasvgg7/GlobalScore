@@ -358,7 +358,7 @@ function BannerUploader({ currentPath, onFile }) {
 }
 
 function SignificancePicker({ value, onChange }) {
-  const labels = ["", "Histórico", "Notable", "De Culto", "Leyenda", "GOAT Status"];
+  const labels = ["", "Actual", "Notable", "Iconico", "Leyenda", "GOAT Status"];
   return (
     <div className="ah-significance">
       {[1, 2, 3, 4, 5].map(n => (
