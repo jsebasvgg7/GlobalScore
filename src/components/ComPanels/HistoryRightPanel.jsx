@@ -21,6 +21,7 @@ const LEGACY_LABEL = {
   "Innovator": "Genio",
   "Leader": "Líder",
   "Goalkeeper": "Portero",
+  "Technician": "Técnico",
 };
 
 const POSITION_LABEL = {
