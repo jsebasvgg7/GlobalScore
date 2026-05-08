@@ -119,7 +119,7 @@ const SECTION_FILTERS = {
   ],
 };
 const POSITION_LABEL = {
-  Forward: "Delantero", Midfielder: "Centrocampista",
+  Forward: "Delantero", Midfielder: "Centrocampista", Playmaker: "Media Punta",
   "All-rounder": "Todocampista", Defender: "Defensor", Goalkeeper: "Portero",
 };
 
