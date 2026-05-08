@@ -65,16 +65,39 @@ export const useDataLoader = () => {
       } else {
         console.log("Perfil encontrado:", profile);
       }
+      const fetchAllMatches = async () => {
+        let all = [];
+        let from = 0;
+        const PAGE_SIZE = 1000;
 
+        while (true) {
+          const { data, error } = await supabase
+            .from("matches")
+            .select("*, predictions(*)")
+            .eq("status", "pending")
+            .range(from, from + PAGE_SIZE - 1);
+
+          if (error) throw error;
+          if (!data?.length) break;
+
+          all = [...all, ...data];
+
+          if (data.length < PAGE_SIZE) break;
+
+          from += PAGE_SIZE;
+        }
+
+        return all;
+      };
       // 3. Cargar todos los datos en paralelo
       const [
         { data: userList },
-        { data: matchList },
+        matchList,
         { data: leagueList },
         { data: awardList }
       ] = await Promise.all([
         supabase.from("users").select("*").order("points", { ascending: false }),
-        supabase.from("matches").select("*, predictions(*)"),
+        fetchAllMatches(),
         supabase.from("leagues").select("*, league_predictions(*)"),
         supabase.from("awards").select("*, award_predictions(*)")
       ]);
@@ -102,7 +125,7 @@ export const useDataLoader = () => {
   // Actualizar datos específicos sin recargar todo
   const updateUsers = useCallback((users) => {
     setState(prev => ({ ...prev, users }));
-    
+
     // Actualizar currentUser si está en la lista
     const updatedCurrentUser = users?.find(u => u.id === prev.currentUser?.id);
     if (updatedCurrentUser) {
@@ -129,7 +152,7 @@ export const useDataLoader = () => {
         .from("users")
         .select("*")
         .order("points", { ascending: false });
-      
+
       updateUsers(data || []);
     } catch (err) {
       console.error("Error al recargar usuarios:", err);
