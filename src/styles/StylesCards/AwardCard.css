@@ -98,18 +98,22 @@
   letter-spacing: 0.05em;
 }
 
+/* REEMPLAZA CON ESTO: */
 .ac-pill {
   font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 3px 7px;
+  padding: 3px 8px;
   font-family: var(--ac-font-mono);
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   white-space: nowrap;
   flex-shrink: 0;
+  border: 1.5px solid;
+  box-shadow: 2px 2px 0;
+  border-radius: 0;
 }
 
 .ac-pill-dot {
@@ -122,7 +126,8 @@
 .ac-pill--pending {
   background: #f1f4fa;
   color: #9aa5b8;
-  border: 0.5px solid #e2e8f0;
+  border-color: #9aa5b8;
+  box-shadow: 2px 2px 0 #9aa5b8;
 }
 
 .ac-pill--pending .ac-pill-dot {
@@ -132,27 +137,30 @@
 .ac-pill--saved {
   background: #e8f4ff;
   color: #185fa5;
-  border: 0.5px solid #b5d4f4;
+  border-color: #185fa5;
+  box-shadow: 2px 2px 0 #185fa5;
 }
 
 .ac-pill--saved .ac-pill-dot {
-  background: #3b82f6;
+  background: #185fa5;
 }
 
 .ac-pill--expired {
   background: #fef2f2;
   color: #a32d2d;
-  border: 0.5px solid #f7c1c1;
+  border-color: #a32d2d;
+  box-shadow: 2px 2px 0 #a32d2d;
 }
 
 .ac-pill--expired .ac-pill-dot {
-  background: #ef4444;
+  background: #a32d2d;
 }
 
 .ac-pill--finished {
   background: #f0fdf4;
   color: #15803d;
-  border: 0.5px solid #86efac;
+  border-color: #15803d;
+  box-shadow: 2px 2px 0 #15803d;
 }
 
 .ac-pill--finished .ac-pill-dot {

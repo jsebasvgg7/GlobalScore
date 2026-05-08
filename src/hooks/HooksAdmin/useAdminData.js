@@ -23,9 +23,13 @@ export const useAdminData = () => {
         titleData,
         userData,
         historyData,
-        bannerData,                                      // ← NUEVO
+        bannerData,
       ] = await Promise.all([
-        supabase.from('matches').select('*, predictions(*)'),
+        supabase
+          .from('matches')
+          .select('*, predictions(*)')
+          .order('created_at', { ascending: false })
+          .range(0, 5000),
         supabase.from('leagues').select('*, league_predictions(*)'),
         supabase.from('awards').select('*, award_predictions(*)'),
         supabase.from('available_achievements').select('*'),

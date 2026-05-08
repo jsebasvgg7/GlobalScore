@@ -4,19 +4,19 @@ import {
   Trophy, Filter, X, ArrowUpDown
 } from "lucide-react";
 
-import MatchCard          from "../components/ComCards/MatchCard";
-import LeagueCard         from "../components/ComCards/LeagueCard";
-import AwardCard          from "../components/ComCards/AwardCard";
-import NavigationTabs     from "../components/ComNavigation/NavigationTabs";
-import RightPanel         from "../components/ComPanels/RightPanel";
-import MobileDashboard    from "../components/ComMobile/MobileDashboard";
+import MatchCard from "../components/ComCards/MatchCard";
+import LeagueCard from "../components/ComCards/LeagueCard";
+import AwardCard from "../components/ComCards/AwardCard";
+import NavigationTabs from "../components/ComNavigation/NavigationTabs";
+import RightPanel from "../components/ComPanels/RightPanel";
+import MobileDashboard from "../components/ComMobile/MobileDashboard";
 import { PageLoader, LoadingOverlay } from "../components/ComFeedback/LoadingStates";
-import { ToastContainer, useToast }   from "../components/ComFeedback/Toast";
+import { ToastContainer, useToast } from "../components/ComFeedback/Toast";
 
 import { useDataLoader } from "../hooks/useDataLoader";
-import { useMatches }    from "../hooks/HooksCards/useMatches";
-import { useLeagues }    from "../hooks/HooksCards/useLeagues";
-import { useAwards }     from "../hooks/HooksCards/useAwards";
+import { useMatches } from "../hooks/HooksCards/useMatches";
+import { useLeagues } from "../hooks/HooksCards/useLeagues";
+import { useAwards } from "../hooks/HooksCards/useAwards";
 
 import "../styles/StylesPages/DashboardPage.css";
 
@@ -35,11 +35,11 @@ function MatchesEmpty({ leagueFilter, leagueCategories, onClear }) {
           <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
             <circle cx="16" cy="16" r="13" />
             <polygon points="16,6 20,10 18,15 14,15 12,10" />
-            <line x1="16" y1="6"  x2="16" y2="3"  />
-            <line x1="20" y1="10" x2="23" y2="8"  />
+            <line x1="16" y1="6" x2="16" y2="3" />
+            <line x1="20" y1="10" x2="23" y2="8" />
             <line x1="18" y1="15" x2="21" y2="17" />
             <line x1="14" y1="15" x2="11" y2="17" />
-            <line x1="12" y1="10" x2="9"  y2="8"  />
+            <line x1="12" y1="10" x2="9" y2="8" />
           </svg>
         </div>
       </div>
@@ -77,14 +77,14 @@ function MatchesEmpty({ leagueFilter, leagueCategories, onClear }) {
 export default function DashboardPage() {
   const navigate = useNavigate();
 
-  const [activeTab,    setActiveTab]    = useState("matches");
+  const [activeTab, setActiveTab] = useState("matches");
   const [leagueFilter, setLeagueFilter] = useState("all");
-  const [showFilters,  setShowFilters]  = useState(false);
-  const [showSort,     setShowSort]     = useState(false);
-  const [sortOption,   setSortOption]   = useState("date-asc");
+  const [showFilters, setShowFilters] = useState(false);
+  const [showSort, setShowSort] = useState(false);
+  const [sortOption, setSortOption] = useState("date-asc");
 
   const sortRef = useRef(null);
-  const toast   = useToast();
+  const toast = useToast();
 
   const {
     currentUser, users, matches, leagues, awards,
@@ -92,30 +92,30 @@ export default function DashboardPage() {
     updateMatches, updateLeagues, updateAwards,
   } = useDataLoader();
 
-  const { loading: matchesLoading, makePrediction }       = useMatches(currentUser);
+  const { loading: matchesLoading, makePrediction } = useMatches(currentUser);
   const { loading: leaguesLoading, makeLeaguePrediction } = useLeagues(currentUser);
-  const { loading: awardsLoading,  makeAwardPrediction }  = useAwards(currentUser);
+  const { loading: awardsLoading, makeAwardPrediction } = useAwards(currentUser);
 
   const handleNavigate = (section) => {
     switch (section) {
-      case "profile":       navigate("/profile");       break;
-      case "ranking":       navigate("/ranking");       break;
-      case "stats":         navigate("/stats");         break;
-      case "world":         navigate("/world");         break;
+      case "profile": navigate("/profile"); break;
+      case "ranking": navigate("/ranking"); break;
+      case "stats": navigate("/stats"); break;
+      case "world": navigate("/world"); break;
       case "notifications": navigate("/notifications"); break;
       default: break;
     }
   };
 
   const leagueCategories = [
-    { id: "all",          name: "Todos",       icon: "🌍", leagues: [] },
-    { id: "europe",       name: "Europa",      icon: "🏆", leagues: ["Champions League","Europa League","Conference League"] },
-    { id: "england",      name: "Inglaterra",  icon: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", leagues: ["Premier League","Championship","FA Cup","EFL Cup"] },
-    { id: "spain",        name: "España",      icon: "🇪🇸", leagues: ["La Liga","Copa del Rey","Supercopa"] },
-    { id: "italy",        name: "Italia",      icon: "🇮🇹", leagues: ["Serie A","Coppa Italia","Supercoppa"] },
-    { id: "germany",      name: "Alemania",    icon: "🇩🇪", leagues: ["Bundesliga","DFB Pokal"] },
-    { id: "france",       name: "Francia",     icon: "🇫🇷", leagues: ["Ligue 1","Coupe de France","Coupe de la Ligue"] },
-    { id: "southamerica", name: "Sudamérica",  icon: "🌎", leagues: ["Copa Libertadores","Copa Sudamericana"] },
+    { id: "all", name: "Todos", icon: "🌍", leagues: [] },
+    { id: "europe", name: "Europa", icon: "🏆", leagues: ["Champions League", "Europa League", "Conference League"] },
+    { id: "england", name: "Inglaterra", icon: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", leagues: ["Premier League", "Championship", "FA Cup", "EFL Cup"] },
+    { id: "spain", name: "España", icon: "🇪🇸", leagues: ["La Liga", "Copa del Rey", "Supercopa"] },
+    { id: "italy", name: "Italia", icon: "🇮🇹", leagues: ["Serie A", "Coppa Italia", "Supercoppa"] },
+    { id: "germany", name: "Alemania", icon: "🇩🇪", leagues: ["Bundesliga", "DFB Pokal"] },
+    { id: "france", name: "Francia", icon: "🇫🇷", leagues: ["Ligue 1", "Coupe de France", "Coupe de la Ligue"] },
+    { id: "southamerica", name: "Sudamérica", icon: "🌎", leagues: ["Copa Libertadores", "Copa Sudamericana"] },
   ];
 
   useEffect(() => {
@@ -134,22 +134,22 @@ export default function DashboardPage() {
       return;
     }
     await makePrediction(matchId, homeScore, awayScore, advancingTeam,
-      (list) => { updateMatches(list); toast.success("Guardado 🎯"); },
-      (err)  => toast.error(`Error: ${err}`)
+      (list) => { updateMatches(list); },
+      (err) => toast.error(`Error: ${err}`)
     );
   };
 
   const handleMakeLeaguePrediction = async (leagueId, champion, topScorer, topAssist, mvp) => {
     await makeLeaguePrediction(leagueId, champion, topScorer, topAssist, mvp,
-      (list) => { updateLeagues(list); toast.success("Guardado 🏆"); },
-      (err)  => toast.error(`Error: ${err}`)
+      (list) => { updateLeagues(list); },
+      (err) => toast.error(`Error: ${err}`)
     );
   };
 
   const handleMakeAwardPrediction = async (awardId, winner) => {
     await makeAwardPrediction(awardId, winner,
-      (list) => { updateAwards(list); toast.success("Guardado 🏆"); },
-      (err)  => toast.error(`Error: ${err}`)
+      (list) => { updateAwards(list); },
+      (err) => toast.error(`Error: ${err}`)
     );
   };
 
@@ -167,24 +167,24 @@ export default function DashboardPage() {
       const da = new Date(`${a.date}T${a.time}`);
       const db = new Date(`${b.date}T${b.time}`);
       switch (sortOption) {
-        case "date-desc":   return db - da;
-        case "league-asc":  return (a.league || "").localeCompare(b.league || "");
+        case "date-desc": return db - da;
+        case "league-asc": return (a.league || "").localeCompare(b.league || "");
         case "league-desc": return (b.league || "").localeCompare(a.league || "");
-        default:            return da - db;
+        default: return da - db;
       }
     });
   }, [matches, leagueFilter, sortOption]);
 
   const groupedMatches = useMemo(() => {
-    const today    = new Date(); today.setHours(0, 0, 0, 0);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
-    const groups   = {};
+    const groups = {};
     filteredMatches.forEach((m) => {
       const d = new Date(m.date + "T00:00:00");
       let label =
-        d.getTime() === today.getTime()    ? "Hoy" :
-        d.getTime() === tomorrow.getTime() ? "Mañana" :
-        d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+        d.getTime() === today.getTime() ? "Hoy" :
+          d.getTime() === tomorrow.getTime() ? "Mañana" :
+            d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
       if (!groups[label]) groups[label] = [];
       groups[label].push(m);
     });
@@ -192,11 +192,11 @@ export default function DashboardPage() {
   }, [filteredMatches]);
 
   const activeLeagues = leagues.filter((l) => l.status === "active");
-  const activeAwards  = awards.filter((a) => a.status === "active");
-  const isLoading     = matchesLoading || leaguesLoading || awardsLoading;
+  const activeAwards = awards.filter((a) => a.status === "active");
+  const isLoading = matchesLoading || leaguesLoading || awardsLoading;
 
   if (loading) return <PageLoader />;
-  if (error)   return <div className="centered">Error: {error}</div>;
+  if (error) return <div className="centered">Error: {error}</div>;
   if (!currentUser) return <div className="centered">Usuario no encontrado</div>;
 
   return (
@@ -246,9 +246,9 @@ export default function DashboardPage() {
                         </div>
                         <div className="sort-options">
                           {[
-                            { key: "date-asc",    label: "Fecha: más próximos" },
-                            { key: "date-desc",   label: "Fecha: más lejanos" },
-                            { key: "league-asc",  label: "Liga: A-Z" },
+                            { key: "date-asc", label: "Fecha: más próximos" },
+                            { key: "date-desc", label: "Fecha: más lejanos" },
+                            { key: "league-asc", label: "Liga: A-Z" },
                             { key: "league-desc", label: "Liga: Z-A" },
                           ].map(({ key, label }) => (
                             <button
@@ -359,7 +359,7 @@ export default function DashboardPage() {
                       <MatchesEmpty
                         leagueFilter="all"
                         leagueCategories={leagueCategories}
-                        onClear={() => {}}
+                        onClear={() => { }}
                       />
                     </div>
                   ) : (
@@ -390,7 +390,7 @@ export default function DashboardPage() {
                       <MatchesEmpty
                         leagueFilter="all"
                         leagueCategories={leagueCategories}
-                        onClear={() => {}}
+                        onClear={() => { }}
                       />
                     </div>
                   ) : (
