@@ -35,7 +35,7 @@ const POSITION_LABEL = {
 };
 const LEGACY_LABEL = {
   "Goal Scorer": "Goleador", "Tactician": "Táctico",
-  "Innovator": "Genio", "Leader": "Líder", "Goalkeeper": "Portero", "Technician": "Tecnico",
+  "Innovator": "Genio", "Leader": "Líder", "Goalkeeper": "Portero", "Technician": "Tcnico",
 };
 const EVENT_TYPE_LABEL = {
   "Championship": "Campeonato", "Historic Match": "Partido Histórico",
@@ -54,7 +54,6 @@ const SIGNIFICANCE_LABEL = ["", "Activo", "Notable", "Iconico", "Leyenda", "GOAT
 function ActiveBadge() {
   return (
     <span className="hp-active-badge">
-      <span className="hp-active-badge-dot" />
       <span className="hp-active-badge-star">★</span>
       <span className="hp-active-badge-text">Activo</span>
     </span>
@@ -63,7 +62,6 @@ function ActiveBadge() {
 
 // ─── Estrellas (historical levels 2-5) ───────────────────────
 function SignificanceStars({ value }) {
-  // Nivel 1 = jugador activo → badge especial, sin estrellas vacías
   if (value === 1) return <ActiveBadge />;
 
   return (
