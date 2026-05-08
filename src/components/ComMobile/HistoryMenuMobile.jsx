@@ -53,7 +53,7 @@ const SECTION_FILTERS = {
         { value: "Defender", label: "Def" },
         { value: "Goalkeeper", label: "Por" },
         { value: "All-rounder", label: "Tod" },
-        { value: "Play-maker", label: "MP" },
+        { value: "Play-maker", label: "MP" }
       ]
     },
     {
@@ -63,7 +63,7 @@ const SECTION_FILTERS = {
         { value: "Innovator", label: "Genio" },
         { value: "Leader", label: "Líder" },
         { value: "Goalkeeper", label: "Portero" },
-        { value: "Technician", label: "Técnico" },
+        { value: "Technician", label: "Técnico" }
       ]
     },
     {
