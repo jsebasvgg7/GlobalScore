@@ -2,26 +2,26 @@ import React from 'react';
 import { Trophy, Target, Award, Shield, Package, Crown, Image, BookOpen } from 'lucide-react';
 
 const TAB_LABELS = {
-  matches:      'Par',
-  leagues:      'Lig',
-  awards:       'Pre',
+  historical: 'His',
+  matches: 'Par',
+  leagues: 'Lig',
+  awards: 'Pre',
   achievements: 'Log',
-  titles:       'Tít',
-  crowns:       'Cor',
-  banners:      'Ban',
-  historical:   'His',
+  titles: 'Tít',
+  crowns: 'Cor',
+  banners: 'Ban',
 };
 
 export default function AdminNavigationTabs({ activeSection, setActiveSection, stats }) {
   const tabs = [
-    { id: 'matches',      icon: Target,    badge: stats.matches.pending },
-    { id: 'leagues',      icon: Trophy,    badge: stats.leagues.active },
-    { id: 'awards',       icon: Award,     badge: stats.awards.active },
-    { id: 'achievements', icon: Shield,    badge: 0 },
-    { id: 'titles',       icon: Package,   badge: 0 },
-    { id: 'crowns',       icon: Crown,     badge: stats.crowns.thisMonth === 0 ? 1 : 0 },
-    { id: 'banners',      icon: Image,     badge: 0 },
-    { id: 'historical',   icon: BookOpen,  badge: 0 },
+    { id: 'historical', icon: BookOpen, badge: 0 },
+    { id: 'matches', icon: Target, badge: stats.matches.pending },
+    { id: 'leagues', icon: Trophy, badge: stats.leagues.active },
+    { id: 'awards', icon: Award, badge: stats.awards.active },
+    { id: 'achievements', icon: Shield, badge: 0 },
+    { id: 'titles', icon: Package, badge: 0 },
+    { id: 'crowns', icon: Crown, badge: stats.crowns.thisMonth === 0 ? 1 : 0 },
+    { id: 'banners', icon: Image, badge: 0 },
   ];
 
   return (
