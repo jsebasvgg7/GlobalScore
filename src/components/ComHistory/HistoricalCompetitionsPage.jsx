@@ -640,10 +640,22 @@ export default function HistoricalCompetitionsPage({ onBack, initialSelectedId }
   const [selectedId, setSelectedId] = useState(initialSelectedId || null);
   const [showFilters, setShowFilters] = useState(false);
 
+  useEffect(() => {
+    setSelectedId(initialSelectedId || null);
+  }, [initialSelectedId]);
+
   const hasFilters = filterType || filterFormat;
 
   const handleSelect = (comp) => setSelectedId(comp.id);
-  const handleBack = () => setSelectedId(null);
+  const isMobile = useIsMobile();
+
+  const handleBack = () => {
+    if (isMobile) {
+      onBack?.();
+    } else {
+      setSelectedId(null);
+    }
+  };
 
   if (selectedId) {
     return (

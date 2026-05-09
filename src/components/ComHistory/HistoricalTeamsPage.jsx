@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Shield, ArrowLeft, RefreshCw, AlertCircle,
   Trophy, Users2, Zap, ChevronRight, Search, X,
@@ -440,12 +440,46 @@ function TeamCard({ team, onClick }) {
 // ══════════════════════════════════════════════════════════════
 //  COMPONENTE PRINCIPAL — HistoricalTeamsPage
 // ══════════════════════════════════════════════════════════════
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined"
+      ? window.innerWidth <= breakpoint
+      : false
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
+
+    const handler = (e) => setIsMobile(e.matches);
+
+    mq.addEventListener("change", handler);
+
+    return () => mq.removeEventListener("change", handler);
+  }, [breakpoint]);
+
+  return isMobile;
+}
 export default function HistoricalTeamsPage({ rightPanelRef, onBack, initialSelectedId }) {
   const [selectedId, setSelectedId] = useState(initialSelectedId || null);
+
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    setSelectedId(initialSelectedId || null);
+  }, [initialSelectedId]);
+
   const { teams, loading, error, reload, search, setSearch } = useHistoricalTeams();
 
+  const handleBack = () => {
+    if (isMobile) {
+      onBack?.();
+    } else {
+      setSelectedId(null);
+    }
+  };
+
   if (selectedId) {
-    return <TeamDetail teamId={selectedId} onBack={() => setSelectedId(null)} />;
+    return <TeamDetail teamId={selectedId} onBack={handleBack} />;
   }
 
   return (

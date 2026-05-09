@@ -297,6 +297,288 @@
   border-color: var(--accent);
 }
 
+/* ════════════════════════════════════════════════
+   PARCHE: Ruleta animada en el Header del menú
+   Agregar al final de HistoryMenuMobile.css
+════════════════════════════════════════════════ */
+
+/* ── Animaciones ── */
+@keyframes hmm-spin-blur {
+  0% {
+    opacity: .6;
+    transform: translateY(-4px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: .6;
+    transform: translateY(4px);
+  }
+}
+
+@keyframes hmm-reveal {
+  from {
+    opacity: 0;
+    transform: scale(.94) translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes hmm-pulse-border {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(91, 79, 216, .4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px rgba(91, 79, 216, 0);
+  }
+}
+
+/* ── Zona de ruleta en el header ── */
+.hmm-random-zone {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Botón de disparo */
+.hmm-header-random-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 0.5px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hmm-header-random-btn:active {
+  transform: scale(.97);
+  background: color-mix(in srgb, var(--accent) 15%, var(--bg));
+}
+
+.hmm-header-random-btn--disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+/* ── Contenedor de la ruleta ── */
+.hmm-roulette {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hmm-roulette-arrow {
+  font-size: 10px;
+  color: var(--accent);
+  flex-shrink: 0;
+  opacity: .7;
+}
+
+.hmm-roulette-arrow--right {
+  /* espejo visual */
+}
+
+.hmm-roulette-slot {
+  flex: 1;
+  min-width: 0;
+  border: 1.5px solid var(--accent);
+  background: var(--bg);
+  cursor: default;
+  padding: 0;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color .2s;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.hmm-roulette--done .hmm-roulette-slot {
+  cursor: pointer;
+  animation: hmm-pulse-border 1.5s ease infinite;
+}
+
+.hmm-roulette-clear {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.5px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .12s, border-color .12s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hmm-roulette-clear:active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ── Slot container ── */
+.hmm-slot {
+  width: 100%;
+}
+
+.hmm-slot--spin>* {
+  animation: hmm-spin-blur .16s ease infinite;
+}
+
+.hmm-slot--reveal>* {
+  animation: hmm-reveal .3s cubic-bezier(.34, 1.56, .64, 1) both;
+}
+
+/* ── Fila de item en el slot ── */
+.hmm-slot-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  width: 100%;
+}
+
+/* Avatar */
+.hmm-slot-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--accent);
+  position: relative;
+}
+
+.hmm-slot-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hmm-slot-avatar--shield {
+  border-radius: 4px;
+}
+
+.hmm-slot-avatar--event {
+  border-radius: 4px;
+  width: 64px;
+  height: 40px;
+  color: var(--muted);
+}
+
+.hmm-slot-goat-chip {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 5px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .08em;
+  background: #f59e0b;
+  color: #000;
+  padding: 1px 3px;
+  white-space: nowrap;
+}
+
+.hmm-slot-event-year {
+  position: absolute;
+  bottom: 2px;
+  left: 3px;
+  font-size: 7px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: #fff;
+  background: rgba(0, 0, 0, .6);
+  padding: 1px 4px;
+}
+
+/* Info texto */
+.hmm-slot-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hmm-slot-name {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.hmm-slot-meta {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hmm-slot-chevron {
+  color: var(--accent);
+  flex-shrink: 0;
+  animation: hmm-reveal .4s ease .15s both;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .hmm-slot--spin>* {
+    animation: none;
+    opacity: .7;
+  }
+
+  .hmm-slot--reveal>* {
+    animation: none;
+  }
+
+  .hmm-roulette--done .hmm-roulette-slot {
+    animation: none;
+  }
+}
+
 /* ══════════════════════════════════════════════
    BUSCADOR GLOBAL
 ══════════════════════════════════════════════ */

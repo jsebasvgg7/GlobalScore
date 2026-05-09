@@ -205,9 +205,7 @@ function PlayerDetail({ playerId, onBack }) {
               {player.name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase()}
             </div>
           }
-          {/* Chip GOAT solo para nivel 5 */}
           {player.significance_level === 5 && <span className="hp-goat-chip">GOAT</span>}
-          {/* Chip ACTIVO para nivel 1 */}
           {isActive && <span className="hp-active-hero-chip">EN ACTIVO</span>}
         </div>
         <div className="hp-detail-hero-info">
@@ -469,6 +467,9 @@ export default function HistoryPage() {
   const handleBackToMenu = () => {
     setShowMenu(true);
     setSelectedPlayerId(null);
+    setPreselectedTeamId(null);
+    setPreselectedEvent(null);
+    setPreselectedCompId(null);
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
@@ -486,6 +487,7 @@ export default function HistoryPage() {
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
+  // ── Pantalla de bienvenida ────────────────────────────────────
   if (showWelcome) {
     return (
       <HistoryWelcomeScreen
@@ -497,13 +499,43 @@ export default function HistoryPage() {
     );
   }
 
+  // ── Menú principal (desktop y mobile) ────────────────────────
   if (showMenu) {
     return isMobile
-      ? <HistoryMenuMobile onSectionChange={(key, item) => { setShowMenu(false); handleSectionChange(key, item); }} />
-      : <HistoryMenuDesktop onSectionChange={(key) => { setShowMenu(false); handleSectionChange(key); }} />;
+      ? (
+        <HistoryMenuMobile
+          onSectionChange={(key, item) => {
+            setShowMenu(false);
+            handleSectionChange(key, item);
+          }}
+        />
+      )
+      : (
+        <HistoryMenuDesktop
+          onSectionChange={(key) => {
+            setShowMenu(false);
+            handleSectionChange(key);
+          }}
+        />
+      );
   }
 
+  // ══════════════════════════════════════════════════════════════
+  //  DETALLE: mobile y desktop comparten los mismos componentes.
+  //  En mobile no hay paneles laterales y onBack vuelve al menú.
+  //  En desktop onBack vuelve a la lista de jugadores (solo players).
+  // ══════════════════════════════════════════════════════════════
+
   if (activeSection === "players" && selectedPlayerId) {
+    // Mobile: sin panel lateral, onBack → menú mobile
+    if (isMobile) {
+      return (
+        <div className="hp-root hp-root--detail">
+          <PlayerDetail playerId={selectedPlayerId} onBack={handleBackToMenu} />
+        </div>
+      );
+    }
+    // Desktop: con panel lateral, onBack → vuelve al listado
     return (
       <div className="hp-shell">
         <div className="hp-root hp-root--detail">
@@ -519,6 +551,27 @@ export default function HistoryPage() {
   }
 
   if (activeSection === "teams") {
+    // Mobile con detalle: mostrar detalle directamente, onBack → menú mobile
+    if (isMobile && preselectedTeamId) {
+      return (
+        <div className="hp-root">
+          <HistoricalTeamsPage
+            initialSelectedId={preselectedTeamId}
+            onDetailBack={() => { setPreselectedTeamId(null); }}
+            onBack={() => { setPreselectedTeamId(null); }}
+          />
+        </div>
+      );
+    }
+    // Mobile sin detalle: menú mobile en sección equipos
+    if (isMobile) {
+      return (
+        <HistoryMenuMobile
+          initialSection="teams"
+          onSectionChange={(key, item) => handleSectionChange(key, item)}
+        />
+      );
+    }
     return (
       <div className="hp-shell">
         <div className="hp-root">
@@ -533,10 +586,52 @@ export default function HistoryPage() {
   }
 
   if (activeSection === "events") {
+    // Mobile con detalle: mostrar detalle directamente, onBack → menú mobile
+    if (isMobile && preselectedEvent) {
+      return (
+        <div className="hp-root">
+          <HistoricalEventsPage
+            selectedEvent={preselectedEvent}
+            onEventSelect={(ev) => setPreselectedEvent(ev)}
+            onDetailBack={() => { setPreselectedEvent(null); }}
+            onBack={() => { setPreselectedEvent(null); }}
+          />
+        </div>
+      );
+    }
+    // Mobile sin detalle: menú mobile en sección eventos
+    if (isMobile) {
+      return (
+        <HistoryMenuMobile
+          initialSection="events"
+          onSectionChange={(key, item) => handleSectionChange(key, item)}
+        />
+      );
+    }
     return <EventsSectionWrapper onBack={handleBackToMenu} initialEvent={preselectedEvent} />;
   }
 
   if (activeSection === "competitions") {
+    // Mobile con detalle: mostrar detalle directamente, onBack → menú mobile
+    if (isMobile && preselectedCompId) {
+      return (
+        <div className="hp-root">
+          <HistoricalCompetitionsPage
+            initialSelectedId={preselectedCompId}
+            onBack={() => { setPreselectedCompId(null); }}
+          />
+        </div>
+      );
+    }
+    // Mobile sin detalle: menú mobile en sección competiciones
+    if (isMobile) {
+      return (
+        <HistoryMenuMobile
+          initialSection="competitions"
+          onSectionChange={(key, item) => handleSectionChange(key, item)}
+        />
+      );
+    }
     return (
       <div className="hp-shell">
         <div className="hp-root">
@@ -549,7 +644,16 @@ export default function HistoryPage() {
     );
   }
 
-  // ── Vista jugadores (listado) ──
+  // ── Vista jugadores — mobile: todo via HistoryMenuMobile ─────
+  if (isMobile) {
+    return (
+      <HistoryMenuMobile
+        initialSection="players"
+        onSectionChange={(key, item) => handleSectionChange(key, item)}
+      />
+    );
+  }
+
   return (
     <div className="hp-shell">
       <div className="hp-root">

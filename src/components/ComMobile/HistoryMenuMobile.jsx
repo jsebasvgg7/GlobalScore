@@ -1,5 +1,8 @@
-import { useState, useMemo, useRef, useEffect } from "react";
-import { Users2, Trophy, Shield, Zap, Search, X, ChevronRight, Filter, Star, } from "lucide-react";
+import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import {
+  Users2, Trophy, Shield, Zap, Search, X, ChevronRight,
+  Filter, Star, Shuffle, ArrowLeft,
+} from "lucide-react";
 import { useHistoricalPlayers, getHistoricalImageUrl } from "../../hooks/HooksHistory/useHistoricalPlayers";
 import { useHistoricalCompetitions } from "../../hooks/HooksHistory/useHistoricalCompetitions";
 import { useHistoricalTeams } from "../../hooks/HooksHistory/useHistoricalTeams";
@@ -17,21 +20,6 @@ function Skel({ w = "100%", h = 16, round = false }) {
   );
 }
 
-// ─── Tema activo (lee del DOM) ────────────────────────────────────────────────
-function useTheme() {
-  const [theme, setTheme] = useState(() => {
-    return document.documentElement.dataset.style || "default";
-  });
-  useEffect(() => {
-    const obs = new MutationObserver(() => {
-      setTheme(document.documentElement.dataset.style || "default");
-    });
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-style"] });
-    return () => obs.disconnect();
-  }, []);
-  return theme;
-}
-
 // ─── Constantes ───────────────────────────────────────────────────────────────
 const SECTIONS = [
   { key: "players", label: "Jug", icon: Users2 },
@@ -44,6 +32,7 @@ const LEGACY_COLOR = {
   Dynastic: "#f59e0b", Innovative: "#8b5cf6",
   Continental: "#3b82f6", National: "#10b981",
 };
+
 const SECTION_FILTERS = {
   players: [
     {
@@ -120,13 +109,166 @@ const SECTION_FILTERS = {
     },
   ],
 };
+
 const POSITION_LABEL = {
   Forward: "Delantero", Midfielder: "Centrocampista", Playmaker: "Media Punta",
   "All-rounder": "Todocampista", Defender: "Defensor", Goalkeeper: "Portero",
 };
 
-// ─── HEADER ──────────────────────────────────────────────────────────────────
-function Header({ totalCounts }) {
+// ─── Animación ruleta (igual que SectionHeaderMobile) ────────────────────────
+function RouletteSlot({ items, running, winner, onDone, renderItem }) {
+  const [displayed, setDisplayed] = useState(null);
+  const [phase, setPhase] = useState("idle");
+  const intervalRef = useRef(null);
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    if (!running) return;
+    setPhase("spinning");
+    let i = 0;
+    intervalRef.current = setInterval(() => {
+      setDisplayed(items[i % items.length]);
+      i++;
+    }, 80);
+    timeoutRef.current = setTimeout(() => {
+      clearInterval(intervalRef.current);
+      setDisplayed(winner);
+      setPhase("reveal");
+      onDone?.();
+    }, 2800);
+    return () => {
+      clearInterval(intervalRef.current);
+      clearTimeout(timeoutRef.current);
+    };
+  }, [running]);
+
+  if (!displayed && phase === "idle") return null;
+  return (
+    <div className={`hmm-slot ${phase === "spinning" ? "hmm-slot--spin" : ""} ${phase === "reveal" ? "hmm-slot--reveal" : ""}`}>
+      {displayed && renderItem(displayed, phase)}
+    </div>
+  );
+}
+
+// ─── SlotItem por tipo ────────────────────────────────────────────────────────
+function PlayerSlotItem({ item, phase }) {
+  const img = getHistoricalImageUrl(item.image_path);
+  return (
+    <div className="hmm-slot-row">
+      <div className={`hmm-slot-avatar ${item.significance_level === 5 ? "hmm-slot-avatar--goat" : ""}`}>
+        {img ? <img src={img} alt={item.name} /> : <span>{item.name?.slice(0, 2).toUpperCase()}</span>}
+        {item.significance_level === 5 && <span className="hmm-slot-goat-chip">GOAT</span>}
+      </div>
+      <div className="hmm-slot-info">
+        <span className="hmm-slot-name">{item.name}</span>
+        <span className="hmm-slot-meta">{item.country}{item.position ? ` · ${item.position}` : ""}</span>
+      </div>
+      {phase === "reveal" && <ChevronRight size={16} className="hmm-slot-chevron" />}
+    </div>
+  );
+}
+
+function TeamSlotItem({ item, phase }) {
+  const img = getHistoricalImageUrl(item.image_path);
+  return (
+    <div className="hmm-slot-row">
+      <div className="hmm-slot-avatar hmm-slot-avatar--shield">
+        {img ? <img src={img} alt={item.name} /> : <span>{item.name?.slice(0, 2).toUpperCase()}</span>}
+      </div>
+      <div className="hmm-slot-info">
+        <span className="hmm-slot-name">{item.name}</span>
+        <span className="hmm-slot-meta">{item.country}{item.era_dominance ? ` · ${item.era_dominance}` : ""}</span>
+      </div>
+      {phase === "reveal" && <ChevronRight size={16} className="hmm-slot-chevron" />}
+    </div>
+  );
+}
+
+function EventSlotItem({ item, phase }) {
+  const img = getHistoricalImageUrl(item.banner_image_path || item.image_path);
+  const year = item.event_date ? new Date(item.event_date).getFullYear() : null;
+  return (
+    <div className="hmm-slot-row">
+      <div className="hmm-slot-avatar hmm-slot-avatar--event">
+        {img ? <img src={img} alt={item.title} /> : <Zap size={20} strokeWidth={1} />}
+        {year && <span className="hmm-slot-event-year">{year}</span>}
+      </div>
+      <div className="hmm-slot-info">
+        <span className="hmm-slot-name">{item.title}</span>
+        <span className="hmm-slot-meta">{item.event_type || ""}</span>
+      </div>
+      {phase === "reveal" && <ChevronRight size={16} className="hmm-slot-chevron" />}
+    </div>
+  );
+}
+
+function CompSlotItem({ item, phase }) {
+  const img = getHistoricalImageUrl(item.image_path);
+  return (
+    <div className="hmm-slot-row">
+      <div className="hmm-slot-avatar hmm-slot-avatar--shield">
+        {img ? <img src={img} alt={item.name} /> : <span>{item.name?.slice(0, 2).toUpperCase()}</span>}
+      </div>
+      <div className="hmm-slot-info">
+        <span className="hmm-slot-name">{item.name}</span>
+        <span className="hmm-slot-meta">{item.country}{item.year ? ` · ${item.year}` : ""}</span>
+      </div>
+      {phase === "reveal" && <ChevronRight size={16} className="hmm-slot-chevron" />}
+    </div>
+  );
+}
+
+const SLOT_ITEM_BY_SECTION = {
+  players: PlayerSlotItem,
+  teams: TeamSlotItem,
+  events: EventSlotItem,
+  competitions: CompSlotItem,
+};
+
+const RANDOM_LABEL = {
+  players: "Jugador aleatorio",
+  teams: "Equipo aleatorio",
+  events: "Momento aleatorio",
+  competitions: "Competición aleatoria",
+};
+
+// ─── HEADER con ruleta animada ────────────────────────────────────────────────
+function Header({ totalCounts, onRandomSelect, activeSection, poolItems }) {
+  const [spinning, setSpinning] = useState(false);
+  const [winner, setWinner] = useState(null);
+  const [done, setDone] = useState(false);
+
+  // Resetear la ruleta cuando cambia de sección
+  useEffect(() => {
+    setSpinning(false);
+    setWinner(null);
+    setDone(false);
+  }, [activeSection]);
+
+  const handleSpin = useCallback(() => {
+    if (spinning || poolItems.length === 0) return;
+    const picked = poolItems[Math.floor(Math.random() * poolItems.length)];
+    setWinner(picked);
+    setDone(false);
+    setSpinning(true);
+  }, [spinning, poolItems]);
+
+  const handleDone = useCallback(() => {
+    setSpinning(false);
+    setDone(true);
+  }, []);
+
+  const handleClear = useCallback(() => {
+    setWinner(null);
+    setDone(false);
+  }, []);
+
+  const handleReveal = useCallback(() => {
+    if (winner && done) onRandomSelect?.(winner);
+  }, [winner, done, onRandomSelect]);
+
+  const SlotItem = SLOT_ITEM_BY_SECTION[activeSection] || PlayerSlotItem;
+
   return (
     <div className="hmm-header">
       <div className="hmm-header-bg" aria-hidden="true" />
@@ -143,6 +285,46 @@ function Header({ totalCounts }) {
         <p className="hmm-subtitle">
           {totalCounts} registros del fútbol mundial
         </p>
+
+        {/* ── Zona de ruleta ── */}
+        <div className="hmm-random-zone">
+          {!done && !spinning && (
+            <button
+              className={`hmm-header-random-btn ${poolItems.length === 0 ? "hmm-header-random-btn--disabled" : ""}`}
+              onClick={handleSpin}
+              disabled={poolItems.length === 0 || spinning}
+              aria-label="Ver item aleatorio"
+            >
+              <Shuffle size={13} />
+              <span>{RANDOM_LABEL[activeSection] || "Aleatorio"}</span>
+            </button>
+          )}
+
+          {(spinning || done) && (
+            <div className={`hmm-roulette ${done ? "hmm-roulette--done" : ""}`}>
+              <div className="hmm-roulette-arrow" aria-hidden="true">▶</div>
+              <button
+                className="hmm-roulette-slot"
+                onClick={done ? handleReveal : undefined}
+                disabled={!done}
+              >
+                <RouletteSlot
+                  items={poolItems}
+                  running={spinning}
+                  winner={winner}
+                  onDone={handleDone}
+                  renderItem={(item, phase) => <SlotItem item={item} phase={phase} />}
+                />
+              </button>
+              <div className="hmm-roulette-arrow hmm-roulette-arrow--right" aria-hidden="true">◀</div>
+              {done && (
+                <button className="hmm-roulette-clear" onClick={handleClear} aria-label="Cerrar">
+                  <X size={13} />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -215,7 +397,6 @@ function ActiveBadgeMobile() {
 
 // ─── ITEMS DE CADA SECCIÓN ────────────────────────────────────────────────────
 
-// Jugador
 function PlayerRow({ player, onClick }) {
   const imgUrl = getHistoricalImageUrl(player.image_path);
   const isActive = player.significance_level === 1;
@@ -230,7 +411,6 @@ function PlayerRow({ player, onClick }) {
         {player.significance_level === 5 && (
           <span className="hmm-player-card-goat">GOAT</span>
         )}
-        {/* Badge activo superpuesto sobre la imagen */}
         {isActive && (
           <span className="hmm-player-card-active-overlay">
             <span className="hmm-player-card-active-dot" />EN ACTIVO
@@ -242,7 +422,6 @@ function PlayerRow({ player, onClick }) {
         <span className="hmm-player-card-meta">
           {player.country}{player.position ? ` · ${POSITION_LABEL[player.position] || player.position}` : ""}
         </span>
-        {/* Estrellas o badge activo */}
         {isActive ? (
           <ActiveBadgeMobile />
         ) : player.significance_level > 0 ? (
@@ -260,7 +439,6 @@ function PlayerRow({ player, onClick }) {
   );
 }
 
-// Equipo
 function TeamRow({ team, onClick }) {
   const imgUrl = getHistoricalImageUrl(team.image_path);
   const legColor = LEGACY_COLOR[team.legacy_type] || "var(--accent)";
@@ -295,7 +473,6 @@ function TeamRow({ team, onClick }) {
   );
 }
 
-// Evento — Feed Card
 function EventRow({ event, onClick }) {
   const bannerUrl = getHistoricalImageUrl(event.banner_image_path || event.image_path);
   const protagonist = event.event_category === "player"
@@ -325,7 +502,6 @@ function EventRow({ event, onClick }) {
   );
 }
 
-// Competición
 function CompRow({ competition, onClick }) {
   const imgUrl = getHistoricalImageUrl(competition.image_path);
   const winner = competition.historical_teams?.name || competition.winner_text;
@@ -358,7 +534,7 @@ function CompRow({ competition, onClick }) {
   );
 }
 
-// ─── LISTA VACÍA ─────────────────────────────────────────────────────────────
+// ─── PANEL DE FILTROS ─────────────────────────────────────────────────────────
 function FilterPanel({ section, activeFilters, onChange, onClear }) {
   const filters = SECTION_FILTERS[section] || [];
   if (filters.length === 0) return null;
@@ -401,7 +577,6 @@ function EmptyState({ section, query }) {
   );
 }
 
-// ─── SKELETONS DE CARGA ───────────────────────────────────────────────────────
 function LoadingRows() {
   return (
     <>
@@ -421,13 +596,13 @@ function LoadingRows() {
 // ══════════════════════════════════════════════════════════════════════════════
 //  COMPONENTE PRINCIPAL
 // ══════════════════════════════════════════════════════════════════════════════
-export default function HistoryMenuMobile({ onSectionChange }) {
+export default function HistoryMenuMobile({ onSectionChange, initialSection, initialItem }) {
   const { allPlayers, loading: loadingPlayers } = useHistoricalPlayers();
   const { competitions, loading: loadingComps } = useHistoricalCompetitions();
   const { teams, loading: loadingTeams } = useHistoricalTeams();
   const { events, loading: loadingEvents } = useHistoricalEvents();
 
-  const [activeSection, setActiveSection] = useState("players");
+  const [activeSection, setActiveSection] = useState(initialSection || "players");
   const [query, setQuery] = useState("");
   const [filterOpen, setFilterOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState({});
@@ -435,6 +610,29 @@ export default function HistoryMenuMobile({ onSectionChange }) {
 
   const nav = (key, item = null) => onSectionChange?.(key, item);
   const totalCounts = allPlayers.length + teams.length + events.length + competitions.length;
+
+  // Si viene initialSection, activarla
+  useEffect(() => {
+    if (initialSection) setActiveSection(initialSection);
+  }, [initialSection]);
+
+  // Si viene initialItem con datos completos (no solo {id}), navegar directamente al detalle
+  useEffect(() => {
+    if (initialItem && initialSection && initialItem.name) {
+      onSectionChange?.(initialSection, initialItem);
+    }
+  }, []);
+
+  // Pool de items de la sección activa (datos crudos para la ruleta)
+  const activePool = useMemo(() => {
+    switch (activeSection) {
+      case "players": return allPlayers;
+      case "teams": return teams;
+      case "events": return events;
+      case "competitions": return competitions;
+      default: return [];
+    }
+  }, [activeSection, allPlayers, teams, events, competitions]);
 
   const searchResults = useMemo(() => {
     if (!query.trim()) return null;
@@ -557,7 +755,12 @@ export default function HistoryMenuMobile({ onSectionChange }) {
 
   return (
     <div className="hmm-root">
-      <Header totalCounts={totalCounts} />
+      <Header
+        totalCounts={totalCounts}
+        onRandomSelect={(item) => nav(activeSection, item)}
+        activeSection={activeSection}
+        poolItems={activePool}
+      />
 
       <div className="hmm-search-row">
         <GlobalSearch
