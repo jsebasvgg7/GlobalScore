@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "./utils/supabaseClient";
 import { ThemeProvider } from "./context/ThemeContext";
+import { resetWelcome } from "./pages/LoginPage";
 
 import Header from "./components/ComLayout/Header";
 import InstallPWAButton from './components/ComPWA/InstallPWAButton';
@@ -48,7 +49,7 @@ export default function App() {
       if (!mounted) return;
 
       setSession(data?.session || null);
-      
+
       if (data?.session) {
         loadUserData(data.session.user.id);
       } else {
@@ -60,6 +61,12 @@ export default function App() {
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         if (!mounted) return;
+
+        // Resetear el welcome screen cuando el usuario cierra sesión,
+        // ANTES de que React monte LoginPage de nuevo.
+        if (_event === "SIGNED_OUT") {
+          resetWelcome();
+        }
 
         setSession(session);
         if (session) {
@@ -89,7 +96,7 @@ export default function App() {
 
       if (profileError) {
         console.error("❌ Profile error:", profileError);
-        
+
         if (profileError.message.includes('permission')) {
           console.log("🚪 Signing out due to permission error");
           await supabase.auth.signOut();
@@ -103,9 +110,9 @@ export default function App() {
 
       if (!profile) {
         console.log("📝 Perfil no encontrado, creando uno nuevo...");
-        
+
         const { data: { user: authUser } } = await supabase.auth.getUser();
-        
+
         if (!authUser) {
           console.error("❌ No se pudo obtener usuario de Auth");
           await supabase.auth.signOut();
@@ -116,10 +123,10 @@ export default function App() {
           return;
         }
 
-        const userName = authUser.user_metadata?.name || 
-                        authUser.user_metadata?.display_name ||
-                        authUser.email?.split('@')[0] || 
-                        "Usuario";
+        const userName = authUser.user_metadata?.name ||
+          authUser.user_metadata?.display_name ||
+          authUser.email?.split('@')[0] ||
+          "Usuario";
 
         const { data: newProfile, error: createError } = await supabase
           .from("users")
@@ -143,14 +150,14 @@ export default function App() {
 
         if (createError) {
           console.error("❌ Error al crear perfil:", createError);
-          
+
           if (createError.code === '23505') {
             const { data: existingProfile } = await supabase
               .from("users")
               .select("*")
               .eq("auth_id", authId)
               .single();
-            
+
             if (existingProfile) {
               console.log("✅ Perfil duplicado encontrado:", existingProfile);
               setCurrentUser(existingProfile);

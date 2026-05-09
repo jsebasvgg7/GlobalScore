@@ -3,12 +3,13 @@ import { Trophy, LogOut, User2, Award, Shield, Bell, Home, BarChart3, Moon, Sun,
 import { supabase } from "../../utils/supabaseClient";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
+import { resetWelcome } from "../../pages/LoginPage";
 import MobileHeader from "../ComLayout/MobileHeader";
 import "../../styles/StylesLayout/Header.css";
 
 export default function Header({ currentUser, users = [], onProfileClick }) {
-  const navigate  = useNavigate();
-  const location  = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { theme, toggleTheme } = useTheme();
   const [clock, setClock] = useState("");
   const [tooltip, setTooltip] = useState(null);
@@ -26,53 +27,43 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
   }, []);
 
   const handleLogout = async () => {
+    resetWelcome();                  // ← resetear ANTES de cerrar sesión
     await supabase.auth.signOut();
     navigate("/");
   };
 
   const isActive = (path) => location.pathname === path;
 
-  /* ── Sidebar / Desktop nav ── */
   const sidebarItems = [
-    { path: "/app",     icon: Home,        label: "Inicio"    },
-    { path: "/ranking", icon: Award,       label: "Ranking"   },
-    { path: "/stats",   icon: BarChart3,   label: "Stats"     },
-    { path: "/world",   icon: Globe,       label: "Mundo"     },
-    { path: "/history", icon: History,     label: "Histórico" },
-    { path: "/profile", icon: User2,       label: "Perfil"    },
-    { path: "/notes",   icon: NotebookPen, label: "Notas"     },
+    { path: "/app", icon: Home, label: "Inicio" },
+    { path: "/ranking", icon: Award, label: "Ranking" },
+    { path: "/stats", icon: BarChart3, label: "Stats" },
+    { path: "/world", icon: Globe, label: "Mundo" },
+    { path: "/history", icon: History, label: "Histórico" },
+    { path: "/profile", icon: User2, label: "Perfil" },
+    { path: "/notes", icon: NotebookPen, label: "Notas" },
     ...(currentUser?.is_admin ? [{ path: "/admin", icon: Shield, label: "Admin" }] : []),
   ];
 
   const firstName = currentUser?.name?.split(" ")[0] || "Jugador";
-  const initials  = (currentUser?.name || "U").slice(0, 2).toUpperCase();
-  const pageName  = sidebarItems.find((n) => isActive(n.path))?.label || "GlobalScore";
+  const initials = (currentUser?.name || "U").slice(0, 2).toUpperCase();
+  const pageName = sidebarItems.find((n) => isActive(n.path))?.label || "GlobalScore";
 
   return (
     <>
-      {/* ══════════════════════════════════════
-          MOBILE HEADER — delegado a MobileHeader
-      ══════════════════════════════════════ */}
       <MobileHeader currentUser={currentUser} />
 
-      {/* ══════════════════════════════════════
-          DESKTOP SIDEBAR — Brutalista Japonés
-      ══════════════════════════════════════ */}
       <aside className="gs-sidebar">
-
-        {/* Logo */}
         <div className="gs-logo-wrap">
           <button className="gs-logo-btn" onClick={() => navigate("/app")} aria-label="Inicio">
             <Trophy size={18} />
           </button>
         </div>
 
-        {/* Separador decorativo */}
         <div className="gs-sidebar-divider">
           <span>NAV</span>
         </div>
 
-        {/* Navegación — centrada verticalmente */}
         <nav className="gs-nav">
           {sidebarItems.map(({ path, icon: Icon, label }, index) => (
             <button
@@ -90,16 +81,12 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
           ))}
         </nav>
 
-        {/* Zona inferior — tema + season info + logout */}
         <div className="gs-sidebar-bottom">
-
-          {/* Bloque temporada */}
           <div className="gs-season-block">
             <span className="gs-season-label">TEMP</span>
             <span className="gs-season-year">25/26</span>
           </div>
 
-          {/* Botón tema */}
           <button
             className="gs-nav-btn"
             onClick={toggleTheme}
@@ -113,7 +100,6 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             )}
           </button>
 
-          {/* Logout */}
           <button
             className="gs-nav-btn gs-nav-btn--logout"
             onClick={handleLogout}
@@ -124,13 +110,9 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
             <LogOut size={15} />
             {tooltip === "logout" && <span className="gs-tooltip">Salir</span>}
           </button>
-
         </div>
       </aside>
 
-      {/* ══════════════════════════════════════
-          DESKTOP TOPBAR
-      ══════════════════════════════════════ */}
       <header className="gs-topbar">
         <div className="gs-topbar-left">
           <div className="gs-topbar-logo-zone"></div>

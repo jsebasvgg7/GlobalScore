@@ -4,6 +4,15 @@ import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { supabase } from "../utils/supabaseClient";
 import "../styles/StylesPages/Auth.css";
 
+/* ─────────────────────────────────────────────────────────────
+   Variable de módulo: sobrevive re-montajes de React/StrictMode.
+   resetWelcome() se llama ANTES de supabase.auth.signOut()
+   desde Header.jsx y ProfileSettingsPage.jsx.
+───────────────────────────────────────────────────────────── */
+let _welcomeDone = false;
+
+export function resetWelcome() { _welcomeDone = false; }
+
 /* ── Loading dots ── */
 function LoadingDots() {
   return (
@@ -13,14 +22,14 @@ function LoadingDots() {
   );
 }
 
-/* ── El contenido real del formulario (compartido entre desktop y mobile) ── */
-function LoginForm({ onNavigate }) {
+/* ── Formulario ── */
+function LoginForm() {
   const navigate = useNavigate();
-  const [loading, setLoading]         = useState(false);
-  const [email, setEmail]             = useState("");
-  const [password, setPassword]       = useState("");
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError]             = useState("");
+  const [error, setError] = useState("");
 
   const validateEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 
@@ -35,7 +44,8 @@ function LoginForm({ onNavigate }) {
     setLoading(true);
     try {
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email: email.trim().toLowerCase(), password,
+        email: email.trim().toLowerCase(),
+        password,
       });
 
       if (signInError) {
@@ -43,17 +53,24 @@ function LoginForm({ onNavigate }) {
           signInError.message.includes("Invalid login credentials")
             ? "Correo o contraseña incorrectos"
             : signInError.message.includes("Email not confirmed")
-            ? "Por favor verifica tu correo antes de iniciar sesión"
-            : "Error al iniciar sesión. Verifica tus credenciales"
+              ? "Por favor verifica tu correo antes de iniciar sesión"
+              : "Error al iniciar sesión. Verifica tus credenciales"
         );
         setLoading(false);
         return;
       }
 
-      if (!data?.user) { setError("Error al iniciar sesión"); setLoading(false); return; }
+      if (!data?.user) {
+        setError("Error al iniciar sesión");
+        setLoading(false);
+        return;
+      }
 
       const { data: profile, error: profileError } = await supabase
-        .from("users").select("*").eq("auth_id", data.user.id).maybeSingle();
+        .from("users")
+        .select("*")
+        .eq("auth_id", data.user.id)
+        .maybeSingle();
 
       if (profileError && profileError.code !== "PGRST116") {
         setError("Error al cargar tu perfil");
@@ -66,14 +83,21 @@ function LoginForm({ onNavigate }) {
         const userName =
           data.user.user_metadata?.name ||
           data.user.user_metadata?.display_name ||
-          data.user.email?.split("@")[0] || "Usuario";
+          data.user.email?.split("@")[0] ||
+          "Usuario";
 
-        const { error: createError } = await supabase.from("users").insert({
-          auth_id: data.user.id, name: userName, email: data.user.email,
-          points: 0, predictions: 0, correct: 0,
-          monthly_points: 0, monthly_predictions: 0, monthly_correct: 0,
-          current_streak: 0, best_streak: 0, level: 1, monthly_championships: 0,
-        }).select().single();
+        const { error: createError } = await supabase
+          .from("users")
+          .insert({
+            auth_id: data.user.id,
+            name: userName,
+            email: data.user.email,
+            points: 0, predictions: 0, correct: 0,
+            monthly_points: 0, monthly_predictions: 0, monthly_correct: 0,
+            current_streak: 0, best_streak: 0, level: 1, monthly_championships: 0,
+          })
+          .select()
+          .single();
 
         if (createError && createError.code !== "23505") {
           setError("Error al crear tu perfil");
@@ -93,17 +117,14 @@ function LoginForm({ onNavigate }) {
 
   return (
     <div className="auth-inner">
-      {/* Brand */}
       <div className="auth-brand-mark">
         <div className="auth-brand-sq" />
         <span className="auth-brand-name">GLOBALSCORE</span>
       </div>
 
-      {/* Título */}
       <div className="auth-form-title">Iniciar<br />sesión</div>
       <div className="auth-form-sub">· accede a tu cuenta ·</div>
 
-      {/* Divisor */}
       <div className="auth-divider">
         <div className="auth-divider-line" />
         <div className="auth-divider-dot" />
@@ -112,14 +133,10 @@ function LoginForm({ onNavigate }) {
 
       <form className="auth-form" onSubmit={login}>
         <div className="auth-input-group">
-
-          {/* Email */}
           <div className="auth-field">
             <label className="auth-field-label">Correo</label>
             <div className="auth-field-wrap">
-              <span className="auth-field-icon">
-                <Mail />
-              </span>
+              <span className="auth-field-icon"><Mail /></span>
               <input
                 className="auth-input"
                 type="email"
@@ -133,13 +150,10 @@ function LoginForm({ onNavigate }) {
             </div>
           </div>
 
-          {/* Password */}
           <div className="auth-field">
             <label className="auth-field-label">Contraseña</label>
             <div className="auth-field-wrap">
-              <span className="auth-field-icon">
-                <Lock />
-              </span>
+              <span className="auth-field-icon"><Lock /></span>
               <input
                 className="auth-input"
                 type={showPassword ? "text" : "password"}
@@ -162,17 +176,14 @@ function LoginForm({ onNavigate }) {
           </div>
         </div>
 
-        {/* Forgot */}
         <div className="auth-forgot-link">
           <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
         </div>
 
-        {/* Error */}
         {error && (
           <div className="auth-message auth-message--error">{error}</div>
         )}
 
-        {/* CTA */}
         <div className="auth-cta">
           <button
             className="auth-cta-btn"
@@ -187,7 +198,6 @@ function LoginForm({ onNavigate }) {
           </button>
         </div>
 
-        {/* Alt link */}
         <div className="auth-alt-link">
           ¿Sin cuenta? <Link to="/register">Regístrate</Link>
         </div>
@@ -197,12 +207,13 @@ function LoginForm({ onNavigate }) {
 }
 
 /* ═══════════════════════════════════════════════
-   WELCOME SCREEN (mobile, primera vez)
+   WELCOME SCREEN (mobile)
 ═══════════════════════════════════════════════ */
 function WelcomeScreen({ onContinue }) {
   const [waveUp, setWaveUp] = useState(false);
 
   const handleContinue = () => {
+    _welcomeDone = true; // marcar ANTES del timeout
     setWaveUp(true);
     setTimeout(onContinue, 600);
   };
@@ -268,7 +279,10 @@ function PhoneStatusBar() {
 ═══════════════════════════════════════════════ */
 export default function LoginPage() {
   const isMobile = () => window.innerWidth <= 640;
-  const [showWelcome, setShowWelcome] = useState(() => isMobile());
+
+  const [showWelcome, setShowWelcome] = useState(() => {
+    return isMobile() && !_welcomeDone;
+  });
 
   if (showWelcome) {
     return <WelcomeScreen onContinue={() => setShowWelcome(false)} />;
@@ -276,11 +290,7 @@ export default function LoginPage() {
 
   return (
     <div className="auth-wrapper">
-
-      {/* ══ DESKTOP: Phone Portal ══ */}
       <div className="auth-phone-portal">
-
-        {/* Panel lateral izquierdo */}
         <div className="auth-side-panel">
           <div>
             <div className="auth-side-label">Plataforma</div>
@@ -295,7 +305,6 @@ export default function LoginPage() {
           <div className="auth-side-version">v2.0 · 2025–2026</div>
         </div>
 
-        {/* Frame del teléfono */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div className="auth-phone-frame">
             <PhoneStatusBar />
@@ -303,7 +312,6 @@ export default function LoginPage() {
               <LoginForm />
             </div>
           </div>
-
           <div className="auth-frame-label">
             <div className="auth-frame-label-dots">
               <span /><span /><span />
@@ -313,11 +321,9 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* ══ MOBILE: Interfaz directa ══ */}
       <div className="auth-mobile-direct">
         <LoginForm />
       </div>
-
     </div>
   );
 }
