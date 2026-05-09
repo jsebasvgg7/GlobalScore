@@ -18,6 +18,7 @@ import HistoryMenuMobile from "../components/ComMobile/HistoryMenuMobile";
 import HistoricalEventsPage from "../components/ComHistory/HistoricalEventsPage";
 import HistoricalEventsMobile from "../components/ComMobile/HistoricalEventsMobile";
 import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
+import HistoricalTeamsMobile from "../components/ComMobile/HistoricalTeamsMobile";
 import HistoricalCompetitionsPage from "../components/ComHistory/HistoricalCompetitionsPage";
 import HistoricalCompetitionsMobile from "../components/ComMobile/HistoricalCompetitionsMobile";
 import HistoryWelcomeScreen from "../components/ComHistory/HistoryWelcomeScreen";
@@ -546,27 +547,18 @@ export default function HistoryPage() {
   }
 
   if (activeSection === "teams") {
-    // Mobile con detalle: mostrar detalle directamente, onBack → menú mobile
-    if (isMobile && preselectedTeamId) {
-      return (
-        <div className="hp-root">
-          <HistoricalTeamsPage
-            initialSelectedId={preselectedTeamId}
-            onDetailBack={() => { setPreselectedTeamId(null); }}
-            onBack={() => { setPreselectedTeamId(null); }}
-          />
-        </div>
-      );
-    }
-    // Mobile sin detalle: menú mobile en sección equipos
+
+    // ── MOBILE ─────────────────────────────
     if (isMobile) {
       return (
-        <HistoryMenuMobile
-          initialSection="teams"
-          onSectionChange={(key, item) => handleSectionChange(key, item)}
+        <HistoricalTeamsMobile
+          initialSelectedId={preselectedTeamId}
+          onBack={handleBackToMenu}
         />
       );
     }
+
+    // ── DESKTOP ────────────────────────────
     return (
       <div className="hp-shell">
         <div className="hp-root">
@@ -575,6 +567,7 @@ export default function HistoryPage() {
             onBack={handleBackToMenu}
           />
         </div>
+
         <TeamsRightPanel />
       </div>
     );

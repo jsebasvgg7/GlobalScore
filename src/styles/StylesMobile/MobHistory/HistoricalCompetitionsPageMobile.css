@@ -879,6 +879,7 @@
   border-bottom: .5px solid var(--border);
   overflow-x: auto;
   scrollbar-width: none;
+  align-items: center;
 }
 
 .hcm-tabs::-webkit-scrollbar {

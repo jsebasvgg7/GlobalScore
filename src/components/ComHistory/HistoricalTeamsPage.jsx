@@ -8,7 +8,6 @@ import { useHistoricalTeams, useHistoricalTeamDetail } from "../../hooks/HooksHi
 import { getHistoricalImageUrl } from "../../hooks/HooksHistory/useHistoricalPlayers";
 import SectionHeaderMobile from "../ComMobile/SectionHeaderMobile";
 import "../../styles/StylesHistory/HistoricalTeamsPage.css";
-import "../../styles/StylesMobile/MobHistory/HistoricalTeamsPageMobile.css";
 
 // ─── Mapas de traducción ──────────────────────────────────────
 const LEGACY_TEAM_LABEL = {

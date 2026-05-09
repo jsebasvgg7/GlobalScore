@@ -357,3 +357,95 @@
 [data-style="neumorphism"] .hcp-mb-arrow-icon {
   color: var(--hcp-accent, #60519b);
 }
+
+[data-style="brutalist"][data-theme="dark"] .hcp-mb-match {
+  background: #252230;
+  border-color: rgba(255, 255, 255, .07);
+}
+
+[data-style="brutalist"][data-theme="dark"] .hcp-mb-team--win .hcp-mb-team-name {
+  color: #E8E6F0;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hcp-mb-team-name {
+  color: rgba(232, 230, 240, .5);
+}
+
+[data-style="brutalist"][data-theme="dark"] .hcp-mb-score {
+  color: rgba(232, 230, 240, .35);
+}
+
+[data-style="brutalist"][data-theme="dark"] .hcp-mb-team--win .hcp-mb-score {
+  color: #8b7fc7;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hcp-mb-pen {
+  color: rgba(232, 230, 240, .3);
+  background: #252230;
+}
+
+[data-style="brutalist"][data-theme="dark"] .hcp-mb-round-header {
+  background: rgba(139, 127, 199, .06);
+  border-color: rgba(139, 127, 199, .2);
+}
+
+[data-style="brutalist"][data-theme="dark"] .hcp-mb-round-count {
+  color: rgba(232, 230, 240, .35);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-match {
+  background: #1E1C28;
+  border: none;
+  box-shadow: 3px 3px 8px rgba(10, 9, 16, .6), -2px -2px 6px rgba(40, 37, 55, .8);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-match--final {
+  box-shadow: 3px 3px 8px rgba(10, 9, 16, .6), -2px -2px 6px rgba(40, 37, 55, .8), 0 0 0 1px rgba(245, 158, 11, .2);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-team-name {
+  color: rgba(232, 230, 240, .4);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-team--win .hcp-mb-team-name {
+  color: #E8E6F0;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-score {
+  color: rgba(232, 230, 240, .3);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-team--win .hcp-mb-score {
+  color: #8b7fc7;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-divider {
+  background: rgba(40, 37, 55, .6);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-pen {
+  background: #1E1C28;
+  color: rgba(232, 230, 240, .3);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-round-header {
+  background: #1E1C28;
+  border: none;
+  box-shadow: 2px 2px 6px rgba(10, 9, 16, .5), -1px -1px 4px rgba(40, 37, 55, .7);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-round-count {
+  color: rgba(232, 230, 240, .3);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-round-dot {
+  box-shadow: 0 0 5px rgba(139, 127, 199, .5);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-arrow-line {
+  background: linear-gradient(to bottom, rgba(40, 37, 55, .8), #8b7fc7);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcp-mb-arrow-icon {
+  color: #8b7fc7;
+}
