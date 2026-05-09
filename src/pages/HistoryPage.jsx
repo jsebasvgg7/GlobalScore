@@ -23,7 +23,6 @@ import SectionHeaderMobile from "../components/ComMobile/SectionHeaderMobile";
 import Footer from '../components/ComLayout/Footer';
 import "../styles/StylesPages/HistoryPage.css";
 import "../styles/StylesMobile/HistoryPageMobile.css";
-import '../styles/StylesMobile/HistoryMobileCardGrid.css';
 
 // ─── Helpers ──────────────────────────────────────────────────
 const LEGACY_COLOR = {
