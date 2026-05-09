@@ -16,6 +16,7 @@ import EventsRightPanel from "../components/ComPanels/EventsRightPanel";
 import HistoryMenuDesktop from "../components/ComHistory/HistoryMenuDesktop";
 import HistoryMenuMobile from "../components/ComMobile/HistoryMenuMobile";
 import HistoricalEventsPage from "../components/ComHistory/HistoricalEventsPage";
+import HistoricalEventsMobile from "../components/ComMobile/HistoricalEventsMobile";
 import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
 import HistoricalCompetitionsPage from "../components/ComHistory/HistoricalCompetitionsPage";
 import HistoricalCompetitionsMobile from "../components/ComMobile/HistoricalCompetitionsMobile";
@@ -580,29 +581,33 @@ export default function HistoryPage() {
   }
 
   if (activeSection === "events") {
-    // Mobile con detalle: mostrar detalle directamente, onBack → menú mobile
+
+    // Mobile con detalle directo
     if (isMobile && preselectedEvent) {
       return (
-        <div className="hp-root">
-          <HistoricalEventsPage
-            selectedEvent={preselectedEvent}
-            onEventSelect={(ev) => setPreselectedEvent(ev)}
-            onDetailBack={() => { setPreselectedEvent(null); }}
-            onBack={() => { setPreselectedEvent(null); }}
-          />
-        </div>
-      );
-    }
-    // Mobile sin detalle: menú mobile en sección eventos
-    if (isMobile) {
-      return (
-        <HistoryMenuMobile
-          initialSection="events"
-          onSectionChange={(key, item) => handleSectionChange(key, item)}
+        <HistoricalEventsMobile
+          initialSelectedEvent={preselectedEvent}
+          onBack={handleBackToMenu}
         />
       );
     }
-    return <EventsSectionWrapper onBack={handleBackToMenu} initialEvent={preselectedEvent} />;
+
+    // Mobile sin detalle
+    if (isMobile) {
+      return (
+        <HistoricalEventsMobile
+          onBack={handleBackToMenu}
+        />
+      );
+    }
+
+    // Desktop
+    return (
+      <EventsSectionWrapper
+        onBack={handleBackToMenu}
+        initialEvent={preselectedEvent}
+      />
+    );
   }
 
   if (activeSection === "competitions") {
