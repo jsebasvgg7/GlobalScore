@@ -421,11 +421,6 @@ function TeamCard({ team, onClick }) {
             {team.country && <span>{team.country}</span>}
             {team.era_dominance && <><span className="htp-tc-sep">·</span><span>{team.era_dominance}</span></>}
           </div>
-          {team.legacy_type && (
-            <span className="htp-tc-badge" style={{ "--lc": legColor }}>
-              {LEGACY_TEAM_LABEL[team.legacy_type] || team.legacy_type}
-            </span>
-          )}
         </div>
 
         {/* Títulos count */}

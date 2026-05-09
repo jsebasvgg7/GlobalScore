@@ -23,6 +23,7 @@ import SectionHeaderMobile from "../components/ComMobile/SectionHeaderMobile";
 import Footer from '../components/ComLayout/Footer';
 import "../styles/StylesPages/HistoryPage.css";
 import "../styles/StylesMobile/HistoryPageMobile.css";
+import '../styles/StylesMobile/HistoryMobileCardGrid.css';
 
 // ─── Helpers ──────────────────────────────────────────────────
 const LEGACY_COLOR = {
@@ -30,7 +31,7 @@ const LEGACY_COLOR = {
   "Innovator": "#8b5cf6", "Leader": "#10b981", "Goalkeeper": "#ec4899",
 };
 const POSITION_LABEL = {
-  "Forward": "Delantero", "Midfielder": "Centrocampista", "All-rounder": "Todocampista", "Playmaker": "Media Punta",
+  "Forward": "Delantero", "Midfielder": "Centrocampista", "All-rounder": "Todocampista", "Play-maker": "Media Punta",
   "Defender": "Defensor", "Goalkeeper": "Portero",
 };
 const LEGACY_LABEL = {
@@ -126,7 +127,6 @@ function PlayerCard({ player, onClick, isActive, onMouseEnter, onMouseLeave }) {
           {player.ballon_dor_count > 0 && (
             <>
               <span className="hp-card-sep">·</span>
-              <span className="hp-card-era">{player.ballon_dor_count}</span>
             </>
           )}
         </div>

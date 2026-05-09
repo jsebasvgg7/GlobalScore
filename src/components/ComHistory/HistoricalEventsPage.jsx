@@ -81,14 +81,7 @@ function EventCard({ event, onClick }) {
       <div className="hep-card-body">
         <div className="hep-card-title-row">
           <h3 className="hep-card-title">{event.title}</h3>
-          {year && <span className="hep-card-year">{year}</span>}
         </div>
-
-        {event.description && (
-          <p className="hep-card-desc">
-            {event.description.slice(0, 110)}{event.description.length > 110 ? "…" : ""}
-          </p>
-        )}
 
         {protagonist && (
           <div className="hep-card-protagonist">
