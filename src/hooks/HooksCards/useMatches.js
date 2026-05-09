@@ -1,6 +1,30 @@
 import { useState, useCallback, useRef } from 'react';
 import { supabase } from '../../utils/supabaseClient';
 
+// ── Helper compartido: recarga SOLO partidos pending (igual que useDataLoader) ──
+const fetchPendingMatches = async () => {
+  let all = [];
+  let from = 0;
+  const PAGE_SIZE = 1000;
+
+  while (true) {
+    const { data, error } = await supabase
+      .from("matches")
+      .select("*, predictions(*)")
+      .eq("status", "pending")
+      .range(from, from + PAGE_SIZE - 1);
+
+    if (error) throw error;
+    if (!data?.length) break;
+
+    all = [...all, ...data];
+    if (data.length < PAGE_SIZE) break;
+    from += PAGE_SIZE;
+  }
+
+  return all;
+};
+
 export const useMatches = (currentUser) => {
   const [loading, setLoading] = useState(false);
   const savingRef = useRef(new Set()); // Track de predicciones en proceso
@@ -11,7 +35,7 @@ export const useMatches = (currentUser) => {
 
     // Crear key única para esta predicción
     const predictionKey = `${matchId}-${homeScore}-${awayScore}-${advancingTeam || 'none'}`;
-    
+
     // Si ya se está guardando esta misma predicción, ignorar
     if (savingRef.current.has(predictionKey)) {
       console.log('⚠️ Predicción duplicada ignorada para match:', matchId);
@@ -45,11 +69,8 @@ export const useMatches = (currentUser) => {
 
       console.log('✅ Predicción guardada:', predictionResult);
 
-      // Recargar lista de partidos
-      const { data: matchList } = await supabase
-        .from("matches")
-        .select("*, predictions(*)");
-
+      // ✅ FIX: Recargar solo partidos pending (igual que la carga inicial)
+      const matchList = await fetchPendingMatches();
       onSuccess?.(matchList);
     } catch (err) {
       console.error("❌ Error al guardar predicción:", err);
@@ -70,7 +91,8 @@ export const useMatches = (currentUser) => {
       const { error } = await supabase.from("matches").insert(match);
       if (error) throw error;
 
-      const { data } = await supabase.from("matches").select("*, predictions(*)");
+      // ✅ FIX: Recargar solo partidos pending
+      const data = await fetchPendingMatches();
       onSuccess?.(data);
     } catch (err) {
       console.error("Error al agregar partido:", err);
@@ -90,10 +112,10 @@ export const useMatches = (currentUser) => {
       }
 
       // 1. Actualizar resultado del partido
-      const updateData = { 
-        result_home: homeScore, 
-        result_away: awayScore, 
-        status: "finished" 
+      const updateData = {
+        result_home: homeScore,
+        result_away: awayScore,
+        status: "finished"
       };
 
       // ⚡ NUEVO: Agregar advancing_team si existe
@@ -136,13 +158,13 @@ export const useMatches = (currentUser) => {
           pointsEarned = 5;
           exactPredictions++;
           console.log(`✅ Usuario ${prediction.user_id}: Resultado exacto (+5 pts)`);
-        } 
+        }
         // Resultado correcto (ganador/empate): 3 puntos
         else if (resultDiff === predDiff) {
           pointsEarned = 3;
           correctResults++;
           console.log(`✅ Usuario ${prediction.user_id}: Acertó resultado (+3 pts)`);
-        } 
+        }
         // Incorrecto: 0 puntos
         else {
           console.log(`❌ Usuario ${prediction.user_id}: No acertó (0 pts)`);
@@ -162,7 +184,7 @@ export const useMatches = (currentUser) => {
         // ⚡ MODIFICADO: Actualizar predicción con advancing_points separado
         await supabase
           .from("predictions")
-          .update({ 
+          .update({
             points_earned: pointsEarned,
             advancing_points: advancingPoints
           })
@@ -184,16 +206,16 @@ export const useMatches = (currentUser) => {
         const newPoints = (userData.points || 0) + totalPoints;
         const newPredictions = (userData.predictions || 0) + 1;
         const newCorrect = (userData.correct || 0) + (totalPoints > 0 ? 1 : 0);
-        
+
         // ========== ESTADÍSTICAS MENSUALES ==========
         const newMonthlyPoints = (userData.monthly_points || 0) + totalPoints;
         const newMonthlyPredictions = (userData.monthly_predictions || 0) + 1;
         const newMonthlyCorrect = (userData.monthly_correct || 0) + (totalPoints > 0 ? 1 : 0);
-        
+
         // ========== RACHAS ==========
         let newCurrentStreak = userData.current_streak || 0;
         let newBestStreak = userData.best_streak || 0;
-        
+
         if (totalPoints > 0) {
           newCurrentStreak = newCurrentStreak + 1;
           newBestStreak = Math.max(newBestStreak, newCurrentStreak);
@@ -236,9 +258,8 @@ export const useMatches = (currentUser) => {
         .select("*")
         .order("points", { ascending: false });
 
-      const { data: updatedMatches } = await supabase
-        .from("matches")
-        .select("*, predictions(*)");
+      // ✅ FIX: Recargar solo partidos pending (el partido recién finalizado ya no aparecerá)
+      const updatedMatches = await fetchPendingMatches();
 
       console.log("✅ Partido finalizado exitosamente");
       console.log(`📈 Resultados: ${exactPredictions} exactos, ${correctResults} resultados correctos`);
