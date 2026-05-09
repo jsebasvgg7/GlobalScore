@@ -26,13 +26,13 @@ export default function AdminRightPanel({
   onRevokeBanner,
 }) {
   const sectionColors = {
-    matches:      '#1D9E75',
-    leagues:      '#f5a623',
-    awards:       '#f25f5c',
+    matches: '#1D9E75',
+    leagues: '#f5a623',
+    awards: '#f25f5c',
     achievements: 'var(--accent)',
-    titles:       '#3b82f6',
-    crowns:       '#c9a227',
-    banners:      'var(--accent)',
+    titles: '#3b82f6',
+    crowns: '#c9a227',
+    banners: 'var(--accent)',
   };
   const panelColor = panelMode === 'finish' ? '#1D9E75' : sectionColors[activeSection] || 'var(--accent)';
 
@@ -88,23 +88,23 @@ export default function AdminRightPanel({
 ================================================================ */
 function PanelHeader({ activeSection, panelMode, panelItem, onResetPanel }) {
   const titles = {
-    matches:      { add: 'Agregar Partido',   finish: 'Finalizar Partido',   edit: 'Editar' },
-    leagues:      { add: 'Agregar Liga',       finish: 'Finalizar Liga',       edit: 'Editar' },
-    awards:       { add: 'Agregar Premio',     finish: 'Finalizar Premio',     edit: 'Editar' },
-    achievements: { add: 'Nuevo Logro',        finish: '',                     edit: 'Editar Logro' },
-    titles:       { add: 'Nuevo Título',       finish: '',                     edit: 'Editar Título' },
-    crowns:       { add: 'Otorgar Corona',     finish: '',                     edit: '' },
-    banners:      { add: 'Crear Banner',       finish: '',                     edit: '',    assign: 'Asignar Banner' },
+    matches: { add: 'Agregar Partido', finish: 'Finalizar Partido', edit: 'Editar' },
+    leagues: { add: 'Agregar Liga', finish: 'Finalizar Liga', edit: 'Editar' },
+    awards: { add: 'Agregar Premio', finish: 'Finalizar Premio', edit: 'Editar' },
+    achievements: { add: 'Nuevo Logro', finish: '', edit: 'Editar Logro' },
+    titles: { add: 'Nuevo Título', finish: '', edit: 'Editar Título' },
+    crowns: { add: 'Otorgar Corona', finish: '', edit: '' },
+    banners: { add: 'Crear Banner', finish: '', edit: '', assign: 'Asignar Banner' },
   };
 
   const sectionColors = {
-    matches:      '#1D9E75',
-    leagues:      '#f5a623',
-    awards:       '#f25f5c',
+    matches: '#1D9E75',
+    leagues: '#f5a623',
+    awards: '#f25f5c',
     achievements: 'var(--accent)',
-    titles:       '#3b82f6',
-    crowns:       '#c9a227',
-    banners:      'var(--accent)',
+    titles: '#3b82f6',
+    crowns: '#c9a227',
+    banners: 'var(--accent)',
   };
 
   const title = titles[activeSection]?.[panelMode] || titles[activeSection]?.add || '';
@@ -187,14 +187,14 @@ function DeleteBtn({ onClick }) {
 ================================================================ */
 function AddForm({ activeSection, onAdd }) {
   switch (activeSection) {
-    case 'matches':      return <AddMatchForm      onAdd={onAdd} />;
-    case 'leagues':      return <AddLeagueForm     onAdd={onAdd} />;
-    case 'awards':       return <AddAwardForm      onAdd={onAdd} />;
+    case 'matches': return <AddMatchForm onAdd={onAdd} />;
+    case 'leagues': return <AddLeagueForm onAdd={onAdd} />;
+    case 'awards': return <AddAwardForm onAdd={onAdd} />;
     case 'achievements': return <AddAchievementForm onAdd={onAdd} />;
-    case 'titles':       return <AddTitleForm      onAdd={onAdd} />;
-    case 'crowns':       return <AddCrownForm      onAdd={onAdd} />;
-    case 'banners':      return <AddBannerForm     onAdd={onAdd} />;
-    default:             return <AddMatchForm      onAdd={onAdd} />;
+    case 'titles': return <AddTitleForm onAdd={onAdd} />;
+    case 'crowns': return <AddCrownForm onAdd={onAdd} />;
+    case 'banners': return <AddBannerForm onAdd={onAdd} />;
+    default: return <AddMatchForm onAdd={onAdd} />;
   }
 }
 
@@ -206,12 +206,44 @@ function AddMatchForm({ onAdd }) {
     date: '', time: '', deadLine: '', deadLine_time: '',
     is_knockout: false,
   });
+
   const [sending, setSending] = useState(false);
 
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    if (name === 'id' && value.length === 12) {
+      const day = value.slice(0, 2);
+      const month = value.slice(2, 4);
+      const year = `20${value.slice(4, 6)}`;
+      const home = value.slice(6, 9).toUpperCase();
+      const away = value.slice(9, 12).toUpperCase();
+      const dateStr = `${year}-${month}-${day}`;
+      setForm(p => ({
+        ...p,
+        id: value,
+        home_team: home,
+        away_team: away,
+        date: dateStr,
+        deadLine: dateStr,
+        home_team_logo_url: getLogoUrlByTeamName(supabase, home, p.league),
+        away_team_logo_url: getLogoUrlByTeamName(supabase, away, p.league),
+      }));
+      return;
+    }
+
+    if (name === 'date') {
+      setForm(p => ({ ...p, date: value, deadLine: value }));
+      return;
+    }
+
+    if (name === 'time') {
+      setForm(p => ({ ...p, time: value, deadLine_time: value }));
+      return;
+    }
+
     set(name, type === 'checkbox' ? checked : value);
     if (name === 'home_team' && value && form.league) {
       const url = getLogoUrlByTeamName(supabase, value, form.league);
@@ -233,20 +265,20 @@ function AddMatchForm({ onAdd }) {
     try {
       const deadlineISO = `${form.deadLine}T${form.deadLine_time}:00`;
       await onAdd({
-        id:                  form.id,
-        league:              form.league,
-        home_team:           form.home_team,
-        away_team:           form.away_team,
-        home_team_logo:      form.home_team_logo,
-        away_team_logo:      form.away_team_logo,
-        home_team_logo_url:  getLogoUrlByTeamName(supabase, form.home_team, form.league),
-        away_team_logo_url:  getLogoUrlByTeamName(supabase, form.away_team, form.league),
-        league_logo_url:     getLeagueLogoUrlDirect(form.league),
-        date:                form.date,
-        time:                form.time,
-        deadline:            deadlineISO,
-        status:              'pending',
-        is_knockout:         form.is_knockout,
+        id: form.id,
+        league: form.league,
+        home_team: form.home_team,
+        away_team: form.away_team,
+        home_team_logo: form.home_team_logo,
+        away_team_logo: form.away_team_logo,
+        home_team_logo_url: getLogoUrlByTeamName(supabase, form.home_team, form.league),
+        away_team_logo_url: getLogoUrlByTeamName(supabase, form.away_team, form.league),
+        league_logo_url: getLeagueLogoUrlDirect(form.league),
+        date: form.date,
+        time: form.time,
+        deadline: deadlineISO,
+        status: 'pending',
+        is_knockout: form.is_knockout,
       });
       setForm({ id: '', league: '', home_team: '', away_team: '', home_team_logo: '🏠', away_team_logo: '✈️', date: '', time: '', deadLine: '', deadLine_time: '', is_knockout: false });
     } finally {
@@ -605,9 +637,9 @@ function AddBannerForm({ onAdd }) {
   };
 
   const submit = async () => {
-  if (!form.name.trim() || !imageFile) return;
-  setUploading(true);
-  try { await onAdd({ ...form, file: imageFile }); setForm({ name: '', description: '' }); setImageFile(null); setPreview(null); }
+    if (!form.name.trim() || !imageFile) return;
+    setUploading(true);
+    try { await onAdd({ ...form, file: imageFile }); setForm({ name: '', description: '' }); setImageFile(null); setPreview(null); }
     finally { setUploading(false); }
   };
 
@@ -655,8 +687,8 @@ function FinishForm({ activeSection, item, onFinish, onResetPanel }) {
   switch (activeSection) {
     case 'matches': return <FinishMatchForm match={item} onFinish={onFinish} onResetPanel={onResetPanel} />;
     case 'leagues': return <FinishLeagueForm league={item} onFinish={onFinish} onResetPanel={onResetPanel} />;
-    case 'awards':  return <FinishAwardForm award={item} onFinish={onFinish} onResetPanel={onResetPanel} />;
-    default:        return null;
+    case 'awards': return <FinishAwardForm award={item} onFinish={onFinish} onResetPanel={onResetPanel} />;
+    default: return null;
   }
 }
 
@@ -720,7 +752,7 @@ function FinishMatchForm({ match, onFinish, onResetPanel }) {
           <span className="adm-ko-label">¿Quién pasa?</span>
           <div className="adm-ko-grid">
             {[{ key: 'home', label: match.home_team, logo: match.home_team_logo },
-              { key: 'away', label: match.away_team, logo: match.away_team_logo }].map(({ key, label, logo }) => (
+            { key: 'away', label: match.away_team, logo: match.away_team_logo }].map(({ key, label, logo }) => (
               <button key={key} type="button"
                 className={`adm-ko-btn ${advancing === key ? 'active' : ''}`}
                 onClick={() => setAdvancing(key)}>
@@ -818,8 +850,8 @@ function FinishAwardForm({ award, onFinish, onResetPanel }) {
 function EditForm({ activeSection, item, onSave, onDelete, onResetPanel }) {
   switch (activeSection) {
     case 'achievements': return <EditAchievementForm item={item} onSave={onSave} onDelete={onDelete} onResetPanel={onResetPanel} />;
-    case 'titles':       return <EditTitleForm item={item} onSave={onSave} onDelete={onDelete} onResetPanel={onResetPanel} />;
-    default:             return null;
+    case 'titles': return <EditTitleForm item={item} onSave={onSave} onDelete={onDelete} onResetPanel={onResetPanel} />;
+    default: return null;
   }
 }
 

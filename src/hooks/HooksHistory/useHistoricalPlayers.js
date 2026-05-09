@@ -4,9 +4,20 @@ import { supabase } from "../../utils/supabaseClient";
 // ─── Helper: URL pública del bucket "historical" ─────────────────────────────
 export function getHistoricalImageUrl(imagePath) {
   if (!imagePath) return null;
+
+  // Cloudinary u otra URL completa
+  if (
+    typeof imagePath === "string" &&
+    imagePath.startsWith("http")
+  ) {
+    return imagePath;
+  }
+
+  // Rutas antiguas de Supabase
   const { data } = supabase.storage
     .from("historical")
     .getPublicUrl(imagePath);
+
   return data?.publicUrl || null;
 }
 
@@ -18,7 +29,7 @@ export function useHistoricalPlayers() {
 
   const [search, setSearch] = useState("");
   const [filterPosition, setFilterPosition] = useState("");
-  const [filterBallonDor, setFilterBallonDor] = useState("");  // "yes" | ""
+  const [filterBallonDor, setFilterBallonDor] = useState("");
   const [filterLegacy, setFilterLegacy] = useState("");
 
   const loadPlayers = useCallback(async () => {

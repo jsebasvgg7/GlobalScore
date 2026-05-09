@@ -19,7 +19,7 @@ const TABS = [
   { key: "events", label: "Eventos", Icon: Zap },
 ];
 
-const POSITIONS = ["Forward", "Midfielder", "All-rounder", "Defender", "Goalkeeper"];
+const POSITIONS = ["Forward", "Midfielder", "All-rounder", "Defender", "Goalkeeper", "Playmaker"];
 const LEGACY_PLAYER = ["Goal Scorer", "Tactician", "Innovator", "Leader", "Goalkeeper"];
 const LEGACY_TEAM = ["Dynastic", "Innovative", "Continental", "National"];
 const EVENT_TYPES = ["Championship", "Historic Match", "Legendary Performance", "Era Defining", "Record"];
@@ -61,7 +61,7 @@ const EVENT_COMP_TYPES = [
 ];
 // ─── Mapas de traducción ──────────────────────────────────────────────────────
 const POSITION_LABEL = {
-  "Forward": "Delantero", "Midfielder": "Centrocampista", "All-rounder": "Todocampista",
+  "Forward": "Delantero", "Midfielder": "Centrocampista", "All-rounder": "Todocampista", "Playmaker": "Media Punta",
   "Defender": "Defensor", "Goalkeeper": "Portero",
 };
 const LEGACY_PLAYER_LABEL = {
@@ -358,7 +358,7 @@ function BannerUploader({ currentPath, onFile }) {
 }
 
 function SignificancePicker({ value, onChange }) {
-  const labels = ["", "Histórico", "Notable", "De Culto", "Leyenda", "GOAT Status"];
+  const labels = ["", "Actual", "Notable", "Iconico", "Leyenda", "GOAT Status"];
   return (
     <div className="ah-significance">
       {[1, 2, 3, 4, 5].map(n => (

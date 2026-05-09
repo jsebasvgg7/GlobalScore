@@ -68,7 +68,9 @@ const SECTION_FILTERS = {
       key: "significance_level", label: "Nivel", options: [
         { value: "5", label: "GOAT" },
         { value: "4", label: "Leyenda" },
-        { value: "3", label: "De Culto" },
+        { value: "3", label: "Iconico" },
+        { value: "2", label: "Notable" },
+        { value: "1", label: "Actual" },
       ]
     },
   ],
@@ -117,7 +119,7 @@ const SECTION_FILTERS = {
   ],
 };
 const POSITION_LABEL = {
-  Forward: "Delantero", Midfielder: "Centrocampista",
+  Forward: "Delantero", Midfielder: "Centrocampista", Playmaker: "Media Punta",
   "All-rounder": "Todocampista", Defender: "Defensor", Goalkeeper: "Portero",
 };
 
