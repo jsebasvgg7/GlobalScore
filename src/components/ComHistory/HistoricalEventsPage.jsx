@@ -11,7 +11,6 @@ import {
 } from "../../hooks/HooksHistory/useHistoricalEvents";
 import SectionHeaderMobile from "../ComMobile/SectionHeaderMobile";
 import "../../styles/StylesHistory/HistoricalEventsPage.css";
-import "../../styles/StylesMobile/MobHistory/HistoricalEventsPageMobile.css";
 
 // ─── Mapas ────────────────────────────────────────────────────────────────────
 const EVENT_TYPE_LABEL = {
