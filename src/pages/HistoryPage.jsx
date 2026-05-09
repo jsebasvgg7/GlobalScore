@@ -18,6 +18,7 @@ import HistoryMenuMobile from "../components/ComMobile/HistoryMenuMobile";
 import HistoricalEventsPage from "../components/ComHistory/HistoricalEventsPage";
 import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
 import HistoricalCompetitionsPage from "../components/ComHistory/HistoricalCompetitionsPage";
+import HistoricalCompetitionsMobile from "../components/ComMobile/HistoricalCompetitionsMobile";
 import HistoryWelcomeScreen from "../components/ComHistory/HistoryWelcomeScreen";
 import SectionHeaderMobile from "../components/ComMobile/SectionHeaderMobile";
 import Footer from '../components/ComLayout/Footer';
@@ -519,12 +520,6 @@ export default function HistoryPage() {
       );
   }
 
-  // ══════════════════════════════════════════════════════════════
-  //  DETALLE: mobile y desktop comparten los mismos componentes.
-  //  En mobile no hay paneles laterales y onBack vuelve al menú.
-  //  En desktop onBack vuelve a la lista de jugadores (solo players).
-  // ══════════════════════════════════════════════════════════════
-
   if (activeSection === "players" && selectedPlayerId) {
     // Mobile: sin panel lateral, onBack → menú mobile
     if (isMobile) {
@@ -611,26 +606,28 @@ export default function HistoryPage() {
   }
 
   if (activeSection === "competitions") {
-    // Mobile con detalle: mostrar detalle directamente, onBack → menú mobile
+    // Mobile con detalle
     if (isMobile && preselectedCompId) {
       return (
-        <div className="hp-root">
-          <HistoricalCompetitionsPage
-            initialSelectedId={preselectedCompId}
-            onBack={() => { setPreselectedCompId(null); }}
-          />
-        </div>
-      );
-    }
-    // Mobile sin detalle: menú mobile en sección competiciones
-    if (isMobile) {
-      return (
-        <HistoryMenuMobile
-          initialSection="competitions"
-          onSectionChange={(key, item) => handleSectionChange(key, item)}
+        <HistoricalCompetitionsMobile
+          initialSelectedId={preselectedCompId}
+          onBack={() => {
+            setPreselectedCompId(null);
+            setShowMenu(true);
+          }}
         />
       );
     }
+
+    // Mobile sin detalle
+    if (isMobile) {
+      return (
+        <HistoricalCompetitionsMobile
+          onBack={() => setShowMenu(true)}
+        />
+      );
+    }
+
     return (
       <div className="hp-shell">
         <div className="hp-root">

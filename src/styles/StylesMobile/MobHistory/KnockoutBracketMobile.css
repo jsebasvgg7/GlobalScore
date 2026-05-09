@@ -1,11 +1,22 @@
 /* ════════════════════════════════════════════════
-   BRACKET MOBILE — layout vertical por ronda
-   Solo se usa en ≤768px vía KnockoutBracketMobile
+   ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗
+   ████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝
+   ██╔████╔██║██║   ██║██████╔╝██║██║     █████╗  
+   ██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝  
+   ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
+   MOBILE — responsive chaos
 ════════════════════════════════════════════════ */
 
 @keyframes hcp-mb-slide-in {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ── Contenedor principal ── */
@@ -119,6 +130,7 @@
 .hcp-mb-team--win .hcp-mb-team-name {
   color: var(--text-primary);
 }
+
 .hcp-mb-team--win .hcp-mb-score {
   color: var(--mb-win, var(--accent));
   font-size: 19px;
@@ -254,8 +266,8 @@
 
 [data-style="brutalist"] .hcp-mb-arrow-line {
   background: linear-gradient(to bottom,
-    var(--hcp-border-hard, #c4bfb8),
-    var(--hcp-accent, #5b4fd8));
+      var(--hcp-border-hard, #c4bfb8),
+      var(--hcp-accent, #5b4fd8));
 }
 
 [data-style="brutalist"] .hcp-mb-arrow-icon {
@@ -294,7 +306,7 @@
 
 [data-style="neumorphism"] .hcp-mb-match--final {
   box-shadow: var(--hcp-shadow),
-              0 0 0 1px rgba(245, 158, 11, 0.2);
+    0 0 0 1px rgba(245, 158, 11, 0.2);
 }
 
 [data-style="neumorphism"] .hcp-mb-team-name {
@@ -314,7 +326,7 @@
 }
 
 [data-style="neumorphism"] .hcp-mb-divider {
-  background: var(--hcp-border, rgba(166,158,148,.25));
+  background: var(--hcp-border, rgba(166, 158, 148, .25));
   margin: 0 14px;
 }
 
@@ -337,8 +349,8 @@
 
 [data-style="neumorphism"] .hcp-mb-arrow-line {
   background: linear-gradient(to bottom,
-    var(--hcp-border-hard, rgba(166,158,148,.4)),
-    var(--hcp-accent, #60519b));
+      var(--hcp-border-hard, rgba(166, 158, 148, .4)),
+      var(--hcp-accent, #60519b));
   border-radius: 2px;
 }
 

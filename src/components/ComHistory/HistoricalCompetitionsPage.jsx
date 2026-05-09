@@ -12,8 +12,7 @@ import {
 import KnockoutBracketMobile from "./KnockoutBracketMobile";
 import SectionHeaderMobile from "../ComMobile/SectionHeaderMobile";
 import "../../styles/StylesHistory/HistoricalCompetitionsPage.css";
-import "../../styles/StylesMobile/HistoricalCompetitionsPageMobile.css";
-import "../../styles/StylesMobile/KnockoutBracketMobile.css";
+import "../../styles/StylesMobile/MobHistory/KnockoutBracketMobile.css";
 
 // ─── Hook: detecta si es mobile ──────────────────────────────────────────────
 function useIsMobile(breakpoint = 768) {

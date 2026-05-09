@@ -8,7 +8,7 @@ import { useHistoricalCompetitions } from "../../hooks/HooksHistory/useHistorica
 import { useHistoricalTeams } from "../../hooks/HooksHistory/useHistoricalTeams";
 import { useHistoricalEvents } from "../../hooks/HooksHistory/useHistoricalEvents";
 import Footer from '../../components/ComLayout/Footer';
-import "../../styles/StylesMobile/HistoryMenuMobile.css";
+import "../../styles/StylesMobile/MobHistory/HistoryMenuMobile.css";
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 function Skel({ w = "100%", h = 16, round = false }) {
