@@ -35,7 +35,7 @@ const POSITION_LABEL = {
 };
 const LEGACY_LABEL = {
   "Goal Scorer": "Goleador", "Tactician": "Táctico",
-  "Innovator": "Genio", "Leader": "Líder", "Goalkeeper": "Portero",
+  "Innovator": "Genio", "Leader": "Líder", "Goalkeeper": "Portero", "Technician": "Técnico",
 };
 const EVENT_TYPE_LABEL = {
   "Championship": "Campeonato", "Historic Match": "Partido Histórico",
@@ -48,9 +48,22 @@ const TITLE_CAT_LABEL = {
 const TITLE_CAT_COLOR = {
   "club": "var(--accent)", "national": "#1D9E75", "individual": "#f59e0b",
 };
-const SIGNIFICANCE_LABEL = ["", "Actual", "Notable", "Iconico", "Leyenda", "GOAT"];
+const SIGNIFICANCE_LABEL = ["", "Activo", "Notable", "Iconico", "Leyenda", "GOAT"];
 
+// ─── Badge jugador activo (significance_level === 1) ──────────
+function ActiveBadge() {
+  return (
+    <span className="hp-active-badge">
+      <span className="hp-active-badge-star">★</span>
+      <span className="hp-active-badge-text">Activo</span>
+    </span>
+  );
+}
+
+// ─── Estrellas (historical levels 2-5) ───────────────────────
 function SignificanceStars({ value }) {
+  if (value === 1) return <ActiveBadge />;
+
   return (
     <span className="hp-stars">
       {[1, 2, 3, 4, 5].map((n) => (
@@ -72,8 +85,6 @@ function useIsMobile(breakpoint = 768) {
   }, [breakpoint]);
   return isMobile;
 }
-
-
 
 function LegacyBadge({ type }) {
   if (!type) return null;
@@ -179,6 +190,8 @@ function PlayerDetail({ playerId, onBack }) {
     { caps: 0, goals: 0, assists: 0 }
   );
 
+  const isActive = player.significance_level === 1;
+
   return (
     <div className="hp-detail">
       <button className="hp-back-section-btn" onClick={onBack}>
@@ -192,7 +205,10 @@ function PlayerDetail({ playerId, onBack }) {
               {player.name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase()}
             </div>
           }
+          {/* Chip GOAT solo para nivel 5 */}
           {player.significance_level === 5 && <span className="hp-goat-chip">GOAT</span>}
+          {/* Chip ACTIVO para nivel 1 */}
+          {isActive && <span className="hp-active-hero-chip">EN ACTIVO</span>}
         </div>
         <div className="hp-detail-hero-info">
           <h1 className="hp-detail-name">{player.name}</h1>
@@ -208,7 +224,9 @@ function PlayerDetail({ playerId, onBack }) {
           </div>
           <div className="hp-detail-sig-row">
             <SignificanceStars value={player.significance_level || 0} />
-            <span className="hp-detail-sig-label">{SIGNIFICANCE_LABEL[player.significance_level || 0]}</span>
+            <span className={`hp-detail-sig-label${isActive ? " hp-detail-sig-label--active" : ""}`}>
+              {SIGNIFICANCE_LABEL[player.significance_level || 0]}
+            </span>
           </div>
           {player.legacy_type && <LegacyBadge type={player.legacy_type} />}
         </div>
@@ -415,11 +433,13 @@ export default function HistoryPage() {
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
   const [preselectedTeamId, setPreselectedTeamId] = useState(null);
   const [preselectedEvent, setPreselectedEvent] = useState(null);
-  const [preselectedCompId, setPreselectedCompId] = useState(null); const [hoveredPlayer, setHoveredPlayer] = useState(null);
+  const [preselectedCompId, setPreselectedCompId] = useState(null);
+  const [hoveredPlayer, setHoveredPlayer] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
   const [showWelcome, setShowWelcome] = useState(
     () => !sessionStorage.getItem("vault_visited")
-  ); const [showMenu, setShowMenu] = useState(true);
+  );
+  const [showMenu, setShowMenu] = useState(true);
   const isMobile = useIsMobile();
 
   const location = useLocation();
@@ -446,7 +466,6 @@ export default function HistoryPage() {
   const clearFilters = () => { setFilterPosition(""); setFilterBallonDor(""); setFilterLegacy(""); };
   const panelPlayer = hoveredPlayer || (selectedPlayerId ? allPlayers.find((p) => p.id === selectedPlayerId) || null : null);
 
-  // Vuelve al menú principal
   const handleBackToMenu = () => {
     setShowMenu(true);
     setSelectedPlayerId(null);
@@ -467,7 +486,6 @@ export default function HistoryPage() {
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
-  // ── Welcome screen ──
   if (showWelcome) {
     return (
       <HistoryWelcomeScreen
@@ -479,13 +497,12 @@ export default function HistoryPage() {
     );
   }
 
-  // ── Menú principal ──
   if (showMenu) {
     return isMobile
-      ? <HistoryMenuMobile onSectionChange={(key, item) => { setShowMenu(false); handleSectionChange(key, item); }} /> : <HistoryMenuDesktop onSectionChange={(key) => { setShowMenu(false); handleSectionChange(key); }} />;
+      ? <HistoryMenuMobile onSectionChange={(key, item) => { setShowMenu(false); handleSectionChange(key, item); }} />
+      : <HistoryMenuDesktop onSectionChange={(key) => { setShowMenu(false); handleSectionChange(key); }} />;
   }
 
-  // ── Detalle jugador ──
   if (activeSection === "players" && selectedPlayerId) {
     return (
       <div className="hp-shell">
@@ -501,7 +518,6 @@ export default function HistoryPage() {
     );
   }
 
-  // ── Vista equipos ──
   if (activeSection === "teams") {
     return (
       <div className="hp-shell">
@@ -509,18 +525,17 @@ export default function HistoryPage() {
           <HistoricalTeamsPage
             initialSelectedId={preselectedTeamId}
             onBack={handleBackToMenu}
-          />        </div>
+          />
+        </div>
         <TeamsRightPanel />
       </div>
     );
   }
 
-  // ── Vista eventos ──
   if (activeSection === "events") {
     return <EventsSectionWrapper onBack={handleBackToMenu} initialEvent={preselectedEvent} />;
   }
 
-  // ── Vista competiciones ──
   if (activeSection === "competitions") {
     return (
       <div className="hp-shell">
@@ -528,7 +543,8 @@ export default function HistoryPage() {
           <HistoricalCompetitionsPage
             initialSelectedId={preselectedCompId}
             onBack={handleBackToMenu}
-          />        </div>
+          />
+        </div>
       </div>
     );
   }
@@ -538,7 +554,6 @@ export default function HistoryPage() {
     <div className="hp-shell">
       <div className="hp-root">
 
-        {/* Header mobile */}
         <div className="hp-mobile-header-wrap">
           <SectionHeaderMobile
             section="players"
@@ -551,7 +566,6 @@ export default function HistoryPage() {
           />
         </div>
 
-        {/* Header desktop */}
         <header className="hp-header hp-header--desktop">
           <div className="hp-header-left">
             <div className="hp-header-icon"><Users2 size={18} strokeWidth={1.5} /></div>
@@ -577,7 +591,6 @@ export default function HistoryPage() {
             >
               <Filter size={12} /> {hasActiveFilters && <span className="hp-filter-dot" />}
             </button>
-            {/* Botón volver al menú */}
             <button className="hp-back-vault-btn" onClick={handleBackToMenu}>
               <ArrowLeft size={12} />
             </button>

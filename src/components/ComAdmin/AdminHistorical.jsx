@@ -19,8 +19,8 @@ const TABS = [
   { key: "events", label: "Eventos", Icon: Zap },
 ];
 
-const POSITIONS = ["Forward", "Midfielder", "All-rounder", "Defender", "Goalkeeper", "Playmaker"];
-const LEGACY_PLAYER = ["Goal Scorer", "Tactician", "Innovator", "Leader", "Goalkeeper"];
+const POSITIONS = ["Forward", "Midfielder", "All-rounder", "Defender", "Goalkeeper", "Play-maker"];
+const LEGACY_PLAYER = ["Goal Scorer", "Tactician", "Innovator", "Leader", "Goalkeeper", "Technician"];
 const LEGACY_TEAM = ["Dynastic", "Innovative", "Continental", "National"];
 const EVENT_TYPES = ["Championship", "Historic Match", "Legendary Performance", "Era Defining", "Record"];
 const COMP_TYPES = ["International", "Continental", "Domestic"];
@@ -61,12 +61,12 @@ const EVENT_COMP_TYPES = [
 ];
 // ─── Mapas de traducción ──────────────────────────────────────────────────────
 const POSITION_LABEL = {
-  "Forward": "Delantero", "Midfielder": "Centrocampista", "All-rounder": "Todocampista", "Playmaker": "Media Punta",
+  "Forward": "Delantero", "Midfielder": "Centrocampista", "All-rounder": "Todocampista", "Play-maker": "Media Punta",
   "Defender": "Defensor", "Goalkeeper": "Portero",
 };
 const LEGACY_PLAYER_LABEL = {
   "Goal Scorer": "Goleador", "Tactician": "Táctico",
-  "Innovator": "Genio", "Leader": "Líder", "Goalkeeper": "Portero",
+  "Innovator": "Genio", "Leader": "Líder", "Goalkeeper": "Portero", "Technician": "Técnico",
 };
 const LEGACY_TEAM_LABEL = {
   "Dynastic": "Dinástico", "Innovative": "Innovador",
@@ -2145,7 +2145,7 @@ function HistoricalList({ items, onEdit, onDelete, onTogglePublish, renderTitle,
             <button
               className={`ah-pub-pill ${item.is_published ? "ah-pub-pill--on" : "ah-pub-pill--off"}`}
               onClick={() => onTogglePublish(item.id, item.is_published)}>
-              {item.is_published ? <><Eye size={10} /> Pub</> : <><EyeOff size={10} /> Borrador</>}
+              {item.is_published ? <><Eye size={10} /></> : <><EyeOff size={10} /> </>}
             </button>
             <button className="ah-list-btn ah-list-btn--edit" onClick={() => onEdit(item)}>
               <Pencil size={12} />
@@ -2172,6 +2172,62 @@ function HistoricalList({ items, onEdit, onDelete, onTogglePublish, renderTitle,
   );
 }
 
+// ── Lista de eventos en grid ──────────────────────────────────────
+function EventListGrid({ items, onEdit, onDelete, onTogglePublish, selectedId }) {
+  const [confirmId, setConfirmId] = useState(null);
+
+  if (items.length === 0) return <p className="ah-list-empty">No hay eventos históricos.</p>;
+
+  return (
+    <div className="ah-event-grid">
+      {items.map(item => (
+        <div key={item.id} className={`ah-event-card ${item.id === selectedId ? "ah-event-card--active" : ""}`}>
+          {/* Banner background */}
+          <div className="ah-event-card-bg"
+            style={{ backgroundImage: `url(${getHistoricalImageUrl(item.banner_image_path)})` }}>
+            <div className="ah-event-card-overlay" />
+
+            {/* Badge tipo de evento */}
+            <div className="ah-event-card-badge">{EVENT_TYPE_LABEL[item.event_type] || item.event_type}</div>
+
+            {/* Actions - top right */}
+            <div className="ah-event-card-actions">
+              <button
+                className={`ah-pub-pill ${item.is_published ? "ah-pub-pill--on" : "ah-pub-pill--off"}`}
+                onClick={() => onTogglePublish(item.id, item.is_published)}>
+                {item.is_published ? <Eye size={14} /> : <EyeOff size={14} />}
+              </button>
+              <button className="ah-list-btn ah-list-btn--edit" onClick={() => onEdit(item)}>
+                <Pencil size={14} />
+              </button>
+              {confirmId === item.id ? (
+                <>
+                  <button className="ah-list-btn ah-list-btn--confirm"
+                    onClick={() => { onDelete(item.id); setConfirmId(null); }}>
+                    <Check size={14} />
+                  </button>
+                  <button className="ah-list-btn ah-list-btn--cancel-del" onClick={() => setConfirmId(null)}>
+                    <X size={14} />
+                  </button>
+                </>
+              ) : (
+                <button className="ah-list-btn ah-list-btn--del" onClick={() => setConfirmId(item.id)}>
+                  <Trash2 size={14} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Footer con título y fecha */}
+          <div className="ah-event-card-footer">
+            <span className="ah-event-card-title">{item.title}</span>
+            <span className="ah-event-card-date">{item.event_date}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 // ══════════════════════════════════════════════════════════════════════════════
 //  COMPONENTE PRINCIPAL
 // ══════════════════════════════════════════════════════════════════════════════
@@ -2205,8 +2261,9 @@ export default function AdminHistorical() {
   } = useAdminHistorical();
 
   const q = search.toLowerCase();
-  const filteredPlayers = players.filter(p => p.name.toLowerCase().includes(q));
-  const filteredTeams = teams.filter(t => t.name.toLowerCase().includes(q));
+  const filteredPlayers = players
+    .filter(p => p.name.toLowerCase().includes(q))
+    .sort((a, b) => (b.significance_level ?? 0) - (a.significance_level ?? 0)); const filteredTeams = teams.filter(t => t.name.toLowerCase().includes(q));
   const filteredCompetitions = competitions.filter(c => c.name.toLowerCase().includes(q));
   const filteredEvents = events.filter(e => e.title.toLowerCase().includes(q));
 
@@ -2230,18 +2287,15 @@ export default function AdminHistorical() {
 
   const renderPlayerMeta = (p) =>
     [
-      p.country,
       POSITION_LABEL[p.position] || p.position,
-      p.ballon_dor_count > 0 ? ` ${p.ballon_dor_count} Balón${p.ballon_dor_count > 1 ? "es" : ""} de Oro` : null,
-      LEGACY_PLAYER_LABEL[p.legacy_type] || p.legacy_type,
-    ].filter(Boolean).join(" · ");
+    ].filter(Boolean).join("");
 
   const renderTeamMeta = (t) =>
-    [t.country, t.era_dominance, LEGACY_TEAM_LABEL[t.legacy_type] || t.legacy_type]
+    [LEGACY_TEAM_LABEL[t.legacy_type] || t.legacy_type]
       .filter(Boolean).join(" · ");
 
   const renderCompMeta = (c) =>
-    [COMP_TYPE_LABEL[c.type] || c.type, c.year ? String(c.year) : null].filter(Boolean).join(" · ");
+    [c.year ? String(c.year) : null, COMP_TYPE_LABEL[c.type] || c.type].filter(Boolean).join(" · ");
 
   const renderEventMeta = (e) =>
     [EVENT_TYPE_LABEL[e.event_type] || e.event_type, e.event_date].filter(Boolean).join(" · ");
@@ -2322,10 +2376,8 @@ export default function AdminHistorical() {
                   emptyMsg="No hay competencias." />
               )}
               {activeTab === "events" && (
-                <HistoricalList items={filteredEvents} selectedId={selectedId}
-                  onEdit={openEdit} onDelete={deleteEvent} onTogglePublish={toggleEventPublished}
-                  renderTitle={e => e.title} renderMeta={renderEventMeta}
-                  emptyMsg="No hay eventos históricos." />
+                <EventListGrid items={filteredEvents} selectedId={selectedId}
+                  onEdit={openEdit} onDelete={deleteEvent} onTogglePublish={toggleEventPublished} />
               )}
             </>}
           </div>

@@ -1357,6 +1357,265 @@
   color: var(--text-primary);
 }
 
+/* ════════════════════════════════════════════════════════════
+   ACTIVE BADGE — jugador en actividad (significance_level = 1)
+   Aplica en: HistoryPage (desktop + mobile) y HistoryMenuMobile
+════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────
+   BADGE INLINE (dentro de hp-stars / hmm-player-card-stars)
+   ────────────────────────────────────────────────────────── */
+.hp-active-badge,
+.hmm-active-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 9px 2px 6px;
+  border-radius: 100px;
+  background: linear-gradient(135deg,
+      rgba(29, 158, 117, 0.12) 0%,
+      rgba(29, 158, 117, 0.06) 100%);
+  border: 1px solid rgba(29, 158, 117, 0.35);
+  color: #1D9E75;
+  font-size: 9px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+  /* Pulso sutil */
+  animation: active-badge-pulse 3s ease-in-out infinite;
+}
+
+@keyframes active-badge-pulse {
+
+  0%,
+  100% {
+    border-color: rgba(29, 158, 117, 0.35);
+    box-shadow: none;
+  }
+
+  50% {
+    border-color: rgba(29, 158, 117, 0.65);
+    box-shadow: 0 0 6px rgba(29, 158, 117, 0.2);
+  }
+}
+
+.hp-active-badge-dot,
+.hmm-active-badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #1D9E75;
+  flex-shrink: 0;
+  /* Pulso del punto */
+  animation: active-dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes active-dot-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.55;
+    transform: scale(0.75);
+  }
+}
+
+.hp-active-badge-star,
+.hmm-active-badge-star {
+  font-size: 9px;
+  line-height: 1;
+  color: #1D9E75;
+  opacity: 0.85;
+}
+
+.hp-active-badge-text,
+.hmm-active-badge-text {
+  line-height: 1;
+}
+
+/* ──────────────────────────────────────────────────────────
+   CHIP "EN ACTIVO" sobre la imagen del hero (detalle jugador)
+   ────────────────────────────────────────────────────────── */
+.hp-active-hero-chip {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  background: linear-gradient(90deg, #1D9E75, #159e6a);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.14em;
+  text-align: center;
+  padding: 3px 0;
+  animation: active-badge-pulse 3s ease-in-out infinite;
+}
+
+/* Label sig activo en hero */
+.hp-detail-sig-label--active {
+  color: #1D9E75 !important;
+}
+
+/* ──────────────────────────────────────────────────────────
+   OVERLAY "EN ACTIVO" sobre la card-img mobile (grid card)
+   ────────────────────────────────────────────────────────── */
+.hmm-player-card-active-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(0deg,
+      rgba(29, 158, 117, 0.92) 0%,
+      rgba(29, 158, 117, 0.0) 100%);
+  color: #fff;
+  font-size: 7px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 4px 5px;
+  z-index: 3;
+}
+
+.hmm-player-card-active-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff;
+  flex-shrink: 0;
+  margin-bottom: 1px;
+  animation: active-dot-pulse 2s ease-in-out infinite;
+}
+
+/* ════════════════════════════════════════════════════════════
+   TEMA: BRUTALIST
+════════════════════════════════════════════════════════════ */
+[data-style="brutalist"] .hp-active-badge,
+[data-style="brutalist"] .hmm-active-badge {
+  border-radius: 0;
+  background: rgba(29, 158, 117, 0.07);
+  border: 1px solid rgba(29, 158, 117, 0.45);
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  padding: 2px 8px 2px 6px;
+}
+
+[data-style="brutalist"] .hp-active-hero-chip {
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.16em;
+  background: #1D9E75;
+}
+
+[data-style="brutalist"] .hmm-player-card-active-overlay {
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.16em;
+  border-radius: 0;
+}
+
+/* ════════════════════════════════════════════════════════════
+   TEMA: NEUMORPHISM — light
+════════════════════════════════════════════════════════════ */
+[data-style="neumorphism"] .hp-active-badge,
+[data-style="neumorphism"] .hmm-active-badge {
+  border-radius: 100px;
+  background: rgba(61, 170, 128, 0.09);
+  border: none;
+  box-shadow:
+    2px 2px 5px rgba(166, 158, 148, 0.4),
+    -1px -1px 4px rgba(255, 255, 255, 0.7),
+    inset 0 0 0 1px rgba(61, 170, 128, 0.3);
+  color: #3DAA80;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 9px;
+}
+
+[data-style="neumorphism"] .hp-active-badge-dot,
+[data-style="neumorphism"] .hmm-active-badge-dot {
+  background: #3DAA80;
+}
+
+[data-style="neumorphism"] .hp-active-badge-star,
+[data-style="neumorphism"] .hmm-active-badge-star {
+  color: #3DAA80;
+}
+
+[data-style="neumorphism"] .hp-active-hero-chip {
+  background: linear-gradient(90deg, #3DAA80, #2d9a70);
+  border-radius: 0;
+}
+
+[data-style="neumorphism"] .hp-detail-sig-label--active {
+  color: #3DAA80 !important;
+}
+
+/* NEUMORPHISM dark */
+[data-style="neumorphism"][data-theme="dark"] .hp-active-badge,
+[data-style="neumorphism"][data-theme="dark"] .hmm-active-badge {
+  background: rgba(61, 170, 128, 0.08);
+  box-shadow:
+    2px 2px 5px rgba(10, 9, 16, 0.55),
+    -1px -1px 4px rgba(40, 37, 55, 0.7),
+    inset 0 0 0 1px rgba(61, 170, 128, 0.3);
+  color: #3DAA80;
+}
+
+/* ════════════════════════════════════════════════════════════
+   MOBILE ≤768px — ajustes finos
+════════════════════════════════════════════════════════════ */
+@media screen and (max-width: 768px) {
+
+  /* El badge inline en hp-stars en mobile debe ser compacto */
+  .hp-active-badge {
+    font-size: 8px;
+    padding: 2px 7px 2px 5px;
+    gap: 4px;
+  }
+
+  .hp-active-badge-dot {
+    width: 4px;
+    height: 4px;
+  }
+
+  /* Neumorphism mobile */
+  [data-style="neumorphism"] .hp-active-badge {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8px;
+  }
+
+  /* Brutalist mobile */
+  [data-style="brutalist"] .hp-active-badge {
+    font-size: 7px;
+    border-radius: 0;
+    padding: 2px 6px 2px 5px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   NEUMORPHISM — overrides para hmm-active-badge mobile
+════════════════════════════════════════════════════════════ */
+[data-style="neumorphism"] .hmm-active-badge {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+[data-style="brutalist"] .hmm-active-badge {
+  border-radius: 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+}
+
 /* ══════════════════════════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════════════════════════ */
