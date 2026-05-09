@@ -53,6 +53,7 @@ const SECTION_FILTERS = {
         { value: "Defender", label: "Def" },
         { value: "Goalkeeper", label: "Por" },
         { value: "All-rounder", label: "Tod" },
+        { value: "Play-maker", label: "MP" }
       ]
     },
     {
@@ -62,6 +63,7 @@ const SECTION_FILTERS = {
         { value: "Innovator", label: "Genio" },
         { value: "Leader", label: "Líder" },
         { value: "Goalkeeper", label: "Portero" },
+        { value: "Technician", label: "Técnico" }
       ]
     },
     {
@@ -70,7 +72,7 @@ const SECTION_FILTERS = {
         { value: "4", label: "Leyenda" },
         { value: "3", label: "Iconico" },
         { value: "2", label: "Notable" },
-        { value: "1", label: "Actual" },
+        { value: "1", label: "Activo" },
       ]
     },
   ],
@@ -200,11 +202,24 @@ function SectionNav({ active, onChange }) {
   );
 }
 
+// ─── Badge jugador activo ─────────────────────────────────────────────────────
+function ActiveBadgeMobile() {
+  return (
+    <span className="hmm-active-badge">
+      <span className="hmm-active-badge-dot" />
+      <span className="hmm-active-badge-star">★</span>
+      <span className="hmm-active-badge-text">Activo</span>
+    </span>
+  );
+}
+
 // ─── ITEMS DE CADA SECCIÓN ────────────────────────────────────────────────────
 
 // Jugador
 function PlayerRow({ player, onClick }) {
   const imgUrl = getHistoricalImageUrl(player.image_path);
+  const isActive = player.significance_level === 1;
+
   return (
     <button className="hmm-player-card" onClick={onClick}>
       <div className="hmm-player-card-img">
@@ -215,13 +230,22 @@ function PlayerRow({ player, onClick }) {
         {player.significance_level === 5 && (
           <span className="hmm-player-card-goat">GOAT</span>
         )}
+        {/* Badge activo superpuesto sobre la imagen */}
+        {isActive && (
+          <span className="hmm-player-card-active-overlay">
+            <span className="hmm-player-card-active-dot" />EN ACTIVO
+          </span>
+        )}
       </div>
       <div className="hmm-player-card-body">
         <span className="hmm-player-card-name">{player.name}</span>
         <span className="hmm-player-card-meta">
           {player.country}{player.position ? ` · ${POSITION_LABEL[player.position] || player.position}` : ""}
         </span>
-        {player.significance_level > 0 && (
+        {/* Estrellas o badge activo */}
+        {isActive ? (
+          <ActiveBadgeMobile />
+        ) : player.significance_level > 0 ? (
           <div className="hmm-player-card-stars">
             {[1, 2, 3, 4, 5].map(n => (
               <Star key={n} size={8}
@@ -230,7 +254,7 @@ function PlayerRow({ player, onClick }) {
               />
             ))}
           </div>
-        )}
+        ) : null}
       </div>
     </button>
   );
@@ -270,6 +294,7 @@ function TeamRow({ team, onClick }) {
     </button>
   );
 }
+
 // Evento — Feed Card
 function EventRow({ event, onClick }) {
   const bannerUrl = getHistoricalImageUrl(event.banner_image_path || event.image_path);
@@ -364,6 +389,7 @@ function FilterPanel({ section, activeFilters, onChange, onClear }) {
     </div>
   );
 }
+
 function EmptyState({ section, query }) {
   const icons = { players: Users2, teams: Shield, events: Zap, competitions: Trophy };
   const Icon = icons[section] || Zap;
@@ -410,7 +436,6 @@ export default function HistoryMenuMobile({ onSectionChange }) {
   const nav = (key, item = null) => onSectionChange?.(key, item);
   const totalCounts = allPlayers.length + teams.length + events.length + competitions.length;
 
-  // ── Búsqueda global ──────────────────────────────────────────────────────
   const searchResults = useMemo(() => {
     if (!query.trim()) return null;
     const q = query.toLowerCase().trim();
@@ -444,7 +469,6 @@ export default function HistoryMenuMobile({ onSectionChange }) {
     return [...matchPlayers, ...matchTeams, ...matchEvents, ...matchComps];
   }, [query, allPlayers, teams, events, competitions]);
 
-  // ── Items de sección activa ──────────────────────────────────────────────
   const sectionItems = useMemo(() => {
     switch (activeSection) {
       case "players": return allPlayers.map(p => ({ type: "player", data: p }));
@@ -492,7 +516,6 @@ export default function HistoryMenuMobile({ onSectionChange }) {
     setQuery("");
   };
 
-  // ── Render de un item (polimórfico) ──────────────────────────────────────
   const renderItem = (item, idx) => {
     switch (item.type) {
       case "player":
@@ -534,11 +557,8 @@ export default function HistoryMenuMobile({ onSectionChange }) {
 
   return (
     <div className="hmm-root">
-
-      {/* ── Header ── */}
       <Header totalCounts={totalCounts} />
 
-      {/* ── Buscador global ── */}
       <div className="hmm-search-row">
         <GlobalSearch
           query={query}
@@ -569,12 +589,10 @@ export default function HistoryMenuMobile({ onSectionChange }) {
         />
       )}
 
-      {/* ── Nav secciones (oculto si hay búsqueda activa) ── */}
       {!query && (
         <SectionNav active={activeSection} onChange={handleSectionChange} />
       )}
 
-      {/* ── Etiqueta de sección o búsqueda ── */}
       <div className="hmm-list-label">
         {query
           ? <><Search size={10} /> Resultados para "{query}"</>
@@ -585,7 +603,6 @@ export default function HistoryMenuMobile({ onSectionChange }) {
         )}
       </div>
 
-      {/* ── Lista ── */}
       <div className={`hmm-list${activeSection === "players" && !query ? " hmm-list--players"
         : activeSection === "teams" && !query ? " hmm-list--teams"
           : activeSection === "competitions" && !query ? " hmm-list--competitions"
