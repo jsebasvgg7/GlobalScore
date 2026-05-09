@@ -255,7 +255,7 @@ function PlayerDetail({ playerId, onBack }) {
 
       {player.impact_summary && (
         <section className="hp-detail-section">
-          <span className="hp-detail-sep">Por qué importa</span>
+          <span className="hp-detail-sep">Trasendecia</span>
           <p className="hp-detail-impact">{player.impact_summary}</p>
         </section>
       )}
