@@ -623,7 +623,7 @@
 .hep-hero {
   position: relative;
   overflow: hidden;
-  min-height: 280px;
+  min-height: 370px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
