@@ -880,6 +880,7 @@
   overflow-x: auto;
   scrollbar-width: none;
   align-items: center;
+  justify-content: center;
 }
 
 .hcm-tabs::-webkit-scrollbar {
@@ -1939,6 +1940,10 @@
   border-radius: 12px;
   box-shadow: 3px 3px 9px rgba(166, 158, 148, .4), -2px -2px 7px rgba(255, 255, 255, .6);
   overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #60519b transparent;
 }
 
 [data-style="neumorphism"] .hcm-th {
@@ -2075,6 +2080,14 @@
 
 [data-style="neumorphism"][data-theme="dark"] .hcm-list {
   background: #1E1C28;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcm-table-wrap {
+  scrollbar-color: #8b7fc7 transparent;
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hcm-table-wrap::-webkit-scrollbar-thumb {
+  background: #8b7fc7;
 }
 
 [data-style="neumorphism"][data-theme="dark"] .hcm-card {
