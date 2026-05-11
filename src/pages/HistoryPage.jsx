@@ -247,8 +247,15 @@ function PlayerDetail({ playerId, onBack }) {
               <div className="hp-stat-cell hp-stat-cell--national"><span className="hp-stat-n">{nationalTotals.goals}</span><span className="hp-stat-lbl">Int'l Goles</span></div>
             </>
           )}
-          {(titles || []).length > 0 && (
-            <div className="hp-stat-cell hp-stat-cell--gold"><span className="hp-stat-n">{(titles || []).length}</span><span className="hp-stat-lbl">Títulos Dist</span></div>
+          {(titles || []).filter(t => t.title_category !== "individual").length > 0 && (
+            <div className="hp-stat-cell hp-stat-cell--gold">
+              <span className="hp-stat-n">
+                {(titles || [])
+                  .filter(t => t.title_category !== "individual")
+                  .reduce((sum, t) => sum + (parseInt(t.quantity) || 1), 0)}
+              </span>
+              <span className="hp-stat-lbl">Títulos</span>
+            </div>
           )}
         </div>
       )}
