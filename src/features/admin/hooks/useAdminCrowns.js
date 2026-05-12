@@ -1,28 +1,22 @@
-import { supabase } from '@/shared/services/supabase/client';
+// src/features/admin/hooks/useAdminCrowns.js
+import {
+  awardMonthlyCrown,
+  resetMonthlyStats,
+} from '../services/admin.service';
 
 export const useAdminCrowns = (loadData, toast) => {
+
   const handleAwardCrown = async (winnerId, monthLabel, currentUserId) => {
     try {
-      // Llamar a la función de Supabase para otorgar la corona
-      const { data, error } = await supabase.rpc('award_monthly_championship', {
-        winner_user_id: winnerId,
-        month_label: monthLabel,
-        awarded_by_user_id: currentUserId
-      });
-
-      if (error) throw error;
-
+      const data = await awardMonthlyCrown(winnerId, monthLabel, currentUserId);
       await loadData();
       toast.success(
         `👑 Corona otorgada exitosamente a ${data.winner_name} para ${monthLabel}`,
         4000
       );
-
       return { success: true, data };
     } catch (err) {
       console.error('Error awarding crown:', err);
-
-      // Mensajes de error específicos
       if (err.message.includes('Ya existe un campeón')) {
         toast.error('⚠️ Ya se otorgó una corona para este mes');
       } else if (err.message.includes('Usuario no encontrado')) {
@@ -30,7 +24,6 @@ export const useAdminCrowns = (loadData, toast) => {
       } else {
         toast.error('❌ Error al otorgar la corona. Intenta de nuevo.');
       }
-
       throw err;
     }
   };
@@ -41,44 +34,23 @@ export const useAdminCrowns = (loadData, toast) => {
     }
 
     try {
-      console.log('🔄 Reseteando estadísticas mensuales...');
-
-      const { data, error } = await supabase.rpc('reset_all_monthly_stats');
-
-      console.log('Respuesta de reset:', { data, error });
-
-      if (error) {
-        console.error('Error en RPC:', error);
-        throw error;
-      }
-
-      // Verificar si la función retornó un error dentro del JSON
-      if (data && !data.success) {
-        throw new Error(data.error || 'Error desconocido en reset');
-      }
-
+      const data = await resetMonthlyStats();
       await loadData();
-
-      const usersReset = data?.users_reset || 0;
       toast.success(
-        `🔄 Estadísticas mensuales reseteadas. ${usersReset} usuarios actualizados.`,
+        `🔄 Estadísticas mensuales reseteadas. ${data?.users_reset || 0} usuarios actualizados.`,
         4000
       );
-
       return { success: true, data };
     } catch (err) {
       console.error('Error resetting monthly stats:', err);
-
-      // Mensaje de error más específico
       const errorMessage = err.message || err.hint || 'Error desconocido';
       toast.error(`❌ Error al resetear estadísticas: ${errorMessage}`);
-
       throw err;
     }
   };
 
   return {
     handleAwardCrown,
-    handleResetMonthlyStats
+    handleResetMonthlyStats,
   };
 };

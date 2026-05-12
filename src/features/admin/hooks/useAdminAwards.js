@@ -1,10 +1,15 @@
-import { supabase } from '@/shared/services/supabase/client';
+// src/features/admin/hooks/useAdminAwards.js
+import {
+  insertAward,
+  finishAward,
+  deleteAward,
+} from '../services/admin.service';
 
 export const useAdminAwards = (loadData, toast) => {
+
   const handleAddAward = async (award) => {
     try {
-      const { error } = await supabase.from('awards').insert(award);
-      if (error) throw error;
+      await insertAward(award);
       await loadData();
       toast.success(`🏅 Premio "${award.name}" agregado exitosamente`, 4000);
       return { success: true };
@@ -17,11 +22,7 @@ export const useAdminAwards = (loadData, toast) => {
 
   const handleFinishAward = async (awardId, winner) => {
     try {
-      await supabase
-        .from('awards')
-        .update({ status: 'finished', winner })
-        .eq('id', awardId);
-
+      await finishAward(awardId, winner);
       await loadData();
       toast.success(`🏅 Premio finalizado. Ganador: ${winner}`, 4000);
     } catch (err) {
@@ -35,8 +36,7 @@ export const useAdminAwards = (loadData, toast) => {
     if (!confirm('¿Estás seguro de eliminar este premio?')) return;
 
     try {
-      const { error } = await supabase.from('awards').delete().eq('id', awardId);
-      if (error) throw error;
+      await deleteAward(awardId);
       await loadData();
       toast.success('🗑️ Premio eliminado correctamente', 3000);
     } catch (err) {
@@ -49,6 +49,6 @@ export const useAdminAwards = (loadData, toast) => {
   return {
     handleAddAward,
     handleFinishAward,
-    handleDeleteAward
+    handleDeleteAward,
   };
 };

@@ -1,10 +1,15 @@
-import { supabase } from '@/shared/services/supabase/client';
+// src/features/admin/hooks/useAdminLeagues.js
+import {
+  insertLeague,
+  finishLeague,
+  deleteLeague,
+} from '../services/admin.service';
 
 export const useAdminLeagues = (loadData, toast) => {
+
   const handleAddLeague = async (league) => {
     try {
-      const { error } = await supabase.from('leagues').insert(league);
-      if (error) throw error;
+      await insertLeague(league);
       await loadData();
       toast.success(`🏆 Liga "${league.name}" agregada exitosamente`, 4000);
       return { success: true };
@@ -17,14 +22,7 @@ export const useAdminLeagues = (loadData, toast) => {
 
   const handleFinishLeague = async (leagueId, results) => {
     try {
-      await supabase
-        .from('leagues')
-        .update({
-          status: 'finished',
-          ...results
-        })
-        .eq('id', leagueId);
-
+      await finishLeague(leagueId, results);
       await loadData();
       toast.success('🏆 Liga finalizada y resultados guardados', 4000);
     } catch (err) {
@@ -38,8 +36,7 @@ export const useAdminLeagues = (loadData, toast) => {
     if (!confirm('¿Estás seguro de eliminar esta liga?')) return;
 
     try {
-      const { error } = await supabase.from('leagues').delete().eq('id', leagueId);
-      if (error) throw error;
+      await deleteLeague(leagueId);
       await loadData();
       toast.success('🗑️ Liga eliminada correctamente', 3000);
     } catch (err) {
@@ -52,6 +49,6 @@ export const useAdminLeagues = (loadData, toast) => {
   return {
     handleAddLeague,
     handleFinishLeague,
-    handleDeleteLeague
+    handleDeleteLeague,
   };
 };

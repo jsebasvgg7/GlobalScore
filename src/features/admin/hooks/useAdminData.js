@@ -1,5 +1,6 @@
+// src/features/admin/hooks/useAdminData.js
 import { useState, useEffect } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
+import { loadAllAdminData } from '../services/admin.service';
 
 export const useAdminData = () => {
   const [matches, setMatches] = useState([]);
@@ -9,44 +10,21 @@ export const useAdminData = () => {
   const [titles, setTitles] = useState([]);
   const [users, setUsers] = useState([]);
   const [crownHistory, setCrownHistory] = useState([]);
-  const [banners, setBanners] = useState([]);          // ← NUEVO
+  const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
     try {
       setLoading(true);
-      const [
-        matchData,
-        leagueData,
-        awardData,
-        achievementData,
-        titleData,
-        userData,
-        historyData,
-        bannerData,
-      ] = await Promise.all([
-        supabase
-          .from('matches')
-          .select('*, predictions(*)')
-          .order('created_at', { ascending: false })
-          .range(0, 5000),
-        supabase.from('leagues').select('*, league_predictions(*)'),
-        supabase.from('awards').select('*, award_predictions(*)'),
-        supabase.from('available_achievements').select('*'),
-        supabase.from('available_titles').select('*'),
-        supabase.from('users').select('*').order('monthly_points', { ascending: false }).limit(10),
-        supabase.from('monthly_championship_history').select('*, users(name)').order('awarded_at', { ascending: false }),
-        supabase.from('available_banners').select('*').order('created_at', { ascending: false }), // ← NUEVO
-      ]);
-
-      setMatches(matchData.data || []);
-      setLeagues(leagueData.data || []);
-      setAwards(awardData.data || []);
-      setAchievements(achievementData.data || []);
-      setTitles(titleData.data || []);
-      setUsers(userData.data || []);
-      setCrownHistory(historyData.data || []);
-      setBanners(bannerData.data || []);               // ← NUEVO
+      const data = await loadAllAdminData();
+      setMatches(data.matches);
+      setLeagues(data.leagues);
+      setAwards(data.awards);
+      setAchievements(data.achievements);
+      setTitles(data.titles);
+      setUsers(data.users);
+      setCrownHistory(data.crownHistory);
+      setBanners(data.banners);
     } catch (err) {
       console.error('Error loading data:', err);
       throw err;
@@ -67,7 +45,7 @@ export const useAdminData = () => {
     titles,
     users,
     crownHistory,
-    banners,                                            // ← NUEVO
+    banners,
     loading,
     loadData,
   };
