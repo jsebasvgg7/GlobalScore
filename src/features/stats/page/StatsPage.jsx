@@ -7,7 +7,7 @@ import {
 import { supabase } from '@/shared/services/supabase/client';
 import StatsRightPanel from '@/features/stats/components/StatsRightPanel';
 import MobileStats from '@/features/stats/components/mobile/MobileStats';
-import GlobalLoader from "@/shared/ui";
+import { GlobalLoader } from "@/shared/ui";
 import './StatsPage.css';
 
 const fmt = (n) => Number(n || 0).toLocaleString('es-ES');

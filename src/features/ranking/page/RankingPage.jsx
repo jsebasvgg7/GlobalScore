@@ -14,7 +14,7 @@ import {
   UserProfilePanel,
   MobileUserProfile,
 } from '@/features/profile';
-import GlobalLoader from "@/shared/ui";
+import { GlobalLoader } from "@/shared/ui";
 import './RankingPage.css';
 
 export default function RankingPage({ currentUser }) {

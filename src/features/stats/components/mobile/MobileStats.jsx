@@ -1,6 +1,6 @@
 import React from "react";
 import { Target, Star, CheckCircle2, Zap } from "lucide-react";
-import GlobalLoader from "@/shared/ui";
+import { GlobalLoader } from "@/shared/ui";
 import "../../styles/MobileStats.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");

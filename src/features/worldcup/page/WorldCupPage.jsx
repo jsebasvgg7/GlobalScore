@@ -8,7 +8,7 @@ import { supabase } from '@/shared/services/supabase/client';
 import { useToast, ToastContainer } from '@/shared/ui';
 import { useWorldCup } from '../hooks/useWorldCup';
 import KnockoutSection from '../components/KnockoutSection';
-import GlobalLoader from "@/shared/ui";
+import { GlobalLoader } from "@/shared/ui";
 import RightPanelWorld from '../components/RightPanelWorld';
 import './WorldCupPage.css';
 import '../styles/MobileWorldCup.css';
