@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
-import { supabase } from "../utils/supabaseClient";
+import { supabase } from "../shared/services/supabase/supabaseClient";
 import "../styles/StylesPages/Auth.css";
 
 /* ─────────────────────────────────────────────────────────────
