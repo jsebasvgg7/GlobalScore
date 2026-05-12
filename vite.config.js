@@ -17,9 +17,9 @@ export default defineConfig({
             resolve('dist/sw.js')
           );
 
-          console.log('✅ Service Worker copiado a dist/');
+          console.log('✅ Service Worker copiado');
         } else {
-          console.log('⚠️ sw.js no existe, se omitió la copia');
+          console.log('⚠️ sw.js no encontrado');
         }
       }
     }
@@ -29,11 +29,5 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, './src')
     }
-  },
-
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    sourcemap: false
   }
 });
