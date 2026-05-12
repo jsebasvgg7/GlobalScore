@@ -2,7 +2,7 @@
 // OFFLINE SYNC SERVICE 
 // ============================================
 
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../supabase/client';
 
 class OfflineSyncService {
   constructor() {
@@ -10,7 +10,7 @@ class OfflineSyncService {
     this.dbVersion = 1;
     this.db = null;
     this.isOnline = navigator.onLine;
-    
+
     this.initDB();
     this.setupOnlineListener();
   }
@@ -38,16 +38,16 @@ class OfflineSyncService {
 
         // Store para predicciones pendientes
         if (!db.objectStoreNames.contains('predictions')) {
-          const predictionsStore = db.createObjectStore('predictions', { 
-            keyPath: 'id', 
-            autoIncrement: true 
+          const predictionsStore = db.createObjectStore('predictions', {
+            keyPath: 'id',
+            autoIncrement: true
           });
-          
+
           predictionsStore.createIndex('match_id', 'match_id', { unique: false });
           predictionsStore.createIndex('user_id', 'user_id', { unique: false });
           predictionsStore.createIndex('timestamp', 'timestamp', { unique: false });
           predictionsStore.createIndex('synced', 'synced', { unique: false });
-          
+
           console.log('📦 [Offline] Store "predictions" creado');
         }
 
@@ -55,7 +55,7 @@ class OfflineSyncService {
         if (!db.objectStoreNames.contains('cache')) {
           const cacheStore = db.createObjectStore('cache', { keyPath: 'key' });
           cacheStore.createIndex('timestamp', 'timestamp', { unique: false });
-          
+
           console.log('📦 [Offline] Store "cache" creado');
         }
 
@@ -107,10 +107,10 @@ class OfflineSyncService {
 
       request.onsuccess = () => {
         console.log('💾 [Offline] Predicción guardada offline:', request.result);
-        resolve({ 
-          success: true, 
+        resolve({
+          success: true,
           id: request.result,
-          offline: true 
+          offline: true
         });
       };
 
@@ -133,12 +133,12 @@ class OfflineSyncService {
       const transaction = this.db.transaction(['predictions'], 'readonly');
       const store = transaction.objectStore('predictions');
       const index = store.index('synced');
-      
+
       const request = index.getAll(false); // false = no sincronizadas
 
       request.onsuccess = () => {
         let predictions = request.result;
-        
+
         // Filtrar por userId si se proporciona
         if (userId) {
           predictions = predictions.filter(p => p.user_id === userId);
@@ -230,9 +230,9 @@ class OfflineSyncService {
 
     } catch (error) {
       console.error('❌ [Offline] Error en sincronización:', error);
-      return { 
-        success: false, 
-        error: error.message 
+      return {
+        success: false,
+        error: error.message
       };
     }
   }
@@ -248,22 +248,22 @@ class OfflineSyncService {
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(['predictions'], 'readwrite');
       const store = transaction.objectStore('predictions');
-      
+
       const request = store.get(id);
 
       request.onsuccess = () => {
         const prediction = request.result;
-        
+
         if (prediction) {
           prediction.synced = true;
           prediction.syncedAt = Date.now();
-          
+
           const updateRequest = store.put(prediction);
-          
+
           updateRequest.onsuccess = () => {
             resolve({ success: true });
           };
-          
+
           updateRequest.onerror = () => {
             reject(updateRequest.error);
           };
@@ -297,16 +297,16 @@ class OfflineSyncService {
 
       request.onsuccess = (event) => {
         const cursor = event.target.result;
-        
+
         if (cursor) {
           const prediction = cursor.value;
-          
+
           // Eliminar si está sincronizada y es vieja
           if (prediction.synced && prediction.syncedAt < cutoffTime) {
             cursor.delete();
             deletedCount++;
           }
-          
+
           cursor.continue();
         } else {
           console.log(`🗑️ [Offline] ${deletedCount} predicciones antiguas eliminadas`);
@@ -368,7 +368,7 @@ class OfflineSyncService {
 
       request.onsuccess = () => {
         const entry = request.result;
-        
+
         if (!entry) {
           resolve(null);
           return;
@@ -401,7 +401,7 @@ class OfflineSyncService {
 
     try {
       const registration = await navigator.serviceWorker.ready;
-      
+
       await registration.showNotification('🔄 Predicciones sincronizadas', {
         body: `${count} predicción${count > 1 ? 'es' : ''} guardada${count > 1 ? 's' : ''} mientras estabas offline`,
         icon: '/icons/icon-192x192.png',
@@ -422,7 +422,7 @@ class OfflineSyncService {
   // ============================================
   async getStats() {
     const pending = await this.getPendingPredictions();
-    
+
     return {
       isOnline: this.isOnline,
       pendingPredictions: pending.length,

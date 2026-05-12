@@ -9,7 +9,6 @@ export default defineConfig({
     {
       name: 'copy-sw',
       closeBundle() {
-        // Copiar service worker al dist después del build
         try {
           copyFileSync(
             resolve('public/sw.js'),
@@ -22,6 +21,11 @@ export default defineConfig({
       }
     }
   ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src')
+    }
+  },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',

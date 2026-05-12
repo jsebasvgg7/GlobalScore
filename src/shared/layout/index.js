@@ -1,7 +1,6 @@
 export { default as DashboardSidebar } from './DashboardSidebar'
 export { default as Footer } from './Footer'
 export { default as Header } from './Header'
-export { default as InstallPWAButton } from './InstallPWAButton'
 export { default as MobileHeader } from './MobileHeader'
 export { default as MobileSubPage } from './MobileSubPage'
 export { default as NavigationTabs } from './NavigationTabs'

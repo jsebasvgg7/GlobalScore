@@ -1,8 +1,3 @@
-// ============================================
-//  usePWA Hook 
-// ============================================
-
-
 import { useState, useEffect, useCallback } from 'react';
 
 export function usePWA() {
@@ -22,7 +17,7 @@ export function usePWA() {
         window.navigator.standalone === true || // iOS
         document.referrer.includes('android-app://')
       );
-      
+
       setIsInstalled(installed);
     };
 
@@ -43,10 +38,10 @@ export function usePWA() {
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
       console.log('📥 [PWA Hook] beforeinstallprompt event fired');
-      
+
       // Prevenir el prompt automático del navegador
       e.preventDefault();
-      
+
       // Guardar el evento para usarlo después
       setDeferredPrompt(e);
       setIsInstallable(true);
@@ -86,12 +81,12 @@ export function usePWA() {
     const checkForUpdates = async () => {
       try {
         const registration = await navigator.serviceWorker.getRegistration();
-        
+
         if (!registration) return;
 
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
-          
+
           newWorker.addEventListener('statechange', () => {
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
               console.log('🆕 [PWA Hook] Actualización disponible');
@@ -141,49 +136,49 @@ export function usePWA() {
   const install = useCallback(async () => {
     if (!deferredPrompt) {
       console.warn('⚠️ [PWA Hook] No hay prompt disponible');
-      return { 
-        success: false, 
+      return {
+        success: false,
         reason: 'no_prompt',
-        message: 'La app no está lista para instalarse aún' 
+        message: 'La app no está lista para instalarse aún'
       };
     }
 
     try {
       console.log('🚀 [PWA Hook] Mostrando prompt de instalación...');
-      
+
       // Mostrar el prompt
       deferredPrompt.prompt();
-      
+
       // Esperar la respuesta del usuario
       const { outcome } = await deferredPrompt.userChoice;
-      
+
       console.log(`👤 [PWA Hook] Usuario ${outcome === 'accepted' ? 'aceptó' : 'rechazó'} la instalación`);
-      
+
       // Limpiar el prompt
       setDeferredPrompt(null);
-      
+
       if (outcome === 'accepted') {
         setIsInstallable(false);
-        
-        return { 
-          success: true, 
+
+        return {
+          success: true,
           outcome,
-          message: 'App instalada correctamente' 
+          message: 'App instalada correctamente'
         };
       } else {
-        return { 
-          success: false, 
+        return {
+          success: false,
           outcome,
-          message: 'Instalación cancelada' 
+          message: 'Instalación cancelada'
         };
       }
-      
+
     } catch (error) {
       console.error('❌ [PWA Hook] Error instalando app:', error);
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: error.message,
-        message: 'Error al instalar la app' 
+        message: 'Error al instalar la app'
       };
     }
   }, [deferredPrompt]);
@@ -194,24 +189,24 @@ export function usePWA() {
   const applyUpdate = useCallback(async () => {
     try {
       const registration = await navigator.serviceWorker.getRegistration();
-      
+
       if (!registration || !registration.waiting) {
         console.warn('⚠️ [PWA Hook] No hay actualización esperando');
         return { success: false, reason: 'no_update' };
       }
 
       console.log('🔄 [PWA Hook] Aplicando actualización...');
-      
+
       // Decir al nuevo SW que tome control
       registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-      
+
       // Recargar cuando el nuevo SW tome control
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         window.location.reload();
       });
 
       return { success: true };
-      
+
     } catch (error) {
       console.error('❌ [PWA Hook] Error aplicando actualización:', error);
       return { success: false, error: error.message };
@@ -224,16 +219,16 @@ export function usePWA() {
   const checkForUpdates = useCallback(async () => {
     try {
       const registration = await navigator.serviceWorker.getRegistration();
-      
+
       if (!registration) {
         return { success: false, reason: 'no_registration' };
       }
 
       console.log('🔍 [PWA Hook] Verificando actualizaciones...');
       await registration.update();
-      
+
       return { success: true };
-      
+
     } catch (error) {
       console.error('❌ [PWA Hook] Error verificando updates:', error);
       return { success: false, error: error.message };
@@ -249,12 +244,12 @@ export function usePWA() {
     isInstalled,
     updateAvailable,
     isOnline,
-    
+
     // Funciones
     install,
     applyUpdate,
     checkForUpdates,
-    
+
     // Información adicional
     canInstall: isInstallable && !isInstalled,
     displayMode: isInstalled ? 'standalone' : 'browser'

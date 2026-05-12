@@ -1,8 +1,7 @@
 // ============================================
 // PUSH NOTIFICATIONS MANAGER 
 // ============================================
-
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../supabase/client';
 
 class PushNotificationsManager {
   constructor() {
@@ -35,7 +34,7 @@ class PushNotificationsManager {
 
     } catch (error) {
       console.error('❌ [Push] Error obteniendo VAPID key:', error);
-      
+
       // Fallback: usar una key hardcodeada (solo para desarrollo)
       console.warn('⚠️ [Push] Usando VAPID key de desarrollo');
       return null;
@@ -71,16 +70,16 @@ class PushNotificationsManager {
   async requestPermission() {
     if (!this.isSupported()) {
       console.warn('⚠️ [Push] Notificaciones no soportadas');
-      return { 
-        success: false, 
+      return {
+        success: false,
         permission: 'not_supported',
-        message: 'Tu navegador no soporta notificaciones push' 
+        message: 'Tu navegador no soporta notificaciones push'
       };
     }
 
     try {
       console.log('🙏 [Push] Solicitando permisos...');
-      
+
       const permission = await Notification.requestPermission();
       this.permission = permission;
 
@@ -125,7 +124,7 @@ class PushNotificationsManager {
 
       // Obtener VAPID public key
       const vapidKey = await this.getVapidKey();
-      
+
       if (!vapidKey) {
         throw new Error('No se pudo obtener VAPID public key');
       }
@@ -155,7 +154,7 @@ class PushNotificationsManager {
 
     } catch (error) {
       console.error('❌ [Push] Error en suscripción:', error);
-      
+
       return {
         success: false,
         error: error.message,
@@ -321,7 +320,7 @@ class PushNotificationsManager {
   // ============================================
   // 🛠️ HELPERS
   // ============================================
-  
+
   urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
@@ -334,7 +333,7 @@ class PushNotificationsManager {
     for (let i = 0; i < rawData.length; ++i) {
       outputArray[i] = rawData.charCodeAt(i);
     }
-    
+
     return outputArray;
   }
 

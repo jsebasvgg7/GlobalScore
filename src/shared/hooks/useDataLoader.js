@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../services/supabase/client';
 
 export const useDataLoader = () => {
   const [state, setState] = useState({

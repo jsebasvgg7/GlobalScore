@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Trophy, LogOut, User2, Award, Shield, Bell, Home, BarChart3, Moon, Sun, Globe, NotebookPen, History } from "lucide-react";
-import { supabase } from "../services/supabase/supabaseClient";
+import { supabase } from '../services/supabase/client';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { resetWelcome } from "../../pages/LoginPage";

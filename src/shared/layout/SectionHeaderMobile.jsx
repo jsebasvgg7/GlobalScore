@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Shuffle, ChevronRight, X } from "lucide-react";
-import { getHistoricalImageUrl } from "../../hooks/HooksHistory/useHistoricalPlayers";
+import { getHistoricalImageUrl } from '@/features/history';
 import "./SectionHeaderMobile.css";
 
 // ─── Animación ruleta ─────────────────────────────────────────────────────────

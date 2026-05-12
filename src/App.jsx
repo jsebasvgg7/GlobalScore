@@ -5,7 +5,6 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { resetWelcome } from "./pages/LoginPage";
 
 import Header from "./components/ComLayout/Header";
-import InstallPWAButton from './components/ComPWA/InstallPWAButton';
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";

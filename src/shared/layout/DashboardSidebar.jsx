@@ -3,8 +3,8 @@ import {
   Zap, Target, Flame, TrendingUp, Trophy,
   CheckCircle2, Clock, Crown, BarChart3
 } from "lucide-react";
-import { supabase } from "../services/supabase/supabaseClient";
-import GlobalLoader from "../ui/GlobalLoader";
+import { supabase } from '../services/supabase/client';
+import GlobalLoader from '../ui/GlobalLoader';
 import "./DashboardSidebar.css";
 
 // ── Helpers ──────────────────────────────────────
