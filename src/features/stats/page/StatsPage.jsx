@@ -393,19 +393,13 @@ export default function StatsPage({ currentUser }) {
                 </div>
               </div>
 
-              <Footer />
             </div>
-            {/* /sp-scroll */}
           </div>
-          {/* /sp-main */}
 
           {/* ══ PANEL DERECHO ══ */}
           <StatsRightPanel stats={stats} currentUser={currentUser} />
-
         </div>
-        {/* /sp-desktop */}
       </div>
-      {/* /sp-shell */}
     </>
   );
 }
