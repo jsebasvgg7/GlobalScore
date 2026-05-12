@@ -2,45 +2,56 @@ import React, { useState } from 'react';
 import { AlertCircle } from 'lucide-react';
 
 // Hooks
-import { useAdminData }         from '../hooks/HooksAdmin/useAdminData';
-import { useAdminMatches }      from '../hooks/HooksAdmin/useAdminMatches';
-import { useAdminLeagues }      from '../hooks/HooksAdmin/useAdminLeagues';
-import { useAdminAwards }       from '../hooks/HooksAdmin/useAdminAwards';
-import { useAdminAchievements } from '../hooks/HooksAdmin/useAdminAchievements';
-import { useAdminCrowns }       from '../hooks/HooksAdmin/useAdminCrowns';
-import { useAdminBanners }      from '../hooks/HooksAdmin/useAdminBanners';
+import {
+  useAdminData,
+  useAdminMatches,
+  useAdminLeagues,
+  useAdminAwards,
+  useAdminAchievements,
+  useAdminCrowns,
+  useAdminBanners
+} from '@/features/admin';
 
 // Utils
-import { getFilteredItems, calculateStats } from '../utils/adminFilters';
+import { getFilteredItems, calculateStats } from '@/shared/utils/adminFilters';
 
 // Componentes
-import MobileAdminSheet, { MobileAdminFAB, useIsMobile } from '../components/ComMobile/MobileAdmin';
-import AdminStatsOverview    from '../components/ComAdmin/AdminStatsOverview';
-import AdminNavigationTabs   from '../components/ComAdmin/AdminNavigationTabs';
-import AdminControls         from '../components/ComAdmin/AdminControls';
-import AdminMatchesList      from '../components/ComAdmin/AdminMatchesList';
-import AdminLeaguesList      from '../components/ComAdmin/AdminLeaguesList';
-import AdminAwardsList       from '../components/ComAdmin/AdminAwardsList';
-import AdminAchievementsList from '../components/ComAdmin/AdminAchievementsList';
-import AdminTitlesList       from '../components/ComAdmin/AdminTitlesList';
-import AdminCrownsSection    from '../components/ComAdmin/AdminCrownsSection';
-import AdminBannersList      from '../components/ComAdmin/AdminBannersList';
-import AdminRightPanel       from '../components/ComAdmin/AdminRightPanel';
-import AdminHistorical       from '../components/ComAdmin/AdminHistorical';
-import Footer                from '../components/ComLayout/Footer';
-import { ToastContainer, useToast } from '../components/ComFeedback/Toast';
+import {
+  MobileAdmin,
+  MobileAdminFAB,
+  useIsMobile
+} from '@/features/admin';
 
-import '../styles/StylesMobile/MobileAdmin.css';
-import '../styles/StylesAdmin/AdminPage.css';
-import '../styles/StylesAdmin/AdminRightPanel.css';
-import '../styles/StylesAdmin/AdminBanners.css';
-import '../styles/StylesAdmin/AdminHistorical.css';
+import {
+  AdminStatsOverview,
+  AdminNavigationTabs,
+  AdminControls,
+  AdminMatchesList,
+  AdminLeaguesList,
+  AdminAwardsList,
+  AdminAchievementsList,
+  AdminTitlesList,
+  AdminCrownsSection,
+  AdminBannersList,
+  AdminRightPanel,
+} from '@/features/admin';
+
+import {
+  ToastContainer,
+  useToast
+} from '@/shared/ui/Toast';
+
+import '../styles/AdminRightPanel.css';
+import '../styles/AdminBanners.css';
+import '../styles/AdminHistorical.css';
+import '../styles/MobileAdmin.css';
+import './AdminPage.css';
 
 export default function AdminPage({ currentUser }) {
   // ── UI state ──────────────────────────────────────────────────
   const [activeSection, setActiveSection] = useState('matches');
-  const [searchTerm,    setSearchTerm]    = useState('');
-  const [filterStatus,  setFilterStatus]  = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
 
   // ── Panel derecho ─────────────────────────────────────────────
   const [panelMode, setPanelMode] = useState('add');
@@ -120,15 +131,15 @@ export default function AdminPage({ currentUser }) {
 
   const handlePanelAdd = async (data) => {
     switch (activeSection) {
-      case 'matches':      await handleAddMatch(data);           break;
-      case 'leagues':      await handleAddLeague(data);          break;
-      case 'awards':       await handleAddAward(data);           break;
-      case 'achievements': await handleSaveAchievement(data);    break;
-      case 'titles':       await handleSaveTitle(data);          break;
-      case 'crowns':       await handleAwardCrown(
-                              users?.[0]?.id, data, currentUser?.id); break;
-      case 'banners':      await handleCreateBanner(
-                              { name: data.name, description: data.description }, data.file); break;
+      case 'matches': await handleAddMatch(data); break;
+      case 'leagues': await handleAddLeague(data); break;
+      case 'awards': await handleAddAward(data); break;
+      case 'achievements': await handleSaveAchievement(data); break;
+      case 'titles': await handleSaveTitle(data); break;
+      case 'crowns': await handleAwardCrown(
+        users?.[0]?.id, data, currentUser?.id); break;
+      case 'banners': await handleCreateBanner(
+        { name: data.name, description: data.description }, data.file); break;
       default: break;
     }
     loadData();
@@ -138,7 +149,7 @@ export default function AdminPage({ currentUser }) {
     switch (activeSection) {
       case 'matches': await handleFinishMatchPanel(...args); break;
       case 'leagues': await handleFinishLeaguePanel(...args); break;
-      case 'awards':  await handleFinishAwardPanel(...args); break;
+      case 'awards': await handleFinishAwardPanel(...args); break;
       default: break;
     }
   };
@@ -146,7 +157,7 @@ export default function AdminPage({ currentUser }) {
   const handlePanelSave = async (data) => {
     switch (activeSection) {
       case 'achievements': await handleSaveAchievement(data); break;
-      case 'titles':       await handleSaveTitle(data);       break;
+      case 'titles': await handleSaveTitle(data); break;
       default: break;
     }
     loadData();
@@ -156,7 +167,7 @@ export default function AdminPage({ currentUser }) {
   const handlePanelDelete = async (id) => {
     switch (activeSection) {
       case 'achievements': await handleDeleteAchievement(id); break;
-      case 'titles':       await handleDeleteTitle(id);       break;
+      case 'titles': await handleDeleteTitle(id); break;
       default: break;
     }
     loadData();
@@ -274,11 +285,11 @@ export default function AdminPage({ currentUser }) {
 
                 {Array.isArray(filteredItems) && filteredItems.length === 0 &&
                   activeSection !== 'crowns' && (
-                  <div className="admin-empty-state">
-                    <AlertCircle size={40} />
-                    <p>No hay {activeSection} para mostrar</p>
-                  </div>
-                )}
+                    <div className="admin-empty-state">
+                      <AlertCircle size={40} />
+                      <p>No hay {activeSection} para mostrar</p>
+                    </div>
+                  )}
               </div>
             )}
           </div>

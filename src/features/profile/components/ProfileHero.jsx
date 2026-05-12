@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Trophy, Heart, Globe, Crown } from 'lucide-react';
-import { calculateAccuracy } from '../../utils/profileUtils';
-import ImageViewer from '../ComOthers/ImageViewer';
+import { calculateAccuracy } from '@/shared/utils/profileUtils';
+import ImageViewer from '@/shared/ui';
 
 export default function ProfileHero({ userData, currentUser }) {
   const accuracy = calculateAccuracy(currentUser);
@@ -16,7 +16,7 @@ export default function ProfileHero({ userData, currentUser }) {
   return (
     <div className="profile-hero">
       <div className="avatar-section">
-        <div 
+        <div
           className={`avatar-circle ${userData.avatar_url ? 'clickable-avatar' : ''}`}
           onClick={handleAvatarClick}
           style={{ cursor: userData.avatar_url ? 'pointer' : 'default' }}
@@ -39,7 +39,7 @@ export default function ProfileHero({ userData, currentUser }) {
         <h2 className="user-name-display">{userData.name}</h2>
         <p className="user-email-display">{userData.email}</p>
         {userData.bio && <p className="user-bio-display">{userData.bio}</p>}
-        
+
         {(userData.favorite_team || userData.favorite_player || userData.nationality) && (
           <div className="user-tags">
             {userData.favorite_team && (
@@ -62,7 +62,7 @@ export default function ProfileHero({ userData, currentUser }) {
       </div>
 
       {showImageViewer && userData.avatar_url && (
-        <ImageViewer 
+        <ImageViewer
           imageUrl={userData.avatar_url}
           userName={userData.name}
           onClose={() => setShowImageViewer(false)}

@@ -4,15 +4,15 @@ import {
   ChevronDown, ChevronUp, Medal, User, Save, ChevronRight, CheckCircle,
   AlertCircle, Users, Swords, Crown, Shield
 } from 'lucide-react';
-import { supabase } from '../utils/supabaseClient';
-import { useToast, ToastContainer } from '../components/ComFeedback/Toast';
-import { useWorldCup } from '../hooks/HooksOthers/useWorldCup';
-import KnockoutSection from '../components/ComWorldCup/KnockoutSection';
-import GlobalLoader from "../components/ComFeedback/GlobalLoader";
-import RightPanelWorld from '../components/ComWorldCup/RightPanelWorld';
-import '../styles/StylesPages/WorldCupPage.css';
-import '../styles/StylesMobile/MobileWorldCup.css';
-import '../styles/StylesPanels/RightPanelWorld.css';
+import { supabase } from '@/shared/services/supabase/client';
+import { useToast, ToastContainer } from '@/shared/ui';
+import { useWorldCup } from '../hooks/useWorldCup';
+import KnockoutSection from '../components/KnockoutSection';
+import GlobalLoader from "@/shared/ui";
+import RightPanelWorld from '../components/RightPanelWorld';
+import './WorldCupPage.css';
+import '../styles/MobileWorldCup.css';
+import '../styles/RightPanelWorld.css';
 
 /* ============================================================
    DATOS
@@ -55,15 +55,15 @@ const getTeamFlag = (team) => {
 };
 
 const AWARDS_CFG = [
-  { key: 'topScorer',            label: 'Bota de Oro',         category: 'Máximo Goleador',             iconVariant: 'gold',  placeholder: 'Nombre del goleador...' },
-  { key: 'topAssist',            label: 'Mejor Asistidor',     category: 'Más Asistencias',             iconVariant: 'blue',  placeholder: 'Nombre del asistidor...' },
-  { key: 'goldenBall',           label: 'Balón de Oro',        category: 'Mejor Jugador del Mundial',   iconVariant: 'gold',  placeholder: 'Nombre del jugador...' },
-  { key: 'bestYoungPlayer',      label: 'Mejor Joven',         category: 'Sub-21 Destacado',            iconVariant: 'green', placeholder: 'Nombre del jugador...' },
-  { key: 'goldenGlove',          label: 'Guante de Oro',       category: 'Mejor Portero',               iconVariant: 'blue',  placeholder: 'Nombre del portero...' },
-  { key: 'surpriseTeam',         label: 'Selección Sorpresa',  category: 'Equipo Revelación',           iconVariant: 'green', placeholder: 'Nombre del equipo...' },
-  { key: 'disappointmentTeam',   label: 'Selec. Decepción',    category: 'Bajo Rendimiento',            iconVariant: 'red',   placeholder: 'Nombre del equipo...' },
-  { key: 'breakoutPlayer',       label: 'Jugador Revelación',  category: 'Descubrimiento del Torneo',   iconVariant: 'amber', placeholder: 'Nombre del jugador...' },
-  { key: 'disappointmentPlayer', label: 'Jugador Decepción',   category: 'Por Debajo de Expectativas', iconVariant: 'red',   placeholder: 'Nombre del jugador...' },
+  { key: 'topScorer', label: 'Bota de Oro', category: 'Máximo Goleador', iconVariant: 'gold', placeholder: 'Nombre del goleador...' },
+  { key: 'topAssist', label: 'Mejor Asistidor', category: 'Más Asistencias', iconVariant: 'blue', placeholder: 'Nombre del asistidor...' },
+  { key: 'goldenBall', label: 'Balón de Oro', category: 'Mejor Jugador del Mundial', iconVariant: 'gold', placeholder: 'Nombre del jugador...' },
+  { key: 'bestYoungPlayer', label: 'Mejor Joven', category: 'Sub-21 Destacado', iconVariant: 'green', placeholder: 'Nombre del jugador...' },
+  { key: 'goldenGlove', label: 'Guante de Oro', category: 'Mejor Portero', iconVariant: 'blue', placeholder: 'Nombre del portero...' },
+  { key: 'surpriseTeam', label: 'Selección Sorpresa', category: 'Equipo Revelación', iconVariant: 'green', placeholder: 'Nombre del equipo...' },
+  { key: 'disappointmentTeam', label: 'Selec. Decepción', category: 'Bajo Rendimiento', iconVariant: 'red', placeholder: 'Nombre del equipo...' },
+  { key: 'breakoutPlayer', label: 'Jugador Revelación', category: 'Descubrimiento del Torneo', iconVariant: 'amber', placeholder: 'Nombre del jugador...' },
+  { key: 'disappointmentPlayer', label: 'Jugador Decepción', category: 'Por Debajo de Expectativas', iconVariant: 'red', placeholder: 'Nombre del jugador...' },
 ];
 
 /* ============================================================
@@ -87,9 +87,9 @@ function calcTable(group, preds) {
     table[hi].played++; table[ai].played++;
     table[hi].gf += hs; table[hi].ga += as_;
     table[ai].gf += as_; table[ai].ga += hs;
-    if (hs > as_)       { table[hi].won++; table[hi].pts += 3; table[ai].lost++; }
-    else if (hs < as_)  { table[ai].won++; table[ai].pts += 3; table[hi].lost++; }
-    else                { table[hi].drawn++; table[ai].drawn++; table[hi].pts++; table[ai].pts++; }
+    if (hs > as_) { table[hi].won++; table[hi].pts += 3; table[ai].lost++; }
+    else if (hs < as_) { table[ai].won++; table[ai].pts += 3; table[hi].lost++; }
+    else { table[hi].drawn++; table[ai].drawn++; table[hi].pts++; table[ai].pts++; }
     table[hi].gd = table[hi].gf - table[hi].ga;
     table[ai].gd = table[ai].gf - table[ai].ga;
   });

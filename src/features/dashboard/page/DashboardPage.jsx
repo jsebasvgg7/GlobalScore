@@ -3,22 +3,22 @@ import { useNavigate } from "react-router-dom";
 import {
   Trophy, Filter, X, ArrowUpDown
 } from "lucide-react";
+import {
+  MatchCard,
+  LeagueCard,
+  AwardCard,
+  RightPanel,
+  MobileDashboard,
+  useMatches,
+  useLeagues,
+  useAwards
+} from "@/features/dashboard";
+import { NavigationTabs } from "@/shared/layout";
+import { PageLoader, LoadingOverlay } from "@/shared/ui/LoadingStates";
+import { ToastContainer, useToast } from "@/shared/ui/Toast";
+import { useDataLoader } from "@/shared/hooks";
 
-import MatchCard from "../components/ComCards/MatchCard";
-import LeagueCard from "../components/ComCards/LeagueCard";
-import AwardCard from "../components/ComCards/AwardCard";
-import NavigationTabs from "../components/ComNavigation/NavigationTabs";
-import RightPanel from "../components/ComPanels/RightPanel";
-import MobileDashboard from "../components/ComMobile/MobileDashboard";
-import { PageLoader, LoadingOverlay } from "../components/ComFeedback/LoadingStates";
-import { ToastContainer, useToast } from "../components/ComFeedback/Toast";
-
-import { useDataLoader } from "../hooks/useDataLoader";
-import { useMatches } from "../hooks/HooksCards/useMatches";
-import { useLeagues } from "../hooks/HooksCards/useLeagues";
-import { useAwards } from "../hooks/HooksCards/useAwards";
-
-import "../styles/StylesPages/DashboardPage.css";
+import "./DashboardPage.css";
 
 /* ── Empty state brutalista ── */
 function MatchesEmpty({ leagueFilter, leagueCategories, onClear }) {

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 export const useAwards = (currentUser) => {
   const [loading, setLoading] = useState(false);
@@ -120,7 +120,7 @@ export const useAwards = (currentUser) => {
               weekly_correct: newWeeklyCorrect
             })
             .eq("id", prediction.user_id);
-            
+
           console.log(`✅ Usuario ${prediction.user_id}:`);
           console.log(`   Global: ${newPoints} pts, ${newCorrect}/${newPredictions}`);
           console.log(`   Semanal: ${newWeeklyPoints} pts, ${newWeeklyCorrect}/${newWeeklyPredictions}`);

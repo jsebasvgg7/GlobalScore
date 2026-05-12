@@ -1,4 +1,4 @@
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 export const useAdminLeagues = (loadData, toast) => {
   const handleAddLeague = async (league) => {
@@ -19,7 +19,7 @@ export const useAdminLeagues = (loadData, toast) => {
     try {
       await supabase
         .from('leagues')
-        .update({ 
+        .update({
           status: 'finished',
           ...results
         })
@@ -36,7 +36,7 @@ export const useAdminLeagues = (loadData, toast) => {
 
   const handleDeleteLeague = async (leagueId) => {
     if (!confirm('¿Estás seguro de eliminar esta liga?')) return;
-    
+
     try {
       const { error } = await supabase.from('leagues').delete().eq('id', leagueId);
       if (error) throw error;

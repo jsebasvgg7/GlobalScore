@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  Bell, Filter, Calendar, Trophy, CheckCircle2, 
+import {
+  Bell, Filter, Calendar, Trophy, CheckCircle2,
   Clock, Target, Award, BellRing, BellOff
 } from 'lucide-react';
-import { supabase } from '../utils/supabaseClient';
-import Footer from '../components/ComLayout/Footer';
-import MobileNotifications from '../components/ComMobile/MobileNotifications';
-import '../styles/StylesPages/NotificationsPage.css';
+import { supabase } from '@/shared/services/supabase/client';
+import MobileNotifications from '@/features/notifications';
+import './NotificationsPage.css';
 
 const VAPID_PUBLIC_KEY = 'BBxgmAtEOHeYNi1tJQcrWzL_Q-6_Mj16ECGgQSL6JPX0i9XyL5V5LFJHjNdde_TTRxAUXJHSYNtUOvXcAsYS_Xs';
 
@@ -252,7 +251,7 @@ export default function NotificationsPage({ currentUser }) {
     return notif.type === filter;
   });
 
-  const newCount      = notifications.filter(n => n.type === 'new').length;
+  const newCount = notifications.filter(n => n.type === 'new').length;
   const finishedCount = notifications.filter(n => n.type === 'finished').length;
 
   // ────────────────────────────────────────────────────────────────────────
@@ -316,8 +315,8 @@ export default function NotificationsPage({ currentUser }) {
           {/* Filtros */}
           <div className="np-filters">
             {[
-              { key: 'all',      label: 'Todas',       icon: <Filter size={11} />,      count: notifications.length },
-              { key: 'new',      label: 'Nuevas',      icon: <Trophy size={11} />,       count: newCount },
+              { key: 'all', label: 'Todas', icon: <Filter size={11} />, count: notifications.length },
+              { key: 'new', label: 'Nuevas', icon: <Trophy size={11} />, count: newCount },
               { key: 'finished', label: 'Finalizadas', icon: <CheckCircle2 size={11} />, count: finishedCount },
             ].map(({ key, label, icon, count }) => (
               <button
@@ -381,7 +380,6 @@ export default function NotificationsPage({ currentUser }) {
                 ))}
               </div>
             )}
-            <Footer />
           </div>
         </div>
 

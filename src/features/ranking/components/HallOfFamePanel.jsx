@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Crown, Star, Zap } from "lucide-react";
 import HistoryTriggerCard from "./HistoryTriggerCard";
 import HistoryPanel from "./HistoryPanel";
-import "../../styles/StylesPanels/HallOfFamePanel.css";
-import "../../styles/StylesOthers/HistoryTriggerCard.css";
-import "../../styles/StylesOthers/HistoryPanel.css";
+import "../styles/HallOfFamePanel.css";
+import "../styles/MonthlyChampionCard.css";
+import "../styles/MonthlyHistoryPanel.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { X, Plus, Trophy, Calendar, Award, Star } from 'lucide-react';
-import { getLogoUrlByAwardName } from '../../utils/logoHelper.js';
-import { supabase } from '../../utils/supabaseClient';
-import '../../styles/StylesAdmin/AdminModal.css';
+import { getLogoUrlByAwardName } from '@/shared/utils/logoHelper';
+import { supabase } from '@/shared/services/supabase/client';
+import '../styles/AdminModal.css';
 
 export default function AdminAwardModal({ onAdd, onClose }) {
   const [form, setForm] = useState({
@@ -27,7 +27,7 @@ export default function AdminAwardModal({ onAdd, onClose }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
-    
+
     // Auto-generar URL del logo cuando se ingresa el nombre del premio
     if (name === 'name' && value) {
       const logoUrl = getLogoUrlByAwardName(supabase, value);
@@ -91,10 +91,10 @@ export default function AdminAwardModal({ onAdd, onClose }) {
               <span>ID del Premio</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="id" 
-              placeholder="Ej: balon-oro-2024, bota-oro-2024" 
+            <input
+              className="form-input-premium"
+              name="id"
+              placeholder="Ej: balon-oro-2024, bota-oro-2024"
               value={form.id}
               onChange={handleChange}
             />
@@ -108,10 +108,10 @@ export default function AdminAwardModal({ onAdd, onClose }) {
               <span>Nombre del Premio</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="name" 
-              placeholder="Ej: Balón de Oro, Bota de Oro, The Best FIFA" 
+            <input
+              className="form-input-premium"
+              name="name"
+              placeholder="Ej: Balón de Oro, Bota de Oro, The Best FIFA"
               value={form.name}
               onChange={handleChange}
             />
@@ -126,10 +126,10 @@ export default function AdminAwardModal({ onAdd, onClose }) {
                 <span>Temporada</span>
                 <span className="required">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="season" 
-                placeholder="Ej: 2024, 2024/25" 
+              <input
+                className="form-input-premium"
+                name="season"
+                placeholder="Ej: 2024, 2024/25"
                 value={form.season}
                 onChange={handleChange}
               />
@@ -140,9 +140,9 @@ export default function AdminAwardModal({ onAdd, onClose }) {
                 <Star size={14} />
                 <span>Categoría</span>
               </label>
-              <select 
-                className="form-input-premium" 
-                name="category" 
+              <select
+                className="form-input-premium"
+                name="category"
                 value={form.category}
                 onChange={handleChange}
               >
@@ -173,10 +173,10 @@ export default function AdminAwardModal({ onAdd, onClose }) {
               <span>Emoji de Respaldo</span>
             </label>
             <div className="logo-input-wrapper">
-              <input 
-                className="form-input-premium logo-input" 
-                name="logo" 
-                placeholder="🏆" 
+              <input
+                className="form-input-premium logo-input"
+                name="logo"
+                placeholder="🏆"
                 value={form.logo}
                 onChange={handleChange}
                 maxLength={2}
@@ -194,10 +194,10 @@ export default function AdminAwardModal({ onAdd, onClose }) {
                 <span>Fecha Límite</span>
                 <span className="required">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="deadline" 
-                type="date" 
+              <input
+                className="form-input-premium"
+                name="deadline"
+                type="date"
                 value={form.deadline}
                 onChange={handleChange}
               />
@@ -209,10 +209,10 @@ export default function AdminAwardModal({ onAdd, onClose }) {
                 <span>Hora Límite</span>
                 <span className="required">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="deadline_time" 
-                type="time" 
+              <input
+                className="form-input-premium"
+                name="deadline_time"
+                type="time"
                 value={form.deadline_time}
                 onChange={handleChange}
               />

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, Users, Zap, Target, Loader } from 'lucide-react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 /* ── helpers ── */
 const MONTHS_ES = [
-  'ENE','FEB','MAR','ABR','MAY','JUN',
-  'JUL','AGO','SEP','OCT','NOV','DIC',
+  'ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN',
+  'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC',
 ];
 
 const fmt = (n) => Number(n || 0).toLocaleString('es-ES');
@@ -35,9 +35,9 @@ function Avatar({ user }) {
 function RankBadge({ rank }) {
   const cls =
     rank === 1 ? 'hp-badge hp-badge--1' :
-    rank === 2 ? 'hp-badge hp-badge--2' :
-    rank === 3 ? 'hp-badge hp-badge--3' :
-    'hp-badge hp-badge--n';
+      rank === 2 ? 'hp-badge hp-badge--2' :
+        rank === 3 ? 'hp-badge hp-badge--3' :
+          'hp-badge hp-badge--n';
   return <span className={cls}>{rank}</span>;
 }
 
@@ -45,12 +45,12 @@ function RankBadge({ rank }) {
    MAIN
 ══════════════════════════════════════════ */
 export default function HistoryPanel() {
-  const [months,        setMonths]        = useState([]);   // [{month, year, participant_count}]
-  const [selectedIdx,   setSelectedIdx]   = useState(0);
-  const [snapshot,      setSnapshot]      = useState([]);
+  const [months, setMonths] = useState([]);   // [{month, year, participant_count}]
+  const [selectedIdx, setSelectedIdx] = useState(0);
+  const [snapshot, setSnapshot] = useState([]);
   const [loadingMonths, setLoadingMonths] = useState(true);
-  const [loadingSnap,   setLoadingSnap]   = useState(false);
-  const [error,         setError]         = useState(null);
+  const [loadingSnap, setLoadingSnap] = useState(false);
+  const [error, setError] = useState(null);
 
   /* ── Load available months ── */
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function HistoryPanel() {
         .from('monthly_ranking_snapshots')
         .select('*')
         .eq('month', m.month)
-        .eq('year',  m.year)
+        .eq('year', m.year)
         .order('rank', { ascending: true })
         .limit(100);
       if (e) throw e;
@@ -191,8 +191,8 @@ export default function HistoryPanel() {
                 const acc = accuracy(row.correct, row.predictions);
                 const topMod =
                   row.rank === 1 ? ' hp-row--gold' :
-                  row.rank === 2 ? ' hp-row--silver' :
-                  row.rank === 3 ? ' hp-row--bronze' : '';
+                    row.rank === 2 ? ' hp-row--silver' :
+                      row.rank === 3 ? ' hp-row--bronze' : '';
 
                 return (
                   <div

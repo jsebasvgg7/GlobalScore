@@ -8,11 +8,11 @@ import {
   useHistoricalCompetitions,
   useHistoricalCompetitionDetail,
   getHistoricalImageUrl,
-} from "../../../hooks/HooksHistory/useHistoricalCompetitions";
-import KnockoutBracketMobile from "./KnockoutBracketMobile";
-import SectionHeaderMobile from "../ComMobile/SectionHeaderMobile";
-import "../../styles/StylesHistory/HistoricalCompetitionsPage.css";
-import "../../styles/StylesMobile/MobHistory/KnockoutBracketMobile.css";
+} from "../hooks/useHistoricalCompetitions";
+import KnockoutBracketMobile from "./mobile/KnockoutBracketMobile";
+import SectionHeaderMobile from "./mobile/SectionHeaderMobile";
+import "../styles/HistoricalCompetitionsPage.css";
+import "../styles/mobile/KnockoutBracketMobile.css";
 
 // ─── Hook: detecta si es mobile ──────────────────────────────────────────────
 function useIsMobile(breakpoint = 768) {

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Trophy, Award, AlertCircle } from 'lucide-react';
 import KnockoutMatchCard from './KnockoutMatchCard';
-import '../../styles/StylesOthers/KnockoutSection.css';
+import '../styles/KnockoutSection.css';
 
 // ============================================
 // CONFIGURACIÓN DE LLAVES FIFA - 32 EQUIPOS
@@ -11,35 +11,35 @@ const ROUND_OF_16_BRACKETS = {
   leftTop: [
     { id: 1, home: 'E-1', away: 'ABCDF-3', label: 'Llave 1', homeDesc: '1° Grupo E', awayDesc: '3° A/B/C/D/F' },
     { id: 2, home: 'I-1', away: 'CDFGH-3', label: 'Llave 2', homeDesc: '1° Grupo I', awayDesc: '3° C/D/F/G/H' },
-    { id: 3, home: 'A-2', away: 'B-2',     label: 'Llave 3', homeDesc: '2° Grupo A', awayDesc: '2° Grupo B' },
-    { id: 4, home: 'F-1', away: 'C-2',     label: 'Llave 4', homeDesc: '1° Grupo F', awayDesc: '2° Grupo C' },
+    { id: 3, home: 'A-2', away: 'B-2', label: 'Llave 3', homeDesc: '2° Grupo A', awayDesc: '2° Grupo B' },
+    { id: 4, home: 'F-1', away: 'C-2', label: 'Llave 4', homeDesc: '1° Grupo F', awayDesc: '2° Grupo C' },
   ],
   leftBottom: [
-    { id: 5, home: 'K-2', away: 'L-2',     label: 'Llave 5', homeDesc: '2° Grupo K', awayDesc: '2° Grupo L' },
-    { id: 6, home: 'H-1', away: 'J-2',     label: 'Llave 6', homeDesc: '1° Grupo H', awayDesc: '2° Grupo J' },
+    { id: 5, home: 'K-2', away: 'L-2', label: 'Llave 5', homeDesc: '2° Grupo K', awayDesc: '2° Grupo L' },
+    { id: 6, home: 'H-1', away: 'J-2', label: 'Llave 6', homeDesc: '1° Grupo H', awayDesc: '2° Grupo J' },
     { id: 7, home: 'D-1', away: 'BEFIJ-3', label: 'Llave 7', homeDesc: '1° Grupo D', awayDesc: '3° B/E/F/I/J' },
     { id: 8, home: 'G-1', away: 'AEHIJ-3', label: 'Llave 8', homeDesc: '1° Grupo G', awayDesc: '3° A/E/H/I/J' },
   ],
   rightTop: [
-    { id: 9,  home: 'C-1', away: 'F-2',     label: 'Llave 9',  homeDesc: '1° Grupo C', awayDesc: '2° Grupo F' },
-    { id: 10, home: 'E-2', away: 'I-2',     label: 'Llave 10', homeDesc: '2° Grupo E', awayDesc: '2° Grupo I' },
+    { id: 9, home: 'C-1', away: 'F-2', label: 'Llave 9', homeDesc: '1° Grupo C', awayDesc: '2° Grupo F' },
+    { id: 10, home: 'E-2', away: 'I-2', label: 'Llave 10', homeDesc: '2° Grupo E', awayDesc: '2° Grupo I' },
     { id: 11, home: 'A-1', away: 'CEFHI-3', label: 'Llave 11', homeDesc: '1° Grupo A', awayDesc: '3° C/E/F/H/I' },
     { id: 12, home: 'L-1', away: 'BHIJK-3', label: 'Llave 12', homeDesc: '1° Grupo L', awayDesc: '3° B/H/I/J/K' },
   ],
   rightBottom: [
-    { id: 13, home: 'J-1', away: 'H-2',     label: 'Llave 13', homeDesc: '1° Grupo J', awayDesc: '2° Grupo H' },
-    { id: 14, home: 'D-2', away: 'G-2',     label: 'Llave 14', homeDesc: '2° Grupo D', awayDesc: '2° Grupo G' },
+    { id: 13, home: 'J-1', away: 'H-2', label: 'Llave 13', homeDesc: '1° Grupo J', awayDesc: '2° Grupo H' },
+    { id: 14, home: 'D-2', away: 'G-2', label: 'Llave 14', homeDesc: '2° Grupo D', awayDesc: '2° Grupo G' },
     { id: 15, home: 'B-1', away: 'EFGIJ-3', label: 'Llave 15', homeDesc: '1° Grupo B', awayDesc: '3° E/F/G/I/J' },
-    { id: 16, home: 'K-1', away: 'DEJL-3',  label: 'Llave 16', homeDesc: '1° Grupo K', awayDesc: '3° D/E/J/L' },
+    { id: 16, home: 'K-1', away: 'DEJL-3', label: 'Llave 16', homeDesc: '1° Grupo K', awayDesc: '3° D/E/J/L' },
   ],
 };
 
 const ROUND_OF_8_BRACKETS = [
-  { id: 'R8-1', matches: [1,  2],  label: 'Octavo 1' },
-  { id: 'R8-2', matches: [3,  4],  label: 'Octavo 2' },
-  { id: 'R8-3', matches: [5,  6],  label: 'Octavo 3' },
-  { id: 'R8-4', matches: [7,  8],  label: 'Octavo 4' },
-  { id: 'R8-5', matches: [9,  10], label: 'Octavo 5' },
+  { id: 'R8-1', matches: [1, 2], label: 'Octavo 1' },
+  { id: 'R8-2', matches: [3, 4], label: 'Octavo 2' },
+  { id: 'R8-3', matches: [5, 6], label: 'Octavo 3' },
+  { id: 'R8-4', matches: [7, 8], label: 'Octavo 4' },
+  { id: 'R8-5', matches: [9, 10], label: 'Octavo 5' },
   { id: 'R8-6', matches: [11, 12], label: 'Octavo 6' },
   { id: 'R8-7', matches: [13, 14], label: 'Octavo 7' },
   { id: 'R8-8', matches: [15, 16], label: 'Octavo 8' },
@@ -84,9 +84,9 @@ function useQualifiedTeams(groupPredictions) {
     GROUPS.forEach(group => {
       const standings = calculateGroupStandings(group, GROUPS_DATA[group], groupPredictions[group]);
       qualified[group] = {
-        first:  standings[0]?.team || null,
+        first: standings[0]?.team || null,
         second: standings[1]?.team || null,
-        third:  standings[2]?.team || null,
+        third: standings[2]?.team || null,
       };
       if (standings[2]) allThirds.push({ ...standings[2], group });
     });
@@ -122,9 +122,9 @@ function calculateGroupStandings(group, teams, groupData) {
     table[hi].played++; table[ai].played++;
     table[hi].gf += hs; table[hi].ga += as_;
     table[ai].gf += as_; table[ai].ga += hs;
-    if (hs > as_)      { table[hi].won++; table[hi].points += 3; table[ai].lost++; }
+    if (hs > as_) { table[hi].won++; table[hi].points += 3; table[ai].lost++; }
     else if (hs < as_) { table[ai].won++; table[ai].points += 3; table[hi].lost++; }
-    else               { table[hi].drawn++; table[ai].drawn++; table[hi].points++; table[ai].points++; }
+    else { table[hi].drawn++; table[ai].drawn++; table[hi].points++; table[ai].points++; }
     table[hi].gd = table[hi].gf - table[hi].ga;
     table[ai].gd = table[ai].gf - table[ai].ga;
   });
@@ -175,10 +175,10 @@ export default function KnockoutSection({ groupPredictions, knockoutPredictions,
 
   function getWinner(stage, id) { return knockoutPredictions[stage]?.[id]; }
 
-  const isRound16Complete  = Object.keys(knockoutPredictions.round16  || {}).length === 16;
-  const isRound8Complete   = Object.keys(knockoutPredictions.round8   || {}).length === 8;
+  const isRound16Complete = Object.keys(knockoutPredictions.round16 || {}).length === 16;
+  const isRound8Complete = Object.keys(knockoutPredictions.round8 || {}).length === 8;
   const isQuartersComplete = Object.keys(knockoutPredictions.quarters || {}).length === 4;
-  const isSemisComplete    = Object.keys(knockoutPredictions.semis    || {}).length === 2;
+  const isSemisComplete = Object.keys(knockoutPredictions.semis || {}).length === 2;
 
   const hasGroupPredictions = Object.values(groupPredictions).some(
     g => g?.matches && Object.keys(g.matches).length > 0

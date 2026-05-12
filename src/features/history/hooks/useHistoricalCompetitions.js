@@ -1,15 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "../../utils/supabaseClient";
+import { supabase } from '@/shared/services/supabase/client';
 
 export { getHistoricalImageUrl } from "./useHistoricalPlayers";
 
 // ─── Listado de competencias publicadas ───────────────────────────────────────
 export function useHistoricalCompetitions() {
   const [competitions, setCompetitions] = useState([]);
-  const [loading, setLoading]           = useState(true);
-  const [error, setError]               = useState(null);
-  const [search, setSearch]             = useState("");
-  const [filterType, setFilterType]     = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [search, setSearch] = useState("");
+  const [filterType, setFilterType] = useState("");
   const [filterFormat, setFilterFormat] = useState("");
 
   const load = useCallback(async () => {
@@ -39,12 +39,12 @@ export function useHistoricalCompetitions() {
       (c.name || "").toLowerCase().includes(q) ||
       (c.country || "").toLowerCase().includes(q) ||
       (c.description || "").toLowerCase().includes(q);
-    const matchType   = !filterType   || c.type   === filterType;
+    const matchType = !filterType || c.type === filterType;
     const matchFormat = !filterFormat || c.format === filterFormat;
     return matchSearch && matchType && matchFormat;
   });
 
-  const types   = [...new Set(competitions.map(c => c.type).filter(Boolean))].sort();
+  const types = [...new Set(competitions.map(c => c.type).filter(Boolean))].sort();
   const formats = [...new Set(competitions.map(c => c.format).filter(Boolean))].sort();
 
   return {
@@ -61,11 +61,11 @@ export function useHistoricalCompetitions() {
 // ─── Detalle de una competición ───────────────────────────────────────────────
 export function useHistoricalCompetitionDetail(competitionId) {
   const [competition, setCompetition] = useState(null);
-  const [groups,      setGroups]      = useState([]);   // rows planas
-  const [standings,   setStandings]   = useState([]);
-  const [knockout,    setKnockout]    = useState([]);
-  const [loading,     setLoading]     = useState(true);
-  const [error,       setError]       = useState(null);
+  const [groups, setGroups] = useState([]);   // rows planas
+  const [standings, setStandings] = useState([]);
+  const [knockout, setKnockout] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const load = useCallback(async () => {
     if (!competitionId) return;
@@ -99,9 +99,9 @@ export function useHistoricalCompetitionDetail(competitionId) {
 
       if (compRes.error) throw compRes.error;
       setCompetition(compRes.data);
-      setGroups(groupsRes.data   || []);
+      setGroups(groupsRes.data || []);
       setStandings(standRes.data || []);
-      setKnockout(knockRes.data  || []);
+      setKnockout(knockRes.data || []);
     } catch (e) {
       setError(e.message);
     } finally {

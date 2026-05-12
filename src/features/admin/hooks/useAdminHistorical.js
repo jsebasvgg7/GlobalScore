@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { uploadToCloudinary } from "../../utils/cloudinaryUpload";
-import { supabase } from "../../utils/supabaseClient";
+import { uploadToCloudinary } from "@/shared/services/cloudinary/upload.service";
+import { supabase } from '@/shared/services/supabase/client';
 
 // ─── Helper: URL pública de imagen ───────────────────────────────────────────
 export const getHistoricalImageUrl = (imagePath) => {

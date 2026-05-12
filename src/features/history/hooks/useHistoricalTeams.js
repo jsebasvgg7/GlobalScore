@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "../../utils/supabaseClient";
+import { supabase } from '@/shared/services/supabase/client';
 
-export { getHistoricalImageUrl } from "../../features/history/hooks/useHistoricalPlayers";
+export { getHistoricalImageUrl } from "./useHistoricalPlayers";
 
 // ─── Hook: listado de equipos publicados ─────────────────────
 export function useHistoricalTeams() {

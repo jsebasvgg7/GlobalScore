@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Shuffle, ChevronRight, X } from "lucide-react";
 import { getHistoricalImageUrl } from '@/features/history';
-import "./SectionHeaderMobile.css";
+import "../../styles/mobile/SectionHeaderMobile.css";
 
 // ─── Animación ruleta ─────────────────────────────────────────────────────────
 function RouletteSlot({ items, running, winner, onDone, renderItem }) {

@@ -5,8 +5,8 @@ import {
   Zap, Star, Flame, AlertCircle, ChevronLeft, Trash2,
   Edit2, UserCheck, Search
 } from 'lucide-react';
-import { getLogoUrlByTeamName, getLeagueLogoUrlDirect, getLogoUrlByLeagueName, getLogoUrlByAwardName } from '../../utils/logoHelper.js';
-import { supabase } from '../../utils/supabaseClient.js';
+import { getLogoUrlByTeamName, getLeagueLogoUrlDirect, getLogoUrlByLeagueName, getLogoUrlByAwardName } from '@/shared/utils/logoHelper.js';
+import { supabase } from '@/shared/services/supabase/client';
 
 /* ================================================================
    PANEL WRAPPER

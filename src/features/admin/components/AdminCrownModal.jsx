@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { X, Trophy, AlertCircle, CheckCircle, Calendar } from 'lucide-react';
-import '../../styles/StylesAdmin/AdminCrownModal.css';
+import '../styles/AdminModal.css';
 
-export default function AdminCrownModal({ 
-  onClose, 
-  onAward, 
-  currentTopUser, 
+export default function AdminCrownModal({
+  onClose,
+  onAward,
+  currentTopUser,
   currentMonth,
-  currentUserId 
+  currentUserId
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -112,9 +112,9 @@ export default function AdminCrownModal({
           <button className="cancel-btn" onClick={onClose} disabled={isLoading}>
             Cancelar
           </button>
-          <button 
-            className="award-btn" 
-            onClick={handleAward} 
+          <button
+            className="award-btn"
+            onClick={handleAward}
             disabled={isLoading || !currentTopUser || !monthLabel}
           >
             {isLoading ? (

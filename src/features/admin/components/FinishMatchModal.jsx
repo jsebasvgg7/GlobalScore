@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { X, Trophy, Target, CheckCircle, AlertCircle } from "lucide-react";
-import "../../styles/StylesAdmin/AdminModal.css";
+import "../styles/AdminModal.css";
 
 export default function FinishMatchModal({ match, onFinish, onClose }) {
-  const [homeScore, setHomeScore]       = useState("");
-  const [awayScore, setAwayScore]       = useState("");
+  const [homeScore, setHomeScore] = useState("");
+  const [awayScore, setAwayScore] = useState("");
   const [advancingTeam, setAdvancingTeam] = useState(null);
-  const [error, setError]               = useState("");
-  const [loading, setLoading]           = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const canSubmit =
     homeScore !== "" &&
@@ -18,8 +18,8 @@ export default function FinishMatchModal({ match, onFinish, onClose }) {
     if (!canSubmit) return;
     const home = parseInt(homeScore);
     const away = parseInt(awayScore);
-    if (isNaN(home) || isNaN(away))  { setError("Los resultados deben ser números válidos"); return; }
-    if (home < 0 || away < 0)        { setError("Los resultados no pueden ser negativos"); return; }
+    if (isNaN(home) || isNaN(away)) { setError("Los resultados deben ser números válidos"); return; }
+    if (home < 0 || away < 0) { setError("Los resultados no pueden ser negativos"); return; }
     if (match.is_knockout && !advancingTeam) { setError("Selecciona el equipo que pasa"); return; }
 
     setError("");

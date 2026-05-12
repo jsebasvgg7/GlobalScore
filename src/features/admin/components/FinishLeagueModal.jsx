@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Trophy, Target, Award, CheckCircle } from 'lucide-react';
-import '../../styles/StylesAdmin/AdminModal.css';
+import '../styles/AdminModal.css';
 
 export default function FinishLeagueModal({ league, onFinish, onClose }) {
   const [form, setForm] = useState({
@@ -17,8 +17,8 @@ export default function FinishLeagueModal({ league, onFinish, onClose }) {
   };
 
   const submit = () => {
-    if (!form.champion || !form.top_scorer || !form.top_scorer_goals || 
-        !form.top_assist || !form.top_assist_count || !form.mvp_player) {
+    if (!form.champion || !form.top_scorer || !form.top_scorer_goals ||
+      !form.top_assist || !form.top_assist_count || !form.mvp_player) {
       alert('Todos los campos son obligatorios');
       return;
     }
@@ -63,10 +63,10 @@ export default function FinishLeagueModal({ league, onFinish, onClose }) {
               <span>Campeón de la Liga</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="champion" 
-              placeholder="Nombre del equipo campeón" 
+            <input
+              className="form-input-premium"
+              name="champion"
+              placeholder="Nombre del equipo campeón"
               value={form.champion}
               onChange={handleChange}
             />
@@ -79,10 +79,10 @@ export default function FinishLeagueModal({ league, onFinish, onClose }) {
               <span>Máximo Goleador</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="top_scorer" 
-              placeholder="Nombre del jugador" 
+            <input
+              className="form-input-premium"
+              name="top_scorer"
+              placeholder="Nombre del jugador"
               value={form.top_scorer}
               onChange={handleChange}
             />
@@ -93,12 +93,12 @@ export default function FinishLeagueModal({ league, onFinish, onClose }) {
               <span>Goles Anotados</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="top_scorer_goals" 
+            <input
+              className="form-input-premium"
+              name="top_scorer_goals"
               type="number"
               min="0"
-              placeholder="Cantidad de goles" 
+              placeholder="Cantidad de goles"
               value={form.top_scorer_goals}
               onChange={handleChange}
             />
@@ -111,10 +111,10 @@ export default function FinishLeagueModal({ league, onFinish, onClose }) {
               <span>Máximo Asistidor</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="top_assist" 
-              placeholder="Nombre del jugador" 
+            <input
+              className="form-input-premium"
+              name="top_assist"
+              placeholder="Nombre del jugador"
               value={form.top_assist}
               onChange={handleChange}
             />
@@ -125,12 +125,12 @@ export default function FinishLeagueModal({ league, onFinish, onClose }) {
               <span>Asistencias</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="top_assist_count" 
+            <input
+              className="form-input-premium"
+              name="top_assist_count"
               type="number"
               min="0"
-              placeholder="Cantidad de asistencias" 
+              placeholder="Cantidad de asistencias"
               value={form.top_assist_count}
               onChange={handleChange}
             />
@@ -143,10 +143,10 @@ export default function FinishLeagueModal({ league, onFinish, onClose }) {
               <span>Jugador MVP</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="mvp_player" 
-              placeholder="Nombre del jugador MVP" 
+            <input
+              className="form-input-premium"
+              name="mvp_player"
+              placeholder="Nombre del jugador MVP"
               value={form.mvp_player}
               onChange={handleChange}
             />

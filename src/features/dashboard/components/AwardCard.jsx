@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Award, CheckCircle2, Star, Clock } from 'lucide-react';
-import '../../styles/StylesCards/AwardCard.css';
+import '../styles/AwardCard.css';
 
 export default function AwardCard({ award, userPrediction, onPredict }) {
   const [predictedWinner, setPredictedWinner] = useState(userPrediction?.predicted_winner ?? '');
 
-  const now            = new Date();
-  const deadline       = award.deadline ? new Date(award.deadline) : null;
+  const now = new Date();
+  const deadline = award.deadline ? new Date(award.deadline) : null;
   const isPastDeadline = deadline && now >= deadline;
-  const hasPrediction  = userPrediction !== undefined;
-  const isFinished     = award.status === 'finished';
-  const isDisabled     = isPastDeadline || isFinished;
+  const hasPrediction = userPrediction !== undefined;
+  const isFinished = award.status === 'finished';
+  const isDisabled = isPastDeadline || isFinished;
 
   const isPredictionChanged = predictedWinner !== (userPrediction?.predicted_winner ?? '');
   const showSaveButton = !isDisabled && (!hasPrediction || isPredictionChanged);
@@ -27,10 +27,10 @@ export default function AwardCard({ award, userPrediction, onPredict }) {
   const pillConfig = isFinished
     ? { label: 'Finalizado', mod: 'finished' }
     : isPastDeadline
-    ? { label: 'Expirado',   mod: 'expired'  }
-    : hasPrediction && !isPredictionChanged
-    ? { label: 'Guardado',   mod: 'saved'    }
-    : { label: 'Pendiente',  mod: 'pending'  };
+      ? { label: 'Expirado', mod: 'expired' }
+      : hasPrediction && !isPredictionChanged
+        ? { label: 'Guardado', mod: 'saved' }
+        : { label: 'Pendiente', mod: 'pending' };
 
   return (
     <div className="ac-card">

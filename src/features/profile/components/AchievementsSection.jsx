@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, Award, Lock, Star, TrendingUp } from 'lucide-react';
-import GlobalLoader from "./GlobalLoader";
-import { supabase } from '../../utils/supabaseClient';
+import GlobalLoader from "@/shared/ui";
+import { supabase } from '@/shared/services/supabase/client';
 
 export default function AchievementsSection({ userId, userStats }) {
   const [achievements, setAchievements] = useState([]);
@@ -40,7 +40,7 @@ export default function AchievementsSection({ userId, userStats }) {
       availableAchievements?.forEach(achievement => {
         const isUnlocked = unlockedAchievements.includes(achievement.id);
         const meetsRequirement = checkRequirement(achievement, userStats);
-        
+
         if (!isUnlocked && meetsRequirement) {
           newUnlocks.push(achievement.id);
         }
@@ -78,7 +78,7 @@ export default function AchievementsSection({ userId, userStats }) {
 
   const checkRequirement = (achievement, stats) => {
     const { requirement_type, requirement_value } = achievement;
-    
+
     switch (requirement_type) {
       case 'points':
         return stats.points >= requirement_value;
@@ -420,8 +420,8 @@ export default function AchievementsSection({ userId, userStats }) {
 
         <div className="achievements-grid">
           {achievements.map(achievement => (
-            <div 
-              key={achievement.id} 
+            <div
+              key={achievement.id}
               className={`achievement-card ${achievement.unlocked ? 'unlocked' : 'locked'}`}
             >
               <div className="achievement-icon">
@@ -432,7 +432,7 @@ export default function AchievementsSection({ userId, userStats }) {
                   </div>
                 )}
               </div>
-              
+
               <div className="achievement-info">
                 <div className="achievement-category">{achievement.category}</div>
                 <div className="achievement-name">{achievement.name}</div>
@@ -441,8 +441,8 @@ export default function AchievementsSection({ userId, userStats }) {
 
               {!achievement.unlocked && achievement.progress < 100 && (
                 <div className="achievement-progress">
-                  <div 
-                    className="achievement-progress-bar" 
+                  <div
+                    className="achievement-progress-bar"
                     style={{ width: `${achievement.progress}%` }}
                   ></div>
                 </div>
@@ -464,14 +464,14 @@ export default function AchievementsSection({ userId, userStats }) {
 
         <div className="titles-grid">
           {titles.map(title => (
-            <div 
-              key={title.id} 
+            <div
+              key={title.id}
               className={`title-card ${title.unlocked ? 'unlocked' : 'locked'}`}
             >
               <div className="title-icon-wrapper">
                 {title.unlocked ? <Star size={24} /> : <Lock size={24} />}
               </div>
-              
+
               <div className="title-info">
                 <div className="title-name">{title.name}</div>
                 <div className="title-description">{title.description}</div>

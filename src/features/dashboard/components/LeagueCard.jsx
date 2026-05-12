@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import { Trophy, Target, Award, Star, CheckCircle2, Shield, Clock } from 'lucide-react';
-import '../../styles/StylesCards/LeagueCard.css';
+import '../styles/LeagueCard.css';
 
 export default function LeagueCard({ league, userPrediction, onPredict }) {
-  const [champion,  setChampion]  = useState(userPrediction?.predicted_champion    ?? '');
-  const [topScorer, setTopScorer] = useState(userPrediction?.predicted_top_scorer  ?? '');
-  const [topAssist, setTopAssist] = useState(userPrediction?.predicted_top_assist  ?? '');
-  const [mvp,       setMvp]       = useState(userPrediction?.predicted_mvp         ?? '');
+  const [champion, setChampion] = useState(userPrediction?.predicted_champion ?? '');
+  const [topScorer, setTopScorer] = useState(userPrediction?.predicted_top_scorer ?? '');
+  const [topAssist, setTopAssist] = useState(userPrediction?.predicted_top_assist ?? '');
+  const [mvp, setMvp] = useState(userPrediction?.predicted_mvp ?? '');
 
-  const now            = new Date();
-  const deadline       = league.deadline ? new Date(league.deadline) : null;
+  const now = new Date();
+  const deadline = league.deadline ? new Date(league.deadline) : null;
   const isPastDeadline = deadline && now >= deadline;
-  const hasPrediction  = userPrediction !== undefined;
-  const isFinished     = league.status === 'finished';
-  const isDisabled     = isPastDeadline || isFinished;
+  const hasPrediction = userPrediction !== undefined;
+  const isFinished = league.status === 'finished';
+  const isDisabled = isPastDeadline || isFinished;
 
   const isPredictionChanged =
-    champion  !== (userPrediction?.predicted_champion   ?? '') ||
+    champion !== (userPrediction?.predicted_champion ?? '') ||
     topScorer !== (userPrediction?.predicted_top_scorer ?? '') ||
     topAssist !== (userPrediction?.predicted_top_assist ?? '') ||
-    mvp       !== (userPrediction?.predicted_mvp        ?? '');
+    mvp !== (userPrediction?.predicted_mvp ?? '');
 
   const showSaveButton = !isDisabled && (!hasPrediction || isPredictionChanged);
 
@@ -35,10 +35,10 @@ export default function LeagueCard({ league, userPrediction, onPredict }) {
   const pillConfig = isFinished
     ? { label: 'Finalizado', mod: 'finished' }
     : isPastDeadline
-    ? { label: 'Expirado',   mod: 'expired'  }
-    : hasPrediction && !isPredictionChanged
-    ? { label: 'Guardado',   mod: 'saved'    }
-    : { label: 'Pendiente',  mod: 'pending'  };
+      ? { label: 'Expirado', mod: 'expired' }
+      : hasPrediction && !isPredictionChanged
+        ? { label: 'Guardado', mod: 'saved' }
+        : { label: 'Pendiente', mod: 'pending' };
 
   return (
     <div className="lc-card">

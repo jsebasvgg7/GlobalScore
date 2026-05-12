@@ -1,4 +1,4 @@
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 export const useAdminAwards = (loadData, toast) => {
   const handleAddAward = async (award) => {
@@ -33,7 +33,7 @@ export const useAdminAwards = (loadData, toast) => {
 
   const handleDeleteAward = async (awardId) => {
     if (!confirm('¿Estás seguro de eliminar este premio?')) return;
-    
+
     try {
       const { error } = await supabase.from('awards').delete().eq('id', awardId);
       if (error) throw error;

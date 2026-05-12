@@ -5,8 +5,8 @@ import {
   Zap, Star, Flame, AlertCircle, ChevronLeft, Trash2,
   Edit2, UserCheck, Search, ChevronUp, Settings
 } from 'lucide-react';
-import { getLogoUrlByTeamName, getLeagueLogoUrlDirect, getLogoUrlByLeagueName, getLogoUrlByAwardName } from '../../utils/logoHelper.js';
-import { supabase } from '../../utils/supabaseClient.js';
+import { getLogoUrlByTeamName, getLeagueLogoUrlDirect, getLogoUrlByLeagueName, getLogoUrlByAwardName } from '@/shared/utils/logoHelper.js';
+import { supabase } from '@/shared/services/supabase/client';
 
 /* ================================================================
    HOOK: detectar si es mobile
@@ -76,13 +76,13 @@ function MobileBottomSheet({ isOpen, onClose, title, color, children }) {
 ================================================================ */
 export function MobileAdminFAB({ activeSection, onOpen }) {
   const sectionColors = {
-    matches:      '#1D9E75',
-    leagues:      '#f5a623',
-    awards:       '#f25f5c',
+    matches: '#1D9E75',
+    leagues: '#f5a623',
+    awards: '#f25f5c',
     achievements: 'var(--accent)',
-    titles:       '#3b82f6',
-    crowns:       '#c9a227',
-    banners:      'var(--accent)',
+    titles: '#3b82f6',
+    crowns: '#c9a227',
+    banners: 'var(--accent)',
   };
   const color = sectionColors[activeSection] || 'var(--accent)';
 
@@ -526,7 +526,7 @@ function FinishMatchForm({ match, onFinish, onClose }) {
           <span className="mba-ko-label">¿Quién pasa?</span>
           <div className="mba-ko-grid">
             {[{ key: 'home', label: match.home_team, logo: match.home_team_logo },
-              { key: 'away', label: match.away_team, logo: match.away_team_logo }].map(({ key, label, logo }) => (
+            { key: 'away', label: match.away_team, logo: match.away_team_logo }].map(({ key, label, logo }) => (
               <button key={key} type="button"
                 className={`mba-ko-btn ${advancing === key ? 'active' : ''}`}
                 onClick={() => setAdvancing(key)}>
@@ -674,23 +674,23 @@ export default function MobileAdminSheet({
   onRevokeBanner,
 }) {
   const sectionColors = {
-    matches:      '#1D9E75',
-    leagues:      '#f5a623',
-    awards:       '#f25f5c',
+    matches: '#1D9E75',
+    leagues: '#f5a623',
+    awards: '#f25f5c',
     achievements: 'var(--accent)',
-    titles:       '#3b82f6',
-    crowns:       '#c9a227',
-    banners:      'var(--accent)',
+    titles: '#3b82f6',
+    crowns: '#c9a227',
+    banners: 'var(--accent)',
   };
 
   const sectionTitles = {
-    matches:      { add: 'Agregar Partido',   finish: 'Finalizar Partido',   edit: 'Editar Partido' },
-    leagues:      { add: 'Agregar Liga',       finish: 'Finalizar Liga',       edit: 'Editar' },
-    awards:       { add: 'Agregar Premio',     finish: 'Finalizar Premio',     edit: 'Editar' },
-    achievements: { add: 'Nuevo Logro',        finish: '',                     edit: 'Editar Logro' },
-    titles:       { add: 'Nuevo Título',       finish: '',                     edit: 'Editar Título' },
-    crowns:       { add: 'Otorgar Corona',     finish: '',                     edit: '' },
-    banners:      { add: 'Crear Banner',       finish: '',                     edit: '',  assign: 'Asignar Banner' },
+    matches: { add: 'Agregar Partido', finish: 'Finalizar Partido', edit: 'Editar Partido' },
+    leagues: { add: 'Agregar Liga', finish: 'Finalizar Liga', edit: 'Editar' },
+    awards: { add: 'Agregar Premio', finish: 'Finalizar Premio', edit: 'Editar' },
+    achievements: { add: 'Nuevo Logro', finish: '', edit: 'Editar Logro' },
+    titles: { add: 'Nuevo Título', finish: '', edit: 'Editar Título' },
+    crowns: { add: 'Otorgar Corona', finish: '', edit: '' },
+    banners: { add: 'Crear Banner', finish: '', edit: '', assign: 'Asignar Banner' },
   };
 
   const color = panelMode === 'finish' ? '#1D9E75' : sectionColors[activeSection] || 'var(--accent)';
@@ -700,19 +700,19 @@ export default function MobileAdminSheet({
     if (panelMode === 'finish' && panelItem) {
       if (activeSection === 'matches') return <FinishMatchForm match={panelItem} onFinish={onFinish} onClose={onClose} />;
       if (activeSection === 'leagues') return <FinishLeagueForm league={panelItem} onFinish={onFinish} onClose={onClose} />;
-      if (activeSection === 'awards')  return <FinishAwardForm award={panelItem} onFinish={onFinish} onClose={onClose} />;
+      if (activeSection === 'awards') return <FinishAwardForm award={panelItem} onFinish={onFinish} onClose={onClose} />;
     }
     if (panelMode === 'edit' && panelItem) {
       if (activeSection === 'achievements') return <EditAchievementForm item={panelItem} onSave={onSave} onDelete={onDelete} onClose={onClose} />;
     }
 
     switch (activeSection) {
-      case 'matches':      return <AddMatchForm onAdd={onAdd} onClose={onClose} />;
-      case 'leagues':      return <AddLeagueForm onAdd={onAdd} onClose={onClose} />;
-      case 'awards':       return <AddAwardForm onAdd={onAdd} onClose={onClose} />;
+      case 'matches': return <AddMatchForm onAdd={onAdd} onClose={onClose} />;
+      case 'leagues': return <AddLeagueForm onAdd={onAdd} onClose={onClose} />;
+      case 'awards': return <AddAwardForm onAdd={onAdd} onClose={onClose} />;
       case 'achievements': return <AddAchievementForm onAdd={onAdd} onClose={onClose} />;
-      case 'crowns':       return <AddCrownForm onAdd={onAdd} onClose={onClose} />;
-      case 'banners':      return <AddBannerForm onAdd={onAdd} onClose={onClose} />;
+      case 'crowns': return <AddCrownForm onAdd={onAdd} onClose={onClose} />;
+      case 'banners': return <AddBannerForm onAdd={onAdd} onClose={onClose} />;
       default: return <AddMatchForm onAdd={onAdd} onClose={onClose} />;
     }
   };

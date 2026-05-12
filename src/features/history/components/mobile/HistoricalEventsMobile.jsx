@@ -8,8 +8,8 @@ import {
   useHistoricalEvents,
   useHistoricalEventDetail,
   getHistoricalImageUrl,
-} from "../../../../hooks/HooksHistory/useHistoricalEvents";
-import "../../styles/StylesMobile/MobHistory/HistoricalEventsMobile.css";
+} from "../../hooks/useHistoricalEvents";
+import "../../styles/mobile/HistoricalEventsMobile.css";
 
 const EVENT_TYPE_LABEL = {
   Championship: "Campeonato",

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 const calculateAchievements = (availableAchievements, userStats) => {
   if (!availableAchievements || !userStats) return [];
@@ -22,7 +22,7 @@ const calculateAchievements = (availableAchievements, userStats) => {
 
 const calculateTitles = (availableTitles, userAchievements) => {
   if (!availableTitles || !userAchievements) return [];
-  
+
   return availableTitles.filter(title => {
     const requiredAchievementId = title.requirement_achievement_id;
     return userAchievements.some(achievement => achievement.id === requiredAchievementId);
@@ -38,10 +38,10 @@ export const useAchievements = (currentUser, streakData) => {
 
   const loadAchievementsAndTitles = async () => {
     if (!currentUser) return;
-    
+
     try {
       setAchievementsLoading(true);
-      
+
       // Load available achievements
       const { data: achievementsData, error: achievementsError } = await supabase
         .from('available_achievements')
@@ -94,7 +94,7 @@ export const useAchievements = (currentUser, streakData) => {
       if (error) throw error;
 
       toast.success('¡Logro guardado exitosamente!');
-      
+
       const { data } = await supabase
         .from('available_achievements')
         .select('*')
@@ -116,7 +116,7 @@ export const useAchievements = (currentUser, streakData) => {
       if (error) throw error;
 
       toast.success('¡Logro eliminado correctamente!');
-      
+
       const { data } = await supabase
         .from('available_achievements')
         .select('*')
@@ -137,7 +137,7 @@ export const useAchievements = (currentUser, streakData) => {
       if (error) throw error;
 
       toast.success('Título guardado correctamente');
-      
+
       const { data } = await supabase
         .from('available_titles')
         .select('*');
@@ -158,7 +158,7 @@ export const useAchievements = (currentUser, streakData) => {
       if (error) throw error;
 
       toast.success('Título eliminado correctamente');
-      
+
       const { data } = await supabase
         .from('available_titles')
         .select('*');
@@ -171,17 +171,17 @@ export const useAchievements = (currentUser, streakData) => {
 
   const getActiveTitle = () => {
     if (userTitles.length === 0) return null;
-    
+
     const sortedTitles = [...userTitles].sort((a, b) => {
       const achievementA = availableAchievements.find(ach => ach.id === a.requirement_achievement_id);
       const achievementB = availableAchievements.find(ach => ach.id === b.requirement_achievement_id);
-      
+
       if (!achievementA) return 1;
       if (!achievementB) return -1;
-      
+
       return (achievementB.requirement_value || 0) - (achievementA.requirement_value || 0);
     });
-    
+
     return sortedTitles[0];
   };
 

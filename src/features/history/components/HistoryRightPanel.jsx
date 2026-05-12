@@ -4,7 +4,7 @@ import {
   TrendingUp, Clock, Globe, Filter
 } from "lucide-react";
 import { getHistoricalImageUrl } from "../hooks/useHistoricalPlayers";
-import "../../styles/StylesPanels/HistoryRightPanel.css";
+import "../styles/HistoryRightPanel.css";
 
 // ── Helpers ───────────────────────────────────────────────────
 const LEGACY_COLOR = {

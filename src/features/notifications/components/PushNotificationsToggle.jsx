@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import usePushNotifications from '../../hooks/usePushNotifications';
+import usePushNotifications from '../hooks/usePushNotifications';
 
 export default function PushNotificationsToggle({ userId }) {
   const {
@@ -16,7 +16,7 @@ export default function PushNotificationsToggle({ userId }) {
 
   const handleToggle = async () => {
     const result = await toggleSubscription();
-    
+
     if (result.success) {
       console.log(isSubscribed ? 'Desuscrito' : 'Suscrito');
     }
@@ -25,15 +25,15 @@ export default function PushNotificationsToggle({ userId }) {
   return (
     <div className="push-toggle">
       <label className="switch">
-        <input 
-          type="checkbox" 
+        <input
+          type="checkbox"
           checked={isSubscribed}
           onChange={handleToggle}
           disabled={isLoading || permission === 'denied'}
         />
         <span className="slider"></span>
       </label>
-      
+
       <span>
         {isSubscribed ? '🔔 Notificaciones ON' : '🔕 Notificaciones OFF'}
       </span>

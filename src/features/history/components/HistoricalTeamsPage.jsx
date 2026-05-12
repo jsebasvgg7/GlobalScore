@@ -4,10 +4,10 @@ import {
   Trophy, Users2, Zap, ChevronRight, Search, X,
   Star, MapPin, Calendar, User2, Hash
 } from "lucide-react";
-import { useHistoricalTeams, useHistoricalTeamDetail } from "../../../hooks/HooksHistory/useHistoricalTeams";
+import { useHistoricalTeams, useHistoricalTeamDetail } from "../hooks/useHistoricalTeams";
 import { getHistoricalImageUrl } from "../hooks/useHistoricalPlayers";
-import SectionHeaderMobile from "../ComMobile/SectionHeaderMobile";
-import "../../styles/StylesHistory/HistoricalTeamsPage.css";
+import SectionHeaderMobile from "./mobile/SectionHeaderMobile";
+import "../styles/HistoricalTeamsPage.css";
 
 // ─── Mapas de traducción ──────────────────────────────────────
 const LEGACY_TEAM_LABEL = {

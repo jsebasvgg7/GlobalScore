@@ -8,24 +8,30 @@ import {
   useHistoricalPlayers,
   useHistoricalPlayerDetail,
   getHistoricalImageUrl,
-} from "../hooks/HooksHistory/useHistoricalPlayers";
-import { useHistoricalEvents } from "../hooks/HooksHistory/useHistoricalEvents";
-import HistoryRightPanel from "../components/ComPanels/HistoryRightPanel";
-import TeamsRightPanel from "../components/ComPanels/TeamsRightPanel";
-import EventsRightPanel from "../components/ComPanels/EventsRightPanel";
-import HistoryMenuDesktop from "../components/ComHistory/HistoryMenuDesktop";
-import HistoryMenuMobile from "../components/ComMobile/HistoryMenuMobile";
-import HistoricalEventsPage from "../components/ComHistory/HistoricalEventsPage";
-import HistoricalEventsMobile from "../components/ComMobile/HistoricalEventsMobile";
-import HistoricalTeamsPage from "../components/ComHistory/HistoricalTeamsPage";
-import HistoricalTeamsMobile from "../components/ComMobile/HistoricalTeamsMobile";
-import HistoricalCompetitionsPage from "../components/ComHistory/HistoricalCompetitionsPage";
-import HistoricalCompetitionsMobile from "../components/ComMobile/HistoricalCompetitionsMobile";
-import HistoryWelcomeScreen from "../components/ComHistory/HistoryWelcomeScreen";
-import SectionHeaderMobile from "../components/ComMobile/SectionHeaderMobile";
-import Footer from '../components/ComLayout/Footer';
-import "../styles/StylesPages/HistoryPage.css";
-import "../styles/StylesMobile/HistoryPageMobile.css";
+  useHistoricalEvents,
+
+  HistoryRightPanel,
+  TeamsRightPanel,
+  EventsRightPanel,
+
+  HistoryMenuDesktop,
+  HistoryMenuMobile,
+
+  HistoricalEventsPage,
+  HistoricalEventsMobile,
+
+  HistoricalTeamsPage,
+  HistoricalTeamsMobile,
+
+  HistoricalCompetitionsPage,
+  HistoricalCompetitionsMobile,
+
+  HistoryWelcomeScreen,
+  SectionHeaderMobile,
+} from '@/features/history';
+
+import "./HistoryPage.css";
+import "../styles/mobile/HistoryPageMobile.css";
 
 // ─── Helpers ──────────────────────────────────────────────────
 const LEGACY_COLOR = {
@@ -773,7 +779,6 @@ export default function HistoryPage() {
             </div>
           </>
         )}
-        <Footer />
       </div>
 
       <HistoryRightPanel

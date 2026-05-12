@@ -9,7 +9,7 @@ import {
   getHistoricalImageUrl,
 } from "../hooks/useAdminHistorical";
 import { DataImporter } from "./DataImporter";
-import "../../styles/StylesAdmin/AdminHistorical.css";
+import "../styles/AdminHistorical.css";
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
 const TABS = [

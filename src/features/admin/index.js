@@ -26,7 +26,11 @@ export { default as FinishLeagueModal } from './components/FinishLeagueModal'
 export { default as FinishMatchModal } from './components/FinishMatchModal'
 
 // Mobile
-export { default as MobileAdmin } from './components/mobile/MobileAdmin'
+export {
+    default as MobileAdmin,
+    MobileAdminFAB,
+    useIsMobile
+} from './components/mobile/MobileAdmin';
 
 // Hooks
 export * from './hooks/useAdminAchievements'

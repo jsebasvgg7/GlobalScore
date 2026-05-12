@@ -1,14 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
-import { supabase } from "../shared/services/supabase/supabaseClient";
-import "../styles/StylesPages/Auth.css";
+import { supabase } from '@/shared/services/supabase/client';
+import "./Auth.css";
 
-/* ─────────────────────────────────────────────────────────────
-   Variable de módulo: sobrevive re-montajes de React/StrictMode.
-   resetWelcome() se llama ANTES de supabase.auth.signOut()
-   desde Header.jsx y ProfileSettingsPage.jsx.
-───────────────────────────────────────────────────────────── */
 let _welcomeDone = false;
 
 export function resetWelcome() { _welcomeDone = false; }

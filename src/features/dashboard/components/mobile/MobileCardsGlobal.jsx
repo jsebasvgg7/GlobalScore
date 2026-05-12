@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CheckCircle2, Trophy, Target, Award, Star, Shield, Clock } from "lucide-react";
-import "../../styles/StylesCards/MobileCardsGlobal.css";
-
+import '../../styles/MobileCardsGlobal.css';
 // ── Icono espadas knockout ───────────────────────────────────────
 const SwordsIcon = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/>
-    <line x1="13" y1="19" x2="19" y2="13"/>
-    <line x1="16" y1="16" x2="20" y2="20"/>
-    <line x1="19" y1="21" x2="21" y2="19"/>
-    <polyline points="9.5 14.5 3 21"/>
-    <polyline points="14.5 9.5 21 3 21 6 18 6"/>
+    <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5" />
+    <line x1="13" y1="19" x2="19" y2="13" />
+    <line x1="16" y1="16" x2="20" y2="20" />
+    <line x1="19" y1="21" x2="21" y2="19" />
+    <polyline points="9.5 14.5 3 21" />
+    <polyline points="14.5 9.5 21 3 21 6 18 6" />
   </svg>
 );
 
@@ -33,9 +32,9 @@ function KeyBtn({ symbol, onPress, disabled, accent = false }) {
     <button
       className={[
         "mcg-key",
-        accent   ? "mcg-key--accent"  : "",
-        pressed  ? "mcg-key--pressed" : "",
-        disabled ? "mcg-key--disabled": "",
+        accent ? "mcg-key--accent" : "",
+        pressed ? "mcg-key--pressed" : "",
+        disabled ? "mcg-key--disabled" : "",
       ].filter(Boolean).join(" ")}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
@@ -59,7 +58,7 @@ function ScoreDisplay({ value, saved }) {
   return (
     <div className={[
       "mcg-score-display",
-      saved   ? "mcg-score-display--saved" : "",
+      saved ? "mcg-score-display--saved" : "",
       isEmpty ? "mcg-score-display--empty" : "",
     ].filter(Boolean).join(" ")}>
       <span className="mcg-score-num">{isEmpty ? "—" : value}</span>
@@ -73,7 +72,7 @@ function ScoreDisplay({ value, saved }) {
 function StatusPill({ mod, label, live = false, saving = false }) {
   return (
     <span className={`mcg-pill mcg-pill--${mod}`}>
-      {live   && <span className="mcg-live-dot" />}
+      {live && <span className="mcg-live-dot" />}
       {saving && <span className="mcg-spin" />}
       {label}
     </span>
@@ -115,15 +114,15 @@ function CardFooterMeta({ time, date, isLive, minute }) {
     <div className="mcg-footer">
       <span className="mcg-meta">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/>
+          <circle cx="12" cy="12" r="9" /><polyline points="12 7 12 12 15 14" />
         </svg>
         {isLive ? `${minute || "??"}′` : (time || "—")}
       </span>
       <div className="mcg-footer-sep" />
       <span className="mcg-meta">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="3" y="4" width="18" height="18"/><line x1="7" y1="2" x2="7" y2="6"/>
-          <line x1="17" y1="2" x2="17" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          <rect x="3" y="4" width="18" height="18" /><line x1="7" y1="2" x2="7" y2="6" />
+          <line x1="17" y1="2" x2="17" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
         </svg>
         {date || "—"}
       </span>
@@ -135,10 +134,10 @@ function CardFooterMeta({ time, date, isLive, minute }) {
 //  1. MATCH CARD MOBILE
 // ════════════════════════════════════════════════════════════════
 function TeamRow({ side, match, score, onInc, onDec, isDisabled, isSaved, isAdvancing, onAdvClick }) {
-  const isHome    = side === "home";
-  const teamName  = isHome ? match.home_team          : match.away_team;
-  const logoUrl   = isHome ? match.home_team_logo_url : match.away_team_logo_url;
-  const logoEmoji = isHome ? match.home_team_logo     : match.away_team_logo;
+  const isHome = side === "home";
+  const teamName = isHome ? match.home_team : match.away_team;
+  const logoUrl = isHome ? match.home_team_logo_url : match.away_team_logo_url;
+  const logoEmoji = isHome ? match.home_team_logo : match.away_team_logo;
 
   return (
     <div className={["mcg-team-row", isAdvancing ? "mcg-team-row--adv" : ""].filter(Boolean).join(" ")}>
@@ -170,11 +169,11 @@ function TeamRow({ side, match, score, onInc, onDec, isDisabled, isSaved, isAdva
 }
 
 export function MatchCardMobile({ match, userPred, onPredict }) {
-  const [homeScore,     setHomeScore]     = useState(userPred?.home_score ?? "");
-  const [awayScore,     setAwayScore]     = useState(userPred?.away_score ?? "");
+  const [homeScore, setHomeScore] = useState(userPred?.home_score ?? "");
+  const [awayScore, setAwayScore] = useState(userPred?.away_score ?? "");
   const [advancingTeam, setAdvancingTeam] = useState(userPred?.predicted_advancing_team ?? null);
-  const [isSaved,       setIsSaved]       = useState(userPred !== undefined);
-  const [isSaving,      setIsSaving]      = useState(false);
+  const [isSaved, setIsSaved] = useState(userPred !== undefined);
+  const [isSaving, setIsSaving] = useState(false);
   const saveTimeoutRef = useRef(null);
 
   useEffect(() => {
@@ -184,11 +183,11 @@ export function MatchCardMobile({ match, userPred, onPredict }) {
     setIsSaved(userPred !== undefined);
   }, [userPred]);
 
-  const now            = new Date();
-  const deadline       = match.deadline ? new Date(match.deadline) : null;
+  const now = new Date();
+  const deadline = match.deadline ? new Date(match.deadline) : null;
   const isPastDeadline = deadline && now >= deadline;
-  const isLive         = match.status === "live";
-  const isDisabled     = isPastDeadline || match.status !== "pending";
+  const isLive = match.status === "live";
+  const isDisabled = isPastDeadline || match.status !== "pending";
 
   const triggerSave = (home, away, adv) => {
     const isValid = home !== "" && away !== "" && !isNaN(parseInt(home)) && !isNaN(parseInt(away));
@@ -247,19 +246,19 @@ export function MatchCardMobile({ match, userPred, onPredict }) {
   };
 
   const pillConfig = isLive
-    ? { mod: "live",    label: "EN VIVO",   live: true  }
+    ? { mod: "live", label: "EN VIVO", live: true }
     : isPastDeadline
-    ? { mod: "expired", label: "CERRADO"                }
-    : isSaving
-    ? { mod: "saving",  label: "GUARDANDO", saving: true}
-    : isSaved
-    ? { mod: "saved",   label: "GUARDADO"               }
-    : { mod: "pending", label: "PENDIENTE"              };
+      ? { mod: "expired", label: "CERRADO" }
+      : isSaving
+        ? { mod: "saving", label: "GUARDANDO", saving: true }
+        : isSaved
+          ? { mod: "saved", label: "GUARDADO" }
+          : { mod: "pending", label: "PENDIENTE" };
 
   return (
     <div className={[
       "mcg-match-card",
-      isLive         ? "mcg-match-card--live"    : "",
+      isLive ? "mcg-match-card--live" : "",
       isPastDeadline ? "mcg-match-card--expired" : "",
     ].filter(Boolean).join(" ")}>
 
@@ -302,30 +301,30 @@ export function MatchCardMobile({ match, userPred, onPredict }) {
 //  2. LEAGUE CARD MOBILE
 // ════════════════════════════════════════════════════════════════
 export function LeagueCardMobile({ league, userPrediction, onPredict }) {
-  const [champion,  setChampion]  = useState(userPrediction?.predicted_champion    ?? "");
-  const [topScorer, setTopScorer] = useState(userPrediction?.predicted_top_scorer  ?? "");
-  const [topAssist, setTopAssist] = useState(userPrediction?.predicted_top_assist  ?? "");
-  const [mvp,       setMvp]       = useState(userPrediction?.predicted_mvp         ?? "");
+  const [champion, setChampion] = useState(userPrediction?.predicted_champion ?? "");
+  const [topScorer, setTopScorer] = useState(userPrediction?.predicted_top_scorer ?? "");
+  const [topAssist, setTopAssist] = useState(userPrediction?.predicted_top_assist ?? "");
+  const [mvp, setMvp] = useState(userPrediction?.predicted_mvp ?? "");
 
   useEffect(() => {
-    setChampion (userPrediction?.predicted_champion    ?? "");
-    setTopScorer(userPrediction?.predicted_top_scorer  ?? "");
-    setTopAssist(userPrediction?.predicted_top_assist  ?? "");
-    setMvp      (userPrediction?.predicted_mvp         ?? "");
+    setChampion(userPrediction?.predicted_champion ?? "");
+    setTopScorer(userPrediction?.predicted_top_scorer ?? "");
+    setTopAssist(userPrediction?.predicted_top_assist ?? "");
+    setMvp(userPrediction?.predicted_mvp ?? "");
   }, [userPrediction]);
 
-  const now            = new Date();
-  const deadline       = league.deadline ? new Date(league.deadline) : null;
+  const now = new Date();
+  const deadline = league.deadline ? new Date(league.deadline) : null;
   const isPastDeadline = deadline && now >= deadline;
-  const hasPrediction  = userPrediction !== undefined;
-  const isFinished     = league.status === "finished";
-  const isDisabled     = isPastDeadline || isFinished;
+  const hasPrediction = userPrediction !== undefined;
+  const isFinished = league.status === "finished";
+  const isDisabled = isPastDeadline || isFinished;
 
   const isPredictionChanged =
-    champion  !== (userPrediction?.predicted_champion   ?? "") ||
+    champion !== (userPrediction?.predicted_champion ?? "") ||
     topScorer !== (userPrediction?.predicted_top_scorer ?? "") ||
     topAssist !== (userPrediction?.predicted_top_assist ?? "") ||
-    mvp       !== (userPrediction?.predicted_mvp        ?? "");
+    mvp !== (userPrediction?.predicted_mvp ?? "");
 
   const showSaveButton = !isDisabled && (!hasPrediction || isPredictionChanged);
 
@@ -340,16 +339,16 @@ export function LeagueCardMobile({ league, userPrediction, onPredict }) {
   const pillConfig = isFinished
     ? { mod: "finished", label: "FINALIZADO" }
     : isPastDeadline
-    ? { mod: "expired",  label: "EXPIRADO"   }
-    : hasPrediction && !isPredictionChanged
-    ? { mod: "saved",    label: "GUARDADO"   }
-    : { mod: "pending",  label: "PENDIENTE"  };
+      ? { mod: "expired", label: "EXPIRADO" }
+      : hasPrediction && !isPredictionChanged
+        ? { mod: "saved", label: "GUARDADO" }
+        : { mod: "pending", label: "PENDIENTE" };
 
   return (
     <div className={[
       "mcg-league-card",
-      isFinished     ? "mcg-league-card--finished" : "",
-      isPastDeadline ? "mcg-league-card--expired"  : "",
+      isFinished ? "mcg-league-card--finished" : "",
+      isPastDeadline ? "mcg-league-card--expired" : "",
     ].filter(Boolean).join(" ")}>
 
       <CardHeader
@@ -496,12 +495,12 @@ export function AwardCardMobile({ award, userPrediction, onPredict }) {
     setPredictedWinner(userPrediction?.predicted_winner ?? "");
   }, [userPrediction]);
 
-  const now            = new Date();
-  const deadline       = award.deadline ? new Date(award.deadline) : null;
+  const now = new Date();
+  const deadline = award.deadline ? new Date(award.deadline) : null;
   const isPastDeadline = deadline && now >= deadline;
-  const hasPrediction  = userPrediction !== undefined;
-  const isFinished     = award.status === "finished";
-  const isDisabled     = isPastDeadline || isFinished;
+  const hasPrediction = userPrediction !== undefined;
+  const isFinished = award.status === "finished";
+  const isDisabled = isPastDeadline || isFinished;
 
   const isPredictionChanged = predictedWinner !== (userPrediction?.predicted_winner ?? "");
   const showSaveButton = !isDisabled && (!hasPrediction || isPredictionChanged);
@@ -517,16 +516,16 @@ export function AwardCardMobile({ award, userPrediction, onPredict }) {
   const pillConfig = isFinished
     ? { mod: "finished", label: "FINALIZADO" }
     : isPastDeadline
-    ? { mod: "expired",  label: "EXPIRADO"   }
-    : hasPrediction && !isPredictionChanged
-    ? { mod: "saved",    label: "GUARDADO"   }
-    : { mod: "pending",  label: "PENDIENTE"  };
+      ? { mod: "expired", label: "EXPIRADO" }
+      : hasPrediction && !isPredictionChanged
+        ? { mod: "saved", label: "GUARDADO" }
+        : { mod: "pending", label: "PENDIENTE" };
 
   return (
     <div className={[
       "mcg-award-card",
-      isFinished     ? "mcg-award-card--finished" : "",
-      isPastDeadline ? "mcg-award-card--expired"  : "",
+      isFinished ? "mcg-award-card--finished" : "",
+      isPastDeadline ? "mcg-award-card--expired" : "",
     ].filter(Boolean).join(" ")}>
 
       <CardHeader

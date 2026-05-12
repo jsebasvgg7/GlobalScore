@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { X, Plus, Trophy, Calendar, Award, Target } from 'lucide-react';
-import { getLogoUrlByLeagueName } from '../../utils/logoHelper.js';
-import { supabase } from '../../utils/supabaseClient';
-import '../../styles/StylesAdmin/AdminModal.css';
+import { getLogoUrlByLeagueName } from '@/shared/utils/logoHelper.js';
+import { supabase } from '@/shared/services/supabase/client';
+import '../styles/AdminModal.css';
 
 export default function AdminLeagueModal({ onAdd, onClose }) {
   const [form, setForm] = useState({
@@ -17,7 +17,7 @@ export default function AdminLeagueModal({ onAdd, onClose }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
-    
+
     // Auto-generar URL del logo cuando se ingresa el nombre de la liga
     if (name === 'name' && value) {
       const logoUrl = getLogoUrlByLeagueName(supabase, value);
@@ -80,10 +80,10 @@ export default function AdminLeagueModal({ onAdd, onClose }) {
               <span>ID de la Liga</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="id" 
-              placeholder="Ej: epl-2024, ucl-2025, laliga-2025" 
+            <input
+              className="form-input-premium"
+              name="id"
+              placeholder="Ej: epl-2024, ucl-2025, laliga-2025"
               value={form.id}
               onChange={handleChange}
             />
@@ -97,10 +97,10 @@ export default function AdminLeagueModal({ onAdd, onClose }) {
               <span>Nombre de la Competición</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="name" 
-              placeholder="Ej: Premier League, La Liga, UEFA Champions League" 
+            <input
+              className="form-input-premium"
+              name="name"
+              placeholder="Ej: Premier League, La Liga, UEFA Champions League"
               value={form.name}
               onChange={handleChange}
             />
@@ -114,10 +114,10 @@ export default function AdminLeagueModal({ onAdd, onClose }) {
               <span>Temporada</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="season" 
-              placeholder="Ej: 2024/25, 2024-2025" 
+            <input
+              className="form-input-premium"
+              name="season"
+              placeholder="Ej: 2024/25, 2024-2025"
               value={form.season}
               onChange={handleChange}
             />
@@ -143,10 +143,10 @@ export default function AdminLeagueModal({ onAdd, onClose }) {
               <span>Emoji de Respaldo</span>
             </label>
             <div className="logo-input-wrapper">
-              <input 
-                className="form-input-premium logo-input" 
-                name="logo" 
-                placeholder="🏆" 
+              <input
+                className="form-input-premium logo-input"
+                name="logo"
+                placeholder="🏆"
                 value={form.logo}
                 onChange={handleChange}
                 maxLength={2}
@@ -164,10 +164,10 @@ export default function AdminLeagueModal({ onAdd, onClose }) {
                 <span>Fecha Límite</span>
                 <span className="required">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="deadline" 
-                type="date" 
+              <input
+                className="form-input-premium"
+                name="deadline"
+                type="date"
                 value={form.deadline}
                 onChange={handleChange}
               />
@@ -179,10 +179,10 @@ export default function AdminLeagueModal({ onAdd, onClose }) {
                 <span>Hora Límite</span>
                 <span className="required">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="deadline_time" 
-                type="time" 
+              <input
+                className="form-input-premium"
+                name="deadline_time"
+                type="time"
                 value={form.deadline_time}
                 onChange={handleChange}
               />

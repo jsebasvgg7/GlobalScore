@@ -14,8 +14,8 @@ import {
   // Coronas
   BadgeCheck,
 } from "lucide-react";
-import { supabase } from "../../utils/supabaseClient";
-import "../../styles/StylesProfile/MobileUserProfile.css";
+import { supabase } from "@/shared/services/supabase/client";
+import "../../styles/MobileUserProfile.css";
 
 /* ── helpers ── */
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
@@ -23,16 +23,16 @@ const pct = (a, b) => (b > 0 ? Math.round((a / b) * 100) : 0);
 
 /* ── Mapa de nombre-de-icon (string) → componente Lucide ── */
 const ICON_MAP = {
-  Crosshair,  Target,     Hash,         TrendingUp,   Star,
-  BarChart2,  Activity,   Award,        BookOpen,     CheckCircle,
-  Eye,        Aperture,   Navigation,   CheckSquare,  Compass,
+  Crosshair, Target, Hash, TrendingUp, Star,
+  BarChart2, Activity, Award, BookOpen, CheckCircle,
+  Eye, Aperture, Navigation, CheckSquare, Compass,
   ShieldCheck: BadgeCheck,
-  Repeat2,    Flame,      Zap,          Calendar,     Cpu,
-  Timer,      Infinity,   Rocket,       Shield,       Crown,
-  Circle,     CircleDot,  Layers,       Trophy,       Gem,
-  Sparkles,   Percent,    LayoutDashboard, Medal,     BadgeCheck,
+  Repeat2, Flame, Zap, Calendar, Cpu,
+  Timer, Infinity, Rocket, Shield, Crown,
+  Circle, CircleDot, Layers, Trophy, Gem,
+  Sparkles, Percent, LayoutDashboard, Medal, BadgeCheck,
   // fallback para nombres que no matcheen
-  Default:    Star,
+  Default: Star,
 };
 
 /** Devuelve el componente Lucide dado un string de nombre */
@@ -44,20 +44,20 @@ function getIcon(iconName, size = 16, color) {
 /* ── Colores por categoría ── */
 const CATEGORY_COLORS = {
   predictions: "#8b7fc7",
-  accuracy:    "#34d399",
-  streaks:     "#ef4444",
-  points:      "#f59e0b",
-  crowns:      "#c9a227",
-  special:     "#fb923c",
+  accuracy: "#34d399",
+  streaks: "#ef4444",
+  points: "#f59e0b",
+  crowns: "#c9a227",
+  special: "#fb923c",
 };
 
 const CATEGORY_LABELS = {
   predictions: "Predicciones",
-  accuracy:    "Aciertos",
-  streaks:     "Rachas",
-  points:      "Puntos",
-  crowns:      "Coronas",
-  special:     "Especiales",
+  accuracy: "Aciertos",
+  streaks: "Rachas",
+  points: "Puntos",
+  crowns: "Coronas",
+  special: "Especiales",
 };
 
 /* ════════════════════════════════════════════
@@ -100,18 +100,18 @@ function TabBtn({ id, active, onClick, children }) {
    PANEL — STATS
 ════════════════════════════════════════════ */
 function PanelStats({ user }) {
-  const acc  = pct(user.correct || 0, user.predictions || 0);
+  const acc = pct(user.correct || 0, user.predictions || 0);
   const mAcc = pct(user.monthly_correct || 0, user.monthly_predictions || 0);
 
   const rows = [
-    { lbl: "PREDICCIONES", val: fmt(user.predictions || 0),         accent: "var(--mup2-accent)" },
-    { lbl: "ACIERTOS",     val: fmt(user.correct     || 0),         accent: "#34d399" },
-    { lbl: "PRECISIÓN",    val: `${acc}%`,                          accent: "#f59e0b" },
-    { lbl: "PUNTOS TOTAL", val: fmt(user.points       || 0),        accent: "var(--mup2-accent)" },
-    { lbl: "PUNTOS MES",   val: fmt(user.monthly_points || 0),      accent: "#a78bfa" },
-    { lbl: "PRED. MES",    val: fmt(user.monthly_predictions || 0), accent: "#34d399" },
-    { lbl: "ACIERTOS MES", val: fmt(user.monthly_correct || 0),     accent: "#f59e0b" },
-    { lbl: "PREC. MES",    val: `${mAcc}%`,                        accent: "#fb923c" },
+    { lbl: "PREDICCIONES", val: fmt(user.predictions || 0), accent: "var(--mup2-accent)" },
+    { lbl: "ACIERTOS", val: fmt(user.correct || 0), accent: "#34d399" },
+    { lbl: "PRECISIÓN", val: `${acc}%`, accent: "#f59e0b" },
+    { lbl: "PUNTOS TOTAL", val: fmt(user.points || 0), accent: "var(--mup2-accent)" },
+    { lbl: "PUNTOS MES", val: fmt(user.monthly_points || 0), accent: "#a78bfa" },
+    { lbl: "PRED. MES", val: fmt(user.monthly_predictions || 0), accent: "#34d399" },
+    { lbl: "ACIERTOS MES", val: fmt(user.monthly_correct || 0), accent: "#f59e0b" },
+    { lbl: "PREC. MES", val: `${mAcc}%`, accent: "#fb923c" },
   ];
 
   return (
@@ -247,7 +247,7 @@ function PanelChampions({ userId }) {
    PANEL — LOGROS  (carga desde Supabase)
 ════════════════════════════════════════════ */
 function PanelAchievements({ user }) {
-  const [allAch, setAllAch]   = useState([]);
+  const [allAch, setAllAch] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -266,17 +266,17 @@ function PanelAchievements({ user }) {
   const isUnlocked = (ach) => {
     const val = ach.requirement_value ?? 0;
     switch (ach.requirement_type) {
-      case "predictions":           return (user.predictions           || 0) >= val;
-      case "correct":               return (user.correct               || 0) >= val;
-      case "streak":                return (user.best_streak           || 0) >= val;
-      case "points":                return (user.points                || 0) >= val;
+      case "predictions": return (user.predictions || 0) >= val;
+      case "correct": return (user.correct || 0) >= val;
+      case "streak": return (user.best_streak || 0) >= val;
+      case "points": return (user.points || 0) >= val;
       case "monthly_championships": return (user.monthly_championships || 0) >= val;
-      default:                      return false;
+      default: return false;
     }
   };
 
   const unlocked = allAch.filter(isUnlocked);
-  const locked   = allAch.filter((a) => !isUnlocked(a));
+  const locked = allAch.filter((a) => !isUnlocked(a));
 
   /* Agrupar desbloqueados por categoría */
   const groupedUnlocked = unlocked.reduce((acc, a) => {
@@ -402,10 +402,10 @@ function AchievementRow({ ach, unlocked }) {
    MAIN COMPONENT
 ════════════════════════════════════════════ */
 export default function MobileUserProfile({ userId, onClose }) {
-  const [user,    setUser]    = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [tab,     setTab]     = useState("stats");
-  const [rank,    setRank]    = useState(null);
+  const [tab, setTab] = useState("stats");
+  const [rank, setRank] = useState(null);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -536,7 +536,7 @@ export default function MobileUserProfile({ userId, onClose }) {
 
           {/* Tabs */}
           <div className="mup2-tabs">
-            <TabBtn id="stats"  active={tab === "stats"}  onClick={setTab}>STATS</TabBtn>
+            <TabBtn id="stats" active={tab === "stats"} onClick={setTab}>STATS</TabBtn>
             <TabBtn id="crowns" active={tab === "crowns"} onClick={setTab}>CORONAS</TabBtn>
             <TabBtn id="logros" active={tab === "logros"} onClick={setTab}>LOGROS</TabBtn>
           </div>
@@ -554,7 +554,7 @@ export default function MobileUserProfile({ userId, onClose }) {
             <div className="mup2-error">Error al cargar usuario</div>
           ) : (
             <>
-              {tab === "stats"  && <PanelStats user={user} />}
+              {tab === "stats" && <PanelStats user={user} />}
               {tab === "crowns" && <PanelChampions userId={userId} />}
               {tab === "logros" && <PanelAchievements user={user} />}
             </>

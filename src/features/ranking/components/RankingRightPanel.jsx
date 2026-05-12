@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/StylesPanels/RankingRightPanel.css";
+import "../styles/RankingRightPanel.css";
 
 const initials = (name = "") => (name || "U").slice(0, 2).toUpperCase();
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");

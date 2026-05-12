@@ -1,13 +1,10 @@
-// ============================================
-// PUSH NOTIFICATIONS MANAGER 
-// ============================================
-import { supabase } from '../supabase/client';
+import { supabase } from '@/shared/services/supabase/client';
 
 class PushNotificationsManager {
   constructor() {
     this.subscription = null;
     this.permission = 'default';
-    this.vapidPublicKey = null; // Se obtiene de Supabase
+    this.vapidPublicKey = null;
   }
 
   // ============================================

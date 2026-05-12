@@ -1,18 +1,17 @@
 import React from "react";
 import { Target, Star, CheckCircle2, Zap } from "lucide-react";
-import GlobalLoader from "../ComFeedback/GlobalLoader";
-import "../../styles/StylesMobile/MobileStats.css";
+import GlobalLoader from "@/shared/ui";
+import "../../styles/MobileStats.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
 
-/* ── Purple scale (matches CSS custom properties) ── */
 const P = {
-  accent:  "#60519b",  // base purple
-  light:   "#8b7fc7",  // light purple
-  exact:   "#7c6fe8",  // exactos — violeta vibrante
-  correct: "#a599d9",  // correctos — lila medio
-  wrong:   "#c9c0f0",  // incorrectos — lavanda suave
-  gold:    "#9d8fe6",  // puntos / totales
+  accent: "#60519b",
+  light: "#8b7fc7",
+  exact: "#7c6fe8",
+  correct: "#a599d9",
+  wrong: "#c9c0f0",
+  gold: "#9d8fe6",
 };
 
 function HeroIcon({ color, children }) {
@@ -50,11 +49,11 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
   const totalPts =
     (stats.pointsFromMatches || 0) +
     (stats.pointsFromLeagues || 0) +
-    (stats.pointsFromAwards  || 0);
+    (stats.pointsFromAwards || 0);
 
   const pctMatches = totalPts > 0 ? Math.round(((stats.pointsFromMatches || 0) / totalPts) * 100) : 0;
   const pctLeagues = totalPts > 0 ? Math.round(((stats.pointsFromLeagues || 0) / totalPts) * 100) : 0;
-  const pctAwards  = totalPts > 0 ? Math.round(((stats.pointsFromAwards  || 0) / totalPts) * 100) : 0;
+  const pctAwards = totalPts > 0 ? Math.round(((stats.pointsFromAwards || 0) / totalPts) * 100) : 0;
 
   const orderedDays = stats.dayStats
     ? [...stats.dayStats.slice(1), stats.dayStats[0]]
@@ -71,9 +70,9 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
         </div>
         <div className="mst-range-pills">
           {[
-            { key: "all",   label: "Todo"   },
-            { key: "month", label: "Mes"    },
-            { key: "week",  label: "Semana" },
+            { key: "all", label: "Todo" },
+            { key: "month", label: "Mes" },
+            { key: "week", label: "Semana" },
           ].map(({ key, label }) => (
             <button
               key={key}
@@ -240,7 +239,7 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
         <div className="mst-days-scroll">
           <div className="mst-days">
             {orderedDays.map((day) => {
-              const pct     = day.total > 0 ? Math.round((day.correct / day.total) * 100) : 0;
+              const pct = day.total > 0 ? Math.round((day.correct / day.total) * 100) : 0;
               const opacity = day.total > 0 ? 0.35 + (pct / 100) * 0.65 : 0.15;
               return (
                 <div className="mst-day" key={day.name}>

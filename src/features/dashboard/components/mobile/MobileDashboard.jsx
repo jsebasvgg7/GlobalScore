@@ -1,11 +1,9 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Crown, Landmark } from "lucide-react";
-import MobileUserProfile from "../ComProfile/MobileUserProfile";
-import Footer from "../ComLayout/Footer";
-import MobileSubPage from "./MobileSubPage";
-import "../../styles/StylesMobile/MobileDashboard.css";
-import "../../styles/StylesMobile/MobileSubPage.css";
+import MobileUserProfile from "../../../profile/components/mobile/MobileUserProfile";
+import MobileSubPage from "@/shared/layout";
+import "../../styles/MobileDashboard.css";
 
 // ── SVGs inline ───────────────────────────────────────────────
 const ClockSVG = () => (

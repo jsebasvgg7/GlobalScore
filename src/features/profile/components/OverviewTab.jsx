@@ -1,6 +1,6 @@
 import React from 'react';
 import { Trophy, Zap, Target, BarChart3, Heart, Calendar, Pill, FileText, ChevronRight } from 'lucide-react';
-import { calculateLevelProgress, calculateAccuracy } from '../../utils/profileUtils';
+import { calculateLevelProgress, calculateAccuracy } from '@/shared/utils/profileUtils';
 
 export default function OverviewTab({ userData, currentUser, userRanking }) {
   const accuracy = calculateAccuracy(currentUser);
@@ -57,7 +57,7 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
 
   return (
     <div className="tab-content-wrapper">
-       {/* Level Progress Card */}
+      {/* Level Progress Card */}
       <div className="level-card-modern">
         <div className="level-card-header">
           <div className="level-icon-wrapper">
@@ -73,7 +73,7 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
           <div className="level-progress-fill" style={{ width: `${levelProgress}%` }}></div>
         </div>
       </div>
-      
+
       <div className="clinical-list">
         {clinicalSections.map((section) => {
           const IconComponent = section.icon;

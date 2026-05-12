@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 export const useLeagues = (currentUser) => {
   const [loading, setLoading] = useState(false);
@@ -64,7 +64,7 @@ export const useLeagues = (currentUser) => {
       // 1. Actualizar liga con resultados
       const { error: updateError } = await supabase
         .from("leagues")
-        .update({ 
+        .update({
           status: "finished",
           champion: results.champion,
           top_scorer: results.top_scorer,
@@ -138,7 +138,7 @@ export const useLeagues = (currentUser) => {
 
           await supabase
             .from("users")
-            .update({ 
+            .update({
               // Globales
               points: newPoints,
               predictions: newPredictions,
@@ -149,7 +149,7 @@ export const useLeagues = (currentUser) => {
               weekly_correct: newWeeklyCorrect
             })
             .eq("id", prediction.user_id);
-            
+
           console.log(`✅ Usuario ${prediction.user_id}:`);
           console.log(`   Global: ${newPoints} pts, ${newCorrect} aciertos`);
           console.log(`   Semanal: ${newWeeklyPoints} pts, ${newWeeklyCorrect} aciertos`);

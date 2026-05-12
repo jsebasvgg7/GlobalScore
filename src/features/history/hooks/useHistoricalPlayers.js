@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "../../shared/services/supabase/supabaseClient";
+import { supabase } from '@/shared/services/supabase/client';
 
 // ─── Helper: URL pública del bucket "historical" ─────────────────────────────
 export function getHistoricalImageUrl(imagePath) {

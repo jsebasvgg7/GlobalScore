@@ -1,4 +1,4 @@
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 export const useAdminAchievements = (loadData, toast) => {
   const handleSaveAchievement = async (achievement) => {

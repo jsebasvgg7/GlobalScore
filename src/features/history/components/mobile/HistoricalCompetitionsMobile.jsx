@@ -8,9 +8,9 @@ import {
   useHistoricalCompetitions,
   useHistoricalCompetitionDetail,
   getHistoricalImageUrl,
-} from "../../../../hooks/HooksHistory/useHistoricalCompetitions";
-import KnockoutBracketMobile from "../ComHistory/KnockoutBracketMobile";
-import "../../styles/StylesMobile/MobHistory/HistoricalCompetitionsPageMobile.css";
+} from "../../hooks/useHistoricalCompetitions";
+import KnockoutBracketMobile from "./KnockoutBracketMobile";
+import "../../styles/mobile/HistoricalCompetitionsPageMobile.css";
 
 const TYPE_LABEL = {
   International: "Internacional",

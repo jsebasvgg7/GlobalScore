@@ -1,13 +1,3 @@
-/* ============================================================
-   PATCH: Reemplazar solo la función MobileAwards en WorldCupPage.jsx
-   La nueva estructura usa icono lateral + label brutalista
-============================================================ */
-
-// ── Agregar a los imports de lucide-react (si no están ya) ──
-// Award ya debe estar importado
-
-// ── Reemplazar MobileAwards por completo: ────────────────────
-
 function MobileAwards({ awards, onAwardUpdate }) {
   return (
     <div className="mwc-body">

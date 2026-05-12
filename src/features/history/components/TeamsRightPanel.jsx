@@ -1,7 +1,7 @@
 import { Shield, Trophy, MapPin } from "lucide-react";
-import { useHistoricalTeams } from "../../../hooks/HooksHistory/useHistoricalTeams";
+import { useHistoricalTeams } from "../hooks/useHistoricalTeams";
 import { getHistoricalImageUrl } from "../hooks/useHistoricalPlayers";
-import "../../styles/StylesPanels/TeamsRightPanel.css";
+import "../styles/TeamsRightPanel.css";
 
 const LEGACY_COLOR = {
   "Dynastic": "#f59e0b",

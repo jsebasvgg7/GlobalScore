@@ -2,8 +2,6 @@
 export { default as AwardCard } from './components/AwardCard'
 export { default as LeagueCard } from './components/LeagueCard'
 export { default as MatchCard } from './components/MatchCard'
-
-// ⚠️ RightPanel está aquí en disco — ver nota abajo
 export { default as RightPanel } from './components/RightPanel'
 
 // Mobile

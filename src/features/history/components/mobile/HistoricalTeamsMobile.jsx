@@ -4,9 +4,9 @@ import {
   Trophy, Star, MapPin, Calendar, User2,
   Search, X, ChevronRight, Shuffle,
 } from "lucide-react";
-import { useHistoricalTeams, useHistoricalTeamDetail } from "../../../../hooks/HooksHistory/useHistoricalTeams";
+import { useHistoricalTeams, useHistoricalTeamDetail } from "../../hooks/useHistoricalTeams";
 import { getHistoricalImageUrl } from "../../hooks/useHistoricalPlayers";
-import "../../styles/StylesMobile/MobHistory/HistoricalTeamsMobile.css";
+import "../../styles/mobile/HistoricalTeamsMobile.css";
 
 const LEGACY_TEAM_LABEL = {
   "Dynastic": "Dinástico",

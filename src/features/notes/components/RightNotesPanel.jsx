@@ -4,7 +4,7 @@ import {
   FileText, PinOff, Save, X, Check, AlertTriangle, ArrowLeft
 } from 'lucide-react';
 import { useNotes } from '../hooks/useNotes';
-import '../../styles/StylesPanels/RightNotesPanel.css';
+import '../styles/RightNotesPanel.css';
 
 // ── Colores ──────────────────────────────────────────────────────
 const COLORS = {

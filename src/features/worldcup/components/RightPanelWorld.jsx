@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { X, Swords, ChevronRight } from 'lucide-react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 /* ============================================================
    DATOS

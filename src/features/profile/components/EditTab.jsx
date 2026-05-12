@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Edit2, User, Trophy, Heart, Flag, Star, Save, X, Activity, Image, Check } from 'lucide-react';
 import AvatarUpload from './AvatarUpload';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 export default function EditTab({
   userData,

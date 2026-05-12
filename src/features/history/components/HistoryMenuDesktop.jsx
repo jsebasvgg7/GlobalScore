@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Users2, Trophy, Shield, Zap, ArrowRight } from "lucide-react";
 import { useHistoricalPlayers, getHistoricalImageUrl } from "../hooks/useHistoricalPlayers";
-import { useHistoricalCompetitions } from "../../../hooks/HooksHistory/useHistoricalCompetitions";
-import { useHistoricalTeams } from "../../../hooks/HooksHistory/useHistoricalTeams";
-import { useHistoricalEvents } from "../../../hooks/HooksHistory/useHistoricalEvents";
-import "../../styles/StylesHistory/HistoryMenuDesktop.css";
+import { useHistoricalCompetitions } from "../hooks/useHistoricalCompetitions";
+import { useHistoricalTeams } from "../hooks/useHistoricalTeams";
+import { useHistoricalEvents } from "../hooks/useHistoricalEvents";
+import "../styles/HistoryMenuDesktop.css";
 
 function Skeleton({ className = "" }) {
   return <div className={`hmd-skeleton ${className}`} />;

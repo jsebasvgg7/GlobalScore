@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Globe, Calendar, Crown, ChevronLeft, ChevronRight, Zap, Star } from "lucide-react";
-import MobileUserProfile from "../ComProfile/MobileUserProfile";
-import "../../styles/StylesMobile/MobileRanking.css";
+import MobileUserProfile from "@/features/profile";
+import "../../styles/MobileRanking.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
 
 const HOF_META = [
-  { label: "ORO",    color: "#c9a227" },
-  { label: "PLATA",  color: "#8a8a8a" },
+  { label: "ORO", color: "#c9a227" },
+  { label: "PLATA", color: "#8a8a8a" },
   { label: "BRONCE", color: "#a0652a" },
 ];
 
@@ -28,7 +28,7 @@ function PodiumCard({ user, rank, onSelect }) {
   if (!user) return null;
   const accuracy = user.rankPredictions > 0
     ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
-  const mods   = ["gold", "silver", "bronze"];
+  const mods = ["gold", "silver", "bronze"];
   const labels = ["ORO", "PLATA", "BRONCE"];
 
   return (
@@ -52,7 +52,7 @@ function TableRow({ user, pos, isMe, onSelect }) {
     ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
   const topMod = pos === 1 ? " mrk-row--gold"
     : pos === 2 ? " mrk-row--silver"
-    : pos === 3 ? " mrk-row--bronze" : "";
+      : pos === 3 ? " mrk-row--bronze" : "";
 
   return (
     <div className={`mrk-row${topMod}${isMe ? " mrk-row--me" : ""}`}>
@@ -104,7 +104,7 @@ function MobHofCarousel({ champions, onSelect }) {
   }
 
   const champ = champions[active];
-  const meta  = HOF_META[Math.min(active, 2)];
+  const meta = HOF_META[Math.min(active, 2)];
 
   return (
     <div className="mrk-hof-carousel">
@@ -113,7 +113,7 @@ function MobHofCarousel({ champions, onSelect }) {
       <div className="mrk-hof-card-row">
 
         <div className={`mrk-hof-card${exiting ? " mrk-hof-card--exit" : ""}`}
-             style={{ borderTopColor: meta.color }}>
+          style={{ borderTopColor: meta.color }}>
 
           <div className="mrk-hof-card-top">
             <span className="mrk-hof-medal" style={{ color: meta.color }}>{meta.label}</span>
@@ -218,32 +218,32 @@ function MobHofCarousel({ champions, onSelect }) {
    MAIN
 ════════════════════════════════════════ */
 export default function MobileRanking({
-  users        = [],
-  currentUser  = null,
-  rankingType  = "global",
+  users = [],
+  currentUser = null,
+  rankingType = "global",
   onChangeType,
-  champions    = [],
+  champions = [],
 }) {
   const [selectedUserId, setSelectedUserId] = useState(null);
 
   const rankingUsers = users.map((u) => ({
     ...u,
-    rankPoints:      rankingType === "monthly" ? u.monthly_points      || 0 : u.points      || 0,
-    rankCorrect:     rankingType === "monthly" ? u.monthly_correct     || 0 : u.correct     || 0,
+    rankPoints: rankingType === "monthly" ? u.monthly_points || 0 : u.points || 0,
+    rankCorrect: rankingType === "monthly" ? u.monthly_correct || 0 : u.correct || 0,
     rankPredictions: rankingType === "monthly" ? u.monthly_predictions || 0 : u.predictions || 0,
   }));
 
   const sorted = [...rankingUsers].sort((a, b) => b.rankPoints - a.rankPoints);
-  const top3   = sorted.slice(0, 3);
-  const rest   = sorted.slice(3);
+  const top3 = sorted.slice(0, 3);
+  const rest = sorted.slice(3);
 
-  const totalRegistered   = users.length;
+  const totalRegistered = users.length;
   const totalParticipated = rankingUsers.filter((u) => u.rankPredictions > 0).length;
-  const leader            = sorted[0] || null;
-  const hofLeader         = champions[0] || null;
+  const leader = sorted[0] || null;
+  const hofLeader = champions[0] || null;
 
   const getCurrentMonthLabel = () => {
-    const months = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+    const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
     const now = new Date();
     return `${months[now.getMonth()]} ${now.getFullYear()}`;
   };
@@ -254,9 +254,9 @@ export default function MobileRanking({
       {/* ── TABS ── */}
       <div className="mrk-tabs">
         {[
-          { key: "global",     icon: <Globe size={13}/>,    label: "Global"  },
-          { key: "monthly",    icon: <Calendar size={13}/>, label: "Mensual" },
-          { key: "halloffame", icon: <Crown size={13}/>,    label: "S. Fama" },
+          { key: "global", icon: <Globe size={13} />, label: "Global" },
+          { key: "monthly", icon: <Calendar size={13} />, label: "Mensual" },
+          { key: "halloffame", icon: <Crown size={13} />, label: "S. Fama" },
         ].map(({ key, icon, label }) => (
           <button
             key={key}

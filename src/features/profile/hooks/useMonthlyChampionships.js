@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 export const useMonthlyChampionships = (currentUser) => {
   const [crownHistory, setCrownHistory] = useState([]);
@@ -13,7 +13,7 @@ export const useMonthlyChampionships = (currentUser) => {
 
   const loadMonthlyData = async () => {
     if (!currentUser?.id) return;
-    
+
     try {
       setChampionshipsLoading(true);
 
@@ -35,7 +35,7 @@ export const useMonthlyChampionships = (currentUser) => {
         .single();
 
       if (userError) throw userError;
-      
+
       setMonthlyStats({
         monthly_points: userData?.monthly_points || 0,
         monthly_predictions: userData?.monthly_predictions || 0,

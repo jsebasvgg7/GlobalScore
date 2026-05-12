@@ -3,7 +3,7 @@ import { Trophy, LogOut, User2, Award, Shield, Bell, Home, BarChart3, Moon, Sun,
 import { supabase } from '../services/supabase/client';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
-import { resetWelcome } from "../../pages/LoginPage";
+import { resetWelcome } from "../../features/auth/page/LoginPage";
 import MobileHeader from "./MobileHeader";
 import "./Header.css";
 

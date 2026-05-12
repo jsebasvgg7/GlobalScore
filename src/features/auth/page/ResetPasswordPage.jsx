@@ -1,11 +1,8 @@
-/* ================================================================
-   ResetPasswordPage.jsx — Brutalista Japonés Retro
-================================================================ */
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, Lock } from "lucide-react";
-import { supabase } from "../utils/supabaseClient";
-import "../styles/StylesPages/Auth.css";
+import { supabase } from '@/shared/services/supabase/client';
+import "./Auth.css";
 
 function LoadingDots() {
   return (
@@ -18,7 +15,7 @@ function LoadingDots() {
 function getStrength(pwd) {
   if (!pwd) return 0;
   let s = 0;
-  if (pwd.length >= 6)  s++;
+  if (pwd.length >= 6) s++;
   if (pwd.length >= 10) s++;
   if (/[A-Z]/.test(pwd) || /[0-9]/.test(pwd)) s++;
   if (/[^a-zA-Z0-9]/.test(pwd)) s++;
@@ -26,7 +23,7 @@ function getStrength(pwd) {
 }
 
 const strengthLabels = ["", "Débil", "Regular", "Buena", "Fuerte"];
-const strengthClass  = ["", "s-weak", "s-fair", "s-good", "s-strong"];
+const strengthClass = ["", "s-weak", "s-fair", "s-good", "s-strong"];
 
 function PasswordStrength({ value }) {
   const level = getStrength(value);
@@ -66,14 +63,14 @@ function StepsIndicator({ current }) {
 
 function ResetForm() {
   const navigate = useNavigate();
-  const [loading, setLoading]               = useState(false);
-  const [password, setPassword]             = useState("");
+  const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword]     = useState(false);
-  const [showConfirm, setShowConfirm]       = useState(false);
-  const [message, setMessage]               = useState("");
-  const [error, setError]                   = useState("");
-  const [isValidToken, setIsValidToken]     = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [isValidToken, setIsValidToken] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -89,8 +86,8 @@ function ResetForm() {
     e.preventDefault();
     setLoading(true); setMessage(""); setError("");
 
-    if (!password)             { setError("Por favor ingresa una contraseña"); setLoading(false); return; }
-    if (password.length < 6)   { setError("La contraseña debe tener al menos 6 caracteres"); setLoading(false); return; }
+    if (!password) { setError("Por favor ingresa una contraseña"); setLoading(false); return; }
+    if (password.length < 6) { setError("La contraseña debe tener al menos 6 caracteres"); setLoading(false); return; }
     if (password !== confirmPassword) { setError("Las contraseñas no coinciden"); setLoading(false); return; }
 
     try {
@@ -210,7 +207,7 @@ function ResetForm() {
             </div>
           </div>
 
-          {error   && <div className="auth-message auth-message--error">{error}</div>}
+          {error && <div className="auth-message auth-message--error">{error}</div>}
           {message && <div className="auth-message auth-message--success">{message}</div>}
 
           <div className="auth-cta">
@@ -236,7 +233,7 @@ function ResetForm() {
 }
 
 function PhoneStatusBar() {
-  const now  = new Date();
+  const now = new Date();
   const time = now.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
   return (
     <div className="auth-phone-status">

@@ -8,9 +8,9 @@ import {
   useHistoricalEvents,
   useHistoricalEventDetail,
   getHistoricalImageUrl,
-} from "../../../hooks/HooksHistory/useHistoricalEvents";
-import SectionHeaderMobile from "../ComMobile/SectionHeaderMobile";
-import "../../styles/StylesHistory/HistoricalEventsPage.css";
+} from "../hooks/useHistoricalEvents";
+import SectionHeaderMobile from "./mobile/SectionHeaderMobile";
+import "../styles/HistoricalEventsPage.css";
 
 // ─── Mapas ────────────────────────────────────────────────────────────────────
 const EVENT_TYPE_LABEL = {

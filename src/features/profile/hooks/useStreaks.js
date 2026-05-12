@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 const checkPredictionCorrect = (prediction, match) => {
   if (match.result_home === null || match.result_away === null) return false;
-  
+
   const predDiff = Math.sign(prediction.home_score - prediction.away_score);
   const resultDiff = Math.sign(match.result_home - match.result_away);
-  
-  return predDiff === resultDiff || 
-         (prediction.home_score === match.result_home && prediction.away_score === match.result_away);
+
+  return predDiff === resultDiff ||
+    (prediction.home_score === match.result_home && prediction.away_score === match.result_away);
 };
 
 const isConsecutive = (date1, date2) => {

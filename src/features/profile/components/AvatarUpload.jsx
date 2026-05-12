@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Upload, Camera, X, Loader2, Crown } from 'lucide-react';
-import { supabase } from '../../utils/supabaseClient';
-import ImageViewer from '../ComOthers/ImageViewer';
-import '../../styles/StylesProfile/ProfileBase.css';
+import { supabase } from '@/shared/services/supabase/client';
+import ImageViewer from '@/shared/ui';
+import '../styles/ProfileBase.css';
 
 export default function AvatarUpload({ currentUrl, userId, onUploadComplete, userLevel }) {
   const [uploading, setUploading] = useState(false);
@@ -63,7 +63,7 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
         .eq('id', userId);
 
       if (updateError) throw updateError;
-      
+
       onUploadComplete(publicUrl);
 
     } catch (error) {
@@ -86,10 +86,10 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
         .eq('id', userId);
 
       if (updateError) throw updateError;
-      
+
       setPreview(null);
       onUploadComplete(null);
-      
+
     } catch (error) {
       console.error('Error al eliminar el avatar:', error.message);
       alert('Error al eliminar el avatar');
@@ -118,13 +118,13 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
         style={{ display: 'none' }}
         disabled={uploading}
       />
-      
+
       {/* Nuevo contenedor para alinear Avatar y Botones lateralmente */}
       <div className="avatar-upload-horizontal-group">
-        
+
         {/* Sección del Avatar (lado izquierdo) - CON BADGE DE NIVEL */}
         <div className="avatar-container-new">
-          <div 
+          <div
             className={`avatar-preview-wrapper ${preview ? 'clickable-avatar' : ''}`}
             onClick={handlePreviewClick}
             style={{ cursor: !uploading ? 'pointer' : 'default' }}
@@ -137,14 +137,14 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
                 <Camera size={24} />
               </div>
             )}
-            
+
             {/* Overlay de carga */}
             {uploading && (
               <div className="avatar-loading-overlay">
                 <Loader2 size={32} className="spinner" />
               </div>
             )}
-            
+
             {/* Overlay de cámara para indicar que es clickeable */}
             {!uploading && !preview && (
               <div className="camera-overlay">
@@ -152,7 +152,7 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
               </div>
             )}
           </div>
-          
+
           {/* Badge de nivel - SIEMPRE VISIBLE */}
           <div className="level-badge-floating">
             <Crown size={14} fill="currentColor" />
@@ -175,7 +175,7 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
               <Upload size={16} />
             )}
           </button>
-          
+
           {/* Botón de Eliminar (solo si hay una foto) */}
           {preview && (
             <button
@@ -192,7 +192,7 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
 
       {/* ImageViewer Modal */}
       {showImageViewer && preview && (
-        <ImageViewer 
+        <ImageViewer
           imageUrl={preview}
           userName="Vista Previa"
           onClose={() => setShowImageViewer(false)}

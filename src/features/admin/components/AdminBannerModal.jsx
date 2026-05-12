@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { X, Plus, Image, Upload, Loader } from 'lucide-react';
-import '../../styles/StylesAdmin/AdminModal.css';
+import '../styles/AdminModal.css';
 
 export default function AdminBannerModal({ onClose, onCreate }) {
   const [form, setForm] = useState({ name: '', description: '' });

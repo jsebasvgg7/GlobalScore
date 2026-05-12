@@ -1,6 +1,6 @@
 import { Zap, Users2, Shield, Trophy, Calendar, Star, TrendingUp } from "lucide-react";
 import { getHistoricalImageUrl } from "../hooks/useHistoricalPlayers";
-import "../../styles/StylesPanels/EventsRightPanel.css";
+import "../styles/EventsRightPanel.css";
 
 // ── Helpers ───────────────────────────────────────────────────
 const CAT_COLOR = { player: "#8b5cf6", team: "#3b82f6" };

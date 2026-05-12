@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Activity, Gamepad2, CheckCircle2, XCircle, Clock, Trophy, Calendar, ArrowUpDown } from 'lucide-react';
-import { getPredictionResult } from '../../utils/profileUtils';
+import { getPredictionResult } from '@/shared/utils/profileUtils';
 
 export default function HistoryTab({ predictionHistory, historyLoading }) {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -10,20 +10,20 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
   // Filtrar predicciones según el estado activo
   const filteredHistory = useMemo(() => {
     if (activeFilter === 'all') return predictionHistory;
-    
+
     return predictionHistory.filter(pred => {
       const match = pred.matches;
       const result = getPredictionResult(pred);
-      
+
       // Filtros por estado del partido
       if (activeFilter === 'active') return match?.status === 'pending';
       if (activeFilter === 'finished') return match?.status === 'finished';
-      
+
       // Filtros por resultado de la predicción
       if (activeFilter === 'exact') return result.status === 'exact';
       if (activeFilter === 'correct') return result.status === 'correct';
       if (activeFilter === 'wrong') return result.status === 'wrong';
-      
+
       return true;
     });
   }, [predictionHistory, activeFilter]);
@@ -31,7 +31,7 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
   // Contadores para los filtros
   const counts = useMemo(() => {
     const finished = predictionHistory.filter(p => p.matches?.status === 'finished');
-    
+
     return {
       all: predictionHistory.length,
       active: predictionHistory.filter(p => p.matches?.status === 'pending').length,
@@ -76,9 +76,9 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
   const renderTeamLogo = (logoUrl, fallbackEmoji) => {
     if (logoUrl && logoUrl.startsWith('http')) {
       return (
-        <img 
-          src={logoUrl} 
-          alt="Team logo" 
+        <img
+          src={logoUrl}
+          alt="Team logo"
           className="history-team-logo"
           onError={(e) => {
             e.target.style.display = 'none';
@@ -95,8 +95,8 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
   const renderLeagueLogo = (logoUrl) => {
     if (logoUrl) {
       return (
-        <img 
-          src={logoUrl} 
+        <img
+          src={logoUrl}
           alt="League logo"
           className="history-league-logo"
           onError={(e) => {
@@ -134,7 +134,7 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
 
         {/* Sort Button */}
         <div className="history-sort-wrapper" ref={sortRef}>
-          <button 
+          <button
             className={`history-sort-compact ${showSort ? 'active' : ''}`}
             onClick={() => setShowSort(!showSort)}
           >
@@ -144,8 +144,8 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
 
           {showSort && (
             <>
-              <div 
-                className="sort-modal-backdrop" 
+              <div
+                className="sort-modal-backdrop"
                 onClick={() => setShowSort(false)}
               />
               <div className="sort-modal">
@@ -287,7 +287,7 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
 
             return (
               <div key={pred.id} className={`history-match-card ${result.status}`}>
-                
+
                 {/* HEADER: Liga y Fecha */}
                 <div className="history-match-header">
                   <div className="history-league-info">
@@ -295,7 +295,7 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
                     <Trophy size={16} className="history-league-icon-fallback" style={{ display: match?.league_logo_url ? 'none' : 'flex' }} />
                     <span className="history-league-name">{match?.league}</span>
                   </div>
-                  
+
                   <div className="history-match-date">
                     <Calendar size={12} />
                     <span>{match?.date}</span>
@@ -304,7 +304,7 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
 
                 {/* CONTENT: Equipos y Predicción */}
                 <div className="history-match-content">
-                  
+
                   {/* Equipo Local */}
                   <div className="history-team-section">
                     <div className="history-team-logo-wrapper">
@@ -322,12 +322,12 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
                       <div className="history-score-box">
                         <span className="history-score-value">{pred.home_score}</span>
                       </div>
-                      
+
                       <div className="history-score-box">
                         <span className="history-score-value">{pred.away_score}</span>
                       </div>
                     </div>
-                    
+
                     {/* Resultado Real - Solo si el partido terminó */}
                     {match?.status === 'finished' && (
                       <div className="history-real-result">
@@ -339,7 +339,7 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
                       </div>
                     )}
                   </div>
-                   {/* Equipo Visitante */}
+                  {/* Equipo Visitante */}
                   <div className="history-team-section">
                     <span className="history-team-name">{match?.away_team}</span>
                     <div className="history-team-logo-wrapper">
@@ -349,7 +349,7 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
                       </span>
                     </div>
                   </div>
-                  </div>
+                </div>
 
                 {/* FOOTER: Resultado */}
                 <div className="history-match-footer">

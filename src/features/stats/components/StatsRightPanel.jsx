@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/StylesPanels/StatsRightPanel.css";
+import "../styles/StatsRightPanel.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
 

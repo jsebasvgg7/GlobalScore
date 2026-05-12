@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Crown, ChevronLeft, ChevronRight, Star, Trophy, Zap } from 'lucide-react';
-import '../../styles/StylesPages/HallOfFame.css';
+import '../styles/HallOfFame.css';
 
 const fmt = (n) => Number(n || 0).toLocaleString('es-ES');
 
@@ -33,9 +33,9 @@ function Avatar({ user, size = 80, onClick }) {
 
 /* ── Metadatos por posición ── */
 const META = [
-  { label: 'ORO',    color: '#c9a227', bg: 'rgba(201,162,39,0.08)',  border: '#c9a227' },
-  { label: 'PLATA',  color: '#8a8a8a', bg: 'rgba(138,138,138,0.07)', border: '#8a8a8a' },
-  { label: 'BRONCE', color: '#a0652a', bg: 'rgba(160,101,42,0.08)',  border: '#a0652a' },
+  { label: 'ORO', color: '#c9a227', bg: 'rgba(201,162,39,0.08)', border: '#c9a227' },
+  { label: 'PLATA', color: '#8a8a8a', bg: 'rgba(138,138,138,0.07)', border: '#8a8a8a' },
+  { label: 'BRONCE', color: '#a0652a', bg: 'rgba(160,101,42,0.08)', border: '#a0652a' },
 ];
 
 /* ════════════════════════════════════════
@@ -43,9 +43,9 @@ const META = [
 ════════════════════════════════════════ */
 export default function HallOfFame({ champions = [], onSelectUser }) {
   const [active, setActive] = useState(0);
-  const [dir, setDir]       = useState(null); // 'left' | 'right' | null
-  const timerRef            = useRef(null);
-  const total               = champions.length;
+  const [dir, setDir] = useState(null); // 'left' | 'right' | null
+  const timerRef = useRef(null);
+  const total = champions.length;
 
   /* Auto-advance 6s */
   useEffect(() => {
@@ -62,8 +62,8 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
       target !== undefined
         ? target
         : direction === 'right'
-        ? (active + 1) % total
-        : (active - 1 + total) % total;
+          ? (active + 1) % total
+          : (active - 1 + total) % total;
 
     setDir(direction);
     setTimeout(() => {
@@ -73,7 +73,7 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
   }
 
   const champ = champions[active] || null;
-  const meta  = META[Math.min(active, 2)];
+  const meta = META[Math.min(active, 2)];
 
   /* ── Top 3 lateral ── */
   const top3 = champions.slice(0, 3);
@@ -109,7 +109,7 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
                   className="hof-card"
                   style={{
                     '--hof-color': meta.color,
-                    '--hof-bg':    meta.bg,
+                    '--hof-bg': meta.bg,
                     borderTopColor: meta.border,
                   }}
                 >

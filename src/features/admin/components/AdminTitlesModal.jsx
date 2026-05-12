@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Plus, Edit2, Trash2, Crown, Award } from 'lucide-react';
-import { supabase } from '../../utils/supabaseClient';
-import '../../styles/StylesAdmin/AdminModal.css';
+import { supabase } from '@/shared/services/supabase/client';
+import '../styles/AdminModal.css';
 
 export default function AdminTitlesModal({ onClose, onSave, onDelete, existingTitle = null }) {
   const [form, setForm] = useState(existingTitle || {
@@ -23,7 +23,7 @@ export default function AdminTitlesModal({ onClose, onSave, onDelete, existingTi
       const { data, error } = await supabase
         .from('available_achievements')
         .select('*')
-        .order('requirement_value', { ascending: true});
+        .order('requirement_value', { ascending: true });
 
       if (error) throw error;
       setAchievements(data || []);
@@ -108,10 +108,10 @@ export default function AdminTitlesModal({ onClose, onSave, onDelete, existingTi
               <span>Nombre del Título</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="name" 
-              placeholder="Ej: Novato, Pronosticador, Oráculo" 
+            <input
+              className="form-input-premium"
+              name="name"
+              placeholder="Ej: Novato, Pronosticador, Oráculo"
               value={form.name}
               onChange={handleChange}
             />
@@ -122,9 +122,9 @@ export default function AdminTitlesModal({ onClose, onSave, onDelete, existingTi
               <span>Descripción</span>
               <span className="required">*</span>
             </label>
-            <textarea 
-              className="form-input-premium" 
-              name="description" 
+            <textarea
+              className="form-input-premium"
+              name="description"
               placeholder="Describe qué representa este título"
               value={form.description}
               onChange={handleChange}
@@ -157,11 +157,11 @@ export default function AdminTitlesModal({ onClose, onSave, onDelete, existingTi
                     gap: '6px'
                   }}
                 >
-                  <div style={{ 
-                    width: '32px', 
-                    height: '32px', 
-                    borderRadius: '50%', 
-                    background: colorOpt.value 
+                  <div style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    background: colorOpt.value
                   }} />
                   <span style={{ fontSize: '11px', fontWeight: '600', color: '#666' }}>
                     {colorOpt.label}
@@ -182,9 +182,9 @@ export default function AdminTitlesModal({ onClose, onSave, onDelete, existingTi
                 Cargando logros...
               </div>
             ) : (
-              <select 
-                className="form-input-premium" 
-                name="requirement_achievement_id" 
+              <select
+                className="form-input-premium"
+                name="requirement_achievement_id"
                 value={form.requirement_achievement_id}
                 onChange={handleChange}
               >
@@ -201,27 +201,27 @@ export default function AdminTitlesModal({ onClose, onSave, onDelete, existingTi
             </span>
           </div>
 
-          <div className="form-hint" style={{ 
-            marginTop: '20px', 
-            padding: '16px', 
-            background: '#f3f0ff', 
-            borderRadius: '12px', 
-            border: '2px solid rgba(96, 81, 155, 0.2)' 
+          <div className="form-hint" style={{
+            marginTop: '20px',
+            padding: '16px',
+            background: '#f3f0ff',
+            borderRadius: '12px',
+            border: '2px solid rgba(96, 81, 155, 0.2)'
           }}>
             <strong style={{ color: '#60519b' }}>Vista Previa:</strong>
-            <div style={{ 
-              marginTop: '12px', 
-              padding: '20px', 
-              background: 'white', 
+            <div style={{
+              marginTop: '12px',
+              padding: '20px',
+              background: 'white',
               borderRadius: '12px',
               display: 'flex',
               alignItems: 'center',
               gap: '16px',
               borderLeft: `4px solid ${form.color}`
             }}>
-              <div style={{ 
-                width: '56px', 
-                height: '56px', 
+              <div style={{
+                width: '56px',
+                height: '56px',
                 borderRadius: '12px',
                 background: `linear-gradient(135deg, ${form.color}, ${form.color}dd)`,
                 display: 'flex',
@@ -232,11 +232,11 @@ export default function AdminTitlesModal({ onClose, onSave, onDelete, existingTi
                 <Crown size={28} />
               </div>
               <div>
-                <div style={{ 
-                  fontWeight: '900', 
+                <div style={{
+                  fontWeight: '900',
                   fontSize: '18px',
                   color: form.color,
-                  marginBottom: '4px' 
+                  marginBottom: '4px'
                 }}>
                   {form.name || 'Nombre del Título'}
                 </div>
@@ -250,10 +250,10 @@ export default function AdminTitlesModal({ onClose, onSave, onDelete, existingTi
 
         <div className="modal-footer-premium">
           {existingTitle && (
-            <button 
-              className="modal-btn-premium secondary" 
+            <button
+              className="modal-btn-premium secondary"
               onClick={handleDelete}
-              style={{ 
+              style={{
                 marginRight: 'auto',
                 background: 'linear-gradient(135deg, #ef4444, #dc2626)',
                 color: 'white',

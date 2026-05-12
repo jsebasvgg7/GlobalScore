@@ -1,6 +1,6 @@
 import React from "react";
 import { Bell, Trophy, CheckCircle2, BellRing, BellOff } from "lucide-react";
-import "../../styles/StylesMobile/MobileNotifications.css";
+import "../../styles/MobileNotifications.css";
 
 // ── Pill de tipo ─────────────────────────────────────────────────
 function TypeBadge({ type }) {
@@ -87,15 +87,15 @@ function LoadingState() {
 //  COMPONENTE PRINCIPAL
 // ════════════════════════════════════════════════════════════════
 export default function MobileNotifications({
-  notifications   = [],
-  loading         = false,
-  filter          = "all",
+  notifications = [],
+  loading = false,
+  filter = "all",
   onFilterChange,
-  pushEnabled     = false,
-  pushLoading     = false,
+  pushEnabled = false,
+  pushLoading = false,
   onTogglePush,
 }) {
-  const newCount      = notifications.filter(n => n.type === "new").length;
+  const newCount = notifications.filter(n => n.type === "new").length;
   const finishedCount = notifications.filter(n => n.type === "finished").length;
 
   const filtered = notifications.filter(n =>
@@ -103,8 +103,8 @@ export default function MobileNotifications({
   );
 
   const FILTERS = [
-    { key: "all",      label: "Todas",  count: notifications.length },
-    { key: "new",      label: "Nuevas", count: newCount },
+    { key: "all", label: "Todas", count: notifications.length },
+    { key: "new", label: "Nuevas", count: newCount },
     { key: "finished", label: "Final.", count: finishedCount },
   ];
 

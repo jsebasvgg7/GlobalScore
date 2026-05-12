@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "../../utils/supabaseClient";
+import { supabase } from "@/shared/services/supabase/client";
 import { getHistoricalImageUrl } from "./useHistoricalPlayers";
 
 export { getHistoricalImageUrl };

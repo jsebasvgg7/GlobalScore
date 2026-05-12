@@ -1,9 +1,5 @@
-// ============================================
-//  usePushNotifications Hook 
-// ============================================
-
 import { useState, useEffect, useCallback } from 'react';
-import pushManager from '../services/pushManager';
+import pushManager from '@/shared/services/pwa/pushManager';
 
 export function usePushNotifications(userId) {
   const [permission, setPermission] = useState('default');
@@ -19,11 +15,11 @@ export function usePushNotifications(userId) {
     const checkSupport = async () => {
       try {
         setIsLoading(true);
-        
+
         // Verificar soporte
         const supported = pushManager.isSupported();
         setIsSupported(supported);
-        
+
         if (!supported) {
           setIsLoading(false);
           return;
@@ -38,7 +34,7 @@ export function usePushNotifications(userId) {
           const status = await pushManager.getSubscriptionStatus(userId);
           setIsSubscribed(status.isSubscribed);
         }
-        
+
       } catch (err) {
         console.error('❌ [Push Hook] Error verificando estado:', err);
         setError(err.message);
@@ -59,11 +55,11 @@ export function usePushNotifications(userId) {
       setError(null);
 
       const result = await pushManager.requestPermission();
-      
+
       setPermission(result.permission);
-      
+
       return result;
-      
+
     } catch (err) {
       console.error('❌ [Push Hook] Error solicitando permisos:', err);
       setError(err.message);
@@ -87,14 +83,14 @@ export function usePushNotifications(userId) {
       setError(null);
 
       const result = await pushManager.subscribe(userId);
-      
+
       if (result.success) {
         setIsSubscribed(true);
         setPermission('granted');
       }
-      
+
       return result;
-      
+
     } catch (err) {
       console.error('❌ [Push Hook] Error suscribiendo:', err);
       setError(err.message);
@@ -118,13 +114,13 @@ export function usePushNotifications(userId) {
       setError(null);
 
       const result = await pushManager.unsubscribe(userId);
-      
+
       if (result.success) {
         setIsSubscribed(false);
       }
-      
+
       return result;
-      
+
     } catch (err) {
       console.error('❌ [Push Hook] Error desuscribiendo:', err);
       setError(err.message);
@@ -151,11 +147,11 @@ export function usePushNotifications(userId) {
   const sendTestNotification = useCallback(async () => {
     try {
       setIsLoading(true);
-      
+
       const result = await pushManager.sendTestNotification();
-      
+
       return result;
-      
+
     } catch (err) {
       console.error('❌ [Push Hook] Error enviando notificación de prueba:', err);
       return { success: false, error: err.message };
@@ -172,13 +168,13 @@ export function usePushNotifications(userId) {
 
     try {
       setIsLoading(true);
-      
+
       const status = await pushManager.getSubscriptionStatus(userId);
       setIsSubscribed(status.isSubscribed);
-      
+
       const currentPermission = await pushManager.getPermissionStatus();
       setPermission(currentPermission);
-      
+
     } catch (err) {
       console.error('❌ [Push Hook] Error refrescando estado:', err);
       setError(err.message);
@@ -197,7 +193,7 @@ export function usePushNotifications(userId) {
     isSupported,
     isLoading,
     error,
-    
+
     // Funciones
     requestPermission,
     subscribe,
@@ -205,7 +201,7 @@ export function usePushNotifications(userId) {
     toggleSubscription,
     sendTestNotification,
     refresh,
-    
+
     // Información derivada
     canSubscribe: isSupported && permission === 'granted' && !isSubscribed,
     needsPermission: isSupported && permission === 'default',

@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Zap, Target, Flame, Clock, Calendar } from "lucide-react";
-import "../../styles/StylesPanels/RightPanel.css";
+import '../styles/RightPanel.css';
 
-const fmt   = (n) => Number(n || 0).toLocaleString("es-ES");
-const acc   = (c, t) => (t > 0 ? Math.round((c / t) * 100) : 0);
+const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
+const acc = (c, t) => (t > 0 ? Math.round((c / t) * 100) : 0);
 const lvlPct = (pts) => Math.round(((pts % 20) / 20) * 100);
 const lvlPts = (pts) => pts % 20;
 const initials = (name = "") => (name || "U").slice(0, 2).toUpperCase();
@@ -37,16 +37,16 @@ export default function RightPanel({ currentUser, users = [], matches = [] }) {
 
   if (!currentUser) return null;
 
-  const points      = currentUser.points       || 0;
-  const predictions = currentUser.predictions  || 0;
-  const correct     = currentUser.correct      || 0;
-  const streak      = currentUser.current_streak || 0;
-  const bestStreak  = currentUser.best_streak  || 0;
-  const level       = currentUser.level        || 1;
-  const monthPts    = currentUser.monthly_points || 0;
-  const accuracy    = acc(correct, predictions);
-  const pct         = lvlPct(points);
-  const ptsInLevel  = lvlPts(points);
+  const points = currentUser.points || 0;
+  const predictions = currentUser.predictions || 0;
+  const correct = currentUser.correct || 0;
+  const streak = currentUser.current_streak || 0;
+  const bestStreak = currentUser.best_streak || 0;
+  const level = currentUser.level || 1;
+  const monthPts = currentUser.monthly_points || 0;
+  const accuracy = acc(correct, predictions);
+  const pct = lvlPct(points);
+  const ptsInLevel = lvlPts(points);
 
   return (
     <aside className="rp-root">

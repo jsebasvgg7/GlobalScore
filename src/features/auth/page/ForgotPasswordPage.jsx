@@ -4,8 +4,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
-import { supabase } from "../utils/supabaseClient";
-import "../styles/StylesPages/Auth.css";
+import { supabase } from '@/shared/services/supabase/client';
+import "./Auth.css";
 
 function LoadingDots() {
   return (
@@ -17,9 +17,9 @@ function LoadingDots() {
 
 function ForgotForm() {
   const [loading, setLoading] = useState(false);
-  const [email, setEmail]     = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [error, setError]     = useState("");
+  const [error, setError] = useState("");
 
   const handleReset = async (e) => {
     e.preventDefault();
@@ -95,7 +95,7 @@ function ForgotForm() {
           </div>
 
           {message && <div className="auth-message auth-message--success">{message}</div>}
-          {error   && <div className="auth-message auth-message--error">{error}</div>}
+          {error && <div className="auth-message auth-message--error">{error}</div>}
 
           <div className="auth-cta">
             <button
@@ -120,7 +120,7 @@ function ForgotForm() {
 }
 
 function PhoneStatusBar() {
-  const now  = new Date();
+  const now = new Date();
   const time = now.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
   return (
     <div className="auth-phone-status">

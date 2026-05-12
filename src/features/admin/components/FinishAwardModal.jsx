@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Trophy, CheckCircle } from 'lucide-react';
-import '../../styles/StylesAdmin/AdminModal.css';
+import '../styles/AdminModal.css';
 
 export default function FinishAwardModal({ award, onFinish, onClose }) {
   const [winner, setWinner] = useState('');
@@ -43,10 +43,10 @@ export default function FinishAwardModal({ award, onFinish, onClose }) {
               <span>Ganador del Premio</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="winner" 
-              placeholder="Nombre completo del ganador" 
+            <input
+              className="form-input-premium"
+              name="winner"
+              placeholder="Nombre completo del ganador"
               value={winner}
               onChange={(e) => setWinner(e.target.value)}
             />

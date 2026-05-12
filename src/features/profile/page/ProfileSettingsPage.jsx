@@ -11,35 +11,35 @@ import {
   Image as ImageIcon,
 } from 'lucide-react';
 
-import { ToastContainer, useToast } from '../components/ComFeedback/Toast';
-import Footer from '../components/ComLayout/Footer';
-import AdminAchievementsModal from '../components/ComAdmin/AdminAchievementsModal';
-import AdminTitlesModal from '../components/ComAdmin/AdminTitlesModal';
-import { resetWelcome } from '../pages/LoginPage';
-import { useProfileData } from '../hooks/HooksProfile/useProfileData';
-import { usePredictionHistory } from '../hooks/HooksProfile/usePredictionHistory';
-import { useStreaks } from '../hooks/HooksProfile/useStreaks';
-import { useAchievements } from '../hooks/HooksProfile/useAchievements';
-import { useUserRanking } from '../hooks/HooksProfile/useUserRanking';
-import { useMonthlyChampionships } from '../hooks/HooksProfile/useMonthlyChampionships';
-import { useSettings } from '../hooks/HooksSettings/useSettings';
-import { useTheme } from '../context/ThemeContext';
+import { ToastContainer, useToast } from '@/shared/ui';
+import {
+  AdminAchievementsModal,
+  AdminTitlesModal
+} from '@/features/admin';
+import { resetWelcome } from '../../../features/auth/page/LoginPage';
+import {
+  useProfileData,
+  usePredictionHistory,
+  useStreaks,
+  useAchievements,
+  useUserRanking,
+  useMonthlyChampionships,
 
-import MobileProfileMain from '../components/ComMobile/MobileProfileMain';
-
-import AvatarUpload from '../components/ComProfile/AvatarUpload';
-import ImageViewer from '../components/ComOthers/ImageViewer';
-
-import { supabase } from '../utils/supabaseClient';
+  MobileProfileMain,
+  AvatarUpload,
+} from '@/features/profile';
+import { useTheme } from '../../../context/ThemeContext';
+import ImageViewer from '@/shared/ui';
+import { supabase } from '@/shared/services/supabase/client';
 import {
   getPredictionResult,
   calculateAccuracy,
   calculateLevelProgress,
   getIconEmoji,
   getCategoryColor,
-} from '../utils/profileUtils';
+} from '@/shared/utils/profileUtils';
 
-import '../styles/StylesPages/ProfileSettingsPage.css';
+import './ProfileSettingsPage.css';
 
 const fmt = (n) => Number(n || 0).toLocaleString('es-ES');
 

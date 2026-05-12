@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Plus, Edit2, Trash2, Trophy, Target, Flame, Star } from 'lucide-react';
-import '../../styles/StylesAdmin/AdminModal.css';
+import '../styles/AdminModal.css';
 
 export default function AdminAchievementsModal({ onClose, onSave, onDelete, existingAchievement = null }) {
   const [form, setForm] = useState(existingAchievement || {
@@ -25,9 +25,9 @@ export default function AdminAchievementsModal({ onClose, onSave, onDelete, exis
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm({ 
-      ...form, 
-      [name]: name === 'requirement_value' ? parseInt(value) || 0 : value 
+    setForm({
+      ...form,
+      [name]: name === 'requirement_value' ? parseInt(value) || 0 : value
     });
   };
 
@@ -89,10 +89,10 @@ export default function AdminAchievementsModal({ onClose, onSave, onDelete, exis
               <span>Nombre del Logro</span>
               <span className="required">*</span>
             </label>
-            <input 
-              className="form-input-premium" 
-              name="name" 
-              placeholder="Ej: Primer Paso, Maestro Predictor" 
+            <input
+              className="form-input-premium"
+              name="name"
+              placeholder="Ej: Primer Paso, Maestro Predictor"
               value={form.name}
               onChange={handleChange}
             />
@@ -103,9 +103,9 @@ export default function AdminAchievementsModal({ onClose, onSave, onDelete, exis
               <span>Descripción</span>
               <span className="required">*</span>
             </label>
-            <textarea 
-              className="form-input-premium" 
-              name="description" 
+            <textarea
+              className="form-input-premium"
+              name="description"
               placeholder="Describe cómo obtener este logro"
               value={form.description}
               onChange={handleChange}
@@ -147,9 +147,9 @@ export default function AdminAchievementsModal({ onClose, onSave, onDelete, exis
                 <Target size={14} />
                 <span>Categoría</span>
               </label>
-              <select 
-                className="form-input-premium" 
-                name="category" 
+              <select
+                className="form-input-premium"
+                name="category"
                 value={form.category}
                 onChange={handleChange}
               >
@@ -167,9 +167,9 @@ export default function AdminAchievementsModal({ onClose, onSave, onDelete, exis
                 <span>Tipo de Requisito</span>
                 <span className="required">*</span>
               </label>
-              <select 
-                className="form-input-premium" 
-                name="requirement_type" 
+              <select
+                className="form-input-premium"
+                name="requirement_type"
                 value={form.requirement_type}
                 onChange={handleChange}
               >
@@ -184,30 +184,30 @@ export default function AdminAchievementsModal({ onClose, onSave, onDelete, exis
                 <span>Valor Requerido</span>
                 <span className="required">*</span>
               </label>
-              <input 
-                className="form-input-premium" 
-                name="requirement_value" 
+              <input
+                className="form-input-premium"
+                name="requirement_value"
                 type="number"
                 min="0"
-                placeholder="Ej: 100" 
+                placeholder="Ej: 100"
                 value={form.requirement_value}
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          <div className="form-hint" style={{ 
-            marginTop: '20px', 
-            padding: '16px', 
-            background: '#f3f0ff', 
-            borderRadius: '12px', 
-            border: '2px solid rgba(96, 81, 155, 0.2)' 
+          <div className="form-hint" style={{
+            marginTop: '20px',
+            padding: '16px',
+            background: '#f3f0ff',
+            borderRadius: '12px',
+            border: '2px solid rgba(96, 81, 155, 0.2)'
           }}>
             <strong style={{ color: '#60519b' }}>Vista Previa:</strong>
-            <div style={{ 
-              marginTop: '12px', 
-              padding: '16px', 
-              background: 'white', 
+            <div style={{
+              marginTop: '12px',
+              padding: '16px',
+              background: 'white',
               borderRadius: '12px',
               display: 'flex',
               alignItems: 'center',
@@ -227,10 +227,10 @@ export default function AdminAchievementsModal({ onClose, onSave, onDelete, exis
 
         <div className="modal-footer-premium">
           {existingAchievement && (
-            <button 
-              className="modal-btn-premium secondary" 
+            <button
+              className="modal-btn-premium secondary"
               onClick={handleDelete}
-              style={{ 
+              style={{
                 marginRight: 'auto',
                 background: 'linear-gradient(135deg, #ef4444, #dc2626)',
                 color: 'white',

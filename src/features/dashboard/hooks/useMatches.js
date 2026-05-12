@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 // ── Helper compartido: recarga SOLO partidos pending (igual que useDataLoader) ──
 const fetchPendingMatches = async () => {

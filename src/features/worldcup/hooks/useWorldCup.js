@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 export const useWorldCup = (currentUser) => {
   const [loading, setLoading] = useState(false);
@@ -7,7 +7,7 @@ export const useWorldCup = (currentUser) => {
   // Cargar predicciones del usuario
   const loadPredictions = useCallback(async () => {
     if (!currentUser) return null;
-    
+
     try {
       const { data, error } = await supabase
         .from('worldcup_predictions')
@@ -48,7 +48,7 @@ export const useWorldCup = (currentUser) => {
   // Guardar predicciones
   const savePredictions = useCallback(async (predictions, onSuccess, onError) => {
     if (!currentUser) return;
-    
+
     setLoading(true);
     try {
       const { error } = await supabase
@@ -64,7 +64,7 @@ export const useWorldCup = (currentUser) => {
         });
 
       if (error) throw error;
-      
+
       onSuccess?.();
     } catch (err) {
       console.error('Error saving predictions:', err);

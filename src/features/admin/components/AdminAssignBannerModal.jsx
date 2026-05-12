@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Search, UserCheck, Image, Check, Trash2 } from 'lucide-react';
-import { supabase } from '../../utils/supabaseClient';
-import '../../styles/StylesAdmin/AdminModal.css';
+import { supabase } from '@/shared/services/supabase/client';
+import '../styles/AdminModal.css';
 
 // Normaliza texto: minúsculas, sin acentos, sin caracteres especiales
 const normalize = (str) =>
@@ -31,7 +31,7 @@ export default function AdminAssignBannerModal({ onClose, banners, users: initia
     };
     fetchUsers();
   }, []);
-   const filtered = !search.trim() ? [] : allUsers.filter(u =>
+  const filtered = !search.trim() ? [] : allUsers.filter(u =>
     (u.name || '').toLowerCase().includes(search.toLowerCase())
   ).slice(0, 6);
 

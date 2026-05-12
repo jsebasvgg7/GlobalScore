@@ -1,20 +1,14 @@
 import React from 'react';
 import {
   Layers, Crown, Shield, Award, Target, Activity, Gem, Lock, Star,
-  // Predicciones
   Crosshair, Hash, TrendingUp, BarChart2, BookOpen,
-  // Aciertos
   CheckCircle, Eye, Aperture, Navigation, CheckSquare, Compass, BadgeCheck,
-  // Rachas
   Repeat2, Flame, Zap, Calendar, Cpu, Timer, Infinity, Rocket,
-  // Puntos
   Circle, CircleDot, Trophy, Sparkles,
-  // Especiales
   Percent, LayoutDashboard, Medal,
 } from 'lucide-react';
-import { getCategoryColor } from '../../utils/profileUtils';
+import { getCategoryColor } from '@/shared/utils/profileUtils';
 
-/* ── Mapa icon-string → componente Lucide (igual que UserProfilePanel) ── */
 const ICON_MAP = {
   Crosshair, Target, Hash, TrendingUp, Star,
   BarChart2, Activity, Award, BookOpen,
@@ -35,23 +29,23 @@ function LucideIcon({ name, size = 14, color }) {
 /* ── Colores y labels por categoría ── */
 const CATEGORY_COLORS = {
   predictions: '#8b7fc7',
-  accuracy:    '#34d399',
-  streaks:     '#ef4444',
-  points:      '#f59e0b',
-  crowns:      '#c9a227',
-  special:     '#fb923c',
+  accuracy: '#34d399',
+  streaks: '#ef4444',
+  points: '#f59e0b',
+  crowns: '#c9a227',
+  special: '#fb923c',
 };
 
 const CATEGORY_LABELS = {
   predictions: 'Predicciones',
-  accuracy:    'Aciertos',
-  streaks:     'Rachas',
-  points:      'Puntos',
-  crowns:      'Coronas',
-  special:     'Especiales',
+  accuracy: 'Aciertos',
+  streaks: 'Rachas',
+  points: 'Puntos',
+  crowns: 'Coronas',
+  special: 'Especiales',
 };
 
-export default function AchievementsTab({ 
+export default function AchievementsTab({
   activeTitle,
   userTitles,
   userAchievements,

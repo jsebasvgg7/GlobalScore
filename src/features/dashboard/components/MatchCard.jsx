@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CheckCircle2 } from "lucide-react";
-import "../../styles/StylesCards/MatchCard.css";
+import '../styles/MatchCard.css';
 
 // ── Icono espadas knockout ────────────────────────────────────
 const SwordsIcon = ({ className }) => (
@@ -36,11 +36,11 @@ const CalendarIcon = ({ className }) => (
 );
 
 export default function MatchCard({ match, userPred, onPredict, isActive = false }) {
-  const [homeScore,     setHomeScore]     = useState(userPred?.home_score ?? "");
-  const [awayScore,     setAwayScore]     = useState(userPred?.away_score ?? "");
+  const [homeScore, setHomeScore] = useState(userPred?.home_score ?? "");
+  const [awayScore, setAwayScore] = useState(userPred?.away_score ?? "");
   const [advancingTeam, setAdvancingTeam] = useState(userPred?.predicted_advancing_team ?? null);
-  const [isSaved,       setIsSaved]       = useState(userPred !== undefined);
-  const [isSaving,      setIsSaving]      = useState(false);
+  const [isSaved, setIsSaved] = useState(userPred !== undefined);
+  const [isSaving, setIsSaving] = useState(false);
   const saveTimeoutRef = useRef(null);
 
   useEffect(() => {
@@ -50,20 +50,20 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
     setIsSaved(userPred !== undefined);
   }, [userPred]);
 
-  const now            = new Date();
-  const deadline       = match.deadline ? new Date(match.deadline) : null;
+  const now = new Date();
+  const deadline = match.deadline ? new Date(match.deadline) : null;
   const isPastDeadline = deadline && now >= deadline;
-  const isLive         = match.status === "live";
-  const isDisabled     = isPastDeadline || match.status !== "pending";
+  const isLive = match.status === "live";
+  const isDisabled = isPastDeadline || match.status !== "pending";
 
   useEffect(() => {
     if (isDisabled) return;
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
 
-    const home    = parseInt(homeScore);
-    const away    = parseInt(awayScore);
+    const home = parseInt(homeScore);
+    const away = parseInt(awayScore);
     const isValid = !isNaN(home) && !isNaN(away) && homeScore !== "" && awayScore !== "";
-    const isDiff  =
+    const isDiff =
       home !== userPred?.home_score ||
       away !== userPred?.away_score ||
       advancingTeam !== userPred?.predicted_advancing_team;
@@ -86,7 +86,7 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
 
   const handleScoreChange = (team, value) => {
     if (isDisabled) return;
-    const n     = parseInt(value, 10);
+    const n = parseInt(value, 10);
     const score = isNaN(n) || n < 0 ? value : Math.min(n, 20);
     team === "home" ? setHomeScore(score) : setAwayScore(score);
     setIsSaved(false);
@@ -100,31 +100,31 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
 
   // ── Pill de estado ────────────────────────────────────────
   const pillConfig = isLive
-    ? { label: "En vivo",    mod: "live"    }
+    ? { label: "En vivo", mod: "live" }
     : isPastDeadline
-    ? { label: "Cerrado",    mod: "expired" }
-    : isSaving
-    ? { label: "Guardando…", mod: "saving"  }
-    : isSaved
-    ? { label: "Guardado",   mod: "saved"   }
-    : { label: "Pendiente",  mod: "pending" };
+      ? { label: "Cerrado", mod: "expired" }
+      : isSaving
+        ? { label: "Guardando…", mod: "saving" }
+        : isSaved
+          ? { label: "Guardado", mod: "saved" }
+          : { label: "Pendiente", mod: "pending" };
 
   // ── Clases raíz ───────────────────────────────────────────
   const cardClasses = [
     "mc-card",
-    isActive       ? "mc-card--active"  : "",
-    isLive         ? "mc-card--live"    : "",
+    isActive ? "mc-card--active" : "",
+    isLive ? "mc-card--live" : "",
     isPastDeadline ? "mc-card--expired" : "",
   ].filter(Boolean).join(" ");
 
   // ── Bloque reutilizable por equipo ────────────────────────
   const TeamBlock = ({ side }) => {
-    const isHome    = side === "home";
-    const teamName  = isHome ? match.home_team          : match.away_team;
-    const logoUrl   = isHome ? match.home_team_logo_url : match.away_team_logo_url;
-    const logoEmoji = isHome ? match.home_team_logo     : match.away_team_logo;
-    const score     = isHome ? homeScore                : awayScore;
-    const isAdv     = advancingTeam === side;
+    const isHome = side === "home";
+    const teamName = isHome ? match.home_team : match.away_team;
+    const logoUrl = isHome ? match.home_team_logo_url : match.away_team_logo_url;
+    const logoEmoji = isHome ? match.home_team_logo : match.away_team_logo;
+    const score = isHome ? homeScore : awayScore;
+    const isAdv = advancingTeam === side;
 
     // ← sin mc-team-block--tap, sin onClick en el bloque
     const blockClasses = [
@@ -217,7 +217,7 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
           </div>
 
           <span className={`mc-pill mc-pill--${pillConfig.mod}`}>
-            {pillConfig.mod === "live"   && <span className="mc-live-dot" />}
+            {pillConfig.mod === "live" && <span className="mc-live-dot" />}
             {pillConfig.mod === "saving" && <span className="mc-saving-ring" />}
             {pillConfig.label}
           </span>

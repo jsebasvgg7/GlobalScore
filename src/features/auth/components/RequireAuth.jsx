@@ -1,6 +1,6 @@
-import { supabase } from "../supabase";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { supabase } from '@/shared/services/supabase/client';
 
 export default function RequireAuth({ children }) {
   const [session, setSession] = useState(undefined);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, CheckCircle, XCircle, RefreshCw, Database } from 'lucide-react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 export default function AdminDiagnosticPanel() {
   const [checking, setChecking] = useState(false);
@@ -42,7 +42,7 @@ export default function AdminDiagnosticPanel() {
               result_home: 1,
               result_away: 0
             });
-            
+
             // Si devuelve un número, la función existe
             checks.functions[func] = (typeof data === 'number' && !error);
             if (error) checks.overall = false;
@@ -60,7 +60,7 @@ export default function AdminDiagnosticPanel() {
 
       // Verificar acceso a tablas críticas
       const tablesToCheck = ['matches', 'users', 'predictions', 'leagues', 'awards'];
-      
+
       for (const table of tablesToCheck) {
         try {
           const { error } = await supabase
@@ -133,8 +133,8 @@ export default function AdminDiagnosticPanel() {
               margin: 0
             }}>
               {results ? (
-                results.overall 
-                  ? 'Sistema operativo ✨' 
+                results.overall
+                  ? 'Sistema operativo ✨'
                   : '⚠️ Se detectaron problemas'
               ) : (
                 'Verificando configuración...'
@@ -142,7 +142,7 @@ export default function AdminDiagnosticPanel() {
             </p>
           </div>
         </div>
-        
+
         <button
           onClick={checkDatabaseHealth}
           disabled={checking}
@@ -151,8 +151,8 @@ export default function AdminDiagnosticPanel() {
             alignItems: 'center',
             gap: '8px',
             padding: '10px 20px',
-            background: checking 
-              ? 'linear-gradient(135deg, #9CA3AF, #6B7280)' 
+            background: checking
+              ? 'linear-gradient(135deg, #9CA3AF, #6B7280)'
               : 'linear-gradient(135deg, #7C3AED, #5B21B6)',
             color: 'white',
             border: 'none',
@@ -192,8 +192,8 @@ export default function AdminDiagnosticPanel() {
           <div style={{
             padding: '16px',
             borderRadius: '12px',
-            background: results.overall 
-              ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%)' 
+            background: results.overall
+              ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%)'
               : 'linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%)',
             border: `2px solid ${results.overall ? '#10B981' : '#EF4444'}`,
             display: 'flex',
@@ -212,7 +212,7 @@ export default function AdminDiagnosticPanel() {
                 color: results.overall ? '#059669' : '#DC2626',
                 marginBottom: '4px'
               }}>
-                {results.overall 
+                {results.overall
                   ? '✅ Base de datos configurada correctamente'
                   : '❌ Configuración incompleta'}
               </div>
@@ -220,7 +220,7 @@ export default function AdminDiagnosticPanel() {
                 fontSize: '13px',
                 color: '#6B7280'
               }}>
-                {results.overall 
+                {results.overall
                   ? 'Todas las funciones necesarias están disponibles'
                   : 'Faltan funciones SQL. Sigue las instrucciones abajo.'}
               </div>
@@ -249,7 +249,7 @@ export default function AdminDiagnosticPanel() {
               {Object.entries(results.functions).map(([func, status]) => {
                 const exists = status === true;
                 const pending = status === '⏸️';
-                
+
                 return (
                   <div
                     key={func}
@@ -267,9 +267,9 @@ export default function AdminDiagnosticPanel() {
                     {exists ? (
                       <CheckCircle size={16} color="#10B981" style={{ flexShrink: 0 }} />
                     ) : pending ? (
-                      <div style={{ 
-                        width: '16px', 
-                        height: '16px', 
+                      <div style={{
+                        width: '16px',
+                        height: '16px',
                         borderRadius: '50%',
                         background: '#F59E0B',
                         flexShrink: 0

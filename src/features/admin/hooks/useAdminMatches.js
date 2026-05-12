@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 export const useAdminMatches = (currentUser, loadData, toast) => {
   const [loading, setLoading] = useState(false);
@@ -10,13 +10,13 @@ export const useAdminMatches = (currentUser, loadData, toast) => {
   const handleAddMatch = async (match) => {
     try {
       setLoading(true);
-      
+
       const { error } = await supabase.from('matches').insert(match);
       if (error) throw error;
-      
+
       await loadData();
       toast.success(`✅ Partido ${match.home_team} vs ${match.away_team} agregado${match.is_knockout ? ' (Eliminatoria)' : ''}`, 4000);
-      
+
       return { success: true };
     } catch (err) {
       console.error('Error adding match:', err);
@@ -33,17 +33,17 @@ export const useAdminMatches = (currentUser, loadData, toast) => {
   const handleFinishMatch = async (matchId, homeScore, awayScore, advancingTeam = null) => {
     try {
       setLoading(true);
-      
+
       console.log(`🎯 Finalizando partido ${matchId}: ${homeScore}-${awayScore}`);
       if (advancingTeam) {
         console.log(`⚡ Equipo que avanza: ${advancingTeam}`);
       }
 
       // 1. Actualizar resultado del partido
-      const updateData = { 
-        result_home: homeScore, 
-        result_away: awayScore, 
-        status: "finished" 
+      const updateData = {
+        result_home: homeScore,
+        result_away: awayScore,
+        status: "finished"
       };
 
       // ⚡ NUEVO: Agregar advancing_team si existe
@@ -86,13 +86,13 @@ export const useAdminMatches = (currentUser, loadData, toast) => {
           pointsEarned = 5;
           exactPredictions++;
           console.log(`✅ Usuario ${prediction.user_id}: Resultado exacto (+5 pts)`);
-        } 
+        }
         // Resultado correcto (ganador/empate): 3 puntos
         else if (resultDiff === predDiff) {
           pointsEarned = 3;
           correctResults++;
           console.log(`✅ Usuario ${prediction.user_id}: Acertó resultado (+3 pts)`);
-        } 
+        }
         // Incorrecto: 0 puntos
         else {
           console.log(`❌ Usuario ${prediction.user_id}: No acertó (0 pts)`);
@@ -112,7 +112,7 @@ export const useAdminMatches = (currentUser, loadData, toast) => {
         // ⚡ MODIFICADO: Actualizar predicción con advancing_points separado
         await supabase
           .from("predictions")
-          .update({ 
+          .update({
             points_earned: pointsEarned,
             advancing_points: advancingPoints
           })
@@ -134,16 +134,16 @@ export const useAdminMatches = (currentUser, loadData, toast) => {
         const newPoints = (userData.points || 0) + totalPoints;
         const newPredictions = (userData.predictions || 0) + 1;
         const newCorrect = (userData.correct || 0) + (totalPoints > 0 ? 1 : 0);
-        
+
         // ========== ESTADÍSTICAS MENSUALES ==========
         const newMonthlyPoints = (userData.monthly_points || 0) + totalPoints;
         const newMonthlyPredictions = (userData.monthly_predictions || 0) + 1;
         const newMonthlyCorrect = (userData.monthly_correct || 0) + (totalPoints > 0 ? 1 : 0);
-        
+
         // ========== RACHAS ==========
         let newCurrentStreak = userData.current_streak || 0;
         let newBestStreak = userData.best_streak || 0;
-        
+
         if (totalPoints > 0) {
           newCurrentStreak = newCurrentStreak + 1;
           newBestStreak = Math.max(newBestStreak, newCurrentStreak);
@@ -184,15 +184,15 @@ export const useAdminMatches = (currentUser, loadData, toast) => {
       let message = `⚽ Partido finalizado: ${homeScore}-${awayScore}\n`;
       message += `📊 ${match.predictions.length} predicciones procesadas\n`;
       message += `✅ ${exactPredictions} exactos, ${correctResults} acertaron ganador`;
-      
+
       if (match.is_knockout) {
         message += `\n⚡ ${correctAdvancing} acertaron equipo que pasa`;
       }
 
       toast.success(message, 5000);
 
-      return { 
-        success: true, 
+      return {
+        success: true,
         data: {
           predictions_processed: match.predictions.length,
           exact: exactPredictions,
@@ -215,29 +215,29 @@ export const useAdminMatches = (currentUser, loadData, toast) => {
   // ============================================
   const handleDeleteMatch = async (matchId) => {
     if (!confirm('¿Estás seguro de eliminar este partido?')) return;
-    
+
     try {
       setLoading(true);
-      
+
       // Primero eliminar predicciones asociadas
       const { error: predError } = await supabase
         .from('predictions')
         .delete()
         .eq('match_id', matchId);
-      
+
       if (predError) throw predError;
-      
+
       // Luego eliminar el partido
       const { error } = await supabase
         .from('matches')
         .delete()
         .eq('id', matchId);
-      
+
       if (error) throw error;
-      
+
       await loadData();
       toast.success('🗑️ Partido eliminado correctamente', 3000);
-      
+
     } catch (err) {
       console.error('Error deleting match:', err);
       toast.error('❌ Error al eliminar el partido');

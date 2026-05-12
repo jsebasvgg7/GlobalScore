@@ -3,23 +3,27 @@ import {
   Target, TrendingUp, Calendar, Globe, Zap,
   BarChart3, Crown, Users
 } from 'lucide-react';
-import { supabase } from '../utils/supabaseClient';
-import HallOfFame from '../components/ComOthers/HallOfFame';
-import UserProfilePanel from '../components/ComProfile/UserProfilePanel';
-import MobileUserProfile from '../components/ComProfile/MobileUserProfile';
-import RankingRightPanel from '../components/ComPanels/RankingRightPanel';
-import MobileRanking from '../components/ComMobile/MobileRanking';
-import HallOfFamePanel from '../components/ComPanels/HallOfFamePanel';
-import GlobalLoader from "../components/ComFeedback/GlobalLoader";
-import '../styles/StylesPages/RankingPage.css';
+import { supabase } from '@/shared/services/supabase/client';
+import {
+  HallOfFame,
+  HallOfFamePanel,
+  RankingRightPanel,
+  MobileRanking,
+} from '@/features/ranking';
+import {
+  UserProfilePanel,
+  MobileUserProfile,
+} from '@/features/profile';
+import GlobalLoader from "@/shared/ui";
+import './RankingPage.css';
 
 export default function RankingPage({ currentUser }) {
-  const [users, setUsers]                   = useState([]);
-  const [loading, setLoading]               = useState(true);
-  const [rankingType, setRankingType]       = useState('global');
-  const [sortBy, setSortBy]                 = useState('points');
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [rankingType, setRankingType] = useState('global');
+  const [sortBy, setSortBy] = useState('points');
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const [champions, setChampions]           = useState([]);
+  const [champions, setChampions] = useState([]);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -82,15 +86,15 @@ export default function RankingPage({ currentUser }) {
       setChampions(
         usersData.map(u => ({
           ...u,
-          monthly_championships:   map[u.id].count,
-          championship_points:     map[u.id].champs[0].points,
+          monthly_championships: map[u.id].count,
+          championship_points: map[u.id].champs[0].points,
           championship_month_year: map[u.id].champs[0].monthYear,
         }))
-        .sort((a, b) =>
-          b.monthly_championships - a.monthly_championships ||
-          b.championship_points - a.championship_points
-        )
-        .slice(0, 10)
+          .sort((a, b) =>
+            b.monthly_championships - a.monthly_championships ||
+            b.championship_points - a.championship_points
+          )
+          .slice(0, 10)
       );
     } catch (err) { console.error(err); setChampions([]); }
   };
@@ -99,8 +103,8 @@ export default function RankingPage({ currentUser }) {
     const monthly = rankingType === 'monthly';
     return users.map(u => ({
       ...u,
-      rankPoints:      monthly ? (u.monthly_points      || 0) : (u.points      || 0),
-      rankCorrect:     monthly ? (u.monthly_correct     || 0) : (u.correct     || 0),
+      rankPoints: monthly ? (u.monthly_points || 0) : (u.points || 0),
+      rankCorrect: monthly ? (u.monthly_correct || 0) : (u.correct || 0),
       rankPredictions: monthly ? (u.monthly_predictions || 0) : (u.predictions || 0),
     }));
   };
@@ -117,12 +121,12 @@ export default function RankingPage({ currentUser }) {
     return b.rankPoints - a.rankPoints;
   });
 
-  const totalRegistered   = rankingUsers.length;
+  const totalRegistered = rankingUsers.length;
   const totalParticipated = rankingUsers.filter(u => u.rankPredictions > 0).length;
 
   const getCurrentMonthLabel = () => {
-    const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     const now = new Date();
     return `${months[now.getMonth()]} ${now.getFullYear()}`;
   };
@@ -158,10 +162,10 @@ export default function RankingPage({ currentUser }) {
 
           {/* TABS */}
           <div className="lb-tabs-bar">
-            <button className={`lb-tab${rankingType === 'global'     ? ' active' : ''}`} onClick={() => setRankingType('global')}>
+            <button className={`lb-tab${rankingType === 'global' ? ' active' : ''}`} onClick={() => setRankingType('global')}>
               <Globe size={13} /><span>Global</span>
             </button>
-            <button className={`lb-tab${rankingType === 'monthly'    ? ' active' : ''}`} onClick={() => setRankingType('monthly')}>
+            <button className={`lb-tab${rankingType === 'monthly' ? ' active' : ''}`} onClick={() => setRankingType('monthly')}>
               <Calendar size={13} /><span>Mensual</span>
             </button>
             <button className={`lb-tab${rankingType === 'halloffame' ? ' active' : ''}`} onClick={() => setRankingType('halloffame')}>
@@ -181,12 +185,12 @@ export default function RankingPage({ currentUser }) {
                 <div className="lb-stat-block">
                   <span className="lb-stat-num">{totalRegistered}</span>
                   <span className="lb-stat-lbl">Registrados</span>
-                  <div className="lb-stat-icon lb-stat-icon--blue"><Users size={13}/></div>
+                  <div className="lb-stat-icon lb-stat-icon--blue"><Users size={13} /></div>
                 </div>
                 <div className="lb-stat-block">
                   <span className="lb-stat-num">{totalParticipated}</span>
                   <span className="lb-stat-lbl">Participantes</span>
-                  <div className="lb-stat-icon lb-stat-icon--green"><Target size={13}/></div>
+                  <div className="lb-stat-icon lb-stat-icon--green"><Target size={13} /></div>
                 </div>
                 <div className="lb-stat-block lb-stat-block--wide">
                   <span className="lb-stat-period">
@@ -207,9 +211,9 @@ export default function RankingPage({ currentUser }) {
                 <span className="lb-sort-label">Ordenar</span>
                 <div className="lb-sort-btns">
                   {[
-                    { key: 'points',      icon: <Zap size={11}/>,      label: 'Puntos'    },
-                    { key: 'accuracy',    icon: <Target size={11}/>,    label: 'Precisión' },
-                    { key: 'predictions', icon: <BarChart3 size={11}/>, label: 'Actividad' },
+                    { key: 'points', icon: <Zap size={11} />, label: 'Puntos' },
+                    { key: 'accuracy', icon: <Target size={11} />, label: 'Precisión' },
+                    { key: 'predictions', icon: <BarChart3 size={11} />, label: 'Actividad' },
                   ].map(({ key, icon, label }) => (
                     <button
                       key={key}
@@ -238,11 +242,11 @@ export default function RankingPage({ currentUser }) {
                   const accuracy = user.rankPredictions > 0
                     ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
                   const isMe = user.id === currentUser?.id;
-                  const pos  = index + 1;
+                  const pos = index + 1;
                   const topMod = pos === 1 ? ' lb-trow--gold'
-                               : pos === 2 ? ' lb-trow--silver'
-                               : pos === 3 ? ' lb-trow--bronze'
-                               : '';
+                    : pos === 2 ? ' lb-trow--silver'
+                      : pos === 3 ? ' lb-trow--bronze'
+                        : '';
                   return (
                     <div
                       key={user.id}

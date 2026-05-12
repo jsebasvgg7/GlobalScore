@@ -1,4 +1,4 @@
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '@/shared/services/supabase/client';
 
 export const useAdminCrowns = (loadData, toast) => {
   const handleAwardCrown = async (winnerId, monthLabel, currentUserId) => {
@@ -17,11 +17,11 @@ export const useAdminCrowns = (loadData, toast) => {
         `👑 Corona otorgada exitosamente a ${data.winner_name} para ${monthLabel}`,
         4000
       );
-      
+
       return { success: true, data };
     } catch (err) {
       console.error('Error awarding crown:', err);
-      
+
       // Mensajes de error específicos
       if (err.message.includes('Ya existe un campeón')) {
         toast.error('⚠️ Ya se otorgó una corona para este mes');
@@ -30,7 +30,7 @@ export const useAdminCrowns = (loadData, toast) => {
       } else {
         toast.error('❌ Error al otorgar la corona. Intenta de nuevo.');
       }
-      
+
       throw err;
     }
   };
@@ -42,7 +42,7 @@ export const useAdminCrowns = (loadData, toast) => {
 
     try {
       console.log('🔄 Reseteando estadísticas mensuales...');
-      
+
       const { data, error } = await supabase.rpc('reset_all_monthly_stats');
 
       console.log('Respuesta de reset:', { data, error });
@@ -58,21 +58,21 @@ export const useAdminCrowns = (loadData, toast) => {
       }
 
       await loadData();
-      
+
       const usersReset = data?.users_reset || 0;
       toast.success(
         `🔄 Estadísticas mensuales reseteadas. ${usersReset} usuarios actualizados.`,
         4000
       );
-      
+
       return { success: true, data };
     } catch (err) {
       console.error('Error resetting monthly stats:', err);
-      
+
       // Mensaje de error más específico
       const errorMessage = err.message || err.hint || 'Error desconocido';
       toast.error(`❌ Error al resetear estadísticas: ${errorMessage}`);
-      
+
       throw err;
     }
   };

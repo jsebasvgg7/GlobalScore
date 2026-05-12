@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import "../../styles/StylesHistory/HistoryWelcomeScreen.css";
+import "../styles/HistoryWelcomeScreen.css";
 
 // ─── Partículas flotantes ────────────────────────────────────
 function Particles() {

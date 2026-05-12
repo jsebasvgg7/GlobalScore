@@ -4,7 +4,7 @@ import {
   Lock, Clock, FileText, PinOff, Save, X, Check, AlertTriangle
 } from 'lucide-react';
 import { useNotes } from '../../hooks/useNotes';
-import '../../styles/StylesMobile/MobileNotes.css';
+import '../../styles/MobileNotes.css';
 
 // ── Colores ──────────────────────────────────────────────────────
 const COLORS = {

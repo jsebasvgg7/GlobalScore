@@ -4,11 +4,10 @@ import {
   Filter, Star, Shuffle, ArrowLeft,
 } from "lucide-react";
 import { useHistoricalPlayers, getHistoricalImageUrl } from "../../hooks/useHistoricalPlayers";
-import { useHistoricalCompetitions } from "../../../../hooks/HooksHistory/useHistoricalCompetitions";
-import { useHistoricalTeams } from "../../../../hooks/HooksHistory/useHistoricalTeams";
-import { useHistoricalEvents } from "../../../../hooks/HooksHistory/useHistoricalEvents";
-import Footer from '../../components/ComLayout/Footer';
-import "../../styles/StylesMobile/MobHistory/HistoryMenuMobile.css";
+import { useHistoricalCompetitions } from "../../hooks/useHistoricalCompetitions";
+import { useHistoricalTeams } from "../../hooks/useHistoricalTeams";
+import { useHistoricalEvents } from "../../hooks/useHistoricalEvents";
+import "../../styles/mobile/HistoryMenuMobile.css";
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 function Skel({ w = "100%", h = 16, round = false }) {
@@ -819,7 +818,6 @@ export default function HistoryMenuMobile({ onSectionChange, initialSection, ini
             : <EmptyState section={activeSection} query={query} />
         }
       </div>
-      <Footer />
     </div>
   );
 }

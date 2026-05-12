@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
-import { supabase } from "../utils/supabaseClient";
-import "../styles/StylesPages/Auth.css";
+import { supabase } from '@/shared/services/supabase/client';
+import "./Auth.css";
 
 function LoadingDots() {
   return (
@@ -16,7 +16,7 @@ function LoadingDots() {
 function getStrength(pwd) {
   if (!pwd) return 0;
   let s = 0;
-  if (pwd.length >= 6)  s++;
+  if (pwd.length >= 6) s++;
   if (pwd.length >= 10) s++;
   if (/[A-Z]/.test(pwd) || /[0-9]/.test(pwd)) s++;
   if (/[^a-zA-Z0-9]/.test(pwd)) s++;
@@ -24,7 +24,7 @@ function getStrength(pwd) {
 }
 
 const strengthLabels = ["", "Débil", "Regular", "Buena", "Fuerte"];
-const strengthClass  = ["", "s-weak", "s-fair", "s-good", "s-strong"];
+const strengthClass = ["", "s-weak", "s-fair", "s-good", "s-strong"];
 
 function PasswordStrength({ value }) {
   const level = getStrength(value);
@@ -46,16 +46,16 @@ function PasswordStrength({ value }) {
 
 function RegisterForm() {
   const navigate = useNavigate();
-  const [loading, setLoading]           = useState(false);
-  const [name, setName]                 = useState("");
-  const [email, setEmail]               = useState("");
-  const [password, setPassword]         = useState("");
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError]               = useState("");
-  const [success, setSuccess]           = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const validateEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-  const validateName  = (n) => /^[a-zA-ZÀ-ÿ\s]{3,50}$/.test(n.trim());
+  const validateName = (n) => /^[a-zA-ZÀ-ÿ\s]{3,50}$/.test(n.trim());
 
   const register = async (e) => {
     e.preventDefault();
@@ -102,7 +102,7 @@ function RegisterForm() {
       }).select().single();
 
       if (insertError && insertError.code !== "23505") {
-        try { await supabase.auth.signOut(); } catch (_) {}
+        try { await supabase.auth.signOut(); } catch (_) { }
         setError("No se pudo crear el perfil. Intenta de nuevo.");
         setLoading(false);
         return;
@@ -208,7 +208,7 @@ function RegisterForm() {
             🔒 Tus datos están seguros y protegidos
           </div>
 
-          {error   && <div className="auth-message auth-message--error">{error}</div>}
+          {error && <div className="auth-message auth-message--error">{error}</div>}
           {success && <div className="auth-message auth-message--success">{success}</div>}
 
           <div className="auth-cta">
@@ -232,7 +232,7 @@ function RegisterForm() {
 
 /* ── Phone Status Bar ── */
 function PhoneStatusBar() {
-  const now  = new Date();
+  const now = new Date();
   const time = now.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
   return (
     <div className="auth-phone-status">

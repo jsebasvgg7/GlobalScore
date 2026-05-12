@@ -14,10 +14,10 @@ import {
   // Especiales
   Percent, LayoutDashboard, Medal,
 } from 'lucide-react';
-import { supabase } from '../../utils/supabaseClient';
-import { LoadingDots } from '../ComFeedback/LoadingSpinner';
-import ImageViewer from '../ComOthers/ImageViewer';
-import '../../styles/StylesProfile/UserProfilePanel.css';
+import { supabase } from '@/shared/services/supabase/client';
+import { LoadingDots } from '@/shared/ui';
+import ImageViewer from '@/shared/ui';
+import '../styles/UserProfilePanel.css';
 
 /* ── helpers ── */
 const fmt = (n) => Number(n || 0).toLocaleString();
@@ -49,32 +49,32 @@ function LucideIcon({ name, size = 14, color }) {
 /* ── Colores y labels por categoría ── */
 const CATEGORY_COLORS = {
   predictions: '#8b7fc7',
-  accuracy:    '#34d399',
-  streaks:     '#ef4444',
-  points:      '#f59e0b',
-  crowns:      '#c9a227',
-  special:     '#fb923c',
+  accuracy: '#34d399',
+  streaks: '#ef4444',
+  points: '#f59e0b',
+  crowns: '#c9a227',
+  special: '#fb923c',
 };
 
 const CATEGORY_LABELS = {
   predictions: 'Predicciones',
-  accuracy:    'Aciertos',
-  streaks:     'Rachas',
-  points:      'Puntos',
-  crowns:      'Coronas',
-  special:     'Especiales',
+  accuracy: 'Aciertos',
+  streaks: 'Rachas',
+  points: 'Puntos',
+  crowns: 'Coronas',
+  special: 'Especiales',
 };
 
 /* ── Evalúa si el usuario cumple el requisito de un logro ── */
 function checkUnlocked(ach, user) {
   const val = ach.requirement_value ?? 0;
   switch (ach.requirement_type) {
-    case 'points':                return (user.points               || 0) >= val;
-    case 'predictions':           return (user.predictions          || 0) >= val;
-    case 'correct':               return (user.correct              || 0) >= val;
-    case 'streak':                return (user.best_streak          || 0) >= val;
-    case 'monthly_championships': return (user.monthly_championships|| 0) >= val;
-    default:                      return false;
+    case 'points': return (user.points || 0) >= val;
+    case 'predictions': return (user.predictions || 0) >= val;
+    case 'correct': return (user.correct || 0) >= val;
+    case 'streak': return (user.best_streak || 0) >= val;
+    case 'monthly_championships': return (user.monthly_championships || 0) >= val;
+    default: return false;
   }
 }
 
@@ -168,16 +168,16 @@ function AchievementRow({ ach, unlocked }) {
    MAIN COMPONENT
 ════════════════════════════════════════════ */
 export default function UserProfilePanel({ userId, onClose }) {
-  const [userData,     setUserData]     = useState(null);
-  const [loading,      setLoading]      = useState(true);
-  const [activeTab,    setActiveTab]    = useState('stats');
-  const [showImage,    setShowImage]    = useState(false);
-  const [userRanking,  setUserRanking]  = useState({ position: 0, totalUsers: 0 });
-  const [crowns,       setCrowns]       = useState([]);
-  const [streakData,   setStreakData]   = useState({ current_streak: 0, best_streak: 0 });
-  const [allAch,       setAllAch]       = useState([]);
-  const [titles,       setTitles]       = useState([]);
-  const [mounted,      setMounted]      = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('stats');
+  const [showImage, setShowImage] = useState(false);
+  const [userRanking, setUserRanking] = useState({ position: 0, totalUsers: 0 });
+  const [crowns, setCrowns] = useState([]);
+  const [streakData, setStreakData] = useState({ current_streak: 0, best_streak: 0 });
+  const [allAch, setAllAch] = useState([]);
+  const [titles, setTitles] = useState([]);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => { loadData(); }, [userId]);
   useEffect(() => {
@@ -250,17 +250,17 @@ export default function UserProfilePanel({ userId, onClose }) {
 
   if (!userData) return null;
 
-  const accuracy    = acc(userData.correct, userData.predictions);
-  const lvlProg     = levelProgress(userData.points || 0);
-  const lvlPts      = pointsInLevel(userData.points || 0);
+  const accuracy = acc(userData.correct, userData.predictions);
+  const lvlProg = levelProgress(userData.points || 0);
+  const lvlPts = pointsInLevel(userData.points || 0);
   const activeTitle = getActiveTitle();
   const totalCrowns = userData.monthly_championships || 0;
-  const firstName   = userData.name?.split(' ')[0] || 'Jugador';
-  const initials    = (userData.name || 'U').slice(0, 2).toUpperCase();
+  const firstName = userData.name?.split(' ')[0] || 'Jugador';
+  const initials = (userData.name || 'U').slice(0, 2).toUpperCase();
 
   /* Separar logros desbloqueados / bloqueados */
   const unlocked = allAch.filter(a => checkUnlocked(a, userData));
-  const locked   = allAch.filter(a => !checkUnlocked(a, userData));
+  const locked = allAch.filter(a => !checkUnlocked(a, userData));
 
   /* Agrupar desbloqueados por categoría */
   const grouped = unlocked.reduce((acc, a) => {
@@ -271,9 +271,9 @@ export default function UserProfilePanel({ userId, onClose }) {
   }, {});
 
   const tabs = [
-    { id: 'stats',   label: 'Stats',   icon: TrendingUp },
-    { id: 'logros',  label: 'Logros',  icon: Star       },
-    { id: 'coronas', label: 'Coronas', icon: Crown      },
+    { id: 'stats', label: 'Stats', icon: TrendingUp },
+    { id: 'logros', label: 'Logros', icon: Star },
+    { id: 'coronas', label: 'Coronas', icon: Crown },
   ];
 
   return (
@@ -343,10 +343,10 @@ export default function UserProfilePanel({ userId, onClose }) {
 
           {(userData.nationality || userData.favorite_team || userData.favorite_player || userData.created_at) && (
             <div className="upp-info-tags">
-              {userData.nationality   && <span className="upp-tag"><Globe size={10} />{userData.nationality}</span>}
+              {userData.nationality && <span className="upp-tag"><Globe size={10} />{userData.nationality}</span>}
               {userData.favorite_team && <span className="upp-tag upp-tag--red"><Trophy size={10} />{userData.favorite_team}</span>}
               {userData.favorite_player && <span className="upp-tag upp-tag--green"><Heart size={10} />{userData.favorite_player}</span>}
-              {userData.created_at    && <span className="upp-tag upp-tag--gold"><Calendar size={10} />Desde {fmtDate(userData.created_at)}</span>}
+              {userData.created_at && <span className="upp-tag upp-tag--gold"><Calendar size={10} />Desde {fmtDate(userData.created_at)}</span>}
             </div>
           )}
 
@@ -388,12 +388,12 @@ export default function UserProfilePanel({ userId, onClose }) {
 
               <SectionDivider icon={TrendingUp} label="Estadísticas globales" color="#5b4fd8" />
               <div className="upp-stats-grid">
-                <StatCard icon={Zap}     label="Puntos"       value={fmt(userData.points)}       accent="#5b4fd8" />
-                <StatCard icon={Target}  label="Predicciones" value={fmt(userData.predictions)}  accent="#3B82F6" />
-                <StatCard icon={Star}    label="Precisión"    value={`${accuracy}%`}             accent="#10B981" />
-                <StatCard icon={Trophy}  label="Correctas"    value={fmt(userData.correct)}      accent="#F59E0B" />
-                <StatCard icon={Crown}   label="Coronas"      value={totalCrowns}                accent="#c9a227" />
-                <StatCard icon={Award}   label="Posición"     value={`#${userRanking.position}`} accent="#EC4899" />
+                <StatCard icon={Zap} label="Puntos" value={fmt(userData.points)} accent="#5b4fd8" />
+                <StatCard icon={Target} label="Predicciones" value={fmt(userData.predictions)} accent="#3B82F6" />
+                <StatCard icon={Star} label="Precisión" value={`${accuracy}%`} accent="#10B981" />
+                <StatCard icon={Trophy} label="Correctas" value={fmt(userData.correct)} accent="#F59E0B" />
+                <StatCard icon={Crown} label="Coronas" value={totalCrowns} accent="#c9a227" />
+                <StatCard icon={Award} label="Posición" value={`#${userRanking.position}`} accent="#EC4899" />
               </div>
 
               <SectionDivider icon={Flame} label="Rachas" color="#EF4444" />
@@ -413,9 +413,9 @@ export default function UserProfilePanel({ userId, onClose }) {
 
               <SectionDivider icon={TrendingUp} label="Este mes" color="#8b7fc7" />
               <div className="upp-stats-grid">
-                <StatCard icon={Zap}    label="Pts mes"    value={fmt(userData.monthly_points)}      accent="#8b7fc7" />
-                <StatCard icon={Target} label="Preds mes"  value={fmt(userData.monthly_predictions)} accent="#6366F1" />
-                <StatCard icon={Star}   label="Correctas"  value={fmt(userData.monthly_correct)}     accent="#10B981" />
+                <StatCard icon={Zap} label="Pts mes" value={fmt(userData.monthly_points)} accent="#8b7fc7" />
+                <StatCard icon={Target} label="Preds mes" value={fmt(userData.monthly_predictions)} accent="#6366F1" />
+                <StatCard icon={Star} label="Correctas" value={fmt(userData.monthly_correct)} accent="#10B981" />
               </div>
             </div>
           )}
@@ -532,10 +532,10 @@ export default function UserProfilePanel({ userId, onClose }) {
 
               <SectionDivider icon={TrendingUp} label="Este mes" color="#10B981" />
               <div className="upp-stats-grid">
-                <StatCard icon={Zap}    label="Pts mes"    value={fmt(userData.monthly_points)}      accent="#8b7fc7" />
-                <StatCard icon={Target} label="Preds mes"  value={fmt(userData.monthly_predictions)} accent="#3B82F6" />
-                <StatCard icon={Star}   label="Correctas"  value={fmt(userData.monthly_correct)}     accent="#10B981" />
-                <StatCard icon={Crown}  label="Coronas"    value={totalCrowns}                       accent="#c9a227" />
+                <StatCard icon={Zap} label="Pts mes" value={fmt(userData.monthly_points)} accent="#8b7fc7" />
+                <StatCard icon={Target} label="Preds mes" value={fmt(userData.monthly_predictions)} accent="#3B82F6" />
+                <StatCard icon={Star} label="Correctas" value={fmt(userData.monthly_correct)} accent="#10B981" />
+                <StatCard icon={Crown} label="Coronas" value={totalCrowns} accent="#c9a227" />
               </div>
 
               {crowns.length > 0 && (

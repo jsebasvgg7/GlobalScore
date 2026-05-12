@@ -10,18 +10,17 @@ import {
   ArrowUpDown, Image, Check, Save, X,
   Filter,
 } from "lucide-react";
-import StyleSwitcher from "./StyleSwitcher";
-import AvatarUpload from "../ComProfile/AvatarUpload";
-import MobileNotes from "../../../../components/ComMobile/MobileNotes";
-import { supabase } from "../../utils/supabaseClient";
+import StyleSwitcher from "@/shared/layout";
+import AvatarUpload from "../AvatarUpload";
+import { MobileNotes } from '@/features/notes';
+import { supabase } from '@/shared/services/supabase/client';
 import {
   getPredictionResult,
   calculateAccuracy,
   calculateLevelProgress,
   getIconEmoji,
-} from "../../utils/profileUtils";
-import "../../styles/StylesMobile/MobileProfileMain.css";
-import "../../styles/StylesMobile/StyleSwitcher.css";
+} from "@/shared/utils/profileUtils";
+import "../../styles/MobileProfileMain.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
 

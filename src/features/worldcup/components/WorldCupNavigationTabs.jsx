@@ -1,6 +1,6 @@
 import React from 'react';
 import { Users, Target, Award } from 'lucide-react';
-import '../../styles/StylesOthers/NavigationTabs.css';
+import '../../../shared/layout/NavigationTabs.css';
 
 export default function WorldCupNavigationTabs({ activeTab, onTabChange }) {
   return (
