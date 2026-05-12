@@ -4,7 +4,7 @@ import { supabase } from '@/shared/services/supabase/client';
 import { ThemeProvider } from './context/ThemeContext';
 import { resetWelcome } from "@/features/auth/page/LoginPage";
 
-import Header from "@/shared/layout";
+import { Header } from "@/shared/layout";
 import LoginPage from "@/features/auth/page/LoginPage";
 import RegisterPage from "@/features/auth/page/RegisterPage";
 import ForgotPasswordPage from "@/features/auth/page/ForgotPasswordPage";
