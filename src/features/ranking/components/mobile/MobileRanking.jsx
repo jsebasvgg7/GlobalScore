@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Globe, Calendar, Crown, ChevronLeft, ChevronRight, Zap, Star } from "lucide-react";
-import MobileUserProfile from "@/features/profile";
+import { MobileUserProfile } from "@/features/profile";
 import "../../styles/MobileRanking.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
