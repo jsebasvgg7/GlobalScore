@@ -4,7 +4,7 @@ import {
   Clock, Target, Award, BellRing, BellOff
 } from 'lucide-react';
 import { supabase } from '@/shared/services/supabase/client';
-import MobileNotifications from '@/features/notifications';
+import { MobileNotifications } from '@/features/notifications';
 import './NotificationsPage.css';
 
 const VAPID_PUBLIC_KEY = 'BBxgmAtEOHeYNi1tJQcrWzL_Q-6_Mj16ECGgQSL6JPX0i9XyL5V5LFJHjNdde_TTRxAUXJHSYNtUOvXcAsYS_Xs';
