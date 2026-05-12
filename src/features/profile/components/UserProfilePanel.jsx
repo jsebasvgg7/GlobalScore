@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/shared/services/supabase/client';
 import { LoadingDots } from '@/shared/ui';
-import ImageViewer from '@/shared/ui';
+import { ImageViewer } from "@/shared/ui";
 import '../styles/UserProfilePanel.css';
 
 /* ── helpers ── */

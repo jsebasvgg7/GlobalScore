@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Upload, Camera, X, Loader2, Crown } from 'lucide-react';
 import { supabase } from '@/shared/services/supabase/client';
-import ImageViewer from '@/shared/ui';
+import { ImageViewer } from "@/shared/ui";
 import '../styles/ProfileBase.css';
 
 export default function AvatarUpload({ currentUrl, userId, onUploadComplete, userLevel }) {

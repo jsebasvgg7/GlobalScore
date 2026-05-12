@@ -29,7 +29,7 @@ import {
   AvatarUpload,
 } from '@/features/profile';
 import { useTheme } from '../../../context/ThemeContext';
-import ImageViewer from '@/shared/ui';
+import { ImageViewer } from "@/shared/ui";
 import { supabase } from '@/shared/services/supabase/client';
 import {
   getPredictionResult,
