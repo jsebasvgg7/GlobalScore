@@ -20,10 +20,11 @@ export { default as AdminRightPanel } from './components/AdminRightPanel'
 export { default as AdminStatsOverview } from './components/AdminStatsOverview'
 export { default as AdminTitlesList } from './components/AdminTitlesList'
 export { default as AdminTitlesModal } from './components/AdminTitlesModal'
-export { default as DataImporter } from './components/DataImporter'
+export { DataImporter } from './components/DataImporter'
 export { default as FinishAwardModal } from './components/FinishAwardModal'
 export { default as FinishLeagueModal } from './components/FinishLeagueModal'
 export { default as FinishMatchModal } from './components/FinishMatchModal'
+export { default as AdminHistorical } from './components/AdminHistorical'
 
 // Mobile
 export {

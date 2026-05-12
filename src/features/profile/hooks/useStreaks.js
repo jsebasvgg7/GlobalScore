@@ -17,6 +17,7 @@ const isConsecutive = (date1, date2) => {
   const diffDays = Math.abs((d1 - d2) / (1000 * 60 * 60 * 24));
   return diffDays <= 7;
 };
+
 export const useStreaks = (currentUser) => {
   const [streakData, setStreakData] = useState({
     current_streak: 0,
@@ -38,19 +39,18 @@ export const useStreaks = (currentUser) => {
           )
         `)
         .eq('user_id', currentUser.id)
-        .eq('matches.status', 'finished')
-        .order('matches.date', { ascending: false });
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
+
+      const finishedPredictions = (data || [])
+        .filter(p => p.matches?.status === 'finished')
+        .sort((a, b) => new Date(b.matches.date) - new Date(a.matches.date));
 
       let currentStreak = 0;
       let bestStreak = 0;
       let tempStreak = 0;
       let lastDate = null;
-
-      const finishedPredictions = (data || [])
-        .filter(p => p.matches?.status === 'finished')
-        .sort((a, b) => new Date(b.matches.date) - new Date(a.matches.date));
 
       finishedPredictions.forEach((pred, index) => {
         const match = pred.matches;
@@ -91,4 +91,3 @@ export const useStreaks = (currentUser) => {
     calculateStreaks
   };
 };
-

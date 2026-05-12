@@ -31,6 +31,7 @@ import {
 import { useTheme } from '../../../context/ThemeContext';
 import { ImageViewer } from "@/shared/ui";
 import { supabase } from '@/shared/services/supabase/client';
+import { useSettings } from '@/shared/hooks/useSettings';
 import {
   getPredictionResult,
   calculateAccuracy,
@@ -790,8 +791,6 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
 
         </div>
       </div>
-
-      <div className="pnew-footer-desktop"><Footer /></div>
 
       {/* Modal eliminar cuenta */}
       {showDeleteConfirm && (

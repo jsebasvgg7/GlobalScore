@@ -1070,23 +1070,6 @@ input[type="number"]::-webkit-outer-spin-button {
   flex-direction: column;
 }
 
-.banner-admin-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 24px;
-  border-bottom: 0.5px solid var(--border);
-  background: var(--bg);
-  transition: background 0.1s;
-}
-
-.banner-admin-card:last-child {
-  border-bottom: none;
-}
-
-.banner-admin-card:hover {
-  background: var(--card);
-}
 
 .banner-admin-preview {
   width: 80px;

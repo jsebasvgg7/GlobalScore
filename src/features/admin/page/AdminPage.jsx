@@ -34,6 +34,8 @@ import {
   AdminCrownsSection,
   AdminBannersList,
   AdminRightPanel,
+  AdminHistorical,
+
 } from '@/features/admin';
 
 import {
@@ -45,6 +47,7 @@ import '../styles/AdminRightPanel.css';
 import '../styles/AdminBanners.css';
 import '../styles/AdminHistorical.css';
 import '../styles/MobileAdmin.css';
+import '../styles/AdminModal.css';
 import './AdminPage.css';
 
 export default function AdminPage({ currentUser }) {
@@ -320,7 +323,7 @@ export default function AdminPage({ currentUser }) {
               activeSection={activeSection}
               onOpen={() => { resetPanel(); setMobileSheetOpen(true); }}
             />
-            <MobileAdminSheet
+            <MobileAdmin
               isOpen={mobileSheetOpen}
               onClose={() => setMobileSheetOpen(false)}
               activeSection={activeSection}
