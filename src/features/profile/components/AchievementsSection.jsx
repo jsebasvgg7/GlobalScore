@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, Award, Lock, Star, TrendingUp } from 'lucide-react';
-import GlobalLoader from "@/shared/ui";
+import { GlobalLoader } from "@/shared/ui";
 import { supabase } from '@/shared/services/supabase/client';
 
 export default function AchievementsSection({ userId, userStats }) {
