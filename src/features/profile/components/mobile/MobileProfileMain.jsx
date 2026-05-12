@@ -10,7 +10,7 @@ import {
   ArrowUpDown, Image, Check, Save, X,
   Filter,
 } from "lucide-react";
-import StyleSwitcher from "@/shared/layout";
+import { StyleSwitcher } from "@/shared/layout";
 import AvatarUpload from "../AvatarUpload";
 import { MobileNotes } from '@/features/notes';
 import { supabase } from '@/shared/services/supabase/client';
