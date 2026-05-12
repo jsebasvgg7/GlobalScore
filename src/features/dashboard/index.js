@@ -5,8 +5,13 @@ export { default as MatchCard } from './components/MatchCard'
 export { default as RightPanel } from './components/RightPanel'
 
 // Mobile
-export { default as MobileCardsGlobal } from './components/mobile/MobileCardsGlobal'
 export { default as MobileDashboard } from './components/mobile/MobileDashboard'
+
+export {
+    MatchCardMobile,
+    LeagueCardMobile,
+    AwardCardMobile
+} from './components/mobile/MobileCardsGlobal'
 
 // Hooks
 export * from './hooks/useAwards'
