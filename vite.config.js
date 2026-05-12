@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { copyFileSync } from 'fs';
+import { copyFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -9,23 +9,28 @@ export default defineConfig({
     {
       name: 'copy-sw',
       closeBundle() {
-        try {
+        const swPath = resolve('public/sw.js');
+
+        if (existsSync(swPath)) {
           copyFileSync(
-            resolve('public/sw.js'),
+            swPath,
             resolve('dist/sw.js')
           );
+
           console.log('✅ Service Worker copiado a dist/');
-        } catch (err) {
-          console.error('❌ Error copiando SW:', err);
+        } else {
+          console.log('⚠️ sw.js no existe, se omitió la copia');
         }
       }
     }
   ],
+
   resolve: {
     alias: {
       '@': resolve(__dirname, './src')
     }
   },
+
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
