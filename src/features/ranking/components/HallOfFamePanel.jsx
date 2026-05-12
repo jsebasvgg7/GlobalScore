@@ -3,8 +3,8 @@ import { Crown, Star, Zap } from "lucide-react";
 import HistoryTriggerCard from "./HistoryTriggerCard";
 import HistoryPanel from "./HistoryPanel";
 import "../styles/HallOfFamePanel.css";
-import "../styles/MonthlyChampionCard.css";
-import "../styles/MonthlyHistoryPanel.css";
+import "../styles/HistoryTriggerCard.css";
+import "../styles/HistoryPanel.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
 
