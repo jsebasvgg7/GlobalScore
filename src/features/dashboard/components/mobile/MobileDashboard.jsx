@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Crown, Landmark } from "lucide-react";
-import MobileUserProfile from "../../../profile/components/mobile/MobileUserProfile";
+import { MobileUserProfile } from "@/features/profile";
 import { MobileSubPage } from "@/shared/layout";
 import "../../styles/MobileDashboard.css";
 
