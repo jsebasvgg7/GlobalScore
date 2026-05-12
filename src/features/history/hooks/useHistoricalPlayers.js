@@ -197,30 +197,3 @@ export function useHistoricalPlayerDetail(playerId) {
 
   return { player, teams, events, career, national, titles, loading, error, reload: load };
 }
-
-// ─── Hook: listado de eventos ─────────────────────────────────────────────────
-export function useHistoricalEvents() {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data, error: err } = await supabase
-          .from("historical_events")
-          .select("*")
-          .eq("is_published", true)
-          .order("event_date");
-        if (err) throw err;
-        setEvents(data || []);
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
-
-  return { events, loading, error };
-}
