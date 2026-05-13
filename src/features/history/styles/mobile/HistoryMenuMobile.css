@@ -41,6 +41,26 @@
   }
 }
 
+@keyframes hmm-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes hmm-overlay-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 /* ══════════════════════════════════════════════
    ROOT
 ══════════════════════════════════════════════ */
@@ -207,100 +227,6 @@
   border-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 8%, var(--bg));
 }
-
-.hmm-filter-toggle--has .hmm-filter-dot {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-.hmm-filter-panel {
-  background: var(--card);
-  border-bottom: 0.5px solid var(--border);
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  animation: hmm-fade-up .2s ease both;
-}
-
-.hmm-filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.hmm-filter-group-label {
-  font-size: 9px;
-  font-weight: 700;
-  font-family: 'DM Mono', monospace;
-  text-transform: uppercase;
-  letter-spacing: .14em;
-  color: var(--muted);
-}
-
-.hmm-filter-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.hmm-filter-chip {
-  padding: 5px 12px;
-  border: 0.5px solid var(--border);
-  background: var(--bg);
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 600;
-  font-family: 'DM Mono', monospace;
-  cursor: pointer;
-  transition: color .12s, background .12s, border-color .12s;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.hmm-filter-chip--active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-}
-
-.hmm-filter-chip:active:not(.hmm-filter-chip--active) {
-  background: color-mix(in srgb, var(--accent) 10%, var(--bg));
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
-.hmm-filter-clear {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 12px;
-  border: 0.5px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 700;
-  font-family: 'DM Mono', monospace;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  cursor: pointer;
-  align-self: flex-start;
-  transition: color .12s, border-color .12s;
-}
-
-.hmm-filter-clear:active {
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
-/* ════════════════════════════════════════════════
-   PARCHE: Ruleta animada en el Header del menú
-   Agregar al final de HistoryMenuMobile.css
-════════════════════════════════════════════════ */
 
 /* ── Animaciones ── */
 @keyframes hmm-spin-blur {
@@ -1339,6 +1265,209 @@
   letter-spacing: .04em;
 }
 
+.hmm-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 9, 16, 0.6);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  animation: hmm-overlay-in .2s ease both;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Sheet container ── */
+.hmm-sheet {
+  width: 100%;
+  background: var(--card);
+  border-top: 0.5px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+  animation: hmm-sheet-in .28s cubic-bezier(.32, .72, 0, 1) both;
+  display: flex;
+  flex-direction: column;
+  max-height: 85dvh;
+}
+
+/* ── Handle ── */
+.hmm-sheet-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  margin: 12px auto 0;
+  flex-shrink: 0;
+}
+
+/* ── Header del sheet ── */
+.hmm-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 4px;
+  flex-shrink: 0;
+}
+
+.hmm-sheet-title {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  color: var(--muted);
+}
+
+.hmm-sheet-clear {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  -webkit-tap-highlight-color: transparent;
+  letter-spacing: .04em;
+}
+
+.hmm-sheet-clear:active {
+  opacity: .6;
+}
+
+/* ── Cuerpo scrollable ── */
+.hmm-sheet-body {
+  overflow-y: auto;
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.hmm-sheet-body::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Grupo de filtro ── */
+.hmm-sheet-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hmm-sheet-group-label {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  color: var(--muted);
+  opacity: .6;
+}
+
+/* ── Chips en pill ── */
+.hmm-sheet-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hmm-sheet-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 100px;
+  border: 0.5px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'DM Mono', monospace;
+  cursor: pointer;
+  transition: color .12s, background .12s, border-color .12s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.hmm-sheet-chip:active {
+  transform: scale(.95);
+}
+
+.hmm-sheet-chip--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ── Footer / botón Aplicar ── */
+.hmm-sheet-footer {
+  padding: 12px 20px;
+  flex-shrink: 0;
+  border-top: 0.5px solid var(--border);
+}
+
+.hmm-sheet-apply {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  cursor: pointer;
+  transition: opacity .12s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hmm-sheet-apply:active {
+  transform: scale(.98);
+  opacity: .88;
+}
+
+.hmm-sheet-apply-badge {
+  background: rgba(255, 255, 255, .25);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  padding: 2px 8px;
+  border-radius: 100px;
+  line-height: 1.4;
+}
+
+/* ── Badge numérico en el botón de filtro (reemplaza el dot) ── */
+.hmm-filter-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 100px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+
 /* ══════════════════════════════════════════════
    TEMA: BRUTALIST
 ══════════════════════════════════════════════ */
@@ -1535,6 +1664,34 @@
   border-radius: 0;
 }
 
+[data-style="brutalist"] .hmm-sheet {
+  border-radius: 0;
+  border-top: 1px solid var(--border);
+}
+
+[data-style="brutalist"] .hmm-sheet-handle {
+  border-radius: 0;
+  background: var(--accent);
+}
+
+[data-style="brutalist"] .hmm-sheet-chip {
+  border-radius: 0;
+  border-width: 1px;
+}
+
+[data-style="brutalist"] .hmm-sheet-chip--active {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+[data-style="brutalist"] .hmm-sheet-apply {
+  border-radius: 0;
+}
+
+[data-style="brutalist"] .hmm-filter-badge {
+  border-radius: 0;
+}
+
 /* ══════════════════════════════════════════════
    TEMA: NEUMORPHISM
 ══════════════════════════════════════════════ */
@@ -1598,64 +1755,91 @@
   background: #ddd8d0;
 }
 
-[data-style="neumorphism"] .hmm-filter-toggle--has .hmm-filter-dot {
+[data-style="neumorphism"] .hmm-sheet {
+  background: #ddd8d0;
+  border-top: none;
+  border-radius: 24px 24px 0 0;
+  box-shadow:
+    0 -8px 32px rgba(166, 158, 148, .35),
+    -4px 0 16px rgba(166, 158, 148, .2),
+    4px 0 16px rgba(166, 158, 148, .2);
+}
+
+[data-style="neumorphism"] .hmm-sheet-title {
+  color: rgba(42, 37, 53, .5);
+}
+
+[data-style="neumorphism"] .hmm-sheet-clear {
+  color: #60519b;
+}
+
+[data-style="neumorphism"] .hmm-sheet-footer {
+  border-top: 1px solid rgba(166, 158, 148, .3);
+}
+
+[data-style="neumorphism"] .hmm-sheet-chip {
+  border: none;
+  background: #ddd8d0;
+  color: #2A2535;
+  box-shadow:
+    3px 3px 7px rgba(166, 158, 148, .5),
+    -2px -2px 5px rgba(255, 255, 255, .7);
+}
+
+[data-style="neumorphism"] .hmm-sheet-chip--active {
+  background: #60519b;
+  color: #fff;
+  box-shadow:
+    inset 3px 3px 6px rgba(48, 38, 90, .4),
+    inset -2px -2px 5px rgba(100, 80, 180, .3);
+}
+
+[data-style="neumorphism"] .hmm-sheet-apply {
+  background: #60519b;
+  border-radius: 14px;
+  box-shadow:
+    4px 4px 10px rgba(166, 158, 148, .4),
+    -2px -2px 7px rgba(255, 255, 255, .6);
+}
+
+[data-style="neumorphism"] .hmm-sheet-apply:active {
+  box-shadow:
+    inset 3px 3px 6px rgba(48, 38, 90, .4),
+    inset -2px -2px 5px rgba(100, 80, 180, .3);
+}
+
+[data-style="neumorphism"] .hmm-filter-badge {
   background: #60519b;
 }
 
-[data-style="neumorphism"] .hmm-filter-panel {
-  border: none;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(166, 158, 148, 0.35),
-    4px 4px 12px rgba(166, 158, 148, 0.3),
-    -3px -3px 9px rgba(255, 255, 255, 0.8);
-}
-
-[data-style="neumorphism"][data-theme="dark"] .hmm-filter-panel {
+/* dark + neumorphism */
+[data-style="neumorphism"][data-theme="dark"] .hmm-sheet {
   background: #1E1C28;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
-    4px 4px 12px rgba(10, 9, 16, 0.6),
-    -3px -3px 9px rgba(40, 37, 55, 0.8);
-}
-
-[data-style="neumorphism"] .hmm-filter-group-label {
-  color: #2A2535;
-  font-weight: 800;
-}
-
-[data-style="neumorphism"] .hmm-filter-chip {
-  border: none;
-  border-radius: 16px;
-  background: #ddd8d0;
-  color: #2A2535;
   box-shadow:
-    3px 3px 7px rgba(166, 158, 148, .5),
-    -2px -2px 5px rgba(255, 255, 255, .7);
+    0 -8px 32px rgba(0, 0, 0, .6),
+    -4px 0 16px rgba(10, 9, 16, .4);
 }
 
-[data-style="neumorphism"] .hmm-filter-chip--active {
+[data-style="neumorphism"][data-theme="dark"] .hmm-sheet-chip {
+  background: #1E1C28;
   box-shadow:
-    inset 3px 3px 6px rgba(166, 158, 148, .5),
-    inset -2px -2px 5px rgba(255, 255, 255, .6);
+    3px 3px 7px rgba(10, 9, 16, .6),
+    -2px -2px 5px rgba(40, 37, 55, .8);
+  color: rgba(232, 230, 240, .7);
+}
+
+[data-style="neumorphism"][data-theme="dark"] .hmm-sheet-chip--active {
   background: #60519b;
   color: #fff;
+  box-shadow:
+    inset 3px 3px 6px rgba(10, 9, 16, .5),
+    inset -2px -2px 5px rgba(40, 37, 55, .7);
 }
 
-[data-style="neumorphism"] .hmm-filter-clear {
-  background: #ddd8d0;
-  color: #2A2535;
-  box-shadow:
-    3px 3px 7px rgba(166, 158, 148, .5),
-    -2px -2px 5px rgba(255, 255, 255, .7);
-  border-radius: 10px;
+[data-style="neumorphism"][data-theme="dark"] .hmm-sheet-footer {
+  border-top-color: rgba(40, 37, 55, .5);
 }
 
-[data-style="neumorphism"] .hmm-filter-clear:active {
-  box-shadow:
-    inset 3px 3px 6px rgba(166, 158, 148, .5),
-    inset -2px -2px 5px rgba(255, 255, 255, .6);
-  background: #60519b;
-  color: #fff;
-}
 
 /* ── Dark overrides ── */
 [data-theme="dark"] .hmm-search-row {
@@ -1664,18 +1848,6 @@
 }
 
 [data-theme="dark"] .hmm-filter-toggle {
-  background: #1E1C28;
-  border-color: #3A3746;
-  color: #ddd8d0;
-}
-
-[data-theme="dark"] .hmm-filter-panel {
-  background: #1A1824;
-  border-color: #38334F;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-}
-
-[data-theme="dark"] .hmm-filter-chip {
   background: #1E1C28;
   border-color: #3A3746;
   color: #ddd8d0;
@@ -1693,21 +1865,6 @@
     inset 4px 4px 9px rgba(10, 9, 16, .5),
     inset -2px -2px 6px rgba(40, 37, 55, .65);
   background: #1E1C28;
-}
-
-[data-style="neumorphism"][data-theme="dark"] .hmm-filter-chip {
-  background: #1E1C28;
-  box-shadow:
-    3px 3px 7px rgba(10, 9, 16, .55),
-    -2px -2px 5px rgba(40, 37, 55, .65);
-}
-
-[data-style="neumorphism"][data-theme="dark"] .hmm-filter-chip--active {
-  background: #60519b;
-  box-shadow:
-    inset 3px 3px 6px rgba(10, 9, 16, .5),
-    inset -2px -2px 5px rgba(40, 37, 55, .65);
-  color: #fff;
 }
 
 [data-style="neumorphism"] .hmm-search-wrap {
@@ -2137,6 +2294,16 @@
 [data-style="neumorphism"][data-theme="dark"] .hmm-search-input::placeholder {
   color: rgba(232, 230, 240, .35);
   opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hmm-sheet {
+    animation: none;
+  }
+
+  .hmm-sheet-overlay {
+    animation: none;
+  }
 }
 
 /* ══════════════════════════════════════════════

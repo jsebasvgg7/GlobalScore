@@ -1,7 +1,8 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import {
   Users2, Trophy, Shield, Zap, Search, X, ChevronRight,
-  Filter, Star, Shuffle, ArrowLeft,
+  Filter, Star, Shuffle, Check,
 } from "lucide-react";
 import { useHistoricalPlayers, getHistoricalImageUrl } from "../../hooks/useHistoricalPlayers";
 import { useHistoricalCompetitions } from "../../hooks/useHistoricalCompetitions";
@@ -9,7 +10,6 @@ import { useHistoricalTeams } from "../../hooks/useHistoricalTeams";
 import { useHistoricalEvents } from "../../hooks/useHistoricalEvents";
 import "../../styles/mobile/HistoryMenuMobile.css";
 
-// ─── Skeleton ─────────────────────────────────────────────────────────────────
 function Skel({ w = "100%", h = 16, round = false }) {
   return (
     <span
@@ -19,7 +19,6 @@ function Skel({ w = "100%", h = 16, round = false }) {
   );
 }
 
-// ─── Constantes ───────────────────────────────────────────────────────────────
 const SECTIONS = [
   { key: "players", label: "Jug", icon: Users2 },
   { key: "teams", label: "Equi", icon: Shield },
@@ -114,7 +113,7 @@ const POSITION_LABEL = {
   "All-rounder": "Todocampista", Defender: "Defensor", Goalkeeper: "Portero",
 };
 
-// ─── Animación ruleta (igual que SectionHeaderMobile) ────────────────────────
+// ─── Ruleta ───────────────────────────────────────────────────────────────────
 function RouletteSlot({ items, running, winner, onDone, renderItem }) {
   const [displayed, setDisplayed] = useState(null);
   const [phase, setPhase] = useState("idle");
@@ -149,7 +148,6 @@ function RouletteSlot({ items, running, winner, onDone, renderItem }) {
   );
 }
 
-// ─── SlotItem por tipo ────────────────────────────────────────────────────────
 function PlayerSlotItem({ item, phase }) {
   const img = getHistoricalImageUrl(item.image_path);
   return (
@@ -231,13 +229,12 @@ const RANDOM_LABEL = {
   competitions: "Competición aleatoria",
 };
 
-// ─── HEADER con ruleta animada ────────────────────────────────────────────────
+// ─── Header ──────────────────────────────────────────────────────────────────
 function Header({ totalCounts, onRandomSelect, activeSection, poolItems }) {
   const [spinning, setSpinning] = useState(false);
   const [winner, setWinner] = useState(null);
   const [done, setDone] = useState(false);
 
-  // Resetear la ruleta cuando cambia de sección
   useEffect(() => {
     setSpinning(false);
     setWinner(null);
@@ -284,8 +281,6 @@ function Header({ totalCounts, onRandomSelect, activeSection, poolItems }) {
         <p className="hmm-subtitle">
           {totalCounts} registros del fútbol mundial
         </p>
-
-        {/* ── Zona de ruleta ── */}
         <div className="hmm-random-zone">
           {!done && !spinning && (
             <button
@@ -298,7 +293,6 @@ function Header({ totalCounts, onRandomSelect, activeSection, poolItems }) {
               <span>{RANDOM_LABEL[activeSection] || "Aleatorio"}</span>
             </button>
           )}
-
           {(spinning || done) && (
             <div className={`hmm-roulette ${done ? "hmm-roulette--done" : ""}`}>
               <div className="hmm-roulette-arrow" aria-hidden="true">▶</div>
@@ -329,7 +323,7 @@ function Header({ totalCounts, onRandomSelect, activeSection, poolItems }) {
   );
 }
 
-// ─── BUSCADOR GLOBAL ─────────────────────────────────────────────────────────
+// ─── Buscador ────────────────────────────────────────────────────────────────
 function GlobalSearch({ query, onChange, onClear, resultCount, searching }) {
   const inputRef = useRef(null);
   return (
@@ -364,7 +358,7 @@ function GlobalSearch({ query, onChange, onClear, resultCount, searching }) {
   );
 }
 
-// ─── NAV DE SECCIONES ────────────────────────────────────────────────────────
+// ─── Nav secciones ───────────────────────────────────────────────────────────
 function SectionNav({ active, onChange }) {
   return (
     <nav className="hmm-nav">
@@ -383,7 +377,87 @@ function SectionNav({ active, onChange }) {
   );
 }
 
-// ─── Badge jugador activo ─────────────────────────────────────────────────────
+// ─── BOTTOM SHEET DE FILTROS ─────────────────────────────────────────────────
+function FilterSheet({ section, activeFilters, onApply, onClose }) {
+  // Estado local del sheet — se aplica solo al tocar "Aplicar"
+  const [draft, setDraft] = useState({ ...activeFilters });
+  const filters = SECTION_FILTERS[section] || [];
+
+  const toggleChip = (key, value) => {
+    setDraft(prev =>
+      prev[key] === value
+        ? (() => { const n = { ...prev }; delete n[key]; return n; })()
+        : { ...prev, [key]: value }
+    );
+  };
+
+  const clearAll = () => setDraft({});
+
+  const activeCount = Object.values(draft).filter(Boolean).length;
+
+  // Bloquear scroll del body mientras el sheet está abierto
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  if (filters.length === 0) return null;
+
+  return createPortal(
+    <div className="hmm-sheet-overlay" onClick={onClose}>
+      <div
+        className="hmm-sheet"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="hmm-sheet-handle" />
+
+        <div className="hmm-sheet-header">
+          <span className="hmm-sheet-title">Filtrar resultados</span>
+          {activeCount > 0 && (
+            <button className="hmm-sheet-clear" onClick={clearAll}>
+              Limpiar todo
+            </button>
+          )}
+        </div>
+
+        <div className="hmm-sheet-body">
+          {filters.map(({ key, label, options }) => (
+            <div key={key} className="hmm-sheet-group">
+              <span className="hmm-sheet-group-label">{label}</span>
+              <div className="hmm-sheet-chips">
+                {options.map(({ value, label: optLabel }) => {
+                  const isActive = draft[key] === value;
+                  return (
+                    <button
+                      key={value}
+                      className={`hmm-sheet-chip ${isActive ? "hmm-sheet-chip--active" : ""}`}
+                      onClick={() => toggleChip(key, value)}
+                    >
+                      {isActive && <Check size={10} strokeWidth={3} />}
+                      {optLabel}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="hmm-sheet-footer">
+          <button className="hmm-sheet-apply" onClick={() => onApply(draft)}>
+            <Check size={14} strokeWidth={2.5} />
+            Aplicar filtros
+            {activeCount > 0 && (
+              <span className="hmm-sheet-apply-badge">{activeCount}</span>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
 function ActiveBadgeMobile() {
   return (
     <span className="hmm-active-badge">
@@ -393,12 +467,9 @@ function ActiveBadgeMobile() {
   );
 }
 
-// ─── ITEMS DE CADA SECCIÓN ────────────────────────────────────────────────────
-
 function PlayerRow({ player, onClick }) {
   const imgUrl = getHistoricalImageUrl(player.image_path);
   const isActive = player.significance_level === 1;
-
   return (
     <button className="hmm-player-card" onClick={onClick}>
       <div className="hmm-player-card-img">
@@ -476,7 +547,6 @@ function EventRow({ event, onClick }) {
   const protagonist = event.event_category === "player"
     ? event.historical_players : event.historical_teams;
   const year = event.event_date ? new Date(event.event_date).getFullYear() : null;
-
   return (
     <button className="hmm-event-card" onClick={onClick}>
       <div className="hmm-event-card-banner">
@@ -532,38 +602,6 @@ function CompRow({ competition, onClick }) {
   );
 }
 
-// ─── PANEL DE FILTROS ─────────────────────────────────────────────────────────
-function FilterPanel({ section, activeFilters, onChange, onClear }) {
-  const filters = SECTION_FILTERS[section] || [];
-  if (filters.length === 0) return null;
-
-  return (
-    <div className="hmm-filter-panel">
-      {filters.map(({ key, label, options }) => (
-        <div key={key} className="hmm-filter-group">
-          <span className="hmm-filter-group-label">{label}</span>
-          <div className="hmm-filter-options">
-            {options.map(({ value, label: optLabel }) => (
-              <button
-                key={value}
-                className={`hmm-filter-chip ${activeFilters[key] === value ? "hmm-filter-chip--active" : ""}`}
-                onClick={() => onChange(key, activeFilters[key] === value ? null : value)}
-              >
-                {optLabel}
-              </button>
-            ))}
-          </div>
-        </div>
-      ))}
-      {Object.values(activeFilters).some(Boolean) && (
-        <button className="hmm-filter-clear" onClick={onClear}>
-          <X size={11} /> Limpiar filtros
-        </button>
-      )}
-    </div>
-  );
-}
-
 function EmptyState({ section, query }) {
   const icons = { players: Users2, teams: Shield, events: Zap, competitions: Trophy };
   const Icon = icons[section] || Zap;
@@ -602,26 +640,23 @@ export default function HistoryMenuMobile({ onSectionChange, initialSection, ini
 
   const [activeSection, setActiveSection] = useState(initialSection || "players");
   const [query, setQuery] = useState("");
-  const [filterOpen, setFilterOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState({});
   const listRef = useRef(null);
 
   const nav = (key, item = null) => onSectionChange?.(key, item);
   const totalCounts = allPlayers.length + teams.length + events.length + competitions.length;
 
-  // Si viene initialSection, activarla
   useEffect(() => {
     if (initialSection) setActiveSection(initialSection);
   }, [initialSection]);
 
-  // Si viene initialItem con datos completos (no solo {id}), navegar directamente al detalle
   useEffect(() => {
     if (initialItem && initialSection && initialItem.name) {
       onSectionChange?.(initialSection, initialItem);
     }
   }, []);
 
-  // Pool de items de la sección activa (datos crudos para la ruleta)
   const activePool = useMemo(() => {
     switch (activeSection) {
       case "players": return allPlayers;
@@ -635,33 +670,28 @@ export default function HistoryMenuMobile({ onSectionChange, initialSection, ini
   const searchResults = useMemo(() => {
     if (!query.trim()) return null;
     const q = query.toLowerCase().trim();
-
     const matchPlayers = allPlayers.filter(p =>
       p.name?.toLowerCase().includes(q) ||
       p.country?.toLowerCase().includes(q) ||
       p.position?.toLowerCase().includes(q) ||
       p.legacy_type?.toLowerCase().includes(q)
     ).map(p => ({ type: "player", data: p }));
-
     const matchTeams = teams.filter(t =>
       t.name?.toLowerCase().includes(q) ||
       t.country?.toLowerCase().includes(q) ||
       t.era_dominance?.toLowerCase().includes(q)
     ).map(t => ({ type: "team", data: t }));
-
     const matchEvents = events.filter(e =>
       e.title?.toLowerCase().includes(q) ||
       e.historical_players?.name?.toLowerCase().includes(q) ||
       e.historical_teams?.name?.toLowerCase().includes(q) ||
       e.event_type?.toLowerCase().includes(q)
     ).map(e => ({ type: "event", data: e }));
-
     const matchComps = competitions.filter(c =>
       c.name?.toLowerCase().includes(q) ||
       c.country?.toLowerCase().includes(q) ||
       c.historical_teams?.name?.toLowerCase().includes(q)
     ).map(c => ({ type: "competition", data: c }));
-
     return [...matchPlayers, ...matchTeams, ...matchEvents, ...matchComps];
   }, [query, allPlayers, teams, events, competitions]);
 
@@ -687,14 +717,13 @@ export default function HistoryMenuMobile({ onSectionChange, initialSection, ini
   const filteredItems = useMemo(() => {
     const base = searchResults !== null ? searchResults : sectionItems;
     if (!hasActiveFilters) return base;
-
-    return base.filter(({ data }) => {
-      return Object.entries(activeFilters).every(([key, value]) => {
+    return base.filter(({ data }) =>
+      Object.entries(activeFilters).every(([key, value]) => {
         if (!value) return true;
         if (key === "significance_level") return String(data[key]) === value;
         return data[key] === value;
-      });
-    });
+      })
+    );
   }, [searchResults, sectionItems, activeFilters, hasActiveFilters]);
 
   const displayItems = filteredItems;
@@ -704,52 +733,32 @@ export default function HistoryMenuMobile({ onSectionChange, initialSection, ini
     setActiveSection(key);
     setQuery("");
     setActiveFilters({});
-    setFilterOpen(false);
+    setSheetOpen(false);
     listRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleClear = () => {
-    setQuery("");
+  const handleApplyFilters = (draft) => {
+    setActiveFilters(draft);
+    setSheetOpen(false);
   };
 
   const renderItem = (item, idx) => {
     switch (item.type) {
       case "player":
-        return (
-          <PlayerRow
-            key={item.data.id || idx}
-            player={item.data}
-            onClick={() => nav("players", item.data)}
-          />
-        );
+        return <PlayerRow key={item.data.id || idx} player={item.data} onClick={() => nav("players", item.data)} />;
       case "team":
-        return (
-          <TeamRow
-            key={item.data.id || idx}
-            team={item.data}
-            onClick={() => nav("teams", item.data)}
-          />
-        );
+        return <TeamRow key={item.data.id || idx} team={item.data} onClick={() => nav("teams", item.data)} />;
       case "event":
-        return (
-          <EventRow
-            key={item.data.id || idx}
-            event={item.data}
-            onClick={() => nav("events", item.data)}
-          />
-        );
+        return <EventRow key={item.data.id || idx} event={item.data} onClick={() => nav("events", item.data)} />;
       case "competition":
-        return (
-          <CompRow
-            key={item.data.id || idx}
-            competition={item.data}
-            onClick={() => nav("competitions", item.data)}
-          />
-        );
+        return <CompRow key={item.data.id || idx} competition={item.data} onClick={() => nav("competitions", item.data)} />;
       default:
         return null;
     }
   };
+
+  const activeFilterCount = Object.values(activeFilters).filter(Boolean).length;
+  const hasFiltersForSection = (SECTION_FILTERS[activeSection]?.length ?? 0) > 0;
 
   return (
     <div className="hmm-root">
@@ -764,31 +773,23 @@ export default function HistoryMenuMobile({ onSectionChange, initialSection, ini
         <GlobalSearch
           query={query}
           onChange={setQuery}
-          onClear={handleClear}
+          onClear={() => setQuery("")}
           resultCount={displayItems.length}
           searching={false}
         />
-        {SECTION_FILTERS[activeSection]?.length > 0 && (
+        {hasFiltersForSection && (
           <button
-            className={`hmm-filter-toggle ${filterOpen ? "hmm-filter-toggle--active" : ""} ${hasActiveFilters ? "hmm-filter-toggle--has" : ""}`}
-            onClick={() => setFilterOpen(v => !v)}
+            className={`hmm-filter-toggle ${sheetOpen ? "hmm-filter-toggle--active" : ""} ${hasActiveFilters ? "hmm-filter-toggle--has" : ""}`}
+            onClick={() => setSheetOpen(v => !v)}
+            aria-label="Abrir filtros"
           >
             <Filter size={15} />
-            {hasActiveFilters && <span className="hmm-filter-dot" />}
+            {hasActiveFilters && (
+              <span className="hmm-filter-badge">{activeFilterCount}</span>
+            )}
           </button>
         )}
       </div>
-
-      {filterOpen && (
-        <FilterPanel
-          section={activeSection}
-          activeFilters={activeFilters}
-          onChange={(key, value) => setActiveFilters(prev =>
-            value === null ? (() => { const n = { ...prev }; delete n[key]; return n; })() : { ...prev, [key]: value }
-          )}
-          onClear={() => setActiveFilters({})}
-        />
-      )}
 
       {!query && (
         <SectionNav active={activeSection} onChange={handleSectionChange} />
@@ -804,12 +805,15 @@ export default function HistoryMenuMobile({ onSectionChange, initialSection, ini
         )}
       </div>
 
-      <div className={`hmm-list${activeSection === "players" ? " hmm-list--players"
-        : activeSection === "teams" ? " hmm-list--teams"
-          : activeSection === "competitions" ? " hmm-list--competitions"
-            : activeSection === "events" ? " hmm-list--events"
-              : ""
-        }`} ref={listRef}>
+      <div
+        className={`hmm-list${activeSection === "players" ? " hmm-list--players"
+          : activeSection === "teams" ? " hmm-list--teams"
+            : activeSection === "competitions" ? " hmm-list--competitions"
+              : activeSection === "events" ? " hmm-list--events"
+                : ""
+          }`}
+        ref={listRef}
+      >
         {loading
           ? <LoadingRows />
           : displayItems.length > 0
@@ -817,6 +821,16 @@ export default function HistoryMenuMobile({ onSectionChange, initialSection, ini
             : <EmptyState section={activeSection} query={query} />
         }
       </div>
+
+      {/* Bottom Sheet flotante */}
+      {sheetOpen && (
+        <FilterSheet
+          section={activeSection}
+          activeFilters={activeFilters}
+          onApply={handleApplyFilters}
+          onClose={() => setSheetOpen(false)}
+        />
+      )}
     </div>
   );
 }
