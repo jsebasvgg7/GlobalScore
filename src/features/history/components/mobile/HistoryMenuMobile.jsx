@@ -387,7 +387,6 @@ function SectionNav({ active, onChange }) {
 function ActiveBadgeMobile() {
   return (
     <span className="hmm-active-badge">
-      <span className="hmm-active-badge-dot" />
       <span className="hmm-active-badge-star">★</span>
       <span className="hmm-active-badge-text">Activo</span>
     </span>

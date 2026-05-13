@@ -32,7 +32,6 @@ import {
 
 import "./HistoryPage.css";
 import "../styles/mobile/HistoryPageMobile.css";
-
 // ─── Helpers ──────────────────────────────────────────────────
 const LEGACY_COLOR = {
   "Goal Scorer": "#f59e0b", "Tactician": "#3b82f6",
