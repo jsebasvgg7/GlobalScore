@@ -805,10 +805,10 @@ export default function HistoryMenuMobile({ onSectionChange, initialSection, ini
         )}
       </div>
 
-      <div className={`hmm-list${activeSection === "players" && !query ? " hmm-list--players"
-        : activeSection === "teams" && !query ? " hmm-list--teams"
-          : activeSection === "competitions" && !query ? " hmm-list--competitions"
-            : activeSection === "events" && !query ? " hmm-list--events"
+      <div className={`hmm-list${activeSection === "players" ? " hmm-list--players"
+        : activeSection === "teams" ? " hmm-list--teams"
+          : activeSection === "competitions" ? " hmm-list--competitions"
+            : activeSection === "events" ? " hmm-list--events"
               : ""
         }`} ref={listRef}>
         {loading

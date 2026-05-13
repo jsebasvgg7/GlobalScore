@@ -835,6 +835,18 @@
   padding: 14px 14px 24px;
 }
 
+.hmm-list--players,
+.hmm-list--teams,
+.hmm-list--competitions {
+  align-items: start;
+}
+
+.hmm-player-card,
+.hmm-team-card,
+.hmm-comp-card {
+  align-self: start;
+}
+
 .hmm-player-card {
   display: flex;
   flex-direction: column;
