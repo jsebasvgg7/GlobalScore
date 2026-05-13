@@ -1,0 +1,105 @@
+import React from 'react';
+import { Trophy, Zap, Target, BarChart3, Heart, Calendar, Pill, FileText, ChevronRight } from 'lucide-react';
+import { calculateLevelProgress, calculateAccuracy } from '@/shared/utils/profileUtils';
+
+export default function OverviewTab({ userData, currentUser, userRanking }) {
+  const accuracy = calculateAccuracy(currentUser);
+  const { pointsInLevel, pointsToNextLevel, levelProgress } = calculateLevelProgress(userData, currentUser);
+
+  // Datos de ejemplo para el diseño clínico
+  const clinicalSections = [
+    {
+      id: 'stats',
+      title: 'Predicciones',
+      icon: Target,
+      color: 'yellow',
+      count: currentUser?.predictions || 0,
+    },
+    {
+      id: 'points',
+      title: 'Puntos totales',
+      icon: Zap,
+      color: 'pink',
+      count: currentUser?.points || 0,
+    },
+    {
+      id: 'accuracy',
+      title: 'Precisión',
+      icon: BarChart3,
+      color: 'green',
+      count: null,
+      subtitle: `${accuracy}% success rate`,
+    },
+    {
+      id: 'level',
+      title: 'Nivel actual',
+      icon: Trophy,
+      color: 'orange',
+      count: userData.level || 1,
+      subtitle: `${pointsInLevel}/20 puntos`,
+    },
+    {
+      id: 'ranking',
+      title: 'Global Ranking',
+      icon: Trophy,
+      color: 'teal',
+      count: userRanking.position || '--',
+      subtitle: `of ${userRanking.totalUsers} players`,
+    },
+    {
+      id: 'championships',
+      title: 'Campeonatos',
+      icon: Heart,
+      color: 'blue',
+      count: userData.monthly_championships || 0,
+    },
+  ];
+
+  return (
+    <div className="tab-content-wrapper">
+      {/* Level Progress Card */}
+      <div className="level-card-modern">
+        <div className="level-card-header">
+          <div className="level-icon-wrapper">
+            <Zap size={20} />
+          </div>
+          <div className="level-info">
+            <div className="level-number">Nivel {userData.level}</div>
+            <div className="level-subtitle">{pointsInLevel} de 20 puntos</div>
+          </div>
+          <div className="points-to-next">{pointsToNextLevel} pts</div>
+        </div>
+        <div className="level-progress-bar">
+          <div className="level-progress-fill" style={{ width: `${levelProgress}%` }}></div>
+        </div>
+      </div>
+
+      <div className="clinical-list">
+        {clinicalSections.map((section) => {
+          const IconComponent = section.icon;
+          return (
+            <div key={section.id} className="clinical-item touchable">
+              <div className={`icon-wrapper ${section.color}`}>
+                <IconComponent />
+              </div>
+              <div className="item-content">
+                <div className="item-info">
+                  <div className="item-title">{section.title}</div>
+                  {section.subtitle && (
+                    <div className="item-subtitle">{section.subtitle}</div>
+                  )}
+                </div>
+                {section.count !== null && (
+                  <div className="item-count">{section.count}</div>
+                )}
+                <div className="chevron">
+                  <ChevronRight />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

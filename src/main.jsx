@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './index.css';
-import { registerPWA } from './services/pwaService';
+import { registerPWA } from '@/shared/services/pwa/pwaService';
 
 if (import.meta.env.PROD) {
   registerPWA()

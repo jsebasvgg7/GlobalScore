@@ -1,25 +1,24 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { supabase } from "./utils/supabaseClient";
-import { ThemeProvider } from "./context/ThemeContext";
-import { resetWelcome } from "./pages/LoginPage";
+import { supabase } from '@/shared/services/supabase/client';
+import { ThemeProvider } from './context/ThemeContext';
+import { resetWelcome } from "@/features/auth/page/LoginPage";
 
-import Header from "./components/ComLayout/Header";
-import InstallPWAButton from './components/ComPWA/InstallPWAButton';
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
-import DashboardPage from "./pages/DashboardPage";
-import RankingPage from "./pages/RankingPage";
-import HistoryPage from "./pages/HistoryPage";
-import AdminPage from "./pages/AdminPage";
-import ProfileSettingsPage from "./pages/ProfileSettingsPage";
-import NotificationsPage from "./pages/NotificationsPage";
-import StatsPage from "./pages/StatsPage";
-import WorldCupPage from "./pages/WorldCupPage";
-import NotesPage from "./pages/NotesPage";
-import { PageLoader } from "./components/ComFeedback/LoadingStates";
+import { Header } from "@/shared/layout";
+import LoginPage from "@/features/auth/page/LoginPage";
+import RegisterPage from "@/features/auth/page/RegisterPage";
+import ForgotPasswordPage from "@/features/auth/page/ForgotPasswordPage";
+import ResetPasswordPage from "@/features/auth/page/ResetPasswordPage";
+import DashboardPage from "@/features/dashboard/page/DashboardPage";
+import RankingPage from "@/features/ranking/page/RankingPage";
+import HistoryPage from "@/features/history/page/HistoryPage";
+import AdminPage from "@/features/admin/page/AdminPage";
+import ProfileSettingsPage from "@/features/profile/page/ProfileSettingsPage";
+import NotificationsPage from "@/features/notifications/page/NotificationsPage";
+import StatsPage from "@/features/stats/page/StatsPage";
+import WorldCupPage from "@/features/worldcup/page/WorldCupPage";
+import NotesPage from "@/features/notes/page/NotesPage";
+import { PageLoader } from "@/shared/ui";
 import "./styles/layout.css";
 
 export default function App() {

@@ -29,8 +29,9 @@
 - [Tech Stack](#️-tech-stack)
 - [Instalación](#-instalación)
 - [Configuración](#️-configuración)
+- [Arquitectura Feature-Based](#-arquitectura-feature-based)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Novedades en v1.3](#-novedades-en-v13)
+- [Novedades en v1.4](#-novedades-en-v14)
 - [Roadmap](#-roadmap)
 - [Contribuir](#-contribuir)
 - [Contacto](#-contacto)
@@ -53,7 +54,8 @@ Disponible como **PWA instalable** en Android e iOS, y como **app nativa en Goog
 - **Push Notifications**: Recibe alertas de nuevos partidos en tiempo real via VAPID/Web Push
 - **Instalable**: Funciona como app nativa en Android (TWA) e iOS vía PWA
 - **Sistema de Notas**: Toma notas personales sobre predicciones y análisis
-- **Historia Completa**: Registro detallado de competiciones, equipos y eventos históricos ⭐ NUEVO
+- **Historia Completa**: Registro detallado de competiciones, equipos y eventos históricos
+- **Arquitectura Feature-Based**: Código organizado por dominio para máxima escalabilidad ⭐ NUEVO
 
 ---
 
@@ -144,10 +146,11 @@ Disponible como **PWA instalable** en Android e iOS, y como **app nativa en Goog
 ├── Historial completo de análisis personal
 └── Accesible desde página dedicada
 
-📜 Historia (NUEVO)
+📜 Historia
 ├── Competiciones históricas con resultados completos
 ├── Equipos históricos con estadísticas
 ├── Eventos y momentos destacados
+├── Bracket de eliminatorias histórico en mobile ⭐ NUEVO
 └── Navegación por secciones con sub-páginas dedicadas
 ```
 
@@ -161,7 +164,7 @@ Disponible como **PWA instalable** en Android e iOS, y como **app nativa en Goog
 - **Gráficas Interactivas**: Precisión por día de la semana
 - **Hall of Fame**: Galería permanente de los mejores jugadores históricos
 - **Análisis de Notas**: Seguimiento de tus análisis personales
-- **Archivo Histórico**: Registro permanente de competiciones y eventos pasados ⭐ NUEVO
+- **Archivo Histórico**: Registro permanente de competiciones y eventos pasados
 
 ### 🔔 Notificaciones Push
 
@@ -191,7 +194,9 @@ Sistema de Push Notifications (VAPID/Web Push)
 - **Offline Support**: Service Worker con página offline y sincronización pendiente
 - **PWA Completa**: Instalable, Service Worker, manifest, íconos adaptativos
 - **Style Switcher**: Personalización de temas y estilos en mobile
-- **Historia navegable**: Secciones de historia con navegación interna propia ⭐ NUEVO
+- **Historia navegable**: Secciones de historia con navegación interna propia
+- **Welcome Screen de Historia**: Pantalla de bienvenida al módulo histórico ⭐ NUEVO
+- **Bracket Mobile de Historia**: Vista de bracket de eliminatorias en mobile ⭐ NUEVO
 
 ---
 
@@ -242,57 +247,24 @@ La versión desktop está diseñada para usuarios en computadoras y tablets gran
 #### Componentes Desktop Principales
 
 **Estructura de Navegación:**
-- `Header.jsx` - Barra superior con logo, búsqueda, usuario
-- `DashboardSidebar.jsx` - Sidebar izquierdo con navegación y stats
-- `Footer.jsx` - Pie de página con enlaces
+- `Header.jsx` — Barra superior con logo, búsqueda, usuario
+- `DashboardSidebar.jsx` — Sidebar izquierdo con navegación y stats
+- `Footer.jsx` — Pie de página con enlaces
 
-**Paneles Laterales Derechos (ComPanels/):**
-- `RightPanel.jsx` - Panel por defecto en Dashboard
-  - Muestra: Ranking top 5, Hall of Fame, puntos destacados
-  
-- `RankingRightPanel.jsx` - Panel en página de Ranking
-  - Muestra: Estadísticas de usuario, progreso, logros próximos
-  
-- `StatsRightPanel.jsx` - Panel en página de Stats
-  - Muestra: Gráficos semanales, análisis, precisión
-
-- `EventsRightPanel.jsx` - Panel en página de Eventos ⭐ NUEVO
-  - Muestra: Resumen de eventos recientes y destacados
-  
-- `HistoryRightPanel.jsx` - Panel en página de Historia ⭐ NUEVO
-  - Muestra: Navegación rápida, competiciones recientes, estadísticas históricas
-
-- `TeamsRightPanel.jsx` - Panel de equipos históricos ⭐ NUEVO
-  - Muestra: Equipos más destacados, filtros rápidos
-
-- `RightNotesPanel.jsx` - Panel en página de Notas
-  - Muestra: Últimas notas, análisis, filtros
-  
-- `HallOfFamePanel.jsx` - Panel dedicado al Hall of Fame
-  - Muestra: Ranking histórico, badges, logros
-
-**Tarjetas y Elementos (ComCards/):**
-- `MatchCard.jsx` - Tarjeta de partido con predicción
-- `LeagueCard.jsx` - Tarjeta de liga con pronóstico
-- `AwardCard.jsx` - Tarjeta de premios individuales
-- `KnockoutMatchCard.jsx` - Tarjeta de playoff en el Mundial
+**Paneles Laterales Derechos:**
+- `RightPanel.jsx` — Panel por defecto en Dashboard (Ranking top 5, Hall of Fame)
+- `RankingRightPanel.jsx` — Panel en Ranking (estadísticas, progreso, logros próximos)
+- `StatsRightPanel.jsx` — Panel en Stats (gráficos semanales, análisis, precisión)
+- `EventsRightPanel.jsx` — Panel en Eventos (resumen de eventos recientes)
+- `HistoryRightPanel.jsx` — Panel en Historia (navegación rápida, competiciones recientes)
+- `TeamsRightPanel.jsx` — Panel de equipos históricos (equipos destacados, filtros rápidos)
+- `RightNotesPanel.jsx` — Panel en Notas (últimas notas, filtros)
+- `HallOfFamePanel.jsx` — Panel dedicado al Hall of Fame
 
 **Páginas Desktop:**
-- `DashboardPage.jsx` - Inicio con últimos partidos
-- `RankingPage.jsx` - Ranking global con paneles
-- `StatsPage.jsx` - Estadísticas detalladas
-- `AdminPage.jsx` - Panel de administración completo
-- `WorldCupPage.jsx` - Mundial 2026 con bracket visual
-- `NotesPage.jsx` - Gestión de notas personales
-- `NotificationsPage.jsx` - Centro de notificaciones
-- `ProfileSettingsPage.jsx` - Configuración de perfil
-- `HistoryPage.jsx` - Página de Historia con sub-navegación ⭐ NUEVO
-
-**Paneles Laterales Especializados:**
-- Perfil de usuario expandido en modal
-- Historial de predicciones con filtros
-- Logros y coronas desbloqueables
-- Banners y personalización
+- `DashboardPage.jsx`, `RankingPage.jsx`, `StatsPage.jsx`, `AdminPage.jsx`
+- `WorldCupPage.jsx`, `NotesPage.jsx`, `NotificationsPage.jsx`
+- `ProfileSettingsPage.jsx`, `HistoryPage.jsx`
 
 #### Características Desktop Exclusivas
 
@@ -347,66 +319,26 @@ La versión mobile está diseñada para usuarios en smartphones y tablets peque�
 └──────────────────────────────────┘
 ```
 
-#### Componentes Mobile Principales (ComMobile/)
+#### Componentes Mobile Principales
 
-**Navegación y Layout:**
-- `MobileHeader.jsx` - Header adaptado con menú toggle
-- `NavigationTabs.jsx` - Bottom navigation con 5-6 tabs principales
-- `MobileSubPage.jsx` - Wrapper para sub-páginas
+Cada feature tiene sus vistas mobile co-ubicadas en una subcarpeta `mobile/` dentro del propio feature:
 
-**Vistas Especializadas por Página:**
+- `MobileDashboard.jsx` — Cards apiladas, filtros simplificados, predicción inline
+- `MobileRanking.jsx` — Podio comprimido, lista scrollable, búsqueda integrada
+- `MobileStats.jsx` — Tabs horizontales, gráficos comprimidos, métricas en cards
+- `MobileAdmin.jsx` — Tabs por sección, FAB flotante, swipe-to-delete
+- `MobileProfileMain.jsx` — Hero comprimido, tabs de overview/historial/logros
+- `MobileNotifications.jsx` — Toggle prominent, notificaciones por tipo
+- `MobileNotes.jsx` — Crear nota rápida, lista ordenada por fecha, búsqueda
+- `StyleSwitcher.jsx` — Toggle entre temas con persistencia
 
-1. **MobileDashboard.jsx** - Dashboard móvil
-   - Cards de partidos apiladas verticalmente
-   - Filtros simplificados (Liga, Estado)
-   - Predicción inline rápida
-   - Últimas predicciones en accordion
-
-2. **MobileRanking.jsx** - Ranking móvil
-   - Podio comprimido (3 posiciones destacadas)
-   - Lista scrollable de posiciones 4-N
-   - Búsqueda de usuario integrada
-   - Avatar del usuario actual sticky en top
-
-3. **MobileStats.jsx** - Estadísticas móvil
-   - Tabs horizontales (Resumen, Por Liga, Semanal)
-   - Gráficos comprimidos pero legibles
-   - Metricas principales en cards
-   - Scroll horizontal para tablas
-
-4. **MobileAdmin.jsx** - Admin móvil
-   - Tabs de navegación: Partidos, Ligas, Premios, Logros, Banners, Coronas
-   - Cada tab tiene lista + modal para crear/editar
-   - Botón FAB flotante para crear nuevos items
-   - Swipe left para eliminar (con confirmación)
-
-5. **MobileProfileMain.jsx** - Perfil móvil
-   - Hero comprimido (avatar, nivel, título)
-   - Tabs: Overview, Historial, Logros, Campeonatos
-   - Cada tab con contenido adaptado
-   - Avatar upload en modal
-
-6. **MobileNotifications.jsx** - Notificaciones móvil
-   - Toggle de push notifications prominent
-   - Lista de notificaciones recientes
-   - Notificaciones by type (Partidos, Sistema, Logros)
-
-7. **MobileNotes.jsx** - Notas móvil
-   - Crear nota rápida (textarea + botón)
-   - Lista de notas ordenadas por fecha
-   - Cada nota: preview + opciones (editar, eliminar)
-   - Búsqueda de notas por contenido
-
-8. **StyleSwitcher.jsx** - Selector de estilos
-   - Toggle entre temas disponibles
-   - Colores adaptativos
-   - Persistencia en localStorage
-
-**Tarjetas Mobile:**
-- `MobileCardsGlobal.jsx` - Envoltorio adaptativo para MatchCard, LeagueCard, etc.
-  - Reduce padding/margen en mobile
-  - Oculta información secundaria
-  - Acciones en dropdown menú
+**Mobile de Historia (`features/history/components/mobile/`):**
+- `HistoricalCompetitionsMobile.jsx` — Vista mobile de competiciones
+- `HistoricalEventsMobile.jsx` — Vista mobile de eventos
+- `HistoricalTeamsMobile.jsx` — Vista mobile de equipos
+- `HistoryMenuMobile.jsx` — Menú de navegación mobile ⭐ NUEVO
+- `KnockoutBracketMobile.jsx` — Bracket de eliminatorias en mobile ⭐ NUEVO
+- `SectionHeaderMobile.jsx` — Header de sección reutilizable ⭐ NUEVO
 
 #### Características Mobile Exclusivas
 
@@ -414,8 +346,7 @@ La versión mobile está diseñada para usuarios en smartphones y tablets peque�
 ✅ Bottom Navigation
    ├─ 5-6 tabs siempre visibles
    ├─ Tap para navegar entre secciones
-   ├─ Activo/inactivo con indicador visual
-   └─ Atajos a las 5 páginas principales
+   └─ Activo/inactivo con indicador visual
 
 ✅ Interacciones táctiles
    ├─ Swipe horizontales para cambiar tabs
@@ -431,25 +362,15 @@ La versión mobile está diseñada para usuarios en smartphones y tablets peque�
    ├─ Iconos grandes y claros
    └─ Colores de alto contraste
 
-✅ Menos información, más profundidad
-   ├─ Listados cortos con paginación/lazy-load
-   ├─ Modales a full-screen
-   ├─ Accordion para agrupar contenido
-   ├─ Tabs horizontales comprimidas
-   └─ Ocultar información secundaria
-
 ✅ Rendimiento
    ├─ Imágenes optimizadas (srcset)
    ├─ Lazy loading de componentes
-   ├─ CSS-in-JS minimizado
    └─ No hay animaciones pesadas
 ```
 
 ---
 
 ### 🔄 Cambio Dinámico Desktop ↔ Mobile
-
-El cambio entre desktop y mobile es **completamente transparente** para el usuario:
 
 ```javascript
 // En App.jsx - Hook para detectar cambios
@@ -459,11 +380,7 @@ const isMobile = useMediaQuery('(max-width: 768px)');
 return isMobile ? <MobileDashboard /> : <DashboardPage />
 ```
 
-**Beneficios:**
-- ✅ Sin recargas de página
-- ✅ Sin pérdida de scroll position
-- ✅ Estado sincronizado entre vistas
-- ✅ Transición suave al rotar dispositivo
+**Beneficios:** sin recargas de página, sin pérdida de scroll position, estado sincronizado, transición suave al rotar dispositivo.
 
 ---
 
@@ -480,24 +397,6 @@ Background:  #F9FAFB (Gris muy claro)
 Text:        #1F2937 (Gris oscuro)
 ```
 
-**Responsividad CSS:**
-```css
-/* Desktop (≥768px) */
-@media (min-width: 768px) {
-  .sidebar { display: block; width: 250px; }
-  .right-panel { display: block; width: 300px; }
-  .main-content { flex: 1; }
-}
-
-/* Mobile (<768px) */
-@media (max-width: 767px) {
-  .sidebar { display: none; }
-  .right-panel { display: none; }
-  .main-content { width: 100%; }
-  .nav-tabs { position: fixed; bottom: 0; }
-}
-```
-
 ---
 
 ### 📊 Comparativa Desktop vs Mobile
@@ -511,52 +410,77 @@ Text:        #1F2937 (Gris oscuro)
 | **Modales** | Ancho fijo (80vw) | Full-screen |
 | **Tablas** | Múltiples columnas | Cards o tabs |
 | **Interacción** | Click + Keyboard | Touch + Swipe |
-| **Scroll** | Vertical principal | Vertical + Horizontal |
 | **Animaciones** | Complejas | Simples |
-| **Imágenes** | Tamaño completo | Optimizadas, srcset |
 
 ---
 
 ## 📜 Sistema de Historia
 
-La sección de Historia es un módulo completo e independiente que actúa como un **archivo permanente** de todo lo que ha ocurrido en la plataforma. Tiene su propio sistema de navegación interna y sub-páginas dedicadas, tanto en desktop como en mobile.
+La sección de Historia es un módulo completo e independiente organizado como su propio feature (`src/features/history/`), con sub-páginas, navegación interna, hooks dedicados y capas de servicio propias.
 
-### 🗂️ Estructura General
+### 🗂️ Estructura del Feature
 
 ```
-HistoryPage.jsx  (página raíz — desktop)
-└── HistorySectionNav.jsx  (barra de navegación interna)
-    ├── HistoricalCompetitionsPage.jsx  → Competiciones
-    ├── HistoricalTeamsPage.jsx         → Equipos
-    └── HistoricalEventsPage.jsx        → Eventos
+src/features/history/
+├── index.js
+├── components/
+│   ├── HistoricalCompetitionsPage.jsx
+│   ├── HistoricalEventsPage.jsx
+│   ├── HistoricalTeamsPage.jsx
+│   ├── HistoryMenuDesktop.jsx        ⭐ NUEVO
+│   ├── HistoryRightPanel.jsx
+│   ├── HistorySectionNav.jsx
+│   ├── HistoryWelcomeScreen.jsx      ⭐ NUEVO
+│   ├── EventsRightPanel.jsx
+│   ├── TeamsRightPanel.jsx
+│   └── mobile/
+│       ├── HistoricalCompetitionsMobile.jsx
+│       ├── HistoricalEventsMobile.jsx
+│       ├── HistoricalTeamsMobile.jsx
+│       ├── HistoryMenuMobile.jsx     ⭐ NUEVO
+│       ├── KnockoutBracketMobile.jsx ⭐ NUEVO
+│       └── SectionHeaderMobile.jsx  ⭐ NUEVO
+├── hooks/
+│   ├── useHistoricalCompetitions.js
+│   ├── useHistoricalEvents.js
+│   ├── useHistoricalPlayers.js
+│   └── useHistoricalTeams.js
+├── page/
+│   ├── HistoryPage.jsx
+│   └── HistoryPage.css
+├── services/
+│   └── history.service.js           ⭐ NUEVO
+├── styles/
+│   ├── ActiveBadge.css              ⭐ NUEVO
+│   ├── EventsRightPanel.css
+│   ├── HistoricalCompetitionsPage.css
+│   ├── HistoricalEventsPage.css
+│   ├── HistoricalTeamsPage.css
+│   ├── HistoryMenuDesktop.css       ⭐ NUEVO
+│   ├── HistoryRightPanel.css
+│   ├── HistorySectionNav.css
+│   ├── HistoryWelcomeScreen.css     ⭐ NUEVO
+│   ├── TeamsRightPanel.css
+│   └── mobile/
+│       ├── HistoricalCompetitionsPageMobile.css
+│       ├── HistoricalTeamsMobile.css
+│       ├── HistoryMenuMobile.css    ⭐ NUEVO
+│       ├── HistoryPageMobile.css
+│       ├── KnockoutBracketMobile.css ⭐ NUEVO
+│       └── SectionHeaderMobile.css  ⭐ NUEVO
+└── types/
+    └── history.types.ts             ⭐ NUEVO
 ```
 
 ### 📋 Sub-páginas de Historia
 
-#### 🏆 Competiciones Históricas (`HistoricalCompetitionsPage`)
-Muestra el registro completo de competiciones pasadas: ligas, torneos y premios finalizados. Cada competición incluye:
-- Campeón, goleador, asistidor y MVP registrados
-- Fecha de inicio y cierre
-- Resultados finales de predicciones de los usuarios
-- Filtros por temporada y tipo de competición
+**🏆 Competiciones Históricas** — registro completo de ligas, torneos y premios finalizados con campeón, goleador, asistidor, MVP, fechas y resultados de predicciones de usuarios.
 
-#### 👥 Equipos Históricos (`HistoricalTeamsPage`)
-Galería y estadísticas de los equipos que han participado en las competiciones:
-- Información de cada equipo con logo
-- Estadísticas históricas de participación
-- Filtros por liga o región
-- Panel lateral con detalle al seleccionar un equipo
+**👥 Equipos Históricos** — galería y estadísticas de equipos participantes con logos, filtros por liga/región y panel lateral de detalle.
 
-#### 📅 Eventos Históricos (`HistoricalEventsPage`)
-Cronología de momentos y eventos significativos de la plataforma:
-- Registro de partidos y resultados destacados
-- Momentos especiales (primeros goles, récords, etc.)
-- Filtros por fecha y categoría
-- Vista de línea de tiempo o cuadrícula
+**📅 Eventos Históricos** — cronología de momentos y eventos significativos de la plataforma con filtros por fecha y categoría.
 
-### 🧭 Navegación Interna (`HistorySectionNav`)
-
-La sección de Historia tiene su **propia barra de navegación** independiente del Header principal, lo que permite al usuario moverse entre sub-secciones sin perder el contexto:
+### 🧭 Navegación Interna
 
 ```
 ┌──────────────────────────────────────────────────────┐
@@ -569,50 +493,15 @@ La sección de Historia tiene su **propia barra de navegación** independiente d
 └──────────────────────────────────────────────────────┘
 ```
 
-### 🪝 Hooks de Historia (`HooksHistory/`)
-
-Cada sub-página de historia tiene su propio hook dedicado con lógica de carga, filtrado y paginación:
-
-| Hook | Responsabilidad |
-|------|----------------|
-| `useHistoricalCompetitions.js` | Carga y filtra competiciones pasadas |
-| `useHistoricalTeams.js` | Obtiene equipos y sus estadísticas históricas |
-| `useHistoricalEvents.js` | Gestiona eventos y momentos destacados |
-| `useHistoricalPlayers.js` | Jugadores y estadísticas a lo largo del tiempo |
-
-### 📱 Historia en Mobile
-
-La sección de Historia también cuenta con vistas mobile dedicadas y sus propios archivos de estilos:
-
-```
-StylesMobile/
-├── HistoricalCompetitionsPageMobile.css
-├── HistoricalEventsPageMobile.css
-├── HistoricalTeamsPageMobile.css
-└── HistoryPageMobile.css
-
-StylesHistory/
-├── HistoricalCompetitionsPage.css
-├── HistoricalEventsPage.css
-├── HistoricalTeamsPage.css
-└── HistorySectionNav.css
-```
-
-### 🎴 Componentes de Apoyo
-
-- **`HistoryTriggerCard.jsx`** (`ComOthers/`) — Tarjeta/botón que aparece en el Dashboard para invitar al usuario a explorar la sección de Historia. Muestra un resumen atractivo con el último evento o competición registrada.
-- **`HistoryPanel.jsx`** (`ComOthers/`) — Panel compacto reutilizable que muestra un resumen del historial en contextos externos (ej. sidebar del perfil).
-- **`HistoryRightPanel.jsx`** (`ComPanels/`) — Panel derecho exclusivo de la página de Historia en desktop, con accesos rápidos y estadísticas resumidas.
-- **`DataImporter.jsx`** (`ComOthers/`) — Herramienta de administración para importar datos históricos masivamente (partidos, equipos, eventos) desde archivos externos.
-
 ### 🗃️ Flujo de Datos
 
 ```
 Supabase (PostgreSQL)
     └── Tablas históricas (competitions, teams, events, players)
-          └── HooksHistory/* (fetch + filtrado)
-                └── Sub-páginas (render + UI)
-                      └── HistorySectionNav (navegación entre secciones)
+          └── history.service.js  (capa de acceso a datos)
+                └── hooks/* (fetch + filtrado + estado)
+                      └── Componentes (render + UI)
+                            └── HistorySectionNav (navegación entre secciones)
 ```
 
 ---
@@ -621,38 +510,18 @@ Supabase (PostgreSQL)
 
 ```
 Admin Dashboard (Responsive: Desktop + Mobile)
-├── 📋 Gestión de Partidos
-│   ├── Crear/Editar/Eliminar
-│   ├── Logos automáticos de equipos
-│   └── Finalizar con cálculo automático de puntos
-├── 🏆 Gestión de Ligas
-│   ├── Crear competiciones
-│   ├── Definir deadlines
-│   └── Registrar resultados finales
+├── 📋 Gestión de Partidos — Crear/Editar/Eliminar, logos automáticos
+├── 🏆 Gestión de Ligas — Competiciones, deadlines, resultados finales
 ├── 🥇 Gestión de Premios Individuales
-├── ⭐ Sistema de Logros
-│   ├── Crear logros personalizados
-│   └── Definir requisitos de desbloqueo
+├── ⭐ Sistema de Logros — Crear logros, definir requisitos
 ├── 👑 Sistema de Títulos y Coronas
-│   ├── Crear títulos exclusivos
-│   ├── AdminCrownModal.jsx — Modal dedicado para coronas (NUEVO)
-│   ├── AdminCrownsSection.jsx — Sección de gestión de coronas (NUEVO)
-│   └── Vincular con logros
-├── 🎖️ Gestión de Banners
-│   ├── Crear y administrar banners
-│   └── Asignar banners a usuarios específicos
-├── 📊 Vista General de Stats (AdminStatsOverview)
-└── 🔧 Panel de Diagnóstico (AdminDiagnosticPanel)
+│   ├── AdminCrownModal.jsx — Modal dedicado para coronas
+│   └── AdminCrownsSection.jsx — Sección de gestión de coronas
+├── 🎖️ Gestión de Banners — Crear y asignar a usuarios
+├── 📊 AdminStatsOverview — Vista general de stats
+├── 🔧 AdminDiagnosticPanel — Diagnóstico y salud del sistema
+└── 📜 DataImporter — Importación masiva de datos históricos
 ```
-
-**Componentes Admin:**
-- `AdminControls.jsx` - Controles principales
-- `AdminNavigationTabs.jsx` - Navegación entre secciones
-- `AdminRightPanel.jsx` - Panel de opciones avanzadas
-- `AdminModalsContainer.jsx` - Contenedor centralizado de modales
-- `AdminCrownModal.jsx` - Modal para gestión de coronas ⭐ NUEVO
-- `AdminCrownsSection.jsx` - Sección dedicada a coronas ⭐ NUEVO
-- `AdminDiagnosticPanel.jsx` - Diagnóstico y salud del sistema
 
 ---
 
@@ -663,7 +532,7 @@ Admin Dashboard (Responsive: Desktop + Mobile)
 - Recuperación de contraseña (`ForgotPasswordPage`)
 - Reset de contraseña via token (`ResetPasswordPage`)
 - Rutas protegidas con `ProtectedRoute` y `RequireAuth`
-- Configuración de perfil dedicada (`ProfileSettingsPage`)
+- Servicios de auth encapsulados en `features/auth/services/auth.service.js` ⭐ NUEVO
 
 ---
 
@@ -679,7 +548,8 @@ Admin Dashboard (Responsive: Desktop + Mobile)
   "icons": "Lucide React 0.469.0",
   "styling": "Tailwind CSS + Custom CSS",
   "stateManagement": "React Context API + Custom Hooks",
-  "responsiveness": "CSS Media Queries + useMediaQuery Hook"
+  "responsiveness": "CSS Media Queries + useMediaQuery Hook",
+  "architecture": "Feature-Based (Domain-Driven)"
 }
 ```
 
@@ -708,20 +578,6 @@ Admin Dashboard (Responsive: Desktop + Mobile)
   "automation": "GitHub Actions (weekly stats reset)"
 }
 ```
-
-### Características Técnicas
-
-- ⚡ **Vite**: Build ultrarrápido con HMR
-- 🎣 **Custom Hooks Granulares**: Organizados por dominio (`HooksAdmin`, `HooksCards`, `HooksHistory`, `HooksProfile`, `HooksNotes`, `HooksOthers`, `HooksSettings`)
-- 🎨 **Tailwind CSS + CSS Variables**: Theming dinámico y utilitarios
-- 🖼️ **Lazy Loading**: Optimización de imágenes
-- 📱 **PWA Completa**: Service Worker, manifest, íconos maskables, página offline, sincronización offline
-- 🔔 **Push Notifications**: VAPID/Web Push con encriptación AES-128-GCM extremo a extremo
-- 🔒 **Row Level Security**: Políticas de seguridad en Supabase
-- 🤖 **TWA Android**: App nativa compilada y firmada para Google Play
-- 🔄 **GitHub Actions**: Reset semanal automatizado de estadísticas (cron: lunes 00:00 UTC)
-- 🛠️ **Scripts de diagnóstico**: Utilidades para mantener la base de datos
-- 📜 **Módulo de Historia**: Sistema completo de archivo histórico con sub-navegación
 
 ---
 
@@ -791,62 +647,72 @@ La aplicación estará disponible en `http://localhost:5173`
 
 ### Configuración de Supabase
 
-#### 1. Crear las tablas
-
-Ejecuta el script SQL en tu proyecto de Supabase (ver archivo `schema.sql` en el repositorio).
-
-#### 2. Configurar Storage Buckets
-
-Crea los siguientes buckets en Supabase Storage:
+Ejecuta el script SQL en tu proyecto de Supabase (ver `schema.sql` en el repositorio), luego crea los siguientes buckets en Supabase Storage:
 
 ```
-team-logos/
-├── leagues/
-│   ├── premier-league/
-│   ├── la-liga/
-│   ├── serie-a/
-│   ├── bundesliga/
-│   └── ligue-1/
-
-league-logos/
-├── inglaterra.png
-├── espana.png
-├── italia.png
-└── ...
-
-award-logos/
-├── balondeor.png
-├── botadeoro.png
-└── ...
-
-avatars/           ← Fotos de perfil de usuarios
-banners/           ← Banners de perfil personalizados
+team-logos/     league-logos/     award-logos/     avatars/     banners/
 ```
 
-#### 3. Configurar Edge Function de Push Notifications
-
-Despliega la función en Supabase:
+### Edge Function de Push Notifications
 
 ```bash
 supabase functions deploy send-match-notification
 ```
 
-La función se dispara automáticamente al insertar un nuevo partido en la base de datos y envía notificaciones push a todos los usuarios suscritos.
+### GitHub Actions (reset semanal)
 
-#### 4. Configurar GitHub Actions (reset semanal)
-
-Añade los siguientes secrets en tu repositorio de GitHub:
+Añade en GitHub → Settings → Secrets:
 
 ```
 SUPABASE_URL=tu_supabase_url
 SUPABASE_SERVICE_KEY=tu_service_role_key
 ```
 
-El workflow `.github/workflows/weekly-reset.yml` ejecuta el reset cada lunes a las 00:00 UTC automáticamente.
+El workflow `.github/workflows/weekly-reset.yml` ejecuta el reset cada lunes a las 00:00 UTC.
 
-#### 5. Configurar assetlinks.json (para TWA/Android)
+---
 
-El archivo `public/.well-known/assetlinks.json` ya está configurado para la verificación de Digital Asset Links con Google Play.
+## 🏗️ Arquitectura Feature-Based
+
+En **v1.4**, GlobalScore migró de una arquitectura organizada por tipo de archivo (`components/`, `hooks/`, `styles/`) a una **arquitectura feature-based** donde cada dominio de la aplicación es completamente autónomo.
+
+### Principio General
+
+```
+src/features/
+└── <feature>/
+    ├── index.js          ← Exportaciones públicas del feature
+    ├── components/       ← Componentes desktop
+    │   └── mobile/       ← Variantes mobile co-ubicadas
+    ├── hooks/            ← Lógica de estado y datos
+    ├── page/             ← Página raíz + su CSS
+    ├── services/         ← Acceso a datos (Supabase)
+    ├── styles/           ← CSS del feature
+    │   └── mobile/       ← CSS mobile del feature
+    └── types/            ← TypeScript types (opcional)
+```
+
+### Beneficios
+
+- **Cohesión**: todo lo de un feature vive junto; un solo lugar para buscar
+- **Escalabilidad**: añadir un feature nuevo no toca otros módulos
+- **Mantenibilidad**: borrar un feature es borrar una carpeta
+- **Onboarding**: un desarrollador nuevo entiende el dominio sin rastrear carpetas globales
+
+### Features Actuales
+
+| Feature | Responsabilidad |
+|---------|----------------|
+| `admin` | Panel de administración completo |
+| `auth` | Login, registro, rutas protegidas |
+| `dashboard` | Feed de partidos, ligas y premios |
+| `history` | Módulo de historia: competiciones, equipos, eventos |
+| `notes` | Sistema de notas personales |
+| `notifications` | Push notifications, centro de notificaciones |
+| `profile` | Perfil público, estadísticas, logros |
+| `ranking` | Tabla global, podio, Hall of Fame |
+| `stats` | Estadísticas detalladas y gráficas |
+| `worldcup` | Mundial 2026: grupos, bracket, premios |
 
 ---
 
@@ -856,328 +722,164 @@ El archivo `public/.well-known/assetlinks.json` ya está configurado para la ver
 globalscore/
 │
 ├── public/
-│   ├── .well-known/
-│   │   └── assetlinks.json         # Digital Asset Links (TWA/Android)
-│   ├── manifest.json               # Web App Manifest (PWA)
-│   ├── sw.js                       # Service Worker
-│   ├── offline.html                # Página offline
-│   └── pushNotifications.js        # Lógica de suscripción push
+│   ├── .well-known/assetlinks.json   # Digital Asset Links (TWA/Android)
+│   ├── manifest.json                 # Web App Manifest (PWA)
+│   ├── sw.js                         # Service Worker
+│   ├── offline.html                  # Página offline
+│   └── pushNotifications.js          # Lógica de suscripción push
 │
-├── app/                            # Proyecto Android nativo (TWA)
+├── app/                              # Proyecto Android nativo (TWA)
 │   └── src/main/
 │       ├── AndroidManifest.xml
 │       ├── java/.../twa/
 │       │   ├── Application.java
 │       │   ├── DelegationService.java
 │       │   └── LauncherActivity.java
-│       └── res/                    # Recursos Android (iconos, colores, strings)
+│       └── res/                      # Recursos Android
 │
 ├── scripts/
-│   ├── generate-vapid-keys.cjs     # Generador de claves VAPID
-│   ├── diagnoseDatabase.js         # Diagnóstico de BD
-│   ├── checkDatabaseFunctions.js   # Verificación de funciones
-│   ├── reset-weekly.js             # Reset semanal de stats
-│   ├── listLeagues.js              # Listar ligas
-│   ├── listTeams.js                # Listar equipos
-│   ├── updateLeagueLogos.js        # Actualizar logos
-│   └── ... (más scripts de utilidad)
+│   └── generate-vapid-keys.cjs
 │
 ├── src/
-│   ├── components/
-│   │   ├── ComAdmin/               # Panel de administración (24 componentes)
-│   │   │   ├── AdminAchievementsList.jsx
-│   │   │   ├── AdminAchievementsModal.jsx
-│   │   │   ├── AdminAssignBannerModal.jsx
-│   │   │   ├── AdminAwardModal.jsx
-│   │   │   ├── AdminAwardsList.jsx
-│   │   │   ├── AdminBannerModal.jsx
-│   │   │   ├── AdminBannersList.jsx
-│   │   │   ├── AdminControls.jsx
-│   │   │   ├── AdminCrownModal.jsx         # NUEVO
-│   │   │   ├── AdminCrownsSection.jsx      # NUEVO
-│   │   │   ├── AdminDiagnosticPanel.jsx
-│   │   │   ├── AdminLeagueModal.jsx
-│   │   │   ├── AdminLeaguesList.jsx
-│   │   │   ├── AdminMatchesList.jsx
-│   │   │   ├── AdminModal.jsx
-│   │   │   ├── AdminModalsContainer.jsx
-│   │   │   ├── AdminNavigationTabs.jsx
-│   │   │   ├── AdminRightPanel.jsx
-│   │   │   ├── AdminStatsOverview.jsx
-│   │   │   ├── AdminTitlesList.jsx
-│   │   │   ├── AdminTitlesModal.jsx
-│   │   │   ├── FinishAwardModal.jsx
-│   │   │   ├── FinishLeagueModal.jsx
-│   │   │   └── FinishMatchModal.jsx
-│   │   │
-│   │   ├── ComAuth/                # Rutas protegidas
-│   │   │   ├── ProtectedRoute.jsx
-│   │   │   └── RequireAuth.jsx
-│   │   │
-│   │   ├── ComCards/               # Tarjetas reutilizables
-│   │   │   ├── AwardCard.jsx
-│   │   │   ├── LeagueCard.jsx
-│   │   │   ├── MatchCard.jsx
-│   │   │   └── MobileCardsGlobal.jsx
-│   │   │
-│   │   ├── ComFeedback/            # Loaders, spinners, toasts
-│   │   │   ├── GlobalLoader.jsx
-│   │   │   ├── LoadingSpinner.jsx
-│   │   │   ├── LoadingStates.jsx
-│   │   │   └── Toast.jsx
-│   │   │
-│   │   ├── ComHistory/             # Sección de Historia (NUEVO)
-│   │   │   ├── HistoricalCompetitionsPage.jsx
-│   │   │   ├── HistoricalEventsPage.jsx
-│   │   │   ├── HistoricalTeamsPage.jsx
-│   │   │   └── HistorySectionNav.jsx
-│   │   │
-│   │   ├── ComLayout/              # Layout base
-│   │   │   ├── DashboardSidebar.jsx
-│   │   │   ├── Footer.jsx
-│   │   │   ├── Header.jsx
-│   │   │   └── MobileHeader.jsx
-│   │   │
-│   │   ├── ComMobile/              # Vistas móviles (9 componentes)
-│   │   │   ├── MobileAdmin.jsx
-│   │   │   ├── MobileDashboard.jsx
-│   │   │   ├── MobileNotes.jsx
-│   │   │   ├── MobileNotifications.jsx
-│   │   │   ├── MobileProfileMain.jsx
-│   │   │   ├── MobileRanking.jsx
-│   │   │   ├── MobileStats.jsx
-│   │   │   ├── MobileSubPage.jsx
-│   │   │   └── StyleSwitcher.jsx
-│   │   │
-│   │   ├── ComNavigation/          # Navegación
-│   │   │   └── NavigationTabs.jsx
-│   │   │
-│   │   ├── ComNotis/               # Push notifications
-│   │   │   └── PushNotificationsToggle.jsx
-│   │   │
-│   │   ├── ComOthers/              # Componentes especiales
-│   │   │   ├── AchievementsSection.jsx
-│   │   │   ├── DataImporter.jsx           # NUEVO
-│   │   │   ├── HallOfFame.jsx
-│   │   │   ├── HistoryPanel.jsx           # NUEVO
-│   │   │   ├── HistoryTriggerCard.jsx     # NUEVO
-│   │   │   └── ImageViewer.jsx
-│   │   │
-│   │   ├── ComPanels/              # Paneles laterales derechos
-│   │   │   ├── EventsRightPanel.jsx       # NUEVO
-│   │   │   ├── HallOfFamePanel.jsx
-│   │   │   ├── HistoryRightPanel.jsx      # NUEVO
-│   │   │   ├── RankingRightPanel.jsx
-│   │   │   ├── RightNotesPanel.jsx
-│   │   │   ├── RightPanel.jsx
-│   │   │   ├── StatsRightPanel.jsx
-│   │   │   └── TeamsRightPanel.jsx        # NUEVO
-│   │   │
-│   │   ├── ComProfile/             # Perfil completo (10 componentes)
-│   │   │   ├── AchievementsTab.jsx
-│   │   │   ├── AvatarUpload.jsx
-│   │   │   ├── EditTab.jsx
-│   │   │   ├── HistoryTab.jsx
-│   │   │   ├── MobileUserProfile.jsx
-│   │   │   ├── MonthlyChampionshipsTab.jsx
-│   │   │   ├── OverviewTab.jsx
-│   │   │   ├── ProfileHero.jsx
-│   │   │   ├── ProfileTabs.jsx
-│   │   │   └── UserProfilePanel.jsx
-│   │   │
-│   │   ├── ComPWA/                 # PWA
-│   │   │   └── InstallPWAButton.jsx
-│   │   │
-│   │   └── ComWorldCup/            # Mundial 2026
-│   │       ├── KnockoutMatchCard.jsx
-│   │       ├── KnockoutSection.jsx
-│   │       ├── RightPanelWorld.jsx
-│   │       ├── WorldCupAwardCard.jsx
-│   │       └── WorldCupNavigationTabs.jsx
-│   │
+│   ├── App.jsx
+│   ├── main.jsx
 │   ├── context/
 │   │   └── ThemeContext.jsx
 │   │
-│   ├── hooks/
-│   │   ├── index.js
-│   │   ├── useDataLoader.js
-│   │   ├── usePWA.js
-│   │   ├── HooksAdmin/             # Hooks de admin (8 hooks)
-│   │   │   ├── index.js
-│   │   │   ├── useAdminAchievements.js
-│   │   │   ├── useAdminAwards.js
-│   │   │   ├── useAdminBanners.js
-│   │   │   ├── useAdminCrowns.js
-│   │   │   ├── useAdminData.js
-│   │   │   ├── useAdminHistorical.js      # NUEVO
-│   │   │   ├── useAdminLeagues.js
-│   │   │   └── useAdminMatches.js
-│   │   ├── HooksCards/             # Hooks de tarjetas
-│   │   │   ├── useAwards.js
-│   │   │   ├── useLeagues.js
-│   │   │   └── useMatches.js
-│   │   ├── HooksHistory/           # Hooks de Historia (NUEVO — 4 hooks)
-│   │   │   ├── useHistoricalCompetitions.js
-│   │   │   ├── useHistoricalEvents.js
-│   │   │   ├── useHistoricalPlayers.js
-│   │   │   └── useHistoricalTeams.js
-│   │   ├── HooksNotes/             # Hooks de notas
-│   │   │   └── useNotes.js
-│   │   ├── HooksOthers/            # Hooks especiales
-│   │   │   ├── useKnockoutBracket.js
-│   │   │   ├── usePushNotifications.js
-│   │   │   └── useWorldCup.js
-│   │   ├── HooksProfile/           # Hooks de perfil (6 hooks)
-│   │   │   ├── useAchievements.js
-│   │   │   ├── useMonthlyChampionships.js
-│   │   │   ├── usePredictionHistory.js
-│   │   │   ├── useProfileData.js
-│   │   │   ├── useStreaks.js
-│   │   │   └── useUserRanking.js
-│   │   └── HooksSettings/          # Hooks de configuración
-│   │       ├── index.js
-│   │       └── useSettings.js
-│   │
-│   ├── pages/
-│   │   ├── AdminPage.jsx
-│   │   ├── DashboardPage.jsx
-│   │   ├── ForgotPasswordPage.jsx
-│   │   ├── HistoryPage.jsx             # NUEVO — Página de Historia
-│   │   ├── LoginPage.jsx
-│   │   ├── NotesPage.jsx
-│   │   ├── NotificationsPage.jsx
-│   │   ├── ProfileSettingsPage.jsx
-│   │   ├── RankingPage.jsx
-│   │   ├── RegisterPage.jsx
-│   │   ├── ResetPasswordPage.jsx
-│   │   ├── StatsPage.jsx
-│   │   └── WorldCupPage.jsx
-│   │
-│   ├── scripts/                    # Scripts utilitarios de BD
-│   │   ├── checkDatabaseFunctions.js
-│   │   ├── diagnoseDatabase.js
-│   │   ├── listLeagues.js
-│   │   ├── listTeams.js
-│   │   ├── reset-weekly.js
-│   │   ├── updateLeagueLogos.js
-│   │   ├── updateLeagueLogosWithServiceRole.js
-│   │   ├── updateLogosImproved.js
-│   │   ├── updateLogosWithServiceRole.js
-│   │   └── updateLogoUrls.js
-│   │
-│   ├── services/
-│   │   ├── offlineSync.js          # Sincronización offline
-│   │   ├── pushManager.js          # Gestión de push notifications
-│   │   └── pwaService.js           # Helpers de PWA
-│   │
-│   ├── styles/
-│   │   ├── layout.css              # Estilos generales
-│   │   ├── StylesAdmin/            # Estilos admin
-│   │   │   ├── AdminBanners.css
-│   │   │   ├── AdminCrownModal.css
-│   │   │   ├── AdminModal.css
-│   │   │   ├── AdminPage.css
-│   │   │   ├── AdminPanel.css
-│   │   │   └── AdminRightPanel.css
-│   │   ├── StylesCards/            # Estilos de tarjetas
-│   │   │   ├── AwardCard.css
-│   │   │   ├── KnockoutMatchCard.css
-│   │   │   ├── LeagueCard.css
-│   │   │   ├── MatchCard.css
-│   │   │   └── MobileCardsGlobal.css
-│   │   ├── StylesFeedback/         # Estilos de feedback
-│   │   │   ├── GlobalLoader.css
-│   │   │   ├── LoadingSpinner.css
-│   │   │   ├── LoadingStates.css
-│   │   │   └── Toast.css
-│   │   ├── StylesHistory/          # Estilos de Historia (NUEVO)
-│   │   │   ├── HistoricalCompetitionsPage.css
-│   │   │   ├── HistoricalEventsPage.css
-│   │   │   ├── HistoricalTeamsPage.css
-│   │   │   └── HistorySectionNav.css
-│   │   ├── StylesLayout/           # Estilos de layout
-│   │   │   ├── DashboardSidebar.css
-│   │   │   ├── Footer.css
-│   │   │   ├── Header.css
-│   │   │   ├── MobileHeader.css
-│   │   │   └── RankingSidebar.css
-│   │   ├── StylesMobile/           # Estilos móviles
-│   │   │   ├── HeaderMobile.css
-│   │   │   ├── HistoricalCompetitionsPageMobile.css  # NUEVO
-│   │   │   ├── HistoricalEventsPageMobile.css        # NUEVO
-│   │   │   ├── HistoricalTeamsPageMobile.css         # NUEVO
-│   │   │   ├── HistoryPageMobile.css                 # NUEVO
-│   │   │   ├── MobileAdmin.css
-│   │   │   ├── MobileDashboard.css
-│   │   │   ├── MobileNotes.css
-│   │   │   ├── MobileNotifications.css
-│   │   │   ├── MobileProfileMain.css
-│   │   │   ├── MobileRanking.css
-│   │   │   ├── MobileStats.css
-│   │   │   ├── MobileSubPage.css
-│   │   │   ├── MobileWorldCup.css
-│   │   │   └── StyleSwitcher.css
-│   │   ├── StylesNavigation/       # Estilos navegación
-│   │   │   └── NavigationTabs.css
-│   │   ├── StylesOthers/           # Estilos especiales
-│   │   │   ├── HistoryPanel.css
-│   │   │   ├── HistoryTriggerCard.css
-│   │   │   ├── ImageViewer.css
-│   │   │   └── KnockoutSection.css
-│   │   ├── StylesPages/            # Estilos de páginas
-│   │   │   ├── Auth.css
-│   │   │   ├── DashboardPage.css
-│   │   │   ├── HallOfFame.css
-│   │   │   ├── HistoryPage.css     # NUEVO
-│   │   │   ├── NotesPage.css
-│   │   │   ├── NotificationsPage.css
-│   │   │   ├── ProfileSettingsPage.css
-│   │   │   ├── RankingPage.css
-│   │   │   ├── StatsPage.css
-│   │   │   └── WorldCupPage.css
-│   │   ├── StylesPanels/           # Estilos paneles
-│   │   │   ├── EventsRightPanel.css      # NUEVO
-│   │   │   ├── HallOfFamePanel.css
-│   │   │   ├── HistoryRightPanel.css     # NUEVO
-│   │   │   ├── RankingRightPanel.css
-│   │   │   ├── RightNotesPanel.css
-│   │   │   ├── RightPanel.css
-│   │   │   ├── RightPanelWorld.css
-│   │   │   ├── StatsRightPanel.css
-│   │   │   └── TeamsRightPanel.css       # NUEVO
-│   │   ├── StylesProfile/          # Estilos perfil
-│   │   │   ├── MobileUserProfile.css
-│   │   │   ├── ProfileBase.css
-│   │   │   ├── ProfileEdit.css
-│   │   │   ├── ProfileHero.css
-│   │   │   ├── ProfileHistory.css
-│   │   │   ├── ProfileOverview.css
-│   │   │   ├── ProfileTabs.css
-│   │   │   └── UserProfilePanel.css
-│   │   └── StylesPWA/              # Estilos PWA
-│   │       └── InstallPWAButton.css
-│   │
-│   └── utils/
-│       ├── adminFilters.js
-│       ├── logoHelper.js
-│       ├── matchUtils.js
-│       ├── profileUtils.js
-│       ├── registerServiceWorker.js
-│       ├── storage.js
-│       ├── supabaseClient.js
-│       └── supabaseClientNode.js       # NUEVO — cliente para scripts Node.js
+│   └── features/                     ⭐ NUEVA ESTRUCTURA
+│       │
+│       ├── admin/
+│       │   ├── index.js
+│       │   ├── components/
+│       │   │   ├── AdminAchievementsList.jsx
+│       │   │   ├── AdminAchievementsModal.jsx
+│       │   │   ├── AdminAssignBannerModal.jsx
+│       │   │   ├── AdminAwardModal.jsx / AdminAwardsList.jsx
+│       │   │   ├── AdminBannerModal.jsx / AdminBannersList.jsx
+│       │   │   ├── AdminControls.jsx
+│       │   │   ├── AdminCrownModal.jsx / AdminCrownsSection.jsx
+│       │   │   ├── AdminDiagnosticPanel.jsx
+│       │   │   ├── AdminLeagueModal.jsx / AdminLeaguesList.jsx
+│       │   │   ├── AdminMatchesList.jsx
+│       │   │   ├── AdminModal.jsx / AdminModalsContainer.jsx
+│       │   │   ├── AdminNavigationTabs.jsx / AdminRightPanel.jsx
+│       │   │   ├── AdminStatsOverview.jsx
+│       │   │   ├── AdminTitlesList.jsx / AdminTitlesModal.jsx
+│       │   │   ├── DataImporter.jsx
+│       │   │   ├── FinishAwardModal.jsx / FinishLeagueModal.jsx / FinishMatchModal.jsx
+│       │   │   └── mobile/
+│       │   │       └── MobileAdmin.jsx
+│       │   ├── hooks/
+│       │   │   ├── useAdminAchievements.js / useAdminAwards.js
+│       │   │   ├── useAdminBanners.js / useAdminCrowns.js
+│       │   │   ├── useAdminData.js / useAdminHistorical.js
+│       │   │   ├── useAdminLeagues.js / useAdminMatches.js
+│       │   ├── page/
+│       │   │   ├── AdminPage.jsx / AdminPage.css
+│       │   ├── services/
+│       │   │   └── admin.service.js
+│       │   ├── styles/
+│       │   │   ├── AdminBanners.css / AdminCrownModal.css
+│       │   │   ├── AdminModal.css / AdminPanel.css
+│       │   │   ├── AdminRightPanel.css / MobileAdmin.css
+│       │   └── types/
+│       │       └── admin.types.ts
+│       │
+│       ├── auth/
+│       │   ├── components/
+│       │   │   ├── ProtectedRoute.jsx / RequireAuth.jsx
+│       │   ├── page/
+│       │   │   ├── LoginPage.jsx / RegisterPage.jsx
+│       │   │   ├── ForgotPasswordPage.jsx / ResetPasswordPage.jsx
+│       │   │   └── Auth.css
+│       │   └── services/
+│       │       └── auth.service.js
+│       │
+│       ├── dashboard/
+│       │   ├── components/
+│       │   │   ├── AwardCard.jsx / LeagueCard.jsx / MatchCard.jsx
+│       │   │   ├── RightPanel.jsx
+│       │   │   └── mobile/
+│       │   │       ├── MobileDashboard.jsx / MobileCardsGlobal.jsx
+│       │   ├── hooks/
+│       │   │   ├── useAwards.js / useLeagues.js / useMatches.js
+│       │   ├── page/
+│       │   │   ├── DashboardPage.jsx / DashboardPage.css
+│       │   ├── services/
+│       │   │   └── dashboard.service.js
+│       │   └── styles/
+│       │       ├── AwardCard.css / LeagueCard.css / MatchCard.css
+│       │       ├── MobileCardsGlobal.css / RightPanel.css
+│       │
+│       ├── history/                  ← (ver sección Historia arriba)
+│       │
+│       ├── notes/
+│       │   ├── components/
+│       │   │   ├── RightNotesPanel.jsx
+│       │   │   └── mobile/MobileNotes.jsx
+│       │   ├── hooks/useNotes.js
+│       │   ├── page/NotesPage.jsx / NotesPage.css
+│       │   ├── services/notes.service.js
+│       │   └── styles/MobileNotes.css / RightNotesPanel.css
+│       │
+│       ├── notifications/
+│       │   ├── components/
+│       │   │   ├── PushNotificationsToggle.jsx
+│       │   │   └── mobile/MobileNotifications.jsx
+│       │   ├── hooks/usePushNotifications.js
+│       │   ├── page/NotificationsPage.jsx / NotificationsPage.css
+│       │   ├── services/notifications.service.js
+│       │   └── styles/...
+│       │
+│       ├── profile/
+│       │   ├── components/
+│       │   │   ├── AchievementsTab.jsx / AvatarUpload.jsx
+│       │   │   ├── EditTab.jsx / HistoryTab.jsx
+│       │   │   ├── MonthlyChampionshipsTab.jsx / OverviewTab.jsx
+│       │   │   ├── ProfileHero.jsx / ProfileTabs.jsx
+│       │   │   ├── UserProfilePanel.jsx
+│       │   │   └── mobile/MobileUserProfile.jsx
+│       │   ├── hooks/
+│       │   │   ├── useAchievements.js / useMonthlyChampionships.js
+│       │   │   ├── usePredictionHistory.js / useProfileData.js
+│       │   │   ├── useStreaks.js / useUserRanking.js
+│       │   ├── page/ProfileSettingsPage.jsx
+│       │   └── styles/...
+│       │
+│       ├── ranking/
+│       │   ├── components/
+│       │   │   ├── HallOfFame.jsx / HallOfFamePanel.jsx
+│       │   │   ├── RankingRightPanel.jsx
+│       │   │   └── mobile/MobileRanking.jsx
+│       │   ├── page/RankingPage.jsx
+│       │   └── styles/...
+│       │
+│       ├── stats/
+│       │   ├── components/
+│       │   │   ├── StatsRightPanel.jsx
+│       │   │   └── mobile/MobileStats.jsx
+│       │   ├── page/StatsPage.jsx
+│       │   └── styles/...
+│       │
+│       └── worldcup/
+│           ├── components/
+│           │   ├── KnockoutMatchCard.jsx / KnockoutSection.jsx
+│           │   ├── RightPanelWorld.jsx / WorldCupAwardCard.jsx
+│           │   ├── WorldCupNavigationTabs.jsx
+│           │   └── mobile/MobileWorldCup.jsx
+│           ├── hooks/useKnockoutBracket.js / useWorldCup.js
+│           ├── page/WorldCupPage.jsx
+│           └── styles/...
 │
 ├── supabase/
-│   └── functions/
-│       └── send-match-notification/   # Edge Function (Deno) para push
+│   └── functions/send-match-notification/  # Edge Function (Deno)
 │
 ├── .github/
-│   └── workflows/
-│       └── weekly-reset.yml           # Automatización de reset semanal
+│   └── workflows/weekly-reset.yml
 │
-├── twa-manifest.json                  # Configuración TWA (Android)
-├── schema.sql                         # Esquema base de datos
-├── render.yaml                        # Configuración Render.com
+├── twa-manifest.json
+├── schema.sql
+├── render.yaml
 ├── tailwind.config.cjs
 ├── postcss.config.cjs
 └── vite.config.js
@@ -1185,61 +887,67 @@ globalscore/
 
 ---
 
-## ✨ Novedades en v1.3
+## ✨ Novedades en v1.4
 
-### 📜 Sistema de Historia (Módulo Principal)
+### 🏗️ Migración a Arquitectura Feature-Based (Cambio Principal)
 
-El cambio más grande de esta versión es la incorporación del **módulo de Historia**, un sistema completo de archivo y consulta de datos históricos de la plataforma:
+La reestructuración más grande del proyecto: `src/components/`, `src/hooks/`, y `src/styles/` fueron reemplazados por `src/features/`, donde cada dominio es completamente autónomo.
 
-- **`HistoryPage.jsx`** — Página raíz con sub-navegación interna propia
-- **`ComHistory/`** — Nueva carpeta de componentes con 4 sub-páginas:
-  - `HistoricalCompetitionsPage.jsx` — Competiciones pasadas
-  - `HistoricalTeamsPage.jsx` — Equipos históricos
-  - `HistoricalEventsPage.jsx` — Eventos y momentos destacados
-  - `HistorySectionNav.jsx` — Barra de navegación interna de la sección
-- **`HooksHistory/`** — 4 hooks dedicados: `useHistoricalCompetitions`, `useHistoricalTeams`, `useHistoricalEvents`, `useHistoricalPlayers`
-- **`HistoryRightPanel.jsx`** — Panel derecho exclusivo de Historia en desktop
-- **`HistoryTriggerCard.jsx`** — Tarjeta de acceso rápido a la Historia desde el Dashboard
-- **`HistoryPanel.jsx`** — Panel compacto de resumen histórico reutilizable
-- **`DataImporter.jsx`** — Herramienta de importación masiva de datos históricos
-- **Estilos mobile completos** — 4 archivos CSS mobile para las sub-páginas de historia
+**Antes (por tipo):**
+```
+src/
+├── components/ComAdmin/, ComHistory/, ComMobile/, ComPanels/...
+├── hooks/HooksAdmin/, HooksHistory/, HooksProfile/...
+└── styles/StylesAdmin/, StylesHistory/, StylesMobile/...
+```
 
-### 🆕 Nuevos Componentes y Paneles
+**Ahora (por feature/dominio):**
+```
+src/features/
+├── admin/    (components + hooks + page + services + styles + types)
+├── auth/     (components + page + services)
+├── dashboard/(components + hooks + page + services + styles)
+├── history/  (components + hooks + page + services + styles + types)
+├── notes/    (components + hooks + page + services + styles)
+└── ...
+```
 
-- **`EventsRightPanel.jsx`** — Panel derecho de eventos en desktop
-- **`TeamsRightPanel.jsx`** — Panel derecho de equipos históricos
-- **`AdminCrownModal.jsx`** — Modal dedicado para gestión de coronas en el admin
-- **`AdminCrownsSection.jsx`** — Sección de administración de coronas
-- **`useAdminHistorical.js`** — Hook de admin para gestión de datos históricos
+Cada feature tiene una capa de **servicio dedicada** (`*.service.js`) que encapsula el acceso a Supabase, separando la lógica de datos de la UI.
 
-### 🔧 Mejoras Técnicas
+### 📜 Mejoras al Módulo de Historia
 
-- **`supabaseClientNode.js`** — Cliente Supabase separado para scripts Node.js (evita conflictos con el cliente de browser)
-- **Estilos reorganizados** — Nueva carpeta `StylesHistory/` con CSS dedicado por sub-página
-- **Paneles laterales ampliados** — `ComPanels/` pasó de 5 a 8 paneles especializados
+- **`HistoryMenuDesktop.jsx`** — Nuevo menú de navegación dedicado para desktop
+- **`HistoryMenuMobile.jsx`** — Menú de navegación mobile específico para historia
+- **`HistoryWelcomeScreen.jsx`** — Pantalla de bienvenida al módulo histórico
+- **`KnockoutBracketMobile.jsx`** — Vista de bracket de eliminatorias adaptada a mobile
+- **`SectionHeaderMobile.jsx`** — Componente de header de sección reutilizable en mobile
+- **`history.service.js`** — Capa de servicio dedicada para todas las consultas históricas
+- **`history.types.ts`** — Tipos TypeScript del dominio histórico
+- **`ActiveBadge.css`** — Estilos para badge de sección activa en navegación
 
-### 🎨 Estilos Nuevos
+### 🔧 Capas de Servicio Nuevas
 
-- `StylesHistory/HistoricalCompetitionsPage.css`
-- `StylesHistory/HistoricalEventsPage.css`
-- `StylesHistory/HistoricalTeamsPage.css`
-- `StylesHistory/HistorySectionNav.css`
-- `StylesMobile/HistoricalCompetitionsPageMobile.css`
-- `StylesMobile/HistoricalEventsPageMobile.css`
-- `StylesMobile/HistoricalTeamsPageMobile.css`
-- `StylesMobile/HistoryPageMobile.css`
-- `StylesPanels/EventsRightPanel.css`
-- `StylesPanels/HistoryRightPanel.css`
-- `StylesPanels/TeamsRightPanel.css`
-- `StylesOthers/HistoryTriggerCard.css`
-- `StylesAdmin/AdminCrownModal.css`
-- `StylesPages/HistoryPage.css`
+Cada feature ahora cuenta con un archivo `*.service.js` que centraliza el acceso a datos:
+
+- `admin.service.js`
+- `auth.service.js`
+- `dashboard.service.js`
+- `history.service.js`
+- `notes.service.js`
+- `notifications.service.js`
+
+### 📦 TypeScript Types
+
+Nuevos archivos de tipos para features con modelos de datos complejos:
+
+- `admin.types.ts`
+- `history.types.ts`
 
 ---
 
 ## 🗺️ Roadmap
 
-### ✅ Completado (v1.0 — v1.3)
+### ✅ Completado (v1.0 — v1.4)
 
 - [x] Sistema de autenticación completo
 - [x] Predicciones de partidos con puntos
@@ -1259,12 +967,17 @@ El cambio más grande de esta versión es la incorporación del **módulo de His
 - [x] GitHub Actions para reset semanal
 - [x] Sistema de Notas Personales
 - [x] StyleSwitcher en Mobile
-- [x] **Módulo de Historia completo** ⭐ NUEVO
-- [x] **Sub-navegación interna de Historia** ⭐ NUEVO
-- [x] **DataImporter para datos históricos** ⭐ NUEVO
-- [x] **Paneles laterales especializados expandidos** ⭐ NUEVO
+- [x] Módulo de Historia completo
+- [x] Sub-navegación interna de Historia
+- [x] DataImporter para datos históricos
+- [x] Paneles laterales especializados
+- [x] **Migración a arquitectura feature-based** ⭐ NUEVO
+- [x] **Capas de servicio por dominio** ⭐ NUEVO
+- [x] **TypeScript types por feature** ⭐ NUEVO
+- [x] **Bracket de eliminatorias histórico en mobile** ⭐ NUEVO
+- [x] **Welcome screen del módulo de Historia** ⭐ NUEVO
 
-### 🚧 En Progreso (v1.4)
+### 🚧 En Progreso (v1.5)
 
 - [ ] **Google Play Store**: Publicación oficial
 - [ ] **Chat Global**: Comunidad integrada
@@ -1290,8 +1003,6 @@ El cambio más grande de esta versión es la incorporación del **módulo de His
 
 ¡Las contribuciones son bienvenidas! Si quieres mejorar GlobalScore:
 
-### Flujo de Contribución
-
 1. **Fork** el proyecto
 2. Crea una **rama** para tu feature (`git checkout -b feature/AmazingFeature`)
 3. **Commit** tus cambios (`git commit -m 'Add: Amazing Feature'`)
@@ -1302,12 +1013,14 @@ El cambio más grande de esta versión es la incorporación del **módulo de His
 
 - ✅ Componentes en **PascalCase**
 - ✅ Funciones y hooks en **camelCase**
-- ✅ Carpetas de componentes con prefijo `Com` (`ComAdmin/`, `ComHistory/`, `ComProfile/`, etc.)
-- ✅ Carpetas de hooks con prefijo `Hooks` (`HooksAdmin/`, `HooksHistory/`, `HooksProfile/`, etc.)
+- ✅ **Feature-based**: cada dominio en su propia carpeta bajo `src/features/`
+- ✅ Cada feature expone sus exports públicos via `index.js`
+- ✅ Componentes mobile co-ubicados en `components/mobile/` del feature
+- ✅ CSS del feature en `styles/`, CSS mobile en `styles/mobile/`
+- ✅ Acceso a datos solo a través de `services/*.service.js`
 - ✅ CSS classes en **kebab-case**
 - ✅ Commits siguiendo [Conventional Commits](https://www.conventionalcommits.org/)
 - ✅ Responsive: Siempre considerar Desktop Y Mobile
-- ✅ Cada módulo grande tiene su propia carpeta de estilos (`StylesHistory/`, etc.)
 
 ### Reportar Bugs
 
@@ -1326,8 +1039,6 @@ Usa el [issue tracker](https://github.com/jsebasvgg7/GlobalScore/issues) con:
 
 - 📧 Email: [globalscore.oficial@gmail.com](mailto:globalscore.oficial@gmail.com)
 - 🌐 Web: [https://globalscore.onrender.com/app](https://globalscore.onrender.com/app)
-- 👤 Luis Vega — [@luisd__vg](https://www.instagram.com/luisd__vg)
-- 👤 J.Sebas Vega — [@jsebas.vg](https://www.instagram.com/jsebas.vg)
 
 **Repositorio**: [https://github.com/jsebasvgg7/GlobalScore](https://github.com/jsebasvgg7/GlobalScore)
 
@@ -1361,7 +1072,7 @@ Usa el [issue tracker](https://github.com/jsebasvgg7/GlobalScore/issues) con:
 
 ### ⭐ Si te gusta el proyecto, dale una estrella en GitHub
 
-**Hecho con 💜 por Hermanos Vega**
+**Zentryx & StarkSoft © 2026**
 
 [⬆ Volver arriba](#-globalscore)
 
