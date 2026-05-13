@@ -472,11 +472,12 @@ export default function HistoryPage() {
     filterPosition, setFilterPosition,
     filterBallonDor, setFilterBallonDor,
     filterLegacy, setFilterLegacy,
+    filterSignificance, setFilterSignificance,
     positions, legacies,
   } = useHistoricalPlayers();
 
-  const hasActiveFilters = filterPosition || filterBallonDor || filterLegacy;
-  const clearFilters = () => { setFilterPosition(""); setFilterBallonDor(""); setFilterLegacy(""); };
+  const hasActiveFilters = filterPosition || filterBallonDor || filterLegacy || filterSignificance;
+  const clearFilters = () => { setFilterPosition(""); setFilterBallonDor(""); setFilterLegacy(""); setFilterSignificance(""); };
   const panelPlayer = hoveredPlayer || (selectedPlayerId ? allPlayers.find((p) => p.id === selectedPlayerId) || null : null);
 
   const handleBackToMenu = () => {
@@ -730,6 +731,21 @@ export default function HistoryPage() {
                 <select className="hp-filter-select" value={filterLegacy} onChange={(e) => setFilterLegacy(e.target.value)}>
                   <option value="">Todos</option>
                   {legacies.map((l) => <option key={l} value={l}>{LEGACY_LABEL[l] || l}</option>)}
+                </select>
+              </div>
+              <div className="hp-filter-group">
+                <label className="hp-filter-label">Nivel</label>
+                <select
+                  className="hp-filter-select"
+                  value={filterSignificance}
+                  onChange={(e) => setFilterSignificance(e.target.value)}
+                >
+                  <option value="">Todos</option>
+                  <option value="5">GOAT</option>
+                  <option value="4">Leyenda</option>
+                  <option value="3">Icónico</option>
+                  <option value="2">Notable</option>
+                  <option value="1">Activo</option>
                 </select>
               </div>
               {hasActiveFilters && (

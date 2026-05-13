@@ -18,11 +18,11 @@ export function useHistoricalPlayers() {
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [search, setSearch] = useState("");
   const [filterPosition, setFilterPosition] = useState("");
   const [filterBallonDor, setFilterBallonDor] = useState("");
   const [filterLegacy, setFilterLegacy] = useState("");
+  const [filterSignificance, setFilterSignificance] = useState("");
 
   const loadPlayers = useCallback(async () => {
     setLoading(true);
@@ -46,12 +46,12 @@ export function useHistoricalPlayers() {
       p.name.toLowerCase().includes(q) ||
       (p.country || "").toLowerCase().includes(q) ||
       (p.description || "").toLowerCase().includes(q);
-
     const matchPos = !filterPosition || p.position === filterPosition;
     const matchBallonDor = !filterBallonDor || (filterBallonDor === "yes" && p.ballon_dor_count > 0);
     const matchLegacy = !filterLegacy || p.legacy_type === filterLegacy;
+    const matchSignificance = !filterSignificance || String(p.significance_level) === filterSignificance; // ← nuevo
 
-    return matchSearch && matchPos && matchBallonDor && matchLegacy;
+    return matchSearch && matchPos && matchBallonDor && matchLegacy && matchSignificance; // ← actualizado
   });
 
   const positions = [...new Set(players.map((p) => p.position).filter(Boolean))].sort();
@@ -67,6 +67,7 @@ export function useHistoricalPlayers() {
     filterPosition, setFilterPosition,
     filterBallonDor, setFilterBallonDor,
     filterLegacy, setFilterLegacy,
+    filterSignificance, setFilterSignificance,
     positions, legacies,
   };
 }
