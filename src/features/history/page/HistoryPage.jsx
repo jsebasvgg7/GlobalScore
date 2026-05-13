@@ -217,23 +217,47 @@ function PlayerDetail({ playerId, onBack }) {
         </div>
         <div className="hp-detail-hero-info">
           <h1 className="hp-detail-name">{player.name}</h1>
+
           <div className="hp-detail-chips">
-            {player.country && <span className="hp-detail-chip hp-chip--country">{player.country}</span>}
-            {player.position && <span className="hp-detail-chip hp-chip--pos">{POSITION_LABEL[player.position] || player.position}</span>}
-            {player.ballon_dor_count > 0 && (
+            {player.country && (
+              <span className="hp-detail-chip hp-chip--country">{player.country}</span>
+            )}
+            {player.position && (
+              <span className="hp-detail-chip hp-chip--pos">
+                {POSITION_LABEL[player.position] || player.position}
+              </span>
+            )}
+            {player.ballon_dor_count > 0 ? (
               <span className="hp-detail-chip hp-chip--era">
                 {player.ballon_dor_count} Balón{player.ballon_dor_count > 1 ? "es" : ""} de Oro
               </span>
+            ) : (
+              player.legacy_type && (
+                <span
+                  className="hp-detail-chip"
+                  style={{ color: LEGACY_COLOR[player.legacy_type] || "var(--accent)", borderColor: `color-mix(in srgb, ${LEGACY_COLOR[player.legacy_type] || "var(--accent)"} 35%, transparent)`, background: `color-mix(in srgb, ${LEGACY_COLOR[player.legacy_type] || "var(--accent)"} 7%, transparent)` }}
+                >
+                  {LEGACY_LABEL[player.legacy_type] || player.legacy_type}
+                </span>
+              )
             )}
-            {lifespan && <span className="hp-detail-chip hp-chip--life">{lifespan}</span>}
+            {lifespan && (
+              <span className="hp-detail-chip hp-chip--life">{lifespan}</span>
+            )}
           </div>
+
+          {/* Fila de estrellas — siempre visible */}
           <div className="hp-detail-sig-row">
             <SignificanceStars value={player.significance_level || 0} />
             <span className={`hp-detail-sig-label${isActive ? " hp-detail-sig-label--active" : ""}`}>
               {SIGNIFICANCE_LABEL[player.significance_level || 0]}
             </span>
           </div>
-          {player.legacy_type && <LegacyBadge type={player.legacy_type} />}
+
+          {/* LegacyBadge solo cuando tiene Balón de Oro (para no duplicar) */}
+          {player.legacy_type && player.ballon_dor_count > 0 && (
+            <LegacyBadge type={player.legacy_type} />
+          )}
         </div>
       </div>
 

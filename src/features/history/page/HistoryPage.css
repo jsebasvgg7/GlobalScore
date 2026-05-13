@@ -1402,31 +1402,6 @@
   }
 }
 
-.hp-active-badge-dot,
-.hmm-active-badge-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #1D9E75;
-  flex-shrink: 0;
-  /* Pulso del punto */
-  animation: active-dot-pulse 2s ease-in-out infinite;
-}
-
-@keyframes active-dot-pulse {
-
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.55;
-    transform: scale(0.75);
-  }
-}
-
 .hp-active-badge-star,
 .hmm-active-badge-star {
   font-size: 9px;
