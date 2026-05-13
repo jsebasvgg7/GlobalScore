@@ -75,7 +75,7 @@ export default function AdminPage({ currentUser }) {
 
   // ── Hooks de acciones ─────────────────────────────────────────
   const { handleAddMatch, handleFinishMatch, handleDeleteMatch }
-    = useAdminMatches(currentUser, loadData, toast);
+    = useAdminMatches(loadData, toast);
 
   const { handleAddLeague, handleFinishLeague, handleDeleteLeague }
     = useAdminLeagues(loadData, toast);

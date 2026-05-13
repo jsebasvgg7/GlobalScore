@@ -1447,7 +1447,6 @@
   line-height: 1.4;
 }
 
-/* ── Badge numérico en el botón de filtro (reemplaza el dot) ── */
 .hmm-filter-badge {
   position: absolute;
   top: 5px;

@@ -31,9 +31,6 @@ export default function AdminAssignBannerModal({ onClose, banners, users: initia
     };
     fetchUsers();
   }, []);
-  const filtered = !search.trim() ? [] : allUsers.filter(u =>
-    (u.name || '').toLowerCase().includes(search.toLowerCase())
-  ).slice(0, 6);
 
   useEffect(() => {
     if (selectedUser) loadUserBanners(selectedUser.id);

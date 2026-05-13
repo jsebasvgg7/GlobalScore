@@ -477,7 +477,7 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
   const [titles, setTitles] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
 
-  useState(() => {
+  useEffect(() => {
     if (!isEdit) return;
     setLoadingData(true);
     Promise.all([
