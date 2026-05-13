@@ -246,7 +246,6 @@ function PlayerDetail({ playerId, onBack }) {
             )}
           </div>
 
-          {/* Fila de estrellas — siempre visible */}
           <div className="hp-detail-sig-row">
             <SignificanceStars value={player.significance_level || 0} />
             <span className={`hp-detail-sig-label${isActive ? " hp-detail-sig-label--active" : ""}`}>
@@ -254,7 +253,6 @@ function PlayerDetail({ playerId, onBack }) {
             </span>
           </div>
 
-          {/* LegacyBadge solo cuando tiene Balón de Oro (para no duplicar) */}
           {player.legacy_type && player.ballon_dor_count > 0 && (
             <LegacyBadge type={player.legacy_type} />
           )}
