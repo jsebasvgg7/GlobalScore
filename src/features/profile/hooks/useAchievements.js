@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
+import {
+  fetchAvailableAchievements,
+  fetchAvailableTitles,
+  upsertAchievement,
+  deleteAchievementById,
+  upsertTitle,
+  deleteTitleById,
+} from '../services/profile.service';
 
 const calculateAchievements = (availableAchievements, userStats) => {
   if (!availableAchievements || !userStats) return [];
@@ -42,26 +49,15 @@ export const useAchievements = (currentUser, streakData) => {
     try {
       setAchievementsLoading(true);
 
-      // Load available achievements
-      const { data: achievementsData, error: achievementsError } = await supabase
-        .from('available_achievements')
-        .select('*')
-        .order('requirement_value', { ascending: true });
+      const achievementsData = await fetchAvailableAchievements();
+      setAvailableAchievements(achievementsData);
 
-      if (achievementsError) throw achievementsError;
-      setAvailableAchievements(achievementsData || []);
-
-      // Load available titles
-      const { data: titlesData, error: titlesError } = await supabase
-        .from('available_titles')
-        .select('*');
-
-      if (titlesError) throw titlesError;
-      setAvailableTitles(titlesData || []);
+      const titlesData = await fetchAvailableTitles();
+      setAvailableTitles(titlesData);
 
       // Calculate user achievements
       const calculatedAchievements = calculateAchievements(
-        achievementsData || [],
+        achievementsData,
         {
           points: currentUser?.points || 0,
           predictions: currentUser?.predictions || 0,
@@ -72,10 +68,7 @@ export const useAchievements = (currentUser, streakData) => {
       setUserAchievements(calculatedAchievements);
 
       // Calculate user titles
-      const calculatedTitles = calculateTitles(
-        titlesData || [],
-        calculatedAchievements
-      );
+      const calculatedTitles = calculateTitles(titlesData, calculatedAchievements);
       setUserTitles(calculatedTitles);
 
     } catch (err) {
@@ -87,19 +80,11 @@ export const useAchievements = (currentUser, streakData) => {
 
   const handleSaveAchievement = async (achievementData, toast) => {
     try {
-      const { error } = await supabase
-        .from('available_achievements')
-        .upsert(achievementData, { onConflict: 'id' });
-
-      if (error) throw error;
-
+      await upsertAchievement(achievementData);
       toast.success('¡Logro guardado exitosamente!');
 
-      const { data } = await supabase
-        .from('available_achievements')
-        .select('*')
-        .order('requirement_value', { ascending: true });
-      setAvailableAchievements(data || []);
+      const data = await fetchAvailableAchievements();
+      setAvailableAchievements(data);
     } catch (err) {
       console.error('Error saving achievement:', err);
       toast.error('Error al guardar el logro');
@@ -108,20 +93,11 @@ export const useAchievements = (currentUser, streakData) => {
 
   const handleDeleteAchievement = async (achievementId, toast) => {
     try {
-      const { error } = await supabase
-        .from('available_achievements')
-        .delete()
-        .eq('id', achievementId);
-
-      if (error) throw error;
-
+      await deleteAchievementById(achievementId);
       toast.success('¡Logro eliminado correctamente!');
 
-      const { data } = await supabase
-        .from('available_achievements')
-        .select('*')
-        .order('requirement_value', { ascending: true });
-      setAvailableAchievements(data || []);
+      const data = await fetchAvailableAchievements();
+      setAvailableAchievements(data);
     } catch (err) {
       console.error('Error deleting achievement:', err);
       toast.error('Error al eliminar el logro');
@@ -130,18 +106,11 @@ export const useAchievements = (currentUser, streakData) => {
 
   const handleSaveTitle = async (titleData, toast) => {
     try {
-      const { error } = await supabase
-        .from('available_titles')
-        .upsert(titleData, { onConflict: 'id' });
-
-      if (error) throw error;
-
+      await upsertTitle(titleData);
       toast.success('Título guardado correctamente');
 
-      const { data } = await supabase
-        .from('available_titles')
-        .select('*');
-      setAvailableTitles(data || []);
+      const data = await fetchAvailableTitles();
+      setAvailableTitles(data);
     } catch (err) {
       console.error('Error saving title:', err);
       toast.error('Error al guardar el título');
@@ -150,19 +119,11 @@ export const useAchievements = (currentUser, streakData) => {
 
   const handleDeleteTitle = async (titleId, toast) => {
     try {
-      const { error } = await supabase
-        .from('available_titles')
-        .delete()
-        .eq('id', titleId);
-
-      if (error) throw error;
-
+      await deleteTitleById(titleId);
       toast.success('Título eliminado correctamente');
 
-      const { data } = await supabase
-        .from('available_titles')
-        .select('*');
-      setAvailableTitles(data || []);
+      const data = await fetchAvailableTitles();
+      setAvailableTitles(data);
     } catch (err) {
       console.error('Error deleting title:', err);
       toast.error('Error al eliminar el título');

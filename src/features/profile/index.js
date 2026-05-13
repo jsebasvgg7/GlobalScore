@@ -23,4 +23,4 @@ export * from './hooks/useStreaks'
 export * from './hooks/useUserRanking'
 
 // Servicio
-export * from './services/profile.service'
+export * from './services'

@@ -19,4 +19,4 @@ export * from './hooks/useLeagues'
 export * from './hooks/useMatches'
 
 // Servicio
-export * from './services/dashboard.service'
+export * from './services'

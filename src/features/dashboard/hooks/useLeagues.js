@@ -1,5 +1,15 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
+import {
+  upsertLeaguePrediction,
+  fetchLeaguesWithPredictions,
+  insertLeague as insertLeagueService,
+  updateLeagueResult,
+  getLeagueWithPredictions,
+  updateLeaguePredictionPoints,
+  getUserStatsForLeague,
+  updateUserStats,
+  fetchAllUsersRanked,
+} from '../services/dashboard.service';
 
 export const useLeagues = (currentUser) => {
   const [loading, setLoading] = useState(false);
@@ -10,25 +20,16 @@ export const useLeagues = (currentUser) => {
 
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from("league_predictions")
-        .upsert({
-          league_id: leagueId,
-          user_id: currentUser.id,
-          predicted_champion: champion,
-          predicted_top_scorer: topScorer,
-          predicted_top_assist: topAssist,
-          predicted_mvp: mvp,
-        }, {
-          onConflict: 'league_id,user_id'
-        });
+      await upsertLeaguePrediction({
+        league_id: leagueId,
+        user_id: currentUser.id,
+        predicted_champion: champion,
+        predicted_top_scorer: topScorer,
+        predicted_top_assist: topAssist,
+        predicted_mvp: mvp,
+      });
 
-      if (error) throw error;
-
-      const { data: leagueList } = await supabase
-        .from("leagues")
-        .select("*, league_predictions(*)");
-
+      const leagueList = await fetchLeaguesWithPredictions();
       onSuccess?.(leagueList);
     } catch (err) {
       console.error("Error al guardar predicción de liga:", err);
@@ -42,10 +43,8 @@ export const useLeagues = (currentUser) => {
   const addLeague = useCallback(async (league, onSuccess, onError) => {
     setLoading(true);
     try {
-      const { error } = await supabase.from("leagues").insert(league);
-      if (error) throw error;
-
-      const { data } = await supabase.from("leagues").select("*, league_predictions(*)");
+      await insertLeagueService(league);
+      const data = await fetchLeaguesWithPredictions();
       onSuccess?.(data);
     } catch (err) {
       console.error("Error al agregar liga:", err);
@@ -62,30 +61,18 @@ export const useLeagues = (currentUser) => {
       console.log(`🏆 Finalizando liga ${leagueId}`);
 
       // 1. Actualizar liga con resultados
-      const { error: updateError } = await supabase
-        .from("leagues")
-        .update({
-          status: "finished",
-          champion: results.champion,
-          top_scorer: results.top_scorer,
-          top_scorer_goals: results.top_scorer_goals,
-          top_assist: results.top_assist,
-          top_assist_count: results.top_assist_count,
-          mvp_player: results.mvp_player
-        })
-        .eq("id", leagueId);
-
-      if (updateError) throw updateError;
+      await updateLeagueResult(leagueId, {
+        status: "finished",
+        champion: results.champion,
+        top_scorer: results.top_scorer,
+        top_scorer_goals: results.top_scorer_goals,
+        top_assist: results.top_assist,
+        top_assist_count: results.top_assist_count,
+        mvp_player: results.mvp_player
+      });
 
       // 2. Obtener liga con predicciones
-      const { data: league, error: leagueError } = await supabase
-        .from("leagues")
-        .select("*, league_predictions(*)")
-        .eq("id", leagueId)
-        .single();
-
-      if (leagueError) throw leagueError;
-
+      const league = await getLeagueWithPredictions(leagueId);
       console.log(`📊 Liga encontrada con ${league.league_predictions.length} predicciones`);
 
       // 3. Calcular puntos (5 por cada predicción correcta)
@@ -113,17 +100,10 @@ export const useLeagues = (currentUser) => {
         console.log(`Usuario ${prediction.user_id}: ${pointsEarned} puntos (${correctPredictions}/4 aciertos)`);
 
         // Actualizar points_earned en predicción
-        await supabase
-          .from("league_predictions")
-          .update({ points_earned: pointsEarned })
-          .eq("id", prediction.id);
+        await updateLeaguePredictionPoints(prediction.id, pointsEarned);
 
         // Actualizar puntos del usuario
-        const { data: userData } = await supabase
-          .from("users")
-          .select("points, predictions, correct, weekly_points, weekly_predictions, weekly_correct")
-          .eq("id", prediction.user_id)
-          .single();
+        const userData = await getUserStatsForLeague(prediction.user_id);
 
         if (userData) {
           // Estadísticas globales
@@ -136,19 +116,16 @@ export const useLeagues = (currentUser) => {
           const newWeeklyPredictions = (userData.weekly_predictions || 0) + 1;
           const newWeeklyCorrect = (userData.weekly_correct || 0) + correctPredictions;
 
-          await supabase
-            .from("users")
-            .update({
-              // Globales
-              points: newPoints,
-              predictions: newPredictions,
-              correct: newCorrect,
-              // Semanales ⭐
-              weekly_points: newWeeklyPoints,
-              weekly_predictions: newWeeklyPredictions,
-              weekly_correct: newWeeklyCorrect
-            })
-            .eq("id", prediction.user_id);
+          await updateUserStats(prediction.user_id, {
+            // Globales
+            points: newPoints,
+            predictions: newPredictions,
+            correct: newCorrect,
+            // Semanales ⭐
+            weekly_points: newWeeklyPoints,
+            weekly_predictions: newWeeklyPredictions,
+            weekly_correct: newWeeklyCorrect
+          });
 
           console.log(`✅ Usuario ${prediction.user_id}:`);
           console.log(`   Global: ${newPoints} pts, ${newCorrect} aciertos`);
@@ -157,14 +134,8 @@ export const useLeagues = (currentUser) => {
       }
 
       // 4. Recargar datos
-      const { data: updatedUsers } = await supabase
-        .from("users")
-        .select("*")
-        .order("points", { ascending: false });
-
-      const { data: updatedLeagues } = await supabase
-        .from("leagues")
-        .select("*, league_predictions(*)");
+      const updatedUsers = await fetchAllUsersRanked();
+      const updatedLeagues = await fetchLeaguesWithPredictions();
 
       onSuccess?.({
         users: updatedUsers || [],

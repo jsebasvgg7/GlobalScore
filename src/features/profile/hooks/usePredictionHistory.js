@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
+import { fetchPredictionHistory } from '../services/profile.service';
 
 export const usePredictionHistory = (currentUser) => {
   const [predictionHistory, setPredictionHistory] = useState([]);
@@ -8,29 +8,8 @@ export const usePredictionHistory = (currentUser) => {
   const loadPredictionHistory = async (toast) => {
     setHistoryLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('predictions')
-        .select(`
-          *,
-          matches (
-            id,
-            league,
-            home_team,
-            away_team,
-            home_team_logo,
-            away_team_logo,
-            result_home,
-            result_away,
-            status,
-            date,
-            time
-          )
-        `)
-        .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setPredictionHistory(data || []);
+      const data = await fetchPredictionHistory(currentUser.id);
+      setPredictionHistory(data);
     } catch (err) {
       console.error('Error loading prediction history:', err);
       if (toast) {

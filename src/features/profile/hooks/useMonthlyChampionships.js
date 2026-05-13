@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
+import { fetchUserCrownHistory, fetchUserMonthlyStats } from '../services/profile.service';
 
 export const useMonthlyChampionships = (currentUser) => {
   const [crownHistory, setCrownHistory] = useState([]);
@@ -17,25 +17,12 @@ export const useMonthlyChampionships = (currentUser) => {
     try {
       setChampionshipsLoading(true);
 
-      // Cargar historial de coronas
-      const { data: history, error: historyError } = await supabase
-        .from('monthly_championship_history')
-        .select('*')
-        .eq('user_id', currentUser.id)
-        .order('awarded_at', { ascending: false });
+      const [history, userData] = await Promise.all([
+        fetchUserCrownHistory(currentUser.id),
+        fetchUserMonthlyStats(currentUser.id),
+      ]);
 
-      if (historyError) throw historyError;
-      setCrownHistory(history || []);
-
-      // Cargar estadísticas mensuales actuales
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('monthly_points, monthly_predictions, monthly_correct, monthly_championships')
-        .eq('id', currentUser.id)
-        .single();
-
-      if (userError) throw userError;
-
+      setCrownHistory(history);
       setMonthlyStats({
         monthly_points: userData?.monthly_points || 0,
         monthly_predictions: userData?.monthly_predictions || 0,

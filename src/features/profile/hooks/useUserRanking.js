@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
+import { fetchAllUsersForRanking } from '../services/profile.service';
 
 export const useUserRanking = (currentUser) => {
   const [userRanking, setUserRanking] = useState({
@@ -12,12 +12,7 @@ export const useUserRanking = (currentUser) => {
 
   const loadUserRanking = async () => {
     try {
-      const { data: allUsers, error } = await supabase
-        .from('users')
-        .select('id, points')
-        .order('points', { ascending: false });
-
-      if (error) throw error;
+      const allUsers = await fetchAllUsersForRanking();
       if (!allUsers || allUsers.length === 0) return;
 
       const userIndex = allUsers.findIndex(user => user.id === currentUser?.id);

@@ -1,25 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from '@/shared/services/supabase/client';
+import {
+  getHistoricalImageUrl,
+  fetchPublishedPlayers,
+  fetchPlayerDetail,
+  fetchPlayerTeams,
+  fetchPlayerEvents,
+  fetchPlayerCareer,
+  fetchPlayerNational,
+  fetchPlayerTitles,
+} from '../services/history.service';
 
-// ─── Helper: URL pública del bucket "historical" ─────────────────────────────
-export function getHistoricalImageUrl(imagePath) {
-  if (!imagePath) return null;
-
-  // Cloudinary u otra URL completa
-  if (
-    typeof imagePath === "string" &&
-    imagePath.startsWith("http")
-  ) {
-    return imagePath;
-  }
-
-  // Rutas antiguas de Supabase
-  const { data } = supabase.storage
-    .from("historical")
-    .getPublicUrl(imagePath);
-
-  return data?.publicUrl || null;
-}
+// Re-exportar helper para que otros hooks/componentes puedan usarlo
+export { getHistoricalImageUrl };
 
 // ─── Hook: listado + filtros ─────────────────────────────────────────────────
 export function useHistoricalPlayers() {
@@ -36,15 +28,8 @@ export function useHistoricalPlayers() {
     setLoading(true);
     setError(null);
     try {
-      const { data, error: err } = await supabase
-        .from("historical_players")
-        .select("*")
-        .eq("is_published", true)
-        .order("significance_level", { ascending: false })
-        .order("name");
-
-      if (err) throw err;
-      setPlayers(data || []);
+      const data = await fetchPublishedPlayers();
+      setPlayers(data);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -103,89 +88,21 @@ export function useHistoricalPlayerDetail(playerId) {
     setError(null);
 
     try {
-      // 1. Jugador base
-      const { data: playerData, error: playerErr } = await supabase
-        .from("historical_players")
-        .select("*")
-        .eq("id", playerId)
-        .eq("is_published", true)
-        .single();
+      const [playerData, teamsData, eventsData, careerData, nationalData, titlesData] = await Promise.all([
+        fetchPlayerDetail(playerId),
+        fetchPlayerTeams(playerId),
+        fetchPlayerEvents(playerId),
+        fetchPlayerCareer(playerId),
+        fetchPlayerNational(playerId),
+        fetchPlayerTitles(playerId),
+      ]);
 
-      if (playerErr) throw playerErr;
       setPlayer(playerData);
-
-      // 2. Equipos donde jugó (relación legacy)
-      const { data: teamsData, error: teamsErr } = await supabase
-        .from("historical_player_teams")
-        .select(`
-          start_year,
-          end_year,
-          roles,
-          historical_teams (
-            id, name, country, era_dominance, legacy_type, image_path, is_published
-          )
-        `)
-        .eq("player_id", playerId);
-
-      if (teamsErr) throw teamsErr;
-
-      const publishedTeams = (teamsData || [])
-        .filter((r) => r.historical_teams?.is_published)
-        .sort((a, b) => (a.start_year || 9999) - (b.start_year || 9999));
-      setTeams(publishedTeams);
-
-      // 3. Eventos donde participó
-      const { data: eventsData, error: eventsErr } = await supabase
-        .from("historical_player_events")
-        .select(`
-          role_note,
-          historical_events (
-            id, title, event_type, event_date, image_path, is_published
-          )
-        `)
-        .eq("player_id", playerId);
-
-      if (eventsErr) throw eventsErr;
-
-      const publishedEvents = (eventsData || [])
-        .filter((r) => r.historical_events?.is_published)
-        .sort((a, b) => {
-          const da = a.historical_events?.event_date || "";
-          const db = b.historical_events?.event_date || "";
-          return da < db ? -1 : 1;
-        });
-      setEvents(publishedEvents);
-
-      // 4. Trayectoria en clubes
-      const { data: careerData, error: careerErr } = await supabase
-        .from("historical_player_career")
-        .select("*")
-        .eq("player_id", playerId)
-        .order("start_year", { ascending: true });
-
-      if (careerErr) throw careerErr;
-      setCareer(careerData || []);
-
-      // 5. Trayectoria en selección
-      const { data: nationalData, error: nationalErr } = await supabase
-        .from("historical_player_national")
-        .select("*")
-        .eq("player_id", playerId)
-        .order("start_year", { ascending: true });
-
-      if (nationalErr) throw nationalErr;
-      setNational(nationalData || []);
-
-      // 6. Palmarés
-      const { data: titlesData, error: titlesErr } = await supabase
-        .from("historical_player_titles")
-        .select("*")
-        .eq("player_id", playerId)
-        .order("year", { ascending: true });
-
-      if (titlesErr) throw titlesErr;
-      setTitles(titlesData || []);
-
+      setTeams(teamsData);
+      setEvents(eventsData);
+      setCareer(careerData);
+      setNational(nationalData);
+      setTitles(titlesData);
     } catch (e) {
       setError(e.message);
     } finally {

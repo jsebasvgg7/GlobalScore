@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from '@/shared/services/supabase/client';
+import { fetchPublishedTeams, fetchTeamDetail } from '../services/history.service';
 
 export { getHistoricalImageUrl } from "./useHistoricalPlayers";
 
@@ -14,13 +14,8 @@ export function useHistoricalTeams() {
     setLoading(true);
     setError(null);
     try {
-      const { data, error: err } = await supabase
-        .from("historical_teams")
-        .select("*")
-        .eq("is_published", true)
-        .order("era_dominance", { ascending: true });
-      if (err) throw err;
-      setTeams(data || []);
+      const data = await fetchPublishedTeams();
+      setTeams(data);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -51,29 +46,10 @@ export function useHistoricalTeamDetail(teamId) {
     setLoading(true);
     setError(null);
     try {
-      const [teamRes, lineupRes, titlesRes] = await Promise.all([
-        supabase
-          .from("historical_teams")
-          .select("*")
-          .eq("id", teamId)
-          .eq("is_published", true)
-          .single(),
-        supabase
-          .from("historical_team_lineup")
-          .select("*, historical_players(id, name, image_path)")
-          .eq("team_id", teamId)
-          .order("shirt_number"),
-        supabase
-          .from("historical_team_titles")
-          .select("*")
-          .eq("team_id", teamId)
-          .order("year"),
-      ]);
-
-      if (teamRes.error) throw teamRes.error;
-      setTeam(teamRes.data);
-      setLineup(lineupRes.data || []);
-      setTitles(titlesRes.data || []);
+      const detail = await fetchTeamDetail(teamId);
+      setTeam(detail.team);
+      setLineup(detail.lineup);
+      setTitles(detail.titles);
     } catch (e) {
       setError(e.message);
     } finally {

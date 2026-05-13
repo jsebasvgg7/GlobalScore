@@ -24,4 +24,4 @@ export * from './hooks/useHistoricalPlayers'
 export * from './hooks/useHistoricalTeams'
 
 // Servicio
-export * from './services/history.service'
+export * from './services'

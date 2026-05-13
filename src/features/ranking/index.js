@@ -9,4 +9,4 @@ export { default as HistoryTriggerCard } from './components/HistoryTriggerCard'
 export { default as MobileRanking } from './components/mobile/MobileRanking'
 
 // Servicio
-export * from './services/ranking.service'
+export * from './services'

@@ -1,52 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
-
-// ── Constantes de cifrado ────────────────────────────────────────
-const SALT = 'GlobalScore_Notes_v1';
-const ITERATIONS = 100_000;
-const KEY_LEN = 256;
-
-// ── Derivar clave AES desde el authId del usuario ────────────────
-async function deriveKey(authId) {
-  const enc = new TextEncoder();
-  const keyMat = await crypto.subtle.importKey(
-    'raw', enc.encode(authId), 'PBKDF2', false, ['deriveKey']
-  );
-  return crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt: enc.encode(SALT), iterations: ITERATIONS, hash: 'SHA-256' },
-    keyMat,
-    { name: 'AES-CBC', length: KEY_LEN },
-    false,
-    ['encrypt', 'decrypt']
-  );
-}
-
-// ── Cifrar texto ─────────────────────────────────────────────────
-async function encrypt(text, key) {
-  if (!text) return '';
-  const enc = new TextEncoder();
-  const iv = crypto.getRandomValues(new Uint8Array(16));
-  const buf = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, key, enc.encode(text));
-
-  // Guardar IV + ciphertext como base64 separados por '.'
-  const toB64 = (arr) => btoa(String.fromCharCode(...new Uint8Array(arr)));
-  return `${toB64(iv)}.${toB64(buf)}`;
-}
-
-// ── Descifrar texto ──────────────────────────────────────────────
-async function decrypt(cipher, key) {
-  if (!cipher) return '';
-  try {
-    const [ivB64, dataB64] = cipher.split('.');
-    const fromB64 = (b64) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-    const iv = fromB64(ivB64);
-    const data = fromB64(dataB64);
-    const buf = await crypto.subtle.decrypt({ name: 'AES-CBC', iv }, key, data);
-    return new TextDecoder().decode(buf);
-  } catch {
-    return '[contenido ilegible]';
-  }
-}
+import {
+  deriveKey,
+  encrypt,
+  decrypt,
+  fetchNotes,
+  createNoteRecord,
+  updateNoteRecord,
+  deleteNoteRecord,
+} from '../services/notes.service';
 
 // ════════════════════════════════════════════════════════════════
 //  HOOK PRINCIPAL
@@ -73,18 +34,11 @@ export function useNotes(currentUser) {
     setLoading(true);
     setError(null);
     try {
-      const { data, error: err } = await supabase
-        .from('notes')
-        .select('*')
-        .eq('user_id', currentUser.id)
-        .order('is_pinned', { ascending: false })
-        .order('updated_at', { ascending: false });
-
-      if (err) throw err;
+      const data = await fetchNotes(currentUser.id);
 
       // Descifrar en paralelo
       const decrypted = await Promise.all(
-        (data || []).map(async (n) => ({
+        data.map(async (n) => ({
           ...n,
           title: await decrypt(n.title_enc, keyRef.current),
           content: await decrypt(n.content_enc, keyRef.current),
@@ -108,12 +62,7 @@ export function useNotes(currentUser) {
         encrypt(title, keyRef.current),
         encrypt(content, keyRef.current),
       ]);
-      const { data, error: err } = await supabase
-        .from('notes')
-        .insert({ user_id: currentUser.id, title_enc, content_enc, color })
-        .select()
-        .single();
-      if (err) throw err;
+      const data = await createNoteRecord({ user_id: currentUser.id, title_enc, content_enc, color });
 
       const newNote = { ...data, title, content };
       setNotes((prev) => [newNote, ...prev]);
@@ -138,8 +87,7 @@ export function useNotes(currentUser) {
       if (color !== undefined) updates.color = color;
       if (is_pinned !== undefined) updates.is_pinned = is_pinned;
 
-      const { error: err } = await supabase.from('notes').update(updates).eq('id', id);
-      if (err) throw err;
+      await updateNoteRecord(id, updates);
 
       setNotes((prev) =>
         prev.map((n) => n.id === id ? { ...n, title: title ?? n.title, content: content ?? n.content, ...updates } : n)
@@ -158,8 +106,7 @@ export function useNotes(currentUser) {
   // ── Eliminar nota ────────────────────────────────────────────
   const deleteNote = useCallback(async (id) => {
     try {
-      const { error: err } = await supabase.from('notes').delete().eq('id', id);
-      if (err) throw err;
+      await deleteNoteRecord(id);
       setNotes((prev) => prev.filter((n) => n.id !== id));
       return true;
     } catch (e) {

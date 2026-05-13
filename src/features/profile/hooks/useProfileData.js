@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
+import { fetchUserById, updateUserProfile } from '../services/profile.service';
 
 export const useProfileData = (currentUser) => {
   const [loading, setLoading] = useState(false);
@@ -14,18 +14,12 @@ export const useProfileData = (currentUser) => {
     avatar_url: currentUser?.avatar_url || null,
     level: currentUser?.level || 1,
     joined_date: currentUser?.created_at || new Date().toISOString(),
-    equipped_banner_url: currentUser?.equipped_banner_url || null, // ← NUEVO
+    equipped_banner_url: currentUser?.equipped_banner_url || null,
   });
 
   const loadUserData = async () => {
     try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', currentUser.id)
-        .single();
-
-      if (error) throw error;
+      const data = await fetchUserById(currentUser.id);
 
       if (data) {
         setUserData({
@@ -39,7 +33,7 @@ export const useProfileData = (currentUser) => {
           avatar_url: data.avatar_url || null,
           level: data.level || 1,
           joined_date: data.created_at,
-          equipped_banner_url: data.equipped_banner_url || null, // ← NUEVO
+          equipped_banner_url: data.equipped_banner_url || null,
         });
       }
     } catch (err) {
@@ -50,20 +44,15 @@ export const useProfileData = (currentUser) => {
   const saveUserData = async (toast, onBack) => {
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from('users')
-        .update({
-          name: userData.name,
-          bio: userData.bio,
-          favorite_team: userData.favorite_team,
-          favorite_player: userData.favorite_player,
-          gender: userData.gender,
-          nationality: userData.nationality,
-          equipped_banner_url: userData.equipped_banner_url ?? null, // ← NUEVO
-        })
-        .eq('id', currentUser.id);
-
-      if (error) throw error;
+      await updateUserProfile(currentUser.id, {
+        name: userData.name,
+        bio: userData.bio,
+        favorite_team: userData.favorite_team,
+        favorite_player: userData.favorite_player,
+        gender: userData.gender,
+        nationality: userData.nationality,
+        equipped_banner_url: userData.equipped_banner_url ?? null,
+      });
 
       toast.success('¡Perfil actualizado con éxito!');
 

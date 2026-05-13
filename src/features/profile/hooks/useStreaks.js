@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
+import { fetchUserPredictionsWithMatches } from '../services/profile.service';
 
 const checkPredictionCorrect = (prediction, match) => {
   if (match.result_home === null || match.result_away === null) return false;
@@ -27,23 +27,9 @@ export const useStreaks = (currentUser) => {
 
   const calculateStreaks = async () => {
     try {
-      const { data, error } = await supabase
-        .from('predictions')
-        .select(`
-          *,
-          matches (
-            result_home,
-            result_away,
-            status,
-            date
-          )
-        `)
-        .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: false });
+      const data = await fetchUserPredictionsWithMatches(currentUser.id);
 
-      if (error) throw error;
-
-      const finishedPredictions = (data || [])
+      const finishedPredictions = data
         .filter(p => p.matches?.status === 'finished')
         .sort((a, b) => new Date(b.matches.date) - new Date(a.matches.date));
 

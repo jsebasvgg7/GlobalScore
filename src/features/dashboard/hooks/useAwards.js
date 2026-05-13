@@ -1,5 +1,15 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
+import {
+  upsertAwardPrediction,
+  fetchAwardsWithPredictions,
+  insertAward as insertAwardService,
+  updateAwardResult,
+  getAwardWithPredictions,
+  updateAwardPredictionPoints,
+  getUserStatsForLeague,
+  updateUserStats,
+  fetchAllUsersRanked,
+} from '../services/dashboard.service';
 
 export const useAwards = (currentUser) => {
   const [loading, setLoading] = useState(false);
@@ -10,22 +20,13 @@ export const useAwards = (currentUser) => {
 
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from("award_predictions")
-        .upsert({
-          award_id: awardId,
-          user_id: currentUser.id,
-          predicted_winner: predictedWinner,
-        }, {
-          onConflict: 'award_id,user_id'
-        });
+      await upsertAwardPrediction({
+        award_id: awardId,
+        user_id: currentUser.id,
+        predicted_winner: predictedWinner,
+      });
 
-      if (error) throw error;
-
-      const { data: awardList } = await supabase
-        .from("awards")
-        .select("*, award_predictions(*)");
-
+      const awardList = await fetchAwardsWithPredictions();
       onSuccess?.(awardList);
     } catch (err) {
       console.error("Error al guardar predicción de premio:", err);
@@ -39,10 +40,8 @@ export const useAwards = (currentUser) => {
   const addAward = useCallback(async (award, onSuccess, onError) => {
     setLoading(true);
     try {
-      const { error } = await supabase.from("awards").insert(award);
-      if (error) throw error;
-
-      const { data } = await supabase.from("awards").select("*, award_predictions(*)");
+      await insertAwardService(award);
+      const data = await fetchAwardsWithPredictions();
       onSuccess?.(data);
     } catch (err) {
       console.error("Error al agregar premio:", err);
@@ -59,21 +58,10 @@ export const useAwards = (currentUser) => {
       console.log(`🏅 Finalizando premio ${awardId} - ganador: ${winner}`);
 
       // 1. Actualizar premio
-      const { error: updateError } = await supabase
-        .from("awards")
-        .update({ status: "finished", winner })
-        .eq("id", awardId);
-
-      if (updateError) throw updateError;
+      await updateAwardResult(awardId, { status: "finished", winner });
 
       // 2. Obtener premio con predicciones
-      const { data: award, error: awardError } = await supabase
-        .from("awards")
-        .select("*, award_predictions(*)")
-        .eq("id", awardId)
-        .single();
-
-      if (awardError) throw awardError;
+      const award = await getAwardWithPredictions(awardId);
 
       // 3. Repartir puntos (10 puntos por acierto)
       for (const prediction of award.award_predictions) {
@@ -84,17 +72,10 @@ export const useAwards = (currentUser) => {
         }
 
         // Actualizar points_earned en predicción
-        await supabase
-          .from("award_predictions")
-          .update({ points_earned: pointsEarned })
-          .eq("id", prediction.id);
+        await updateAwardPredictionPoints(prediction.id, pointsEarned);
 
         // Actualizar puntos del usuario
-        const { data: userData } = await supabase
-          .from("users")
-          .select("points, predictions, correct, weekly_points, weekly_predictions, weekly_correct")
-          .eq("id", prediction.user_id)
-          .single();
+        const userData = await getUserStatsForLeague(prediction.user_id);
 
         if (userData) {
           // Estadísticas globales
@@ -107,19 +88,16 @@ export const useAwards = (currentUser) => {
           const newWeeklyPredictions = (userData.weekly_predictions || 0) + 1;
           const newWeeklyCorrect = (userData.weekly_correct || 0) + (pointsEarned > 0 ? 1 : 0);
 
-          await supabase
-            .from("users")
-            .update({
-              // Globales
-              points: newPoints,
-              predictions: newPredictions,
-              correct: newCorrect,
-              // Semanales ⭐
-              weekly_points: newWeeklyPoints,
-              weekly_predictions: newWeeklyPredictions,
-              weekly_correct: newWeeklyCorrect
-            })
-            .eq("id", prediction.user_id);
+          await updateUserStats(prediction.user_id, {
+            // Globales
+            points: newPoints,
+            predictions: newPredictions,
+            correct: newCorrect,
+            // Semanales ⭐
+            weekly_points: newWeeklyPoints,
+            weekly_predictions: newWeeklyPredictions,
+            weekly_correct: newWeeklyCorrect
+          });
 
           console.log(`✅ Usuario ${prediction.user_id}:`);
           console.log(`   Global: ${newPoints} pts, ${newCorrect}/${newPredictions}`);
@@ -128,14 +106,8 @@ export const useAwards = (currentUser) => {
       }
 
       // 4. Recargar datos
-      const { data: updatedUsers } = await supabase
-        .from("users")
-        .select("*")
-        .order("points", { ascending: false });
-
-      const { data: updatedAwards } = await supabase
-        .from("awards")
-        .select("*, award_predictions(*)");
+      const updatedUsers = await fetchAllUsersRanked();
+      const updatedAwards = await fetchAwardsWithPredictions();
 
       onSuccess?.({
         users: updatedUsers || [],

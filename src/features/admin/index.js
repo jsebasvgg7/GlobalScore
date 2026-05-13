@@ -44,4 +44,4 @@ export * from './hooks/useAdminLeagues'
 export * from './hooks/useAdminMatches'
 
 // Servicio
-export * from './services/admin.service'
+export * from './services'

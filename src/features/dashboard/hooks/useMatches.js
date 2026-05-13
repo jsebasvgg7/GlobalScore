@@ -1,29 +1,15 @@
 import { useState, useCallback, useRef } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
-
-// ── Helper compartido: recarga SOLO partidos pending (igual que useDataLoader) ──
-const fetchPendingMatches = async () => {
-  let all = [];
-  let from = 0;
-  const PAGE_SIZE = 1000;
-
-  while (true) {
-    const { data, error } = await supabase
-      .from("matches")
-      .select("*, predictions(*)")
-      .eq("status", "pending")
-      .range(from, from + PAGE_SIZE - 1);
-
-    if (error) throw error;
-    if (!data?.length) break;
-
-    all = [...all, ...data];
-    if (data.length < PAGE_SIZE) break;
-    from += PAGE_SIZE;
-  }
-
-  return all;
-};
+import {
+  fetchPendingMatches,
+  upsertMatchPrediction,
+  insertMatch as insertMatchService,
+  updateMatchResult,
+  getMatchWithPredictions,
+  updatePredictionPoints,
+  getUserStats,
+  updateUserStats,
+  fetchAllUsersRanked,
+} from '../services/dashboard.service';
 
 export const useMatches = (currentUser) => {
   const [loading, setLoading] = useState(false);
@@ -58,15 +44,7 @@ export const useMatches = (currentUser) => {
         predictionData.predicted_advancing_team = advancingTeam;
       }
 
-      const { data: predictionResult, error } = await supabase
-        .from("predictions")
-        .upsert(predictionData, {
-          onConflict: 'match_id,user_id'
-        })
-        .select();
-
-      if (error) throw error;
-
+      const predictionResult = await upsertMatchPrediction(predictionData);
       console.log('✅ Predicción guardada:', predictionResult);
 
       // ✅ FIX: Recargar solo partidos pending (igual que la carga inicial)
@@ -88,8 +66,7 @@ export const useMatches = (currentUser) => {
   const addMatch = useCallback(async (match, onSuccess, onError) => {
     setLoading(true);
     try {
-      const { error } = await supabase.from("matches").insert(match);
-      if (error) throw error;
+      await insertMatchService(match);
 
       // ✅ FIX: Recargar solo partidos pending
       const data = await fetchPendingMatches();
@@ -123,21 +100,10 @@ export const useMatches = (currentUser) => {
         updateData.advancing_team = advancingTeam;
       }
 
-      const { error: updateError } = await supabase
-        .from("matches")
-        .update(updateData)
-        .eq("id", matchId);
-
-      if (updateError) throw updateError;
+      await updateMatchResult(matchId, updateData);
 
       // 2. Obtener partido con todas sus predicciones
-      const { data: match, error: matchError } = await supabase
-        .from("matches")
-        .select("*, predictions(*)")
-        .eq("id", matchId)
-        .single();
-
-      if (matchError) throw matchError;
+      const match = await getMatchWithPredictions(matchId);
 
       console.log(`📊 Partido encontrado con ${match.predictions.length} predicciones`);
       console.log(`⚡ Es knockout: ${match.is_knockout}`);
@@ -182,22 +148,16 @@ export const useMatches = (currentUser) => {
         const totalPoints = pointsEarned + advancingPoints;
 
         // ⚡ MODIFICADO: Actualizar predicción con advancing_points separado
-        await supabase
-          .from("predictions")
-          .update({
-            points_earned: pointsEarned,
-            advancing_points: advancingPoints
-          })
-          .eq("id", prediction.id);
+        await updatePredictionPoints(prediction.id, {
+          points_earned: pointsEarned,
+          advancing_points: advancingPoints
+        });
 
         // Obtener datos actuales del usuario
-        const { data: userData, error: userError } = await supabase
-          .from("users")
-          .select("points, predictions, correct, best_streak, current_streak, monthly_points, monthly_predictions, monthly_correct")
-          .eq("id", prediction.user_id)
-          .single();
-
-        if (userError) {
+        let userData;
+        try {
+          userData = await getUserStats(prediction.user_id);
+        } catch (userError) {
           console.error(`❌ Error al obtener usuario ${prediction.user_id}:`, userError);
           continue;
         }
@@ -224,9 +184,8 @@ export const useMatches = (currentUser) => {
         }
 
         // ✅ ACTUALIZAR USUARIO CON TODAS LAS ESTADÍSTICAS
-        const { error: updateUserError } = await supabase
-          .from("users")
-          .update({
+        try {
+          await updateUserStats(prediction.user_id, {
             // 🌍 Estadísticas globales
             points: newPoints,
             predictions: newPredictions,
@@ -237,26 +196,21 @@ export const useMatches = (currentUser) => {
             monthly_points: newMonthlyPoints,
             monthly_predictions: newMonthlyPredictions,
             monthly_correct: newMonthlyCorrect
-          })
-          .eq("id", prediction.user_id);
+          });
 
-        if (updateUserError) {
-          console.error(`❌ Error actualizando usuario ${prediction.user_id}:`, updateUserError);
-        } else {
           console.log(`✅ Usuario ${prediction.user_id} actualizado exitosamente:`);
           console.log(`   🌍 Global: ${newPoints} pts, ${newCorrect}/${newPredictions} correctas, racha: ${newCurrentStreak}`);
           console.log(`   📅 Mensual: ${newMonthlyPoints} pts, ${newMonthlyCorrect}/${newMonthlyPredictions} correctas`);
           if (advancingPoints > 0) {
             console.log(`   ⚡ Advancing: +${advancingPoints} pts`);
           }
+        } catch (updateUserError) {
+          console.error(`❌ Error actualizando usuario ${prediction.user_id}:`, updateUserError);
         }
       }
 
       // 4. Recargar datos actualizados
-      const { data: updatedUsers } = await supabase
-        .from("users")
-        .select("*")
-        .order("points", { ascending: false });
+      const updatedUsers = await fetchAllUsersRanked();
 
       // ✅ FIX: Recargar solo partidos pending (el partido recién finalizado ya no aparecerá)
       const updatedMatches = await fetchPendingMatches();

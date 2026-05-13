@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "@/shared/services/supabase/client";
+import { fetchPublishedEvents, fetchEventDetail } from "../services/history.service";
 import { getHistoricalImageUrl } from "./useHistoricalPlayers";
 
 export { getHistoricalImageUrl };
@@ -17,17 +17,8 @@ export function useHistoricalEvents() {
     setLoading(true);
     setError(null);
     try {
-      const { data, error } = await supabase
-        .from("historical_events")
-        .select(`
-          *,
-          historical_players!historical_events_protagonist_id_fkey(id, name, image_path, country, position),
-          historical_teams!historical_events_team_protagonist_id_fkey(id, name, image_path, primary_color)
-        `)
-        .eq("is_published", true)
-        .order("event_date", { ascending: false });
-      if (error) throw error;
-      setEvents(data || []);
+      const data = await fetchPublishedEvents();
+      setEvents(data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -78,51 +69,12 @@ export function useHistoricalEventDetail(eventId) {
     setLoading(true);
     setError(null);
     try {
-      // Evento principal con protagonistas
-      const { data: ev, error: evErr } = await supabase
-        .from("historical_events")
-        .select(`
-          *,
-          historical_players!historical_events_protagonist_id_fkey(id, name, image_path, country, position, legacy_type, impact_summary),
-          historical_teams!historical_events_team_protagonist_id_fkey(id, name, image_path, primary_color, secondary_color, country, formation, manager)
-        `)
-        .eq("id", eventId)
-        .single();
-      if (evErr) throw evErr;
-      setEvent(ev);
-
-      // Datos adicionales en paralelo
-      const [linRes, sqRes, stRes, koRes] = await Promise.all([
-        supabase
-          .from("historical_event_lineups")
-          .select("*")
-          .eq("event_id", eventId)
-          .order("sort_order"),
-        supabase
-          .from("historical_event_squad")
-          .select("*")
-          .eq("event_id", eventId)
-          .order("sort_order"),
-        supabase
-          .from("historical_event_standings")
-          .select("*")
-          .eq("event_id", eventId)
-          .order("position"),
-        supabase
-          .from("historical_event_knockout")
-          .select("*")
-          .eq("event_id", eventId)
-          .order("sort_order"),
-      ]);
-
-      const allLineups = linRes.data || [];
-      setLineups({
-        team_a: allLineups.filter((l) => l.team_side === "team_a"),
-        team_b: allLineups.filter((l) => l.team_side === "team_b"),
-      });
-      setSquad(sqRes.data || []);
-      setStandings(stRes.data || []);
-      setKnockout(koRes.data || []);
+      const detail = await fetchEventDetail(eventId);
+      setEvent(detail.event);
+      setLineups(detail.lineups);
+      setSquad(detail.squad);
+      setStandings(detail.standings);
+      setKnockout(detail.knockout);
     } catch (err) {
       setError(err.message);
     } finally {

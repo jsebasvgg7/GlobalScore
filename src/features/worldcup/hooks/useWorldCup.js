@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '@/shared/services/supabase/client';
+import { fetchWorldCupPredictions, upsertWorldCupPredictions } from '../services/worldcup.service';
 
 export const useWorldCup = (currentUser) => {
   const [loading, setLoading] = useState(false);
@@ -9,13 +9,7 @@ export const useWorldCup = (currentUser) => {
     if (!currentUser) return null;
 
     try {
-      const { data, error } = await supabase
-        .from('worldcup_predictions')
-        .select('*')
-        .eq('user_id', currentUser.id)
-        .single();
-
-      if (error && error.code !== 'PGRST116') throw error;
+      const data = await fetchWorldCupPredictions(currentUser.id);
 
       if (data) {
         return {
@@ -51,20 +45,7 @@ export const useWorldCup = (currentUser) => {
 
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from('worldcup_predictions')
-        .upsert({
-          user_id: currentUser.id,
-          groups_predictions: predictions.groups,
-          knockout_predictions: predictions.knockout,
-          awards_predictions: predictions.awards,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'user_id'
-        });
-
-      if (error) throw error;
-
+      await upsertWorldCupPredictions(currentUser.id, predictions);
       onSuccess?.();
     } catch (err) {
       console.error('Error saving predictions:', err);
@@ -79,11 +60,7 @@ export const useWorldCup = (currentUser) => {
     if (!currentUser) return null;
 
     try {
-      const { data: predictions } = await supabase
-        .from('worldcup_predictions')
-        .select('*')
-        .eq('user_id', currentUser.id)
-        .single();
+      const predictions = await fetchWorldCupPredictions(currentUser.id);
 
       if (!predictions) return null;
 

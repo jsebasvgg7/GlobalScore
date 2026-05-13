@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from '@/shared/services/supabase/client';
+import { fetchPublishedCompetitions, fetchCompetitionDetail } from '../services/history.service';
 
 export { getHistoricalImageUrl } from "./useHistoricalPlayers";
 
@@ -16,13 +16,8 @@ export function useHistoricalCompetitions() {
     setLoading(true);
     setError(null);
     try {
-      const { data, error: err } = await supabase
-        .from("historical_competitions")
-        .select("*, historical_teams(id, name, image_path)")
-        .eq("is_published", true)
-        .order("year", { ascending: false });
-      if (err) throw err;
-      setCompetitions(data || []);
+      const data = await fetchPublishedCompetitions();
+      setCompetitions(data);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -61,7 +56,7 @@ export function useHistoricalCompetitions() {
 // ─── Detalle de una competición ───────────────────────────────────────────────
 export function useHistoricalCompetitionDetail(competitionId) {
   const [competition, setCompetition] = useState(null);
-  const [groups, setGroups] = useState([]);   // rows planas
+  const [groups, setGroups] = useState([]);
   const [standings, setStandings] = useState([]);
   const [knockout, setKnockout] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -72,36 +67,11 @@ export function useHistoricalCompetitionDetail(competitionId) {
     setLoading(true);
     setError(null);
     try {
-      const [compRes, groupsRes, standRes, knockRes] = await Promise.all([
-        supabase
-          .from("historical_competitions")
-          .select("*, historical_teams(id, name, image_path, country)")
-          .eq("id", competitionId)
-          .eq("is_published", true)
-          .single(),
-        supabase
-          .from("historical_competition_groups")
-          .select("*")
-          .eq("competition_id", competitionId)
-          .order("group_name")
-          .order("sort_order"),
-        supabase
-          .from("historical_competition_standings")
-          .select("*")
-          .eq("competition_id", competitionId)
-          .order("position"),
-        supabase
-          .from("historical_competition_knockout")
-          .select("*")
-          .eq("competition_id", competitionId)
-          .order("sort_order"),
-      ]);
-
-      if (compRes.error) throw compRes.error;
-      setCompetition(compRes.data);
-      setGroups(groupsRes.data || []);
-      setStandings(standRes.data || []);
-      setKnockout(knockRes.data || []);
+      const detail = await fetchCompetitionDetail(competitionId);
+      setCompetition(detail.competition);
+      setGroups(detail.groups);
+      setStandings(detail.standings);
+      setKnockout(detail.knockout);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -121,7 +91,7 @@ export function useHistoricalCompetitionDetail(competitionId) {
 
   return {
     competition,
-    groupedGroups, // { "Grupo A": [rows...], ... }
+    groupedGroups,
     standings,
     knockout,
     loading, error, reload: load,
