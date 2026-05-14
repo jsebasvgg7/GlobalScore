@@ -3,11 +3,14 @@ import { getUserCollection } from '../services/albums.service';
 
 export function useAlbumCollection(userId) {
     const [collection, setCollection] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const fetchCollection = useCallback(async () => {
-        if (!userId) return;
+        if (!userId) {
+            setLoading(false);
+            return;
+        }
         try {
             setLoading(true);
             const data = await getUserCollection(userId);

@@ -8,7 +8,7 @@ export default function AlbumBookEntry({ currentUser }) {
     const navigate = useNavigate();
     const { packs, barPercent, packsAvailable, loading } = useAlbumPacks(currentUser?.id);
 
-    if (loading || !packs) return null;
+    if (loading) return null;
 
     return (
         <button className="abe-root" onClick={() => navigate('/albums')}>
