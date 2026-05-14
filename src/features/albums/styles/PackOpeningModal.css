@@ -802,6 +802,12 @@
     filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.6));
 }
 
+[data-theme="light"] .pom-star--lit {
+    fill: #f59e0b;
+    stroke: #f59e0b;
+    filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.6));
+}
+
 /* ── PARTÍCULAS GOAT ── */
 .pom-particles {
     position: absolute;
