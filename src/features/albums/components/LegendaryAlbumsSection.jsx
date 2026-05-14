@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Lock, BookOpen, Trophy, Star, ChevronLeft, ChevronRight, Gift, Crown } from 'lucide-react';
 import '../styles/LegendaryAlbumsSection.css';
 
 const ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'golden_album'];
@@ -7,7 +8,7 @@ const ALBUM_META = {
     legendary_1: {
         label: 'Legendarios I',
         shortLabel: 'LEG I',
-        req: '30 jugadores · mín. 5 de ⭐⭐⭐⭐',
+        req: '30 jugadores · mín. 5×⭐⭐⭐⭐',
         slots: 30,
         minStars4: 5,
         minStars5: 0,
@@ -15,6 +16,7 @@ const ALBUM_META = {
         accent: '#a599d9',
         tag: 'TEMPORADA 25·26',
         number: '01',
+        golden: false,
     },
     legendary_2: {
         label: 'Legendarios II',
@@ -27,6 +29,7 @@ const ALBUM_META = {
         accent: '#c4b5fd',
         tag: 'TEMPORADA 25·26',
         number: '02',
+        golden: false,
     },
     legendary_3: {
         label: 'Legendarios III',
@@ -39,11 +42,12 @@ const ALBUM_META = {
         accent: '#34d399',
         tag: 'TEMPORADA 25·26',
         number: '03',
+        golden: false,
     },
     golden_album: {
         label: 'Álbum Dorado',
         shortLabel: 'DORADO',
-        req: '15 jugadores · todos de ⭐⭐⭐⭐+',
+        req: '15 jugadores · todos ⭐⭐⭐⭐+',
         slots: 15,
         minStars4: 15,
         minStars5: 0,
@@ -64,10 +68,7 @@ function posLabel(pos) {
     return map[pos] || pos?.slice(0, 3).toUpperCase() || '—';
 }
 
-/* ════════════════════════════════════════════════
-   FIGURITA individual — dentro del panel
-════════════════════════════════════════════════ */
-function Sticker({ index, card, collectionItem, meta }) {
+function PanelSticker({ index, card, collectionItem, accent }) {
     const num = String(index + 1).padStart(2, '0');
     const isGoat = card?.significance_level === 5;
     const filled = !!collectionItem;
@@ -76,10 +77,10 @@ function Sticker({ index, card, collectionItem, meta }) {
         return (
             <div
                 className={`las-sticker las-sticker--filled${isGoat ? ' las-sticker--goat' : ''}`}
-                style={{ '--acc': meta.accent }}
+                style={{ '--meta-accent': accent }}
             >
                 <span className="las-sticker-num">{num}</span>
-                {isGoat && <span className="las-sticker-crown">♛</span>}
+                {isGoat && <span className="las-sticker-crown"><Crown size={8} /></span>}
                 <div className="las-sticker-img-zone">
                     {card?.image_path
                         ? <img src={card.image_path} alt={card.name} className="las-sticker-img" />
@@ -98,22 +99,19 @@ function Sticker({ index, card, collectionItem, meta }) {
     }
 
     return (
-        <div className="las-sticker las-sticker--empty" style={{ '--acc': meta.accent }}>
+        <div className="las-sticker las-sticker--empty" style={{ '--meta-accent': accent }}>
             <span className="las-sticker-num">{num}</span>
             <svg className="las-sticker-sil" viewBox="0 0 40 60" fill="currentColor" aria-hidden="true">
                 <ellipse cx="20" cy="13" rx="9" ry="9" />
                 <path d="M4 56 Q4 30 20 27 Q36 30 36 56Z" />
             </svg>
-            <div className="las-sticker-stars-row">
-                {[1, 2, 3, 4].map(n => <span key={n} className="las-star-dot">★</span>)}
+            <div className="las-sticker-stars-empty">
+                {[1, 2, 3, 4].map(n => <span key={n} className="las-sticker-star-dot">★</span>)}
             </div>
         </div>
     );
 }
 
-/* ════════════════════════════════════════════════
-   PANEL FLOTANTE — se abre sobre la página
-════════════════════════════════════════════════ */
 function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose }) {
     const [page, setPage] = useState(0);
     const PER_PAGE = 6;
@@ -140,15 +138,11 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
 
     return (
         <>
-            {/* Overlay semitransparente */}
             <div className="las-panel-overlay" onClick={onClose} />
-
-            {/* Panel lateral */}
             <div className="las-panel" style={{ '--spine': meta.spine, '--acc': meta.accent }}>
 
-                {/* Cabecera del panel */}
                 <div className="las-panel-header">
-                    <div className="las-panel-spine" />
+                    <div className="las-panel-spine-bar" />
                     <div className="las-panel-header-content">
                         <div className="las-panel-title-block">
                             <span className="las-panel-tag">{meta.tag}</span>
@@ -164,44 +158,40 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                     <button className="las-panel-close" onClick={onClose} aria-label="Cerrar">✕</button>
                 </div>
 
-                {/* Barra de progreso */}
                 <div className="las-panel-bar">
                     <div className="las-panel-bar-fill" style={{ width: `${pct}%` }} />
                 </div>
 
-                {/* Chips de requisitos */}
                 <div className="las-panel-chips">
                     <span className={`las-chip${stars4 >= reqStars4 ? ' las-chip--met' : ''}`}>
-                        ⭐⭐⭐⭐ {Math.min(stars4, reqStars4)}/{reqStars4}
+                        <Star size={9} /><Star size={9} /><Star size={9} /><Star size={9} />
+                        &nbsp;{Math.min(stars4, reqStars4)}/{reqStars4}
                     </span>
                     {reqStars5 > 0 && (
                         <span className={`las-chip${stars5count >= reqStars5 ? ' las-chip--met' : ''}`}>
-                            ⭐⭐⭐⭐⭐ {Math.min(stars5count, reqStars5)}/{reqStars5}
+                            <Crown size={9} />&nbsp;{Math.min(stars5count, reqStars5)}/{reqStars5}
                         </span>
                     )}
                     <span className="las-chip las-chip--pct">{pct}% completado</span>
                     {isCompleted && <span className="las-chip las-chip--done">✓ Completado</span>}
                 </div>
 
-                {/* Página del álbum */}
                 <div className="las-panel-scroll">
                     <div className="las-album-page">
-                        {/* Encabezado de página */}
                         <div className="las-page-header">
-                            <div className="las-page-line" />
+                            <div className="las-page-header-line" />
                             <span className="las-page-label">Página {String(page + 1).padStart(2, '0')}</span>
-                            <div className="las-page-line" />
+                            <div className="las-page-header-line" />
                         </div>
 
-                        {/* Grid de figuritas 3 × 2 */}
                         <div className="las-sticker-grid">
                             {pageItems.map(({ idx, item }) => (
-                                <Sticker
+                                <PanelSticker
                                     key={idx}
                                     index={idx}
                                     card={item?.card ?? null}
                                     collectionItem={item ?? null}
-                                    meta={meta}
+                                    accent={meta.accent}
                                 />
                             ))}
                             {Array.from({ length: PER_PAGE - pageItems.length }).map((_, i) => (
@@ -209,13 +199,14 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                             ))}
                         </div>
 
-                        {/* Paginación */}
                         <div className="las-pagination">
                             <button
                                 className="las-page-btn"
                                 onClick={() => setPage(p => Math.max(0, p - 1))}
                                 disabled={page === 0}
-                            >‹</button>
+                            >
+                                <ChevronLeft size={14} />
+                            </button>
                             <div className="las-page-dots">
                                 {Array.from({ length: totalPages }).map((_, i) => (
                                     <button
@@ -229,13 +220,15 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                                 className="las-page-btn"
                                 onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
                                 disabled={page === totalPages - 1}
-                            >›</button>
+                            >
+                                <ChevronRight size={14} />
+                            </button>
                         </div>
                     </div>
 
                     {def?.reward_description && (
                         <div className="las-reward-bar">
-                            <span>🎁</span>
+                            <Gift size={13} className="las-reward-icon" />
                             <span>{def.reward_description}</span>
                         </div>
                     )}
@@ -245,9 +238,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
     );
 }
 
-/* ════════════════════════════════════════════════
-   LIBRO — tarjeta en la fila horizontal
-════════════════════════════════════════════════ */
 function AlbumBook({ albumId, meta, definitions, progress, collection, locked }) {
     const [panelOpen, setPanelOpen] = useState(false);
 
@@ -266,26 +256,31 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                 onClick={() => !locked && setPanelOpen(true)}
                 aria-disabled={locked}
             >
-                {/* Lomo */}
                 <div className="las-book-spine">
                     <span className="las-book-spine-num">{meta.number}</span>
                     <span className="las-book-spine-lbl">{meta.shortLabel}</span>
                 </div>
 
-                {/* Portada */}
                 <div className="las-book-cover">
                     <div className="las-book-grid-bg" />
 
                     <div className="las-book-tag">
-                        {locked ? '🔒 BLOQUEADO' : meta.tag}
+                        {locked
+                            ? <span className="las-book-tag-locked"><Lock size={6} strokeWidth={2.5} /> BLOQ.</span>
+                            : meta.tag
+                        }
                     </div>
 
                     <div className="las-book-title-block">
-                        <span className="las-book-icon">{meta.golden ? '✦' : '📖'}</span>
+                        <span className="las-book-icon">
+                            {meta.golden
+                                ? <Trophy size={14} strokeWidth={1.8} />
+                                : <BookOpen size={14} strokeWidth={1.8} />
+                            }
+                        </span>
                         <span className="las-book-title">{meta.label}</span>
                     </div>
 
-                    {/* Mini preview — 6 slots */}
                     {!locked ? (
                         <div className="las-book-preview">
                             {Array.from({ length: 6 }).map((_, i) => {
@@ -304,18 +299,17 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                         </div>
                     ) : (
                         <div className="las-book-locked-hint">
-                            Completa el álbum anterior para desbloquear
+                            Completa el álbum anterior
                         </div>
                     )}
 
-                    {/* Footer */}
                     <div className="las-book-footer">
                         <div className="las-book-pbar">
                             <div className="las-book-pbar-fill" style={{ width: `${pct}%` }} />
                         </div>
                         <div className="las-book-footer-row">
                             <span className="las-book-count">{filled}/{reqPlayers}</span>
-                            {isCompleted && <span className="las-book-done">✓</span>}
+                            {isCompleted && <span className="las-book-done-badge">✓</span>}
                             {!locked && <span className="las-book-hint">Abrir →</span>}
                         </div>
                     </div>
@@ -336,9 +330,6 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
     );
 }
 
-/* ════════════════════════════════════════════════
-   EXPORT PRINCIPAL
-════════════════════════════════════════════════ */
 export default function LegendaryAlbumsSection({ definitions, progress, collection }) {
     const isUnlocked = (albumId) => {
         const idx = ORDER.indexOf(albumId);
@@ -355,7 +346,6 @@ export default function LegendaryAlbumsSection({ definitions, progress, collecti
                 <span className="las-eyebrow-count">4 álbumes</span>
             </div>
 
-            {/* Fila horizontal 4 × 1 */}
             <div className="las-books-row">
                 {ORDER.map(albumId => (
                     <AlbumBook

@@ -1,19 +1,17 @@
-/* ════════════════════════════════════════════════
-   LEGENDARY ALBUMS SECTION — las-*
-   Grid de libros + interior tipo álbum Panini
-   Light / Dark completo
-════════════════════════════════════════════════ */
-
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@600;700;800&display=swap');
 
-/* ── RAÍZ ── */
+/* ════════════════════════════════════════════════
+   LEGENDARY ALBUMS SECTION — las-*
+════════════════════════════════════════════════ */
+
 .las-root {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }
 
-.las-section-eyebrow {
+/* ── Eyebrow ── */
+.las-eyebrow {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -25,7 +23,7 @@
     color: #a0a0b0;
 }
 
-[data-theme="dark"] .las-section-eyebrow {
+[data-theme="dark"] .las-eyebrow {
     color: #6E6680;
 }
 
@@ -48,23 +46,29 @@
 }
 
 /* ════════════════════════════════════════════════
-   GRID DE LIBROS — 2×2 escritorio, 1×2 móvil
+   FILA 4×1
 ════════════════════════════════════════════════ */
-.las-books-grid {
+.las-books-row {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
 }
 
-@media (max-width: 480px) {
-    .las-books-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
+@media (max-width: 700px) {
+    .las-books-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 420px) {
+    .las-books-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
     }
 }
 
 /* ════════════════════════════════════════════════
-   LIBRO — tarjeta visual
+   LIBRO
 ════════════════════════════════════════════════ */
 .las-book {
     display: flex;
@@ -74,66 +78,59 @@
     background: transparent;
     cursor: pointer;
     text-align: left;
-    border-radius: 4px;
+    border-radius: 3px;
     overflow: hidden;
-    box-shadow:
-        4px 4px 0 rgba(0, 0, 0, 0.15),
-        0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.18), 0 8px 24px rgba(0, 0, 0, 0.1);
     transition: transform 0.18s ease, box-shadow 0.18s ease;
     position: relative;
     aspect-ratio: 3/4;
-    min-height: 200px;
+    min-height: 160px;
 }
 
 .las-book:hover:not(.las-book--locked) {
-    transform: translateY(-4px) rotate(-0.5deg);
-    box-shadow:
-        6px 8px 0 rgba(0, 0, 0, 0.2),
-        0 16px 32px rgba(0, 0, 0, 0.18);
+    transform: translateY(-5px) rotate(-0.6deg);
+    box-shadow: 6px 10px 0 rgba(0, 0, 0, 0.22), 0 18px 36px rgba(0, 0, 0, 0.16);
 }
 
 .las-book:active:not(.las-book--locked) {
     transform: translateY(-1px) rotate(0deg);
-    box-shadow:
-        3px 3px 0 rgba(0, 0, 0, 0.15),
-        0 6px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .las-book--locked {
     cursor: not-allowed;
-    opacity: 0.55;
-    filter: grayscale(0.5);
+    opacity: 0.5;
+    filter: grayscale(0.6);
 }
 
 /* ── Lomo ── */
 .las-book-spine {
-    width: 18px;
+    width: 16px;
     flex-shrink: 0;
     background: var(--spine, #5b4fd8);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 0;
-    gap: 8px;
-}
-
-.las-book-spine-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 7px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.8);
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    transform: rotate(180deg);
+    padding: 8px 0;
 }
 
 .las-book-spine-num {
     font-family: 'DM Mono', monospace;
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.las-book-spine-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.75);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
 }
 
 /* ── Portada ── */
@@ -142,19 +139,17 @@
     background: #1a1726;
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    gap: 8px;
+    padding: 9px 8px 8px;
+    gap: 7px;
     position: relative;
     overflow: hidden;
 }
 
-/* Light mode — portada más clara pero mantiene estética oscura de álbum */
 [data-theme="light"] .las-book-cover {
     background: #1e1b30;
 }
 
-/* Cuadrícula de fondo tipo papel de álbum */
-.las-book-pattern {
+.las-book-grid-bg {
     position: absolute;
     inset: 0;
     background:
@@ -172,26 +167,35 @@
     background: #231800;
 }
 
-.las-book--golden .las-book-pattern {
+.las-book--golden .las-book-grid-bg {
     background:
         repeating-linear-gradient(0deg, transparent, transparent 11px, rgba(245, 158, 11, 0.04) 12px),
         repeating-linear-gradient(90deg, transparent, transparent 11px, rgba(245, 158, 11, 0.04) 12px);
 }
 
-/* ── Tag de edición ── */
+/* ── Tag ── */
 .las-book-tag {
     position: relative;
     z-index: 1;
     font-family: 'DM Mono', monospace;
-    font-size: 7px;
+    font-size: 6px;
     font-weight: 700;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--accent, #a599d9);
+    color: var(--acc, #a599d9);
     background: rgba(255, 255, 255, 0.04);
     border: 0.5px solid rgba(255, 255, 255, 0.08);
-    padding: 3px 6px;
+    padding: 2px 5px;
     width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.las-book-tag-locked {
+    display: flex;
+    align-items: center;
+    gap: 3px;
 }
 
 .las-book--golden .las-book-tag {
@@ -201,39 +205,44 @@
 }
 
 /* ── Título ── */
-.las-book-title-zone {
+.las-book-title-block {
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
 }
 
-.las-book-title-icon {
-    font-size: 1.1rem;
-    line-height: 1;
+.las-book-icon {
+    color: var(--acc, #a599d9);
+    display: flex;
+    align-items: center;
+}
+
+.las-book--golden .las-book-icon {
+    color: #f59e0b;
 }
 
 .las-book-title {
     font-family: 'Sora', sans-serif;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 800;
     color: rgba(255, 255, 255, 0.9);
     letter-spacing: -0.01em;
-    line-height: 1.1;
+    line-height: 1.15;
 }
 
-/* ── Mini grid preview ── */
-.las-book-preview-grid {
+/* ── Mini preview 2×3 ── */
+.las-book-preview {
     position: relative;
     z-index: 1;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 3px;
+    gap: 2px;
     flex: 1;
 }
 
-.las-book-preview-slot {
+.las-book-slot {
     background: rgba(255, 255, 255, 0.04);
     border: 0.5px dashed rgba(255, 255, 255, 0.1);
     border-radius: 2px;
@@ -242,30 +251,26 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    transition: border-color 0.15s;
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    font-weight: 700;
+    color: var(--acc, #a599d9);
 }
 
-.las-book-preview-slot--filled {
-    border-color: var(--accent, #a599d9);
+.las-book-slot--filled {
+    border-color: var(--acc, #a599d9);
     border-style: solid;
     background: rgba(255, 255, 255, 0.06);
 }
 
-.las-book-preview-img {
+.las-book-slot img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 2px;
 }
 
-.las-book-preview-initials {
-    font-family: 'DM Mono', monospace;
-    font-size: 7px;
-    font-weight: 700;
-    color: var(--accent, #a599d9);
-}
-
-.las-book-locked-msg {
+.las-book-locked-hint {
     position: relative;
     z-index: 1;
     flex: 1;
@@ -273,38 +278,38 @@
     align-items: center;
     justify-content: center;
     font-family: 'DM Mono', monospace;
-    font-size: 8px;
-    color: rgba(255, 255, 255, 0.25);
+    font-size: 7px;
+    color: rgba(255, 255, 255, 0.22);
     text-align: center;
-    letter-spacing: 0.06em;
-    padding: 8px 4px;
+    letter-spacing: 0.05em;
     line-height: 1.5;
+    padding: 6px 2px;
 }
 
-/* ── Footer del libro ── */
+/* ── Footer ── */
 .las-book-footer {
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
 }
 
-.las-book-progress-bar {
+.las-book-pbar {
     height: 2px;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 1px;
     overflow: hidden;
 }
 
-.las-book-progress-fill {
+.las-book-pbar-fill {
     height: 100%;
-    background: var(--accent, #a599d9);
+    background: var(--acc, #a599d9);
     border-radius: 1px;
     transition: width 0.5s ease;
 }
 
-.las-book--golden .las-book-progress-fill {
+.las-book--golden .las-book-pbar-fill {
     background: linear-gradient(90deg, #b45309, #f59e0b);
 }
 
@@ -316,132 +321,181 @@
 
 .las-book-count {
     font-family: 'DM Mono', monospace;
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.35);
 }
 
 .las-book-done-badge {
-    font-size: 9px;
-    font-weight: 800;
-    color: #22c55e;
-    font-family: 'DM Mono', monospace;
-}
-
-.las-book-open-hint {
     font-family: 'DM Mono', monospace;
     font-size: 8px;
+    font-weight: 800;
+    color: #22c55e;
+}
+
+.las-book-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
     font-weight: 700;
-    color: var(--accent, #a599d9);
+    color: var(--acc, #a599d9);
     opacity: 0;
     transition: opacity 0.15s;
 }
 
-.las-book:hover .las-book-open-hint {
+.las-book:hover .las-book-hint {
     opacity: 1;
 }
 
 /* ════════════════════════════════════════════════
-   INTERIOR DEL ÁLBUM — ocupa el contenedor padre
+   PANEL FLOTANTE
+   Respeta: topbar 56px (top) y sidebar 80px (left en desktop)
 ════════════════════════════════════════════════ */
-.las-interior {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    background: #f0ede8;
-    border-radius: 0;
-    animation: las-interior-in 0.2s ease;
+.las-panel-overlay {
+    position: fixed;
+    /* Cubre toda la ventana excepto topbar y sidebar */
+    top: var(--topbar-h, 56px);
+    left: var(--sidebar-w, 80px);
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 100;
+    animation: las-overlay-in 0.2s ease;
 }
 
-[data-theme="dark"] .las-interior {
-    background: #13111A;
+/* En mobile no hay sidebar */
+@media (max-width: 768px) {
+    .las-panel-overlay {
+        top: 60px;
+        /* MobileHeader height */
+        left: 0;
+    }
 }
 
-@keyframes las-interior-in {
+@keyframes las-overlay-in {
     from {
         opacity: 0;
-        transform: translateY(8px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
-/* ── Header interior ── */
-.las-interior-header {
+.las-panel {
+    position: fixed;
+    /* Parte desde debajo del topbar */
+    top: var(--topbar-h, 56px);
+    right: 0;
+    bottom: 0;
+    width: min(480px, calc(100vw - var(--sidebar-w, 80px)));
+    background: #f0ede8;
+    border-left: 0.5px solid #d4cfc8;
+    z-index: 101;
     display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 0 10px;
-    border-bottom: 0.5px solid #d4cfc8;
-    flex-shrink: 0;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.15);
+    animation: las-panel-in 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-[data-theme="dark"] .las-interior-header {
+[data-theme="dark"] .las-panel {
+    background: #13111A;
+    border-left-color: #2A2638;
+    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.45);
+}
+
+/* En mobile ocupa todo el ancho disponible desde el header mobile */
+@media (max-width: 768px) {
+    .las-panel {
+        top: 60px;
+        width: 100vw;
+    }
+}
+
+@keyframes las-panel-in {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* ── Header del panel ── */
+.las-panel-header {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 0.5px solid #d4cfc8;
+    flex-shrink: 0;
+    position: relative;
+}
+
+[data-theme="dark"] .las-panel-header {
     border-bottom-color: #2A2638;
 }
 
-.las-interior-back {
+.las-panel-spine-bar {
+    width: 5px;
+    flex-shrink: 0;
+    background: var(--spine, #5b4fd8);
+}
+
+.las-panel-header-content {
+    flex: 1;
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #5b4fd8;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    flex-shrink: 0;
-    transition: color 0.12s;
+    justify-content: space-between;
+    padding: 14px 40px 14px 16px;
+    gap: 12px;
+    min-width: 0;
 }
 
-.las-interior-back:hover {
-    color: #4a3fc7;
-}
-
-[data-theme="dark"] .las-interior-back {
-    color: #A599D9;
-}
-
-.las-interior-title-zone {
-    flex: 1;
+.las-panel-title-block {
     display: flex;
     flex-direction: column;
     gap: 2px;
     min-width: 0;
 }
 
-.las-interior-tag {
+.las-panel-tag {
     font-family: 'DM Mono', monospace;
     font-size: 8px;
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--accent, #a599d9);
+    color: var(--acc, #a599d9);
 }
 
-.las-interior-title {
+.las-panel-title {
     font-family: 'Sora', sans-serif;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 800;
     color: #1a1726;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+[data-theme="dark"] .las-panel-title {
+    color: #F0EDF8;
+}
+
+.las-panel-req {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: #a0a0b0;
+    letter-spacing: 0.04em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-[data-theme="dark"] .las-interior-title {
-    color: #F0EDF8;
+[data-theme="dark"] .las-panel-req {
+    color: #6E6680;
 }
 
-.las-interior-counter {
+.las-panel-counter-block {
     display: flex;
     align-items: baseline;
     gap: 2px;
@@ -449,62 +503,99 @@
     flex-shrink: 0;
 }
 
-.las-interior-count-fill {
-    font-size: 22px;
+.las-panel-count-n {
+    font-size: 26px;
     font-weight: 800;
-    color: var(--accent, #a599d9);
+    color: var(--acc, #a599d9);
     line-height: 1;
 }
 
-.las-interior-count-sep {
-    font-size: 13px;
+.las-panel-count-sep {
+    font-size: 14px;
     color: #d4cfc8;
 }
 
-[data-theme="dark"] .las-interior-count-sep {
+[data-theme="dark"] .las-panel-count-sep {
     color: #38334F;
 }
 
-.las-interior-count-total {
-    font-size: 14px;
+.las-panel-count-t {
+    font-size: 15px;
     color: #a0a0b0;
 }
 
-[data-theme="dark"] .las-interior-count-total {
+[data-theme="dark"] .las-panel-count-t {
     color: #6E6680;
 }
 
-/* ── Barra interior ── */
-.las-interior-bar-wrap {
+.las-panel-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.06);
+    border: none;
+    border-radius: 50%;
+    font-size: 12px;
+    color: #a0a0b0;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.las-panel-close:hover {
+    background: rgba(0, 0, 0, 0.12);
+    color: #2a2535;
+}
+
+[data-theme="dark"] .las-panel-close {
+    background: rgba(255, 255, 255, 0.06);
+    color: #6E6680;
+}
+
+[data-theme="dark"] .las-panel-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #F0EDF8;
+}
+
+/* ── Barra ── */
+.las-panel-bar {
     height: 3px;
     background: #d4cfc8;
     flex-shrink: 0;
 }
 
-[data-theme="dark"] .las-interior-bar-wrap {
+[data-theme="dark"] .las-panel-bar {
     background: #2A2638;
 }
 
-.las-interior-bar-fill {
+.las-panel-bar-fill {
     height: 100%;
-    background: var(--accent, #a599d9);
+    background: var(--acc, #a599d9);
     transition: width 0.5s ease;
 }
 
 /* ── Chips ── */
-.las-interior-chips {
+.las-panel-chips {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 6px;
-    padding: 10px 0 8px;
+    padding: 10px 16px 8px;
     flex-shrink: 0;
 }
 
 .las-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
     font-family: 'DM Mono', monospace;
     font-size: 9px;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 4px 10px;
     border: 0.5px solid #d4cfc8;
@@ -538,33 +629,38 @@
     color: #6E6680;
 }
 
-/* ── Scroll interior ── */
-.las-interior-scroll {
+/* ── Scroll ── */
+.las-panel-scroll {
     flex: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding: 12px 16px 24px;
     scrollbar-width: thin;
     scrollbar-color: rgba(91, 79, 216, 0.2) transparent;
 }
 
-.las-interior-scroll::-webkit-scrollbar {
+.las-panel-scroll::-webkit-scrollbar {
     width: 3px;
 }
 
-.las-interior-scroll::-webkit-scrollbar-thumb {
+.las-panel-scroll::-webkit-scrollbar-thumb {
     background: rgba(91, 79, 216, 0.2);
     border-radius: 2px;
 }
 
+[data-theme="dark"] .las-panel-scroll {
+    scrollbar-color: rgba(139, 127, 199, 0.2) transparent;
+}
+
 /* ════════════════════════════════════════════════
-   PÁGINA DEL ÁLBUM — estética Panini
+   PÁGINA DEL ÁLBUM
 ════════════════════════════════════════════════ */
 .las-album-page {
     background: #faf8f4;
     border: 0.5px solid #d4cfc8;
-    padding: 16px;
+    padding: 14px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -576,24 +672,17 @@
     border-color: #2A2638;
 }
 
-/* Líneas horizontales de página tipo libreta */
 .las-album-page::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(0deg,
-            transparent,
-            transparent 31px,
-            rgba(0, 0, 0, 0.03) 32px);
+    background: repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(0, 0, 0, 0.03) 32px);
     pointer-events: none;
     z-index: 0;
 }
 
 [data-theme="dark"] .las-album-page::before {
-    background: repeating-linear-gradient(0deg,
-            transparent,
-            transparent 31px,
-            rgba(255, 255, 255, 0.02) 32px);
+    background: repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(255, 255, 255, 0.02) 32px);
 }
 
 .las-page-header {
@@ -628,9 +717,7 @@
     color: #6E6680;
 }
 
-/* ════════════════════════════════════════════════
-   GRID DE FIGURITAS — 3 columnas
-════════════════════════════════════════════════ */
+/* ── Grid 3×2 ── */
 .las-sticker-grid {
     position: relative;
     z-index: 1;
@@ -657,7 +744,6 @@
     transition: transform 0.15s, box-shadow 0.15s;
 }
 
-/* Vacío */
 .las-sticker--empty {
     border: 1px dashed #c8c3bb;
     background: rgba(0, 0, 0, 0.02);
@@ -667,11 +753,6 @@
 [data-theme="dark"] .las-sticker--empty {
     border-color: #2A2638;
     background: rgba(255, 255, 255, 0.01);
-}
-
-.las-sticker--golden-empty {
-    border-color: rgba(245, 158, 11, 0.2);
-    background: rgba(245, 158, 11, 0.02);
 }
 
 .las-sticker-sil {
@@ -703,7 +784,6 @@
     color: #38334F;
 }
 
-/* Relleno */
 .las-sticker--filled {
     border: 1px solid color-mix(in srgb, var(--meta-accent, #a599d9) 50%, transparent);
     background: color-mix(in srgb, var(--meta-accent, #a599d9) 8%, #faf8f4);
@@ -731,16 +811,6 @@
     background: color-mix(in srgb, #f59e0b 10%, #1a1726) !important;
 }
 
-.las-sticker--golden {
-    border-color: rgba(245, 158, 11, 0.5) !important;
-    background: color-mix(in srgb, #f59e0b 8%, #faf8f4) !important;
-}
-
-[data-theme="dark"] .las-sticker--golden {
-    background: color-mix(in srgb, #f59e0b 8%, #1a1726) !important;
-}
-
-/* Número */
 .las-sticker-num {
     position: absolute;
     top: 4px;
@@ -766,17 +836,15 @@
     color: rgba(255, 255, 255, 0.25);
 }
 
-/* Corona GOAT */
 .las-sticker-crown {
     position: absolute;
     top: 4px;
     right: 5px;
-    font-size: 9px;
-    line-height: 1;
     color: #f59e0b;
+    display: flex;
+    align-items: center;
 }
 
-/* Imagen/avatar */
 .las-sticker-img-zone {
     flex: 1;
     width: 100%;
@@ -810,7 +878,6 @@
     color: var(--meta-accent, #a599d9);
 }
 
-/* Info inferior */
 .las-sticker-info {
     width: 100%;
     display: flex;
@@ -883,14 +950,11 @@
     border: 0.5px solid #d4cfc8;
     background: transparent;
     color: #a0a0b0;
-    font-size: 16px;
-    line-height: 1;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: color 0.12s, border-color 0.12s;
-    font-family: 'DM Mono', monospace;
 }
 
 [data-theme="dark"] .las-page-btn {
@@ -965,5 +1029,6 @@
 }
 
 .las-reward-icon {
-    font-size: 14px;
+    flex-shrink: 0;
+    color: var(--acc, #a599d9);
 }

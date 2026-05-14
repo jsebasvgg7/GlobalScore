@@ -277,7 +277,7 @@ export default function App() {
           />
           <Route
             path="/albums"
-            element={session ? <AlbumsPage /> : <Navigate to="/" replace />}
+            element={session ? <AlbumsPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
 
           <Route
