@@ -1,55 +1,185 @@
+/* ════════════════════════════════════════════════
+   ALBUMS SECTION NAV — asn-*
+════════════════════════════════════════════════ */
+
 .asn-root {
     display: flex;
-    gap: 4px;
-    background: var(--color-surface-raised, #1e1e32);
-    border-radius: 12px;
-    padding: 4px;
+    align-items: flex-end;
+    gap: 0;
+    margin-top: 28px;
+    border-bottom: 0.5px solid #d4cfc8;
+    position: relative;
+}
+
+[data-theme="dark"] .asn-root {
+    border-bottom-color: #38334F;
 }
 
 .asn-tab {
-    flex: 1;
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 8px 12px;
+    gap: 8px;
+    padding: 10px 20px 12px;
     border: none;
-    border-radius: 9px;
+    border-bottom: 2px solid transparent;
     background: transparent;
-    color: var(--color-text-muted, #888);
-    font-size: 0.85rem;
+    color: #a0a0b0;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
     font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: color 0.15s ease, border-color 0.15s ease;
     white-space: nowrap;
+    margin-bottom: -0.5px;
 }
 
 .asn-tab:hover {
-    background: var(--color-surface, #252540);
-    color: var(--color-text, #eee);
+    color: #2a2535;
 }
 
+[data-theme="dark"] .asn-tab {
+    color: #6E6680;
+}
+
+[data-theme="dark"] .asn-tab:hover {
+    color: #B8B0D0;
+}
+
+/* ── Activo ── */
 .asn-tab--active {
-    background: var(--color-primary, #7c6af7);
-    color: #fff;
-    font-weight: 600;
+    color: #5b4fd8;
+    border-bottom-color: #5b4fd8;
+}
+
+[data-theme="dark"] .asn-tab--active {
+    color: #A599D9;
+    border-bottom-color: #A599D9;
+}
+
+/* ── Ícono contenedor con número de ítems ── */
+.asn-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: rgba(166, 158, 148, 0.18);
+    border: 0.5px solid #d4cfc8;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    flex-shrink: 0;
+}
+
+.asn-tab--active .asn-icon-wrap {
+    background: rgba(91, 79, 216, 0.1);
+    border-color: rgba(91, 79, 216, 0.25);
+}
+
+[data-theme="dark"] .asn-icon-wrap {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: #38334F;
+}
+
+[data-theme="dark"] .asn-tab--active .asn-icon-wrap {
+    background: rgba(139, 127, 199, 0.12);
+    border-color: rgba(139, 127, 199, 0.3);
 }
 
 .asn-icon {
-    font-size: 1rem;
+    font-size: 0.85rem;
     line-height: 1;
 }
 
+/* ── Label ── */
+.asn-label {
+    letter-spacing: 0.1em;
+}
+
+/* ── Badge de cantidad ── */
+.asn-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 16px;
+    padding: 0 5px;
+    background: rgba(166, 158, 148, 0.2);
+    border: 0.5px solid #d4cfc8;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #a0a0b0;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.asn-tab--active .asn-count {
+    background: rgba(91, 79, 216, 0.1);
+    border-color: rgba(91, 79, 216, 0.25);
+    color: #5b4fd8;
+}
+
+[data-theme="dark"] .asn-count {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: #38334F;
+    color: #6E6680;
+}
+
+[data-theme="dark"] .asn-tab--active .asn-count {
+    background: rgba(139, 127, 199, 0.12);
+    border-color: rgba(139, 127, 199, 0.3);
+    color: #A599D9;
+}
+
+/* ── Separador vertical entre tabs ── */
+.asn-tab+.asn-tab::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 25%;
+    bottom: 25%;
+    width: 0.5px;
+    background: #d4cfc8;
+}
+
+[data-theme="dark"] .asn-tab+.asn-tab::before {
+    background: #38334F;
+}
+
+.asn-tab--active+.asn-tab::before,
+.asn-tab:has(+ .asn-tab--active)::before {
+    opacity: 0;
+}
+
+/* ── Mobile ── */
 @media (max-width: 480px) {
+    .asn-tab {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 8px 12px;
+        gap: 5px;
+    }
+
     .asn-label {
         display: none;
     }
 
-    .asn-tab {
-        padding: 10px;
+    .asn-icon-wrap {
+        width: 28px;
+        height: 28px;
     }
 
-    .asn-icon {
-        font-size: 1.2rem;
+    .asn-count {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        min-width: 14px;
+        height: 14px;
+        font-size: 8px;
     }
 }

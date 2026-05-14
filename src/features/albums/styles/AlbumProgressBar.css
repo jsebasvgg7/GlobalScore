@@ -8,20 +8,20 @@
 .apb-bar-wrap {
     width: 100%;
     height: 8px;
-    background: var(--color-surface-raised, #2a2a3a);
+    background: rgba(166, 158, 148, 0.28);
     border-radius: 4px;
     overflow: hidden;
 }
 
 .apb-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--color-primary, #7c6af7), #a78bfa);
+    background: linear-gradient(90deg, #5b4fd8, #8b7fc7);
     border-radius: 4px;
     transition: width 0.4s ease;
 }
 
 .apb-root--compact .apb-bar-wrap {
-    height: 5px;
+    height: 4px;
 }
 
 .apb-meta {
@@ -32,14 +32,33 @@
 
 .apb-label {
     font-size: 0.72rem;
-    color: var(--color-text-muted, #888);
+    color: #a0a0b0;
+    font-family: 'DM Mono', monospace;
 }
 
 .apb-packs-badge {
     font-size: 0.72rem;
     font-weight: 600;
-    color: var(--color-primary, #7c6af7);
-    background: color-mix(in srgb, var(--color-primary, #7c6af7) 15%, transparent);
+    color: #5b4fd8;
+    background: rgba(91, 79, 216, 0.1);
     padding: 2px 8px;
     border-radius: 20px;
+}
+
+/* ── DARK MODE ── */
+[data-theme="dark"] .apb-bar-wrap {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .apb-bar-fill {
+    background: linear-gradient(90deg, #7366B3, #A599D9);
+}
+
+[data-theme="dark"] .apb-label {
+    color: #6E6680;
+}
+
+[data-theme="dark"] .apb-packs-badge {
+    color: #A599D9;
+    background: rgba(139, 127, 199, 0.12);
 }

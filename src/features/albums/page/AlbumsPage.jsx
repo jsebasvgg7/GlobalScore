@@ -22,7 +22,7 @@ export default function AlbumsPage({ currentUser }) {
     const { packs, barPercent, packsAvailable, refresh: refreshPacks } = useAlbumPacks(user?.id);
     const { collection, loading: collectionLoading, refresh: refreshCollection } = useAlbumCollection(user?.id);
     const { progress, refresh: refreshProgress } = useAlbumProgress(user?.id);
-    const { definitions, legendary, stars, cult } = useAlbumDefinitions();
+    const { legendary, cult } = useAlbumDefinitions();
 
     const { open, reset, phase, result, isGoat, isLegend, setPhase } = usePackOpening({
         onPackOpened: () => {
@@ -36,23 +36,6 @@ export default function AlbumsPage({ currentUser }) {
         getAlbumCards().then(setAllCards).catch(console.error);
     }, []);
 
-    const handleOpenModal = () => {
-        reset();
-        setModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        reset();
-        setModalOpen(false);
-    };
-
-    const handlePackOpen = () => open(user?.id);
-
-
-    const handleReset = () => {
-        reset();
-    };
-
     useEffect(() => {
         if (phase === 'revealing') {
             const t = setTimeout(() => setPhase('done'), 3200);
@@ -60,33 +43,49 @@ export default function AlbumsPage({ currentUser }) {
         }
     }, [phase, setPhase]);
 
+    const handleOpenModal = () => { reset(); setModalOpen(true); };
+    const handleCloseModal = () => { reset(); setModalOpen(false); };
+
     return (
         <div className="alp-root page-root">
-            <div className="alp-container container">
+            <div className="alp-container">
 
-                {/* Header */}
-                <div className="alp-header">
-                    <div className="alp-header-left">
-                        <h1 className="alp-title">📖 GlobalAlbums</h1>
-                        <p className="alp-subtitle">Colecciona, completa y demuestra quién sabe de fútbol</p>
+                {/* ── Hero ── */}
+                <div className="alp-hero">
+                    <div className="alp-hero-left">
+                        <div className="alp-hero-eyebrow">
+                            <span className="alp-hero-eyebrow-dot" />
+                            Temporada 25 · 26
+                        </div>
+                        <h1 className="alp-hero-title">
+                            Global<span className="alp-hero-title-accent">Albums</span>
+                        </h1>
+                        <p className="alp-hero-sub">
+                            Colecciona · Completa · Demuestra quién sabe de fútbol
+                        </p>
                     </div>
 
                     {packsAvailable > 0 && (
                         <button className="alp-open-btn" onClick={handleOpenModal}>
-                            📦 Abrir {packsAvailable === 1 ? 'sobre' : `${packsAvailable} sobres`}
+                            <span className="alp-open-btn-count">{packsAvailable}</span>
+                            Abrir {packsAvailable === 1 ? 'sobre' : 'sobres'}
                         </button>
                     )}
                 </div>
 
-                {/* Progress bar */}
+                {/* ── Barra de progreso ── */}
                 <div className="alp-bar-section">
+                    <div className="alp-bar-header">
+                        <span className="alp-bar-label">Progreso · próximo sobre</span>
+                        <span className="alp-bar-pct">{barPercent}%</span>
+                    </div>
                     <AlbumProgressBar percent={barPercent} packsAvailable={packsAvailable} />
                 </div>
 
-                {/* Nav */}
+                {/* ── Nav ── */}
                 <AlbumsSectionNav active={activeSection} onChange={setActiveSection} />
 
-                {/* Sections */}
+                {/* ── Contenido ── */}
                 <div className="alp-section-content">
                     {activeSection === 'legendary' && (
                         <LegendaryAlbumsSection
@@ -95,14 +94,12 @@ export default function AlbumsPage({ currentUser }) {
                             collection={collection}
                         />
                     )}
-
                     {activeSection === 'stars' && !collectionLoading && (
                         <StarCollectionSection
                             collection={collection}
                             allCards={allCards}
                         />
                     )}
-
                     {activeSection === 'cult' && !collectionLoading && (
                         <CultAlbumsSection
                             definitions={cult}
@@ -121,9 +118,9 @@ export default function AlbumsPage({ currentUser }) {
                 packsAvailable={packsAvailable}
                 isGoat={isGoat}
                 isLegend={isLegend}
-                onOpen={handlePackOpen}
+                onOpen={() => open(user?.id)}
                 onClose={handleCloseModal}
-                onReset={handleReset}
+                onReset={reset}
             />
         </div>
     );
