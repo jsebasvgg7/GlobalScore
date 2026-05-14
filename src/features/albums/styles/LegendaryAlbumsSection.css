@@ -51,7 +51,8 @@
 .las-books-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: 20px;
+    padding-bottom: 12px;
 }
 
 @media (max-width: 700px) {
@@ -63,8 +64,45 @@
 @media (max-width: 420px) {
     .las-books-row {
         grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
+        gap: 12px;
     }
+}
+
+/* ════════════════════════════════════════════════
+   WRAPPER 3D — contiene páginas + libro
+════════════════════════════════════════════════ */
+.las-book-wrapper {
+    position: relative;
+    perspective: 800px;
+    transform-style: preserve-3d;
+}
+
+/* Páginas apiladas detrás del libro (efecto canto) */
+.las-book-pages-stack {
+    position: absolute;
+    top: 4px;
+    right: -5px;
+    bottom: 4px;
+    width: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    gap: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.las-book-page-leaf {
+    flex: 1;
+    background: color-mix(in srgb, var(--acc, #a599d9) 18%, #e8e4dc);
+    border-right: 0.5px solid color-mix(in srgb, var(--acc, #a599d9) 30%, #c8c3bb);
+    transform: translateX(calc(var(--leaf-i, 0) * 1px));
+    opacity: calc(0.6 - var(--leaf-i, 0) * 0.15);
+}
+
+[data-theme="dark"] .las-book-page-leaf {
+    background: color-mix(in srgb, var(--acc, #a599d9) 12%, #1e1c28);
+    border-right-color: color-mix(in srgb, var(--acc, #a599d9) 20%, #2a2638);
 }
 
 /* ════════════════════════════════════════════════
@@ -78,56 +116,74 @@
     background: transparent;
     cursor: pointer;
     text-align: left;
-    border-radius: 3px;
+    border-radius: 2px;
     overflow: hidden;
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.18), 0 8px 24px rgba(0, 0, 0, 0.1);
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    box-shadow:
+        4px 4px 0 rgba(0, 0, 0, 0.28),
+        8px 8px 24px rgba(0, 0, 0, 0.18),
+        inset 1px 0 0 rgba(255, 255, 255, 0.06);
+    transition:
+        transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
     aspect-ratio: 3/4;
     min-height: 160px;
+    z-index: 1;
+    transform-style: preserve-3d;
+    transform-origin: left center;
 }
 
-.las-book:hover:not(.las-book--locked) {
-    transform: translateY(-5px) rotate(-0.6deg);
-    box-shadow: 6px 10px 0 rgba(0, 0, 0, 0.22), 0 18px 36px rgba(0, 0, 0, 0.16);
+.las-book--hovered:not(.las-book--locked) {
+    transform: rotateY(-8deg) translateY(-6px) translateX(2px);
+    box-shadow:
+        12px 14px 0 rgba(0, 0, 0, 0.3),
+        20px 24px 40px rgba(0, 0, 0, 0.22),
+        inset 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
-.las-book:active:not(.las-book--locked) {
-    transform: translateY(-1px) rotate(0deg);
-    box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.las-book--locked {
+.las-book-wrapper--locked .las-book {
     cursor: not-allowed;
-    opacity: 0.5;
-    filter: grayscale(0.6);
+    opacity: 0.52;
+    filter: grayscale(0.7) brightness(0.75);
 }
 
 /* ── Lomo ── */
 .las-book-spine {
-    width: 16px;
+    width: 18px;
     flex-shrink: 0;
-    background: var(--spine, #5b4fd8);
+    background: linear-gradient(180deg, var(--spine, #5b4fd8) 0%, var(--spine-alt, #3d34a5) 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 0;
+    padding: 10px 0;
+    box-shadow: inset -2px 0 6px rgba(0, 0, 0, 0.35), inset 1px 0 0 rgba(255, 255, 255, 0.12);
+    position: relative;
+}
+
+.las-book-spine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .las-book-spine-num {
     font-family: 'DM Mono', monospace;
     font-size: 8px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.55);
 }
 
 .las-book-spine-lbl {
     font-family: 'DM Mono', monospace;
     font-size: 6px;
     font-weight: 700;
-    letter-spacing: 0.08em;
-    color: rgba(255, 255, 255, 0.75);
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.8);
     writing-mode: vertical-rl;
     text-orientation: mixed;
     transform: rotate(180deg);
@@ -136,41 +192,103 @@
 /* ── Portada ── */
 .las-book-cover {
     flex: 1;
-    background: #1a1726;
+    background: var(--cover-bg, #1a1726);
     display: flex;
     flex-direction: column;
     padding: 9px 8px 8px;
-    gap: 7px;
+    gap: 6px;
     position: relative;
     overflow: hidden;
-}
-
-[data-theme="light"] .las-book-cover {
-    background: #1e1b30;
 }
 
 .las-book-grid-bg {
     position: absolute;
     inset: 0;
     background:
-        repeating-linear-gradient(0deg, transparent, transparent 11px, rgba(255, 255, 255, 0.025) 12px),
-        repeating-linear-gradient(90deg, transparent, transparent 11px, rgba(255, 255, 255, 0.025) 12px);
+        repeating-linear-gradient(0deg, transparent, transparent 11px, rgba(255, 255, 255, 0.022) 12px),
+        repeating-linear-gradient(90deg, transparent, transparent 11px, rgba(255, 255, 255, 0.022) 12px);
     pointer-events: none;
     z-index: 0;
 }
 
-.las-book--golden .las-book-cover {
-    background: #1a1200;
+/* Acento lateral (borde de color) en la portada */
+.las-book-cover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg,
+            rgba(var(--acc-rgb, 165, 153, 217), 0.5) 0%,
+            rgba(var(--acc-rgb, 165, 153, 217), 0.1) 100%);
+    pointer-events: none;
+    z-index: 2;
 }
 
-[data-theme="light"] .las-book--golden .las-book-cover {
-    background: #231800;
+/* ── Insignia de rareza embossed ── */
+.las-rarity-badge {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+    align-self: flex-end;
+    background: rgba(var(--acc-rgb, 165, 153, 217), 0.08);
+    border: 0.5px solid rgba(var(--acc-rgb, 165, 153, 217), 0.3);
+    padding: 3px 5px 2px;
+    backdrop-filter: blur(2px);
 }
 
-.las-book--golden .las-book-grid-bg {
-    background:
-        repeating-linear-gradient(0deg, transparent, transparent 11px, rgba(245, 158, 11, 0.04) 12px),
-        repeating-linear-gradient(90deg, transparent, transparent 11px, rgba(245, 158, 11, 0.04) 12px);
+.las-rarity-badge--golden {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.45);
+    box-shadow:
+        0 0 8px rgba(245, 158, 11, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: las-golden-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes las-golden-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 6px rgba(245, 158, 11, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 0 14px rgba(245, 158, 11, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+}
+
+.las-rarity-badge-stars {
+    display: flex;
+    gap: 1px;
+}
+
+.las-rarity-star {
+    font-size: 7px;
+    color: var(--acc, #a599d9);
+    line-height: 1;
+}
+
+.las-rarity-badge--golden .las-rarity-star {
+    color: #f59e0b;
+}
+
+.las-rarity-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 5px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--acc, #a599d9);
+    line-height: 1;
+}
+
+.las-rarity-badge--golden .las-rarity-label {
+    color: #f59e0b;
 }
 
 /* ── Tag ── */
@@ -227,7 +345,7 @@
     font-family: 'Sora', sans-serif;
     font-size: 11px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.92);
     letter-spacing: -0.01em;
     line-height: 1.15;
 }
@@ -255,10 +373,15 @@
     font-size: 6px;
     font-weight: 700;
     color: var(--acc, #a599d9);
+    transition: border-color 0.2s;
+}
+
+.las-book--hovered .las-book-slot {
+    border-color: rgba(255, 255, 255, 0.06);
 }
 
 .las-book-slot--filled {
-    border-color: var(--acc, #a599d9);
+    border-color: color-mix(in srgb, var(--acc, #a599d9) 55%, transparent);
     border-style: solid;
     background: rgba(255, 255, 255, 0.06);
 }
@@ -270,20 +393,167 @@
     border-radius: 2px;
 }
 
-.las-book-locked-hint {
+/* ════════════════════════════════════════════════
+   LOCK DRAMÁTICO
+════════════════════════════════════════════════ */
+.las-book-locked-zone {
     position: relative;
     z-index: 1;
     flex: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    overflow: hidden;
+}
+
+.las-lock-fog {
+    position: absolute;
+    inset: -10px;
+    background: radial-gradient(ellipse at center,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.55) 60%,
+            rgba(0, 0, 0, 0.85) 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.las-lock-icon-wrap {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+/* Cadenas laterales */
+.las-lock-chain {
+    position: absolute;
+    top: -10px;
+    width: 1px;
+    height: 22px;
+    background: repeating-linear-gradient(180deg,
+            rgba(255, 255, 255, 0.25) 0px,
+            rgba(255, 255, 255, 0.25) 3px,
+            transparent 3px,
+            transparent 6px);
+}
+
+.las-lock-chain--left {
+    left: -14px;
+    transform: rotate(-18deg);
+}
+
+.las-lock-chain--right {
+    right: -14px;
+    transform: rotate(18deg);
+}
+
+.las-lock-body {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.35);
+    position: relative;
+    z-index: 1;
+}
+
+.las-lock-pulse {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    animation: las-lock-pulse 2.8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes las-lock-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    70% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+}
+
+.las-lock-label {
+    position: relative;
+    z-index: 1;
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.2);
+    text-align: center;
+    line-height: 1.5;
+    padding: 0 4px;
+}
+
+/* ════════════════════════════════════════════════
+   PÁGINAS APILADAS (PROGRESO)
+════════════════════════════════════════════════ */
+.las-stacked-pages {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 10px;
+    position: relative;
+}
+
+.las-page-leaf {
+    flex: 1;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1px;
+    transition: background 0.4s, border-color 0.4s;
+    transform-origin: bottom;
+    animation: las-leaf-appear 0.3s ease both;
+    animation-delay: calc(var(--leaf-offset, 0px) * 0.05);
+}
+
+.las-page-leaf--filled {
+    background: color-mix(in srgb, var(--acc, #a599d9) 55%, transparent);
+    border-color: color-mix(in srgb, var(--acc, #a599d9) 70%, transparent);
+}
+
+@keyframes las-leaf-appear {
+    from {
+        transform: scaleY(0.3);
+        opacity: 0;
+    }
+
+    to {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
+.las-stacked-pct {
     font-family: 'DM Mono', monospace;
     font-size: 7px;
-    color: rgba(255, 255, 255, 0.22);
-    text-align: center;
-    letter-spacing: 0.05em;
-    line-height: 1.5;
-    padding: 6px 2px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.3);
+    margin-left: 3px;
+    white-space: nowrap;
+    line-height: 1;
+    align-self: center;
 }
 
 /* ── Footer ── */
@@ -293,24 +563,6 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-}
-
-.las-book-pbar {
-    height: 2px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 1px;
-    overflow: hidden;
-}
-
-.las-book-pbar-fill {
-    height: 100%;
-    background: var(--acc, #a599d9);
-    border-radius: 1px;
-    transition: width 0.5s ease;
-}
-
-.las-book--golden .las-book-pbar-fill {
-    background: linear-gradient(90deg, #b45309, #f59e0b);
 }
 
 .las-book-footer-row {
@@ -323,7 +575,7 @@
     font-family: 'DM Mono', monospace;
     font-size: 8px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.28);
 }
 
 .las-book-done-badge {
@@ -339,20 +591,18 @@
     font-weight: 700;
     color: var(--acc, #a599d9);
     opacity: 0;
-    transition: opacity 0.15s;
+    transition: opacity 0.2s;
 }
 
-.las-book:hover .las-book-hint {
+.las-book--hovered .las-book-hint {
     opacity: 1;
 }
 
 /* ════════════════════════════════════════════════
    PANEL FLOTANTE
-   Respeta: topbar 56px (top) y sidebar 80px (left en desktop)
 ════════════════════════════════════════════════ */
 .las-panel-overlay {
     position: fixed;
-    /* Cubre toda la ventana excepto topbar y sidebar */
     top: var(--topbar-h, 56px);
     left: var(--sidebar-w, 80px);
     right: 0;
@@ -363,11 +613,9 @@
     animation: las-overlay-in 0.2s ease;
 }
 
-/* En mobile no hay sidebar */
 @media (max-width: 768px) {
     .las-panel-overlay {
         top: 60px;
-        /* MobileHeader height */
         left: 0;
     }
 }
@@ -384,7 +632,6 @@
 
 .las-panel {
     position: fixed;
-    /* Parte desde debajo del topbar */
     top: var(--topbar-h, 56px);
     right: 0;
     bottom: 0;
@@ -405,7 +652,6 @@
     box-shadow: -8px 0 40px rgba(0, 0, 0, 0.45);
 }
 
-/* En mobile ocupa todo el ancho disponible desde el header mobile */
 @media (max-width: 768px) {
     .las-panel {
         top: 60px;
@@ -423,7 +669,6 @@
     }
 }
 
-/* ── Header del panel ── */
 .las-panel-header {
     display: flex;
     align-items: stretch;
@@ -561,7 +806,6 @@
     color: #F0EDF8;
 }
 
-/* ── Barra ── */
 .las-panel-bar {
     height: 3px;
     background: #d4cfc8;
@@ -578,7 +822,6 @@
     transition: width 0.5s ease;
 }
 
-/* ── Chips ── */
 .las-panel-chips {
     display: flex;
     flex-wrap: wrap;
@@ -629,7 +872,6 @@
     color: #6E6680;
 }
 
-/* ── Scroll ── */
 .las-panel-scroll {
     flex: 1;
     overflow-y: auto;
@@ -717,7 +959,6 @@
     color: #6E6680;
 }
 
-/* ── Grid 3×2 ── */
 .las-sticker-grid {
     position: relative;
     z-index: 1;
@@ -1008,7 +1249,6 @@
     border-color: #A599D9;
 }
 
-/* ── Recompensa ── */
 .las-reward-bar {
     display: flex;
     align-items: center;

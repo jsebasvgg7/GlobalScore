@@ -13,10 +13,16 @@ const ALBUM_META = {
         minStars4: 5,
         minStars5: 0,
         spine: '#5b4fd8',
+        spineAlt: '#3d34a5',
         accent: '#a599d9',
+        accentRgb: '165,153,217',
         tag: 'TEMPORADA 25·26',
         number: '01',
         golden: false,
+        coverBg: '#1a1726',
+        coverLine: '#2e2858',
+        rarityLevel: 4,
+        rarityLabel: 'LEYENDA',
     },
     legendary_2: {
         label: 'Legendarios II',
@@ -26,10 +32,16 @@ const ALBUM_META = {
         minStars4: 5,
         minStars5: 2,
         spine: '#7c3aed',
+        spineAlt: '#5b1fbd',
         accent: '#c4b5fd',
+        accentRgb: '196,181,253',
         tag: 'TEMPORADA 25·26',
         number: '02',
         golden: false,
+        coverBg: '#160e2a',
+        coverLine: '#2a1a50',
+        rarityLevel: 4,
+        rarityLabel: 'LEYENDA+',
     },
     legendary_3: {
         label: 'Legendarios III',
@@ -39,23 +51,35 @@ const ALBUM_META = {
         minStars4: 5,
         minStars5: 4,
         spine: '#1D9E75',
+        spineAlt: '#0d6e50',
         accent: '#34d399',
+        accentRgb: '52,211,153',
         tag: 'TEMPORADA 25·26',
         number: '03',
         golden: false,
+        coverBg: '#0a1f18',
+        coverLine: '#163d2e',
+        rarityLevel: 5,
+        rarityLabel: 'ÉLITE',
     },
     golden_album: {
         label: 'Álbum Dorado',
         shortLabel: 'DORADO',
-        req: '15 jugadores · todos ⭐⭐⭐⭐+',
+        req: '15 jugadores · todos ⭐⭐⭐⭐⭐',
         slots: 15,
         minStars4: 15,
         minStars5: 0,
         spine: '#b45309',
+        spineAlt: '#7c3b00',
         accent: '#f59e0b',
+        accentRgb: '245,158,11',
         tag: 'ESPECIAL',
         number: '✦',
         golden: true,
+        coverBg: '#1a1200',
+        coverLine: '#2e2000',
+        rarityLevel: 5,
+        rarityLabel: 'GOAT',
     },
 };
 
@@ -66,6 +90,43 @@ function getInitials(name = '') {
 function posLabel(pos) {
     const map = { Forward: 'DEL', Midfielder: 'MED', Defender: 'DEF', Goalkeeper: 'POR', 'Play-maker': 'MP', 'All-rounder': 'TOD' };
     return map[pos] || pos?.slice(0, 3).toUpperCase() || '—';
+}
+
+function RarityBadge({ level, label, accent, accentRgb, golden }) {
+    const stars = Array.from({ length: Math.min(level, 5) });
+    return (
+        <div
+            className={`las-rarity-badge${golden ? ' las-rarity-badge--golden' : ''}`}
+            style={{ '--acc': accent, '--acc-rgb': accentRgb }}
+        >
+            <div className="las-rarity-badge-stars">
+                {stars.map((_, i) => (
+                    <span key={i} className="las-rarity-star">★</span>
+                ))}
+            </div>
+            <span className="las-rarity-label">{label}</span>
+        </div>
+    );
+}
+
+function StackedPages({ pct, accent }) {
+    const pages = 5;
+    const filled = Math.round((pct / 100) * pages);
+    return (
+        <div className="las-stacked-pages">
+            {Array.from({ length: pages }).map((_, i) => (
+                <div
+                    key={i}
+                    className={`las-page-leaf${i < filled ? ' las-page-leaf--filled' : ''}`}
+                    style={{
+                        '--leaf-offset': `${i * 1.5}px`,
+                        '--acc': accent,
+                    }}
+                />
+            ))}
+            <span className="las-stacked-pct">{pct}%</span>
+        </div>
+    );
 }
 
 function PanelSticker({ index, card, collectionItem, accent }) {
@@ -140,7 +201,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
         <>
             <div className="las-panel-overlay" onClick={onClose} />
             <div className="las-panel" style={{ '--spine': meta.spine, '--acc': meta.accent }}>
-
                 <div className="las-panel-header">
                     <div className="las-panel-spine-bar" />
                     <div className="las-panel-header-content">
@@ -240,6 +300,7 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
 
 function AlbumBook({ albumId, meta, definitions, progress, collection, locked }) {
     const [panelOpen, setPanelOpen] = useState(false);
+    const [hovered, setHovered] = useState(false);
 
     const def = definitions.find(d => d.id === albumId);
     const playerCol = collection.filter(c => c.card?.card_type === 'player');
@@ -250,71 +311,116 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
 
     return (
         <>
-            <button
-                className={`las-book${locked ? ' las-book--locked' : ''}${isCompleted ? ' las-book--done' : ''}${meta.golden ? ' las-book--golden' : ''}`}
-                style={{ '--spine': meta.spine, '--acc': meta.accent }}
-                onClick={() => !locked && setPanelOpen(true)}
-                aria-disabled={locked}
+            <div
+                className={`las-book-wrapper${locked ? ' las-book-wrapper--locked' : ''}`}
+                onMouseEnter={() => !locked && setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
             >
-                <div className="las-book-spine">
-                    <span className="las-book-spine-num">{meta.number}</span>
-                    <span className="las-book-spine-lbl">{meta.shortLabel}</span>
+                {/* Páginas apiladas detrás del libro */}
+                <div className="las-book-pages-stack">
+                    {[0, 1, 2].map(i => (
+                        <div
+                            key={i}
+                            className="las-book-page-leaf"
+                            style={{ '--leaf-i': i, '--acc': meta.accent }}
+                        />
+                    ))}
                 </div>
 
-                <div className="las-book-cover">
-                    <div className="las-book-grid-bg" />
-
-                    <div className="las-book-tag">
-                        {locked
-                            ? <span className="las-book-tag-locked"><Lock size={6} strokeWidth={2.5} /> BLOQ.</span>
-                            : meta.tag
-                        }
+                <button
+                    className={`las-book${locked ? ' las-book--locked' : ''}${isCompleted ? ' las-book--done' : ''}${meta.golden ? ' las-book--golden' : ''}${hovered ? ' las-book--hovered' : ''}`}
+                    style={{
+                        '--spine': meta.spine,
+                        '--spine-alt': meta.spineAlt,
+                        '--acc': meta.accent,
+                        '--acc-rgb': meta.accentRgb,
+                        '--cover-bg': meta.coverBg,
+                        '--cover-line': meta.coverLine,
+                    }}
+                    onClick={() => !locked && setPanelOpen(true)}
+                    aria-disabled={locked}
+                >
+                    {/* Lomo */}
+                    <div className="las-book-spine">
+                        <span className="las-book-spine-num">{meta.number}</span>
+                        <span className="las-book-spine-lbl">{meta.shortLabel}</span>
                     </div>
 
-                    <div className="las-book-title-block">
-                        <span className="las-book-icon">
-                            {meta.golden
-                                ? <Trophy size={14} strokeWidth={1.8} />
-                                : <BookOpen size={14} strokeWidth={1.8} />
+                    {/* Portada */}
+                    <div className="las-book-cover">
+                        <div className="las-book-grid-bg" />
+
+                        {/* Insignia de rareza embossed */}
+                        {!locked && (
+                            <RarityBadge
+                                level={meta.rarityLevel}
+                                label={meta.rarityLabel}
+                                accent={meta.accent}
+                                accentRgb={meta.accentRgb}
+                                golden={meta.golden}
+                            />
+                        )}
+
+                        <div className="las-book-tag">
+                            {locked
+                                ? <span className="las-book-tag-locked"><Lock size={6} strokeWidth={2.5} /> BLOQ.</span>
+                                : meta.tag
                             }
-                        </span>
-                        <span className="las-book-title">{meta.label}</span>
-                    </div>
+                        </div>
 
-                    {!locked ? (
-                        <div className="las-book-preview">
-                            {Array.from({ length: 6 }).map((_, i) => {
-                                const item = playerCol[i];
-                                return (
-                                    <div key={i} className={`las-book-slot${item ? ' las-book-slot--filled' : ''}`}>
-                                        {item?.card?.image_path
-                                            ? <img src={item.card.image_path} alt="" />
-                                            : item
-                                                ? <span>{getInitials(item.card?.name)}</span>
-                                                : null
-                                        }
+                        <div className="las-book-title-block">
+                            <span className="las-book-icon">
+                                {meta.golden
+                                    ? <Trophy size={14} strokeWidth={1.8} />
+                                    : <BookOpen size={14} strokeWidth={1.8} />
+                                }
+                            </span>
+                            <span className="las-book-title">{meta.label}</span>
+                        </div>
+
+                        {!locked ? (
+                            <div className="las-book-preview">
+                                {Array.from({ length: 6 }).map((_, i) => {
+                                    const item = playerCol[i];
+                                    return (
+                                        <div key={i} className={`las-book-slot${item ? ' las-book-slot--filled' : ''}`}>
+                                            {item?.card?.image_path
+                                                ? <img src={item.card.image_path} alt="" />
+                                                : item
+                                                    ? <span>{getInitials(item.card?.name)}</span>
+                                                    : null
+                                            }
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            /* Lock dramático con fog */
+                            <div className="las-book-locked-zone">
+                                <div className="las-lock-fog" />
+                                <div className="las-lock-icon-wrap">
+                                    <div className="las-lock-chain las-lock-chain--left" />
+                                    <div className="las-lock-chain las-lock-chain--right" />
+                                    <div className="las-lock-body">
+                                        <Lock size={16} strokeWidth={2} />
                                     </div>
-                                );
-                            })}
-                        </div>
-                    ) : (
-                        <div className="las-book-locked-hint">
-                            Completa el álbum anterior
-                        </div>
-                    )}
+                                    <div className="las-lock-pulse" />
+                                </div>
+                                <span className="las-lock-label">Completa el álbum anterior</span>
+                            </div>
+                        )}
 
-                    <div className="las-book-footer">
-                        <div className="las-book-pbar">
-                            <div className="las-book-pbar-fill" style={{ width: `${pct}%` }} />
-                        </div>
-                        <div className="las-book-footer-row">
-                            <span className="las-book-count">{filled}/{reqPlayers}</span>
-                            {isCompleted && <span className="las-book-done-badge">✓</span>}
-                            {!locked && <span className="las-book-hint">Abrir →</span>}
+                        <div className="las-book-footer">
+                            <StackedPages pct={pct} accent={meta.accent} />
+                            <div className="las-book-footer-row">
+                                <span className="las-book-count">{filled}/{reqPlayers}</span>
+                                {isCompleted && <span className="las-book-done-badge">✓</span>}
+                                {!locked && <span className="las-book-hint">Abrir →</span>}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </button>
+                </button>
+            </div>
 
             {panelOpen && (
                 <AlbumPanel
