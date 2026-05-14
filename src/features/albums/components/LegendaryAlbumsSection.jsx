@@ -1,63 +1,48 @@
 import React, { useState } from 'react';
-import { Lock, BookOpen, Trophy, Star, ChevronLeft, ChevronRight, Gift, Crown } from 'lucide-react';
+import { Lock, Star, ChevronLeft, ChevronRight, Gift, Crown } from 'lucide-react';
 import '../styles/LegendaryAlbumsSection.css';
 
+/* ══════════════════════════════════════════
+   ORDER & META
+══════════════════════════════════════════ */
 const ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'golden_album'];
 
 const ALBUM_META = {
     legendary_1: {
-        label: 'Legendarios I',
+        label: 'Legendarios Vol. I',
         shortLabel: 'LEG I',
         req: '30 jugadores · mín. 5×⭐⭐⭐⭐',
         slots: 30,
         minStars4: 5,
         minStars5: 0,
-        spine: '#5b4fd8',
-        spineAlt: '#3d34a5',
-        accent: '#a599d9',
-        accentRgb: '165,153,217',
         tag: 'TEMPORADA 25·26',
-        number: '01',
+        number: 'I',
         golden: false,
-        coverBg: '#1a1726',
-        rarityLevel: 4,
-        rarityLabel: 'LEYENDA',
+        theme: 'leather-gold',
     },
     legendary_2: {
-        label: 'Legendarios II',
+        label: 'Legendarios Vol. II',
         shortLabel: 'LEG II',
         req: '30 jugadores · 5×⭐⭐⭐⭐ + 2×⭐⭐⭐⭐⭐',
         slots: 30,
         minStars4: 5,
         minStars5: 2,
-        spine: '#7c3aed',
-        spineAlt: '#5b1fbd',
-        accent: '#c4b5fd',
-        accentRgb: '196,181,253',
         tag: 'TEMPORADA 25·26',
-        number: '02',
+        number: 'II',
         golden: false,
-        coverBg: '#160e2a',
-        rarityLevel: 4,
-        rarityLabel: 'LEYENDA+',
+        theme: 'indigo-night',
     },
     legendary_3: {
-        label: 'Legendarios III',
+        label: 'Legendarios III Élite',
         shortLabel: 'LEG III',
         req: '30 jugadores · 5×⭐⭐⭐⭐ + 4×⭐⭐⭐⭐⭐',
         slots: 30,
         minStars4: 5,
         minStars5: 4,
-        spine: '#1D9E75',
-        spineAlt: '#0d6e50',
-        accent: '#34d399',
-        accentRgb: '52,211,153',
         tag: 'TEMPORADA 25·26',
-        number: '03',
+        number: 'III',
         golden: false,
-        coverBg: '#0a1f18',
-        rarityLevel: 5,
-        rarityLabel: 'ÉLITE',
+        theme: 'field-green',
     },
     golden_album: {
         label: 'Álbum Dorado',
@@ -66,16 +51,10 @@ const ALBUM_META = {
         slots: 15,
         minStars4: 15,
         minStars5: 0,
-        spine: '#b45309',
-        spineAlt: '#7c3b00',
-        accent: '#f59e0b',
-        accentRgb: '245,158,11',
         tag: 'ESPECIAL',
         number: '✦',
         golden: true,
-        coverBg: '#1a1200',
-        rarityLevel: 5,
-        rarityLabel: 'GOAT',
+        theme: 'golden',
     },
 };
 
@@ -92,444 +71,341 @@ function posLabel(pos) {
 }
 
 /* ══════════════════════════════════════════
-   UNIQUE COVER ILLUSTRATIONS — one per album
+   COVER SVG ILLUSTRATIONS
 ══════════════════════════════════════════ */
 
-/** Legendarios I — diagonal hatching + shield */
-function CoverLeg1({ accent, locked }) {
+function CoverLeatherGold({ locked }) {
     return (
-        <svg viewBox="0 0 100 130" className="las-book-cover-art" aria-hidden="true">
+        <svg viewBox="0 0 100 130" className="lbn-cover-art" aria-hidden="true">
             <defs>
-                <pattern id="leg1-hatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
-                    <line x1="0" y1="0" x2="0" y2="8" stroke={accent} strokeWidth="0.6" opacity="0.25" />
+                <pattern id="hatch-gold" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+                    <line x1="0" y1="0" x2="0" y2="8" stroke="#c8993a" strokeWidth="0.5" opacity="0.18" />
                 </pattern>
             </defs>
-            {/* Background pattern */}
-            <rect x="0" y="0" width="100" height="130" fill="url(#leg1-hatch)" />
-            {/* Decorative corner lines */}
-            <line x1="8" y1="8" x2="30" y2="8" stroke={accent} strokeWidth="0.5" opacity="0.4" />
-            <line x1="8" y1="8" x2="8" y2="30" stroke={accent} strokeWidth="0.5" opacity="0.4" />
-            <line x1="92" y1="122" x2="70" y2="122" stroke={accent} strokeWidth="0.5" opacity="0.4" />
-            <line x1="92" y1="122" x2="92" y2="100" stroke={accent} strokeWidth="0.5" opacity="0.4" />
-            {/* Shield shape */}
+            <rect width="100" height="130" fill="url(#hatch-gold)" />
+            {/* Corner brackets */}
+            <line x1="8" y1="10" x2="24" y2="10" stroke="#c8993a" strokeWidth="0.6" opacity="0.5" />
+            <line x1="8" y1="10" x2="8" y2="26" stroke="#c8993a" strokeWidth="0.6" opacity="0.5" />
+            <line x1="92" y1="120" x2="76" y2="120" stroke="#c8993a" strokeWidth="0.6" opacity="0.5" />
+            <line x1="92" y1="120" x2="92" y2="104" stroke="#c8993a" strokeWidth="0.6" opacity="0.5" />
+            <line x1="92" y1="10" x2="76" y2="10" stroke="#c8993a" strokeWidth="0.6" opacity="0.5" />
+            <line x1="92" y1="10" x2="92" y2="26" stroke="#c8993a" strokeWidth="0.6" opacity="0.5" />
+            <line x1="8" y1="120" x2="24" y2="120" stroke="#c8993a" strokeWidth="0.6" opacity="0.5" />
+            <line x1="8" y1="120" x2="8" y2="104" stroke="#c8993a" strokeWidth="0.6" opacity="0.5" />
             {!locked && (
-                <g transform="translate(50,62)">
-                    <path
-                        d="M0,-32 L24,-20 L24,4 Q24,22 0,34 Q-24,22 -24,4 L-24,-20 Z"
-                        fill="none"
-                        stroke={accent}
-                        strokeWidth="1.2"
-                        opacity="0.9"
-                    />
-                    <path
-                        d="M0,-22 L16,-13 L16,3 Q16,15 0,23 Q-16,15 -16,3 L-16,-13 Z"
-                        fill={accent}
-                        opacity="0.12"
-                    />
-                    {/* Shield cross */}
-                    <line x1="0" y1="-20" x2="0" y2="20" stroke={accent} strokeWidth="0.7" opacity="0.5" />
-                    <line x1="-18" y1="-4" x2="18" y2="-4" stroke={accent} strokeWidth="0.7" opacity="0.5" />
+                <g transform="translate(50,60)">
+                    <path d="M0,-28 L20,-17 L20,3 Q20,19 0,30 Q-20,19 -20,3 L-20,-17 Z"
+                        fill="none" stroke="#c8993a" strokeWidth="1.2" opacity="0.9" />
+                    <path d="M0,-19 L13,-11 L13,2 Q13,13 0,20 Q-13,13 -13,2 L-13,-11 Z"
+                        fill="#c8993a" opacity="0.1" />
+                    <line x1="0" y1="-17" x2="0" y2="17" stroke="#c8993a" strokeWidth="0.6" opacity="0.4" />
+                    <line x1="-15" y1="-3" x2="15" y2="-3" stroke="#c8993a" strokeWidth="0.6" opacity="0.4" />
+                    <circle cx="0" cy="-3" r="2" fill="#c8993a" opacity="0.5" />
                 </g>
             )}
-            {/* Roman numeral I */}
             {!locked && (
-                <text x="50" y="115" textAnchor="middle" fill={accent} fontSize="9" fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.2em" opacity="0.6">I</text>
+                <text x="50" y="115" textAnchor="middle" fill="#c8993a" fontSize="8"
+                    fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.22em" opacity="0.55">I</text>
             )}
         </svg>
     );
 }
 
-/** Legendarios II — hexagonal grid + crown */
-function CoverLeg2({ accent, locked }) {
-    const hexPoints = (cx, cy, r) => {
-        return Array.from({ length: 6 }, (_, i) => {
-            const a = (Math.PI / 3) * i - Math.PI / 6;
-            return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
-        }).join(' ');
-    };
-    const hexes = [
-        [50, 40], [30, 52], [70, 52], [50, 64], [30, 76], [70, 76], [50, 88],
-    ];
+function CoverIndigoNight({ locked }) {
     return (
-        <svg viewBox="0 0 100 130" className="las-book-cover-art" aria-hidden="true">
-            {/* Hex grid background */}
-            {hexes.map(([cx, cy], i) => (
-                <polygon
-                    key={i}
-                    points={hexPoints(cx, cy, 13)}
-                    fill="none"
-                    stroke={accent}
-                    strokeWidth="0.5"
-                    opacity={i === 0 ? 0.5 : 0.18}
-                />
+        <svg viewBox="0 0 100 130" aria-hidden="true" className="lbn-cover-art">
+            {/* Stars scattered */}
+            {[
+                [20, 22, 1.2], [72, 18, 0.8], [50, 15, 1.0], [38, 32, 0.7],
+                [80, 35, 0.9], [15, 48, 0.7], [65, 42, 1.0], [88, 58, 0.7],
+                [30, 55, 0.8], [55, 62, 1.2], [18, 70, 0.7], [78, 72, 0.9],
+                [42, 80, 0.8], [90, 85, 0.7], [10, 88, 0.9],
+            ].map(([x, y, r], i) => (
+                <circle key={i} cx={x} cy={y} r={r} fill="#8aa8f0" opacity={0.25 + (i % 3) * 0.1} />
             ))}
-            {/* Center hex filled */}
+            {/* Constellation lines */}
             {!locked && (
-                <>
-                    <polygon
-                        points={hexPoints(50, 64, 13)}
-                        fill={accent}
-                        opacity="0.12"
-                    />
-                    {/* Crown */}
-                    <g transform="translate(50,64)">
-                        <path
-                            d="M-14,8 L-14,-4 L-7,2 L0,-10 L7,2 L14,-4 L14,8 Z"
-                            fill="none"
-                            stroke={accent}
-                            strokeWidth="1.2"
-                            strokeLinejoin="round"
-                            opacity="0.9"
-                        />
-                        <rect x="-14" y="8" width="28" height="3" rx="1" fill={accent} opacity="0.3" />
-                        {/* Crown gems */}
-                        <circle cx="0" cy="-2" r="1.5" fill={accent} opacity="0.7" />
-                        <circle cx="-9" cy="3" r="1" fill={accent} opacity="0.5" />
-                        <circle cx="9" cy="3" r="1" fill={accent} opacity="0.5" />
+                <g opacity="0.45">
+                    <line x1="50" y1="26" x2="30" y2="44" stroke="#8aa8f0" strokeWidth="0.4" />
+                    <line x1="30" y1="44" x2="38" y2="60" stroke="#8aa8f0" strokeWidth="0.4" />
+                    <line x1="50" y1="26" x2="68" y2="40" stroke="#8aa8f0" strokeWidth="0.4" />
+                    <line x1="68" y1="40" x2="60" y2="60" stroke="#8aa8f0" strokeWidth="0.4" />
+                    <line x1="38" y1="60" x2="50" y2="76" stroke="#8aa8f0" strokeWidth="0.4" />
+                    <line x1="60" y1="60" x2="50" y2="76" stroke="#8aa8f0" strokeWidth="0.4" />
+                    {/* Crown at center */}
+                    <g transform="translate(50,48)" stroke="#8aa8f0" fill="none" strokeWidth="1" strokeLinejoin="round">
+                        <path d="M-12,7 L-12,-4 L-6,2 L0,-9 L6,2 L12,-4 L12,7 Z" opacity="0.85" />
+                        <rect x="-12" y="7" width="24" height="3" rx="1" fill="#8aa8f0" opacity="0.25" stroke="none" />
+                        <circle cx="0" cy="-1" r="1.5" fill="#8aa8f0" opacity="0.65" stroke="none" />
                     </g>
-                </>
-            )}
-            {/* II label */}
-            {!locked && (
-                <text x="50" y="118" textAnchor="middle" fill={accent} fontSize="9" fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.2em" opacity="0.6">II</text>
+                    <text x="50" y="115" textAnchor="middle" fill="#8aa8f0" fontSize="8"
+                        fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.22em" opacity="0.55">II</text>
+                </g>
             )}
         </svg>
     );
 }
 
-/** Legendarios III — concentric rings + lightning bolt */
-function CoverLeg3({ accent, locked }) {
+function CoverFieldGreen({ locked }) {
     return (
-        <svg viewBox="0 0 100 130" className="las-book-cover-art" aria-hidden="true">
-            {/* Concentric arcs (bottom half only for depth) */}
-            {[42, 32, 22, 12].map((r, i) => (
-                <circle
-                    key={i}
-                    cx="50"
-                    cy="65"
-                    r={r}
-                    fill="none"
-                    stroke={accent}
-                    strokeWidth="0.6"
-                    opacity={0.12 + i * 0.06}
-                />
+        <svg viewBox="0 0 100 130" aria-hidden="true" className="lbn-cover-art">
+            {/* Grass lines */}
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (
+                <line key={i} x1="0" y1={i * 13} x2="100" y2={i * 13}
+                    stroke="#4abf4a" strokeWidth="0.5" opacity="0.12" />
+            ))}
+            {/* Concentric rings */}
+            {[40, 30, 20, 10].map((r, i) => (
+                <circle key={i} cx="50" cy="58" r={r} fill="none"
+                    stroke="#4abf4a" strokeWidth="0.5" opacity={0.1 + i * 0.05} />
             ))}
             {/* Radiating lines */}
-            {Array.from({ length: 12 }, (_, i) => {
-                const angle = (i / 12) * Math.PI * 2;
-                const x1 = 50 + 14 * Math.cos(angle);
-                const y1 = 65 + 14 * Math.sin(angle);
-                const x2 = 50 + 44 * Math.cos(angle);
-                const y2 = 65 + 44 * Math.sin(angle);
+            {!locked && Array.from({ length: 8 }, (_, i) => {
+                const angle = (i / 8) * Math.PI * 2;
                 return (
-                    <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
-                        stroke={accent} strokeWidth="0.4" opacity="0.15" />
+                    <line key={i}
+                        x1={50 + 12 * Math.cos(angle)} y1={58 + 12 * Math.sin(angle)}
+                        x2={50 + 40 * Math.cos(angle)} y2={58 + 40 * Math.sin(angle)}
+                        stroke="#4abf4a" strokeWidth="0.4" opacity="0.18" />
                 );
             })}
-            {/* Lightning bolt center */}
             {!locked && (
-                <g transform="translate(50,65)">
-                    <path
-                        d="M6,-18 L-4,-2 L3,-2 L-6,18 L4,2 L-3,2 Z"
-                        fill={accent}
-                        opacity="0.85"
-                    />
-                    {/* Inner glow ring */}
-                    <circle cx="0" cy="0" r="10" fill={accent} opacity="0.08" />
+                <g transform="translate(50,58)">
+                    <path d="M5,-16 L-4,-2 L3,-2 L-5,16 L4,2 L-3,2 Z"
+                        fill="#4abf4a" opacity="0.8" />
+                    <circle cx="0" cy="0" r="9" fill="#4abf4a" opacity="0.07" />
+                    <text x="0" y="38" textAnchor="middle" fill="#4abf4a" fontSize="8"
+                        fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.22em" opacity="0.55">III</text>
                 </g>
-            )}
-            {/* III label */}
-            {!locked && (
-                <text x="50" y="118" textAnchor="middle" fill={accent} fontSize="9" fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.2em" opacity="0.6">III</text>
             )}
         </svg>
     );
 }
 
-/** Álbum Dorado — spiral + trophy, shimmer animation */
-function CoverGolden({ accent, locked }) {
+function CoverGolden({ locked }) {
     return (
-        <svg viewBox="0 0 100 130" className="las-book-cover-art las-book-cover-art--golden" aria-hidden="true">
+        <svg viewBox="0 0 100 130" aria-hidden="true" className="lbn-cover-art lbn-cover-art--golden">
             <defs>
                 <pattern id="gold-dots" patternUnits="userSpaceOnUse" width="10" height="10">
-                    <circle cx="5" cy="5" r="0.8" fill={accent} opacity="0.2" />
+                    <circle cx="5" cy="5" r="0.7" fill="#d4a830" opacity="0.22" />
                 </pattern>
             </defs>
-            {/* Dot grid */}
-            <rect x="0" y="0" width="100" height="130" fill="url(#gold-dots)" />
-            {/* Spiral (hand-drawn as arcs) */}
-            {!locked && (
-                <>
-                    <path
-                        d="M50,65 Q56,52 62,60 Q70,72 58,80 Q44,88 36,72 Q28,52 48,42 Q72,32 80,62 Q86,90 62,100"
-                        fill="none"
-                        stroke={accent}
-                        strokeWidth="1"
-                        opacity="0.35"
-                        strokeLinecap="round"
-                    />
-                    {/* Trophy */}
-                    <g transform="translate(50,62)">
-                        {/* Cup body */}
-                        <path
-                            d="M-10,-16 Q-12,4 0,12 Q12,4 10,-16 Z"
-                            fill="none"
-                            stroke={accent}
-                            strokeWidth="1.2"
-                            strokeLinejoin="round"
-                            opacity="0.95"
-                        />
-                        {/* Handles */}
-                        <path d="M-10,-10 Q-18,-10 -18,-4 Q-18,2 -10,2" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
-                        <path d="M10,-10 Q18,-10 18,-4 Q18,2 10,2" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
-                        {/* Stem + base */}
-                        <line x1="0" y1="12" x2="0" y2="18" stroke={accent} strokeWidth="1.2" opacity="0.8" />
-                        <rect x="-8" y="18" width="16" height="3" rx="1.5" fill={accent} opacity="0.6" />
-                        {/* Star inside trophy */}
-                        <path d="M0,-6 L1.5,-2 L5.5,-2 L2.5,0.5 L3.5,4.5 L0,2.5 L-3.5,4.5 L-2.5,0.5 L-5.5,-2 L-1.5,-2 Z"
-                            fill={accent} opacity="0.7" />
-                    </g>
-                </>
-            )}
+            <rect width="100" height="130" fill="url(#gold-dots)" />
+            {/* Double frame */}
+            <rect x="8" y="8" width="84" height="114" fill="none" stroke="#d4a830" strokeWidth="0.8" opacity="0.5" />
+            <rect x="12" y="12" width="76" height="106" fill="none" stroke="#d4a830" strokeWidth="0.4" opacity="0.3" />
             {/* Corner ornaments */}
-            {[
-                [8, 10], [92, 10], [8, 120], [92, 120]
-            ].map(([cx, cy], i) => (
+            {[[8, 8], [92, 8], [8, 122], [92, 122]].map(([cx, cy], i) => (
                 <g key={i} transform={`translate(${cx},${cy})`}>
-                    <circle r="1.5" fill={accent} opacity="0.5" />
-                    <circle r="4" fill="none" stroke={accent} strokeWidth="0.5" opacity="0.25" />
+                    <circle r="1.8" fill="#d4a830" opacity="0.55" />
+                    <circle r="4" fill="none" stroke="#d4a830" strokeWidth="0.5" opacity="0.3" />
                 </g>
             ))}
-            {/* GOAT text */}
             {!locked && (
-                <text x="50" y="118" textAnchor="middle" fill={accent} fontSize="8" fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.25em" opacity="0.7">GOAT</text>
+                <>
+                    {/* Spiral */}
+                    <path d="M50,58 Q56,46 62,54 Q70,66 58,74 Q44,82 36,66 Q28,48 48,38 Q72,28 80,58"
+                        fill="none" stroke="#d4a830" strokeWidth="0.9" opacity="0.3" strokeLinecap="round" />
+                    {/* Trophy */}
+                    <g transform="translate(50,55)" stroke="#d4a830" fill="none" strokeWidth="1.1">
+                        <path d="M-9,-15 Q-11,4 0,11 Q11,4 9,-15 Z" strokeLinejoin="round" opacity="0.9" />
+                        <path d="M-9,-9 Q-16,-9 -16,-3 Q-16,3 -9,3" opacity="0.65" />
+                        <path d="M9,-9 Q16,-9 16,-3 Q16,3 9,3" opacity="0.65" />
+                        <line x1="0" y1="11" x2="0" y2="17" opacity="0.75" />
+                        <rect x="-7" y="17" width="14" height="2.5" rx="1.2" fill="#d4a830" opacity="0.55" stroke="none" />
+                        <path d="M0,-6 L1.4,-2 L5,-2 L2.3,0.5 L3.2,4 L0,2.4 L-3.2,4 L-2.3,0.5 L-5,-2 L-1.4,-2 Z"
+                            fill="#d4a830" opacity="0.65" stroke="none" />
+                    </g>
+                    <text x="50" y="115" textAnchor="middle" fill="#d4a830" fontSize="7"
+                        fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.28em" opacity="0.65">GOAT</text>
+                </>
             )}
         </svg>
     );
 }
 
-const COVER_COMPONENTS = {
-    legendary_1: CoverLeg1,
-    legendary_2: CoverLeg2,
-    legendary_3: CoverLeg3,
+const COVERS = {
+    legendary_1: CoverLeatherGold,
+    legendary_2: CoverIndigoNight,
+    legendary_3: CoverFieldGreen,
     golden_album: CoverGolden,
 };
 
 /* ══════════════════════════════════════════
-   RARITY BADGE
+   OPEN BOOK — sticker pages
 ══════════════════════════════════════════ */
-function RarityBadge({ level, label, accent, accentRgb, golden }) {
-    const stars = Array.from({ length: Math.min(level, 5) });
-    return (
-        <div
-            className={`las-rarity-badge${golden ? ' las-rarity-badge--golden' : ''}`}
-            style={{ '--acc': accent, '--acc-rgb': accentRgb }}
-        >
-            <div className="las-rarity-badge-stars">
-                {stars.map((_, i) => <span key={i} className="las-rarity-star">★</span>)}
-            </div>
-            <span className="las-rarity-label">{label}</span>
-        </div>
-    );
-}
-
-/* ══════════════════════════════════════════
-   STACKED PAGES (progress indicator)
-══════════════════════════════════════════ */
-function StackedPages({ pct, accent }) {
-    const pages = 5;
-    const filled = Math.round((pct / 100) * pages);
-    return (
-        <div className="las-stacked-pages">
-            {Array.from({ length: pages }).map((_, i) => (
-                <div
-                    key={i}
-                    className={`las-page-leaf${i < filled ? ' las-page-leaf--filled' : ''}`}
-                    style={{ '--leaf-offset': `${i * 1.5}px`, '--acc': accent }}
-                />
-            ))}
-            <span className="las-stacked-pct">{pct}%</span>
-        </div>
-    );
-}
-
-/* ══════════════════════════════════════════
-   PANEL STICKER
-══════════════════════════════════════════ */
-function PanelSticker({ index, card, collectionItem, accent }) {
+function StickerSlot({ index, collectionItem, card, accent }) {
     const num = String(index + 1).padStart(2, '0');
     const isGoat = card?.significance_level === 5;
     const filled = !!collectionItem;
 
-    if (filled) {
-        return (
-            <div
-                className={`las-sticker las-sticker--filled${isGoat ? ' las-sticker--goat' : ''}`}
-                style={{ '--meta-accent': accent }}
-            >
-                <span className="las-sticker-num">{num}</span>
-                {isGoat && <span className="las-sticker-crown"><Crown size={8} /></span>}
-                <div className="las-sticker-img-zone">
-                    {card?.image_path
-                        ? <img src={card.image_path} alt={card.name} className="las-sticker-img" />
-                        : <div className="las-sticker-avatar">{getInitials(card?.name)}</div>
-                    }
-                </div>
-                <div className="las-sticker-info">
-                    <span className="las-sticker-name">{card?.name}</span>
-                    {card?.position && <span className="las-sticker-pos">{posLabel(card.position)}</span>}
-                </div>
-                {collectionItem?.copies > 1 && (
-                    <span className="las-sticker-copies">×{collectionItem.copies}</span>
-                )}
-            </div>
-        );
-    }
-
     return (
-        <div className="las-sticker las-sticker--empty" style={{ '--meta-accent': accent }}>
-            <span className="las-sticker-num">{num}</span>
-            <svg className="las-sticker-sil" viewBox="0 0 40 60" fill="currentColor" aria-hidden="true">
-                <ellipse cx="20" cy="13" rx="9" ry="9" />
-                <path d="M4 56 Q4 30 20 27 Q36 30 36 56Z" />
-            </svg>
-            <div className="las-sticker-stars-empty">
-                {[1, 2, 3, 4].map(n => <span key={n} className="las-sticker-star-dot">★</span>)}
-            </div>
+        <div className={`lbn-sticker${filled ? ' lbn-sticker--filled' : ' lbn-sticker--empty'}${isGoat ? ' lbn-sticker--goat' : ''}`}>
+            <span className="lbn-sticker-num">{num}</span>
+            {filled ? (
+                <>
+                    {isGoat && <span className="lbn-sticker-crown"><Crown size={7} /></span>}
+                    <div className="lbn-sticker-img-zone">
+                        {card?.image_path
+                            ? <img src={card.image_path} alt={card.name} className="lbn-sticker-img" />
+                            : <div className="lbn-sticker-avatar">{getInitials(card?.name)}</div>
+                        }
+                    </div>
+                    <div className="lbn-sticker-info">
+                        <span className="lbn-sticker-name">{card?.name}</span>
+                        {card?.position && <span className="lbn-sticker-pos">{posLabel(card.position)}</span>}
+                    </div>
+                    {collectionItem?.copies > 1 && (
+                        <span className="lbn-sticker-copies">×{collectionItem.copies}</span>
+                    )}
+                </>
+            ) : (
+                <>
+                    <svg className="lbn-sticker-sil" viewBox="0 0 40 60" fill="currentColor" aria-hidden="true">
+                        <ellipse cx="20" cy="13" rx="9" ry="9" />
+                        <path d="M4 56 Q4 30 20 27 Q36 30 36 56Z" />
+                    </svg>
+                    <div className="lbn-sticker-empty-dots">
+                        {[1, 2, 3, 4].map(n => <span key={n}>★</span>)}
+                    </div>
+                </>
+            )}
         </div>
     );
 }
 
-/* ══════════════════════════════════════════
-   ALBUM PANEL (slide-in detail view)
-══════════════════════════════════════════ */
-function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose }) {
+function OpenBook({ albumId, meta, definitions, progress, collection, onClose }) {
     const [page, setPage] = useState(0);
-    const PER_PAGE = 6;
+    const PER_PAGE = 6; // 6 per page = 3 left + 3 right (but shown as grid of 6 across both pages)
 
     const def = definitions.find(d => d.id === albumId);
     const prog = progress.find(p => p.album_id === albumId);
     const isCompleted = prog?.is_completed ?? false;
 
-    // ── FIX: filter to players only, then check star requirements ──
     const playerCol = collection.filter(c => c.card?.card_type === 'player');
     const reqPlayers = def?.required_unique_players ?? meta.slots;
     const reqStars4 = def?.required_min_stars_4 ?? meta.minStars4;
     const reqStars5 = def?.required_min_stars_5 ?? meta.minStars5;
-
-    // Count unique players that qualify (sorted best-first so we fill the album optimally)
     const qualifiedPlayers = playerCol.filter(c => (c.card?.significance_level ?? 0) >= 1);
     const stars4Count = playerCol.filter(c => (c.card?.significance_level ?? 0) >= 4).length;
     const stars5Count = playerCol.filter(c => c.card?.significance_level === 5).length;
-
-    // How many slots are filled (capped to album capacity)
     const filled = Math.min(qualifiedPlayers.length, reqPlayers);
     const pct = reqPlayers > 0 ? Math.min(100, Math.round((filled / reqPlayers) * 100)) : 0;
-
     const totalPages = Math.ceil(meta.slots / PER_PAGE);
 
-    // Build page items from the player collection for this album
-    const pageItems = Array.from({ length: PER_PAGE }, (_, i) => {
-        const gi = page * PER_PAGE + i;
+    // Left page: slots 0-2, Right page: slots 3-5
+    const pageStart = page * PER_PAGE;
+    const leftItems = Array.from({ length: 3 }, (_, i) => {
+        const gi = pageStart + i;
+        if (gi >= meta.slots) return null;
+        return { idx: gi, item: qualifiedPlayers[gi] ?? null };
+    }).filter(Boolean);
+    const rightItems = Array.from({ length: 3 }, (_, i) => {
+        const gi = pageStart + 3 + i;
         if (gi >= meta.slots) return null;
         return { idx: gi, item: qualifiedPlayers[gi] ?? null };
     }).filter(Boolean);
 
     return (
         <>
-            <div className="las-panel-overlay" onClick={onClose} />
-            <div className="las-panel" style={{ '--spine': meta.spine, '--acc': meta.accent }}>
-                <div className="las-panel-header">
-                    <div className="las-panel-spine-bar" />
-                    <div className="las-panel-header-content">
-                        <div className="las-panel-title-block">
-                            <span className="las-panel-tag">{meta.tag}</span>
-                            <span className="las-panel-title">{meta.label}</span>
-                            <span className="las-panel-req">{meta.req}</span>
-                        </div>
-                        <div className="las-panel-counter-block">
-                            <span className="las-panel-count-n">{filled}</span>
-                            <span className="las-panel-count-sep">/</span>
-                            <span className="las-panel-count-t">{reqPlayers}</span>
-                        </div>
-                    </div>
-                    <button className="las-panel-close" onClick={onClose} aria-label="Cerrar">✕</button>
+            <div className="lbn-overlay" onClick={onClose} />
+            <div className={`lbn-open-book lbn-open-book--${meta.theme}`}>
+                {/* Book label above */}
+                <div className="lbn-open-book-label">
+                    <span className="lbn-open-book-title">{meta.label}</span>
+                    <button className="lbn-open-book-close" onClick={onClose} aria-label="Cerrar">✕</button>
                 </div>
 
-                <div className="las-panel-bar">
-                    <div className="las-panel-bar-fill" style={{ width: `${pct}%` }} />
-                </div>
+                {/* ── Two pages ── */}
+                <div className="lbn-pages-wrap">
 
-                <div className="las-panel-chips">
-                    <span className={`las-chip${stars4Count >= reqStars4 ? ' las-chip--met' : ''}`}>
-                        <Star size={9} /><Star size={9} /><Star size={9} /><Star size={9} />
-                        &nbsp;{Math.min(stars4Count, reqStars4)}/{reqStars4}
-                    </span>
-                    {reqStars5 > 0 && (
-                        <span className={`las-chip${stars5Count >= reqStars5 ? ' las-chip--met' : ''}`}>
-                            <Crown size={9} />&nbsp;{Math.min(stars5Count, reqStars5)}/{reqStars5}
-                        </span>
-                    )}
-                    <span className="las-chip las-chip--pct">{pct}% completado</span>
-                    {isCompleted && <span className="las-chip las-chip--done">✓ Completado</span>}
-                </div>
-
-                <div className="las-panel-scroll">
-                    <div className="las-album-page">
-                        <div className="las-page-header">
-                            <div className="las-page-header-line" />
-                            <span className="las-page-label">Página {String(page + 1).padStart(2, '0')}</span>
-                            <div className="las-page-header-line" />
-                        </div>
-
-                        <div className="las-sticker-grid">
-                            {pageItems.map(({ idx, item }) => (
-                                <PanelSticker
-                                    key={idx}
-                                    index={idx}
-                                    card={item?.card ?? null}
-                                    collectionItem={item ?? null}
-                                    accent={meta.accent}
-                                />
-                            ))}
-                            {Array.from({ length: PER_PAGE - pageItems.length }).map((_, i) => (
-                                <div key={`ph-${i}`} className="las-sticker-phantom" />
-                            ))}
-                        </div>
-
-                        <div className="las-pagination">
-                            <button
-                                className="las-page-btn"
-                                onClick={() => setPage(p => Math.max(0, p - 1))}
-                                disabled={page === 0}
-                            >
-                                <ChevronLeft size={14} />
-                            </button>
-                            <div className="las-page-dots">
-                                {Array.from({ length: totalPages }).map((_, i) => (
-                                    <button
-                                        key={i}
-                                        className={`las-page-dot${i === page ? ' las-page-dot--active' : ''}`}
-                                        onClick={() => setPage(i)}
-                                    />
+                    {/* LEFT PAGE */}
+                    <div className="lbn-page lbn-page--left">
+                        <div className="lbn-page-inner">
+                            <div className="lbn-page-header">
+                                <span className="lbn-page-eyebrow">{meta.tag}</span>
+                                <span className="lbn-page-num">pág. {String(page * 2 + 1).padStart(2, '0')}</span>
+                            </div>
+                            <div className="lbn-page-divider" />
+                            <div className="lbn-sticker-col">
+                                {leftItems.map(({ idx, item }) => (
+                                    <StickerSlot key={idx} index={idx} collectionItem={item} card={item?.card ?? null} />
+                                ))}
+                                {Array.from({ length: 3 - leftItems.length }).map((_, i) => (
+                                    <div key={`ph-l-${i}`} className="lbn-sticker-phantom" />
                                 ))}
                             </div>
-                            <button
-                                className="las-page-btn"
-                                onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-                                disabled={page === totalPages - 1}
-                            >
-                                <ChevronRight size={14} />
-                            </button>
+                            <div className="lbn-page-footer">
+                                <div className="lbn-page-progress">
+                                    <div className="lbn-page-progress-fill" style={{ width: `${pct}%` }} />
+                                </div>
+                                <span className="lbn-page-count">{filled}/{reqPlayers}</span>
+                            </div>
                         </div>
                     </div>
 
-                    {def?.reward_description && (
-                        <div className="las-reward-bar">
-                            <Gift size={13} className="las-reward-icon" />
-                            <span>{def.reward_description}</span>
+                    {/* CENTER SPINE */}
+                    <div className="lbn-book-gutter">
+                        <div className="lbn-gutter-shadow-left" />
+                        <div className="lbn-gutter-center" />
+                        <div className="lbn-gutter-shadow-right" />
+                    </div>
+
+                    {/* RIGHT PAGE */}
+                    <div className="lbn-page lbn-page--right">
+                        <div className="lbn-page-inner">
+                            <div className="lbn-page-header">
+                                <span className="lbn-page-eyebrow">Colección de jugadores</span>
+                                <span className="lbn-page-num">pág. {String(page * 2 + 2).padStart(2, '0')}</span>
+                            </div>
+                            <div className="lbn-page-divider" />
+                            <div className="lbn-sticker-col">
+                                {rightItems.map(({ idx, item }) => (
+                                    <StickerSlot key={idx} index={idx} collectionItem={item} card={item?.card ?? null} />
+                                ))}
+                                {Array.from({ length: 3 - rightItems.length }).map((_, i) => (
+                                    <div key={`ph-r-${i}`} className="lbn-sticker-phantom" />
+                                ))}
+                            </div>
+
+                            {/* Chips */}
+                            <div className="lbn-page-chips">
+                                <span className={`lbn-chip${stars4Count >= reqStars4 ? ' lbn-chip--met' : ''}`}>
+                                    <Star size={8} /><Star size={8} /><Star size={8} /><Star size={8} />
+                                    &nbsp;{Math.min(stars4Count, reqStars4)}/{reqStars4}
+                                </span>
+                                {reqStars5 > 0 && (
+                                    <span className={`lbn-chip${stars5Count >= reqStars5 ? ' lbn-chip--met' : ''}`}>
+                                        <Crown size={8} />&nbsp;{Math.min(stars5Count, reqStars5)}/{reqStars5}
+                                    </span>
+                                )}
+                                {isCompleted && <span className="lbn-chip lbn-chip--done">✓ Completado</span>}
+                            </div>
+
+                            {/* Pagination */}
+                            <div className="lbn-pagination">
+                                <button className="lbn-pg-btn" onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0}>
+                                    <ChevronLeft size={13} />
+                                </button>
+                                <div className="lbn-pg-dots">
+                                    {Array.from({ length: totalPages }).map((_, i) => (
+                                        <button key={i} className={`lbn-pg-dot${i === page ? ' lbn-pg-dot--active' : ''}`}
+                                            onClick={() => setPage(i)} />
+                                    ))}
+                                </div>
+                                <button className="lbn-pg-btn" onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page === totalPages - 1}>
+                                    <ChevronRight size={13} />
+                                </button>
+                            </div>
+
+                            {def?.reward_description && (
+                                <div className="lbn-reward">
+                                    <Gift size={11} className="lbn-reward-icon" />
+                                    <span>{def.reward_description}</span>
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
             </div>
         </>
@@ -537,10 +413,10 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
 }
 
 /* ══════════════════════════════════════════
-   ALBUM BOOK (the card itself)
+   SINGLE BOOK CARD
 ══════════════════════════════════════════ */
 function AlbumBook({ albumId, meta, definitions, progress, collection, locked }) {
-    const [panelOpen, setPanelOpen] = useState(false);
+    const [bookOpen, setBookOpen] = useState(false);
     const [hovered, setHovered] = useState(false);
 
     const def = definitions.find(d => d.id === albumId);
@@ -548,132 +424,97 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
     const reqPlayers = def?.required_unique_players ?? meta.slots;
     const filled = Math.min(playerCol.length, reqPlayers);
     const pct = reqPlayers > 0 ? Math.min(100, Math.round((filled / reqPlayers) * 100)) : 0;
-
-    // ── FIX: read completion from progress prop, not recalculated ──
     const isCompleted = progress.find(p => p.album_id === albumId)?.is_completed ?? false;
-
-    const CoverArt = COVER_COMPONENTS[albumId];
+    const CoverArt = COVERS[albumId];
 
     return (
         <>
-            {/* ── Wrapper: no perspective/transform-style so all 4 stay equal size ── */}
             <div
-                className={`las-book-wrapper${locked ? ' las-book-wrapper--locked' : ''}`}
+                className={`lbn-wrapper${locked ? ' lbn-wrapper--locked' : ''}${hovered ? ' lbn-wrapper--hovered' : ''}`}
                 onMouseEnter={() => !locked && setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
-                {/* Page-edge stack behind the book */}
-                <div className="las-book-pages-stack">
-                    {[0, 1, 2].map(i => (
-                        <div
-                            key={i}
-                            className="las-book-page-leaf"
-                            style={{ '--leaf-i': i, '--acc': meta.accent }}
-                        />
-                    ))}
-                </div>
+                {/* Pages stack visible from side */}
+                <div className="lbn-pages-edge" />
 
                 <button
                     className={[
-                        'las-book',
-                        locked ? 'las-book--locked' : '',
-                        isCompleted ? 'las-book--done' : '',
-                        meta.golden ? 'las-book--golden' : '',
-                        hovered ? 'las-book--hovered' : '',
+                        'lbn-book',
+                        `lbn-book--${meta.theme}`,
+                        locked ? 'lbn-book--locked' : '',
+                        isCompleted ? 'lbn-book--done' : '',
+                        hovered && !locked ? 'lbn-book--hovered' : '',
                     ].filter(Boolean).join(' ')}
-                    style={{
-                        '--spine': meta.spine,
-                        '--spine-alt': meta.spineAlt,
-                        '--acc': meta.accent,
-                        '--acc-rgb': meta.accentRgb,
-                        '--cover-bg': meta.coverBg,
-                    }}
-                    onClick={() => !locked && setPanelOpen(true)}
+                    onClick={() => !locked && setBookOpen(true)}
                     aria-disabled={locked}
                 >
-                    {/* Spine */}
-                    <div className="las-book-spine">
-                        <span className="las-book-spine-num">{meta.number}</span>
-                        <span className="las-book-spine-lbl">{meta.shortLabel}</span>
+                    {/* ── Spine ── */}
+                    <div className="lbn-spine">
+                        <span className="lbn-spine-num">{meta.number}</span>
+                        <span className="lbn-spine-label">{meta.shortLabel}</span>
                     </div>
 
-                    {/* Cover */}
-                    <div className="las-book-cover">
-
-                        {/* Unique SVG illustration for this album */}
-                        <div className="las-book-cover-art-wrap">
-                            {CoverArt && (
-                                <CoverArt accent={meta.accent} locked={locked} />
-                            )}
+                    {/* ── Cover ── */}
+                    <div className="lbn-cover">
+                        {/* SVG illustration */}
+                        <div className="lbn-cover-art-wrap">
+                            {CoverArt && <CoverArt locked={locked} />}
                         </div>
 
-                        {/* Rarity badge — top-right corner */}
-                        {!locked && (
-                            <RarityBadge
-                                level={meta.rarityLevel}
-                                label={meta.rarityLabel}
-                                accent={meta.accent}
-                                accentRgb={meta.accentRgb}
-                                golden={meta.golden}
-                            />
-                        )}
-
-                        {/* Season tag */}
-                        <div className="las-book-tag">
+                        {/* Season tag top-left */}
+                        <div className="lbn-cover-tag">
                             {locked
-                                ? <span className="las-book-tag-locked"><Lock size={6} strokeWidth={2.5} /> BLOQ.</span>
+                                ? <><Lock size={5} strokeWidth={2.5} /> BLOQ.</>
                                 : meta.tag
                             }
                         </div>
 
                         {/* Title */}
-                        <div className="las-book-title-block">
-                            <span className="las-book-icon">
-                                {meta.golden
-                                    ? <Trophy size={14} strokeWidth={1.8} />
-                                    : <BookOpen size={14} strokeWidth={1.8} />
-                                }
-                            </span>
-                            <span className="las-book-title">{meta.label}</span>
+                        <div className="lbn-cover-title-block">
+                            <span className="lbn-cover-title">{meta.label}</span>
                         </div>
 
-                        {/* Lock overlay for locked albums */}
+                        {/* Lock overlay */}
                         {locked && (
-                            <div className="las-book-locked-zone">
-                                <div className="las-lock-fog" />
-                                <div className="las-lock-icon-wrap">
-                                    <div className="las-lock-chain las-lock-chain--left" />
-                                    <div className="las-lock-chain las-lock-chain--right" />
-                                    <div className="las-lock-body">
-                                        <Lock size={16} strokeWidth={2} />
-                                    </div>
-                                    <div className="las-lock-pulse" />
+                            <div className="lbn-locked-overlay">
+                                <div className="lbn-locked-fog" />
+                                <div className="lbn-locked-icon">
+                                    <Lock size={18} strokeWidth={1.8} />
+                                    <div className="lbn-locked-pulse" />
                                 </div>
-                                <span className="las-lock-label">Completa el álbum anterior</span>
+                                <span className="lbn-locked-label">Completa el álbum anterior</span>
                             </div>
                         )}
 
-                        {/* Footer: progress indicator */}
-                        <div className="las-book-footer">
-                            <StackedPages pct={pct} accent={meta.accent} />
-                            <div className="las-book-footer-row">
-                                <span className="las-book-count">{filled}/{reqPlayers}</span>
-                                {isCompleted && <span className="las-book-done-badge">✓</span>}
-                                {!locked && <span className="las-book-hint">Abrir →</span>}
+                        {/* Footer */}
+                        <div className="lbn-cover-footer">
+                            <div className="lbn-cover-progress">
+                                <div className="lbn-cover-progress-fill" style={{ width: `${pct}%` }} />
+                            </div>
+                            <div className="lbn-cover-footer-row">
+                                <span className="lbn-cover-count">{filled}/{reqPlayers}</span>
+                                {isCompleted && <span className="lbn-cover-done">✓</span>}
+                                {!locked && <span className="lbn-cover-hint">Abrir →</span>}
                             </div>
                         </div>
                     </div>
                 </button>
+
+                {/* Hover info label below book */}
+                <div className="lbn-hover-label">
+                    <span className="lbn-hover-title">{meta.label}</span>
+                    <span className="lbn-hover-req">{meta.req}</span>
+                </div>
             </div>
 
-            {panelOpen && (
-                <AlbumPanel
+            {bookOpen && (
+                <OpenBook
                     albumId={albumId}
                     meta={meta}
                     definitions={definitions}
                     progress={progress}
                     collection={collection}
-                    onClose={() => setPanelOpen(false)}
+                    onClose={() => setBookOpen(false)}
                 />
             )}
         </>
@@ -692,14 +533,14 @@ export default function LegendaryAlbumsSection({ definitions, progress, collecti
     };
 
     return (
-        <div className="las-root">
-            <div className="las-eyebrow">
+        <div className="lbn-root">
+            <div className="lbn-eyebrow">
                 <span>Álbumes Legendarios</span>
-                <div className="las-eyebrow-line" />
-                <span className="las-eyebrow-count">4 álbumes</span>
+                <div className="lbn-eyebrow-line" />
+                <span className="lbn-eyebrow-count">4 álbumes</span>
             </div>
 
-            <div className="las-books-row">
+            <div className="lbn-shelf">
                 {ORDER.map(albumId => (
                     <AlbumBook
                         key={albumId}
