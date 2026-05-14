@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAlbumPacks } from '../hooks/useAlbumPacks';
 import { useAlbumCollection } from '../hooks/useAlbumCollection';
 import { useAlbumProgress } from '../hooks/useAlbumProgress';
@@ -11,7 +12,26 @@ import LegendaryAlbumsSection from '../components/LegendaryAlbumsSection';
 import StarCollectionSection from '../components/StarCollectionSection';
 import CultAlbumsSection from '../components/CultAlbumsSection';
 import PackOpeningModal from '../components/PackOpeningModal';
+import { primaryButtonProps } from '../motion/variants';
 import './AlbumsPage.css';
+
+// ── Variantes locales de esta página ──────────────────────────────────────
+const heroVariants = {
+    hidden: { opacity: 0, y: -8 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.32, ease: 'easeOut' },
+    },
+};
+
+const barFillVariants = {
+    hidden: { width: '0%' },
+    visible: (pct) => ({
+        width: `${pct}%`,
+        transition: { duration: 0.7, ease: [0.23, 1, 0.32, 1], delay: 0.2 },
+    }),
+};
 
 export default function AlbumsPage({ currentUser }) {
     const user = currentUser;
@@ -48,7 +68,14 @@ export default function AlbumsPage({ currentUser }) {
 
     return (
         <div className="alp-root">
-            <div className="alp-hero">
+
+            {/* ── HERO ── */}
+            <motion.div
+                className="alp-hero"
+                variants={heroVariants}
+                initial="hidden"
+                animate="visible"
+            >
                 <div className="alp-hero-left">
                     <div className="alp-hero-eyebrow">
                         <span className="alp-hero-eyebrow-dot" />
@@ -62,20 +89,45 @@ export default function AlbumsPage({ currentUser }) {
                     </p>
                 </div>
 
-                {packsAvailable > 0 && (
-                    <button className="alp-open-btn" onClick={handleOpenModal}>
-                        <span className="alp-open-btn-count">{packsAvailable}</span>
-                        Abrir {packsAvailable === 1 ? 'sobre' : 'sobres'}
-                    </button>
-                )}
-            </div>
+                {/* Botón con Framer — reemplaza CSS transform hover/active */}
+                <AnimatePresence>
+                    {packsAvailable > 0 && (
+                        <motion.button
+                            className="alp-open-btn"
+                            onClick={handleOpenModal}
+                            {...primaryButtonProps}
+                            initial={{ opacity: 0, scale: 0.92 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.92 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <span className="alp-open-btn-count">{packsAvailable}</span>
+                            Abrir {packsAvailable === 1 ? 'sobre' : 'sobres'}
+                        </motion.button>
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
+            {/* ── BARRA DE PROGRESO ── */}
             <div className="alp-bar-section">
                 <div className="alp-bar-header">
                     <span className="alp-bar-label">Progreso · próximo sobre</span>
                     <span className="alp-bar-pct">{barPercent}%</span>
                 </div>
-                <AlbumProgressBar percent={barPercent} packsAvailable={packsAvailable} />
+
+                {/* Progress bar con motion — reemplaza transition: width en CSS */}
+                <div className="apb-root">
+                    <div className="apb-bar-wrap">
+                        <motion.div
+                            className="apb-bar-fill"
+                            custom={barPercent}
+                            variants={barFillVariants}
+                            initial="hidden"
+                            animate="visible"
+                            key={barPercent} // re-anima si cambia el valor
+                        />
+                    </div>
+                </div>
             </div>
 
             <AlbumsSectionNav active={activeSection} onChange={setActiveSection} />

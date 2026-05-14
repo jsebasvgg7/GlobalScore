@@ -1,8 +1,48 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAlbumPacks } from '../hooks/useAlbumPacks';
 import AlbumProgressBar from './AlbumProgressBar';
 import '../styles/AlbumBookEntry.css';
+
+// ── Variantes locales ──────────────────────────────────────────────────────
+const rootVariants = {
+    rest: { y: 0 },
+    hover: {
+        y: -2,
+        transition: { type: 'spring', stiffness: 400, damping: 22 },
+    },
+    tap: {
+        y: 0,
+        transition: { type: 'spring', stiffness: 600, damping: 28 },
+    },
+};
+
+const spineVariants = {
+    rest: { scaleY: 1 },
+    hover: {
+        scaleY: 1.04,
+        transition: { type: 'spring', stiffness: 300, damping: 20 },
+    },
+};
+
+const iconVariants = {
+    rest: { rotate: 0, scale: 1 },
+    hover: {
+        rotate: -5,
+        scale: 1.1,
+        transition: { type: 'spring', stiffness: 300, damping: 18 },
+    },
+};
+
+const arrowVariants = {
+    rest: { x: 0, opacity: 0.4 },
+    hover: {
+        x: 4,
+        opacity: 1,
+        transition: { type: 'spring', stiffness: 400, damping: 22 },
+    },
+};
 
 export default function AlbumBookEntry({ currentUser }) {
     const navigate = useNavigate();
@@ -11,11 +51,22 @@ export default function AlbumBookEntry({ currentUser }) {
     if (loading) return null;
 
     return (
-        <button className="abe-root" onClick={() => navigate('/albums')}>
-
+        <motion.button
+            className="abe-root"
+            onClick={() => navigate('/albums')}
+            initial="rest"
+            whileHover="hover"
+            whileTap="tap"
+            variants={rootVariants}
+            // Framer controla el hover — quitamos el CSS :hover transform
+            style={{ transform: 'none' }}
+        >
             <div className="abe-book-zone">
-                <div className="abe-spine" />
-                <div className="abe-book-bg">
+                {/* Spine con micro-scale vertical */}
+                <motion.div className="abe-spine" variants={spineVariants} />
+
+                {/* Ícono del libro con rotación suave */}
+                <motion.div className="abe-book-bg" variants={iconVariants}>
                     <svg
                         className="abe-book-svg"
                         width="28"
@@ -38,7 +89,7 @@ export default function AlbumBookEntry({ currentUser }) {
                         <line x1="20.5" y1="15" x2="16.5" y2="14.2" />
                         <line x1="20.5" y1="18" x2="16.5" y2="17.2" />
                     </svg>
-                </div>
+                </motion.div>
             </div>
 
             <div className="abe-content">
@@ -56,7 +107,8 @@ export default function AlbumBookEntry({ currentUser }) {
                 <AlbumProgressBar percent={barPercent} compact />
             </div>
 
-            <span className="abe-arrow" aria-hidden="true">
+            {/* Flecha con slide derecha */}
+            <motion.span className="abe-arrow" variants={arrowVariants} aria-hidden="true">
                 <svg
                     width="16"
                     height="16"
@@ -69,7 +121,7 @@ export default function AlbumBookEntry({ currentUser }) {
                 >
                     <path d="M6 4l4 4-4 4" />
                 </svg>
-            </span>
-        </button>
+            </motion.span>
+        </motion.button>
     );
 }
