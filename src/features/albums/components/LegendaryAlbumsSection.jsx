@@ -20,7 +20,6 @@ const ALBUM_META = {
         number: '01',
         golden: false,
         coverBg: '#1a1726',
-        coverLine: '#2e2858',
         rarityLevel: 4,
         rarityLabel: 'LEYENDA',
     },
@@ -39,7 +38,6 @@ const ALBUM_META = {
         number: '02',
         golden: false,
         coverBg: '#160e2a',
-        coverLine: '#2a1a50',
         rarityLevel: 4,
         rarityLabel: 'LEYENDA+',
     },
@@ -58,7 +56,6 @@ const ALBUM_META = {
         number: '03',
         golden: false,
         coverBg: '#0a1f18',
-        coverLine: '#163d2e',
         rarityLevel: 5,
         rarityLabel: 'ÉLITE',
     },
@@ -77,7 +74,6 @@ const ALBUM_META = {
         number: '✦',
         golden: true,
         coverBg: '#1a1200',
-        coverLine: '#2e2000',
         rarityLevel: 5,
         rarityLabel: 'GOAT',
     },
@@ -88,10 +84,240 @@ function getInitials(name = '') {
 }
 
 function posLabel(pos) {
-    const map = { Forward: 'DEL', Midfielder: 'MED', Defender: 'DEF', Goalkeeper: 'POR', 'Play-maker': 'MP', 'All-rounder': 'TOD' };
+    const map = {
+        Forward: 'DEL', Midfielder: 'MED', Defender: 'DEF',
+        Goalkeeper: 'POR', 'Play-maker': 'MP', 'All-rounder': 'TOD',
+    };
     return map[pos] || pos?.slice(0, 3).toUpperCase() || '—';
 }
 
+/* ══════════════════════════════════════════
+   UNIQUE COVER ILLUSTRATIONS — one per album
+══════════════════════════════════════════ */
+
+/** Legendarios I — diagonal hatching + shield */
+function CoverLeg1({ accent, locked }) {
+    return (
+        <svg viewBox="0 0 100 130" className="las-book-cover-art" aria-hidden="true">
+            <defs>
+                <pattern id="leg1-hatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+                    <line x1="0" y1="0" x2="0" y2="8" stroke={accent} strokeWidth="0.6" opacity="0.25" />
+                </pattern>
+            </defs>
+            {/* Background pattern */}
+            <rect x="0" y="0" width="100" height="130" fill="url(#leg1-hatch)" />
+            {/* Decorative corner lines */}
+            <line x1="8" y1="8" x2="30" y2="8" stroke={accent} strokeWidth="0.5" opacity="0.4" />
+            <line x1="8" y1="8" x2="8" y2="30" stroke={accent} strokeWidth="0.5" opacity="0.4" />
+            <line x1="92" y1="122" x2="70" y2="122" stroke={accent} strokeWidth="0.5" opacity="0.4" />
+            <line x1="92" y1="122" x2="92" y2="100" stroke={accent} strokeWidth="0.5" opacity="0.4" />
+            {/* Shield shape */}
+            {!locked && (
+                <g transform="translate(50,62)">
+                    <path
+                        d="M0,-32 L24,-20 L24,4 Q24,22 0,34 Q-24,22 -24,4 L-24,-20 Z"
+                        fill="none"
+                        stroke={accent}
+                        strokeWidth="1.2"
+                        opacity="0.9"
+                    />
+                    <path
+                        d="M0,-22 L16,-13 L16,3 Q16,15 0,23 Q-16,15 -16,3 L-16,-13 Z"
+                        fill={accent}
+                        opacity="0.12"
+                    />
+                    {/* Shield cross */}
+                    <line x1="0" y1="-20" x2="0" y2="20" stroke={accent} strokeWidth="0.7" opacity="0.5" />
+                    <line x1="-18" y1="-4" x2="18" y2="-4" stroke={accent} strokeWidth="0.7" opacity="0.5" />
+                </g>
+            )}
+            {/* Roman numeral I */}
+            {!locked && (
+                <text x="50" y="115" textAnchor="middle" fill={accent} fontSize="9" fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.2em" opacity="0.6">I</text>
+            )}
+        </svg>
+    );
+}
+
+/** Legendarios II — hexagonal grid + crown */
+function CoverLeg2({ accent, locked }) {
+    const hexPoints = (cx, cy, r) => {
+        return Array.from({ length: 6 }, (_, i) => {
+            const a = (Math.PI / 3) * i - Math.PI / 6;
+            return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
+        }).join(' ');
+    };
+    const hexes = [
+        [50, 40], [30, 52], [70, 52], [50, 64], [30, 76], [70, 76], [50, 88],
+    ];
+    return (
+        <svg viewBox="0 0 100 130" className="las-book-cover-art" aria-hidden="true">
+            {/* Hex grid background */}
+            {hexes.map(([cx, cy], i) => (
+                <polygon
+                    key={i}
+                    points={hexPoints(cx, cy, 13)}
+                    fill="none"
+                    stroke={accent}
+                    strokeWidth="0.5"
+                    opacity={i === 0 ? 0.5 : 0.18}
+                />
+            ))}
+            {/* Center hex filled */}
+            {!locked && (
+                <>
+                    <polygon
+                        points={hexPoints(50, 64, 13)}
+                        fill={accent}
+                        opacity="0.12"
+                    />
+                    {/* Crown */}
+                    <g transform="translate(50,64)">
+                        <path
+                            d="M-14,8 L-14,-4 L-7,2 L0,-10 L7,2 L14,-4 L14,8 Z"
+                            fill="none"
+                            stroke={accent}
+                            strokeWidth="1.2"
+                            strokeLinejoin="round"
+                            opacity="0.9"
+                        />
+                        <rect x="-14" y="8" width="28" height="3" rx="1" fill={accent} opacity="0.3" />
+                        {/* Crown gems */}
+                        <circle cx="0" cy="-2" r="1.5" fill={accent} opacity="0.7" />
+                        <circle cx="-9" cy="3" r="1" fill={accent} opacity="0.5" />
+                        <circle cx="9" cy="3" r="1" fill={accent} opacity="0.5" />
+                    </g>
+                </>
+            )}
+            {/* II label */}
+            {!locked && (
+                <text x="50" y="118" textAnchor="middle" fill={accent} fontSize="9" fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.2em" opacity="0.6">II</text>
+            )}
+        </svg>
+    );
+}
+
+/** Legendarios III — concentric rings + lightning bolt */
+function CoverLeg3({ accent, locked }) {
+    return (
+        <svg viewBox="0 0 100 130" className="las-book-cover-art" aria-hidden="true">
+            {/* Concentric arcs (bottom half only for depth) */}
+            {[42, 32, 22, 12].map((r, i) => (
+                <circle
+                    key={i}
+                    cx="50"
+                    cy="65"
+                    r={r}
+                    fill="none"
+                    stroke={accent}
+                    strokeWidth="0.6"
+                    opacity={0.12 + i * 0.06}
+                />
+            ))}
+            {/* Radiating lines */}
+            {Array.from({ length: 12 }, (_, i) => {
+                const angle = (i / 12) * Math.PI * 2;
+                const x1 = 50 + 14 * Math.cos(angle);
+                const y1 = 65 + 14 * Math.sin(angle);
+                const x2 = 50 + 44 * Math.cos(angle);
+                const y2 = 65 + 44 * Math.sin(angle);
+                return (
+                    <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
+                        stroke={accent} strokeWidth="0.4" opacity="0.15" />
+                );
+            })}
+            {/* Lightning bolt center */}
+            {!locked && (
+                <g transform="translate(50,65)">
+                    <path
+                        d="M6,-18 L-4,-2 L3,-2 L-6,18 L4,2 L-3,2 Z"
+                        fill={accent}
+                        opacity="0.85"
+                    />
+                    {/* Inner glow ring */}
+                    <circle cx="0" cy="0" r="10" fill={accent} opacity="0.08" />
+                </g>
+            )}
+            {/* III label */}
+            {!locked && (
+                <text x="50" y="118" textAnchor="middle" fill={accent} fontSize="9" fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.2em" opacity="0.6">III</text>
+            )}
+        </svg>
+    );
+}
+
+/** Álbum Dorado — spiral + trophy, shimmer animation */
+function CoverGolden({ accent, locked }) {
+    return (
+        <svg viewBox="0 0 100 130" className="las-book-cover-art las-book-cover-art--golden" aria-hidden="true">
+            <defs>
+                <pattern id="gold-dots" patternUnits="userSpaceOnUse" width="10" height="10">
+                    <circle cx="5" cy="5" r="0.8" fill={accent} opacity="0.2" />
+                </pattern>
+            </defs>
+            {/* Dot grid */}
+            <rect x="0" y="0" width="100" height="130" fill="url(#gold-dots)" />
+            {/* Spiral (hand-drawn as arcs) */}
+            {!locked && (
+                <>
+                    <path
+                        d="M50,65 Q56,52 62,60 Q70,72 58,80 Q44,88 36,72 Q28,52 48,42 Q72,32 80,62 Q86,90 62,100"
+                        fill="none"
+                        stroke={accent}
+                        strokeWidth="1"
+                        opacity="0.35"
+                        strokeLinecap="round"
+                    />
+                    {/* Trophy */}
+                    <g transform="translate(50,62)">
+                        {/* Cup body */}
+                        <path
+                            d="M-10,-16 Q-12,4 0,12 Q12,4 10,-16 Z"
+                            fill="none"
+                            stroke={accent}
+                            strokeWidth="1.2"
+                            strokeLinejoin="round"
+                            opacity="0.95"
+                        />
+                        {/* Handles */}
+                        <path d="M-10,-10 Q-18,-10 -18,-4 Q-18,2 -10,2" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
+                        <path d="M10,-10 Q18,-10 18,-4 Q18,2 10,2" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
+                        {/* Stem + base */}
+                        <line x1="0" y1="12" x2="0" y2="18" stroke={accent} strokeWidth="1.2" opacity="0.8" />
+                        <rect x="-8" y="18" width="16" height="3" rx="1.5" fill={accent} opacity="0.6" />
+                        {/* Star inside trophy */}
+                        <path d="M0,-6 L1.5,-2 L5.5,-2 L2.5,0.5 L3.5,4.5 L0,2.5 L-3.5,4.5 L-2.5,0.5 L-5.5,-2 L-1.5,-2 Z"
+                            fill={accent} opacity="0.7" />
+                    </g>
+                </>
+            )}
+            {/* Corner ornaments */}
+            {[
+                [8, 10], [92, 10], [8, 120], [92, 120]
+            ].map(([cx, cy], i) => (
+                <g key={i} transform={`translate(${cx},${cy})`}>
+                    <circle r="1.5" fill={accent} opacity="0.5" />
+                    <circle r="4" fill="none" stroke={accent} strokeWidth="0.5" opacity="0.25" />
+                </g>
+            ))}
+            {/* GOAT text */}
+            {!locked && (
+                <text x="50" y="118" textAnchor="middle" fill={accent} fontSize="8" fontFamily="'DM Mono', monospace" fontWeight="800" letterSpacing="0.25em" opacity="0.7">GOAT</text>
+            )}
+        </svg>
+    );
+}
+
+const COVER_COMPONENTS = {
+    legendary_1: CoverLeg1,
+    legendary_2: CoverLeg2,
+    legendary_3: CoverLeg3,
+    golden_album: CoverGolden,
+};
+
+/* ══════════════════════════════════════════
+   RARITY BADGE
+══════════════════════════════════════════ */
 function RarityBadge({ level, label, accent, accentRgb, golden }) {
     const stars = Array.from({ length: Math.min(level, 5) });
     return (
@@ -100,15 +326,16 @@ function RarityBadge({ level, label, accent, accentRgb, golden }) {
             style={{ '--acc': accent, '--acc-rgb': accentRgb }}
         >
             <div className="las-rarity-badge-stars">
-                {stars.map((_, i) => (
-                    <span key={i} className="las-rarity-star">★</span>
-                ))}
+                {stars.map((_, i) => <span key={i} className="las-rarity-star">★</span>)}
             </div>
             <span className="las-rarity-label">{label}</span>
         </div>
     );
 }
 
+/* ══════════════════════════════════════════
+   STACKED PAGES (progress indicator)
+══════════════════════════════════════════ */
 function StackedPages({ pct, accent }) {
     const pages = 5;
     const filled = Math.round((pct / 100) * pages);
@@ -118,10 +345,7 @@ function StackedPages({ pct, accent }) {
                 <div
                     key={i}
                     className={`las-page-leaf${i < filled ? ' las-page-leaf--filled' : ''}`}
-                    style={{
-                        '--leaf-offset': `${i * 1.5}px`,
-                        '--acc': accent,
-                    }}
+                    style={{ '--leaf-offset': `${i * 1.5}px`, '--acc': accent }}
                 />
             ))}
             <span className="las-stacked-pct">{pct}%</span>
@@ -129,6 +353,9 @@ function StackedPages({ pct, accent }) {
     );
 }
 
+/* ══════════════════════════════════════════
+   PANEL STICKER
+══════════════════════════════════════════ */
 function PanelSticker({ index, card, collectionItem, accent }) {
     const num = String(index + 1).padStart(2, '0');
     const isGoat = card?.significance_level === 5;
@@ -173,6 +400,9 @@ function PanelSticker({ index, card, collectionItem, accent }) {
     );
 }
 
+/* ══════════════════════════════════════════
+   ALBUM PANEL (slide-in detail view)
+══════════════════════════════════════════ */
 function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose }) {
     const [page, setPage] = useState(0);
     const PER_PAGE = 6;
@@ -181,20 +411,28 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
     const prog = progress.find(p => p.album_id === albumId);
     const isCompleted = prog?.is_completed ?? false;
 
+    // ── FIX: filter to players only, then check star requirements ──
     const playerCol = collection.filter(c => c.card?.card_type === 'player');
     const reqPlayers = def?.required_unique_players ?? meta.slots;
     const reqStars4 = def?.required_min_stars_4 ?? meta.minStars4;
     const reqStars5 = def?.required_min_stars_5 ?? meta.minStars5;
-    const stars4 = playerCol.filter(c => c.card?.significance_level >= 4).length;
-    const stars5count = playerCol.filter(c => c.card?.significance_level === 5).length;
-    const filled = Math.min(playerCol.length, reqPlayers);
+
+    // Count unique players that qualify (sorted best-first so we fill the album optimally)
+    const qualifiedPlayers = playerCol.filter(c => (c.card?.significance_level ?? 0) >= 1);
+    const stars4Count = playerCol.filter(c => (c.card?.significance_level ?? 0) >= 4).length;
+    const stars5Count = playerCol.filter(c => c.card?.significance_level === 5).length;
+
+    // How many slots are filled (capped to album capacity)
+    const filled = Math.min(qualifiedPlayers.length, reqPlayers);
     const pct = reqPlayers > 0 ? Math.min(100, Math.round((filled / reqPlayers) * 100)) : 0;
 
     const totalPages = Math.ceil(meta.slots / PER_PAGE);
+
+    // Build page items from the player collection for this album
     const pageItems = Array.from({ length: PER_PAGE }, (_, i) => {
         const gi = page * PER_PAGE + i;
         if (gi >= meta.slots) return null;
-        return { idx: gi, item: playerCol[gi] ?? null };
+        return { idx: gi, item: qualifiedPlayers[gi] ?? null };
     }).filter(Boolean);
 
     return (
@@ -223,13 +461,13 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                 </div>
 
                 <div className="las-panel-chips">
-                    <span className={`las-chip${stars4 >= reqStars4 ? ' las-chip--met' : ''}`}>
+                    <span className={`las-chip${stars4Count >= reqStars4 ? ' las-chip--met' : ''}`}>
                         <Star size={9} /><Star size={9} /><Star size={9} /><Star size={9} />
-                        &nbsp;{Math.min(stars4, reqStars4)}/{reqStars4}
+                        &nbsp;{Math.min(stars4Count, reqStars4)}/{reqStars4}
                     </span>
                     {reqStars5 > 0 && (
-                        <span className={`las-chip${stars5count >= reqStars5 ? ' las-chip--met' : ''}`}>
-                            <Crown size={9} />&nbsp;{Math.min(stars5count, reqStars5)}/{reqStars5}
+                        <span className={`las-chip${stars5Count >= reqStars5 ? ' las-chip--met' : ''}`}>
+                            <Crown size={9} />&nbsp;{Math.min(stars5Count, reqStars5)}/{reqStars5}
                         </span>
                     )}
                     <span className="las-chip las-chip--pct">{pct}% completado</span>
@@ -298,6 +536,9 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
     );
 }
 
+/* ══════════════════════════════════════════
+   ALBUM BOOK (the card itself)
+══════════════════════════════════════════ */
 function AlbumBook({ albumId, meta, definitions, progress, collection, locked }) {
     const [panelOpen, setPanelOpen] = useState(false);
     const [hovered, setHovered] = useState(false);
@@ -307,16 +548,21 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
     const reqPlayers = def?.required_unique_players ?? meta.slots;
     const filled = Math.min(playerCol.length, reqPlayers);
     const pct = reqPlayers > 0 ? Math.min(100, Math.round((filled / reqPlayers) * 100)) : 0;
+
+    // ── FIX: read completion from progress prop, not recalculated ──
     const isCompleted = progress.find(p => p.album_id === albumId)?.is_completed ?? false;
+
+    const CoverArt = COVER_COMPONENTS[albumId];
 
     return (
         <>
+            {/* ── Wrapper: no perspective/transform-style so all 4 stay equal size ── */}
             <div
                 className={`las-book-wrapper${locked ? ' las-book-wrapper--locked' : ''}`}
                 onMouseEnter={() => !locked && setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
-                {/* Páginas apiladas detrás del libro */}
+                {/* Page-edge stack behind the book */}
                 <div className="las-book-pages-stack">
                     {[0, 1, 2].map(i => (
                         <div
@@ -328,29 +574,40 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                 </div>
 
                 <button
-                    className={`las-book${locked ? ' las-book--locked' : ''}${isCompleted ? ' las-book--done' : ''}${meta.golden ? ' las-book--golden' : ''}${hovered ? ' las-book--hovered' : ''}`}
+                    className={[
+                        'las-book',
+                        locked ? 'las-book--locked' : '',
+                        isCompleted ? 'las-book--done' : '',
+                        meta.golden ? 'las-book--golden' : '',
+                        hovered ? 'las-book--hovered' : '',
+                    ].filter(Boolean).join(' ')}
                     style={{
                         '--spine': meta.spine,
                         '--spine-alt': meta.spineAlt,
                         '--acc': meta.accent,
                         '--acc-rgb': meta.accentRgb,
                         '--cover-bg': meta.coverBg,
-                        '--cover-line': meta.coverLine,
                     }}
                     onClick={() => !locked && setPanelOpen(true)}
                     aria-disabled={locked}
                 >
-                    {/* Lomo */}
+                    {/* Spine */}
                     <div className="las-book-spine">
                         <span className="las-book-spine-num">{meta.number}</span>
                         <span className="las-book-spine-lbl">{meta.shortLabel}</span>
                     </div>
 
-                    {/* Portada */}
+                    {/* Cover */}
                     <div className="las-book-cover">
-                        <div className="las-book-grid-bg" />
 
-                        {/* Insignia de rareza embossed */}
+                        {/* Unique SVG illustration for this album */}
+                        <div className="las-book-cover-art-wrap">
+                            {CoverArt && (
+                                <CoverArt accent={meta.accent} locked={locked} />
+                            )}
+                        </div>
+
+                        {/* Rarity badge — top-right corner */}
                         {!locked && (
                             <RarityBadge
                                 level={meta.rarityLevel}
@@ -361,6 +618,7 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                             />
                         )}
 
+                        {/* Season tag */}
                         <div className="las-book-tag">
                             {locked
                                 ? <span className="las-book-tag-locked"><Lock size={6} strokeWidth={2.5} /> BLOQ.</span>
@@ -368,6 +626,7 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                             }
                         </div>
 
+                        {/* Title */}
                         <div className="las-book-title-block">
                             <span className="las-book-icon">
                                 {meta.golden
@@ -378,24 +637,8 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                             <span className="las-book-title">{meta.label}</span>
                         </div>
 
-                        {!locked ? (
-                            <div className="las-book-preview">
-                                {Array.from({ length: 6 }).map((_, i) => {
-                                    const item = playerCol[i];
-                                    return (
-                                        <div key={i} className={`las-book-slot${item ? ' las-book-slot--filled' : ''}`}>
-                                            {item?.card?.image_path
-                                                ? <img src={item.card.image_path} alt="" />
-                                                : item
-                                                    ? <span>{getInitials(item.card?.name)}</span>
-                                                    : null
-                                            }
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            /* Lock dramático con fog */
+                        {/* Lock overlay for locked albums */}
+                        {locked && (
                             <div className="las-book-locked-zone">
                                 <div className="las-lock-fog" />
                                 <div className="las-lock-icon-wrap">
@@ -410,6 +653,7 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                             </div>
                         )}
 
+                        {/* Footer: progress indicator */}
                         <div className="las-book-footer">
                             <StackedPages pct={pct} accent={meta.accent} />
                             <div className="las-book-footer-row">
@@ -436,6 +680,9 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
     );
 }
 
+/* ══════════════════════════════════════════
+   MAIN EXPORT
+══════════════════════════════════════════ */
 export default function LegendaryAlbumsSection({ definitions, progress, collection }) {
     const isUnlocked = (albumId) => {
         const idx = ORDER.indexOf(albumId);

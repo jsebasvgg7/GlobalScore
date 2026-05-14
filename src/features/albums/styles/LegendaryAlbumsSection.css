@@ -1,16 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@600;700;800&display=swap');
 
-/* ════════════════════════════════════════════════
-   LEGENDARY ALBUMS SECTION — las-*
-════════════════════════════════════════════════ */
-
 .las-root {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-/* ── Eyebrow ── */
 .las-eyebrow {
     display: flex;
     align-items: center;
@@ -51,6 +46,7 @@
 .las-books-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    align-items: stretch;
     gap: 20px;
     padding-bottom: 12px;
 }
@@ -69,15 +65,12 @@
 }
 
 /* ════════════════════════════════════════════════
-   WRAPPER 3D — contiene páginas + libro
+   WRAPPER
 ════════════════════════════════════════════════ */
 .las-book-wrapper {
     position: relative;
-    perspective: 800px;
-    transform-style: preserve-3d;
 }
 
-/* Páginas apiladas detrás del libro (efecto canto) */
 .las-book-pages-stack {
     position: absolute;
     top: 4px;
@@ -87,7 +80,6 @@
     display: flex;
     flex-direction: column;
     justify-content: stretch;
-    gap: 0;
     pointer-events: none;
     z-index: 0;
 }
@@ -127,17 +119,16 @@
         box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
     aspect-ratio: 3/4;
+    width: 100%;
     min-height: 160px;
     z-index: 1;
-    transform-style: preserve-3d;
-    transform-origin: left center;
 }
 
 .las-book--hovered:not(.las-book--locked) {
-    transform: rotateY(-8deg) translateY(-6px) translateX(2px);
+    transform: translateY(-6px) scale(1.02);
     box-shadow:
-        12px 14px 0 rgba(0, 0, 0, 0.3),
-        20px 24px 40px rgba(0, 0, 0, 0.22),
+        6px 10px 0 rgba(0, 0, 0, 0.3),
+        14px 20px 36px rgba(0, 0, 0, 0.22),
         inset 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
@@ -199,19 +190,9 @@
     gap: 6px;
     position: relative;
     overflow: hidden;
+    min-width: 0;
 }
 
-.las-book-grid-bg {
-    position: absolute;
-    inset: 0;
-    background:
-        repeating-linear-gradient(0deg, transparent, transparent 11px, rgba(255, 255, 255, 0.022) 12px),
-        repeating-linear-gradient(90deg, transparent, transparent 11px, rgba(255, 255, 255, 0.022) 12px);
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* Acento lateral (borde de color) en la portada */
 .las-book-cover::after {
     content: '';
     position: absolute;
@@ -226,7 +207,41 @@
     z-index: 2;
 }
 
-/* ── Insignia de rareza embossed ── */
+/* ── Arte SVG de portada ── */
+.las-book-cover-art-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.las-book-cover-art {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.las-book-cover-art--golden {
+    animation: las-golden-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes las-golden-shimmer {
+
+    0%,
+    100% {
+        opacity: 0.85;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ── Insignia de rareza ── */
 .las-rarity-badge {
     position: relative;
     z-index: 2;
@@ -244,9 +259,6 @@
 .las-rarity-badge--golden {
     background: rgba(245, 158, 11, 0.12);
     border-color: rgba(245, 158, 11, 0.45);
-    box-shadow:
-        0 0 8px rgba(245, 158, 11, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     animation: las-golden-pulse 2.5s ease-in-out infinite;
 }
 
@@ -294,7 +306,7 @@
 /* ── Tag ── */
 .las-book-tag {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     font-family: 'DM Mono', monospace;
     font-size: 6px;
     font-weight: 700;
@@ -325,7 +337,7 @@
 /* ── Título ── */
 .las-book-title-block {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -350,55 +362,12 @@
     line-height: 1.15;
 }
 
-/* ── Mini preview 2×3 ── */
-.las-book-preview {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    flex: 1;
-}
-
-.las-book-slot {
-    background: rgba(255, 255, 255, 0.04);
-    border: 0.5px dashed rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-    aspect-ratio: 2/3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    font-family: 'DM Mono', monospace;
-    font-size: 6px;
-    font-weight: 700;
-    color: var(--acc, #a599d9);
-    transition: border-color 0.2s;
-}
-
-.las-book--hovered .las-book-slot {
-    border-color: rgba(255, 255, 255, 0.06);
-}
-
-.las-book-slot--filled {
-    border-color: color-mix(in srgb, var(--acc, #a599d9) 55%, transparent);
-    border-style: solid;
-    background: rgba(255, 255, 255, 0.06);
-}
-
-.las-book-slot img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 2px;
-}
-
 /* ════════════════════════════════════════════════
    LOCK DRAMÁTICO
 ════════════════════════════════════════════════ */
 .las-book-locked-zone {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -428,7 +397,6 @@
     gap: 0;
 }
 
-/* Cadenas laterales */
 .las-lock-chain {
     position: absolute;
     top: -10px;
@@ -524,25 +492,11 @@
     border-radius: 1px;
     transition: background 0.4s, border-color 0.4s;
     transform-origin: bottom;
-    animation: las-leaf-appear 0.3s ease both;
-    animation-delay: calc(var(--leaf-offset, 0px) * 0.05);
 }
 
 .las-page-leaf--filled {
     background: color-mix(in srgb, var(--acc, #a599d9) 55%, transparent);
     border-color: color-mix(in srgb, var(--acc, #a599d9) 70%, transparent);
-}
-
-@keyframes las-leaf-appear {
-    from {
-        transform: scaleY(0.3);
-        opacity: 0;
-    }
-
-    to {
-        transform: scaleY(1);
-        opacity: 1;
-    }
 }
 
 .las-stacked-pct {
@@ -559,7 +513,7 @@
 /* ── Footer ── */
 .las-book-footer {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     gap: 4px;
