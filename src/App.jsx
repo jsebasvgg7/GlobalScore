@@ -17,6 +17,7 @@ import ProfileSettingsPage from "@/features/profile/page/ProfileSettingsPage";
 import NotificationsPage from "@/features/notifications/page/NotificationsPage";
 import StatsPage from "@/features/stats/page/StatsPage";
 import WorldCupPage from "@/features/worldcup/page/WorldCupPage";
+import AlbumsPage from "@/features/albums/page/AlbumsPage";
 import NotesPage from "@/features/notes/page/NotesPage";
 import { PageLoader } from "@/shared/ui";
 import "./styles/layout.css";
@@ -274,6 +275,11 @@ export default function App() {
             path="/notes"
             element={session ? <NotesPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
+          <Route
+            path="/albums"
+            element={session ? <AlbumsPage /> : <Navigate to="/" replace />}
+          />
+
           <Route
             path="/profile"
             element={

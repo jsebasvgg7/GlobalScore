@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../../contexts/AuthContext';
+import React, { useState, useEffect } from 'react';
 import { useAlbumPacks } from '../hooks/useAlbumPacks';
 import { useAlbumCollection } from '../hooks/useAlbumCollection';
 import { useAlbumProgress } from '../hooks/useAlbumProgress';
@@ -13,10 +12,9 @@ import StarCollectionSection from '../components/StarCollectionSection';
 import CultAlbumsSection from '../components/CultAlbumsSection';
 import PackOpeningModal from '../components/PackOpeningModal';
 import './AlbumsPage.css';
-import { useEffect } from 'react';
 
-export default function AlbumsPage() {
-    const { user } = useAuth();
+export default function AlbumsPage({ currentUser }) {
+    const user = currentUser;
     const [activeSection, setActiveSection] = useState('legendary');
     const [modalOpen, setModalOpen] = useState(false);
     const [allCards, setAllCards] = useState([]);
@@ -49,6 +47,7 @@ export default function AlbumsPage() {
     };
 
     const handlePackOpen = () => open(user?.id);
+
 
     const handleReset = () => {
         reset();

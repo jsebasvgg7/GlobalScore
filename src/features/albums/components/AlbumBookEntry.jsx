@@ -1,14 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAlbumPacks } from '../hooks/useAlbumPacks';
-import { useAuth } from '@/context/ThemeContext';
 import AlbumProgressBar from './AlbumProgressBar';
 import '../styles/AlbumBookEntry.css';
 
-export default function AlbumBookEntry() {
+export default function AlbumBookEntry({ currentUser }) {
     const navigate = useNavigate();
-    const { user } = useAuth();
-    const { packs, barPercent, packsAvailable, loading } = useAlbumPacks(user?.id);
+    const { packs, barPercent, packsAvailable, loading } = useAlbumPacks(currentUser?.id);
 
     if (loading || !packs) return null;
 
