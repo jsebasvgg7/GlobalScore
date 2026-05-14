@@ -47,68 +47,60 @@ export default function AlbumsPage({ currentUser }) {
     const handleCloseModal = () => { reset(); setModalOpen(false); };
 
     return (
-        <div className="alp-root page-root">
-            <div className="alp-container">
-
-                {/* ── Hero ── */}
-                <div className="alp-hero">
-                    <div className="alp-hero-left">
-                        <div className="alp-hero-eyebrow">
-                            <span className="alp-hero-eyebrow-dot" />
-                            Temporada 25 · 26
-                        </div>
-                        <h1 className="alp-hero-title">
-                            Global<span className="alp-hero-title-accent">Albums</span>
-                        </h1>
-                        <p className="alp-hero-sub">
-                            Colecciona · Completa · Demuestra quién sabe de fútbol
-                        </p>
+        <div className="alp-root">
+            <div className="alp-hero">
+                <div className="alp-hero-left">
+                    <div className="alp-hero-eyebrow">
+                        <span className="alp-hero-eyebrow-dot" />
+                        Temporada 25 · 26
                     </div>
-
-                    {packsAvailable > 0 && (
-                        <button className="alp-open-btn" onClick={handleOpenModal}>
-                            <span className="alp-open-btn-count">{packsAvailable}</span>
-                            Abrir {packsAvailable === 1 ? 'sobre' : 'sobres'}
-                        </button>
-                    )}
+                    <h1 className="alp-hero-title">
+                        Global<span className="alp-hero-title-accent">Albums</span>
+                    </h1>
+                    <p className="alp-hero-sub">
+                        Colecciona · Completa · Demuestra quién sabe de fútbol
+                    </p>
                 </div>
 
-                {/* ── Barra de progreso ── */}
-                <div className="alp-bar-section">
-                    <div className="alp-bar-header">
-                        <span className="alp-bar-label">Progreso · próximo sobre</span>
-                        <span className="alp-bar-pct">{barPercent}%</span>
-                    </div>
-                    <AlbumProgressBar percent={barPercent} packsAvailable={packsAvailable} />
+                {packsAvailable > 0 && (
+                    <button className="alp-open-btn" onClick={handleOpenModal}>
+                        <span className="alp-open-btn-count">{packsAvailable}</span>
+                        Abrir {packsAvailable === 1 ? 'sobre' : 'sobres'}
+                    </button>
+                )}
+            </div>
+
+            <div className="alp-bar-section">
+                <div className="alp-bar-header">
+                    <span className="alp-bar-label">Progreso · próximo sobre</span>
+                    <span className="alp-bar-pct">{barPercent}%</span>
                 </div>
+                <AlbumProgressBar percent={barPercent} packsAvailable={packsAvailable} />
+            </div>
 
-                {/* ── Nav ── */}
-                <AlbumsSectionNav active={activeSection} onChange={setActiveSection} />
+            <AlbumsSectionNav active={activeSection} onChange={setActiveSection} />
 
-                {/* ── Contenido ── */}
-                <div className="alp-section-content">
-                    {activeSection === 'legendary' && (
-                        <LegendaryAlbumsSection
-                            definitions={legendary}
-                            progress={progress}
-                            collection={collection}
-                        />
-                    )}
-                    {activeSection === 'stars' && !collectionLoading && (
-                        <StarCollectionSection
-                            collection={collection}
-                            allCards={allCards}
-                        />
-                    )}
-                    {activeSection === 'cult' && !collectionLoading && (
-                        <CultAlbumsSection
-                            definitions={cult}
-                            collection={collection}
-                            allCards={allCards}
-                        />
-                    )}
-                </div>
-
+            <div className="alp-section-scroll">
+                {activeSection === 'legendary' && (
+                    <LegendaryAlbumsSection
+                        definitions={legendary}
+                        progress={progress}
+                        collection={collection}
+                    />
+                )}
+                {activeSection === 'stars' && !collectionLoading && (
+                    <StarCollectionSection
+                        collection={collection}
+                        allCards={allCards}
+                    />
+                )}
+                {activeSection === 'cult' && !collectionLoading && (
+                    <CultAlbumsSection
+                        definitions={cult}
+                        collection={collection}
+                        allCards={allCards}
+                    />
+                )}
             </div>
 
             <PackOpeningModal

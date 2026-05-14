@@ -1,491 +1,833 @@
 /* ════════════════════════════════════════════════
    LEGENDARY ALBUMS SECTION — las-*
-   Estética: Álbum Panini · Brutalista Editorial
+   Grid de libros + interior tipo álbum Panini
+   Light / Dark completo
 ════════════════════════════════════════════════ */
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@600;700;800&display=swap');
+
+/* ── RAÍZ ── */
 .las-root {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
 }
 
-/* ── ALBUM CONTAINER ── */
-.las-album {
-    background: #1a1726;
-    border: 1px solid #2d2645;
+.las-section-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #a0a0b0;
+}
+
+[data-theme="dark"] .las-section-eyebrow {
+    color: #6E6680;
+}
+
+.las-eyebrow-line {
+    flex: 1;
+    height: 0.5px;
+    background: #d4cfc8;
+}
+
+[data-theme="dark"] .las-eyebrow-line {
+    background: #2A2638;
+}
+
+.las-eyebrow-count {
+    color: #5b4fd8;
+}
+
+[data-theme="dark"] .las-eyebrow-count {
+    color: #8B7FC7;
+}
+
+/* ════════════════════════════════════════════════
+   GRID DE LIBROS — 2×2 escritorio, 1×2 móvil
+════════════════════════════════════════════════ */
+.las-books-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+@media (max-width: 480px) {
+    .las-books-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+}
+
+/* ════════════════════════════════════════════════
+   LIBRO — tarjeta visual
+════════════════════════════════════════════════ */
+.las-book {
+    display: flex;
+    flex-direction: row;
+    border: none;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 4px;
     overflow: hidden;
+    box-shadow:
+        4px 4px 0 rgba(0, 0, 0, 0.15),
+        0 8px 24px rgba(0, 0, 0, 0.12);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
     position: relative;
+    aspect-ratio: 3/4;
+    min-height: 200px;
 }
 
-/* Fondo cuadriculado tipo papel de álbum */
-.las-album::before {
-    content: '';
+.las-book:hover:not(.las-book--locked) {
+    transform: translateY(-4px) rotate(-0.5deg);
+    box-shadow:
+        6px 8px 0 rgba(0, 0, 0, 0.2),
+        0 16px 32px rgba(0, 0, 0, 0.18);
+}
+
+.las-book:active:not(.las-book--locked) {
+    transform: translateY(-1px) rotate(0deg);
+    box-shadow:
+        3px 3px 0 rgba(0, 0, 0, 0.15),
+        0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.las-book--locked {
+    cursor: not-allowed;
+    opacity: 0.55;
+    filter: grayscale(0.5);
+}
+
+/* ── Lomo ── */
+.las-book-spine {
+    width: 18px;
+    flex-shrink: 0;
+    background: var(--spine, #5b4fd8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    gap: 8px;
+}
+
+.las-book-spine-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.8);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+}
+
+.las-book-spine-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Portada ── */
+.las-book-cover {
+    flex: 1;
+    background: #1a1726;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Light mode — portada más clara pero mantiene estética oscura de álbum */
+[data-theme="light"] .las-book-cover {
+    background: #1e1b30;
+}
+
+/* Cuadrícula de fondo tipo papel de álbum */
+.las-book-pattern {
     position: absolute;
     inset: 0;
     background:
-        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255, 255, 255, 0.02) 39px, rgba(255, 255, 255, 0.02) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255, 255, 255, 0.02) 39px, rgba(255, 255, 255, 0.02) 40px);
+        repeating-linear-gradient(0deg, transparent, transparent 11px, rgba(255, 255, 255, 0.025) 12px),
+        repeating-linear-gradient(90deg, transparent, transparent 11px, rgba(255, 255, 255, 0.025) 12px);
     pointer-events: none;
     z-index: 0;
 }
 
-.las-album--golden {
-    background: #1a1508;
-    border-color: #3a2e08;
+.las-book--golden .las-book-cover {
+    background: #1a1200;
 }
 
-.las-album--golden::before {
+[data-theme="light"] .las-book--golden .las-book-cover {
+    background: #231800;
+}
+
+.las-book--golden .las-book-pattern {
     background:
-        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255, 215, 0, 0.025) 39px, rgba(255, 215, 0, 0.025) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255, 215, 0, 0.025) 39px, rgba(255, 215, 0, 0.025) 40px);
+        repeating-linear-gradient(0deg, transparent, transparent 11px, rgba(245, 158, 11, 0.04) 12px),
+        repeating-linear-gradient(90deg, transparent, transparent 11px, rgba(245, 158, 11, 0.04) 12px);
 }
 
-.las-album--done {
-    border-color: rgba(34, 197, 94, 0.4);
-}
-
-.las-album--locked {
-    opacity: 0.6;
-}
-
-/* ── ALBUM HEADER ── */
-.las-album-header {
+/* ── Tag de edición ── */
+.las-book-tag {
     position: relative;
     z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 14px 18px 12px;
-    background: rgba(0, 0, 0, 0.35);
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.06);
-    cursor: pointer;
-    border: none;
-    width: 100%;
-    text-align: left;
-    transition: background 0.15s;
-}
-
-.las-album-header:hover {
-    background: rgba(0, 0, 0, 0.45);
-}
-
-.las-album-header--locked {
-    cursor: default;
-}
-
-.las-album-header--locked:hover {
-    background: rgba(0, 0, 0, 0.35);
-}
-
-.las-album-header-left {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
-}
-
-.las-album-edition-tag {
     font-family: 'DM Mono', monospace;
-    font-size: 8px;
+    font-size: 7px;
     font-weight: 700;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #5b4fd8;
-    background: rgba(91, 79, 216, 0.12);
-    border: 0.5px solid rgba(91, 79, 216, 0.3);
-    padding: 2px 8px;
-    display: inline-block;
+    color: var(--accent, #a599d9);
+    background: rgba(255, 255, 255, 0.04);
+    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    padding: 3px 6px;
     width: fit-content;
 }
 
-.las-album--golden .las-album-edition-tag {
+.las-book--golden .las-book-tag {
     color: #f59e0b;
-    background: rgba(245, 158, 11, 0.1);
-    border-color: rgba(245, 158, 11, 0.3);
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.2);
 }
 
-.las-album-edition-tag--locked {
-    color: rgba(255, 255, 255, 0.2) !important;
-    background: transparent !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
+/* ── Título ── */
+.las-book-title-zone {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
-.las-album-title {
+.las-book-title-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.las-book-title {
     font-family: 'Sora', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.92);
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.9);
     letter-spacing: -0.01em;
+    line-height: 1.1;
 }
 
-.las-album-title--locked {
-    color: rgba(255, 255, 255, 0.25) !important;
+/* ── Mini grid preview ── */
+.las-book-preview-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    flex: 1;
 }
 
-.las-album-req {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    color: rgba(255, 255, 255, 0.3);
-    letter-spacing: 0.04em;
-}
-
-.las-album-req--locked {
-    color: rgba(255, 255, 255, 0.12) !important;
-}
-
-.las-album-header-right {
+.las-book-preview-slot {
+    background: rgba(255, 255, 255, 0.04);
+    border: 0.5px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    aspect-ratio: 2/3;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    overflow: hidden;
+    transition: border-color 0.15s;
+}
+
+.las-book-preview-slot--filled {
+    border-color: var(--accent, #a599d9);
+    border-style: solid;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.las-book-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+.las-book-preview-initials {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    font-weight: 700;
+    color: var(--accent, #a599d9);
+}
+
+.las-book-locked-msg {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.25);
+    text-align: center;
+    letter-spacing: 0.06em;
+    padding: 8px 4px;
+    line-height: 1.5;
+}
+
+/* ── Footer del libro ── */
+.las-book-footer {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.las-book-progress-bar {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 1px;
+    overflow: hidden;
+}
+
+.las-book-progress-fill {
+    height: 100%;
+    background: var(--accent, #a599d9);
+    border-radius: 1px;
+    transition: width 0.5s ease;
+}
+
+.las-book--golden .las-book-progress-fill {
+    background: linear-gradient(90deg, #b45309, #f59e0b);
+}
+
+.las-book-footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.las-book-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.las-book-done-badge {
+    font-size: 9px;
+    font-weight: 800;
+    color: #22c55e;
+    font-family: 'DM Mono', monospace;
+}
+
+.las-book-open-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--accent, #a599d9);
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.las-book:hover .las-book-open-hint {
+    opacity: 1;
+}
+
+/* ════════════════════════════════════════════════
+   INTERIOR DEL ÁLBUM — ocupa el contenedor padre
+════════════════════════════════════════════════ */
+.las-interior {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: #f0ede8;
+    border-radius: 0;
+    animation: las-interior-in 0.2s ease;
+}
+
+[data-theme="dark"] .las-interior {
+    background: #13111A;
+}
+
+@keyframes las-interior-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Header interior ── */
+.las-interior-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0 10px;
+    border-bottom: 0.5px solid #d4cfc8;
     flex-shrink: 0;
 }
 
-.las-album-counter {
+[data-theme="dark"] .las-interior-header {
+    border-bottom-color: #2A2638;
+}
+
+.las-interior-back {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5b4fd8;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: color 0.12s;
+}
+
+.las-interior-back:hover {
+    color: #4a3fc7;
+}
+
+[data-theme="dark"] .las-interior-back {
+    color: #A599D9;
+}
+
+.las-interior-title-zone {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.las-interior-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent, #a599d9);
+}
+
+.las-interior-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #1a1726;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+[data-theme="dark"] .las-interior-title {
+    color: #F0EDF8;
+}
+
+.las-interior-counter {
     display: flex;
     align-items: baseline;
     gap: 2px;
     font-family: 'DM Mono', monospace;
+    flex-shrink: 0;
 }
 
-.las-album-counter-fill {
-    font-size: 18px;
-    font-weight: 700;
-    color: #a599d9;
+.las-interior-count-fill {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent, #a599d9);
     line-height: 1;
 }
 
-.las-album--golden .las-album-counter-fill {
-    color: #f59e0b;
-}
-
-.las-album-counter-sep {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.2);
-}
-
-.las-album-counter-total {
+.las-interior-count-sep {
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.3);
+    color: #d4cfc8;
 }
 
-.las-album-done-badge {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: #22c55e;
-    background: rgba(34, 197, 94, 0.1);
-    border: 0.5px solid rgba(34, 197, 94, 0.3);
-    padding: 3px 8px;
+[data-theme="dark"] .las-interior-count-sep {
+    color: #38334F;
 }
 
-.las-album-locked-hint {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    color: rgba(255, 255, 255, 0.2);
-    letter-spacing: 0.08em;
+.las-interior-count-total {
+    font-size: 14px;
+    color: #a0a0b0;
 }
 
-.las-album-chevron {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.25);
-    transition: transform 0.2s ease;
-    display: inline-block;
+[data-theme="dark"] .las-interior-count-total {
+    color: #6E6680;
 }
 
-.las-album-chevron--up {
-    transform: rotate(180deg);
-}
-
-/* ── PROGRESS STRIP ── */
-.las-album-progress-strip {
-    position: relative;
-    z-index: 1;
+/* ── Barra interior ── */
+.las-interior-bar-wrap {
     height: 3px;
-    background: rgba(255, 255, 255, 0.05);
+    background: #d4cfc8;
+    flex-shrink: 0;
 }
 
-.las-album-progress-fill {
+[data-theme="dark"] .las-interior-bar-wrap {
+    background: #2A2638;
+}
+
+.las-interior-bar-fill {
     height: 100%;
-    background: #5b4fd8;
+    background: var(--accent, #a599d9);
     transition: width 0.5s ease;
 }
 
-.las-album--golden .las-album-progress-fill {
-    background: linear-gradient(90deg, #b45309, #f59e0b);
-}
-
-.las-album--done .las-album-progress-fill {
-    background: #22c55e;
-}
-
-/* ── REQ CHIPS ── */
-.las-album-req-chips {
-    position: relative;
-    z-index: 1;
+/* ── Chips ── */
+.las-interior-chips {
     display: flex;
-    align-items: center;
-    gap: 8px;
     flex-wrap: wrap;
-    padding: 10px 18px;
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
-    background: rgba(0, 0, 0, 0.2);
+    gap: 6px;
+    padding: 10px 0 8px;
+    flex-shrink: 0;
 }
 
-.las-req-chip {
+.las-chip {
     font-family: 'DM Mono', monospace;
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 4px 10px;
-    border: 0.5px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.3);
+    border: 0.5px solid #d4cfc8;
+    color: #a0a0b0;
     background: transparent;
-    transition: border-color 0.2s, color 0.2s;
 }
 
-.las-req-chip--met {
+[data-theme="dark"] .las-chip {
+    border-color: #38334F;
+    color: #6E6680;
+}
+
+.las-chip--met {
+    color: #22c55e;
+    border-color: rgba(34, 197, 94, 0.4);
+    background: rgba(34, 197, 94, 0.06);
+}
+
+.las-chip--done {
     color: #22c55e;
     border-color: rgba(34, 197, 94, 0.4);
     background: rgba(34, 197, 94, 0.08);
 }
 
-.las-req-chip-pct {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    color: rgba(255, 255, 255, 0.2);
-    letter-spacing: 0.08em;
+.las-chip--pct {
     margin-left: auto;
+    color: #a0a0b0;
 }
 
-/* ── ALBUM BODY ── */
-.las-album-body {
+[data-theme="dark"] .las-chip--pct {
+    color: #6E6680;
+}
+
+/* ── Scroll interior ── */
+.las-interior-scroll {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(91, 79, 216, 0.2) transparent;
+}
+
+.las-interior-scroll::-webkit-scrollbar {
+    width: 3px;
+}
+
+.las-interior-scroll::-webkit-scrollbar-thumb {
+    background: rgba(91, 79, 216, 0.2);
+    border-radius: 2px;
+}
+
+/* ════════════════════════════════════════════════
+   PÁGINA DEL ÁLBUM — estética Panini
+════════════════════════════════════════════════ */
+.las-album-page {
+    background: #faf8f4;
+    border: 0.5px solid #d4cfc8;
+    padding: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+[data-theme="dark"] .las-album-page {
+    background: #1a1726;
+    border-color: #2A2638;
+}
+
+/* Líneas horizontales de página tipo libreta */
+.las-album-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg,
+            transparent,
+            transparent 31px,
+            rgba(0, 0, 0, 0.03) 32px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+[data-theme="dark"] .las-album-page::before {
+    background: repeating-linear-gradient(0deg,
+            transparent,
+            transparent 31px,
+            rgba(255, 255, 255, 0.02) 32px);
+}
+
+.las-page-header {
     position: relative;
     z-index: 1;
-    padding: 16px 18px 20px;
-}
-
-.las-album-page-label {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
+    gap: 10px;
 }
 
-.las-album-page-label span:first-child {
+.las-page-header-line {
+    flex: 1;
+    height: 0.5px;
+    background: #d4cfc8;
+}
+
+[data-theme="dark"] .las-page-header-line {
+    background: #38334F;
+}
+
+.las-page-label {
     font-family: 'DM Mono', monospace;
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.2);
+    color: #a0a0b0;
+    flex-shrink: 0;
 }
 
-.las-album-page-dots {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+[data-theme="dark"] .las-page-label {
+    color: #6E6680;
 }
 
-.las-page-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.las-page-dot--active {
-    background: #5b4fd8;
-}
-
-/* ── STICKER GRID ── */
+/* ════════════════════════════════════════════════
+   GRID DE FIGURITAS — 3 columnas
+════════════════════════════════════════════════ */
 .las-sticker-grid {
+    position: relative;
+    z-index: 1;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
 }
 
-@media (max-width: 700px) {
-    .las-sticker-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
+.las-sticker-phantom {
+    aspect-ratio: 2/3;
+    opacity: 0;
+    pointer-events: none;
 }
 
-@media (max-width: 480px) {
-    .las-sticker-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* ── STICKER SLOT — base ── */
-.las-slot {
+/* ── Figurita ── */
+.las-sticker {
     aspect-ratio: 2/3;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow: hidden;
-    transition: border-color 0.2s, transform 0.15s;
+    border-radius: 3px;
+    transition: transform 0.15s, box-shadow 0.15s;
 }
 
-/* ── SLOT EMPTY ── */
-.las-slot--empty {
-    border: 1px dashed rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.02);
+/* Vacío */
+.las-sticker--empty {
+    border: 1px dashed #c8c3bb;
+    background: rgba(0, 0, 0, 0.02);
     justify-content: center;
-    cursor: default;
 }
 
-.las-slot--golden-empty {
-    border-color: rgba(245, 158, 11, 0.1);
+[data-theme="dark"] .las-sticker--empty {
+    border-color: #2A2638;
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.las-sticker--golden-empty {
+    border-color: rgba(245, 158, 11, 0.2);
     background: rgba(245, 158, 11, 0.02);
 }
 
-.las-slot--blurred {
-    filter: blur(2px);
-    opacity: 0.4;
-    pointer-events: none;
-}
-
-.las-slot-silhouette {
-    width: 46%;
-    opacity: 0.1;
-    color: white;
+.las-sticker-sil {
+    width: 44%;
+    color: #d4cfc8;
+    opacity: 0.5;
     flex-shrink: 0;
     margin-top: 4px;
 }
 
-.las-slot-stars-row {
+[data-theme="dark"] .las-sticker-sil {
+    color: #38334F;
+    opacity: 0.6;
+}
+
+.las-sticker-stars-empty {
     position: absolute;
     bottom: 5px;
-    left: 0;
-    right: 0;
     display: flex;
-    justify-content: center;
     gap: 1px;
 }
 
-.las-slot-star {
-    font-size: 7px;
-    color: rgba(255, 255, 255, 0.1);
+.las-sticker-star-dot {
+    font-size: 6px;
+    color: #c8c3bb;
 }
 
-.las-slot-star--req {
-    color: rgba(245, 158, 11, 0.25);
+[data-theme="dark"] .las-sticker-star-dot {
+    color: #38334F;
 }
 
-/* ── SLOT FILLED ── */
-.las-slot--filled {
-    border: 1px solid rgba(91, 79, 216, 0.5);
-    background: rgba(91, 79, 216, 0.06);
+/* Relleno */
+.las-sticker--filled {
+    border: 1px solid color-mix(in srgb, var(--meta-accent, #a599d9) 50%, transparent);
+    background: color-mix(in srgb, var(--meta-accent, #a599d9) 8%, #faf8f4);
     cursor: pointer;
     justify-content: flex-end;
 }
 
-.las-slot--filled:hover {
-    border-color: rgba(91, 79, 216, 0.8);
-    transform: translateY(-2px);
+[data-theme="dark"] .las-sticker--filled {
+    background: color-mix(in srgb, var(--meta-accent, #a599d9) 8%, #1a1726);
+}
+
+.las-sticker--filled:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     z-index: 2;
+    border-color: var(--meta-accent, #a599d9);
 }
 
-.las-slot--goat {
+.las-sticker--goat {
     border-color: rgba(245, 158, 11, 0.6) !important;
-    background: rgba(245, 158, 11, 0.07) !important;
+    background: color-mix(in srgb, #f59e0b 10%, #faf8f4) !important;
 }
 
-.las-slot--goat:hover {
-    border-color: rgba(245, 158, 11, 0.9) !important;
+[data-theme="dark"] .las-sticker--goat {
+    background: color-mix(in srgb, #f59e0b 10%, #1a1726) !important;
 }
 
-.las-slot--golden-filled {
+.las-sticker--golden {
     border-color: rgba(245, 158, 11, 0.5) !important;
-    background: rgba(245, 158, 11, 0.06) !important;
+    background: color-mix(in srgb, #f59e0b 8%, #faf8f4) !important;
 }
 
-.las-slot-num {
+[data-theme="dark"] .las-sticker--golden {
+    background: color-mix(in srgb, #f59e0b 8%, #1a1726) !important;
+}
+
+/* Número */
+.las-sticker-num {
     position: absolute;
     top: 4px;
     left: 5px;
     font-family: 'DM Mono', monospace;
     font-size: 7px;
     font-weight: 700;
-    letter-spacing: 0.04em;
 }
 
-.las-slot--empty .las-slot-num {
-    color: rgba(255, 255, 255, 0.18);
+.las-sticker--empty .las-sticker-num {
+    color: #c8c3bb;
 }
 
-.las-slot--filled .las-slot-num {
-    color: rgba(255, 255, 255, 0.35);
+.las-sticker--filled .las-sticker-num {
+    color: rgba(0, 0, 0, 0.25);
 }
 
-.las-slot-avatar-wrap {
-    position: relative;
+[data-theme="dark"] .las-sticker--empty .las-sticker-num {
+    color: #38334F;
+}
+
+[data-theme="dark"] .las-sticker--filled .las-sticker-num {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+/* Corona GOAT */
+.las-sticker-crown {
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    font-size: 9px;
+    line-height: 1;
+    color: #f59e0b;
+}
+
+/* Imagen/avatar */
+.las-sticker-img-zone {
     flex: 1;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    padding-top: 16px;
+    padding-top: 14px;
 }
 
-.las-slot-img {
-    width: 72%;
+.las-sticker-img {
+    width: 70%;
     aspect-ratio: 1;
     object-fit: cover;
     border-radius: 50%;
-    border: 1.5px solid rgba(91, 79, 216, 0.4);
+    border: 1.5px solid color-mix(in srgb, var(--meta-accent, #a599d9) 50%, transparent);
     display: block;
 }
 
-.las-slot-avatar {
-    width: 70%;
+.las-sticker-avatar {
+    width: 68%;
     aspect-ratio: 1;
     border-radius: 50%;
-    background: rgba(91, 79, 216, 0.2);
-    border: 1.5px solid rgba(91, 79, 216, 0.4);
+    background: color-mix(in srgb, var(--meta-accent, #a599d9) 15%, transparent);
+    border: 1.5px solid color-mix(in srgb, var(--meta-accent, #a599d9) 40%, transparent);
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    color: #a599d9;
-}
-
-.las-slot-avatar--goat {
-    background: rgba(245, 158, 11, 0.15);
-    border-color: rgba(245, 158, 11, 0.45);
-    color: #f59e0b;
-}
-
-.las-slot-goat-crown {
-    position: absolute;
-    top: 10px;
-    right: 10%;
     font-size: 10px;
-    line-height: 1;
+    font-weight: 700;
+    color: var(--meta-accent, #a599d9);
 }
 
-.las-slot-info {
+/* Info inferior */
+.las-sticker-info {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 4px 3px 0;
-    gap: 2px;
+    padding: 3px 3px 0;
+    gap: 1px;
+    border-top: 0.5px solid color-mix(in srgb, var(--meta-accent, #a599d9) 20%, transparent);
 }
 
-.las-slot-name {
+.las-sticker-name {
     font-family: 'DM Mono', monospace;
     font-size: 7px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: rgba(255, 255, 255, 0.75);
+    color: #2a2535;
     text-align: center;
     line-height: 1.2;
     overflow: hidden;
@@ -495,77 +837,133 @@
     width: 100%;
 }
 
-.las-slot-pos {
+[data-theme="dark"] .las-sticker-name {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.las-sticker-pos {
     font-family: 'DM Mono', monospace;
     font-size: 6px;
     font-weight: 700;
     letter-spacing: 0.1em;
-    color: #5b4fd8;
-    background: rgba(91, 79, 216, 0.12);
-    border-top: 0.5px solid rgba(91, 79, 216, 0.2);
+    color: var(--meta-accent, #a599d9);
     width: 100%;
     text-align: center;
-    padding: 3px 2px;
-    margin-top: 2px;
+    padding: 2px 2px 3px;
 }
 
-.las-slot-pos--goat {
-    color: #f59e0b;
-    background: rgba(245, 158, 11, 0.1);
-    border-color: rgba(245, 158, 11, 0.2);
-}
-
-.las-slot-copies {
+.las-sticker-copies {
     position: absolute;
     top: 4px;
     right: 4px;
     font-family: 'DM Mono', monospace;
     font-size: 7px;
-    font-weight: 700;
-    background: #5b4fd8;
+    font-weight: 800;
+    background: var(--meta-accent, #a599d9);
     color: #fff;
     padding: 1px 4px;
-    border-radius: 3px;
-}
-
-/* ── LOCKED GRID ── */
-.las-album-locked-grid {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
-    padding: 16px 18px;
-    filter: blur(2px);
-    opacity: 0.3;
-    pointer-events: none;
-}
-
-/* ── REWARD ── */
-.las-album-reward {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-    padding: 10px 14px;
-    border: 0.5px solid rgba(255, 255, 255, 0.07);
-    background: rgba(255, 255, 255, 0.03);
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.4);
-    letter-spacing: 0.06em;
-}
-
-.las-album-reward-icon {
-    font-size: 14px;
+    border-radius: 2px;
 }
 
 /* ════════════════════════════════════════════════
-   LIGHT MODE overrides
+   PAGINACIÓN
 ════════════════════════════════════════════════ */
-[data-theme="light"] .las-album {
-    background: #1a1726;
+.las-pagination {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
 }
 
-/* El álbum Legendarios es intencionalmente oscuro en ambos modos
-   (como un álbum Panini real de tapa oscura) */
+.las-page-btn {
+    width: 28px;
+    height: 28px;
+    border: 0.5px solid #d4cfc8;
+    background: transparent;
+    color: #a0a0b0;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.12s, border-color 0.12s;
+    font-family: 'DM Mono', monospace;
+}
+
+[data-theme="dark"] .las-page-btn {
+    border-color: #38334F;
+    color: #6E6680;
+}
+
+.las-page-btn:hover:not(:disabled) {
+    color: #5b4fd8;
+    border-color: #5b4fd8;
+}
+
+[data-theme="dark"] .las-page-btn:hover:not(:disabled) {
+    color: #A599D9;
+    border-color: #A599D9;
+}
+
+.las-page-btn:disabled {
+    opacity: 0.25;
+    cursor: default;
+}
+
+.las-page-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.las-page-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 0.5px solid #c8c3bb;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+[data-theme="dark"] .las-page-dot {
+    border-color: #38334F;
+}
+
+.las-page-dot--active {
+    background: #5b4fd8;
+    border-color: #5b4fd8;
+}
+
+[data-theme="dark"] .las-page-dot--active {
+    background: #A599D9;
+    border-color: #A599D9;
+}
+
+/* ── Recompensa ── */
+.las-reward-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 0.5px solid #d4cfc8;
+    background: #f5f3ef;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #a0a0b0;
+    letter-spacing: 0.06em;
+}
+
+[data-theme="dark"] .las-reward-bar {
+    border-color: #2A2638;
+    background: rgba(255, 255, 255, 0.02);
+    color: #6E6680;
+}
+
+.las-reward-icon {
+    font-size: 14px;
+}

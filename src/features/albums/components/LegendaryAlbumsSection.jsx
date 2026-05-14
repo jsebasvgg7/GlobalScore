@@ -1,293 +1,374 @@
 import React, { useState } from 'react';
 import '../styles/LegendaryAlbumsSection.css';
 
-/* ─── Config ────────────────────────────────────────────────── */
 const ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'golden_album'];
 
 const ALBUM_META = {
     legendary_1: {
         label: 'Legendarios I',
-        shortLabel: 'LEG. I',
-        req: '30 jugadores únicos · mín. 5 de ⭐⭐⭐⭐',
+        shortLabel: 'LEG I',
+        req: '30 jugadores · mín. 5 de ⭐⭐⭐⭐',
         slots: 30,
         minStars4: 5,
         minStars5: 0,
-        pageNum: '01',
+        spine: '#5b4fd8',
+        accent: '#a599d9',
+        tag: 'TEMPORADA 25·26',
+        number: '01',
     },
     legendary_2: {
         label: 'Legendarios II',
-        shortLabel: 'LEG. II',
+        shortLabel: 'LEG II',
         req: '30 jugadores · 5×⭐⭐⭐⭐ + 2×⭐⭐⭐⭐⭐',
         slots: 30,
         minStars4: 5,
         minStars5: 2,
-        pageNum: '02',
+        spine: '#7c3aed',
+        accent: '#c4b5fd',
+        tag: 'TEMPORADA 25·26',
+        number: '02',
     },
     legendary_3: {
         label: 'Legendarios III',
-        shortLabel: 'LEG. III',
+        shortLabel: 'LEG III',
         req: '30 jugadores · 5×⭐⭐⭐⭐ + 4×⭐⭐⭐⭐⭐',
         slots: 30,
         minStars4: 5,
         minStars5: 4,
-        pageNum: '03',
+        spine: '#1D9E75',
+        accent: '#34d399',
+        tag: 'TEMPORADA 25·26',
+        number: '03',
     },
     golden_album: {
         label: 'Álbum Dorado',
         shortLabel: 'DORADO',
-        req: '15 jugadores únicos · todos de ⭐⭐⭐⭐+',
+        req: '15 jugadores · todos de ⭐⭐⭐⭐+',
         slots: 15,
         minStars4: 15,
         minStars5: 0,
-        pageNum: '04',
+        spine: '#b45309',
+        accent: '#f59e0b',
+        tag: 'ESPECIAL',
+        number: '✦',
         golden: true,
     },
 };
 
-/* ─── Helpers ───────────────────────────────────────────────── */
 function getInitials(name = '') {
     return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || '?';
 }
 
 function posLabel(pos) {
-    const map = {
-        Forward: 'DEL', Midfielder: 'MED', Defender: 'DEF',
-        Goalkeeper: 'POR', 'Play-maker': 'MP', 'All-rounder': 'TOD',
-    };
+    const map = { Forward: 'DEL', Midfielder: 'MED', Defender: 'DEF', Goalkeeper: 'POR', 'Play-maker': 'MP', 'All-rounder': 'TOD' };
     return map[pos] || pos?.slice(0, 3).toUpperCase() || '—';
 }
 
-/* ─── Slot component ────────────────────────────────────────── */
-function StickerSlot({ index, card, collectionItem, isGolden }) {
+/* ════════════════════════════════════════════════
+   FIGURITA individual — dentro del panel
+════════════════════════════════════════════════ */
+function Sticker({ index, card, collectionItem, meta }) {
     const num = String(index + 1).padStart(2, '0');
-    const stars = card?.significance_level ?? 4;
-    const isGoat = stars === 5;
+    const isGoat = card?.significance_level === 5;
     const filled = !!collectionItem;
 
     if (filled) {
         return (
-            <div className={`las-slot las-slot--filled${isGoat ? ' las-slot--goat' : ''}${isGolden ? ' las-slot--golden-filled' : ''}`}>
-                <span className="las-slot-num">{num}</span>
-                <div className="las-slot-avatar-wrap">
-                    {card?.image_path ? (
-                        <img src={card.image_path} alt={card.name} className="las-slot-img" />
-                    ) : (
-                        <div className={`las-slot-avatar${isGoat ? ' las-slot-avatar--goat' : ''}`}>
-                            {getInitials(card?.name)}
-                        </div>
-                    )}
-                    {isGoat && <span className="las-slot-goat-crown">♛</span>}
+            <div
+                className={`las-sticker las-sticker--filled${isGoat ? ' las-sticker--goat' : ''}`}
+                style={{ '--acc': meta.accent }}
+            >
+                <span className="las-sticker-num">{num}</span>
+                {isGoat && <span className="las-sticker-crown">♛</span>}
+                <div className="las-sticker-img-zone">
+                    {card?.image_path
+                        ? <img src={card.image_path} alt={card.name} className="las-sticker-img" />
+                        : <div className="las-sticker-avatar">{getInitials(card?.name)}</div>
+                    }
                 </div>
-                <div className="las-slot-info">
-                    <span className="las-slot-name">{card?.name}</span>
-                    {card?.position && (
-                        <span className={`las-slot-pos${isGoat ? ' las-slot-pos--goat' : ''}`}>
-                            {posLabel(card.position)}
-                        </span>
-                    )}
+                <div className="las-sticker-info">
+                    <span className="las-sticker-name">{card?.name}</span>
+                    {card?.position && <span className="las-sticker-pos">{posLabel(card.position)}</span>}
                 </div>
                 {collectionItem?.copies > 1 && (
-                    <span className="las-slot-copies">×{collectionItem.copies}</span>
+                    <span className="las-sticker-copies">×{collectionItem.copies}</span>
                 )}
             </div>
         );
     }
 
     return (
-        <div className={`las-slot las-slot--empty${isGolden ? ' las-slot--golden-empty' : ''}`}>
-            <span className="las-slot-num">{num}</span>
-            <svg className="las-slot-silhouette" viewBox="0 0 40 60" fill="currentColor" aria-hidden="true">
+        <div className="las-sticker las-sticker--empty" style={{ '--acc': meta.accent }}>
+            <span className="las-sticker-num">{num}</span>
+            <svg className="las-sticker-sil" viewBox="0 0 40 60" fill="currentColor" aria-hidden="true">
                 <ellipse cx="20" cy="13" rx="9" ry="9" />
                 <path d="M4 56 Q4 30 20 27 Q36 30 36 56Z" />
             </svg>
-            <div className="las-slot-stars-row">
-                {[1, 2, 3, 4, 5].map(n => (
-                    <span key={n} className={`las-slot-star${n <= 4 ? ' las-slot-star--req' : ''}`}>★</span>
-                ))}
+            <div className="las-sticker-stars-row">
+                {[1, 2, 3, 4].map(n => <span key={n} className="las-star-dot">★</span>)}
             </div>
         </div>
     );
 }
 
-/* ─── Album card ────────────────────────────────────────────── */
-function AlbumCard({ albumId, definitions, progress, collection }) {
-    const [expanded, setExpanded] = useState(albumId === 'legendary_1');
-    const meta = ALBUM_META[albumId];
-    const isGolden = meta.golden;
+/* ════════════════════════════════════════════════
+   PANEL FLOTANTE — se abre sobre la página
+════════════════════════════════════════════════ */
+function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose }) {
+    const [page, setPage] = useState(0);
+    const PER_PAGE = 6;
 
     const def = definitions.find(d => d.id === albumId);
     const prog = progress.find(p => p.album_id === albumId);
     const isCompleted = prog?.is_completed ?? false;
 
-    const playerCollection = collection.filter(c => c.card?.card_type === 'player');
-    const uniquePlayers = playerCollection.length;
-    const stars4Plus = playerCollection.filter(c => c.card?.significance_level >= 4).length;
-    const stars5 = playerCollection.filter(c => c.card?.significance_level === 5).length;
-
+    const playerCol = collection.filter(c => c.card?.card_type === 'player');
     const reqPlayers = def?.required_unique_players ?? meta.slots;
     const reqStars4 = def?.required_min_stars_4 ?? meta.minStars4;
     const reqStars5 = def?.required_min_stars_5 ?? meta.minStars5;
+    const stars4 = playerCol.filter(c => c.card?.significance_level >= 4).length;
+    const stars5count = playerCol.filter(c => c.card?.significance_level === 5).length;
+    const filled = Math.min(playerCol.length, reqPlayers);
+    const pct = reqPlayers > 0 ? Math.min(100, Math.round((filled / reqPlayers) * 100)) : 0;
 
-    const filledCount = Math.min(uniquePlayers, reqPlayers);
-    const fillPct = reqPlayers > 0 ? Math.min(100, Math.round((filledCount / reqPlayers) * 100)) : 0;
-    const meets4 = stars4Plus >= reqStars4;
-    const meets5 = reqStars5 === 0 || stars5 >= reqStars5;
-
-    /* Build slot data: take the first N player cards */
-    const stickerCards = playerCollection.slice(0, meta.slots);
+    const totalPages = Math.ceil(meta.slots / PER_PAGE);
+    const pageItems = Array.from({ length: PER_PAGE }, (_, i) => {
+        const gi = page * PER_PAGE + i;
+        if (gi >= meta.slots) return null;
+        return { idx: gi, item: playerCol[gi] ?? null };
+    }).filter(Boolean);
 
     return (
-        <div className={`las-album${isGolden ? ' las-album--golden' : ''}${isCompleted ? ' las-album--done' : ''}`}>
+        <>
+            {/* Overlay semitransparente */}
+            <div className="las-panel-overlay" onClick={onClose} />
 
-            {/* ── Album header ── */}
-            <button
-                className="las-album-header"
-                onClick={() => setExpanded(v => !v)}
-                aria-expanded={expanded}
-            >
-                <div className="las-album-header-left">
-                    <span className="las-album-edition-tag">
-                        {isGolden ? '✦ ESPECIAL' : `TEMPORADA 25·26`}
-                    </span>
-                    <span className="las-album-title">
-                        {isGolden ? '🏆' : '📖'} {meta.label}
-                    </span>
-                    <span className="las-album-req">{meta.req}</span>
-                </div>
+            {/* Panel lateral */}
+            <div className="las-panel" style={{ '--spine': meta.spine, '--acc': meta.accent }}>
 
-                <div className="las-album-header-right">
-                    <div className="las-album-counter">
-                        <span className="las-album-counter-fill">{filledCount}</span>
-                        <span className="las-album-counter-sep">/</span>
-                        <span className="las-album-counter-total">{reqPlayers}</span>
+                {/* Cabecera del panel */}
+                <div className="las-panel-header">
+                    <div className="las-panel-spine" />
+                    <div className="las-panel-header-content">
+                        <div className="las-panel-title-block">
+                            <span className="las-panel-tag">{meta.tag}</span>
+                            <span className="las-panel-title">{meta.label}</span>
+                            <span className="las-panel-req">{meta.req}</span>
+                        </div>
+                        <div className="las-panel-counter-block">
+                            <span className="las-panel-count-n">{filled}</span>
+                            <span className="las-panel-count-sep">/</span>
+                            <span className="las-panel-count-t">{reqPlayers}</span>
+                        </div>
                     </div>
-
-                    {isCompleted && (
-                        <span className="las-album-done-badge">✓ Completado</span>
-                    )}
-
-                    <span className={`las-album-chevron${expanded ? ' las-album-chevron--up' : ''}`}>
-                        ▼
-                    </span>
+                    <button className="las-panel-close" onClick={onClose} aria-label="Cerrar">✕</button>
                 </div>
-            </button>
 
-            {/* ── Progress strip ── */}
-            <div className="las-album-progress-strip">
-                <div className="las-album-progress-fill" style={{ width: `${fillPct}%` }} />
-            </div>
+                {/* Barra de progreso */}
+                <div className="las-panel-bar">
+                    <div className="las-panel-bar-fill" style={{ width: `${pct}%` }} />
+                </div>
 
-            {/* ── Requirements chips ── */}
-            {expanded && (
-                <div className="las-album-req-chips">
-                    <span className={`las-req-chip${meets4 ? ' las-req-chip--met' : ''}`}>
-                        ⭐⭐⭐⭐ {Math.min(stars4Plus, reqStars4)}/{reqStars4}
+                {/* Chips de requisitos */}
+                <div className="las-panel-chips">
+                    <span className={`las-chip${stars4 >= reqStars4 ? ' las-chip--met' : ''}`}>
+                        ⭐⭐⭐⭐ {Math.min(stars4, reqStars4)}/{reqStars4}
                     </span>
                     {reqStars5 > 0 && (
-                        <span className={`las-req-chip${meets5 ? ' las-req-chip--met' : ''}`}>
-                            ⭐⭐⭐⭐⭐ {Math.min(stars5, reqStars5)}/{reqStars5}
+                        <span className={`las-chip${stars5count >= reqStars5 ? ' las-chip--met' : ''}`}>
+                            ⭐⭐⭐⭐⭐ {Math.min(stars5count, reqStars5)}/{reqStars5}
                         </span>
                     )}
-                    <span className="las-req-chip-pct">{fillPct}% completado</span>
+                    <span className="las-chip las-chip--pct">{pct}% completado</span>
+                    {isCompleted && <span className="las-chip las-chip--done">✓ Completado</span>}
                 </div>
-            )}
 
-            {/* ── Sticker grid ── */}
-            {expanded && (
-                <div className="las-album-body">
-                    <div className="las-album-page-label">
-                        <span>Página {meta.pageNum}</span>
-                        <span className="las-album-page-dots">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                                <span key={i} className={`las-page-dot${i === 0 ? ' las-page-dot--active' : ''}`} />
-                            ))}
-                        </span>
-                    </div>
+                {/* Página del álbum */}
+                <div className="las-panel-scroll">
+                    <div className="las-album-page">
+                        {/* Encabezado de página */}
+                        <div className="las-page-header">
+                            <div className="las-page-line" />
+                            <span className="las-page-label">Página {String(page + 1).padStart(2, '0')}</span>
+                            <div className="las-page-line" />
+                        </div>
 
-                    <div className="las-sticker-grid">
-                        {Array.from({ length: meta.slots }).map((_, i) => {
-                            const item = stickerCards[i];
-                            return (
-                                <StickerSlot
-                                    key={i}
-                                    index={i}
+                        {/* Grid de figuritas 3 × 2 */}
+                        <div className="las-sticker-grid">
+                            {pageItems.map(({ idx, item }) => (
+                                <Sticker
+                                    key={idx}
+                                    index={idx}
                                     card={item?.card ?? null}
                                     collectionItem={item ?? null}
-                                    isGolden={isGolden}
+                                    meta={meta}
                                 />
-                            );
-                        })}
+                            ))}
+                            {Array.from({ length: PER_PAGE - pageItems.length }).map((_, i) => (
+                                <div key={`ph-${i}`} className="las-sticker-phantom" />
+                            ))}
+                        </div>
+
+                        {/* Paginación */}
+                        <div className="las-pagination">
+                            <button
+                                className="las-page-btn"
+                                onClick={() => setPage(p => Math.max(0, p - 1))}
+                                disabled={page === 0}
+                            >‹</button>
+                            <div className="las-page-dots">
+                                {Array.from({ length: totalPages }).map((_, i) => (
+                                    <button
+                                        key={i}
+                                        className={`las-page-dot${i === page ? ' las-page-dot--active' : ''}`}
+                                        onClick={() => setPage(i)}
+                                    />
+                                ))}
+                            </div>
+                            <button
+                                className="las-page-btn"
+                                onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                                disabled={page === totalPages - 1}
+                            >›</button>
+                        </div>
                     </div>
 
                     {def?.reward_description && (
-                        <div className="las-album-reward">
-                            <span className="las-album-reward-icon">🎁</span>
+                        <div className="las-reward-bar">
+                            <span>🎁</span>
                             <span>{def.reward_description}</span>
                         </div>
                     )}
                 </div>
-            )}
-        </div>
+            </div>
+        </>
     );
 }
 
-/* ─── Main export ───────────────────────────────────────────── */
+/* ════════════════════════════════════════════════
+   LIBRO — tarjeta en la fila horizontal
+════════════════════════════════════════════════ */
+function AlbumBook({ albumId, meta, definitions, progress, collection, locked }) {
+    const [panelOpen, setPanelOpen] = useState(false);
+
+    const def = definitions.find(d => d.id === albumId);
+    const playerCol = collection.filter(c => c.card?.card_type === 'player');
+    const reqPlayers = def?.required_unique_players ?? meta.slots;
+    const filled = Math.min(playerCol.length, reqPlayers);
+    const pct = reqPlayers > 0 ? Math.min(100, Math.round((filled / reqPlayers) * 100)) : 0;
+    const isCompleted = progress.find(p => p.album_id === albumId)?.is_completed ?? false;
+
+    return (
+        <>
+            <button
+                className={`las-book${locked ? ' las-book--locked' : ''}${isCompleted ? ' las-book--done' : ''}${meta.golden ? ' las-book--golden' : ''}`}
+                style={{ '--spine': meta.spine, '--acc': meta.accent }}
+                onClick={() => !locked && setPanelOpen(true)}
+                aria-disabled={locked}
+            >
+                {/* Lomo */}
+                <div className="las-book-spine">
+                    <span className="las-book-spine-num">{meta.number}</span>
+                    <span className="las-book-spine-lbl">{meta.shortLabel}</span>
+                </div>
+
+                {/* Portada */}
+                <div className="las-book-cover">
+                    <div className="las-book-grid-bg" />
+
+                    <div className="las-book-tag">
+                        {locked ? '🔒 BLOQUEADO' : meta.tag}
+                    </div>
+
+                    <div className="las-book-title-block">
+                        <span className="las-book-icon">{meta.golden ? '✦' : '📖'}</span>
+                        <span className="las-book-title">{meta.label}</span>
+                    </div>
+
+                    {/* Mini preview — 6 slots */}
+                    {!locked ? (
+                        <div className="las-book-preview">
+                            {Array.from({ length: 6 }).map((_, i) => {
+                                const item = playerCol[i];
+                                return (
+                                    <div key={i} className={`las-book-slot${item ? ' las-book-slot--filled' : ''}`}>
+                                        {item?.card?.image_path
+                                            ? <img src={item.card.image_path} alt="" />
+                                            : item
+                                                ? <span>{getInitials(item.card?.name)}</span>
+                                                : null
+                                        }
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="las-book-locked-hint">
+                            Completa el álbum anterior para desbloquear
+                        </div>
+                    )}
+
+                    {/* Footer */}
+                    <div className="las-book-footer">
+                        <div className="las-book-pbar">
+                            <div className="las-book-pbar-fill" style={{ width: `${pct}%` }} />
+                        </div>
+                        <div className="las-book-footer-row">
+                            <span className="las-book-count">{filled}/{reqPlayers}</span>
+                            {isCompleted && <span className="las-book-done">✓</span>}
+                            {!locked && <span className="las-book-hint">Abrir →</span>}
+                        </div>
+                    </div>
+                </div>
+            </button>
+
+            {panelOpen && (
+                <AlbumPanel
+                    albumId={albumId}
+                    meta={meta}
+                    definitions={definitions}
+                    progress={progress}
+                    collection={collection}
+                    onClose={() => setPanelOpen(false)}
+                />
+            )}
+        </>
+    );
+}
+
+/* ════════════════════════════════════════════════
+   EXPORT PRINCIPAL
+════════════════════════════════════════════════ */
 export default function LegendaryAlbumsSection({ definitions, progress, collection }) {
     const isUnlocked = (albumId) => {
         const idx = ORDER.indexOf(albumId);
         if (idx === 0) return true;
-        const prevId = ORDER[idx - 1];
-        const prev = progress.find(p => p.album_id === prevId);
+        const prev = progress.find(p => p.album_id === ORDER[idx - 1]);
         return prev?.is_completed ?? false;
     };
 
     return (
         <div className="las-root">
-            {ORDER.map((albumId) => {
-                const unlocked = isUnlocked(albumId);
-                const meta = ALBUM_META[albumId];
+            <div className="las-eyebrow">
+                <span>Álbumes Legendarios</span>
+                <div className="las-eyebrow-line" />
+                <span className="las-eyebrow-count">4 álbumes</span>
+            </div>
 
-                if (!unlocked) {
-                    return (
-                        <div key={albumId} className={`las-album las-album--locked${meta.golden ? ' las-album--golden las-album--golden-locked' : ''}`}>
-                            <div className="las-album-header las-album-header--locked">
-                                <div className="las-album-header-left">
-                                    <span className="las-album-edition-tag las-album-edition-tag--locked">
-                                        🔒 BLOQUEADO
-                                    </span>
-                                    <span className="las-album-title las-album-title--locked">
-                                        {meta.golden ? '🏆' : '📖'} {meta.label}
-                                    </span>
-                                    <span className="las-album-req las-album-req--locked">{meta.req}</span>
-                                </div>
-                                <div className="las-album-header-right">
-                                    <span className="las-album-locked-hint">
-                                        Completa el álbum anterior
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="las-album-progress-strip">
-                                <div className="las-album-progress-fill" style={{ width: '0%' }} />
-                            </div>
-                            <div className="las-album-locked-grid">
-                                {Array.from({ length: Math.min(meta.slots, 10) }).map((_, i) => (
-                                    <div key={i} className="las-slot las-slot--empty las-slot--blurred" />
-                                ))}
-                            </div>
-                        </div>
-                    );
-                }
-
-                return (
-                    <AlbumCard
+            {/* Fila horizontal 4 × 1 */}
+            <div className="las-books-row">
+                {ORDER.map(albumId => (
+                    <AlbumBook
                         key={albumId}
                         albumId={albumId}
+                        meta={ALBUM_META[albumId]}
                         definitions={definitions}
                         progress={progress}
                         collection={collection}
+                        locked={!isUnlocked(albumId)}
                     />
-                );
-            })}
+                ))}
+            </div>
         </div>
     );
 }
