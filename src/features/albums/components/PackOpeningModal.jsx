@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { getHistoricalImageUrl } from '@/features/history/services/history.service';
 import '../styles/PackOpeningModal.css';
 
 const TYPE_LABEL = { player: 'JUGADOR', team: 'EQUIPO', competition: 'COPA', event: 'EVENTO' };
@@ -48,6 +49,9 @@ function RevealCard({ type, card, index, visible, isGoat }) {
     const isPlayer = type === 'player';
     const stars = isPlayer ? card?.significance_level : null;
 
+    // Resolver la URL de imagen correctamente para todos los tipos de carta
+    const resolvedImageUrl = card?.image_path ? getHistoricalImageUrl(card.image_path) : null;
+
     return (
         <div
             className={`pom-card${visible ? ' pom-card--visible' : ''}${isGoat && isPlayer ? ' pom-card--goat' : ''}`}
@@ -63,8 +67,8 @@ function RevealCard({ type, card, index, visible, isGoat }) {
                 </div>
 
                 <div className="pom-card-img-zone">
-                    {card?.image_path ? (
-                        <img src={card.image_path} alt={card.name} className="pom-card-img" />
+                    {resolvedImageUrl ? (
+                        <img src={resolvedImageUrl} alt={card.name} className="pom-card-img" />
                     ) : (
                         <div className="pom-card-initials" style={{ color }}>
                             {getInitials(card?.name)}
@@ -88,31 +92,25 @@ function RevealCard({ type, card, index, visible, isGoat }) {
     );
 }
 
-/* ── SOBRE FÍSICO ── */
 function PackVisual({ count, onOpen }) {
     return (
         <div className="pom-pack-scene">
             <div className="pom-pack-wrapper">
-                {/* Lomo izquierdo */}
                 <div className="pom-pack-spine" />
-
-                {/* Cuerpo del sobre */}
                 <div className="pom-pack-body">
                     <div className="pom-pack-texture" />
                     <div className="pom-pack-logo">
                         <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="30" cy="30" r="28" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+                            <circle cx="30" cy="30" r="28" className="pom-logo-ring" strokeWidth="1" />
                             <path d="M30 8 L36 22 L52 22 L39 32 L44 46 L30 38 L16 46 L21 32 L8 22 L24 22 Z"
-                                fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1.2" />
-                            <circle cx="30" cy="30" r="4" fill="rgba(255,255,255,0.25)" />
+                                className="pom-logo-star" strokeWidth="1.2" />
+                            <circle cx="30" cy="30" r="4" className="pom-logo-dot" />
                         </svg>
                     </div>
                     <div className="pom-pack-season">TEMPORADA 25·26</div>
                     <div className="pom-pack-series">GLOBAL ALBUMS</div>
                     <div className="pom-pack-tear-line" />
                 </div>
-
-                {/* Pestaña superior */}
                 <div className="pom-pack-tab">
                     <div className="pom-pack-perforation">
                         {Array.from({ length: 7 }).map((_, i) => (
@@ -139,7 +137,6 @@ function PackVisual({ count, onOpen }) {
     );
 }
 
-/* ── ANIMACIÓN DE RASGADO ── */
 function TearAnimation() {
     return (
         <div className="pom-tear-scene">
@@ -160,7 +157,6 @@ function TearAnimation() {
     );
 }
 
-/* ── MODAL PRINCIPAL ── */
 export default function PackOpeningModal({
     isOpen, phase, result, packsAvailable,
     isGoat, isLegend, onOpen, onClose, onReset,
@@ -193,7 +189,6 @@ export default function PackOpeningModal({
         <div ref={overlayRef} className={`pom-overlay${overlayMod}`} onClick={handleOverlayClick}>
             <div className={`pom-modal${isGoat ? ' pom-modal--goat' : ''}`}>
 
-                {/* Cabecera */}
                 <div className="pom-modal-header">
                     <div className="pom-modal-header-left">
                         <div className="pom-modal-spine" />
@@ -217,10 +212,8 @@ export default function PackOpeningModal({
                     )}
                 </div>
 
-                {/* Barra divisora */}
                 <div className="pom-modal-bar" />
 
-                {/* Contenido */}
                 <div className="pom-modal-body">
                     {phase === 'idle' && (
                         <PackVisual count={packsAvailable} onOpen={onOpen} />
@@ -245,17 +238,16 @@ export default function PackOpeningModal({
                     )}
                 </div>
 
-                {/* Acciones finales */}
                 {phase === 'done' && (
                     <div className="pom-modal-actions">
                         {packsAvailable > 1 && (
                             <button className="pom-btn-again" onClick={onReset}>
-                                <span>Abrir otro</span>
+                                <span>ABRIR OTRO</span>
                                 <span className="pom-btn-count">{packsAvailable - 1}</span>
                             </button>
                         )}
                         <button className="pom-btn-collection" onClick={onClose}>
-                            Ver mi colección
+                            VER MI COLECCIÓN
                         </button>
                     </div>
                 )}

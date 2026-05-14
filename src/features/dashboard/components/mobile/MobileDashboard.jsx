@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Crown, Landmark } from "lucide-react";
+import { Crown, BookOpen } from "lucide-react";
 import { MobileUserProfile } from "@/features/profile";
 import { MobileSubPage } from "@/shared/layout";
 import AlbumBookEntry from '@/features/albums/components/AlbumBookEntry';
@@ -320,7 +320,7 @@ function ProgressBar({ saved, total, onNavigate }) {
           <span className="mob2-progress-count">[{saved}/{total}]</span>
         </div>
         <button className="mob2-history-cta-icon" onClick={onNavigate} aria-label="Historial">
-          <Landmark size={18} />
+          <BookOpen size={18} />
         </button>
       </div>
       <div className="mob2-progress-track">
@@ -620,9 +620,7 @@ export default function MobileDashboard({
       )}
 
       {/* PROGRESS + HISTORY */}
-      <ProgressBar saved={savedPending} total={totalPredictable} onNavigate={() => navigate("/history")} />
-      {/* Album entry */}
-      <AlbumBookEntry currentUser={currentUser} />
+      <ProgressBar saved={savedPending} total={totalPredictable} onNavigate={() => navigate("/albums")} />
       {/* NEXT MATCH — o estado vacío */}
       <NextMatchBanner
         match={nextMatch}

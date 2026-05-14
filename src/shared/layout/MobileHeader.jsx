@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Bell, Moon, Sun, Trophy, Award, BarChart3, Globe, User2, NotebookPen, Shield, History, Notebook, Landmark } from "lucide-react";
+import { Bell, Moon, Sun, Trophy, Award, BarChart3, Globe, User2, BookOpen, Shield, History, Notebook, Landmark } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import "./MobileHeader.css";
