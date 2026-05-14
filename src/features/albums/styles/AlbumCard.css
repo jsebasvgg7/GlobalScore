@@ -1,0 +1,132 @@
+.ac-root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 80px;
+    border-radius: 10px;
+    border: 2px solid var(--color-border, #333);
+    background: var(--color-surface, #1a1a2e);
+    padding: 6px;
+    position: relative;
+    cursor: default;
+    transition: transform 0.15s ease;
+}
+
+.ac-root:hover {
+    transform: translateY(-2px);
+}
+
+.ac-root--small {
+    width: 56px;
+    padding: 4px;
+    border-radius: 8px;
+    gap: 4px;
+}
+
+.ac-root--empty {
+    border-style: dashed;
+    opacity: 0.35;
+    justify-content: center;
+    min-height: 96px;
+}
+
+.ac-empty-icon {
+    font-size: 1.5rem;
+    color: var(--color-text-muted, #666);
+}
+
+/* Frames */
+.ac-frame--silver {
+    border-color: #c0c0c0;
+    box-shadow: 0 0 8px rgba(192, 192, 192, 0.3);
+}
+
+.ac-frame--gold {
+    border-color: #ffd700;
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+}
+
+.ac-frame--legendary {
+    border-color: #a855f7;
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.5);
+    animation: legendary-pulse 2s ease-in-out infinite;
+}
+
+.ac-root--goat {
+    background: linear-gradient(135deg, #1a1a2e, #2d1b69);
+}
+
+@keyframes legendary-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 16px rgba(168, 85, 247, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 24px rgba(168, 85, 247, 0.8);
+    }
+}
+
+.ac-image-wrap {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--color-surface-raised, #252540);
+}
+
+.ac-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ac-type-icon {
+    font-size: 1.6rem;
+}
+
+.ac-root--small .ac-type-icon {
+    font-size: 1.2rem;
+}
+
+.ac-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 100%;
+}
+
+.ac-name {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--color-text, #eee);
+    text-align: center;
+    line-height: 1.2;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.ac-stars {
+    font-size: 0.45rem;
+    letter-spacing: -1px;
+}
+
+.ac-copies {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    font-size: 0.55rem;
+    font-weight: 700;
+    background: var(--color-primary, #7c6af7);
+    color: #fff;
+    border-radius: 20px;
+    padding: 1px 4px;
+}

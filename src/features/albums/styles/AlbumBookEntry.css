@@ -1,0 +1,74 @@
+.abe-root {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: 1px solid var(--color-border, #2a2a3e);
+    background: var(--color-surface, #1a1a2e);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.abe-root:hover {
+    background: var(--color-surface-raised, #1e1e32);
+    border-color: var(--color-primary, #7c6af7);
+}
+
+.abe-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.abe-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.abe-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.abe-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text, #eee);
+}
+
+.abe-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--color-primary, #7c6af7);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    animation: abe-pulse 2s ease-in-out infinite;
+}
+
+@keyframes abe-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.75;
+    }
+}
+
+.abe-arrow {
+    font-size: 1.3rem;
+    color: var(--color-text-muted, #666);
+    flex-shrink: 0;
+}

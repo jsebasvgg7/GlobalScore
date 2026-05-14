@@ -1,0 +1,55 @@
+.asn-root {
+    display: flex;
+    gap: 4px;
+    background: var(--color-surface-raised, #1e1e32);
+    border-radius: 12px;
+    padding: 4px;
+}
+
+.asn-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--color-text-muted, #888);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
+}
+
+.asn-tab:hover {
+    background: var(--color-surface, #252540);
+    color: var(--color-text, #eee);
+}
+
+.asn-tab--active {
+    background: var(--color-primary, #7c6af7);
+    color: #fff;
+    font-weight: 600;
+}
+
+.asn-icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+@media (max-width: 480px) {
+    .asn-label {
+        display: none;
+    }
+
+    .asn-tab {
+        padding: 10px;
+    }
+
+    .asn-icon {
+        font-size: 1.2rem;
+    }
+}

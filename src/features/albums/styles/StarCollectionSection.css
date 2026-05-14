@@ -1,0 +1,100 @@
+.scs-root {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.scs-section {
+    border-radius: 12px;
+    border: 1px solid var(--color-border, #2a2a3e);
+    background: var(--color-surface, #1a1a2e);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+}
+
+.scs-section--open {
+    border-color: var(--color-primary, #7c6af7);
+}
+
+.scs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 14px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    gap: 12px;
+}
+
+.scs-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.scs-emoji {
+    font-size: 0.9rem;
+    letter-spacing: -2px;
+    flex-shrink: 0;
+}
+
+.scs-header-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.scs-label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--color-text, #eee);
+}
+
+.scs-desc {
+    font-size: 0.7rem;
+    color: var(--color-text-muted, #888);
+}
+
+.scs-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.scs-count {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-primary, #7c6af7);
+}
+
+.scs-chevron {
+    font-size: 0.65rem;
+    color: var(--color-text-muted, #888);
+}
+
+.scs-bar-wrap {
+    height: 3px;
+    background: var(--color-surface-raised, #2a2a3a);
+}
+
+.scs-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary, #7c6af7), #a78bfa);
+    transition: width 0.4s ease;
+}
+
+.scs-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 14px;
+}
+
+.scs-empty {
+    font-size: 0.78rem;
+    color: var(--color-text-muted, #888);
+    padding: 8px 0;
+}
