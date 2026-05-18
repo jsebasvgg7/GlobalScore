@@ -15,22 +15,9 @@ import PackOpeningModal from '../components/PackOpeningModal';
 import { primaryButtonProps } from '../motion/variants';
 import './AlbumsPage.css';
 
-// ── Variantes locales de esta página ──────────────────────────────────────
 const heroVariants = {
     hidden: { opacity: 0, y: -8 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.32, ease: 'easeOut' },
-    },
-};
-
-const barFillVariants = {
-    hidden: { width: '0%' },
-    visible: (pct) => ({
-        width: `${pct}%`,
-        transition: { duration: 0.7, ease: [0.23, 1, 0.32, 1], delay: 0.2 },
-    }),
+    visible: { opacity: 1, y: 0, transition: { duration: 0.32, ease: 'easeOut' } },
 };
 
 export default function AlbumsPage({ currentUser }) {
@@ -69,7 +56,6 @@ export default function AlbumsPage({ currentUser }) {
     return (
         <div className="alp-root">
 
-            {/* ── HERO ── */}
             <motion.div
                 className="alp-hero"
                 variants={heroVariants}
@@ -89,7 +75,6 @@ export default function AlbumsPage({ currentUser }) {
                     </p>
                 </div>
 
-                {/* Botón con Framer — reemplaza CSS transform hover/active */}
                 <AnimatePresence>
                     {packsAvailable > 0 && (
                         <motion.button
@@ -108,26 +93,11 @@ export default function AlbumsPage({ currentUser }) {
                 </AnimatePresence>
             </motion.div>
 
-            {/* ── BARRA DE PROGRESO ── */}
             <div className="alp-bar-section">
-                <div className="alp-bar-header">
-                    <span className="alp-bar-label">Progreso · próximo sobre</span>
-                    <span className="alp-bar-pct">{barPercent}%</span>
-                </div>
-
-                {/* Progress bar con motion — reemplaza transition: width en CSS */}
-                <div className="apb-root">
-                    <div className="apb-bar-wrap">
-                        <motion.div
-                            className="apb-bar-fill"
-                            custom={barPercent}
-                            variants={barFillVariants}
-                            initial="hidden"
-                            animate="visible"
-                            key={barPercent} // re-anima si cambia el valor
-                        />
-                    </div>
-                </div>
+                <AlbumProgressBar
+                    percent={barPercent}
+                    packsAvailable={packsAvailable}
+                />
             </div>
 
             <AlbumsSectionNav active={activeSection} onChange={setActiveSection} />
