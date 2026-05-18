@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Lock, BookOpen, Trophy, Star, ChevronLeft, ChevronRight, Gift, Crown, X, User, Search, Maximize2 } from 'lucide-react';
+import { Lock, BookOpen, Trophy, Star, ChevronLeft, ChevronRight, Gift, Crown, X, User, Search } from 'lucide-react';
 import '../styles/LegendaryAlbumsSection.css';
 
 const ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'golden_album'];
@@ -101,16 +101,10 @@ function posLabel(pos) {
     return map[pos] || pos?.slice(0, 3).toUpperCase() || '—';
 }
 
-/* ══════════════════════════════════════════
-   FIX: Cálculo de progreso POR ÁLBUM
-   Cada álbum tiene sus propios requisitos de stars
-══════════════════════════════════════════ */
 function calcAlbumProgress(meta, collection) {
     const playerCol = collection.filter(c => c.card?.card_type === 'player');
     const reqPlayers = meta.slots;
 
-    // Para golden_album: todos deben ser 5 estrellas
-    // Para los demás: cualquier jugador califica, pero se verifica los requisitos de estrellas
     let qualifiedPlayers;
     if (meta.golden) {
         qualifiedPlayers = playerCol.filter(c => c.card?.significance_level === 5);
@@ -128,14 +122,14 @@ function calcAlbumProgress(meta, collection) {
 }
 
 /* ══════════════════════════════════════════
-   COVER ILLUSTRATIONS — libro estilo imagen
+   COVER ILLUSTRATIONS
 ══════════════════════════════════════════ */
 function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
     const id = `cover-${albumId}`;
 
     if (albumId === 'legendary_1') {
         return (
-            <svg viewBox="0 0 120 160" className="las-cover-svg" aria-hidden="true">
+            <svg viewBox="0 0 120 160" className="las2-cover-svg" aria-hidden="true">
                 <defs>
                     <pattern id={`${id}-hatch`} patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
                         <line x1="0" y1="0" x2="0" y2="10" stroke={accent} strokeWidth="0.8" opacity="0.18" />
@@ -146,14 +140,12 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
                     </radialGradient>
                 </defs>
                 <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-hatch)`} />
-                {/* Corner ornaments */}
                 <g stroke={accent} strokeWidth="0.7" opacity="0.45" fill="none">
                     <polyline points="8,8 8,22 22,22" />
                     <polyline points="112,8 112,22 98,22" />
                     <polyline points="8,152 8,138 22,138" />
                     <polyline points="112,152 112,138 98,138" />
                 </g>
-                {/* Shield */}
                 {!locked && (
                     <g transform="translate(60,78)">
                         <path d="M0,-34 L26,-20 L26,6 Q26,26 0,40 Q-26,26 -26,6 L-26,-20 Z"
@@ -176,13 +168,12 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
                 const a = (Math.PI / 3) * i - Math.PI / 6;
                 return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
             }).join(' ');
-
         const hexes = [
             [60, 56, 18], [36, 69, 18], [84, 69, 18],
             [60, 82, 18], [36, 95, 18], [84, 95, 18], [60, 108, 18],
         ];
         return (
-            <svg viewBox="0 0 120 160" className="las-cover-svg" aria-hidden="true">
+            <svg viewBox="0 0 120 160" className="las2-cover-svg" aria-hidden="true">
                 <defs>
                     <radialGradient id={`${id}-glow`} cx="50%" cy="50%" r="60%">
                         <stop offset="0%" stopColor={accent} stopOpacity="0.12" />
@@ -195,13 +186,11 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
                         fill={i === 3 ? accent : 'none'} fillOpacity={i === 3 ? 0.08 : 0}
                         stroke={accent} strokeWidth="0.6" opacity={i === 3 ? 0.6 : 0.2} />
                 ))}
-                {/* Corner diamonds */}
                 <g fill={accent} opacity="0.35">
                     {[[10, 10], [110, 10], [10, 150], [110, 150]].map(([x, y], i) => (
                         <polygon key={i} points={`${x},${y - 5} ${x + 4},${y} ${x},${y + 5} ${x - 4},${y}`} />
                     ))}
                 </g>
-                {/* Crown */}
                 {!locked && (
                     <g transform="translate(60,82)">
                         <path d="M-16,10 L-16,-6 L-8,2 L0,-14 L8,2 L16,-6 L16,10 Z"
@@ -218,7 +207,7 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
 
     if (albumId === 'legendary_3') {
         return (
-            <svg viewBox="0 0 120 160" className="las-cover-svg" aria-hidden="true">
+            <svg viewBox="0 0 120 160" className="las2-cover-svg" aria-hidden="true">
                 <defs>
                     <radialGradient id={`${id}-center`} cx="50%" cy="50%" r="50%">
                         <stop offset="0%" stopColor={accent} stopOpacity="0.2" />
@@ -226,13 +215,11 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
                     </radialGradient>
                 </defs>
                 <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-center)`} />
-                {/* Concentric rings */}
                 {[50, 40, 30, 20, 12].map((r, i) => (
                     <circle key={i} cx="60" cy="80" r={r}
                         fill="none" stroke={accent} strokeWidth="0.7"
                         opacity={0.08 + i * 0.06} />
                 ))}
-                {/* Radiating lines */}
                 {Array.from({ length: 16 }, (_, i) => {
                     const a = (i / 16) * Math.PI * 2;
                     return (
@@ -242,28 +229,24 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
                             stroke={accent} strokeWidth="0.4" opacity="0.14" />
                     );
                 })}
-                {/* Crosshair corners */}
                 <g stroke={accent} strokeWidth="0.6" opacity="0.4">
                     <line x1="6" y1="12" x2="20" y2="12" /><line x1="6" y1="12" x2="6" y2="26" />
                     <line x1="114" y1="12" x2="100" y2="12" /><line x1="114" y1="12" x2="114" y2="26" />
                     <line x1="6" y1="148" x2="20" y2="148" /><line x1="6" y1="148" x2="6" y2="134" />
                     <line x1="114" y1="148" x2="100" y2="148" /><line x1="114" y1="148" x2="114" y2="134" />
                 </g>
-                {/* Lightning bolt */}
                 {!locked && (
                     <g transform="translate(60,80)">
                         <circle cx="0" cy="0" r="13" fill={accent} fillOpacity="0.08" />
-                        <path d="M7,-20 L-5,-2 L4,-2 L-7,20 L5,2 L-4,2 Z"
-                            fill={accent} opacity="0.9" />
+                        <path d="M7,-20 L-5,-2 L4,-2 L-7,20 L5,2 L-4,2 Z" fill={accent} opacity="0.9" />
                     </g>
                 )}
             </svg>
         );
     }
 
-    // Golden
     return (
-        <svg viewBox="0 0 120 160" className="las-cover-svg las-cover-svg--golden" aria-hidden="true">
+        <svg viewBox="0 0 120 160" className="las2-cover-svg las2-cover-svg--golden" aria-hidden="true">
             <defs>
                 <pattern id={`${id}-dots`} patternUnits="userSpaceOnUse" width="12" height="12">
                     <circle cx="6" cy="6" r="1" fill={accent} opacity="0.25" />
@@ -275,21 +258,17 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
             </defs>
             <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-dots)`} />
             <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-radial)`} />
-            {/* Ornamental border */}
             <rect x="7" y="7" width="106" height="146" fill="none" stroke={accent} strokeWidth="0.5" opacity="0.3" />
             <rect x="11" y="11" width="98" height="138" fill="none" stroke={accent} strokeWidth="0.3" opacity="0.2" />
-            {/* Corner diamonds */}
             <g fill={accent} opacity="0.6">
                 {[[7, 7], [113, 7], [7, 153], [113, 153]].map(([x, y], i) => (
                     <polygon key={i} points={`${x},${y - 6} ${x + 5},${y} ${x},${y + 6} ${x - 5},${y}`} />
                 ))}
             </g>
-            {/* Spiral */}
             {!locked && (
                 <>
                     <path d="M60,80 Q68,62 76,72 Q86,88 70,98 Q50,110 40,88 Q30,62 56,50 Q84,38 94,72 Q102,104 74,118"
                         fill="none" stroke={accent} strokeWidth="1.2" opacity="0.3" strokeLinecap="round" />
-                    {/* Trophy */}
                     <g transform="translate(60,76)">
                         <path d="M-12,-20 Q-14,4 0,16 Q14,4 12,-20 Z"
                             fill="none" stroke={accent} strokeWidth="1.4" strokeLinejoin="round" opacity="0.95" />
@@ -307,7 +286,7 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
 }
 
 /* ══════════════════════════════════════════
-   STICKER CARD — panel mejorado
+   STICKER CARD
 ══════════════════════════════════════════ */
 function StickerCard({ index, card, collectionItem, accent }) {
     const num = String(index + 1).padStart(3, '0');
@@ -319,7 +298,6 @@ function StickerCard({ index, card, collectionItem, accent }) {
         return (
             <div className={`las2-sticker las2-sticker--filled${isGoat ? ' las2-sticker--goat' : ''}`}
                 style={{ '--acc': accent }}>
-                {/* Header */}
                 <div className="las2-sticker-header">
                     <span className="las2-sticker-num">{num}</span>
                     {isGoat && <Crown size={9} className="las2-sticker-crown" />}
@@ -327,20 +305,17 @@ function StickerCard({ index, card, collectionItem, accent }) {
                         <span className="las2-sticker-copies">×{collectionItem.copies}</span>
                     )}
                 </div>
-                {/* Avatar */}
                 <div className="las2-sticker-avatar-zone">
                     {card?.image_path
                         ? <img src={card.image_path} alt={card.name} className="las2-sticker-img" />
                         : <div className="las2-sticker-avatar">{getInitials(card?.name)}</div>
                     }
                 </div>
-                {/* Stars */}
                 <div className="las2-sticker-stars">
                     {Array.from({ length: 5 }, (_, i) => (
                         <span key={i} className={`las2-star ${i < stars ? 'las2-star--on' : 'las2-star--off'}`}>★</span>
                     ))}
                 </div>
-                {/* Info */}
                 <div className="las2-sticker-info">
                     <span className="las2-sticker-name">{card?.name}</span>
                     {card?.position && <span className="las2-sticker-pos">{posLabel(card.position)}</span>}
@@ -372,12 +347,12 @@ function StickerCard({ index, card, collectionItem, accent }) {
 }
 
 /* ══════════════════════════════════════════
-   PANEL DETALLE — diseño radical nuevo
+   ALBUM PANEL
 ══════════════════════════════════════════ */
 function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose }) {
     const [page, setPage] = useState(0);
     const [search, setSearch] = useState('');
-    const PER_PAGE = 12;
+    const PER_PAGE = 10; // 2 filas × 5 columnas
 
     const def = definitions.find(d => d.id === albumId);
     const prog = progress.find(p => p.album_id === albumId);
@@ -390,13 +365,11 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
     const reqStars4 = def?.required_min_stars_4 ?? meta.minStars4;
     const reqStars5 = def?.required_min_stars_5 ?? meta.minStars5;
 
-    // Slots completos del álbum (incluye vacíos)
     const allSlots = Array.from({ length: meta.slots }, (_, i) => ({
         idx: i,
         item: qualifiedPlayers[i] ?? null,
     }));
 
-    // Filtro por búsqueda
     const filteredSlots = search.trim()
         ? allSlots.filter(({ item }) =>
             item?.card?.name?.toLowerCase().includes(search.toLowerCase())
@@ -405,23 +378,14 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
 
     const totalPages = Math.max(1, Math.ceil(filteredSlots.length / PER_PAGE));
     const safePagenr = Math.min(page, totalPages - 1);
-
     const pageItems = filteredSlots.slice(safePagenr * PER_PAGE, (safePagenr + 1) * PER_PAGE);
-
-    // Stats footer
-    const totalSize = qualifiedPlayers.reduce((acc, c) => acc + (c?.card ? 1 : 0), 0);
-    const lastUpdate = def?.updated_at
-        ? new Date(def.updated_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
-        : '—';
 
     const albumNum = meta.number === '✦' ? 'GOLD' : meta.number;
 
     return (
         <>
-            {/* Overlay — cierra al hacer clic fuera */}
             <div className="las2-overlay" onClick={onClose} />
 
-            {/* Modal centrado */}
             <div
                 className="las2-panel"
                 style={{
@@ -442,20 +406,16 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                     </button>
                 </div>
 
-                {/* ── BODY 2 COLS ── */}
+                {/* ── BODY ── */}
                 <div className="las2-panel-body">
 
-                    {/* ──────────── SIDEBAR IZQUIERDA ──────────── */}
+                    {/* ── SIDEBAR ── */}
                     <div className="las2-panel-sidebar">
                         <div className="las2-panel-sidebar-inner">
 
-                            {/* ID */}
                             <span className="las2-sidebar-id">ID: ALB-{albumNum}</span>
-
-                            {/* Título */}
                             <h2 className="las2-sidebar-title">{meta.shortLabel}</h2>
 
-                            {/* Count */}
                             <div className="las2-sidebar-count">
                                 <span className="las2-sidebar-count-big">{filled}</span>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -466,112 +426,64 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
 
                             <div className="las2-sidebar-divider" />
 
-                            {/* Imagen del libro */}
+                            {/* Libro */}
                             <div className="las2-sidebar-book-img">
                                 <div className="las2-sidebar-book-svg-wrap">
-                                    {/* Lomo */}
                                     <div style={{
-                                        position: 'absolute',
-                                        left: 0,
-                                        top: 0,
-                                        bottom: 0,
-                                        width: 22,
+                                        position: 'absolute', left: 0, top: 0, bottom: 0, width: 22,
                                         background: `linear-gradient(180deg, ${meta.spine} 0%, ${meta.spineAlt} 100%)`,
                                         borderRadius: '3px 0 0 3px',
                                         boxShadow: 'inset -2px 0 8px rgba(0,0,0,0.4)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
                                     }}>
                                         <span style={{
-                                            fontFamily: "'DM Mono', monospace",
-                                            fontSize: 7,
-                                            fontWeight: 800,
-                                            color: 'rgba(255,255,255,0.7)',
-                                            writingMode: 'vertical-rl',
-                                            textOrientation: 'mixed',
-                                            transform: 'rotate(180deg)',
-                                            letterSpacing: '0.1em',
+                                            fontFamily: "'DM Mono', monospace", fontSize: 7, fontWeight: 800,
+                                            color: 'rgba(255,255,255,0.7)', writingMode: 'vertical-rl',
+                                            textOrientation: 'mixed', transform: 'rotate(180deg)', letterSpacing: '0.1em',
                                         }}>{meta.shortLabel}</span>
                                     </div>
-                                    {/* Portada */}
                                     <div style={{
-                                        position: 'absolute',
-                                        left: 22,
-                                        top: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        background: meta.coverBg,
-                                        borderRadius: '0 4px 4px 0',
-                                        overflow: 'hidden',
+                                        position: 'absolute', left: 22, top: 0, right: 0, bottom: 0,
+                                        background: meta.coverBg, borderRadius: '0 4px 4px 0', overflow: 'hidden',
                                         boxShadow: '4px 6px 0 rgba(0,0,0,0.32), 8px 14px 28px rgba(0,0,0,0.22)',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
+                                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                                     }}>
-                                        <BookCoverIllustration
-                                            albumId={albumId}
-                                            accent={meta.accent}
-                                            accentRgb={meta.accentRgb}
-                                            locked={false}
-                                        />
-                                        {/* Hebilla */}
+                                        <BookCoverIllustration albumId={albumId} accent={meta.accent} accentRgb={meta.accentRgb} locked={false} />
                                         <div className="las2-clasp">
                                             <div className="las2-clasp-strap las2-clasp-strap--top" />
-                                            <div className="las2-clasp-buckle">
-                                                <div className="las2-clasp-buckle-inner" />
-                                            </div>
+                                            <div className="las2-clasp-buckle"><div className="las2-clasp-buckle-inner" /></div>
                                             <div className="las2-clasp-strap las2-clasp-strap--bot" />
                                         </div>
-                                        {/* Cantoneras */}
                                         {['tl', 'tr', 'bl', 'br'].map(pos => (
                                             <div key={pos} className={`las2-corner las2-corner--${pos}`} />
                                         ))}
-                                        {/* Nombre en portada */}
                                         <span style={{
-                                            position: 'absolute',
-                                            fontFamily: "'Sora', sans-serif",
-                                            fontSize: 14,
-                                            fontWeight: 800,
-                                            letterSpacing: '0.2em',
-                                            color: 'rgba(255,255,255,0.88)',
-                                            textShadow: `0 0 16px rgba(${meta.accentRgb},0.6)`,
-                                            zIndex: 2,
-                                        }}>AYVA</span>
+                                            position: 'absolute', fontFamily: "'Sora', sans-serif", fontSize: 14,
+                                            fontWeight: 800, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.88)',
+                                            textShadow: `0 0 16px rgba(${meta.accentRgb},0.6)`, zIndex: 2,
+                                        }}></span>
                                     </div>
-                                    {/* Page stack */}
                                     <div style={{
-                                        position: 'absolute',
-                                        top: 4,
-                                        right: -8,
-                                        bottom: 4,
-                                        width: 10,
-                                        zIndex: 0,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: 1,
+                                        position: 'absolute', top: 4, right: -8, bottom: 4, width: 10,
+                                        zIndex: 0, display: 'flex', flexDirection: 'column', gap: 1,
                                     }}>
                                         {[0, 1, 2].map(i => (
                                             <div key={i} style={{
-                                                flex: 1,
-                                                borderRadius: '0 1px 1px 0',
-                                                background: '#d4cfc8',
-                                                transform: `translateX(${i * 1.5}px)`,
-                                                opacity: 0.7 - i * 0.2,
+                                                flex: 1, borderRadius: '0 1px 1px 0', background: '#d4cfc8',
+                                                transform: `translateX(${i * 1.5}px)`, opacity: 0.7 - i * 0.2,
                                             }} />
                                         ))}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Progress bar */}
+                            {/* Progress */}
                             <div className="las2-sidebar-pbar-wrap">
                                 <div className="las2-sidebar-pbar-fill" style={{ width: `${pct}%` }} />
                                 <span className="las2-sidebar-pbar-pct">{pct}%</span>
                             </div>
 
-                            {/* Chips de requisitos */}
+                            {/* Chips */}
                             <div className="las2-sidebar-chips">
                                 <span className={`las2-chip ${stars4Count >= reqStars4 ? 'las2-chip--ok' : ''}`}>
                                     {'★★★★'} {Math.min(stars4Count, reqStars4)}/{reqStars4}
@@ -587,50 +499,24 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                             </div>
                         </div>
 
-                        {/* Descripción + meta */}
+                        {/* Descripción */}
                         <div className="las2-sidebar-desc-block">
-                            <div>
+                            <div className="las2-sidebar-desc-full">
                                 <span className="las2-sidebar-desc-label">Descripción</span>
-                                <span className="las2-sidebar-desc-val las2-sidebar-desc-val--full">
-                                    {def?.description ?? 'Tu colección personal.\nAñade jugadores y organízalos como quieras.'}
-                                </span>
-                            </div>
-                            <div>
-                                <span className="las2-sidebar-desc-label">Creado</span>
                                 <span className="las2-sidebar-desc-val">
-                                    {def?.created_at
-                                        ? new Date(def.created_at).toLocaleDateString('es-ES')
-                                        : '—'}
+                                    {def?.description ?? 'El primer álbum legendario.'}
                                 </span>
                             </div>
-                            <div>
-                                <span className="las2-sidebar-desc-label">Actualizado</span>
-                                <span className="las2-sidebar-desc-val">{lastUpdate}</span>
-                            </div>
-                        </div>
-
-                        {/* Footer sidebar */}
-                        <div className="las2-sidebar-footer">
-                            <div className="las2-sidebar-drag-hint">
-                                <div className="las2-sidebar-drag-dot" />
-                                Arrastra figuritas al álbum
-                            </div>
-                            <button className="las2-sidebar-info-btn">
-                                INFO +
-                            </button>
                         </div>
                     </div>
 
-                    {/* ──────────── PANEL PRINCIPAL (DERECHO) ──────────── */}
+                    {/* ── PANEL PRINCIPAL ── */}
                     <div className="las2-panel-main">
 
-                        {/* Toolbar: búsqueda + filtro + sort */}
+                        {/* Toolbar: solo búsqueda */}
                         <div className="las2-panel-toolbar">
                             <div className="las2-toolbar-search">
-                                <Search
-                                    size={13}
-                                    className="las2-toolbar-search-icon"
-                                />
+                                <Search size={13} className="las2-toolbar-search-icon" />
                                 <input
                                     type="text"
                                     className="las2-toolbar-search-input"
@@ -639,28 +525,17 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                                     onChange={e => { setSearch(e.target.value); setPage(0); }}
                                 />
                             </div>
-                            <button className="las2-toolbar-filter-btn">Filter</button>
-                            <select className="las2-toolbar-sort" defaultValue="date">
-                                <option value="date">Sort: Date</option>
-                                <option value="stars">Sort: Stars</option>
-                                <option value="name">Sort: Name</option>
-                            </select>
                         </div>
 
                         {/* Grid scrolleable */}
                         <div className="las2-panel-scroll">
-
-                            {/* Page indicator */}
                             <div className="las2-page-indicator">
                                 <div className="las2-page-indicator-line" />
-                                <span>
-                                    Página {String(safePagenr + 1).padStart(2, '0')}{' '}
-                                    / {String(totalPages).padStart(2, '0')}
-                                </span>
+                                <span>Página {String(safePagenr + 1).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}</span>
                                 <div className="las2-page-indicator-line" />
                             </div>
 
-                            {/* Grid de figuritas */}
+                            {/* Grid 5 columnas × 2 filas = 10 cartas */}
                             <div className="las2-sticker-grid">
                                 {pageItems.map(({ idx, item }) => (
                                     <StickerCard
@@ -672,44 +547,11 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                                     />
                                 ))}
                             </div>
-
-                            {/* Paginación */}
-                            <div className="las2-pagination">
-                                <button
-                                    className="las2-page-btn"
-                                    onClick={() => setPage(p => Math.max(0, p - 1))}
-                                    disabled={safePagenr === 0}
-                                >
-                                    <ChevronLeft size={15} />
-                                </button>
-
-                                <div className="las2-pagination-info">
-                                    PAGE{' '}
-                                    <strong>{String(safePagenr + 1).padStart(2, '0')}</strong>
-                                    {' '}/ {String(totalPages).padStart(2, '0')}
-                                </div>
-
-                                <button
-                                    className="las2-page-btn"
-                                    onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-                                    disabled={safePagenr === totalPages - 1}
-                                >
-                                    <ChevronRight size={15} />
-                                </button>
-                            </div>
-
-                            {/* Reward */}
-                            {def?.reward_description && (
-                                <div className="las2-reward">
-                                    <Gift size={13} />
-                                    <span>{def.reward_description}</span>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>
 
-                {/* ── FOOTER DEL MODAL ── */}
+                {/* ── FOOTER ── */}
                 <div className="las2-modal-footer">
                     <div className="las2-footer-stat">
                         <span className="las2-footer-stat-label">Total Items</span>
@@ -717,16 +559,34 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                     </div>
                     <div className="las2-footer-stat">
                         <span className="las2-footer-stat-label">Total Size</span>
-                        <span className="las2-footer-stat-val">{totalSize > 0 ? `${totalSize}` : '0B'}</span>
+                        <span className="las2-footer-stat-val">{filled > 0 ? `${filled}` : '0'}</span>
                     </div>
-                    <div className="las2-footer-stat">
-                        <span className="las2-footer-stat-label">Last Update</span>
-                        <span className="las2-footer-stat-val" style={{ fontSize: 11 }}>{lastUpdate}</span>
+
+                    {/* Paginación integrada en el footer */}
+                    <div className="las2-footer-pagination">
+                        <button
+                            className="las2-page-btn"
+                            onClick={() => setPage(p => Math.max(0, p - 1))}
+                            disabled={safePagenr === 0}
+                            aria-label="Página anterior"
+                        >
+                            <ChevronLeft size={15} />
+                        </button>
+                        <div className="las2-pagination-info">
+                            PAGE <strong>{String(safePagenr + 1).padStart(2, '0')}</strong> / {String(totalPages).padStart(2, '0')}
+                        </div>
+                        <button
+                            className="las2-page-btn"
+                            onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                            disabled={safePagenr === totalPages - 1}
+                            aria-label="Página siguiente"
+                        >
+                            <ChevronRight size={15} />
+                        </button>
                     </div>
+
                     <div className="las2-footer-spacer" />
-                    <button className="las2-footer-export-btn">
-                        Export Album
-                    </button>
+                    <button className="las2-footer-export-btn">Salir del Álbum</button>
                     <button className="las2-footer-arrow-btn" onClick={onClose}>
                         <ChevronRight size={16} />
                     </button>
@@ -736,45 +596,37 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
     );
 }
 
-
 /* ══════════════════════════════════════════
-   BOOK CARD — estilo álbum físico (imagen ref)
+   BOOK CARD
 ══════════════════════════════════════════ */
 function AlbumBook({ albumId, meta, definitions, progress, collection, locked }) {
     const [panelOpen, setPanelOpen] = useState(false);
 
-    const { filled, pct, qualifiedPlayers } = locked
-        ? { filled: 0, pct: 0, qualifiedPlayers: [] }
+    const { filled, pct } = locked
+        ? { filled: 0, pct: 0 }
         : calcAlbumProgress(meta, collection);
     const reqPlayers = meta.slots;
-
     const isCompleted = progress.find(p => p.album_id === albumId)?.is_completed ?? false;
 
     return (
         <>
             <div className={`las2-book-wrap ${locked ? 'las2-book-wrap--locked' : ''}`}>
-                {/* Page stack effect */}
                 <div className="las2-page-stack">
                     {[2, 1, 0].map(i => (
-                        <div key={i} className="las2-page-leaf"
-                            style={{ '--li': i, '--acc': meta.accent }} />
+                        <div key={i} className="las2-page-leaf" style={{ '--li': i, '--acc': meta.accent }} />
                     ))}
                 </div>
 
                 <button
                     className={`las2-book ${isCompleted ? 'las2-book--done' : ''} ${meta.golden ? 'las2-book--golden' : ''}`}
                     style={{
-                        '--spine': meta.spine,
-                        '--spine-alt': meta.spineAlt,
-                        '--acc': meta.accent,
-                        '--acc-rgb': meta.accentRgb,
-                        '--cover-bg': meta.coverBg,
+                        '--spine': meta.spine, '--spine-alt': meta.spineAlt,
+                        '--acc': meta.accent, '--acc-rgb': meta.accentRgb, '--cover-bg': meta.coverBg,
                     }}
                     onClick={() => !locked && setPanelOpen(true)}
                     disabled={locked}
                     aria-disabled={locked}
                 >
-                    {/* ── LOMO (spine) ── */}
                     <div className="las2-spine">
                         <span className="las2-spine-num">{meta.number}</span>
                         <span className="las2-spine-label">{meta.shortLabel}</span>
@@ -783,49 +635,25 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                         </div>
                     </div>
 
-                    {/* ── PORTADA ── */}
                     <div className="las2-cover">
-                        {/* Ilustración SVG de fondo */}
                         <div className="las2-cover-art">
-                            <BookCoverIllustration
-                                albumId={albumId}
-                                accent={meta.accent}
-                                accentRgb={meta.accentRgb}
-                                locked={locked}
-                            />
+                            <BookCoverIllustration albumId={albumId} accent={meta.accent} accentRgb={meta.accentRgb} locked={locked} />
                         </div>
-
-                        {/* Clasp / hebilla (estilo imagen) */}
                         <div className="las2-clasp">
                             <div className="las2-clasp-strap las2-clasp-strap--top" />
-                            <div className="las2-clasp-buckle">
-                                <div className="las2-clasp-buckle-inner" />
-                            </div>
+                            <div className="las2-clasp-buckle"><div className="las2-clasp-buckle-inner" /></div>
                             <div className="las2-clasp-strap las2-clasp-strap--bot" />
                         </div>
-
-                        {/* Metal corners */}
                         {['tl', 'tr', 'bl', 'br'].map(pos => (
                             <div key={pos} className={`las2-corner las2-corner--${pos}`} />
                         ))}
-
-                        {/* Tag temporada / Lock */}
                         <div className="las2-cover-tag">
-                            {locked
-                                ? <><Lock size={7} strokeWidth={2.5} /> BLOQUEADO</>
-                                : meta.tag
-                            }
+                            {locked ? <><Lock size={7} strokeWidth={2.5} /> BLOQUEADO</> : meta.tag}
                         </div>
-
-                        {/* ID del álbum */}
                         <div className="las2-cover-id">ID: ALB-{meta.number === '✦' ? 'GOLD' : meta.number}</div>
-
-                        {/* Título del libro (centro) */}
                         <div className="las2-cover-title-block">
                             <span className="las2-cover-brand"></span>
                         </div>
-
-                        {/* Lock overlay */}
                         {locked && (
                             <div className="las2-lock-overlay">
                                 <div className="las2-lock-fog" />
@@ -837,23 +665,16 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                                 <span className="las2-lock-msg">Completa el álbum anterior</span>
                             </div>
                         )}
-
-                        {/* Footer del libro */}
                         <div className="las2-cover-footer">
                             <div className="las2-cover-footer-info">
                                 <span className="las2-cover-count">{filled} / {reqPlayers} ITEMS</span>
                                 {isCompleted && <span className="las2-done-tick">✓</span>}
                             </div>
-                            {/* Mini progress */}
                             <div className="las2-mini-bar">
                                 <div className="las2-mini-bar-fill" style={{ width: `${pct}%` }} />
                             </div>
-                            {!locked && (
-                                <span className="las2-cover-hint">Abrir álbum →</span>
-                            )}
+                            {!locked && <span className="las2-cover-hint">Abrir álbum →</span>}
                         </div>
-
-                        {/* Rarity badge */}
                         {!locked && (
                             <div className={`las2-rarity ${meta.golden ? 'las2-rarity--golden' : ''}`}>
                                 <div className="las2-rarity-stars">
@@ -898,7 +719,6 @@ export default function LegendaryAlbumsSection({ definitions, progress, collecti
                 <div className="las2-eyebrow-line" />
                 <span className="las2-eyebrow-count">4 álbumes</span>
             </div>
-
             <div className="las2-row">
                 {ORDER.map(albumId => (
                     <AlbumBook

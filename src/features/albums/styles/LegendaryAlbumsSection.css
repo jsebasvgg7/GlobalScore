@@ -2,17 +2,18 @@
 
 /* ════════════════════════════════════════════════
    LEGENDARY ALBUMS SECTION v2 — las2-*
-   Diseño inspirado en álbum físico (imagen ref)
+   Diseño inspirado en álbum físico
 ════════════════════════════════════════════════ */
 
-/* ── ROOT ── */
+/* ══════════════════════════════════════════
+   ROOT + EYEBROW
+══════════════════════════════════════════ */
 .las2-root {
     display: flex;
     flex-direction: column;
     gap: 18px;
 }
 
-/* ── EYEBROW ── */
 .las2-eyebrow {
     display: flex;
     align-items: center;
@@ -48,7 +49,9 @@
     color: #8B7FC7;
 }
 
-/* ── FILA DE ÁLBUMES ── */
+/* ══════════════════════════════════════════
+   FILA DE ÁLBUMES
+══════════════════════════════════════════ */
 .las2-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -70,9 +73,9 @@
     }
 }
 
-/* ════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    BOOK WRAPPER
-════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 .las2-book-wrap {
     position: relative;
     display: flex;
@@ -89,7 +92,6 @@
     filter: grayscale(0.6) brightness(0.8);
 }
 
-/* Page stack */
 .las2-page-stack {
     position: absolute;
     top: 3px;
@@ -117,9 +119,9 @@
     border-right-color: color-mix(in srgb, var(--acc, #a599d9) 22%, #2a2638);
 }
 
-/* ════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    EL LIBRO
-════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 .las2-book {
     display: flex;
     flex-direction: row;
@@ -226,7 +228,6 @@
     min-width: 0;
 }
 
-/* Edge highlight */
 .las2-cover::after {
     content: '';
     position: absolute;
@@ -271,7 +272,7 @@
     }
 }
 
-/* ── HEBILLA / CLASP (estilo imagen) ── */
+/* ── HEBILLA ── */
 .las2-clasp {
     position: absolute;
     right: 0;
@@ -314,7 +315,7 @@
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
 }
 
-/* ── CANTONERAS (corner metals) ── */
+/* ── CANTONERAS ── */
 .las2-corner {
     position: absolute;
     width: 10px;
@@ -381,7 +382,7 @@
     color: rgba(255, 255, 255, 0.25);
 }
 
-/* ── TÍTULO CENTRAL (AYVA) ── */
+/* ── TÍTULO CENTRAL ── */
 .las2-cover-title-block {
     position: relative;
     z-index: 2;
@@ -401,6 +402,13 @@
         0 0 20px rgba(var(--acc-rgb, 165, 153, 217), 0.6),
         0 2px 8px rgba(0, 0, 0, 0.5);
     user-select: none;
+}
+
+.las2-book--golden .las2-cover-brand {
+    background: linear-gradient(135deg, #fde68a, #f59e0b, #d97706);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /* ── RARITY BADGE ── */
@@ -506,29 +514,25 @@
     animation: las2-lock-pulse 2.8s ease-in-out infinite;
 }
 
-@keyframes las2-lock-pulse {
-    0% {
-        transform: scale(1);
-        opacity: 0.6;
-    }
-
-    70% {
-        transform: scale(1.7);
-        opacity: 0;
-    }
-
-    100% {
-        transform: scale(1.7);
-        opacity: 0;
-    }
-}
-
 .las2-lock-pulse {
     position: absolute;
     inset: -8px;
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.04);
     animation: las2-lock-pulse 2.8s ease-in-out 0.4s infinite;
+}
+
+@keyframes las2-lock-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    70%,
+    100% {
+        transform: scale(1.7);
+        opacity: 0;
+    }
 }
 
 .las2-lock-msg {
@@ -602,21 +606,9 @@
     opacity: 1;
 }
 
-/* Álbum dorado */
-.las2-book--golden .las2-cover-brand {
-    background: linear-gradient(135deg, #fde68a, #f59e0b, #d97706);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* ════════════════════════════════════════════════
-   ALBUM PANEL — MODAL CENTRADO (reemplaza panel lateral)
-   Reemplaza los bloques .las2-overlay y .las2-panel
-   en LegendaryAlbumsSection.css
-════════════════════════════════════════════════ */
-
-/* ── OVERLAY ── */
+/* ══════════════════════════════════════════
+   MODAL OVERLAY + PANEL
+══════════════════════════════════════════ */
 .las2-overlay {
     position: fixed;
     inset: 0;
@@ -637,10 +629,9 @@
     }
 }
 
-/* ── MODAL CENTRADO ── */
 .las2-panel {
     position: fixed;
-    top: 50%;
+    top: 53%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 80vw;
@@ -681,9 +672,80 @@
     }
 }
 
-/* ════════════════════════════════════════════════
-   MODAL BODY — 2 columnas (info izq + grid der)
-════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .las2-panel {
+        width: 96vw;
+        height: 92vh;
+    }
+}
+
+/* ── TOPBAR ── */
+.las2-modal-topbar {
+    flex-shrink: 0;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px 0 0;
+    border-bottom: 1px solid #d4cfc8;
+    background: var(--cover-bg, #1a1726);
+    position: relative;
+}
+
+[data-theme="dark"] .las2-modal-topbar {
+    border-bottom-color: #2A2638;
+}
+
+.las2-modal-topbar-spine {
+    width: 5px;
+    height: 100%;
+    flex-shrink: 0;
+    background: linear-gradient(180deg,
+            var(--spine, #5b4fd8) 0%,
+            color-mix(in srgb, var(--spine, #5b4fd8) 70%, black) 100%);
+    margin-right: 14px;
+}
+
+.las2-modal-topbar-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.9);
+    flex: 1;
+}
+
+.las2-modal-topbar-season {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--acc, #a599d9);
+    margin-right: 16px;
+}
+
+.las2-panel-close {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.07);
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.las2-panel-close:hover {
+    background: rgba(91, 79, 216, 0.25);
+    color: #fff;
+}
+
+/* ══════════════════════════════════════════
+   BODY — 2 COLUMNAS
+══════════════════════════════════════════ */
 .las2-panel-body {
     flex: 1;
     min-height: 0;
@@ -693,20 +755,15 @@
 }
 
 @media (max-width: 900px) {
-    .las2-panel {
-        width: 96vw;
-        height: 92vh;
-    }
-
     .las2-panel-body {
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;
     }
 }
 
-/* ════════════════════════════════════════════════
-   COLUMNA IZQUIERDA — info del álbum
-════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════ */
 .las2-panel-sidebar {
     display: flex;
     flex-direction: column;
@@ -721,7 +778,7 @@
     border-right-color: #2A2638;
 }
 
-/* Spine decorativo vertical */
+/* Spine decorativo */
 .las2-panel-sidebar::before {
     content: '';
     position: absolute;
@@ -740,7 +797,6 @@
     display: flex;
     flex-direction: column;
     padding: 20px 18px 0 26px;
-    gap: 0;
     overflow-y: auto;
     scrollbar-width: none;
 }
@@ -749,7 +805,6 @@
     display: none;
 }
 
-/* ID del álbum */
 .las2-sidebar-id {
     font-family: 'DM Mono', monospace;
     font-size: 9px;
@@ -765,7 +820,6 @@
     color: #4E4868;
 }
 
-/* Título grande */
 .las2-sidebar-title {
     font-family: 'Sora', sans-serif;
     font-size: 32px;
@@ -781,7 +835,6 @@
     color: #F0EDF8;
 }
 
-/* Count */
 .las2-sidebar-count {
     display: flex;
     align-items: baseline;
@@ -817,7 +870,6 @@
     color: #a0a0b0;
 }
 
-/* Divider */
 .las2-sidebar-divider {
     height: 1px;
     background: #d4cfc8;
@@ -844,7 +896,52 @@
     filter: drop-shadow(6px 10px 24px rgba(0, 0, 0, 0.28));
 }
 
-/* Chips de requisitos en sidebar */
+/* Progress bar */
+.las2-sidebar-pbar-wrap {
+    position: relative;
+    height: 4px;
+    background: #d4cfc8;
+    border-radius: 2px;
+    overflow: visible;
+    margin-bottom: 8px;
+}
+
+[data-theme="dark"] .las2-sidebar-pbar-wrap {
+    background: #2A2638;
+}
+
+.las2-sidebar-pbar-fill {
+    height: 100%;
+    background: var(--acc, #5b4fd8);
+    border-radius: 2px;
+    transition: width 0.6s ease;
+    position: relative;
+}
+
+.las2-sidebar-pbar-fill::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--acc, #5b4fd8);
+    box-shadow: 0 0 10px rgba(var(--acc-rgb, 91, 79, 216), 0.5);
+}
+
+.las2-sidebar-pbar-pct {
+    position: absolute;
+    right: 0;
+    top: -16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--acc, #5b4fd8);
+}
+
+/* Chips */
 .las2-sidebar-chips {
     display: flex;
     flex-direction: column;
@@ -852,18 +949,53 @@
     margin-bottom: 6px;
 }
 
-/* ── SECTION DESCRIPCIÓN ── */
+.las2-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #a0a0b0;
+    border: 0.5px solid #d4cfc8;
+    padding: 3px 7px;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="dark"] .las2-chip {
+    border-color: #38334F;
+    color: #6E6680;
+}
+
+.las2-chip--ok {
+    color: #22c55e;
+    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.las2-chip--done {
+    color: var(--acc, #5b4fd8);
+    border-color: rgba(var(--acc-rgb, 91, 79, 216), 0.3);
+    background: rgba(var(--acc-rgb, 91, 79, 216), 0.05);
+}
+
+/* Descripción */
 .las2-sidebar-desc-block {
     padding: 12px 14px;
     border-top: 1px solid #d4cfc8;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 16px;
     flex-shrink: 0;
 }
 
 [data-theme="dark"] .las2-sidebar-desc-block {
     border-top-color: #2A2638;
+}
+
+.las2-sidebar-desc-full {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .las2-sidebar-desc-label {
@@ -873,7 +1005,6 @@
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: #5b4fd8;
-    margin-bottom: 3px;
     display: block;
 }
 
@@ -892,45 +1023,18 @@
     color: #6E6680;
 }
 
-.las2-sidebar-desc-val--full {
-    grid-column: 1 / -1;
-}
-
-/* ── FOOTER SIDEBAR ── */
+/* Footer sidebar */
 .las2-sidebar-footer {
     border-top: 1px solid #d4cfc8;
     padding: 10px 14px 12px 26px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     flex-shrink: 0;
 }
 
 [data-theme="dark"] .las2-sidebar-footer {
     border-top-color: #2A2638;
-}
-
-.las2-sidebar-drag-hint {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: 'DM Mono', monospace;
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #a0a0b0;
-}
-
-.las2-sidebar-drag-dot {
-    width: 7px;
-    height: 7px;
-    background: var(--acc, #5b4fd8);
-    flex-shrink: 0;
-}
-
-[data-theme="dark"] .las2-sidebar-drag-hint {
-    color: #4E4868;
 }
 
 .las2-sidebar-info-btn {
@@ -966,9 +1070,9 @@
     color: var(--acc, #a599d9);
 }
 
-/* ════════════════════════════════════════════════
-   COLUMNA DERECHA — grid de figuritas
-════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   PANEL PRINCIPAL (DERECHO)
+══════════════════════════════════════════ */
 .las2-panel-main {
     display: flex;
     flex-direction: column;
@@ -976,12 +1080,11 @@
     min-width: 0;
 }
 
-/* ── TOOLBAR (search + filter + sort) ── */
+/* ── TOOLBAR ── */
 .las2-panel-toolbar {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 8px;
     padding: 12px 16px;
     border-bottom: 1px solid #d4cfc8;
 }
@@ -1043,67 +1146,13 @@
     border-color: var(--acc, #a599d9);
 }
 
-.las2-toolbar-filter-btn {
-    height: 34px;
-    padding: 0 16px;
-    background: #5b4fd8;
-    border: none;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #fff;
-    cursor: pointer;
-    border-radius: 3px;
-    flex-shrink: 0;
-    clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
-    transition: background 0.12s;
-}
-
-.las2-toolbar-filter-btn:hover {
-    background: #4a3fc7;
-}
-
-[data-theme="dark"] .las2-toolbar-filter-btn {
-    background: #7366B3;
-}
-
-.las2-toolbar-sort {
-    height: 34px;
-    padding: 0 10px;
-    background: transparent;
-    border: 1px solid #d4cfc8;
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: #6a6880;
-    cursor: pointer;
-    border-radius: 3px;
-    flex-shrink: 0;
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23a0a0b0'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    padding-right: 26px;
-}
-
-[data-theme="dark"] .las2-toolbar-sort {
-    border-color: #2A2638;
-    color: #6E6680;
-    background-color: transparent;
-}
-
 /* ── GRID AREA ── */
 .las2-panel-scroll {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 14px 16px;
+    padding: 10px 18px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -1124,339 +1173,6 @@
     scrollbar-color: rgba(139, 127, 199, 0.2) transparent;
 }
 
-/* Grid 4 columnas */
-.las2-sticker-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-}
-
-@media (max-width: 700px) {
-    .las2-sticker-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* ── EXPAND CORNER (top-right) ── */
-.las2-panel-expand {
-    position: absolute;
-    top: 10px;
-    right: 14px;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    color: #a0a0b0;
-    cursor: pointer;
-    z-index: 10;
-    transition: color 0.12s;
-}
-
-.las2-panel-expand:hover {
-    color: #5b4fd8;
-}
-
-[data-theme="dark"] .las2-panel-expand:hover {
-    color: var(--acc, #a599d9);
-}
-
-/* ── CLOSE BTN (top-right of modal) ── */
-.las2-panel-close {
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.07);
-    border: 0.5px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    color: #6a6880;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-    z-index: 10;
-}
-
-.las2-panel-close:hover {
-    background: rgba(91, 79, 216, 0.12);
-    color: #5b4fd8;
-}
-
-[data-theme="dark"] .las2-panel-close {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.4);
-}
-
-[data-theme="dark"] .las2-panel-close:hover {
-    background: rgba(163, 153, 217, 0.15);
-    color: rgba(255, 255, 255, 0.9);
-}
-
-/* ── MODAL HEADER (barra superior del modal) ── */
-.las2-modal-topbar {
-    flex-shrink: 0;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    padding: 0 14px 0 0;
-    border-bottom: 1px solid #d4cfc8;
-    background: var(--cover-bg, #1a1726);
-    position: relative;
-    gap: 0;
-}
-
-[data-theme="dark"] .las2-modal-topbar {
-    border-bottom-color: #2A2638;
-}
-
-.las2-modal-topbar-spine {
-    width: 5px;
-    height: 100%;
-    flex-shrink: 0;
-    background: linear-gradient(180deg,
-            var(--spine, #5b4fd8) 0%,
-            color-mix(in srgb, var(--spine, #5b4fd8) 70%, black) 100%);
-    margin-right: 14px;
-}
-
-.las2-modal-topbar-title {
-    font-family: 'Sora', sans-serif;
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    color: rgba(255, 255, 255, 0.9);
-    flex: 1;
-}
-
-.las2-modal-topbar-season {
-    font-family: 'DM Mono', monospace;
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--acc, #a599d9);
-    margin-right: 16px;
-}
-
-/* ── FOOTER DEL MODAL (stats + export) ── */
-.las2-modal-footer {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 0;
-    border-top: 1px solid #d4cfc8;
-    background: #eee9e1;
-    padding: 0;
-    height: 52px;
-}
-
-[data-theme="dark"] .las2-modal-footer {
-    background: #0f0d18;
-    border-top-color: #2A2638;
-}
-
-.las2-footer-stat {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 20px;
-    border-right: 1px solid #d4cfc8;
-    height: 100%;
-    min-width: 90px;
-}
-
-[data-theme="dark"] .las2-footer-stat {
-    border-right-color: #2A2638;
-}
-
-.las2-footer-stat-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 7px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #a0a0b0;
-    line-height: 1;
-    margin-bottom: 3px;
-}
-
-[data-theme="dark"] .las2-footer-stat-label {
-    color: #4E4868;
-}
-
-.las2-footer-stat-val {
-    font-family: 'DM Mono', monospace;
-    font-size: 16px;
-    font-weight: 800;
-    color: #1a1726;
-    line-height: 1;
-    letter-spacing: -0.02em;
-}
-
-[data-theme="dark"] .las2-footer-stat-val {
-    color: #F0EDF8;
-}
-
-.las2-footer-spacer {
-    flex: 1;
-}
-
-.las2-footer-export-btn {
-    height: 100%;
-    padding: 0 24px;
-    background: #5b4fd8;
-    border: none;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #fff;
-    cursor: pointer;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    transition: background 0.12s;
-}
-
-.las2-footer-export-btn:hover {
-    background: #4a3fc7;
-}
-
-[data-theme="dark"] .las2-footer-export-btn {
-    background: #7366B3;
-}
-
-.las2-footer-arrow-btn {
-    width: 52px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    border-left: 1px solid #d4cfc8;
-    color: #a0a0b0;
-    cursor: pointer;
-    transition: color 0.12s, background 0.12s;
-}
-
-.las2-footer-arrow-btn:hover {
-    background: rgba(91, 79, 216, 0.06);
-    color: #5b4fd8;
-}
-
-[data-theme="dark"] .las2-footer-arrow-btn {
-    border-left-color: #2A2638;
-    color: #4E4868;
-}
-
-/* ── PAGINACIÓN (dentro del área principal) ── */
-.las2-pagination {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
-    padding: 0 2px;
-}
-
-.las2-pagination-left {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.las2-page-btn {
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #d4cfc8;
-    background: transparent;
-    color: #a0a0b0;
-    cursor: pointer;
-    border-radius: 3px;
-    transition: color 0.12s, border-color 0.12s, background 0.12s;
-}
-
-[data-theme="dark"] .las2-page-btn {
-    border-color: #38334F;
-    color: #6E6680;
-}
-
-.las2-page-btn:hover:not(:disabled) {
-    color: #5b4fd8;
-    border-color: #5b4fd8;
-    background: rgba(91, 79, 216, 0.05);
-}
-
-.las2-page-btn:disabled {
-    opacity: 0.25;
-    cursor: default;
-}
-
-.las2-pagination-info {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: #a0a0b0;
-}
-
-.las2-pagination-info strong {
-    background: #5b4fd8;
-    color: #fff;
-    padding: 3px 7px;
-    border-radius: 2px;
-    font-size: 10px;
-    margin: 0 3px;
-}
-
-[data-theme="dark"] .las2-pagination-info strong {
-    background: #7366B3;
-}
-
-.las2-page-nums {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.las2-page-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    font-weight: 700;
-    padding: 4px 8px;
-    border: 1px solid #d4cfc8;
-    background: transparent;
-    color: #a0a0b0;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.12s;
-}
-
-[data-theme="dark"] .las2-page-num {
-    border-color: #38334F;
-    color: #6E6680;
-}
-
-.las2-page-num--active {
-    background: #5b4fd8;
-    border-color: #5b4fd8;
-    color: #fff;
-}
-
-[data-theme="dark"] .las2-page-num--active {
-    background: #7366B3;
-    border-color: #7366B3;
-}
-
 /* ── PAGE INDICATOR ── */
 .las2-page-indicator {
     display: flex;
@@ -1468,6 +1184,7 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #a0a0b0;
+    flex-shrink: 0;
 }
 
 [data-theme="dark"] .las2-page-indicator {
@@ -1482,6 +1199,26 @@
 
 [data-theme="dark"] .las2-page-indicator-line {
     background: #2A2638;
+}
+
+/* ── STICKER GRID — 5 columnas × 2 filas = 10 por página ── */
+.las2-sticker-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+    .las2-sticker-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .las2-sticker-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 /* ── REWARD ── */
@@ -1497,6 +1234,7 @@
     color: #a0a0b0;
     letter-spacing: 0.06em;
     border-radius: 3px;
+    flex-shrink: 0;
 }
 
 [data-theme="dark"] .las2-reward {
@@ -1510,96 +1248,9 @@
     flex-shrink: 0;
 }
 
-/* ════════════════════════════════════════════════
-   PROGRESS BAR en sidebar
-════════════════════════════════════════════════ */
-.las2-sidebar-pbar-wrap {
-    position: relative;
-    height: 4px;
-    background: #d4cfc8;
-    border-radius: 2px;
-    overflow: visible;
-    margin-bottom: 8px;
-}
-
-[data-theme="dark"] .las2-sidebar-pbar-wrap {
-    background: #2A2638;
-}
-
-.las2-sidebar-pbar-fill {
-    height: 100%;
-    background: var(--acc, #5b4fd8);
-    border-radius: 2px;
-    transition: width 0.6s ease;
-    position: relative;
-}
-
-.las2-sidebar-pbar-fill::after {
-    content: '';
-    position: absolute;
-    right: -1px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--acc, #5b4fd8);
-    box-shadow: 0 0 10px rgba(var(--acc-rgb, 91, 79, 216), 0.5);
-}
-
-.las2-sidebar-pbar-pct {
-    position: absolute;
-    right: 0;
-    top: -16px;
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    font-weight: 800;
-    color: var(--acc, #5b4fd8);
-}
-
-/* ── PAGE INDICATOR ── */
-.las2-page-indicator {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'DM Mono', monospace;
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #a0a0b0;
-}
-
-[data-theme="dark"] .las2-page-indicator {
-    color: #6E6680;
-}
-
-.las2-page-indicator-line {
-    flex: 1;
-    height: 0.5px;
-    background: #d4cfc8;
-}
-
-[data-theme="dark"] .las2-page-indicator-line {
-    background: #2A2638;
-}
-
-/* ════════════════════════════════════════════════
-   STICKER GRID — 4 columnas en panel amplio
-════════════════════════════════════════════════ */
-.las2-sticker-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-}
-
-@media (max-width: 480px) {
-    .las2-sticker-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* ── STICKER CARD ── */
+/* ══════════════════════════════════════════
+   STICKER CARD
+══════════════════════════════════════════ */
 .las2-sticker {
     aspect-ratio: 2/3;
     position: relative;
@@ -1648,7 +1299,6 @@
     background: color-mix(in srgb, #f59e0b 8%, #1a1726) !important;
 }
 
-/* Sticker header */
 .las2-sticker-header {
     display: flex;
     align-items: center;
@@ -1693,7 +1343,6 @@
     border-radius: 2px;
 }
 
-/* Avatar zone */
 .las2-sticker-avatar-zone {
     flex: 1;
     display: flex;
@@ -1743,7 +1392,6 @@
     color: #38334F;
 }
 
-/* Stars */
 .las2-sticker-stars {
     display: flex;
     justify-content: center;
@@ -1776,7 +1424,6 @@
     color: #38334F;
 }
 
-/* Info */
 .las2-sticker-info {
     display: flex;
     flex-direction: column;
@@ -1832,28 +1479,92 @@
     text-align: center;
 }
 
-/* ════════════════════════════════════════════════
-   PAGINACIÓN DEL PANEL
-════════════════════════════════════════════════ */
-.las2-pagination {
+/* ══════════════════════════════════════════
+   FOOTER DEL MODAL — stats + paginación + export
+══════════════════════════════════════════ */
+.las2-modal-footer {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
+    border-top: 1px solid #d4cfc8;
+    background: #eee9e1;
+    height: 52px;
+}
+
+[data-theme="dark"] .las2-modal-footer {
+    background: #0f0d18;
+    border-top-color: #2A2638;
+}
+
+.las2-footer-stat {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    gap: 10px;
+    padding: 0 20px;
+    border-right: 1px solid #d4cfc8;
+    height: 100%;
+    min-width: 90px;
+}
+
+[data-theme="dark"] .las2-footer-stat {
+    border-right-color: #2A2638;
+}
+
+.las2-footer-stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #a0a0b0;
+    line-height: 1;
+    margin-bottom: 3px;
+}
+
+[data-theme="dark"] .las2-footer-stat-label {
+    color: #4E4868;
+}
+
+.las2-footer-stat-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    font-weight: 800;
+    color: #1a1726;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+[data-theme="dark"] .las2-footer-stat-val {
+    color: #F0EDF8;
+}
+
+/* Paginación integrada en el footer */
+.las2-footer-pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px;
+    border-right: 1px solid #d4cfc8;
+    height: 100%;
+}
+
+[data-theme="dark"] .las2-footer-pagination {
+    border-right-color: #2A2638;
 }
 
 .las2-page-btn {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 0.5px solid #d4cfc8;
+    border: 1px solid #d4cfc8;
     background: transparent;
     color: #a0a0b0;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 3px;
     transition: color 0.12s, border-color 0.12s, background 0.12s;
+    flex-shrink: 0;
 }
 
 [data-theme="dark"] .las2-page-btn {
@@ -1877,64 +1588,80 @@
     cursor: default;
 }
 
-.las2-page-nums {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.las2-page-num {
+.las2-pagination-info {
     font-family: 'DM Mono', monospace;
     font-size: 9px;
     font-weight: 700;
-    padding: 4px 8px;
-    border: 0.5px solid #d4cfc8;
-    background: transparent;
+    letter-spacing: 0.12em;
     color: #a0a0b0;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.12s;
+    white-space: nowrap;
 }
 
-[data-theme="dark"] .las2-page-num {
-    border-color: #38334F;
+.las2-pagination-info strong {
+    background: #5b4fd8;
+    color: #fff;
+    padding: 3px 7px;
+    border-radius: 2px;
+    font-size: 10px;
+    margin: 0 3px;
+}
+
+[data-theme="dark"] .las2-pagination-info {
     color: #6E6680;
 }
 
-.las2-page-num--active {
-    background: #5b4fd8;
-    border-color: #5b4fd8;
-    color: #fff;
-}
-
-[data-theme="dark"] .las2-page-num--active {
+[data-theme="dark"] .las2-pagination-info strong {
     background: #7366B3;
-    border-color: #7366B3;
 }
 
-/* ── REWARD BAR ── */
-.las2-reward {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    border: 0.5px solid #d4cfc8;
-    background: #faf8f4;
+.las2-footer-spacer {
+    flex: 1;
+}
+
+.las2-footer-export-btn {
+    height: 100%;
+    padding: 0 24px;
+    background: #5b4fd8;
+    border: none;
     font-family: 'DM Mono', monospace;
     font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+    cursor: pointer;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.12s;
+}
+
+.las2-footer-export-btn:hover {
+    background: #4a3fc7;
+}
+
+[data-theme="dark"] .las2-footer-export-btn {
+    background: #7366B3;
+}
+
+.las2-footer-arrow-btn {
+    width: 52px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-left: 1px solid #d4cfc8;
     color: #a0a0b0;
-    letter-spacing: 0.06em;
-    border-radius: 2px;
+    cursor: pointer;
+    transition: color 0.12s, background 0.12s;
 }
 
-[data-theme="dark"] .las2-reward {
-    border-color: #2A2638;
-    background: rgba(255, 255, 255, 0.02);
-    color: #6E6680;
+.las2-footer-arrow-btn:hover {
+    background: rgba(91, 79, 216, 0.06);
+    color: #5b4fd8;
 }
 
-.las2-reward svg {
-    color: var(--acc, #a599d9);
-    flex-shrink: 0;
+[data-theme="dark"] .las2-footer-arrow-btn {
+    border-left-color: #2A2638;
+    color: #4E4868;
 }
