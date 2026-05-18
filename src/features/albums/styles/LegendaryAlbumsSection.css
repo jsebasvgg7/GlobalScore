@@ -1,12 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap');
 
-.las-root {
+/* ════════════════════════════════════════════════
+   LEGENDARY ALBUMS SECTION v2 — las2-*
+   Diseño inspirado en álbum físico (imagen ref)
+════════════════════════════════════════════════ */
+
+/* ── ROOT ── */
+.las2-root {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 18px;
 }
 
-.las-eyebrow {
+/* ── EYEBROW ── */
+.las2-eyebrow {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -18,89 +25,102 @@
     color: #a0a0b0;
 }
 
-[data-theme="dark"] .las-eyebrow {
+[data-theme="dark"] .las2-eyebrow {
     color: #6E6680;
 }
 
-.las-eyebrow-line {
+.las2-eyebrow-line {
     flex: 1;
     height: 0.5px;
     background: #d4cfc8;
 }
 
-[data-theme="dark"] .las-eyebrow-line {
+[data-theme="dark"] .las2-eyebrow-line {
     background: #2A2638;
 }
 
-.las-eyebrow-count {
+.las2-eyebrow-count {
     color: #5b4fd8;
+    font-size: 8px;
 }
 
-[data-theme="dark"] .las-eyebrow-count {
+[data-theme="dark"] .las2-eyebrow-count {
     color: #8B7FC7;
 }
 
-/* ════════════════════════════════════════════════
-   FILA 4×1
-════════════════════════════════════════════════ */
-.las-books-row {
+/* ── FILA DE ÁLBUMES ── */
+.las2-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
     align-items: stretch;
-    gap: 20px;
-    padding-bottom: 12px;
 }
 
-@media (max-width: 700px) {
-    .las-books-row {
+@media (max-width: 780px) {
+    .las2-row {
         grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
     }
 }
 
-@media (max-width: 420px) {
-    .las-books-row {
+@media (max-width: 440px) {
+    .las2-row {
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 10px;
     }
 }
 
 /* ════════════════════════════════════════════════
-   WRAPPER
+   BOOK WRAPPER
 ════════════════════════════════════════════════ */
-.las-book-wrapper {
+.las2-book-wrap {
     position: relative;
-}
-
-.las-book-pages-stack {
-    position: absolute;
-    top: 4px;
-    right: -5px;
-    bottom: 4px;
-    width: 8px;
     display: flex;
     flex-direction: column;
-    justify-content: stretch;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.las2-book-wrap:not(.las2-book-wrap--locked):hover {
+    transform: translateY(-8px);
+}
+
+.las2-book-wrap--locked {
+    opacity: 0.55;
+    filter: grayscale(0.6) brightness(0.8);
+}
+
+/* Page stack */
+.las2-page-stack {
+    position: absolute;
+    top: 3px;
+    right: -6px;
+    bottom: 3px;
+    width: 10px;
+    display: flex;
+    flex-direction: column;
     pointer-events: none;
     z-index: 0;
+    gap: 1px;
 }
 
-.las-book-page-leaf {
+.las2-page-leaf {
     flex: 1;
-    background: color-mix(in srgb, var(--acc, #a599d9) 18%, #e8e4dc);
-    border-right: 0.5px solid color-mix(in srgb, var(--acc, #a599d9) 30%, #c8c3bb);
-    transform: translateX(calc(var(--leaf-i, 0) * 1px));
-    opacity: calc(0.6 - var(--leaf-i, 0) * 0.15);
+    border-radius: 0 1px 1px 0;
+    background: color-mix(in srgb, var(--acc, #a599d9) 20%, #e5e0d8);
+    border-right: 1px solid color-mix(in srgb, var(--acc, #a599d9) 35%, #c8c3bb);
+    transform: translateX(calc(var(--li, 0) * 1.5px));
+    opacity: calc(0.7 - var(--li, 0) * 0.2);
 }
 
-[data-theme="dark"] .las-book-page-leaf {
-    background: color-mix(in srgb, var(--acc, #a599d9) 12%, #1e1c28);
-    border-right-color: color-mix(in srgb, var(--acc, #a599d9) 20%, #2a2638);
+[data-theme="dark"] .las2-page-leaf {
+    background: color-mix(in srgb, var(--acc, #a599d9) 14%, #1e1c28);
+    border-right-color: color-mix(in srgb, var(--acc, #a599d9) 22%, #2a2638);
 }
 
 /* ════════════════════════════════════════════════
-   LIBRO
+   EL LIBRO
 ════════════════════════════════════════════════ */
-.las-book {
+.las2-book {
     display: flex;
     flex-direction: row;
     border: none;
@@ -108,92 +128,106 @@
     background: transparent;
     cursor: pointer;
     text-align: left;
-    border-radius: 2px;
+    border-radius: 3px 4px 4px 3px;
     overflow: hidden;
     box-shadow:
-        4px 4px 0 rgba(0, 0, 0, 0.28),
-        8px 8px 24px rgba(0, 0, 0, 0.18),
+        4px 6px 0 rgba(0, 0, 0, 0.32),
+        8px 14px 28px rgba(0, 0, 0, 0.22),
         inset 1px 0 0 rgba(255, 255, 255, 0.06);
-    transition:
-        transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-        box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
-    aspect-ratio: 3/4;
     width: 100%;
-    min-height: 160px;
+    aspect-ratio: 3/4;
+    min-height: 170px;
     z-index: 1;
+    transition: box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.las-book--hovered:not(.las-book--locked) {
-    transform: translateY(-6px) scale(1.02);
+.las2-book-wrap:not(.las2-book-wrap--locked):hover .las2-book {
     box-shadow:
-        6px 10px 0 rgba(0, 0, 0, 0.3),
-        14px 20px 36px rgba(0, 0, 0, 0.22),
-        inset 1px 0 0 rgba(255, 255, 255, 0.08);
+        6px 12px 0 rgba(0, 0, 0, 0.36),
+        12px 24px 40px rgba(0, 0, 0, 0.28),
+        inset 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
-.las-book-wrapper--locked .las-book {
+.las2-book:disabled {
     cursor: not-allowed;
-    opacity: 0.52;
-    filter: grayscale(0.7) brightness(0.75);
 }
 
-/* ── Lomo ── */
-.las-book-spine {
-    width: 18px;
+/* ── LOMO ── */
+.las2-spine {
+    width: 20px;
     flex-shrink: 0;
     background: linear-gradient(180deg, var(--spine, #5b4fd8) 0%, var(--spine-alt, #3d34a5) 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 0;
-    box-shadow: inset -2px 0 6px rgba(0, 0, 0, 0.35), inset 1px 0 0 rgba(255, 255, 255, 0.12);
+    padding: 10px 0 8px;
     position: relative;
+    box-shadow:
+        inset -2px 0 8px rgba(0, 0, 0, 0.4),
+        inset 1px 0 0 rgba(255, 255, 255, 0.14);
 }
 
-.las-book-spine::after {
+.las2-spine::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    width: 3px;
+    width: 4px;
     height: 100%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12);
+    pointer-events: none;
 }
 
-.las-book-spine-num {
+.las2-spine-num {
     font-family: 'DM Mono', monospace;
     font-size: 8px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1;
 }
 
-.las-book-spine-lbl {
+.las2-spine-label {
     font-family: 'DM Mono', monospace;
     font-size: 6px;
     font-weight: 700;
-    letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.85);
     writing-mode: vertical-rl;
     text-orientation: mixed;
     transform: rotate(180deg);
+    line-height: 1;
 }
 
-/* ── Portada ── */
-.las-book-cover {
+.las2-spine-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 10px;
+}
+
+.las2-spine-line {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 1px;
+}
+
+/* ── PORTADA ── */
+.las2-cover {
     flex: 1;
     background: var(--cover-bg, #1a1726);
     display: flex;
     flex-direction: column;
-    padding: 9px 8px 8px;
-    gap: 6px;
+    padding: 8px 7px 7px;
+    gap: 5px;
     position: relative;
     overflow: hidden;
     min-width: 0;
 }
 
-.las-book-cover::after {
+/* Edge highlight */
+.las2-cover::after {
     content: '';
     position: absolute;
     top: 0;
@@ -201,35 +235,31 @@
     width: 2px;
     height: 100%;
     background: linear-gradient(180deg,
-            rgba(var(--acc-rgb, 165, 153, 217), 0.5) 0%,
+            rgba(var(--acc-rgb, 165, 153, 217), 0.6) 0%,
             rgba(var(--acc-rgb, 165, 153, 217), 0.1) 100%);
     pointer-events: none;
-    z-index: 2;
+    z-index: 3;
 }
 
-/* ── Arte SVG de portada ── */
-.las-book-cover-art-wrap {
+/* ── ILUSTRACIÓN ── */
+.las2-cover-art {
     position: absolute;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
 }
 
-.las-book-cover-art {
+.las2-cover-svg {
     width: 100%;
     height: 100%;
     display: block;
 }
 
-.las-book-cover-art--golden {
-    animation: las-golden-shimmer 3s ease-in-out infinite;
+.las2-cover-svg--golden {
+    animation: las2-golden-shimmer 3s ease-in-out infinite;
 }
 
-@keyframes las-golden-shimmer {
+@keyframes las2-golden-shimmer {
 
     0%,
     100% {
@@ -241,226 +271,267 @@
     }
 }
 
-/* ── Insignia de rareza ── */
-.las-rarity-badge {
-    position: relative;
-    z-index: 2;
+/* ── HEBILLA / CLASP (estilo imagen) ── */
+.las2-clasp {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    gap: 1px;
-    align-self: flex-end;
-    background: rgba(var(--acc-rgb, 165, 153, 217), 0.08);
-    border: 0.5px solid rgba(var(--acc-rgb, 165, 153, 217), 0.3);
-    padding: 3px 5px 2px;
-    backdrop-filter: blur(2px);
+    align-items: center;
+    pointer-events: none;
 }
 
-.las-rarity-badge--golden {
-    background: rgba(245, 158, 11, 0.12);
-    border-color: rgba(245, 158, 11, 0.45);
-    animation: las-golden-pulse 2.5s ease-in-out infinite;
+.las2-clasp-strap--top,
+.las2-clasp-strap--bot {
+    width: 5px;
+    height: 22px;
+    background: linear-gradient(90deg,
+            color-mix(in srgb, var(--acc, #a599d9) 40%, #8a7a6a) 0%,
+            #c4aa80 50%,
+            #8a7060 100%);
+    border-radius: 1px;
 }
 
-@keyframes las-golden-pulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 6px rgba(245, 158, 11, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    }
-
-    50% {
-        box-shadow: 0 0 14px rgba(245, 158, 11, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    }
-}
-
-.las-rarity-badge-stars {
+.las2-clasp-buckle {
+    width: 9px;
+    height: 12px;
+    background: linear-gradient(135deg, #d4b896 0%, #8a6a40 50%, #c4a870 100%);
+    border-radius: 2px;
     display: flex;
-    gap: 1px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-.las-rarity-star {
-    font-size: 7px;
-    color: var(--acc, #a599d9);
-    line-height: 1;
+.las2-clasp-buckle-inner {
+    width: 5px;
+    height: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
 }
 
-.las-rarity-badge--golden .las-rarity-star {
-    color: #f59e0b;
+/* ── CANTONERAS (corner metals) ── */
+.las2-corner {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(135deg, #c4aa80 0%, #8a6a40 100%);
 }
 
-.las-rarity-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 5px;
-    font-weight: 800;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--acc, #a599d9);
-    line-height: 1;
+.las2-corner--tl {
+    top: 0;
+    left: 20px;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
-.las-rarity-badge--golden .las-rarity-label {
-    color: #f59e0b;
+.las2-corner--tr {
+    top: 0;
+    right: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
 }
 
-/* ── Tag ── */
-.las-book-tag {
+.las2-corner--bl {
+    bottom: 0;
+    left: 20px;
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+}
+
+.las2-corner--br {
+    bottom: 0;
+    right: 0;
+    clip-path: polygon(100% 0, 0 100%, 100% 100%);
+}
+
+/* ── TAG TEMPORADA ── */
+.las2-cover-tag {
     position: relative;
     z-index: 2;
     font-family: 'DM Mono', monospace;
-    font-size: 6px;
+    font-size: 5.5px;
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--acc, #a599d9);
-    background: rgba(255, 255, 255, 0.04);
-    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
     padding: 2px 5px;
     width: fit-content;
     display: flex;
     align-items: center;
     gap: 3px;
+    align-self: flex-start;
 }
 
-.las-book-tag-locked {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-}
-
-.las-book--golden .las-book-tag {
-    color: #f59e0b;
-    background: rgba(245, 158, 11, 0.08);
-    border-color: rgba(245, 158, 11, 0.2);
-}
-
-/* ── Título ── */
-.las-book-title-block {
-    position: relative;
+/* ── ID ── */
+.las2-cover-id {
+    position: absolute;
+    top: 7px;
+    right: 14px;
     z-index: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.25);
 }
 
-.las-book-icon {
-    color: var(--acc, #a599d9);
-    display: flex;
-    align-items: center;
-}
-
-.las-book--golden .las-book-icon {
-    color: #f59e0b;
-}
-
-.las-book-title {
-    font-family: 'Sora', sans-serif;
-    font-size: 11px;
-    font-weight: 800;
-    color: rgba(255, 255, 255, 0.92);
-    letter-spacing: -0.01em;
-    line-height: 1.15;
-}
-
-/* ════════════════════════════════════════════════
-   LOCK DRAMÁTICO
-════════════════════════════════════════════════ */
-.las-book-locked-zone {
+/* ── TÍTULO CENTRAL (AYVA) ── */
+.las2-cover-title-block {
     position: relative;
     z-index: 2;
     flex: 1;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    overflow: hidden;
 }
 
-.las-lock-fog {
+.las2-cover-brand {
+    font-family: 'Sora', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    color: rgba(255, 255, 255, 0.88);
+    text-shadow:
+        0 0 20px rgba(var(--acc-rgb, 165, 153, 217), 0.6),
+        0 2px 8px rgba(0, 0, 0, 0.5);
+    user-select: none;
+}
+
+/* ── RARITY BADGE ── */
+.las2-rarity {
     position: absolute;
-    inset: -10px;
-    background: radial-gradient(ellipse at center,
-            rgba(0, 0, 0, 0) 0%,
-            rgba(0, 0, 0, 0.55) 60%,
-            rgba(0, 0, 0, 0.85) 100%);
-    pointer-events: none;
-    z-index: 0;
+    top: 24px;
+    right: 12px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+    background: rgba(var(--acc-rgb, 165, 153, 217), 0.1);
+    border: 0.5px solid rgba(var(--acc-rgb, 165, 153, 217), 0.35);
+    padding: 3px 5px 2px;
+    backdrop-filter: blur(4px);
 }
 
-.las-lock-icon-wrap {
-    position: relative;
-    z-index: 1;
+.las2-rarity--golden {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.45);
+    animation: las2-golden-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes las2-golden-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 6px rgba(245, 158, 11, 0.15);
+    }
+
+    50% {
+        box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+    }
+}
+
+.las2-rarity-stars {
+    display: flex;
+    gap: 1px;
+}
+
+.las2-rarity-stars span {
+    font-size: 6px;
+    color: var(--acc, #a599d9);
+    line-height: 1;
+}
+
+.las2-rarity--golden .las2-rarity-stars span {
+    color: #f59e0b;
+}
+
+.las2-rarity-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 5px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--acc, #a599d9);
+    line-height: 1;
+}
+
+.las2-rarity--golden .las2-rarity-label {
+    color: #f59e0b;
+}
+
+/* ── LOCK OVERLAY ── */
+.las2-lock-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0;
+    justify-content: center;
+    gap: 10px;
 }
 
-.las-lock-chain {
+.las2-lock-fog {
     position: absolute;
-    top: -10px;
-    width: 1px;
-    height: 22px;
-    background: repeating-linear-gradient(180deg,
-            rgba(255, 255, 255, 0.25) 0px,
-            rgba(255, 255, 255, 0.25) 3px,
-            transparent 3px,
-            transparent 6px);
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
 }
 
-.las-lock-chain--left {
-    left: -14px;
-    transform: rotate(-18deg);
-}
-
-.las-lock-chain--right {
-    right: -14px;
-    transform: rotate(18deg);
-}
-
-.las-lock-body {
-    width: 32px;
-    height: 32px;
+.las2-lock-core {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.14);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     color: rgba(255, 255, 255, 0.35);
-    position: relative;
-    z-index: 1;
 }
 
-.las-lock-pulse {
+.las2-lock-ring {
     position: absolute;
-    width: 32px;
-    height: 32px;
+    inset: -4px;
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    animation: las-lock-pulse 2.8s ease-in-out infinite;
-    pointer-events: none;
+    animation: las2-lock-pulse 2.8s ease-in-out infinite;
 }
 
-@keyframes las-lock-pulse {
+@keyframes las2-lock-pulse {
     0% {
         transform: scale(1);
         opacity: 0.6;
     }
 
     70% {
-        transform: scale(1.6);
+        transform: scale(1.7);
         opacity: 0;
     }
 
     100% {
-        transform: scale(1.6);
+        transform: scale(1.7);
         opacity: 0;
     }
 }
 
-.las-lock-label {
+.las2-lock-pulse {
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    animation: las2-lock-pulse 2.8s ease-in-out 0.4s infinite;
+}
+
+.las2-lock-msg {
     position: relative;
     z-index: 1;
     font-family: 'DM Mono', monospace;
@@ -469,49 +540,12 @@
     letter-spacing: 0.06em;
     color: rgba(255, 255, 255, 0.2);
     text-align: center;
+    padding: 0 6px;
     line-height: 1.5;
-    padding: 0 4px;
 }
 
-/* ════════════════════════════════════════════════
-   PÁGINAS APILADAS (PROGRESO)
-════════════════════════════════════════════════ */
-.las-stacked-pages {
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    height: 10px;
-    position: relative;
-}
-
-.las-page-leaf {
-    flex: 1;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.08);
-    border: 0.5px solid rgba(255, 255, 255, 0.1);
-    border-radius: 1px;
-    transition: background 0.4s, border-color 0.4s;
-    transform-origin: bottom;
-}
-
-.las-page-leaf--filled {
-    background: color-mix(in srgb, var(--acc, #a599d9) 55%, transparent);
-    border-color: color-mix(in srgb, var(--acc, #a599d9) 70%, transparent);
-}
-
-.las-stacked-pct {
-    font-family: 'DM Mono', monospace;
-    font-size: 7px;
-    font-weight: 800;
-    color: rgba(255, 255, 255, 0.3);
-    margin-left: 3px;
-    white-space: nowrap;
-    line-height: 1;
-    align-self: center;
-}
-
-/* ── Footer ── */
-.las-book-footer {
+/* ── FOOTER DEL LIBRO ── */
+.las2-cover-footer {
     position: relative;
     z-index: 2;
     display: flex;
@@ -519,62 +553,79 @@
     gap: 4px;
 }
 
-.las-book-footer-row {
+.las2-cover-footer-info {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.las-book-count {
+.las2-cover-count {
     font-family: 'DM Mono', monospace;
-    font-size: 8px;
+    font-size: 7px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.28);
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.08em;
 }
 
-.las-book-done-badge {
+.las2-done-tick {
     font-family: 'DM Mono', monospace;
     font-size: 8px;
     font-weight: 800;
     color: #22c55e;
 }
 
-.las-book-hint {
+.las2-mini-bar {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 1px;
+    overflow: hidden;
+}
+
+.las2-mini-bar-fill {
+    height: 100%;
+    background: var(--acc, #a599d9);
+    border-radius: 1px;
+    transition: width 0.6s ease;
+}
+
+.las2-cover-hint {
     font-family: 'DM Mono', monospace;
-    font-size: 7px;
+    font-size: 6.5px;
     font-weight: 700;
     color: var(--acc, #a599d9);
+    letter-spacing: 0.06em;
     opacity: 0;
     transition: opacity 0.2s;
 }
 
-.las-book--hovered .las-book-hint {
+.las2-book-wrap:not(.las2-book-wrap--locked):hover .las2-cover-hint {
     opacity: 1;
 }
 
+/* Álbum dorado */
+.las2-book--golden .las2-cover-brand {
+    background: linear-gradient(135deg, #fde68a, #f59e0b, #d97706);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 /* ════════════════════════════════════════════════
-   PANEL FLOTANTE
+   PANEL OVERLAY
 ════════════════════════════════════════════════ */
-.las-panel-overlay {
+.las2-overlay {
     position: fixed;
     top: var(--topbar-h, 56px);
     left: var(--sidebar-w, 80px);
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(3px);
-    z-index: 100;
-    animation: las-overlay-in 0.2s ease;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    animation: las2-overlay-in 0.2s ease;
 }
 
-@media (max-width: 768px) {
-    .las-panel-overlay {
-        top: 60px;
-        left: 0;
-    }
-}
-
-@keyframes las-overlay-in {
+@keyframes las2-overlay-in {
     from {
         opacity: 0;
     }
@@ -584,514 +635,536 @@
     }
 }
 
-.las-panel {
+@media (max-width: 768px) {
+    .las2-overlay {
+        top: 60px;
+        left: 0;
+    }
+}
+
+/* ════════════════════════════════════════════════
+   PANEL PRINCIPAL
+════════════════════════════════════════════════ */
+.las2-panel {
     position: fixed;
     top: var(--topbar-h, 56px);
     right: 0;
     bottom: 0;
-    width: min(480px, calc(100vw - var(--sidebar-w, 80px)));
-    background: #f0ede8;
-    border-left: 0.5px solid #d4cfc8;
-    z-index: 101;
+    width: min(560px, calc(100vw - var(--sidebar-w, 80px)));
+    background: #f5f2ed;
+    border-left: 1px solid #d4cfc8;
+    z-index: 201;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.15);
-    animation: las-panel-in 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: -12px 0 60px rgba(0, 0, 0, 0.18), -4px 0 20px rgba(0, 0, 0, 0.1);
+    animation: las2-panel-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-[data-theme="dark"] .las-panel {
+[data-theme="dark"] .las2-panel {
     background: #13111A;
     border-left-color: #2A2638;
-    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.45);
+    box-shadow: -12px 0 60px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes las2-panel-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0.6;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 @media (max-width: 768px) {
-    .las-panel {
+    .las2-panel {
         top: 60px;
         width: 100vw;
     }
 }
 
-@keyframes las-panel-in {
-    from {
-        transform: translateX(100%);
-    }
-
-    to {
-        transform: translateX(0);
-    }
-}
-
-.las-panel-header {
+/* ── PANEL HEADER ── */
+.las2-panel-head {
     display: flex;
     align-items: stretch;
-    border-bottom: 0.5px solid #d4cfc8;
     flex-shrink: 0;
+    border-bottom: 1px solid #d4cfc8;
     position: relative;
+    background: var(--cover-bg, #1a1726);
 }
 
-[data-theme="dark"] .las-panel-header {
+[data-theme="dark"] .las2-panel-head {
     border-bottom-color: #2A2638;
 }
 
-.las-panel-spine-bar {
-    width: 5px;
+.las2-panel-head-spine {
+    width: 6px;
     flex-shrink: 0;
-    background: var(--spine, #5b4fd8);
+    background: linear-gradient(180deg, var(--spine, #5b4fd8) 0%, color-mix(in srgb, var(--spine, #5b4fd8) 70%, black) 100%);
 }
 
-.las-panel-header-content {
+.las2-panel-head-body {
     flex: 1;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 40px 14px 16px;
-    gap: 12px;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 48px 14px 18px;
     min-width: 0;
 }
 
-.las-panel-title-block {
+.las2-panel-head-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.las2-panel-title-group {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
     min-width: 0;
 }
 
-.las-panel-tag {
+.las2-panel-season {
     font-family: 'DM Mono', monospace;
-    font-size: 8px;
+    font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--acc, #a599d9);
-}
-
-.las-panel-title {
-    font-family: 'Sora', sans-serif;
-    font-size: 16px;
-    font-weight: 800;
-    color: #1a1726;
-    letter-spacing: -0.02em;
     line-height: 1;
 }
 
-[data-theme="dark"] .las-panel-title {
-    color: #F0EDF8;
+.las2-panel-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0;
 }
 
-.las-panel-req {
+.las2-panel-req {
     font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    color: #a0a0b0;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.35);
     letter-spacing: 0.04em;
+    margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-[data-theme="dark"] .las-panel-req {
-    color: #6E6680;
-}
-
-.las-panel-counter-block {
+.las2-panel-count-block {
     display: flex;
     align-items: baseline;
-    gap: 2px;
-    font-family: 'DM Mono', monospace;
+    gap: 4px;
     flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
 }
 
-.las-panel-count-n {
-    font-size: 26px;
+.las2-panel-count-big {
+    font-size: 40px;
     font-weight: 800;
     color: var(--acc, #a599d9);
     line-height: 1;
+    letter-spacing: -0.02em;
 }
 
-.las-panel-count-sep {
-    font-size: 14px;
-    color: #d4cfc8;
-}
-
-[data-theme="dark"] .las-panel-count-sep {
-    color: #38334F;
-}
-
-.las-panel-count-t {
-    font-size: 15px;
-    color: #a0a0b0;
-}
-
-[data-theme="dark"] .las-panel-count-t {
-    color: #6E6680;
-}
-
-.las-panel-close {
-    position: absolute;
-    top: 10px;
-    right: 12px;
-    width: 28px;
-    height: 28px;
+.las2-panel-count-meta {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.06);
-    border: none;
-    border-radius: 50%;
-    font-size: 12px;
-    color: #a0a0b0;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    flex-direction: column;
+    gap: 1px;
 }
 
-.las-panel-close:hover {
-    background: rgba(0, 0, 0, 0.12);
-    color: #2a2535;
+.las2-panel-count-sep {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+    line-height: 1;
 }
 
-[data-theme="dark"] .las-panel-close {
-    background: rgba(255, 255, 255, 0.06);
-    color: #6E6680;
+.las2-panel-count-label {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
 }
 
-[data-theme="dark"] .las-panel-close:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #F0EDF8;
+/* Progress bar en header */
+.las2-pbar-wrap {
+    position: relative;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    overflow: visible;
 }
 
-.las-panel-bar {
-    height: 3px;
-    background: #d4cfc8;
-    flex-shrink: 0;
-}
-
-[data-theme="dark"] .las-panel-bar {
-    background: #2A2638;
-}
-
-.las-panel-bar-fill {
+.las2-pbar-fill {
     height: 100%;
     background: var(--acc, #a599d9);
-    transition: width 0.5s ease;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+    position: relative;
 }
 
-.las-panel-chips {
+.las2-pbar-fill::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--acc, #a599d9);
+    box-shadow: 0 0 8px rgba(var(--acc-rgb, 165, 153, 217), 0.6);
+}
+
+.las2-pbar-pct {
+    position: absolute;
+    right: 0;
+    top: -18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--acc, #a599d9);
+}
+
+/* Chips de requisitos */
+.las2-chips {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     gap: 6px;
-    padding: 10px 16px 8px;
-    flex-shrink: 0;
 }
 
-.las-chip {
+.las2-chip {
     display: inline-flex;
     align-items: center;
-    gap: 3px;
+    gap: 4px;
     font-family: 'DM Mono', monospace;
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 4px 10px;
-    border: 0.5px solid #d4cfc8;
-    color: #a0a0b0;
-    background: transparent;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.04);
 }
 
-[data-theme="dark"] .las-chip {
-    border-color: #38334F;
-    color: #6E6680;
-}
-
-.las-chip--met {
+.las2-chip--ok {
     color: #22c55e;
     border-color: rgba(34, 197, 94, 0.4);
     background: rgba(34, 197, 94, 0.06);
 }
 
-.las-chip--done {
+.las2-chip--done {
     color: #22c55e;
     border-color: rgba(34, 197, 94, 0.4);
     background: rgba(34, 197, 94, 0.08);
 }
 
-.las-chip--pct {
-    margin-left: auto;
-    color: #a0a0b0;
+.las2-panel-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 0.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    z-index: 2;
 }
 
-[data-theme="dark"] .las-chip--pct {
-    color: #6E6680;
+.las2-panel-close:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.9);
 }
 
-.las-panel-scroll {
+/* ── PANEL SCROLL AREA ── */
+.las2-panel-scroll {
     flex: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 12px 16px 24px;
+    gap: 16px;
+    padding: 16px 18px 28px;
     scrollbar-width: thin;
     scrollbar-color: rgba(91, 79, 216, 0.2) transparent;
 }
 
-.las-panel-scroll::-webkit-scrollbar {
+.las2-panel-scroll::-webkit-scrollbar {
     width: 3px;
 }
 
-.las-panel-scroll::-webkit-scrollbar-thumb {
+.las2-panel-scroll::-webkit-scrollbar-thumb {
     background: rgba(91, 79, 216, 0.2);
     border-radius: 2px;
 }
 
-[data-theme="dark"] .las-panel-scroll {
+[data-theme="dark"] .las2-panel-scroll {
     scrollbar-color: rgba(139, 127, 199, 0.2) transparent;
 }
 
-/* ════════════════════════════════════════════════
-   PÁGINA DEL ÁLBUM
-════════════════════════════════════════════════ */
-.las-album-page {
-    background: #faf8f4;
-    border: 0.5px solid #d4cfc8;
-    padding: 14px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-[data-theme="dark"] .las-album-page {
-    background: #1a1726;
-    border-color: #2A2638;
-}
-
-.las-album-page::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(0, 0, 0, 0.03) 32px);
-    pointer-events: none;
-    z-index: 0;
-}
-
-[data-theme="dark"] .las-album-page::before {
-    background: repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(255, 255, 255, 0.02) 32px);
-}
-
-.las-page-header {
-    position: relative;
-    z-index: 1;
+/* ── PAGE INDICATOR ── */
+.las2-page-indicator {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.las-page-header-line {
-    flex: 1;
-    height: 0.5px;
-    background: #d4cfc8;
-}
-
-[data-theme="dark"] .las-page-header-line {
-    background: #38334F;
-}
-
-.las-page-label {
     font-family: 'DM Mono', monospace;
     font-size: 8px;
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #a0a0b0;
-    flex-shrink: 0;
 }
 
-[data-theme="dark"] .las-page-label {
+[data-theme="dark"] .las2-page-indicator {
     color: #6E6680;
 }
 
-.las-sticker-grid {
-    position: relative;
-    z-index: 1;
+.las2-page-indicator-line {
+    flex: 1;
+    height: 0.5px;
+    background: #d4cfc8;
+}
+
+[data-theme="dark"] .las2-page-indicator-line {
+    background: #2A2638;
+}
+
+/* ════════════════════════════════════════════════
+   STICKER GRID — 4 columnas en panel amplio
+════════════════════════════════════════════════ */
+.las2-sticker-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
 }
 
-.las-sticker-phantom {
-    aspect-ratio: 2/3;
-    opacity: 0;
-    pointer-events: none;
+@media (max-width: 480px) {
+    .las2-sticker-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
-/* ── Figurita ── */
-.las-sticker {
+/* ── STICKER CARD ── */
+.las2-sticker {
     aspect-ratio: 2/3;
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    border-radius: 4px;
     overflow: hidden;
-    border-radius: 3px;
     transition: transform 0.15s, box-shadow 0.15s;
 }
 
-.las-sticker--empty {
+.las2-sticker--empty {
     border: 1px dashed #c8c3bb;
-    background: rgba(0, 0, 0, 0.02);
+    background: rgba(0, 0, 0, 0.015);
+    align-items: center;
     justify-content: center;
 }
 
-[data-theme="dark"] .las-sticker--empty {
+[data-theme="dark"] .las2-sticker--empty {
     border-color: #2A2638;
     background: rgba(255, 255, 255, 0.01);
 }
 
-.las-sticker-sil {
-    width: 44%;
-    color: #d4cfc8;
-    opacity: 0.5;
-    flex-shrink: 0;
-    margin-top: 4px;
-}
-
-[data-theme="dark"] .las-sticker-sil {
-    color: #38334F;
-    opacity: 0.6;
-}
-
-.las-sticker-stars-empty {
-    position: absolute;
-    bottom: 5px;
-    display: flex;
-    gap: 1px;
-}
-
-.las-sticker-star-dot {
-    font-size: 6px;
-    color: #c8c3bb;
-}
-
-[data-theme="dark"] .las-sticker-star-dot {
-    color: #38334F;
-}
-
-.las-sticker--filled {
-    border: 1px solid color-mix(in srgb, var(--meta-accent, #a599d9) 50%, transparent);
-    background: color-mix(in srgb, var(--meta-accent, #a599d9) 8%, #faf8f4);
+.las2-sticker--filled {
+    border: 1px solid color-mix(in srgb, var(--acc, #a599d9) 45%, transparent);
+    background: color-mix(in srgb, var(--acc, #a599d9) 6%, #faf8f4);
     cursor: pointer;
-    justify-content: flex-end;
 }
 
-[data-theme="dark"] .las-sticker--filled {
-    background: color-mix(in srgb, var(--meta-accent, #a599d9) 8%, #1a1726);
+[data-theme="dark"] .las2-sticker--filled {
+    background: color-mix(in srgb, var(--acc, #a599d9) 7%, #1a1726);
 }
 
-.las-sticker--filled:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+.las2-sticker--filled:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     z-index: 2;
-    border-color: var(--meta-accent, #a599d9);
+    border-color: var(--acc, #a599d9);
 }
 
-.las-sticker--goat {
-    border-color: rgba(245, 158, 11, 0.6) !important;
-    background: color-mix(in srgb, #f59e0b 10%, #faf8f4) !important;
+.las2-sticker--goat {
+    border-color: rgba(245, 158, 11, 0.55) !important;
+    background: color-mix(in srgb, #f59e0b 8%, #faf8f4) !important;
 }
 
-[data-theme="dark"] .las-sticker--goat {
-    background: color-mix(in srgb, #f59e0b 10%, #1a1726) !important;
+[data-theme="dark"] .las2-sticker--goat {
+    background: color-mix(in srgb, #f59e0b 8%, #1a1726) !important;
 }
 
-.las-sticker-num {
-    position: absolute;
-    top: 4px;
-    left: 5px;
+/* Sticker header */
+.las2-sticker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 5px 0;
+}
+
+.las2-sticker-num {
     font-family: 'DM Mono', monospace;
     font-size: 7px;
     font-weight: 700;
+    line-height: 1;
 }
 
-.las-sticker--empty .las-sticker-num {
+.las2-sticker--empty .las2-sticker-num {
     color: #c8c3bb;
 }
 
-.las-sticker--filled .las-sticker-num {
-    color: rgba(0, 0, 0, 0.25);
+.las2-sticker--filled .las2-sticker-num {
+    color: rgba(0, 0, 0, 0.2);
 }
 
-[data-theme="dark"] .las-sticker--empty .las-sticker-num {
+[data-theme="dark"] .las2-sticker--empty .las2-sticker-num {
     color: #38334F;
 }
 
-[data-theme="dark"] .las-sticker--filled .las-sticker-num {
-    color: rgba(255, 255, 255, 0.25);
+[data-theme="dark"] .las2-sticker--filled .las2-sticker-num {
+    color: rgba(255, 255, 255, 0.2);
 }
 
-.las-sticker-crown {
-    position: absolute;
-    top: 4px;
-    right: 5px;
+.las2-sticker-crown {
     color: #f59e0b;
-    display: flex;
-    align-items: center;
 }
 
-.las-sticker-img-zone {
+.las2-sticker-copies {
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    font-weight: 800;
+    background: var(--acc, #a599d9);
+    color: #fff;
+    padding: 1px 3px;
+    border-radius: 2px;
+}
+
+/* Avatar zone */
+.las2-sticker-avatar-zone {
     flex: 1;
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 14px;
+    padding: 4px 6px 2px;
 }
 
-.las-sticker-img {
-    width: 70%;
+.las2-sticker-img {
+    width: 72%;
     aspect-ratio: 1;
     object-fit: cover;
     border-radius: 50%;
-    border: 1.5px solid color-mix(in srgb, var(--meta-accent, #a599d9) 50%, transparent);
-    display: block;
+    border: 1.5px solid color-mix(in srgb, var(--acc, #a599d9) 50%, transparent);
 }
 
-.las-sticker-avatar {
+.las2-sticker-avatar {
     width: 68%;
     aspect-ratio: 1;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--meta-accent, #a599d9) 15%, transparent);
-    border: 1.5px solid color-mix(in srgb, var(--meta-accent, #a599d9) 40%, transparent);
+    background: color-mix(in srgb, var(--acc, #a599d9) 14%, transparent);
+    border: 1.5px solid color-mix(in srgb, var(--acc, #a599d9) 40%, transparent);
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'DM Mono', monospace;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
-    color: var(--meta-accent, #a599d9);
+    color: var(--acc, #a599d9);
 }
 
-.las-sticker-info {
-    width: 100%;
+.las2-sticker-silhouette {
+    width: 60%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px dashed #d4cfc8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d4cfc8;
+}
+
+[data-theme="dark"] .las2-sticker-silhouette {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: #2A2638;
+    color: #38334F;
+}
+
+/* Stars */
+.las2-sticker-stars {
+    display: flex;
+    justify-content: center;
+    gap: 1px;
+    padding: 0 4px 2px;
+}
+
+.las2-star {
+    font-size: 7px;
+    line-height: 1;
+}
+
+.las2-star--on {
+    color: var(--acc, #a599d9);
+}
+
+.las2-star--off {
+    color: rgba(0, 0, 0, 0.1);
+}
+
+.las2-star--empty {
+    color: #d4cfc8;
+}
+
+[data-theme="dark"] .las2-star--off {
+    color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .las2-star--empty {
+    color: #38334F;
+}
+
+/* Info */
+.las2-sticker-info {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 3px 3px 0;
+    padding: 3px 4px 4px;
     gap: 1px;
-    border-top: 0.5px solid color-mix(in srgb, var(--meta-accent, #a599d9) 20%, transparent);
+    border-top: 0.5px solid color-mix(in srgb, var(--acc, #a599d9) 20%, transparent);
 }
 
-.las-sticker-name {
+.las2-sticker--empty .las2-sticker-info {
+    border-top-color: #e8e4dc;
+}
+
+[data-theme="dark"] .las2-sticker--empty .las2-sticker-info {
+    border-top-color: #2A2638;
+}
+
+.las2-sticker-name {
     font-family: 'DM Mono', monospace;
-    font-size: 7px;
+    font-size: 6.5px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: #2a2535;
     text-align: center;
-    line-height: 1.2;
+    line-height: 1.25;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -1099,130 +1172,131 @@
     width: 100%;
 }
 
-[data-theme="dark"] .las-sticker-name {
+.las2-sticker-name--empty {
+    color: #c8c3bb;
+}
+
+[data-theme="dark"] .las2-sticker-name {
     color: rgba(255, 255, 255, 0.82);
 }
 
-.las-sticker-pos {
+[data-theme="dark"] .las2-sticker-name--empty {
+    color: #38334F;
+}
+
+.las2-sticker-pos {
     font-family: 'DM Mono', monospace;
     font-size: 6px;
     font-weight: 700;
     letter-spacing: 0.1em;
-    color: var(--meta-accent, #a599d9);
+    color: var(--acc, #a599d9);
     width: 100%;
     text-align: center;
-    padding: 2px 2px 3px;
-}
-
-.las-sticker-copies {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    font-family: 'DM Mono', monospace;
-    font-size: 7px;
-    font-weight: 800;
-    background: var(--meta-accent, #a599d9);
-    color: #fff;
-    padding: 1px 4px;
-    border-radius: 2px;
 }
 
 /* ════════════════════════════════════════════════
-   PAGINACIÓN
+   PAGINACIÓN DEL PANEL
 ════════════════════════════════════════════════ */
-.las-pagination {
-    position: relative;
-    z-index: 1;
+.las2-pagination {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
 }
 
-.las-page-btn {
-    width: 28px;
-    height: 28px;
+.las2-page-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 0.5px solid #d4cfc8;
     background: transparent;
     color: #a0a0b0;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.12s, border-color 0.12s;
+    border-radius: 2px;
+    transition: color 0.12s, border-color 0.12s, background 0.12s;
 }
 
-[data-theme="dark"] .las-page-btn {
+[data-theme="dark"] .las2-page-btn {
     border-color: #38334F;
     color: #6E6680;
 }
 
-.las-page-btn:hover:not(:disabled) {
+.las2-page-btn:hover:not(:disabled) {
     color: #5b4fd8;
     border-color: #5b4fd8;
+    background: rgba(91, 79, 216, 0.05);
 }
 
-[data-theme="dark"] .las-page-btn:hover:not(:disabled) {
+[data-theme="dark"] .las2-page-btn:hover:not(:disabled) {
     color: #A599D9;
     border-color: #A599D9;
 }
 
-.las-page-btn:disabled {
+.las2-page-btn:disabled {
     opacity: 0.25;
     cursor: default;
 }
 
-.las-page-dots {
+.las2-page-nums {
     display: flex;
-    gap: 5px;
-    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.las-page-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    border: 0.5px solid #c8c3bb;
+.las2-page-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border: 0.5px solid #d4cfc8;
     background: transparent;
+    color: #a0a0b0;
     cursor: pointer;
-    padding: 0;
-    transition: background 0.15s, border-color 0.15s;
+    border-radius: 2px;
+    transition: all 0.12s;
 }
 
-[data-theme="dark"] .las-page-dot {
+[data-theme="dark"] .las2-page-num {
     border-color: #38334F;
+    color: #6E6680;
 }
 
-.las-page-dot--active {
+.las2-page-num--active {
     background: #5b4fd8;
     border-color: #5b4fd8;
+    color: #fff;
 }
 
-[data-theme="dark"] .las-page-dot--active {
-    background: #A599D9;
-    border-color: #A599D9;
+[data-theme="dark"] .las2-page-num--active {
+    background: #7366B3;
+    border-color: #7366B3;
 }
 
-.las-reward-bar {
+/* ── REWARD BAR ── */
+.las2-reward {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
+    gap: 10px;
+    padding: 12px 16px;
     border: 0.5px solid #d4cfc8;
-    background: #f5f3ef;
+    background: #faf8f4;
     font-family: 'DM Mono', monospace;
     font-size: 10px;
     color: #a0a0b0;
     letter-spacing: 0.06em;
+    border-radius: 2px;
 }
 
-[data-theme="dark"] .las-reward-bar {
+[data-theme="dark"] .las2-reward {
     border-color: #2A2638;
     background: rgba(255, 255, 255, 0.02);
     color: #6E6680;
 }
 
-.las-reward-icon {
-    flex-shrink: 0;
+.las2-reward svg {
     color: var(--acc, #a599d9);
+    flex-shrink: 0;
 }
