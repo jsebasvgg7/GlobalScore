@@ -1,13 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap');
-
 /* ════════════════════════════════════════════════
-   LEGENDARY ALBUMS SECTION v2 — las2-*
-   Diseño inspirado en álbum físico
+    █████╗ ██╗     ██████╗ ██╗   ██╗███╗   ███╗███████╗
+   ██╔══██╗██║     ██╔══██╗██║   ██║████╗ ████║██╔════╝
+   ███████║██║     ██████╔╝██║   ██║██╔████╔██║███████╗
+   ██╔══██║██║     ██╔══██╗██║   ██║██║╚██╔╝██║╚════██║
+   ██║  ██║███████╗██████╔╝╚██████╔╝██║ ╚═╝ ██║███████║
+   ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚══════╝
+   ALBUMS — collectible pages & sticker systems
 ════════════════════════════════════════════════ */
 
-/* ══════════════════════════════════════════
-   ROOT + EYEBROW
-══════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap');
+
 .las2-root {
     display: flex;
     flex-direction: column;

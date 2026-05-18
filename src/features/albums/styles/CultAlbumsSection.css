@@ -1,13 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap');
-
 /* ════════════════════════════════════════════════
-   CULT ALBUMS SECTION v2 — cas2-*
-   Mismo molde que LegendaryAlbumsSection (las2-*)
+    █████╗ ██╗     ██████╗ ██╗   ██╗███╗   ███╗███████╗
+   ██╔══██╗██║     ██╔══██╗██║   ██║████╗ ████║██╔════╝
+   ███████║██║     ██████╔╝██║   ██║██╔████╔██║███████╗
+   ██╔══██║██║     ██╔══██╗██║   ██║██║╚██╔╝██║╚════██║
+   ██║  ██║███████╗██████╔╝╚██████╔╝██║ ╚═╝ ██║███████║
+   ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚══════╝
+   ALBUMS — collectible pages & sticker systems
 ════════════════════════════════════════════════ */
 
-/* ══════════════════════════════════════════
-   ROOT + EYEBROW
-══════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap');
+
 .cas2-root {
     display: flex;
     flex-direction: column;

@@ -1,11 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@600;700;800&display=swap');
-
 /* ════════════════════════════════════════════════
-   PACK OPENING MODAL — pom-*
-   GlobalScore · 25/26 — light/dark aware
+    █████╗ ██╗     ██████╗ ██╗   ██╗███╗   ███╗███████╗
+   ██╔══██╗██║     ██╔══██╗██║   ██║████╗ ████║██╔════╝
+   ███████║██║     ██████╔╝██║   ██║██╔████╔██║███████╗
+   ██╔══██║██║     ██╔══██╗██║   ██║██║╚██╔╝██║╚════██║
+   ██║  ██║███████╗██████╔╝╚██████╔╝██║ ╚═╝ ██║███████║
+   ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚══════╝
+   ALBUMS — collectible pages & sticker systems
 ════════════════════════════════════════════════ */
 
-/* ── Tokens locales (dark por defecto, se sobrescriben en light) ── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@600;700;800&display=swap');
+
 .pom-overlay {
     --pom-bg: #0d0b18;
     --pom-bg-raised: #161326;

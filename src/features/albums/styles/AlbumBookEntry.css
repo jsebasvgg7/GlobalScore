@@ -1,7 +1,11 @@
 /* ════════════════════════════════════════════════
-   ALBUM BOOK ENTRY — floating book button
-   abe-float-anchor posiciona el botón en la
-   esquina inferior derecha del contenido.
+    █████╗ ██╗     ██████╗ ██╗   ██╗███╗   ███╗███████╗
+   ██╔══██╗██║     ██╔══██╗██║   ██║████╗ ████║██╔════╝
+   ███████║██║     ██████╔╝██║   ██║██╔████╔██║███████╗
+   ██╔══██║██║     ██╔══██╗██║   ██║██║╚██╔╝██║╚════██║
+   ██║  ██║███████╗██████╔╝╚██████╔╝██║ ╚═╝ ██║███████║
+   ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚══════╝
+   ALBUMS — collectible pages & sticker systems
 ════════════════════════════════════════════════ */
 
 .abe-float-anchor {
@@ -18,42 +22,31 @@
 .abe-float-btn {
     pointer-events: all;
     position: relative;
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
-    border: 0.5px solid rgba(91, 79, 216, 0.35);
-    background: #e8e4de;
-    box-shadow: 4px 4px 14px rgba(91, 79, 216, 0.15), -2px -2px 8px rgba(255, 255, 255, 0.8);
+    background: none;
+    border: none;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #5b4fd8;
-    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
-}
-
-.abe-float-btn:hover {
-    background: #ede9ff;
-    border-color: rgba(91, 79, 216, 0.5);
-    box-shadow: 4px 4px 20px rgba(91, 79, 216, 0.22), -2px -2px 8px rgba(255, 255, 255, 0.9);
+    padding: 0;
+    display: block;
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.18));
+    /* motion.button maneja hover/tap */
 }
 
 .abe-book-svg {
     display: block;
-    flex-shrink: 0;
 }
 
 /* ─── Punto indicador de sobres disponibles ─── */
 .abe-dot-badge {
     position: absolute;
-    top: 7px;
-    right: 8px;
-    width: 8px;
-    height: 8px;
+    top: 3px;
+    right: 5px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    background: #5b4fd8;
-    border: 1.5px solid #e8e4de;
-    animation: abe-pulse 2.5s ease-in-out infinite;
+    background: #e84040;
+    border: 1.5px solid #fff;
+    animation: abe-pulse 2s ease-in-out infinite;
+    z-index: 10;
 }
 
 @keyframes abe-pulse {
@@ -65,64 +58,55 @@
     }
 
     50% {
-        opacity: 0.6;
-        transform: scale(0.85);
+        opacity: 0.65;
+        transform: scale(0.78);
     }
 }
 
 /* ─── Tooltip ─── */
 .abe-tooltip {
     pointer-events: none;
-    margin-top: 8px;
+    margin-top: 10px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 12px;
-    background: #2a2535;
-    color: #f0edf8;
+    padding: 5px 14px;
+    background: #2a1f0e;
+    color: #f5e6c8;
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.06em;
-    border-radius: 8px;
+    letter-spacing: 0.08em;
+    border-radius: 6px;
+    border: 1px solid #8b6914;
     white-space: nowrap;
 }
 
 .abe-tooltip-badge {
-    background: #5b4fd8;
-    color: #fff;
+    background: #c8982e;
+    color: #2a1f0e;
     font-size: 10px;
     font-weight: 700;
-    padding: 1px 6px;
+    padding: 1px 7px;
     border-radius: 20px;
 }
 
 /* ════════════════════════════════════════════════
-   DARK MODE
+   DARK MODE — el libro mantiene sus colores
+   ya que es un objeto físico, no UI temático.
+   Solo ajustamos la sombra y el tooltip.
 ════════════════════════════════════════════════ */
 
 [data-theme="dark"] .abe-float-btn {
-    background: #1e1b2e;
-    border-color: rgba(139, 127, 199, 0.35);
-    box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.4);
-    color: #a599d9;
-}
-
-[data-theme="dark"] .abe-float-btn:hover {
-    background: #252038;
-    border-color: rgba(139, 127, 199, 0.55);
+    filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.5));
 }
 
 [data-theme="dark"] .abe-dot-badge {
-    background: #a599d9;
-    border-color: #1e1b2e;
+    border-color: #1a1d2e;
 }
 
 [data-theme="dark"] .abe-tooltip {
-    background: #f0edf8;
-    color: #2a2535;
-}
-
-[data-theme="dark"] .abe-tooltip-badge {
-    background: #5b4fd8;
+    background: #2a1f0e;
+    color: #f5e6c8;
+    border-color: #8b6914;
 }

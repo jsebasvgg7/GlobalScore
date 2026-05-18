@@ -1,9 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
-
 /* ════════════════════════════════════════════════
-   ALBUMS PAGE — alp-*
-   Respeta sidebar (80px) + topbar (56px)
+   ██████╗  █████╗  ██████╗ ███████╗███████╗
+   ██╔══██╗██╔══██╗██╔════╝ ██╔════╝██╔════╝
+   ██████╔╝███████║██║  ███╗█████╗  ███████╗
+   ██╔═══╝ ██╔══██║██║   ██║██╔══╝  ╚════██║
+   ██║     ██║  ██║╚██████╔╝███████╗███████║
+   PAGES — main views
 ════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
 
 .alp-root {
     display: flex;
