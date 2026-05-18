@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Lock, BookOpen, Trophy, Star, ChevronLeft, ChevronRight, Gift, Crown, X, User } from 'lucide-react';
+import { Lock, BookOpen, Trophy, Star, ChevronLeft, ChevronRight, Gift, Crown, X, User, Search, Maximize2 } from 'lucide-react';
 import '../styles/LegendaryAlbumsSection.css';
 
 const ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'golden_album'];
@@ -376,132 +376,366 @@ function StickerCard({ index, card, collectionItem, accent }) {
 ══════════════════════════════════════════ */
 function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose }) {
     const [page, setPage] = useState(0);
-    const PER_PAGE = 12; // más cartas por página
+    const [search, setSearch] = useState('');
+    const PER_PAGE = 12;
 
     const def = definitions.find(d => d.id === albumId);
     const prog = progress.find(p => p.album_id === albumId);
     const isCompleted = prog?.is_completed ?? false;
 
-    const { filled, pct, stars4Count, stars5Count, qualifiedPlayers } = calcAlbumProgress(meta, collection);
+    const { filled, pct, stars4Count, stars5Count, qualifiedPlayers } =
+        calcAlbumProgress(meta, collection);
+
     const reqPlayers = def?.required_unique_players ?? meta.slots;
     const reqStars4 = def?.required_min_stars_4 ?? meta.minStars4;
     const reqStars5 = def?.required_min_stars_5 ?? meta.minStars5;
-    const totalPages = Math.ceil(meta.slots / PER_PAGE);
 
-    const pageItems = Array.from({ length: PER_PAGE }, (_, i) => {
-        const gi = page * PER_PAGE + i;
-        if (gi >= meta.slots) return null;
-        return { idx: gi, item: qualifiedPlayers[gi] ?? null };
-    }).filter(Boolean);
+    // Slots completos del álbum (incluye vacíos)
+    const allSlots = Array.from({ length: meta.slots }, (_, i) => ({
+        idx: i,
+        item: qualifiedPlayers[i] ?? null,
+    }));
+
+    // Filtro por búsqueda
+    const filteredSlots = search.trim()
+        ? allSlots.filter(({ item }) =>
+            item?.card?.name?.toLowerCase().includes(search.toLowerCase())
+        )
+        : allSlots;
+
+    const totalPages = Math.max(1, Math.ceil(filteredSlots.length / PER_PAGE));
+    const safePagenr = Math.min(page, totalPages - 1);
+
+    const pageItems = filteredSlots.slice(safePagenr * PER_PAGE, (safePagenr + 1) * PER_PAGE);
+
+    // Stats footer
+    const totalSize = qualifiedPlayers.reduce((acc, c) => acc + (c?.card ? 1 : 0), 0);
+    const lastUpdate = def?.updated_at
+        ? new Date(def.updated_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
+        : '—';
+
+    const albumNum = meta.number === '✦' ? 'GOLD' : meta.number;
 
     return (
         <>
+            {/* Overlay — cierra al hacer clic fuera */}
             <div className="las2-overlay" onClick={onClose} />
-            <div className="las2-panel" style={{ '--spine': meta.spine, '--acc': meta.accent, '--acc-rgb': meta.accentRgb, '--cover-bg': meta.coverBg }}>
 
-                {/* ── HEADER ── */}
-                <div className="las2-panel-head">
-                    <div className="las2-panel-head-spine" />
-                    <div className="las2-panel-head-body">
-                        <div className="las2-panel-head-top">
-                            <div className="las2-panel-title-group">
-                                <span className="las2-panel-season">{meta.tag}</span>
-                                <h2 className="las2-panel-title">{meta.label}</h2>
-                                <p className="las2-panel-req">{meta.req}</p>
-                            </div>
-                            <div className="las2-panel-count-block">
-                                <span className="las2-panel-count-big">{filled}</span>
-                                <div className="las2-panel-count-meta">
-                                    <span className="las2-panel-count-sep">/ {reqPlayers}</span>
-                                    <span className="las2-panel-count-label">jugadores</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Progress bar */}
-                        <div className="las2-pbar-wrap">
-                            <div className="las2-pbar-fill" style={{ width: `${pct}%` }} />
-                            <span className="las2-pbar-pct">{pct}%</span>
-                        </div>
-
-                        {/* Requirement chips */}
-                        <div className="las2-chips">
-                            <span className={`las2-chip ${stars4Count >= reqStars4 ? 'las2-chip--ok' : ''}`}>
-                                {'★★★★'} {Math.min(stars4Count, reqStars4)}/{reqStars4}
-                            </span>
-                            {reqStars5 > 0 && (
-                                <span className={`las2-chip ${stars5Count >= reqStars5 ? 'las2-chip--ok' : ''}`}>
-                                    <Crown size={10} /> {Math.min(stars5Count, reqStars5)}/{reqStars5} GOAT
-                                </span>
-                            )}
-                            {isCompleted && (
-                                <span className="las2-chip las2-chip--done">✓ Completado</span>
-                            )}
-                        </div>
-                    </div>
+            {/* Modal centrado */}
+            <div
+                className="las2-panel"
+                style={{
+                    '--spine': meta.spine,
+                    '--acc': meta.accent,
+                    '--acc-rgb': meta.accentRgb,
+                    '--cover-bg': meta.coverBg,
+                }}
+                onClick={e => e.stopPropagation()}
+            >
+                {/* ── TOPBAR ── */}
+                <div className="las2-modal-topbar">
+                    <div className="las2-modal-topbar-spine" />
+                    <span className="las2-modal-topbar-title">{meta.label}</span>
+                    <span className="las2-modal-topbar-season">{meta.tag}</span>
                     <button className="las2-panel-close" onClick={onClose} aria-label="Cerrar">
-                        <X size={16} />
+                        <X size={14} />
                     </button>
                 </div>
 
-                {/* ── BODY: grid de stickers ── */}
-                <div className="las2-panel-scroll">
+                {/* ── BODY 2 COLS ── */}
+                <div className="las2-panel-body">
 
-                    {/* Page indicator */}
-                    <div className="las2-page-indicator">
-                        <div className="las2-page-indicator-line" />
-                        <span>Página {String(page + 1).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}</span>
-                        <div className="las2-page-indicator-line" />
+                    {/* ──────────── SIDEBAR IZQUIERDA ──────────── */}
+                    <div className="las2-panel-sidebar">
+                        <div className="las2-panel-sidebar-inner">
+
+                            {/* ID */}
+                            <span className="las2-sidebar-id">ID: ALB-{albumNum}</span>
+
+                            {/* Título */}
+                            <h2 className="las2-sidebar-title">{meta.shortLabel}</h2>
+
+                            {/* Count */}
+                            <div className="las2-sidebar-count">
+                                <span className="las2-sidebar-count-big">{filled}</span>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                    <span className="las2-sidebar-count-sep">/ {reqPlayers}</span>
+                                    <span className="las2-sidebar-count-label">Items</span>
+                                </div>
+                            </div>
+
+                            <div className="las2-sidebar-divider" />
+
+                            {/* Imagen del libro */}
+                            <div className="las2-sidebar-book-img">
+                                <div className="las2-sidebar-book-svg-wrap">
+                                    {/* Lomo */}
+                                    <div style={{
+                                        position: 'absolute',
+                                        left: 0,
+                                        top: 0,
+                                        bottom: 0,
+                                        width: 22,
+                                        background: `linear-gradient(180deg, ${meta.spine} 0%, ${meta.spineAlt} 100%)`,
+                                        borderRadius: '3px 0 0 3px',
+                                        boxShadow: 'inset -2px 0 8px rgba(0,0,0,0.4)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}>
+                                        <span style={{
+                                            fontFamily: "'DM Mono', monospace",
+                                            fontSize: 7,
+                                            fontWeight: 800,
+                                            color: 'rgba(255,255,255,0.7)',
+                                            writingMode: 'vertical-rl',
+                                            textOrientation: 'mixed',
+                                            transform: 'rotate(180deg)',
+                                            letterSpacing: '0.1em',
+                                        }}>{meta.shortLabel}</span>
+                                    </div>
+                                    {/* Portada */}
+                                    <div style={{
+                                        position: 'absolute',
+                                        left: 22,
+                                        top: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        background: meta.coverBg,
+                                        borderRadius: '0 4px 4px 0',
+                                        overflow: 'hidden',
+                                        boxShadow: '4px 6px 0 rgba(0,0,0,0.32), 8px 14px 28px rgba(0,0,0,0.22)',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}>
+                                        <BookCoverIllustration
+                                            albumId={albumId}
+                                            accent={meta.accent}
+                                            accentRgb={meta.accentRgb}
+                                            locked={false}
+                                        />
+                                        {/* Hebilla */}
+                                        <div className="las2-clasp">
+                                            <div className="las2-clasp-strap las2-clasp-strap--top" />
+                                            <div className="las2-clasp-buckle">
+                                                <div className="las2-clasp-buckle-inner" />
+                                            </div>
+                                            <div className="las2-clasp-strap las2-clasp-strap--bot" />
+                                        </div>
+                                        {/* Cantoneras */}
+                                        {['tl', 'tr', 'bl', 'br'].map(pos => (
+                                            <div key={pos} className={`las2-corner las2-corner--${pos}`} />
+                                        ))}
+                                        {/* Nombre en portada */}
+                                        <span style={{
+                                            position: 'absolute',
+                                            fontFamily: "'Sora', sans-serif",
+                                            fontSize: 14,
+                                            fontWeight: 800,
+                                            letterSpacing: '0.2em',
+                                            color: 'rgba(255,255,255,0.88)',
+                                            textShadow: `0 0 16px rgba(${meta.accentRgb},0.6)`,
+                                            zIndex: 2,
+                                        }}>AYVA</span>
+                                    </div>
+                                    {/* Page stack */}
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 4,
+                                        right: -8,
+                                        bottom: 4,
+                                        width: 10,
+                                        zIndex: 0,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: 1,
+                                    }}>
+                                        {[0, 1, 2].map(i => (
+                                            <div key={i} style={{
+                                                flex: 1,
+                                                borderRadius: '0 1px 1px 0',
+                                                background: '#d4cfc8',
+                                                transform: `translateX(${i * 1.5}px)`,
+                                                opacity: 0.7 - i * 0.2,
+                                            }} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Progress bar */}
+                            <div className="las2-sidebar-pbar-wrap">
+                                <div className="las2-sidebar-pbar-fill" style={{ width: `${pct}%` }} />
+                                <span className="las2-sidebar-pbar-pct">{pct}%</span>
+                            </div>
+
+                            {/* Chips de requisitos */}
+                            <div className="las2-sidebar-chips">
+                                <span className={`las2-chip ${stars4Count >= reqStars4 ? 'las2-chip--ok' : ''}`}>
+                                    {'★★★★'} {Math.min(stars4Count, reqStars4)}/{reqStars4}
+                                </span>
+                                {reqStars5 > 0 && (
+                                    <span className={`las2-chip ${stars5Count >= reqStars5 ? 'las2-chip--ok' : ''}`}>
+                                        <Crown size={9} /> {Math.min(stars5Count, reqStars5)}/{reqStars5} GOAT
+                                    </span>
+                                )}
+                                {isCompleted && (
+                                    <span className="las2-chip las2-chip--done">✓ Completado</span>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Descripción + meta */}
+                        <div className="las2-sidebar-desc-block">
+                            <div>
+                                <span className="las2-sidebar-desc-label">Descripción</span>
+                                <span className="las2-sidebar-desc-val las2-sidebar-desc-val--full">
+                                    {def?.description ?? 'Tu colección personal.\nAñade jugadores y organízalos como quieras.'}
+                                </span>
+                            </div>
+                            <div>
+                                <span className="las2-sidebar-desc-label">Creado</span>
+                                <span className="las2-sidebar-desc-val">
+                                    {def?.created_at
+                                        ? new Date(def.created_at).toLocaleDateString('es-ES')
+                                        : '—'}
+                                </span>
+                            </div>
+                            <div>
+                                <span className="las2-sidebar-desc-label">Actualizado</span>
+                                <span className="las2-sidebar-desc-val">{lastUpdate}</span>
+                            </div>
+                        </div>
+
+                        {/* Footer sidebar */}
+                        <div className="las2-sidebar-footer">
+                            <div className="las2-sidebar-drag-hint">
+                                <div className="las2-sidebar-drag-dot" />
+                                Arrastra figuritas al álbum
+                            </div>
+                            <button className="las2-sidebar-info-btn">
+                                INFO +
+                            </button>
+                        </div>
                     </div>
 
-                    {/* Grid */}
-                    <div className="las2-sticker-grid">
-                        {pageItems.map(({ idx, item }) => (
-                            <StickerCard
-                                key={idx}
-                                index={idx}
-                                card={item?.card ?? null}
-                                collectionItem={item ?? null}
-                                accent={meta.accent}
-                            />
-                        ))}
-                    </div>
+                    {/* ──────────── PANEL PRINCIPAL (DERECHO) ──────────── */}
+                    <div className="las2-panel-main">
 
-                    {/* Paginación */}
-                    <div className="las2-pagination">
-                        <button className="las2-page-btn"
-                            onClick={() => setPage(p => Math.max(0, p - 1))}
-                            disabled={page === 0}>
-                            <ChevronLeft size={16} />
-                        </button>
-                        <div className="las2-page-nums">
-                            {Array.from({ length: totalPages }, (_, i) => (
-                                <button key={i}
-                                    className={`las2-page-num ${i === page ? 'las2-page-num--active' : ''}`}
-                                    onClick={() => setPage(i)}>
-                                    {String(i + 1).padStart(2, '0')}
+                        {/* Toolbar: búsqueda + filtro + sort */}
+                        <div className="las2-panel-toolbar">
+                            <div className="las2-toolbar-search">
+                                <Search
+                                    size={13}
+                                    className="las2-toolbar-search-icon"
+                                />
+                                <input
+                                    type="text"
+                                    className="las2-toolbar-search-input"
+                                    placeholder="Search items..."
+                                    value={search}
+                                    onChange={e => { setSearch(e.target.value); setPage(0); }}
+                                />
+                            </div>
+                            <button className="las2-toolbar-filter-btn">Filter</button>
+                            <select className="las2-toolbar-sort" defaultValue="date">
+                                <option value="date">Sort: Date</option>
+                                <option value="stars">Sort: Stars</option>
+                                <option value="name">Sort: Name</option>
+                            </select>
+                        </div>
+
+                        {/* Grid scrolleable */}
+                        <div className="las2-panel-scroll">
+
+                            {/* Page indicator */}
+                            <div className="las2-page-indicator">
+                                <div className="las2-page-indicator-line" />
+                                <span>
+                                    Página {String(safePagenr + 1).padStart(2, '0')}{' '}
+                                    / {String(totalPages).padStart(2, '0')}
+                                </span>
+                                <div className="las2-page-indicator-line" />
+                            </div>
+
+                            {/* Grid de figuritas */}
+                            <div className="las2-sticker-grid">
+                                {pageItems.map(({ idx, item }) => (
+                                    <StickerCard
+                                        key={idx}
+                                        index={idx}
+                                        card={item?.card ?? null}
+                                        collectionItem={item ?? null}
+                                        accent={meta.accent}
+                                    />
+                                ))}
+                            </div>
+
+                            {/* Paginación */}
+                            <div className="las2-pagination">
+                                <button
+                                    className="las2-page-btn"
+                                    onClick={() => setPage(p => Math.max(0, p - 1))}
+                                    disabled={safePagenr === 0}
+                                >
+                                    <ChevronLeft size={15} />
                                 </button>
-                            ))}
-                        </div>
-                        <button className="las2-page-btn"
-                            onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-                            disabled={page === totalPages - 1}>
-                            <ChevronRight size={16} />
-                        </button>
-                    </div>
 
-                    {/* Reward */}
-                    {def?.reward_description && (
-                        <div className="las2-reward">
-                            <Gift size={14} />
-                            <span>{def.reward_description}</span>
+                                <div className="las2-pagination-info">
+                                    PAGE{' '}
+                                    <strong>{String(safePagenr + 1).padStart(2, '0')}</strong>
+                                    {' '}/ {String(totalPages).padStart(2, '0')}
+                                </div>
+
+                                <button
+                                    className="las2-page-btn"
+                                    onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                                    disabled={safePagenr === totalPages - 1}
+                                >
+                                    <ChevronRight size={15} />
+                                </button>
+                            </div>
+
+                            {/* Reward */}
+                            {def?.reward_description && (
+                                <div className="las2-reward">
+                                    <Gift size={13} />
+                                    <span>{def.reward_description}</span>
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
+                </div>
+
+                {/* ── FOOTER DEL MODAL ── */}
+                <div className="las2-modal-footer">
+                    <div className="las2-footer-stat">
+                        <span className="las2-footer-stat-label">Total Items</span>
+                        <span className="las2-footer-stat-val">{filled}</span>
+                    </div>
+                    <div className="las2-footer-stat">
+                        <span className="las2-footer-stat-label">Total Size</span>
+                        <span className="las2-footer-stat-val">{totalSize > 0 ? `${totalSize}` : '0B'}</span>
+                    </div>
+                    <div className="las2-footer-stat">
+                        <span className="las2-footer-stat-label">Last Update</span>
+                        <span className="las2-footer-stat-val" style={{ fontSize: 11 }}>{lastUpdate}</span>
+                    </div>
+                    <div className="las2-footer-spacer" />
+                    <button className="las2-footer-export-btn">
+                        Export Album
+                    </button>
+                    <button className="las2-footer-arrow-btn" onClick={onClose}>
+                        <ChevronRight size={16} />
+                    </button>
                 </div>
             </div>
         </>
     );
 }
+
 
 /* ══════════════════════════════════════════
    BOOK CARD — estilo álbum físico (imagen ref)
