@@ -235,9 +235,6 @@ export default function DashboardPage() {
             {activeTab === "matches" && (
               <div className="db-content">
 
-                {/* Album entry */}
-                <AlbumBookEntry currentUser={currentUser} />
-
                 {/* Sort dropdown */}
                 <div style={{ position: "relative" }} ref={sortRef}>
                   {showSort && (
@@ -348,6 +345,8 @@ export default function DashboardPage() {
                     </div>
                   ))
                 )}
+                {/* Album entry */}
+                <AlbumBookEntry currentUser={currentUser} />
               </div>
             )}
 

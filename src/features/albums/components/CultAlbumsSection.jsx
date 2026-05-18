@@ -515,7 +515,6 @@ function CultBook({ defId, meta, collection, allCards }) {
 
                         {/* Ícono central */}
                         <div className="cas2-cover-title-block">
-                            <span className="cas2-cover-icon">{meta.icon}</span>
                         </div>
 
                         {/* Rarity badge */}

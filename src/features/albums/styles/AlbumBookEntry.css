@@ -1,126 +1,58 @@
 /* ════════════════════════════════════════════════
-   ALBUM BOOK ENTRY — abe-*
-   NOTA: transform en :hover/:active eliminados.
-   Framer Motion controla todo el movimiento.
-   CSS mantiene colores, bordes y sombras.
+   ALBUM BOOK ENTRY — floating book button
+   abe-float-anchor posiciona el botón en la
+   esquina inferior derecha del contenido.
 ════════════════════════════════════════════════ */
 
-.abe-root {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    width: 100%;
-    min-height: 72px;
-    padding: 0;
-    border-radius: 14px;
-    border: 0.5px solid #d4cfc8;
-    background: #e8e4de;
-    box-shadow: 4px 4px 12px rgba(166, 158, 148, 0.35), -3px -3px 8px rgba(255, 255, 255, 0.75);
-    cursor: pointer;
-    text-align: left;
-    overflow: hidden;
-    /* Solo transición de colores y sombras — Framer maneja transforms */
-    transition: box-shadow 0.15s ease, border-color 0.15s ease;
-    font-family: 'Sora', sans-serif;
-    /* Necesario para que Framer no sea interferido por will-change */
-    will-change: transform;
-}
-
-.abe-root:hover {
-    border-color: rgba(91, 79, 216, 0.35);
-    box-shadow: 4px 4px 18px rgba(91, 79, 216, 0.12), -3px -3px 8px rgba(255, 255, 255, 0.8);
-    /* Sin transform — Framer lo maneja */
-}
-
-/* ─── BOOK ZONE ─── */
-.abe-book-zone {
-    position: relative;
-    flex-shrink: 0;
-    width: 72px;
-    height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.abe-spine {
+.abe-float-anchor {
     position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: #5b4fd8;
-    transform-origin: center;
-    /* Sin transition — Framer lo maneja */
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
 }
 
-.abe-root:hover .abe-spine {
-    background: #4a3fc7;
-}
-
-.abe-book-bg {
-    width: 48px;
-    height: 48px;
-    background: rgba(91, 79, 216, 0.08);
-    border: 0.5px solid rgba(91, 79, 216, 0.18);
-    border-radius: 10px;
+.abe-float-btn {
+    pointer-events: all;
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    border: 0.5px solid rgba(91, 79, 216, 0.35);
+    background: #e8e4de;
+    box-shadow: 4px 4px 14px rgba(91, 79, 216, 0.15), -2px -2px 8px rgba(255, 255, 255, 0.8);
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.15s ease, border-color 0.15s ease;
-    /* Sin transform — Framer lo maneja */
+    color: #5b4fd8;
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
-.abe-root:hover .abe-book-bg {
-    background: rgba(91, 79, 216, 0.13);
-    border-color: rgba(91, 79, 216, 0.28);
+.abe-float-btn:hover {
+    background: #ede9ff;
+    border-color: rgba(91, 79, 216, 0.5);
+    box-shadow: 4px 4px 20px rgba(91, 79, 216, 0.22), -2px -2px 8px rgba(255, 255, 255, 0.9);
 }
 
 .abe-book-svg {
-    color: #5b4fd8;
     display: block;
-    transition: color 0.15s ease;
+    flex-shrink: 0;
 }
 
-.abe-root:hover .abe-book-svg {
-    color: #4a3fc7;
-}
-
-/* ─── CONTENT ─── */
-.abe-content {
-    flex: 1;
-    min-width: 0;
-    padding: 14px 0 14px 2px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.abe-top {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.abe-title {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #2a2535;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
-}
-
-.abe-badge {
-    font-size: 10px;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.06em;
-    background: rgba(91, 79, 216, 0.1);
-    color: #5b4fd8;
-    border: 0.5px solid rgba(91, 79, 216, 0.28);
-    padding: 2px 8px;
-    border-radius: 20px;
-    white-space: nowrap;
+/* ─── Punto indicador de sobres disponibles ─── */
+.abe-dot-badge {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #5b4fd8;
+    border: 1.5px solid #e8e4de;
     animation: abe-pulse 2.5s ease-in-out infinite;
 }
 
@@ -129,93 +61,68 @@
     0%,
     100% {
         opacity: 1;
+        transform: scale(1);
     }
 
     50% {
         opacity: 0.6;
+        transform: scale(0.85);
     }
 }
 
-.abe-sub {
-    font-size: 10.5px;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.04em;
-    color: #a0a0b0;
-}
-
-/* ─── ARROW ─── */
-.abe-arrow {
-    flex-shrink: 0;
-    margin-right: 16px;
-    color: #c4bfb8;
-    display: flex;
+/* ─── Tooltip ─── */
+.abe-tooltip {
+    pointer-events: none;
+    margin-top: 8px;
+    display: inline-flex;
     align-items: center;
-    /* Sin transition — Framer lo maneja */
+    gap: 6px;
+    padding: 5px 12px;
+    background: #2a2535;
+    color: #f0edf8;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    border-radius: 8px;
+    white-space: nowrap;
 }
 
-.abe-root:hover .abe-arrow {
-    color: #5b4fd8;
+.abe-tooltip-badge {
+    background: #5b4fd8;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 20px;
 }
 
 /* ════════════════════════════════════════════════
    DARK MODE
 ════════════════════════════════════════════════ */
 
-[data-theme="dark"] .abe-root {
-    background: #1A1824;
-    border-color: #38334F;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+[data-theme="dark"] .abe-float-btn {
+    background: #1e1b2e;
+    border-color: rgba(139, 127, 199, 0.35);
+    box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.4);
+    color: #a599d9;
 }
 
-[data-theme="dark"] .abe-root:hover {
-    border-color: rgba(139, 127, 199, 0.5);
-    box-shadow: 0 8px 28px rgba(91, 79, 216, 0.18);
+[data-theme="dark"] .abe-float-btn:hover {
+    background: #252038;
+    border-color: rgba(139, 127, 199, 0.55);
 }
 
-[data-theme="dark"] .abe-spine {
-    background: #7366B3;
+[data-theme="dark"] .abe-dot-badge {
+    background: #a599d9;
+    border-color: #1e1b2e;
 }
 
-[data-theme="dark"] .abe-root:hover .abe-spine {
-    background: #8B7FC7;
+[data-theme="dark"] .abe-tooltip {
+    background: #f0edf8;
+    color: #2a2535;
 }
 
-[data-theme="dark"] .abe-book-bg {
-    background: rgba(139, 127, 199, 0.08);
-    border-color: rgba(139, 127, 199, 0.2);
-}
-
-[data-theme="dark"] .abe-root:hover .abe-book-bg {
-    background: rgba(139, 127, 199, 0.14);
-    border-color: rgba(139, 127, 199, 0.32);
-}
-
-[data-theme="dark"] .abe-book-svg {
-    color: #A599D9;
-}
-
-[data-theme="dark"] .abe-root:hover .abe-book-svg {
-    color: #C4BBE8;
-}
-
-[data-theme="dark"] .abe-title {
-    color: #F0EDF8;
-}
-
-[data-theme="dark"] .abe-badge {
-    background: rgba(139, 127, 199, 0.12);
-    color: #A599D9;
-    border-color: rgba(139, 127, 199, 0.3);
-}
-
-[data-theme="dark"] .abe-sub {
-    color: #6E6680;
-}
-
-[data-theme="dark"] .abe-arrow {
-    color: #38334F;
-}
-
-[data-theme="dark"] .abe-root:hover .abe-arrow {
-    color: #A599D9;
+[data-theme="dark"] .abe-tooltip-badge {
+    background: #5b4fd8;
 }

@@ -50,6 +50,7 @@
   flex-direction: column;
   gap: 0;
   scroll-behavior: smooth;
+  position: relative;
 }
 
 .db-content::-webkit-scrollbar {
