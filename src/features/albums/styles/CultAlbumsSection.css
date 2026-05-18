@@ -1386,3 +1386,80 @@
     border-left-color: #2A2638;
     color: #4E4868;
 }
+
+/* ══ PANINI STICKER UPGRADES ══ */
+
+.cas2-sticker-topband {
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg,
+            var(--acc, #5b4fd8) 0%,
+            color-mix(in srgb, var(--acc, #5b4fd8) 60%, #fff) 50%,
+            var(--acc, #5b4fd8) 100%);
+    flex-shrink: 0;
+}
+
+.cas2-sticker-avatar-zone {
+    position: relative;
+}
+
+.cas2-sticker-ring-svg {
+    position: absolute;
+    inset: 5px 5px 1px;
+    pointer-events: none;
+    z-index: 2;
+    width: calc(100% - 10px);
+    height: calc(100% - 6px);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.cas2-sticker--filled:hover .cas2-sticker-ring-svg {
+    opacity: 1;
+}
+
+.cas2-sticker-foil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.06) 40%,
+            rgba(255, 255, 255, 0.14) 50%,
+            rgba(255, 255, 255, 0.06) 60%,
+            transparent 100%);
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.2s;
+    mix-blend-mode: overlay;
+}
+
+.cas2-sticker--filled:hover .cas2-sticker-foil {
+    opacity: 1;
+}
+
+.cas2-sticker-avatar-zone--empty {
+    padding: 6px;
+}
+
+.cas2-sticker-avatar-zone--empty {
+    padding: 6px;
+}
+
+.cas2-sticker-silhouette {
+    width: 72%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.025);
+    border: 1.5px dashed color-mix(in srgb, var(--acc, #5b4fd8) 35%, #ccc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color-mix(in srgb, var(--acc, #5b4fd8) 40%, #ccc);
+}
+
+[data-theme="dark"] .cas2-sticker-silhouette {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: color-mix(in srgb, var(--acc, #5b4fd8) 30%, #2A2638);
+    color: color-mix(in srgb, var(--acc, #5b4fd8) 25%, #38334F);
+}

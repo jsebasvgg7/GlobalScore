@@ -196,22 +196,45 @@ function CultStickerCard({ index, item, meta }) {
         const resolvedImg = card?.image_path ? getHistoricalImageUrl(card.image_path) : null;
         return (
             <div className="cas2-sticker cas2-sticker--filled" style={{ '--acc': meta.color }}>
+                {/* Banda top degradado */}
+                <div className="cas2-sticker-topband" />
+
                 <div className="cas2-sticker-header">
                     <span className="cas2-sticker-num">{num}</span>
                     {item.copies > 1 && (
                         <span className="cas2-sticker-copies">×{item.copies}</span>
                     )}
                 </div>
+
                 <div className="cas2-sticker-avatar-zone">
                     {resolvedImg ? (
                         <img src={resolvedImg} alt={card.name} className="cas2-sticker-img" />
                     ) : (
                         <div className="cas2-sticker-avatar">{getInitials(card?.name)}</div>
                     )}
+                    {/* Anillo foil */}
+                    <svg className="cas2-sticker-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+                        <defs>
+                            <linearGradient id={`cg-${num}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor={meta.color} stopOpacity="0.9" />
+                                <stop offset="50%" stopColor="#fff" stopOpacity="0.7" />
+                                <stop offset="100%" stopColor={meta.color} stopOpacity="0.9" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="46"
+                            fill="none"
+                            stroke={`url(#cg-${num})`}
+                            strokeWidth="2"
+                            strokeDasharray="6 3" />
+                    </svg>
                 </div>
+
                 <div className="cas2-sticker-info">
                     <span className="cas2-sticker-name">{card?.name}</span>
                 </div>
+
+                {/* Foil shimmer overlay */}
+                <div className="cas2-sticker-foil" />
             </div>
         );
     }
@@ -221,9 +244,12 @@ function CultStickerCard({ index, item, meta }) {
             <div className="cas2-sticker-header">
                 <span className="cas2-sticker-num">{num}</span>
             </div>
-            <div className="cas2-sticker-avatar-zone">
+            <div className="cas2-sticker-avatar-zone cas2-sticker-avatar-zone--empty">
                 <div className="cas2-sticker-silhouette">
-                    <span className="cas2-sticker-silhouette-icon">{meta.icon}</span>
+                    <svg viewBox="0 0 60 80" fill="currentColor" aria-hidden="true" style={{ width: '55%', opacity: 0.22 }}>
+                        <ellipse cx="30" cy="18" rx="12" ry="12" />
+                        <path d="M6 80 Q6 44 30 38 Q54 44 54 80Z" />
+                    </svg>
                 </div>
             </div>
             <div className="cas2-sticker-info">

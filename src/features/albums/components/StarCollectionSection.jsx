@@ -285,7 +285,13 @@ function StickerCard({ index, card, collectionItem, accent, level }) {
 
     if (filled) {
         return (
-            <div className={`scs2-sticker scs2-sticker--filled${isGoat ? ' scs2-sticker--goat' : ''}`} style={{ '--acc': accent }}>
+            <div
+                className={`scs2-sticker scs2-sticker--filled${isGoat ? ' scs2-sticker--goat' : ''}`}
+                style={{ '--acc': accent }}
+            >
+                {/* Banda top degradado */}
+                <div className="scs2-sticker-topband" />
+
                 <div className="scs2-sticker-header">
                     <span className="scs2-sticker-num">{num}</span>
                     {isGoat && <Crown size={9} className="scs2-sticker-crown" />}
@@ -293,21 +299,42 @@ function StickerCard({ index, card, collectionItem, accent, level }) {
                         <span className="scs2-sticker-copies">×{collectionItem.copies}</span>
                     )}
                 </div>
+
                 <div className="scs2-sticker-avatar-zone">
                     {card?.image_path
                         ? <img src={card.image_path} alt={card.name} className="scs2-sticker-img" />
                         : <div className="scs2-sticker-avatar">{getInitials(card?.name)}</div>
                     }
+                    {/* Anillo foil */}
+                    <svg className="scs2-sticker-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+                        <defs>
+                            <linearGradient id={`sg-${num}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor={accent} stopOpacity="0.9" />
+                                <stop offset="50%" stopColor="#fff" stopOpacity="0.7" />
+                                <stop offset="100%" stopColor={accent} stopOpacity="0.9" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="46"
+                            fill="none"
+                            stroke={`url(#sg-${num}`}
+                            strokeWidth="2"
+                            strokeDasharray={isGoat ? "none" : "6 3"} />
+                    </svg>
                 </div>
+
                 <div className="scs2-sticker-stars">
                     {Array.from({ length: 5 }, (_, i) => (
                         <span key={i} className={`scs2-star ${i < stars ? 'scs2-star--on' : 'scs2-star--off'}`}>★</span>
                     ))}
                 </div>
+
                 <div className="scs2-sticker-info">
                     <span className="scs2-sticker-name">{card?.name}</span>
                     {card?.position && <span className="scs2-sticker-pos">{posLabel(card.position)}</span>}
                 </div>
+
+                {/* Foil shimmer overlay */}
+                <div className="scs2-sticker-foil" />
             </div>
         );
     }
@@ -317,8 +344,13 @@ function StickerCard({ index, card, collectionItem, accent, level }) {
             <div className="scs2-sticker-header">
                 <span className="scs2-sticker-num">{num}</span>
             </div>
-            <div className="scs2-sticker-avatar-zone">
-                <div className="scs2-sticker-silhouette"><User size={22} strokeWidth={1} /></div>
+            <div className="scs2-sticker-avatar-zone scs2-sticker-avatar-zone--empty">
+                <div className="scs2-sticker-silhouette">
+                    <svg viewBox="0 0 60 80" fill="currentColor" aria-hidden="true" style={{ width: '55%', opacity: 0.22 }}>
+                        <ellipse cx="30" cy="18" rx="12" ry="12" />
+                        <path d="M6 80 Q6 44 30 38 Q54 44 54 80Z" />
+                    </svg>
+                </div>
             </div>
             <div className="scs2-sticker-stars">
                 {Array.from({ length: 4 }, (_, i) => (

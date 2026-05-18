@@ -296,30 +296,56 @@ function StickerCard({ index, card, collectionItem, accent }) {
 
     if (filled) {
         return (
-            <div className={`las2-sticker las2-sticker--filled${isGoat ? ' las2-sticker--goat' : ''}`}
-                style={{ '--acc': accent }}>
+            <div
+                className={`las2-sticker las2-sticker--filled${isGoat ? ' las2-sticker--goat' : ''}`}
+                style={{ '--acc': accent }}
+            >
+                {/* Banda top degradado */}
+                <div className="las2-sticker-topband" />
+
                 <div className="las2-sticker-header">
                     <span className="las2-sticker-num">{num}</span>
-                    {isGoat && <Crown size={9} className="las2-sticker-crown" />}
+                    {isGoat && <Crown size={8} className="las2-sticker-crown" />}
                     {collectionItem?.copies > 1 && (
                         <span className="las2-sticker-copies">×{collectionItem.copies}</span>
                     )}
                 </div>
+
                 <div className="las2-sticker-avatar-zone">
                     {card?.image_path
                         ? <img src={card.image_path} alt={card.name} className="las2-sticker-img" />
                         : <div className="las2-sticker-avatar">{getInitials(card?.name)}</div>
                     }
+                    {/* Anillo foil */}
+                    <svg className="las2-sticker-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+                        <defs>
+                            <linearGradient id={`sg-${num}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor={accent} stopOpacity="0.9" />
+                                <stop offset="50%" stopColor="#fff" stopOpacity="0.7" />
+                                <stop offset="100%" stopColor={accent} stopOpacity="0.9" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="46"
+                            fill="none"
+                            stroke={`url(#sg-${num})`}
+                            strokeWidth="2"
+                            strokeDasharray={isGoat ? "none" : "6 3"} />
+                    </svg>
                 </div>
+
                 <div className="las2-sticker-stars">
                     {Array.from({ length: 5 }, (_, i) => (
                         <span key={i} className={`las2-star ${i < stars ? 'las2-star--on' : 'las2-star--off'}`}>★</span>
                     ))}
                 </div>
+
                 <div className="las2-sticker-info">
                     <span className="las2-sticker-name">{card?.name}</span>
                     {card?.position && <span className="las2-sticker-pos">{posLabel(card.position)}</span>}
                 </div>
+
+                {/* Foil shimmer overlay */}
+                <div className="las2-sticker-foil" />
             </div>
         );
     }
@@ -329,9 +355,12 @@ function StickerCard({ index, card, collectionItem, accent }) {
             <div className="las2-sticker-header">
                 <span className="las2-sticker-num">{num}</span>
             </div>
-            <div className="las2-sticker-avatar-zone">
+            <div className="las2-sticker-avatar-zone las2-sticker-avatar-zone--empty">
                 <div className="las2-sticker-silhouette">
-                    <User size={22} strokeWidth={1} />
+                    <svg viewBox="0 0 60 80" fill="currentColor" aria-hidden="true" style={{ width: '55%', opacity: 0.22 }}>
+                        <ellipse cx="30" cy="18" rx="12" ry="12" />
+                        <path d="M6 80 Q6 44 30 38 Q54 44 54 80Z" />
+                    </svg>
                 </div>
             </div>
             <div className="las2-sticker-stars">
