@@ -383,7 +383,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
     const isCompleted = prog?.is_completed ?? false;
 
     const { filled, pct, stars4Count, stars5Count, qualifiedPlayers } = calcAlbumProgress(meta, collection);
-
     const reqPlayers = def?.required_unique_players ?? meta.slots;
     const reqStars4 = def?.required_min_stars_4 ?? meta.minStars4;
     const reqStars5 = def?.required_min_stars_5 ?? meta.minStars5;
@@ -510,8 +509,9 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
 function AlbumBook({ albumId, meta, definitions, progress, collection, locked }) {
     const [panelOpen, setPanelOpen] = useState(false);
 
-    // FIX: Cálculo de progreso individual para ESTE álbum
-    const { filled, pct, qualifiedPlayers } = calcAlbumProgress(meta, collection);
+    const { filled, pct, qualifiedPlayers } = locked
+        ? { filled: 0, pct: 0, qualifiedPlayers: [] }
+        : calcAlbumProgress(meta, collection);
     const reqPlayers = meta.slots;
 
     const isCompleted = progress.find(p => p.album_id === albumId)?.is_completed ?? false;
