@@ -3,7 +3,12 @@ import { getHistoricalImageUrl } from '@/features/history/services/history.servi
 import '../styles/PackOpeningModal.css';
 
 const TYPE_LABEL = { player: 'JUGADOR', team: 'EQUIPO', competition: 'COPA', event: 'EVENTO' };
-const TYPE_COLOR = { player: '#5b4fd8', team: '#1D9E75', competition: '#f59e0b', event: '#e55b5b' };
+const TYPE_COLOR = {
+    player: '#6C63FF',
+    team: '#10B981',
+    competition: '#F59E0B',
+    event: '#F43F5E',
+};
 const CARD_ORDER = ['player', 'team', 'competition', 'event'];
 
 function getInitials(name = '') {
@@ -15,143 +20,124 @@ function StarRow({ level }) {
     return (
         <div className="pom-stars">
             {[1, 2, 3, 4, 5].map(n => (
-                <svg key={n} className={`pom-star${n <= level ? ' pom-star--lit' : ''}`} viewBox="0 0 12 12">
-                    <polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5" />
-                </svg>
+                <span key={n} className={`pom-star${n <= level ? ' pom-star--lit' : ''}`}>★</span>
             ))}
         </div>
     );
 }
 
-function Particles({ active }) {
-    const particles = Array.from({ length: 32 }, (_, i) => i);
-    if (!active) return null;
+function Particles() {
     return (
         <div className="pom-particles" aria-hidden="true">
-            {particles.map(i => (
-                <div
-                    key={i}
-                    className="pom-particle"
-                    style={{
-                        '--angle': `${(i / 32) * 360}deg`,
-                        '--delay': `${(i % 8) * 0.06}s`,
-                        '--dist': `${90 + Math.random() * 100}px`,
-                        '--size': `${2 + Math.random() * 5}px`,
-                        '--color': i % 3 === 0 ? '#f59e0b' : i % 3 === 1 ? '#fcd34d' : '#fff7ed',
-                    }}
-                />
+            {Array.from({ length: 20 }, (_, i) => (
+                <div key={i} className="pom-particle" style={{
+                    '--angle': `${(i / 20) * 360}deg`,
+                    '--delay': `${(i % 5) * 0.08}s`,
+                    '--dist': `${60 + Math.random() * 70}px`,
+                    '--size': `${2 + Math.random() * 3}px`,
+                    '--color': i % 2 === 0 ? '#f59e0b' : '#fcd34d',
+                }} />
             ))}
         </div>
     );
 }
 
+/* ════════════════════════════════════════════════
+   CARTA — mismo tamaño garantizado por CSS grid
+   Inspirada en la imagen: borde top de color,
+   imagen cuadrada que ocupa el cuerpo, footer limpio
+════════════════════════════════════════════════ */
 function RevealCard({ type, card, index, visible, isGoat }) {
-    const color = TYPE_COLOR[type] || '#5b4fd8';
+    const color = TYPE_COLOR[type] || '#6C63FF';
     const isPlayer = type === 'player';
     const stars = isPlayer ? card?.significance_level : null;
-    const resolvedImageUrl = card?.image_path ? getHistoricalImageUrl(card.image_path) : null;
+    const imgUrl = card?.image_path ? getHistoricalImageUrl(card.image_path) : null;
+    const isGoatCard = isGoat && isPlayer;
 
     return (
         <div
-            className={`pom-card${visible ? ' pom-card--visible' : ''}${isGoat && isPlayer ? ' pom-card--goat' : ''}`}
-            style={{ '--card-color': color, '--delay': `${index * 0.14}s` }}
+            className={`pom-card${visible ? ' pom-card--visible' : ''}${isGoatCard ? ' pom-card--goat' : ''}`}
+            style={{ '--c': color, '--delay': `${index * 0.14}s` }}
         >
-            {/* Glow halo behind card */}
-            <div className="pom-card-halo" style={{ '--card-color': color }} />
+            {/* Franja superior de color — sello de tipo */}
+            <div className="pom-card-topstrip" />
 
-            <div className="pom-card-inner">
-                {/* Top gradient bar with shimmer */}
-                <div className="pom-card-top-bar" style={{ background: color }}>
-                    <div className="pom-card-top-shimmer" />
-                </div>
+            {/* Etiqueta de tipo */}
+            <span className="pom-card-type">{TYPE_LABEL[type]}</span>
 
-                <div className="pom-card-type-label" style={{ color }}>
-                    {TYPE_LABEL[type]}
-                </div>
-
-                <div className="pom-card-img-zone">
-                    {resolvedImageUrl ? (
-                        <img src={resolvedImageUrl} alt={card.name} className="pom-card-img" />
-                    ) : (
-                        <div className="pom-card-initials" style={{ color }}>
-                            {getInitials(card?.name)}
-                        </div>
-                    )}
-                    {/* Diagonal gloss */}
-                    <div className="pom-card-img-gloss" />
-                    {isGoat && isPlayer && <div className="pom-card-goat-halo" />}
-                </div>
-
-                <div className="pom-card-info">
-                    <span className="pom-card-name">{card?.name || '—'}</span>
-                    {stars && <StarRow level={stars} />}
-                </div>
-
-                <div className="pom-card-bottom-bar" style={{ background: color }} />
+            {/* Imagen cuadrada — ocupa el espacio central */}
+            <div className="pom-card-media">
+                {imgUrl
+                    ? <img src={imgUrl} alt={card?.name || ''} className="pom-card-img" />
+                    : <span className="pom-card-initials">{getInitials(card?.name)}</span>
+                }
+                {/* esquinas decorativas estilo álbum Panini */}
+                <i className="pom-corner pom-corner--tl" aria-hidden="true" />
+                <i className="pom-corner pom-corner--tr" aria-hidden="true" />
+                <i className="pom-corner pom-corner--bl" aria-hidden="true" />
+                <i className="pom-corner pom-corner--br" aria-hidden="true" />
             </div>
 
-            {/* Card shine overlay */}
-            <div className="pom-card-shine" />
+            {/* Footer: nombre + estrellas */}
+            <div className="pom-card-footer">
+                <span className="pom-card-name">{card?.name || '—'}</span>
+                {stars && <StarRow level={stars} />}
+            </div>
 
-            {isGoat && isPlayer && <Particles active />}
+            {/* Brillo diagonal */}
+            <div className="pom-card-gloss" aria-hidden="true" />
+
+            {isGoatCard && <Particles />}
         </div>
     );
 }
 
+/* ════════════════════════════════════════════════
+   SOBRE — fase idle
+════════════════════════════════════════════════ */
 function PackVisual({ count, onOpen }) {
     return (
         <div className="pom-pack-scene">
-            {/* Ambient glow behind pack */}
-            <div className="pom-pack-ambient" />
+            <div className="pom-pack-glow" aria-hidden="true" />
 
-            <div className="pom-pack-wrapper">
-                {/* Shadow projected on floor */}
-                <div className="pom-pack-floor-shadow" />
-
+            <div className="pom-pack-wrapper" aria-hidden="true">
                 <div className="pom-pack-spine" />
                 <div className="pom-pack-body">
-                    <div className="pom-pack-texture" />
-                    {/* Inner glow */}
-                    <div className="pom-pack-inner-glow" />
-
-                    <div className="pom-pack-logo">
-                        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="30" cy="30" r="28" className="pom-logo-ring" strokeWidth="1" />
-                            <path d="M30 8 L36 22 L52 22 L39 32 L44 46 L30 38 L16 46 L21 32 L8 22 L24 22 Z"
-                                className="pom-logo-star" strokeWidth="1.2" />
-                            <circle cx="30" cy="30" r="4" className="pom-logo-dot" />
-                        </svg>
-                    </div>
-                    <div className="pom-pack-season">TEMPORADA 25·26</div>
-                    <div className="pom-pack-series">GLOBAL ALBUMS</div>
-                    <div className="pom-pack-tear-line" />
-                </div>
-                <div className="pom-pack-tab">
-                    <div className="pom-pack-perforation">
-                        {Array.from({ length: 7 }).map((_, i) => (
-                            <div key={i} className="pom-pack-perf-dot" />
+                    <div className="pom-pack-tab">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                            <span key={i} className="pom-perf" />
                         ))}
                     </div>
+                    <div className="pom-pack-face">
+                        <svg width="36" height="36" viewBox="0 0 48 48" fill="none" className="pom-pack-logo">
+                            <circle cx="24" cy="24" r="21"
+                                stroke="currentColor" strokeWidth="1" strokeOpacity=".35" />
+                            <path d="M24 7l4 11h12l-9.5 7.5 3.5 11L24 30l-10 6.5 3.5-11L8 18h12z"
+                                stroke="currentColor" strokeWidth="1.3" strokeOpacity=".55"
+                                fill="none" strokeLinejoin="round" />
+                        </svg>
+                        <span className="pom-pack-season">25 · 26</span>
+                        <span className="pom-pack-brand">Global Albums</span>
+                    </div>
                 </div>
-
-                {/* Side edge highlight */}
-                <div className="pom-pack-edge-highlight" />
             </div>
 
-            <div className="pom-pack-count-label">
-                <span className="pom-pack-count-n">{count}</span>
-                <span className="pom-pack-count-txt">{count === 1 ? 'sobre disponible' : 'sobres disponibles'}</span>
+            <div className="pom-count-block">
+                <span className="pom-count-n">{count}</span>
+                <span className="pom-count-lbl">
+                    {count === 1 ? 'sobre disponible' : 'sobres disponibles'}
+                </span>
             </div>
 
-            <button className="pom-open-trigger" onClick={onOpen} disabled={count < 1}>
-                <span>ABRIR SOBRE</span>
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <button className="pom-cta" onClick={onOpen} disabled={count < 1}>
+                Abrir sobre
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                    <path d="M2.5 6.5h8M7.5 3.5l3 3-3 3"
+                        stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <div className="pom-trigger-shimmer" />
             </button>
 
-            <p className="pom-pack-hint">4 figuritas · jugador · competición · equipo · evento</p>
+            <p className="pom-hint">jugador · equipo · copa · evento</p>
         </div>
     );
 }
@@ -159,24 +145,20 @@ function PackVisual({ count, onOpen }) {
 function TearAnimation() {
     return (
         <div className="pom-tear-scene">
-            <div className="pom-tear-ambient" />
             <div className="pom-tear-pack">
-                <div className="pom-tear-pack-body">
-                    <div className="pom-tear-texture" />
-                    <div className="pom-tear-light" />
-                </div>
-                <div className="pom-tear-top">
-                    <div className="pom-tear-top-body" />
-                </div>
-                <div className="pom-tear-line-container">
+                <div className="pom-tear-flap" />
+                <div className="pom-tear-body">
                     <div className="pom-tear-beam" />
                 </div>
             </div>
-            <p className="pom-tear-label">Abriendo sobre...</p>
+            <p className="pom-tear-lbl">Abriendo...</p>
         </div>
     );
 }
 
+/* ════════════════════════════════════════════════
+   MODAL PRINCIPAL
+════════════════════════════════════════════════ */
 export default function PackOpeningModal({
     isOpen, phase, result, packsAvailable,
     isGoat, isLegend, onOpen, onClose, onReset,
@@ -188,63 +170,73 @@ export default function PackOpeningModal({
         if (phase === 'revealing') {
             setRevealedCount(0);
             const timers = CARD_ORDER.map((_, i) =>
-                setTimeout(() => setRevealedCount(i + 1), 300 + i * 480)
+                setTimeout(() => setRevealedCount(i + 1), 220 + i * 400)
             );
             return () => timers.forEach(clearTimeout);
         }
         if (phase === 'idle') setRevealedCount(0);
     }, [phase]);
 
+    useEffect(() => {
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+        return () => { document.body.style.overflow = ''; };
+    }, [isOpen]);
+
     if (!isOpen) return null;
 
-    const cards = result ? CARD_ORDER.map(type => ({ type, card: result[type] })) : [];
-    const overlayMod = isGoat ? ' pom-overlay--goat' : isLegend ? ' pom-overlay--legend' : '';
+    const cards = result
+        ? CARD_ORDER.map(type => ({ type, card: result[type] }))
+        : [];
 
     const handleOverlayClick = (e) => {
         if (e.target === overlayRef.current && phase === 'done') onClose();
     };
 
+    const titles = {
+        idle: 'Apertura de sobre',
+        animating: 'Abriendo...',
+        revealing: isGoat ? '¡Figurita GOAT!' : 'Tus nuevas cartas',
+        done: isGoat ? '¡Figurita GOAT!' : 'Tus nuevas cartas',
+    };
+
     return (
-        <div ref={overlayRef} className={`pom-overlay${overlayMod}`} onClick={handleOverlayClick}>
+        <div
+            ref={overlayRef}
+            className="pom-overlay"
+            onClick={handleOverlayClick}
+            role="dialog"
+            aria-modal="true"
+        >
             <div className={`pom-modal${isGoat ? ' pom-modal--goat' : ''}`}>
 
-                <div className="pom-modal-header">
-                    <div className="pom-modal-header-left">
-                        <div className="pom-modal-spine" />
-                        <div className="pom-modal-title-block">
-                            <span className="pom-modal-eyebrow">GLOBAL ALBUMS · 25/26</span>
-                            <span className="pom-modal-title">
-                                {phase === 'idle' && 'APERTURA DE SOBRE'}
-                                {phase === 'animating' && 'ABRIENDO...'}
-                                {(phase === 'revealing' || phase === 'done') && (
-                                    isGoat ? 'FIGURITA GOAT' : isLegend ? 'FIGURITA LEYENDA' : 'TUS FIGURITAS'
-                                )}
-                            </span>
-                        </div>
+                {/* HEADER */}
+                <div className="pom-header">
+                    <div className="pom-header-bar" />
+                    <div className="pom-header-text">
+                        <span className="pom-eyebrow">Global Albums · 25/26</span>
+                        <span className="pom-title">{titles[phase] ?? titles.idle}</span>
                     </div>
                     {phase === 'done' && (
-                        <button className="pom-modal-close" onClick={onClose} aria-label="Cerrar">
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                        <button className="pom-close" onClick={onClose} aria-label="Cerrar">
+                            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                                <path d="M1 1l9 9M10 1L1 10"
+                                    stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                             </svg>
                         </button>
                     )}
                 </div>
 
-                <div className="pom-modal-bar" />
+                <div className="pom-sep" />
 
-                <div className="pom-modal-body">
-                    {phase === 'idle' && (
-                        <PackVisual count={packsAvailable} onOpen={onOpen} />
-                    )}
-
+                {/* BODY */}
+                <div className="pom-body">
+                    {phase === 'idle' && <PackVisual count={packsAvailable} onOpen={onOpen} />}
                     {phase === 'animating' && <TearAnimation />}
 
                     {(phase === 'revealing' || phase === 'done') && (
-                        <div className="pom-cards-stage">
-                            {isGoat && <div className="pom-goat-light" />}
-                            {/* 2×2 grid layout */}
-                            <div className="pom-cards-grid">
+                        <div className="pom-stage">
+                            {isGoat && <div className="pom-goat-aura" aria-hidden="true" />}
+                            <div className="pom-grid">
                                 {cards.map(({ type, card }, i) => (
                                     <RevealCard
                                         key={type}
@@ -260,19 +252,21 @@ export default function PackOpeningModal({
                     )}
                 </div>
 
+                {/* ACCIONES */}
                 {phase === 'done' && (
-                    <div className="pom-modal-actions">
+                    <div className="pom-actions">
                         {packsAvailable > 1 && (
                             <button className="pom-btn-again" onClick={onReset}>
-                                <span>ABRIR OTRO</span>
-                                <span className="pom-btn-count">{packsAvailable - 1}</span>
+                                <span>Abrir otro</span>
+                                <span className="pom-badge">{packsAvailable - 1}</span>
                             </button>
                         )}
                         <button className="pom-btn-collection" onClick={onClose}>
-                            VER MI COLECCIÓN
+                            Ver mi colección
                         </button>
                     </div>
                 )}
+
             </div>
         </div>
     );

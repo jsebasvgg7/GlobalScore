@@ -86,9 +86,6 @@ const ALBUM_META = {
     },
 };
 
-/* ══════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════ */
 function getInitials(name = '') {
     return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || '?';
 }
@@ -101,24 +98,75 @@ function posLabel(pos) {
     return map[pos] || pos?.slice(0, 3).toUpperCase() || '—';
 }
 
-function calcAlbumProgress(meta, collection) {
+/* ══════════════════════════════════════════
+   SLOT LAYOUT ENGINE
+   Builds two zones: REQ slots + GENERAL slots.
+   Players are sorted highest stars → lowest before placement.
+══════════════════════════════════════════ */
+function buildSlotLayout(meta, collection) {
     const playerCol = collection.filter(c => c.card?.card_type === 'player');
-    const reqPlayers = meta.slots;
 
-    let qualifiedPlayers;
-    if (meta.golden) {
-        qualifiedPlayers = playerCol.filter(c => c.card?.significance_level === 5);
-    } else {
-        qualifiedPlayers = playerCol.filter(c => (c.card?.significance_level ?? 0) >= 1);
-    }
+    // Sort descending by significance_level so highest stars appear first
+    const sorted = [...playerCol].sort(
+        (a, b) => (b.card?.significance_level ?? 0) - (a.card?.significance_level ?? 0)
+    );
 
-    const stars4Count = playerCol.filter(c => (c.card?.significance_level ?? 0) >= 4).length;
-    const stars5Count = playerCol.filter(c => c.card?.significance_level === 5).length;
+    const stars5players = sorted.filter(c => c.card?.significance_level === 5);
+    const stars4players = sorted.filter(c => (c.card?.significance_level ?? 0) === 4);
+    const generalPlayers = sorted.filter(c => (c.card?.significance_level ?? 0) <= 3);
 
-    const filled = Math.min(qualifiedPlayers.length, reqPlayers);
-    const pct = reqPlayers > 0 ? Math.min(100, Math.round((filled / reqPlayers) * 100)) : 0;
+    // REQ ZONE — fixed slots for 5★ requirement
+    const reqSlots5 = Array.from({ length: meta.minStars5 }, (_, i) => ({
+        slotType: 'req5',
+        item: stars5players[i] ?? null,
+        reqLabel: '⭐⭐⭐⭐⭐',
+        minStars: 5,
+    }));
 
-    return { filled, pct, stars4Count, stars5Count, qualifiedPlayers };
+    // REQ ZONE — fixed slots for 4★ requirement
+    // 4★ slots accept EITHER 4★ or 5★ cards (5★ already placed above)
+    const stars4pool = [...stars5players.slice(meta.minStars5), ...stars4players];
+    const reqSlots4 = Array.from({ length: meta.minStars4 }, (_, i) => ({
+        slotType: 'req4',
+        item: stars4pool[i] ?? null,
+        reqLabel: '⭐⭐⭐⭐',
+        minStars: 4,
+    }));
+
+    // GENERAL ZONE — remaining slots
+    // Players already used in req zones
+    const usedInReq = new Set([
+        ...stars5players.slice(0, meta.minStars5).map(c => c.card_id ?? c.id),
+        ...stars4pool.slice(0, meta.minStars4).map(c => c.card_id ?? c.id),
+    ]);
+
+    const generalPool = sorted.filter(c => !usedInReq.has(c.card_id ?? c.id));
+    const reqTotal = meta.minStars5 + meta.minStars4;
+    const generalSlotCount = meta.slots - reqTotal;
+
+    const generalSlots = Array.from({ length: generalSlotCount }, (_, i) => ({
+        slotType: 'general',
+        item: generalPool[i] ?? null,
+        reqLabel: null,
+        minStars: null,
+    }));
+
+    // Progress counters
+    const filledReq5 = reqSlots5.filter(s => s.item).length;
+    const filledReq4 = reqSlots4.filter(s => s.item).length;
+    const filledGeneral = generalSlots.filter(s => s.item).length;
+    const filled = filledReq5 + filledReq4 + filledGeneral;
+    const pct = meta.slots > 0 ? Math.min(100, Math.round((filled / meta.slots) * 100)) : 0;
+
+    return {
+        reqSlots5,
+        reqSlots4,
+        generalSlots,
+        filled,
+        pct,
+        stars4Count: stars4players.length + stars5players.length,
+        stars5Count: stars5players.length,
+    };
 }
 
 /* ══════════════════════════════════════════
@@ -288,19 +336,20 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
 /* ══════════════════════════════════════════
    STICKER CARD
 ══════════════════════════════════════════ */
-function StickerCard({ index, card, collectionItem, accent }) {
+function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }) {
     const num = String(index + 1).padStart(3, '0');
     const isGoat = card?.significance_level === 5;
     const filled = !!collectionItem;
     const stars = card?.significance_level ?? 0;
 
+    const isReqSlot = slotType === 'req4' || slotType === 'req5';
+
     if (filled) {
         return (
             <div
-                className={`las2-sticker las2-sticker--filled${isGoat ? ' las2-sticker--goat' : ''}`}
+                className={`las2-sticker las2-sticker--filled${isGoat ? ' las2-sticker--goat' : ''}${isReqSlot ? ' las2-sticker--req' : ''}`}
                 style={{ '--acc': accent }}
             >
-                {/* Banda top degradado */}
                 <div className="las2-sticker-topband" />
 
                 <div className="las2-sticker-header">
@@ -316,7 +365,6 @@ function StickerCard({ index, card, collectionItem, accent }) {
                         ? <img src={card.image_path} alt={card.name} className="las2-sticker-img" />
                         : <div className="las2-sticker-avatar">{getInitials(card?.name)}</div>
                     }
-                    {/* Anillo foil */}
                     <svg className="las2-sticker-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
                         <defs>
                             <linearGradient id={`sg-${num}`} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -344,14 +392,22 @@ function StickerCard({ index, card, collectionItem, accent }) {
                     {card?.position && <span className="las2-sticker-pos">{posLabel(card.position)}</span>}
                 </div>
 
-                {/* Foil shimmer overlay */}
                 <div className="las2-sticker-foil" />
             </div>
         );
     }
 
     return (
-        <div className="las2-sticker las2-sticker--empty" style={{ '--acc': accent }}>
+        <div
+            className={`las2-sticker las2-sticker--empty${isReqSlot ? ' las2-sticker--req-empty' : ''}`}
+            style={{ '--acc': accent }}
+        >
+            {isReqSlot && (
+                <div className="las2-req-badge">
+                    <span className="las2-req-badge-stars">{reqLabel}</span>
+                    <span className="las2-req-badge-label">REQUERIDO</span>
+                </div>
+            )}
             <div className="las2-sticker-header">
                 <span className="las2-sticker-num">{num}</span>
             </div>
@@ -364,7 +420,7 @@ function StickerCard({ index, card, collectionItem, accent }) {
                 </div>
             </div>
             <div className="las2-sticker-stars">
-                {Array.from({ length: 4 }, (_, i) => (
+                {Array.from({ length: isReqSlot ? (slotType === 'req5' ? 5 : 4) : 4 }, (_, i) => (
                     <span key={i} className="las2-star las2-star--empty">★</span>
                 ))}
             </div>
@@ -376,28 +432,46 @@ function StickerCard({ index, card, collectionItem, accent }) {
 }
 
 /* ══════════════════════════════════════════
+   ZONE HEADER
+══════════════════════════════════════════ */
+function ZoneHeader({ label, count, filled, accent }) {
+    return (
+        <div className="las2-zone-header" style={{ '--acc': accent }}>
+            <div className="las2-zone-header-line" />
+            <div className="las2-zone-header-content">
+                <span className="las2-zone-header-label">{label}</span>
+                <span className="las2-zone-header-count">{filled}/{count}</span>
+            </div>
+            <div className="las2-zone-header-line" />
+        </div>
+    );
+}
+
+/* ══════════════════════════════════════════
    ALBUM PANEL
 ══════════════════════════════════════════ */
 function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose }) {
-    const [page, setPage] = useState(0);
     const [search, setSearch] = useState('');
-    const PER_PAGE = 10; // 2 filas × 5 columnas
+    const [page, setPage] = useState(0);
+    const PER_PAGE = 10;
 
     const def = definitions.find(d => d.id === albumId);
     const prog = progress.find(p => p.album_id === albumId);
     const isCompleted = prog?.is_completed ?? false;
 
-    const { filled, pct, stars4Count, stars5Count, qualifiedPlayers } =
-        calcAlbumProgress(meta, collection);
+    const { reqSlots5, reqSlots4, generalSlots, filled, pct, stars4Count, stars5Count } =
+        buildSlotLayout(meta, collection);
 
     const reqPlayers = def?.required_unique_players ?? meta.slots;
     const reqStars4 = def?.required_min_stars_4 ?? meta.minStars4;
     const reqStars5 = def?.required_min_stars_5 ?? meta.minStars5;
 
-    const allSlots = Array.from({ length: meta.slots }, (_, i) => ({
-        idx: i,
-        item: qualifiedPlayers[i] ?? null,
-    }));
+    // Combine all slots in display order: 5★ req → 4★ req → general
+    const allSlots = [
+        ...reqSlots5.map((s, i) => ({ ...s, globalIdx: i })),
+        ...reqSlots4.map((s, i) => ({ ...s, globalIdx: reqSlots5.length + i })),
+        ...generalSlots.map((s, i) => ({ ...s, globalIdx: reqSlots5.length + reqSlots4.length + i })),
+    ];
 
     const filteredSlots = search.trim()
         ? allSlots.filter(({ item }) =>
@@ -408,6 +482,11 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
     const totalPages = Math.max(1, Math.ceil(filteredSlots.length / PER_PAGE));
     const safePagenr = Math.min(page, totalPages - 1);
     const pageItems = filteredSlots.slice(safePagenr * PER_PAGE, (safePagenr + 1) * PER_PAGE);
+
+    // Determine zone boundaries within the current page for zone headers
+    const pageStartIdx = safePagenr * PER_PAGE;
+    const req5End = reqSlots5.length;
+    const req4End = req5End + reqSlots4.length;
 
     const albumNum = meta.number === '✦' ? 'GOLD' : meta.number;
 
@@ -425,7 +504,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                 }}
                 onClick={e => e.stopPropagation()}
             >
-                {/* ── TOPBAR ── */}
                 <div className="las2-modal-topbar">
                     <div className="las2-modal-topbar-spine" />
                     <span className="las2-modal-topbar-title">{meta.label}</span>
@@ -435,10 +513,8 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                     </button>
                 </div>
 
-                {/* ── BODY ── */}
                 <div className="las2-panel-body">
 
-                    {/* ── SIDEBAR ── */}
                     <div className="las2-panel-sidebar">
                         <div className="las2-panel-sidebar-inner">
 
@@ -455,7 +531,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
 
                             <div className="las2-sidebar-divider" />
 
-                            {/* Libro */}
                             <div className="las2-sidebar-book-img">
                                 <div className="las2-sidebar-book-svg-wrap">
                                     <div style={{
@@ -506,13 +581,11 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                                 </div>
                             </div>
 
-                            {/* Progress */}
                             <div className="las2-sidebar-pbar-wrap">
                                 <div className="las2-sidebar-pbar-fill" style={{ width: `${pct}%` }} />
                                 <span className="las2-sidebar-pbar-pct">{pct}%</span>
                             </div>
 
-                            {/* Chips */}
                             <div className="las2-sidebar-chips">
                                 <span className={`las2-chip ${stars4Count >= reqStars4 ? 'las2-chip--ok' : ''}`}>
                                     {'★★★★'} {Math.min(stars4Count, reqStars4)}/{reqStars4}
@@ -528,7 +601,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                             </div>
                         </div>
 
-                        {/* Descripción */}
                         <div className="las2-sidebar-desc-block">
                             <div className="las2-sidebar-desc-full">
                                 <span className="las2-sidebar-desc-label">Descripción</span>
@@ -539,10 +611,8 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                         </div>
                     </div>
 
-                    {/* ── PANEL PRINCIPAL ── */}
                     <div className="las2-panel-main">
 
-                        {/* Toolbar: solo búsqueda */}
                         <div className="las2-panel-toolbar">
                             <div className="las2-toolbar-search">
                                 <Search size={13} className="las2-toolbar-search-icon" />
@@ -556,7 +626,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                             </div>
                         </div>
 
-                        {/* Grid scrolleable */}
                         <div className="las2-panel-scroll">
                             <div className="las2-page-indicator">
                                 <div className="las2-page-indicator-line" />
@@ -564,34 +633,23 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                                 <div className="las2-page-indicator-line" />
                             </div>
 
-                            {/* Grid 5 columnas × 2 filas = 10 cartas */}
-                            <div className="las2-sticker-grid">
-                                {pageItems.map(({ idx, item }) => (
-                                    <StickerCard
-                                        key={idx}
-                                        index={idx}
-                                        card={item?.card ?? null}
-                                        collectionItem={item ?? null}
-                                        accent={meta.accent}
-                                    />
-                                ))}
-                            </div>
+                            {renderPageWithZones(pageItems, pageStartIdx, req5End, req4End, reqSlots5, reqSlots4, generalSlots, meta, search)}
                         </div>
                     </div>
                 </div>
 
-                {/* ── FOOTER ── */}
                 <div className="las2-modal-footer">
                     <div className="las2-footer-stat">
                         <span className="las2-footer-stat-label">Total Items</span>
                         <span className="las2-footer-stat-val">{filled}</span>
                     </div>
                     <div className="las2-footer-stat">
-                        <span className="las2-footer-stat-label">Total Size</span>
-                        <span className="las2-footer-stat-val">{filled > 0 ? `${filled}` : '0'}</span>
+                        <span className="las2-footer-stat-label">Requisitos</span>
+                        <span className="las2-footer-stat-val">
+                            {reqSlots5.filter(s => s.item).length + reqSlots4.filter(s => s.item).length}/{reqSlots5.length + reqSlots4.length}
+                        </span>
                     </div>
 
-                    {/* Paginación integrada en el footer */}
                     <div className="las2-footer-pagination">
                         <button
                             className="las2-page-btn"
@@ -626,6 +684,81 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
 }
 
 /* ══════════════════════════════════════════
+   ZONE-GROUPED RENDER
+   Splits the current page items into sub-grids per zone,
+   each preceded by a ZoneHeader.
+══════════════════════════════════════════ */
+function renderPageWithZones(pageItems, pageStartIdx, req5End, req4End, reqSlots5, reqSlots4, generalSlots, meta, search) {
+    if (search.trim()) {
+        // Flat grid, no zone separation
+        return (
+            <div className="las2-sticker-grid">
+                {pageItems.map(({ slotType, item, globalIdx, reqLabel }, i) => (
+                    <StickerCard
+                        key={globalIdx ?? i}
+                        index={globalIdx ?? i}
+                        card={item?.card ?? null}
+                        collectionItem={item ?? null}
+                        accent={meta.accent}
+                        slotType={slotType}
+                        reqLabel={reqLabel}
+                    />
+                ))}
+            </div>
+        );
+    }
+
+    // Group consecutive page items by zone
+    const zones = [];
+    let currentZone = null;
+    let currentGroup = [];
+
+    pageItems.forEach((slot, i) => {
+        const absIdx = pageStartIdx + i;
+        let zone;
+        if (absIdx < req5End) zone = 'req5';
+        else if (absIdx < req4End) zone = 'req4';
+        else zone = 'general';
+
+        if (zone !== currentZone) {
+            if (currentGroup.length > 0) zones.push({ zone: currentZone, slots: currentGroup });
+            currentZone = zone;
+            currentGroup = [];
+        }
+        currentGroup.push({ ...slot, absIdx });
+    });
+    if (currentGroup.length > 0) zones.push({ zone: currentZone, slots: currentGroup });
+
+    const zoneLabels = {
+        req5: { label: 'GOAT SLOTS', total: reqSlots5.length, countFn: () => reqSlots5.filter(s => s.item).length },
+        req4: { label: 'LEYENDA SLOTS', total: reqSlots4.length, countFn: () => reqSlots4.filter(s => s.item).length },
+        general: { label: 'SLOTS GENERALES', total: generalSlots.length, countFn: () => generalSlots.filter(s => s.item).length },
+    };
+
+    return zones.map(({ zone, slots }) => {
+        const { label, total, countFn } = zoneLabels[zone];
+        return (
+            <div key={zone} className={`las2-zone-block las2-zone-block--${zone}`}>
+                <ZoneHeader label={label} count={total} filled={countFn()} accent={meta.accent} />
+                <div className="las2-sticker-grid">
+                    {slots.map(({ slotType, item, reqLabel, absIdx }) => (
+                        <StickerCard
+                            key={absIdx}
+                            index={absIdx}
+                            card={item?.card ?? null}
+                            collectionItem={item ?? null}
+                            accent={meta.accent}
+                            slotType={slotType}
+                            reqLabel={reqLabel}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    });
+}
+
+/* ══════════════════════════════════════════
    BOOK CARD
 ══════════════════════════════════════════ */
 function AlbumBook({ albumId, meta, definitions, progress, collection, locked }) {
@@ -633,7 +766,7 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
 
     const { filled, pct } = locked
         ? { filled: 0, pct: 0 }
-        : calcAlbumProgress(meta, collection);
+        : buildSlotLayout(meta, collection);
     const reqPlayers = meta.slots;
     const isCompleted = progress.find(p => p.album_id === albumId)?.is_completed ?? false;
 

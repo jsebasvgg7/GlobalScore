@@ -13,6 +13,7 @@ import StarCollectionSection from '../components/StarCollectionSection';
 import CultAlbumsSection from '../components/CultAlbumsSection';
 import PackOpeningModal from '../components/PackOpeningModal';
 import { primaryButtonProps } from '../motion/variants';
+import { useAlbumCards } from '../hooks/useAlbumCards';
 import './AlbumsPage.css';
 
 const heroVariants = {
@@ -24,7 +25,7 @@ export default function AlbumsPage({ currentUser }) {
     const user = currentUser;
     const [activeSection, setActiveSection] = useState('legendary');
     const [modalOpen, setModalOpen] = useState(false);
-    const [allCards, setAllCards] = useState([]);
+    const { allCards, loading: cardsLoading, refresh: refreshCards } = useAlbumCards();
 
     const { packs, barPercent, packsAvailable, refresh: refreshPacks } = useAlbumPacks(user?.id);
     const { collection, loading: collectionLoading, refresh: refreshCollection } = useAlbumCollection(user?.id);
@@ -36,11 +37,12 @@ export default function AlbumsPage({ currentUser }) {
             refreshPacks();
             refreshCollection();
             refreshProgress();
+            refreshCards();
         },
     });
 
     useEffect(() => {
-        getAlbumCards().then(setAllCards).catch(console.error);
+        refreshCards();
     }, []);
 
     useEffect(() => {

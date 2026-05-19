@@ -13,6 +13,7 @@ import LegendaryAlbumsSection from '../LegendaryAlbumsSection';
 import StarCollectionSection from '../StarCollectionSection';
 import CultAlbumsSection from '../CultAlbumsSection';
 import PackOpeningModal from '../PackOpeningModal';
+import { useAlbumCards } from '../../hooks/useAlbumCards';
 import '../../styles/mobile/AlbumsPageMobile.css';
 
 const SECTIONS = [
@@ -26,7 +27,7 @@ export default function AlbumsPageMobile() {
     const [userId, setUserId] = useState(null);
     const [activeSection, setActiveSection] = useState('legendary');
     const [modalOpen, setModalOpen] = useState(false);
-    const [allCards, setAllCards] = useState([]);
+    const { allCards, loading: cardsLoading, refresh: refreshCards } = useAlbumCards();
 
     useEffect(() => {
         supabase.auth.getUser().then(({ data }) => {
@@ -53,11 +54,12 @@ export default function AlbumsPageMobile() {
             refreshPacks();
             refreshCollection();
             refreshProgress();
+            refreshCards();
         },
     });
 
     useEffect(() => {
-        getAlbumCards().then(setAllCards).catch(console.error);
+        refreshCards();
     }, []);
 
     useEffect(() => {
