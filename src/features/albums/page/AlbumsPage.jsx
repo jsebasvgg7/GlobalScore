@@ -6,7 +6,7 @@ import { useAlbumCollection } from '../hooks/useAlbumCollection';
 import { useAlbumProgress } from '../hooks/useAlbumProgress';
 import { useAlbumDefinitions } from '../hooks/useAlbumDefinitions';
 import { usePackOpening } from '../hooks/usePackOpening';
-import { getAlbumCards } from '../services/albums.service';
+import { getAlbumCards, computeAndSyncAlbumProgress } from '../services/albums.service';
 import AlbumsSectionNav from '../components/AlbumsSectionNav';
 import AlbumProgressBar from '../components/AlbumProgressBar';
 import LegendaryAlbumsSection from '../components/LegendaryAlbumsSection';
@@ -34,7 +34,8 @@ export default function AlbumsPage({ currentUser }) {
     const { legendary, cult } = useAlbumDefinitions();
 
     const { open, reset, phase, result, isGoat, isLegend, setPhase } = usePackOpening({
-        onPackOpened: () => {
+        onPackOpened: async () => {
+            await computeAndSyncAlbumProgress(user?.id);
             refreshPacks();
             refreshCollection();
             refreshProgress();
@@ -45,6 +46,12 @@ export default function AlbumsPage({ currentUser }) {
     useEffect(() => {
         refreshCards();
     }, []);
+
+    useEffect(() => {
+        if (user?.id) {
+            computeAndSyncAlbumProgress(user.id).then(() => refreshProgress());
+        }
+    }, [user?.id]);
 
     useEffect(() => {
         if (phase === 'revealing') {
