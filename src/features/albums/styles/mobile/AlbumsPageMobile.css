@@ -7,26 +7,32 @@
    MOBILE — responsive chaos
 ════════════════════════════════════════════════ */
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap');
+
+/* ── RAÍZ ── */
 .alb-mob-root {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    background: var(--color-bg, #0f0f1a);
-    color: var(--color-text, #eee);
+    min-height: 100dvh;
+    background: #13111A;
+    color: #eee;
+    font-family: 'Sora', sans-serif;
+    overscroll-behavior: none;
 }
 
-/* ── Header ── */
+/* ── HEADER ── */
 .alb-mob-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
-    padding-top: calc(12px + env(safe-area-inset-top, 0px));
-    background: var(--color-bg, #0f0f1a);
-    border-bottom: 1px solid var(--color-border, #2a2a3e);
+    padding: 10px 16px;
+    padding-top: calc(10px + env(safe-area-inset-top, 0px));
+    background: #13111A;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     position: sticky;
     top: 0;
     z-index: 50;
+    gap: 8px;
 }
 
 .alb-mob-back {
@@ -35,11 +41,12 @@
     justify-content: center;
     width: 36px;
     height: 36px;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.05);
     border: none;
-    color: var(--color-text, #eee);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
-    padding: 0;
+    flex-shrink: 0;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -47,57 +54,73 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.88rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--color-text, #eee);
+    color: rgba(255, 255, 255, 0.85);
+    flex: 1;
+    justify-content: center;
 }
 
+/* Botón de sobres: solo ícono + número, sin texto */
 .alb-mob-open-btn {
     display: flex;
     align-items: center;
     gap: 5px;
-    padding: 6px 12px;
-    background: var(--color-primary, #7c6af7);
+    padding: 7px 12px;
+    background: #5b4fd8;
     color: #fff;
     border: none;
     border-radius: 20px;
-    font-size: 0.78rem;
-    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 800;
     cursor: pointer;
+    flex-shrink: 0;
     -webkit-tap-highlight-color: transparent;
-    animation: alb-mob-pulse 2s ease-in-out infinite;
+    line-height: 1;
+    /* Pulso sutil */
+    animation: alb-mob-pulse 2.5s ease-in-out infinite;
+}
+
+.alb-mob-open-btn span {
+    font-size: 13px;
+    font-weight: 800;
 }
 
 @keyframes alb-mob-pulse {
 
     0%,
     100% {
-        box-shadow: 0 0 0 0 rgba(124, 106, 247, 0.4);
+        box-shadow: 0 0 0 0 rgba(91, 79, 216, 0.5);
     }
 
     50% {
-        box-shadow: 0 0 0 6px rgba(124, 106, 247, 0);
+        box-shadow: 0 0 0 6px rgba(91, 79, 216, 0);
     }
 }
 
 .alb-mob-header-spacer {
-    width: 60px;
+    width: 48px;
+    flex-shrink: 0;
 }
 
-/* ── Progress bar wrap ── */
+/* ── PROGRESS BAR WRAP ── */
 .alb-mob-bar-wrap {
     padding: 10px 16px 0;
+    background: #13111A;
 }
 
-/* ── Section nav ── */
+/* ── SECTION NAV ── */
 .alb-mob-snav {
     display: flex;
-    padding: 10px 16px 0;
-    border-bottom: 1px solid var(--color-border, #2a2a3e);
+    background: #13111A;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     overflow-x: auto;
     scrollbar-width: none;
+    flex-shrink: 0;
 }
 
 .alb-mob-snav::-webkit-scrollbar {
@@ -110,43 +133,47 @@
     flex-direction: column;
     align-items: center;
     gap: 3px;
-    padding: 8px 4px 10px;
+    padding: 10px 8px 11px;
     background: transparent;
     border: none;
     border-bottom: 2px solid transparent;
-    color: var(--color-text-muted, #888);
+    color: rgba(255, 255, 255, 0.4);
     cursor: pointer;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     transition: color 0.15s, border-color 0.15s;
     -webkit-tap-highlight-color: transparent;
     white-space: nowrap;
     margin-bottom: -1px;
+    min-width: 80px;
 }
 
 .alb-mob-snav-btn--active {
-    color: var(--color-text, #eee);
-    border-bottom-color: var(--color-primary, #7c6af7);
+    color: #fff;
+    border-bottom-color: #5b4fd8;
 }
 
 .alb-mob-snav-icon {
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 1;
 }
 
 .alb-mob-snav-label {
-    font-size: 0.65rem;
+    font-size: 8px;
+    letter-spacing: 0.12em;
 }
 
-/* ── Main content ── */
+/* ── MAIN CONTENT ── */
 .alb-mob-main {
     flex: 1;
-    padding: 16px 16px calc(72px + env(safe-area-inset-bottom, 0px));
+    padding: 14px 12px calc(72px + env(safe-area-inset-bottom, 0px));
+    overflow-x: hidden;
 }
 
-/* ── Loading ── */
+/* ── LOADING ── */
 .alb-mob-loading {
     display: flex;
     justify-content: center;
@@ -157,8 +184,8 @@
 .alb-mob-loading-spinner {
     width: 28px;
     height: 28px;
-    border: 2px solid var(--color-border, #2a2a3e);
-    border-top-color: var(--color-primary, #7c6af7);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #5b4fd8;
     border-radius: 50%;
     animation: alb-mob-spin 0.7s linear infinite;
 }
@@ -169,7 +196,7 @@
     }
 }
 
-/* ── Solo visible en mobile ── */
+/* ── SOLO MOBILE ── */
 @media (min-width: 769px) {
     .alb-mob-root {
         display: none;

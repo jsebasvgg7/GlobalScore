@@ -1,0 +1,261 @@
+/* ════════════════════════════════════════════════
+   LEGENDARY ALBUMS SECTION — Mobile Responsive
+   Sobreescrituras específicas para pantallas < 768px
+════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* ── EYEBROW ── */
+  .las2-root { gap: 12px; }
+
+  .las2-eyebrow {
+    font-size: 8px;
+    gap: 8px;
+  }
+
+  /* ── FILA DE LIBROS: 2 columnas en mobile ── */
+  .las2-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* ── LIBRO: ratio más compacto ── */
+  .las2-book {
+    aspect-ratio: 3/4;
+    min-height: 140px;
+  }
+
+  .las2-book-wrap:not(.las2-book-wrap--locked):hover {
+    transform: none; /* Sin hover en touch */
+  }
+
+  /* ── LOMO más delgado en mobile ── */
+  .las2-spine {
+    width: 16px;
+    padding: 8px 0 6px;
+  }
+
+  .las2-spine-num { font-size: 7px; }
+  .las2-spine-label { font-size: 5px; }
+
+  /* ── PORTADA ── */
+  .las2-cover {
+    padding: 6px 5px 5px;
+    gap: 3px;
+  }
+
+  .las2-cover-tag {
+    font-size: 4.5px;
+    padding: 1px 4px;
+  }
+
+  .las2-cover-id {
+    font-size: 4px;
+    top: 5px;
+    right: 10px;
+  }
+
+  /* ── RARITY BADGE: ocultar en móvil pequeño para no saturar ── */
+  .las2-rarity {
+    top: 20px;
+    right: 8px;
+    padding: 2px 4px 1px;
+  }
+
+  .las2-rarity-stars span { font-size: 5px; }
+  .las2-rarity-label { font-size: 4px; }
+
+  /* ── FOOTER DEL LIBRO ── */
+  .las2-cover-footer { gap: 3px; }
+
+  .las2-cover-count {
+    font-size: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  .las2-cover-hint { display: none; } /* Ocultar en touch */
+
+  /* ── LOCK OVERLAY ── */
+  .las2-lock-msg { font-size: 5px; padding: 0 4px; }
+  .las2-lock-core { width: 28px; height: 28px; }
+
+  /* ── PÁGINAS APILADAS ── */
+  .las2-page-stack {
+    right: -4px;
+    width: 7px;
+  }
+
+  /* ════════════════════════════════════════════
+     PANEL MODAL — Full screen en mobile
+  ════════════════════════════════════════════ */
+  .las2-overlay {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .las2-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-width: 100%;
+    border-radius: 0;
+    transform: none !important;
+    animation: las2-modal-mobile-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes las2-modal-mobile-in {
+    from { transform: translateY(100%) !important; opacity: 0; }
+    to   { transform: translateY(0) !important; opacity: 1; }
+  }
+
+  /* Body en mobile: columna única */
+  .las2-panel-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+  }
+
+  /* Sidebar horizontal y compacto */
+  .las2-panel-sidebar {
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    overflow: visible;
+    max-height: 160px;
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .las2-panel-sidebar::before {
+    width: 100%;
+    height: 3px;
+    bottom: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(90deg, var(--spine, #5b4fd8) 0%, color-mix(in srgb, var(--spine, #5b4fd8) 70%, black) 100%);
+  }
+
+  .las2-panel-sidebar-inner {
+    padding: 14px 14px 10px 16px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    overflow: hidden;
+    align-items: flex-start;
+  }
+
+  /* En mobile ocultar el libro miniatura del sidebar */
+  .las2-sidebar-book-img { display: none; }
+
+  .las2-sidebar-id {
+    text-align: left;
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 8px;
+  }
+
+  .las2-sidebar-title {
+    font-size: 20px;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .las2-sidebar-count {
+    align-items: center;
+    margin-bottom: 0;
+    gap: 4px;
+  }
+
+  .las2-sidebar-count-big { font-size: 20px; }
+  .las2-sidebar-count-sep { font-size: 11px; }
+  .las2-sidebar-count-label { font-size: 8px; }
+
+  .las2-sidebar-divider { display: none; }
+
+  /* Barra de progreso compacta */
+  .las2-sidebar-pbar-wrap {
+    flex: 1;
+    min-width: 80px;
+    margin-bottom: 0;
+    align-self: center;
+  }
+
+  .las2-sidebar-pbar-pct {
+    font-size: 8px;
+    top: -14px;
+  }
+
+  /* Chips en fila */
+  .las2-sidebar-chips {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+    gap: 3px;
+  }
+
+  .las2-chip { font-size: 7px; padding: 2px 5px; }
+
+  /* Ocultar descripción en sidebar mobile */
+  .las2-sidebar-desc-block { display: none; }
+
+  /* Topbar */
+  .las2-modal-topbar { height: 48px; }
+  .las2-modal-topbar-title { font-size: 12px; }
+  .las2-modal-topbar-season { font-size: 7px; }
+
+  /* Grid de stickers: 4 columnas en mobile */
+  .las2-sticker-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  /* Footer modal más compacto */
+  .las2-modal-footer { height: 48px; }
+
+  .las2-footer-stat {
+    padding: 0 12px;
+    min-width: 70px;
+  }
+
+  .las2-footer-stat-label { font-size: 6px; }
+  .las2-footer-stat-val { font-size: 14px; }
+
+  .las2-footer-pagination { padding: 0 8px; gap: 4px; }
+  .las2-pagination-info { font-size: 8px; display: none; }
+
+  .las2-page-btn { width: 26px; height: 26px; }
+
+  .las2-footer-export-btn {
+    padding: 0 14px;
+    font-size: 9px;
+  }
+
+  .las2-footer-arrow-btn { width: 40px; }
+
+  /* Scroll del panel */
+  .las2-panel-scroll { padding: 8px 12px; gap: 8px; }
+
+  /* Zone headers más pequeños */
+  .las2-zone-header-label { font-size: 6px; }
+  .las2-zone-header-count { font-size: 6px; }
+
+  /* Toolbar de búsqueda */
+  .las2-panel-toolbar { padding: 8px 12px; }
+  .las2-toolbar-search-input { height: 30px; font-size: 9px; }
+}
+
+@media (max-width: 380px) {
+  .las2-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .las2-sticker-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+  }
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { getHistoricalImageUrl } from '@/features/history/services/history.service';
 import '../styles/PackOpeningModal.css';
+import '../styles/mobile/PackOpeningModal.mobile.css';
 
 const TYPE_LABEL = { player: 'JUGADOR', team: 'EQUIPO', competition: 'COPA', event: 'EVENTO' };
 const TYPE_COLOR = {

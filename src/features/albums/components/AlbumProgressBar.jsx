@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/AlbumProgressBar.css';
+import '../styles/mobile/AlbumProgressBar.mobile.css';
 
 function PackIcon({ filled }) {
     return (

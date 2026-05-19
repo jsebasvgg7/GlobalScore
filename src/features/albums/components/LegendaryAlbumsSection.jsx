@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Lock, BookOpen, Trophy, Star, ChevronLeft, ChevronRight, Gift, Crown, X, User, Search } from 'lucide-react';
 import '../styles/LegendaryAlbumsSection.css';
+import '../styles/mobile/LegendaryAlbumsSection.mobile.css';
 
 const ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'golden_album'];
 

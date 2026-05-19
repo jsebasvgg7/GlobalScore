@@ -7,13 +7,12 @@ import { useAlbumCollection } from '../../hooks/useAlbumCollection';
 import { useAlbumProgress } from '../../hooks/useAlbumProgress';
 import { useAlbumDefinitions } from '../../hooks/useAlbumDefinitions';
 import { usePackOpening } from '../../hooks/usePackOpening';
-import { getAlbumCards } from '../../services/albums.service';
+import { useAlbumCards } from '../../hooks/useAlbumCards';
 import AlbumProgressBar from '../AlbumProgressBar';
 import LegendaryAlbumsSection from '../LegendaryAlbumsSection';
 import StarCollectionSection from '../StarCollectionSection';
 import CultAlbumsSection from '../CultAlbumsSection';
 import PackOpeningModal from '../PackOpeningModal';
-import { useAlbumCards } from '../../hooks/useAlbumCards';
 import '../../styles/mobile/AlbumsPageMobile.css';
 
 const SECTIONS = [
@@ -58,9 +57,7 @@ export default function AlbumsPageMobile() {
         },
     });
 
-    useEffect(() => {
-        refreshCards();
-    }, []);
+    useEffect(() => { refreshCards(); }, []);
 
     useEffect(() => {
         if (phase === 'revealing') {
@@ -86,13 +83,18 @@ export default function AlbumsPageMobile() {
                 </button>
 
                 <div className="alb-mob-header-center">
-                    <BookOpen size={16} strokeWidth={2} />
+                    <BookOpen size={14} strokeWidth={2} />
                     <span>GlobalAlbums</span>
                 </div>
 
+                {/* Botón de sobres: solo ícono Package + número */}
                 {packsAvailable > 0 ? (
-                    <button className="alb-mob-open-btn" onClick={handleOpenModal}>
-                        <Package size={14} />
+                    <button
+                        className="alb-mob-open-btn"
+                        onClick={handleOpenModal}
+                        aria-label={`Abrir sobre. ${packsAvailable} disponibles`}
+                    >
+                        <Package size={14} strokeWidth={2} />
                         <span>{packsAvailable}</span>
                     </button>
                 ) : (
@@ -100,7 +102,7 @@ export default function AlbumsPageMobile() {
                 )}
             </header>
 
-            {/* ── Barra de progreso ── */}
+            {/* ── Barra de progreso (compacta) ── */}
             {packs && (
                 <div className="alb-mob-bar-wrap">
                     <AlbumProgressBar
@@ -112,14 +114,16 @@ export default function AlbumsPageMobile() {
             )}
 
             {/* ── Section nav ── */}
-            <nav className="alb-mob-snav">
+            <nav className="alb-mob-snav" role="tablist" aria-label="Secciones">
                 {SECTIONS.map(({ id, label, icon }) => (
                     <button
                         key={id}
+                        role="tab"
+                        aria-selected={activeSection === id}
                         className={`alb-mob-snav-btn${activeSection === id ? ' alb-mob-snav-btn--active' : ''}`}
                         onClick={() => setActiveSection(id)}
                     >
-                        <span className="alb-mob-snav-icon">{icon}</span>
+                        <span className="alb-mob-snav-icon" aria-hidden="true">{icon}</span>
                         <span className="alb-mob-snav-label">{label}</span>
                     </button>
                 ))}

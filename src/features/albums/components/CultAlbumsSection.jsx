@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Search, ChevronLeft, ChevronRight, X, Crown } from 'lucide-react';
 import { getHistoricalImageUrl } from '@/features/history/services/history.service';
 import '../styles/CultAlbumsSection.css';
+import '../styles/mobile/CultAlbumsSection.mobile.css';
 
 // ══════════════════════════════════════════════════════════════
 //  META DE CATEGORÍAS DE CULTO

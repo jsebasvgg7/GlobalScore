@@ -1,0 +1,11 @@
+/* ════════════════════════════════════════════════
+   ALBUMS SECTION NAV — Mobile Responsive
+════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  .asn-root {
+    /* En mobile la nav es parte del alb-mob-root, no se usa */
+    display: none;
+  }
+}
