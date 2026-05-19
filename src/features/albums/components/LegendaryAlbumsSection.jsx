@@ -454,7 +454,7 @@ function ZoneHeader({ label, count, filled, accent }) {
 function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose }) {
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(0);
-    const PER_PAGE = 10;
+    const PER_PAGE = window.innerWidth <= 768 ? 9 : 10;
 
     const def = definitions.find(d => d.id === albumId);
     const prog = progress.find(p => p.album_id === albumId);

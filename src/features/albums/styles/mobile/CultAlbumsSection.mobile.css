@@ -4,8 +4,14 @@
 
 @media (max-width: 768px) {
 
-  .cas2-root { gap: 12px; }
-  .cas2-eyebrow { font-size: 8px; gap: 8px; }
+  .cas2-root {
+    gap: 12px;
+  }
+
+  .cas2-eyebrow {
+    font-size: 8px;
+    gap: 8px;
+  }
 
   /* ── FILA: 1 sola columna para que los 3 álbumes de culto tengan el mismo ancho ── */
   .cas2-row {
@@ -13,9 +19,12 @@
     gap: 14px;
     max-width: 360px;
     margin: 0 auto;
+    padding-bottom: 72px;
   }
 
-  .cas2-book-wrap:hover { transform: none; }
+  .cas2-book-wrap:hover {
+    transform: none;
+  }
 
   /* ── LIBRO: ratio horizontal para aprovechar el ancho ── */
   .cas2-book {
@@ -24,45 +33,104 @@
     max-height: 180px;
   }
 
-  .cas2-spine { width: 18px; padding: 10px 0 8px; }
-  .cas2-spine-num { font-size: 8px; }
-  .cas2-spine-label { font-size: 5px; }
-  .cas2-spine-lines { width: 8px; }
+  .cas2-spine {
+    width: 18px;
+    padding: 10px 0 8px;
+  }
 
-  .cas2-cover { padding: 7px 8px 6px; gap: 4px; }
+  .cas2-spine-num {
+    font-size: 8px;
+  }
 
-  .cas2-cover-tag { font-size: 5px; padding: 2px 5px; }
-  .cas2-cover-id { font-size: 4px; top: 6px; right: 10px; }
+  .cas2-spine-label {
+    font-size: 5px;
+  }
+
+  .cas2-spine-lines {
+    width: 8px;
+  }
+
+  .cas2-cover {
+    padding: 7px 8px 6px;
+    gap: 4px;
+  }
+
+  .cas2-cover-tag {
+    font-size: 5px;
+    padding: 2px 5px;
+  }
+
+  .cas2-cover-id {
+    font-size: 4px;
+    top: 6px;
+    right: 10px;
+  }
 
   /* Ícono central más visible */
-  .cas2-cover-title-block { flex: 1; }
-  .cas2-cover-icon { font-size: 1.8rem; }
+  .cas2-cover-title-block {
+    flex: 1;
+  }
+
+  .cas2-cover-icon {
+    font-size: 1.8rem;
+  }
 
   .cas2-rarity {
-    top: 20px; right: 10px;
+    top: 20px;
+    right: 10px;
     padding: 2px 4px 2px;
   }
-  .cas2-rarity-stars span { font-size: 5px; }
-  .cas2-rarity-label { font-size: 4px; }
 
-  .cas2-cover-count { font-size: 6px; }
-  .cas2-cover-hint { display: none; }
-  .cas2-done-tick { font-size: 7px; }
+  .cas2-rarity-stars span {
+    font-size: 5px;
+  }
 
-  .cas2-page-stack { right: -4px; width: 7px; }
+  .cas2-rarity-label {
+    font-size: 4px;
+  }
+
+  .cas2-cover-count {
+    font-size: 6px;
+  }
+
+  .cas2-cover-hint {
+    display: none;
+  }
+
+  .cas2-done-tick {
+    font-size: 7px;
+  }
+
+  .cas2-page-stack {
+    right: -4px;
+    width: 7px;
+  }
 
   /* Cantoneras más pequeñas */
-  .cas2-corner { width: 8px; height: 8px; }
+  .cas2-corner {
+    width: 8px;
+    height: 8px;
+  }
 
   /* Hebilla más pequeña */
   .cas2-clasp-strap--top,
-  .cas2-clasp-strap--bot { height: 16px; width: 4px; }
-  .cas2-clasp-buckle { width: 7px; height: 10px; }
+  .cas2-clasp-strap--bot {
+    height: 16px;
+    width: 4px;
+  }
+
+  .cas2-clasp-buckle {
+    width: 7px;
+    height: 10px;
+  }
 
   /* ── PANEL MODAL ── */
   .cas2-panel {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100vw;
     height: 100dvh;
     max-width: 100%;
@@ -72,8 +140,15 @@
   }
 
   @keyframes cas2-modal-mobile-in {
-    from { transform: translateY(100%) !important; opacity: 0; }
-    to   { transform: translateY(0) !important; opacity: 1; }
+    from {
+      transform: translateY(100%) !important;
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0) !important;
+      opacity: 1;
+    }
   }
 
   .cas2-panel-body {
@@ -83,14 +158,18 @@
 
   .cas2-panel-sidebar {
     border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     max-height: 140px;
     flex-direction: row;
   }
 
   .cas2-panel-sidebar::before {
-    width: 100%; height: 3px;
-    bottom: auto; top: 0; left: 0; right: 0;
+    width: 100%;
+    height: 3px;
+    bottom: auto;
+    top: 0;
+    left: 0;
+    right: 0;
     background: linear-gradient(90deg, var(--spine, #1D9E75) 0%, color-mix(in srgb, var(--spine, #1D9E75) 70%, black) 100%);
   }
 
@@ -103,53 +182,160 @@
     align-items: flex-start;
   }
 
-  .cas2-sidebar-book-img { display: none; }
-  .cas2-sidebar-divider { display: none; }
-  .cas2-sidebar-desc-block { display: none; }
+  .cas2-sidebar-book-img {
+    display: none;
+  }
 
-  .cas2-sidebar-id { text-align: left; width: 100%; font-size: 8px; margin-bottom: 0; }
-  .cas2-sidebar-title { font-size: 20px; margin: 0; }
-  .cas2-sidebar-count { margin-bottom: 0; gap: 4px; }
-  .cas2-sidebar-count-big { font-size: 20px; }
-  .cas2-sidebar-count-sep { font-size: 11px; }
-  .cas2-sidebar-count-label { font-size: 8px; }
+  .cas2-sidebar-divider {
+    display: none;
+  }
 
-  .cas2-sidebar-pbar-wrap { flex: 1; min-width: 80px; margin-bottom: 0; align-self: center; }
-  .cas2-sidebar-pbar-pct { font-size: 8px; top: -14px; }
+  .cas2-sidebar-desc-block {
+    display: none;
+  }
 
-  .cas2-sidebar-chips { flex-direction: row; flex-wrap: wrap; margin-bottom: 0; gap: 3px; }
-  .cas2-chip { font-size: 7px; padding: 2px 5px; }
+  .cas2-sidebar-id {
+    text-align: left;
+    width: 100%;
+    font-size: 8px;
+    margin-bottom: 0;
+  }
 
-  .cas2-modal-topbar { height: 48px; }
-  .cas2-modal-topbar-title { font-size: 12px; }
-  .cas2-modal-topbar-season { font-size: 7px; }
+  .cas2-sidebar-title {
+    font-size: 20px;
+    margin: 0;
+  }
+
+  .cas2-sidebar-count {
+    margin-bottom: 0;
+    gap: 4px;
+  }
+
+  .cas2-sidebar-count-big {
+    font-size: 20px;
+  }
+
+  .cas2-sidebar-count-sep {
+    font-size: 11px;
+  }
+
+  .cas2-sidebar-count-label {
+    font-size: 8px;
+  }
+
+  .cas2-sidebar-pbar-wrap {
+    flex: 1;
+    min-width: 80px;
+    margin-bottom: 0;
+    align-self: center;
+  }
+
+  .cas2-sidebar-pbar-pct {
+    font-size: 8px;
+    top: -14px;
+  }
+
+  .cas2-sidebar-chips {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+    gap: 3px;
+  }
+
+  .cas2-chip {
+    font-size: 7px;
+    padding: 2px 5px;
+  }
+
+  .cas2-modal-topbar {
+    height: 48px;
+  }
+
+  .cas2-modal-topbar-title {
+    font-size: 12px;
+  }
+
+  .cas2-modal-topbar-season {
+    font-size: 7px;
+  }
 
   .cas2-sticker-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
   }
 
-  .cas2-modal-footer { height: 48px; }
-  .cas2-footer-stat { padding: 0 12px; min-width: 70px; }
-  .cas2-footer-stat-label { font-size: 6px; }
-  .cas2-footer-stat-val { font-size: 14px; }
-  .cas2-footer-pagination { padding: 0 8px; gap: 4px; }
-  .cas2-pagination-info { display: none; }
-  .cas2-page-btn { width: 26px; height: 26px; }
-  .cas2-footer-close-btn { padding: 0 14px; font-size: 9px; }
-  .cas2-footer-arrow-btn { width: 40px; }
+  .cas2-modal-footer {
+    height: 48px;
+    margin-bottom: 56px;
+  }
 
-  .cas2-panel-scroll { padding: 8px 12px; gap: 8px; }
-  .cas2-panel-toolbar { padding: 8px 12px; }
-  .cas2-toolbar-search-input { height: 30px; font-size: 9px; }
+  .cas2-footer-stat {
+    padding: 0 12px;
+    min-width: 70px;
+  }
+
+  .cas2-footer-stat-label {
+    font-size: 6px;
+  }
+
+  .cas2-footer-stat-val {
+    font-size: 14px;
+  }
+
+  .cas2-footer-pagination {
+    padding: 0 8px;
+    gap: 4px;
+  }
+
+  .cas2-pagination-info {
+    display: none;
+  }
+
+  .cas2-page-btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  .cas2-footer-close-btn {
+    padding: 0 14px;
+    font-size: 9px;
+  }
+
+  .cas2-footer-arrow-btn {
+    width: 40px;
+  }
+
+  .cas2-panel-scroll {
+    padding: 8px 12px 72px;
+    gap: 8px;
+  }
+
+  .cas2-panel-toolbar {
+    padding: 8px 12px;
+  }
+
+  .cas2-toolbar-search-input {
+    height: 30px;
+    font-size: 9px;
+  }
 }
 
 @media (max-width: 480px) {
+
   /* En pantallas muy pequeñas, el álbum de culto cabe en horizontal */
-  .cas2-row { max-width: 100%; }
+  .cas2-row {
+    max-width: 100%;
+  }
 
   .cas2-sticker-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
+  }
+}
+
+@media (max-width: 380px) {
+  .cas2-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
 }

@@ -266,7 +266,7 @@ function CultStickerCard({ index, item, meta }) {
 function CultPanel({ defId, meta, collection, allCards, onClose }) {
     const [page, setPage] = useState(0);
     const [search, setSearch] = useState('');
-    const PER_PAGE = 10;
+    const PER_PAGE = window.innerWidth <= 768 ? 9 : 10;
 
     const owned = collection.filter(item => item.card?.card_type === meta.cardType);
     const total = allCards.filter(c => c.card_type === meta.cardType).length;

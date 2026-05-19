@@ -4,51 +4,101 @@
 
 @media (max-width: 768px) {
 
-  .scs2-root { gap: 12px; }
-
-  .scs2-eyebrow { font-size: 8px; gap: 8px; }
-
-  /* ── 3 columnas en mobile (5 libros) ── */
-  .scs2-row {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+  .scs2-root {
+    gap: 12px;
   }
 
-  .scs2-book-wrap:hover { transform: none; }
+  .scs2-eyebrow {
+    font-size: 8px;
+    gap: 8px;
+  }
+
+  .scs2-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding-bottom: 72px;
+  }
+
+  .scs2-book-wrap:hover {
+    transform: none;
+  }
 
   .scs2-book {
     aspect-ratio: 3/4;
     min-height: 120px;
   }
 
-  .scs2-spine { width: 16px; padding: 8px 0 6px; }
-  .scs2-spine-num { font-size: 7px; }
-  .scs2-spine-label { font-size: 4.5px; }
+  .scs2-spine {
+    width: 16px;
+    padding: 8px 0 6px;
+  }
 
-  .scs2-cover { padding: 5px 4px 5px; gap: 3px; }
-  .scs2-cover-tag { font-size: 4px; padding: 1px 3px; }
-  .scs2-cover-id { font-size: 3.5px; top: 5px; right: 8px; }
+  .scs2-spine-num {
+    font-size: 7px;
+  }
 
-  .scs2-cover-stars-row { gap: 1px; }
-  .scs2-cover-star { font-size: 9px; }
+  .scs2-spine-label {
+    font-size: 4.5px;
+  }
+
+  .scs2-cover {
+    padding: 5px 4px 5px;
+    gap: 3px;
+  }
+
+  .scs2-cover-tag {
+    font-size: 4px;
+    padding: 1px 3px;
+  }
+
+  .scs2-cover-id {
+    font-size: 3.5px;
+    top: 5px;
+    right: 8px;
+  }
+
+  .scs2-cover-stars-row {
+    gap: 1px;
+  }
+
+  .scs2-cover-star {
+    font-size: 9px;
+  }
 
   .scs2-rarity {
     top: 18px;
     right: 6px;
     padding: 2px 3px 1px;
   }
-  .scs2-rarity-stars span { font-size: 4.5px; }
-  .scs2-rarity-label { font-size: 3.5px; }
 
-  .scs2-cover-count { font-size: 5.5px; }
-  .scs2-cover-hint { display: none; }
+  .scs2-rarity-stars span {
+    font-size: 4.5px;
+  }
 
-  .scs2-page-stack { right: -4px; width: 7px; }
+  .scs2-rarity-label {
+    font-size: 3.5px;
+  }
+
+  .scs2-cover-count {
+    font-size: 5.5px;
+  }
+
+  .scs2-cover-hint {
+    display: none;
+  }
+
+  .scs2-page-stack {
+    right: -4px;
+    width: 7px;
+  }
 
   /* ── PANEL MODAL ── */
   .scs2-panel {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100vw;
     height: 100dvh;
     max-width: 100%;
@@ -58,8 +108,15 @@
   }
 
   @keyframes scs2-modal-mobile-in {
-    from { transform: translateY(100%) !important; opacity: 0; }
-    to   { transform: translateY(0) !important; opacity: 1; }
+    from {
+      transform: translateY(100%) !important;
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0) !important;
+      opacity: 1;
+    }
   }
 
   .scs2-panel-body {
@@ -69,14 +126,18 @@
 
   .scs2-panel-sidebar {
     border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     max-height: 140px;
     flex-direction: row;
   }
 
   .scs2-panel-sidebar::before {
-    width: 100%; height: 3px;
-    bottom: auto; top: 0; left: 0; right: 0;
+    width: 100%;
+    height: 3px;
+    bottom: auto;
+    top: 0;
+    left: 0;
+    right: 0;
     background: linear-gradient(90deg, var(--spine, #5b4fd8) 0%, color-mix(in srgb, var(--spine, #5b4fd8) 70%, black) 100%);
   }
 
@@ -89,51 +150,148 @@
     align-items: flex-start;
   }
 
-  .scs2-sidebar-book-img { display: none; }
-  .scs2-sidebar-divider { display: none; }
-  .scs2-sidebar-desc-block { display: none; }
+  .scs2-sidebar-book-img {
+    display: none;
+  }
 
-  .scs2-sidebar-id { text-align: left; width: 100%; font-size: 8px; margin-bottom: 0; }
-  .scs2-sidebar-title { font-size: 20px; margin: 0; }
-  .scs2-sidebar-count { margin-bottom: 0; gap: 4px; }
-  .scs2-sidebar-count-big { font-size: 20px; }
-  .scs2-sidebar-count-sep { font-size: 11px; }
-  .scs2-sidebar-count-label { font-size: 8px; }
+  .scs2-sidebar-divider {
+    display: none;
+  }
 
-  .scs2-sidebar-pbar-wrap { flex: 1; min-width: 80px; margin-bottom: 0; align-self: center; }
-  .scs2-sidebar-pbar-pct { font-size: 8px; top: -14px; }
+  .scs2-sidebar-desc-block {
+    display: none;
+  }
 
-  .scs2-sidebar-chips { flex-direction: row; flex-wrap: wrap; margin-bottom: 0; gap: 3px; }
-  .scs2-chip { font-size: 7px; padding: 2px 5px; }
+  .scs2-sidebar-id {
+    text-align: left;
+    width: 100%;
+    font-size: 8px;
+    margin-bottom: 0;
+  }
 
-  .scs2-modal-topbar { height: 48px; }
-  .scs2-modal-topbar-title { font-size: 12px; }
-  .scs2-modal-topbar-season { font-size: 7px; }
+  .scs2-sidebar-title {
+    font-size: 20px;
+    margin: 0;
+  }
+
+  .scs2-sidebar-count {
+    margin-bottom: 0;
+    gap: 4px;
+  }
+
+  .scs2-sidebar-count-big {
+    font-size: 20px;
+  }
+
+  .scs2-sidebar-count-sep {
+    font-size: 11px;
+  }
+
+  .scs2-sidebar-count-label {
+    font-size: 8px;
+  }
+
+  .scs2-sidebar-pbar-wrap {
+    flex: 1;
+    min-width: 80px;
+    margin-bottom: 0;
+    align-self: center;
+  }
+
+  .scs2-sidebar-pbar-pct {
+    font-size: 8px;
+    top: -14px;
+  }
+
+  .scs2-sidebar-chips {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+    gap: 3px;
+  }
+
+  .scs2-chip {
+    font-size: 7px;
+    padding: 2px 5px;
+  }
+
+  .scs2-modal-topbar {
+    height: 48px;
+  }
+
+  .scs2-modal-topbar-title {
+    font-size: 12px;
+  }
+
+  .scs2-modal-topbar-season {
+    font-size: 7px;
+  }
 
   .scs2-sticker-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
   }
 
-  .scs2-modal-footer { height: 48px; }
-  .scs2-footer-stat { padding: 0 12px; min-width: 70px; }
-  .scs2-footer-stat-label { font-size: 6px; }
-  .scs2-footer-stat-val { font-size: 14px; }
-  .scs2-footer-pagination { padding: 0 8px; gap: 4px; }
-  .scs2-pagination-info { display: none; }
-  .scs2-page-btn { width: 26px; height: 26px; }
-  .scs2-footer-close-btn { padding: 0 14px; font-size: 9px; }
-  .scs2-footer-arrow-btn { width: 40px; }
+  .scs2-modal-footer {
+    height: 48px;
+    margin-bottom: 56px;
+  }
 
-  .scs2-panel-scroll { padding: 8px 12px; gap: 8px; }
-  .scs2-panel-toolbar { padding: 8px 12px; }
-  .scs2-toolbar-search-input { height: 30px; font-size: 9px; }
+  .scs2-footer-stat {
+    padding: 0 12px;
+    min-width: 70px;
+  }
+
+  .scs2-footer-stat-label {
+    font-size: 6px;
+  }
+
+  .scs2-footer-stat-val {
+    font-size: 14px;
+  }
+
+  .scs2-footer-pagination {
+    padding: 0 8px;
+    gap: 4px;
+  }
+
+  .scs2-pagination-info {
+    display: none;
+  }
+
+  .scs2-page-btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  .scs2-footer-close-btn {
+    padding: 0 14px;
+    font-size: 9px;
+  }
+
+  .scs2-footer-arrow-btn {
+    width: 40px;
+  }
+
+  .scs2-panel-scroll {
+    padding: 8px 12px 72px;
+    gap: 8px;
+  }
+
+  .scs2-panel-toolbar {
+    padding: 8px 12px;
+  }
+
+  .scs2-toolbar-search-input {
+    height: 30px;
+    font-size: 9px;
+  }
 }
 
 @media (max-width: 380px) {
   .scs2-row {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 7px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
 
   .scs2-sticker-grid {
