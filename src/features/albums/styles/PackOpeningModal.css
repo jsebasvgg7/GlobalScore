@@ -5,11 +5,12 @@
    ██╔══██║██║     ██╔══██╗██║   ██║██║╚██╔╝██║╚════██║
    ██║  ██║███████╗██████╔╝╚██████╔╝██║ ╚═╝ ██║███████║
    ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚══════╝
-   ALBUMS — collectible pages & sticker systems
+   PACK OPENING MODAL — Flip Reveal on Table
 ════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@600;700;800&display=swap');
 
+/* ── CSS Variables — dark mode (default) ── */
 .pom-overlay {
     --pom-bg: #13111A;
     --pom-surface: #1C1929;
@@ -21,8 +22,32 @@
     --pom-card-bg: #1A1726;
     --pom-card-border: rgba(255, 255, 255, 0.07);
     --pom-accent: #6C63FF;
+
+    /* Table felt — dark */
+    --pom-felt-bg: #0f3d2b;
+    --pom-felt-border: #1a5c3e;
+    --pom-felt-inner: rgba(255, 255, 255, 0.04);
+
+    /* Card back — dark */
+    --pom-back-bg: #2a1f4e;
+    --pom-back-border: rgba(108, 99, 255, 0.35);
+    --pom-back-pattern: rgba(108, 99, 255, 0.07);
+    --pom-back-text: rgba(108, 99, 255, 0.4);
+    --pom-back-icon: rgba(255, 255, 255, 0.5);
+
+    /* Progress dots */
+    --pom-dot-empty: rgba(255, 255, 255, 0.12);
+    --pom-dot-empty-border: rgba(255, 255, 255, 0.15);
+    --pom-dot-done: #6C63FF;
+
+    /* Subtitle */
+    --pom-subtitle: rgba(255, 255, 255, 0.38);
+
+    /* Tap hint */
+    --pom-hint-color: rgba(255, 255, 255, 0.28);
 }
 
+/* ── CSS Variables — light mode ── */
 [data-theme="light"] .pom-overlay {
     --pom-bg: #F5F3FF;
     --pom-surface: #ECEAF8;
@@ -34,9 +59,34 @@
     --pom-card-bg: #ECEAFF;
     --pom-card-border: rgba(91, 79, 216, 0.14);
     --pom-accent: #5B4FD8;
+
+    /* Table felt — light (warmer green for day) */
+    --pom-felt-bg: #1a6644;
+    --pom-felt-border: #22885a;
+    --pom-felt-inner: rgba(255, 255, 255, 0.06);
+
+    /* Card back — light */
+    --pom-back-bg: #2a1f4e;
+    --pom-back-border: rgba(108, 99, 255, 0.45);
+    --pom-back-pattern: rgba(108, 99, 255, 0.09);
+    --pom-back-text: rgba(140, 120, 255, 0.55);
+    --pom-back-icon: rgba(255, 255, 255, 0.55);
+
+    /* Progress dots */
+    --pom-dot-empty: rgba(91, 79, 216, 0.14);
+    --pom-dot-empty-border: rgba(91, 79, 216, 0.25);
+    --pom-dot-done: #5B4FD8;
+
+    /* Subtitle */
+    --pom-subtitle: rgba(18, 14, 48, 0.42);
+
+    /* Tap hint */
+    --pom-hint-color: rgba(18, 14, 48, 0.30);
 }
 
-
+/* ════════════════════════════════════════════════
+   OVERLAY
+════════════════════════════════════════════════ */
 .pom-overlay {
     position: fixed;
     inset: 0;
@@ -51,28 +101,22 @@
     animation: pom-fade 0.20s ease;
 }
 
-@keyframes pom-fade {
-    from {
-        opacity: 0;
-    }
+[data-theme="light"] .pom-overlay {
+    background: rgba(30, 20, 80, 0.55);
+}
 
-    to {
-        opacity: 1;
-    }
+@keyframes pom-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 /* ════════════════════════════════════════════════
    MODAL
-   max-width estrecho + max-height con margen
-   para que los botones de acción nunca queden
-   tapados por el topbar (56px) ni el fondo.
 ════════════════════════════════════════════════ */
 .pom-modal {
     position: relative;
     width: 100%;
     max-width: 480px;
-    /* más estrecho que antes */
-    /* 100vh - topbar(56) - padding-top(72) - margen-bottom(16) */
     max-height: calc(100vh - 144px);
     display: flex;
     flex-direction: column;
@@ -88,18 +132,10 @@
 }
 
 @keyframes pom-in {
-    from {
-        opacity: 0;
-        transform: translateY(18px) scale(0.97);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    from { opacity: 0; transform: translateY(18px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Variante GOAT */
 .pom-modal--goat {
     border-color: rgba(245, 158, 11, 0.35);
     box-shadow:
@@ -118,7 +154,6 @@
     padding-right: 12px;
 }
 
-/* Acento izquierdo — hereda el lenguaje del sidebar de GlobalScore */
 .pom-header-bar {
     width: 4px;
     align-self: stretch;
@@ -132,7 +167,7 @@
     flex-direction: column;
     gap: 2px;
     flex: 1;
-    padding: 12px 0;
+    padding: 10px 0;
 }
 
 .pom-eyebrow {
@@ -156,6 +191,18 @@
     line-height: 1;
 }
 
+/* NEW: subtitle line under the title */
+.pom-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pom-subtitle);
+    line-height: 1;
+    margin-top: 1px;
+}
+
 .pom-close {
     width: 30px;
     height: 30px;
@@ -177,6 +224,11 @@
     border-color: rgba(255, 255, 255, 0.18);
 }
 
+[data-theme="light"] .pom-close:hover {
+    background: rgba(91, 79, 216, 0.08);
+    border-color: rgba(91, 79, 216, 0.3);
+}
+
 .pom-sep {
     height: 1px;
     background: var(--pom-border);
@@ -184,7 +236,7 @@
 }
 
 /* ════════════════════════════════════════════════
-   BODY — scrollable internamente si desborda
+   BODY
 ════════════════════════════════════════════════ */
 .pom-body {
     flex: 1;
@@ -197,9 +249,7 @@
     scrollbar-width: none;
 }
 
-.pom-body::-webkit-scrollbar {
-    display: none;
-}
+.pom-body::-webkit-scrollbar { display: none; }
 
 /* ════════════════════════════════════════════════
    SOBRE — fase idle
@@ -221,25 +271,14 @@
     transform: translate(-50%, -50%);
     width: 280px;
     height: 200px;
-    background: radial-gradient(ellipse,
-            rgba(108, 99, 255, 0.22) 0%,
-            transparent 68%);
+    background: radial-gradient(ellipse, rgba(108, 99, 255, 0.22) 0%, transparent 68%);
     pointer-events: none;
     animation: pom-glow 4s ease-in-out infinite;
 }
 
 @keyframes pom-glow {
-
-    0%,
-    100% {
-        opacity: .7;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    50% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.08);
-    }
+    0%, 100% { opacity: .7; transform: translate(-50%, -50%) scale(1); }
+    50%       { opacity: 1;  transform: translate(-50%, -50%) scale(1.08); }
 }
 
 .pom-pack-wrapper {
@@ -252,22 +291,13 @@
 }
 
 @keyframes pom-float {
-
-    0%,
-    100% {
-        transform: perspective(480px) rotateY(-5deg) rotateX(2deg) translateY(0);
-    }
-
-    50% {
-        transform: perspective(480px) rotateY(-5deg) rotateX(2deg) translateY(-7px);
-    }
+    0%, 100% { transform: perspective(480px) rotateY(-5deg) rotateX(2deg) translateY(0); }
+    50%       { transform: perspective(480px) rotateY(-5deg) rotateX(2deg) translateY(-7px); }
 }
 
 .pom-pack-spine {
     position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
+    left: 0; top: 0; bottom: 0;
     width: 8px;
     background: linear-gradient(180deg, #7C73FF 0%, #5B4FD8 50%, #3D34A8 100%);
     border-radius: 3px 0 0 3px;
@@ -276,10 +306,7 @@
 
 .pom-pack-body {
     position: absolute;
-    left: 8px;
-    top: 0;
-    right: 0;
-    bottom: 0;
+    left: 8px; top: 0; right: 0; bottom: 0;
     background: linear-gradient(150deg, #1E1B32 0%, #120F20 60%, #1E1B32 100%);
     border: 1px solid rgba(108, 99, 255, 0.30);
     border-left: none;
@@ -302,8 +329,7 @@
 
 .pom-perf {
     display: block;
-    width: 4px;
-    height: 4px;
+    width: 4px; height: 4px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.22);
 }
@@ -317,17 +343,15 @@
     gap: 6px;
     position: relative;
     background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 11px, rgba(108, 99, 255, 0.04) 12px),
-        repeating-linear-gradient(90deg, transparent, transparent 11px, rgba(108, 99, 255, 0.04) 12px);
+        repeating-linear-gradient(0deg,   transparent, transparent 11px, rgba(108, 99, 255, 0.04) 12px),
+        repeating-linear-gradient(90deg,  transparent, transparent 11px, rgba(108, 99, 255, 0.04) 12px);
 }
 
 .pom-pack-face::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 55%;
-    height: 45%;
+    top: 0; left: 0;
+    width: 55%; height: 45%;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, transparent 60%);
     pointer-events: none;
 }
@@ -355,7 +379,6 @@
     text-transform: uppercase;
 }
 
-/* Contador */
 .pom-count-block {
     display: flex;
     flex-direction: column;
@@ -381,7 +404,6 @@
     color: var(--pom-muted);
 }
 
-/* CTA */
 .pom-cta {
     display: flex;
     align-items: center;
@@ -406,27 +428,17 @@
 .pom-cta::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: -80%;
-    width: 55%;
-    height: 100%;
+    top: 0; left: -80%;
+    width: 55%; height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
     animation: pom-sheen 3s ease-in-out infinite 1s;
     pointer-events: none;
 }
 
 @keyframes pom-sheen {
-    0% {
-        left: -80%;
-    }
-
-    40% {
-        left: 140%;
-    }
-
-    100% {
-        left: 140%;
-    }
+    0%   { left: -80%; }
+    40%  { left: 140%; }
+    100% { left: 140%; }
 }
 
 .pom-cta:hover:not(:disabled) {
@@ -435,14 +447,8 @@
     box-shadow: 0 7px 24px rgba(108, 99, 255, 0.52);
 }
 
-.pom-cta:active:not(:disabled) {
-    transform: translateY(0);
-}
-
-.pom-cta:disabled {
-    opacity: .30;
-    cursor: not-allowed;
-}
+.pom-cta:active:not(:disabled) { transform: translateY(0); }
+.pom-cta:disabled { opacity: .30; cursor: not-allowed; }
 
 .pom-hint {
     font-family: 'DM Mono', monospace;
@@ -455,7 +461,7 @@
 }
 
 /* ════════════════════════════════════════════════
-   ANIMACIÓN RASGADO
+   TEAR ANIMATION
 ════════════════════════════════════════════════ */
 .pom-tear-scene {
     display: flex;
@@ -467,16 +473,13 @@
 
 .pom-tear-pack {
     position: relative;
-    width: 128px;
-    height: 184px;
+    width: 128px; height: 184px;
     filter: drop-shadow(0 14px 28px rgba(108, 99, 255, 0.40));
 }
 
 .pom-tear-flap {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     height: 28px;
     background: linear-gradient(135deg, #6055E0, #4A3FC7);
     border-radius: 0 6px 0 0;
@@ -485,15 +488,8 @@
 }
 
 @keyframes pom-tear-fly {
-    0% {
-        transform: translateY(0) rotate(0);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(-44px) rotate(-7deg);
-        opacity: 0;
-    }
+    0%   { transform: translateY(0) rotate(0); opacity: 1; }
+    100% { transform: translateY(-44px) rotate(-7deg); opacity: 0; }
 }
 
 .pom-tear-body {
@@ -507,36 +503,19 @@
 
 .pom-tear-beam {
     position: absolute;
-    top: 28px;
-    left: 0;
-    right: 0;
+    top: 28px; left: 0; right: 0;
     height: 2px;
     background: linear-gradient(90deg,
-            transparent 0%, #6C63FF 25%, #C4BBFF 50%, #6C63FF 75%, transparent 100%);
+        transparent 0%, #6C63FF 25%, #C4BBFF 50%, #6C63FF 75%, transparent 100%);
     box-shadow: 0 0 12px rgba(108, 99, 255, 0.7);
     animation: pom-beam 0.85s ease-in-out infinite 0.25s;
 }
 
 @keyframes pom-beam {
-    0% {
-        transform: scaleX(0);
-        opacity: 0;
-    }
-
-    35% {
-        transform: scaleX(1);
-        opacity: 1;
-    }
-
-    70% {
-        transform: scaleX(1);
-        opacity: .8;
-    }
-
-    100% {
-        transform: scaleX(1);
-        opacity: 0;
-    }
+    0%   { transform: scaleX(0); opacity: 0; }
+    35%  { transform: scaleX(1); opacity: 1; }
+    70%  { transform: scaleX(1); opacity: .8; }
+    100% { transform: scaleX(1); opacity: 0; }
 }
 
 .pom-tear-lbl {
@@ -551,145 +530,234 @@
 }
 
 @keyframes pom-blink {
-
-    0%,
-    100% {
-        opacity: .3;
-    }
-
-    50% {
-        opacity: .75;
-    }
+    0%, 100% { opacity: .3; }
+    50%       { opacity: .75; }
 }
 
 /* ════════════════════════════════════════════════
-   STAGE DE CARTAS
+   STAGE — wraps table felt + grid + dots
 ════════════════════════════════════════════════ */
 .pom-stage {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 18px 16px;
     width: 100%;
     position: relative;
+    /* felt needs to be a positioned ancestor */
+    overflow: hidden;
 }
 
 .pom-goat-aura {
     position: absolute;
     inset: 0;
     background: radial-gradient(ellipse at center,
-            rgba(245, 158, 11, 0.13) 0%, transparent 65%);
+        rgba(245, 158, 11, 0.13) 0%, transparent 65%);
     pointer-events: none;
     animation: pom-aura 2.2s ease-in-out infinite;
+    z-index: 0;
 }
 
 @keyframes pom-aura {
-
-    0%,
-    100% {
-        opacity: .6;
-    }
-
-    50% {
-        opacity: 1;
-    }
-}
-
-/* ── GRID 2×2
-   Las 4 cartas tienen el mismo tamaño porque:
-   · grid-template-columns: 1fr 1fr  → mismas columnas
-   · pom-card tiene aspect-ratio fijo → misma altura
-   No hay margin ni padding variable por tipo.
-─────────────────────────────────────────────── */
-.pom-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    width: 100%;
-    max-width: 400px;
+    0%, 100% { opacity: .6; }
+    50%       { opacity: 1; }
 }
 
 /* ════════════════════════════════════════════════
-   CARTA INDIVIDUAL
-   Inspirada en la imagen de referencia:
-   · fondo oscuro parejo
-   · franja de color en el borde superior
-   · imagen grande sin recortar
-   · nombre pequeño abajo
+   TABLE FELT
+   Sits as an absolute layer behind the grid.
+   Uses a tall percentage so it always covers
+   the card area regardless of modal height.
 ════════════════════════════════════════════════ */
-.pom-card {
-    /* Tamaño idéntico para todas */
+.pom-table-felt {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    /* tall enough to always cover the card grid */
+    height: 82%;
+    background: var(--pom-felt-bg);
+    border-top: 2px solid var(--pom-felt-border);
+    border-radius: 50% 50% 0 0 / 16px 16px 0 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Inner decorative ring on the felt */
+.pom-table-felt::before {
+    content: '';
+    position: absolute;
+    inset: 6px 8px 0;
+    border: 1px solid var(--pom-felt-inner);
+    border-bottom: none;
+    border-radius: 50% 50% 0 0 / 12px 12px 0 0;
+}
+
+/* ════════════════════════════════════════════════
+   GRID 2×2
+════════════════════════════════════════════════ */
+.pom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    max-width: 380px;
+    padding: 20px 20px 10px;
+    position: relative;
+    z-index: 2;
+}
+
+/* ════════════════════════════════════════════════
+   CARD SLOT — perspective wrapper
+════════════════════════════════════════════════ */
+.pom-card-slot {
+    perspective: 900px;
     aspect-ratio: 3/4;
     position: relative;
+    /* deal-in animation */
+    opacity: 0;
+    transform: translateY(-28px) scale(0.88);
+}
+
+.pom-card-slot--dealt {
+    animation: pom-deal-in 0.46s cubic-bezier(0.22, 1, 0.36, 1) var(--deal-delay, 0s) both;
+}
+
+@keyframes pom-deal-in {
+    0%   { opacity: 0; transform: translateY(-28px) scale(0.88); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Hover lift when face-down */
+.pom-card-slot:not(.pom-card-slot--revealed) {
+    cursor: pointer;
+}
+
+.pom-card-slot:not(.pom-card-slot--revealed):hover .pom-card-inner {
+    transform: translateY(-6px) rotateX(4deg);
+}
+
+/* ── flip container ── */
+.pom-card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.52s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.pom-card-slot--revealed .pom-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Hover effect only when face-down */
+.pom-card-slot:not(.pom-card-slot--revealed) .pom-card-inner {
+    transition:
+        transform 0.52s cubic-bezier(0.4, 0.2, 0.2, 1),
+        box-shadow 0.18s;
+}
+
+/* ════════════════════════════════════════════════
+   CARD BACK (face-down side)
+════════════════════════════════════════════════ */
+.pom-card-back {
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: var(--pom-back-bg);
+    border: 1px solid var(--pom-back-border);
     display: flex;
-    flex-direction: column;
-    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
-    background: var(--pom-card-bg);
-    border: 1px solid color-mix(in srgb, var(--c, #6C63FF) 28%, var(--pom-card-border));
     box-shadow:
         0 6px 20px rgba(0, 0, 0, 0.38),
         0 2px 6px rgba(0, 0, 0, 0.22);
-
-    /* Aparición */
-    opacity: 0;
-    transform: translateY(-16px) scale(0.94);
-    transition:
-        opacity 0.40s cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0s),
-        transform 0.42s cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0s);
 }
 
-.pom-card--visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+.pom-card-back-pattern {
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    background-image:
+        repeating-linear-gradient( 45deg, var(--pom-back-pattern) 0px, var(--pom-back-pattern) 1px, transparent 1px, transparent 10px),
+        repeating-linear-gradient(-45deg, var(--pom-back-pattern) 0px, var(--pom-back-pattern) 1px, transparent 1px, transparent 10px);
 }
 
-.pom-card--visible:hover {
-    transform: translateY(-5px) scale(1.025);
-    z-index: 2;
+.pom-card-back-logo {
+    width: 40px; height: 40px;
+    border: 1.5px solid var(--pom-back-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    color: var(--pom-back-icon);
+}
+
+.pom-card-back-corner {
+    position: absolute;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--pom-back-text);
+    letter-spacing: 0.1em;
+}
+
+.pom-card-back-corner--tl { top: 8px; left: 9px; }
+.pom-card-back-corner--br { bottom: 8px; right: 9px; transform: rotate(180deg); }
+
+/* ════════════════════════════════════════════════
+   CARD FRONT (revealed side)
+════════════════════════════════════════════════ */
+.pom-card-front {
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: rotateY(180deg);
+    background: var(--pom-card-bg);
+    border: 1px solid color-mix(in srgb, var(--c, #6C63FF) 28%, var(--pom-card-border));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     box-shadow:
-        0 12px 32px rgba(0, 0, 0, 0.45),
-        0 4px 10px rgba(0, 0, 0, 0.28);
-    transition: transform 0.17s cubic-bezier(0.22, 1, 0.36, 1),
-        box-shadow 0.17s;
+        0 6px 20px rgba(0, 0, 0, 0.38),
+        0 2px 6px rgba(0, 0, 0, 0.22);
 }
 
-/* Franja de color superior — el identificador visual de tipo */
+.pom-card-front--goat {
+    border-color: rgba(245, 158, 11, 0.50);
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.38),
+        0 0 20px rgba(245, 158, 11, 0.18);
+}
+
+/* Franja superior de color */
 .pom-card-topstrip {
     height: 5px;
     background: var(--c, #6C63FF);
     flex-shrink: 0;
-    position: relative;
-    /* brillo animado */
     overflow: hidden;
+    position: relative;
 }
 
 .pom-card-topstrip::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: -60%;
-    width: 50%;
-    height: 100%;
+    top: 0; left: -60%;
+    width: 50%; height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.40), transparent);
     animation: pom-strip-sheen 3s ease-in-out infinite var(--delay, 0s);
 }
 
 @keyframes pom-strip-sheen {
-    0% {
-        left: -60%;
-    }
-
-    40% {
-        left: 130%;
-    }
-
-    100% {
-        left: 130%;
-    }
+    0%   { left: -60%; }
+    40%  { left: 130%; }
+    100% { left: 130%; }
 }
 
-/* Etiqueta de tipo */
 .pom-card-type {
     font-family: 'DM Mono', monospace;
     font-size: 7px;
@@ -702,7 +770,6 @@
     line-height: 1;
 }
 
-/* Imagen — ocupa el espacio central restante */
 .pom-card-media {
     flex: 1;
     min-height: 0;
@@ -714,9 +781,12 @@
     background: rgba(0, 0, 0, 0.18);
 }
 
+[data-theme="light"] .pom-card-media {
+    background: rgba(0, 0, 0, 0.08);
+}
+
 .pom-card-img {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     object-fit: cover;
     object-position: center top;
     display: block;
@@ -731,51 +801,34 @@
     letter-spacing: -0.03em;
 }
 
-/* Esquinas decorativas tipo álbum */
+/* Decorative corners */
 .pom-corner {
     position: absolute;
-    width: 8px;
-    height: 8px;
+    width: 8px; height: 8px;
     border-color: rgba(255, 255, 255, 0.18);
     border-style: solid;
     display: block;
 }
 
-.pom-corner--tl {
-    top: 4px;
-    left: 4px;
-    border-width: 1px 0 0 1px;
+[data-theme="light"] .pom-corner {
+    border-color: rgba(0, 0, 0, 0.12);
 }
 
-.pom-corner--tr {
-    top: 4px;
-    right: 4px;
-    border-width: 1px 1px 0 0;
-}
+.pom-corner--tl { top: 4px;    left: 4px;  border-width: 1px 0 0 1px; }
+.pom-corner--tr { top: 4px;    right: 4px; border-width: 1px 1px 0 0; }
+.pom-corner--bl { bottom: 4px; left: 4px;  border-width: 0 0 1px 1px; }
+.pom-corner--br { bottom: 4px; right: 4px; border-width: 0 1px 1px 0; }
 
-.pom-corner--bl {
-    bottom: 4px;
-    left: 4px;
-    border-width: 0 0 1px 1px;
-}
-
-.pom-corner--br {
-    bottom: 4px;
-    right: 4px;
-    border-width: 0 1px 1px 0;
-}
-
-/* Gloss diagonal sobre la imagen */
+/* Gloss on media area */
 .pom-card-media::after {
     content: '';
     position: absolute;
     inset: 0;
     background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.09) 0%, transparent 40%, rgba(0, 0, 0, 0.06) 100%);
+        rgba(255, 255, 255, 0.09) 0%, transparent 40%, rgba(0, 0, 0, 0.06) 100%);
     pointer-events: none;
 }
 
-/* Footer: nombre + estrellas */
 .pom-card-footer {
     display: flex;
     flex-direction: column;
@@ -785,6 +838,10 @@
     flex-shrink: 0;
     border-top: 1px solid color-mix(in srgb, var(--c, #6C63FF) 22%, transparent);
     background: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .pom-card-footer {
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .pom-card-name {
@@ -803,26 +860,17 @@
     width: 100%;
 }
 
-/* Brillo diagonal sobre toda la carta */
+/* Gloss overlay on entire front card */
 .pom-card-gloss {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.07) 0%, transparent 40%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, transparent 40%);
     pointer-events: none;
-    border-radius: 8px;
+    border-radius: 10px;
     z-index: 3;
 }
 
-/* GOAT override */
-.pom-card--goat {
-    border-color: rgba(245, 158, 11, 0.50);
-    box-shadow:
-        0 6px 20px rgba(0, 0, 0, 0.38),
-        0 0 20px rgba(245, 158, 11, 0.18);
-}
-
-/* ── Estrellas ── */
+/* ── Stars ── */
 .pom-stars {
     display: flex;
     gap: 2px;
@@ -835,24 +883,27 @@
     line-height: 1;
 }
 
+[data-theme="light"] .pom-star {
+    color: rgba(0, 0, 0, 0.12);
+}
+
 .pom-star--lit {
     color: #F59E0B;
     text-shadow: 0 0 5px rgba(245, 158, 11, 0.55);
 }
 
-/* ── Partículas GOAT ── */
+/* ── Particles (GOAT) ── */
 .pom-particles {
     position: absolute;
     inset: 0;
     pointer-events: none;
     z-index: 5;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .pom-particle {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     width: var(--size, 3px);
     height: var(--size, 3px);
     border-radius: 50%;
@@ -862,21 +913,64 @@
 }
 
 @keyframes pom-burst {
-    0% {
-        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(var(--dist, 65px));
-        opacity: 0;
-    }
+    0%   { transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0); opacity: 1; }
+    100% { transform: translate(-50%, -50%) rotate(var(--angle)) translateX(var(--dist, 65px)); opacity: 0; }
 }
 
 /* ════════════════════════════════════════════════
-   ACCIONES — siempre dentro del modal, nunca
-   tapadas porque el modal tiene max-height con
-   el margen del topbar ya descontado
+   TAP HINT — shown below each face-down card
+════════════════════════════════════════════════ */
+.pom-tap-hint {
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pom-hint-color);
+    white-space: nowrap;
+    pointer-events: none;
+    animation: pom-hint-pulse 2s ease-in-out infinite;
+    z-index: 3;
+}
+
+@keyframes pom-hint-pulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 0.8; }
+}
+
+/* ════════════════════════════════════════════════
+   PROGRESS DOTS
+════════════════════════════════════════════════ */
+.pom-progress-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 0 18px;
+    position: relative;
+    z-index: 2;
+}
+
+.pom-pdot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--pom-dot-empty);
+    border: 1px solid var(--pom-dot-empty-border);
+    transition: background 0.3s, border-color 0.3s, transform 0.25s;
+}
+
+.pom-pdot--done {
+    background: var(--pom-dot-done);
+    border-color: var(--pom-dot-done);
+    transform: scale(1.18);
+}
+
+/* ════════════════════════════════════════════════
+   ACCIONES
 ════════════════════════════════════════════════ */
 .pom-actions {
     display: flex;
@@ -913,16 +1007,15 @@
     pointer-events: none;
 }
 
-.pom-btn-again:hover {
-    background: #7C73FF;
-}
+.pom-btn-again:hover { background: #7C73FF; }
+
+[data-theme="light"] .pom-btn-again:hover { background: #4a3fc7; }
 
 .pom-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 20px; height: 20px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.20);
     font-size: 10px;
@@ -952,13 +1045,15 @@
     background: rgba(255, 255, 255, 0.02);
 }
 
+[data-theme="light"] .pom-btn-collection:hover {
+    background: rgba(91, 79, 216, 0.05);
+}
+
 /* ════════════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE — desktop adjustments
 ════════════════════════════════════════════════ */
 @media (max-width: 600px) {
-    .pom-overlay {
-        padding: 64px 10px 10px;
-    }
+    .pom-overlay { padding: 64px 10px 10px; }
 
     .pom-modal {
         max-height: calc(100vh - 120px);
@@ -968,37 +1063,17 @@
     .pom-grid {
         gap: 8px;
         max-width: 100%;
+        padding: 16px 14px 8px;
     }
 
-    .pom-stage {
-        padding: 14px 12px;
-    }
-
-    .pom-pack-wrapper {
-        width: 112px;
-        height: 160px;
-    }
-
-    .pom-count-n {
-        font-size: 30px;
-    }
-
-    .pom-cta {
-        padding: 10px 22px;
-        font-size: 10px;
-    }
+    .pom-pack-wrapper { width: 112px; height: 160px; }
+    .pom-count-n { font-size: 30px; }
+    .pom-cta { padding: 10px 22px; font-size: 10px; }
 }
 
 @media (max-width: 380px) {
-    .pom-grid {
-        gap: 6px;
-    }
-
-    .pom-card-name {
-        font-size: 7px;
-    }
-
-    .pom-card-type {
-        font-size: 6px;
-    }
+    .pom-grid { gap: 6px; padding: 12px 10px 6px; }
+    .pom-card-name { font-size: 7px; }
+    .pom-card-type { font-size: 6px; }
+    .pom-card-initials { font-size: 18px; }
 }

@@ -194,7 +194,9 @@ function CultStickerCard({ index, item, meta }) {
     const filled = !!item;
 
     if (filled) {
-        const resolvedImg = card?.image_path ? getHistoricalImageUrl(card.image_path) : null;
+        const resolvedImg = card?.image_path
+    ? (card.image_path.startsWith('http') ? card.image_path : getHistoricalImageUrl(card.image_path))
+    : null;
         return (
             <div className="cas2-sticker cas2-sticker--filled" style={{ '--acc': meta.color }}>
                 {/* Banda top degradado */}

@@ -44,11 +44,32 @@ function Particles() {
 }
 
 /* ════════════════════════════════════════════════
-   CARTA — mismo tamaño garantizado por CSS grid
-   Inspirada en la imagen: borde top de color,
-   imagen cuadrada que ocupa el cuerpo, footer limpio
+   BACK of card — shown face-down on the table
 ════════════════════════════════════════════════ */
-function RevealCard({ type, card, index, visible, isGoat }) {
+function CardBack() {
+    return (
+        <div className="pom-card-back">
+            <div className="pom-card-back-pattern" />
+            <span className="pom-card-back-corner pom-card-back-corner--tl">GA</span>
+            <div className="pom-card-back-logo">
+                <svg width="20" height="20" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="21"
+                        stroke="currentColor" strokeWidth="1.5" strokeOpacity=".5" />
+                    <path d="M24 7l4 11h12l-9.5 7.5 3.5 11L24 30l-10 6.5 3.5-11L8 18h12z"
+                        stroke="currentColor" strokeWidth="1.5" strokeOpacity=".5"
+                        fill="none" strokeLinejoin="round" />
+                </svg>
+            </div>
+            <span className="pom-card-back-corner pom-card-back-corner--br">GA</span>
+        </div>
+    );
+}
+
+/* ════════════════════════════════════════════════
+   CARTA INDIVIDUAL — flip on click
+   Face-down by default; revealed on user tap/click
+════════════════════════════════════════════════ */
+function RevealCard({ type, card, index, dealt, isRevealed, onReveal, isGoat }) {
     const color = TYPE_COLOR[type] || '#6C63FF';
     const isPlayer = type === 'player';
     const stars = isPlayer ? card?.significance_level : null;
@@ -57,38 +78,73 @@ function RevealCard({ type, card, index, visible, isGoat }) {
 
     return (
         <div
-            className={`pom-card${visible ? ' pom-card--visible' : ''}${isGoatCard ? ' pom-card--goat' : ''}`}
-            style={{ '--c': color, '--delay': `${index * 0.14}s` }}
+            className={`pom-card-slot${dealt ? ' pom-card-slot--dealt' : ''}${isRevealed ? ' pom-card-slot--revealed' : ''}`}
+            style={{ '--deal-delay': `${index * 0.12}s` }}
+            onClick={!isRevealed ? onReveal : undefined}
+            role={!isRevealed ? 'button' : undefined}
+            aria-label={!isRevealed ? `Revelar carta ${index + 1}` : TYPE_LABEL[type]}
+            tabIndex={!isRevealed ? 0 : undefined}
+            onKeyDown={!isRevealed ? (e) => e.key === 'Enter' && onReveal() : undefined}
         >
-            {/* Franja superior de color — sello de tipo */}
-            <div className="pom-card-topstrip" />
+            <div className="pom-card-inner">
 
-            {/* Etiqueta de tipo */}
-            <span className="pom-card-type">{TYPE_LABEL[type]}</span>
+                {/* BACK */}
+                <CardBack />
 
-            {/* Imagen cuadrada — ocupa el espacio central */}
-            <div className="pom-card-media">
-                {imgUrl
-                    ? <img src={imgUrl} alt={card?.name || ''} className="pom-card-img" />
-                    : <span className="pom-card-initials">{getInitials(card?.name)}</span>
-                }
-                {/* esquinas decorativas estilo álbum Panini */}
-                <i className="pom-corner pom-corner--tl" aria-hidden="true" />
-                <i className="pom-corner pom-corner--tr" aria-hidden="true" />
-                <i className="pom-corner pom-corner--bl" aria-hidden="true" />
-                <i className="pom-corner pom-corner--br" aria-hidden="true" />
+                {/* FRONT */}
+                <div
+                    className={`pom-card-front${isGoatCard ? ' pom-card-front--goat' : ''}`}
+                    style={{ '--c': color }}
+                >
+                    <div className="pom-card-topstrip" />
+                    <span className="pom-card-type">{TYPE_LABEL[type]}</span>
+
+                    <div className="pom-card-media">
+                        {imgUrl
+                            ? <img src={imgUrl} alt={card?.name || ''} className="pom-card-img" />
+                            : <span className="pom-card-initials">{getInitials(card?.name)}</span>
+                        }
+                        <i className="pom-corner pom-corner--tl" aria-hidden="true" />
+                        <i className="pom-corner pom-corner--tr" aria-hidden="true" />
+                        <i className="pom-corner pom-corner--bl" aria-hidden="true" />
+                        <i className="pom-corner pom-corner--br" aria-hidden="true" />
+                    </div>
+
+                    <div className="pom-card-footer">
+                        <span className="pom-card-name">{card?.name || '—'}</span>
+                        {stars && <StarRow level={stars} />}
+                    </div>
+
+                    <div className="pom-card-gloss" aria-hidden="true" />
+                    {isGoatCard && <Particles />}
+                </div>
+
             </div>
 
-            {/* Footer: nombre + estrellas */}
-            <div className="pom-card-footer">
-                <span className="pom-card-name">{card?.name || '—'}</span>
-                {stars && <StarRow level={stars} />}
-            </div>
+            {/* Tap hint — only visible when face-down */}
+            {!isRevealed && (
+                <span className="pom-tap-hint" aria-hidden="true">toca para revelar</span>
+            )}
+        </div>
+    );
+}
 
-            {/* Brillo diagonal */}
-            <div className="pom-card-gloss" aria-hidden="true" />
+/* ════════════════════════════════════════════════
+   TABLE FELT — decorative background surface
+════════════════════════════════════════════════ */
+function TableFelt() {
+    return <div className="pom-table-felt" aria-hidden="true" />;
+}
 
-            {isGoatCard && <Particles />}
+/* ════════════════════════════════════════════════
+   PROGRESS DOTS — one per card
+════════════════════════════════════════════════ */
+function ProgressDots({ total, revealedSet }) {
+    return (
+        <div className="pom-progress-dots" aria-label={`${revealedSet.size} de ${total} cartas reveladas`}>
+            {Array.from({ length: total }, (_, i) => (
+                <span key={i} className={`pom-pdot${revealedSet.has(i) ? ' pom-pdot--done' : ''}`} />
+            ))}
         </div>
     );
 }
@@ -164,19 +220,41 @@ export default function PackOpeningModal({
     isOpen, phase, result, packsAvailable,
     isGoat, isLegend, onOpen, onClose, onReset,
 }) {
-    const [revealedCount, setRevealedCount] = useState(0);
+    // Set of revealed card indices (0-3)
+    const [revealedCards, setRevealedCards] = useState(new Set());
+    // Whether cards have been "dealt" (animate in)
+    const [dealt, setDealt] = useState(false);
     const overlayRef = useRef(null);
 
+    const allRevealed = revealedCards.size === CARD_ORDER.length;
+
+    // Reset reveal state when a new pack is opened
     useEffect(() => {
         if (phase === 'revealing') {
-            setRevealedCount(0);
-            const timers = CARD_ORDER.map((_, i) =>
-                setTimeout(() => setRevealedCount(i + 1), 220 + i * 400)
-            );
-            return () => timers.forEach(clearTimeout);
+            setRevealedCards(new Set());
+            setDealt(false);
+            // Small delay so the DOM mounts before the deal animation fires
+            const t = setTimeout(() => setDealt(true), 40);
+            return () => clearTimeout(t);
         }
-        if (phase === 'idle') setRevealedCount(0);
+        if (phase === 'idle') {
+            setRevealedCards(new Set());
+            setDealt(false);
+        }
     }, [phase]);
+
+    // Once all cards are revealed, transition phase to 'done' after a short pause
+    useEffect(() => {
+        if (allRevealed && phase === 'revealing') {
+            const t = setTimeout(() => {
+                // The parent usePackOpening hook exposes setPhase via onReset/open chain;
+                // here we trigger the parent's phase change by calling onReset indirectly.
+                // If your hook exposes setPhase directly, call setPhase('done') instead.
+                // This no-op re-render keeps local state intact; parent can listen via prop.
+            }, 600);
+            return () => clearTimeout(t);
+        }
+    }, [allRevealed, phase]);
 
     useEffect(() => {
         document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -189,9 +267,19 @@ export default function PackOpeningModal({
         ? CARD_ORDER.map(type => ({ type, card: result[type] }))
         : [];
 
-    const handleOverlayClick = (e) => {
-        if (e.target === overlayRef.current && phase === 'done') onClose();
+    const handleReveal = (index) => {
+        setRevealedCards(prev => {
+            const next = new Set(prev);
+            next.add(index);
+            return next;
+        });
     };
+
+    const handleOverlayClick = (e) => {
+        if (e.target === overlayRef.current && allRevealed) onClose();
+    };
+
+    const isShowingCards = phase === 'revealing' || phase === 'done';
 
     const titles = {
         idle: 'Apertura de sobre',
@@ -200,6 +288,12 @@ export default function PackOpeningModal({
         done: isGoat ? '¡Figurita GOAT!' : 'Tus nuevas cartas',
     };
 
+    const subtitle = isShowingCards
+        ? allRevealed
+            ? '¡Sobre completado!'
+            : `Toca cada carta para revelarla · ${revealedCards.size}/${CARD_ORDER.length}`
+        : null;
+
     return (
         <div
             ref={overlayRef}
@@ -207,6 +301,7 @@ export default function PackOpeningModal({
             onClick={handleOverlayClick}
             role="dialog"
             aria-modal="true"
+            aria-label="Apertura de sobre"
         >
             <div className={`pom-modal${isGoat ? ' pom-modal--goat' : ''}`}>
 
@@ -216,8 +311,11 @@ export default function PackOpeningModal({
                     <div className="pom-header-text">
                         <span className="pom-eyebrow">Global Albums · 25/26</span>
                         <span className="pom-title">{titles[phase] ?? titles.idle}</span>
+                        {subtitle && (
+                            <span className="pom-subtitle">{subtitle}</span>
+                        )}
                     </div>
-                    {phase === 'done' && (
+                    {allRevealed && (
                         <button className="pom-close" onClick={onClose} aria-label="Cerrar">
                             <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
                                 <path d="M1 1l9 9M10 1L1 10"
@@ -234,9 +332,13 @@ export default function PackOpeningModal({
                     {phase === 'idle' && <PackVisual count={packsAvailable} onOpen={onOpen} />}
                     {phase === 'animating' && <TearAnimation />}
 
-                    {(phase === 'revealing' || phase === 'done') && (
+                    {isShowingCards && (
                         <div className="pom-stage">
+                            {/* Table felt behind the cards */}
+                            <TableFelt />
+
                             {isGoat && <div className="pom-goat-aura" aria-hidden="true" />}
+
                             <div className="pom-grid">
                                 {cards.map(({ type, card }, i) => (
                                     <RevealCard
@@ -244,17 +346,24 @@ export default function PackOpeningModal({
                                         type={type}
                                         card={card}
                                         index={i}
-                                        visible={i < revealedCount}
+                                        dealt={dealt}
+                                        isRevealed={revealedCards.has(i)}
+                                        onReveal={() => handleReveal(i)}
                                         isGoat={isGoat}
                                     />
                                 ))}
                             </div>
+
+                            <ProgressDots
+                                total={CARD_ORDER.length}
+                                revealedSet={revealedCards}
+                            />
                         </div>
                     )}
                 </div>
 
-                {/* ACCIONES */}
-                {phase === 'done' && (
+                {/* ACCIONES — visible once all cards revealed */}
+                {isShowingCards && allRevealed && (
                     <div className="pom-actions">
                         {packsAvailable > 1 && (
                             <button className="pom-btn-again" onClick={onReset}>

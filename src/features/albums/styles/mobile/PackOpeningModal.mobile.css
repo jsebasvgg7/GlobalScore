@@ -1,64 +1,103 @@
 /* ════════════════════════════════════════════════
-   PACK OPENING MODAL — Mobile Responsive
+   ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗
+   ████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝
+   ██╔████╔██║██║   ██║██████╔╝██║██║     █████╗  
+   ██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝  
+   ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
+   MOBILE — responsive chaos
 ════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
 
-  .pom-overlay {
-    /* Compensar el top header móvil (~60px) y el bottom nav (~56px) */
-    padding: 60px 12px calc(56px + env(safe-area-inset-bottom, 8px));
-    align-items: flex-start;
-    overflow-y: auto;
-  }
+    /* ── Overlay ── */
+    .pom-overlay {
+        /* Account for mobile top header (~60px) and bottom nav (~56px) */
+        padding: 60px 12px calc(56px + env(safe-area-inset-bottom, 8px));
+        align-items: flex-start;
+        overflow-y: auto;
+    }
 
-  .pom-modal {
-    max-width: 100%;
-    max-height: none;
-    height: auto;
-    border-radius: 12px;
-    margin: auto;
-  }
+    /* ── Modal ── */
+    .pom-modal {
+        max-width: 100%;
+        max-height: none;
+        height: auto;
+        border-radius: 12px;
+        margin: auto;
+    }
 
-  .pom-header { min-height: 44px; }
-  .pom-header-bar { margin-right: 12px; }
-  .pom-eyebrow { font-size: 7px; }
-  .pom-title { font-size: 12px; }
+    /* ── Header ── */
+    .pom-header { min-height: 44px; }
+    .pom-header-bar { margin-right: 12px; }
+    .pom-eyebrow  { font-size: 7px; }
+    .pom-title    { font-size: 12px; }
+    .pom-subtitle { font-size: 8px; }
 
-  /* Sobre más pequeño en mobile */
-  .pom-pack-wrapper { width: 110px; height: 158px; }
+    /* ── Idle pack ── */
+    .pom-pack-wrapper { width: 110px; height: 158px; }
+    .pom-count-n  { font-size: 30px; }
+    .pom-count-lbl { font-size: 8px; }
+    .pom-cta { padding: 10px 22px; font-size: 10px; }
+    .pom-pack-scene { gap: 16px; padding: 20px 16px 18px; }
+    .pom-hint { font-size: 7px; }
 
-  .pom-count-n { font-size: 30px; }
-  .pom-count-lbl { font-size: 8px; }
+    /* ── Stage ── */
+    .pom-stage { /* no extra padding — felt handles it */ }
 
-  .pom-cta {
-    padding: 10px 22px;
-    font-size: 10px;
-  }
+    /* ── Grid ── */
+    .pom-grid {
+        gap: 10px;
+        max-width: 100%;
+        padding: 18px 14px 8px;
+    }
 
-  .pom-pack-scene { gap: 16px; padding: 20px 16px 18px; }
+    /* ── Card slot ── */
+    /* Cards get a slight scatter on mobile for an organic feel */
+    .pom-card-slot:nth-child(1) { transform-origin: bottom right; }
+    .pom-card-slot:nth-child(2) { transform-origin: bottom left;  }
+    .pom-card-slot:nth-child(3) { transform-origin: top right;    }
+    .pom-card-slot:nth-child(4) { transform-origin: top left;     }
 
-  .pom-hint { font-size: 7px; }
+    /* Disable hover lift on touch devices (they don't hover) */
+    .pom-card-slot:not(.pom-card-slot--revealed):hover .pom-card-inner {
+        transform: none;
+    }
 
-  /* Grid de cartas 2x2 — reducir gap */
-  .pom-grid {
-    gap: 8px;
-    max-width: 100%;
-  }
+    /* ── Card face details ── */
+    .pom-card-name  { font-size: 7px; }
+    .pom-card-type  { font-size: 6px; padding: 4px 6px 2px; }
+    .pom-card-footer { padding: 5px 6px 6px; gap: 3px; }
+    .pom-card-initials { font-size: 20px; }
+    .pom-star { font-size: 7px; }
 
-  .pom-stage { padding: 12px 12px; }
+    /* Tap hint slightly larger for touch targets */
+    .pom-tap-hint { font-size: 7px; bottom: -14px; }
 
-  /* Acciones */
-  .pom-btn-again { padding: 12px 16px; font-size: 10px; }
-  .pom-btn-collection { padding: 10px 16px; font-size: 9px; }
+    /* ── Progress dots ── */
+    .pom-pdot { width: 8px; height: 8px; }
+    .pom-progress-dots { gap: 7px; padding: 12px 0 16px; }
 
-  /* Tarjeta individual */
-  .pom-card-name { font-size: 7px; }
-  .pom-card-type { font-size: 6px; padding: 4px 6px 2px; }
-  .pom-card-footer { padding: 5px 6px 6px; gap: 3px; }
+    /* ── Action buttons ── */
+    .pom-btn-again      { padding: 12px 16px; font-size: 10px; }
+    .pom-btn-collection { padding: 10px 16px; font-size: 9px;  }
+
+    /* ── Table felt — slightly taller on mobile ── */
+    .pom-table-felt { height: 78%; }
 }
 
+/* ── Very small phones (≤380px) ── */
 @media (max-width: 380px) {
-  .pom-grid { gap: 6px; }
-  .pom-pack-wrapper { width: 96px; height: 138px; }
-  .pom-count-n { font-size: 26px; }
+    .pom-grid {
+        gap: 7px;
+        padding: 14px 10px 6px;
+    }
+
+    .pom-pack-wrapper { width: 96px; height: 138px; }
+    .pom-count-n { font-size: 26px; }
+
+    .pom-card-name     { font-size: 6px; }
+    .pom-card-initials { font-size: 17px; }
+    .pom-tap-hint      { font-size: 6px; }
+
+    .pom-pdot { width: 7px; height: 7px; }
 }
