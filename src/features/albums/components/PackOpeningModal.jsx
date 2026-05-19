@@ -173,7 +173,7 @@ function FlipCard({ type, card, index, isDealt, isFlipped, onFlip, isGoat }) {
 }
 
 /** Sobre visual (lado izquierdo) */
-function PackVisual({ count, phase, onOpen }) {
+function PackVisual({ count, phase, onOpen, allFlipped, packsAvailable, onReset, onClose }) {
     const isOpening = phase === 'animating';
 
     return (
@@ -239,10 +239,25 @@ function PackVisual({ count, phase, onOpen }) {
             )}
             {phase === 'animating' && (
                 <span className="pom2-pack-opening-lbl" aria-live="polite">Abriendo…</span>
+                
             )}
-
-            {/* Pista de tipos */}
+            
+             {/* Pista de tipos */}
             <p className="pom2-pack-types-hint">jugador · equipo · copa · evento</p>
+            {/* Botones de acción cuando el sobre está completado */}
+                {allFlipped && (
+                    <div className="pom2-actions">
+                        {packsAvailable > 1 && (
+                            <button className="pom2-btn-again" onClick={onReset}>
+                                Abrir otro
+                                <span className="pom2-badge">{packsAvailable - 1}</span>
+                            </button>
+                        )}
+                        <button className="pom2-btn-collection" onClick={onClose}>
+                            Ver mi colección
+                        </button>
+                    </div>
+                )}
         </div>
     );
 }
@@ -401,10 +416,14 @@ export default function PackOpeningModal({
                 {/* ── Body: sobre + cartas side by side ── */}
                 <div className="pom2-body">
                     {/* Lado izquierdo: sobre */}
-                    <PackVisual
+                   <PackVisual
                         count={packsAvailable}
                         phase={phase}
                         onOpen={onOpen}
+                        allFlipped={allFlipped}
+                        packsAvailable={packsAvailable}
+                        onReset={onReset}
+                        onClose={onClose}
                     />
 
                     {/* Divisor vertical */}
@@ -420,21 +439,6 @@ export default function PackOpeningModal({
                         allFlipped={allFlipped}
                     />
                 </div>
-
-                {/* ── Footer de acciones ── */}
-                {allFlipped && (
-                    <div className="pom2-actions">
-                        {packsAvailable > 1 && (
-                            <button className="pom2-btn-again" onClick={onReset}>
-                                Abrir otro
-                                <span className="pom2-badge">{packsAvailable - 1}</span>
-                            </button>
-                        )}
-                        <button className="pom2-btn-collection" onClick={onClose}>
-                            Ver mi colección
-                        </button>
-                    </div>
-                )}
             </div>
         </div>
     );

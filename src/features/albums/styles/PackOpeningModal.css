@@ -226,8 +226,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 14px;
+    justify-content: center;     
+    gap: 12px;                  
     padding: 20px 16px 18px;
     position: relative;
     overflow: hidden;
@@ -870,31 +870,37 @@
 .pom2-cards-done { color: var(--pom2-dot-done); }
 
 /* ════════════════════════════════════════════════
-   ACCIONES (footer)
+   ACCIONES — dentro del panel izquierdo
 ════════════════════════════════════════════════ */
 .pom2-actions {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--pom2-border);
-    flex-shrink: 0;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 .pom2-btn-again {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 12px 20px;
+    gap: 8px;
+    padding: 9px 20px;
+    width: 100%;
+    max-width: 180px;
     background: var(--pom2-accent);
     border: none;
+    border-radius: 8px;
     color: #fff;
     font-family: 'DM Mono', monospace;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.14s;
+    transition: background 0.14s, transform 0.12s;
     position: relative;
     overflow: hidden;
 }
@@ -906,17 +912,17 @@
     pointer-events:none;
 }
 
-.pom2-btn-again:hover { background: #9284ff; }
+.pom2-btn-again:hover { background: #9284ff; transform: translateY(-1px); }
 [data-theme="light"] .pom2-btn-again:hover { background: var(--pom2-accent-dark); }
 
 .pom2-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 20px; height: 20px;
+    width: 18px; height: 18px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.20);
-    font-size: 10px;
+    background: rgba(255,255,255,0.22);
+    font-size: 9px;
     font-weight: 800;
 }
 
@@ -924,21 +930,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px;
+    padding: 0;
     background: transparent;
     border: none;
-    border-top: 1px solid var(--pom2-border-mid);
-    color: var(--pom2-muted);
+    color: rgba(255,255,255,0.38);
     font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.10em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: color 0.13s, background 0.13s;
+    transition: color 0.13s;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(255,255,255,0.15);
 }
 
 .pom2-btn-collection:hover {
-    color: var(--pom2-text);
-    background: var(--pom2-footer-btn);
+    color: rgba(255,255,255,0.72);
+    text-decoration-color: rgba(255,255,255,0.40);
 }

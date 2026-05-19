@@ -1,176 +1,202 @@
 /* ════════════════════════════════════════════════
    PACK OPENING MODAL v2 — MOBILE
-   Colapsa a columna: sobre arriba / cartas abajo
+   Layout vertical: sobre (fila compacta) arriba / cartas abajo
+   Sin scroll — proporciones correctas
 ════════════════════════════════════════════════ */
 
-/* ── Tablet y móvil grande (≤768px) ── */
 @media (max-width: 768px) {
 
-    /* Overlay */
+    /* Overlay centrado sin scroll */
     .pom2-overlay {
-        padding: 58px 10px calc(56px + env(safe-area-inset-bottom, 10px));
-        align-items: flex-start;
-        overflow-y: auto;
+        padding: 56px 10px 10px;
+        align-items: center;
+        overflow: hidden;
     }
 
-    /* Modal: apilado vertical */
+    /* Modal: columna, altura fija en viewport */
     .pom2-modal {
         max-width: 100%;
-        max-height: none;
-        height: auto;
+        width: 100%;
+        height: calc(100dvh - 76px);
+        max-height: 700px;
         border-radius: 12px;
-        margin: auto;
-    }
-
-    /* Body: columna en lugar de fila */
-    .pom2-body {
+        overflow: hidden;
+        display: flex;
         flex-direction: column;
     }
 
-    /* Divisor: horizontal en mobile */
+    /* Body: columna vertical */
+    .pom2-body {
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    /* Divisor horizontal */
     .pom2-divider {
         width: auto;
         height: 1px;
-        align-self: auto;
-    }
-
-    /* ── Panel sobre: fila compacta ── */
-    .pom2-pack-panel {
-        width: 100%;
-        flex-direction: row;
-        justify-content: center;
-        gap: 20px;
-        padding: 18px 20px 16px;
-        flex-wrap: wrap;
-    }
-
-    /* Sobre más pequeño */
-    .pom2-pack-wrap {
-        width: 88px;
-        height: 126px;
         flex-shrink: 0;
     }
 
-    /* Info del sobre: apilada verticalmente */
-    .pom2-pack-info-col {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+    /* ── Panel sobre: fila horizontal compacta ── */
+    /* Altura fija — no aplasta el sobre */
+    .pom2-pack-panel {
+        width: 100%;
+        height: auto;
+        flex-shrink: 0;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 14px 20px 12px;
+        /* IMPORTANTE: no usar flex:1 aquí, height auto */
     }
 
-    /* Counter y CTA en fila */
+    /* Sobre: proporción original respetada */
+    .pom2-pack-wrap {
+        width: 72px;
+        height: 102px;   /* ratio ~1:1.42 como el original */
+        flex-shrink: 0;
+        animation: pom2-float 4s ease-in-out infinite;
+    }
+
+    /* Columna derecha del sobre: contador + botones */
     .pom2-pack-count {
         align-items: flex-start;
     }
 
-    .pom2-pack-count-n {
-        font-size: 26px;
-    }
+    .pom2-pack-count-n   { font-size: 26px; }
+    .pom2-pack-count-lbl { font-size: 7px; }
 
-    .pom2-pack-count-lbl {
-        font-size: 7px;
-    }
-
+    /* CTA */
     .pom2-pack-cta {
-        padding: 9px 18px;
+        padding: 8px 16px;
         font-size: 9px;
     }
 
-    .pom2-pack-opening-lbl {
+    /* Botones de acción en mobile: lado a lado debajo del counter */
+    .pom2-actions {
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+        width: auto;
+    }
+
+    .pom2-btn-again {
+        max-width: none;
+        width: auto;
+        padding: 7px 14px;
         font-size: 8px;
+        border-radius: 7px;
     }
 
-    .pom2-pack-types-hint {
-        display: none;
+    .pom2-btn-collection {
+        font-size: 7px;
+        white-space: nowrap;
     }
 
-    /* ── Panel cartas ── */
+    .pom2-pack-types-hint { display: none; }
+
+    /* ── Panel cartas: ocupa el resto ── */
     .pom2-cards-panel {
-        padding: 12px 12px 10px;
-        gap: 8px;
+        flex: 1;
+        min-height: 0;
+        padding: 8px 10px 6px;
+        gap: 5px;
+        overflow: hidden;
     }
 
-    /* Grid más compacto */
+    .pom2-cards-tag  { font-size: 7px; }
+    .pom2-pdot       { width: 6px; height: 6px; }
+    .pom2-progress-dots { gap: 4px; }
+
+    /* Grid 2×2 — ocupa todo el espacio disponible */
     .pom2-cards-grid {
-        gap: 8px;
+        gap: 6px;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
     }
 
-    /* Carta: aspect ratio adaptado */
+    /* CLAVE: cartas con aspect-ratio vertical, no cuadradas */
     .pom2-flip-slot {
-        aspect-ratio: 3 / 4;
+        aspect-ratio: 2 / 3;   /* rectángulo vertical */
+        min-height: 0;
+        width: 100%;
     }
 
-    /* Deshabilitar hover lift en táctil */
+    /* Desactivar hover lift en táctil */
     .pom2-flip-slot:not(.pom2-flip-slot--flipped):hover .pom2-flip-inner {
         transform: none;
     }
 
-    /* Detalles internos de carta */
-    .pom2-card-name        { font-size: 7px; }
-    .pom2-card-type-label  { font-size: 6px; padding: 4px 6px 2px; }
-    .pom2-card-rarity      { font-size: 6px; }
-    .pom2-card-footer      { padding: 4px 5px 5px; gap: 2px; }
-    .pom2-card-initials    { font-size: 9px; }
-    .pom2-star             { font-size: 7px; }
-    .pom2-card-placeholder svg { width: 26px; height: 26px; }
+    /* Texto interior compacto */
+    .pom2-card-name       { font-size: 6px; }
+    .pom2-card-type-label { font-size: 5px; padding: 3px 5px 2px; }
+    .pom2-card-rarity     { font-size: 5px; }
+    .pom2-card-footer     { padding: 3px 4px 4px; gap: 1px; }
+    .pom2-card-strip      { height: 3px; }
+    .pom2-card-initials   { font-size: 8px; }
+    .pom2-star            { font-size: 6px; }
+    .pom2-card-placeholder svg { width: 20px; height: 20px; }
 
-    /* Hint "toca" */
-    .pom2-tap-hint { font-size: 6px; bottom: -13px; }
+    .pom2-tap-hint        { font-size: 5px; bottom: -12px; }
 
-    /* Puntos de progreso */
-    .pom2-pdot           { width: 7px; height: 7px; }
-    .pom2-progress-dots  { gap: 5px; }
-
-    /* Footer */
     .pom2-cards-hint,
     .pom2-cards-done {
-        font-size: 7px;
-        padding: 2px 0;
+        font-size: 6px;
+        padding: 1px 0;
     }
-
-    /* Acciones */
-    .pom2-btn-again      { padding: 12px 16px; font-size: 10px; }
-    .pom2-btn-collection { padding: 10px 16px; font-size: 9px;  }
 }
 
 /* ── Móvil pequeño (≤480px) ── */
 @media (max-width: 480px) {
 
+    .pom2-modal {
+        height: calc(100dvh - 68px);
+    }
+
     .pom2-pack-panel {
         gap: 14px;
-        padding: 14px 16px 12px;
+        padding: 10px 16px 10px;
     }
 
     .pom2-pack-wrap {
-        width: 76px;
-        height: 110px;
+        width: 60px;
+        height: 85px;
     }
 
     .pom2-pack-count-n { font-size: 22px; }
 
-    .pom2-cards-panel { padding: 10px 10px 8px; }
+    .pom2-btn-again {
+        padding: 6px 12px;
+        font-size: 7px;
+    }
 
-    .pom2-cards-grid { gap: 7px; }
-
-    /* Header del modal */
-    .pom2-eyebrow { font-size: 7px; }
-    .pom2-title   { font-size: 11px; }
+    .pom2-cards-panel { padding: 6px 8px 5px; }
+    .pom2-cards-grid  { gap: 5px; }
 }
 
 /* ── Teléfonos muy pequeños (≤360px) ── */
 @media (max-width: 360px) {
 
-    .pom2-pack-wrap {
-        width: 66px;
-        height: 96px;
+    .pom2-pack-panel {
+        gap: 10px;
+        padding: 8px 12px;
     }
 
-    .pom2-pack-logo svg { width: 24px; height: 24px; }
-    .pom2-pack-season   { font-size: 6px; }
-    .pom2-pack-brand    { font-size: 6px; }
-    .pom2-pack-cta      { padding: 8px 14px; font-size: 8px; }
+    .pom2-pack-wrap {
+        width: 52px;
+        height: 74px;
+    }
 
-    .pom2-cards-grid { gap: 6px; }
-    .pom2-card-name  { font-size: 6px; }
+    .pom2-pack-logo svg  { width: 18px; height: 18px; }
+    .pom2-pack-season    { font-size: 5px; }
+    .pom2-pack-brand     { font-size: 5px; }
+    .pom2-pack-count-n   { font-size: 18px; }
+
+    .pom2-cards-grid { gap: 4px; }
+    .pom2-card-name  { font-size: 5px; }
 }
