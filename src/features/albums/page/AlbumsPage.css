@@ -237,19 +237,38 @@
 
 @media (max-width: 600px) {
     .alp-hero {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
         gap: 12px;
         padding: 14px 16px 12px;
     }
 
-    .alp-hero-title {
-        font-size: 1.4rem;
+    .alp-hero-left {
+        flex: 1;
+        min-width: 0;
     }
 
     .alp-open-btn {
-        width: 100%;
-        justify-content: center;
+        width: auto;
+        flex-shrink: 0;
+        padding: 9px 12px;
+        gap: 6px;
+    }
+
+    .alp-open-btn {
+        width: auto;
+        flex-shrink: 0;
+        flex-direction: column;
+        padding: 8px 14px;
+        gap: 3px;
+    }
+
+    .alp-open-btn-text {
+        display: none;
+    }
+
+    .alp-open-btn-text {
+        display: none;
     }
 
     .alp-bar-section {

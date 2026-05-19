@@ -318,7 +318,7 @@
 
   /* Scroll del panel */
   .las2-panel-scroll {
-    padding: 8px 12px 72px;
+    padding: 8px 12px 16px;
     gap: 8px;
   }
 

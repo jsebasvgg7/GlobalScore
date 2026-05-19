@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Package } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAlbumPacks } from '../hooks/useAlbumPacks';
 import { useAlbumCollection } from '../hooks/useAlbumCollection';
@@ -88,8 +89,11 @@ export default function AlbumsPage({ currentUser }) {
                             exit={{ opacity: 0, scale: 0.92 }}
                             transition={{ duration: 0.2 }}
                         >
+                            <Package size={20} strokeWidth={2} />
                             <span className="alp-open-btn-count">{packsAvailable}</span>
-                            Abrir {packsAvailable === 1 ? 'sobre' : 'sobres'}
+                            <span className="alp-open-btn-text">
+                                Abrir {packsAvailable === 1 ? 'sobre' : 'sobres'}
+                            </span>
                         </motion.button>
                     )}
                 </AnimatePresence>

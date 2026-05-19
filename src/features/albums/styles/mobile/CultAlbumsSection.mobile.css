@@ -15,10 +15,8 @@
 
   /* ── FILA: 1 sola columna para que los 3 álbumes de culto tengan el mismo ancho ── */
   .cas2-row {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    max-width: 360px;
-    margin: 0 auto;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
     padding-bottom: 72px;
   }
 
@@ -26,11 +24,9 @@
     transform: none;
   }
 
-  /* ── LIBRO: ratio horizontal para aprovechar el ancho ── */
   .cas2-book {
-    aspect-ratio: 5/3;
-    min-height: 100px;
-    max-height: 180px;
+    aspect-ratio: 3/4;
+    min-height: 140px;
   }
 
   .cas2-spine {
@@ -306,7 +302,7 @@
   }
 
   .cas2-panel-scroll {
-    padding: 8px 12px 72px;
+    padding: 8px 12px 16px;
     gap: 8px;
   }
 
