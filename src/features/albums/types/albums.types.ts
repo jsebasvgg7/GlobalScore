@@ -104,4 +104,11 @@ export const DROP_RATES: Record<SignificanceLevel, number> = {
     5: 0.5,
 };
 
-export const LEGENDARY_ALBUM_IDS = ['legendary_1', 'legendary_2', 'legendary_3', 'golden_album'];
+// golden_album ELIMINADO — replaced by progressive LEG I→V system
+export const LEGENDARY_ALBUM_IDS = [
+    'legendary_1',
+    'legendary_2',
+    'legendary_3',
+    'legendary_4',
+    'legendary_5',
+];

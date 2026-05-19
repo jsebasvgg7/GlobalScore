@@ -9,6 +9,55 @@ const PLAYER_DROP_RATES = [
     { level: 1, weight: 55 },
 ];
 
+// ── Definición progresiva LEG I→V ─────────────────────────────────────────
+// Cada álbum describe cuántos jugadores de cada rareza MÍNIMA necesita.
+// Las cartas son ÚNICAS: una vez usada en un álbum previo no puede reutilizarse.
+const LEG_REQUIREMENTS = {
+    legendary_1: {
+        slots: 30,
+        req: [
+            // { minStars, count }
+            { minStars: 4, count: 5 },
+        ],
+    },
+    legendary_2: {
+        slots: 30,
+        req: [
+            { minStars: 3, count: 5 },
+            { minStars: 4, count: 5 },
+        ],
+    },
+    legendary_3: {
+        slots: 30,
+        req: [
+            { minStars: 2, count: 5 },
+            { minStars: 3, count: 5 },
+            { minStars: 4, count: 5 },
+        ],
+    },
+    legendary_4: {
+        slots: 30,
+        req: [
+            { minStars: 2, count: 5 },
+            { minStars: 3, count: 5 },
+            { minStars: 4, count: 5 },
+            { minStars: 5, count: 1 },
+        ],
+    },
+    legendary_5: {
+        slots: 30,
+        req: [
+            { minStars: 2, count: 5 },
+            { minStars: 3, count: 5 },
+            { minStars: 4, count: 5 },
+            { minStars: 5, count: 5 },
+        ],
+    },
+};
+
+// Orden progresivo de los álbumes legendarios
+const LEG_ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'legendary_4', 'legendary_5'];
+
 // ── Cartas ─────────────────────────────────────────────────────────────────
 
 export async function getAlbumCards() {
@@ -224,51 +273,129 @@ export async function getUserAlbumProgress(userId) {
     return data ?? [];
 }
 
+// ── Helper: asigna jugadores a slots de un álbum legendario ───────────────
+// Devuelve { usedIds, filledSlots, meetsAllReqs, uniquePlayers }
+// usedGlobalIds: Set de card_ids ya consumidos por álbumes anteriores
+function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
+    const legDef = LEG_REQUIREMENTS[albumId];
+    if (!legDef) return { usedIds: new Set(), uniquePlayers: 0, meetsAllReqs: false };
+
+    // Pool disponible: jugadores no usados en álbumes previos
+    const available = playerCollection.filter(
+        (c) => !usedGlobalIds.has(c.card_id ?? c.id)
+    );
+
+    // Ordenar de mayor a menor rareza
+    const sorted = [...available].sort(
+        (a, b) => (b.card?.significance_level ?? 0) - (a.card?.significance_level ?? 0)
+    );
+
+    const assignedIds = new Set();
+    let meetsAllReqs = true;
+
+    // Para cada requisito (ordenados de mayor a menor minStars para asignar primero los más raros)
+    const reqsSorted = [...legDef.req].sort((a, b) => b.minStars - a.minStars);
+
+    for (const { minStars, count } of reqsSorted) {
+        // Candidatos: cumplen el minimo de estrellas y no asignados aún
+        const candidates = sorted.filter(
+            (c) =>
+                (c.card?.significance_level ?? 0) >= minStars &&
+                !assignedIds.has(c.card_id ?? c.id)
+        );
+
+        let filled = 0;
+        for (const candidate of candidates) {
+            if (filled >= count) break;
+            assignedIds.add(candidate.card_id ?? candidate.id);
+            filled++;
+        }
+
+        if (filled < count) {
+            meetsAllReqs = false;
+        }
+    }
+
+    // Slots generales: rellenar hasta legDef.slots con los restantes disponibles
+    const reqTotal = legDef.req.reduce((s, r) => s + r.count, 0);
+    const generalNeeded = legDef.slots - reqTotal;
+    const remaining = sorted.filter((c) => !assignedIds.has(c.card_id ?? c.id));
+
+    let generalFilled = 0;
+    for (const c of remaining) {
+        if (generalFilled >= generalNeeded) break;
+        assignedIds.add(c.card_id ?? c.id);
+        generalFilled++;
+    }
+
+    const uniquePlayers = assignedIds.size;
+    const meetsPlayers = uniquePlayers >= legDef.slots;
+
+    return {
+        usedIds: assignedIds,
+        uniquePlayers,
+        meetsAllReqs: meetsAllReqs && meetsPlayers,
+    };
+}
+
+// ── computeAndSyncAlbumProgress ───────────────────────────────────────────
 export async function computeAndSyncAlbumProgress(userId) {
-    const [collection, definitions, allCards] = await Promise.all([
+    const [collection, definitions] = await Promise.all([
         getUserCollection(userId),
         getAlbumDefinitions(),
-        getAlbumCards(),
     ]);
-
-    const ownedCardIds = new Set(collection.map((c) => c.card_id));
 
     const updates = [];
 
+    // Colección de jugadores (todos, para LEG)
+    const playerCollection = collection.filter((c) => c.card?.card_type === 'player');
+
+    // Pool global de IDs ya consumidos por álbumes legendarios anteriores
+    // Se procesa en orden LEG I → LEG V para respetar exclusividad
+    const globalUsedIds = new Set();
+
+    for (const albumId of LEG_ORDER) {
+        const album = definitions.find((d) => d.id === albumId);
+        if (!album) continue;
+
+        const { usedIds, uniquePlayers, meetsAllReqs } = assignLegendarySlots(
+            albumId,
+            playerCollection,
+            globalUsedIds
+        );
+
+        // Acumular IDs usados para el siguiente álbum
+        usedIds.forEach((id) => globalUsedIds.add(id));
+
+        updates.push({
+            album_id: albumId,
+            unique_cards: uniquePlayers,
+            is_completed: meetsAllReqs,
+        });
+    }
+
+    // Álbumes no-legendarios (stars, cult)
     for (const album of definitions) {
+        if (LEG_ORDER.includes(album.id)) continue; // ya procesados
+
         let uniqueCards = 0;
 
         if (album.album_type === 'stars') {
             uniqueCards = collection.filter(
-                (c) => c.card?.card_type === 'player' && c.card?.significance_level === album.star_filter
+                (c) =>
+                    c.card?.card_type === 'player' &&
+                    c.card?.significance_level === album.star_filter
             ).length;
         } else if (album.album_type === 'cult') {
-            uniqueCards = collection.filter((c) => c.card?.card_type === album.required_card_type).length;
-        } else if (album.album_type === 'legendary') {
-            const playerCards = collection.filter((c) => c.card?.card_type === 'player');
-            const stars4plus = playerCards.filter((c) => c.card?.significance_level >= 4).length;
-            const stars5 = playerCards.filter((c) => c.card?.significance_level === 5).length;
-            const uniquePlayers = playerCards.length;
-
-            const meetsStars4 = stars4plus >= (album.required_min_stars_4 ?? 0);
-            const meetsStars5 = stars5 >= (album.required_min_stars_5 ?? 0);
-            const meetsPlayers = uniquePlayers >= (album.required_unique_players ?? 0);
-
-            const isCompleted = meetsPlayers && meetsStars4 && meetsStars5;
-            uniqueCards = uniquePlayers;
-
-            updates.push({
-                album_id: album.id,
-                unique_cards: uniqueCards,
-                is_completed: isCompleted,
-            });
-            continue;
+            uniqueCards = collection.filter(
+                (c) => c.card?.card_type === album.required_card_type
+            ).length;
         }
 
-        updates.push({ album_id: album.id, unique_cards: uniqueCards });
+        updates.push({ album_id: album.id, unique_cards: uniqueCards, is_completed: false });
     }
 
-    // Upsert progreso
+    // Upsert progreso en Supabase
     for (const update of updates) {
         const { error } = await supabase.from('album_progress').upsert(
             {
@@ -294,7 +421,7 @@ export async function getAllUsersLegendaryProgress() {
     const { data, error } = await supabase
         .from('album_progress')
         .select('user_id, album_id, is_completed')
-        .in('album_id', ['legendary_1', 'legendary_2', 'legendary_3', 'golden_album'])
+        .in('album_id', LEG_ORDER)
         .eq('is_completed', true);
 
     if (error) throw error;
@@ -306,7 +433,7 @@ export async function getUserLegendaryCount(userId) {
         .from('album_progress')
         .select('album_id')
         .eq('user_id', userId)
-        .in('album_id', ['legendary_1', 'legendary_2', 'legendary_3', 'golden_album'])
+        .in('album_id', LEG_ORDER)
         .eq('is_completed', true);
 
     if (error) throw error;

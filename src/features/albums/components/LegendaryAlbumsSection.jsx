@@ -3,87 +3,131 @@ import { Lock, BookOpen, Trophy, Star, ChevronLeft, ChevronRight, Gift, Crown, X
 import '../styles/LegendaryAlbumsSection.css';
 import '../styles/mobile/LegendaryAlbumsSection.mobile.css';
 
-const ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'golden_album'];
+// ── Orden progresivo LEG I → LEG V (golden_album eliminado) ───────────────
+const ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'legendary_4', 'legendary_5'];
+
+// ── Requisitos por álbum (espejo del servicio, para el layout visual) ─────
+// req: [{ minStars, count }] ordenados de mayor a menor rareza
+const LEG_SLOT_REQS = {
+    legendary_1: {
+        slots: 30,
+        req: [{ minStars: 4, count: 5 }],
+    },
+    legendary_2: {
+        slots: 30,
+        req: [
+            { minStars: 3, count: 5 },
+            { minStars: 4, count: 5 },
+        ],
+    },
+    legendary_3: {
+        slots: 30,
+        req: [
+            { minStars: 2, count: 5 },
+            { minStars: 3, count: 5 },
+            { minStars: 4, count: 5 },
+        ],
+    },
+    legendary_4: {
+        slots: 30,
+        req: [
+            { minStars: 2, count: 5 },
+            { minStars: 3, count: 5 },
+            { minStars: 4, count: 5 },
+            { minStars: 5, count: 1 },
+        ],
+    },
+    legendary_5: {
+        slots: 30,
+        req: [
+            { minStars: 2, count: 5 },
+            { minStars: 3, count: 5 },
+            { minStars: 4, count: 5 },
+            { minStars: 5, count: 5 },
+        ],
+    },
+};
 
 const ALBUM_META = {
     legendary_1: {
-        label: 'Legendarios I',
+        label: 'Foundations',
         shortLabel: 'LEG I',
+        subtitle: 'FOUNDATIONS',
         req: '30 jugadores · mín. 5×⭐⭐⭐⭐',
-        slots: 30,
-        minStars4: 5,
-        minStars5: 0,
         spine: '#5b4fd8',
         spineAlt: '#3d34a5',
         accent: '#a599d9',
         accentRgb: '165,153,217',
         tag: 'TEMPORADA 25·26',
         number: '01',
-        golden: false,
         coverBg: '#1a1726',
         coverPattern: 'diagonal',
-        rarityLevel: 4,
-        coverSubtitle: 'LEGENDARIOS',
+        rarityLevel: 3,
+        rarityLabel: 'FUNDACIÓN',
     },
     legendary_2: {
-        label: 'Legendarios II',
+        label: 'Rising Legends',
         shortLabel: 'LEG II',
-        req: '30 jugadores · 5×⭐⭐⭐⭐ + 2×⭐⭐⭐⭐⭐',
-        slots: 30,
-        minStars4: 5,
-        minStars5: 2,
+        subtitle: 'RISING LEGENDS',
+        req: '30 jugadores · 5×⭐⭐⭐ + 5×⭐⭐⭐⭐',
         spine: '#7c3aed',
         spineAlt: '#5b1fbd',
         accent: '#c4b5fd',
         accentRgb: '196,181,253',
         tag: 'TEMPORADA 25·26',
         number: '02',
-        golden: false,
         coverBg: '#160e2a',
         coverPattern: 'hex',
         rarityLevel: 4,
         rarityLabel: 'LEYENDA+',
-        coverSubtitle: 'LEGENDARIOS',
     },
     legendary_3: {
-        label: 'Legendarios III',
+        label: 'Historical Depth',
         shortLabel: 'LEG III',
-        req: '30 jugadores · 5×⭐⭐⭐⭐ + 4×⭐⭐⭐⭐⭐',
-        slots: 30,
-        minStars4: 5,
-        minStars5: 4,
+        subtitle: 'HISTORICAL DEPTH',
+        req: '30 jugadores · 5×⭐⭐ + 5×⭐⭐⭐ + 5×⭐⭐⭐⭐',
         spine: '#1D9E75',
         spineAlt: '#0d6e50',
         accent: '#34d399',
         accentRgb: '52,211,153',
         tag: 'TEMPORADA 25·26',
         number: '03',
-        golden: false,
         coverBg: '#0a1f18',
         coverPattern: 'radial',
         rarityLevel: 5,
         rarityLabel: 'ÉLITE',
-        coverSubtitle: 'LEGENDARIOS',
     },
-    golden_album: {
-        label: 'Álbum Dorado',
-        shortLabel: 'DORADO',
-        req: '15 jugadores · todos ⭐⭐⭐⭐⭐',
-        slots: 15,
-        minStars4: 15,
-        minStars5: 0,
+    legendary_4: {
+        label: 'Elite Construction',
+        shortLabel: 'LEG IV',
+        subtitle: 'ELITE CONSTRUCTION',
+        req: '30 jugadores · 5×⭐⭐ + 5×⭐⭐⭐ + 5×⭐⭐⭐⭐ + 1×⭐⭐⭐⭐⭐',
         spine: '#b45309',
         spineAlt: '#7c3b00',
         accent: '#f59e0b',
         accentRgb: '245,158,11',
-        tag: 'ESPECIAL',
-        number: '✦',
-        golden: true,
+        tag: 'TEMPORADA 25·26',
+        number: '04',
         coverBg: '#1a1200',
         coverPattern: 'spiral',
         rarityLevel: 5,
         rarityLabel: 'GOAT',
-        coverSubtitle: 'DORADO',
+    },
+    legendary_5: {
+        label: 'The Immortals',
+        shortLabel: 'LEG V',
+        subtitle: 'THE IMMORTALS',
+        req: '30 jugadores · 5×⭐⭐ + 5×⭐⭐⭐ + 5×⭐⭐⭐⭐ + 5×⭐⭐⭐⭐⭐',
+        spine: '#9d174d',
+        spineAlt: '#6b1130',
+        accent: '#f472b6',
+        accentRgb: '244,114,182',
+        tag: 'ENDGAME',
+        number: '05',
+        coverBg: '#1a0e15',
+        coverPattern: 'immortal',
+        rarityLevel: 5,
+        rarityLabel: 'INMORTAL',
     },
 };
 
@@ -101,73 +145,95 @@ function posLabel(pos) {
 
 /* ══════════════════════════════════════════
    SLOT LAYOUT ENGINE
-   Builds two zones: REQ slots + GENERAL slots.
-   Players are sorted highest stars → lowest before placement.
-══════════════════════════════════════════ */
-function buildSlotLayout(meta, collection) {
-    const playerCol = collection.filter(c => c.card?.card_type === 'player');
+   Builds slot zones based on the GLOBAL collection,
+   excluding cards already used in previous albums.
 
-    // Sort descending by significance_level so highest stars appear first
+   prevUsedIds: Set of card IDs consumed by earlier LEG albums.
+══════════════════════════════════════════ */
+function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
+    const slotDef = LEG_SLOT_REQS[albumId];
+    if (!slotDef) return { reqZones: [], generalSlots: [], filled: 0, pct: 0, usedIds: new Set() };
+
+    // Only player cards, not already consumed by previous albums
+    const playerCol = collection.filter(
+        (c) => c.card?.card_type === 'player' && !prevUsedIds.has(c.card_id ?? c.id)
+    );
+
+    // Sort descending by significance so highest stars are assigned first
     const sorted = [...playerCol].sort(
         (a, b) => (b.card?.significance_level ?? 0) - (a.card?.significance_level ?? 0)
     );
 
-    const stars5players = sorted.filter(c => c.card?.significance_level === 5);
-    const stars4players = sorted.filter(c => (c.card?.significance_level ?? 0) === 4);
-    const generalPlayers = sorted.filter(c => (c.card?.significance_level ?? 0) <= 3);
+    const assignedIds = new Set();
+    const reqZones = [];
 
-    // REQ ZONE — fixed slots for 5★ requirement
-    const reqSlots5 = Array.from({ length: meta.minStars5 }, (_, i) => ({
-        slotType: 'req5',
-        item: stars5players[i] ?? null,
-        reqLabel: '⭐⭐⭐⭐⭐',
-        minStars: 5,
+    // Process requirements from highest to lowest minStars
+    const reqsSorted = [...slotDef.req].sort((a, b) => b.minStars - a.minStars);
+
+    for (const { minStars, count } of reqsSorted) {
+        const candidates = sorted.filter(
+            (c) =>
+                (c.card?.significance_level ?? 0) >= minStars &&
+                !assignedIds.has(c.card_id ?? c.id)
+        );
+
+        const slots = Array.from({ length: count }, (_, i) => {
+            const item = candidates[i] ?? null;
+            if (item) assignedIds.add(item.card_id ?? item.id);
+            return {
+                slotType: minStars === 5 ? 'req5' : minStars === 4 ? 'req4' : minStars === 3 ? 'req3' : 'req2',
+                item,
+                reqLabel: '⭐'.repeat(minStars),
+                minStars,
+            };
+        });
+
+        reqZones.push({ minStars, slots });
+    }
+
+    // General slots: remaining cards not yet assigned
+    const reqTotal = slotDef.req.reduce((s, r) => s + r.count, 0);
+    const generalSlotCount = slotDef.slots - reqTotal;
+    const generalPool = sorted.filter((c) => !assignedIds.has(c.card_id ?? c.id));
+
+    const generalSlots = Array.from({ length: generalSlotCount }, (_, i) => {
+        const item = generalPool[i] ?? null;
+        if (item) assignedIds.add(item.card_id ?? item.id);
+        return { slotType: 'general', item, reqLabel: null, minStars: null };
+    });
+
+    // Stats
+    const filledReq = reqZones.reduce((sum, z) => sum + z.slots.filter(s => s.item).length, 0);
+    const filledGen = generalSlots.filter(s => s.item).length;
+    const filled = filledReq + filledGen;
+    const pct = slotDef.slots > 0 ? Math.min(100, Math.round((filled / slotDef.slots) * 100)) : 0;
+
+    // Req fulfillment per zone
+    const reqMet = reqZones.map(z => ({
+        minStars: z.minStars,
+        required: z.slots.length,
+        filled: z.slots.filter(s => s.item).length,
     }));
 
-    // REQ ZONE — fixed slots for 4★ requirement
-    // 4★ slots accept EITHER 4★ or 5★ cards (5★ already placed above)
-    const stars4pool = [...stars5players.slice(meta.minStars5), ...stars4players];
-    const reqSlots4 = Array.from({ length: meta.minStars4 }, (_, i) => ({
-        slotType: 'req4',
-        item: stars4pool[i] ?? null,
-        reqLabel: '⭐⭐⭐⭐',
-        minStars: 4,
-    }));
+    return { reqZones, generalSlots, filled, pct, usedIds: assignedIds, reqMet };
+}
 
-    // GENERAL ZONE — remaining slots
-    // Players already used in req zones
-    const usedInReq = new Set([
-        ...stars5players.slice(0, meta.minStars5).map(c => c.card_id ?? c.id),
-        ...stars4pool.slice(0, meta.minStars4).map(c => c.card_id ?? c.id),
-    ]);
+/* ══════════════════════════════════════════
+   Compute all albums' usedIds in order
+   so each album can exclude cards used by previous ones.
+══════════════════════════════════════════ */
+function computeAllUsedIds(collection) {
+    const allUsed = {}; // albumId → Set of usedIds for THAT album
+    const globalUsed = new Set();
 
-    const generalPool = sorted.filter(c => !usedInReq.has(c.card_id ?? c.id));
-    const reqTotal = meta.minStars5 + meta.minStars4;
-    const generalSlotCount = meta.slots - reqTotal;
+    for (const albumId of ORDER) {
+        const { usedIds } = buildSlotLayout(albumId, collection, globalUsed);
+        allUsed[albumId] = globalUsed.size; // just tracking
+        usedIds.forEach(id => globalUsed.add(id));
+        allUsed[albumId] = new Set(usedIds); // store the used set for this album
+    }
 
-    const generalSlots = Array.from({ length: generalSlotCount }, (_, i) => ({
-        slotType: 'general',
-        item: generalPool[i] ?? null,
-        reqLabel: null,
-        minStars: null,
-    }));
-
-    // Progress counters
-    const filledReq5 = reqSlots5.filter(s => s.item).length;
-    const filledReq4 = reqSlots4.filter(s => s.item).length;
-    const filledGeneral = generalSlots.filter(s => s.item).length;
-    const filled = filledReq5 + filledReq4 + filledGeneral;
-    const pct = meta.slots > 0 ? Math.min(100, Math.round((filled / meta.slots) * 100)) : 0;
-
-    return {
-        reqSlots5,
-        reqSlots4,
-        generalSlots,
-        filled,
-        pct,
-        stars4Count: stars4players.length + stars5players.length,
-        stars5Count: stars5players.length,
-    };
+    return allUsed;
 }
 
 /* ══════════════════════════════════════════
@@ -294,42 +360,102 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
         );
     }
 
+    // legendary_4 — golden elite (1 GOAT required)
+    if (albumId === 'legendary_4') {
+        return (
+            <svg viewBox="0 0 120 160" className="las2-cover-svg" aria-hidden="true">
+                <defs>
+                    <pattern id={`${id}-dots`} patternUnits="userSpaceOnUse" width="12" height="12">
+                        <circle cx="6" cy="6" r="1" fill={accent} opacity="0.25" />
+                    </pattern>
+                    <radialGradient id={`${id}-radial`} cx="50%" cy="50%" r="60%">
+                        <stop offset="0%" stopColor={accent} stopOpacity="0.15" />
+                        <stop offset="100%" stopColor={accent} stopOpacity="0" />
+                    </radialGradient>
+                </defs>
+                <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-dots)`} />
+                <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-radial)`} />
+                <rect x="7" y="7" width="106" height="146" fill="none" stroke={accent} strokeWidth="0.5" opacity="0.3" />
+                <rect x="11" y="11" width="98" height="138" fill="none" stroke={accent} strokeWidth="0.3" opacity="0.2" />
+                <g fill={accent} opacity="0.6">
+                    {[[7, 7], [113, 7], [7, 153], [113, 153]].map(([x, y], i) => (
+                        <polygon key={i} points={`${x},${y - 6} ${x + 5},${y} ${x},${y + 6} ${x - 5},${y}`} />
+                    ))}
+                </g>
+                {!locked && (
+                    <>
+                        <path d="M60,80 Q68,62 76,72 Q86,88 70,98 Q50,110 40,88 Q30,62 56,50 Q84,38 94,72 Q102,104 74,118"
+                            fill="none" stroke={accent} strokeWidth="1.2" opacity="0.3" strokeLinecap="round" />
+                        <g transform="translate(60,76)">
+                            <path d="M-12,-20 Q-14,4 0,16 Q14,4 12,-20 Z"
+                                fill="none" stroke={accent} strokeWidth="1.4" strokeLinejoin="round" opacity="0.95" />
+                            <path d="M-12,-12 Q-22,-12 -22,-4 Q-22,4 -12,4" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
+                            <path d="M12,-12 Q22,-12 22,-4 Q22,4 12,4" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
+                            <line x1="0" y1="16" x2="0" y2="22" stroke={accent} strokeWidth="1.4" opacity="0.8" />
+                            <rect x="-10" y="22" width="20" height="4" rx="2" fill={accent} opacity="0.6" />
+                            <path d="M0,-8 L2,-4 L6,-4 L3,-1 L4,3 L0,1 L-4,3 L-3,-1 L-6,-4 L-2,-4 Z"
+                                fill={accent} opacity="0.75" />
+                        </g>
+                    </>
+                )}
+            </svg>
+        );
+    }
+
+    // legendary_5 — The Immortals (endgame, 5 GOATs)
     return (
-        <svg viewBox="0 0 120 160" className="las2-cover-svg las2-cover-svg--golden" aria-hidden="true">
+        <svg viewBox="0 0 120 160" className="las2-cover-svg" aria-hidden="true">
             <defs>
-                <pattern id={`${id}-dots`} patternUnits="userSpaceOnUse" width="12" height="12">
-                    <circle cx="6" cy="6" r="1" fill={accent} opacity="0.25" />
-                </pattern>
-                <radialGradient id={`${id}-radial`} cx="50%" cy="50%" r="60%">
-                    <stop offset="0%" stopColor={accent} stopOpacity="0.15" />
+                <radialGradient id={`${id}-core`} cx="50%" cy="50%" r="55%">
+                    <stop offset="0%" stopColor={accent} stopOpacity="0.22" />
                     <stop offset="100%" stopColor={accent} stopOpacity="0" />
                 </radialGradient>
+                <radialGradient id={`${id}-outer`} cx="50%" cy="50%" r="80%">
+                    <stop offset="0%" stopColor="transparent" />
+                    <stop offset="100%" stopColor="rgba(0,0,0,0.55)" />
+                </radialGradient>
             </defs>
-            <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-dots)`} />
-            <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-radial)`} />
-            <rect x="7" y="7" width="106" height="146" fill="none" stroke={accent} strokeWidth="0.5" opacity="0.3" />
-            <rect x="11" y="11" width="98" height="138" fill="none" stroke={accent} strokeWidth="0.3" opacity="0.2" />
-            <g fill={accent} opacity="0.6">
-                {[[7, 7], [113, 7], [7, 153], [113, 153]].map(([x, y], i) => (
-                    <polygon key={i} points={`${x},${y - 6} ${x + 5},${y} ${x},${y + 6} ${x - 5},${y}`} />
-                ))}
-            </g>
-            {!locked && (
-                <>
-                    <path d="M60,80 Q68,62 76,72 Q86,88 70,98 Q50,110 40,88 Q30,62 56,50 Q84,38 94,72 Q102,104 74,118"
-                        fill="none" stroke={accent} strokeWidth="1.2" opacity="0.3" strokeLinecap="round" />
-                    <g transform="translate(60,76)">
-                        <path d="M-12,-20 Q-14,4 0,16 Q14,4 12,-20 Z"
-                            fill="none" stroke={accent} strokeWidth="1.4" strokeLinejoin="round" opacity="0.95" />
-                        <path d="M-12,-12 Q-22,-12 -22,-4 Q-22,4 -12,4" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
-                        <path d="M12,-12 Q22,-12 22,-4 Q22,4 12,4" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
-                        <line x1="0" y1="16" x2="0" y2="22" stroke={accent} strokeWidth="1.4" opacity="0.8" />
-                        <rect x="-10" y="22" width="20" height="4" rx="2" fill={accent} opacity="0.6" />
-                        <path d="M0,-8 L2,-4 L6,-4 L3,-1 L4,3 L0,1 L-4,3 L-3,-1 L-6,-4 L-2,-4 Z"
-                            fill={accent} opacity="0.75" />
+            <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-core)`} />
+            {/* Concentric rings */}
+            {[56, 44, 32, 22, 14].map((r, i) => (
+                <circle key={i} cx="60" cy="80" r={r}
+                    fill="none" stroke={accent} strokeWidth={i === 0 ? 0.5 : 0.4}
+                    opacity={0.06 + i * 0.07}
+                    strokeDasharray={i % 2 === 0 ? "4 3" : "none"} />
+            ))}
+            {/* 5 stars pattern */}
+            {Array.from({ length: 5 }, (_, i) => {
+                const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+                const cx = 60 + 30 * Math.cos(a);
+                const cy = 80 + 30 * Math.sin(a);
+                return (
+                    <g key={i} transform={`translate(${cx},${cy})`}>
+                        <path d="M0,-5 L1.5,-1.5 L5,-1.5 L2.5,1 L3.5,4.5 L0,2.5 L-3.5,4.5 L-2.5,1 L-5,-1.5 L-1.5,-1.5 Z"
+                            fill={accent} opacity="0.4" />
                     </g>
-                </>
+                );
+            })}
+            {/* Center crown */}
+            {!locked && (
+                <g transform="translate(60,80)">
+                    <circle cx="0" cy="0" r="11" fill={accent} fillOpacity="0.06" />
+                    <path d="M-10,5 L-10,-5 L-5,0 L0,-10 L5,0 L10,-5 L10,5 Z"
+                        fill="none" stroke={accent} strokeWidth="1.3" strokeLinejoin="round" opacity="0.95" />
+                    <rect x="-10" y="5" width="20" height="3" rx="1.5" fill={accent} opacity="0.5" />
+                    {/* 5 dots on crown */}
+                    {[-8, -4, 0, 4, 8].map((x, i) => (
+                        <circle key={i} cx={x} cy="-1" r="1" fill={accent} opacity="0.7" />
+                    ))}
+                </g>
             )}
+            <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-outer)`} />
+            {/* Corner ornaments */}
+            <g stroke={accent} strokeWidth="0.6" opacity="0.35" fill="none">
+                <polyline points="6,8 6,20 18,20" />
+                <polyline points="114,8 114,20 102,20" />
+                <polyline points="6,152 6,140 18,140" />
+                <polyline points="114,152 114,140 102,140" />
+            </g>
         </svg>
     );
 }
@@ -342,8 +468,7 @@ function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }
     const isGoat = card?.significance_level === 5;
     const filled = !!collectionItem;
     const stars = card?.significance_level ?? 0;
-
-    const isReqSlot = slotType === 'req4' || slotType === 'req5';
+    const isReqSlot = slotType !== 'general';
 
     if (filled) {
         return (
@@ -352,7 +477,6 @@ function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }
                 style={{ '--acc': accent }}
             >
                 <div className="las2-sticker-topband" />
-
                 <div className="las2-sticker-header">
                     <span className="las2-sticker-num">{num}</span>
                     {isGoat && <Crown size={8} className="las2-sticker-crown" />}
@@ -360,7 +484,6 @@ function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }
                         <span className="las2-sticker-copies">×{collectionItem.copies}</span>
                     )}
                 </div>
-
                 <div className="las2-sticker-avatar-zone">
                     {card?.image_path
                         ? <img src={card.image_path} alt={card.name} className="las2-sticker-img" />
@@ -381,18 +504,15 @@ function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }
                             strokeDasharray={isGoat ? "none" : "6 3"} />
                     </svg>
                 </div>
-
                 <div className="las2-sticker-stars">
                     {Array.from({ length: 5 }, (_, i) => (
                         <span key={i} className={`las2-star ${i < stars ? 'las2-star--on' : 'las2-star--off'}`}>★</span>
                     ))}
                 </div>
-
                 <div className="las2-sticker-info">
                     <span className="las2-sticker-name">{card?.name}</span>
                     {card?.position && <span className="las2-sticker-pos">{posLabel(card.position)}</span>}
                 </div>
-
                 <div className="las2-sticker-foil" />
             </div>
         );
@@ -421,7 +541,7 @@ function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }
                 </div>
             </div>
             <div className="las2-sticker-stars">
-                {Array.from({ length: isReqSlot ? (slotType === 'req5' ? 5 : 4) : 4 }, (_, i) => (
+                {Array.from({ length: isReqSlot ? (slotType === 'req5' ? 5 : slotType === 'req4' ? 4 : slotType === 'req3' ? 3 : 2) : 4 }, (_, i) => (
                     <span key={i} className="las2-star las2-star--empty">★</span>
                 ))}
             </div>
@@ -451,7 +571,7 @@ function ZoneHeader({ label, count, filled, accent }) {
 /* ══════════════════════════════════════════
    ALBUM PANEL
 ══════════════════════════════════════════ */
-function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose }) {
+function AlbumPanel({ albumId, meta, definitions, progress, collection, prevUsedIds, onClose }) {
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(0);
     const PER_PAGE = window.innerWidth <= 768 ? 9 : 10;
@@ -460,19 +580,26 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
     const prog = progress.find(p => p.album_id === albumId);
     const isCompleted = prog?.is_completed ?? false;
 
-    const { reqSlots5, reqSlots4, generalSlots, filled, pct, stars4Count, stars5Count } =
-        buildSlotLayout(meta, collection);
+    const { reqZones, generalSlots, filled, pct, reqMet } =
+        buildSlotLayout(albumId, collection, prevUsedIds);
 
-    const reqPlayers = def?.required_unique_players ?? meta.slots;
-    const reqStars4 = def?.required_min_stars_4 ?? meta.minStars4;
-    const reqStars5 = def?.required_min_stars_5 ?? meta.minStars5;
+    const slotDef = LEG_SLOT_REQS[albumId] ?? { slots: 30, req: [] };
 
-    // Combine all slots in display order: 5★ req → 4★ req → general
-    const allSlots = [
-        ...reqSlots5.map((s, i) => ({ ...s, globalIdx: i })),
-        ...reqSlots4.map((s, i) => ({ ...s, globalIdx: reqSlots5.length + i })),
-        ...generalSlots.map((s, i) => ({ ...s, globalIdx: reqSlots5.length + reqSlots4.length + i })),
-    ];
+    // Flatten all slots for pagination
+    const allSlots = [];
+    reqZones.forEach(zone => {
+        zone.slots.forEach((s, i) => allSlots.push({ ...s, globalIdx: allSlots.length }));
+    });
+    generalSlots.forEach((s, i) => allSlots.push({ ...s, globalIdx: allSlots.length }));
+
+    // Zone boundary indices
+    const reqBoundaries = [];
+    let cursor = 0;
+    reqZones.forEach(zone => {
+        reqBoundaries.push({ start: cursor, end: cursor + zone.slots.length, minStars: zone.minStars });
+        cursor += zone.slots.length;
+    });
+    const generalStart = cursor;
 
     const filteredSlots = search.trim()
         ? allSlots.filter(({ item }) =>
@@ -483,18 +610,16 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
     const totalPages = Math.max(1, Math.ceil(filteredSlots.length / PER_PAGE));
     const safePagenr = Math.min(page, totalPages - 1);
     const pageItems = filteredSlots.slice(safePagenr * PER_PAGE, (safePagenr + 1) * PER_PAGE);
-
-    // Determine zone boundaries within the current page for zone headers
     const pageStartIdx = safePagenr * PER_PAGE;
-    const req5End = reqSlots5.length;
-    const req4End = req5End + reqSlots4.length;
 
-    const albumNum = meta.number === '✦' ? 'GOLD' : meta.number;
+    const reqTotal = slotDef.req.reduce((s, r) => s + r.count, 0);
+    const filledReq = reqZones.reduce((sum, z) => sum + z.slots.filter(s => s.item).length, 0);
+
+    const albumNum = meta.number;
 
     return (
         <>
             <div className="las2-overlay" onClick={onClose} />
-
             <div
                 className="las2-panel"
                 style={{
@@ -515,17 +640,15 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                 </div>
 
                 <div className="las2-panel-body">
-
                     <div className="las2-panel-sidebar">
                         <div className="las2-panel-sidebar-inner">
-
                             <span className="las2-sidebar-id">ID: ALB-{albumNum}</span>
                             <h2 className="las2-sidebar-title">{meta.shortLabel}</h2>
 
                             <div className="las2-sidebar-count">
                                 <span className="las2-sidebar-count-big">{filled}</span>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                    <span className="las2-sidebar-count-sep">/ {reqPlayers}</span>
+                                    <span className="las2-sidebar-count-sep">/ {slotDef.slots}</span>
                                     <span className="las2-sidebar-count-label">Items</span>
                                 </div>
                             </div>
@@ -562,11 +685,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                                         {['tl', 'tr', 'bl', 'br'].map(pos => (
                                             <div key={pos} className={`las2-corner las2-corner--${pos}`} />
                                         ))}
-                                        <span style={{
-                                            position: 'absolute', fontFamily: "'Sora', sans-serif", fontSize: 14,
-                                            fontWeight: 800, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.88)',
-                                            textShadow: `0 0 16px rgba(${meta.accentRgb},0.6)`, zIndex: 2,
-                                        }}></span>
                                     </div>
                                     <div style={{
                                         position: 'absolute', top: 4, right: -8, bottom: 4, width: 10,
@@ -588,14 +706,12 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                             </div>
 
                             <div className="las2-sidebar-chips">
-                                <span className={`las2-chip ${stars4Count >= reqStars4 ? 'las2-chip--ok' : ''}`}>
-                                    {'★★★★'} {Math.min(stars4Count, reqStars4)}/{reqStars4}
-                                </span>
-                                {reqStars5 > 0 && (
-                                    <span className={`las2-chip ${stars5Count >= reqStars5 ? 'las2-chip--ok' : ''}`}>
-                                        <Crown size={9} /> {Math.min(stars5Count, reqStars5)}/{reqStars5} GOAT
+                                {reqMet?.map(({ minStars, required, filled: f }) => (
+                                    <span key={minStars} className={`las2-chip ${f >= required ? 'las2-chip--ok' : ''}`}>
+                                        {'★'.repeat(minStars)} {Math.min(f, required)}/{required}
+                                        {minStars === 5 && <Crown size={9} style={{ marginLeft: 2 }} />}
                                     </span>
-                                )}
+                                ))}
                                 {isCompleted && (
                                     <span className="las2-chip las2-chip--done">✓ Completado</span>
                                 )}
@@ -606,14 +722,13 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                             <div className="las2-sidebar-desc-full">
                                 <span className="las2-sidebar-desc-label">Descripción</span>
                                 <span className="las2-sidebar-desc-val">
-                                    {def?.description ?? 'El primer álbum legendario.'}
+                                    {def?.description ?? meta.subtitle}
                                 </span>
                             </div>
                         </div>
                     </div>
 
                     <div className="las2-panel-main">
-
                         <div className="las2-panel-toolbar">
                             <div className="las2-toolbar-search">
                                 <Search size={13} className="las2-toolbar-search-icon" />
@@ -634,7 +749,7 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                                 <div className="las2-page-indicator-line" />
                             </div>
 
-                            {renderPageWithZones(pageItems, pageStartIdx, req5End, req4End, reqSlots5, reqSlots4, generalSlots, meta, search)}
+                            {renderPageWithZones(pageItems, pageStartIdx, reqBoundaries, generalStart, reqZones, generalSlots, meta, search)}
                         </div>
                     </div>
                 </div>
@@ -646,9 +761,7 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
                     </div>
                     <div className="las2-footer-stat">
                         <span className="las2-footer-stat-label">Requisitos</span>
-                        <span className="las2-footer-stat-val">
-                            {reqSlots5.filter(s => s.item).length + reqSlots4.filter(s => s.item).length}/{reqSlots5.length + reqSlots4.length}
-                        </span>
+                        <span className="las2-footer-stat-val">{filledReq}/{reqTotal}</span>
                     </div>
 
                     <div className="las2-footer-pagination">
@@ -686,12 +799,9 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, onClose 
 
 /* ══════════════════════════════════════════
    ZONE-GROUPED RENDER
-   Splits the current page items into sub-grids per zone,
-   each preceded by a ZoneHeader.
 ══════════════════════════════════════════ */
-function renderPageWithZones(pageItems, pageStartIdx, req5End, req4End, reqSlots5, reqSlots4, generalSlots, meta, search) {
+function renderPageWithZones(pageItems, pageStartIdx, reqBoundaries, generalStart, reqZones, generalSlots, meta, search) {
     if (search.trim()) {
-        // Flat grid, no zone separation
         return (
             <div className="las2-sticker-grid">
                 {pageItems.map(({ slotType, item, globalIdx, reqLabel }, i) => (
@@ -709,17 +819,21 @@ function renderPageWithZones(pageItems, pageStartIdx, req5End, req4End, reqSlots
         );
     }
 
-    // Group consecutive page items by zone
+    // Determine zone per absolute index
+    const getZone = (absIdx) => {
+        for (const b of reqBoundaries) {
+            if (absIdx >= b.start && absIdx < b.end) return `req${b.minStars}`;
+        }
+        return 'general';
+    };
+
     const zones = [];
     let currentZone = null;
     let currentGroup = [];
 
     pageItems.forEach((slot, i) => {
         const absIdx = pageStartIdx + i;
-        let zone;
-        if (absIdx < req5End) zone = 'req5';
-        else if (absIdx < req4End) zone = 'req4';
-        else zone = 'general';
+        const zone = getZone(absIdx);
 
         if (zone !== currentZone) {
             if (currentGroup.length > 0) zones.push({ zone: currentZone, slots: currentGroup });
@@ -730,17 +844,24 @@ function renderPageWithZones(pageItems, pageStartIdx, req5End, req4End, reqSlots
     });
     if (currentGroup.length > 0) zones.push({ zone: currentZone, slots: currentGroup });
 
-    const zoneLabels = {
-        req5: { label: 'GOAT SLOTS', total: reqSlots5.length, countFn: () => reqSlots5.filter(s => s.item).length },
-        req4: { label: 'LEYENDA SLOTS', total: reqSlots4.length, countFn: () => reqSlots4.filter(s => s.item).length },
-        general: { label: 'SLOTS GENERALES', total: generalSlots.length, countFn: () => generalSlots.filter(s => s.item).length },
+    const zoneLabel = (zone) => {
+        if (zone === 'req5') return { label: 'GOAT SLOTS', data: reqZones.find(z => z.minStars === 5) };
+        if (zone === 'req4') return { label: 'LEYENDA SLOTS', data: reqZones.find(z => z.minStars === 4) };
+        if (zone === 'req3') return { label: 'CULTO SLOTS', data: reqZones.find(z => z.minStars === 3) };
+        if (zone === 'req2') return { label: 'HISTORIA SLOTS', data: reqZones.find(z => z.minStars === 2) };
+        return { label: 'SLOTS GENERALES', data: null };
     };
 
     return zones.map(({ zone, slots }) => {
-        const { label, total, countFn } = zoneLabels[zone];
+        const { label, data } = zoneLabel(zone);
+        const total = data ? data.slots.length : generalSlots.length;
+        const filledCount = data
+            ? data.slots.filter(s => s.item).length
+            : generalSlots.filter(s => s.item).length;
+
         return (
             <div key={zone} className={`las2-zone-block las2-zone-block--${zone}`}>
-                <ZoneHeader label={label} count={total} filled={countFn()} accent={meta.accent} />
+                <ZoneHeader label={label} count={total} filled={filledCount} accent={meta.accent} />
                 <div className="las2-sticker-grid">
                     {slots.map(({ slotType, item, reqLabel, absIdx }) => (
                         <StickerCard
@@ -762,14 +883,17 @@ function renderPageWithZones(pageItems, pageStartIdx, req5End, req4End, reqSlots
 /* ══════════════════════════════════════════
    BOOK CARD
 ══════════════════════════════════════════ */
-function AlbumBook({ albumId, meta, definitions, progress, collection, locked }) {
+function AlbumBook({ albumId, meta, definitions, progress, collection, locked, prevUsedIds }) {
     const [panelOpen, setPanelOpen] = useState(false);
 
     const { filled, pct } = locked
         ? { filled: 0, pct: 0 }
-        : buildSlotLayout(meta, collection);
-    const reqPlayers = meta.slots;
+        : buildSlotLayout(albumId, collection, prevUsedIds);
+
+    const slotDef = LEG_SLOT_REQS[albumId] ?? { slots: 30 };
     const isCompleted = progress.find(p => p.album_id === albumId)?.is_completed ?? false;
+
+    const isEndgame = albumId === 'legendary_5';
 
     return (
         <>
@@ -781,7 +905,7 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                 </div>
 
                 <button
-                    className={`las2-book ${isCompleted ? 'las2-book--done' : ''} ${meta.golden ? 'las2-book--golden' : ''}`}
+                    className={`las2-book ${isCompleted ? 'las2-book--done' : ''} ${isEndgame ? 'las2-book--endgame' : ''}`}
                     style={{
                         '--spine': meta.spine, '--spine-alt': meta.spineAlt,
                         '--acc': meta.accent, '--acc-rgb': meta.accentRgb, '--cover-bg': meta.coverBg,
@@ -813,7 +937,7 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                         <div className="las2-cover-tag">
                             {locked ? <><Lock size={7} strokeWidth={2.5} /> BLOQUEADO</> : meta.tag}
                         </div>
-                        <div className="las2-cover-id">ID: ALB-{meta.number === '✦' ? 'GOLD' : meta.number}</div>
+                        <div className="las2-cover-id">ID: ALB-{meta.number}</div>
                         <div className="las2-cover-title-block">
                             <span className="las2-cover-brand"></span>
                         </div>
@@ -830,7 +954,7 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                         )}
                         <div className="las2-cover-footer">
                             <div className="las2-cover-footer-info">
-                                <span className="las2-cover-count">{filled} / {reqPlayers} ITEMS</span>
+                                <span className="las2-cover-count">{filled} / {slotDef.slots} ITEMS</span>
                                 {isCompleted && <span className="las2-done-tick">✓</span>}
                             </div>
                             <div className="las2-mini-bar">
@@ -839,7 +963,7 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                             {!locked && <span className="las2-cover-hint">Abrir álbum →</span>}
                         </div>
                         {!locked && (
-                            <div className={`las2-rarity ${meta.golden ? 'las2-rarity--golden' : ''}`}>
+                            <div className={`las2-rarity ${isEndgame ? 'las2-rarity--endgame' : ''}`}>
                                 <div className="las2-rarity-stars">
                                     {Array.from({ length: meta.rarityLevel }, (_, i) => <span key={i}>★</span>)}
                                 </div>
@@ -857,6 +981,7 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
                     definitions={definitions}
                     progress={progress}
                     collection={collection}
+                    prevUsedIds={prevUsedIds}
                     onClose={() => setPanelOpen(false)}
                 />
             )}
@@ -868,19 +993,53 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked })
    MAIN EXPORT
 ══════════════════════════════════════════ */
 export default function LegendaryAlbumsSection({ definitions, progress, collection }) {
-    const isUnlocked = useCallback((albumId) => {
-        const idx = ORDER.indexOf(albumId);
-        if (idx === 0) return true;
-        const prev = progress.find(p => p.album_id === ORDER[idx - 1]);
-        return prev?.is_completed ?? false;
+    // isUnlocked needs to be computed first so useMemo can use it
+    const unlockedSet = React.useMemo(() => {
+        const set = new Set();
+        for (let i = 0; i < ORDER.length; i++) {
+            const albumId = ORDER[i];
+            if (i === 0) {
+                set.add(albumId);
+            } else {
+                const prev = progress.find(p => p.album_id === ORDER[i - 1]);
+                if (prev?.is_completed) set.add(albumId);
+            }
+        }
+        return set;
     }, [progress]);
+
+    const isUnlocked = useCallback((albumId) => unlockedSet.has(albumId), [unlockedSet]);
+
+    // Pre-compute cumulative usedIds in order.
+    // CRITICAL: locked albums are SKIPPED — they don't consume cards from the pool
+    // and they receive an empty prevUsedIds so they show all slots as empty.
+    const prevUsedIdsMap = React.useMemo(() => {
+        const map = {};
+        const globalUsed = new Set();
+
+        for (const albumId of ORDER) {
+            if (!unlockedSet.has(albumId)) {
+                // Locked album: snapshot current globalUsed (won't matter since
+                // buildSlotLayout will receive locked=true and return empty),
+                // but crucially we do NOT run buildSlotLayout or accumulate IDs.
+                map[albumId] = new Set(globalUsed);
+                continue;
+            }
+
+            map[albumId] = new Set(globalUsed); // snapshot BEFORE this album
+            const { usedIds } = buildSlotLayout(albumId, collection, globalUsed);
+            usedIds.forEach(id => globalUsed.add(id));
+        }
+
+        return map;
+    }, [collection, unlockedSet]);
 
     return (
         <div className="las2-root">
             <div className="las2-eyebrow">
                 <span>Álbumes Legendarios</span>
                 <div className="las2-eyebrow-line" />
-                <span className="las2-eyebrow-count">4 álbumes</span>
+                <span className="las2-eyebrow-count">5 álbumes</span>
             </div>
             <div className="las2-row">
                 {ORDER.map(albumId => (
@@ -892,6 +1051,7 @@ export default function LegendaryAlbumsSection({ definitions, progress, collecti
                         progress={progress}
                         collection={collection}
                         locked={!isUnlocked(albumId)}
+                        prevUsedIds={prevUsedIdsMap[albumId]}
                     />
                 ))}
             </div>
