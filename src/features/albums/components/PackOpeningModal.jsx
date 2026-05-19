@@ -24,7 +24,7 @@ function StarRow({ level }) {
 }
 
 function Particles({ active }) {
-    const particles = Array.from({ length: 24 }, (_, i) => i);
+    const particles = Array.from({ length: 32 }, (_, i) => i);
     if (!active) return null;
     return (
         <div className="pom-particles" aria-hidden="true">
@@ -33,10 +33,11 @@ function Particles({ active }) {
                     key={i}
                     className="pom-particle"
                     style={{
-                        '--angle': `${(i / 24) * 360}deg`,
-                        '--delay': `${(i % 6) * 0.07}s`,
-                        '--dist': `${80 + Math.random() * 80}px`,
-                        '--size': `${2 + Math.random() * 4}px`,
+                        '--angle': `${(i / 32) * 360}deg`,
+                        '--delay': `${(i % 8) * 0.06}s`,
+                        '--dist': `${90 + Math.random() * 100}px`,
+                        '--size': `${2 + Math.random() * 5}px`,
+                        '--color': i % 3 === 0 ? '#f59e0b' : i % 3 === 1 ? '#fcd34d' : '#fff7ed',
                     }}
                 />
             ))}
@@ -48,19 +49,21 @@ function RevealCard({ type, card, index, visible, isGoat }) {
     const color = TYPE_COLOR[type] || '#5b4fd8';
     const isPlayer = type === 'player';
     const stars = isPlayer ? card?.significance_level : null;
-
-    // Resolver la URL de imagen correctamente para todos los tipos de carta
     const resolvedImageUrl = card?.image_path ? getHistoricalImageUrl(card.image_path) : null;
 
     return (
         <div
             className={`pom-card${visible ? ' pom-card--visible' : ''}${isGoat && isPlayer ? ' pom-card--goat' : ''}`}
-            style={{ '--card-color': color, '--delay': `${index * 0.12}s` }}
+            style={{ '--card-color': color, '--delay': `${index * 0.14}s` }}
         >
-            <div className="pom-card-shine" />
+            {/* Glow halo behind card */}
+            <div className="pom-card-halo" style={{ '--card-color': color }} />
 
             <div className="pom-card-inner">
-                <div className="pom-card-top-bar" style={{ background: color }} />
+                {/* Top gradient bar with shimmer */}
+                <div className="pom-card-top-bar" style={{ background: color }}>
+                    <div className="pom-card-top-shimmer" />
+                </div>
 
                 <div className="pom-card-type-label" style={{ color }}>
                     {TYPE_LABEL[type]}
@@ -74,9 +77,9 @@ function RevealCard({ type, card, index, visible, isGoat }) {
                             {getInitials(card?.name)}
                         </div>
                     )}
-                    {isGoat && isPlayer && (
-                        <div className="pom-card-goat-halo" />
-                    )}
+                    {/* Diagonal gloss */}
+                    <div className="pom-card-img-gloss" />
+                    {isGoat && isPlayer && <div className="pom-card-goat-halo" />}
                 </div>
 
                 <div className="pom-card-info">
@@ -87,6 +90,9 @@ function RevealCard({ type, card, index, visible, isGoat }) {
                 <div className="pom-card-bottom-bar" style={{ background: color }} />
             </div>
 
+            {/* Card shine overlay */}
+            <div className="pom-card-shine" />
+
             {isGoat && isPlayer && <Particles active />}
         </div>
     );
@@ -95,10 +101,19 @@ function RevealCard({ type, card, index, visible, isGoat }) {
 function PackVisual({ count, onOpen }) {
     return (
         <div className="pom-pack-scene">
+            {/* Ambient glow behind pack */}
+            <div className="pom-pack-ambient" />
+
             <div className="pom-pack-wrapper">
+                {/* Shadow projected on floor */}
+                <div className="pom-pack-floor-shadow" />
+
                 <div className="pom-pack-spine" />
                 <div className="pom-pack-body">
                     <div className="pom-pack-texture" />
+                    {/* Inner glow */}
+                    <div className="pom-pack-inner-glow" />
+
                     <div className="pom-pack-logo">
                         <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="30" cy="30" r="28" className="pom-logo-ring" strokeWidth="1" />
@@ -118,6 +133,9 @@ function PackVisual({ count, onOpen }) {
                         ))}
                     </div>
                 </div>
+
+                {/* Side edge highlight */}
+                <div className="pom-pack-edge-highlight" />
             </div>
 
             <div className="pom-pack-count-label">
@@ -130,6 +148,7 @@ function PackVisual({ count, onOpen }) {
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                     <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
+                <div className="pom-trigger-shimmer" />
             </button>
 
             <p className="pom-pack-hint">4 figuritas · jugador · competición · equipo · evento</p>
@@ -140,6 +159,7 @@ function PackVisual({ count, onOpen }) {
 function TearAnimation() {
     return (
         <div className="pom-tear-scene">
+            <div className="pom-tear-ambient" />
             <div className="pom-tear-pack">
                 <div className="pom-tear-pack-body">
                     <div className="pom-tear-texture" />
@@ -168,7 +188,7 @@ export default function PackOpeningModal({
         if (phase === 'revealing') {
             setRevealedCount(0);
             const timers = CARD_ORDER.map((_, i) =>
-                setTimeout(() => setRevealedCount(i + 1), 300 + i * 450)
+                setTimeout(() => setRevealedCount(i + 1), 300 + i * 480)
             );
             return () => timers.forEach(clearTimeout);
         }
@@ -178,7 +198,6 @@ export default function PackOpeningModal({
     if (!isOpen) return null;
 
     const cards = result ? CARD_ORDER.map(type => ({ type, card: result[type] })) : [];
-
     const overlayMod = isGoat ? ' pom-overlay--goat' : isLegend ? ' pom-overlay--legend' : '';
 
     const handleOverlayClick = (e) => {
@@ -224,16 +243,19 @@ export default function PackOpeningModal({
                     {(phase === 'revealing' || phase === 'done') && (
                         <div className="pom-cards-stage">
                             {isGoat && <div className="pom-goat-light" />}
-                            {cards.map(({ type, card }, i) => (
-                                <RevealCard
-                                    key={type}
-                                    type={type}
-                                    card={card}
-                                    index={i}
-                                    visible={i < revealedCount}
-                                    isGoat={isGoat}
-                                />
-                            ))}
+                            {/* 2×2 grid layout */}
+                            <div className="pom-cards-grid">
+                                {cards.map(({ type, card }, i) => (
+                                    <RevealCard
+                                        key={type}
+                                        type={type}
+                                        card={card}
+                                        index={i}
+                                        visible={i < revealedCount}
+                                        isGoat={isGoat}
+                                    />
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>
