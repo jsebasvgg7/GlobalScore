@@ -1,24 +1,20 @@
 /* ════════════════════════════════════════════════
-   ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗
-   ████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝
-   ██╔████╔██║██║   ██║██████╔╝██║██║     █████╗  
-   ██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝  
-   ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
-   MOBILE — responsive chaos
+   PACK OPENING MODAL v2 — MOBILE
+   Colapsa a columna: sobre arriba / cartas abajo
 ════════════════════════════════════════════════ */
 
+/* ── Tablet y móvil grande (≤768px) ── */
 @media (max-width: 768px) {
 
-    /* ── Overlay ── */
-    .pom-overlay {
-        /* Account for mobile top header (~60px) and bottom nav (~56px) */
-        padding: 60px 12px calc(56px + env(safe-area-inset-bottom, 8px));
+    /* Overlay */
+    .pom2-overlay {
+        padding: 58px 10px calc(56px + env(safe-area-inset-bottom, 10px));
         align-items: flex-start;
         overflow-y: auto;
     }
 
-    /* ── Modal ── */
-    .pom-modal {
+    /* Modal: apilado vertical */
+    .pom2-modal {
         max-width: 100%;
         max-height: none;
         height: auto;
@@ -26,78 +22,155 @@
         margin: auto;
     }
 
-    /* ── Header ── */
-    .pom-header { min-height: 44px; }
-    .pom-header-bar { margin-right: 12px; }
-    .pom-eyebrow  { font-size: 7px; }
-    .pom-title    { font-size: 12px; }
-    .pom-subtitle { font-size: 8px; }
-
-    /* ── Idle pack ── */
-    .pom-pack-wrapper { width: 110px; height: 158px; }
-    .pom-count-n  { font-size: 30px; }
-    .pom-count-lbl { font-size: 8px; }
-    .pom-cta { padding: 10px 22px; font-size: 10px; }
-    .pom-pack-scene { gap: 16px; padding: 20px 16px 18px; }
-    .pom-hint { font-size: 7px; }
-
-    /* ── Stage ── */
-    .pom-stage { /* no extra padding — felt handles it */ }
-
-    /* ── Grid ── */
-    .pom-grid {
-        gap: 10px;
-        max-width: 100%;
-        padding: 18px 14px 8px;
+    /* Body: columna en lugar de fila */
+    .pom2-body {
+        flex-direction: column;
     }
 
-    /* ── Card slot ── */
-    /* Cards get a slight scatter on mobile for an organic feel */
-    .pom-card-slot:nth-child(1) { transform-origin: bottom right; }
-    .pom-card-slot:nth-child(2) { transform-origin: bottom left;  }
-    .pom-card-slot:nth-child(3) { transform-origin: top right;    }
-    .pom-card-slot:nth-child(4) { transform-origin: top left;     }
+    /* Divisor: horizontal en mobile */
+    .pom2-divider {
+        width: auto;
+        height: 1px;
+        align-self: auto;
+    }
 
-    /* Disable hover lift on touch devices (they don't hover) */
-    .pom-card-slot:not(.pom-card-slot--revealed):hover .pom-card-inner {
+    /* ── Panel sobre: fila compacta ── */
+    .pom2-pack-panel {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+        gap: 20px;
+        padding: 18px 20px 16px;
+        flex-wrap: wrap;
+    }
+
+    /* Sobre más pequeño */
+    .pom2-pack-wrap {
+        width: 88px;
+        height: 126px;
+        flex-shrink: 0;
+    }
+
+    /* Info del sobre: apilada verticalmente */
+    .pom2-pack-info-col {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    /* Counter y CTA en fila */
+    .pom2-pack-count {
+        align-items: flex-start;
+    }
+
+    .pom2-pack-count-n {
+        font-size: 26px;
+    }
+
+    .pom2-pack-count-lbl {
+        font-size: 7px;
+    }
+
+    .pom2-pack-cta {
+        padding: 9px 18px;
+        font-size: 9px;
+    }
+
+    .pom2-pack-opening-lbl {
+        font-size: 8px;
+    }
+
+    .pom2-pack-types-hint {
+        display: none;
+    }
+
+    /* ── Panel cartas ── */
+    .pom2-cards-panel {
+        padding: 12px 12px 10px;
+        gap: 8px;
+    }
+
+    /* Grid más compacto */
+    .pom2-cards-grid {
+        gap: 8px;
+    }
+
+    /* Carta: aspect ratio adaptado */
+    .pom2-flip-slot {
+        aspect-ratio: 3 / 4;
+    }
+
+    /* Deshabilitar hover lift en táctil */
+    .pom2-flip-slot:not(.pom2-flip-slot--flipped):hover .pom2-flip-inner {
         transform: none;
     }
 
-    /* ── Card face details ── */
-    .pom-card-name  { font-size: 7px; }
-    .pom-card-type  { font-size: 6px; padding: 4px 6px 2px; }
-    .pom-card-footer { padding: 5px 6px 6px; gap: 3px; }
-    .pom-card-initials { font-size: 20px; }
-    .pom-star { font-size: 7px; }
+    /* Detalles internos de carta */
+    .pom2-card-name        { font-size: 7px; }
+    .pom2-card-type-label  { font-size: 6px; padding: 4px 6px 2px; }
+    .pom2-card-rarity      { font-size: 6px; }
+    .pom2-card-footer      { padding: 4px 5px 5px; gap: 2px; }
+    .pom2-card-initials    { font-size: 9px; }
+    .pom2-star             { font-size: 7px; }
+    .pom2-card-placeholder svg { width: 26px; height: 26px; }
 
-    /* Tap hint slightly larger for touch targets */
-    .pom-tap-hint { font-size: 7px; bottom: -14px; }
+    /* Hint "toca" */
+    .pom2-tap-hint { font-size: 6px; bottom: -13px; }
 
-    /* ── Progress dots ── */
-    .pom-pdot { width: 8px; height: 8px; }
-    .pom-progress-dots { gap: 7px; padding: 12px 0 16px; }
+    /* Puntos de progreso */
+    .pom2-pdot           { width: 7px; height: 7px; }
+    .pom2-progress-dots  { gap: 5px; }
 
-    /* ── Action buttons ── */
-    .pom-btn-again      { padding: 12px 16px; font-size: 10px; }
-    .pom-btn-collection { padding: 10px 16px; font-size: 9px;  }
-
-    /* ── Table felt — slightly taller on mobile ── */
-    .pom-table-felt { height: 78%; }
-}
-
-/* ── Very small phones (≤380px) ── */
-@media (max-width: 380px) {
-    .pom-grid {
-        gap: 7px;
-        padding: 14px 10px 6px;
+    /* Footer */
+    .pom2-cards-hint,
+    .pom2-cards-done {
+        font-size: 7px;
+        padding: 2px 0;
     }
 
-    .pom-pack-wrapper { width: 96px; height: 138px; }
-    .pom-count-n { font-size: 26px; }
+    /* Acciones */
+    .pom2-btn-again      { padding: 12px 16px; font-size: 10px; }
+    .pom2-btn-collection { padding: 10px 16px; font-size: 9px;  }
+}
 
-    .pom-card-name     { font-size: 6px; }
-    .pom-card-initials { font-size: 17px; }
-    .pom-tap-hint      { font-size: 6px; }
+/* ── Móvil pequeño (≤480px) ── */
+@media (max-width: 480px) {
 
-    .pom-pdot { width: 7px; height: 7px; }
+    .pom2-pack-panel {
+        gap: 14px;
+        padding: 14px 16px 12px;
+    }
+
+    .pom2-pack-wrap {
+        width: 76px;
+        height: 110px;
+    }
+
+    .pom2-pack-count-n { font-size: 22px; }
+
+    .pom2-cards-panel { padding: 10px 10px 8px; }
+
+    .pom2-cards-grid { gap: 7px; }
+
+    /* Header del modal */
+    .pom2-eyebrow { font-size: 7px; }
+    .pom2-title   { font-size: 11px; }
+}
+
+/* ── Teléfonos muy pequeños (≤360px) ── */
+@media (max-width: 360px) {
+
+    .pom2-pack-wrap {
+        width: 66px;
+        height: 96px;
+    }
+
+    .pom2-pack-logo svg { width: 24px; height: 24px; }
+    .pom2-pack-season   { font-size: 6px; }
+    .pom2-pack-brand    { font-size: 6px; }
+    .pom2-pack-cta      { padding: 8px 14px; font-size: 8px; }
+
+    .pom2-cards-grid { gap: 6px; }
+    .pom2-card-name  { font-size: 6px; }
 }
