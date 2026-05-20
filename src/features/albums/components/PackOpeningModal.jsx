@@ -18,11 +18,12 @@ const TYPE_COLOR = {
     event:       '#F43F5E',
 };
 
-const TYPE_ICON = {
-    player:      'M24 4C24 4 16 8 16 16C16 21 19 24 24 26C29 24 32 21 32 16C32 8 24 4 24 4Z M10 40C10 32 16 28 24 28C32 28 38 32 38 40',
-    team:        'M24 4L6 12V24C6 33 14 41 24 44C34 41 42 33 42 24V12L24 4Z',
-    competition: 'M24 4L28 16H42L31 23L35 35L24 28L13 35L17 23L6 16H20L24 4Z',
-    event:       'M24 4C13 4 4 13 4 24C4 35 13 44 24 44C35 44 44 35 44 24C44 13 35 4 24 4Z M24 12V26L32 30',
+/* RGB versions for CSS var(--acc-rgb) tricks */
+const TYPE_COLOR_RGB = {
+    player:      '124,111,255',
+    team:        '16,185,129',
+    competition: '245,158,11',
+    event:       '244,63,94',
 };
 
 const CARD_ORDER = ['player', 'team', 'competition', 'event'];
@@ -31,18 +32,15 @@ function getInitials(name = '') {
     return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || '??';
 }
 
-/* ─── Sub-components ────────────────────────────────────────────────────── */
-
-function StarRow({ level }) {
-    if (!level) return null;
-    return (
-        <div className="pom2-stars">
-            {[1, 2, 3, 4, 5].map(n => (
-                <span key={n} className={`pom2-star${n <= level ? ' pom2-star--lit' : ''}`}>★</span>
-            ))}
-        </div>
-    );
+function posLabel(pos) {
+    const map = {
+        Forward: 'DEL', Midfielder: 'MED', Defender: 'DEF',
+        Goalkeeper: 'POR', 'Play-maker': 'MP', 'All-rounder': 'TOD',
+    };
+    return map[pos] || pos?.slice(0, 3).toUpperCase() || '—';
 }
+
+/* ─── Sub-components ────────────────────────────────────────────────────── */
 
 function GoatParticles() {
     return (
@@ -80,50 +78,88 @@ function CardBack() {
     );
 }
 
-/** Frente de la carta */
-function CardFront({ type, card, isGoat }) {
+/**
+ * CardFront — identical structure to LegendaryAlbumsSection's StickerCard (filled state).
+ * Uses the same topband / avatar-zone / ring-svg / stars / info / foil layers.
+ */
+function CardFront({ type, card, isGoat, index = 0 }) {
     const color    = TYPE_COLOR[type] || '#7C6FFF';
+    const colorRgb = TYPE_COLOR_RGB[type] || '124,111,255';
     const isPlayer = type === 'player';
-    const stars    = isPlayer ? card?.significance_level : null;
+    const stars    = isPlayer ? (card?.significance_level ?? 0) : 0;
     const imgUrl   = card?.image_path ? getHistoricalImageUrl(card.image_path) : null;
     const label    = TYPE_LABEL[type] || type;
-    const iconPath = TYPE_ICON[type];
+    const num      = String(index + 1).padStart(3, '0');
+    const isGoatCard = isGoat && isPlayer;
 
     return (
         <div
-            className={`pom2-card-front${isGoat && isPlayer ? ' pom2-card-front--goat' : ''}`}
-            style={{ '--c': color }}
+            className={`pom2-card-front${isGoatCard ? ' pom2-card-front--goat' : ''}`}
+            style={{ '--acc': color, '--acc-rgb': colorRgb }}
         >
-            <div className="pom2-card-strip" />
-            <span className="pom2-card-type-label">{label}</span>
-            <div className="pom2-card-media">
+            {/* ── Top colour band (same as las2-sticker-topband) ── */}
+            <div className="pom2-sticker-topband" />
+
+            {/* ── Header row: slot number + type label + optional crown ── */}
+            <div className="pom2-sticker-header">
+                <span className="pom2-sticker-num">{num}</span>
+                <span className="pom2-card-type-label">{label}</span>
+                {isGoatCard && (
+                    <svg width="9" height="9" viewBox="0 0 12 12" fill="none" className="pom2-sticker-crown" aria-label="GOAT">
+                        <path d="M6 1l1.5 3H11L8.5 6l1 3L6 7.5 2.5 9l1-3L1 4h3.5L6 1z"
+                            fill="#f59e0b" />
+                    </svg>
+                )}
+            </div>
+
+            {/* ── Avatar zone with dashed ring (same as las2-sticker-avatar-zone) ── */}
+            <div className="pom2-sticker-avatar-zone">
                 {imgUrl ? (
-                    <img src={imgUrl} alt={card?.name || ''} className="pom2-card-img" />
+                    <img src={imgUrl} alt={card?.name || ''} className="pom2-sticker-img" />
                 ) : (
-                    <div className="pom2-card-placeholder">
-                        <svg width="36" height="36" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                            <path d={iconPath} stroke="currentColor" strokeWidth="1.8"
-                                fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        <span className="pom2-card-initials">{getInitials(card?.name)}</span>
-                    </div>
+                    <div className="pom2-sticker-avatar">{getInitials(card?.name)}</div>
                 )}
-                <i className="pom2-corner pom2-corner--tl" aria-hidden="true" />
-                <i className="pom2-corner pom2-corner--tr" aria-hidden="true" />
-                <i className="pom2-corner pom2-corner--bl" aria-hidden="true" />
-                <i className="pom2-corner pom2-corner--br" aria-hidden="true" />
+                {/* Animated gradient ring — identical to las2-sticker-ring-svg */}
+                <svg className="pom2-sticker-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+                    <defs>
+                        <linearGradient id={`sg-pom-${num}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%"   stopColor={color} stopOpacity="0.9" />
+                            <stop offset="50%"  stopColor="#fff"  stopOpacity="0.7" />
+                            <stop offset="100%" stopColor={color} stopOpacity="0.9" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="46"
+                        fill="none"
+                        stroke={`url(#sg-pom-${num})`}
+                        strokeWidth="2"
+                        strokeDasharray={isGoatCard ? "none" : "6 3"} />
+                </svg>
             </div>
-            <div className="pom2-card-footer">
-                <span className="pom2-card-name">{card?.name || '—'}</span>
-                {stars && <StarRow level={stars} />}
-                {!stars && (
-                    <span className="pom2-card-rarity">
-                        {type === 'event' ? 'Evento' : type === 'competition' ? 'Copa' : type === 'team' ? 'Equipo' : 'Jugador'}
-                    </span>
+
+            {/* ── Star row ── */}
+            <div className="pom2-sticker-stars">
+                {isPlayer ? (
+                    Array.from({ length: 5 }, (_, i) => (
+                        <span key={i} className={`pom2-star ${i < stars ? 'pom2-star--on' : 'pom2-star--off'}`}>★</span>
+                    ))
+                ) : (
+                    /* Non-player cards: show type as small badge instead of stars */
+                    <span className="pom2-card-rarity-badge">{label}</span>
                 )}
             </div>
-            <div className="pom2-card-gloss" aria-hidden="true" />
-            {isGoat && isPlayer && <GoatParticles />}
+
+            {/* ── Info footer (name + position) ── */}
+            <div className="pom2-sticker-info">
+                <span className="pom2-sticker-name">{card?.name || '—'}</span>
+                {isPlayer && card?.position && (
+                    <span className="pom2-sticker-pos">{posLabel(card.position)}</span>
+                )}
+            </div>
+
+            {/* ── Foil shimmer overlay ── */}
+            <div className="pom2-sticker-foil" aria-hidden="true" />
+
+            {isGoatCard && <GoatParticles />}
         </div>
     );
 }
@@ -149,7 +185,7 @@ function FlipCard({ type, card, index, isDealt, isFlipped, onFlip, isGoat }) {
         >
             <div className="pom2-flip-inner">
                 <CardBack />
-                <CardFront type={type} card={card} isGoat={isGoat} />
+                <CardFront type={type} card={card} isGoat={isGoat} index={index} />
             </div>
             {!isFlipped && (
                 <span className="pom2-tap-hint" aria-hidden="true">toca</span>

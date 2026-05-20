@@ -8,7 +8,7 @@
    ALBUMS — collectible pages & sticker systems
 ════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap');
 
 /* ══════════════ VARIABLES DARK (default) ══════════════ */
 .pom2-overlay {
@@ -29,20 +29,22 @@
     --pom2-back-bg:      #1e1840;
     --pom2-back-border:  rgba(124,111,255,0.30);
     --pom2-back-text:    rgba(124,111,255,0.50);
-    --pom2-card-bg:      #1a1726;
-    --pom2-card-border:  rgba(255,255,255,0.06);
-    --pom2-card-name:    rgba(255,255,255,0.90);
-    --pom2-card-rarity:  rgba(255,255,255,0.38);
-    --pom2-card-footer:  rgba(0,0,0,0.18);
-    --pom2-card-media:   rgba(0,0,0,0.20);
     --pom2-dot-empty:    rgba(255,255,255,0.10);
     --pom2-dot-border:   rgba(255,255,255,0.15);
     --pom2-dot-done:     #7C6FFF;
     --pom2-hint:         rgba(255,255,255,0.25);
-    --pom2-footer-btn:   rgba(255,255,255,0.03);
-    --pom2-corner:       rgba(255,255,255,0.16);
-    --pom2-star-off:     rgba(255,255,255,0.13);
     --pom2-header-bg:    #0e0c18;
+    /* Sticker card tokens (dark) */
+    --pom2-sticker-bg:      #1a1726;
+    --pom2-sticker-border:  rgba(255,255,255,0.06);
+    --pom2-sticker-name:    rgba(255,255,255,0.88);
+    --pom2-sticker-num:     rgba(255,255,255,0.20);
+    --pom2-sticker-pos:     var(--acc, #7C6FFF);
+    --pom2-sticker-sep:     rgba(255,255,255,0.08);
+    --pom2-sticker-sil-bg:  rgba(255,255,255,0.02);
+    --pom2-sticker-sil-bd:  #2A2638;
+    --pom2-star-off:        rgba(255,255,255,0.13);
+    --pom2-star-on:         var(--acc, #7C6FFF);
 }
 
 /* ══════════════ VARIABLES LIGHT ══════════════ */
@@ -64,22 +66,27 @@
     --pom2-back-bg:      #2a2060;
     --pom2-back-border:  rgba(124,111,255,0.40);
     --pom2-back-text:    rgba(180,160,255,0.60);
-    --pom2-card-bg:      #ffffff;
-    --pom2-card-border:  rgba(91,79,216,0.14);
-    --pom2-card-name:    #0e0a30;
-    --pom2-card-rarity:  #7a72aa;
-    --pom2-card-footer:  #f0eeff;
-    --pom2-card-media:   #ede9ff;
     --pom2-dot-empty:    rgba(91,79,216,0.12);
     --pom2-dot-border:   rgba(91,79,216,0.24);
     --pom2-dot-done:     #5b4fd8;
     --pom2-hint:         #8882aa;
-    --pom2-footer-btn:   rgba(91,79,216,0.04);
-    --pom2-corner:       rgba(91,79,216,0.18);
-    --pom2-star-off:     rgba(91,79,216,0.12);
     --pom2-header-bg:    #ffffff;
+    /* Sticker card tokens (light) */
+    --pom2-sticker-bg:      #faf8f4;
+    --pom2-sticker-border:  rgba(91,79,216,0.18);
+    --pom2-sticker-name:    #2a2535;
+    --pom2-sticker-num:     rgba(0,0,0,0.20);
+    --pom2-sticker-pos:     var(--acc, #5b4fd8);
+    --pom2-sticker-sep:     rgba(0,0,0,0.06);
+    --pom2-sticker-sil-bg:  rgba(0,0,0,0.025);
+    --pom2-sticker-sil-bd:  #d4cfc8;
+    --pom2-star-off:        rgba(0,0,0,0.10);
+    --pom2-star-on:         var(--acc, #5b4fd8);
 }
 
+/* ══════════════════════════════════════════════
+   OVERLAY & MODAL SHELL
+══════════════════════════════════════════════ */
 .pom2-overlay {
     position: fixed;
     inset: 0;
@@ -126,6 +133,9 @@
     border-color: rgba(245,158,11,0.28);
 }
 
+/* ══════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════ */
 .pom2-header {
     display: flex;
     align-items: center;
@@ -195,6 +205,9 @@
     background: rgba(124,111,255,0.08);
 }
 
+/* ══════════════════════════════════════════════
+   BODY LAYOUT
+══════════════════════════════════════════════ */
 .pom2-body {
     flex: 1;
     min-height: 0;
@@ -202,6 +215,9 @@
     overflow: hidden;
 }
 
+/* ══════════════════════════════════════════════
+   PACK PANEL (left side)
+══════════════════════════════════════════════ */
 .pom2-pack-panel {
     width: 50%;
     flex-shrink: 0;
@@ -209,8 +225,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;     
-    gap: 12px;                  
+    justify-content: center;
+    gap: 12px;
     padding: 20px 16px 18px;
     position: relative;
     overflow: hidden;
@@ -453,6 +469,9 @@
     position: relative; z-index:1;
 }
 
+/* ══════════════════════════════════════════════
+   DIVIDER
+══════════════════════════════════════════════ */
 .pom2-divider {
     width: 1px;
     background: var(--pom2-border);
@@ -460,6 +479,9 @@
     align-self: stretch;
 }
 
+/* ══════════════════════════════════════════════
+   CARDS PANEL (right side)
+══════════════════════════════════════════════ */
 .pom2-cards-panel {
     flex: 1;
     min-width: 0;
@@ -518,6 +540,9 @@
     overflow: hidden;
 }
 
+/* ══════════════════════════════════════════════
+   FLIP SLOT
+══════════════════════════════════════════════ */
 .pom2-flip-slot {
     perspective: 900px;
     position: relative;
@@ -548,17 +573,20 @@
     position: relative;
     transform-style: preserve-3d;
     transition: transform 0.52s cubic-bezier(0.4,0.2,0.2,1);
-    border-radius: 9px;
+    border-radius: 4px;
 }
 
 .pom2-flip-slot--flipped .pom2-flip-inner {
     transform: rotateY(180deg);
 }
 
+/* ══════════════════════════════════════════════
+   CARD BACK
+══════════════════════════════════════════════ */
 .pom2-card-back {
     position: absolute;
     inset: 0;
-    border-radius: 9px;
+    border-radius: 4px;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     background: var(--pom2-back-bg);
@@ -575,7 +603,7 @@
     background-image:
         repeating-linear-gradient( 45deg, rgba(124,111,255,0.07) 0px, rgba(124,111,255,0.07) 1px, transparent 1px, transparent 9px),
         repeating-linear-gradient(-45deg, rgba(124,111,255,0.07) 0px, rgba(124,111,255,0.07) 1px, transparent 1px, transparent 9px);
-    border-radius: 9px;
+    border-radius: 4px;
 }
 
 .pom2-card-back-logo {
@@ -601,126 +629,182 @@
 .pom2-back-corner--tl { top:6px; left:7px; }
 .pom2-back-corner--br { bottom:6px; right:7px; transform:rotate(180deg); }
 
+/* ══════════════════════════════════════════════
+   CARD FRONT — identical to LegendaryAlbumsSection StickerCard
+══════════════════════════════════════════════ */
 .pom2-card-front {
     position: absolute;
     inset: 0;
-    border-radius: 9px;
+    border-radius: 4px;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     transform: rotateY(180deg);
-    background: var(--pom2-card-bg);
-    border: 1px solid color-mix(in srgb, var(--c, #7C6FFF) 28%, var(--pom2-card-border));
+
+    /* Same structure as las2-sticker--filled */
     display: flex;
     flex-direction: column;
     overflow: hidden;
+
+    border: 1px solid color-mix(in srgb, var(--acc, #7C6FFF) 45%, transparent);
+    background: color-mix(in srgb, var(--acc, #7C6FFF) 6%, var(--pom2-sticker-bg, #1a1726));
+    transition: transform 0.15s, box-shadow 0.15s;
 }
 
-.pom2-card-front--goat { border-color: rgba(245,158,11,0.45); }
+.pom2-card-front--goat {
+    border-color: rgba(245,158,11,0.55) !important;
+    background: color-mix(in srgb, #f59e0b 8%, var(--pom2-sticker-bg, #1a1726)) !important;
+}
 
-.pom2-card-strip {
-    height: 4px;
-    background: var(--c, #7C6FFF);
+/* ── Top colour band ── */
+.pom2-sticker-topband {
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg,
+        var(--acc, #7C6FFF) 0%,
+        color-mix(in srgb, var(--acc, #7C6FFF) 60%, #fff) 50%,
+        var(--acc, #7C6FFF) 100%);
     flex-shrink: 0;
-    position: relative;
-    overflow: hidden;
 }
 
-.pom2-card-strip::after {
-    content: '';
-    position: absolute;
-    top:0; left:-70%;
-    width:50%; height:100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.38), transparent);
-    animation: pom2-strip-sheen 3.5s ease-in-out infinite;
+/* ── Header row ── */
+.pom2-sticker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 5px 0;
+    flex-shrink: 0;
 }
 
-@keyframes pom2-strip-sheen {
-    0%   { left:-70%; }
-    45%  { left:140%; }
-    100% { left:140%; }
+.pom2-sticker-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--pom2-sticker-num, rgba(255,255,255,0.20));
 }
 
 .pom2-card-type-label {
     font-family: 'DM Mono', monospace;
     font-size: 6px;
     font-weight: 700;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--c, #7C6FFF);
-    padding: 4px 6px 2px;
+    color: var(--acc, #7C6FFF);
+    line-height: 1;
+    flex: 1;
+    text-align: right;
+}
+
+.pom2-sticker-crown {
+    margin-left: 3px;
     flex-shrink: 0;
+}
+
+/* ── Avatar zone ── */
+.pom2-sticker-avatar-zone {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 6px 2px;
+    position: relative;
+    min-height: 0;
+}
+
+.pom2-sticker-img {
+    width: 72%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 50%;
+    border: 1.5px solid color-mix(in srgb, var(--acc, #7C6FFF) 50%, transparent);
+    position: relative;
+    z-index: 1;
+}
+
+.pom2-sticker-avatar {
+    width: 68%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--acc, #7C6FFF) 14%, transparent);
+    border: 1.5px solid color-mix(in srgb, var(--acc, #7C6FFF) 40%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--acc, #7C6FFF);
+    position: relative;
+    z-index: 1;
+}
+
+/* Gradient ring SVG — same as las2-sticker-ring-svg */
+.pom2-sticker-ring-svg {
+    position: absolute;
+    inset: 5px 5px 1px;
+    pointer-events: none;
+    z-index: 2;
+    width: calc(100% - 10px);
+    height: calc(100% - 6px);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.pom2-flip-slot--flipped .pom2-sticker-ring-svg {
+    opacity: 1;
+}
+
+/* ── Stars row ── */
+.pom2-sticker-stars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+    padding: 0 4px 2px;
+    flex-shrink: 0;
+}
+
+.pom2-star {
+    font-size: 7px;
     line-height: 1;
 }
 
-.pom2-card-media {
-    flex: 1;
-    min-height: 0;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--pom2-card-media);
-}
+.pom2-star--on  { color: var(--acc, #7C6FFF); }
+.pom2-star--off { color: var(--pom2-star-off, rgba(255,255,255,0.13)); }
 
-.pom2-card-img {
-    width:100%; height:100%;
-    object-fit: cover;
-    object-position: center top;
-    display: block;
-}
-
-.pom2-card-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    color: var(--c, #7C6FFF);
-    opacity: 0.55;
-    height: 100%;
-    width: 100%;
-}
-
-.pom2-card-initials {
+/* Badge for non-player types instead of stars */
+.pom2-card-rarity-badge {
     font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--c, #7C6FFF);
-    opacity: 0.65;
-}
-
-.pom2-corner {
-    position: absolute;
-    width: 6px; height: 6px;
-    border-color: var(--pom2-corner);
-    border-style: solid;
-    display: block;
-}
-
-.pom2-corner--tl { top:3px;    left:3px;  border-width:1px 0 0 1px; }
-.pom2-corner--tr { top:3px;    right:3px; border-width:1px 1px 0 0; }
-.pom2-corner--bl { bottom:3px; left:3px;  border-width:0 0 1px 1px; }
-.pom2-corner--br { bottom:3px; right:3px; border-width:0 1px 1px 0; }
-
-.pom2-card-footer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: 4px 5px 5px;
-    flex-shrink: 0;
-    border-top: 1px solid color-mix(in srgb, var(--c, #7C6FFF) 18%, transparent);
-    background: var(--pom2-card-footer);
-}
-
-.pom2-card-name {
-    font-family: 'DM Mono', monospace;
-    font-size: 7px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    font-size: 6px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--pom2-card-name);
+    color: var(--acc, #7C6FFF);
+    border: 0.5px solid color-mix(in srgb, var(--acc, #7C6FFF) 50%, transparent);
+    padding: 1px 5px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--acc, #7C6FFF) 10%, transparent);
+}
+
+/* ── Info footer (name + position) ── */
+.pom2-sticker-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3px 4px 4px;
+    gap: 1px;
+    border-top: 0.5px solid color-mix(in srgb, var(--acc, #7C6FFF) 20%, transparent);
+    flex-shrink: 0;
+}
+
+.pom2-sticker-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 6.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--pom2-sticker-name, rgba(255,255,255,0.88));
     text-align: center;
     line-height: 1.25;
     overflow: hidden;
@@ -730,41 +814,44 @@
     width: 100%;
 }
 
-.pom2-card-rarity {
+.pom2-sticker-pos {
     font-family: 'DM Mono', monospace;
     font-size: 6px;
-    font-weight: 500;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--pom2-card-rarity);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--acc, #7C6FFF);
+    width: 100%;
     text-align: center;
 }
 
-.pom2-stars { display:flex; gap:2px; align-items:center; }
-
-.pom2-star {
-    font-size: 7px;
-    color: var(--pom2-star-off);
-    line-height: 1;
-}
-
-.pom2-star--lit { color: #f59e0b; }
-
-.pom2-card-gloss {
+/* ── Foil shimmer overlay (same as las2-sticker-foil) ── */
+.pom2-sticker-foil {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 40%);
+    background: linear-gradient(135deg,
+        transparent 0%,
+        rgba(255,255,255,0.06) 40%,
+        rgba(255,255,255,0.14) 50%,
+        rgba(255,255,255,0.06) 60%,
+        transparent 100%);
     pointer-events: none;
-    border-radius: 9px;
-    z-index: 3;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.2s;
+    mix-blend-mode: overlay;
 }
 
+.pom2-flip-slot--flipped .pom2-card-front:hover .pom2-sticker-foil {
+    opacity: 1;
+}
+
+/* ── GOAT particles ── */
 .pom2-particles {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 5;
-    border-radius: 9px;
+    z-index: 6;
+    border-radius: 4px;
 }
 
 .pom2-particle {
@@ -782,6 +869,9 @@
     100% { transform:translate(-50%,-50%) rotate(var(--angle)) translateX(var(--dist,60px)); opacity:0; }
 }
 
+/* ══════════════════════════════════════════════
+   TAP HINT
+══════════════════════════════════════════════ */
 .pom2-tap-hint {
     position: absolute;
     bottom: -13px;
@@ -804,6 +894,9 @@
     50%     { opacity:0.80; }
 }
 
+/* ══════════════════════════════════════════════
+   CARDS HINT / DONE
+══════════════════════════════════════════════ */
 .pom2-cards-hint,
 .pom2-cards-done {
     font-family: 'DM Mono', monospace;
@@ -820,6 +913,9 @@
 
 .pom2-cards-done { color: var(--pom2-dot-done); }
 
+/* ══════════════════════════════════════════════
+   ACTION BUTTONS
+══════════════════════════════════════════════ */
 .pom2-actions {
     display: flex;
     flex-direction: column;
@@ -898,7 +994,7 @@
     color: rgba(255,255,255,0.72);
     text-decoration-color: rgba(255,255,255,0.40);
 }
+
 .pom2-mobile-actions {
     display: none;
 }
- 
