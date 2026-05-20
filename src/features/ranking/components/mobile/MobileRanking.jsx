@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Globe, Calendar, Crown, ChevronLeft, ChevronRight, Zap, Star } from "lucide-react";
+import { Globe, Calendar, Crown, ChevronLeft, ChevronRight, Zap, Star, BookOpen } from "lucide-react";
 import { MobileUserProfile } from "@/features/profile";
 import "../../styles/MobileRanking.css";
 
@@ -11,7 +11,6 @@ const HOF_META = [
   { label: "BRONCE", color: "#a0652a" },
 ];
 
-/* ── Avatar genérico ── */
 function MobAvatar({ user, size = "md" }) {
   const cls = `mrk-av mrk-av--${size}`;
   if (user?.avatar_url)
@@ -23,11 +22,8 @@ function MobAvatar({ user, size = "md" }) {
   );
 }
 
-/* ── Tarjeta del podio (ranking) ── */
 function PodiumCard({ user, rank, onSelect }) {
   if (!user) return null;
-  const accuracy = user.rankPredictions > 0
-    ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
   const mods = ["gold", "silver", "bronze"];
   const labels = ["ORO", "PLATA", "BRONCE"];
 
@@ -46,8 +42,7 @@ function PodiumCard({ user, rank, onSelect }) {
   );
 }
 
-/* ── Fila tabla (ranking) ── */
-function TableRow({ user, pos, isMe, onSelect }) {
+function TableRow({ user, pos, isMe, onSelect, legCount }) {
   const accuracy = user.rankPredictions > 0
     ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
   const topMod = pos === 1 ? " mrk-row--gold"
@@ -71,13 +66,16 @@ function TableRow({ user, pos, isMe, onSelect }) {
         <span className="mrk-row-pts">{fmt(user.rankPoints)}<span className="mrk-row-pts-lbl">pts</span></span>
         <span className="mrk-row-acc">{accuracy}%</span>
       </div>
+      {legCount !== undefined && (
+        <span className={`mrk-row-albums${legCount > 0 ? ' mrk-row-albums--active' : ''}`}>
+          <BookOpen size={10} />
+          <span>{legCount}/4</span>
+        </span>
+      )}
     </div>
   );
 }
 
-/* ════════════════════════════════════════
-   HOF CARRUSEL MOBILE
-════════════════════════════════════════ */
 function MobHofCarousel({ champions, onSelect }) {
   const [active, setActive] = useState(0);
   const [exiting, setExiting] = useState(false);
@@ -108,10 +106,7 @@ function MobHofCarousel({ champions, onSelect }) {
 
   return (
     <div className="mrk-hof-carousel">
-
-      {/* ── Tarjeta central ── */}
       <div className="mrk-hof-card-row">
-
         <div className={`mrk-hof-card${exiting ? " mrk-hof-card--exit" : ""}`}
           style={{ borderTopColor: meta.color }}>
 
@@ -120,7 +115,6 @@ function MobHofCarousel({ champions, onSelect }) {
             <span className="mrk-hof-pos" style={{ background: meta.color }}>#{active + 1}</span>
           </div>
 
-          {/* Avatar */}
           <button className="mrk-hof-av-btn" onClick={() => onSelect(champ.id)}>
             <div className="mrk-hof-av-ring" style={{
               background: `linear-gradient(135deg, ${meta.color}88, ${meta.color})`
@@ -131,7 +125,6 @@ function MobHofCarousel({ champions, onSelect }) {
 
           <span className="mrk-hof-name">{champ.name}</span>
 
-          {/* Coronas */}
           <div className="mrk-hof-crowns">
             {Array.from({ length: Math.min(champ.monthly_championships, 6) }).map((_, i) => (
               <Crown key={i} size={14} style={{ color: meta.color }} />
@@ -143,7 +136,6 @@ function MobHofCarousel({ champions, onSelect }) {
             )}
           </div>
 
-          {/* Stats */}
           <div className="mrk-hof-stats">
             <div className="mrk-hof-stat">
               <span className="mrk-hof-stat-val" style={{ color: meta.color }}>
@@ -167,7 +159,6 @@ function MobHofCarousel({ champions, onSelect }) {
         </div>
       </div>
 
-      {/* Dots */}
       <div className="mrk-hof-dots">
         {champions.map((_, i) => (
           <button
@@ -179,7 +170,6 @@ function MobHofCarousel({ champions, onSelect }) {
         ))}
       </div>
 
-      {/* Lista top 3 */}
       {champions.slice(0, 3).length > 0 && (
         <div className="mrk-hof-list">
           <div className="mrk-hof-list-label">Top campeones</div>
@@ -214,15 +204,13 @@ function MobHofCarousel({ champions, onSelect }) {
   );
 }
 
-/* ════════════════════════════════════════
-   MAIN
-════════════════════════════════════════ */
 export default function MobileRanking({
   users = [],
   currentUser = null,
   rankingType = "global",
   onChangeType,
   champions = [],
+  albumProgress = {},
 }) {
   const [selectedUserId, setSelectedUserId] = useState(null);
 
@@ -251,7 +239,7 @@ export default function MobileRanking({
   return (
     <div className="mrk-root">
 
-      {/* ── TABS ── */}
+      {/* TABS */}
       <div className="mrk-tabs">
         {[
           { key: "global", icon: <Globe size={13} />, label: "Global" },
@@ -268,10 +256,9 @@ export default function MobileRanking({
         ))}
       </div>
 
-      {/* ── STATS ROW — cambia según tab ── */}
+      {/* STATS ROW */}
       <div className="mrk-stats-row">
         {rankingType === "halloffame" ? (
-          /* Stats del HOF */
           <>
             <div className="mrk-stat-block">
               <span className="mrk-stat-num">{champions.length}</span>
@@ -298,7 +285,6 @@ export default function MobileRanking({
             )}
           </>
         ) : (
-          /* Stats del ranking */
           <>
             <div className="mrk-stat-block">
               <span className="mrk-stat-num">{totalRegistered}</span>
@@ -323,7 +309,7 @@ export default function MobileRanking({
         )}
       </div>
 
-      {/* ════ SALÓN DE LA FAMA ════ */}
+      {/* SALÓN DE LA FAMA */}
       {rankingType === "halloffame" && (
         champions.length === 0 ? (
           <div className="mrk-hof-empty">
@@ -335,7 +321,7 @@ export default function MobileRanking({
         )
       )}
 
-      {/* ════ PODIO ════ */}
+      {/* PODIO */}
       {rankingType !== "halloffame" && top3.length > 0 && (
         <div className="mrk-podium-wrap">
           <div className="mrk-podium-header">
@@ -361,7 +347,7 @@ export default function MobileRanking({
         </div>
       )}
 
-      {/* ════ TABLA ════ */}
+      {/* TABLA */}
       {rankingType !== "halloffame" && (
         <div className="mrk-table">
           <div className="mrk-table-header">
@@ -372,12 +358,18 @@ export default function MobileRanking({
           </div>
           {top3.map((user, i) => (
             <TableRow key={user.id} user={user} pos={i + 1}
-              isMe={user.id === currentUser?.id} onSelect={setSelectedUserId} />
+              isMe={user.id === currentUser?.id}
+              onSelect={setSelectedUserId}
+              legCount={albumProgress[user.id] || 0}
+            />
           ))}
           {rest.length > 0 && <div className="mrk-table-sep" />}
           {rest.map((user, i) => (
             <TableRow key={user.id} user={user} pos={i + 4}
-              isMe={user.id === currentUser?.id} onSelect={setSelectedUserId} />
+              isMe={user.id === currentUser?.id}
+              onSelect={setSelectedUserId}
+              legCount={albumProgress[user.id] || 0}
+            />
           ))}
         </div>
       )}

@@ -2,16 +2,11 @@ import React, { useState, useEffect } from 'react';
 import {
   X, Crown, Flame, Shield, Gem, Globe, Heart,
   Trophy, Calendar, Target, Zap, Users, TrendingUp, Award,
-  Star, Lock,
-  // Predicciones
-  Crosshair, Hash, BarChart2, Activity, BookOpen,
-  // Aciertos
+  Star, Lock, BookOpen, Package,
+  Crosshair, Hash, BarChart2, Activity, BookOpen as BookOpenIcon,
   CheckCircle, Eye, Aperture, Navigation, CheckSquare, Compass, BadgeCheck,
-  // Rachas
   Repeat2, Cpu, Timer, Infinity, Rocket,
-  // Puntos
   Circle, CircleDot, Layers, Sparkles,
-  // Especiales
   Percent, LayoutDashboard, Medal,
 } from 'lucide-react';
 import { supabase } from '@/shared/services/supabase/client';
@@ -19,7 +14,6 @@ import { LoadingDots } from '@/shared/ui';
 import { ImageViewer } from "@/shared/ui";
 import '../styles/UserProfilePanel.css';
 
-/* ── helpers ── */
 const fmt = (n) => Number(n || 0).toLocaleString();
 const acc = (correct, predictions) =>
   predictions > 0 ? Math.round((correct / predictions) * 100) : 0;
@@ -28,10 +22,9 @@ const pointsInLevel = (points) => points % 20;
 const fmtDate = (d) =>
   new Date(d).toLocaleDateString('es-ES', { year: 'numeric', month: 'short' });
 
-/* ── Mapa icon-string → componente Lucide ── */
 const ICON_MAP = {
   Crosshair, Target, Hash, TrendingUp, Star,
-  BarChart2, Activity, Award, BookOpen,
+  BarChart2, Activity, Award, BookOpen: BookOpenIcon,
   CheckCircle, Eye, Aperture, Navigation, CheckSquare, Compass,
   ShieldCheck: BadgeCheck, BadgeCheck,
   Repeat2, Flame, Zap, Calendar, Cpu,
@@ -46,7 +39,6 @@ function LucideIcon({ name, size = 14, color }) {
   return <Icon size={size} color={color} />;
 }
 
-/* ── Colores y labels por categoría ── */
 const CATEGORY_COLORS = {
   predictions: '#8b7fc7',
   accuracy: '#34d399',
@@ -65,7 +57,6 @@ const CATEGORY_LABELS = {
   special: 'Especiales',
 };
 
-/* ── Evalúa si el usuario cumple el requisito de un logro ── */
 function checkUnlocked(ach, user) {
   const val = ach.requirement_value ?? 0;
   switch (ach.requirement_type) {
@@ -78,7 +69,6 @@ function checkUnlocked(ach, user) {
   }
 }
 
-/* ── Sub-components básicos ── */
 function SectionDivider({ icon: Icon, label, color = '#5b4fd8' }) {
   return (
     <div className="upp-divider">
@@ -119,7 +109,6 @@ function CrownEntry({ crown, index }) {
   );
 }
 
-/* ── Fila individual de logro ── */
 function AchievementRow({ ach, unlocked }) {
   const color = unlocked
     ? (CATEGORY_COLORS[ach.category] || '#5b4fd8')
@@ -130,7 +119,6 @@ function AchievementRow({ ach, unlocked }) {
       className={`upp-ach-row${unlocked ? ' upp-ach-row--on' : ' upp-ach-row--off'}`}
       style={{ '--ach-color': CATEGORY_COLORS[ach.category] || '#5b4fd8' }}
     >
-      {/* Icono cuadrado */}
       <div
         className="upp-ach-icon"
         style={{ background: unlocked ? (CATEGORY_COLORS[ach.category] || '#5b4fd8') : undefined }}
@@ -140,14 +128,10 @@ function AchievementRow({ ach, unlocked }) {
           : <Lock size={11} />
         }
       </div>
-
-      {/* Texto */}
       <div className="upp-ach-text">
         <span className="upp-ach-name">{ach.name}</span>
         <span className="upp-ach-desc">{ach.description}</span>
       </div>
-
-      {/* Badge categoría solo si desbloqueado */}
       {unlocked && (
         <span
           className="upp-ach-cat"
@@ -160,6 +144,134 @@ function AchievementRow({ ach, unlocked }) {
           {CATEGORY_LABELS[ach.category] || ach.category}
         </span>
       )}
+    </div>
+  );
+}
+
+/* ── ÁLBUMES TAB ── */
+const LEGENDARY_ALBUM_IDS = ['legendary_1', 'legendary_2', 'legendary_3', 'legendary_4'];
+const LEGENDARY_LABELS = {
+  legendary_1: 'Legendarios I',
+  legendary_2: 'Legendarios II',
+  legendary_3: 'Legendarios III',
+  legendary_4: 'Álbum Dorado',
+};
+const LEGENDARY_COLORS = ['#5b4fd8', '#8b7fc7', '#c9a227', '#ef9f27'];
+
+const STAR_ALBUMS = [
+  { id: 'stars_1', label: '⭐ 1 Estrella', color: '#888' },
+  { id: 'stars_2', label: '⭐⭐ 2 Estrellas', color: '#8b7fc7' },
+  { id: 'stars_3', label: '⭐⭐⭐ 3 Estrellas', color: '#34d399' },
+  { id: 'stars_4', label: '⭐⭐⭐⭐ 4 Estrellas', color: '#c9a227' },
+  { id: 'stars_5', label: '⭐⭐⭐⭐⭐ GOAT', color: '#ef4444' },
+];
+
+function AlbumsTab({ userId }) {
+  const [progress, setProgress] = useState([]);
+  const [collection, setCollection] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!userId) return;
+    (async () => {
+      setLoading(true);
+      const [{ data: prog }, { data: col }] = await Promise.all([
+        supabase.from('album_progress').select('*').eq('user_id', userId),
+        supabase.from('album_collection')
+          .select('*, card:card_id(*)')
+          .eq('user_id', userId),
+      ]);
+      setProgress(prog || []);
+      setCollection(col || []);
+      setLoading(false);
+    })();
+  }, [userId]);
+
+  if (loading) {
+    return (
+      <div className="upp-tab-panel">
+        <div className="upp-loading">
+          <BookOpen size={28} opacity={0.3} />
+          <LoadingDots />
+        </div>
+      </div>
+    );
+  }
+
+  const getProgress = (albumId) => progress.find(p => p.album_id === albumId);
+
+  const totalCards = collection.length;
+  const uniquePlayers = collection.filter(c => c.card?.card_type === 'player').length;
+  const legendaryDone = LEGENDARY_ALBUM_IDS.filter(id => getProgress(id)?.is_completed).length;
+  const packsOpened = collection.reduce((acc, c) => acc + (c.copies || 0), 0) - collection.length;
+
+  return (
+    <div className="upp-tab-panel">
+
+      {/* Resumen */}
+      <SectionDivider icon={BookOpen} label="Colección" color="#5b4fd8" />
+      <div className="upp-stats-grid">
+        <StatCard icon={Package} label="Cartas totales" value={totalCards} accent="#5b4fd8" />
+        <StatCard icon={Star} label="Jugadores únicos" value={uniquePlayers} accent="#c9a227" />
+        <StatCard icon={Trophy} label="Álbumes leg." value={`${legendaryDone}/4`} accent="#ef9f27" />
+        <StatCard icon={BookOpen} label="Duplicados" value={packsOpened > 0 ? packsOpened : '—'} accent="#34d399" />
+      </div>
+
+      {/* Legendarios */}
+      <SectionDivider icon={Trophy} label="Álbumes Legendarios" color="#ef9f27" />
+      <div className="upp-albums-legendary">
+        {LEGENDARY_ALBUM_IDS.map((id, i) => {
+          const prog = getProgress(id);
+          const done = prog?.is_completed ?? false;
+          const cards = prog?.unique_cards ?? 0;
+          const total = 30;
+          const pct = Math.min(100, Math.round((cards / total) * 100));
+          const color = LEGENDARY_COLORS[i];
+
+          return (
+            <div
+              key={id}
+              className={`upp-leg-album${done ? ' upp-leg-album--done' : ''}`}
+              style={{ '--leg-color': color }}
+            >
+              <div className="upp-leg-album-left">
+                <div className="upp-leg-album-icon">
+                  {done ? <Trophy size={14} /> : <BookOpen size={14} />}
+                </div>
+                <div className="upp-leg-album-info">
+                  <span className="upp-leg-album-name">{LEGENDARY_LABELS[id]}</span>
+                  <span className="upp-leg-album-sub">{cards}/{total} jugadores</span>
+                </div>
+              </div>
+              <div className="upp-leg-album-right">
+                {done
+                  ? <span className="upp-leg-album-badge">✓ Completo</span>
+                  : <span className="upp-leg-album-pct">{pct}%</span>
+                }
+              </div>
+              <div className="upp-leg-album-bar">
+                <div className="upp-leg-album-fill" style={{ width: `${pct}%` }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Colección de estrellas */}
+      <SectionDivider icon={Star} label="Colección de Estrellas" color="#c9a227" />
+      <div className="upp-albums-stars">
+        {STAR_ALBUMS.map(({ id, label, color }) => {
+          const prog = getProgress(id);
+          const cards = prog?.unique_cards ?? 0;
+          return (
+            <div key={id} className="upp-star-row" style={{ '--star-color': color }}>
+              <span className="upp-star-label">{label}</span>
+              <span className="upp-star-count">{cards}</span>
+            </div>
+          );
+        })}
+      </div>
+
     </div>
   );
 }
@@ -233,7 +345,6 @@ export default function UserProfilePanel({ userId, onClose }) {
     })[0];
   };
 
-  /* ── Loading ── */
   if (loading) {
     return (
       <div className="upp-backdrop" onClick={onClose}>
@@ -258,11 +369,9 @@ export default function UserProfilePanel({ userId, onClose }) {
   const firstName = userData.name?.split(' ')[0] || 'Jugador';
   const initials = (userData.name || 'U').slice(0, 2).toUpperCase();
 
-  /* Separar logros desbloqueados / bloqueados */
   const unlocked = allAch.filter(a => checkUnlocked(a, userData));
   const locked = allAch.filter(a => !checkUnlocked(a, userData));
 
-  /* Agrupar desbloqueados por categoría */
   const grouped = unlocked.reduce((acc, a) => {
     const cat = a.category || 'special';
     if (!acc[cat]) acc[cat] = [];
@@ -272,6 +381,7 @@ export default function UserProfilePanel({ userId, onClose }) {
 
   const tabs = [
     { id: 'stats', label: 'Stats', icon: TrendingUp },
+    { id: 'albums', label: 'Álbumes', icon: BookOpen },
     { id: 'logros', label: 'Logros', icon: Star },
     { id: 'coronas', label: 'Coronas', icon: Crown },
   ];
@@ -293,7 +403,7 @@ export default function UserProfilePanel({ userId, onClose }) {
           <X size={14} />
         </button>
 
-        {/* ── HEADER ── */}
+        {/* HEADER */}
         <div className="upp-header">
           <div className="upp-banner">
             {userData.equipped_banner_url ? (
@@ -353,7 +463,7 @@ export default function UserProfilePanel({ userId, onClose }) {
           {userData.bio && <p className="upp-bio">{userData.bio}</p>}
         </div>
 
-        {/* ── TABS ── */}
+        {/* TABS */}
         <div className="upp-tabs">
           {tabs.map(tab => {
             const Icon = tab.icon;
@@ -370,10 +480,9 @@ export default function UserProfilePanel({ userId, onClose }) {
           })}
         </div>
 
-        {/* ── CONTENIDO ── */}
+        {/* CONTENIDO */}
         <div className="upp-content">
 
-          {/* ════ STATS ════ */}
           {activeTab === 'stats' && (
             <div className="upp-tab-panel">
               <SectionDivider icon={Zap} label={`Nivel ${userData.level}`} color="#c9a227" />
@@ -420,11 +529,12 @@ export default function UserProfilePanel({ userId, onClose }) {
             </div>
           )}
 
-          {/* ════ LOGROS ════ */}
+          {activeTab === 'albums' && (
+            <AlbumsTab userId={userId} />
+          )}
+
           {activeTab === 'logros' && (
             <div className="upp-tab-panel">
-
-              {/* Título activo */}
               {activeTitle && (
                 <>
                   <SectionDivider icon={Gem} label="Título activo" color={activeTitle.color || '#5b4fd8'} />
@@ -439,7 +549,6 @@ export default function UserProfilePanel({ userId, onClose }) {
                 </>
               )}
 
-              {/* Resumen de progreso */}
               <div className="upp-ach-summary">
                 <span className="upp-ach-summary-nums">
                   <strong>{unlocked.length}</strong>/{allAch.length}
@@ -453,7 +562,6 @@ export default function UserProfilePanel({ userId, onClose }) {
                 </div>
               </div>
 
-              {/* Desbloqueados agrupados por categoría */}
               {unlocked.length === 0 ? (
                 <div className="upp-empty">
                   <Star size={36} opacity={0.25} />
@@ -479,7 +587,6 @@ export default function UserProfilePanel({ userId, onClose }) {
                 })
               )}
 
-              {/* Bloqueados */}
               {locked.length > 0 && (
                 <>
                   <div className="upp-ach-cat-hdr">
@@ -495,7 +602,6 @@ export default function UserProfilePanel({ userId, onClose }) {
             </div>
           )}
 
-          {/* ════ CORONAS ════ */}
           {activeTab === 'coronas' && (
             <div className="upp-tab-panel">
               <SectionDivider icon={Crown} label="Campeonatos" color="#c9a227" />

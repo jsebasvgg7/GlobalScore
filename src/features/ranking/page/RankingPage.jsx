@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Target, TrendingUp, Calendar, Globe, Zap,
-  BarChart3, Crown, Users
+  BarChart3, Crown, Users, BookOpen
 } from 'lucide-react';
 import { supabase } from '@/shared/services/supabase/client';
 import {
@@ -17,6 +17,8 @@ import {
 import { GlobalLoader } from "@/shared/ui";
 import './RankingPage.css';
 
+const LEGENDARY_ALBUM_IDS = ['legendary_1', 'legendary_2', 'legendary_3', 'legendary_4'];
+
 export default function RankingPage({ currentUser }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,6 +26,7 @@ export default function RankingPage({ currentUser }) {
   const [sortBy, setSortBy] = useState('points');
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [champions, setChampions] = useState([]);
+  const [albumProgress, setAlbumProgress] = useState({});
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -37,6 +40,7 @@ export default function RankingPage({ currentUser }) {
     checkAndResetMonthly();
     loadUsers();
     loadTopChampions();
+    loadAlbumProgress();
   }, []);
 
   const checkAndResetMonthly = async () => {
@@ -61,6 +65,24 @@ export default function RankingPage({ currentUser }) {
       if (error) throw error;
       setUsers(data || []);
     } catch (err) { console.error(err); } finally { setLoading(false); }
+  };
+
+  const loadAlbumProgress = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('album_progress')
+        .select('user_id, album_id, is_completed')
+        .in('album_id', LEGENDARY_ALBUM_IDS)
+        .eq('is_completed', true);
+      if (error) throw error;
+
+      const map = {};
+      (data || []).forEach(row => {
+        if (!map[row.user_id]) map[row.user_id] = 0;
+        map[row.user_id]++;
+      });
+      setAlbumProgress(map);
+    } catch (err) { console.error(err); }
   };
 
   const loadTopChampions = async () => {
@@ -141,23 +163,16 @@ export default function RankingPage({ currentUser }) {
 
   return (
     <>
-      {/* ══════════════════════════════════════
-          VISTA MOBILE — solo ≤768px
-          Componente propio, no toca desktop
-      ══════════════════════════════════════ */}
       <MobileRanking
         users={users}
         currentUser={currentUser}
         rankingType={rankingType}
         onChangeType={setRankingType}
         champions={champions}
+        albumProgress={albumProgress}
       />
 
-      {/* ══════════════════════════════════════
-          VISTA DESKTOP — solo >768px
-      ══════════════════════════════════════ */}
       <div className="lb-shell">
-
         <div className="lb-page">
 
           {/* TABS */}
@@ -234,6 +249,7 @@ export default function RankingPage({ currentUser }) {
                 <span className="lbc-num lbc-hide-sm">Pred.</span>
                 <span className="lbc-num">Precisión</span>
                 <span className="lbc-num">Puntos</span>
+                <span className="lbc-num lbc-albums">Álbumes</span>
               </div>
 
               {/* TBODY */}
@@ -247,6 +263,8 @@ export default function RankingPage({ currentUser }) {
                     : pos === 2 ? ' lb-trow--silver'
                       : pos === 3 ? ' lb-trow--bronze'
                         : '';
+                  const legCount = albumProgress[user.id] || 0;
+
                   return (
                     <div
                       key={user.id}
@@ -273,6 +291,12 @@ export default function RankingPage({ currentUser }) {
                       <span className="lbc-num lb-pts">
                         {user.rankPoints}<span className="lb-pts-lbl">pts</span>
                       </span>
+                      <span className="lbc-num lbc-albums">
+                        <span className={`lb-album-badge${legCount > 0 ? ' lb-album-badge--active' : ''}`}>
+                          <BookOpen size={11} />
+                          <span>{legCount}/4</span>
+                        </span>
+                      </span>
                     </div>
                   );
                 })}
@@ -290,7 +314,6 @@ export default function RankingPage({ currentUser }) {
 
         </div>
 
-        {/* PANEL DERECHO */}
         {rankingType !== 'halloffame' ? (
           <RankingRightPanel
             users={users}
