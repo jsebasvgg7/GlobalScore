@@ -3,15 +3,10 @@ import {
   X, Crown, Flame, Shield, Gem, Globe, Heart,
   Trophy, Calendar, Target, Zap, Users, TrendingUp, Award,
   Star, Lock,
-  // Predicciones
   Crosshair, Hash, BarChart2, Activity, BookOpen,
-  // Aciertos
   CheckCircle, Eye, Aperture, Navigation, CheckSquare, Compass, BadgeCheck,
-  // Rachas
   Repeat2, Cpu, Timer, Infinity, Rocket,
-  // Puntos
   Circle, CircleDot, Layers, Sparkles,
-  // Especiales
   Percent, LayoutDashboard, Medal,
 } from 'lucide-react';
 import { supabase } from '@/shared/services/supabase/client';
@@ -64,7 +59,13 @@ const CATEGORY_LABELS = {
   crowns: 'Coronas',
   special: 'Especiales',
 };
-
+const ALB_META_LIST = [
+  { id: 'legendary_1', label: 'Foundations',       shortLabel: 'LEG I',  req: '30 jugadores · mín. 5×⭐⭐⭐⭐', spine: '#5b4fd8', spineAlt: '#3d34a5', accent: '#a599d9' },
+  { id: 'legendary_2', label: 'Rising Legends',    shortLabel: 'LEG II', req: '5×⭐⭐⭐ + 5×⭐⭐⭐⭐',           spine: '#7c3aed', spineAlt: '#5b1fbd', accent: '#c4b5fd' },
+  { id: 'legendary_3', label: 'Historical Depth',  shortLabel: 'LEG III',req: '5×⭐⭐ + 5×⭐⭐⭐ + 5×⭐⭐⭐⭐',    spine: '#1D9E75', spineAlt: '#0d6e50', accent: '#34d399' },
+  { id: 'legendary_4', label: 'Elite Construction',shortLabel: 'LEG IV', req: '... + 1×⭐⭐⭐⭐⭐ GOAT',         spine: '#b45309', spineAlt: '#7c3b00', accent: '#f59e0b' },
+  { id: 'legendary_5', label: 'The Immortals',     shortLabel: 'LEG V',  req: '... + 5×⭐⭐⭐⭐⭐ GOAT',         spine: '#9d174d', spineAlt: '#6b1130', accent: '#f472b6' },
+];
 /* ── Evalúa si el usuario cumple el requisito de un logro ── */
 function checkUnlocked(ach, user) {
   const val = ach.requirement_value ?? 0;
@@ -178,6 +179,7 @@ export default function UserProfilePanel({ userId, onClose }) {
   const [allAch, setAllAch] = useState([]);
   const [titles, setTitles] = useState([]);
   const [mounted, setMounted] = useState(false);
+  const [albumsCompleted, setAlbumsCompleted] = useState([]);
 
   useEffect(() => { loadData(); }, [userId]);
   useEffect(() => {
@@ -193,12 +195,18 @@ export default function UserProfilePanel({ userId, onClose }) {
         { data: history },
         { data: available },
         { data: availTitles },
+        { data: albumProg },
       ] = await Promise.all([
         supabase.from('users').select('*').eq('id', userId).single(),
         supabase.from('users').select('id, points').order('points', { ascending: false }),
         supabase.from('monthly_championship_history').select('*').eq('user_id', userId).order('awarded_at', { ascending: false }),
         supabase.from('available_achievements').select('*').order('requirement_value', { ascending: true }),
         supabase.from('available_titles').select('*'),
+        supabase.from('album_progress')
+          .select('album_id, is_completed')
+          .eq('user_id', userId)
+          .in('album_id', ['legendary_1','legendary_2','legendary_3','legendary_4','legendary_5'])
+          .eq('is_completed', true),
       ]);
 
       setUserData(user);
@@ -217,6 +225,7 @@ export default function UserProfilePanel({ userId, onClose }) {
           unlocked.some(a => a.id === t.requirement_achievement_id)
         ));
       }
+      setAlbumsCompleted(albumProg || []);
     } catch (err) {
       console.error('Error loading profile:', err);
     } finally {
@@ -271,10 +280,11 @@ export default function UserProfilePanel({ userId, onClose }) {
   }, {});
 
   const tabs = [
-    { id: 'stats', label: 'Stats', icon: TrendingUp },
-    { id: 'logros', label: 'Logros', icon: Star },
-    { id: 'coronas', label: 'Coronas', icon: Crown },
-  ];
+  { id: 'stats', label: 'Stats', icon: TrendingUp },
+  { id: 'logros', label: 'Logros', icon: Star },
+  { id: 'coronas', label: 'Coronas', icon: Crown },
+  { id: 'albums', label: 'Álbumes', icon: BookOpen },
+];
 
   return (
     <>
@@ -545,6 +555,65 @@ export default function UserProfilePanel({ userId, onClose }) {
                     {crowns.map((c, i) => <CrownEntry key={c.id} crown={c} index={i} />)}
                   </div>
                 </>
+              )}
+            </div>
+          )}
+          {/* ════ ÁLBUMES LEGENDARIOS ════ */}
+          {activeTab === 'albums' && (
+            <div className="upp-tab-panel">
+              <SectionDivider icon={BookOpen} label="Álbumes Legendarios" color="#5b4fd8" />
+
+              <div className="upp-albums-summary">
+                <BookOpen size={32} strokeWidth={1.5} style={{ color: '#5b4fd8', opacity: 0.7 }} />
+                <div>
+                  <span className="upp-albums-count">{albumsCompleted.length}</span>
+                  <span className="upp-albums-count-sep">/5</span>
+                  <span className="upp-albums-count-lbl">álbumes completados</span>
+                </div>
+                <div className="upp-albums-bar-wrap">
+                  <div className="upp-albums-bar">
+                    <div className="upp-albums-bar-fill" style={{ width: `${(albumsCompleted.length / 5) * 100}%` }} />
+                  </div>
+                </div>
+              </div>
+
+              {ALB_META_LIST.map((alb) => {
+                const done = albumsCompleted.some(p => p.album_id === alb.id);
+                return (
+                  <div
+                    key={alb.id}
+                    className={`upp-alb-row${done ? ' upp-alb-row--done' : ' upp-alb-row--locked'}`}
+                    style={{ '--alb-accent': alb.accent }}
+                  >
+                    <div className="upp-alb-spine" style={{ background: `linear-gradient(180deg, ${alb.spine}, ${alb.spineAlt})` }}>
+                      <span className="upp-alb-spine-label">{alb.shortLabel}</span>
+                    </div>
+                    <div className="upp-alb-icon">
+                      {done
+                        ? <BookOpen size={16} strokeWidth={2} />
+                        : <Lock size={14} strokeWidth={2} />
+                      }
+                    </div>
+                    <div className="upp-alb-info">
+                      <span className="upp-alb-name">{alb.label}</span>
+                      <span className="upp-alb-req">{alb.req}</span>
+                    </div>
+                    {done
+                      ? <span className="upp-alb-badge upp-alb-badge--done"><Trophy size={10} /> Completado</span>
+                      : <span className="upp-alb-badge upp-alb-badge--pending"><Lock size={9} /> Pendiente</span>
+                    }
+                  </div>
+                );
+              })}
+
+              {albumsCompleted.length === 5 && (
+                <div className="upp-alb-immortal">
+                  <Crown size={22} fill="#f472b6" color="#ec4899" />
+                  <div>
+                    <strong>THE IMMORTALS</strong>
+                    <p>Ha completado los 5 álbumes legendarios</p>
+                  </div>
+                </div>
               )}
             </div>
           )}

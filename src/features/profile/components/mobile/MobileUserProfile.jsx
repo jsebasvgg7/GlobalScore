@@ -1,17 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   X, Crown, Flame, Zap, Lock, ChevronRight,
-  // Predicciones
   Crosshair, Target, Hash, TrendingUp, Star, BarChart2, Activity, Award, BookOpen,
-  // Aciertos
   CheckCircle, Eye, Aperture, Navigation, CheckSquare, Compass,
-  // Rachas
   Repeat2, Calendar, Cpu, Timer, Infinity, Rocket, Shield,
-  // Puntos
   Circle, CircleDot, Layers, Trophy, Gem, Sparkles,
-  // Especiales
   Percent, LayoutDashboard, Medal,
-  // Coronas
   BadgeCheck,
 } from "lucide-react";
 import { supabase } from "@/shared/services/supabase/client";
@@ -397,7 +391,108 @@ function AchievementRow({ ach, unlocked }) {
     </div>
   );
 }
+/* ════════════════════════════════════════════════
+   PANEL — ÁLBUMES LEGENDARIOS
+════════════════════════════════════════════════ */
+const MOB_ALB_META = [
+  { id: 'legendary_1', label: 'Foundations',        shortLabel: 'LEG I',  spine: '#5b4fd8', accent: '#a599d9' },
+  { id: 'legendary_2', label: 'Rising Legends',     shortLabel: 'LEG II', spine: '#7c3aed', accent: '#c4b5fd' },
+  { id: 'legendary_3', label: 'Historical Depth',   shortLabel: 'LEG III',spine: '#1D9E75', accent: '#34d399' },
+  { id: 'legendary_4', label: 'Elite Construction', shortLabel: 'LEG IV', spine: '#b45309', accent: '#f59e0b' },
+  { id: 'legendary_5', label: 'The Immortals',      shortLabel: 'LEG V',  spine: '#9d174d', accent: '#f472b6' },
+];
 
+function PanelAlbums({ userId }) {
+  const [completed, setCompleted] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const { data } = await supabase
+        .from('album_progress')
+        .select('album_id, is_completed')
+        .eq('user_id', userId)
+        .in('album_id', ['legendary_1','legendary_2','legendary_3','legendary_4','legendary_5'])
+        .eq('is_completed', true);
+      setCompleted(data || []);
+      setLoading(false);
+    })();
+  }, [userId]);
+
+  const completedIds = new Set(completed.map(p => p.album_id));
+  const count = completed.length;
+  const isImmortal = count === 5;
+
+  return (
+    <div className="mup2-panel">
+      <div className="mup2-sec-hdr">
+        <div className="mup2-sec-line" style={{ background: '#5b4fd8' }} />
+        <span className="mup2-sec-lbl">ÁLBUMES LEGENDARIOS</span>
+        <span className="mup2-sec-extra" style={{ color: '#5b4fd8' }}>{count}/5</span>
+      </div>
+
+      {loading ? (
+        <div className="mup2-loading-row">
+          <span className="mup2-loading-dot" />
+          <span className="mup2-loading-dot" style={{ animationDelay: '0.15s' }} />
+          <span className="mup2-loading-dot" style={{ animationDelay: '0.3s' }} />
+        </div>
+      ) : (
+        <>
+          {/* Barra de progreso */}
+          <div className="mup2-alb-progress-wrap">
+            <div className="mup2-alb-progress-track">
+              <div className="mup2-alb-progress-fill" style={{ width: `${(count / 5) * 100}%` }} />
+            </div>
+            <span className="mup2-alb-progress-label">{count} de 5 completados</span>
+          </div>
+
+          {/* Lista de álbumes */}
+          <div className="mup2-alb-list">
+            {MOB_ALB_META.map((alb) => {
+              const done = completedIds.has(alb.id);
+              return (
+                <div
+                  key={alb.id}
+                  className={`mup2-alb-row${done ? ' mup2-alb-row--done' : ' mup2-alb-row--pending'}`}
+                  style={{ '--alb-accent': alb.accent, '--alb-spine': alb.spine }}
+                >
+                  <div className="mup2-alb-spine-bar" />
+                  <div className="mup2-alb-icon">
+                    {done
+                      ? <BookOpen size={15} strokeWidth={2} style={{ color: alb.accent }} />
+                      : <Lock size={13} strokeWidth={2} style={{ color: 'var(--mup2-muted)', opacity: 0.4 }} />
+                    }
+                  </div>
+                  <div className="mup2-alb-info">
+                    <span className="mup2-alb-shortlabel">{alb.shortLabel}</span>
+                    <span className="mup2-alb-name">{alb.label}</span>
+                  </div>
+                  {done
+                    ? <Trophy size={13} style={{ color: '#1D9E75', flexShrink: 0 }} />
+                    : <Lock size={11} style={{ color: 'var(--mup2-muted)', opacity: 0.3, flexShrink: 0 }} />
+                  }
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Banner immortal */}
+          {isImmortal && (
+            <div className="mup2-alb-immortal">
+              <Crown size={18} fill="#f472b6" color="#ec4899" />
+              <div>
+                <span className="mup2-alb-immortal-title">THE IMMORTALS</span>
+                <span className="mup2-alb-immortal-sub">Todos los álbumes completados</span>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
 /* ════════════════════════════════════════════
    MAIN COMPONENT
 ════════════════════════════════════════════ */
@@ -539,6 +634,7 @@ export default function MobileUserProfile({ userId, onClose }) {
             <TabBtn id="stats" active={tab === "stats"} onClick={setTab}>STATS</TabBtn>
             <TabBtn id="crowns" active={tab === "crowns"} onClick={setTab}>CORONAS</TabBtn>
             <TabBtn id="logros" active={tab === "logros"} onClick={setTab}>LOGROS</TabBtn>
+            <TabBtn id="albums" active={tab === "albums"} onClick={setTab}>ÁLBUMES</TabBtn>
           </div>
         </div>
 
@@ -557,6 +653,7 @@ export default function MobileUserProfile({ userId, onClose }) {
               {tab === "stats" && <PanelStats user={user} />}
               {tab === "crowns" && <PanelChampions userId={userId} />}
               {tab === "logros" && <PanelAchievements user={user} />}
+              {tab === "albums" && <PanelAlbums userId={userId} />}
             </>
           )}
         </div>
