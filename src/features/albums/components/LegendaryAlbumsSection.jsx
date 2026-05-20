@@ -3,11 +3,8 @@ import { Lock, BookOpen, Trophy, Star, ChevronLeft, ChevronRight, Gift, Crown, X
 import '../styles/LegendaryAlbumsSection.css';
 import '../styles/mobile/LegendaryAlbumsSection.mobile.css';
 
-// ── Orden progresivo LEG I → LEG V (golden_album eliminado) ───────────────
+// ── Orden progresivo LEG I → LEG V ───────────────
 const ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'legendary_4', 'legendary_5'];
-
-// ── Requisitos por álbum (espejo del servicio, para el layout visual) ─────
-// req: [{ minStars, count }] ordenados de mayor a menor rareza
 const LEG_SLOT_REQS = {
     legendary_1: {
         slots: 30,
@@ -143,23 +140,14 @@ function posLabel(pos) {
     return map[pos] || pos?.slice(0, 3).toUpperCase() || '—';
 }
 
-/* ══════════════════════════════════════════
-   SLOT LAYOUT ENGINE
-   Builds slot zones based on the GLOBAL collection,
-   excluding cards already used in previous albums.
-
-   prevUsedIds: Set of card IDs consumed by earlier LEG albums.
-══════════════════════════════════════════ */
 function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
     const slotDef = LEG_SLOT_REQS[albumId];
     if (!slotDef) return { reqZones: [], generalSlots: [], filled: 0, pct: 0, usedIds: new Set() };
 
-    // Only player cards, not already consumed by previous albums
     const playerCol = collection.filter(
         (c) => c.card?.card_type === 'player' && !prevUsedIds.has(c.card_id ?? c.id)
     );
 
-    // Sort descending by significance so highest stars are assigned first
     const sorted = [...playerCol].sort(
         (a, b) => (b.card?.significance_level ?? 0) - (a.card?.significance_level ?? 0)
     );
@@ -167,7 +155,6 @@ function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
     const assignedIds = new Set();
     const reqZones = [];
 
-    // Process requirements from highest to lowest minStars
     const reqsSorted = [...slotDef.req].sort((a, b) => b.minStars - a.minStars);
 
     for (const { minStars, count } of reqsSorted) {
@@ -191,7 +178,6 @@ function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
         reqZones.push({ minStars, slots });
     }
 
-    // General slots: remaining cards not yet assigned
     const reqTotal = slotDef.req.reduce((s, r) => s + r.count, 0);
     const generalSlotCount = slotDef.slots - reqTotal;
     const generalPool = sorted.filter((c) => !assignedIds.has(c.card_id ?? c.id));
@@ -202,13 +188,11 @@ function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
         return { slotType: 'general', item, reqLabel: null, minStars: null };
     });
 
-    // Stats
     const filledReq = reqZones.reduce((sum, z) => sum + z.slots.filter(s => s.item).length, 0);
     const filledGen = generalSlots.filter(s => s.item).length;
     const filled = filledReq + filledGen;
     const pct = slotDef.slots > 0 ? Math.min(100, Math.round((filled / slotDef.slots) * 100)) : 0;
 
-    // Req fulfillment per zone
     const reqMet = reqZones.map(z => ({
         minStars: z.minStars,
         required: z.slots.length,
@@ -218,19 +202,15 @@ function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
     return { reqZones, generalSlots, filled, pct, usedIds: assignedIds, reqMet };
 }
 
-/* ══════════════════════════════════════════
-   Compute all albums' usedIds in order
-   so each album can exclude cards used by previous ones.
-══════════════════════════════════════════ */
 function computeAllUsedIds(collection) {
-    const allUsed = {}; // albumId → Set of usedIds for THAT album
+    const allUsed = {};
     const globalUsed = new Set();
 
     for (const albumId of ORDER) {
         const { usedIds } = buildSlotLayout(albumId, collection, globalUsed);
-        allUsed[albumId] = globalUsed.size; // just tracking
+        allUsed[albumId] = globalUsed.size;
         usedIds.forEach(id => globalUsed.add(id));
-        allUsed[albumId] = new Set(usedIds); // store the used set for this album
+        allUsed[albumId] = new Set(usedIds);
     }
 
     return allUsed;
@@ -360,7 +340,6 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
         );
     }
 
-    // legendary_4 — golden elite (1 GOAT required)
     if (albumId === 'legendary_4') {
         return (
             <svg viewBox="0 0 120 160" className="las2-cover-svg" aria-hidden="true">
@@ -402,7 +381,6 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
         );
     }
 
-    // legendary_5 — The Immortals (endgame, 5 GOATs)
     return (
         <svg viewBox="0 0 120 160" className="las2-cover-svg" aria-hidden="true">
             <defs>
@@ -585,14 +563,12 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, prevUsed
 
     const slotDef = LEG_SLOT_REQS[albumId] ?? { slots: 30, req: [] };
 
-    // Flatten all slots for pagination
     const allSlots = [];
     reqZones.forEach(zone => {
         zone.slots.forEach((s, i) => allSlots.push({ ...s, globalIdx: allSlots.length }));
     });
     generalSlots.forEach((s, i) => allSlots.push({ ...s, globalIdx: allSlots.length }));
 
-    // Zone boundary indices
     const reqBoundaries = [];
     let cursor = 0;
     reqZones.forEach(zone => {
@@ -802,7 +778,6 @@ function renderPageWithZones(pageItems, pageStartIdx, reqBoundaries, generalStar
         );
     }
 
-    // Determine zone per absolute index
     const getZone = (absIdx) => {
         for (const b of reqBoundaries) {
             if (absIdx >= b.start && absIdx < b.end) return `req${b.minStars}`;
@@ -993,23 +968,17 @@ export default function LegendaryAlbumsSection({ definitions, progress, collecti
 
     const isUnlocked = useCallback((albumId) => unlockedSet.has(albumId), [unlockedSet]);
 
-    // Pre-compute cumulative usedIds in order.
-    // CRITICAL: locked albums are SKIPPED — they don't consume cards from the pool
-    // and they receive an empty prevUsedIds so they show all slots as empty.
     const prevUsedIdsMap = React.useMemo(() => {
         const map = {};
         const globalUsed = new Set();
 
         for (const albumId of ORDER) {
             if (!unlockedSet.has(albumId)) {
-                // Locked album: snapshot current globalUsed (won't matter since
-                // buildSlotLayout will receive locked=true and return empty),
-                // but crucially we do NOT run buildSlotLayout or accumulate IDs.
                 map[albumId] = new Set(globalUsed);
                 continue;
             }
 
-            map[albumId] = new Set(globalUsed); // snapshot BEFORE this album
+            map[albumId] = new Set(globalUsed);
             const { usedIds } = buildSlotLayout(albumId, collection, globalUsed);
             usedIds.forEach(id => globalUsed.add(id));
         }

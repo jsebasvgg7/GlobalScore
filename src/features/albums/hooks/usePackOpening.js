@@ -5,8 +5,7 @@ export function usePackOpening({ onPackOpened } = {}) {
     const [isOpening, setIsOpening] = useState(false);
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
-    const [phase, setPhase] = useState('idle'); // idle | animating | revealing | done
-
+    const [phase, setPhase] = useState('idle');
     const open = useCallback(async (userId) => {
         if (isOpening) return;
         setIsOpening(true);

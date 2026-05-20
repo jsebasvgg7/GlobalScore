@@ -35,7 +35,6 @@
     display: block;
 }
 
-/* ─── Punto indicador de sobres disponibles ─── */
 .abe-dot-badge {
     position: absolute;
     top: 3px;
@@ -63,7 +62,6 @@
     }
 }
 
-/* ─── Tooltip ─── */
 .abe-tooltip {
     pointer-events: none;
     margin-top: 10px;
@@ -90,12 +88,6 @@
     padding: 1px 7px;
     border-radius: 20px;
 }
-
-/* ════════════════════════════════════════════════
-   DARK MODE — el libro mantiene sus colores
-   ya que es un objeto físico, no UI temático.
-   Solo ajustamos la sombra y el tooltip.
-════════════════════════════════════════════════ */
 
 [data-theme="dark"] .abe-float-btn {
     filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.5));

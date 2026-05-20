@@ -1,11 +1,14 @@
 /* ════════════════════════════════════════════════
-   LEGENDARY ALBUMS SECTION — Mobile Responsive
-   Sobreescrituras específicas para pantallas < 768px
+   ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗
+   ████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝
+   ██╔████╔██║██║   ██║██████╔╝██║██║     █████╗  
+   ██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝  
+   ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
+   MOBILE — responsive chaos
 ════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
 
-  /* ── EYEBROW ── */
   .las2-root {
     gap: 12px;
   }
@@ -15,14 +18,12 @@
     gap: 8px;
   }
 
-  /* ── FILA DE LIBROS: 2 columnas en mobile ── */
   .las2-row {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     padding-bottom: 72px;
   }
 
-  /* ── LIBRO: ratio más compacto ── */
   .las2-book {
     aspect-ratio: 3/4;
     min-height: 140px;
@@ -30,10 +31,8 @@
 
   .las2-book-wrap:not(.las2-book-wrap--locked):hover {
     transform: none;
-    /* Sin hover en touch */
   }
 
-  /* ── LOMO más delgado en mobile ── */
   .las2-spine {
     width: 16px;
     padding: 8px 0 6px;
@@ -47,7 +46,6 @@
     font-size: 5px;
   }
 
-  /* ── PORTADA ── */
   .las2-cover {
     padding: 6px 5px 5px;
     gap: 3px;
@@ -64,7 +62,6 @@
     right: 10px;
   }
 
-  /* ── RARITY BADGE: ocultar en móvil pequeño para no saturar ── */
   .las2-rarity {
     top: 20px;
     right: 8px;
@@ -79,7 +76,6 @@
     font-size: 4px;
   }
 
-  /* ── FOOTER DEL LIBRO ── */
   .las2-cover-footer {
     gap: 3px;
   }
@@ -93,9 +89,6 @@
     display: none;
   }
 
-  /* Ocultar en touch */
-
-  /* ── LOCK OVERLAY ── */
   .las2-lock-msg {
     font-size: 5px;
     padding: 0 4px;
@@ -106,15 +99,11 @@
     height: 28px;
   }
 
-  /* ── PÁGINAS APILADAS ── */
   .las2-page-stack {
     right: -4px;
     width: 7px;
   }
 
-  /* ════════════════════════════════════════════
-     PANEL MODAL — Full screen en mobile
-  ════════════════════════════════════════════ */
   .las2-overlay {
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -146,14 +135,12 @@
     }
   }
 
-  /* Body en mobile: columna única */
   .las2-panel-body {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
     overflow: hidden;
   }
 
-  /* Sidebar horizontal y compacto */
   .las2-panel-sidebar {
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
@@ -182,7 +169,6 @@
     align-items: flex-start;
   }
 
-  /* En mobile ocultar el libro miniatura del sidebar */
   .las2-sidebar-book-img {
     display: none;
   }
@@ -222,7 +208,6 @@
     display: none;
   }
 
-  /* Barra de progreso compacta */
   .las2-sidebar-pbar-wrap {
     flex: 1;
     min-width: 80px;
@@ -235,7 +220,6 @@
     top: -14px;
   }
 
-  /* Chips en fila */
   .las2-sidebar-chips {
     flex-direction: row;
     flex-wrap: wrap;
@@ -248,7 +232,6 @@
     padding: 2px 5px;
   }
 
-  /* Ocultar descripción en sidebar mobile */
   .las2-sidebar-desc-block {
     display: none;
   }
@@ -266,13 +249,11 @@
     font-size: 7px;
   }
 
-  /* Grid de stickers: 4 columnas en mobile */
   .las2-sticker-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
   }
 
-  /* Footer modal más compacto */
   .las2-modal-footer {
     height: 48px;
     padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -316,13 +297,11 @@
     width: 40px;
   }
 
-  /* Scroll del panel */
   .las2-panel-scroll {
     padding: 8px 12px 16px;
     gap: 8px;
   }
 
-  /* Zone headers más pequeños */
   .las2-zone-header-label {
     font-size: 6px;
   }
@@ -331,7 +310,6 @@
     font-size: 6px;
   }
 
-  /* Toolbar de búsqueda */
   .las2-panel-toolbar {
     padding: 8px 12px;
   }

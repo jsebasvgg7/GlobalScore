@@ -51,9 +51,6 @@
     color: #8B7FC7;
 }
 
-/* ══════════════════════════════════════════
-   FILA DE LIBROS
-══════════════════════════════════════════ */
 .scs2-row {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -75,9 +72,6 @@
     }
 }
 
-/* ══════════════════════════════════════════
-   BOOK WRAPPER
-══════════════════════════════════════════ */
 .scs2-book-wrap {
     position: relative;
     display: flex;
@@ -116,9 +110,6 @@
     border-right-color: color-mix(in srgb, var(--acc, #a599d9) 22%, #2a2638);
 }
 
-/* ══════════════════════════════════════════
-   EL LIBRO
-══════════════════════════════════════════ */
 .scs2-book {
     display: flex;
     flex-direction: row;
@@ -148,7 +139,6 @@
         inset 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
-/* ── LOMO ── */
 .scs2-spine {
     width: 20px;
     flex-shrink: 0;
@@ -206,7 +196,6 @@
     border-radius: 1px;
 }
 
-/* ── PORTADA ── */
 .scs2-cover {
     flex: 1;
     background: var(--cover-bg, #1a1726);
@@ -233,7 +222,6 @@
     z-index: 3;
 }
 
-/* ── ILUSTRACIÓN ── */
 .scs2-cover-art {
     position: absolute;
     inset: 0;
@@ -263,7 +251,6 @@
     }
 }
 
-/* ── HEBILLA ── */
 .scs2-clasp {
     position: absolute;
     right: 0;
@@ -305,7 +292,6 @@
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
 }
 
-/* ── CANTONERAS ── */
 .scs2-corner {
     position: absolute;
     width: 10px;
@@ -339,7 +325,6 @@
     clip-path: polygon(100% 0, 0 100%, 100% 100%);
 }
 
-/* ── TAG ── */
 .scs2-cover-tag {
     position: relative;
     z-index: 2;
@@ -356,7 +341,6 @@
     align-self: flex-start;
 }
 
-/* ── ID ── */
 .scs2-cover-id {
     position: absolute;
     top: 7px;
@@ -369,7 +353,6 @@
     color: rgba(255, 255, 255, 0.25);
 }
 
-/* ── ESTRELLAS en portada ── */
 .scs2-cover-title-block {
     position: relative;
     z-index: 2;
@@ -400,7 +383,6 @@
     text-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
 }
 
-/* ── RARITY ── */
 .scs2-rarity {
     position: absolute;
     top: 24px;
@@ -463,7 +445,6 @@
     color: #f59e0b;
 }
 
-/* ── FOOTER DEL LIBRO ── */
 .scs2-cover-footer {
     position: relative;
     z-index: 2;
@@ -521,9 +502,6 @@
     opacity: 1;
 }
 
-/* ══════════════════════════════════════════
-   OVERLAY + PANEL MODAL
-══════════════════════════════════════════ */
 .scs2-overlay {
     position: fixed;
     inset: 0;
@@ -594,7 +572,6 @@
     }
 }
 
-/* ── TOPBAR ── */
 .scs2-modal-topbar {
     flex-shrink: 0;
     height: 44px;
@@ -655,7 +632,6 @@
     color: #fff;
 }
 
-/* ── BODY ── */
 .scs2-panel-body {
     flex: 1;
     min-height: 0;
@@ -671,9 +647,6 @@
     }
 }
 
-/* ══════════════════════════════════════════
-   SIDEBAR
-══════════════════════════════════════════ */
 .scs2-panel-sidebar {
     display: flex;
     flex-direction: column;
@@ -911,9 +884,6 @@
     color: #6E6680;
 }
 
-/* ══════════════════════════════════════════
-   PANEL PRINCIPAL
-══════════════════════════════════════════ */
 .scs2-panel-main {
     display: flex;
     flex-direction: column;
@@ -1054,9 +1024,6 @@
     }
 }
 
-/* ══════════════════════════════════════════
-   STICKER CARD
-══════════════════════════════════════════ */
 .scs2-sticker {
     aspect-ratio: 2/3;
     position: relative;
@@ -1285,9 +1252,6 @@
     text-align: center;
 }
 
-/* ══════════════════════════════════════════
-   FOOTER MODAL
-══════════════════════════════════════════ */
 .scs2-modal-footer {
     flex-shrink: 0;
     display: flex;
@@ -1457,8 +1421,6 @@
     border-left-color: #2A2638;
     color: #4E4868;
 }
-
-/* ══ PANINI STICKER UPGRADES ══ */
 
 .scs2-sticker-topband {
     width: 100%;

@@ -1,5 +1,10 @@
 /* ════════════════════════════════════════════════
-   CULT ALBUMS SECTION — Mobile Responsive
+   ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗
+   ████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝
+   ██╔████╔██║██║   ██║██████╔╝██║██║     █████╗  
+   ██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝  
+   ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
+   MOBILE — responsive chaos
 ════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
@@ -13,7 +18,6 @@
     gap: 8px;
   }
 
-  /* ── FILA: 1 sola columna para que los 3 álbumes de culto tengan el mismo ancho ── */
   .cas2-row {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
@@ -62,7 +66,6 @@
     right: 10px;
   }
 
-  /* Ícono central más visible */
   .cas2-cover-title-block {
     flex: 1;
   }
@@ -102,13 +105,11 @@
     width: 7px;
   }
 
-  /* Cantoneras más pequeñas */
   .cas2-corner {
     width: 8px;
     height: 8px;
   }
 
-  /* Hebilla más pequeña */
   .cas2-clasp-strap--top,
   .cas2-clasp-strap--bot {
     height: 16px;
@@ -120,7 +121,6 @@
     height: 10px;
   }
 
-  /* ── PANEL MODAL ── */
   .cas2-panel {
     position: fixed;
     top: 0;
@@ -318,7 +318,6 @@
 
 @media (max-width: 480px) {
 
-  /* En pantallas muy pequeñas, el álbum de culto cabe en horizontal */
   .cas2-row {
     max-width: 100%;
   }

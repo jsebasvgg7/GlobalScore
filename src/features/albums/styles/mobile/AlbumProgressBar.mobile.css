@@ -1,10 +1,14 @@
 /* ════════════════════════════════════════════════
-   ALBUM PROGRESS BAR — Mobile Responsive
+   ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗
+   ████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝
+   ██╔████╔██║██║   ██║██████╔╝██║██║     █████╗  
+   ██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝  
+   ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
+   MOBILE — responsive chaos
 ════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
 
-  /* Versión full (no compact) en mobile: más compacta */
   .apb-root { gap: 6px; }
 
   .apb-header {
@@ -27,7 +31,6 @@
   .apb-end-pack { width: 22px; }
   .apb-pack-icon { width: 16px; height: 21px; }
 
-  /* Compact track más visible */
   .apb-compact-track { height: 3px; }
   .apb-compact-glow { width: 7px; height: 7px; }
 }

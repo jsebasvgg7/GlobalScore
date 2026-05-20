@@ -64,7 +64,6 @@
     justify-content: center;
 }
 
-/* Botón de sobres: solo ícono + número, sin texto */
 .alb-mob-open-btn {
     display: flex;
     align-items: center;
@@ -196,7 +195,6 @@
     }
 }
 
-/* ── SOLO MOBILE ── */
 @media (min-width: 769px) {
     .alb-mob-root {
         display: none;

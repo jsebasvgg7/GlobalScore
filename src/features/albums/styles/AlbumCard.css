@@ -43,7 +43,6 @@
     width: 56px;
 }
 
-/* ── FOIL OVERLAY ── */
 .ac-foil {
     position: absolute;
     inset: 0;
@@ -60,7 +59,6 @@
     opacity: 1;
 }
 
-/* ── HEADER BAND ── */
 .ac-header-band {
     width: 100%;
     background: var(--card-gradient, linear-gradient(135deg, #3d34a5 0%, #7c6fe0 100%));
@@ -94,7 +92,6 @@
     line-height: 1;
 }
 
-/* ── IMAGE SECTION ── */
 .ac-image-section {
     background: color-mix(in srgb, var(--card-color, #5b4fd8) 5%, #f8f7ff);
     display: flex;
@@ -165,7 +162,6 @@
     font-size: 9px;
 }
 
-/* Halo GOAT */
 .ac-goat-halo {
     position: absolute;
     inset: -4px;
@@ -182,7 +178,6 @@
     }
 }
 
-/* ── FOOTER BAND ── */
 .ac-footer-band {
     flex: 1;
     display: flex;
@@ -202,7 +197,6 @@
     border-top-color: color-mix(in srgb, var(--card-color, #5b4fd8) 30%, transparent);
 }
 
-/* Línea decorativa superior del footer */
 .ac-footer-band::before {
     content: '';
     position: absolute;
@@ -248,7 +242,6 @@
     line-height: 1;
 }
 
-/* ── STARS ── */
 .ac-stars-row {
     display: flex;
     gap: 1px;
@@ -283,7 +276,6 @@
     color: #2e2b40;
 }
 
-/* ── COPIES BADGE ── */
 .ac-copies {
     position: absolute;
     top: 5px;
@@ -299,9 +291,6 @@
     z-index: 6;
 }
 
-/* ══════════════════════════════
-   VARIANTES DE FRAME
-══════════════════════════════ */
 .ac-root--silver {
     border-color: #b0b8c8;
     box-shadow: 0 2px 12px rgba(176, 184, 200, 0.4),
@@ -331,14 +320,10 @@
     }
 }
 
-/* ── GOAT ── */
 .ac-root--goat {
     border-color: rgba(245, 158, 11, 0.7) !important;
 }
 
-/* ══════════════════════════════
-   CARTA VACÍA — Panini clásico
-══════════════════════════════ */
 .ac-root--empty {
     border: 1.5px dashed #c8c4be;
     background: #faf9f7;

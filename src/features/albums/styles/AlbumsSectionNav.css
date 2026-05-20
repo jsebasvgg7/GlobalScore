@@ -20,7 +20,6 @@
     border-bottom-color: #2A2638;
 }
 
-/* Línea inferior decorativa */
 .asn-root::after {
     content: '';
     position: absolute;
@@ -42,7 +41,6 @@
     max-width: 600px;
 }
 
-/* ── TAB ── */
 .asn-tab {
     position: relative;
     flex: 1;
@@ -69,7 +67,6 @@
     background: rgba(139, 127, 199, 0.05);
 }
 
-/* Separador entre tabs */
 .asn-tab+.asn-tab {
     border-left: 0.5px solid #d4cfc8;
 }
@@ -78,13 +75,11 @@
     border-left-color: #2A2638;
 }
 
-/* Ocultar separador cuando el tab adyacente es activo */
 .asn-tab--active+.asn-tab,
 .asn-tab+.asn-tab--active {
     border-left-color: transparent;
 }
 
-/* ── CONTENIDO INTERNO ── */
 .asn-tab-inner {
     display: flex;
     align-items: center;
@@ -92,7 +87,6 @@
     padding: 10px 16px 12px;
 }
 
-/* ── ICON BOX ── */
 .asn-icon-box {
     flex-shrink: 0;
     width: 28px;
@@ -113,7 +107,6 @@
     color: #6E6680;
 }
 
-/* ── TEXT BLOCK ── */
 .asn-text-block {
     display: flex;
     flex-direction: column;
@@ -153,7 +146,6 @@
     color: #6E6680;
 }
 
-/* ── BARRA ACTIVA ── */
 .asn-active-bar {
     position: absolute;
     bottom: -2px;
@@ -168,7 +160,6 @@
     background: #A599D9;
 }
 
-/* ── ESTADO ACTIVO ── */
 .asn-tab--active {
     border-bottom-color: transparent;
 }

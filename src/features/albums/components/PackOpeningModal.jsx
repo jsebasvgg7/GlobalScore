@@ -4,7 +4,6 @@ import '../styles/PackOpeningModal.css';
 import '../styles/mobile/PackOpeningModal.mobile.css';
 
 /* ─── Constants ─────────────────────────────────────────────────────────── */
-
 const TYPE_LABEL = {
     player:      'Jugador',
     team:        'Equipo',
@@ -45,7 +44,6 @@ function StarRow({ level }) {
     );
 }
 
-/** Partículas para carta GOAT */
 function GoatParticles() {
     return (
         <div className="pom2-particles" aria-hidden="true">
@@ -62,7 +60,6 @@ function GoatParticles() {
     );
 }
 
-/** Dorso de la carta (boca abajo) */
 function CardBack() {
     return (
         <div className="pom2-card-back">
@@ -131,7 +128,6 @@ function CardFront({ type, card, isGoat }) {
     );
 }
 
-/** Carta individual con efecto flip */
 function FlipCard({ type, card, index, isDealt, isFlipped, onFlip, isGoat }) {
     const handleKey = useCallback((e) => {
         if (!isFlipped && (e.key === 'Enter' || e.key === ' ')) onFlip();
@@ -162,7 +158,6 @@ function FlipCard({ type, card, index, isDealt, isFlipped, onFlip, isGoat }) {
     );
 }
 
-/** Sobre visual */
 function PackVisual({ count, phase, onOpen, allFlipped, packsAvailable, onReset, onClose }) {
     const isOpening = phase === 'animating';
 
@@ -244,7 +239,6 @@ function PackVisual({ count, phase, onOpen, allFlipped, packsAvailable, onReset,
     );
 }
 
-/** Área de cartas */
 function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, packsAvailable, onReset, onClose }) {
     return (
         <div className="pom2-cards-panel">
@@ -301,7 +295,6 @@ function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, pa
 }
 
 /* ─── Modal principal ───────────────────────────────────────────────────── */
-
 export default function PackOpeningModal({
     isOpen,
     phase,

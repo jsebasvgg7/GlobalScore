@@ -102,9 +102,6 @@ function posLabel(pos) {
     return map[pos] || pos?.slice(0, 3).toUpperCase() || '—';
 }
 
-/* ══════════════════════════════════════════
-   COVER ILLUSTRATIONS (una por tier)
-══════════════════════════════════════════ */
 function StarCoverIllustration({ level, accent, accentRgb, locked }) {
     const id = `star-cover-${level}`;
 
@@ -242,7 +239,6 @@ function StarCoverIllustration({ level, accent, accentRgb, locked }) {
         );
     }
 
-    /* level === 5 — GOAT dorado */
     return (
         <svg viewBox="0 0 120 160" className="scs2-cover-svg scs2-cover-svg--golden" aria-hidden="true">
             <defs>

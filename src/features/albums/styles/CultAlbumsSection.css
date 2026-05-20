@@ -51,9 +51,6 @@
     color: #34d399;
 }
 
-/* ══════════════════════════════════════════
-   FILA DE ÁLBUMES
-══════════════════════════════════════════ */
 .cas2-row {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 280px));
@@ -76,9 +73,6 @@
     }
 }
 
-/* ══════════════════════════════════════════
-   BOOK WRAPPER
-══════════════════════════════════════════ */
 .cas2-book-wrap {
     position: relative;
     display: flex;
@@ -117,9 +111,6 @@
     border-right-color: color-mix(in srgb, var(--acc, #1D9E75) 22%, #2a2638);
 }
 
-/* ══════════════════════════════════════════
-   EL LIBRO
-══════════════════════════════════════════ */
 .cas2-book {
     display: flex;
     flex-direction: row;
@@ -149,7 +140,6 @@
         inset 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
-/* ── LOMO ── */
 .cas2-spine {
     width: 22px;
     flex-shrink: 0;
@@ -209,7 +199,6 @@
     border-radius: 1px;
 }
 
-/* ── PORTADA ── */
 .cas2-cover {
     flex: 1;
     background: var(--cover-bg, #0a1f18);
@@ -236,7 +225,6 @@
     z-index: 3;
 }
 
-/* ── ILUSTRACIÓN ── */
 .cas2-cover-art {
     position: absolute;
     inset: 0;
@@ -250,7 +238,6 @@
     display: block;
 }
 
-/* ── HEBILLA ── */
 .cas2-clasp {
     position: absolute;
     right: 0;
@@ -292,7 +279,6 @@
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
 }
 
-/* ── CANTONERAS ── */
 .cas2-corner {
     position: absolute;
     width: 10px;
@@ -326,7 +312,6 @@
     clip-path: polygon(100% 0, 0 100%, 100% 100%);
 }
 
-/* ── TAG ── */
 .cas2-cover-tag {
     position: relative;
     z-index: 2;
@@ -355,7 +340,6 @@
     color: rgba(255, 255, 255, 0.25);
 }
 
-/* ── ÍCONO CENTRAL ── */
 .cas2-cover-title-block {
     position: relative;
     z-index: 2;
@@ -371,7 +355,6 @@
     line-height: 1;
 }
 
-/* ── RARITY BADGE ── */
 .cas2-rarity {
     position: absolute;
     top: 24px;
@@ -408,7 +391,6 @@
     line-height: 1;
 }
 
-/* ── FOOTER DEL LIBRO ── */
 .cas2-cover-footer {
     position: relative;
     z-index: 2;
@@ -466,9 +448,6 @@
     opacity: 1;
 }
 
-/* ══════════════════════════════════════════
-   OVERLAY + PANEL MODAL
-══════════════════════════════════════════ */
 .cas2-overlay {
     position: fixed;
     inset: 0;
@@ -539,7 +518,6 @@
     }
 }
 
-/* ── TOPBAR ── */
 .cas2-modal-topbar {
     flex-shrink: 0;
     height: 44px;
@@ -603,9 +581,6 @@
     color: #fff;
 }
 
-/* ══════════════════════════════════════════
-   BODY — 2 COLUMNAS
-══════════════════════════════════════════ */
 .cas2-panel-body {
     flex: 1;
     min-height: 0;
@@ -621,9 +596,6 @@
     }
 }
 
-/* ══════════════════════════════════════════
-   SIDEBAR
-══════════════════════════════════════════ */
 .cas2-panel-sidebar {
     display: flex;
     flex-direction: column;
@@ -735,7 +707,6 @@
     background: #2A2638;
 }
 
-/* Mini libro sidebar */
 .cas2-sidebar-book-img {
     flex: 1;
     display: flex;
@@ -751,7 +722,6 @@
     filter: drop-shadow(6px 10px 24px rgba(0, 0, 0, 0.28));
 }
 
-/* Progress */
 .cas2-sidebar-pbar-wrap {
     position: relative;
     height: 4px;
@@ -796,7 +766,6 @@
     color: var(--acc, #1D9E75);
 }
 
-/* Chips */
 .cas2-sidebar-chips {
     display: flex;
     flex-direction: column;
@@ -830,7 +799,6 @@
     background: rgba(var(--acc-rgb, 29, 158, 117), 0.05);
 }
 
-/* Descripción */
 .cas2-sidebar-desc-block {
     padding: 12px 14px;
     border-top: 1px solid #d4cfc8;
@@ -868,9 +836,6 @@
     color: #6E6680;
 }
 
-/* ══════════════════════════════════════════
-   PANEL PRINCIPAL
-══════════════════════════════════════════ */
 .cas2-panel-main {
     display: flex;
     flex-direction: column;
@@ -965,7 +930,6 @@
     border-radius: 2px;
 }
 
-/* Page indicator */
 .cas2-page-indicator {
     display: flex;
     align-items: center;
@@ -993,7 +957,6 @@
     background: #2A2638;
 }
 
-/* ── STICKER GRID 5×2 ── */
 .cas2-sticker-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -1013,9 +976,6 @@
     }
 }
 
-/* ══════════════════════════════════════════
-   STICKER CARD
-══════════════════════════════════════════ */
 .cas2-sticker {
     aspect-ratio: 2/3;
     position: relative;
@@ -1095,7 +1055,6 @@
     border-radius: 2px;
 }
 
-/* ── Zona imagen — FIX 1:1 ── */
 .cas2-sticker-avatar-zone {
     flex: 1;
     display: flex;
@@ -1105,7 +1064,6 @@
 }
 
 .cas2-sticker-img {
-    /* FIX BUG: imagen cuadrada perfecta */
     width: 72%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
@@ -1154,7 +1112,6 @@
     line-height: 1;
 }
 
-/* Type tag inline */
 .cas2-sticker-type-tag {
     position: absolute;
     top: 3px;
@@ -1214,9 +1171,6 @@
     color: #38334F;
 }
 
-/* ══════════════════════════════════════════
-   FOOTER DEL MODAL
-══════════════════════════════════════════ */
 .cas2-modal-footer {
     flex-shrink: 0;
     display: flex;
@@ -1386,8 +1340,6 @@
     border-left-color: #2A2638;
     color: #4E4868;
 }
-
-/* ══ PANINI STICKER UPGRADES ══ */
 
 .cas2-sticker-topband {
     width: 100%;

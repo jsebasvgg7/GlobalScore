@@ -1,23 +1,20 @@
 /* ════════════════════════════════════════════════
-   PACK OPENING MODAL v2 — MOBILE REWRITE
-   
-   LÓGICA DE LAYOUT:
-   · Fase idle / animating → SOLO el sobre, pantalla completa
-   · Fase revealing / done → SOLO las cartas, pantalla completa
-   · Transición suave entre vistas
-   · Sin paneles side-by-side en mobile
+   ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗
+   ████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝
+   ██╔████╔██║██║   ██║██████╔╝██║██║     █████╗  
+   ██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝  
+   ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
+   MOBILE — responsive chaos
 ════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
 
-    /* ── Overlay ── */
     .pom2-overlay {
         padding: 56px 0 0;
         align-items: flex-end;
         overflow: hidden;
     }
 
-    /* ── Modal: hoja completa desde abajo ── */
     .pom2-modal {
         max-width: 100%;
         width: 100%;
@@ -38,14 +35,12 @@
         to   { transform: translateY(0);    opacity: 1; }
     }
 
-    /* ── Header: siempre visible arriba ── */
     .pom2-header {
         flex-shrink: 0;
         height: 50px;
         min-height: 50px;
     }
 
-    /* ── Body: columna, ocupa todo el espacio restante ── */
     .pom2-body {
         flex: 1;
         min-height: 0;
@@ -55,16 +50,10 @@
         position: relative;
     }
 
-    /* ── Divisor: oculto en mobile ── */
     .pom2-divider {
         display: none;
     }
 
-    /* ══════════════════════════════════════════
-       PANEL DEL SOBRE — vista completa en mobile
-       Visible en fases: idle, animating
-       Oculto en fases: revealing, done
-    ══════════════════════════════════════════ */
     .pom2-pack-panel {
         position: absolute;
         inset: 0;
@@ -86,7 +75,6 @@
         pointer-events: auto;
     }
 
-    /* Cuando estamos en revealing/done: sobre sale hacia la izquierda */
     .pom2-modal--revealing .pom2-pack-panel,
     .pom2-modal--done      .pom2-pack-panel {
         opacity: 0;
@@ -94,7 +82,6 @@
         pointer-events: none;
     }
 
-    /* Sobre grande — como desktop pero adaptado */
     .pom2-pack-wrap {
         width: 140px;
         height: 198px;
@@ -105,7 +92,6 @@
             drop-shadow(0 6px 12px rgba(0,0,0,0.45));
     }
 
-    /* Contador de sobres: grande y centrado */
     .pom2-pack-count {
         align-items: center;
     }
@@ -122,7 +108,6 @@
         color: rgba(255,255,255,0.36);
     }
 
-    /* Botón CTA — grande y prominente */
     .pom2-pack-cta {
         padding: 13px 32px;
         font-size: 11px;
@@ -137,23 +122,16 @@
         letter-spacing: 0.22em;
     }
 
-    /* Hint de tipos */
     .pom2-pack-types-hint {
         font-size: 8px;
         color: rgba(255,255,255,0.22);
         letter-spacing: 0.12em;
     }
 
-    /* Acciones cuando el sobre se completó (en mobile están en el panel cartas) */
     .pom2-pack-panel .pom2-actions {
-        display: none; /* Las acciones van abajo en el panel de cartas */
+        display: none;
     }
 
-    /* ══════════════════════════════════════════
-       PANEL DE CARTAS — vista completa en mobile
-       Oculto en fases: idle, animating
-       Visible en fases: revealing, done
-    ══════════════════════════════════════════ */
     .pom2-cards-panel {
         position: absolute;
         inset: 0;
@@ -165,7 +143,6 @@
         padding: 14px 14px 10px;
         gap: 10px;
         overflow: hidden;
-        /* Por defecto: fuera de pantalla a la derecha */
         opacity: 0;
         transform: translateX(100%);
         transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1) 0.08s,
@@ -174,7 +151,6 @@
         z-index: 1;
     }
 
-    /* Cuando estamos en revealing/done: cartas entran desde la derecha */
     .pom2-modal--revealing .pom2-cards-panel,
     .pom2-modal--done      .pom2-cards-panel {
         opacity: 1;
@@ -183,7 +159,6 @@
         z-index: 3;
     }
 
-    /* ── Cabecera del panel de cartas ── */
     .pom2-cards-header {
         flex-shrink: 0;
         padding: 0 2px;
@@ -203,7 +178,6 @@
         gap: 6px;
     }
 
-    /* ── Grid 2×2 — ocupa todo el espacio disponible ── */
     .pom2-cards-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -213,7 +187,6 @@
         overflow: hidden;
     }
 
-    /* Slot de carta: rectangle vertical, sin aspecto forzado */
     .pom2-flip-slot {
         aspect-ratio: unset;
         width: 100%;
@@ -222,18 +195,15 @@
         position: relative;
     }
 
-    /* Desactivar hover lift en táctil */
     .pom2-flip-slot:not(.pom2-flip-slot--flipped):hover .pom2-flip-inner {
         transform: none;
     }
 
-    /* flip-inner ocupa toda la celda */
     .pom2-flip-inner {
         width: 100%;
         height: 100%;
     }
 
-    /* Texto de cartas — tamaño legible en mobile */
     .pom2-card-strip      { height: 4px; }
     .pom2-card-type-label { font-size: 7px; padding: 4px 7px 2px; }
     .pom2-card-name       { font-size: 8px; }
@@ -244,7 +214,6 @@
     .pom2-card-placeholder svg { width: 28px; height: 28px; }
     .pom2-tap-hint        { font-size: 6px; bottom: -14px; }
 
-    /* Hint y done */
     .pom2-cards-hint,
     .pom2-cards-done {
         font-size: 8px;
@@ -252,7 +221,6 @@
         flex-shrink: 0;
     }
 
-    /* ── Acciones completado: dentro del panel de cartas en mobile ── */
     .pom2-cards-panel .pom2-mobile-actions {
         display: flex;
         flex-direction: row;

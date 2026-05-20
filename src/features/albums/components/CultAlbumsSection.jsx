@@ -63,16 +63,10 @@ const CULT_META = {
 
 const CULT_ORDER = ['cult_teams', 'cult_competitions', 'cult_events'];
 
-// ══════════════════════════════════════════════════════════════
-//  HELPERS
-// ══════════════════════════════════════════════════════════════
 function getInitials(name = '') {
     return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || '?';
 }
 
-// ══════════════════════════════════════════════════════════════
-//  COVER ILLUSTRATIONS — una por tipo de culto
-// ══════════════════════════════════════════════════════════════
 function CultCoverIllustration({ defId, color, colorRgb }) {
     const id = `cult-cover-${defId}`;
 
@@ -185,9 +179,6 @@ function CultCoverIllustration({ defId, color, colorRgb }) {
     );
 }
 
-// ══════════════════════════════════════════════════════════════
-//  STICKER CARD dentro del modal
-// ══════════════════════════════════════════════════════════════
 function CultStickerCard({ index, item, meta }) {
     const num = String(index + 1).padStart(3, '0');
     const card = item?.card;
@@ -262,9 +253,6 @@ function CultStickerCard({ index, item, meta }) {
     );
 }
 
-// ══════════════════════════════════════════════════════════════
-//  MODAL PANEL — igual estructura que LegendaryAlbumsSection
-// ══════════════════════════════════════════════════════════════
 function CultPanel({ defId, meta, collection, allCards, onClose }) {
     const [page, setPage] = useState(0);
     const [search, setSearch] = useState('');
@@ -463,9 +451,6 @@ function CultPanel({ defId, meta, collection, allCards, onClose }) {
     );
 }
 
-// ══════════════════════════════════════════════════════════════
-//  BOOK CARD — mismo molde que las2-book
-// ══════════════════════════════════════════════════════════════
 function CultBook({ defId, meta, collection, allCards }) {
     const [panelOpen, setPanelOpen] = useState(false);
 

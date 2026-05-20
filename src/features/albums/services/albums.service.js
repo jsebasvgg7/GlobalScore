@@ -17,9 +17,6 @@ const PLAYER_DROP_RATES_BOOST = [
     { level: 1, weight: 40.3 },
 ];
 
-// ── Definición progresiva LEG I→V ─────────────────────────────────────────
-// Cada álbum describe cuántos jugadores de cada rareza MÍNIMA necesita.
-// Las cartas son ÚNICAS: una vez usada en un álbum previo no puede reutilizarse.
 const LEG_REQUIREMENTS = {
     legendary_1: {
         slots: 30,
@@ -297,19 +294,14 @@ export async function getUserAlbumProgress(userId) {
     return data ?? [];
 }
 
-// ── Helper: asigna jugadores a slots de un álbum legendario ───────────────
-// Devuelve { usedIds, filledSlots, meetsAllReqs, uniquePlayers }
-// usedGlobalIds: Set de card_ids ya consumidos por álbumes anteriores
 function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
     const legDef = LEG_REQUIREMENTS[albumId];
     if (!legDef) return { usedIds: new Set(), uniquePlayers: 0, meetsAllReqs: false };
 
-    // Pool disponible: jugadores no usados en álbumes previos
     const available = playerCollection.filter(
         (c) => !usedGlobalIds.has(c.card_id ?? c.id)
     );
 
-    // Ordenar de mayor a menor rareza
     const sorted = [...available].sort(
         (a, b) => (b.card?.significance_level ?? 0) - (a.card?.significance_level ?? 0)
     );
@@ -317,11 +309,9 @@ function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
     const assignedIds = new Set();
     let meetsAllReqs = true;
 
-    // Para cada requisito (ordenados de mayor a menor minStars para asignar primero los más raros)
     const reqsSorted = [...legDef.req].sort((a, b) => b.minStars - a.minStars);
 
     for (const { minStars, count } of reqsSorted) {
-        // Candidatos: cumplen el minimo de estrellas y no asignados aún
         const candidates = sorted.filter(
             (c) =>
                 (c.card?.significance_level ?? 0) >= minStars &&
@@ -340,7 +330,6 @@ function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
         }
     }
 
-    // Slots generales: rellenar hasta legDef.slots con los restantes disponibles
     const reqTotal = legDef.req.reduce((s, r) => s + r.count, 0);
     const generalNeeded = legDef.slots - reqTotal;
     const remaining = sorted.filter((c) => !assignedIds.has(c.card_id ?? c.id));
@@ -371,11 +360,8 @@ export async function computeAndSyncAlbumProgress(userId) {
 
     const updates = [];
 
-    // Colección de jugadores (todos, para LEG)
     const playerCollection = collection.filter((c) => c.card?.card_type === 'player');
 
-    // Pool global de IDs ya consumidos por álbumes legendarios anteriores
-    // Se procesa en orden LEG I → LEG V para respetar exclusividad
     const globalUsedIds = new Set();
 
     for (const albumId of LEG_ORDER) {
@@ -388,7 +374,6 @@ export async function computeAndSyncAlbumProgress(userId) {
             globalUsedIds
         );
 
-        // Acumular IDs usados para el siguiente álbum
         usedIds.forEach((id) => globalUsedIds.add(id));
 
         updates.push({
@@ -400,7 +385,7 @@ export async function computeAndSyncAlbumProgress(userId) {
 
     // Álbumes no-legendarios (stars, cult)
     for (const album of definitions) {
-        if (LEG_ORDER.includes(album.id)) continue; // ya procesados
+        if (LEG_ORDER.includes(album.id)) continue;
 
         let uniqueCards = 0;
 

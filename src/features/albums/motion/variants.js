@@ -1,9 +1,3 @@
-/* ════════════════════════════════════════════════
-   GLOBALALBUMS — MOTION VARIANTS
-   Importar desde cualquier componente del feature
-   Framer Motion v12
-════════════════════════════════════════════════ */
-
 // ── Libro en estantería (hover 3D) ──────────────────────────────────────────
 export const bookShelfVariants = {
     rest: {
@@ -133,7 +127,7 @@ export const stickerSlotVariants = {
         opacity: 1,
         y: 0,
         transition: {
-            delay: Math.min(i * 0.04, 0.3), // máximo 300ms de delay total
+            delay: Math.min(i * 0.04, 0.3),
             duration: 0.22,
             ease: 'easeOut',
         },

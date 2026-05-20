@@ -1,8 +1,11 @@
 /* ════════════════════════════════════════════════
-   PACK OPENING MODAL v2 — FIXES
-   · Desktop 50/50, cartas pequeñas, sin scroll
-   · Light mode: textos oscuros legibles
-   · Mobile: sobre compacto, cartas 2x2 pequeñas
+    █████╗ ██╗     ██████╗ ██╗   ██╗███╗   ███╗███████╗
+   ██╔══██╗██║     ██╔══██╗██║   ██║████╗ ████║██╔════╝
+   ███████║██║     ██████╔╝██║   ██║██╔████╔██║███████╗
+   ██╔══██║██║     ██╔══██╗██║   ██║██║╚██╔╝██║╚════██║
+   ██║  ██║███████╗██████╔╝╚██████╔╝██║ ╚═╝ ██║███████║
+   ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚══════╝
+   ALBUMS — collectible pages & sticker systems
 ════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@700;800&display=swap');
@@ -48,13 +51,11 @@
     --pom2-surface:      #f4f2ff;
     --pom2-border:       rgba(91,79,216,0.14);
     --pom2-border-mid:   rgba(91,79,216,0.09);
-    /* Textos explícitamente oscuros */
     --pom2-text:         #0e0a30;
     --pom2-muted:        #5a5380;
     --pom2-dim:          #8882aa;
     --pom2-accent:       #5b4fd8;
     --pom2-accent-dark:  #4134b8;
-    /* El panel del sobre sigue oscuro — contraste garantizado */
     --pom2-pack-bg:      #1e1840;
     --pom2-pack-spine:   #4a3fc7;
     --pom2-pack-face:    #1c1836;
@@ -63,7 +64,6 @@
     --pom2-back-bg:      #2a2060;
     --pom2-back-border:  rgba(124,111,255,0.40);
     --pom2-back-text:    rgba(180,160,255,0.60);
-    /* Cartas: fondo claro, texto oscuro */
     --pom2-card-bg:      #ffffff;
     --pom2-card-border:  rgba(91,79,216,0.14);
     --pom2-card-name:    #0e0a30;
@@ -80,9 +80,6 @@
     --pom2-header-bg:    #ffffff;
 }
 
-/* ════════════════════════════════════════════════
-   OVERLAY
-════════════════════════════════════════════════ */
 .pom2-overlay {
     position: fixed;
     inset: 0;
@@ -106,15 +103,10 @@
     to   { opacity:1; }
 }
 
-/* ════════════════════════════════════════════════
-   MODAL — desktop: altura fija, sin scroll
-════════════════════════════════════════════════ */
 .pom2-modal {
     position: relative;
     width: 100%;
-    /* Ancho suficiente para 50/50 cómodo */
     max-width: 720px;
-    /* Altura controlada: no excede la pantalla */
     height: min(520px, calc(100vh - 104px));
     display: flex;
     flex-direction: column;
@@ -134,9 +126,6 @@
     border-color: rgba(245,158,11,0.28);
 }
 
-/* ════════════════════════════════════════════════
-   HEADER
-════════════════════════════════════════════════ */
 .pom2-header {
     display: flex;
     align-items: center;
@@ -206,9 +195,6 @@
     background: rgba(124,111,255,0.08);
 }
 
-/* ════════════════════════════════════════════════
-   BODY — flex row, ocupa todo el espacio restante
-════════════════════════════════════════════════ */
 .pom2-body {
     flex: 1;
     min-height: 0;
@@ -216,9 +202,6 @@
     overflow: hidden;
 }
 
-/* ════════════════════════════════════════════════
-   PANEL IZQUIERDO — SOBRE (exactamente 50%)
-════════════════════════════════════════════════ */
 .pom2-pack-panel {
     width: 50%;
     flex-shrink: 0;
@@ -242,7 +225,6 @@
     pointer-events: none;
 }
 
-/* ── Sobre ── */
 .pom2-pack-wrap {
     position: relative;
     width: 104px;
@@ -259,7 +241,6 @@
     50%      { transform: perspective(520px) rotateY(-6deg) rotateX(2deg) translateY(-7px); }
 }
 
-/* Solapa */
 .pom2-pack-flap {
     position: absolute;
     top: 0; left: 8px; right: 0;
@@ -295,7 +276,6 @@
     background: rgba(255,255,255,0.24);
 }
 
-/* Cuerpo del sobre */
 .pom2-pack-body {
     position: absolute;
     inset: 0;
@@ -338,7 +318,6 @@
     pointer-events: none;
 }
 
-/* Rayo apertura */
 .pom2-pack-beam {
     position: absolute;
     top: 26px; left:0; right:0;
@@ -381,7 +360,6 @@
     position: relative; z-index:1;
 }
 
-/* Contador */
 .pom2-pack-count {
     display: flex;
     flex-direction: column;
@@ -394,7 +372,6 @@
     font-family: 'DM Mono', monospace;
     font-size: 30px;
     font-weight: 700;
-    /* Siempre blanco — está sobre fondo oscuro del panel */
     color: rgba(255,255,255,0.92);
     line-height: 1;
 }
@@ -408,7 +385,6 @@
     color: rgba(255,255,255,0.32);
 }
 
-/* Botón CTA */
 .pom2-pack-cta {
     display: flex;
     align-items: center;
@@ -470,7 +446,6 @@
     font-family: 'DM Mono', monospace;
     font-size: 7px;
     letter-spacing: 0.09em;
-    /* Siempre tenue blanco — fondo siempre oscuro */
     color: rgba(255,255,255,0.18);
     text-transform: uppercase;
     text-align: center;
@@ -478,9 +453,6 @@
     position: relative; z-index:1;
 }
 
-/* ════════════════════════════════════════════════
-   DIVISOR VERTICAL
-════════════════════════════════════════════════ */
 .pom2-divider {
     width: 1px;
     background: var(--pom2-border);
@@ -488,9 +460,6 @@
     align-self: stretch;
 }
 
-/* ════════════════════════════════════════════════
-   PANEL DERECHO — CARTAS (50%)
-════════════════════════════════════════════════ */
 .pom2-cards-panel {
     flex: 1;
     min-width: 0;
@@ -499,10 +468,9 @@
     background: var(--pom2-surface);
     padding: 10px 10px 8px;
     gap: 6px;
-    overflow: hidden; /* sin scroll en desktop */
+    overflow: hidden;
 }
 
-/* Cabecera */
 .pom2-cards-header {
     display: flex;
     align-items: center;
@@ -520,7 +488,6 @@
     color: var(--pom2-muted);
 }
 
-/* Puntos */
 .pom2-progress-dots {
     display: flex;
     gap: 5px;
@@ -541,9 +508,6 @@
     transform: scale(1.22);
 }
 
-/* ════════════════════════════════════════════════
-   GRID 2×2 — cartas pequeñas, sin scroll
-════════════════════════════════════════════════ */
 .pom2-cards-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -551,18 +515,15 @@
     gap: 8px;
     flex: 1;
     min-height: 0;
-    /* Las cartas no crecen más allá del espacio disponible */
     overflow: hidden;
 }
 
-/* ── Slot flip ── */
 .pom2-flip-slot {
     perspective: 900px;
     position: relative;
     cursor: default;
     opacity: 0;
     transform: translateY(-18px) scale(0.92);
-    /* Ocupa toda la celda del grid */
     min-height: 0;
 }
 
@@ -594,9 +555,6 @@
     transform: rotateY(180deg);
 }
 
-/* ════════════════════════════════════════════════
-   DORSO
-════════════════════════════════════════════════ */
 .pom2-card-back {
     position: absolute;
     inset: 0;
@@ -643,9 +601,6 @@
 .pom2-back-corner--tl { top:6px; left:7px; }
 .pom2-back-corner--br { bottom:6px; right:7px; transform:rotate(180deg); }
 
-/* ════════════════════════════════════════════════
-   FRENTE DE CARTA
-════════════════════════════════════════════════ */
 .pom2-card-front {
     position: absolute;
     inset: 0;
@@ -765,7 +720,6 @@
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    /* Variable explícita — nunca hereda gris del panel */
     color: var(--pom2-card-name);
     text-align: center;
     line-height: 1.25;
@@ -786,7 +740,6 @@
     text-align: center;
 }
 
-/* Estrellas */
 .pom2-stars { display:flex; gap:2px; align-items:center; }
 
 .pom2-star {
@@ -806,7 +759,6 @@
     z-index: 3;
 }
 
-/* Partículas GOAT */
 .pom2-particles {
     position: absolute;
     inset: 0;
@@ -830,7 +782,6 @@
     100% { transform:translate(-50%,-50%) rotate(var(--angle)) translateX(var(--dist,60px)); opacity:0; }
 }
 
-/* Hint "toca" */
 .pom2-tap-hint {
     position: absolute;
     bottom: -13px;
@@ -869,9 +820,6 @@
 
 .pom2-cards-done { color: var(--pom2-dot-done); }
 
-/* ════════════════════════════════════════════════
-   ACCIONES — dentro del panel izquierdo
-════════════════════════════════════════════════ */
 .pom2-actions {
     display: flex;
     flex-direction: column;
