@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Lock, Search, ChevronLeft, ChevronRight, X, User, Crown } from 'lucide-react';
 import '../styles/StarCollectionSection.css';
+import '../styles/mobile/StarCollectionSection.mobile.css';
 
 /* ══════════════════════════════════════════
    META POR TIER
