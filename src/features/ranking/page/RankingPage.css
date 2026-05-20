@@ -670,54 +670,6 @@
   font-size: 17px;
 }
 
-.lb-thead,
-.lb-trow {
-  grid-template-columns: 60px 1fr 110px 110px 100px 100px 90px;
-}
-
-.lbc-albums {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lb-album-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 700;
-  font-family: var(--lb-mono);
-  color: #b0aaa0;
-  background: var(--lb-surface);
-  border: 0.5px solid var(--lb-border);
-  padding: 3px 8px;
-  letter-spacing: 0.04em;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
-}
-
-.lb-album-badge--active {
-  color: #5b4fd8;
-  border-color: rgba(91, 79, 216, 0.35);
-  background: rgba(91, 79, 216, 0.06);
-}
-
-[data-theme="dark"] .lb-album-badge--active {
-  color: #a899ff;
-  border-color: rgba(168, 153, 255, 0.3);
-  background: rgba(168, 153, 255, 0.08);
-}
-
-@media (max-width: 1024px) {
-  .lb-thead,
-  .lb-trow {
-    grid-template-columns: 56px 1fr 100px 100px 90px;
-  }
-
-  .lbc-albums {
-    display: none !important;
-  }
-}
 
 @media (max-width: 1024px) {
   .lb-shell {

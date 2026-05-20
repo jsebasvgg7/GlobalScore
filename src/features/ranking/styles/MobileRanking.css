@@ -388,32 +388,6 @@
   flex-shrink: 0;
   animation: mrk-crown-bob 3.5s ease-in-out infinite;
 }
-.mrk-row-albums {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  flex-shrink: 0;
-  padding: 3px 7px;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: var(--mrk-muted);
-  border: 1px solid var(--mrk-border);
-  opacity: 0.55;
-  transition: opacity 0.15s;
-}
- 
-.mrk-row-albums--active {
-  color: var(--mrk-accent);
-  border-color: var(--mrk-accent-border);
-  background: var(--mrk-accent-subtle);
-  opacity: 1;
-}
-
-[data-style="brutalist"] .mrk-row-albums {
-  border-radius: 0;
-  font-family: var(--mrk-mono);
-}
 
 [data-style="brutalist"] .mrk-podium-title {
   font-size: 9px;
@@ -1491,18 +1465,6 @@
   color: #fff;
   flex-shrink: 0;
   border-radius: 0;
-}
- 
-[data-style="neumorphism"] .mrk-row-albums {
-  border-radius: var(--r-pill);
-  font-family: var(--mrk-sans);
-  border: none;
-  box-shadow: var(--nm-ism);
-}
- 
-[data-style="neumorphism"] .mrk-row-albums--active {
-  background: var(--mrk-accent-subtle);
-  box-shadow: var(--nm-ism);
 }
 
 [data-style="neumorphism"] .mrk-hof-list-badge {
