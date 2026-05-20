@@ -950,3 +950,7 @@
     color: rgba(255,255,255,0.72);
     text-decoration-color: rgba(255,255,255,0.40);
 }
+.pom2-mobile-actions {
+    display: none;
+}
+ 

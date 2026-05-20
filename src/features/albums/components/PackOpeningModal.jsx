@@ -85,11 +85,11 @@ function CardBack() {
 
 /** Frente de la carta */
 function CardFront({ type, card, isGoat }) {
-    const color   = TYPE_COLOR[type] || '#7C6FFF';
+    const color    = TYPE_COLOR[type] || '#7C6FFF';
     const isPlayer = type === 'player';
-    const stars   = isPlayer ? card?.significance_level : null;
-    const imgUrl  = card?.image_path ? getHistoricalImageUrl(card.image_path) : null;
-    const label   = TYPE_LABEL[type] || type;
+    const stars    = isPlayer ? card?.significance_level : null;
+    const imgUrl   = card?.image_path ? getHistoricalImageUrl(card.image_path) : null;
+    const label    = TYPE_LABEL[type] || type;
     const iconPath = TYPE_ICON[type];
 
     return (
@@ -97,13 +97,8 @@ function CardFront({ type, card, isGoat }) {
             className={`pom2-card-front${isGoat && isPlayer ? ' pom2-card-front--goat' : ''}`}
             style={{ '--c': color }}
         >
-            {/* Barra de color superior */}
             <div className="pom2-card-strip" />
-
-            {/* Etiqueta de tipo */}
             <span className="pom2-card-type-label">{label}</span>
-
-            {/* Imagen o placeholder */}
             <div className="pom2-card-media">
                 {imgUrl ? (
                     <img src={imgUrl} alt={card?.name || ''} className="pom2-card-img" />
@@ -116,14 +111,11 @@ function CardFront({ type, card, isGoat }) {
                         <span className="pom2-card-initials">{getInitials(card?.name)}</span>
                     </div>
                 )}
-                {/* Esquinas decorativas */}
                 <i className="pom2-corner pom2-corner--tl" aria-hidden="true" />
                 <i className="pom2-corner pom2-corner--tr" aria-hidden="true" />
                 <i className="pom2-corner pom2-corner--bl" aria-hidden="true" />
                 <i className="pom2-corner pom2-corner--br" aria-hidden="true" />
             </div>
-
-            {/* Footer con nombre y estrellas */}
             <div className="pom2-card-footer">
                 <span className="pom2-card-name">{card?.name || '—'}</span>
                 {stars && <StarRow level={stars} />}
@@ -133,8 +125,6 @@ function CardFront({ type, card, isGoat }) {
                     </span>
                 )}
             </div>
-
-            {/* Brillo decorativo */}
             <div className="pom2-card-gloss" aria-hidden="true" />
             {isGoat && isPlayer && <GoatParticles />}
         </div>
@@ -172,18 +162,15 @@ function FlipCard({ type, card, index, isDealt, isFlipped, onFlip, isGoat }) {
     );
 }
 
-/** Sobre visual (lado izquierdo) */
+/** Sobre visual */
 function PackVisual({ count, phase, onOpen, allFlipped, packsAvailable, onReset, onClose }) {
     const isOpening = phase === 'animating';
 
     return (
         <div className="pom2-pack-panel">
-            {/* Patrón de fondo */}
             <div className="pom2-pack-bg-pattern" aria-hidden="true" />
 
-            {/* Sobre */}
             <div className={`pom2-pack-wrap${isOpening ? ' pom2-pack-wrap--tearing' : ''}`} aria-hidden="true">
-                {/* Solapa (animada al abrir) */}
                 <div className="pom2-pack-flap">
                     <div className="pom2-pack-flap-perfs">
                         {Array.from({ length: 6 }).map((_, i) => (
@@ -191,11 +178,9 @@ function PackVisual({ count, phase, onOpen, allFlipped, packsAvailable, onReset,
                         ))}
                     </div>
                 </div>
-                {/* Cuerpo del sobre */}
                 <div className="pom2-pack-body">
                     <div className="pom2-pack-spine" />
                     <div className="pom2-pack-face">
-                        {/* Rayo de apertura */}
                         {isOpening && <div className="pom2-pack-beam" aria-hidden="true" />}
                         <div className="pom2-pack-logo">
                             <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
@@ -213,7 +198,6 @@ function PackVisual({ count, phase, onOpen, allFlipped, packsAvailable, onReset,
                 </div>
             </div>
 
-            {/* Contador de sobres */}
             <div className="pom2-pack-count">
                 <span className="pom2-pack-count-n">{count}</span>
                 <span className="pom2-pack-count-lbl">
@@ -221,7 +205,6 @@ function PackVisual({ count, phase, onOpen, allFlipped, packsAvailable, onReset,
                 </span>
             </div>
 
-            {/* Botón abrir / estado abriendo */}
             {phase === 'idle' && (
                 <button
                     className="pom2-pack-cta"
@@ -239,37 +222,34 @@ function PackVisual({ count, phase, onOpen, allFlipped, packsAvailable, onReset,
             )}
             {phase === 'animating' && (
                 <span className="pom2-pack-opening-lbl" aria-live="polite">Abriendo…</span>
-                
             )}
-            
-             {/* Pista de tipos */}
+
             <p className="pom2-pack-types-hint">jugador · equipo · copa · evento</p>
-            {/* Botones de acción cuando el sobre está completado */}
-                {allFlipped && (
-                    <div className="pom2-actions">
-                        {packsAvailable > 1 && (
-                            <button className="pom2-btn-again" onClick={onReset}>
-                                Abrir otro
-                                <span className="pom2-badge">{packsAvailable - 1}</span>
-                            </button>
-                        )}
-                        <button className="pom2-btn-collection" onClick={onClose}>
-                            Ver mi colección
+
+            {/* Acciones en desktop (ocultas en mobile via CSS) */}
+            {allFlipped && (
+                <div className="pom2-actions">
+                    {packsAvailable > 1 && (
+                        <button className="pom2-btn-again" onClick={onReset}>
+                            Abrir otro
+                            <span className="pom2-badge">{packsAvailable - 1}</span>
                         </button>
-                    </div>
-                )}
+                    )}
+                    <button className="pom2-btn-collection" onClick={onClose}>
+                        Ver mi colección
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
 
-/** Área de cartas (lado derecho) */
-function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped }) {
+/** Área de cartas */
+function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, packsAvailable, onReset, onClose }) {
     return (
         <div className="pom2-cards-panel">
-            {/* Cabecera de la sección */}
             <div className="pom2-cards-header">
                 <span className="pom2-cards-tag">Tus cartas</span>
-                {/* Puntos de progreso */}
                 <div className="pom2-progress-dots" aria-label={`${flippedSet.size} de ${cards.length} reveladas`}>
                     {cards.map((_, i) => (
                         <span key={i}
@@ -278,7 +258,6 @@ function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped }) 
                 </div>
             </div>
 
-            {/* Grid 2×2 */}
             <div className="pom2-cards-grid">
                 {cards.map(({ type, card }, i) => (
                     <FlipCard
@@ -294,7 +273,6 @@ function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped }) 
                 ))}
             </div>
 
-            {/* Hint cuando no están todas volteadas */}
             {!allFlipped && isDealt && (
                 <p className="pom2-cards-hint" aria-live="polite">
                     Toca cada carta para revelarla · {flippedSet.size}/{cards.length}
@@ -302,6 +280,21 @@ function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped }) 
             )}
             {allFlipped && (
                 <p className="pom2-cards-done" aria-live="polite">¡Sobre completado!</p>
+            )}
+
+            {/* Acciones en mobile (ocultas en desktop via CSS) */}
+            {allFlipped && (
+                <div className="pom2-mobile-actions">
+                    {packsAvailable > 1 && (
+                        <button className="pom2-btn-again" onClick={onReset}>
+                            Abrir otro
+                            <span className="pom2-badge">{packsAvailable - 1}</span>
+                        </button>
+                    )}
+                    <button className="pom2-btn-collection" onClick={onClose}>
+                        Ver mi colección
+                    </button>
+                </div>
             )}
         </div>
     );
@@ -325,9 +318,7 @@ export default function PackOpeningModal({
     const overlayRef = useRef(null);
 
     const allFlipped = result ? flippedCards.size === CARD_ORDER.length : false;
-    const isShowingCards = phase === 'revealing' || phase === 'done';
 
-    /* Resetear al abrir nuevo sobre */
     useEffect(() => {
         if (phase === 'revealing') {
             setFlippedCards(new Set());
@@ -341,7 +332,6 @@ export default function PackOpeningModal({
         }
     }, [phase]);
 
-    /* Bloquear scroll del body */
     useEffect(() => {
         document.body.style.overflow = isOpen ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
@@ -365,7 +355,6 @@ export default function PackOpeningModal({
         if (e.target === overlayRef.current && allFlipped) onClose();
     };
 
-    /* Títulos por fase */
     const titles = {
         idle:      'Apertura de sobre',
         animating: 'Abriendo…',
@@ -413,10 +402,9 @@ export default function PackOpeningModal({
 
                 <div className="pom2-header-sep" aria-hidden="true" />
 
-                {/* ── Body: sobre + cartas side by side ── */}
+                {/* ── Body ── */}
                 <div className="pom2-body">
-                    {/* Lado izquierdo: sobre */}
-                   <PackVisual
+                    <PackVisual
                         count={packsAvailable}
                         phase={phase}
                         onOpen={onOpen}
@@ -426,10 +414,8 @@ export default function PackOpeningModal({
                         onClose={onClose}
                     />
 
-                    {/* Divisor vertical */}
                     <div className="pom2-divider" aria-hidden="true" />
 
-                    {/* Lado derecho: cartas */}
                     <CardsPanel
                         cards={cards}
                         isDealt={isDealt}
@@ -437,6 +423,9 @@ export default function PackOpeningModal({
                         onFlip={handleFlip}
                         isGoat={isGoat}
                         allFlipped={allFlipped}
+                        packsAvailable={packsAvailable}
+                        onReset={onReset}
+                        onClose={onClose}
                     />
                 </div>
             </div>
