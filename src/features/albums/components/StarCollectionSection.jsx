@@ -512,18 +512,23 @@ function StarPanel({ level, meta, collection, allCards, onClose }) {
 
                     {/* PANEL PRINCIPAL */}
                     <div className="scs2-panel-main">
-                        <div className="scs2-panel-toolbar">
-                            <div className="scs2-toolbar-search">
-                                <Search size={13} className="scs2-toolbar-search-icon" />
-                                <input
-                                    type="text"
-                                    className="scs2-toolbar-search-input"
-                                    placeholder="Search players..."
-                                    value={search}
-                                    onChange={e => { setSearch(e.target.value); setPage(0); }}
-                                />
-                            </div>
+                       <div className="scs2-panel-toolbar">
+                        <div className="scs2-toolbar-search">
+                            <Search size={13} className="scs2-toolbar-search-icon" />
+                            <input
+                                type="text"
+                                className="scs2-toolbar-search-input"
+                                placeholder="Search players..."
+                                value={search}
+                                onChange={e => { setSearch(e.target.value); setPage(0); }}
+                            />
                         </div>
+                        <div className="scs2-footer-pagination" style={{ border: 'none', height: 'auto', padding: '0 0 0 12px' }}>
+                            <button className="scs2-page-btn" onClick={() => setPage(p => Math.max(0, p - 1))} disabled={safePagenr === 0} aria-label="Página anterior"><ChevronLeft size={15} /></button>
+                            <div className="scs2-pagination-info">PAGE <strong>{String(safePagenr + 1).padStart(2, '0')}</strong> / {String(totalPages).padStart(2, '0')}</div>
+                            <button className="scs2-page-btn" onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={safePagenr === totalPages - 1} aria-label="Página siguiente"><ChevronRight size={15} /></button>
+                        </div>
+                    </div>
 
                         <div className="scs2-panel-scroll">
                             <div className="scs2-page-indicator">
@@ -557,28 +562,6 @@ function StarPanel({ level, meta, collection, allCards, onClose }) {
                     <div className="scs2-footer-stat">
                         <span className="scs2-footer-stat-label">Total</span>
                         <span className="scs2-footer-stat-val">{total || '?'}</span>
-                    </div>
-
-                    <div className="scs2-footer-pagination">
-                        <button
-                            className="scs2-page-btn"
-                            onClick={() => setPage(p => Math.max(0, p - 1))}
-                            disabled={safePagenr === 0}
-                            aria-label="Página anterior"
-                        >
-                            <ChevronLeft size={15} />
-                        </button>
-                        <div className="scs2-pagination-info">
-                            PAGE <strong>{String(safePagenr + 1).padStart(2, '0')}</strong> / {String(totalPages).padStart(2, '0')}
-                        </div>
-                        <button
-                            className="scs2-page-btn"
-                            onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-                            disabled={safePagenr === totalPages - 1}
-                            aria-label="Página siguiente"
-                        >
-                            <ChevronRight size={15} />
-                        </button>
                     </div>
 
                     <div className="scs2-footer-spacer" />

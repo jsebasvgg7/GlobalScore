@@ -413,6 +413,11 @@ function CultPanel({ defId, meta, collection, allCards, onClose }) {
                                     onChange={e => { setSearch(e.target.value); setPage(0); }}
                                 />
                             </div>
+                            <div className="cas2-footer-pagination" style={{ border: 'none', height: 'auto', padding: '0 0 0 12px' }}>
+                                <button className="cas2-page-btn" onClick={() => setPage(p => Math.max(0, p - 1))} disabled={safePagenr === 0} aria-label="Página anterior"><ChevronLeft size={15} /></button>
+                                <div className="cas2-pagination-info">PAGE <strong>{String(safePagenr + 1).padStart(2, '0')}</strong> / {String(totalPages).padStart(2, '0')}</div>
+                                <button className="cas2-page-btn" onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={safePagenr === totalPages - 1} aria-label="Página siguiente"><ChevronRight size={15} /></button>
+                            </div>
                         </div>
 
                         <div className="cas2-panel-scroll">
@@ -445,28 +450,6 @@ function CultPanel({ defId, meta, collection, allCards, onClose }) {
                     <div className="cas2-footer-stat">
                         <span className="cas2-footer-stat-label">Total</span>
                         <span className="cas2-footer-stat-val">{total || '?'}</span>
-                    </div>
-
-                    <div className="cas2-footer-pagination">
-                        <button
-                            className="cas2-page-btn"
-                            onClick={() => setPage(p => Math.max(0, p - 1))}
-                            disabled={safePagenr === 0}
-                            aria-label="Página anterior"
-                        >
-                            <ChevronLeft size={15} />
-                        </button>
-                        <div className="cas2-pagination-info">
-                            PAGE <strong>{String(safePagenr + 1).padStart(2, '0')}</strong> / {String(totalPages).padStart(2, '0')}
-                        </div>
-                        <button
-                            className="cas2-page-btn"
-                            onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-                            disabled={safePagenr === totalPages - 1}
-                            aria-label="Página siguiente"
-                        >
-                            <ChevronRight size={15} />
-                        </button>
                     </div>
 
                     <div className="cas2-footer-spacer" />
