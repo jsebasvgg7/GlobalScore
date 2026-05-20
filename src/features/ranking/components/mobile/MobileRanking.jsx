@@ -67,14 +67,15 @@ function TableRow({ user, pos, isMe, onSelect, legCount = 0 }) {
           <span className="mrk-row-sub">{user.rankCorrect} aciertos</span>
         </div>
       </button>
-      <div className="mrk-row-right">
-        <span className="mrk-row-pts">{fmt(user.rankPoints)}<span className="mrk-row-pts-lbl">pts</span></span>
-        <span className="mrk-row-acc">{accuracy}%</span>
-      </div>
       <span className={`mrk-row-albums${legCount > 0 ? ' mrk-row-albums--active' : ''}${legCount === 5 ? ' mrk-row-albums--immortal' : ''}`}>
       {legCount === 5 ? <Crown size={10} /> : <BookOpen size={10} />}
       <span>{legCount}/5</span>
     </span>
+      <div className="mrk-row-right">
+        <span className="mrk-row-pts">{fmt(user.rankPoints)}<span className="mrk-row-pts-lbl">pts</span></span>
+        <span className="mrk-row-acc">{accuracy}%</span>
+      </div>
+      
     </div>
   );
 }
