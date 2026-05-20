@@ -28,7 +28,7 @@ export default function AlbumsPage({ currentUser }) {
     const [modalOpen, setModalOpen] = useState(false);
     const { allCards, loading: cardsLoading, refresh: refreshCards } = useAlbumCards();
 
-    const { packs, barPercent, packsAvailable, refresh: refreshPacks } = useAlbumPacks(user?.id);
+    const { packs, barPercent, packsAvailable, boostActive, boostPacksRemaining, refresh: refreshPacks } = useAlbumPacks(user?.id);
     const { collection, loading: collectionLoading, refresh: refreshCollection } = useAlbumCollection(user?.id);
     const { progress, refresh: refreshProgress } = useAlbumProgress(user?.id);
     const { legendary, cult } = useAlbumDefinitions();
@@ -107,10 +107,12 @@ export default function AlbumsPage({ currentUser }) {
             </motion.div>
 
             <div className="alp-bar-section">
-                <AlbumProgressBar
-                    percent={barPercent}
-                    packsAvailable={packsAvailable}
-                />
+               <AlbumProgressBar
+                percent={barPercent}
+                packsAvailable={packsAvailable}
+                boostActive={boostActive}
+                boostPacksRemaining={boostPacksRemaining}
+            />
             </div>
 
             <AlbumsSectionNav active={activeSection} onChange={setActiveSection} />

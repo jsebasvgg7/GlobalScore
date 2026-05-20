@@ -22,11 +22,11 @@ function PackIcon({ filled }) {
     );
 }
 
-export default function AlbumProgressBar({ percent, packsAvailable, compact = false }) {
+export default function AlbumProgressBar({ percent, packsAvailable, boostActive = false, boostPacksRemaining = 0, compact = false }) {
     if (compact) {
         return (
             <div className="apb-root apb-root--compact">
-                <div className="apb-compact-track">
+                <div className={`apb-compact-track${boostActive ? ' apb-compact-track--boost' : ''}`}>
                     <div className="apb-compact-fill" style={{ width: `${percent}%` }} />
                     <div className="apb-compact-glow" style={{ left: `${percent}%` }} />
                 </div>
@@ -34,42 +34,49 @@ export default function AlbumProgressBar({ percent, packsAvailable, compact = fa
         );
     }
 
-    const packs = packsAvailable ?? 0;
-    const showPacks = packs > 0;
-
     return (
-        <div className="apb-root">
+        <div className={`apb-root${boostActive ? ' apb-root--boost' : ''}`}>
             <div className="apb-header">
                 <div className="apb-header-left">
-                    <span className="apb-eyebrow">Próximo sobre</span>
+                    <span className="apb-eyebrow">
+                        {boostActive ? 'Boost activo' : 'Próximo boost'}
+                    </span>
                     <div className="apb-mechanic-hint">
                         <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true">
                             <polygon points="0,8 8,8 4,0" className="apb-hint-arrow" />
                         </svg>
-                        <span>resultado exacto = sobre</span>
+                        <span>
+                            {boostActive
+                                ? `probabilidades mejoradas · ${boostPacksRemaining} ${boostPacksRemaining === 1 ? 'sobre' : 'sobres'}`
+                                : 'cada 10 sobres abiertos'}
+                        </span>
                     </div>
                 </div>
-                <span className="apb-pct-badge">{percent}<span className="apb-pct-sym">%</span></span>
+                {boostActive ? (
+                    <span className="apb-boost-badge">⚡ {boostPacksRemaining}</span>
+                ) : (
+                    <span className="apb-pct-badge">{percent}<span className="apb-pct-sym">%</span></span>
+                )}
             </div>
 
             <div className="apb-track-wrap">
                 <div className="apb-track">
-                    <div className="apb-fill" style={{ width: `${percent}%` }}>
+                    <div className="apb-fill" style={{ width: boostActive ? '100%' : `${percent}%` }}>
                         <div className="apb-fill-shimmer" />
                     </div>
-                    <div className="apb-fill-glow" style={{ left: `${Math.min(percent, 99)}%` }} />
+                    <div className="apb-fill-glow" style={{ left: boostActive ? '99%' : `${Math.min(percent, 99)}%` }} />
 
                     {[25, 50, 75].map(tick => (
                         <div
                             key={tick}
-                            className={`apb-tick${percent >= tick ? ' apb-tick--passed' : ''}`}
+                            className={`apb-tick${(boostActive || percent >= tick) ? ' apb-tick--passed' : ''}`}
                             style={{ left: `${tick}%` }}
                         />
                     ))}
                 </div>
 
-                <div className={`apb-end-pack${percent >= 90 ? ' apb-end-pack--glow' : ''}`}>
-                    <PackIcon filled={percent >= 100} />
+                <div className={`apb-end-pack${(boostActive || percent >= 90) ? ' apb-end-pack--glow' : ''}`}>
+                    <PackIcon filled={boostActive || percent >= 100} />
                 </div>
             </div>
         </div>

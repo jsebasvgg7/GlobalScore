@@ -43,7 +43,7 @@ export default function AlbumsPageMobile() {
         });
     }, []);
 
-    const { packs, barPercent, packsAvailable, refresh: refreshPacks } = useAlbumPacks(userId);
+    const { packs, barPercent, packsAvailable, boostActive, boostPacksRemaining, refresh: refreshPacks } = useAlbumPacks(userId);
     const { collection, loading: collectionLoading, refresh: refreshCollection } = useAlbumCollection(userId);
     const { progress, refresh: refreshProgress } = useAlbumProgress(userId);
     const { legendary, cult } = useAlbumDefinitions();
@@ -108,6 +108,8 @@ export default function AlbumsPageMobile() {
                     <AlbumProgressBar
                         percent={barPercent}
                         packsAvailable={packsAvailable}
+                        boostActive={boostActive}
+                        boostPacksRemaining={boostPacksRemaining}
                         compact
                     />
                 </div>

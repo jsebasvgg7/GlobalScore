@@ -1,12 +1,20 @@
 import { supabase } from '@/shared/services/supabase/client';
 
 // ── Drop rates por significance_level ──────────────────────────────────────
-const PLAYER_DROP_RATES = [
+const PLAYER_DROP_RATES_BASE = [
     { level: 5, weight: 0.5 },
     { level: 4, weight: 7.5 },
     { level: 3, weight: 12 },
     { level: 2, weight: 25 },
     { level: 1, weight: 55 },
+];
+
+const PLAYER_DROP_RATES_BOOST = [
+    { level: 5, weight: 1.2 },
+    { level: 4, weight: 14.5 },
+    { level: 3, weight: 19 },
+    { level: 2, weight: 25 },
+    { level: 1, weight: 40.3 },
 ];
 
 // ── Definición progresiva LEG I→V ─────────────────────────────────────────
@@ -108,11 +116,12 @@ export async function initUserPacks(userId) {
 
 // ── Apertura de sobre ──────────────────────────────────────────────────────
 
-function rollPlayerByRarity(playerCards) {
+function rollPlayerByRarity(playerCards, boosted = false) {
+    const rates = boosted ? PLAYER_DROP_RATES_BOOST : PLAYER_DROP_RATES_BASE;
     const rand = Math.random() * 100;
     let cumulative = 0;
 
-    for (const { level, weight } of PLAYER_DROP_RATES) {
+    for (const { level, weight } of rates) {
         cumulative += weight;
         if (rand <= cumulative) {
             const pool = playerCards.filter((c) => c.significance_level === level);
@@ -122,7 +131,6 @@ function rollPlayerByRarity(playerCards) {
         }
     }
 
-    // Fallback: cualquier jugador de nivel 1
     const fallback = playerCards.filter((c) => c.significance_level === 1);
     return fallback[Math.floor(Math.random() * fallback.length)] ?? null;
 }
@@ -133,13 +141,11 @@ function rollRandom(cards) {
 }
 
 export async function openPack(userId) {
-    // 1. Verificar sobres disponibles
     const packs = await getUserPacks(userId);
     if (!packs || packs.packs_available < 1) {
         throw new Error('No hay sobres disponibles');
     }
 
-    // 2. Cargar pool de cartas por tipo
     const [players, teams, competitions, events] = await Promise.all([
         getAlbumCardsByType('player'),
         getAlbumCardsByType('team'),
@@ -147,32 +153,48 @@ export async function openPack(userId) {
         getAlbumCardsByType('event'),
     ]);
 
-    // 3. Seleccionar las 4 cartas
-    const drawnPlayer = rollPlayerByRarity(players);
+    const boosted = packs.boost_active === true;
+    const drawnPlayer = rollPlayerByRarity(players, boosted);
     const drawnTeam = rollRandom(teams);
     const drawnCompetition = rollRandom(competitions);
     const drawnEvent = rollRandom(events);
-
     const drawn = [drawnPlayer, drawnTeam, drawnCompetition, drawnEvent].filter(Boolean);
 
-    // 4. Decrementar sobre disponible
+    const newTotalOpened = packs.total_packs_opened + 1;
+    const boostTriggered = packs.total_packs_opened > 0 && newTotalOpened % 10 === 0;
+
+    let newBoostActive = boosted;
+    let newBoostRemaining = packs.boost_packs_remaining ?? 0;
+
+    if (boostTriggered) {
+        newBoostActive = true;
+        newBoostRemaining = 3;
+    } else if (boosted) {
+        newBoostRemaining = newBoostRemaining - 1;
+        if (newBoostRemaining <= 0) {
+            newBoostActive = false;
+            newBoostRemaining = 0;
+        }
+    }
+
     const { error: packError } = await supabase
         .from('album_packs')
         .update({
             packs_available: packs.packs_available - 1,
-            total_packs_opened: packs.total_packs_opened + 1,
+            total_packs_opened: newTotalOpened,
+            total_packs_earned: packs.total_packs_earned,
+            boost_active: newBoostActive,
+            boost_packs_remaining: newBoostRemaining,
             updated_at: new Date().toISOString(),
         })
         .eq('user_id', userId);
 
     if (packError) throw packError;
 
-    // 5. Añadir cartas a la colección (upsert con copies++)
     for (const card of drawn) {
         await upsertCollectionCard(userId, card.id);
     }
 
-    // 6. Registrar en historial
     const { error: historyError } = await supabase.from('album_pack_history').insert({
         user_id: userId,
         card_player_id: drawnPlayer?.id ?? null,
@@ -189,6 +211,8 @@ export async function openPack(userId) {
         team: drawnTeam,
         competition: drawnCompetition,
         event: drawnEvent,
+        boosted,
+        boostTriggered,
     };
 }
 

@@ -24,7 +24,7 @@ export function useAlbumPacks(userId) {
     }, [fetchPacks]);
 
     const barPercent = packs
-        ? Math.min(100, Math.round((packs.bar_progress / packs.bar_threshold) * 100))
+        ? (packs.total_packs_opened % 10) * 10
         : 0;
 
     return {
@@ -33,6 +33,8 @@ export function useAlbumPacks(userId) {
         error,
         barPercent,
         packsAvailable: packs?.packs_available ?? 0,
+        boostActive: packs?.boost_active ?? false,
+        boostPacksRemaining: packs?.boost_packs_remaining ?? 0,
         refresh: fetchPacks,
     };
 }
