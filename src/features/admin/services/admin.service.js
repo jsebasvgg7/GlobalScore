@@ -5,20 +5,11 @@ import { uploadToCloudinary } from '@/shared/services/cloudinary/upload.service'
 //  MATCHES
 // ════════════════════════════════════════════════════════════
 
-/**
- * Inserta un partido nuevo en la tabla matches.
- * @param {Object} match - Datos del partido a insertar.
- */
 export const insertMatch = async (match) => {
     const { error } = await supabase.from('matches').insert(match);
     if (error) throw error;
 };
 
-/**
- * Actualiza el resultado de un partido y lo marca como finalizado.
- * @param {string} matchId
- * @param {Object} updateData - { result_home, result_away, status, advancing_team? }
- */
 export const updateMatchResult = async (matchId, updateData) => {
     const { error } = await supabase
         .from('matches')
@@ -27,11 +18,6 @@ export const updateMatchResult = async (matchId, updateData) => {
     if (error) throw error;
 };
 
-/**
- * Obtiene un partido con todas sus predicciones.
- * @param {string} matchId
- * @returns {Object} Partido con sus predicciones.
- */
 export const getMatchWithPredictions = async (matchId) => {
     const { data, error } = await supabase
         .from('matches')
@@ -42,10 +28,6 @@ export const getMatchWithPredictions = async (matchId) => {
     return data;
 };
 
-/**
- * Elimina las predicciones de un partido y luego el partido.
- * @param {string} matchId
- */
 export const deleteMatch = async (matchId) => {
     const { error: predError } = await supabase
         .from('predictions')
@@ -64,12 +46,6 @@ export const deleteMatch = async (matchId) => {
 //  PREDICTIONS
 // ════════════════════════════════════════════════════════════
 
-/**
- * Actualiza los puntos obtenidos en una predicción.
- * @param {string} predictionId
- * @param {number} pointsEarned
- * @param {number} advancingPoints
- */
 export const updatePredictionPoints = async (predictionId, pointsEarned, advancingPoints) => {
     const { error } = await supabase
         .from('predictions')
@@ -82,11 +58,6 @@ export const updatePredictionPoints = async (predictionId, pointsEarned, advanci
 //  USERS
 // ════════════════════════════════════════════════════════════
 
-/**
- * Obtiene las estadísticas actuales de un usuario.
- * @param {string} userId
- * @returns {Object} Datos del usuario.
- */
 export const getUserStats = async (userId) => {
     const { data, error } = await supabase
         .from('users')
@@ -97,11 +68,6 @@ export const getUserStats = async (userId) => {
     return data;
 };
 
-/**
- * Actualiza las estadísticas globales y mensuales de un usuario.
- * @param {string} userId
- * @param {Object} stats - Campos a actualizar.
- */
 export const updateUserStats = async (userId, stats) => {
     const { error } = await supabase
         .from('users')
@@ -110,10 +76,6 @@ export const updateUserStats = async (userId, stats) => {
     if (error) throw error;
 };
 
-/**
- * Quita el banner equipado de todos los usuarios que tenían esa URL.
- * @param {string} imageUrl
- */
 export const clearEquippedBanner = async (imageUrl) => {
     const { error } = await supabase
         .from('users')
@@ -122,10 +84,6 @@ export const clearEquippedBanner = async (imageUrl) => {
     if (error) throw error;
 };
 
-/**
- * Obtiene todos los usuarios ordenados por nombre.
- * @returns {Array} Lista de usuarios.
- */
 export const getAllUsers = async () => {
     const { data, error } = await supabase
         .from('users')
@@ -139,32 +97,113 @@ export const getAllUsers = async () => {
 //  LEAGUES
 // ════════════════════════════════════════════════════════════
 
-/**
- * Inserta una nueva liga.
- * @param {Object} league
- */
 export const insertLeague = async (league) => {
-    const { error } = await supabase.from('leagues').insert(league);
+    // Extraer deadline_time del objeto antes de insertar
+    const { deadline_time, ...leagueData } = league;
+    const { error } = await supabase.from('leagues').insert(leagueData);
     if (error) throw error;
 };
 
 /**
- * Finaliza una liga actualizando su estado y resultados.
- * @param {string} leagueId
- * @param {Object} results
+ * Finaliza una liga, actualiza su estado y distribuye puntos a los usuarios.
+ * 5 puntos por cada campo acertado (campeón, goleador, asistidor, MVP).
  */
 export const finishLeague = async (leagueId, results) => {
-    const { error } = await supabase
+    // 1. Marcar la liga como finalizada con sus resultados
+    const { error: leagueError } = await supabase
         .from('leagues')
-        .update({ status: 'finished', ...results })
+        .update({
+            status: 'finished',
+            champion: results.champion,
+            top_scorer: results.top_scorer,
+            top_scorer_goals: results.top_scorer_goals,
+            top_assist: results.top_assist,
+            top_assist_count: results.top_assist_count,
+            mvp_player: results.mvp_player,
+        })
         .eq('id', leagueId);
-    if (error) throw error;
+    if (leagueError) throw leagueError;
+
+    // 2. Obtener todas las predicciones de esta liga
+    const { data: predictions, error: predError } = await supabase
+        .from('league_predictions')
+        .select('*')
+        .eq('league_id', leagueId);
+    if (predError) throw predError;
+
+    if (!predictions || predictions.length === 0) {
+        console.log('No hay predicciones para esta liga.');
+        return;
+    }
+
+    console.log(`📊 Procesando ${predictions.length} predicciones de liga...`);
+
+    // 3. Calcular y distribuir puntos por cada predicción
+    for (const prediction of predictions) {
+        let pointsEarned = 0;
+        let correctCount = 0;
+
+        if (prediction.predicted_champion?.toLowerCase() === results.champion?.toLowerCase()) {
+            pointsEarned += 5;
+            correctCount++;
+        }
+        if (prediction.predicted_top_scorer?.toLowerCase() === results.top_scorer?.toLowerCase()) {
+            pointsEarned += 5;
+            correctCount++;
+        }
+        if (prediction.predicted_top_assist?.toLowerCase() === results.top_assist?.toLowerCase()) {
+            pointsEarned += 5;
+            correctCount++;
+        }
+        if (prediction.predicted_mvp?.toLowerCase() === results.mvp_player?.toLowerCase()) {
+            pointsEarned += 5;
+            correctCount++;
+        }
+
+        console.log(`Usuario ${prediction.user_id}: ${pointsEarned} pts (${correctCount}/4 aciertos)`);
+
+        // Actualizar points_earned en la predicción
+        const { error: updPredErr } = await supabase
+            .from('league_predictions')
+            .update({ points_earned: pointsEarned })
+            .eq('id', prediction.id);
+        if (updPredErr) console.error('Error actualizando predicción:', updPredErr);
+
+        // Si no ganó puntos, no actualizar al usuario
+        if (pointsEarned === 0) continue;
+
+        // Obtener stats actuales del usuario
+        const { data: userData, error: userErr } = await supabase
+            .from('users')
+            .select('points, predictions, correct, monthly_points, monthly_predictions, monthly_correct')
+            .eq('id', prediction.user_id)
+            .single();
+
+        if (userErr || !userData) {
+            console.error(`Error obteniendo usuario ${prediction.user_id}:`, userErr);
+            continue;
+        }
+
+        // Actualizar estadísticas globales y mensuales del usuario
+        const { error: updUserErr } = await supabase
+            .from('users')
+            .update({
+                points: (userData.points || 0) + pointsEarned,
+                predictions: (userData.predictions || 0) + 1,
+                correct: (userData.correct || 0) + correctCount,
+                monthly_points: (userData.monthly_points || 0) + pointsEarned,
+                monthly_predictions: (userData.monthly_predictions || 0) + 1,
+                monthly_correct: (userData.monthly_correct || 0) + correctCount,
+            })
+            .eq('id', prediction.user_id);
+
+        if (updUserErr) console.error(`Error actualizando usuario ${prediction.user_id}:`, updUserErr);
+        else console.log(`✅ Usuario ${prediction.user_id} actualizado: +${pointsEarned} pts`);
+    }
+
+    console.log('✅ Liga finalizada y puntos distribuidos correctamente.');
 };
 
-/**
- * Elimina una liga.
- * @param {string} leagueId
- */
 export const deleteLeague = async (leagueId) => {
     const { error } = await supabase.from('leagues').delete().eq('id', leagueId);
     if (error) throw error;
@@ -174,32 +213,89 @@ export const deleteLeague = async (leagueId) => {
 //  AWARDS
 // ════════════════════════════════════════════════════════════
 
-/**
- * Inserta un nuevo premio.
- * @param {Object} award
- */
 export const insertAward = async (award) => {
-    const { error } = await supabase.from('awards').insert(award);
+    // Extraer deadline_time del objeto antes de insertar
+    const { deadline_time, ...awardData } = award;
+    const { error } = await supabase.from('awards').insert(awardData);
     if (error) throw error;
 };
 
 /**
- * Finaliza un premio asignando el ganador.
- * @param {string} awardId
- * @param {string} winner
+ * Finaliza un premio, actualiza su estado y distribuye puntos a los usuarios.
+ * 10 puntos por acertar el ganador.
  */
 export const finishAward = async (awardId, winner) => {
-    const { error } = await supabase
+    // 1. Marcar el premio como finalizado
+    const { error: awardError } = await supabase
         .from('awards')
         .update({ status: 'finished', winner })
         .eq('id', awardId);
-    if (error) throw error;
+    if (awardError) throw awardError;
+
+    // 2. Obtener todas las predicciones de este premio
+    const { data: predictions, error: predError } = await supabase
+        .from('award_predictions')
+        .select('*')
+        .eq('award_id', awardId);
+    if (predError) throw predError;
+
+    if (!predictions || predictions.length === 0) {
+        console.log('No hay predicciones para este premio.');
+        return;
+    }
+
+    console.log(`📊 Procesando ${predictions.length} predicciones de premio...`);
+
+    // 3. Calcular y distribuir puntos
+    for (const prediction of predictions) {
+        const pointsEarned = prediction.predicted_winner?.toLowerCase() === winner.toLowerCase()
+            ? 10
+            : 0;
+
+        console.log(`Usuario ${prediction.user_id}: ${pointsEarned} pts`);
+
+        // Actualizar points_earned en la predicción
+        const { error: updPredErr } = await supabase
+            .from('award_predictions')
+            .update({ points_earned: pointsEarned })
+            .eq('id', prediction.id);
+        if (updPredErr) console.error('Error actualizando predicción:', updPredErr);
+
+        // Si no ganó puntos, no actualizar al usuario
+        if (pointsEarned === 0) continue;
+
+        // Obtener stats actuales del usuario
+        const { data: userData, error: userErr } = await supabase
+            .from('users')
+            .select('points, predictions, correct, monthly_points, monthly_predictions, monthly_correct')
+            .eq('id', prediction.user_id)
+            .single();
+
+        if (userErr || !userData) {
+            console.error(`Error obteniendo usuario ${prediction.user_id}:`, userErr);
+            continue;
+        }
+
+        // Actualizar estadísticas globales y mensuales del usuario
+        const { error: updUserErr } = await supabase
+            .from('users')
+            .update({
+                points: (userData.points || 0) + pointsEarned,
+                predictions: (userData.predictions || 0) + 1,
+                correct: (userData.correct || 0) + 1,
+                monthly_points: (userData.monthly_points || 0) + pointsEarned,
+                monthly_predictions: (userData.monthly_predictions || 0) + 1,
+                monthly_correct: (userData.monthly_correct || 0) + 1,
+            })
+            .eq('id', prediction.user_id);
+
+        if (updUserErr) console.error(`Error actualizando usuario ${prediction.user_id}:`, updUserErr);
+        else console.log(`✅ Usuario ${prediction.user_id} actualizado: +${pointsEarned} pts`);
+    }
+
+    console.log('✅ Premio finalizado y puntos distribuidos correctamente.');
 };
 
-/**
- * Elimina un premio.
- * @param {string} awardId
- */
 export const deleteAward = async (awardId) => {
     const { error } = await supabase.from('awards').delete().eq('id', awardId);
     if (error) throw error;
@@ -209,10 +305,6 @@ export const deleteAward = async (awardId) => {
 //  ACHIEVEMENTS
 // ════════════════════════════════════════════════════════════
 
-/**
- * Guarda (crea o actualiza) un logro.
- * @param {Object} achievement
- */
 export const upsertAchievement = async (achievement) => {
     const { error } = await supabase
         .from('available_achievements')
@@ -220,10 +312,6 @@ export const upsertAchievement = async (achievement) => {
     if (error) throw error;
 };
 
-/**
- * Elimina un logro por su id.
- * @param {string} achievementId
- */
 export const deleteAchievement = async (achievementId) => {
     const { error } = await supabase
         .from('available_achievements')
@@ -236,10 +324,6 @@ export const deleteAchievement = async (achievementId) => {
 //  TITLES
 // ════════════════════════════════════════════════════════════
 
-/**
- * Guarda (crea o actualiza) un título.
- * @param {Object} title
- */
 export const upsertTitle = async (title) => {
     const { error } = await supabase
         .from('available_titles')
@@ -247,10 +331,6 @@ export const upsertTitle = async (title) => {
     if (error) throw error;
 };
 
-/**
- * Elimina un título por su id.
- * @param {string} titleId
- */
 export const deleteTitle = async (titleId) => {
     const { error } = await supabase
         .from('available_titles')
@@ -263,13 +343,7 @@ export const deleteTitle = async (titleId) => {
 //  BANNERS
 // ════════════════════════════════════════════════════════════
 
-/**
- * Sube una imagen al bucket "banners" de Supabase Storage.
- * @param {File} file
- * @returns {string} URL pública de la imagen.
- */
 export const uploadBannerImage = async (file) => {
-    // Verificar sesión activa
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
     if (sessionError || !session) {
         throw new Error('No hay sesión activa. Por favor recarga la página e inicia sesión nuevamente.');
@@ -305,10 +379,6 @@ export const uploadBannerImage = async (file) => {
     return publicUrl;
 };
 
-/**
- * Inserta un banner en la tabla available_banners.
- * @param {{ name: string, description?: string, image_url: string }} bannerData
- */
 export const insertBanner = async (bannerData) => {
     const { error } = await supabase.from('available_banners').insert({
         name: bannerData.name,
@@ -318,31 +388,21 @@ export const insertBanner = async (bannerData) => {
     if (error) throw error;
 };
 
-/**
- * Elimina un banner de la tabla y, si es posible, del storage.
- * También revoca asignaciones de usuario.
- * @param {string} bannerId
- * @param {string} imageUrl
- */
 export const deleteBanner = async (bannerId, imageUrl) => {
-    // Quitar banner equipado de los usuarios que lo tenían
     await clearEquippedBanner(imageUrl);
 
-    // Eliminar asignaciones de user_banners
     const { error: ubError } = await supabase
         .from('user_banners')
         .delete()
         .eq('banner_id', bannerId);
     if (ubError) throw ubError;
 
-    // Eliminar de la tabla
     const { error } = await supabase
         .from('available_banners')
         .delete()
         .eq('id', bannerId);
     if (error) throw error;
 
-    // Intentar eliminar del storage (no crítico si falla)
     try {
         const fileName = imageUrl.split('/').pop();
         await supabase.storage.from('banners').remove([fileName]);
@@ -351,11 +411,6 @@ export const deleteBanner = async (bannerId, imageUrl) => {
     }
 };
 
-/**
- * Asigna un banner a un usuario en user_banners.
- * @param {string} userId
- * @param {string} bannerId
- */
 export const assignBannerToUser = async (userId, bannerId) => {
     const { error } = await supabase
         .from('user_banners')
@@ -363,12 +418,6 @@ export const assignBannerToUser = async (userId, bannerId) => {
     if (error) throw error;
 };
 
-/**
- * Revoca un banner de un usuario.
- * @param {string} userId
- * @param {string} bannerId
- * @param {string} imageUrl - Para limpiar equipped_banner_url si corresponde.
- */
 export const revokeBannerFromUser = async (userId, bannerId, imageUrl) => {
     const { error } = await supabase
         .from('user_banners')
@@ -377,7 +426,6 @@ export const revokeBannerFromUser = async (userId, bannerId, imageUrl) => {
         .eq('banner_id', bannerId);
     if (error) throw error;
 
-    // Si el usuario tenía ese banner equipado, limpiarlo
     await supabase
         .from('users')
         .update({ equipped_banner_url: null })
@@ -385,11 +433,6 @@ export const revokeBannerFromUser = async (userId, bannerId, imageUrl) => {
         .eq('equipped_banner_url', imageUrl);
 };
 
-/**
- * Obtiene los banners asignados a un usuario.
- * @param {string} userId
- * @returns {Array} Banners del usuario.
- */
 export const getUserBanners = async (userId) => {
     const { data, error } = await supabase
         .from('user_banners')
@@ -403,13 +446,6 @@ export const getUserBanners = async (userId) => {
 //  CROWNS / MONTHLY CHAMPIONSHIPS
 // ════════════════════════════════════════════════════════════
 
-/**
- * Llama al RPC de Supabase para otorgar la corona mensual.
- * @param {string} winnerId
- * @param {string} monthLabel - Formato "YYYY-MM"
- * @param {string} adminId
- * @returns {Object} Datos del resultado de la función.
- */
 export const awardMonthlyCrown = async (winnerId, monthLabel, adminId) => {
     const { data, error } = await supabase.rpc('award_monthly_championship', {
         winner_user_id: winnerId,
@@ -420,10 +456,6 @@ export const awardMonthlyCrown = async (winnerId, monthLabel, adminId) => {
     return data;
 };
 
-/**
- * Llama al RPC de Supabase para resetear las estadísticas mensuales.
- * @returns {Object} Resultado con users_reset.
- */
 export const resetMonthlyStats = async () => {
     const { data, error } = await supabase.rpc('reset_all_monthly_stats');
     if (error) throw error;
@@ -437,11 +469,6 @@ export const resetMonthlyStats = async () => {
 //  LOAD ALL ADMIN DATA
 // ════════════════════════════════════════════════════════════
 
-/**
- * Carga todos los datos necesarios para el panel de administración
- * en paralelo usando Promise.all.
- * @returns {Object} Todos los datos del admin.
- */
 export const loadAllAdminData = async () => {
     const [
         matchData,
@@ -493,40 +520,17 @@ export const loadAllAdminData = async () => {
 //  HISTORICAL IMAGES (Cloudinary)
 // ════════════════════════════════════════════════════════════
 
-/**
- * Sube una imagen histórica a Cloudinary y devuelve la URL pública.
- * Las imágenes se guardan en globalscore/<folder>.
- * @param {File} file
- * @param {'players'|'teams'|'competitions'|'events'} folder
- * @returns {Promise<string>} URL pública con transformaciones automáticas.
- */
 export const uploadHistoricalImage = async (file, folder = 'historical') => {
     return await uploadToCloudinary(file, folder);
 };
 
-/**
- * Resuelve la URL pública de una imagen histórica.
- * - Si ya es URL de Cloudinary (http...), la retorna directo.
- * - Si es un path de Supabase Storage (legacy), obtiene la URL pública.
- * @param {string|null} imagePath
- * @returns {string|null}
- */
 export const getHistoricalImageUrl = (imagePath) => {
     if (!imagePath) return null;
-
-    // Ya es URL completa de Cloudinary
     if (imagePath.startsWith('http')) return imagePath;
-
-    // Compatibilidad con imágenes antiguas en Supabase Storage
     const { data } = supabase.storage.from('historical').getPublicUrl(imagePath);
     return data?.publicUrl || null;
 };
 
-/**
- * Elimina una imagen del bucket histórico de Supabase Storage (solo legacy).
- * Las imágenes de Cloudinary no se pueden eliminar desde el cliente.
- * @param {string|null} imagePath - Solo paths relativos (no URLs http).
- */
 export const deleteHistoricalImage = async (imagePath) => {
     if (!imagePath || imagePath.startsWith('http')) return;
     await supabase.storage.from('historical').remove([imagePath]);

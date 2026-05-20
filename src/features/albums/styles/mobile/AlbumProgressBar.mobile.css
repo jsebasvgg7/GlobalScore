@@ -1,0 +1,36 @@
+/* ════════════════════════════════════════════════
+   ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗
+   ████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝
+   ██╔████╔██║██║   ██║██████╔╝██║██║     █████╗  
+   ██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝  
+   ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
+   MOBILE — responsive chaos
+════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  .apb-root { gap: 6px; }
+
+  .apb-header {
+    align-items: center;
+  }
+
+  .apb-eyebrow { font-size: 7px; letter-spacing: 0.16em; }
+
+  .apb-mechanic-hint { font-size: 8px; gap: 3px; }
+
+  .apb-pct-badge { font-size: 18px; }
+  .apb-pct-sym { font-size: 11px; }
+
+  .apb-track { height: 8px; }
+
+  .apb-fill-glow {
+    width: 10px; height: 10px;
+  }
+
+  .apb-end-pack { width: 22px; }
+  .apb-pack-icon { width: 16px; height: 21px; }
+
+  .apb-compact-track { height: 3px; }
+  .apb-compact-glow { width: 7px; height: 7px; }
+}

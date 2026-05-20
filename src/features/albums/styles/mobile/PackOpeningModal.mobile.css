@@ -1,0 +1,336 @@
+/* ════════════════════════════════════════════════
+   ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗
+   ████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝
+   ██╔████╔██║██║   ██║██████╔╝██║██║     █████╗  
+   ██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝  
+   ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
+   MOBILE — responsive chaos
+════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+    .pom2-overlay {
+        padding: 56px 0 0;
+        align-items: flex-end;
+        overflow: hidden;
+    }
+
+    .pom2-modal {
+        max-width: 100%;
+        width: 100%;
+        height: calc(100dvh - 56px);
+        max-height: none;
+        border-radius: 16px 16px 0 0;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        animation: pom2-slide-up 0.38s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    @keyframes pom2-slide-up {
+        from { transform: translateY(40px); opacity: 0; }
+        to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .pom2-header {
+        flex-shrink: 0;
+        height: 50px;
+        min-height: 50px;
+    }
+
+    .pom2-body {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .pom2-divider {
+        display: none;
+    }
+
+    .pom2-pack-panel {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        padding: 32px 24px 40px;
+        background: var(--pom2-pack-bg);
+        overflow: hidden;
+        /* Por defecto visible */
+        opacity: 1;
+        transform: translateX(0);
+        transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1),
+                    transform 0.35s cubic-bezier(0.4,0,0.2,1);
+        z-index: 2;
+        pointer-events: auto;
+    }
+
+    .pom2-modal--revealing .pom2-pack-panel,
+    .pom2-modal--done      .pom2-pack-panel {
+        opacity: 0;
+        transform: translateX(-100%);
+        pointer-events: none;
+    }
+
+    .pom2-pack-wrap {
+        width: 140px;
+        height: 198px;
+        flex-shrink: 0;
+        animation: pom2-float 4s ease-in-out infinite;
+        filter:
+            drop-shadow(0 20px 40px rgba(124,111,255,0.45))
+            drop-shadow(0 6px 12px rgba(0,0,0,0.45));
+    }
+
+    .pom2-pack-count {
+        align-items: center;
+    }
+
+    .pom2-pack-count-n {
+        font-size: 48px;
+        font-weight: 700;
+        color: rgba(255,255,255,0.92);
+    }
+
+    .pom2-pack-count-lbl {
+        font-size: 9px;
+        letter-spacing: 0.16em;
+        color: rgba(255,255,255,0.36);
+    }
+
+    .pom2-pack-cta {
+        padding: 13px 32px;
+        font-size: 11px;
+        border-radius: 10px;
+        letter-spacing: 0.16em;
+        min-width: 180px;
+        justify-content: center;
+    }
+
+    .pom2-pack-opening-lbl {
+        font-size: 10px;
+        letter-spacing: 0.22em;
+    }
+
+    .pom2-pack-types-hint {
+        font-size: 8px;
+        color: rgba(255,255,255,0.22);
+        letter-spacing: 0.12em;
+    }
+
+    .pom2-pack-panel .pom2-actions {
+        display: none;
+    }
+
+    .pom2-cards-panel {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: var(--pom2-surface);
+        padding: 14px 14px 10px;
+        gap: 10px;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1) 0.08s,
+                    transform 0.38s cubic-bezier(0.22,1,0.36,1) 0.08s;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .pom2-modal--revealing .pom2-cards-panel,
+    .pom2-modal--done      .pom2-cards-panel {
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: auto;
+        z-index: 3;
+    }
+
+    .pom2-cards-header {
+        flex-shrink: 0;
+        padding: 0 2px;
+    }
+
+    .pom2-cards-tag {
+        font-size: 9px;
+        letter-spacing: 0.18em;
+    }
+
+    .pom2-pdot {
+        width: 8px;
+        height: 8px;
+    }
+
+    .pom2-progress-dots {
+        gap: 6px;
+    }
+
+    .pom2-cards-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .pom2-flip-slot {
+        aspect-ratio: unset;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        position: relative;
+    }
+
+    .pom2-flip-slot:not(.pom2-flip-slot--flipped):hover .pom2-flip-inner {
+        transform: none;
+    }
+
+    .pom2-flip-inner {
+        width: 100%;
+        height: 100%;
+    }
+
+    .pom2-card-strip      { height: 4px; }
+    .pom2-card-type-label { font-size: 7px; padding: 4px 7px 2px; }
+    .pom2-card-name       { font-size: 8px; }
+    .pom2-card-rarity     { font-size: 6px; }
+    .pom2-card-footer     { padding: 5px 6px 6px; gap: 2px; }
+    .pom2-card-initials   { font-size: 12px; }
+    .pom2-star            { font-size: 8px; }
+    .pom2-card-placeholder svg { width: 28px; height: 28px; }
+    .pom2-tap-hint        { font-size: 6px; bottom: -14px; }
+
+    .pom2-cards-hint,
+    .pom2-cards-done {
+        font-size: 8px;
+        padding: 2px 0;
+        flex-shrink: 0;
+    }
+
+    .pom2-cards-panel .pom2-mobile-actions {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        flex-shrink: 0;
+        padding: 4px 0 2px;
+    }
+
+    .pom2-btn-again {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: var(--pom2-accent);
+        border: none;
+        border-radius: 9px;
+        color: #fff;
+        font-family: 'DM Mono', monospace;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        cursor: pointer;
+        max-width: none;
+        width: auto;
+        transition: background 0.14s, transform 0.12s;
+    }
+
+    .pom2-btn-again:hover { background: #9284ff; }
+
+    .pom2-btn-collection {
+        font-size: 8px;
+        color: var(--pom2-muted);
+        text-decoration-color: var(--pom2-dim);
+        white-space: nowrap;
+    }
+
+    .pom2-btn-collection:hover {
+        color: var(--pom2-text);
+        text-decoration-color: var(--pom2-muted);
+    }
+}
+
+/* ══════════════════════════════════════════════
+   Móvil pequeño ≤480px
+══════════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+    .pom2-modal {
+        height: calc(100dvh - 56px);
+    }
+
+    .pom2-pack-panel {
+        gap: 20px;
+        padding: 24px 20px 36px;
+    }
+
+    .pom2-pack-wrap {
+        width: 118px;
+        height: 167px;
+    }
+
+    .pom2-pack-count-n { font-size: 40px; }
+
+    .pom2-pack-cta {
+        padding: 11px 28px;
+        font-size: 10px;
+        min-width: 160px;
+    }
+
+    .pom2-cards-grid { gap: 8px; }
+    .pom2-cards-panel { padding: 12px 12px 8px; gap: 8px; }
+
+    .pom2-card-name       { font-size: 7px; }
+    .pom2-card-type-label { font-size: 6px; }
+}
+
+/* ══════════════════════════════════════════════
+   Teléfonos muy pequeños ≤360px
+══════════════════════════════════════════════ */
+@media (max-width: 360px) {
+
+    .pom2-pack-panel {
+        gap: 16px;
+        padding: 20px 16px 30px;
+    }
+
+    .pom2-pack-wrap {
+        width: 100px;
+        height: 142px;
+    }
+
+    .pom2-pack-logo svg  { width: 22px; height: 22px; }
+    .pom2-pack-season    { font-size: 5px; }
+    .pom2-pack-brand     { font-size: 6px; }
+    .pom2-pack-count-n   { font-size: 34px; }
+
+    .pom2-pack-cta {
+        padding: 10px 22px;
+        font-size: 9px;
+        min-width: 140px;
+    }
+
+    .pom2-cards-grid { gap: 6px; }
+    .pom2-cards-panel { padding: 10px 10px 6px; }
+
+    .pom2-card-name       { font-size: 6px; }
+    .pom2-card-type-label { font-size: 5px; }
+    .pom2-card-initials   { font-size: 10px; }
+}

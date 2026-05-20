@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Globe, Calendar, Crown, ChevronLeft, ChevronRight, Zap, Star } from "lucide-react";
+import { Globe, Calendar, Crown, ChevronLeft, ChevronRight, Zap, Star, BookOpen } from "lucide-react";
 import { MobileUserProfile } from "@/features/profile";
 import "../../styles/MobileRanking.css";
 
@@ -47,7 +47,7 @@ function PodiumCard({ user, rank, onSelect }) {
 }
 
 /* ── Fila tabla (ranking) ── */
-function TableRow({ user, pos, isMe, onSelect }) {
+function TableRow({ user, pos, isMe, onSelect, legCount = 0 }) {
   const accuracy = user.rankPredictions > 0
     ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
   const topMod = pos === 1 ? " mrk-row--gold"
@@ -67,10 +67,15 @@ function TableRow({ user, pos, isMe, onSelect }) {
           <span className="mrk-row-sub">{user.rankCorrect} aciertos</span>
         </div>
       </button>
+      <span className={`mrk-row-albums${legCount > 0 ? ' mrk-row-albums--active' : ''}${legCount === 5 ? ' mrk-row-albums--immortal' : ''}`}>
+      {legCount === 5 ? <Crown size={10} /> : <BookOpen size={10} />}
+      <span>{legCount}/5</span>
+    </span>
       <div className="mrk-row-right">
         <span className="mrk-row-pts">{fmt(user.rankPoints)}<span className="mrk-row-pts-lbl">pts</span></span>
         <span className="mrk-row-acc">{accuracy}%</span>
       </div>
+      
     </div>
   );
 }
@@ -223,6 +228,7 @@ export default function MobileRanking({
   rankingType = "global",
   onChangeType,
   champions = [],
+  albumProgress = {},
 }) {
   const [selectedUserId, setSelectedUserId] = useState(null);
 
@@ -370,15 +376,19 @@ export default function MobileRanking({
               {rankingType === "monthly" ? getCurrentMonthLabel() : "Global"}
             </span>
           </div>
-          {top3.map((user, i) => (
-            <TableRow key={user.id} user={user} pos={i + 1}
-              isMe={user.id === currentUser?.id} onSelect={setSelectedUserId} />
-          ))}
-          {rest.length > 0 && <div className="mrk-table-sep" />}
-          {rest.map((user, i) => (
-            <TableRow key={user.id} user={user} pos={i + 4}
-              isMe={user.id === currentUser?.id} onSelect={setSelectedUserId} />
-          ))}
+         {top3.map((user, i) => (
+          <TableRow key={user.id} user={user} pos={i + 1}
+            isMe={user.id === currentUser?.id}
+            onSelect={setSelectedUserId}
+            legCount={albumProgress[user.id] || 0} />
+        ))}
+        {rest.length > 0 && <div className="mrk-table-sep" />}
+        {rest.map((user, i) => (
+          <TableRow key={user.id} user={user} pos={i + 4}
+            isMe={user.id === currentUser?.id}
+            onSelect={setSelectedUserId}
+            legCount={albumProgress[user.id] || 0} />
+        ))}
         </div>
       )}
 

@@ -377,20 +377,21 @@ function AddLeagueForm({ onAdd }) {
       if (url) set('logo_url', url);
     }
   };
-
+  
   const submit = async () => {
     if (!form.id || !form.name || !form.season || !form.deadline || !form.deadline_time) return;
     setSending(true);
     try {
+      const { deadline_time, deadline: deadline_date, ...rest } = form;
       await onAdd({
-        ...form,
+        ...rest,
         logo_url: getLogoUrlByLeagueName(supabase, form.name),
-        deadline: `${form.deadline}T${form.deadline_time}:00`,
+        deadline: `${deadline_date}T${deadline_time}:00`,
         status: 'active',
       });
-      setForm({ id: '', name: '', season: '', logo: '🏆', deadline: '', deadline_time: '' });
-    } finally { setSending(false); }
-  };
+        setForm({ id: '', name: '', season: '', logo: '🏆', deadline: '', deadline_time: '' });
+      } finally { setSending(false); }
+    };
 
   return (
     <div className="adm-form">
@@ -447,10 +448,11 @@ function AddAwardForm({ onAdd }) {
     if (!form.id || !form.name || !form.season || !form.deadline || !form.deadline_time) return;
     setSending(true);
     try {
+      const { deadline_time, deadline: deadline_date, ...rest } = form;
       await onAdd({
-        ...form,
+        ...rest,
         logo_url: getLogoUrlByAwardName(supabase, form.name),
-        deadline: `${form.deadline}T${form.deadline_time}:00`,
+        deadline: `${deadline_date}T${deadline_time}:00`,
         status: 'active',
       });
       setForm({ id: '', name: '', season: '', logo: '🏆', category: 'Individual', deadline: '', deadline_time: '' });

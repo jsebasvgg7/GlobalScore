@@ -1,0 +1,104 @@
+/* ════════════════════════════════════════════════
+    █████╗ ██╗     ██████╗ ██╗   ██╗███╗   ███╗███████╗
+   ██╔══██╗██║     ██╔══██╗██║   ██║████╗ ████║██╔════╝
+   ███████║██║     ██████╔╝██║   ██║██╔████╔██║███████╗
+   ██╔══██║██║     ██╔══██╗██║   ██║██║╚██╔╝██║╚════██║
+   ██║  ██║███████╗██████╔╝╚██████╔╝██║ ╚═╝ ██║███████║
+   ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚══════╝
+   ALBUMS — collectible pages & sticker systems
+════════════════════════════════════════════════ */
+
+.abe-float-anchor {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+}
+
+.abe-float-btn {
+    pointer-events: all;
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: block;
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.18));
+    /* motion.button maneja hover/tap */
+}
+
+.abe-book-svg {
+    display: block;
+}
+
+.abe-dot-badge {
+    position: absolute;
+    top: 3px;
+    right: 5px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #e84040;
+    border: 1.5px solid #fff;
+    animation: abe-pulse 2s ease-in-out infinite;
+    z-index: 10;
+}
+
+@keyframes abe-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.65;
+        transform: scale(0.78);
+    }
+}
+
+.abe-tooltip {
+    pointer-events: none;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    background: #2a1f0e;
+    color: #f5e6c8;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    border-radius: 6px;
+    border: 1px solid #8b6914;
+    white-space: nowrap;
+}
+
+.abe-tooltip-badge {
+    background: #c8982e;
+    color: #2a1f0e;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 20px;
+}
+
+[data-theme="dark"] .abe-float-btn {
+    filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.5));
+}
+
+[data-theme="dark"] .abe-dot-badge {
+    border-color: #1a1d2e;
+}
+
+[data-theme="dark"] .abe-tooltip {
+    background: #2a1f0e;
+    color: #f5e6c8;
+    border-color: #8b6914;
+}

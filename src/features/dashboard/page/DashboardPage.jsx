@@ -13,6 +13,7 @@ import {
   useLeagues,
   useAwards
 } from "@/features/dashboard";
+import AlbumBookEntry from '@/features/albums/components/AlbumBookEntry';
 import { NavigationTabs } from "@/shared/layout";
 import { PageLoader, LoadingOverlay } from "@/shared/ui/LoadingStates";
 import { ToastContainer, useToast } from "@/shared/ui/Toast";
@@ -344,6 +345,8 @@ export default function DashboardPage() {
                     </div>
                   ))
                 )}
+                {/* Album entry */}
+                <AlbumBookEntry currentUser={currentUser} />
               </div>
             )}
 

@@ -26,12 +26,13 @@
 - [Características Principales](#-características-principales)
 - [🖥️ Arquitectura Desktop vs Mobile](#️-arquitectura-desktop-vs-mobile)
 - [📜 Sistema de Historia](#-sistema-de-historia)
+- [📒 GlobalAlbums](#-globalalbums)
 - [Tech Stack](#️-tech-stack)
 - [Instalación](#-instalación)
 - [Configuración](#️-configuración)
 - [Arquitectura Feature-Based](#-arquitectura-feature-based)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Novedades en v1.4](#-novedades-en-v14)
+- [Novedades en v1.5](#-novedades-en-v15)
 - [Roadmap](#-roadmap)
 - [Contribuir](#-contribuir)
 - [Contacto](#-contacto)
@@ -55,7 +56,8 @@ Disponible como **PWA instalable** en Android e iOS, y como **app nativa en Goog
 - **Instalable**: Funciona como app nativa en Android (TWA) e iOS vía PWA
 - **Sistema de Notas**: Toma notas personales sobre predicciones y análisis
 - **Historia Completa**: Registro detallado de competiciones, equipos y eventos históricos
-- **Arquitectura Feature-Based**: Código organizado por dominio para máxima escalabilidad ⭐ NUEVO
+- **GlobalAlbums**: Sistema de figuritas coleccionables vinculado a las predicciones ⭐ NUEVO
+- **Arquitectura Feature-Based**: Código organizado por dominio para máxima escalabilidad
 
 ---
 
@@ -146,12 +148,59 @@ Disponible como **PWA instalable** en Android e iOS, y como **app nativa en Goog
 ├── Historial completo de análisis personal
 └── Accesible desde página dedicada
 
+📒 GlobalAlbums  ⭐ NUEVO
+├── Sobres generados por resultados exactos (5 pts)
+├── 4 figuritas por sobre (jugador, equipo, copa, evento)
+├── Sistema de rareza en 5 niveles (1★ al GOAT 5★)
+├── 13 álbumes coleccionables en 3 categorías
+├── Boost automático cada 10 sobres abiertos
+└── Animación de apertura de sobre con flip de cartas
+
 📜 Historia
 ├── Competiciones históricas con resultados completos
 ├── Equipos históricos con estadísticas
 ├── Eventos y momentos destacados
-├── Bracket de eliminatorias histórico en mobile ⭐ NUEVO
+├── Bracket de eliminatorias histórico en mobile
 └── Navegación por secciones con sub-páginas dedicadas
+```
+
+### 📒 GlobalAlbums
+
+```
+Sistema de Colección de Figuritas
+├── 🎯 Mecánica Central
+│   ├── Solo los resultados exactos (5 pts) generan sobres
+│   ├── Cada sobre = 4 figuritas (1 por categoría de Historia)
+│   └── Sobres acumulables — abre cuando quieras
+│
+├── ⭐ Sistema de Rareza (Jugadores)
+│   ├── 1★ Actuales Relevantes   — ~55% drop rate
+│   ├── 2★ Momentos Puntuales    — ~25% drop rate
+│   ├── 3★ Culto y Distinción    — ~12% drop rate
+│   ├── 4★ Leyendas              — ~7.5% drop rate
+│   └── 5★ GOAT (solo 10)        — ~0.5% drop rate
+│
+├── 📚 13 Álbumes en 3 Categorías
+│   ├── Legendarios (LEG I → LEG V) — progresivos, requieren requisitos de estrellas
+│   ├── Estrellas (EST I → GOAT)    — 5 álbumes por nivel de rareza de jugadores
+│   └── Culto (Equipos, Copas, Eventos) — 3 álbumes temáticos históricos
+│
+├── ⚡ Sistema de Boost
+│   ├── Activo cada 10 sobres abiertos
+│   ├── 3 sobres con probabilidades mejoradas
+│   └── Indicado visualmente en la barra de progreso
+│
+├── 🃏 Diseño de Cartas
+│   ├── Foil shimmer overlay en hover
+│   ├── Anillo foil animado por rareza
+│   ├── Marco normal / plata / oro / legendario según copias
+│   └── Efecto GOAT exclusivo con halo y partículas
+│
+└── 📦 Pack Opening Modal
+    ├── Animación de sobre con flap que se desprende
+    ├── 4 cartas con flip individual al tocar
+    ├── Partículas de burst en carta GOAT
+    └── Vista adaptada desktop (split) y mobile (pantalla completa)
 ```
 
 ### 📊 Estadísticas y Analytics
@@ -179,24 +228,6 @@ Sistema de Push Notifications (VAPID/Web Push)
 ├── 🔑 Generación de claves VAPID incluida
 └── 📡 Disparo automático al crear un partido nuevo
 ```
-
-### 🎨 Experiencia de Usuario
-
-- **Diseño Purple Theme**: Paleta coherente y moderna
-- **Responsive Design**: Móvil, tablet y desktop completamente optimizados
-- **Vistas Mobile Dedicadas**: Componentes específicos para cada sección en móvil
-- **Bottom Navigation**: Navegación móvil intuitiva
-- **Avatar Upload**: Sube y personaliza tu foto de perfil
-- **Perfil Público**: Visualiza el perfil de otros usuarios
-- **Image Viewer**: Visor de imágenes integrado
-- **Animaciones Sutiles**: Transiciones fluidas
-- **Toast Notifications**: Feedback visual elegante
-- **Offline Support**: Service Worker con página offline y sincronización pendiente
-- **PWA Completa**: Instalable, Service Worker, manifest, íconos adaptativos
-- **Style Switcher**: Personalización de temas y estilos en mobile
-- **Historia navegable**: Secciones de historia con navegación interna propia
-- **Welcome Screen de Historia**: Pantalla de bienvenida al módulo histórico ⭐ NUEVO
-- **Bracket Mobile de Historia**: Vista de bracket de eliminatorias en mobile ⭐ NUEVO
 
 ---
 
@@ -264,7 +295,7 @@ La versión desktop está diseñada para usuarios en computadoras y tablets gran
 **Páginas Desktop:**
 - `DashboardPage.jsx`, `RankingPage.jsx`, `StatsPage.jsx`, `AdminPage.jsx`
 - `WorldCupPage.jsx`, `NotesPage.jsx`, `NotificationsPage.jsx`
-- `ProfileSettingsPage.jsx`, `HistoryPage.jsx`
+- `ProfileSettingsPage.jsx`, `HistoryPage.jsx`, `AlbumsPage.jsx`
 
 #### Características Desktop Exclusivas
 
@@ -274,7 +305,7 @@ La versión desktop está diseñada para usuarios en computadoras y tablets gran
    └─ Transiciones suaves entre secciones
 
 ✅ Interacciones avanzadas
-   ├─ Hover effects en tarjetas
+   ├─ Hover effects en tarjetas y libros 3D
    ├─ Drag & drop en admin
    ├─ Modales amplios con múltiples tabs
    └─ Tooltips contextuales
@@ -321,8 +352,6 @@ La versión mobile está diseñada para usuarios en smartphones y tablets peque�
 
 #### Componentes Mobile Principales
 
-Cada feature tiene sus vistas mobile co-ubicadas en una subcarpeta `mobile/` dentro del propio feature:
-
 - `MobileDashboard.jsx` — Cards apiladas, filtros simplificados, predicción inline
 - `MobileRanking.jsx` — Podio comprimido, lista scrollable, búsqueda integrada
 - `MobileStats.jsx` — Tabs horizontales, gráficos comprimidos, métricas en cards
@@ -330,15 +359,7 @@ Cada feature tiene sus vistas mobile co-ubicadas en una subcarpeta `mobile/` den
 - `MobileProfileMain.jsx` — Hero comprimido, tabs de overview/historial/logros
 - `MobileNotifications.jsx` — Toggle prominent, notificaciones por tipo
 - `MobileNotes.jsx` — Crear nota rápida, lista ordenada por fecha, búsqueda
-- `StyleSwitcher.jsx` — Toggle entre temas con persistencia
-
-**Mobile de Historia (`features/history/components/mobile/`):**
-- `HistoricalCompetitionsMobile.jsx` — Vista mobile de competiciones
-- `HistoricalEventsMobile.jsx` — Vista mobile de eventos
-- `HistoricalTeamsMobile.jsx` — Vista mobile de equipos
-- `HistoryMenuMobile.jsx` — Menú de navegación mobile ⭐ NUEVO
-- `KnockoutBracketMobile.jsx` — Bracket de eliminatorias en mobile ⭐ NUEVO
-- `SectionHeaderMobile.jsx` — Header de sección reutilizable ⭐ NUEVO
+- `AlbumsPageMobile.jsx` — Header compacto, section nav, álbumes optimizados para touch ⭐ NUEVO
 
 #### Características Mobile Exclusivas
 
@@ -361,148 +382,118 @@ Cada feature tiene sus vistas mobile co-ubicadas en una subcarpeta `mobile/` den
    ├─ Espaciado vertical aumentado (42px botones)
    ├─ Iconos grandes y claros
    └─ Colores de alto contraste
-
-✅ Rendimiento
-   ├─ Imágenes optimizadas (srcset)
-   ├─ Lazy loading de componentes
-   └─ No hay animaciones pesadas
 ```
 
 ---
 
-### 🔄 Cambio Dinámico Desktop ↔ Mobile
+## 📒 GlobalAlbums
 
-```javascript
-// En App.jsx - Hook para detectar cambios
-const isMobile = useMediaQuery('(max-width: 768px)');
-
-// El router redirige automáticamente:
-return isMobile ? <MobileDashboard /> : <DashboardPage />
-```
-
-**Beneficios:** sin recargas de página, sin pérdida de scroll position, estado sincronizado, transición suave al rotar dispositivo.
-
----
-
-### 🎨 Theming y Estilos
-
-**Colores Base (Purple Theme):**
-```css
-Primary:     #8B5CF6 (Púrpura)
-Secondary:   #EC4899 (Rosa)
-Success:     #10B981 (Verde)
-Warning:     #F59E0B (Ámbar)
-Error:       #EF4444 (Rojo)
-Background:  #F9FAFB (Gris muy claro)
-Text:        #1F2937 (Gris oscuro)
-```
-
----
-
-### 📊 Comparativa Desktop vs Mobile
-
-| Aspecto | Desktop | Mobile |
-|---------|---------|--------|
-| **Layout** | Sidebar + Contenido + Panel | Single Column |
-| **Nav** | Sidebar + Header | Bottom Tabs + Header |
-| **Información** | Multi-panel, densa | Secuencial, profunda |
-| **Ancho Pantalla** | ≥768px | <768px |
-| **Modales** | Ancho fijo (80vw) | Full-screen |
-| **Tablas** | Múltiples columnas | Cards o tabs |
-| **Interacción** | Click + Keyboard | Touch + Swipe |
-| **Animaciones** | Complejas | Simples |
-
----
-
-## 📜 Sistema de Historia
-
-La sección de Historia es un módulo completo e independiente organizado como su propio feature (`src/features/history/`), con sub-páginas, navegación interna, hooks dedicados y capas de servicio propias.
+GlobalAlbums es el sistema de colección de figuritas integrado en GlobalScore. Convierte cada predicción exacta en una recompensa tangible — un sobre con 4 cartas coleccionables extraídas directamente del módulo de Historia.
 
 ### 🗂️ Estructura del Feature
 
 ```
-src/features/history/
+src/features/albums/
 ├── index.js
 ├── components/
-│   ├── HistoricalCompetitionsPage.jsx
-│   ├── HistoricalEventsPage.jsx
-│   ├── HistoricalTeamsPage.jsx
-│   ├── HistoryMenuDesktop.jsx        ⭐ NUEVO
-│   ├── HistoryRightPanel.jsx
-│   ├── HistorySectionNav.jsx
-│   ├── HistoryWelcomeScreen.jsx      ⭐ NUEVO
-│   ├── EventsRightPanel.jsx
-│   ├── TeamsRightPanel.jsx
+│   ├── AlbumBookEntry.jsx         ← Botón flotante libro en Dashboard
+│   ├── AlbumCard.jsx              ← Carta individual con foil y rareza
+│   ├── AlbumProgressBar.jsx       ← Barra progreso hacia siguiente sobre
+│   ├── AlbumsSectionNav.jsx       ← Navegación entre las 3 secciones
+│   ├── CultAlbumsSection.jsx      ← Álbumes temáticos (Equipos/Copas/Eventos)
+│   ├── LegendaryAlbumsSection.jsx ← Álbumes legendarios LEG I→V progresivos
+│   ├── PackOpeningModal.jsx       ← Modal apertura de sobre con animaciones
+│   ├── StarCollectionSection.jsx  ← Álbumes por nivel de rareza de jugadores
 │   └── mobile/
-│       ├── HistoricalCompetitionsMobile.jsx
-│       ├── HistoricalEventsMobile.jsx
-│       ├── HistoricalTeamsMobile.jsx
-│       ├── HistoryMenuMobile.jsx     ⭐ NUEVO
-│       ├── KnockoutBracketMobile.jsx ⭐ NUEVO
-│       └── SectionHeaderMobile.jsx  ⭐ NUEVO
+│       └── AlbumsPageMobile.jsx   ← Vista mobile completa
 ├── hooks/
-│   ├── useHistoricalCompetitions.js
-│   ├── useHistoricalEvents.js
-│   ├── useHistoricalPlayers.js
-│   └── useHistoricalTeams.js
+│   ├── useAlbumCards.js
+│   ├── useAlbumCollection.js
+│   ├── useAlbumDefinitions.js
+│   ├── useAlbumPacks.js
+│   ├── useAlbumProgress.js
+│   └── usePackOpening.js
+├── motion/
+│   └── variants.js                ← Variantes Framer Motion del feature
 ├── page/
-│   ├── HistoryPage.jsx
-│   └── HistoryPage.css
+│   ├── AlbumsPage.jsx
+│   └── AlbumsPage.css
 ├── services/
-│   └── history.service.js           ⭐ NUEVO
+│   └── albums.service.js          ← Lógica de drop rates, apertura, progreso
 ├── styles/
-│   ├── ActiveBadge.css              ⭐ NUEVO
-│   ├── EventsRightPanel.css
-│   ├── HistoricalCompetitionsPage.css
-│   ├── HistoricalEventsPage.css
-│   ├── HistoricalTeamsPage.css
-│   ├── HistoryMenuDesktop.css       ⭐ NUEVO
-│   ├── HistoryRightPanel.css
-│   ├── HistorySectionNav.css
-│   ├── HistoryWelcomeScreen.css     ⭐ NUEVO
-│   ├── TeamsRightPanel.css
+│   ├── AlbumBookEntry.css
+│   ├── AlbumCard.css
+│   ├── AlbumProgressBar.css
+│   ├── AlbumsSectionNav.css
+│   ├── CultAlbumsSection.css
+│   ├── LegendaryAlbumsSection.css
+│   ├── PackOpeningModal.css
+│   ├── StarCollectionSection.css
 │   └── mobile/
-│       ├── HistoricalCompetitionsPageMobile.css
-│       ├── HistoricalTeamsMobile.css
-│       ├── HistoryMenuMobile.css    ⭐ NUEVO
-│       ├── HistoryPageMobile.css
-│       ├── KnockoutBracketMobile.css ⭐ NUEVO
-│       └── SectionHeaderMobile.css  ⭐ NUEVO
+│       ├── AlbumProgressBar.mobile.css
+│       ├── AlbumsPageMobile.css
+│       ├── AlbumsSectionNav.mobile.css
+│       ├── CultAlbumsSection.mobile.css
+│       ├── LegendaryAlbumsSection.mobile.css
+│       ├── PackOpeningModal.mobile.css
+│       └── StarCollectionSection.mobile.css
 └── types/
-    └── history.types.ts             ⭐ NUEVO
+    └── albums.types.ts
 ```
 
-### 📋 Sub-páginas de Historia
+### 📋 Las Tres Secciones de Álbumes
 
-**🏆 Competiciones Históricas** — registro completo de ligas, torneos y premios finalizados con campeón, goleador, asistidor, MVP, fechas y resultados de predicciones de usuarios.
+**👑 Legendarios (LEG I → LEG V)** — 5 álbumes progresivos desbloqueables en cadena. Cada álbum requiere 30 jugadores únicos con requisitos crecientes de rareza. Solo se desbloquea el siguiente al completar el anterior. El álbum final (LEG V) exige 5 cartas GOAT — el reto más difícil del sistema.
 
-**👥 Equipos Históricos** — galería y estadísticas de equipos participantes con logos, filtros por liga/región y panel lateral de detalle.
+| Álbum | Requisito clave | Rareza |
+|---|---|---|
+| LEG I — Foundations | 5× ⭐⭐⭐⭐ | FUNDACIÓN |
+| LEG II — Rising Legends | 5× ⭐⭐⭐ + 5× ⭐⭐⭐⭐ | LEYENDA+ |
+| LEG III — Historical Depth | 5× ⭐⭐ + 5× ⭐⭐⭐ + 5× ⭐⭐⭐⭐ | ÉLITE |
+| LEG IV — Elite Construction | anterior + 1× ⭐⭐⭐⭐⭐ | GOAT |
+| LEG V — The Immortals | anterior + 5× ⭐⭐⭐⭐⭐ | INMORTAL |
 
-**📅 Eventos Históricos** — cronología de momentos y eventos significativos de la plataforma con filtros por fecha y categoría.
+**⭐ Estrellas (EST I → GOAT)** — 5 álbumes independientes, uno por cada nivel de rareza de jugadores. Sin requisitos de desbloqueo — cualquier carta del nivel correspondiente contribuye directamente.
 
-### 🧭 Navegación Interna
+**📒 Culto (Equipos / Copas / Eventos)** — 3 álbumes que recogen los elementos no-jugadores del sistema: equipos históricos, competiciones y eventos. Se completan automáticamente a medida que se consiguen cartas de Historia.
 
-```
-┌──────────────────────────────────────────────────────┐
-│   📜 HISTORIA                                        │
-│   [🏆 Competiciones] [👥 Equipos] [📅 Eventos]      │
-├──────────────────────────────────────────────────────┤
-│                                                      │
-│         Contenido de la sub-sección activa           │
-│                                                      │
-└──────────────────────────────────────────────────────┘
-```
+### ⚡ Mecánica de Boost
+
+Cada 10 sobres abiertos se activa un **Boost** de 3 sobres. Durante el boost, las probabilidades de rareza alta aumentan significativamente:
+
+| Rareza | Base | Boost activo |
+|---|---|---|
+| ⭐ (1 estrella) | 55% | 40.3% |
+| ⭐⭐ (2 estrellas) | 25% | 25% |
+| ⭐⭐⭐ (3 estrellas) | 12% | 19% |
+| ⭐⭐⭐⭐ (4 estrellas) | 7.5% | 14.5% |
+| ⭐⭐⭐⭐⭐ GOAT | 0.5% | 1.2% |
+
+### 🎨 Sistema de Marcos
+
+Las copias múltiples de una misma carta mejoran su marco visual:
+
+| Copias | Marco |
+|---|---|
+| 1-2 | Normal |
+| 3-4 | Plata |
+| 5-9 | Oro |
+| 10+ | Legendario (animación pulsante) |
 
 ### 🗃️ Flujo de Datos
 
 ```
 Supabase (PostgreSQL)
-    └── Tablas históricas (competitions, teams, events, players)
-          └── history.service.js  (capa de acceso a datos)
-                └── hooks/* (fetch + filtrado + estado)
-                      └── Componentes (render + UI)
-                            └── HistorySectionNav (navegación entre secciones)
+    └── Tablas de álbumes (album_cards, album_packs, album_collection, album_progress)
+          └── albums.service.js  (drop rates, apertura de sobre, sync de progreso)
+                └── hooks/* (fetch + estado + refresh)
+                      └── Componentes (render + animaciones)
+                            └── AlbumBookEntry (entrada desde Dashboard)
 ```
+
+### 🔗 Integración con el Dashboard
+
+El feature se integra en el Dashboard mediante `AlbumBookEntry.jsx` — un libro SVG flotante en la esquina superior del panel de partidos (desktop) y un botón en el header mobile. Muestra un badge rojo cuando hay sobres disponibles. En el tab de Álbumes del `MobileDashboard`, hay un panel resumen con: barra de progreso, contador de sobres, cartas totales, álbumes legendarios completados y GOATs conseguidos.
 
 ---
 
@@ -532,7 +523,7 @@ Admin Dashboard (Responsive: Desktop + Mobile)
 - Recuperación de contraseña (`ForgotPasswordPage`)
 - Reset de contraseña via token (`ResetPasswordPage`)
 - Rutas protegidas con `ProtectedRoute` y `RequireAuth`
-- Servicios de auth encapsulados en `features/auth/services/auth.service.js` ⭐ NUEVO
+- Servicios de auth encapsulados en `features/auth/services/auth.service.js`
 
 ---
 
@@ -549,7 +540,8 @@ Admin Dashboard (Responsive: Desktop + Mobile)
   "styling": "Tailwind CSS + Custom CSS",
   "stateManagement": "React Context API + Custom Hooks",
   "responsiveness": "CSS Media Queries + useMediaQuery Hook",
-  "architecture": "Feature-Based (Domain-Driven)"
+  "architecture": "Feature-Based (Domain-Driven)",
+  "animations": "Framer Motion (albums feature)"
 }
 ```
 
@@ -562,7 +554,8 @@ Admin Dashboard (Responsive: Desktop + Mobile)
   "authentication": "Supabase Auth",
   "storage": "Supabase Storage (Logos, Avatares)",
   "security": "Row Level Security (RLS)",
-  "edgeFunctions": "Deno (Push Notifications)"
+  "edgeFunctions": "Deno (Push Notifications)",
+  "triggers": "PostgreSQL Triggers (album_cards auto-sync)"
 }
 ```
 
@@ -618,14 +611,6 @@ Para push notifications, genera tus claves VAPID:
 node scripts/generate-vapid-keys.cjs
 ```
 
-Luego configura en Supabase Edge Functions:
-
-```env
-VAPID_PUBLIC_KEY=tu_vapid_public_key
-VAPID_PRIVATE_KEY=tu_vapid_private_key
-VAPID_EMAIL=mailto:tu@email.com
-```
-
 ### Paso 4: Ejecutar el proyecto
 
 ```bash
@@ -653,28 +638,30 @@ Ejecuta el script SQL en tu proyecto de Supabase (ver `schema.sql` en el reposit
 team-logos/     league-logos/     award-logos/     avatars/     banners/
 ```
 
+### Schema de GlobalAlbums
+
+Las tablas necesarias para GlobalAlbums están en el mismo `schema.sql`:
+
+```
+album_cards         ← Cartas del sistema (sync automático con Historia via triggers)
+album_packs         ← Sobres disponibles y estado de boost por usuario
+album_collection    ← Cartas obtenidas por cada usuario con copias y frame_level
+album_definitions   ← Definición de los 13 álbumes (legendary/stars/cult)
+album_progress      ← Progreso de cada usuario en cada álbum
+album_pack_history  ← Historial de sobres abiertos
+```
+
 ### Edge Function de Push Notifications
 
 ```bash
 supabase functions deploy send-match-notification
 ```
 
-### GitHub Actions (reset semanal)
-
-Añade en GitHub → Settings → Secrets:
-
-```
-SUPABASE_URL=tu_supabase_url
-SUPABASE_SERVICE_KEY=tu_service_role_key
-```
-
-El workflow `.github/workflows/weekly-reset.yml` ejecuta el reset cada lunes a las 00:00 UTC.
-
 ---
 
 ## 🏗️ Arquitectura Feature-Based
 
-En **v1.4**, GlobalScore migró de una arquitectura organizada por tipo de archivo (`components/`, `hooks/`, `styles/`) a una **arquitectura feature-based** donde cada dominio de la aplicación es completamente autónomo.
+GlobalScore utiliza una **arquitectura feature-based** donde cada dominio de la aplicación es completamente autónomo.
 
 ### Principio General
 
@@ -692,18 +679,12 @@ src/features/
     └── types/            ← TypeScript types (opcional)
 ```
 
-### Beneficios
-
-- **Cohesión**: todo lo de un feature vive junto; un solo lugar para buscar
-- **Escalabilidad**: añadir un feature nuevo no toca otros módulos
-- **Mantenibilidad**: borrar un feature es borrar una carpeta
-- **Onboarding**: un desarrollador nuevo entiende el dominio sin rastrear carpetas globales
-
 ### Features Actuales
 
 | Feature | Responsabilidad |
 |---------|----------------|
 | `admin` | Panel de administración completo |
+| `albums` | Sistema de figuritas GlobalAlbums ⭐ NUEVO |
 | `auth` | Login, registro, rutas protegidas |
 | `dashboard` | Feed de partidos, ligas y premios |
 | `history` | Módulo de historia: competiciones, equipos, eventos |
@@ -722,23 +703,11 @@ src/features/
 globalscore/
 │
 ├── public/
-│   ├── .well-known/assetlinks.json   # Digital Asset Links (TWA/Android)
-│   ├── manifest.json                 # Web App Manifest (PWA)
-│   ├── sw.js                         # Service Worker
-│   ├── offline.html                  # Página offline
-│   └── pushNotifications.js          # Lógica de suscripción push
-│
-├── app/                              # Proyecto Android nativo (TWA)
-│   └── src/main/
-│       ├── AndroidManifest.xml
-│       ├── java/.../twa/
-│       │   ├── Application.java
-│       │   ├── DelegationService.java
-│       │   └── LauncherActivity.java
-│       └── res/                      # Recursos Android
-│
-├── scripts/
-│   └── generate-vapid-keys.cjs
+│   ├── .well-known/assetlinks.json
+│   ├── manifest.json
+│   ├── sw.js
+│   ├── offline.html
+│   └── pushNotifications.js
 │
 ├── src/
 │   ├── App.jsx
@@ -746,208 +715,79 @@ globalscore/
 │   ├── context/
 │   │   └── ThemeContext.jsx
 │   │
-│   └── features/                     ⭐ NUEVA ESTRUCTURA
-│       │
+│   └── features/
 │       ├── admin/
-│       │   ├── index.js
-│       │   ├── components/
-│       │   │   ├── AdminAchievementsList.jsx
-│       │   │   ├── AdminAchievementsModal.jsx
-│       │   │   ├── AdminAssignBannerModal.jsx
-│       │   │   ├── AdminAwardModal.jsx / AdminAwardsList.jsx
-│       │   │   ├── AdminBannerModal.jsx / AdminBannersList.jsx
-│       │   │   ├── AdminControls.jsx
-│       │   │   ├── AdminCrownModal.jsx / AdminCrownsSection.jsx
-│       │   │   ├── AdminDiagnosticPanel.jsx
-│       │   │   ├── AdminLeagueModal.jsx / AdminLeaguesList.jsx
-│       │   │   ├── AdminMatchesList.jsx
-│       │   │   ├── AdminModal.jsx / AdminModalsContainer.jsx
-│       │   │   ├── AdminNavigationTabs.jsx / AdminRightPanel.jsx
-│       │   │   ├── AdminStatsOverview.jsx
-│       │   │   ├── AdminTitlesList.jsx / AdminTitlesModal.jsx
-│       │   │   ├── DataImporter.jsx
-│       │   │   ├── FinishAwardModal.jsx / FinishLeagueModal.jsx / FinishMatchModal.jsx
-│       │   │   └── mobile/
-│       │   │       └── MobileAdmin.jsx
-│       │   ├── hooks/
-│       │   │   ├── useAdminAchievements.js / useAdminAwards.js
-│       │   │   ├── useAdminBanners.js / useAdminCrowns.js
-│       │   │   ├── useAdminData.js / useAdminHistorical.js
-│       │   │   ├── useAdminLeagues.js / useAdminMatches.js
-│       │   ├── page/
-│       │   │   ├── AdminPage.jsx / AdminPage.css
-│       │   ├── services/
-│       │   │   └── admin.service.js
-│       │   ├── styles/
-│       │   │   ├── AdminBanners.css / AdminCrownModal.css
-│       │   │   ├── AdminModal.css / AdminPanel.css
-│       │   │   ├── AdminRightPanel.css / MobileAdmin.css
-│       │   └── types/
-│       │       └── admin.types.ts
-│       │
+│       ├── albums/           ← Feature GlobalAlbums ⭐ NUEVO
+│       │   ├── components/   (AlbumBookEntry, AlbumCard, PackOpeningModal...)
+│       │   ├── hooks/        (useAlbumPacks, useAlbumCollection, usePackOpening...)
+│       │   ├── motion/       (variants.js — Framer Motion)
+│       │   ├── page/         (AlbumsPage.jsx)
+│       │   ├── services/     (albums.service.js — drop rates, apertura, sync)
+│       │   ├── styles/       (CSS desktop + mobile/)
+│       │   └── types/        (albums.types.ts)
 │       ├── auth/
-│       │   ├── components/
-│       │   │   ├── ProtectedRoute.jsx / RequireAuth.jsx
-│       │   ├── page/
-│       │   │   ├── LoginPage.jsx / RegisterPage.jsx
-│       │   │   ├── ForgotPasswordPage.jsx / ResetPasswordPage.jsx
-│       │   │   └── Auth.css
-│       │   └── services/
-│       │       └── auth.service.js
-│       │
 │       ├── dashboard/
-│       │   ├── components/
-│       │   │   ├── AwardCard.jsx / LeagueCard.jsx / MatchCard.jsx
-│       │   │   ├── RightPanel.jsx
-│       │   │   └── mobile/
-│       │   │       ├── MobileDashboard.jsx / MobileCardsGlobal.jsx
-│       │   ├── hooks/
-│       │   │   ├── useAwards.js / useLeagues.js / useMatches.js
-│       │   ├── page/
-│       │   │   ├── DashboardPage.jsx / DashboardPage.css
-│       │   ├── services/
-│       │   │   └── dashboard.service.js
-│       │   └── styles/
-│       │       ├── AwardCard.css / LeagueCard.css / MatchCard.css
-│       │       ├── MobileCardsGlobal.css / RightPanel.css
-│       │
-│       ├── history/                  ← (ver sección Historia arriba)
-│       │
+│       ├── history/
 │       ├── notes/
-│       │   ├── components/
-│       │   │   ├── RightNotesPanel.jsx
-│       │   │   └── mobile/MobileNotes.jsx
-│       │   ├── hooks/useNotes.js
-│       │   ├── page/NotesPage.jsx / NotesPage.css
-│       │   ├── services/notes.service.js
-│       │   └── styles/MobileNotes.css / RightNotesPanel.css
-│       │
 │       ├── notifications/
-│       │   ├── components/
-│       │   │   ├── PushNotificationsToggle.jsx
-│       │   │   └── mobile/MobileNotifications.jsx
-│       │   ├── hooks/usePushNotifications.js
-│       │   ├── page/NotificationsPage.jsx / NotificationsPage.css
-│       │   ├── services/notifications.service.js
-│       │   └── styles/...
-│       │
 │       ├── profile/
-│       │   ├── components/
-│       │   │   ├── AchievementsTab.jsx / AvatarUpload.jsx
-│       │   │   ├── EditTab.jsx / HistoryTab.jsx
-│       │   │   ├── MonthlyChampionshipsTab.jsx / OverviewTab.jsx
-│       │   │   ├── ProfileHero.jsx / ProfileTabs.jsx
-│       │   │   ├── UserProfilePanel.jsx
-│       │   │   └── mobile/MobileUserProfile.jsx
-│       │   ├── hooks/
-│       │   │   ├── useAchievements.js / useMonthlyChampionships.js
-│       │   │   ├── usePredictionHistory.js / useProfileData.js
-│       │   │   ├── useStreaks.js / useUserRanking.js
-│       │   ├── page/ProfileSettingsPage.jsx
-│       │   └── styles/...
-│       │
 │       ├── ranking/
-│       │   ├── components/
-│       │   │   ├── HallOfFame.jsx / HallOfFamePanel.jsx
-│       │   │   ├── RankingRightPanel.jsx
-│       │   │   └── mobile/MobileRanking.jsx
-│       │   ├── page/RankingPage.jsx
-│       │   └── styles/...
-│       │
 │       ├── stats/
-│       │   ├── components/
-│       │   │   ├── StatsRightPanel.jsx
-│       │   │   └── mobile/MobileStats.jsx
-│       │   ├── page/StatsPage.jsx
-│       │   └── styles/...
-│       │
 │       └── worldcup/
-│           ├── components/
-│           │   ├── KnockoutMatchCard.jsx / KnockoutSection.jsx
-│           │   ├── RightPanelWorld.jsx / WorldCupAwardCard.jsx
-│           │   ├── WorldCupNavigationTabs.jsx
-│           │   └── mobile/MobileWorldCup.jsx
-│           ├── hooks/useKnockoutBracket.js / useWorldCup.js
-│           ├── page/WorldCupPage.jsx
-│           └── styles/...
 │
 ├── supabase/
-│   └── functions/send-match-notification/  # Edge Function (Deno)
+│   └── functions/send-match-notification/
 │
 ├── .github/
 │   └── workflows/weekly-reset.yml
 │
-├── twa-manifest.json
 ├── schema.sql
+├── twa-manifest.json
 ├── render.yaml
-├── tailwind.config.cjs
-├── postcss.config.cjs
 └── vite.config.js
 ```
 
 ---
 
-## ✨ Novedades en v1.4
+## ✨ Novedades en v1.5
 
-### 🏗️ Migración a Arquitectura Feature-Based (Cambio Principal)
+### 📒 GlobalAlbums — Feature Principal
 
-La reestructuración más grande del proyecto: `src/components/`, `src/hooks/`, y `src/styles/` fueron reemplazados por `src/features/`, donde cada dominio es completamente autónomo.
+El feature más ambicioso de GlobalScore: un sistema completo de figuritas coleccionables que convierte las predicciones exactas en recompensas visuales y gamificadas.
 
-**Antes (por tipo):**
-```
-src/
-├── components/ComAdmin/, ComHistory/, ComMobile/, ComPanels/...
-├── hooks/HooksAdmin/, HooksHistory/, HooksProfile/...
-└── styles/StylesAdmin/, StylesHistory/, StylesMobile/...
-```
+**Componentes nuevos:**
+- `AlbumBookEntry.jsx` — Libro SVG flotante como punto de entrada desde Dashboard
+- `AlbumCard.jsx` — Carta con sistema de rareza, foil shimmer y marcos dinámicos
+- `AlbumProgressBar.jsx` — Barra hacia el siguiente sobre con indicador de boost
+- `AlbumsSectionNav.jsx` — Navegación entre Legendarios / Estrellas / Culto
+- `LegendaryAlbumsSection.jsx` — 5 álbumes legendarios progresivos con sistema de slots por rareza
+- `StarCollectionSection.jsx` — 5 álbumes por nivel de significancia de jugadores
+- `CultAlbumsSection.jsx` — 3 álbumes temáticos de Historia (Equipos, Copas, Eventos)
+- `PackOpeningModal.jsx` — Modal completo de apertura con animación de sobre y flip de cartas
+- `AlbumsPageMobile.jsx` — Vista mobile con header compacto, section nav y scroll optimizado
 
-**Ahora (por feature/dominio):**
-```
-src/features/
-├── admin/    (components + hooks + page + services + styles + types)
-├── auth/     (components + page + services)
-├── dashboard/(components + hooks + page + services + styles)
-├── history/  (components + hooks + page + services + styles + types)
-├── notes/    (components + hooks + page + services + styles)
-└── ...
-```
+**Lógica nueva:**
+- `albums.service.js` — Drop rates diferenciados, boost automático, sync de progreso, apertura de sobre
+- `useAlbumPacks.js` — Estado de sobres y barra de progreso
+- `useAlbumCollection.js` — Colección del usuario con helpers por tipo y nivel
+- `usePackOpening.js` — Máquina de estados para la animación de apertura
+- `useAlbumProgress.js` — Progreso por álbum con conteo de legendarios completados
+- `computeAndSyncAlbumProgress()` — Algoritmo que asigna slots progresivos sin reutilizar cartas entre álbumes
 
-Cada feature tiene una capa de **servicio dedicada** (`*.service.js`) que encapsula el acceso a Supabase, separando la lógica de datos de la UI.
+**Integración en Dashboard:**
+- `AlbumBookEntry` importado en `DashboardPage.jsx` (desktop, libro flotante)
+- Panel "Álbumes" en `MobileDashboard.jsx` como tercer tab de la sección inferior
+- `AlbumsPanel` muestra barra de progreso, grid 2×2 de stats y CTA de acceso rápido
 
-### 📜 Mejoras al Módulo de Historia
+### 🗄️ Base de Datos
 
-- **`HistoryMenuDesktop.jsx`** — Nuevo menú de navegación dedicado para desktop
-- **`HistoryMenuMobile.jsx`** — Menú de navegación mobile específico para historia
-- **`HistoryWelcomeScreen.jsx`** — Pantalla de bienvenida al módulo histórico
-- **`KnockoutBracketMobile.jsx`** — Vista de bracket de eliminatorias adaptada a mobile
-- **`SectionHeaderMobile.jsx`** — Componente de header de sección reutilizable en mobile
-- **`history.service.js`** — Capa de servicio dedicada para todas las consultas históricas
-- **`history.types.ts`** — Tipos TypeScript del dominio histórico
-- **`ActiveBadge.css`** — Estilos para badge de sección activa en navegación
-
-### 🔧 Capas de Servicio Nuevas
-
-Cada feature ahora cuenta con un archivo `*.service.js` que centraliza el acceso a datos:
-
-- `admin.service.js`
-- `auth.service.js`
-- `dashboard.service.js`
-- `history.service.js`
-- `notes.service.js`
-- `notifications.service.js`
-
-### 📦 TypeScript Types
-
-Nuevos archivos de tipos para features con modelos de datos complejos:
-
-- `admin.types.ts`
-- `history.types.ts`
+6 tablas nuevas en PostgreSQL con RLS completo y triggers automáticos para sincronización de cartas con Historia al publicar jugadores, equipos, competiciones o eventos.
 
 ---
 
 ## 🗺️ Roadmap
 
-### ✅ Completado (v1.0 — v1.4)
+### ✅ Completado (v1.0 — v1.5)
 
 - [x] Sistema de autenticación completo
 - [x] Predicciones de partidos con puntos
@@ -959,7 +799,7 @@ Nuevos archivos de tipos para features con modelos de datos complejos:
 - [x] Campeonatos mensuales con historial
 - [x] Panel de administración completo
 - [x] Mundial 2026 (Fase de grupos + Eliminatorias)
-- [x] **Responsive design + vistas móviles dedicadas** ⭐
+- [x] Responsive design + vistas móviles dedicadas
 - [x] Push Notifications vía VAPID/Web Push
 - [x] Soporte offline con Service Worker
 - [x] PWA completa
@@ -968,20 +808,19 @@ Nuevos archivos de tipos para features con modelos de datos complejos:
 - [x] Sistema de Notas Personales
 - [x] StyleSwitcher en Mobile
 - [x] Módulo de Historia completo
-- [x] Sub-navegación interna de Historia
-- [x] DataImporter para datos históricos
-- [x] Paneles laterales especializados
-- [x] **Migración a arquitectura feature-based** ⭐ NUEVO
-- [x] **Capas de servicio por dominio** ⭐ NUEVO
-- [x] **TypeScript types por feature** ⭐ NUEVO
-- [x] **Bracket de eliminatorias histórico en mobile** ⭐ NUEVO
-- [x] **Welcome screen del módulo de Historia** ⭐ NUEVO
+- [x] Migración a arquitectura feature-based
+- [x] Capas de servicio por dominio
+- [x] **GlobalAlbums — sistema completo de figuritas coleccionables** ⭐ NUEVO
+- [x] **13 álbumes en 3 categorías (Legendarios, Estrellas, Culto)** ⭐ NUEVO
+- [x] **Pack Opening Modal con animaciones Framer Motion** ⭐ NUEVO
+- [x] **Sistema de boost cada 10 sobres** ⭐ NUEVO
+- [x] **Integración Albums en Dashboard desktop y mobile** ⭐ NUEVO
 
-### 🚧 En Progreso (v1.5)
+### 🚧 En Progreso (v1.6)
 
 - [ ] **Google Play Store**: Publicación oficial
+- [ ] **Indicador de álbumes en perfil público**
 - [ ] **Chat Global**: Comunidad integrada
-- [ ] **Ligas Privadas**: Competencias entre grupos cerrados
 
 ### 📋 Planeado (v2.0)
 
@@ -992,16 +831,9 @@ Nuevos archivos de tipos para features con modelos de datos complejos:
 - [ ] **Predicciones en Vivo**: Durante el partido
 - [ ] **Social Sharing**: Compartir predicciones en redes
 
-### 🔮 Futuro (v3.0)
-
-- [ ] **AI Predictions**: Asistente con IA
-- [ ] **Analytics Avanzados**: ML para recomendaciones
-
 ---
 
 ## 🤝 Contribuir
-
-¡Las contribuciones son bienvenidas! Si quieres mejorar GlobalScore:
 
 1. **Fork** el proyecto
 2. Crea una **rama** para tu feature (`git checkout -b feature/AmazingFeature`)
@@ -1021,15 +853,6 @@ Nuevos archivos de tipos para features con modelos de datos complejos:
 - ✅ CSS classes en **kebab-case**
 - ✅ Commits siguiendo [Conventional Commits](https://www.conventionalcommits.org/)
 - ✅ Responsive: Siempre considerar Desktop Y Mobile
-
-### Reportar Bugs
-
-Usa el [issue tracker](https://github.com/jsebasvgg7/GlobalScore/issues) con:
-- Descripción clara del bug
-- Pasos para reproducirlo
-- Comportamiento esperado vs actual
-- Screenshots si es posible
-- Device info (Desktop/Mobile, navegador, tamaño pantalla)
 
 ---
 
@@ -1057,6 +880,7 @@ Usa el [issue tracker](https://github.com/jsebasvgg7/GlobalScore/issues) con:
 - [Vite](https://vitejs.dev/) — Build tool
 - [Tailwind CSS](https://tailwindcss.com/) — Utilidades CSS
 - [Lucide Icons](https://lucide.dev/) — Iconografía
+- [Framer Motion](https://www.framer.com/motion/) — Animaciones (GlobalAlbums)
 - [Render](https://render.com/) — Hosting
 - [Bubblewrap](https://github.com/GoogleChromeLabs/bubblewrap) — TWA para Android
 

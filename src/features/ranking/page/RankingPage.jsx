@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Target, TrendingUp, Calendar, Globe, Zap,
-  BarChart3, Crown, Users
+  BarChart3, Crown, Users, BookOpen
 } from 'lucide-react';
 import { supabase } from '@/shared/services/supabase/client';
 import {
@@ -24,6 +24,7 @@ export default function RankingPage({ currentUser }) {
   const [sortBy, setSortBy] = useState('points');
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [champions, setChampions] = useState([]);
+  const [albumProgress, setAlbumProgress] = useState({});
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -37,6 +38,7 @@ export default function RankingPage({ currentUser }) {
     checkAndResetMonthly();
     loadUsers();
     loadTopChampions();
+    loadAlbumProgress();
   }, []);
 
   const checkAndResetMonthly = async () => {
@@ -98,6 +100,22 @@ export default function RankingPage({ currentUser }) {
       );
     } catch (err) { console.error(err); setChampions([]); }
   };
+  const loadAlbumProgress = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('album_progress')
+      .select('user_id, album_id, is_completed')
+      .in('album_id', ['legendary_1', 'legendary_2', 'legendary_3', 'legendary_4', 'legendary_5'])
+      .eq('is_completed', true);
+    if (error) throw error;
+    const map = {};
+    (data || []).forEach(row => {
+      if (!map[row.user_id]) map[row.user_id] = 0;
+      map[row.user_id]++;
+    });
+    setAlbumProgress(map);
+  } catch (err) { console.error(err); }
+};
 
   const getRankingData = () => {
     const monthly = rankingType === 'monthly';
@@ -151,6 +169,7 @@ export default function RankingPage({ currentUser }) {
         rankingType={rankingType}
         onChangeType={setRankingType}
         champions={champions}
+        albumProgress={albumProgress}
       />
 
       {/* ══════════════════════════════════════
@@ -234,6 +253,7 @@ export default function RankingPage({ currentUser }) {
                 <span className="lbc-num lbc-hide-sm">Pred.</span>
                 <span className="lbc-num">Precisión</span>
                 <span className="lbc-num">Puntos</span>
+                <span className="lbc-num lbc-albums">Álbumes</span>
               </div>
 
               {/* TBODY */}
@@ -272,6 +292,19 @@ export default function RankingPage({ currentUser }) {
                       <span className="lbc-num lb-acc">{accuracy}%</span>
                       <span className="lbc-num lb-pts">
                         {user.rankPoints}<span className="lb-pts-lbl">pts</span>
+                      </span>
+                      <span className="lbc-num lbc-albums">
+                        {(() => {
+                          const legCount = albumProgress[user.id] || 0;
+                          const isImmortal = legCount === 5;
+                          return (
+                            <span className={`lb-album-badge${legCount > 0 ? ' lb-album-badge--active' : ''}${isImmortal ? ' lb-album-badge--immortal' : ''}`}>
+                              <BookOpen size={11} />
+                              <span>{legCount}/5</span>
+                              {isImmortal && <Crown size={9} className="lb-album-badge-crown" />}
+                            </span>
+                          );
+                        })()}
                       </span>
                     </div>
                   );
