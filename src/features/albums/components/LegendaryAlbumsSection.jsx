@@ -501,12 +501,6 @@ function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }
             className={`las2-sticker las2-sticker--empty${isReqSlot ? ' las2-sticker--req-empty' : ''}`}
             style={{ '--acc': accent }}
         >
-            {isReqSlot && (
-                <div className="las2-req-badge">
-                    <span className="las2-req-badge-stars">{reqLabel}</span>
-                    <span className="las2-req-badge-label">REQUERIDO</span>
-                </div>
-            )}
             <div className="las2-sticker-header">
                 <span className="las2-sticker-num">{num}</span>
             </div>
@@ -746,7 +740,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, prevUsed
                     </div>
 
                     <div className="las2-footer-spacer" />
-                    <button className="las2-footer-export-btn">Salir del Álbum</button>
                     <button className="las2-footer-arrow-btn" onClick={onClose}>
                         <ChevronRight size={16} />
                     </button>
