@@ -290,7 +290,7 @@
 
 .cas2-corner--tl {
     top: 0;
-    left: 22px;
+    left: 0;
     clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
@@ -302,7 +302,7 @@
 
 .cas2-corner--bl {
     bottom: 0;
-    left: 22px;
+    left: 0;
     clip-path: polygon(0 0, 0 100%, 100% 100%);
 }
 
