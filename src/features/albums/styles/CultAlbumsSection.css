@@ -405,6 +405,10 @@
     justify-content: space-between;
 }
 
+.cas2-cover-footer {
+    margin-top: auto;
+}
+
 .cas2-cover-count {
     font-family: 'DM Mono', monospace;
     font-size: 6.5px;
@@ -1611,85 +1615,79 @@
 [data-theme="dark"] .ah-special-badge-text {
     color: #c084fc;
 }
-
 /* ══════════════════════════════════════════════════════════════
    ÁLBUM ESPECIAL — Estado bloqueado (usuario sin acceso)
-   Aplica la clase .cas2-book--special-locked al <button> del libro
-   cuando el usuario no es el special_owner
+   Clase .cas2-book--special-locked en el <button> del libro
 ══════════════════════════════════════════════════════════════ */
 
-/* ── Overlay de bloqueo sobre la portada ─────────────────────── */
 .cas2-book--special-locked {
     cursor: default;
     pointer-events: none;
-}
-
-.cas2-book--special-locked .cas2-cover::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 10;
-    background: rgba(5, 2, 15, 0.72);
-    backdrop-filter: blur(1.5px);
-    -webkit-backdrop-filter: blur(1.5px);
-}
-
-/* ── Icono de candado centrado ───────────────────────────────── */
-.cas2-book--special-locked .cas2-cover::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 11;
-    background:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='11' width='18' height='11' rx='2'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4'/%3E%3C/svg%3E")
-        center 40% / 28% no-repeat;
-    pointer-events: none;
-}
-
-/* ── Lomo también atenuado ───────────────────────────────────── */
-.cas2-book--special-locked .cas2-spine {
-    opacity: 0.45;
-    filter: saturate(0.3);
-}
-
-/* ── Texto "BLOQUEADO" debajo del candado ────────────────────── */
-.cas2-book--special-locked .cas2-cover-footer {
-    position: relative;
-    z-index: 12;
-    opacity: 0;
-}
-
-.cas2-book-wrap:has(.cas2-book--special-locked)::after {
-    content: 'BLOQUEADO';
-    position: absolute;
-    bottom: 34px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 12;
-    font-family: 'DM Mono', monospace;
-    font-size: 6.5px;
-    font-weight: 800;
-    letter-spacing: 0.28em;
-    color: rgba(168, 85, 247, 0.65);
-    pointer-events: none;
-    white-space: nowrap;
-}
-
-/* ── Páginas apiladas también atenuadas ──────────────────────── */
-.cas2-book-wrap:has(.cas2-book--special-locked) .cas2-page-leaf {
-    opacity: 0.2;
-}
-
-/* ── Sin hover lift cuando está bloqueado ────────────────────── */
-.cas2-book-wrap:has(.cas2-book--special-locked):hover {
-    transform: none;
-}
-
-/* ── Brillo púrpura sutil en el borde (indica que es especial) ── */
-.cas2-book--special-locked {
     box-shadow:
         4px 6px 0 rgba(0, 0, 0, 0.32),
         8px 14px 28px rgba(0, 0, 0, 0.22),
         0 0 0 1px rgba(168, 85, 247, 0.18),
         inset 1px 0 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+.cas2-book-wrap:has(.cas2-book--special-locked):hover {
+    transform: none;
+}
+
+.cas2-book-wrap:has(.cas2-book--special-locked) .cas2-page-leaf {
+    opacity: 0.18;
+}
+
+.cas2-book--special-locked .cas2-spine {
+    opacity: 0.4;
+    filter: saturate(0.25) brightness(0.7);
+}
+
+/* overlay oscuro — usa book-wrap::before para no pisar .cas2-cover::after */
+.cas2-book-wrap:has(.cas2-book--special-locked)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 6px;
+    bottom: 0;
+    z-index: 5;
+    background: rgba(4, 1, 14, 0.78);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 3px 4px 4px 3px;
+    pointer-events: none;
+}
+
+/* candado SVG — usa book-wrap::after */
+.cas2-book-wrap:has(.cas2-book--special-locked)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 6px;
+    bottom: 0;
+    z-index: 6;
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='11' width='18' height='11' rx='2'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4'/%3E%3C/svg%3E")
+        center 42% / 22% no-repeat;
+    pointer-events: none;
+    border-radius: 3px 4px 4px 3px;
+}
+
+/* etiqueta "BLOQUEADO" — span extra que añades en el JSX */
+.cas2-locked-label {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 7;
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    color: rgba(168, 85, 247, 0.7);
+    white-space: nowrap;
+    pointer-events: none;
+    text-transform: uppercase;
 }
