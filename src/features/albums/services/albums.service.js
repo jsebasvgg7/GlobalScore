@@ -20,10 +20,7 @@ const PLAYER_DROP_RATES_BOOST = [
 const LEG_REQUIREMENTS = {
     legendary_1: {
         slots: 30,
-        req: [
-            // { minStars, count }
-            { minStars: 4, count: 5 },
-        ],
+        req: [{ minStars: 4, count: 5 }],
     },
     legendary_2: {
         slots: 30,
@@ -60,7 +57,6 @@ const LEG_REQUIREMENTS = {
     },
 };
 
-// Orden progresivo de los álbumes legendarios
 const LEG_ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'legendary_4', 'legendary_5'];
 
 // ── Cartas ─────────────────────────────────────────────────────────────────
@@ -81,10 +77,59 @@ export async function getAlbumCardsByType(cardType) {
         .from('album_cards')
         .select('*')
         .eq('card_type', cardType)
-        .eq('is_active', true);
+        .eq('is_active', true)
+        // ── NUEVO: excluir cartas únicas del pool de drops ──────────────
+        .eq('drop_enabled', true);
 
     if (error) throw error;
     return data;
+}
+
+// ── NUEVO: obtener todas las cartas especiales (para el álbum Edición Única) ──
+// Todos los usuarios pueden ver qué cartas especiales existen.
+// El frontend decide si mostrar el slot lleno o con candado según si el
+// usuario tiene esa carta en su colección.
+export async function getSpecialCards() {
+    const { data, error } = await supabase
+        .from('album_cards')
+        .select('*')
+        .eq('is_special', true)
+        .eq('is_active', true)
+        .order('created_at', { ascending: true });
+
+    if (error) throw error;
+    return data ?? [];
+}
+
+// ── NUEVO: entregar carta única directamente a un usuario (uso desde Admin) ──
+// El trigger SQL ya lo hace automáticamente al publicar.
+// Esta función es el fallback manual para el Admin si necesita re-entregar.
+export async function deliverSpecialCard(cardId, userId) {
+    // Verificar que la carta existe y es especial
+    const { data: card, error: cardError } = await supabase
+        .from('album_cards')
+        .select('id, is_special, drop_enabled')
+        .eq('id', cardId)
+        .eq('is_special', true)
+        .single();
+
+    if (cardError || !card) throw new Error('Carta especial no encontrada');
+    if (card.drop_enabled) throw new Error('Esta carta tiene drop_enabled=true — no es una carta única');
+
+    const { error } = await supabase.from('album_collection').upsert(
+        {
+            user_id:           userId,
+            card_id:           cardId,
+            copies:            1,
+            frame_level:       'legendary',
+            first_obtained_at: new Date().toISOString(),
+            last_obtained_at:  new Date().toISOString(),
+        },
+        { onConflict: 'user_id,card_id' }
+    );
+
+    if (error) throw error;
+    return { success: true };
 }
 
 // ── Sobres ─────────────────────────────────────────────────────────────────
@@ -112,6 +157,8 @@ export async function initUserPacks(userId) {
 }
 
 // ── Apertura de sobre ──────────────────────────────────────────────────────
+// getAlbumCardsByType ya filtra drop_enabled = true, así que las cartas
+// especiales nunca pueden aparecer en sobres. No hay cambio adicional aquí.
 
 function rollPlayerByRarity(playerCards, boosted = false) {
     const rates = boosted ? PLAYER_DROP_RATES_BOOST : PLAYER_DROP_RATES_BASE;
@@ -143,6 +190,7 @@ export async function openPack(userId) {
         throw new Error('No hay sobres disponibles');
     }
 
+    // getAlbumCardsByType ya excluye drop_enabled = false (cartas únicas)
     const [players, teams, competitions, events] = await Promise.all([
         getAlbumCardsByType('player'),
         getAlbumCardsByType('team'),
@@ -151,25 +199,25 @@ export async function openPack(userId) {
     ]);
 
     const boosted = packs.boost_active === true;
-    const drawnPlayer = rollPlayerByRarity(players, boosted);
-    const drawnTeam = rollRandom(teams);
+    const drawnPlayer      = rollPlayerByRarity(players, boosted);
+    const drawnTeam        = rollRandom(teams);
     const drawnCompetition = rollRandom(competitions);
-    const drawnEvent = rollRandom(events);
+    const drawnEvent       = rollRandom(events);
     const drawn = [drawnPlayer, drawnTeam, drawnCompetition, drawnEvent].filter(Boolean);
 
     const newTotalOpened = packs.total_packs_opened + 1;
     const boostTriggered = packs.total_packs_opened > 0 && newTotalOpened % 10 === 0;
 
-    let newBoostActive = boosted;
+    let newBoostActive    = boosted;
     let newBoostRemaining = packs.boost_packs_remaining ?? 0;
 
     if (boostTriggered) {
-        newBoostActive = true;
+        newBoostActive    = true;
         newBoostRemaining = 3;
     } else if (boosted) {
         newBoostRemaining = newBoostRemaining - 1;
         if (newBoostRemaining <= 0) {
-            newBoostActive = false;
+            newBoostActive    = false;
             newBoostRemaining = 0;
         }
     }
@@ -177,12 +225,12 @@ export async function openPack(userId) {
     const { error: packError } = await supabase
         .from('album_packs')
         .update({
-            packs_available: packs.packs_available - 1,
+            packs_available:   packs.packs_available - 1,
             total_packs_opened: newTotalOpened,
             total_packs_earned: packs.total_packs_earned,
-            boost_active: newBoostActive,
+            boost_active:       newBoostActive,
             boost_packs_remaining: newBoostRemaining,
-            updated_at: new Date().toISOString(),
+            updated_at:         new Date().toISOString(),
         })
         .eq('user_id', userId);
 
@@ -193,21 +241,21 @@ export async function openPack(userId) {
     }
 
     const { error: historyError } = await supabase.from('album_pack_history').insert({
-        user_id: userId,
-        card_player_id: drawnPlayer?.id ?? null,
-        card_team_id: drawnTeam?.id ?? null,
+        user_id:            userId,
+        card_player_id:     drawnPlayer?.id      ?? null,
+        card_team_id:       drawnTeam?.id        ?? null,
         card_competition_id: drawnCompetition?.id ?? null,
-        card_event_id: drawnEvent?.id ?? null,
+        card_event_id:      drawnEvent?.id       ?? null,
         player_significance: drawnPlayer?.significance_level ?? null,
     });
 
     if (historyError) throw historyError;
 
     return {
-        player: drawnPlayer,
-        team: drawnTeam,
-        competition: drawnCompetition,
-        event: drawnEvent,
+        player:       drawnPlayer,
+        team:         drawnTeam,
+        competition:  drawnCompetition,
+        event:        drawnEvent,
         boosted,
         boostTriggered,
     };
@@ -237,14 +285,14 @@ export async function upsertCollectionCard(userId, cardId) {
         .maybeSingle();
 
     if (existing) {
-        const newCopies = existing.copies + 1;
+        const newCopies  = existing.copies + 1;
         const frameLevel = getFrameLevel(newCopies);
 
         const { error } = await supabase
             .from('album_collection')
             .update({
-                copies: newCopies,
-                frame_level: frameLevel,
+                copies:           newCopies,
+                frame_level:      frameLevel,
                 last_obtained_at: new Date().toISOString(),
             })
             .eq('id', existing.id);
@@ -254,9 +302,9 @@ export async function upsertCollectionCard(userId, cardId) {
     }
 
     const { error } = await supabase.from('album_collection').insert({
-        user_id: userId,
-        card_id: cardId,
-        copies: 1,
+        user_id:    userId,
+        card_id:    cardId,
+        copies:     1,
         frame_level: 'normal',
     });
 
@@ -266,8 +314,8 @@ export async function upsertCollectionCard(userId, cardId) {
 
 export function getFrameLevel(copies) {
     if (copies >= 10) return 'legendary';
-    if (copies >= 5) return 'gold';
-    if (copies >= 3) return 'silver';
+    if (copies >= 5)  return 'gold';
+    if (copies >= 3)  return 'silver';
     return 'normal';
 }
 
@@ -306,10 +354,9 @@ function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
         (a, b) => (b.card?.significance_level ?? 0) - (a.card?.significance_level ?? 0)
     );
 
-    const assignedIds = new Set();
-    let meetsAllReqs = true;
-
-    const reqsSorted = [...legDef.req].sort((a, b) => b.minStars - a.minStars);
+    const assignedIds  = new Set();
+    let meetsAllReqs   = true;
+    const reqsSorted   = [...legDef.req].sort((a, b) => b.minStars - a.minStars);
 
     for (const { minStars, count } of reqsSorted) {
         const candidates = sorted.filter(
@@ -325,14 +372,12 @@ function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
             filled++;
         }
 
-        if (filled < count) {
-            meetsAllReqs = false;
-        }
+        if (filled < count) meetsAllReqs = false;
     }
 
-    const reqTotal = legDef.req.reduce((s, r) => s + r.count, 0);
+    const reqTotal      = legDef.req.reduce((s, r) => s + r.count, 0);
     const generalNeeded = legDef.slots - reqTotal;
-    const remaining = sorted.filter((c) => !assignedIds.has(c.card_id ?? c.id));
+    const remaining     = sorted.filter((c) => !assignedIds.has(c.card_id ?? c.id));
 
     let generalFilled = 0;
     for (const c of remaining) {
@@ -342,25 +387,37 @@ function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
     }
 
     const uniquePlayers = assignedIds.size;
-    const meetsPlayers = uniquePlayers >= legDef.slots;
+    const meetsPlayers  = uniquePlayers >= legDef.slots;
 
     return {
-        usedIds: assignedIds,
+        usedIds:       assignedIds,
         uniquePlayers,
-        meetsAllReqs: meetsAllReqs && meetsPlayers,
+        meetsAllReqs:  meetsAllReqs && meetsPlayers,
     };
 }
 
 // ── computeAndSyncAlbumProgress ───────────────────────────────────────────
 export async function computeAndSyncAlbumProgress(userId) {
-    const [collection, definitions] = await Promise.all([
+    const [collection, definitions, specialCards] = await Promise.all([
         getUserCollection(userId),
         getAlbumDefinitions(),
+        getSpecialCards(),
     ]);
 
     const updates = [];
 
-    const playerCollection = collection.filter((c) => c.card?.card_type === 'player');
+    // ── Cartas especiales: filtrar las que el usuario posee ────────────────
+    const ownedSpecialCardIds = new Set(
+        collection
+            .filter((c) => c.card?.is_special === true)
+            .map((c) => c.card_id)
+    );
+
+    // ── Álbumes legendarios ────────────────────────────────────────────────
+    // Excluir cartas especiales del cómputo de álbumes legendarios/estrellas
+    const playerCollection = collection.filter(
+        (c) => c.card?.card_type === 'player' && !c.card?.is_special
+    );
 
     const globalUsedIds = new Set();
 
@@ -377,15 +434,30 @@ export async function computeAndSyncAlbumProgress(userId) {
         usedIds.forEach((id) => globalUsedIds.add(id));
 
         updates.push({
-            album_id: albumId,
+            album_id:     albumId,
             unique_cards: uniquePlayers,
             is_completed: meetsAllReqs,
         });
     }
 
-    // Álbumes no-legendarios (stars, cult)
+    // ── Álbumes no-legendarios (stars, cult) ───────────────────────────────
     for (const album of definitions) {
         if (LEG_ORDER.includes(album.id)) continue;
+
+        // ── NUEVO: álbum especial ──────────────────────────────────────────
+        if (album.id === 'special_unique') {
+            // unique_cards = cuántas cartas especiales posee este usuario
+            const ownedCount = ownedSpecialCardIds.size;
+            // is_completed = posee TODAS las especiales existentes
+            const isCompleted = specialCards.length > 0 && ownedCount >= specialCards.length;
+
+            updates.push({
+                album_id:     album.id,
+                unique_cards: ownedCount,
+                is_completed: isCompleted,
+            });
+            continue;
+        }
 
         let uniqueCards = 0;
 
@@ -393,7 +465,8 @@ export async function computeAndSyncAlbumProgress(userId) {
             uniqueCards = collection.filter(
                 (c) =>
                     c.card?.card_type === 'player' &&
-                    c.card?.significance_level === album.star_filter
+                    c.card?.significance_level === album.star_filter &&
+                    !c.card?.is_special   // excluir especiales de álbumes de estrellas
             ).length;
         } else if (album.album_type === 'cult') {
             uniqueCards = collection.filter(
@@ -404,16 +477,16 @@ export async function computeAndSyncAlbumProgress(userId) {
         updates.push({ album_id: album.id, unique_cards: uniqueCards, is_completed: false });
     }
 
-    // Upsert progreso en Supabase
+    // ── Upsert progreso en Supabase ────────────────────────────────────────
     for (const update of updates) {
         const { error } = await supabase.from('album_progress').upsert(
             {
-                user_id: userId,
-                album_id: update.album_id,
+                user_id:      userId,
+                album_id:     update.album_id,
                 unique_cards: update.unique_cards,
                 is_completed: update.is_completed ?? false,
                 completed_at: update.is_completed ? new Date().toISOString() : null,
-                updated_at: new Date().toISOString(),
+                updated_at:   new Date().toISOString(),
             },
             { onConflict: 'user_id,album_id' }
         );
@@ -422,6 +495,30 @@ export async function computeAndSyncAlbumProgress(userId) {
     }
 
     return updates;
+}
+
+// ── NUEVO: datos del álbum Edición Única para renderizado ─────────────────
+// Devuelve todas las cartas especiales + cuáles posee el usuario.
+// El frontend usa esto para renderizar: slot lleno (dueño) o candado (resto).
+export async function getSpecialAlbumData(userId) {
+    const [specialCards, collection] = await Promise.all([
+        getSpecialCards(),
+        getUserCollection(userId),
+    ]);
+
+    const ownedMap = new Map(
+        collection
+            .filter((c) => c.card?.is_special === true)
+            .map((c) => [c.card_id, c])
+    );
+
+    return specialCards.map((card) => ({
+        ...card,
+        owned:       ownedMap.has(card.id),
+        // Si el usuario no la posee, ocultamos name/image para el efecto candado
+        displayName: ownedMap.has(card.id) ? card.name       : '???',
+        displayImage: ownedMap.has(card.id) ? card.image_path : null,
+    }));
 }
 
 // ── Ranking — progreso legendarios ────────────────────────────────────────

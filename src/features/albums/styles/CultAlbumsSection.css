@@ -53,7 +53,7 @@
 
 .cas2-row {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 280px));
+    grid-template-columns: repeat(4, minmax(0, 280px));
     gap: 20px;
     align-items: stretch;
     justify-content: center;
@@ -1414,4 +1414,282 @@
     background: rgba(255, 255, 255, 0.02);
     border-color: color-mix(in srgb, var(--acc, #5b4fd8) 30%, #2A2638);
     color: color-mix(in srgb, var(--acc, #5b4fd8) 25%, #38334F);
+}
+/* ── Libro especial — hover púrpura ──────────────────────────── */
+.cas2-book-wrap:has(.cas2-cover-tag) .cas2-cover-tag {
+    /* ya heredado */
+}
+
+/* ── Rareza especial con ✦ ────────────────────────────────────── */
+.cas2-rarity--special .cas2-rarity-stars span {
+    font-size: 7px;
+    color: #c084fc;
+    animation: cas2-special-pulse 2.4s ease-in-out infinite;
+}
+
+.cas2-rarity--special .cas2-rarity-stars span:nth-child(2) { animation-delay: 0.2s; }
+.cas2-rarity--special .cas2-rarity-stars span:nth-child(3) { animation-delay: 0.4s; }
+.cas2-rarity--special .cas2-rarity-stars span:nth-child(4) { animation-delay: 0.6s; }
+.cas2-rarity--special .cas2-rarity-stars span:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes cas2-special-pulse {
+    0%, 100% { opacity: 1; filter: drop-shadow(0 0 3px #c084fc); }
+    50%       { opacity: 0.55; filter: none; }
+}
+
+.cas2-rarity--special .cas2-rarity-label {
+    color: #c084fc;
+    letter-spacing: 0.22em;
+}
+
+/* ── Badge 1/1 en la carta ────────────────────────────────────── */
+.cas2-sticker-special-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #c084fc;
+    background: rgba(192, 132, 252, 0.12);
+    border: 0.5px solid rgba(192, 132, 252, 0.4);
+    padding: 1px 4px;
+    border-radius: 2px;
+}
+
+/* ── Carta especial (filled) ──────────────────────────────────── */
+.cas2-sticker--special {
+    border-color: rgba(168, 85, 247, 0.55) !important;
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, #a855f7 8%, #faf8f4),
+        color-mix(in srgb, #c084fc 4%, #faf8f4)
+    ) !important;
+}
+
+[data-theme="dark"] .cas2-sticker--special {
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, #a855f7 12%, #1a1726),
+        color-mix(in srgb, #c084fc 6%, #1a1726)
+    ) !important;
+}
+
+/* ── Topband especial ─────────────────────────────────────────── */
+.cas2-sticker-topband--special {
+    background: linear-gradient(
+        90deg,
+        #7c3aed 0%,
+        #c084fc 35%,
+        #f0abfc 50%,
+        #c084fc 65%,
+        #7c3aed 100%
+    ) !important;
+    animation: cas2-special-shimmer 3s linear infinite;
+    background-size: 200% 100% !important;
+}
+
+@keyframes cas2-special-shimmer {
+    0%   { background-position: 200% center; }
+    100% { background-position: -200% center; }
+}
+
+/* ── Foil especial ────────────────────────────────────────────── */
+.cas2-sticker-foil--special {
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(192, 132, 252, 0.08) 35%,
+        rgba(240, 171, 252, 0.22) 50%,
+        rgba(192, 132, 252, 0.08) 65%,
+        transparent 100%
+    ) !important;
+}
+
+.cas2-sticker--special:hover .cas2-sticker-foil--special {
+    opacity: 1;
+}
+
+/* ── Slot con candado ─────────────────────────────────────────── */
+.cas2-sticker--special-locked {
+    border-color: rgba(168, 85, 247, 0.2) !important;
+    background: rgba(168, 85, 247, 0.02) !important;
+}
+
+[data-theme="dark"] .cas2-sticker--special-locked {
+    background: rgba(168, 85, 247, 0.04) !important;
+}
+
+.cas2-sticker-silhouette--locked {
+    border-color: rgba(168, 85, 247, 0.3) !important;
+    color: rgba(168, 85, 247, 0.4) !important;
+    background: rgba(168, 85, 247, 0.04) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   AÑADIR al final de AdminHistorical.css
+   Estilos del toggle Carta Única en PlayerPanel
+══════════════════════════════════════════════════════════════ */
+
+/* ── Sección especial con borde púrpura ──────────────────────── */
+.ah-special-section {
+    border-left: 2px solid #a855f7 !important;
+    background: rgba(168, 85, 247, 0.03);
+    position: relative;
+}
+
+[data-theme="dark"] .ah-special-section {
+    background: rgba(168, 85, 247, 0.06);
+}
+
+.ah-panel-sep--special {
+    color: #a855f7 !important;
+    letter-spacing: 0.16em;
+}
+
+/* ── Label del toggle especial ───────────────────────────────── */
+.ah-pub-label--special {
+    color: #a855f7 !important;
+    font-weight: 800;
+}
+
+/* ── Aviso de advertencia ────────────────────────────────────── */
+.ah-special-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    padding: 8px 10px;
+    background: rgba(168, 85, 247, 0.07);
+    border: 0.5px solid rgba(168, 85, 247, 0.3);
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    color: #7c3aed;
+    line-height: 1.55;
+    border-radius: 2px;
+}
+
+[data-theme="dark"] .ah-special-warning {
+    background: rgba(168, 85, 247, 0.12);
+    color: #c084fc;
+}
+
+.ah-special-warning span:first-child {
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* ── Preview badge 1 OF 1 ────────────────────────────────────── */
+.ah-special-badge-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: linear-gradient(90deg,
+        rgba(124, 58, 237, 0.08),
+        rgba(192, 132, 252, 0.15),
+        rgba(124, 58, 237, 0.08)
+    );
+    border: 0.5px solid rgba(168, 85, 247, 0.4);
+    margin-top: 2px;
+}
+
+.ah-special-star {
+    font-size: 12px;
+    color: #c084fc;
+    animation: cas2-special-pulse 2.4s ease-in-out infinite;
+}
+
+.ah-special-badge-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    color: #a855f7;
+    text-transform: uppercase;
+}
+
+[data-theme="dark"] .ah-special-badge-text {
+    color: #c084fc;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ÁLBUM ESPECIAL — Estado bloqueado (usuario sin acceso)
+   Aplica la clase .cas2-book--special-locked al <button> del libro
+   cuando el usuario no es el special_owner
+══════════════════════════════════════════════════════════════ */
+
+/* ── Overlay de bloqueo sobre la portada ─────────────────────── */
+.cas2-book--special-locked {
+    cursor: default;
+    pointer-events: none;
+}
+
+.cas2-book--special-locked .cas2-cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: rgba(5, 2, 15, 0.72);
+    backdrop-filter: blur(1.5px);
+    -webkit-backdrop-filter: blur(1.5px);
+}
+
+/* ── Icono de candado centrado ───────────────────────────────── */
+.cas2-book--special-locked .cas2-cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 11;
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='11' width='18' height='11' rx='2'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4'/%3E%3C/svg%3E")
+        center 40% / 28% no-repeat;
+    pointer-events: none;
+}
+
+/* ── Lomo también atenuado ───────────────────────────────────── */
+.cas2-book--special-locked .cas2-spine {
+    opacity: 0.45;
+    filter: saturate(0.3);
+}
+
+/* ── Texto "BLOQUEADO" debajo del candado ────────────────────── */
+.cas2-book--special-locked .cas2-cover-footer {
+    position: relative;
+    z-index: 12;
+    opacity: 0;
+}
+
+.cas2-book-wrap:has(.cas2-book--special-locked)::after {
+    content: 'BLOQUEADO';
+    position: absolute;
+    bottom: 34px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 12;
+    font-family: 'DM Mono', monospace;
+    font-size: 6.5px;
+    font-weight: 800;
+    letter-spacing: 0.28em;
+    color: rgba(168, 85, 247, 0.65);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+/* ── Páginas apiladas también atenuadas ──────────────────────── */
+.cas2-book-wrap:has(.cas2-book--special-locked) .cas2-page-leaf {
+    opacity: 0.2;
+}
+
+/* ── Sin hover lift cuando está bloqueado ────────────────────── */
+.cas2-book-wrap:has(.cas2-book--special-locked):hover {
+    transform: none;
+}
+
+/* ── Brillo púrpura sutil en el borde (indica que es especial) ── */
+.cas2-book--special-locked {
+    box-shadow:
+        4px 6px 0 rgba(0, 0, 0, 0.32),
+        8px 14px 28px rgba(0, 0, 0, 0.22),
+        0 0 0 1px rgba(168, 85, 247, 0.18),
+        inset 1px 0 0 rgba(255, 255, 255, 0.04) !important;
 }

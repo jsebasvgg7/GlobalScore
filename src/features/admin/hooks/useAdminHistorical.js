@@ -52,6 +52,7 @@ export function useAdminHistorical() {
   const [teams, setTeams] = useState([]);
   const [competitions, setCompetitions] = useState([]);
   const [events, setEvents] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -92,17 +93,26 @@ export function useAdminHistorical() {
     setEvents(data || []);
   }, []);
 
+  const loadUsers = useCallback(async () => {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, name, email')
+      .order('name');
+    if (error) throw error;
+    setUsers(data || []);
+  }, []);
+
   const loadAll = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      await Promise.all([loadPlayers(), loadTeams(), loadCompetitions(), loadEvents()]);
+      await Promise.all([loadPlayers(), loadTeams(), loadCompetitions(), loadEvents(), loadUsers()]);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  }, [loadPlayers, loadTeams, loadCompetitions, loadEvents]);
+  }, [loadPlayers, loadTeams, loadCompetitions, loadEvents, loadUsers]);
 
   useEffect(() => { loadAll(); }, [loadAll]);
 
@@ -804,7 +814,7 @@ export function useAdminHistorical() {
 
   // ── Return ─────────────────────────────────────────────────────────────────
   return {
-    players, teams, competitions, events,
+    players, teams, competitions, events, users,
     loading, error,
     loadAll, loadPlayers, loadTeams, loadCompetitions, loadEvents,
     createPlayer, updatePlayer, deletePlayer, togglePlayerPublished,

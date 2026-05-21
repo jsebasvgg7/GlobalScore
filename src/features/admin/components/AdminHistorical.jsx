@@ -146,6 +146,9 @@ const PLAYER_EMPTY = {
   name: "", country: "", position: "", birth_year: "", death_year: "",
   ballon_dor_count: 0, legacy_type: "", significance_level: 3,
   description: "", impact_summary: "", is_published: false,
+  // ── Carta única ──────────────────────────────────────────────────────────
+  is_special: false,
+  special_owner_id: "",
 };
 const TEAM_EMPTY = {
   name: "", country: "", founded_year: "", era_dominance: "",
@@ -458,7 +461,7 @@ function EditableTable({ columns, rows, onAdd, onRemove, onUpdate, addLabel = "A
 // ══════════════════════════════════════════════════════════════════════════════
 //  PANEL: JUGADOR
 // ══════════════════════════════════════════════════════════════════════════════
-function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPlayerTeams,
+function PlayerPanel({ player, teams, users, onSave, onClose, onGetPlayerTeams, onSetPlayerTeams,
   onGetCareer, onSetCareer, onGetNational, onSetNational, onGetTitles, onSetTitles }) {
   const isEdit = !!player?.id;
   const [form, setForm] = useState(player?.id ? { ...player } : { ...PLAYER_EMPTY });
@@ -644,6 +647,61 @@ function PlayerPanel({ player, teams, onSave, onClose, onGetPlayerTeams, onSetPl
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Visibilidad</span>
           <PublishToggle checked={form.is_published} onChange={v => set("is_published", v)} />
+        </div>
+
+        {/* ── Carta Única — solo aparece cuando is_special está activo ── */}
+        <div className="ah-panel-section ah-special-section">
+          <span className="ah-panel-sep ah-panel-sep--special">
+            ✦ Carta Única · Edición Especial
+          </span>
+
+          <label className="ah-pub-toggle" style={{ marginBottom: 6 }}>
+            <input
+              type="checkbox"
+              checked={!!form.is_special}
+              onChange={e => {
+                set("is_special", e.target.checked);
+                if (!e.target.checked) set("special_owner_id", "");
+              }}
+            />
+            <span className="ah-pub-track"><span className="ah-pub-thumb" /></span>
+            <span className="ah-pub-label ah-pub-label--special">
+              {form.is_special ? "Carta única activada" : "Carta normal"}
+            </span>
+          </label>
+
+          {form.is_special && (
+            <>
+              <div className="ah-special-warning">
+                <span>⚠</span>
+                <span>
+                  Al publicar, la carta se entrega automáticamente al usuario
+                  seleccionado y <strong>no aparecerá en sobres ni en Historia pública</strong>.
+                  Esta acción es irreversible.
+                </span>
+              </div>
+
+              <PField label="Entregar a usuario" required>
+                <PSelect
+                  value={form.special_owner_id || ""}
+                  onChange={e => set("special_owner_id", e.target.value)}
+                >
+                  <option value="">— Selecciona el dueño —</option>
+                  {(users || []).map(u => (
+                    <option key={u.id} value={u.id}>
+                      {u.name} {u.email ? `· ${u.email}` : ""}
+                    </option>
+                  ))}
+                </PSelect>
+              </PField>
+
+              <div className="ah-special-badge-preview">
+                <span className="ah-special-star">✦</span>
+                <span className="ah-special-badge-text">EDICIÓN ÚNICA · 1 DE 1</span>
+                <span className="ah-special-star">✦</span>
+              </div>
+            </>
+          )}
         </div>
       </>}
 
@@ -2237,7 +2295,7 @@ export default function AdminHistorical() {
   const [search, setSearch] = useState("");
 
   const {
-    players, teams, competitions, events,
+    players, teams, competitions, events, users,
     loading, error, loadAll,
     createPlayer, updatePlayer, deletePlayer, togglePlayerPublished,
     createTeam, updateTeam, deleteTeam, toggleTeamPublished,
@@ -2430,7 +2488,7 @@ export default function AdminHistorical() {
 
             {panel?.type === "players" && (
               <PlayerPanel
-                player={panel.data} teams={teams}
+                player={panel.data} teams={teams} users={users}
                 onSave={handleSavePlayer} onClose={closePanel}
                 onGetPlayerTeams={getPlayerTeams} onSetPlayerTeams={setPlayerTeams}
                 onGetCareer={getPlayerCareer} onSetCareer={setPlayerCareer}

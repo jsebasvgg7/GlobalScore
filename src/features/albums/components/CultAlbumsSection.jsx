@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Search, ChevronLeft, ChevronRight, X, Crown } from 'lucide-react';
 import { getHistoricalImageUrl } from '@/features/history/services/history.service';
+import { getSpecialAlbumData } from '@/features/albums/services/albums.service';
 import '../styles/CultAlbumsSection.css';
 import '../styles/mobile/CultAlbumsSection.mobile.css';
 
@@ -550,11 +551,437 @@ function CultBook({ defId, meta, collection, allCards }) {
     );
 }
 
+// ── Ilustración de portada para el álbum especial ─────────────────────────────
+function SpecialCoverIllustration() {
+    const id = 'special-cover';
+    return (
+        <svg viewBox="0 0 120 160" className="cas2-cover-svg" aria-hidden="true">
+            <defs>
+                <radialGradient id={`${id}-glow`} cx="50%" cy="50%" r="60%">
+                    <stop offset="0%" stopColor="#c084fc" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#7c3aed" stopOpacity="0" />
+                </radialGradient>
+                <linearGradient id={`${id}-star`} x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#f0abfc" />
+                    <stop offset="100%" stopColor="#a855f7" />
+                </linearGradient>
+            </defs>
+            <rect width="120" height="160" fill={`url(#${id}-glow)`} />
+
+            {/* Partículas de fondo */}
+            {[[18, 20], [95, 35], [12, 80], [100, 90], [55, 140], [30, 130], [88, 55]].map(([x, y], i) => (
+                <circle key={i} cx={x} cy={y} r="1.2" fill="#c084fc" opacity={0.3 + (i % 3) * 0.15} />
+            ))}
+
+            {/* Símbolo central ✦ */}
+            <g transform="translate(60,76)">
+                {/* Rombo exterior */}
+                <path
+                    d="M0,-28 L16,-8 L0,28 L-16,-8 Z"
+                    fill="none" stroke="#c084fc" strokeWidth="0.8" opacity="0.4"
+                />
+                {/* Estrella de 4 puntas */}
+                <path
+                    d="M0,-20 L4,-4 L20,0 L4,4 L0,20 L-4,4 L-20,0 L-4,-4 Z"
+                    fill={`url(#${id}-star)`} opacity="0.85"
+                />
+                {/* Cruz interior */}
+                <circle cx="0" cy="0" r="3" fill="#fff" opacity="0.9" />
+                {/* Destellos */}
+                {[[0, -24], [24, 0], [0, 24], [-24, 0]].map(([dx, dy], i) => (
+                    <line key={i}
+                        x1={dx * 0.6} y1={dy * 0.6}
+                        x2={dx * 0.85} y2={dy * 0.85}
+                        stroke="#f0abfc" strokeWidth="1.2" opacity="0.5"
+                    />
+                ))}
+            </g>
+
+            {/* "1 OF 1" en la parte inferior */}
+            <text
+                x="60" y="124"
+                textAnchor="middle"
+                fontFamily="DM Mono, monospace"
+                fontSize="6" fontWeight="800"
+                fill="#c084fc" opacity="0.7"
+                letterSpacing="3"
+            >
+                1 OF 1
+            </text>
+
+            {/* Esquinas */}
+            <g stroke="#c084fc" strokeWidth="0.6" opacity="0.4">
+                <polyline points="8,8 8,18 18,18" />
+                <polyline points="112,8 112,18 102,18" />
+                <polyline points="8,152 8,142 18,142" />
+                <polyline points="112,152 112,142 102,142" />
+            </g>
+        </svg>
+    );
+}
+
+// ── Slot de carta en el panel del álbum especial ──────────────────────────────
+function SpecialStickerCard({ index, card }) {
+    const num = String(index + 1).padStart(3, '0');
+    const isOwned = card?.owned === true;
+
+    if (isOwned) {
+        const resolvedImg = card?.image_path
+            ? (card.image_path.startsWith('http') ? card.image_path : getHistoricalImageUrl(card.image_path))
+            : null;
+
+        return (
+            <div className="cas2-sticker cas2-sticker--filled cas2-sticker--special" style={{ '--acc': '#a855f7' }}>
+                <div className="cas2-sticker-topband cas2-sticker-topband--special" />
+
+                <div className="cas2-sticker-header">
+                    <span className="cas2-sticker-num">{num}</span>
+                    <span className="cas2-sticker-special-badge">1/1</span>
+                </div>
+
+                <div className="cas2-sticker-avatar-zone">
+                    {resolvedImg ? (
+                        <img src={resolvedImg} alt={card.name} className="cas2-sticker-img" />
+                    ) : (
+                        <div className="cas2-sticker-avatar">{getInitials(card?.name)}</div>
+                    )}
+                    {/* Anillo especial */}
+                    <svg className="cas2-sticker-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+                        <defs>
+                            <linearGradient id={`sg-${num}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="#f0abfc" stopOpacity="1" />
+                                <stop offset="50%" stopColor="#fff" stopOpacity="0.9" />
+                                <stop offset="100%" stopColor="#a855f7" stopOpacity="1" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="46"
+                            fill="none"
+                            stroke={`url(#sg-${num})`}
+                            strokeWidth="2.5"
+                            strokeDasharray="4 2" />
+                    </svg>
+                </div>
+
+                <div className="cas2-sticker-info">
+                    <span className="cas2-sticker-name">{card?.displayName}</span>
+                </div>
+
+                {/* Foil especial */}
+                <div className="cas2-sticker-foil cas2-sticker-foil--special" />
+            </div>
+        );
+    }
+
+    // Slot con candado — visible para todos
+    return (
+        <div className="cas2-sticker cas2-sticker--empty cas2-sticker--special-locked" style={{ '--acc': '#a855f7' }}>
+            <div className="cas2-sticker-header">
+                <span className="cas2-sticker-num">{num}</span>
+            </div>
+            <div className="cas2-sticker-avatar-zone cas2-sticker-avatar-zone--empty">
+                <div className="cas2-sticker-silhouette cas2-sticker-silhouette--locked">
+                    {/* Icono candado */}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                        style={{ width: '45%', opacity: 0.3 }} aria-hidden="true">
+                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                </div>
+            </div>
+            <div className="cas2-sticker-info">
+                <span className="cas2-sticker-name cas2-sticker-name--empty">???</span>
+            </div>
+        </div>
+    );
+}
+
+// ── Panel modal del álbum especial ────────────────────────────────────────────
+function SpecialPanel({ specialCards, totalSpecial, onClose }) {
+    const [page, setPage] = useState(0);
+    const [search, setSearch] = useState('');
+    const PER_PAGE = window.innerWidth <= 768 ? 9 : 10;
+
+    const owned = specialCards.filter(c => c.owned).length;
+    const total = totalSpecial;
+    const pct = total > 0 ? Math.min(100, Math.round((owned / total) * 100)) : 0;
+
+    const filteredCards = search.trim()
+        ? specialCards.filter(c =>
+            c.owned && c.displayName?.toLowerCase().includes(search.toLowerCase())
+        )
+        : specialCards;
+
+    const totalPages = Math.max(1, Math.ceil(filteredCards.length / PER_PAGE));
+    const safePagenr = Math.min(page, totalPages - 1);
+    const pageItems = filteredCards.slice(safePagenr * PER_PAGE, (safePagenr + 1) * PER_PAGE);
+
+    const color = '#a855f7';
+    const colorAlt = '#7c3aed';
+    const colorRgb = '168,85,247';
+    const coverBg = '#13001f';
+
+    return (
+        <>
+            <div className="cas2-overlay" onClick={onClose} />
+            <div
+                className="cas2-panel"
+                style={{
+                    '--spine': color,
+                    '--spine-alt': colorAlt,
+                    '--acc': color,
+                    '--acc-rgb': colorRgb,
+                    '--cover-bg': coverBg,
+                }}
+                onClick={e => e.stopPropagation()}
+            >
+                {/* TOPBAR */}
+                <div className="cas2-modal-topbar">
+                    <div className="cas2-modal-topbar-spine" />
+                    <span className="cas2-modal-topbar-title">Edición Única</span>
+                    <span className="cas2-modal-topbar-season">ESPECIAL · 1 OF 1</span>
+                    <button className="cas2-panel-close" onClick={onClose} aria-label="Cerrar">
+                        <X size={14} />
+                    </button>
+                </div>
+
+                {/* BODY */}
+                <div className="cas2-panel-body">
+                    {/* SIDEBAR */}
+                    <div className="cas2-panel-sidebar">
+                        <div className="cas2-panel-sidebar-inner">
+                            <span className="cas2-sidebar-id">ID: SPL-UNIQUE</span>
+                            <h2 className="cas2-sidebar-title">ÚNICOS</h2>
+
+                            <div className="cas2-sidebar-count">
+                                <span className="cas2-sidebar-count-big">{owned}</span>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                    <span className="cas2-sidebar-count-sep">/ {total || '?'}</span>
+                                    <span className="cas2-sidebar-count-label">Cartas</span>
+                                </div>
+                            </div>
+
+                            <div className="cas2-sidebar-divider" />
+
+                            {/* Mini libro */}
+                            <div className="cas2-sidebar-book-img">
+                                <div className="cas2-sidebar-book-svg-wrap">
+                                    <div style={{
+                                        position: 'absolute', left: 0, top: 0, bottom: 0, width: 22,
+                                        background: `linear-gradient(180deg, ${color} 0%, ${colorAlt} 100%)`,
+                                        borderRadius: '3px 0 0 3px',
+                                        boxShadow: 'inset -2px 0 8px rgba(0,0,0,0.4)',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    }}>
+                                        <span style={{
+                                            fontFamily: "'DM Mono', monospace", fontSize: 7, fontWeight: 800,
+                                            color: 'rgba(255,255,255,0.75)', writingMode: 'vertical-rl',
+                                            textOrientation: 'mixed', transform: 'rotate(180deg)', letterSpacing: '0.1em',
+                                        }}>ÚNICOS</span>
+                                    </div>
+                                    <div style={{
+                                        position: 'absolute', left: 22, top: 0, right: 0, bottom: 0,
+                                        background: coverBg, borderRadius: '0 4px 4px 0', overflow: 'hidden',
+                                        boxShadow: '4px 6px 0 rgba(0,0,0,0.32), 8px 14px 28px rgba(0,0,0,0.22)',
+                                    }}>
+                                        <SpecialCoverIllustration />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Progress bar */}
+                            <div className="cas2-sidebar-pbar-wrap">
+                                <div className="cas2-sidebar-pbar-fill" style={{ width: `${pct}%` }} />
+                                <span className="cas2-sidebar-pbar-pct">{pct}%</span>
+                            </div>
+
+                            <div className="cas2-sidebar-chips">
+                                <span className="cas2-chip">✦ CARTA ÚNICA · IRREPETIBLE</span>
+                                {pct === 100 && total > 0 && (
+                                    <span className="cas2-chip cas2-chip--done">✓ Colección completa</span>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="cas2-sidebar-desc-block">
+                            <div className="cas2-sidebar-desc-full">
+                                <span className="cas2-sidebar-desc-label">Descripción</span>
+                                <span className="cas2-sidebar-desc-val">
+                                    Cartas de edición única irrepetible. Solo existe un ejemplar de cada una.
+                                    Los slots con candado son cartas que pertenecen a otro coleccionista.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* PANEL PRINCIPAL */}
+                    <div className="cas2-panel-main">
+                        <div className="cas2-panel-toolbar">
+                            <div className="cas2-toolbar-search">
+                                <Search size={13} className="cas2-toolbar-search-icon" />
+                                <input
+                                    type="text"
+                                    className="cas2-toolbar-search-input"
+                                    placeholder="Buscar carta..."
+                                    value={search}
+                                    onChange={e => { setSearch(e.target.value); setPage(0); }}
+                                />
+                            </div>
+                            <div className="cas2-footer-pagination" style={{ border: 'none', height: 'auto', padding: '0 0 0 12px' }}>
+                                <button className="cas2-page-btn" onClick={() => setPage(p => Math.max(0, p - 1))} disabled={safePagenr === 0}><ChevronLeft size={15} /></button>
+                                <div className="cas2-pagination-info">PAGE <strong>{String(safePagenr + 1).padStart(2, '0')}</strong> / {String(totalPages).padStart(2, '0')}</div>
+                                <button className="cas2-page-btn" onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={safePagenr === totalPages - 1}><ChevronRight size={15} /></button>
+                            </div>
+                        </div>
+
+                        <div className="cas2-panel-scroll">
+                            <div className="cas2-page-indicator">
+                                <div className="cas2-page-indicator-line" />
+                                <span>Página {String(safePagenr + 1).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}</span>
+                                <div className="cas2-page-indicator-line" />
+                            </div>
+                            <div className="cas2-sticker-grid">
+                                {pageItems.map((card, idx) => (
+                                    <SpecialStickerCard
+                                        key={card.id || idx}
+                                        index={safePagenr * PER_PAGE + idx}
+                                        card={card}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* FOOTER */}
+                <div className="cas2-modal-footer">
+                    <div className="cas2-footer-stat">
+                        <span className="cas2-footer-stat-label">Propias</span>
+                        <span className="cas2-footer-stat-val">{owned}</span>
+                    </div>
+                    <div className="cas2-footer-stat">
+                        <span className="cas2-footer-stat-label">Total</span>
+                        <span className="cas2-footer-stat-val">{total || '?'}</span>
+                    </div>
+                    <div className="cas2-footer-spacer" />
+                    <button className="cas2-footer-close-btn" onClick={onClose}>Cerrar Álbum</button>
+                    <button className="cas2-footer-arrow-btn" onClick={onClose}><ChevronRight size={16} /></button>
+                </div>
+            </div>
+        </>
+    );
+}
+
+// ── Libro especial en la fila de Culto ────────────────────────────────────────
+function SpecialBook({ userId }) {
+    const [panelOpen, setPanelOpen] = useState(false);
+    const [specialCards, setSpecialCards] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!userId) return;
+        getSpecialAlbumData(userId)
+            .then(setSpecialCards)
+            .catch(() => setSpecialCards([]))
+            .finally(() => setLoading(false));
+    }, [userId]);
+
+    const total = specialCards.length;
+    const owned = specialCards.filter(c => c.owned).length;
+    const pct = total > 0 ? Math.min(100, Math.round((owned / total) * 100)) : 0;
+    const isCompleted = total > 0 && owned >= total;
+
+    const color = '#a855f7';
+    const colorAlt = '#7c3aed';
+    const colorRgb = '168,85,247';
+    const coverBg = '#13001f';
+
+    return (
+        <>
+            <div className="cas2-book-wrap">
+                <div className="cas2-page-stack">
+                    {[2, 1, 0].map(i => (
+                        <div key={i} className="cas2-page-leaf" style={{ '--li': i, '--acc': color }} />
+                    ))}
+                </div>
+
+                <button
+                    className={`cas2-book${isCompleted ? ' cas2-book--done' : ''}`}
+                    style={{
+                        '--spine': color,
+                        '--spine-alt': colorAlt,
+                        '--acc': color,
+                        '--acc-rgb': colorRgb,
+                        '--cover-bg': coverBg,
+                    }}
+                    onClick={() => setPanelOpen(true)}
+                    disabled={loading}
+                >
+                    {/* Lomo */}
+                    <div className="cas2-spine">
+                        <span className="cas2-spine-num">04</span>
+                        <span className="cas2-spine-label">ÚNICOS</span>
+                        <div className="cas2-spine-lines">
+                            {[0, 1, 2].map(i => <div key={i} className="cas2-spine-line" />)}
+                        </div>
+                    </div>
+
+                    {/* Portada */}
+                    <div className="cas2-cover">
+                        <div className="cas2-cover-art">
+                            <SpecialCoverIllustration />
+                        </div>
+
+                        <div className="cas2-clasp">
+                            <div className="cas2-clasp-strap cas2-clasp-strap--top" />
+                            <div className="cas2-clasp-buckle"><div className="cas2-clasp-buckle-inner" /></div>
+                            <div className="cas2-clasp-strap cas2-clasp-strap--bot" />
+                        </div>
+
+                        {['tl', 'tr', 'bl', 'br'].map(pos => (
+                            <div key={pos} className={`cas2-corner cas2-corner--${pos}`} />
+                        ))}
+
+                        <div className="cas2-cover-tag">ESPECIAL · ÚNICO</div>
+                        <div className="cas2-cover-id">ID: SPL-UNIQUE</div>
+
+                        {/* Badge de rareza especial */}
+                        <div className="cas2-rarity cas2-rarity--special">
+                            <div className="cas2-rarity-stars">
+                                {[0, 1, 2, 3, 4].map(i => <span key={i}>✦</span>)}
+                            </div>
+                            <span className="cas2-rarity-label">IRREPETIBLE</span>
+                        </div>
+
+                        <div className="cas2-cover-footer">
+                            <div className="cas2-cover-footer-info">
+                                <span className="cas2-cover-count">{owned} / {total || '?'} CARTAS</span>
+                                {isCompleted && <span className="cas2-done-tick">✓</span>}
+                            </div>
+                            <div className="cas2-mini-bar">
+                                <div className="cas2-mini-bar-fill" style={{ width: `${pct}%` }} />
+                            </div>
+                            <span className="cas2-cover-hint">Abrir álbum →</span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            {panelOpen && (
+                <SpecialPanel
+                    specialCards={specialCards}
+                    totalSpecial={total}
+                    onClose={() => setPanelOpen(false)}
+                />
+            )}
+        </>
+    );
+}
+
 // ══════════════════════════════════════════════════════════════
 //  EXPORT PRINCIPAL
 // ══════════════════════════════════════════════════════════════
-export default function CultAlbumsSection({ definitions, collection, allCards }) {
-    const cultDefs = definitions.filter(d => d.album_type === 'cult');
+export default function CultAlbumsSection({ definitions, collection, allCards, currentUserId }) {
+    const cultDefs = definitions.filter(d => d.album_type === 'cult' && d.id !== 'special_unique');
 
     const categories = CULT_ORDER.map(id => {
         const def = cultDefs.find(d => d.id === id);
@@ -568,7 +995,7 @@ export default function CultAlbumsSection({ definitions, collection, allCards })
             <div className="cas2-eyebrow">
                 <span>Álbum de Culto · Categorías Especiales</span>
                 <div className="cas2-eyebrow-line" />
-                <span className="cas2-eyebrow-count">{categories.length + extras.length} álbumes</span>
+                <span className="cas2-eyebrow-count">{categories.length + extras.length + 1} álbumes</span>
             </div>
 
             <div className="cas2-row">
@@ -610,6 +1037,9 @@ export default function CultAlbumsSection({ definitions, collection, allCards })
                         />
                     );
                 })}
+
+                {/* ── Álbum Edición Única — siempre al final ── */}
+                <SpecialBook userId={currentUserId} />
             </div>
         </div>
     );
