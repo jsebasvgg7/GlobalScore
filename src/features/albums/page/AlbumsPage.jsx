@@ -136,6 +136,7 @@ export default function AlbumsPage({ currentUser }) {
                         definitions={cult}
                         collection={collection}
                         allCards={allCards}
+                        currentUserId={user?.id}
                     />
                 )}
             </div>
