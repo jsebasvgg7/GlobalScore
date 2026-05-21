@@ -497,26 +497,27 @@ export async function computeAndSyncAlbumProgress(userId) {
     return updates;
 }
 
-// ── NUEVO: datos del álbum Edición Única para renderizado ─────────────────
-// Devuelve todas las cartas especiales + cuáles posee el usuario.
-// El frontend usa esto para renderizar: slot lleno (dueño) o candado (resto).
+// ── Datos del álbum Edición Única para renderizado ─────────────────
+
 export async function getSpecialAlbumData(userId) {
     const [specialCards, collection] = await Promise.all([
         getSpecialCards(),
         getUserCollection(userId),
     ]);
 
+    // Usamos los IDs que ya sabemos que son especiales
+    const specialCardIds = new Set(specialCards.map((c) => c.id));
+
     const ownedMap = new Map(
         collection
-            .filter((c) => c.card?.is_special === true)
+            .filter((c) => specialCardIds.has(c.card_id))
             .map((c) => [c.card_id, c])
     );
 
     return specialCards.map((card) => ({
         ...card,
-        owned:       ownedMap.has(card.id),
-        // Si el usuario no la posee, ocultamos name/image para el efecto candado
-        displayName: ownedMap.has(card.id) ? card.name       : '???',
+        owned:        ownedMap.has(card.id),
+        displayName:  ownedMap.has(card.id) ? card.name       : '???',
         displayImage: ownedMap.has(card.id) ? card.image_path : null,
     }));
 }
