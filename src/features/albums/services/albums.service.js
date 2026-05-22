@@ -118,12 +118,12 @@ export async function deliverSpecialCard(cardId, userId) {
 
     const { error } = await supabase.from('album_collection').upsert(
         {
-            user_id:           userId,
-            card_id:           cardId,
-            copies:            1,
-            frame_level:       'legendary',
+            user_id: userId,
+            card_id: cardId,
+            copies: 1,
+            frame_level: 'legendary',
             first_obtained_at: new Date().toISOString(),
-            last_obtained_at:  new Date().toISOString(),
+            last_obtained_at: new Date().toISOString(),
         },
         { onConflict: 'user_id,card_id' }
     );
@@ -199,25 +199,25 @@ export async function openPack(userId) {
     ]);
 
     const boosted = packs.boost_active === true;
-    const drawnPlayer      = rollPlayerByRarity(players, boosted);
-    const drawnTeam        = rollRandom(teams);
+    const drawnPlayer = rollPlayerByRarity(players, boosted);
+    const drawnTeam = rollRandom(teams);
     const drawnCompetition = rollRandom(competitions);
-    const drawnEvent       = rollRandom(events);
+    const drawnEvent = rollRandom(events);
     const drawn = [drawnPlayer, drawnTeam, drawnCompetition, drawnEvent].filter(Boolean);
 
     const newTotalOpened = packs.total_packs_opened + 1;
     const boostTriggered = packs.total_packs_opened > 0 && newTotalOpened % 10 === 0;
 
-    let newBoostActive    = boosted;
+    let newBoostActive = boosted;
     let newBoostRemaining = packs.boost_packs_remaining ?? 0;
 
     if (boostTriggered) {
-        newBoostActive    = true;
+        newBoostActive = true;
         newBoostRemaining = 3;
     } else if (boosted) {
         newBoostRemaining = newBoostRemaining - 1;
         if (newBoostRemaining <= 0) {
-            newBoostActive    = false;
+            newBoostActive = false;
             newBoostRemaining = 0;
         }
     }
@@ -225,12 +225,12 @@ export async function openPack(userId) {
     const { error: packError } = await supabase
         .from('album_packs')
         .update({
-            packs_available:   packs.packs_available - 1,
+            packs_available: packs.packs_available - 1,
             total_packs_opened: newTotalOpened,
             total_packs_earned: packs.total_packs_earned,
-            boost_active:       newBoostActive,
+            boost_active: newBoostActive,
             boost_packs_remaining: newBoostRemaining,
-            updated_at:         new Date().toISOString(),
+            updated_at: new Date().toISOString(),
         })
         .eq('user_id', userId);
 
@@ -241,21 +241,21 @@ export async function openPack(userId) {
     }
 
     const { error: historyError } = await supabase.from('album_pack_history').insert({
-        user_id:            userId,
-        card_player_id:     drawnPlayer?.id      ?? null,
-        card_team_id:       drawnTeam?.id        ?? null,
+        user_id: userId,
+        card_player_id: drawnPlayer?.id ?? null,
+        card_team_id: drawnTeam?.id ?? null,
         card_competition_id: drawnCompetition?.id ?? null,
-        card_event_id:      drawnEvent?.id       ?? null,
+        card_event_id: drawnEvent?.id ?? null,
         player_significance: drawnPlayer?.significance_level ?? null,
     });
 
     if (historyError) throw historyError;
 
     return {
-        player:       drawnPlayer,
-        team:         drawnTeam,
-        competition:  drawnCompetition,
-        event:        drawnEvent,
+        player: drawnPlayer,
+        team: drawnTeam,
+        competition: drawnCompetition,
+        event: drawnEvent,
         boosted,
         boostTriggered,
     };
@@ -285,14 +285,14 @@ export async function upsertCollectionCard(userId, cardId) {
         .maybeSingle();
 
     if (existing) {
-        const newCopies  = existing.copies + 1;
+        const newCopies = existing.copies + 1;
         const frameLevel = getFrameLevel(newCopies);
 
         const { error } = await supabase
             .from('album_collection')
             .update({
-                copies:           newCopies,
-                frame_level:      frameLevel,
+                copies: newCopies,
+                frame_level: frameLevel,
                 last_obtained_at: new Date().toISOString(),
             })
             .eq('id', existing.id);
@@ -302,9 +302,9 @@ export async function upsertCollectionCard(userId, cardId) {
     }
 
     const { error } = await supabase.from('album_collection').insert({
-        user_id:    userId,
-        card_id:    cardId,
-        copies:     1,
+        user_id: userId,
+        card_id: cardId,
+        copies: 1,
         frame_level: 'normal',
     });
 
@@ -314,8 +314,8 @@ export async function upsertCollectionCard(userId, cardId) {
 
 export function getFrameLevel(copies) {
     if (copies >= 10) return 'legendary';
-    if (copies >= 5)  return 'gold';
-    if (copies >= 3)  return 'silver';
+    if (copies >= 5) return 'gold';
+    if (copies >= 3) return 'silver';
     return 'normal';
 }
 
@@ -354,9 +354,9 @@ function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
         (a, b) => (b.card?.significance_level ?? 0) - (a.card?.significance_level ?? 0)
     );
 
-    const assignedIds  = new Set();
-    let meetsAllReqs   = true;
-    const reqsSorted   = [...legDef.req].sort((a, b) => b.minStars - a.minStars);
+    const assignedIds = new Set();
+    let meetsAllReqs = true;
+    const reqsSorted = [...legDef.req].sort((a, b) => b.minStars - a.minStars);
 
     for (const { minStars, count } of reqsSorted) {
         const candidates = sorted.filter(
@@ -375,10 +375,11 @@ function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
         if (filled < count) meetsAllReqs = false;
     }
 
-    const reqTotal      = legDef.req.reduce((s, r) => s + r.count, 0);
+    const reqTotal = legDef.req.reduce((s, r) => s + r.count, 0);
     const generalNeeded = legDef.slots - reqTotal;
-    const remaining     = sorted.filter((c) => !assignedIds.has(c.card_id ?? c.id));
-
+    const remaining = [...available]
+        .filter((c) => !assignedIds.has(c.card_id ?? c.id))
+        .sort((a, b) => (a.card?.significance_level ?? 0) - (b.card?.significance_level ?? 0));
     let generalFilled = 0;
     for (const c of remaining) {
         if (generalFilled >= generalNeeded) break;
@@ -387,12 +388,12 @@ function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
     }
 
     const uniquePlayers = assignedIds.size;
-    const meetsPlayers  = uniquePlayers >= legDef.slots;
+    const meetsPlayers = uniquePlayers >= legDef.slots;
 
     return {
-        usedIds:       assignedIds,
+        usedIds: assignedIds,
         uniquePlayers,
-        meetsAllReqs:  meetsAllReqs && meetsPlayers,
+        meetsAllReqs: meetsAllReqs && meetsPlayers,
     };
 }
 
@@ -434,7 +435,7 @@ export async function computeAndSyncAlbumProgress(userId) {
         usedIds.forEach((id) => globalUsedIds.add(id));
 
         updates.push({
-            album_id:     albumId,
+            album_id: albumId,
             unique_cards: uniquePlayers,
             is_completed: meetsAllReqs,
         });
@@ -452,7 +453,7 @@ export async function computeAndSyncAlbumProgress(userId) {
             const isCompleted = specialCards.length > 0 && ownedCount >= specialCards.length;
 
             updates.push({
-                album_id:     album.id,
+                album_id: album.id,
                 unique_cards: ownedCount,
                 is_completed: isCompleted,
             });
@@ -481,12 +482,12 @@ export async function computeAndSyncAlbumProgress(userId) {
     for (const update of updates) {
         const { error } = await supabase.from('album_progress').upsert(
             {
-                user_id:      userId,
-                album_id:     update.album_id,
+                user_id: userId,
+                album_id: update.album_id,
                 unique_cards: update.unique_cards,
                 is_completed: update.is_completed ?? false,
                 completed_at: update.is_completed ? new Date().toISOString() : null,
-                updated_at:   new Date().toISOString(),
+                updated_at: new Date().toISOString(),
             },
             { onConflict: 'user_id,album_id' }
         );
@@ -516,8 +517,8 @@ export async function getSpecialAlbumData(userId) {
 
     return specialCards.map((card) => ({
         ...card,
-        owned:        ownedMap.has(card.id),
-        displayName:  ownedMap.has(card.id) ? card.name       : '???',
+        owned: ownedMap.has(card.id),
+        displayName: ownedMap.has(card.id) ? card.name : '???',
         displayImage: ownedMap.has(card.id) ? card.image_path : null,
     }));
 }

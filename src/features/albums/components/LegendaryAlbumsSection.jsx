@@ -177,17 +177,15 @@ function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
 
         reqZones.push({ minStars, slots });
     }
-
     const reqTotal = slotDef.req.reduce((s, r) => s + r.count, 0);
     const generalSlotCount = slotDef.slots - reqTotal;
-    const generalPool = sorted.filter((c) => !assignedIds.has(c.card_id ?? c.id));
-
+    const generalPool = sorted
+        .filter((c) => !assignedIds.has(c.card_id ?? c.id));
     const generalSlots = Array.from({ length: generalSlotCount }, (_, i) => {
         const item = generalPool[i] ?? null;
         if (item) assignedIds.add(item.card_id ?? item.id);
         return { slotType: 'general', item, reqLabel: null, minStars: null };
     });
-
     const filledReq = reqZones.reduce((sum, z) => sum + z.slots.filter(s => s.item).length, 0);
     const filledGen = generalSlots.filter(s => s.item).length;
     const filled = filledReq + filledGen;
