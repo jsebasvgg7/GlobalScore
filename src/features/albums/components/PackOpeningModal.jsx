@@ -5,25 +5,24 @@ import '../styles/mobile/PackOpeningModal.mobile.css';
 
 /* ─── Constants ─────────────────────────────────────────────────────────── */
 const TYPE_LABEL = {
-    player:      'Jugador',
-    team:        'Equipo',
+    player: 'Jugador',
+    team: 'Equipo',
     competition: 'Copa',
-    event:       'Evento',
+    event: 'Evento',
 };
 
 const TYPE_COLOR = {
-    player:      '#7C6FFF',
-    team:        '#10B981',
+    player: '#7C6FFF',
+    team: '#10B981',
     competition: '#F59E0B',
-    event:       '#F43F5E',
+    event: '#F43F5E',
 };
 
-/* RGB versions for CSS var(--acc-rgb) tricks */
 const TYPE_COLOR_RGB = {
-    player:      '124,111,255',
-    team:        '16,185,129',
+    player: '124,111,255',
+    team: '16,185,129',
     competition: '245,158,11',
-    event:       '244,63,94',
+    event: '244,63,94',
 };
 
 const CARD_ORDER = ['player', 'team', 'competition', 'event'];
@@ -42,16 +41,27 @@ function posLabel(pos) {
 
 /* ─── Sub-components ────────────────────────────────────────────────────── */
 
+/* Partículas GOAT — calculadas una sola vez con useMemo */
 function GoatParticles() {
+    const particles = React.useMemo(() =>
+        Array.from({ length: 18 }, (_, i) => ({
+            angle: `${(i / 18) * 360}deg`,
+            delay: `${(i % 6) * 0.07}s`,
+            dist: `${55 + (i * 37 % 55)}px`,
+            size: `${2 + (i % 3)}px`,
+            color: i % 2 === 0 ? '#f59e0b' : '#fcd34d',
+        })),
+        []);
+
     return (
         <div className="pom2-particles" aria-hidden="true">
-            {Array.from({ length: 18 }, (_, i) => (
+            {particles.map((p, i) => (
                 <div key={i} className="pom2-particle" style={{
-                    '--angle':  `${(i / 18) * 360}deg`,
-                    '--delay':  `${(i % 6) * 0.07}s`,
-                    '--dist':   `${55 + Math.random() * 55}px`,
-                    '--size':   `${2 + Math.random() * 3}px`,
-                    '--color':  i % 2 === 0 ? '#f59e0b' : '#fcd34d',
+                    '--angle': p.angle,
+                    '--delay': p.delay,
+                    '--dist': p.dist,
+                    '--size': p.size,
+                    '--color': p.color,
                 }} />
             ))}
         </div>
@@ -78,18 +88,14 @@ function CardBack() {
     );
 }
 
-/**
- * CardFront — identical structure to LegendaryAlbumsSection's StickerCard (filled state).
- * Uses the same topband / avatar-zone / ring-svg / stars / info / foil layers.
- */
 function CardFront({ type, card, isGoat, index = 0 }) {
-    const color    = TYPE_COLOR[type] || '#7C6FFF';
+    const color = TYPE_COLOR[type] || '#7C6FFF';
     const colorRgb = TYPE_COLOR_RGB[type] || '124,111,255';
     const isPlayer = type === 'player';
-    const stars    = isPlayer ? (card?.significance_level ?? 0) : 0;
-    const imgUrl   = card?.image_path ? getHistoricalImageUrl(card.image_path) : null;
-    const label    = TYPE_LABEL[type] || type;
-    const num      = String(index + 1).padStart(3, '0');
+    const stars = isPlayer ? (card?.significance_level ?? 0) : 0;
+    const imgUrl = card?.image_path ? getHistoricalImageUrl(card.image_path) : null;
+    const label = TYPE_LABEL[type] || type;
+    const num = String(index + 1).padStart(3, '0');
     const isGoatCard = isGoat && isPlayer;
 
     return (
@@ -97,10 +103,8 @@ function CardFront({ type, card, isGoat, index = 0 }) {
             className={`pom2-card-front${isGoatCard ? ' pom2-card-front--goat' : ''}`}
             style={{ '--acc': color, '--acc-rgb': colorRgb }}
         >
-            {/* ── Top colour band (same as las2-sticker-topband) ── */}
             <div className="pom2-sticker-topband" />
 
-            {/* ── Header row: slot number + type label + optional crown ── */}
             <div className="pom2-sticker-header">
                 <span className="pom2-sticker-num">{num}</span>
                 <span className="pom2-card-type-label">{label}</span>
@@ -112,19 +116,17 @@ function CardFront({ type, card, isGoat, index = 0 }) {
                 )}
             </div>
 
-            {/* ── Avatar zone with dashed ring (same as las2-sticker-avatar-zone) ── */}
             <div className="pom2-sticker-avatar-zone">
                 {imgUrl ? (
                     <img src={imgUrl} alt={card?.name || ''} className="pom2-sticker-img" />
                 ) : (
                     <div className="pom2-sticker-avatar">{getInitials(card?.name)}</div>
                 )}
-                {/* Animated gradient ring — identical to las2-sticker-ring-svg */}
                 <svg className="pom2-sticker-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
                     <defs>
                         <linearGradient id={`sg-pom-${num}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%"   stopColor={color} stopOpacity="0.9" />
-                            <stop offset="50%"  stopColor="#fff"  stopOpacity="0.7" />
+                            <stop offset="0%" stopColor={color} stopOpacity="0.9" />
+                            <stop offset="50%" stopColor="#fff" stopOpacity="0.7" />
                             <stop offset="100%" stopColor={color} stopOpacity="0.9" />
                         </linearGradient>
                     </defs>
@@ -136,19 +138,16 @@ function CardFront({ type, card, isGoat, index = 0 }) {
                 </svg>
             </div>
 
-            {/* ── Star row ── */}
             <div className="pom2-sticker-stars">
                 {isPlayer ? (
                     Array.from({ length: 5 }, (_, i) => (
                         <span key={i} className={`pom2-star ${i < stars ? 'pom2-star--on' : 'pom2-star--off'}`}>★</span>
                     ))
                 ) : (
-                    /* Non-player cards: show type as small badge instead of stars */
                     <span className="pom2-card-rarity-badge">{label}</span>
                 )}
             </div>
 
-            {/* ── Info footer (name + position) ── */}
             <div className="pom2-sticker-info">
                 <span className="pom2-sticker-name">{card?.name || '—'}</span>
                 {isPlayer && card?.position && (
@@ -156,9 +155,7 @@ function CardFront({ type, card, isGoat, index = 0 }) {
                 )}
             </div>
 
-            {/* ── Foil shimmer overlay ── */}
             <div className="pom2-sticker-foil" aria-hidden="true" />
-
             {isGoatCard && <GoatParticles />}
         </div>
     );
@@ -173,10 +170,10 @@ function FlipCard({ type, card, index, isDealt, isFlipped, onFlip, isGoat }) {
         <div
             className={[
                 'pom2-flip-slot',
-                isDealt   ? 'pom2-flip-slot--dealt'   : '',
+                isDealt ? 'pom2-flip-slot--dealt' : '',
                 isFlipped ? 'pom2-flip-slot--flipped' : '',
             ].filter(Boolean).join(' ')}
-            style={{ '--deal-delay': `${index * 0.11}s` }}
+            style={{ '--deal-delay': `${index * 0.09}s` }}
             onClick={!isFlipped ? onFlip : undefined}
             role={!isFlipped ? 'button' : undefined}
             aria-label={!isFlipped ? `Revelar carta ${index + 1}` : TYPE_LABEL[type]}
@@ -194,48 +191,376 @@ function FlipCard({ type, card, index, isDealt, isFlipped, onFlip, isGoat }) {
     );
 }
 
-function PackVisual({ count, phase, onOpen, allFlipped, packsAvailable, onReset, onClose }) {
-    const isOpening = phase === 'animating';
+/* ─── Confeti burst al completar todas las cartas ───────────────────────── */
+function ConfettiBurst() {
+    const pieces = React.useMemo(() =>
+        Array.from({ length: 28 }, (_, i) => {
+            const colors = ['#7C6FFF', '#F59E0B', '#10B981', '#F43F5E', '#c4bbff', '#fcd34d'];
+            return {
+                color: colors[i % colors.length],
+                angle: `${(i / 28) * 360}deg`,
+                dist: `${60 + (i * 23 % 70)}px`,
+                size: `${3 + (i % 4)}px`,
+                delay: `${(i % 7) * 0.04}s`,
+                shape: i % 3 === 0 ? 'rect' : 'circle',
+            };
+        }), []);
+
+    return (
+        <div className="pom2-confetti" aria-hidden="true">
+            {pieces.map((p, i) => (
+                <div key={i} className={`pom2-confetti-piece pom2-confetti-piece--${p.shape}`} style={{
+                    '--angle': p.angle,
+                    '--dist': p.dist,
+                    '--size': p.size,
+                    '--color': p.color,
+                    '--delay': p.delay,
+                }} />
+            ))}
+        </div>
+    );
+}
+
+/* ─── Panel "done" para el lado izquierdo ───────────────────────────────── */
+function PackDonePanel({ cards, packsAvailable, onReset, onClose }) {
+    return (
+        <div className="pom2-done-panel">
+            <div className="pom2-pack-bg-pattern" aria-hidden="true" />
+            <ConfettiBurst />
+
+            <div className="pom2-done-badge" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 13l4 4L19 7" stroke="#10B981" strokeWidth="2.2"
+                        strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            </div>
+
+            <p className="pom2-done-title">¡Sobre completado!</p>
+
+            <div className="pom2-done-thumbs">
+                {cards.map(({ type, card }, i) => {
+                    const color = TYPE_COLOR[type] || '#7C6FFF';
+                    const label = TYPE_LABEL[type] || type;
+                    const initials = card?.name
+                        ? card.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()
+                        : label.slice(0, 2).toUpperCase();
+                    return (
+                        <div key={i} className="pom2-done-thumb" style={{ '--acc': color }}>
+                            <span className="pom2-done-thumb-init">{initials}</span>
+                            <span className="pom2-done-thumb-type">{label}</span>
+                        </div>
+                    );
+                })}
+            </div>
+
+            <div className="pom2-actions">
+                {packsAvailable > 1 && (
+                    <button className="pom2-btn-again" onClick={onReset}>
+                        Abrir otro
+                        <span className="pom2-badge">{packsAvailable - 1}</span>
+                    </button>
+                )}
+                <button className="pom2-btn-collection" onClick={onClose}>
+                    Ver mi colección
+                </button>
+            </div>
+        </div>
+    );
+}
+
+/* ─── HoloScanner — panel izquierdo durante animating + revealing ───────── */
+const OS_LINES_ANIMATING = [
+    'INICIANDO APERTURA...',
+    'LEYENDO CONTENIDO...',
+    'CLASIFICANDO ÍTEMS...',
+    'VERIFICANDO RAREZA...',
+];
+
+const OS_LINES_REVEALING = [
+    'TRANSFERENCIA COMPLETADA ✓',
+    'SINCRONIZANDO COLECCIÓN...',
+    'ÍTEM REGISTRADO ✓',
+];
+
+const SCAN_TYPES = [
+    { key: 'player', label: 'JUGADOR', color: '#7C6FFF' },
+    { key: 'team', label: 'EQUIPO', color: '#10B981' },
+    { key: 'competition', label: 'COPA', color: '#F59E0B' },
+    { key: 'event', label: 'EVENTO', color: '#F43F5E' },
+];
+
+function HoloScanner({ phase, isGoat, flippedCount, totalCards }) {
+    const [osLine, setOsLine] = useState(0);
+    const [typesVisible, setTypesVisible] = useState(0);
+    const [rarityStep, setRarityStep] = useState(0); // 0-4 bloques
+
+    const isAnimating = phase === 'animating';
+    const isRevealing = phase === 'revealing' || phase === 'done';
+
+    /* Typewriter de líneas OS */
+    useEffect(() => {
+        if (!isAnimating) return;
+        setOsLine(0);
+        setTypesVisible(0);
+        setRarityStep(0);
+
+        const timers = [];
+        OS_LINES_ANIMATING.forEach((_, i) => {
+            timers.push(setTimeout(() => setOsLine(i + 1), 200 + i * 320));
+        });
+        /* Tipos aparecen uno a uno desde los 400ms */
+        SCAN_TYPES.forEach((_, i) => {
+            timers.push(setTimeout(() => setTypesVisible(i + 1), 500 + i * 200));
+        });
+        /* Barra de rareza va creciendo */
+        for (let s = 1; s <= 4; s++) {
+            timers.push(setTimeout(() => setRarityStep(s), 900 + s * 200));
+        }
+        return () => timers.forEach(clearTimeout);
+    }, [isAnimating]);
+
+    /* Reset suave al pasar a revealing */
+    useEffect(() => {
+        if (isRevealing) {
+            setOsLine(OS_LINES_ANIMATING.length);
+            setTypesVisible(SCAN_TYPES.length);
+            setRarityStep(4);
+        }
+    }, [isRevealing]);
+
+    const revealedLines = isRevealing
+        ? OS_LINES_REVEALING.slice(0, Math.min(flippedCount + 1, OS_LINES_REVEALING.length))
+        : [];
+
+    return (
+        <div className={`pom2-holo${isGoat ? ' pom2-holo--goat' : ''}`} aria-hidden="true">
+            {/* Grid holográfico de fondo */}
+            <div className="pom2-holo-grid" />
+
+            {/* Scan line horizontal */}
+            <div className={`pom2-holo-scanline${isRevealing ? ' pom2-holo-scanline--slow' : ''}`} />
+
+            {/* Scan line vertical secundario */}
+            <div className="pom2-holo-scanline-v" />
+
+            {/* Corner brackets */}
+            <div className="pom2-holo-corner pom2-holo-corner--tl" />
+            <div className="pom2-holo-corner pom2-holo-corner--tr" />
+            <div className="pom2-holo-corner pom2-holo-corner--bl" />
+            <div className="pom2-holo-corner pom2-holo-corner--br" />
+
+            {/* Contenido OS */}
+            <div className="pom2-holo-content">
+
+                {/* Cabecera */}
+                <div className="pom2-holo-header">
+                    <span className="pom2-holo-dot" />
+                    <span className="pom2-holo-os-title">GLOBAL ALBUMS OS v2.6</span>
+                </div>
+
+                {/* Líneas de proceso */}
+                <div className="pom2-holo-lines">
+                    {OS_LINES_ANIMATING.slice(0, osLine).map((line, i) => (
+                        <div key={i} className="pom2-holo-line pom2-holo-line--in">
+                            <span className="pom2-holo-prompt">›</span>
+                            <span className="pom2-holo-line-text">{line}</span>
+                        </div>
+                    ))}
+                    {revealedLines.map((line, i) => (
+                        <div key={'r' + i} className="pom2-holo-line pom2-holo-line--done">
+                            <span className="pom2-holo-prompt">✓</span>
+                            <span className="pom2-holo-line-text">{line}</span>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Separador */}
+                {typesVisible > 0 && (
+                    <div className="pom2-holo-sep" />
+                )}
+
+                {/* Tipos detectados */}
+                {typesVisible > 0 && (
+                    <div className="pom2-holo-section">
+                        <span className="pom2-holo-label">CONTENIDO DETECTADO</span>
+                        <div className="pom2-holo-types">
+                            {SCAN_TYPES.slice(0, typesVisible).map((t, i) => (
+                                <div key={t.key} className="pom2-holo-type-row pom2-holo-type-row--in"
+                                    style={{ '--tc': t.color, '--ti': i }}>
+                                    <span className="pom2-holo-type-diamond">◈</span>
+                                    <span className="pom2-holo-type-name">{t.label}</span>
+                                    <span className="pom2-holo-type-signal" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Rareza */}
+                {rarityStep > 0 && (
+                    <>
+                        <div className="pom2-holo-sep" />
+                        <div className="pom2-holo-section">
+                            <span className="pom2-holo-label">
+                                {isGoat ? '⚠ ANOMALÍA DETECTADA' : 'RAREZA ESTIMADA'}
+                            </span>
+                            {isGoat ? (
+                                <div className="pom2-holo-anomaly">
+                                    <span className="pom2-holo-anomaly-text">ÍTEM DE ALTO VALOR</span>
+                                </div>
+                            ) : (
+                                <div className="pom2-holo-rarity-bar">
+                                    {Array.from({ length: 8 }).map((_, i) => (
+                                        <div key={i}
+                                            className={`pom2-holo-rarity-seg${i < rarityStep * 2 ? ' pom2-holo-rarity-seg--on' : ''}`}
+                                            style={{ '--ri': i }} />
+                                    ))}
+                                    <span className="pom2-holo-rarity-lbl">
+                                        {isRevealing ? 'CONFIRMADA' : 'ANALIZANDO'}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </>
+                )}
+
+                {/* Contador en vivo durante revealing */}
+                {isRevealing && (
+                    <>
+                        <div className="pom2-holo-sep" />
+                        <div className="pom2-holo-section">
+                            <span className="pom2-holo-label">ÍTEMS REVELADOS</span>
+                            <div className="pom2-holo-counter">
+                                <span className="pom2-holo-counter-n">{flippedCount}</span>
+                                <span className="pom2-holo-counter-sep">/</span>
+                                <span className="pom2-holo-counter-total">{totalCards}</span>
+                                <div className="pom2-holo-counter-pips">
+                                    {Array.from({ length: totalCards }).map((_, i) => (
+                                        <span key={i}
+                                            className={`pom2-holo-pip${i < flippedCount ? ' pom2-holo-pip--on' : ''}`} />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
+            </div>
+        </div>
+    );
+}
+
+/* ─── Nuevo sobre rediseñado ─────────────────────────────────────────────── */
+/**
+ * EnvelopePack — reemplaza el PackVisual anterior.
+ *
+ * Fases internas (controladas por `phase` del padre):
+ *   idle      → sobre flota, botón visible
+ *   animating → shake (450ms) → solapa sube (500ms) → sobre sale (300ms)
+ *               al mismo tiempo que las cartas empiezan a aparecer (overlap 200ms)
+ *   revealing → sobre ya no se muestra, cartas presentes
+ */
+function EnvelopePack({ count, phase, onOpen, allFlipped, packsAvailable, onReset, onClose, isGoat, flippedCount, totalCards }) {
+    const [envPhase, setEnvPhase] = useState('idle'); // idle | shake | opening | gone
+    const [scannerActive, setScannerActive] = useState(false);
+
+    /* Sincronizar envPhase con la phase del padre */
+    useEffect(() => {
+        if (phase === 'idle') {
+            setEnvPhase('idle');
+            setScannerActive(false);
+            return;
+        }
+        if (phase === 'animating') {
+            /* shake → opening → gone */
+            setEnvPhase('shake');
+            const t1 = setTimeout(() => setEnvPhase('opening'), 450);
+            const t2 = setTimeout(() => {
+                setEnvPhase('gone');
+                setScannerActive(true); // se activa cuando el sobre sale y NUNCA se apaga por tiempo
+            }, 950);
+            return () => { clearTimeout(t1); clearTimeout(t2); };
+        }
+    }, [phase]);
+
+    /* El scanner se apaga ÚNICAMENTE cuando el usuario destapa todas las cartas */
+    useEffect(() => {
+        if (allFlipped) setScannerActive(false);
+    }, [allFlipped]);
+
+    const isGone = envPhase === 'gone' || phase === 'revealing' || phase === 'done';
 
     return (
         <div className="pom2-pack-panel">
             <div className="pom2-pack-bg-pattern" aria-hidden="true" />
 
-            <div className={`pom2-pack-wrap${isOpening ? ' pom2-pack-wrap--tearing' : ''}`} aria-hidden="true">
-                <div className="pom2-pack-flap">
-                    <div className="pom2-pack-flap-perfs">
-                        {Array.from({ length: 6 }).map((_, i) => (
-                            <span key={i} className="pom2-perf" />
+            {/* ── Sobre ── */}
+            {!isGone && (
+                <div className={`pom2-env-wrap pom2-env-wrap--${envPhase}`} data-env-phase={envPhase} aria-hidden="true">
+                    {/* Glow pulsante que crece con la animación */}
+                    <div className={`pom2-env-glow pom2-env-glow--${envPhase}`} aria-hidden="true" />
+                    {/* Sombra dinámica */}
+                    <div className="pom2-env-shadow" />
+
+                    {/* Cuerpo del sobre */}
+                    <div className="pom2-env-body">
+                        {/* Spine lateral */}
+                        <div className="pom2-env-spine" />
+
+                        {/* Shine de papel */}
+                        <div className="pom2-env-shine" />
+
+                        {/* Cara frontal */}
+                        <div className="pom2-env-face">
+                            <div className="pom2-env-logo">
+                                <svg width="24" height="24" viewBox="0 0 48 48" fill="none">
+                                    <path d="M24 4L6 12V24C6 33 14 41 24 44C34 41 42 33 42 24V12L24 4Z"
+                                        stroke="currentColor" strokeWidth="1.5"
+                                        fill="none" strokeLinejoin="round" />
+                                    <text x="24" y="29" textAnchor="middle"
+                                        fontFamily="'DM Mono', monospace" fontSize="11"
+                                        fontWeight="700" fill="currentColor">GA</text>
+                                </svg>
+                            </div>
+                            <span className="pom2-env-brand">Global Albums</span>
+                            <span className="pom2-env-season">25 · 26</span>
+                        </div>
+
+                        {/* Triángulo inferior (estilo sobre) */}
+                        <div className="pom2-env-flap-bottom" />
+
+                        {/* Beam de luz al abrirse */}
+                        <div className="pom2-env-beam" />
+                    </div>
+
+                    {/* Solapa superior con clip-path triangular */}
+                    <div className="pom2-env-flap">
+                        <div className="pom2-env-flap-face" />
+                        {/* Perforaciones */}
+                        <div className="pom2-env-perfs">
+                            {Array.from({ length: 6 }).map((_, i) => (
+                                <span key={i} className="pom2-env-perf" />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Línea de desgarro — aparece durante opening */}
+                    <div className="pom2-env-tear-line">
+                        {Array.from({ length: 7 }).map((_, i) => (
+                            <div key={i} className="pom2-env-tear-seg" />
                         ))}
                     </div>
                 </div>
-                <div className="pom2-pack-body">
-                    <div className="pom2-pack-spine" />
-                    <div className="pom2-pack-face">
-                        {isOpening && <div className="pom2-pack-beam" aria-hidden="true" />}
-                        <div className="pom2-pack-logo">
-                            <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
-                                <path d="M24 4L6 12V24C6 33 14 41 24 44C34 41 42 33 42 24V12L24 4Z"
-                                    stroke="currentColor" strokeWidth="1.4"
-                                    fill="none" strokeLinejoin="round" />
-                                <text x="24" y="29" textAnchor="middle"
-                                    fontFamily="'DM Mono', monospace" fontSize="11"
-                                    fontWeight="700" fill="currentColor">GA</text>
-                            </svg>
-                        </div>
-                        <span className="pom2-pack-season">25 · 26</span>
-                        <span className="pom2-pack-brand">Global Albums</span>
-                    </div>
-                </div>
-            </div>
+            )}
 
-            <div className="pom2-pack-count">
+            {/* ── Contador de sobres ── */}
+            <div className={`pom2-pack-count${isGone ? ' pom2-pack-count--hidden' : ''}`}>
                 <span className="pom2-pack-count-n">{count}</span>
                 <span className="pom2-pack-count-lbl">
                     {count === 1 ? 'sobre disponible' : 'sobres disponibles'}
                 </span>
             </div>
 
+            {/* ── CTA ── */}
             {phase === 'idle' && (
                 <button
                     className="pom2-pack-cta"
@@ -251,26 +576,23 @@ function PackVisual({ count, phase, onOpen, allFlipped, packsAvailable, onReset,
                     </svg>
                 </button>
             )}
-            {phase === 'animating' && (
-                <span className="pom2-pack-opening-lbl" aria-live="polite">Abriendo…</span>
+
+            {/* HoloScanner — activo desde que el sobre sale hasta que se destapan todas las cartas.
+                No depende de phase, solo de scannerActive y allFlipped. */}
+            {scannerActive && (
+                <HoloScanner
+                    phase={phase}
+                    isGoat={isGoat}
+                    flippedCount={flippedCount}
+                    totalCards={totalCards}
+                />
             )}
 
-            <p className="pom2-pack-types-hint">jugador · equipo · copa · evento</p>
+            <p className={`pom2-pack-types-hint${isGone ? ' pom2-pack-types-hint--hidden' : ''}`}>
+                jugador · equipo · copa · evento
+            </p>
 
-            {/* Acciones en desktop (ocultas en mobile via CSS) */}
-            {allFlipped && (
-                <div className="pom2-actions">
-                    {packsAvailable > 1 && (
-                        <button className="pom2-btn-again" onClick={onReset}>
-                            Abrir otro
-                            <span className="pom2-badge">{packsAvailable - 1}</span>
-                        </button>
-                    )}
-                    <button className="pom2-btn-collection" onClick={onClose}>
-                        Ver mi colección
-                    </button>
-                </div>
-            )}
+            {/* Acciones desktop movidas a PackDonePanel */}
         </div>
     );
 }
@@ -289,30 +611,41 @@ function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, pa
             </div>
 
             <div className="pom2-cards-grid">
-                {cards.map(({ type, card }, i) => (
-                    <FlipCard
-                        key={type}
-                        type={type}
-                        card={card}
-                        index={i}
-                        isDealt={isDealt}
-                        isFlipped={flippedSet.has(i)}
-                        onFlip={() => onFlip(i)}
-                        isGoat={isGoat}
-                    />
-                ))}
+                {!isDealt
+                    ? CARD_ORDER.map((type, i) => (
+                        <div key={type} className="pom2-waiting-slot" style={{ '--slot-i': i }} aria-hidden="true">
+                            <CardBack />
+                            <div className="pom2-waiting-shimmer" />
+                            <span className="pom2-waiting-type">{TYPE_LABEL[type]}</span>
+                        </div>
+                    ))
+                    : cards.map(({ type, card }, i) => (
+                        <FlipCard
+                            key={type}
+                            type={type}
+                            card={card}
+                            index={i}
+                            isDealt={isDealt}
+                            isFlipped={flippedSet.has(i)}
+                            onFlip={() => onFlip(i)}
+                            isGoat={isGoat}
+                        />
+                    ))}
             </div>
 
             {!allFlipped && isDealt && (
-                <p className="pom2-cards-hint" aria-live="polite">
+                <p className="pom2-cards-hint pom2-cards-hint--visible" aria-live="polite">
                     Toca cada carta para revelarla · {flippedSet.size}/{cards.length}
                 </p>
             )}
             {allFlipped && (
-                <p className="pom2-cards-done" aria-live="polite">¡Sobre completado!</p>
+                <div className="pom2-cards-done-wrap" aria-live="polite">
+                    <ConfettiBurst />
+                    <p className="pom2-cards-done">¡Sobre completado!</p>
+                </div>
             )}
 
-            {/* Acciones en mobile (ocultas en desktop via CSS) */}
+            {/* Acciones mobile (ocultas en desktop via CSS) */}
             {allFlipped && (
                 <div className="pom2-mobile-actions">
                     {packsAvailable > 1 && (
@@ -343,7 +676,7 @@ export default function PackOpeningModal({
     onReset,
 }) {
     const [flippedCards, setFlippedCards] = useState(new Set());
-    const [isDealt,      setIsDealt]      = useState(false);
+    const [isDealt, setIsDealt] = useState(false);
     const overlayRef = useRef(null);
 
     const allFlipped = result ? flippedCards.size === CARD_ORDER.length : false;
@@ -352,7 +685,15 @@ export default function PackOpeningModal({
         if (phase === 'revealing') {
             setFlippedCards(new Set());
             setIsDealt(false);
-            const t = setTimeout(() => setIsDealt(true), 60);
+            /*
+             * TIMING AJUSTADO:
+             * El sobre sale a los 950ms desde que empieza "animating".
+             * Las cartas hacen deal-in a partir de los 750ms (overlap 200ms).
+             * Aquí seteamos isDealt apenas arranca "revealing" (el padre
+             * cambia la phase a revealing en ~950ms después de onOpen).
+             * Así las cartas y el sobre se solapan exactamente 200ms.
+             */
+            const t = setTimeout(() => setIsDealt(true), 30);
             return () => clearTimeout(t);
         }
         if (phase === 'idle') {
@@ -385,10 +726,10 @@ export default function PackOpeningModal({
     };
 
     const titles = {
-        idle:      'Apertura de sobre',
+        idle: 'Apertura de sobre',
         animating: 'Abriendo…',
         revealing: isGoat ? '¡Figurita GOAT!' : '¡Tus cartas!',
-        done:      isGoat ? '¡Figurita GOAT!' : '¡Tus cartas!',
+        done: isGoat ? '¡Figurita GOAT!' : '¡Tus cartas!',
     };
 
     return (
@@ -402,7 +743,7 @@ export default function PackOpeningModal({
         >
             <div className={[
                 'pom2-modal',
-                isGoat   ? 'pom2-modal--goat'   : '',
+                isGoat ? 'pom2-modal--goat' : '',
                 isLegend ? 'pom2-modal--legend' : '',
                 `pom2-modal--${phase}`,
             ].filter(Boolean).join(' ')}>
@@ -433,15 +774,27 @@ export default function PackOpeningModal({
 
                 {/* ── Body ── */}
                 <div className="pom2-body">
-                    <PackVisual
-                        count={packsAvailable}
-                        phase={phase}
-                        onOpen={onOpen}
-                        allFlipped={allFlipped}
-                        packsAvailable={packsAvailable}
-                        onReset={onReset}
-                        onClose={onClose}
-                    />
+                    {allFlipped ? (
+                        <PackDonePanel
+                            cards={cards}
+                            packsAvailable={packsAvailable}
+                            onReset={onReset}
+                            onClose={onClose}
+                        />
+                    ) : (
+                        <EnvelopePack
+                            count={packsAvailable}
+                            phase={phase}
+                            onOpen={onOpen}
+                            allFlipped={allFlipped}
+                            packsAvailable={packsAvailable}
+                            onReset={onReset}
+                            onClose={onClose}
+                            isGoat={isGoat}
+                            flippedCount={flippedCards.size}
+                            totalCards={CARD_ORDER.length}
+                        />
+                    )}
 
                     <div className="pom2-divider" aria-hidden="true" />
 
