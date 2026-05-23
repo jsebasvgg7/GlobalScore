@@ -47,9 +47,19 @@ export const deleteMatch = async (matchId) => {
 // ════════════════════════════════════════════════════════════
 
 export const updatePredictionPoints = async (predictionId, pointsEarned, advancingPoints) => {
+    const resultType = pointsEarned === 5
+        ? 'exact'
+        : pointsEarned === 3
+            ? 'correct'
+            : 'wrong';
+
     const { error } = await supabase
         .from('predictions')
-        .update({ points_earned: pointsEarned, advancing_points: advancingPoints })
+        .update({
+            points_earned: pointsEarned,
+            advancing_points: advancingPoints,
+            result_type: resultType,
+        })
         .eq('id', predictionId);
     if (error) throw error;
 };
