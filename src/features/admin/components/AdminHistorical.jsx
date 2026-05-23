@@ -89,10 +89,10 @@ const TITLE_CAT_LABEL = {
 const FORMATION_DEFAULTS = {
   "4-3-3": [
     { shirt_number: 1, position_role: "GK", pos_x: 50, pos_y: 88 },
-    { shirt_number: 2, position_role: "RB", pos_x: 80, pos_y: 70 },
+    { shirt_number: 2, position_role: "RB", pos_x: 20, pos_y: 70 },
     { shirt_number: 6, position_role: "CB", pos_x: 40, pos_y: 70 },
     { shirt_number: 4, position_role: "CB", pos_x: 60, pos_y: 70 },
-    { shirt_number: 3, position_role: "LB", pos_x: 20, pos_y: 70 },
+    { shirt_number: 3, position_role: "LB", pos_x: 80, pos_y: 70 },
     { shirt_number: 5, position_role: "CDM", pos_x: 50, pos_y: 52 },
     { shirt_number: 10, position_role: "CM", pos_x: 30, pos_y: 52 },
     { shirt_number: 8, position_role: "CM", pos_x: 70, pos_y: 52 },
@@ -285,7 +285,12 @@ const EMPTY_EVENT_KNOCKOUT_ROW = (sort = 0) => ({
 });
 
 const EMPTY_LINEUP_PLAYER = (num) => ({
-  shirt_number: num, player_name: "", position_role: "", pos_x: 50, pos_y: 50,
+  _id: Date.now() + Math.random(),
+  shirt_number: num,      // sugerido, pero el admin puede cambiarlo
+  player_name: "",
+  position_role: "",
+  pos_x: 50,
+  pos_y: 50,
 });
 
 const EMPTY_CAREER_ROW = () => ({
@@ -844,6 +849,79 @@ function PlayerPanel({ player, teams, users, onSave, onClose, onGetPlayerTeams, 
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
+//  FIELD PREVIEW — Vista táctica del campo
+// ══════════════════════════════════════════════════════════════════════════════
+
+function FieldPreview({ lineup, primaryColor = "#ffffff", secondaryColor = "#1a1a2e" }) {
+  const active = lineup.filter(p => p.player_name && p.player_name.trim() !== "");
+
+  return (
+    <div className="ah-field-preview" style={{ aspectRatio: "3 / 4.2" }}>
+      <svg
+        className="ah-field-svg"
+        viewBox="0 0 300 420"
+        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <rect x="10" y="10" width="280" height="400" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" />
+        <line x1="10" y1="210" x2="290" y2="210" stroke="rgba(255,255,255,0.35)" strokeWidth="1" />
+        <circle cx="150" cy="210" r="38" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1" />
+        <circle cx="150" cy="210" r="2" fill="rgba(255,255,255,0.5)" />
+        <rect x="65" y="10" width="170" height="60" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+        <rect x="105" y="10" width="90" height="25" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+        <rect x="65" y="350" width="170" height="60" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+        <rect x="105" y="385" width="90" height="25" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+        <circle cx="150" cy="45" r="2" fill="rgba(255,255,255,0.4)" />
+        <circle cx="150" cy="375" r="2" fill="rgba(255,255,255,0.4)" />
+        <path d="M 100 70 A 38 38 0 0 1 200 70" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+        <path d="M 100 350 A 38 38 0 0 0 200 350" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+        <path d="M 10 10 Q 18 10 18 18" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+        <path d="M 290 10 Q 282 10 282 18" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+        <path d="M 10 410 Q 18 410 18 402" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+        <path d="M 290 410 Q 282 410 282 402" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+        <rect x="127" y="4" width="46" height="8" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" />
+        <rect x="127" y="408" width="46" height="8" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" />
+      </svg>
+
+      {active.map((p) => {
+        const isGK = p.position_role === "GK";
+        const x = `${Math.min(Math.max(p.pos_x ?? 50, 5), 95)}%`;
+        const y = `${Math.min(Math.max(p.pos_y ?? 50, 5), 95)}%`;
+        const shortName = (p.player_name || "").split(" ").pop() || p.player_name;
+
+        return (
+          <div
+            key={p._id || p.shirt_number}
+            className={`ah-field-player ${isGK ? "ah-field-player--gk" : "ah-field-player--field"}`}
+            style={{ left: x, top: y }}
+          >
+            <div
+              className="ah-field-player-dot"
+              style={isGK ? undefined : { "--player-color": primaryColor, "--player-text": secondaryColor }}
+            >
+              {p.shirt_number || "?"}
+            </div>
+            <span className="ah-field-player-name">{shortName}</span>
+            {p.position_role && <span className="ah-field-player-pos">{p.position_role}</span>}
+          </div>
+        );
+      })}
+
+      {active.length === 0 && (
+        <div style={{
+          position: "absolute", inset: 0, display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center", gap: 6, pointerEvents: "none",
+        }}>
+          <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+            Sin jugadores aún
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
 //  PANEL: EQUIPO
 // ══════════════════════════════════════════════════════════════════════════════
 
@@ -855,39 +933,36 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
   const [error, setError] = useState(null);
   const [tab, setTab] = useState("info");
   const [loadingData, setLoadingData] = useState(false);
+  const [showField, setShowField] = useState(true); // toggle del preview
 
+  // Lineup dinámico — ya no es fijo de 1-11
   const [lineup, setLineup] = useState(
     Array.from({ length: 11 }, (_, i) => EMPTY_LINEUP_PLAYER(i + 1))
   );
   const [titles, setTitles] = useState([]);
   const [newTitle, setNewTitle] = useState({ title_name: "", year: "", competition_id: "" });
 
-  // ✅ BUG 1 CORREGIDO: useEffect en lugar de useState para cargar datos async
   useEffect(() => {
     if (!isEdit) return;
     setLoadingData(true);
     Promise.all([onGetLineup(team.id), onGetTitles(team.id)])
       .then(([lin, tit]) => {
         if (lin && lin.length > 0) {
+          // Cargar tal cual desde BD — el dorsal es el valor guardado
           setLineup(
-            Array.from({ length: 11 }, (_, i) => {
-              const found = lin.find(p => p.shirt_number === i + 1);
-              return found
-                ? {
-                  shirt_number: i + 1,
-                  player_name: found.player_name || "",
-                  position_role: found.position_role || "",
-                  pos_x: found.pos_x ?? 50,
-                  pos_y: found.pos_y ?? 50,
-                }
-                : EMPTY_LINEUP_PLAYER(i + 1);
-            })
+            lin.map(p => ({
+              _id: p.id || Date.now() + Math.random(),
+              shirt_number: p.shirt_number,
+              player_name: p.player_name || "",
+              position_role: p.position_role || "",
+              pos_x: p.pos_x ?? 50,
+              pos_y: p.pos_y ?? 50,
+            }))
           );
         }
-        // ✅ BUG 2 CORREGIDO: guardamos solo los campos que necesitamos de los títulos existentes
         setTitles(
           (tit || []).map(t => ({
-            _dbId: t.id,            // referencia interna, no se envía a Supabase
+            _dbId: t.id,
             title_name: t.title_name,
             year: t.year || "",
             competition_id: t.competition_id || "",
@@ -897,25 +972,58 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
       .catch(() => { })
       .finally(() => setLoadingData(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // solo al montar
+  }, []);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
+  // ── Auto-posicionar desde formación — por índice, no por dorsal ────────────
   const applyFormation = (formation) => {
     const defaults = FORMATION_DEFAULTS[formation];
     if (!defaults) return;
     setLineup(prev =>
-      prev.map(p => {
-        const def = defaults.find(d => d.shirt_number === p.shirt_number);
-        return def ? { ...p, position_role: def.position_role, pos_x: def.pos_x, pos_y: def.pos_y } : p;
+      prev.map((p, idx) => {
+        const def = defaults[idx];
+        return def
+          ? { ...p, position_role: def.position_role, pos_x: def.pos_x, pos_y: def.pos_y }
+          : p;
       })
     );
     set("formation", formation);
   };
 
-  const updateLineupPlayer = (num, field, val) =>
-    setLineup(prev => prev.map(p => p.shirt_number === num ? { ...p, [field]: val } : p));
+  // ── Actualizar campo de un jugador por _id ─────────────────────────────────
+  const updateLineupPlayer = (_id, field, val) =>
+    setLineup(prev => prev.map(p => p._id === _id ? { ...p, [field]: val } : p));
 
+  // ── Añadir / quitar jugador ─────────────────────────────────────────────────
+  const addLineupPlayer = () => {
+    const usedNums = lineup.map(p => Number(p.shirt_number)).filter(Boolean);
+    let next = 1;
+    while (usedNums.includes(next)) next++;
+    setLineup(prev => [...prev, EMPTY_LINEUP_PLAYER(next)]);
+  };
+
+  const removeLineupPlayer = (_id) =>
+    setLineup(prev => prev.filter(p => p._id !== _id));
+
+  // ── Importar desde DataImporter ────────────────────────────────────────────
+  const handleLineupImport = (rows, importMode) => {
+    const mapped = rows.map(r => ({
+      _id: Date.now() + Math.random(),
+      shirt_number: Number(r.shirt_number) || 1,
+      player_name: r.player_name || "",
+      position_role: r.position_role || "",
+      pos_x: Number(r.pos_x) || 50,
+      pos_y: Number(r.pos_y) || 50,
+    }));
+    if (importMode === "append") {
+      setLineup(prev => [...prev, ...mapped]);
+    } else {
+      setLineup(mapped);
+    }
+  };
+
+  // ── Palmarés ────────────────────────────────────────────────────────────────
   const addTitle = () => {
     if (!newTitle.title_name.trim()) return;
     setTitles(prev => [
@@ -931,35 +1039,37 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
 
   const removeTitle = (idx) => setTitles(prev => prev.filter((_, i) => i !== idx));
 
+  // ── Guardar ─────────────────────────────────────────────────────────────────
   const handleSubmit = async () => {
     if (!form.name.trim()) { setError("El nombre es obligatorio"); return; }
+
+    // Validar dorsales 1-11 (constraint de BD)
+    const invalid = lineup.filter(p => p.player_name.trim() && (Number(p.shirt_number) < 1 || Number(p.shirt_number) > 11));
+    if (invalid.length > 0) {
+      setError(`Los dorsales deben ser entre 1 y 11. Revisa: ${invalid.map(p => p.shirt_number).join(", ")}`);
+      return;
+    }
+
     setSaving(true); setError(null);
     try {
-      console.log("1. Guardando form...");
       const saved = await onSave(form, imageFile);
-      console.log("2. Equipo guardado:", saved);
       const id = saved?.id || team?.id;
-      console.log("3. ID del equipo:", id);
-      console.log("4. Títulos a guardar:", titles);
 
       if (id) {
-        const lineupToSave = lineup.filter(p => p.player_name && p.player_name.trim() !== "");
-        console.log("5. Lineup a guardar:", lineupToSave);
+        const lineupToSave = lineup
+          .filter(p => p.player_name && p.player_name.trim() !== "")
+          .map(({ _id, ...r }) => ({ ...r, shirt_number: Number(r.shirt_number) }));
         await onSetLineup(id, lineupToSave);
-        console.log("6. Lineup guardado OK");
 
         const titlesToSave = titles.map(({ title_name, year, competition_id }) => ({
           title_name,
           year: year ? String(year).trim() : null,
           competition_id: competition_id || null,
         }));
-        console.log("7. titlesToSave:", titlesToSave);
         await onSetTitles(id, titlesToSave);
-        console.log("8. Títulos guardados OK");
       }
       onClose();
     } catch (err) {
-      console.error("ERROR:", err);
       setError(err.message);
     } finally {
       setSaving(false);
@@ -978,6 +1088,7 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
         ))}
       </div>
 
+      {/* ── TAB INFO ── */}
       {tab === "info" && <>
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Imagen</span>
@@ -1053,9 +1164,18 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
         </div>
       </>}
 
+      {/* ── TAB ALINEACIÓN ── */}
       {tab === "lineup" && (
         <div className="ah-panel-section">
-          <span className="ah-panel-sep">Formación y 11 titular</span>
+          <span className="ah-panel-sep">Formación y alineación</span>
+
+          {/* Importador masivo */}
+          <DataImporter
+            mode="team_lineup"
+            onImport={handleLineupImport}
+          />
+
+          {/* Selector de formación + auto-posicionar */}
           <div className="ah-formation-row">
             <PSelect value={form.formation || "4-3-3"}
               onChange={e => set("formation", e.target.value)}
@@ -1067,46 +1187,121 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
               Auto-posicionar
             </button>
           </div>
+
+          {/* ── Vista previa del campo (toggle) ─────────────────────── */}
+          <div className="ah-field-wrap">
+            <button
+              type="button"
+              className="ah-field-toggle"
+              onClick={() => setShowField(v => !v)}
+            >
+              <span className="ah-field-toggle-label">
+                {showField ? <EyeOff size={10} /> : <Eye size={10} />}
+                {showField ? "Ocultar vista previa del campo" : "Ver campo táctico"}
+              </span>
+              {lineup.filter(p => p.player_name.trim()).length > 0 && (
+                <span style={{
+                  fontSize: 8, fontFamily: "'DM Mono', monospace",
+                  color: "var(--accent)", fontWeight: 700,
+                }}>
+                  {lineup.filter(p => p.player_name.trim()).length} jugadores
+                </span>
+              )}
+            </button>
+
+            {showField && (
+              <>
+                <FieldPreview
+                  lineup={lineup}
+                  primaryColor={form.primary_color || "#ffffff"}
+                  secondaryColor={form.secondary_color || "#1a1a2e"}
+                />
+                <p className="ah-field-hint">
+                  Ajusta X · Y en la tabla de abajo para mover jugadores en el campo.
+                  X=0 izquierda · X=100 derecha · Y=0 arriba · Y=100 abajo
+                </p>
+              </>
+            )}
+          </div>
+
+          {/* ── Lista editable de jugadores ──────────────────────────── */}
           {loadingData ? (
             <div className="ah-loading-msg">
               <RefreshCw size={12} className="ah-spin" /> Cargando...
             </div>
           ) : (
-            <div className="ah-lineup-list">
-              {lineup.map(p => (
-                <div key={p.shirt_number} className="ah-lineup-row">
-                  <span className="ah-lineup-num">{p.shirt_number}</span>
-                  <PInput
-                    placeholder="Nombre del jugador"
-                    value={p.player_name || ""}
-                    onChange={e => updateLineupPlayer(p.shirt_number, "player_name", e.target.value)}
-                    style={{ flex: 2 }}
-                  />
-                  <PSelect
-                    value={p.position_role || ""}
-                    onChange={e => updateLineupPlayer(p.shirt_number, "position_role", e.target.value)}
-                    style={{ flex: 1 }}>
-                    <option value="">Pos.</option>
-                    {POSITION_ROLES.map(r => <option key={r} value={r}>{r}</option>)}
-                  </PSelect>
-                  <div className="ah-pos-inputs">
-                    <input type="number" min="0" max="100" className="ah-pinput ah-pos-xy"
-                      title="Pos X" placeholder="X" value={p.pos_x ?? 50}
-                      onChange={e => updateLineupPlayer(p.shirt_number, "pos_x", parseFloat(e.target.value) || 0)} />
-                    <input type="number" min="0" max="100" className="ah-pinput ah-pos-xy"
-                      title="Pos Y" placeholder="Y" value={p.pos_y ?? 50}
-                      onChange={e => updateLineupPlayer(p.shirt_number, "pos_y", parseFloat(e.target.value) || 0)} />
+            <>
+              <div className="ah-lineup-list">
+                {lineup.map(p => (
+                  <div key={p._id} className="ah-lineup-row-dyn">
+                    {/* Dorsal editable */}
+                    <PInput
+                      type="number"
+                      min="1"
+                      max="11"
+                      value={p.shirt_number ?? ""}
+                      onChange={e => updateLineupPlayer(p._id, "shirt_number", e.target.value)}
+                      className="ah-lineup-dorsal"
+                      title="Dorsal (1-11)"
+                      placeholder="#"
+                    />
+                    {/* Nombre */}
+                    <PInput
+                      placeholder="Nombre del jugador"
+                      value={p.player_name || ""}
+                      onChange={e => updateLineupPlayer(p._id, "player_name", e.target.value)}
+                      style={{ flex: 2 }}
+                    />
+                    {/* Posición */}
+                    <PSelect
+                      value={p.position_role || ""}
+                      onChange={e => updateLineupPlayer(p._id, "position_role", e.target.value)}
+                      style={{ flex: 1 }}>
+                      <option value="">Pos.</option>
+                      {POSITION_ROLES.map(r => <option key={r} value={r}>{r}</option>)}
+                    </PSelect>
+                    {/* X / Y */}
+                    <div className="ah-pos-inputs">
+                      <input type="number" min="0" max="100" className="ah-pinput ah-pos-xy"
+                        title="Pos X (0=izq · 100=der)" placeholder="X" value={p.pos_x ?? 50}
+                        onChange={e => updateLineupPlayer(p._id, "pos_x", parseFloat(e.target.value) || 0)} />
+                      <input type="number" min="0" max="100" className="ah-pinput ah-pos-xy"
+                        title="Pos Y (0=arriba · 100=abajo)" placeholder="Y" value={p.pos_y ?? 50}
+                        onChange={e => updateLineupPlayer(p._id, "pos_y", parseFloat(e.target.value) || 0)} />
+                    </div>
+                    {/* Quitar */}
+                    <button type="button" className="ah-lineup-remove"
+                      onClick={() => removeLineupPlayer(p._id)}
+                      title="Quitar jugador">
+                      <X size={10} />
+                    </button>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+
+              {/* Botón añadir jugador */}
+              <button
+                type="button"
+                className="ah-add-link-btn"
+                style={{ width: "100%", justifyContent: "center", marginTop: 6 }}
+                onClick={addLineupPlayer}>
+                <Plus size={11} /> Añadir jugador
+              </button>
+
+              {/* Nota sobre constraint de BD */}
+              <div className="ah-lineup-db-note">
+                ⚠ La base de datos acepta dorsales del 1 al 11. Jugadores con dorsal fuera de ese rango no se guardarán.
+              </div>
+            </>
           )}
-          <span className="ah-phint" style={{ marginTop: 6, display: "block" }}>
-            X/Y 0–100. Y=88 portero · Y=16 delantero. Usa "Auto-posicionar" para rellenar desde la formación.
+
+          <span className="ah-phint" style={{ marginTop: 4, display: "block" }}>
+            X/Y 0–100. Y=0 portería arriba · Y=100 portería abajo. Usa "Auto-posicionar" para rellenar desde la formación.
           </span>
         </div>
       )}
 
+      {/* ── TAB TÍTULOS ── */}
       {tab === "titles" && (
         <div className="ah-panel-section">
           <span className="ah-panel-sep">Palmarés</span>

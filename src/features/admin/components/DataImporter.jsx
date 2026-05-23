@@ -44,6 +44,14 @@ const FORMAT_HELP = {
     specialParse: true,
   },
 
+  // ── Equipos históricos — Alineación ──────────────────────────────────────────
+  team_lineup: {
+    label: "Alineación (Equipo histórico)",
+    placeholder: `1\tFilippo Galli\tCB\t80\t70\n2\tMauro Tassotti\tRB\t65\t70\n3\tPaolo Maldini\tLB\t35\t70\n5\tCarlos Ancelotti\tCM\t40\t50\n9\tMarco van Basten\tST\t50\t20\n10\tRuud Gullit\tCAM\t50\t35`,
+    hint: "Dorsal · Jugador · Pos(GK/CB/LB...) · X(0-100) · Y(0-100)",
+    columns: ["shirt_number", "player_name", "position_role", "pos_x", "pos_y"],
+  },
+
   // ── Eventos — Alineaciones ────────────────────────────────────────────────────
   event_lineup_a: {
     label: "Alineación Equipo A",
@@ -150,7 +158,6 @@ function parseData(raw, mode) {
         val = isNaN(n) || n < 1 ? 1 : n;
 
       } else if (col === "round") {
-        // Normalizar ronda a valor canónico
         const mapped = ROUND_MAP[val.toLowerCase()];
         if (mapped) {
           val = mapped;
@@ -159,7 +166,6 @@ function parseData(raw, mode) {
         }
 
       } else if (col === "position_role") {
-        // Normalizar posición
         const mapped = POSITION_MAP[val.toLowerCase()];
         if (mapped) {
           val = mapped;
@@ -168,7 +174,6 @@ function parseData(raw, mode) {
         }
 
       } else if (col === "winner") {
-        // Normalizar ganador
         const winnerMap = {
           "local": "team_a", "a": "team_a", "team_a": "team_a",
           "visitante": "team_b", "b": "team_b", "team_b": "team_b",
@@ -180,10 +185,14 @@ function parseData(raw, mode) {
         "start_year", "end_year", "year", "appearances", "goals", "assists", "caps",
         "points", "wins", "draws", "losses", "goals_for", "goals_against",
         "score_a", "score_b", "penalties_a", "penalties_b", "position",
-        "shirt_number", "match_number",
+        "shirt_number", "match_number", "pos_x", "pos_y",
       ].includes(col)) {
         if (val !== "" && isNaN(Number(val))) {
           errors.push(`Línea ${idx + 1}, col "${col}": se esperaba número, recibió "${val}"`);
+        }
+        // Convertir pos_x y pos_y a número
+        if ((col === "pos_x" || col === "pos_y") && val !== "") {
+          val = parseFloat(val) || 50;
         }
       }
 
@@ -212,10 +221,8 @@ export function DataImporter({ mode, onImport, allowModeSwitch = false }) {
   const [raw, setRaw] = useState("");
   const [result, setResult] = useState(null);
   const [importMode, setImportMode] = useState("replace");
-  // Para el panel de eventos, permite cambiar entre sub-modos
   const [activeMode, setActiveMode] = useState(mode);
 
-  // Si mode cambia externamente, sincronizar
   const effectiveMode = allowModeSwitch ? activeMode : mode;
   const config = FORMAT_HELP[effectiveMode];
 
@@ -226,7 +233,7 @@ export function DataImporter({ mode, onImport, allowModeSwitch = false }) {
 
   const handleConfirm = () => {
     if (!result) return;
-    onImport(result.rows, importMode, effectiveMode); // ← pasa effectiveMode para que el caller sepa a qué lista aplicar
+    onImport(result.rows, importMode, effectiveMode);
     setOpen(false);
     setRaw("");
     setResult(null);

@@ -2600,6 +2600,229 @@
   background: rgba(255, 255, 255, 0.02);
 }
 
+/* ══════════════════════════════════════
+   FIELD PREVIEW 
+   ════════════════════════════════════ */
+
+/* ── Contenedor del campo ─────────────────────────────────────── */
+.ah-field-preview {
+  position: relative;
+  width: 100%;
+  border: 0.5px solid var(--border);
+  background: #2d5a27;
+  overflow: hidden;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+/* Líneas del campo (SVG inline) */
+.ah-field-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── Jugador en el campo ──────────────────────────────────────── */
+.ah-field-player {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: default;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ah-field-player-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--player-color, #fff);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--player-text, #1a1a2e);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  line-height: 1;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.ah-field-player--gk .ah-field-player-dot {
+  --player-color: #f59e0b;
+  --player-text: #1a1a2e;
+  border-color: #fcd34d;
+}
+
+.ah-field-player--field .ah-field-player-dot {
+  --player-color: #fff;
+  --player-text: #1a1a2e;
+}
+
+.ah-field-player-name {
+  font-size: 7px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 6px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+  max-width: 54px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.ah-field-player-pos {
+  font-size: 6px;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  text-align: center;
+  letter-spacing: 0.06em;
+}
+
+/* ── Wrapper: campo + controles ──────────────────────────────── */
+.ah-field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ah-field-hint {
+  font-size: 8px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  text-align: center;
+  letter-spacing: 0.06em;
+}
+
+/* ── Collapse toggle del preview ──────────────────────────────── */
+.ah-field-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px;
+  border: 0.5px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s;
+  margin-bottom: 4px;
+}
+
+.ah-field-toggle:hover {
+  background: var(--bg);
+  border-color: var(--accent);
+}
+
+.ah-field-toggle-label {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ah-field-toggle-label svg {
+  opacity: 0.7;
+}
+
+/* ── Fila dinámica de jugador (lineup editable) ───────────────── */
+.ah-lineup-row-dyn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 0;
+}
+
+/* Botón de quitar jugador */
+.ah-lineup-remove {
+  width: 22px;
+  height: 22px;
+  border: 0.5px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.12s;
+  border-radius: 2px;
+  padding: 0;
+}
+
+.ah-lineup-remove:hover {
+  background: rgba(242, 95, 92, 0.1);
+  color: #f25f5c;
+  border-color: rgba(242, 95, 92, 0.3);
+}
+
+/* Input dorsal — ancho fijo corto */
+.ah-lineup-dorsal {
+  width: 38px !important;
+  flex-shrink: 0;
+  text-align: center;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── Advertencia de límite BD ─────────────────────────────────── */
+.ah-lineup-db-note {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  background: rgba(245, 158, 11, 0.06);
+  border: 0.5px solid rgba(245, 158, 11, 0.25);
+  font-size: 8px;
+  font-family: 'DM Mono', monospace;
+  color: #b97a0a;
+  margin-top: 4px;
+}
+
+[data-theme="dark"] .ah-lineup-db-note {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
+}
+
+/* ── Campo — dark mode ────────────────────────────────────────── */
+[data-theme="dark"] .ah-field-preview {
+  background: #1e3d1a;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 691px) {
+  .ah-field-player-dot {
+    width: 20px;
+    height: 20px;
+    font-size: 7px;
+  }
+
+  .ah-field-player-name {
+    font-size: 6px;
+    max-width: 42px;
+  }
+
+  .ah-field-player-pos {
+    display: none;
+  }
+}
 
 /* ══════════════════════════════════════════════════════════════
    RESPONSIVE
