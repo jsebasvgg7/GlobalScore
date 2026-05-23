@@ -264,7 +264,7 @@ function PlayerDetail({ playerId, onBack }) {
           {careerTotals.clubs > 0 && (
             <>
               <div className="hp-stat-cell"><span className="hp-stat-n">{careerTotals.clubs}</span><span className="hp-stat-lbl">Clubes</span></div>
-              <div className="hp-stat-cell"><span className="hp-stat-n">{careerTotals.goals}</span><span className="hp-stat-lbl">Goles</span></div>
+              <div className="hp-stat-cell"><span className="hp-stat-n">{careerTotals.goals + nationalTotals.goals}</span><span className="hp-stat-lbl">Goles</span></div>
               {careerTotals.assists > 0 && <div className="hp-stat-cell"><span className="hp-stat-n">{careerTotals.assists}</span><span className="hp-stat-lbl">Asist.</span></div>}
             </>
           )}

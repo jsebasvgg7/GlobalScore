@@ -10,39 +10,126 @@ import {
 // ─── Re-exportamos los helpers para quien los importe desde el hook ───────────
 export { getHistoricalImageUrl, uploadHistoricalImage, deleteHistoricalImage };
 
+// ══════════════════════════════════════════════════════════════════════════════
+//  UTILIDADES DE SANITIZACIÓN
+//  Toda conversión de "" → null vive aquí. Nunca pasar strings vacíos
+//  a columnas UUID, integer o date de Supabase.
+// ══════════════════════════════════════════════════════════════════════════════
+
+/** Convierte cualquier valor vacío/falsy en null para campos UUID */
+const uuid = (v) => (v && typeof v === 'string' && v.trim() !== '' ? v.trim() : null);
+
+/** Convierte a entero; devuelve null si el valor es vacío o no parseable */
+const int = (v) => {
+  if (v === '' || v === null || v === undefined) return null;
+  const n = parseInt(v, 10);
+  return Number.isFinite(n) ? n : null;
+};
+
+/** Convierte a string recortado; devuelve null si queda vacío */
+const str = (v) => {
+  if (v === null || v === undefined) return null;
+  const s = String(v).trim();
+  return s !== '' ? s : null;
+};
+
+/** Convierte a boolean explícito (acepta string "true"/"false") */
+const bool = (v) => {
+  if (typeof v === 'boolean') return v;
+  if (v === 'true') return true;
+  return false;
+};
+
+/** Convierte a date ISO; devuelve null si está vacío */
+const date = (v) => (v && String(v).trim() !== '' ? String(v).trim() : null);
+
 // ─── Helper: obtener admin_id del usuario autenticado ────────────────────────
 const getAdminId = async () => {
   const { data: { user } } = await supabase.auth.getUser();
   return user?.id || null;
 };
 
-// ─── Campos válidos para historical_events ───────────────────────────────────
-const VALID_EVENT_FIELDS = new Set([
-  'title', 'event_type', 'event_date', 'description', 'is_published',
-  'image_path', 'banner_image_path', 'event_category', 'context_text',
-  'impact_text', 'protagonist_id', 'team_protagonist_id',
-  'score_a', 'score_b', 'team_a_name', 'team_b_name', 'admin_id',
-]);
+// ──────────────────────────────────────────────────────────────────────────────
+//  CAMPOS VÁLIDOS Y LIMPIADORES POR TABLA
+//  Cada función recibe el objeto crudo del formulario y devuelve un payload
+//  listo para insertar/actualizar en Supabase sin ningún campo sucio.
+// ──────────────────────────────────────────────────────────────────────────────
 
-const cleanEventPayload = (formData) => {
-  const filtered = Object.fromEntries(
-    Object.entries(formData).filter(([key]) => VALID_EVENT_FIELDS.has(key))
-  );
-  // UUIDs vacíos → null
-  for (const field of ['protagonist_id', 'team_protagonist_id']) {
-    if (field in filtered && !filtered[field]) filtered[field] = null;
+const cleanPlayer = (f) => ({
+  name: str(f.name),
+  country: str(f.country),
+  position: str(f.position),
+  birth_year: int(f.birth_year),
+  death_year: int(f.death_year),
+  ballon_dor_count: int(f.ballon_dor_count) ?? 0,
+  legacy_type: str(f.legacy_type),
+  significance_level: int(f.significance_level) ?? 3,
+  description: str(f.description),
+  impact_summary: str(f.impact_summary),
+  is_published: bool(f.is_published),
+  is_special: bool(f.is_special),
+  special_owner_id: uuid(f.special_owner_id),
+  // image_path se maneja fuera
+});
+
+const cleanTeam = (f) => ({
+  name: str(f.name),
+  country: str(f.country),
+  founded_year: int(f.founded_year),
+  era_dominance: str(f.era_dominance),
+  active_years: str(f.active_years),
+  manager: str(f.manager),
+  legacy_type: str(f.legacy_type),
+  primary_color: str(f.primary_color),
+  secondary_color: str(f.secondary_color),
+  formation: str(f.formation),
+  titles_count: int(f.titles_count) ?? 0,
+  description: str(f.description),
+  historical_note: str(f.historical_note),
+  is_published: bool(f.is_published),
+  // image_path se maneja fuera
+});
+
+const cleanCompetition = (f) => {
+  const base = {
+    name: str(f.name),
+    type: str(f.type),
+    format: str(f.format),
+    year: int(f.year),
+    country: str(f.country),
+    edition: str(f.edition),
+    num_teams: int(f.num_teams),
+    description: str(f.description),
+    is_published: bool(f.is_published),
+  };
+  // Modo ganador: equipo registrado vs texto libre
+  if (f.use_winner_text) {
+    base.winner_text = str(f.winner_text);
+    base.winner_team_id = null;
+  } else {
+    base.winner_team_id = uuid(f.winner_team_id);
+    base.winner_text = null;
   }
-  // event_date vacío → null
-  if ('event_date' in filtered && !filtered.event_date) filtered.event_date = null;
-  // integers vacíos → null
-  for (const field of ['score_a', 'score_b']) {
-    if (field in filtered) {
-      const val = filtered[field];
-      filtered[field] = val !== '' && val != null ? parseInt(val) : null;
-    }
-  }
-  return filtered;
+  return base;
 };
+
+const cleanEvent = (f) => ({
+  title: str(f.title),
+  event_type: str(f.event_type),
+  event_date: date(f.event_date),
+  event_category: str(f.event_category),
+  context_text: str(f.context_text),
+  impact_text: str(f.impact_text),
+  description: str(f.description),
+  protagonist_id: uuid(f.protagonist_id),
+  team_protagonist_id: uuid(f.team_protagonist_id),
+  score_a: int(f.score_a),
+  score_b: int(f.score_b),
+  team_a_name: str(f.team_a_name),
+  team_b_name: str(f.team_b_name),
+  is_published: bool(f.is_published),
+  // image_path y banner_image_path se manejan fuera
+});
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  HOOK PRINCIPAL
@@ -106,7 +193,9 @@ export function useAdminHistorical() {
     setLoading(true);
     setError(null);
     try {
-      await Promise.all([loadPlayers(), loadTeams(), loadCompetitions(), loadEvents(), loadUsers()]);
+      await Promise.all([
+        loadPlayers(), loadTeams(), loadCompetitions(), loadEvents(), loadUsers(),
+      ]);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -123,9 +212,10 @@ export function useAdminHistorical() {
     let image_path = null;
     if (imageFile) image_path = await uploadHistoricalImage(imageFile, 'players');
     const admin_id = await getAdminId();
+    const payload = { ...cleanPlayer(formData), image_path, admin_id };
     const { data, error } = await supabase
       .from('historical_players')
-      .insert({ ...formData, image_path, admin_id })
+      .insert(payload)
       .select()
       .single();
     if (error) throw error;
@@ -134,15 +224,15 @@ export function useAdminHistorical() {
   };
 
   const updatePlayer = async (id, formData, imageFile) => {
-    let updates = { ...formData };
+    let payload = { ...cleanPlayer(formData) };
     if (imageFile) {
       const old = players.find((p) => p.id === id);
       if (old?.image_path) await deleteHistoricalImage(old.image_path);
-      updates.image_path = await uploadHistoricalImage(imageFile, 'players');
+      payload.image_path = await uploadHistoricalImage(imageFile, 'players');
     }
     const { data, error } = await supabase
       .from('historical_players')
-      .update(updates)
+      .update(payload)
       .eq('id', id)
       .select()
       .single();
@@ -189,18 +279,18 @@ export function useAdminHistorical() {
       .delete()
       .eq('player_id', playerId);
     if (delErr) throw delErr;
-    if (!rows || rows.length === 0) return;
+    if (!rows?.length) return;
     const toInsert = rows.map((r, idx) => ({
       player_id: playerId,
-      team_name: r.team_name || null,
-      team_country: r.team_country || null,
-      start_year: r.start_year ? parseInt(r.start_year) : null,
-      end_year: r.end_year ? parseInt(r.end_year) : null,
-      appearances: r.appearances ? parseInt(r.appearances) : null,
-      goals: r.goals ? parseInt(r.goals) : null,
-      assists: r.assists ? parseInt(r.assists) : null,
-      role_note: r.role_note || null,
-      sort_order: r.sort_order ?? idx,
+      team_name: str(r.team_name),
+      team_country: str(r.team_country),
+      start_year: int(r.start_year),
+      end_year: int(r.end_year),
+      appearances: int(r.appearances),
+      goals: int(r.goals),
+      assists: int(r.assists),
+      role_note: str(r.role_note),
+      sort_order: int(r.sort_order) ?? idx,
     }));
     const { error: insErr } = await supabase.from('historical_player_career').insert(toInsert);
     if (insErr) throw insErr;
@@ -225,16 +315,16 @@ export function useAdminHistorical() {
       .delete()
       .eq('player_id', playerId);
     if (delErr) throw delErr;
-    if (!rows || rows.length === 0) return;
+    if (!rows?.length) return;
     const toInsert = rows.map((r) => ({
       player_id: playerId,
-      country: r.country || null,
-      start_year: r.start_year ? parseInt(r.start_year) : null,
-      end_year: r.end_year ? parseInt(r.end_year) : null,
-      caps: r.caps ? parseInt(r.caps) : null,
-      goals: r.goals ? parseInt(r.goals) : null,
-      assists: r.assists ? parseInt(r.assists) : null,
-      role_note: r.role_note || null,
+      country: str(r.country),
+      start_year: int(r.start_year),
+      end_year: int(r.end_year),
+      caps: int(r.caps),
+      goals: int(r.goals),
+      assists: int(r.assists),
+      role_note: str(r.role_note),
     }));
     const { error: insErr } = await supabase.from('historical_player_national').insert(toInsert);
     if (insErr) throw insErr;
@@ -259,14 +349,15 @@ export function useAdminHistorical() {
       .delete()
       .eq('player_id', playerId);
     if (delErr) throw delErr;
-    if (!rows || rows.length === 0) return;
-    const toInsert = rows.map((r) => ({
+    if (!rows?.length) return;
+    const toInsert = rows.map((r, idx) => ({
       player_id: playerId,
-      title_category: r.title_category || 'club',
-      title_name: r.title_name || null,
-      year: r.year ? String(r.year).trim() : null,
-      team_name: r.team_name || null,
-      quantity: r.quantity ? parseInt(r.quantity) : 1,
+      title_category: str(r.title_category) || 'club',
+      title_name: str(r.title_name),
+      year: str(r.year),
+      team_name: str(r.team_name),
+      quantity: int(r.quantity) ?? 1,
+      sort_order: int(r.sort_order) ?? idx,
     }));
     const { error: insErr } = await supabase.from('historical_player_titles').insert(toInsert);
     if (insErr) throw insErr;
@@ -279,9 +370,10 @@ export function useAdminHistorical() {
     let image_path = null;
     if (imageFile) image_path = await uploadHistoricalImage(imageFile, 'teams');
     const admin_id = await getAdminId();
+    const payload = { ...cleanTeam(formData), image_path, admin_id };
     const { data, error } = await supabase
       .from('historical_teams')
-      .insert({ ...formData, image_path, admin_id })
+      .insert(payload)
       .select()
       .single();
     if (error) throw error;
@@ -290,15 +382,15 @@ export function useAdminHistorical() {
   };
 
   const updateTeam = async (id, formData, imageFile) => {
-    let updates = { ...formData };
+    let payload = { ...cleanTeam(formData) };
     if (imageFile) {
       const old = teams.find((t) => t.id === id);
       if (old?.image_path) await deleteHistoricalImage(old.image_path);
-      updates.image_path = await uploadHistoricalImage(imageFile, 'teams');
+      payload.image_path = await uploadHistoricalImage(imageFile, 'teams');
     }
     const { data, error } = await supabase
       .from('historical_teams')
-      .update(updates)
+      .update(payload)
       .eq('id', id)
       .select()
       .single();
@@ -345,15 +437,15 @@ export function useAdminHistorical() {
       .delete()
       .eq('team_id', teamId);
     if (delErr) throw delErr;
-    if (!lineupRows || lineupRows.length === 0) return;
+    if (!lineupRows?.length) return;
     const rows = lineupRows.map((r) => ({
       team_id: teamId,
-      shirt_number: r.shirt_number,
-      player_name: r.player_name,
-      position_role: r.position_role || null,
-      pos_x: r.pos_x ?? 50,
-      pos_y: r.pos_y ?? 50,
-      player_id: r.player_id || null,
+      shirt_number: int(r.shirt_number),
+      player_name: str(r.player_name),
+      position_role: str(r.position_role),
+      pos_x: r.pos_x != null ? parseFloat(r.pos_x) : 50,
+      pos_y: r.pos_y != null ? parseFloat(r.pos_y) : 50,
+      player_id: uuid(r.player_id),
     }));
     const { error: insErr } = await supabase.from('historical_team_lineup').insert(rows);
     if (insErr) throw insErr;
@@ -378,12 +470,12 @@ export function useAdminHistorical() {
       .delete()
       .eq('team_id', teamId);
     if (delErr) throw delErr;
-    if (titleRows && titleRows.length > 0) {
+    if (titleRows?.length) {
       const rows = titleRows.map((r) => ({
         team_id: teamId,
-        title_name: r.title_name,
-        year: r.year || null,
-        competition_id: r.competition_id || null,
+        title_name: str(r.title_name),
+        year: str(r.year),
+        competition_id: uuid(r.competition_id),
       }));
       const { error: insErr } = await supabase.from('historical_team_titles').insert(rows);
       if (insErr) throw insErr;
@@ -406,9 +498,10 @@ export function useAdminHistorical() {
     let image_path = null;
     if (imageFile) image_path = await uploadHistoricalImage(imageFile, 'competitions');
     const admin_id = await getAdminId();
+    const payload = { ...cleanCompetition(formData), image_path, admin_id };
     const { data, error } = await supabase
       .from('historical_competitions')
-      .insert({ ...formData, image_path, admin_id })
+      .insert(payload)
       .select()
       .single();
     if (error) throw error;
@@ -417,15 +510,15 @@ export function useAdminHistorical() {
   };
 
   const updateCompetition = async (id, formData, imageFile) => {
-    let updates = { ...formData };
+    let payload = { ...cleanCompetition(formData) };
     if (imageFile) {
       const old = competitions.find((c) => c.id === id);
       if (old?.image_path) await deleteHistoricalImage(old.image_path);
-      updates.image_path = await uploadHistoricalImage(imageFile, 'competitions');
+      payload.image_path = await uploadHistoricalImage(imageFile, 'competitions');
     }
     const { data, error } = await supabase
       .from('historical_competitions')
-      .update(updates)
+      .update(payload)
       .eq('id', id)
       .select()
       .single();
@@ -462,7 +555,7 @@ export function useAdminHistorical() {
     if (imageFile) image_path = await uploadHistoricalImage(imageFile, 'events');
     if (bannerFile) banner_image_path = await uploadHistoricalImage(bannerFile, 'events/banners');
     const admin_id = await getAdminId();
-    const payload = cleanEventPayload({ ...formData, image_path, banner_image_path, admin_id });
+    const payload = { ...cleanEvent(formData), image_path, banner_image_path, admin_id };
     const { data, error } = await supabase
       .from('historical_events')
       .insert(payload)
@@ -475,18 +568,18 @@ export function useAdminHistorical() {
 
   const updateEvent = async (id, formData, imageFile, bannerFile) => {
     const old = events.find((e) => e.id === id);
-    let updates = cleanEventPayload({ ...formData });
+    let payload = { ...cleanEvent(formData) };
     if (imageFile) {
       if (old?.image_path) await deleteHistoricalImage(old.image_path);
-      updates.image_path = await uploadHistoricalImage(imageFile, 'events');
+      payload.image_path = await uploadHistoricalImage(imageFile, 'events');
     }
     if (bannerFile) {
       if (old?.banner_image_path) await deleteHistoricalImage(old.banner_image_path);
-      updates.banner_image_path = await uploadHistoricalImage(bannerFile, 'events/banners');
+      payload.banner_image_path = await uploadHistoricalImage(bannerFile, 'events/banners');
     }
     const { data, error } = await supabase
       .from('historical_events')
-      .update(updates)
+      .update(payload)
       .eq('id', id)
       .select()
       .single();
@@ -529,14 +622,17 @@ export function useAdminHistorical() {
 
   const setPlayerTeams = async (playerId, teamLinks) => {
     await supabase.from('historical_player_teams').delete().eq('player_id', playerId);
-    if (teamLinks.length === 0) return;
-    const rows = teamLinks.map((t) => ({
-      player_id: playerId,
-      team_id: t.team_id,
-      start_year: t.start_year ? parseInt(t.start_year) : null,
-      end_year: t.end_year ? parseInt(t.end_year) : null,
-      roles: t.roles || null,
-    }));
+    if (!teamLinks?.length) return;
+    const rows = teamLinks
+      .filter((t) => uuid(t.team_id)) // descartar filas sin team_id válido
+      .map((t) => ({
+        player_id: playerId,
+        team_id: uuid(t.team_id),
+        start_year: int(t.start_year),
+        end_year: int(t.end_year),
+        roles: str(t.roles),
+      }));
+    if (!rows.length) return;
     const { error } = await supabase.from('historical_player_teams').insert(rows);
     if (error) throw error;
   };
@@ -546,9 +642,12 @@ export function useAdminHistorical() {
   // ══════════════════════════════════════════════════════════════════════════
   const getEventRelations = async (eventId) => {
     const [pRes, tRes, cRes] = await Promise.all([
-      supabase.from('historical_player_events').select('*, historical_players(id, name)').eq('event_id', eventId),
-      supabase.from('historical_event_teams').select('*, historical_teams(id, name)').eq('event_id', eventId),
-      supabase.from('historical_event_competitions').select('*, historical_competitions(id, name)').eq('event_id', eventId),
+      supabase.from('historical_player_events')
+        .select('*, historical_players(id, name)').eq('event_id', eventId),
+      supabase.from('historical_event_teams')
+        .select('*, historical_teams(id, name)').eq('event_id', eventId),
+      supabase.from('historical_event_competitions')
+        .select('*, historical_competitions(id, name)').eq('event_id', eventId),
     ]);
     return {
       players: pRes.data || [],
@@ -564,12 +663,18 @@ export function useAdminHistorical() {
       supabase.from('historical_event_competitions').delete().eq('event_id', eventId),
     ]);
     const inserts = [];
-    if (playerIds?.length)
-      inserts.push(supabase.from('historical_player_events').insert(playerIds.map((id) => ({ event_id: eventId, player_id: id }))));
-    if (teamIds?.length)
-      inserts.push(supabase.from('historical_event_teams').insert(teamIds.map((id) => ({ event_id: eventId, team_id: id }))));
-    if (competitionIds?.length)
-      inserts.push(supabase.from('historical_event_competitions').insert(competitionIds.map((id) => ({ event_id: eventId, competition_id: id }))));
+    const validPlayers = (playerIds || []).filter(uuid);
+    const validTeams = (teamIds || []).filter(uuid);
+    const validComps = (competitionIds || []).filter(uuid);
+    if (validPlayers.length)
+      inserts.push(supabase.from('historical_player_events')
+        .insert(validPlayers.map((id) => ({ event_id: eventId, player_id: id }))));
+    if (validTeams.length)
+      inserts.push(supabase.from('historical_event_teams')
+        .insert(validTeams.map((id) => ({ event_id: eventId, team_id: id }))));
+    if (validComps.length)
+      inserts.push(supabase.from('historical_event_competitions')
+        .insert(validComps.map((id) => ({ event_id: eventId, competition_id: id }))));
     await Promise.all(inserts);
   };
 
@@ -588,24 +693,26 @@ export function useAdminHistorical() {
   };
 
   const setCompetitionGroups = async (competitionId, rows) => {
-    const { error: delErr } = await supabase.from('historical_competition_groups').delete().eq('competition_id', competitionId);
+    const { error: delErr } = await supabase
+      .from('historical_competition_groups').delete().eq('competition_id', competitionId);
     if (delErr) throw delErr;
-    if (!rows || rows.length === 0) return;
+    if (!rows?.length) return;
     const toInsert = rows.map((r, idx) => ({
       competition_id: competitionId,
-      group_name: r.group_name || 'Grupo A',
-      team_name: r.team_name || '',
-      team_id: r.team_id || null,
-      position: r.position ? parseInt(r.position) : null,
-      points: r.points ? parseInt(r.points) : 0,
-      wins: r.wins ? parseInt(r.wins) : 0,
-      draws: r.draws ? parseInt(r.draws) : 0,
-      losses: r.losses ? parseInt(r.losses) : 0,
-      goals_for: r.goals_for ? parseInt(r.goals_for) : 0,
-      goals_against: r.goals_against ? parseInt(r.goals_against) : 0,
-      sort_order: r.sort_order ?? idx,
+      group_name: str(r.group_name) || 'Grupo A',
+      team_name: str(r.team_name) || '',
+      team_id: uuid(r.team_id),
+      position: int(r.position),
+      points: int(r.points) ?? 0,
+      wins: int(r.wins) ?? 0,
+      draws: int(r.draws) ?? 0,
+      losses: int(r.losses) ?? 0,
+      goals_for: int(r.goals_for) ?? 0,
+      goals_against: int(r.goals_against) ?? 0,
+      sort_order: int(r.sort_order) ?? idx,
     }));
-    const { error: insErr } = await supabase.from('historical_competition_groups').insert(toInsert);
+    const { error: insErr } = await supabase
+      .from('historical_competition_groups').insert(toInsert);
     if (insErr) throw insErr;
   };
 
@@ -623,23 +730,25 @@ export function useAdminHistorical() {
   };
 
   const setCompetitionStandings = async (competitionId, rows) => {
-    const { error: delErr } = await supabase.from('historical_competition_standings').delete().eq('competition_id', competitionId);
+    const { error: delErr } = await supabase
+      .from('historical_competition_standings').delete().eq('competition_id', competitionId);
     if (delErr) throw delErr;
-    if (!rows || rows.length === 0) return;
+    if (!rows?.length) return;
     const toInsert = rows.map((r, idx) => ({
       competition_id: competitionId,
-      position: r.position ? parseInt(r.position) : idx + 1,
-      team_name: r.team_name || '',
-      team_id: r.team_id || null,
-      points: r.points ? parseInt(r.points) : 0,
-      wins: r.wins ? parseInt(r.wins) : 0,
-      draws: r.draws ? parseInt(r.draws) : 0,
-      losses: r.losses ? parseInt(r.losses) : 0,
-      goals_for: r.goals_for ? parseInt(r.goals_for) : 0,
-      goals_against: r.goals_against ? parseInt(r.goals_against) : 0,
-      champion: !!r.champion,
+      position: int(r.position) ?? idx + 1,
+      team_name: str(r.team_name) || '',
+      team_id: uuid(r.team_id),
+      points: int(r.points) ?? 0,
+      wins: int(r.wins) ?? 0,
+      draws: int(r.draws) ?? 0,
+      losses: int(r.losses) ?? 0,
+      goals_for: int(r.goals_for) ?? 0,
+      goals_against: int(r.goals_against) ?? 0,
+      champion: bool(r.champion),
     }));
-    const { error: insErr } = await supabase.from('historical_competition_standings').insert(toInsert);
+    const { error: insErr } = await supabase
+      .from('historical_competition_standings').insert(toInsert);
     if (insErr) throw insErr;
   };
 
@@ -657,28 +766,30 @@ export function useAdminHistorical() {
   };
 
   const setCompetitionKnockout = async (competitionId, rows) => {
-    const { error: delErr } = await supabase.from('historical_competition_knockout').delete().eq('competition_id', competitionId);
+    const { error: delErr } = await supabase
+      .from('historical_competition_knockout').delete().eq('competition_id', competitionId);
     if (delErr) throw delErr;
-    if (!rows || rows.length === 0) return;
+    if (!rows?.length) return;
     const toInsert = rows.map((r, idx) => ({
       competition_id: competitionId,
-      round: r.round || 'Final',
-      match_number: r.match_number ? parseInt(r.match_number) : 1,
-      team_a: r.team_a || '',
-      team_b: r.team_b || '',
-      team_a_id: r.team_a_id || null,
-      team_b_id: r.team_b_id || null,
-      score_a: r.score_a !== '' && r.score_a != null ? parseInt(r.score_a) : null,
-      score_b: r.score_b !== '' && r.score_b != null ? parseInt(r.score_b) : null,
-      agg_a: r.agg_a !== '' && r.agg_a != null ? parseInt(r.agg_a) : null,
-      agg_b: r.agg_b !== '' && r.agg_b != null ? parseInt(r.agg_b) : null,
-      penalties_a: r.penalties_a !== '' && r.penalties_a != null ? parseInt(r.penalties_a) : null,
-      penalties_b: r.penalties_b !== '' && r.penalties_b != null ? parseInt(r.penalties_b) : null,
-      winner: r.winner || null,
-      notes: r.notes || null,
-      sort_order: r.sort_order ?? idx,
+      round: str(r.round) || 'Final',
+      match_number: int(r.match_number) ?? 1,
+      team_a: str(r.team_a) || '',
+      team_b: str(r.team_b) || '',
+      team_a_id: uuid(r.team_a_id),
+      team_b_id: uuid(r.team_b_id),
+      score_a: int(r.score_a),
+      score_b: int(r.score_b),
+      agg_a: int(r.agg_a),
+      agg_b: int(r.agg_b),
+      penalties_a: int(r.penalties_a),
+      penalties_b: int(r.penalties_b),
+      winner: str(r.winner),
+      notes: str(r.notes),
+      sort_order: int(r.sort_order) ?? idx,
     }));
-    const { error: insErr } = await supabase.from('historical_competition_knockout').insert(toInsert);
+    const { error: insErr } = await supabase
+      .from('historical_competition_knockout').insert(toInsert);
     if (insErr) throw insErr;
   };
 
@@ -697,21 +808,23 @@ export function useAdminHistorical() {
   };
 
   const setEventLineups = async (eventId, rows) => {
-    const { error: delErr } = await supabase.from('historical_event_lineups').delete().eq('event_id', eventId);
+    const { error: delErr } = await supabase
+      .from('historical_event_lineups').delete().eq('event_id', eventId);
     if (delErr) throw delErr;
-    if (!rows || rows.length === 0) return;
+    if (!rows?.length) return;
     const toInsert = rows.map((r, idx) => ({
       event_id: eventId,
-      team_side: r.team_side || 'team_a',
-      team_name: r.team_name || '',
-      team_id: r.team_id || null,
-      shirt_number: r.shirt_number ? parseInt(r.shirt_number) : null,
-      player_name: r.player_name || '',
-      position_role: r.position_role || null,
-      is_protagonist: !!r.is_protagonist,
-      sort_order: r.sort_order ?? idx,
+      team_side: str(r.team_side) || 'team_a',
+      team_name: str(r.team_name) || '',
+      team_id: uuid(r.team_id),
+      shirt_number: int(r.shirt_number),
+      player_name: str(r.player_name) || '',
+      position_role: str(r.position_role),
+      is_protagonist: bool(r.is_protagonist),
+      sort_order: int(r.sort_order) ?? idx,
     }));
-    const { error: insErr } = await supabase.from('historical_event_lineups').insert(toInsert);
+    const { error: insErr } = await supabase
+      .from('historical_event_lineups').insert(toInsert);
     if (insErr) throw insErr;
   };
 
@@ -729,19 +842,21 @@ export function useAdminHistorical() {
   };
 
   const setEventSquad = async (eventId, rows) => {
-    const { error: delErr } = await supabase.from('historical_event_squad').delete().eq('event_id', eventId);
+    const { error: delErr } = await supabase
+      .from('historical_event_squad').delete().eq('event_id', eventId);
     if (delErr) throw delErr;
-    if (!rows || rows.length === 0) return;
+    if (!rows?.length) return;
     const toInsert = rows.map((r, idx) => ({
       event_id: eventId,
-      player_name: r.player_name || '',
-      player_id: r.player_id || null,
-      shirt_number: r.shirt_number ? parseInt(r.shirt_number) : null,
-      position_role: r.position_role || null,
-      is_key_player: !!r.is_key_player,
-      sort_order: r.sort_order ?? idx,
+      player_name: str(r.player_name) || '',
+      player_id: uuid(r.player_id),
+      shirt_number: int(r.shirt_number),
+      position_role: str(r.position_role),
+      is_key_player: bool(r.is_key_player),
+      sort_order: int(r.sort_order) ?? idx,
     }));
-    const { error: insErr } = await supabase.from('historical_event_squad').insert(toInsert);
+    const { error: insErr } = await supabase
+      .from('historical_event_squad').insert(toInsert);
     if (insErr) throw insErr;
   };
 
@@ -759,23 +874,25 @@ export function useAdminHistorical() {
   };
 
   const setEventStandings = async (eventId, rows) => {
-    const { error: delErr } = await supabase.from('historical_event_standings').delete().eq('event_id', eventId);
+    const { error: delErr } = await supabase
+      .from('historical_event_standings').delete().eq('event_id', eventId);
     if (delErr) throw delErr;
-    if (!rows || rows.length === 0) return;
+    if (!rows?.length) return;
     const toInsert = rows.map((r, idx) => ({
       event_id: eventId,
-      position: r.position ? parseInt(r.position) : idx + 1,
-      team_name: r.team_name || '',
-      team_id: r.team_id || null,
-      points: r.points ? parseInt(r.points) : null,
-      wins: r.wins ? parseInt(r.wins) : null,
-      draws: r.draws ? parseInt(r.draws) : null,
-      losses: r.losses ? parseInt(r.losses) : null,
-      goals_for: r.goals_for ? parseInt(r.goals_for) : null,
-      goals_against: r.goals_against ? parseInt(r.goals_against) : null,
-      is_champion: !!r.is_champion,
+      position: int(r.position) ?? idx + 1,
+      team_name: str(r.team_name) || '',
+      team_id: uuid(r.team_id),
+      points: int(r.points),
+      wins: int(r.wins),
+      draws: int(r.draws),
+      losses: int(r.losses),
+      goals_for: int(r.goals_for),
+      goals_against: int(r.goals_against),
+      is_champion: bool(r.is_champion),
     }));
-    const { error: insErr } = await supabase.from('historical_event_standings').insert(toInsert);
+    const { error: insErr } = await supabase
+      .from('historical_event_standings').insert(toInsert);
     if (insErr) throw insErr;
   };
 
@@ -793,22 +910,24 @@ export function useAdminHistorical() {
   };
 
   const setEventKnockout = async (eventId, rows) => {
-    const { error: delErr } = await supabase.from('historical_event_knockout').delete().eq('event_id', eventId);
+    const { error: delErr } = await supabase
+      .from('historical_event_knockout').delete().eq('event_id', eventId);
     if (delErr) throw delErr;
-    if (!rows || rows.length === 0) return;
+    if (!rows?.length) return;
     const toInsert = rows.map((r, idx) => ({
       event_id: eventId,
-      round: r.round || 'Final',
-      match_number: r.match_number ? parseInt(r.match_number) : 1,
-      team_a: r.team_a || '',
-      team_b: r.team_b || '',
-      score_a: r.score_a !== '' && r.score_a != null ? parseInt(r.score_a) : null,
-      score_b: r.score_b !== '' && r.score_b != null ? parseInt(r.score_b) : null,
-      winner: r.winner || null,
-      is_decisive: !!r.is_decisive,
-      sort_order: r.sort_order ?? idx,
+      round: str(r.round) || 'Final',
+      match_number: int(r.match_number) ?? 1,
+      team_a: str(r.team_a) || '',
+      team_b: str(r.team_b) || '',
+      score_a: int(r.score_a),
+      score_b: int(r.score_b),
+      winner: str(r.winner),
+      is_decisive: bool(r.is_decisive),
+      sort_order: int(r.sort_order) ?? idx,
     }));
-    const { error: insErr } = await supabase.from('historical_event_knockout').insert(toInsert);
+    const { error: insErr } = await supabase
+      .from('historical_event_knockout').insert(toInsert);
     if (insErr) throw insErr;
   };
 
