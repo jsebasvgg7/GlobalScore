@@ -89,10 +89,10 @@ const TITLE_CAT_LABEL = {
 const FORMATION_DEFAULTS = {
   "4-3-3": [
     { shirt_number: 1, position_role: "GK", pos_x: 50, pos_y: 88 },
-    { shirt_number: 2, position_role: "RB", pos_x: 20, pos_y: 70 },
+    { shirt_number: 2, position_role: "RB", pos_x: 80, pos_y: 70 },
     { shirt_number: 6, position_role: "CB", pos_x: 40, pos_y: 70 },
     { shirt_number: 4, position_role: "CB", pos_x: 60, pos_y: 70 },
-    { shirt_number: 3, position_role: "LB", pos_x: 80, pos_y: 70 },
+    { shirt_number: 3, position_role: "LB", pos_x: 20, pos_y: 70 },
     { shirt_number: 5, position_role: "CDM", pos_x: 50, pos_y: 52 },
     { shirt_number: 10, position_role: "CM", pos_x: 30, pos_y: 52 },
     { shirt_number: 8, position_role: "CM", pos_x: 70, pos_y: 52 },
