@@ -5,16 +5,43 @@ import {
   Zap, Star, Flame, AlertCircle, ChevronLeft, Trash2,
   Edit2, UserCheck, Search
 } from 'lucide-react';
+import MatchForm from '../forms/MatchForm';
+import FinishMatchForm from '../forms/FinishMatchForm';
+import { LeagueForm, FinishLeagueForm } from '../forms/LeagueForm';
+import { AwardForm, FinishAwardForm } from '../forms/AwardForm';
 import { getLogoUrlByTeamName, getLeagueLogoUrlDirect, getLogoUrlByLeagueName, getLogoUrlByAwardName } from '@/shared/utils/logoHelper.js';
 import { supabase } from '@/shared/services/supabase/client';
+
+const ADM_STYLES = {
+  form: 'adm-form', row2: 'adm-row-2', field: 'adm-field',
+  label: 'adm-label', req: 'adm-req', hint: 'adm-hint', input: 'adm-input',
+  toggle: 'adm-toggle', toggleCheck: 'adm-toggle-check',
+  toggleTrack: 'adm-toggle-track', toggleThumb: 'adm-toggle-thumb',
+  toggleLabel: 'adm-toggle-label', toggleSub: 'adm-toggle-sub',
+  sectionSep: 'adm-section-sep',
+  logoPreview: 'adm-logo-preview', logoItem: 'adm-logo-item',
+  logoImg: 'adm-logo-img', logoEmoji: 'adm-logo-emoji', logoVs: 'adm-logo-vs',
+  logoPreviewSingle: 'adm-logo-preview adm-logo-preview--single',
+  logoImgLg: 'adm-logo-img-lg', logoName: 'adm-logo-name',
+  submitBtn: 'adm-submit-btn', submitBtnGreen: 'adm-submit-btn--green',
+  spinner: 'adm-spinner',
+  matchPreview: 'adm-match-preview', matchTeam: 'adm-match-team',
+  matchLogo: 'adm-match-logo', matchName: 'adm-match-name',
+  matchVs: 'adm-match-vs', matchKo: 'adm-match-ko', matchMeta: 'adm-match-meta',
+  scoreRow: 'adm-score-row', scoreInput: 'adm-score-input', scoreSep: 'adm-score-sep',
+  koSection: 'adm-ko-section', koLabel: 'adm-ko-label', koGrid: 'adm-ko-grid',
+  koBtn: 'adm-ko-btn', koBtnActive: 'active',
+  error: 'adm-error', infoBox: 'adm-info-box',
+  finishTitle: 'adm-finish-title',
+};
 
 /* ================================================================
    PANEL WRAPPER
 ================================================================ */
 export default function AdminRightPanel({
   activeSection,
-  panelMode,       // 'add' | 'finish' | 'edit'
-  panelItem,       // item a finalizar/editar
+  panelMode,
+  panelItem,
   onAdd,
   onFinish,
   onSave,
@@ -25,6 +52,7 @@ export default function AdminRightPanel({
   onAssignBanner,
   onRevokeBanner,
 }) {
+
   const sectionColors = {
     matches: '#1D9E75',
     leagues: '#f5a623',
@@ -188,307 +216,15 @@ function DeleteBtn({ onClick }) {
 ================================================================ */
 function AddForm({ activeSection, onAdd, users }) {
   switch (activeSection) {
-    case 'matches': return <AddMatchForm onAdd={onAdd} />;
-    case 'leagues': return <AddLeagueForm onAdd={onAdd} />;
-    case 'awards': return <AddAwardForm onAdd={onAdd} />;
+    case 'matches': return <MatchForm onAdd={onAdd} styles={ADM_STYLES} />;
+    case 'leagues': return <LeagueForm onAdd={onAdd} styles={ADM_STYLES} />;
+    case 'awards': return <AwardForm onAdd={onAdd} styles={ADM_STYLES} />;
     case 'achievements': return <AddAchievementForm onAdd={onAdd} />;
     case 'titles': return <AddTitleForm onAdd={onAdd} />;
     case 'crowns': return <AddCrownForm onAdd={onAdd} users={users} />;
     case 'banners': return <AddBannerForm onAdd={onAdd} />;
-    default: return <AddMatchForm onAdd={onAdd} />;
+    default: return <MatchForm onAdd={onAdd} styles={ADM_STYLES} />;
   }
-}
-
-/* ── ADD MATCH ── */
-function AddMatchForm({ onAdd }) {
-  const [form, setForm] = useState({
-    id: '', league: '', home_team: '', away_team: '',
-    home_team_logo: '🏠', away_team_logo: '✈️',
-    date: '', time: '', deadLine: '', deadLine_time: '',
-    is_knockout: false,
-  });
-
-  const [sending, setSending] = useState(false);
-
-  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    if (name === 'id' && value.length === 12) {
-      const day = value.slice(0, 2);
-      const month = value.slice(2, 4);
-      const year = `20${value.slice(4, 6)}`;
-      const home = value.slice(6, 9).toUpperCase();
-      const away = value.slice(9, 12).toUpperCase();
-      const dateStr = `${year}-${month}-${day}`;
-      setForm(p => ({
-        ...p,
-        id: value,
-        home_team: home,
-        away_team: away,
-        date: dateStr,
-        deadLine: dateStr,
-        home_team_logo_url: getLogoUrlByTeamName(supabase, home, p.league),
-        away_team_logo_url: getLogoUrlByTeamName(supabase, away, p.league),
-      }));
-      return;
-    }
-
-    if (name === 'date') {
-      setForm(p => ({ ...p, date: value, deadLine: value }));
-      return;
-    }
-
-    if (name === 'time') {
-      setForm(p => ({ ...p, time: value, deadLine_time: value }));
-      return;
-    }
-
-    set(name, type === 'checkbox' ? checked : value);
-    if (name === 'home_team' && value && form.league) {
-      const url = getLogoUrlByTeamName(supabase, value, form.league);
-      if (url) set('home_team_logo_url', url);
-    }
-    if (name === 'away_team' && value && form.league) {
-      const url = getLogoUrlByTeamName(supabase, value, form.league);
-      if (url) set('away_team_logo_url', url);
-    }
-    if (name === 'league' && value) {
-      const ll = getLeagueLogoUrlDirect(value);
-      if (ll) set('league_logo_url', ll);
-    }
-  };
-
-  const submit = async () => {
-    if (!form.id || !form.home_team || !form.away_team || !form.date || !form.time || !form.deadLine || !form.deadLine_time) return;
-    setSending(true);
-    try {
-      const deadlineISO = `${form.deadLine}T${form.deadLine_time}:00`;
-      await onAdd({
-        id: form.id,
-        league: form.league,
-        home_team: form.home_team,
-        away_team: form.away_team,
-        home_team_logo: form.home_team_logo,
-        away_team_logo: form.away_team_logo,
-        home_team_logo_url: getLogoUrlByTeamName(supabase, form.home_team, form.league),
-        away_team_logo_url: getLogoUrlByTeamName(supabase, form.away_team, form.league),
-        league_logo_url: getLeagueLogoUrlDirect(form.league),
-        date: form.date,
-        time: form.time,
-        deadline: deadlineISO,
-        status: 'pending',
-        is_knockout: form.is_knockout,
-      });
-      setForm({ id: '', league: '', home_team: '', away_team: '', home_team_logo: '🏠', away_team_logo: '✈️', date: '', time: '', deadLine: '', deadLine_time: '', is_knockout: false });
-    } finally {
-      setSending(false);
-    }
-  };
-
-  return (
-    <div className="adm-form">
-      <div className="adm-row-2">
-        <Field label="ID Partido" required hint="Sin espacios, usar guiones">
-          <Input name="id" placeholder="match-001" value={form.id} onChange={handleChange} />
-        </Field>
-        <Field label="Liga" hint="Logo auto">
-          <Input name="league" placeholder="Premier League" value={form.league} onChange={handleChange} />
-        </Field>
-      </div>
-
-      {/* Knockout toggle */}
-      <label className="adm-toggle">
-        <input type="checkbox" name="is_knockout" checked={form.is_knockout} onChange={handleChange} className="adm-toggle-check" />
-        <span className="adm-toggle-track"><span className="adm-toggle-thumb" /></span>
-        <div className="adm-toggle-label">
-          <span>⚡ Eliminatoria</span>
-          <span className="adm-toggle-sub">+2 pts por clasificado</span>
-        </div>
-      </label>
-
-      <div className="adm-row-2">
-        <Field label="Equipo Local" required hint="Código 3 letras">
-          <Input name="home_team" placeholder="MUN" value={form.home_team} onChange={handleChange} />
-        </Field>
-        <Field label="Equipo Visitante" required hint="Código 3 letras">
-          <Input name="away_team" placeholder="LIV" value={form.away_team} onChange={handleChange} />
-        </Field>
-      </div>
-
-      {/* Preview logos */}
-      {form.home_team && form.away_team && (
-        <div className="adm-logo-preview">
-          <div className="adm-logo-item">
-            {form.home_team_logo_url
-              ? <img src={form.home_team_logo_url} alt="" className="adm-logo-img" />
-              : <span className="adm-logo-emoji">{form.home_team_logo}</span>}
-            <span>{form.home_team}</span>
-          </div>
-          <span className="adm-logo-vs">VS</span>
-          <div className="adm-logo-item">
-            {form.away_team_logo_url
-              ? <img src={form.away_team_logo_url} alt="" className="adm-logo-img" />
-              : <span className="adm-logo-emoji">{form.away_team_logo}</span>}
-            <span>{form.away_team}</span>
-          </div>
-        </div>
-      )}
-
-      <div className="adm-section-sep">Fecha del partido</div>
-      <div className="adm-row-2">
-        <Field label="Fecha" required>
-          <Input type="date" name="date" value={form.date} onChange={handleChange} />
-        </Field>
-        <Field label="Hora" required>
-          <Input type="time" name="time" value={form.time} onChange={handleChange} />
-        </Field>
-      </div>
-
-      <div className="adm-section-sep">Límite predicciones</div>
-      <div className="adm-row-2">
-        <Field label="Fecha Límite" required>
-          <Input type="date" name="deadLine" value={form.deadLine} onChange={handleChange} />
-        </Field>
-        <Field label="Hora Límite" required>
-          <Input type="time" name="deadLine_time" value={form.deadLine_time} onChange={handleChange} />
-        </Field>
-      </div>
-
-      <button className="adm-submit-btn" onClick={submit} disabled={sending}>
-        {sending ? <span className="adm-spinner" /> : <Plus size={14} />}
-        <span>{sending ? 'Agregando...' : 'Agregar Partido'}</span>
-      </button>
-    </div>
-  );
-}
-
-/* ── ADD LEAGUE ── */
-function AddLeagueForm({ onAdd }) {
-  const [form, setForm] = useState({ id: '', name: '', season: '', logo: '🏆', deadline: '', deadline_time: '' });
-  const [sending, setSending] = useState(false);
-  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    set(name, value);
-    if (name === 'name' && value) {
-      const url = getLogoUrlByLeagueName(supabase, value);
-      if (url) set('logo_url', url);
-    }
-  };
-
-  const submit = async () => {
-    if (!form.id || !form.name || !form.season || !form.deadline || !form.deadline_time) return;
-    setSending(true);
-    try {
-      const { deadline_time, deadline: deadline_date, ...rest } = form;
-      await onAdd({
-        ...rest,
-        logo_url: getLogoUrlByLeagueName(supabase, form.name),
-        deadline: `${deadline_date}T${deadline_time}:00`,
-        status: 'active',
-      });
-      setForm({ id: '', name: '', season: '', logo: '🏆', deadline: '', deadline_time: '' });
-    } finally { setSending(false); }
-  };
-
-  return (
-    <div className="adm-form">
-      <Field label="ID Liga" required hint="Sin espacios, usar guiones">
-        <Input name="id" placeholder="epl-2024" value={form.id} onChange={handleChange} />
-      </Field>
-      <Field label="Nombre" required hint="Logo asignado automáticamente">
-        <Input name="name" placeholder="Premier League" value={form.name} onChange={handleChange} />
-      </Field>
-      <div className="adm-row-2">
-        <Field label="Temporada" required>
-          <Input name="season" placeholder="2024/25" value={form.season} onChange={handleChange} />
-        </Field>
-        <Field label="Emoji Respaldo">
-          <Input name="logo" placeholder="🏆" value={form.logo} onChange={handleChange} maxLength={2} />
-        </Field>
-      </div>
-      {form.logo_url && (
-        <div className="adm-logo-preview adm-logo-preview--single">
-          <img src={form.logo_url} alt="Logo" className="adm-logo-img-lg" />
-          <span className="adm-logo-name">{form.name}</span>
-        </div>
-      )}
-      <div className="adm-section-sep">Fecha límite</div>
-      <div className="adm-row-2">
-        <Field label="Fecha" required><Input type="date" name="deadline" value={form.deadline} onChange={handleChange} /></Field>
-        <Field label="Hora" required><Input type="time" name="deadline_time" value={form.deadline_time} onChange={handleChange} /></Field>
-      </div>
-      <button className="adm-submit-btn" onClick={submit} disabled={sending}>
-        {sending ? <span className="adm-spinner" /> : <Plus size={14} />}
-        <span>{sending ? 'Agregando...' : 'Agregar Liga'}</span>
-      </button>
-    </div>
-  );
-}
-
-/* ── ADD AWARD ── */
-function AddAwardForm({ onAdd }) {
-  const [form, setForm] = useState({ id: '', name: '', season: '', logo: '🏆', category: 'Individual', deadline: '', deadline_time: '' });
-  const [sending, setSending] = useState(false);
-  const cats = ['Individual', 'Equipo', 'Goleador', 'Portero', 'Joven', 'Fair Play'];
-  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    set(name, value);
-    if (name === 'name' && value) {
-      const url = getLogoUrlByAwardName(supabase, value);
-      if (url) set('logo_url', url);
-    }
-  };
-
-  const submit = async () => {
-    if (!form.id || !form.name || !form.season || !form.deadline || !form.deadline_time) return;
-    setSending(true);
-    try {
-      const { deadline_time, deadline: deadline_date, ...rest } = form;
-      await onAdd({
-        ...rest,
-        logo_url: getLogoUrlByAwardName(supabase, form.name),
-        deadline: `${deadline_date}T${deadline_time}:00`,
-        status: 'active',
-      });
-      setForm({ id: '', name: '', season: '', logo: '🏆', category: 'Individual', deadline: '', deadline_time: '' });
-    } finally { setSending(false); }
-  };
-
-  return (
-    <div className="adm-form">
-      <Field label="ID Premio" required hint="Sin espacios, usar guiones">
-        <Input name="id" placeholder="balon-oro-2024" value={form.id} onChange={handleChange} />
-      </Field>
-      <Field label="Nombre" required hint="Logo asignado automáticamente">
-        <Input name="name" placeholder="Balón de Oro" value={form.name} onChange={handleChange} />
-      </Field>
-      <div className="adm-row-2">
-        <Field label="Temporada" required>
-          <Input name="season" placeholder="2024" value={form.season} onChange={handleChange} />
-        </Field>
-        <Field label="Categoría">
-          <Select name="category" value={form.category} onChange={handleChange}>
-            {cats.map(c => <option key={c} value={c}>{c}</option>)}
-          </Select>
-        </Field>
-      </div>
-      <div className="adm-section-sep">Fecha límite</div>
-      <div className="adm-row-2">
-        <Field label="Fecha" required><Input type="date" name="deadline" value={form.deadline} onChange={handleChange} /></Field>
-        <Field label="Hora" required><Input type="time" name="deadline_time" value={form.deadline_time} onChange={handleChange} /></Field>
-      </div>
-      <button className="adm-submit-btn" onClick={submit} disabled={sending}>
-        {sending ? <span className="adm-spinner" /> : <Plus size={14} />}
-        <span>{sending ? 'Agregando...' : 'Agregar Premio'}</span>
-      </button>
-    </div>
-  );
 }
 
 /* ── ADD ACHIEVEMENT ── */
@@ -695,163 +431,11 @@ function AddBannerForm({ onAdd }) {
 ================================================================ */
 function FinishForm({ activeSection, item, onFinish, onResetPanel }) {
   switch (activeSection) {
-    case 'matches': return <FinishMatchForm match={item} onFinish={onFinish} onResetPanel={onResetPanel} />;
-    case 'leagues': return <FinishLeagueForm league={item} onFinish={onFinish} onResetPanel={onResetPanel} />;
-    case 'awards': return <FinishAwardForm award={item} onFinish={onFinish} onResetPanel={onResetPanel} />;
+    case 'matches': return <FinishMatchForm match={item} onFinish={onFinish} onClose={onResetPanel} styles={ADM_STYLES} />;
+    case 'leagues': return <FinishLeagueForm league={item} onFinish={onFinish} onClose={onResetPanel} styles={ADM_STYLES} />;
+    case 'awards': return <FinishAwardForm award={item} onFinish={onFinish} onClose={onResetPanel} styles={ADM_STYLES} />;
     default: return null;
   }
-}
-
-/* ── FINISH MATCH ── */
-function FinishMatchForm({ match, onFinish, onResetPanel }) {
-  const [homeScore, setHomeScore] = useState('');
-  const [awayScore, setAwayScore] = useState('');
-  const [advancing, setAdvancing] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const canSubmit = homeScore !== '' && awayScore !== '' && (!match.is_knockout || advancing);
-
-  const submit = async () => {
-    const h = parseInt(homeScore), a = parseInt(awayScore);
-    if (isNaN(h) || isNaN(a) || h < 0 || a < 0) { setError('Resultados inválidos'); return; }
-    if (match.is_knockout && !advancing) { setError('Selecciona el equipo que pasa'); return; }
-    setError(''); setLoading(true);
-    try { await onFinish(match.id, h, a, advancing); onResetPanel(); }
-    catch { setError('Error al finalizar'); }
-    finally { setLoading(false); }
-  };
-
-  return (
-    <div className="adm-form">
-      {/* Info del partido */}
-      <div className="adm-match-preview">
-        <div className="adm-match-team">
-          <span className="adm-match-logo">{match.home_team_logo}</span>
-          <span className="adm-match-name">{match.home_team}</span>
-        </div>
-        <div className="adm-match-vs">
-          <span>VS</span>
-          {match.is_knockout && <span className="adm-match-ko">⚡ Elim.</span>}
-        </div>
-        <div className="adm-match-team">
-          <span className="adm-match-logo">{match.away_team_logo}</span>
-          <span className="adm-match-name">{match.away_team}</span>
-        </div>
-      </div>
-      <div className="adm-match-meta">{match.league} · {match.date}</div>
-
-      {/* Marcador */}
-      <div className="adm-score-row">
-        <div className="adm-field">
-          <label className="adm-label">Local</label>
-          <input className="adm-input adm-score-input" type="number" min="0" placeholder="0"
-            value={homeScore} onChange={e => setHomeScore(e.target.value)} autoFocus />
-        </div>
-        <span className="adm-score-sep">–</span>
-        <div className="adm-field">
-          <label className="adm-label">Visitante</label>
-          <input className="adm-input adm-score-input" type="number" min="0" placeholder="0"
-            value={awayScore} onChange={e => setAwayScore(e.target.value)} />
-        </div>
-      </div>
-
-      {/* Eliminatoria */}
-      {match.is_knockout && (
-        <div className="adm-ko-section">
-          <span className="adm-ko-label">¿Quién pasa?</span>
-          <div className="adm-ko-grid">
-            {[{ key: 'home', label: match.home_team, logo: match.home_team_logo },
-            { key: 'away', label: match.away_team, logo: match.away_team_logo }].map(({ key, label, logo }) => (
-              <button key={key} type="button"
-                className={`adm-ko-btn ${advancing === key ? 'active' : ''}`}
-                onClick={() => setAdvancing(key)}>
-                <span>{logo}</span>
-                <span>{label}</span>
-                {advancing === key && <CheckCircle size={13} className="adm-ko-check" />}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {error && (
-        <div className="adm-error"><AlertCircle size={13} /><span>{error}</span></div>
-      )}
-
-      <div className="adm-info-box">
-        ⚠️ Esta acción calculará los puntos de todas las predicciones y no se puede deshacer.
-      </div>
-
-      <button className="adm-submit-btn adm-submit-btn--green" onClick={submit} disabled={loading || !canSubmit}>
-        {loading ? <span className="adm-spinner" /> : <CheckCircle size={14} />}
-        <span>{loading ? 'Finalizando...' : 'Finalizar Partido'}</span>
-      </button>
-    </div>
-  );
-}
-
-/* ── FINISH LEAGUE ── */
-function FinishLeagueForm({ league, onFinish, onResetPanel }) {
-  const [form, setForm] = useState({ champion: '', top_scorer: '', top_scorer_goals: '', top_assist: '', top_assist_count: '', mvp_player: '' });
-  const [sending, setSending] = useState(false);
-  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
-
-  const submit = async () => {
-    if (Object.values(form).some(v => !v)) return;
-    setSending(true);
-    try {
-      await onFinish(league.id, { ...form, top_scorer_goals: parseInt(form.top_scorer_goals), top_assist_count: parseInt(form.top_assist_count) });
-      onResetPanel();
-    } finally { setSending(false); }
-  };
-
-  return (
-    <div className="adm-form">
-      <div className="adm-finish-title">{league.logo} {league.name} · {league.season}</div>
-      <Field label="Campeón" required><Input placeholder="Nombre del equipo" value={form.champion} onChange={e => set('champion', e.target.value)} /></Field>
-      <div className="adm-row-2">
-        <Field label="Máx. Goleador" required><Input placeholder="Jugador" value={form.top_scorer} onChange={e => set('top_scorer', e.target.value)} /></Field>
-        <Field label="Goles" required><Input type="number" min="0" placeholder="0" value={form.top_scorer_goals} onChange={e => set('top_scorer_goals', e.target.value)} /></Field>
-      </div>
-      <div className="adm-row-2">
-        <Field label="Máx. Asistidor" required><Input placeholder="Jugador" value={form.top_assist} onChange={e => set('top_assist', e.target.value)} /></Field>
-        <Field label="Asistencias" required><Input type="number" min="0" placeholder="0" value={form.top_assist_count} onChange={e => set('top_assist_count', e.target.value)} /></Field>
-      </div>
-      <Field label="MVP" required><Input placeholder="Jugador MVP" value={form.mvp_player} onChange={e => set('mvp_player', e.target.value)} /></Field>
-      <button className="adm-submit-btn adm-submit-btn--green" onClick={submit} disabled={sending}>
-        {sending ? <span className="adm-spinner" /> : <CheckCircle size={14} />}
-        <span>{sending ? 'Finalizando...' : 'Finalizar Liga'}</span>
-      </button>
-    </div>
-  );
-}
-
-/* ── FINISH AWARD ── */
-function FinishAwardForm({ award, onFinish, onResetPanel }) {
-  const [winner, setWinner] = useState('');
-  const [sending, setSending] = useState(false);
-
-  const submit = async () => {
-    if (!winner.trim()) return;
-    setSending(true);
-    try { await onFinish(award.id, winner.trim()); onResetPanel(); }
-    finally { setSending(false); }
-  };
-
-  return (
-    <div className="adm-form">
-      <div className="adm-finish-title">{award.logo} {award.name} · {award.season}</div>
-      <Field label="Ganador del Premio" required>
-        <Input placeholder="Nombre del ganador" value={winner} onChange={e => setWinner(e.target.value)} />
-      </Field>
-      <div className="adm-info-box">Cada predicción correcta otorga 10 puntos.</div>
-      <button className="adm-submit-btn adm-submit-btn--green" onClick={submit} disabled={sending}>
-        {sending ? <span className="adm-spinner" /> : <CheckCircle size={14} />}
-        <span>{sending ? 'Finalizando...' : 'Finalizar Premio'}</span>
-      </button>
-    </div>
-  );
 }
 
 /* ================================================================

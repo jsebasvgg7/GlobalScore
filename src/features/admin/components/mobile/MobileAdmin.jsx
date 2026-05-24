@@ -5,8 +5,36 @@ import {
   Zap, Star, Flame, AlertCircle, ChevronLeft, Trash2,
   Edit2, UserCheck, Search, ChevronUp, Settings
 } from 'lucide-react';
+import MatchForm from '../../forms/MatchForm';
+import FinishMatchForm from '../../forms/FinishMatchForm';
+import { LeagueForm, FinishLeagueForm } from '../../forms/LeagueForm';
+import { AwardForm, FinishAwardForm } from '../../forms/AwardForm';
 import { getLogoUrlByTeamName, getLeagueLogoUrlDirect, getLogoUrlByLeagueName, getLogoUrlByAwardName } from '@/shared/utils/logoHelper.js';
 import { supabase } from '@/shared/services/supabase/client';
+
+const MBA_STYLES = {
+  form: 'mba-form', row2: 'mba-row-2', field: 'mba-field',
+  label: 'mba-label', req: 'mba-req', hint: 'mba-hint', input: 'mba-input',
+  toggle: 'mba-toggle-row', toggleCheck: 'mba-toggle-check',
+  toggleTrack: 'mba-toggle-track', toggleThumb: 'mba-toggle-thumb',
+  toggleLabel: 'mba-toggle-label', toggleSub: 'mba-toggle-sub',
+  sectionSep: 'mba-sep-label',
+  logoPreview: 'mba-logo-preview', logoItem: 'mba-logo-item',
+  logoImg: 'mba-logo-img', logoEmoji: '', logoVs: 'mba-vs',
+  submitBtn: 'mba-submit-btn', submitBtnGreen: 'mba-submit-btn--green',
+  spinner: 'mba-spinner',
+  matchPreview: 'mba-match-preview', matchTeam: 'mba-match-team',
+  matchLogo: 'mba-match-logo', matchName: 'mba-match-name',
+  matchVs: 'mba-match-vs', matchKo: 'mba-ko-badge', matchMeta: 'mba-meta',
+  scoreRow: 'mba-score-row', scoreInput: 'mba-score-input', scoreSep: 'mba-score-sep',
+  koSection: 'mba-ko-section', koLabel: 'mba-ko-label', koGrid: 'mba-ko-grid',
+  koBtn: 'mba-ko-btn', koBtnActive: 'active',
+  error: 'mba-error', infoBox: 'mba-info-box',
+  logoPreviewSingle: 'mba-logo-preview mba-logo-preview--single',
+  logoImgLg: 'mba-logo-img-lg',
+  logoName: '',
+  finishTitle: 'mba-finish-title',
+};
 
 /* ================================================================
    HOOK: detectar si es mobile
@@ -115,227 +143,6 @@ function Field({ label, required, hint, children }) {
 function Input(props) { return <input className="mba-input" {...props} />; }
 function Sel({ children, ...props }) { return <select className="mba-input" {...props}>{children}</select>; }
 function Textarea(props) { return <textarea className="mba-input mba-textarea" {...props} />; }
-
-/* ================================================================
-   ADD MATCH FORM
-================================================================ */
-function AddMatchForm({ onAdd, onClose }) {
-  const [form, setForm] = useState({
-    id: '', league: '', home_team: '', away_team: '',
-    home_team_logo: '🏠', away_team_logo: '✈️',
-    date: '', time: '', deadLine: '', deadLine_time: '',
-    is_knockout: false,
-  });
-  const [sending, setSending] = useState(false);
-  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    set(name, type === 'checkbox' ? checked : value);
-    if (name === 'home_team' && value && form.league) {
-      const url = getLogoUrlByTeamName(supabase, value, form.league);
-      if (url) set('home_team_logo_url', url);
-    }
-    if (name === 'away_team' && value && form.league) {
-      const url = getLogoUrlByTeamName(supabase, value, form.league);
-      if (url) set('away_team_logo_url', url);
-    }
-    if (name === 'league' && value) {
-      const ll = getLeagueLogoUrlDirect(value);
-      if (ll) set('league_logo_url', ll);
-    }
-  };
-
-  const submit = async () => {
-    if (!form.id || !form.home_team || !form.away_team || !form.date || !form.time || !form.deadLine || !form.deadLine_time) return;
-    setSending(true);
-    try {
-      await onAdd({
-        id: form.id, league: form.league,
-        home_team: form.home_team, away_team: form.away_team,
-        home_team_logo: form.home_team_logo, away_team_logo: form.away_team_logo,
-        home_team_logo_url: getLogoUrlByTeamName(supabase, form.home_team, form.league),
-        away_team_logo_url: getLogoUrlByTeamName(supabase, form.away_team, form.league),
-        league_logo_url: getLeagueLogoUrlDirect(form.league),
-        date: form.date, time: form.time,
-        deadline: `${form.deadLine}T${form.deadLine_time}:00`,
-        status: 'pending', is_knockout: form.is_knockout,
-      });
-      onClose();
-    } finally { setSending(false); }
-  };
-
-  return (
-    <div className="mba-form">
-      <div className="mba-row-2">
-        <Field label="ID Partido" required hint="Sin espacios">
-          <Input name="id" placeholder="match-001" value={form.id} onChange={handleChange} />
-        </Field>
-        <Field label="Liga" hint="Logo auto">
-          <Input name="league" placeholder="Premier League" value={form.league} onChange={handleChange} />
-        </Field>
-      </div>
-
-      <label className="mba-toggle-row">
-        <input type="checkbox" name="is_knockout" checked={form.is_knockout} onChange={handleChange} className="mba-toggle-check" />
-        <span className="mba-toggle-track"><span className="mba-toggle-thumb" /></span>
-        <div className="mba-toggle-label">
-          <span>⚡ Eliminatoria</span>
-          <span className="mba-toggle-sub">+2 pts por clasificado</span>
-        </div>
-      </label>
-
-      <div className="mba-row-2">
-        <Field label="Local" required hint="Código 3 letras">
-          <Input name="home_team" placeholder="MUN" value={form.home_team} onChange={handleChange} />
-        </Field>
-        <Field label="Visitante" required hint="Código 3 letras">
-          <Input name="away_team" placeholder="LIV" value={form.away_team} onChange={handleChange} />
-        </Field>
-      </div>
-
-      {form.home_team && form.away_team && (
-        <div className="mba-logo-preview">
-          <div className="mba-logo-item">
-            {form.home_team_logo_url
-              ? <img src={form.home_team_logo_url} alt="" className="mba-logo-img" />
-              : <span>{form.home_team_logo}</span>}
-            <span>{form.home_team}</span>
-          </div>
-          <span className="mba-vs">VS</span>
-          <div className="mba-logo-item">
-            {form.away_team_logo_url
-              ? <img src={form.away_team_logo_url} alt="" className="mba-logo-img" />
-              : <span>{form.away_team_logo}</span>}
-            <span>{form.away_team}</span>
-          </div>
-        </div>
-      )}
-
-      <div className="mba-sep-label">Fecha del partido</div>
-      <div className="mba-row-2">
-        <Field label="Fecha" required><Input type="date" name="date" value={form.date} onChange={handleChange} /></Field>
-        <Field label="Hora" required><Input type="time" name="time" value={form.time} onChange={handleChange} /></Field>
-      </div>
-
-      <div className="mba-sep-label">Límite predicciones</div>
-      <div className="mba-row-2">
-        <Field label="Fecha Límite" required><Input type="date" name="deadLine" value={form.deadLine} onChange={handleChange} /></Field>
-        <Field label="Hora Límite" required><Input type="time" name="deadLine_time" value={form.deadLine_time} onChange={handleChange} /></Field>
-      </div>
-
-      <button className="mba-submit-btn mba-submit-btn--green" onClick={submit} disabled={sending}>
-        {sending ? <span className="mba-spinner" /> : <Plus size={16} />}
-        <span>{sending ? 'Agregando...' : 'Agregar Partido'}</span>
-      </button>
-    </div>
-  );
-}
-
-/* ================================================================
-   ADD LEAGUE FORM
-================================================================ */
-function AddLeagueForm({ onAdd, onClose }) {
-  const [form, setForm] = useState({ id: '', name: '', season: '', logo: '🏆', deadline: '', deadline_time: '' });
-  const [sending, setSending] = useState(false);
-  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    set(name, value);
-    if (name === 'name' && value) {
-      const url = getLogoUrlByLeagueName(supabase, value);
-      if (url) set('logo_url', url);
-    }
-  };
-
-  const submit = async () => {
-    if (!form.id || !form.name || !form.season || !form.deadline || !form.deadline_time) return;
-    setSending(true);
-    try {
-      await onAdd({ ...form, logo_url: getLogoUrlByLeagueName(supabase, form.name), deadline: `${form.deadline}T${form.deadline_time}:00`, status: 'active' });
-      onClose();
-    } finally { setSending(false); }
-  };
-
-  return (
-    <div className="mba-form">
-      <Field label="ID Liga" required hint="Sin espacios, usar guiones"><Input name="id" placeholder="epl-2024" value={form.id} onChange={handleChange} /></Field>
-      <Field label="Nombre" required hint="Logo asignado automáticamente"><Input name="name" placeholder="Premier League" value={form.name} onChange={handleChange} /></Field>
-      {form.logo_url && (
-        <div className="mba-logo-preview mba-logo-preview--single">
-          <img src={form.logo_url} alt="Logo" className="mba-logo-img-lg" />
-          <span>{form.name}</span>
-        </div>
-      )}
-      <div className="mba-row-2">
-        <Field label="Temporada" required><Input name="season" placeholder="2024/25" value={form.season} onChange={handleChange} /></Field>
-        <Field label="Emoji Respaldo"><Input name="logo" placeholder="🏆" value={form.logo} onChange={handleChange} maxLength={2} /></Field>
-      </div>
-      <div className="mba-sep-label">Fecha límite</div>
-      <div className="mba-row-2">
-        <Field label="Fecha" required><Input type="date" name="deadline" value={form.deadline} onChange={handleChange} /></Field>
-        <Field label="Hora" required><Input type="time" name="deadline_time" value={form.deadline_time} onChange={handleChange} /></Field>
-      </div>
-      <button className="mba-submit-btn mba-submit-btn--amber" onClick={submit} disabled={sending}>
-        {sending ? <span className="mba-spinner" /> : <Plus size={16} />}
-        <span>{sending ? 'Agregando...' : 'Agregar Liga'}</span>
-      </button>
-    </div>
-  );
-}
-
-/* ================================================================
-   ADD AWARD FORM
-================================================================ */
-function AddAwardForm({ onAdd, onClose }) {
-  const [form, setForm] = useState({ id: '', name: '', season: '', logo: '🏆', category: 'Individual', deadline: '', deadline_time: '' });
-  const [sending, setSending] = useState(false);
-  const cats = ['Individual', 'Equipo', 'Goleador', 'Portero', 'Joven', 'Fair Play'];
-  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    set(name, value);
-    if (name === 'name' && value) {
-      const url = getLogoUrlByAwardName(supabase, value);
-      if (url) set('logo_url', url);
-    }
-  };
-
-  const submit = async () => {
-    if (!form.id || !form.name || !form.season || !form.deadline || !form.deadline_time) return;
-    setSending(true);
-    try {
-      await onAdd({ ...form, logo_url: getLogoUrlByAwardName(supabase, form.name), deadline: `${form.deadline}T${form.deadline_time}:00`, status: 'active' });
-      onClose();
-    } finally { setSending(false); }
-  };
-
-  return (
-    <div className="mba-form">
-      <Field label="ID Premio" required hint="Sin espacios, usar guiones"><Input name="id" placeholder="balon-oro-2024" value={form.id} onChange={handleChange} /></Field>
-      <Field label="Nombre" required hint="Logo asignado automáticamente"><Input name="name" placeholder="Balón de Oro" value={form.name} onChange={handleChange} /></Field>
-      <div className="mba-row-2">
-        <Field label="Temporada" required><Input name="season" placeholder="2024" value={form.season} onChange={handleChange} /></Field>
-        <Field label="Categoría">
-          <Sel name="category" value={form.category} onChange={e => set('category', e.target.value)}>
-            {cats.map(c => <option key={c} value={c}>{c}</option>)}
-          </Sel>
-        </Field>
-      </div>
-      <div className="mba-sep-label">Fecha límite</div>
-      <div className="mba-row-2">
-        <Field label="Fecha" required><Input type="date" name="deadline" value={form.deadline} onChange={handleChange} /></Field>
-        <Field label="Hora" required><Input type="time" name="deadline_time" value={form.deadline_time} onChange={handleChange} /></Field>
-      </div>
-      <button className="mba-submit-btn mba-submit-btn--red" onClick={submit} disabled={sending}>
-        {sending ? <span className="mba-spinner" /> : <Plus size={16} />}
-        <span>{sending ? 'Agregando...' : 'Agregar Premio'}</span>
-      </button>
-    </div>
-  );
-}
 
 /* ================================================================
    ADD ACHIEVEMENT FORM
@@ -470,151 +277,6 @@ function AddBannerForm({ onAdd, onClose }) {
 }
 
 /* ================================================================
-   FINISH MATCH FORM (mobile)
-================================================================ */
-function FinishMatchForm({ match, onFinish, onClose }) {
-  const [homeScore, setHomeScore] = useState('');
-  const [awayScore, setAwayScore] = useState('');
-  const [advancing, setAdvancing] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const canSubmit = homeScore !== '' && awayScore !== '' && (!match.is_knockout || advancing);
-
-  const submit = async () => {
-    const h = parseInt(homeScore), a = parseInt(awayScore);
-    if (isNaN(h) || isNaN(a) || h < 0 || a < 0) { setError('Resultados inválidos'); return; }
-    if (match.is_knockout && !advancing) { setError('Selecciona el equipo que pasa'); return; }
-    setError(''); setLoading(true);
-    try { await onFinish(match.id, h, a, advancing); onClose(); }
-    catch { setError('Error al finalizar'); }
-    finally { setLoading(false); }
-  };
-
-  return (
-    <div className="mba-form">
-      <div className="mba-match-preview">
-        <div className="mba-match-team">
-          <span className="mba-match-logo">{match.home_team_logo}</span>
-          <span className="mba-match-name">{match.home_team}</span>
-        </div>
-        <div className="mba-match-vs">
-          <span>VS</span>
-          {match.is_knockout && <span className="mba-ko-badge">⚡ Elim.</span>}
-        </div>
-        <div className="mba-match-team">
-          <span className="mba-match-logo">{match.away_team_logo}</span>
-          <span className="mba-match-name">{match.away_team}</span>
-        </div>
-      </div>
-      <div className="mba-meta">{match.league} · {match.date}</div>
-
-      <div className="mba-score-row">
-        <div className="mba-field">
-          <label className="mba-label">Local</label>
-          <input className="mba-input mba-score-input" type="number" min="0" placeholder="0" value={homeScore} onChange={e => setHomeScore(e.target.value)} autoFocus />
-        </div>
-        <span className="mba-score-sep">–</span>
-        <div className="mba-field">
-          <label className="mba-label">Visitante</label>
-          <input className="mba-input mba-score-input" type="number" min="0" placeholder="0" value={awayScore} onChange={e => setAwayScore(e.target.value)} />
-        </div>
-      </div>
-
-      {match.is_knockout && (
-        <div className="mba-ko-section">
-          <span className="mba-ko-label">¿Quién pasa?</span>
-          <div className="mba-ko-grid">
-            {[{ key: 'home', label: match.home_team, logo: match.home_team_logo },
-            { key: 'away', label: match.away_team, logo: match.away_team_logo }].map(({ key, label, logo }) => (
-              <button key={key} type="button"
-                className={`mba-ko-btn ${advancing === key ? 'active' : ''}`}
-                onClick={() => setAdvancing(key)}>
-                <span>{logo}</span><span>{label}</span>
-                {advancing === key && <CheckCircle size={13} />}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {error && <div className="mba-error"><AlertCircle size={13} /><span>{error}</span></div>}
-
-      <div className="mba-info-box">⚠️ Esta acción calculará los puntos y no se puede deshacer.</div>
-
-      <button className="mba-submit-btn mba-submit-btn--green" onClick={submit} disabled={loading || !canSubmit}>
-        {loading ? <span className="mba-spinner" /> : <CheckCircle size={16} />}
-        <span>{loading ? 'Finalizando...' : 'Finalizar Partido'}</span>
-      </button>
-    </div>
-  );
-}
-
-/* ================================================================
-   FINISH LEAGUE FORM (mobile)
-================================================================ */
-function FinishLeagueForm({ league, onFinish, onClose }) {
-  const [form, setForm] = useState({ champion: '', top_scorer: '', top_scorer_goals: '', top_assist: '', top_assist_count: '', mvp_player: '' });
-  const [sending, setSending] = useState(false);
-  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
-
-  const submit = async () => {
-    if (Object.values(form).some(v => !v)) return;
-    setSending(true);
-    try {
-      await onFinish(league.id, { ...form, top_scorer_goals: parseInt(form.top_scorer_goals), top_assist_count: parseInt(form.top_assist_count) });
-      onClose();
-    } finally { setSending(false); }
-  };
-
-  return (
-    <div className="mba-form">
-      <div className="mba-finish-title">{league.logo} {league.name} · {league.season}</div>
-      <Field label="Campeón" required><Input placeholder="Nombre del equipo" value={form.champion} onChange={e => set('champion', e.target.value)} /></Field>
-      <div className="mba-row-2">
-        <Field label="Máx. Goleador" required><Input placeholder="Jugador" value={form.top_scorer} onChange={e => set('top_scorer', e.target.value)} /></Field>
-        <Field label="Goles" required><Input type="number" min="0" placeholder="0" value={form.top_scorer_goals} onChange={e => set('top_scorer_goals', e.target.value)} /></Field>
-      </div>
-      <div className="mba-row-2">
-        <Field label="Máx. Asistidor" required><Input placeholder="Jugador" value={form.top_assist} onChange={e => set('top_assist', e.target.value)} /></Field>
-        <Field label="Asistencias" required><Input type="number" min="0" placeholder="0" value={form.top_assist_count} onChange={e => set('top_assist_count', e.target.value)} /></Field>
-      </div>
-      <Field label="MVP" required><Input placeholder="Jugador MVP" value={form.mvp_player} onChange={e => set('mvp_player', e.target.value)} /></Field>
-      <button className="mba-submit-btn mba-submit-btn--green" onClick={submit} disabled={sending}>
-        {sending ? <span className="mba-spinner" /> : <CheckCircle size={16} />}
-        <span>{sending ? 'Finalizando...' : 'Finalizar Liga'}</span>
-      </button>
-    </div>
-  );
-}
-
-/* ================================================================
-   FINISH AWARD FORM (mobile)
-================================================================ */
-function FinishAwardForm({ award, onFinish, onClose }) {
-  const [winner, setWinner] = useState('');
-  const [sending, setSending] = useState(false);
-
-  const submit = async () => {
-    if (!winner.trim()) return;
-    setSending(true);
-    try { await onFinish(award.id, winner.trim()); onClose(); } finally { setSending(false); }
-  };
-
-  return (
-    <div className="mba-form">
-      <div className="mba-finish-title">{award.logo} {award.name} · {award.season}</div>
-      <Field label="Ganador del Premio" required><Input placeholder="Nombre del ganador" value={winner} onChange={e => setWinner(e.target.value)} /></Field>
-      <div className="mba-info-box">Cada predicción correcta otorga 10 puntos.</div>
-      <button className="mba-submit-btn mba-submit-btn--green" onClick={submit} disabled={sending}>
-        {sending ? <span className="mba-spinner" /> : <CheckCircle size={16} />}
-        <span>{sending ? 'Finalizando...' : 'Finalizar Premio'}</span>
-      </button>
-    </div>
-  );
-}
-
-/* ================================================================
    EDIT ACHIEVEMENT FORM (mobile)
 ================================================================ */
 function EditAchievementForm({ item, onSave, onDelete, onClose }) {
@@ -710,6 +372,7 @@ function AddTitleForm({ onAdd, onClose }) {
     </div>
   );
 }
+
 /* ================================================================
    MAIN EXPORT
 ================================================================ */
@@ -753,18 +416,18 @@ export default function MobileAdminSheet({
 
   const renderContent = () => {
     if (panelMode === 'finish' && panelItem) {
-      if (activeSection === 'matches') return <FinishMatchForm match={panelItem} onFinish={onFinish} onClose={onClose} />;
-      if (activeSection === 'leagues') return <FinishLeagueForm league={panelItem} onFinish={onFinish} onClose={onClose} />;
-      if (activeSection === 'awards') return <FinishAwardForm award={panelItem} onFinish={onFinish} onClose={onClose} />;
+      if (activeSection === 'matches') return <FinishMatchForm match={panelItem} onFinish={onFinish} onClose={onClose} styles={MBA_STYLES} />;
+      if (activeSection === 'leagues') return <FinishLeagueForm league={panelItem} onFinish={onFinish} onClose={onClose} styles={MBA_STYLES} />;
+      if (activeSection === 'awards') return <FinishAwardForm award={panelItem} onFinish={onFinish} onClose={onClose} styles={MBA_STYLES} />;
     }
     if (panelMode === 'edit' && panelItem) {
       if (activeSection === 'achievements') return <EditAchievementForm item={panelItem} onSave={onSave} onDelete={onDelete} onClose={onClose} />;
     }
 
     switch (activeSection) {
-      case 'matches': return <AddMatchForm onAdd={onAdd} onClose={onClose} />;
-      case 'leagues': return <AddLeagueForm onAdd={onAdd} onClose={onClose} />;
-      case 'awards': return <AddAwardForm onAdd={onAdd} onClose={onClose} />;
+      case 'matches': return <MatchForm onAdd={onAdd} onClose={onClose} styles={MBA_STYLES} />;
+      case 'leagues': return <LeagueForm onAdd={onAdd} onClose={onClose} styles={MBA_STYLES} />;
+      case 'awards': return <AwardForm onAdd={onAdd} onClose={onClose} styles={MBA_STYLES} />;
       case 'achievements': return <AddAchievementForm onAdd={onAdd} onClose={onClose} />;
       case 'titles': return <AddTitleForm onAdd={onAdd} onClose={onClose} />;
       case 'crowns': return <AddCrownForm onAdd={onAdd} onClose={onClose} />;
