@@ -8,6 +8,7 @@ import {
   getUserStats,
   updateUserStats,
   updatePredictionPoints,
+  awardPackToUser,
 } from '../services/admin.service';
 
 export const useAdminMatches = (loadData, toast) => {
@@ -71,6 +72,7 @@ export const useAdminMatches = (loadData, toast) => {
         if (prediction.home_score === homeScore && prediction.away_score === awayScore) {
           pointsEarned = 5;
           exactPredictions++;
+          await awardPackToUser(prediction.user_id);
         } else if (resultDiff === predDiff) {
           pointsEarned = 3;
           correctResults++;

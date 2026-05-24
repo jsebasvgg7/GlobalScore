@@ -567,3 +567,34 @@ export async function getUserPackHistory(userId, limit = 20) {
     if (error) throw error;
     return data ?? [];
 }
+
+// ── Puntos y sobres ────────────────────────────────────────────────────────
+
+export const awardPackToUser = async (userId) => {
+    const { data: existing } = await supabase
+        .from('album_packs')
+        .select('id, packs_available, total_packs_earned')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+    if (existing) {
+        const { error } = await supabase
+            .from('album_packs')
+            .update({
+                packs_available: existing.packs_available + 1,
+                total_packs_earned: existing.total_packs_earned + 1,
+                updated_at: new Date().toISOString(),
+            })
+            .eq('user_id', userId);
+        if (error) throw error;
+    } else {
+        const { error } = await supabase
+            .from('album_packs')
+            .insert({
+                user_id: userId,
+                packs_available: 1,
+                total_packs_earned: 1,
+            });
+        if (error) throw error;
+    }
+};
