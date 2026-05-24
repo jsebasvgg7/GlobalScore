@@ -69,10 +69,12 @@ export const useAdminMatches = (loadData, toast) => {
         let pointsEarned = 0;
         let advancingPoints = 0;
 
+        console.log(`🔍 Comparando: pred(${prediction.home_score}-${prediction.away_score}) vs real(${homeScore}-${awayScore})`);
         if (prediction.home_score === homeScore && prediction.away_score === awayScore) {
-          pointsEarned = 5;
+          console.log(`✅ EXACTA para usuario ${prediction.user_id} - otorgando sobre...`); pointsEarned = 5;
           exactPredictions++;
           await awardPackToUser(prediction.user_id);
+          console.log(`📦 Sobre otorgado a ${prediction.user_id}`);
         } else if (resultDiff === predDiff) {
           pointsEarned = 3;
           correctResults++;
