@@ -33,7 +33,6 @@ export const useAdminLeagues = (loadData, toast) => {
   };
 
   const handleDeleteLeague = async (leagueId) => {
-    if (!confirm('¿Estás seguro de eliminar esta liga?')) return;
 
     try {
       await deleteLeague(leagueId);

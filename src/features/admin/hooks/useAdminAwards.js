@@ -33,7 +33,6 @@ export const useAdminAwards = (loadData, toast) => {
   };
 
   const handleDeleteAward = async (awardId) => {
-    if (!confirm('¿Estás seguro de eliminar este premio?')) return;
 
     try {
       await deleteAward(awardId);

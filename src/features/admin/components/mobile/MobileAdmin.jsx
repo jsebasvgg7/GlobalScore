@@ -653,10 +653,65 @@ function EditAchievementForm({ item, onSave, onDelete, onClose }) {
     </div>
   );
 }
+function AddTitleForm({ onAdd, onClose }) {
+  const [form, setForm] = useState({
+    id: '', name: '', description: '',
+    color: '#7C3AED', requirement_achievement_id: ''
+  });
+  const [achievements, setAchievements] = useState([]);
+  const [sending, setSending] = useState(false);
+  const colors = ['#7C3AED', '#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#EC4899'];
+  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
+  useEffect(() => {
+    supabase.from('available_achievements')
+      .select('*')
+      .order('requirement_value', { ascending: true })
+      .then(({ data }) => setAchievements(data || []));
+  }, []);
+
+  const submit = async () => {
+    if (!form.name || !form.description || !form.requirement_achievement_id) return;
+    const id = form.id || form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    setSending(true);
+    try { await onAdd({ ...form, id }); onClose(); }
+    finally { setSending(false); }
+  };
+
+  return (
+    <div className="mba-form">
+      <Field label="Nombre" required>
+        <Input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Oráculo" />
+      </Field>
+      <Field label="Descripción" required>
+        <Textarea value={form.description} onChange={e => set('description', e.target.value)} rows={2} />
+      </Field>
+      <Field label="Color">
+        <div className="mba-color-grid">
+          {colors.map(c => (
+            <button key={c} type="button"
+              className={`mba-color-btn ${form.color === c ? 'active' : ''}`}
+              style={{ background: c }}
+              onClick={() => set('color', c)}
+            />
+          ))}
+        </div>
+      </Field>
+      <Field label="Logro Requerido" required>
+        <Sel value={form.requirement_achievement_id} onChange={e => set('requirement_achievement_id', e.target.value)}>
+          <option value="">Selecciona un logro...</option>
+          {achievements.map(a => <option key={a.id} value={a.id}>{a.icon} {a.name}</option>)}
+        </Sel>
+      </Field>
+      <button className="mba-submit-btn" onClick={submit} disabled={sending}>
+        {sending ? <span className="mba-spinner" /> : <Package size={16} />}
+        <span>{sending ? 'Creando...' : 'Crear Título'}</span>
+      </button>
+    </div>
+  );
+}
 /* ================================================================
-   MAIN EXPORT — MobileAdminSheet
-   Este componente reemplaza/complementa el panel derecho en mobile
+   MAIN EXPORT
 ================================================================ */
 export default function MobileAdminSheet({
   isOpen,
@@ -711,6 +766,7 @@ export default function MobileAdminSheet({
       case 'leagues': return <AddLeagueForm onAdd={onAdd} onClose={onClose} />;
       case 'awards': return <AddAwardForm onAdd={onAdd} onClose={onClose} />;
       case 'achievements': return <AddAchievementForm onAdd={onAdd} onClose={onClose} />;
+      case 'titles': return <AddTitleForm onAdd={onAdd} onClose={onClose} />;
       case 'crowns': return <AddCrownForm onAdd={onAdd} onClose={onClose} />;
       case 'banners': return <AddBannerForm onAdd={onAdd} onClose={onClose} />;
       default: return <AddMatchForm onAdd={onAdd} onClose={onClose} />;

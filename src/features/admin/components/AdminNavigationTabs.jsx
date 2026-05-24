@@ -20,7 +20,7 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
     { id: 'awards', icon: Award, badge: stats.awards.active },
     { id: 'achievements', icon: Shield, badge: 0 },
     { id: 'titles', icon: Package, badge: 0 },
-    { id: 'crowns', icon: Crown, badge: stats.crowns.thisMonth === 0 ? 1 : 0 },
+    { id: 'crowns', icon: Crown, badge: stats.crowns?.thisMonth === 0 ? '!' : 0 },
     { id: 'banners', icon: Image, badge: 0 },
   ];
 
@@ -34,7 +34,11 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
         >
           <Icon size={14} />
           <span>{TAB_LABELS[id]}</span>
-          {badge > 0 && <span className="tab-badge">{badge}</span>}
+          {badge !== 0 && (
+            <span className={`tab-badge ${badge === '!' ? 'tab-badge--alert' : ''}`}>
+              {badge === '!' ? '' : badge}
+            </span>
+          )}
         </button>
       ))}
     </div>

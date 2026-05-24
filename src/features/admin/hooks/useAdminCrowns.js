@@ -29,9 +29,6 @@ export const useAdminCrowns = (loadData, toast) => {
   };
 
   const handleResetMonthlyStats = async () => {
-    if (!confirm('⚠️ ¿Estás seguro de resetear las estadísticas mensuales de TODOS los usuarios? Esta acción no se puede deshacer.')) {
-      return;
-    }
 
     try {
       const data = await resetMonthlyStats();

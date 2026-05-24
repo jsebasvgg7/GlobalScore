@@ -75,6 +75,7 @@ export default function AdminRightPanel({
             <AddForm
               activeSection={activeSection}
               onAdd={onAdd}
+              users={users}
             />
           )}
         </div>
@@ -185,14 +186,14 @@ function DeleteBtn({ onClick }) {
 /* ================================================================
    ADD FORM — por sección
 ================================================================ */
-function AddForm({ activeSection, onAdd }) {
+function AddForm({ activeSection, onAdd, users }) {
   switch (activeSection) {
     case 'matches': return <AddMatchForm onAdd={onAdd} />;
     case 'leagues': return <AddLeagueForm onAdd={onAdd} />;
     case 'awards': return <AddAwardForm onAdd={onAdd} />;
     case 'achievements': return <AddAchievementForm onAdd={onAdd} />;
     case 'titles': return <AddTitleForm onAdd={onAdd} />;
-    case 'crowns': return <AddCrownForm onAdd={onAdd} />;
+    case 'crowns': return <AddCrownForm onAdd={onAdd} users={users} />;
     case 'banners': return <AddBannerForm onAdd={onAdd} />;
     default: return <AddMatchForm onAdd={onAdd} />;
   }
@@ -377,7 +378,7 @@ function AddLeagueForm({ onAdd }) {
       if (url) set('logo_url', url);
     }
   };
-  
+
   const submit = async () => {
     if (!form.id || !form.name || !form.season || !form.deadline || !form.deadline_time) return;
     setSending(true);
@@ -389,9 +390,9 @@ function AddLeagueForm({ onAdd }) {
         deadline: `${deadline_date}T${deadline_time}:00`,
         status: 'active',
       });
-        setForm({ id: '', name: '', season: '', logo: '🏆', deadline: '', deadline_time: '' });
-      } finally { setSending(false); }
-    };
+      setForm({ id: '', name: '', season: '', logo: '🏆', deadline: '', deadline_time: '' });
+    } finally { setSending(false); }
+  };
 
   return (
     <div className="adm-form">
@@ -595,14 +596,16 @@ function AddTitleForm({ onAdd }) {
 }
 
 /* ── ADD CROWN ── */
-function AddCrownForm({ onAdd }) {
+function AddCrownForm({ onAdd, users = [] }) {
   const [month, setMonth] = useState(new Date().toISOString().slice(0, 7));
   const [sending, setSending] = useState(false);
+  const topUser = users[0];
 
   const submit = async () => {
-    if (!month) return;
+    if (!month || !topUser) return;
     setSending(true);
-    try { await onAdd(month); } finally { setSending(false); }
+    try { await onAdd({ winnerId: topUser.id, monthLabel: month }); }
+    finally { setSending(false); }
   };
 
   return (
@@ -610,11 +613,16 @@ function AddCrownForm({ onAdd }) {
       <div className="adm-crown-info">
         <Crown size={28} style={{ color: '#c9a227' }} />
         <p>Otorga la corona mensual al usuario con más puntos en el mes seleccionado.</p>
+        {topUser && (
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>
+            Ganador: <strong>{topUser.name}</strong>
+          </p>
+        )}
       </div>
       <Field label="Mes (YYYY-MM)" required hint="Formato: 2026-01 para Enero 2026">
         <Input type="month" value={month} onChange={e => setMonth(e.target.value)} />
       </Field>
-      <button className="adm-submit-btn adm-submit-btn--gold" onClick={submit} disabled={sending}>
+      <button className="adm-submit-btn adm-submit-btn--gold" onClick={submit} disabled={sending || !topUser}>
         {sending ? <span className="adm-spinner" /> : <Crown size={14} />}
         <span>{sending ? 'Otorgando...' : 'Otorgar Corona'}</span>
       </button>
@@ -952,9 +960,16 @@ function AssignBannerForm({ users: initialUsers, banners, onAssign, onRevoke }) 
     fetchUsers();
   }, []);
 
-  const filtered = !search.trim() ? [] : allUsers.filter(u =>
-    (u.name || '').toLowerCase().includes(search.toLowerCase())
-  ).slice(0, 6);
+  const normalize = (str) =>
+    (str || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+
+  const filtered = !search.trim() ? [] : allUsers.filter(u => {
+    const term = normalize(search);
+    const name = normalize(u.name);
+    const nameRaw = (u.name || '').toLowerCase();
+    const termRaw = search.toLowerCase().trim();
+    return name.includes(term) || nameRaw.includes(termRaw);
+  }).slice(0, 6);
 
   const loadUserBanners = async (uid) => {
     const { data } = await supabase.from('user_banners').select('*, available_banners(*)').eq('user_id', uid);

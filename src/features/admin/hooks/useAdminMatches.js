@@ -148,7 +148,6 @@ export const useAdminMatches = (loadData, toast) => {
   // ELIMINAR PARTIDO
   // ============================================
   const handleDeleteMatch = async (matchId) => {
-    if (!confirm('¿Estás seguro de eliminar este partido?')) return;
 
     try {
       setLoading(true);

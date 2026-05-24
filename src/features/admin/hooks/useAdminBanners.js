@@ -36,7 +36,6 @@ export const useAdminBanners = (loadData, toast) => {
 
   // ── Eliminar banner ─────────────────────────────────
   const handleDeleteBanner = async (bannerId, imageUrl) => {
-    if (!confirm('¿Eliminar este banner? Se quitará de los usuarios que lo tengan equipado.')) return;
 
     try {
       await deleteBanner(bannerId, imageUrl);

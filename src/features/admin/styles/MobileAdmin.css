@@ -830,6 +830,25 @@
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
 }
 
+.mba-color-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mba-color-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.mba-color-btn.active {
+  border-color: var(--text);
+  transform: scale(1.15);
+}
+
 @media (min-width: 769px) {
   .mba-fab {
     display: none !important;

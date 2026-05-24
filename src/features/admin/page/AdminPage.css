@@ -270,6 +270,16 @@
   z-index: 2 !important;
 }
 
+.tab-badge--alert {
+  width: 8px !important;
+  height: 8px !important;
+  background: #f25f5c !important;
+  font-size: 0 !important;
+  min-width: unset !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+}
+
 .admin-controls {
   display: flex;
   align-items: center;

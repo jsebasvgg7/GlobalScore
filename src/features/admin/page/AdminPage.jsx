@@ -140,7 +140,7 @@ export default function AdminPage({ currentUser }) {
       case 'achievements': await handleSaveAchievement(data); break;
       case 'titles': await handleSaveTitle(data); break;
       case 'crowns': await handleAwardCrown(
-        users?.[0]?.id, data, currentUser?.id); break;
+        data.winnerId, data.monthLabel, currentUser?.id); break;
       case 'banners': await handleCreateBanner(
         { name: data.name, description: data.description }, data.file); break;
       default: break;
