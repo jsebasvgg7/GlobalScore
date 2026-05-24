@@ -8,8 +8,8 @@ import {
   getUserStats,
   updateUserStats,
   updatePredictionPoints,
-  awardPackToUser,
 } from '../services/admin.service';
+import { awardPackToUser } from '@/features/albums/services/albums.service';
 
 export const useAdminMatches = (loadData, toast) => {
   const [loading, setLoading] = useState(false);
