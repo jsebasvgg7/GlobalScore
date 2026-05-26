@@ -148,9 +148,11 @@ function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
         (c) => c.card?.card_type === 'player' && !prevUsedIds.has(c.card_id ?? c.id)
     );
 
-    const sorted = [...playerCol].sort(
-        (a, b) => (b.card?.significance_level ?? 0) - (a.card?.significance_level ?? 0)
-    );
+    const sorted = [...playerCol].sort((a, b) => {
+        const dateA = a.first_obtained_at ? new Date(a.first_obtained_at).getTime() : 0;
+        const dateB = b.first_obtained_at ? new Date(b.first_obtained_at).getTime() : 0;
+        return dateA - dateB;
+    });
 
     const assignedIds = new Set();
     const reqZones = [];

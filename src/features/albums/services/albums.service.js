@@ -78,17 +78,12 @@ export async function getAlbumCardsByType(cardType) {
         .select('*')
         .eq('card_type', cardType)
         .eq('is_active', true)
-        // ── NUEVO: excluir cartas únicas del pool de drops ──────────────
         .eq('drop_enabled', true);
 
     if (error) throw error;
     return data;
 }
 
-// ── NUEVO: obtener todas las cartas especiales (para el álbum Edición Única) ──
-// Todos los usuarios pueden ver qué cartas especiales existen.
-// El frontend decide si mostrar el slot lleno o con candado según si el
-// usuario tiene esa carta en su colección.
 export async function getSpecialCards() {
     const { data, error } = await supabase
         .from('album_cards')
@@ -101,11 +96,7 @@ export async function getSpecialCards() {
     return data ?? [];
 }
 
-// ── NUEVO: entregar carta única directamente a un usuario (uso desde Admin) ──
-// El trigger SQL ya lo hace automáticamente al publicar.
-// Esta función es el fallback manual para el Admin si necesita re-entregar.
 export async function deliverSpecialCard(cardId, userId) {
-    // Verificar que la carta existe y es especial
     const { data: card, error: cardError } = await supabase
         .from('album_cards')
         .select('id, is_special, drop_enabled')
@@ -157,8 +148,6 @@ export async function initUserPacks(userId) {
 }
 
 // ── Apertura de sobre ──────────────────────────────────────────────────────
-// getAlbumCardsByType ya filtra drop_enabled = true, así que las cartas
-// especiales nunca pueden aparecer en sobres. No hay cambio adicional aquí.
 
 function rollPlayerByRarity(playerCards, boosted = false) {
     const rates = boosted ? PLAYER_DROP_RATES_BOOST : PLAYER_DROP_RATES_BASE;
@@ -190,7 +179,6 @@ export async function openPack(userId) {
         throw new Error('No hay sobres disponibles');
     }
 
-    // getAlbumCardsByType ya excluye drop_enabled = false (cartas únicas)
     const [players, teams, competitions, events] = await Promise.all([
         getAlbumCardsByType('player'),
         getAlbumCardsByType('team'),
@@ -345,17 +333,19 @@ export async function getUserAlbumProgress(userId) {
 function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
     const legDef = LEG_REQUIREMENTS[albumId];
     if (!legDef) return { usedIds: new Set(), uniquePlayers: 0, meetsAllReqs: false };
-
     const available = playerCollection.filter(
         (c) => !usedGlobalIds.has(c.card_id ?? c.id)
     );
 
-    const sorted = [...available].sort(
-        (a, b) => (b.card?.significance_level ?? 0) - (a.card?.significance_level ?? 0)
-    );
+    const sorted = [...available].sort((a, b) => {
+        const dateA = a.first_obtained_at ? new Date(a.first_obtained_at).getTime() : 0;
+        const dateB = b.first_obtained_at ? new Date(b.first_obtained_at).getTime() : 0;
+        return dateA - dateB;
+    });
 
     const assignedIds = new Set();
     let meetsAllReqs = true;
+
     const reqsSorted = [...legDef.req].sort((a, b) => b.minStars - a.minStars);
 
     for (const { minStars, count } of reqsSorted) {
@@ -364,24 +354,23 @@ function assignLegendarySlots(albumId, playerCollection, usedGlobalIds) {
                 (c.card?.significance_level ?? 0) >= minStars &&
                 !assignedIds.has(c.card_id ?? c.id)
         );
-
         let filled = 0;
         for (const candidate of candidates) {
             if (filled >= count) break;
             assignedIds.add(candidate.card_id ?? candidate.id);
             filled++;
         }
-
         if (filled < count) meetsAllReqs = false;
     }
 
     const reqTotal = legDef.req.reduce((s, r) => s + r.count, 0);
     const generalNeeded = legDef.slots - reqTotal;
-    const remaining = [...available]
-        .filter((c) => !assignedIds.has(c.card_id ?? c.id))
-        .sort((a, b) => (a.card?.significance_level ?? 0) - (b.card?.significance_level ?? 0));
+
+    const generalPool = sorted.filter(
+        (c) => !assignedIds.has(c.card_id ?? c.id)
+    );
     let generalFilled = 0;
-    for (const c of remaining) {
+    for (const c of generalPool) {
         if (generalFilled >= generalNeeded) break;
         assignedIds.add(c.card_id ?? c.id);
         generalFilled++;
@@ -407,15 +396,12 @@ export async function computeAndSyncAlbumProgress(userId) {
 
     const updates = [];
 
-    // ── Cartas especiales: filtrar las que el usuario posee ────────────────
     const ownedSpecialCardIds = new Set(
         collection
             .filter((c) => c.card?.is_special === true)
             .map((c) => c.card_id)
     );
 
-    // ── Álbumes legendarios ────────────────────────────────────────────────
-    // Excluir cartas especiales del cómputo de álbumes legendarios/estrellas
     const playerCollection = collection.filter(
         (c) => c.card?.card_type === 'player' && !c.card?.is_special
     );
@@ -441,22 +427,13 @@ export async function computeAndSyncAlbumProgress(userId) {
         });
     }
 
-    // ── Álbumes no-legendarios (stars, cult) ───────────────────────────────
     for (const album of definitions) {
         if (LEG_ORDER.includes(album.id)) continue;
 
-        // ── NUEVO: álbum especial ──────────────────────────────────────────
         if (album.id === 'special_unique') {
-            // unique_cards = cuántas cartas especiales posee este usuario
             const ownedCount = ownedSpecialCardIds.size;
-            // is_completed = posee TODAS las especiales existentes
             const isCompleted = specialCards.length > 0 && ownedCount >= specialCards.length;
-
-            updates.push({
-                album_id: album.id,
-                unique_cards: ownedCount,
-                is_completed: isCompleted,
-            });
+            updates.push({ album_id: album.id, unique_cards: ownedCount, is_completed: isCompleted });
             continue;
         }
 
@@ -467,7 +444,7 @@ export async function computeAndSyncAlbumProgress(userId) {
                 (c) =>
                     c.card?.card_type === 'player' &&
                     c.card?.significance_level === album.star_filter &&
-                    !c.card?.is_special   // excluir especiales de álbumes de estrellas
+                    !c.card?.is_special
             ).length;
         } else if (album.album_type === 'cult') {
             uniqueCards = collection.filter(
@@ -478,7 +455,6 @@ export async function computeAndSyncAlbumProgress(userId) {
         updates.push({ album_id: album.id, unique_cards: uniqueCards, is_completed: false });
     }
 
-    // ── Upsert progreso en Supabase ────────────────────────────────────────
     for (const update of updates) {
         const { error } = await supabase.from('album_progress').upsert(
             {
@@ -491,14 +467,13 @@ export async function computeAndSyncAlbumProgress(userId) {
             },
             { onConflict: 'user_id,album_id' }
         );
-
         if (error) throw error;
     }
 
     return updates;
 }
 
-// ── Datos del álbum Edición Única para renderizado ─────────────────
+// ── Datos del álbum Edición Única ─────────────────────────────────────────
 
 export async function getSpecialAlbumData(userId) {
     const [specialCards, collection] = await Promise.all([
@@ -506,9 +481,7 @@ export async function getSpecialAlbumData(userId) {
         getUserCollection(userId),
     ]);
 
-    // Usamos los IDs que ya sabemos que son especiales
     const specialCardIds = new Set(specialCards.map((c) => c.id));
-
     const ownedMap = new Map(
         collection
             .filter((c) => specialCardIds.has(c.card_id))
