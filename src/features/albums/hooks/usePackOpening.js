@@ -25,9 +25,9 @@ export function usePackOpening({ onPackOpened } = {}) {
         } catch (err) {
             setError(err);
             setPhase('idle');
+            openingRef.current = false;
         } finally {
             setIsOpening(false);
-            openingRef.current = false;
         }
     }, [onPackOpened]);
 
