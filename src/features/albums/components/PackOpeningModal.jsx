@@ -221,6 +221,13 @@ function ConfettiBurst() {
 
 /* ─── PackDonePanel ─────────────────────────────────────────────────────── */
 function PackDonePanel({ cards, packsAvailable, onReset, onClose }) {
+    const [resetting, setResetting] = useState(false);
+
+    const handleReset = async () => {
+        setResetting(true);
+        await onReset();
+    };
+
     return (
         <div className="pom2-done-panel">
             <div className="pom2-pack-bg-pattern" aria-hidden="true" />
@@ -253,9 +260,9 @@ function PackDonePanel({ cards, packsAvailable, onReset, onClose }) {
 
             <div className="pom2-actions">
                 {packsAvailable > 1 && (
-                    <button className="pom2-btn-again" onClick={onReset}>
-                        Abrir otro
-                        <span className="pom2-badge">{packsAvailable - 1}</span>
+                    <button className="pom2-btn-again" onClick={handleReset} disabled={resetting}>
+                        {resetting ? 'Cargando…' : 'Abrir otro'}
+                        {!resetting && <span className="pom2-badge">{packsAvailable - 1}</span>}
                     </button>
                 )}
                 <button className="pom2-btn-collection" onClick={onClose}>
@@ -542,6 +549,13 @@ function EnvelopePack({ count, phase, onOpen, isOpening, allFlipped, packsAvaila
 
 /* ─── CardsPanel ─────────────────────────────────────────────────────────── */
 function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, packsAvailable, onReset, onClose }) {
+    const [resetting, setResetting] = useState(false);
+
+    const handleReset = async () => {
+        setResetting(true);
+        await onReset();
+    };
+
     return (
         <div className="pom2-cards-panel">
             <div className="pom2-cards-header">
@@ -592,9 +606,9 @@ function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, pa
             {allFlipped && (
                 <div className="pom2-mobile-actions">
                     {packsAvailable > 1 && (
-                        <button className="pom2-btn-again" onClick={onReset}>
-                            Abrir otro
-                            <span className="pom2-badge">{packsAvailable - 1}</span>
+                        <button className="pom2-btn-again" onClick={handleReset} disabled={resetting}>
+                            {resetting ? 'Cargando…' : 'Abrir otro'}
+                            {!resetting && <span className="pom2-badge">{packsAvailable - 1}</span>}
                         </button>
                     )}
                     <button className="pom2-btn-collection" onClick={onClose}>

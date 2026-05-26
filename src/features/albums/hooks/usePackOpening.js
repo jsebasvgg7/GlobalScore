@@ -31,13 +31,13 @@ export function usePackOpening({ onPackOpened } = {}) {
         }
     }, [onPackOpened]);
 
-    const reset = useCallback(() => {
+    const reset = useCallback(async (beforeReset) => {
+        if (beforeReset) await beforeReset();
         setResult(null);
         setPhase('idle');
         setError(null);
         openingRef.current = false;
     }, []);
-
     const playerStars = result?.player?.significance_level ?? null;
     const isGoat = playerStars === 5;
     const isLegend = playerStars === 4;
