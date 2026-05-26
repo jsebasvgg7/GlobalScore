@@ -49,8 +49,9 @@ export default function AlbumsPageMobile() {
     const { legendary, cult } = useAlbumDefinitions();
 
     const { open, reset, phase, result, isGoat, isLegend, setPhase } = usePackOpening({
-        onPackOpened: () => {
-            refreshPacks();
+        onPackOpened: async () => {
+            await refreshPacks();
+            await computeAndSyncAlbumProgress(user?.id);
             refreshCollection();
             refreshProgress();
             refreshCards();
@@ -68,6 +69,10 @@ export default function AlbumsPageMobile() {
 
     const handleOpenModal = () => { reset(); setModalOpen(true); };
     const handleCloseModal = () => { reset(); setModalOpen(false); };
+    const handleReset = async () => {
+        await refreshPacks();
+        reset();
+    };
 
     return (
         <div className="alb-mob-root">
@@ -172,7 +177,7 @@ export default function AlbumsPageMobile() {
                 isLegend={isLegend}
                 onOpen={() => open(userId)}
                 onClose={handleCloseModal}
-                onReset={reset}
+                onReset={handleReset}
             />
         </div>
     );

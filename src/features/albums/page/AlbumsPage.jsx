@@ -35,8 +35,8 @@ export default function AlbumsPage({ currentUser }) {
 
     const { open, reset, phase, result, isGoat, isLegend, setPhase } = usePackOpening({
         onPackOpened: async () => {
+            await refreshPacks();
             await computeAndSyncAlbumProgress(user?.id);
-            refreshPacks();
             refreshCollection();
             refreshProgress();
             refreshCards();
@@ -62,6 +62,10 @@ export default function AlbumsPage({ currentUser }) {
 
     const handleOpenModal = () => { reset(); setModalOpen(true); };
     const handleCloseModal = () => { reset(); setModalOpen(false); };
+    const handleReset = async () => {
+        await refreshPacks();
+        reset();
+    };
 
     return (
         <div className="alp-root">
@@ -107,12 +111,12 @@ export default function AlbumsPage({ currentUser }) {
             </motion.div>
 
             <div className="alp-bar-section">
-               <AlbumProgressBar
-                percent={barPercent}
-                packsAvailable={packsAvailable}
-                boostActive={boostActive}
-                boostPacksRemaining={boostPacksRemaining}
-            />
+                <AlbumProgressBar
+                    percent={barPercent}
+                    packsAvailable={packsAvailable}
+                    boostActive={boostActive}
+                    boostPacksRemaining={boostPacksRemaining}
+                />
             </div>
 
             <AlbumsSectionNav active={activeSection} onChange={setActiveSection} />
@@ -150,7 +154,7 @@ export default function AlbumsPage({ currentUser }) {
                 isLegend={isLegend}
                 onOpen={() => open(user?.id)}
                 onClose={handleCloseModal}
-                onReset={reset}
+                onReset={handleReset}
             />
         </div>
     );

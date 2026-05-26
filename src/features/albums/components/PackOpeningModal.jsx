@@ -259,10 +259,10 @@ function PackDonePanel({ cards, packsAvailable, onReset, onClose }) {
             </div>
 
             <div className="pom2-actions">
-                {packsAvailable > 1 && (
+                {packsAvailable > 0 && (
                     <button className="pom2-btn-again" onClick={handleReset} disabled={resetting}>
                         {resetting ? 'Cargando…' : 'Abrir otro'}
-                        {!resetting && <span className="pom2-badge">{packsAvailable - 1}</span>}
+                        {!resetting && <span className="pom2-badge">{packsAvailable}</span>}
                     </button>
                 )}
                 <button className="pom2-btn-collection" onClick={onClose}>
@@ -605,10 +605,10 @@ function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, pa
 
             {allFlipped && (
                 <div className="pom2-mobile-actions">
-                    {packsAvailable > 1 && (
+                    {packsAvailable > 0 && (
                         <button className="pom2-btn-again" onClick={handleReset} disabled={resetting}>
                             {resetting ? 'Cargando…' : 'Abrir otro'}
-                            {!resetting && <span className="pom2-badge">{packsAvailable - 1}</span>}
+                            {!resetting && <span className="pom2-badge">{packsAvailable}</span>}
                         </button>
                     )}
                     <button className="pom2-btn-collection" onClick={onClose}>
