@@ -41,7 +41,6 @@ function posLabel(pos) {
 
 /* ─── Sub-components ────────────────────────────────────────────────────── */
 
-/* Partículas GOAT — calculadas una sola vez con useMemo */
 function GoatParticles() {
     const particles = React.useMemo(() =>
         Array.from({ length: 18 }, (_, i) => ({
@@ -191,7 +190,6 @@ function FlipCard({ type, card, index, isDealt, isFlipped, onFlip, isGoat }) {
     );
 }
 
-/* ─── Confeti burst al completar todas las cartas ───────────────────────── */
 function ConfettiBurst() {
     const pieces = React.useMemo(() =>
         Array.from({ length: 28 }, (_, i) => {
@@ -221,7 +219,7 @@ function ConfettiBurst() {
     );
 }
 
-/* ─── Panel "done" para el lado izquierdo ───────────────────────────────── */
+/* ─── PackDonePanel ─────────────────────────────────────────────────────── */
 function PackDonePanel({ cards, packsAvailable, onReset, onClose }) {
     return (
         <div className="pom2-done-panel">
@@ -268,7 +266,7 @@ function PackDonePanel({ cards, packsAvailable, onReset, onClose }) {
     );
 }
 
-/* ─── HoloScanner — panel izquierdo durante animating + revealing ───────── */
+/* ─── HoloScanner ───────────────────────────────────────────────────────── */
 const OS_LINES_ANIMATING = [
     'INICIANDO APERTURA...',
     'LEYENDO CONTENIDO...',
@@ -292,12 +290,11 @@ const SCAN_TYPES = [
 function HoloScanner({ phase, isGoat, flippedCount, totalCards }) {
     const [osLine, setOsLine] = useState(0);
     const [typesVisible, setTypesVisible] = useState(0);
-    const [rarityStep, setRarityStep] = useState(0); // 0-4 bloques
+    const [rarityStep, setRarityStep] = useState(0);
 
     const isAnimating = phase === 'animating';
     const isRevealing = phase === 'revealing' || phase === 'done';
 
-    /* Typewriter de líneas OS */
     useEffect(() => {
         if (!isAnimating) return;
         setOsLine(0);
@@ -308,18 +305,15 @@ function HoloScanner({ phase, isGoat, flippedCount, totalCards }) {
         OS_LINES_ANIMATING.forEach((_, i) => {
             timers.push(setTimeout(() => setOsLine(i + 1), 200 + i * 320));
         });
-        /* Tipos aparecen uno a uno desde los 400ms */
         SCAN_TYPES.forEach((_, i) => {
             timers.push(setTimeout(() => setTypesVisible(i + 1), 500 + i * 200));
         });
-        /* Barra de rareza va creciendo */
         for (let s = 1; s <= 4; s++) {
             timers.push(setTimeout(() => setRarityStep(s), 900 + s * 200));
         }
         return () => timers.forEach(clearTimeout);
     }, [isAnimating]);
 
-    /* Reset suave al pasar a revealing */
     useEffect(() => {
         if (isRevealing) {
             setOsLine(OS_LINES_ANIMATING.length);
@@ -334,31 +328,20 @@ function HoloScanner({ phase, isGoat, flippedCount, totalCards }) {
 
     return (
         <div className={`pom2-holo${isGoat ? ' pom2-holo--goat' : ''}`} aria-hidden="true">
-            {/* Grid holográfico de fondo */}
             <div className="pom2-holo-grid" />
-
-            {/* Scan line horizontal */}
             <div className={`pom2-holo-scanline${isRevealing ? ' pom2-holo-scanline--slow' : ''}`} />
-
-            {/* Scan line vertical secundario */}
             <div className="pom2-holo-scanline-v" />
-
-            {/* Corner brackets */}
             <div className="pom2-holo-corner pom2-holo-corner--tl" />
             <div className="pom2-holo-corner pom2-holo-corner--tr" />
             <div className="pom2-holo-corner pom2-holo-corner--bl" />
             <div className="pom2-holo-corner pom2-holo-corner--br" />
 
-            {/* Contenido OS */}
             <div className="pom2-holo-content">
-
-                {/* Cabecera */}
                 <div className="pom2-holo-header">
                     <span className="pom2-holo-dot" />
                     <span className="pom2-holo-os-title">GLOBAL ALBUMS OS v2.6</span>
                 </div>
 
-                {/* Líneas de proceso */}
                 <div className="pom2-holo-lines">
                     {OS_LINES_ANIMATING.slice(0, osLine).map((line, i) => (
                         <div key={i} className="pom2-holo-line pom2-holo-line--in">
@@ -374,12 +357,8 @@ function HoloScanner({ phase, isGoat, flippedCount, totalCards }) {
                     ))}
                 </div>
 
-                {/* Separador */}
-                {typesVisible > 0 && (
-                    <div className="pom2-holo-sep" />
-                )}
+                {typesVisible > 0 && <div className="pom2-holo-sep" />}
 
-                {/* Tipos detectados */}
                 {typesVisible > 0 && (
                     <div className="pom2-holo-section">
                         <span className="pom2-holo-label">CONTENIDO DETECTADO</span>
@@ -396,7 +375,6 @@ function HoloScanner({ phase, isGoat, flippedCount, totalCards }) {
                     </div>
                 )}
 
-                {/* Rareza */}
                 {rarityStep > 0 && (
                     <>
                         <div className="pom2-holo-sep" />
@@ -424,7 +402,6 @@ function HoloScanner({ phase, isGoat, flippedCount, totalCards }) {
                     </>
                 )}
 
-                {/* Contador en vivo durante revealing */}
                 {isRevealing && (
                     <>
                         <div className="pom2-holo-sep" />
@@ -449,21 +426,11 @@ function HoloScanner({ phase, isGoat, flippedCount, totalCards }) {
     );
 }
 
-/* ─── Nuevo sobre rediseñado ─────────────────────────────────────────────── */
-/**
- * EnvelopePack — reemplaza el PackVisual anterior.
- *
- * Fases internas (controladas por `phase` del padre):
- *   idle      → sobre flota, botón visible
- *   animating → shake (450ms) → solapa sube (500ms) → sobre sale (300ms)
- *               al mismo tiempo que las cartas empiezan a aparecer (overlap 200ms)
- *   revealing → sobre ya no se muestra, cartas presentes
- */
-function EnvelopePack({ count, phase, onOpen, allFlipped, packsAvailable, onReset, onClose, isGoat, flippedCount, totalCards }) {
-    const [envPhase, setEnvPhase] = useState('idle'); // idle | shake | opening | gone
+/* ─── EnvelopePack ───────────────────────────────────────────────────────── */
+function EnvelopePack({ count, phase, onOpen, isOpening, allFlipped, packsAvailable, onReset, onClose, isGoat, flippedCount, totalCards }) {
+    const [envPhase, setEnvPhase] = useState('idle');
     const [scannerActive, setScannerActive] = useState(false);
 
-    /* Sincronizar envPhase con la phase del padre */
     useEffect(() => {
         if (phase === 'idle') {
             setEnvPhase('idle');
@@ -471,18 +438,16 @@ function EnvelopePack({ count, phase, onOpen, allFlipped, packsAvailable, onRese
             return;
         }
         if (phase === 'animating') {
-            /* shake → opening → gone */
             setEnvPhase('shake');
             const t1 = setTimeout(() => setEnvPhase('opening'), 450);
             const t2 = setTimeout(() => {
                 setEnvPhase('gone');
-                setScannerActive(true); // se activa cuando el sobre sale y NUNCA se apaga por tiempo
+                setScannerActive(true);
             }, 950);
             return () => { clearTimeout(t1); clearTimeout(t2); };
         }
     }, [phase]);
 
-    /* El scanner se apaga ÚNICAMENTE cuando el usuario destapa todas las cartas */
     useEffect(() => {
         if (allFlipped) setScannerActive(false);
     }, [allFlipped]);
@@ -493,23 +458,13 @@ function EnvelopePack({ count, phase, onOpen, allFlipped, packsAvailable, onRese
         <div className="pom2-pack-panel">
             <div className="pom2-pack-bg-pattern" aria-hidden="true" />
 
-            {/* ── Sobre ── */}
             {!isGone && (
                 <div className={`pom2-env-wrap pom2-env-wrap--${envPhase}`} data-env-phase={envPhase} aria-hidden="true">
-                    {/* Glow pulsante que crece con la animación */}
                     <div className={`pom2-env-glow pom2-env-glow--${envPhase}`} aria-hidden="true" />
-                    {/* Sombra dinámica */}
                     <div className="pom2-env-shadow" />
-
-                    {/* Cuerpo del sobre */}
                     <div className="pom2-env-body">
-                        {/* Spine lateral */}
                         <div className="pom2-env-spine" />
-
-                        {/* Shine de papel */}
                         <div className="pom2-env-shine" />
-
-                        {/* Cara frontal */}
                         <div className="pom2-env-face">
                             <div className="pom2-env-logo">
                                 <svg width="24" height="24" viewBox="0 0 48 48" fill="none">
@@ -524,26 +479,17 @@ function EnvelopePack({ count, phase, onOpen, allFlipped, packsAvailable, onRese
                             <span className="pom2-env-brand">Global Albums</span>
                             <span className="pom2-env-season">25 · 26</span>
                         </div>
-
-                        {/* Triángulo inferior (estilo sobre) */}
                         <div className="pom2-env-flap-bottom" />
-
-                        {/* Beam de luz al abrirse */}
                         <div className="pom2-env-beam" />
                     </div>
-
-                    {/* Solapa superior con clip-path triangular */}
                     <div className="pom2-env-flap">
                         <div className="pom2-env-flap-face" />
-                        {/* Perforaciones */}
                         <div className="pom2-env-perfs">
                             {Array.from({ length: 6 }).map((_, i) => (
                                 <span key={i} className="pom2-env-perf" />
                             ))}
                         </div>
                     </div>
-
-                    {/* Línea de desgarro — aparece durante opening */}
                     <div className="pom2-env-tear-line">
                         {Array.from({ length: 7 }).map((_, i) => (
                             <div key={i} className="pom2-env-tear-seg" />
@@ -552,7 +498,6 @@ function EnvelopePack({ count, phase, onOpen, allFlipped, packsAvailable, onRese
                 </div>
             )}
 
-            {/* ── Contador de sobres ── */}
             <div className={`pom2-pack-count${isGone ? ' pom2-pack-count--hidden' : ''}`}>
                 <span className="pom2-pack-count-n">{count}</span>
                 <span className="pom2-pack-count-lbl">
@@ -560,25 +505,25 @@ function EnvelopePack({ count, phase, onOpen, allFlipped, packsAvailable, onRese
                 </span>
             </div>
 
-            {/* ── CTA ── */}
             {phase === 'idle' && (
                 <button
                     className="pom2-pack-cta"
                     onClick={onOpen}
-                    disabled={count < 1}
+                    disabled={count < 1 || isOpening}
                     aria-label="Abrir sobre"
+                    aria-busy={isOpening}
                 >
-                    Abrir sobre
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                        <path d="M2 6h8M7 3l3 3-3 3"
-                            stroke="currentColor" strokeWidth="1.5"
-                            strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+                    {isOpening ? 'Abriendo…' : 'Abrir sobre'}
+                    {!isOpening && (
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                            <path d="M2 6h8M7 3l3 3-3 3"
+                                stroke="currentColor" strokeWidth="1.5"
+                                strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    )}
                 </button>
             )}
 
-            {/* HoloScanner — activo desde que el sobre sale hasta que se destapan todas las cartas.
-                No depende de phase, solo de scannerActive y allFlipped. */}
             {scannerActive && (
                 <HoloScanner
                     phase={phase}
@@ -591,12 +536,11 @@ function EnvelopePack({ count, phase, onOpen, allFlipped, packsAvailable, onRese
             <p className={`pom2-pack-types-hint${isGone ? ' pom2-pack-types-hint--hidden' : ''}`}>
                 jugador · equipo · copa · evento
             </p>
-
-            {/* Acciones desktop movidas a PackDonePanel */}
         </div>
     );
 }
 
+/* ─── CardsPanel ─────────────────────────────────────────────────────────── */
 function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, packsAvailable, onReset, onClose }) {
     return (
         <div className="pom2-cards-panel">
@@ -645,7 +589,6 @@ function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, pa
                 </div>
             )}
 
-            {/* Acciones mobile (ocultas en desktop via CSS) */}
             {allFlipped && (
                 <div className="pom2-mobile-actions">
                     {packsAvailable > 1 && (
@@ -671,6 +614,7 @@ export default function PackOpeningModal({
     packsAvailable,
     isGoat,
     isLegend,
+    isOpening,
     onOpen,
     onClose,
     onReset,
@@ -685,14 +629,6 @@ export default function PackOpeningModal({
         if (phase === 'revealing') {
             setFlippedCards(new Set());
             setIsDealt(false);
-            /*
-             * TIMING AJUSTADO:
-             * El sobre sale a los 950ms desde que empieza "animating".
-             * Las cartas hacen deal-in a partir de los 750ms (overlap 200ms).
-             * Aquí seteamos isDealt apenas arranca "revealing" (el padre
-             * cambia la phase a revealing en ~950ms después de onOpen).
-             * Así las cartas y el sobre se solapan exactamente 200ms.
-             */
             const t = setTimeout(() => setIsDealt(true), 30);
             return () => clearTimeout(t);
         }
@@ -748,7 +684,6 @@ export default function PackOpeningModal({
                 `pom2-modal--${phase}`,
             ].filter(Boolean).join(' ')}>
 
-                {/* ── Header ── */}
                 <div className="pom2-header">
                     <div className="pom2-header-accent" aria-hidden="true" />
                     <div className="pom2-header-text">
@@ -772,7 +707,6 @@ export default function PackOpeningModal({
 
                 <div className="pom2-header-sep" aria-hidden="true" />
 
-                {/* ── Body ── */}
                 <div className="pom2-body">
                     {allFlipped ? (
                         <PackDonePanel
@@ -786,6 +720,7 @@ export default function PackOpeningModal({
                             count={packsAvailable}
                             phase={phase}
                             onOpen={onOpen}
+                            isOpening={isOpening}
                             allFlipped={allFlipped}
                             packsAvailable={packsAvailable}
                             onReset={onReset}

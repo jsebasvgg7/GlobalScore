@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { openPack } from '../services/albums.service';
 
 export function usePackOpening({ onPackOpened } = {}) {
@@ -6,8 +6,13 @@ export function usePackOpening({ onPackOpened } = {}) {
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
     const [phase, setPhase] = useState('idle');
+
+    const openingRef = useRef(false);
+
     const open = useCallback(async (userId) => {
-        if (isOpening) return;
+        if (openingRef.current) return;
+        openingRef.current = true;
+
         setIsOpening(true);
         setError(null);
         setPhase('animating');
@@ -22,13 +27,15 @@ export function usePackOpening({ onPackOpened } = {}) {
             setPhase('idle');
         } finally {
             setIsOpening(false);
+            openingRef.current = false;
         }
-    }, [isOpening, onPackOpened]);
+    }, [onPackOpened]);
 
     const reset = useCallback(() => {
         setResult(null);
         setPhase('idle');
         setError(null);
+        openingRef.current = false;
     }, []);
 
     const playerStars = result?.player?.significance_level ?? null;
