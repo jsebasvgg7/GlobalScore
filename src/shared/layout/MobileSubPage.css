@@ -103,6 +103,11 @@
   -webkit-font-smoothing: antialiased;
 }
 
+.mhd-header {
+  padding-top: env(safe-area-inset-top, 0px);
+  height: calc(60px + env(safe-area-inset-top, 0px));
+}
+
 [data-style="brutalist"] .msp-topbar {
   display: flex;
   align-items: center;
