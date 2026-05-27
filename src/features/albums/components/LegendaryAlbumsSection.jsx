@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { Lock, BookOpen, Trophy, Star, ChevronLeft, ChevronRight, Gift, Crown, X, User, Search } from 'lucide-react';
+import { Lock, Crown, Search, ChevronLeft, ChevronRight, X, Gift } from 'lucide-react';
 import '../styles/LegendaryAlbumsSection.css';
 import '../styles/mobile/LegendaryAlbumsSection.mobile.css';
 
 // ── Orden progresivo LEG I → LEG V ───────────────
 const ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'legendary_4', 'legendary_5'];
+
 const LEG_SLOT_REQS = {
     legendary_1: {
         slots: 30,
@@ -47,9 +48,9 @@ const LEG_SLOT_REQS = {
 
 const ALBUM_META = {
     legendary_1: {
-        label: 'Foundations',
+        label: 'LEGENDARIOS',
         shortLabel: 'LEG I',
-        subtitle: 'FOUNDATIONS',
+        subtitle: 'Colecciona las leyendas que marcaron la historia del fútbol.',
         req: '30 jugadores · mín. 5×⭐⭐⭐⭐',
         spine: '#5b4fd8',
         spineAlt: '#3d34a5',
@@ -58,14 +59,13 @@ const ALBUM_META = {
         tag: 'TEMPORADA 25·26',
         number: '01',
         coverBg: '#1a1726',
-        coverPattern: 'diagonal',
         rarityLevel: 3,
         rarityLabel: 'FUNDACIÓN',
     },
     legendary_2: {
-        label: 'Rising Legends',
+        label: 'ESTRELLAS',
         shortLabel: 'LEG II',
-        subtitle: 'RISING LEGENDS',
+        subtitle: 'Las estrellas que brillaron en cada era del fútbol mundial.',
         req: '30 jugadores · 5×⭐⭐⭐ + 5×⭐⭐⭐⭐',
         spine: '#7c3aed',
         spineAlt: '#5b1fbd',
@@ -74,14 +74,13 @@ const ALBUM_META = {
         tag: 'TEMPORADA 25·26',
         number: '02',
         coverBg: '#160e2a',
-        coverPattern: 'hex',
         rarityLevel: 4,
-        rarityLabel: 'LEYENDA+',
+        rarityLabel: 'LEYENDA',
     },
     legendary_3: {
-        label: 'Historical Depth',
+        label: 'FUTURO',
         shortLabel: 'LEG III',
-        subtitle: 'HISTORICAL DEPTH',
+        subtitle: 'Los jugadores que están escribiendo la historia hoy.',
         req: '30 jugadores · 5×⭐⭐ + 5×⭐⭐⭐ + 5×⭐⭐⭐⭐',
         spine: '#1D9E75',
         spineAlt: '#0d6e50',
@@ -90,14 +89,13 @@ const ALBUM_META = {
         tag: 'TEMPORADA 25·26',
         number: '03',
         coverBg: '#0a1f18',
-        coverPattern: 'radial',
         rarityLevel: 5,
         rarityLabel: 'ÉLITE',
     },
     legendary_4: {
-        label: 'Elite Construction',
+        label: 'HÉROES',
         shortLabel: 'LEG IV',
-        subtitle: 'ELITE CONSTRUCTION',
+        subtitle: 'Los héroes que dejaron su huella en torneos históricos.',
         req: '30 jugadores · 5×⭐⭐ + 5×⭐⭐⭐ + 5×⭐⭐⭐⭐ + 1×⭐⭐⭐⭐⭐',
         spine: '#b45309',
         spineAlt: '#7c3b00',
@@ -106,14 +104,13 @@ const ALBUM_META = {
         tag: 'TEMPORADA 25·26',
         number: '04',
         coverBg: '#1a1200',
-        coverPattern: 'spiral',
         rarityLevel: 5,
         rarityLabel: 'GOAT',
     },
     legendary_5: {
-        label: 'The Immortals',
+        label: 'INMORTALES',
         shortLabel: 'LEG V',
-        subtitle: 'THE IMMORTALS',
+        subtitle: 'Solo para los coleccionistas más dedicados del planeta.',
         req: '30 jugadores · 5×⭐⭐ + 5×⭐⭐⭐ + 5×⭐⭐⭐⭐ + 5×⭐⭐⭐⭐⭐',
         spine: '#9d174d',
         spineAlt: '#6b1130',
@@ -122,12 +119,12 @@ const ALBUM_META = {
         tag: 'ENDGAME',
         number: '05',
         coverBg: '#1a0e15',
-        coverPattern: 'immortal',
         rarityLevel: 5,
         rarityLabel: 'INMORTAL',
     },
 };
 
+// ── Helpers ──────────────────────────────────────
 function getInitials(name = '') {
     return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || '?';
 }
@@ -140,6 +137,7 @@ function posLabel(pos) {
     return map[pos] || pos?.slice(0, 3).toUpperCase() || '—';
 }
 
+// ── buildSlotLayout ───────────────────────────────
 function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
     const slotDef = LEG_SLOT_REQS[albumId];
     if (!slotDef) return { reqZones: [], generalSlots: [], filled: 0, pct: 0, usedIds: new Set() };
@@ -147,7 +145,6 @@ function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
     const playerCol = collection.filter(
         (c) => c.card?.card_type === 'player' && !prevUsedIds.has(c.card_id ?? c.id)
     );
-
     const sorted = [...playerCol].sort((a, b) => {
         const dateA = a.first_obtained_at ? new Date(a.first_obtained_at).getTime() : 0;
         const dateB = b.first_obtained_at ? new Date(b.first_obtained_at).getTime() : 0;
@@ -156,7 +153,6 @@ function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
 
     const assignedIds = new Set();
     const reqZones = [];
-
     const reqsSorted = [...slotDef.req].sort((a, b) => b.minStars - a.minStars);
 
     for (const { minStars, count } of reqsSorted) {
@@ -165,7 +161,6 @@ function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
                 (c.card?.significance_level ?? 0) >= minStars &&
                 !assignedIds.has(c.card_id ?? c.id)
         );
-
         const slots = Array.from({ length: count }, (_, i) => {
             const item = candidates[i] ?? null;
             if (item) assignedIds.add(item.card_id ?? item.id);
@@ -176,23 +171,22 @@ function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
                 minStars,
             };
         });
-
         reqZones.push({ minStars, slots });
     }
+
     const reqTotal = slotDef.req.reduce((s, r) => s + r.count, 0);
     const generalSlotCount = slotDef.slots - reqTotal;
-    const generalPool = sorted
-        .filter((c) => !assignedIds.has(c.card_id ?? c.id));
+    const generalPool = sorted.filter((c) => !assignedIds.has(c.card_id ?? c.id));
     const generalSlots = Array.from({ length: generalSlotCount }, (_, i) => {
         const item = generalPool[i] ?? null;
         if (item) assignedIds.add(item.card_id ?? item.id);
         return { slotType: 'general', item, reqLabel: null, minStars: null };
     });
+
     const filledReq = reqZones.reduce((sum, z) => sum + z.slots.filter(s => s.item).length, 0);
     const filledGen = generalSlots.filter(s => s.item).length;
     const filled = filledReq + filledGen;
     const pct = slotDef.slots > 0 ? Math.min(100, Math.round((filled / slotDef.slots) * 100)) : 0;
-
     const reqMet = reqZones.map(z => ({
         minStars: z.minStars,
         required: z.slots.length,
@@ -202,25 +196,275 @@ function buildSlotLayout(albumId, collection, prevUsedIds = new Set()) {
     return { reqZones, generalSlots, filled, pct, usedIds: assignedIds, reqMet };
 }
 
-function computeAllUsedIds(collection) {
-    const allUsed = {};
-    const globalUsed = new Set();
+/* ══════════════════════════════════════════
+   ILUSTRACIONES SVG DE PORTADA (tarjeta grande)
+══════════════════════════════════════════ */
+function AlbumCoverIllustration({ albumId, accent, accentRgb }) {
+    const id = `cov-${albumId}`;
 
-    for (const albumId of ORDER) {
-        const { usedIds } = buildSlotLayout(albumId, collection, globalUsed);
-        allUsed[albumId] = globalUsed.size;
-        usedIds.forEach(id => globalUsed.add(id));
-        allUsed[albumId] = new Set(usedIds);
+    // legendary_1 — Balón de fútbol
+    if (albumId === 'legendary_1') {
+        return (
+            <svg viewBox="0 0 180 200" className="las2-card-svg" aria-hidden="true">
+                <defs>
+                    <radialGradient id={`${id}-glow`} cx="50%" cy="48%" r="58%">
+                        <stop offset="0%" stopColor={accent} stopOpacity="0.18" />
+                        <stop offset="100%" stopColor={accent} stopOpacity="0" />
+                    </radialGradient>
+                </defs>
+                <rect x="0" y="0" width="180" height="200" fill={`url(#${id}-glow)`} />
+                <g transform="translate(90,90)">
+                    <circle cx="0" cy="0" r="44" fill="none" stroke={accent} strokeWidth="1.4" opacity="0.45" />
+                    <circle cx="0" cy="0" r="44" fill={accent} fillOpacity="0.05" />
+                    {/* Pentágono central */}
+                    <polygon points="0,-18 17,-6 11,15 -11,15 -17,-6"
+                        fill={accent} fillOpacity="0.15" stroke={accent} strokeWidth="1.2" opacity="0.85" />
+                    {/* 5 pentágonos satélite */}
+                    {Array.from({ length: 5 }, (_, i) => {
+                        const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+                        return (
+                            <polygon key={i}
+                                transform={`translate(${29 * Math.cos(a)},${29 * Math.sin(a)}) rotate(${(i / 5) * 360})`}
+                                points="0,-9.5 9,-3 5.5,8 -5.5,8 -9,-3"
+                                fill="none" stroke={accent} strokeWidth="0.9" opacity="0.4" />
+                        );
+                    })}
+                    {/* Líneas entre pentágonos */}
+                    {Array.from({ length: 5 }, (_, i) => {
+                        const a1 = (i / 5) * Math.PI * 2 - Math.PI / 2;
+                        const a2 = ((i + 0.5) / 5) * Math.PI * 2 - Math.PI / 2;
+                        return (
+                            <line key={i}
+                                x1={18 * Math.cos(a1)} y1={18 * Math.sin(a1)}
+                                x2={28 * Math.cos(a2)} y2={28 * Math.sin(a2)}
+                                stroke={accent} strokeWidth="0.6" opacity="0.28" />
+                        );
+                    })}
+                </g>
+                <text x="90" y="160" textAnchor="middle"
+                    fontFamily="'DM Mono', monospace" fontSize="15" fontWeight="800"
+                    letterSpacing="3" fill={accent} opacity="0.9">
+                    LEGENDARIOS
+                </text>
+                <text x="90" y="176" textAnchor="middle"
+                    fontFamily="'DM Mono', monospace" fontSize="8" fontWeight="600"
+                    letterSpacing="2.5" fill={accent} opacity="0.4">
+                    TEMPORADA 25-26
+                </text>
+                <g stroke={accent} strokeWidth="0.9" opacity="0.28" fill="none">
+                    <polyline points="12,12 12,26 26,26" />
+                    <polyline points="168,12 168,26 154,26" />
+                    <polyline points="12,188 12,174 26,174" />
+                    <polyline points="168,188 168,174 154,174" />
+                </g>
+            </svg>
+        );
     }
 
-    return allUsed;
+    // legendary_2 — Corona
+    if (albumId === 'legendary_2') {
+        return (
+            <svg viewBox="0 0 180 200" className="las2-card-svg" aria-hidden="true">
+                <defs>
+                    <radialGradient id={`${id}-glow`} cx="50%" cy="48%" r="58%">
+                        <stop offset="0%" stopColor={accent} stopOpacity="0.16" />
+                        <stop offset="100%" stopColor={accent} stopOpacity="0" />
+                    </radialGradient>
+                </defs>
+                <rect x="0" y="0" width="180" height="200" fill={`url(#${id}-glow)`} />
+                <g transform="translate(90,88)">
+                    <circle cx="0" cy="0" r="42" fill="none" stroke={accent} strokeWidth="0.7" opacity="0.18" />
+                    <circle cx="0" cy="0" r="32" fill="none" stroke={accent} strokeWidth="0.5" opacity="0.12" />
+                    {/* Corona */}
+                    <path d="M-34,16 L-34,-16 L-17,4 L0,-26 L17,4 L34,-16 L34,16 Z"
+                        fill={accent} fillOpacity="0.12" stroke={accent} strokeWidth="1.9"
+                        strokeLinejoin="round" opacity="0.95" />
+                    <rect x="-34" y="16" width="68" height="8" rx="3.5"
+                        fill={accent} fillOpacity="0.3" />
+                    {/* Puntas corona */}
+                    {[[-26, -10], [0, -24], [26, -10]].map(([x, y], i) => (
+                        <circle key={i} cx={x} cy={y} r="3.5" fill={accent} opacity="0.75" />
+                    ))}
+                    {/* Gemas base */}
+                    {[[-18, 8], [0, 8], [18, 8]].map(([x, y], i) => (
+                        <polygon key={i}
+                            points={`${x},${y - 5} ${x + 3.5},${y} ${x},${y + 3.5} ${x - 3.5},${y}`}
+                            fill={accent} opacity="0.65" />
+                    ))}
+                </g>
+                <text x="90" y="158" textAnchor="middle"
+                    fontFamily="'DM Mono', monospace" fontSize="15" fontWeight="800"
+                    letterSpacing="3" fill={accent} opacity="0.9">
+                    ESTRELLAS
+                </text>
+                <text x="90" y="174" textAnchor="middle"
+                    fontFamily="'DM Mono', monospace" fontSize="8" fontWeight="600"
+                    letterSpacing="2.5" fill={accent} opacity="0.4">
+                    TEMPORADA 25-26
+                </text>
+                <g stroke={accent} strokeWidth="0.9" opacity="0.28" fill="none">
+                    <polyline points="12,12 12,26 26,26" />
+                    <polyline points="168,12 168,26 154,26" />
+                    <polyline points="12,188 12,174 26,174" />
+                    <polyline points="168,188 168,174 154,174" />
+                </g>
+            </svg>
+        );
+    }
+
+    // legendary_3 — Rayo
+    if (albumId === 'legendary_3') {
+        return (
+            <svg viewBox="0 0 180 200" className="las2-card-svg" aria-hidden="true">
+                <defs>
+                    <radialGradient id={`${id}-glow`} cx="50%" cy="48%" r="55%">
+                        <stop offset="0%" stopColor={accent} stopOpacity="0.22" />
+                        <stop offset="100%" stopColor={accent} stopOpacity="0" />
+                    </radialGradient>
+                </defs>
+                <rect x="0" y="0" width="180" height="200" fill={`url(#${id}-glow)`} />
+                {/* Círculos concéntricos */}
+                {[50, 40, 30, 20].map((r, i) => (
+                    <circle key={i} cx="90" cy="90" r={r}
+                        fill="none" stroke={accent} strokeWidth="0.65"
+                        opacity={0.07 + i * 0.05}
+                        strokeDasharray={i % 2 ? "4 3" : "none"} />
+                ))}
+                <g transform="translate(90,90)">
+                    <circle cx="0" cy="0" r="22" fill={accent} fillOpacity="0.1" />
+                    {/* Rayo */}
+                    <path d="M12,-38 L-8,-4 L7,-4 L-12,38 L10,4 L-5,4 Z"
+                        fill={accent} opacity="0.95" />
+                </g>
+                <text x="90" y="160" textAnchor="middle"
+                    fontFamily="'DM Mono', monospace" fontSize="15" fontWeight="800"
+                    letterSpacing="5" fill={accent} opacity="0.9">
+                    FUTURO
+                </text>
+                <text x="90" y="176" textAnchor="middle"
+                    fontFamily="'DM Mono', monospace" fontSize="8" fontWeight="600"
+                    letterSpacing="2.5" fill={accent} opacity="0.4">
+                    TEMPORADA 25-26
+                </text>
+                <g stroke={accent} strokeWidth="0.9" opacity="0.28" fill="none">
+                    <polyline points="12,12 12,26 26,26" />
+                    <polyline points="168,12 168,26 154,26" />
+                    <polyline points="12,188 12,174 26,174" />
+                    <polyline points="168,188 168,174 154,174" />
+                </g>
+            </svg>
+        );
+    }
+
+    // legendary_4 — Escudo con estrella
+    if (albumId === 'legendary_4') {
+        return (
+            <svg viewBox="0 0 180 200" className="las2-card-svg" aria-hidden="true">
+                <defs>
+                    <radialGradient id={`${id}-glow`} cx="50%" cy="48%" r="58%">
+                        <stop offset="0%" stopColor={accent} stopOpacity="0.18" />
+                        <stop offset="100%" stopColor={accent} stopOpacity="0" />
+                    </radialGradient>
+                </defs>
+                <rect x="0" y="0" width="180" height="200" fill={`url(#${id}-glow)`} />
+                {/* Patrón de puntos */}
+                {Array.from({ length: 5 }, (_, row) =>
+                    Array.from({ length: 5 }, (_, col) => (
+                        <circle key={`${row}-${col}`}
+                            cx={22 + col * 34} cy={22 + row * 34} r="1.2"
+                            fill={accent} opacity="0.14" />
+                    ))
+                )}
+                <g transform="translate(90,88)">
+                    {/* Escudo */}
+                    <path d="M0,-48 L38,-32 L38,4 Q38,40 0,58 Q-38,40 -38,4 L-38,-32 Z"
+                        fill={accent} fillOpacity="0.1" stroke={accent} strokeWidth="1.8" opacity="0.88" />
+                    <path d="M0,-32 L24,-20 L24,2 Q24,26 0,38 Q-24,26 -24,2 L-24,-20 Z"
+                        fill={accent} fillOpacity="0.07" stroke={accent} strokeWidth="0.8" opacity="0.38" />
+                    {/* Estrella central */}
+                    <path d="M0,-18 L4.3,-6 L17,-6 L7,2 L11,14 L0,8 L-11,14 L-7,2 L-17,-6 L-4.3,-6 Z"
+                        fill={accent} opacity="0.82" />
+                </g>
+                <text x="90" y="160" textAnchor="middle"
+                    fontFamily="'DM Mono', monospace" fontSize="15" fontWeight="800"
+                    letterSpacing="4" fill={accent} opacity="0.9">
+                    HÉROES
+                </text>
+                <text x="90" y="176" textAnchor="middle"
+                    fontFamily="'DM Mono', monospace" fontSize="8" fontWeight="600"
+                    letterSpacing="2.5" fill={accent} opacity="0.4">
+                    TEMPORADA 25-26
+                </text>
+                <g stroke={accent} strokeWidth="0.9" opacity="0.28" fill="none">
+                    <polyline points="12,12 12,26 26,26" />
+                    <polyline points="168,12 168,26 154,26" />
+                    <polyline points="12,188 12,174 26,174" />
+                    <polyline points="168,188 168,174 154,174" />
+                </g>
+            </svg>
+        );
+    }
+
+    // legendary_5 — 5 estrellas en círculo + corona
+    return (
+        <svg viewBox="0 0 180 200" className="las2-card-svg" aria-hidden="true">
+            <defs>
+                <radialGradient id={`${id}-glow`} cx="50%" cy="48%" r="58%">
+                    <stop offset="0%" stopColor={accent} stopOpacity="0.22" />
+                    <stop offset="100%" stopColor={accent} stopOpacity="0" />
+                </radialGradient>
+            </defs>
+            <rect x="0" y="0" width="180" height="200" fill={`url(#${id}-glow)`} />
+            {[52, 42, 32].map((r, i) => (
+                <circle key={i} cx="90" cy="90" r={r}
+                    fill="none" stroke={accent} strokeWidth="0.65"
+                    opacity={0.08 + i * 0.05}
+                    strokeDasharray={i % 2 ? "4 2" : "none"} />
+            ))}
+            {/* 5 estrellas en círculo */}
+            {Array.from({ length: 5 }, (_, i) => {
+                const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+                return (
+                    <g key={i} transform={`translate(${90 + 40 * Math.cos(a)},${90 + 40 * Math.sin(a)})`}>
+                        <path d="M0,-8 L3,-2.5 L9,-2.5 L4.5,2 L6.5,8 L0,4.5 L-6.5,8 L-4.5,2 L-9,-2.5 L-3,-2.5 Z"
+                            fill={accent} opacity="0.55" />
+                    </g>
+                );
+            })}
+            {/* Corona central */}
+            <g transform="translate(90,90)">
+                <circle cx="0" cy="0" r="18" fill={accent} fillOpacity="0.1" />
+                <path d="M-16,9 L-16,-9 L-8,0 L0,-18 L8,0 L16,-9 L16,9 Z"
+                    fill="none" stroke={accent} strokeWidth="1.8"
+                    strokeLinejoin="round" opacity="0.95" />
+                <rect x="-16" y="9" width="32" height="5" rx="2.5" fill={accent} opacity="0.5" />
+            </g>
+            <text x="90" y="160" textAnchor="middle"
+                fontFamily="'DM Mono', monospace" fontSize="15" fontWeight="800"
+                letterSpacing="2.5" fill={accent} opacity="0.9">
+                INMORTALES
+            </text>
+            <text x="90" y="176" textAnchor="middle"
+                fontFamily="'DM Mono', monospace" fontSize="8" fontWeight="600"
+                letterSpacing="2.5" fill={accent} opacity="0.4">
+                ENDGAME
+            </text>
+            <g stroke={accent} strokeWidth="0.9" opacity="0.28" fill="none">
+                <polyline points="12,12 12,26 26,26" />
+                <polyline points="168,12 168,26 154,26" />
+                <polyline points="12,188 12,174 26,174" />
+                <polyline points="168,188 168,174 154,174" />
+            </g>
+        </svg>
+    );
 }
 
 /* ══════════════════════════════════════════
-   COVER ILLUSTRATIONS
+   ILUSTRACIÓN PEQUEÑA PARA EL PANEL MODAL
+   (mismo estilo que la original, con lomo)
 ══════════════════════════════════════════ */
 function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
-    const id = `cover-${albumId}`;
+    const id = `bk-${albumId}`;
 
     if (albumId === 'legendary_1') {
         return (
@@ -256,17 +500,13 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
             </svg>
         );
     }
-
     if (albumId === 'legendary_2') {
         const hexPts = (cx, cy, r) =>
             Array.from({ length: 6 }, (_, i) => {
                 const a = (Math.PI / 3) * i - Math.PI / 6;
                 return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
             }).join(' ');
-        const hexes = [
-            [60, 56, 18], [36, 69, 18], [84, 69, 18],
-            [60, 82, 18], [36, 95, 18], [84, 95, 18], [60, 108, 18],
-        ];
+        const hexes = [[60, 56, 18], [36, 69, 18], [84, 69, 18], [60, 82, 18], [36, 95, 18], [84, 95, 18], [60, 108, 18]];
         return (
             <svg viewBox="0 0 120 160" className="las2-cover-svg" aria-hidden="true">
                 <defs>
@@ -281,25 +521,17 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
                         fill={i === 3 ? accent : 'none'} fillOpacity={i === 3 ? 0.08 : 0}
                         stroke={accent} strokeWidth="0.6" opacity={i === 3 ? 0.6 : 0.2} />
                 ))}
-                <g fill={accent} opacity="0.35">
-                    {[[10, 10], [110, 10], [10, 150], [110, 150]].map(([x, y], i) => (
-                        <polygon key={i} points={`${x},${y - 5} ${x + 4},${y} ${x},${y + 5} ${x - 4},${y}`} />
-                    ))}
-                </g>
                 {!locked && (
                     <g transform="translate(60,82)">
                         <path d="M-16,10 L-16,-6 L-8,2 L0,-14 L8,2 L16,-6 L16,10 Z"
                             fill="none" stroke={accent} strokeWidth="1.4" strokeLinejoin="round" opacity="0.9" />
                         <rect x="-16" y="10" width="32" height="4" rx="1.5" fill={accent} opacity="0.35" />
                         <circle cx="0" cy="-1" r="2" fill={accent} opacity="0.7" />
-                        <circle cx="-10" cy="3" r="1.2" fill={accent} opacity="0.5" />
-                        <circle cx="10" cy="3" r="1.2" fill={accent} opacity="0.5" />
                     </g>
                 )}
             </svg>
         );
     }
-
     if (albumId === 'legendary_3') {
         return (
             <svg viewBox="0 0 120 160" className="las2-cover-svg" aria-hidden="true">
@@ -312,24 +544,8 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
                 <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-center)`} />
                 {[50, 40, 30, 20, 12].map((r, i) => (
                     <circle key={i} cx="60" cy="80" r={r}
-                        fill="none" stroke={accent} strokeWidth="0.7"
-                        opacity={0.08 + i * 0.06} />
+                        fill="none" stroke={accent} strokeWidth="0.7" opacity={0.08 + i * 0.06} />
                 ))}
-                {Array.from({ length: 16 }, (_, i) => {
-                    const a = (i / 16) * Math.PI * 2;
-                    return (
-                        <line key={i}
-                            x1={60 + 14 * Math.cos(a)} y1={80 + 14 * Math.sin(a)}
-                            x2={60 + 52 * Math.cos(a)} y2={80 + 52 * Math.sin(a)}
-                            stroke={accent} strokeWidth="0.4" opacity="0.14" />
-                    );
-                })}
-                <g stroke={accent} strokeWidth="0.6" opacity="0.4">
-                    <line x1="6" y1="12" x2="20" y2="12" /><line x1="6" y1="12" x2="6" y2="26" />
-                    <line x1="114" y1="12" x2="100" y2="12" /><line x1="114" y1="12" x2="114" y2="26" />
-                    <line x1="6" y1="148" x2="20" y2="148" /><line x1="6" y1="148" x2="6" y2="134" />
-                    <line x1="114" y1="148" x2="100" y2="148" /><line x1="114" y1="148" x2="114" y2="134" />
-                </g>
                 {!locked && (
                     <g transform="translate(60,80)">
                         <circle cx="0" cy="0" r="13" fill={accent} fillOpacity="0.08" />
@@ -339,48 +555,32 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
             </svg>
         );
     }
-
     if (albumId === 'legendary_4') {
         return (
             <svg viewBox="0 0 120 160" className="las2-cover-svg" aria-hidden="true">
                 <defs>
-                    <pattern id={`${id}-dots`} patternUnits="userSpaceOnUse" width="12" height="12">
-                        <circle cx="6" cy="6" r="1" fill={accent} opacity="0.25" />
-                    </pattern>
                     <radialGradient id={`${id}-radial`} cx="50%" cy="50%" r="60%">
                         <stop offset="0%" stopColor={accent} stopOpacity="0.15" />
                         <stop offset="100%" stopColor={accent} stopOpacity="0" />
                     </radialGradient>
                 </defs>
-                <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-dots)`} />
                 <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-radial)`} />
                 <rect x="7" y="7" width="106" height="146" fill="none" stroke={accent} strokeWidth="0.5" opacity="0.3" />
-                <rect x="11" y="11" width="98" height="138" fill="none" stroke={accent} strokeWidth="0.3" opacity="0.2" />
-                <g fill={accent} opacity="0.6">
-                    {[[7, 7], [113, 7], [7, 153], [113, 153]].map(([x, y], i) => (
-                        <polygon key={i} points={`${x},${y - 6} ${x + 5},${y} ${x},${y + 6} ${x - 5},${y}`} />
-                    ))}
-                </g>
                 {!locked && (
-                    <>
-                        <path d="M60,80 Q68,62 76,72 Q86,88 70,98 Q50,110 40,88 Q30,62 56,50 Q84,38 94,72 Q102,104 74,118"
-                            fill="none" stroke={accent} strokeWidth="1.2" opacity="0.3" strokeLinecap="round" />
-                        <g transform="translate(60,76)">
-                            <path d="M-12,-20 Q-14,4 0,16 Q14,4 12,-20 Z"
-                                fill="none" stroke={accent} strokeWidth="1.4" strokeLinejoin="round" opacity="0.95" />
-                            <path d="M-12,-12 Q-22,-12 -22,-4 Q-22,4 -12,4" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
-                            <path d="M12,-12 Q22,-12 22,-4 Q22,4 12,4" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
-                            <line x1="0" y1="16" x2="0" y2="22" stroke={accent} strokeWidth="1.4" opacity="0.8" />
-                            <rect x="-10" y="22" width="20" height="4" rx="2" fill={accent} opacity="0.6" />
-                            <path d="M0,-8 L2,-4 L6,-4 L3,-1 L4,3 L0,1 L-4,3 L-3,-1 L-6,-4 L-2,-4 Z"
-                                fill={accent} opacity="0.75" />
-                        </g>
-                    </>
+                    <g transform="translate(60,76)">
+                        <path d="M-12,-20 Q-14,4 0,16 Q14,4 12,-20 Z"
+                            fill="none" stroke={accent} strokeWidth="1.4" strokeLinejoin="round" opacity="0.95" />
+                        <path d="M-12,-12 Q-22,-12 -22,-4 Q-22,4 -12,4" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
+                        <path d="M12,-12 Q22,-12 22,-4 Q22,4 12,4" fill="none" stroke={accent} strokeWidth="1" opacity="0.7" />
+                        <line x1="0" y1="16" x2="0" y2="22" stroke={accent} strokeWidth="1.4" opacity="0.8" />
+                        <rect x="-10" y="22" width="20" height="4" rx="2" fill={accent} opacity="0.6" />
+                        <path d="M0,-8 L2,-4 L6,-4 L3,-1 L4,3 L0,1 L-4,3 L-3,-1 L-6,-4 L-2,-4 Z"
+                            fill={accent} opacity="0.75" />
+                    </g>
                 )}
             </svg>
         );
     }
-
     return (
         <svg viewBox="0 0 120 160" className="las2-cover-svg" aria-hidden="true">
             <defs>
@@ -388,58 +588,37 @@ function BookCoverIllustration({ albumId, accent, accentRgb, locked }) {
                     <stop offset="0%" stopColor={accent} stopOpacity="0.22" />
                     <stop offset="100%" stopColor={accent} stopOpacity="0" />
                 </radialGradient>
-                <radialGradient id={`${id}-outer`} cx="50%" cy="50%" r="80%">
-                    <stop offset="0%" stopColor="transparent" />
-                    <stop offset="100%" stopColor="rgba(0,0,0,0.55)" />
-                </radialGradient>
             </defs>
             <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-core)`} />
-            {/* Concentric rings */}
             {[56, 44, 32, 22, 14].map((r, i) => (
                 <circle key={i} cx="60" cy="80" r={r}
                     fill="none" stroke={accent} strokeWidth={i === 0 ? 0.5 : 0.4}
                     opacity={0.06 + i * 0.07}
                     strokeDasharray={i % 2 === 0 ? "4 3" : "none"} />
             ))}
-            {/* 5 stars pattern */}
             {Array.from({ length: 5 }, (_, i) => {
                 const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
-                const cx = 60 + 30 * Math.cos(a);
-                const cy = 80 + 30 * Math.sin(a);
                 return (
-                    <g key={i} transform={`translate(${cx},${cy})`}>
+                    <g key={i} transform={`translate(${60 + 30 * Math.cos(a)},${80 + 30 * Math.sin(a)})`}>
                         <path d="M0,-5 L1.5,-1.5 L5,-1.5 L2.5,1 L3.5,4.5 L0,2.5 L-3.5,4.5 L-2.5,1 L-5,-1.5 L-1.5,-1.5 Z"
                             fill={accent} opacity="0.4" />
                     </g>
                 );
             })}
-            {/* Center crown */}
             {!locked && (
                 <g transform="translate(60,80)">
                     <circle cx="0" cy="0" r="11" fill={accent} fillOpacity="0.06" />
                     <path d="M-10,5 L-10,-5 L-5,0 L0,-10 L5,0 L10,-5 L10,5 Z"
                         fill="none" stroke={accent} strokeWidth="1.3" strokeLinejoin="round" opacity="0.95" />
                     <rect x="-10" y="5" width="20" height="3" rx="1.5" fill={accent} opacity="0.5" />
-                    {/* 5 dots on crown */}
-                    {[-8, -4, 0, 4, 8].map((x, i) => (
-                        <circle key={i} cx={x} cy="-1" r="1" fill={accent} opacity="0.7" />
-                    ))}
                 </g>
             )}
-            <rect x="0" y="0" width="120" height="160" fill={`url(#${id}-outer)`} />
-            {/* Corner ornaments */}
-            <g stroke={accent} strokeWidth="0.6" opacity="0.35" fill="none">
-                <polyline points="6,8 6,20 18,20" />
-                <polyline points="114,8 114,20 102,20" />
-                <polyline points="6,152 6,140 18,140" />
-                <polyline points="114,152 114,140 102,140" />
-            </g>
         </svg>
     );
 }
 
 /* ══════════════════════════════════════════
-   STICKER CARD
+   STICKER CARD (panel modal)
 ══════════════════════════════════════════ */
 function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }) {
     const num = String(index + 1).padStart(3, '0');
@@ -450,10 +629,8 @@ function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }
 
     if (filled) {
         return (
-            <div
-                className={`las2-sticker las2-sticker--filled${isGoat ? ' las2-sticker--goat' : ''}${isReqSlot ? ' las2-sticker--req' : ''}`}
-                style={{ '--acc': accent }}
-            >
+            <div className={`las2-sticker las2-sticker--filled${isGoat ? ' las2-sticker--goat' : ''}${isReqSlot ? ' las2-sticker--req' : ''}`}
+                style={{ '--acc': accent }}>
                 <div className="las2-sticker-topband" />
                 <div className="las2-sticker-header">
                     <span className="las2-sticker-num">{num}</span>
@@ -476,10 +653,8 @@ function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }
                             </linearGradient>
                         </defs>
                         <circle cx="50" cy="50" r="46"
-                            fill="none"
-                            stroke={`url(#sg-${num})`}
-                            strokeWidth="2"
-                            strokeDasharray={isGoat ? "none" : "6 3"} />
+                            fill="none" stroke={`url(#sg-${num})`}
+                            strokeWidth="2" strokeDasharray={isGoat ? "none" : "6 3"} />
                     </svg>
                 </div>
                 <div className="las2-sticker-stars">
@@ -497,10 +672,14 @@ function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }
     }
 
     return (
-        <div
-            className={`las2-sticker las2-sticker--empty${isReqSlot ? ' las2-sticker--req-empty' : ''}`}
-            style={{ '--acc': accent }}
-        >
+        <div className={`las2-sticker las2-sticker--empty${isReqSlot ? ' las2-sticker--req-empty' : ''}`}
+            style={{ '--acc': accent }}>
+            {isReqSlot && (
+                <div className="las2-req-badge">
+                    <span className="las2-req-badge-stars">{reqLabel}</span>
+                    <span className="las2-req-badge-label">REQ</span>
+                </div>
+            )}
             <div className="las2-sticker-header">
                 <span className="las2-sticker-num">{num}</span>
             </div>
@@ -541,7 +720,87 @@ function ZoneHeader({ label, count, filled, accent }) {
 }
 
 /* ══════════════════════════════════════════
-   ALBUM PANEL
+   ZONE-GROUPED RENDER (panel modal)
+══════════════════════════════════════════ */
+function renderPageWithZones(pageItems, pageStartIdx, reqBoundaries, generalStart, reqZones, generalSlots, meta, search) {
+    if (search.trim()) {
+        return (
+            <div className="las2-sticker-grid">
+                {pageItems.map(({ slotType, item, globalIdx, reqLabel }, i) => (
+                    <StickerCard
+                        key={globalIdx ?? i}
+                        index={globalIdx ?? i}
+                        card={item?.card ?? null}
+                        collectionItem={item ?? null}
+                        accent={meta.accent}
+                        slotType={slotType}
+                        reqLabel={reqLabel}
+                    />
+                ))}
+            </div>
+        );
+    }
+
+    const getZone = (absIdx) => {
+        for (const b of reqBoundaries) {
+            if (absIdx >= b.start && absIdx < b.end) return `req${b.minStars}`;
+        }
+        return 'general';
+    };
+
+    const zones = [];
+    let currentZone = null;
+    let currentGroup = [];
+
+    pageItems.forEach((slot, i) => {
+        const absIdx = pageStartIdx + i;
+        const zone = getZone(absIdx);
+        if (zone !== currentZone) {
+            if (currentGroup.length > 0) zones.push({ zone: currentZone, slots: currentGroup });
+            currentZone = zone;
+            currentGroup = [];
+        }
+        currentGroup.push({ ...slot, absIdx });
+    });
+    if (currentGroup.length > 0) zones.push({ zone: currentZone, slots: currentGroup });
+
+    const zoneLabel = (zone) => {
+        if (zone === 'req5') return { label: 'GOAT SLOTS', data: reqZones.find(z => z.minStars === 5) };
+        if (zone === 'req4') return { label: 'LEYENDA SLOTS', data: reqZones.find(z => z.minStars === 4) };
+        if (zone === 'req3') return { label: 'CULTO SLOTS', data: reqZones.find(z => z.minStars === 3) };
+        if (zone === 'req2') return { label: 'HISTORIA SLOTS', data: reqZones.find(z => z.minStars === 2) };
+        return { label: 'SLOTS GENERALES', data: null };
+    };
+
+    return zones.map(({ zone, slots }) => {
+        const { label, data } = zoneLabel(zone);
+        const total = data ? data.slots.length : generalSlots.length;
+        const filledCount = data
+            ? data.slots.filter(s => s.item).length
+            : generalSlots.filter(s => s.item).length;
+        return (
+            <div key={zone} className={`las2-zone-block las2-zone-block--${zone}`}>
+                <ZoneHeader label={label} count={total} filled={filledCount} accent={meta.accent} />
+                <div className="las2-sticker-grid">
+                    {slots.map(({ slotType, item, reqLabel, absIdx }) => (
+                        <StickerCard
+                            key={absIdx}
+                            index={absIdx}
+                            card={item?.card ?? null}
+                            collectionItem={item ?? null}
+                            accent={meta.accent}
+                            slotType={slotType}
+                            reqLabel={reqLabel}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    });
+}
+
+/* ══════════════════════════════════════════
+   ALBUM PANEL (modal — sin cambios)
 ══════════════════════════════════════════ */
 function AlbumPanel({ albumId, meta, definitions, progress, collection, prevUsedIds, onClose }) {
     const [search, setSearch] = useState('');
@@ -559,9 +818,9 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, prevUsed
 
     const allSlots = [];
     reqZones.forEach(zone => {
-        zone.slots.forEach((s, i) => allSlots.push({ ...s, globalIdx: allSlots.length }));
+        zone.slots.forEach((s) => allSlots.push({ ...s, globalIdx: allSlots.length }));
     });
-    generalSlots.forEach((s, i) => allSlots.push({ ...s, globalIdx: allSlots.length }));
+    generalSlots.forEach((s) => allSlots.push({ ...s, globalIdx: allSlots.length }));
 
     const reqBoundaries = [];
     let cursor = 0;
@@ -584,7 +843,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, prevUsed
 
     const reqTotal = slotDef.req.reduce((s, r) => s + r.count, 0);
     const filledReq = reqZones.reduce((sum, z) => sum + z.slots.filter(s => s.item).length, 0);
-
     const albumNum = meta.number;
 
     return (
@@ -723,7 +981,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, prevUsed
                                 <span>Página {String(safePagenr + 1).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}</span>
                                 <div className="las2-page-indicator-line" />
                             </div>
-
                             {renderPageWithZones(pageItems, pageStartIdx, reqBoundaries, generalStart, reqZones, generalSlots, meta, search)}
                         </div>
                     </div>
@@ -738,7 +995,6 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, prevUsed
                         <span className="las2-footer-stat-label">Requisitos</span>
                         <span className="las2-footer-stat-val">{filledReq}/{reqTotal}</span>
                     </div>
-
                     <div className="las2-footer-spacer" />
                     <button className="las2-footer-arrow-btn" onClick={onClose}>
                         <ChevronRight size={16} />
@@ -750,180 +1006,89 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, prevUsed
 }
 
 /* ══════════════════════════════════════════
-   ZONE-GROUPED RENDER
+   TARJETA DE ÁLBUM — diseño imagen 2
+   (tarjeta grande con SVG, nombre, progreso)
 ══════════════════════════════════════════ */
-function renderPageWithZones(pageItems, pageStartIdx, reqBoundaries, generalStart, reqZones, generalSlots, meta, search) {
-    if (search.trim()) {
-        return (
-            <div className="las2-sticker-grid">
-                {pageItems.map(({ slotType, item, globalIdx, reqLabel }, i) => (
-                    <StickerCard
-                        key={globalIdx ?? i}
-                        index={globalIdx ?? i}
-                        card={item?.card ?? null}
-                        collectionItem={item ?? null}
-                        accent={meta.accent}
-                        slotType={slotType}
-                        reqLabel={reqLabel}
-                    />
-                ))}
-            </div>
-        );
-    }
-
-    const getZone = (absIdx) => {
-        for (const b of reqBoundaries) {
-            if (absIdx >= b.start && absIdx < b.end) return `req${b.minStars}`;
-        }
-        return 'general';
-    };
-
-    const zones = [];
-    let currentZone = null;
-    let currentGroup = [];
-
-    pageItems.forEach((slot, i) => {
-        const absIdx = pageStartIdx + i;
-        const zone = getZone(absIdx);
-
-        if (zone !== currentZone) {
-            if (currentGroup.length > 0) zones.push({ zone: currentZone, slots: currentGroup });
-            currentZone = zone;
-            currentGroup = [];
-        }
-        currentGroup.push({ ...slot, absIdx });
-    });
-    if (currentGroup.length > 0) zones.push({ zone: currentZone, slots: currentGroup });
-
-    const zoneLabel = (zone) => {
-        if (zone === 'req5') return { label: 'GOAT SLOTS', data: reqZones.find(z => z.minStars === 5) };
-        if (zone === 'req4') return { label: 'LEYENDA SLOTS', data: reqZones.find(z => z.minStars === 4) };
-        if (zone === 'req3') return { label: 'CULTO SLOTS', data: reqZones.find(z => z.minStars === 3) };
-        if (zone === 'req2') return { label: 'HISTORIA SLOTS', data: reqZones.find(z => z.minStars === 2) };
-        return { label: 'SLOTS GENERALES', data: null };
-    };
-
-    return zones.map(({ zone, slots }) => {
-        const { label, data } = zoneLabel(zone);
-        const total = data ? data.slots.length : generalSlots.length;
-        const filledCount = data
-            ? data.slots.filter(s => s.item).length
-            : generalSlots.filter(s => s.item).length;
-
-        return (
-            <div key={zone} className={`las2-zone-block las2-zone-block--${zone}`}>
-                <ZoneHeader label={label} count={total} filled={filledCount} accent={meta.accent} />
-                <div className="las2-sticker-grid">
-                    {slots.map(({ slotType, item, reqLabel, absIdx }) => (
-                        <StickerCard
-                            key={absIdx}
-                            index={absIdx}
-                            card={item?.card ?? null}
-                            collectionItem={item ?? null}
-                            accent={meta.accent}
-                            slotType={slotType}
-                            reqLabel={reqLabel}
-                        />
-                    ))}
-                </div>
-            </div>
-        );
-    });
-}
-
-/* ══════════════════════════════════════════
-   BOOK CARD
-══════════════════════════════════════════ */
-function AlbumBook({ albumId, meta, definitions, progress, collection, locked, prevUsedIds }) {
+function AlbumCard({ albumId, meta, definitions, progress, collection, locked, prevUsedIds }) {
     const [panelOpen, setPanelOpen] = useState(false);
+    const isCompleted = progress.find(p => p.album_id === albumId)?.is_completed ?? false;
 
     const { filled, pct } = locked
         ? { filled: 0, pct: 0 }
         : buildSlotLayout(albumId, collection, prevUsedIds);
 
     const slotDef = LEG_SLOT_REQS[albumId] ?? { slots: 30 };
-    const isCompleted = progress.find(p => p.album_id === albumId)?.is_completed ?? false;
-
-    const isEndgame = albumId === 'legendary_5';
+    const isActive = !locked && !isCompleted;
 
     return (
         <>
-            <div className={`las2-book-wrap ${locked ? 'las2-book-wrap--locked' : ''}`}>
-                <div className="las2-page-stack">
-                    {[2, 1, 0].map(i => (
-                        <div key={i} className="las2-page-leaf" style={{ '--li': i, '--acc': meta.accent }} />
-                    ))}
+            <button
+                className={[
+                    'las2-card',
+                    locked ? 'las2-card--locked' : '',
+                    isActive ? 'las2-card--active' : '',
+                    isCompleted ? 'las2-card--done' : '',
+                ].filter(Boolean).join(' ')}
+                style={{
+                    '--spine': meta.spine,
+                    '--spine-alt': meta.spineAlt,
+                    '--acc': meta.accent,
+                    '--acc-rgb': meta.accentRgb,
+                    '--cover-bg': meta.coverBg,
+                }}
+                onClick={() => !locked && setPanelOpen(true)}
+                disabled={locked}
+                aria-disabled={locked}
+            >
+                {/* Número */}
+                <div className="las2-card-number">{meta.number}</div>
+
+                {/* Tag: ACTIVO / TEMPORADA / BLOQUEADO */}
+                <div className={[
+                    'las2-card-tag',
+                    isActive ? 'las2-card-tag--active' : '',
+                    locked ? 'las2-card-tag--locked' : '',
+                ].filter(Boolean).join(' ')}>
+                    {locked ? 'BLOQUEADO' : isActive ? 'ACTIVO' : meta.tag}
                 </div>
 
-                <button
-                    className={`las2-book ${isCompleted ? 'las2-book--done' : ''} ${isEndgame ? 'las2-book--endgame' : ''}`}
-                    style={{
-                        '--spine': meta.spine, '--spine-alt': meta.spineAlt,
-                        '--acc': meta.accent, '--acc-rgb': meta.accentRgb, '--cover-bg': meta.coverBg,
-                    }}
-                    onClick={() => !locked && setPanelOpen(true)}
-                    disabled={locked}
-                    aria-disabled={locked}
-                >
-                    <div className="las2-spine">
-                        <span className="las2-spine-num">{meta.number}</span>
-                        <span className="las2-spine-label">{meta.shortLabel}</span>
-                        <div className="las2-spine-lines">
-                            {[0, 1, 2].map(i => <div key={i} className="las2-spine-line" />)}
+                {/* Área de ilustración */}
+                <div className="las2-card-art">
+                    {locked ? (
+                        <div className="las2-card-lock-art">
+                            <div className="las2-card-lock-icon">
+                                <Lock size={38} strokeWidth={1.4} />
+                            </div>
+                            <span className="las2-card-lock-msg">Completa el álbum anterior</span>
                         </div>
-                    </div>
+                    ) : (
+                        <AlbumCoverIllustration albumId={albumId} accent={meta.accent} accentRgb={meta.accentRgb} />
+                    )}
+                </div>
 
-                    <div className="las2-cover">
-                        <div className="las2-cover-art">
-                            <BookCoverIllustration albumId={albumId} accent={meta.accent} accentRgb={meta.accentRgb} locked={locked} />
-                        </div>
-                        <div className="las2-clasp">
-                            <div className="las2-clasp-strap las2-clasp-strap--top" />
-                            <div className="las2-clasp-buckle"><div className="las2-clasp-buckle-inner" /></div>
-                            <div className="las2-clasp-strap las2-clasp-strap--bot" />
-                        </div>
-                        {['tl', 'tr', 'bl', 'br'].map(pos => (
-                            <div key={pos} className={`las2-corner las2-corner--${pos}`} />
-                        ))}
-                        <div className="las2-cover-tag">
-                            {locked ? <><Lock size={7} strokeWidth={2.5} /> BLOQUEADO</> : meta.tag}
-                        </div>
-                        <div className="las2-cover-id">ID: ALB-{meta.number}</div>
-                        <div className="las2-cover-title-block">
-                            <span className="las2-cover-brand"></span>
-                        </div>
-                        {locked && (
-                            <div className="las2-lock-overlay">
-                                <div className="las2-lock-fog" />
-                                <div className="las2-lock-core">
-                                    <div className="las2-lock-ring" />
-                                    <Lock size={18} strokeWidth={1.8} />
-                                    <div className="las2-lock-pulse" />
-                                </div>
-                                <span className="las2-lock-msg">Completa el álbum anterior</span>
-                            </div>
-                        )}
-                        <div className="las2-cover-footer">
-                            <div className="las2-cover-footer-info">
-                                <span className="las2-cover-count">{filled} / {slotDef.slots} ITEMS</span>
-                                {isCompleted && <span className="las2-done-tick">✓</span>}
-                            </div>
-                            <div className="las2-mini-bar">
-                                <div className="las2-mini-bar-fill" style={{ width: `${pct}%` }} />
-                            </div>
-                            {!locked && <span className="las2-cover-hint">Abrir álbum →</span>}
-                        </div>
-                        {!locked && (
-                            <div className={`las2-rarity ${isEndgame ? 'las2-rarity--endgame' : ''}`}>
-                                <div className="las2-rarity-stars">
-                                    {Array.from({ length: meta.rarityLevel }, (_, i) => <span key={i}>★</span>)}
-                                </div>
-                                <span className="las2-rarity-label">{meta.rarityLabel}</span>
-                            </div>
-                        )}
+                {/* Barra de progreso */}
+                <div className="las2-card-progress">
+                    <div className="las2-card-progress-bar">
+                        <div className="las2-card-progress-fill" style={{ width: `${pct}%` }} />
                     </div>
-                </button>
-            </div>
+                    <div className="las2-card-progress-info">
+                        <span>{filled} / {slotDef.slots}</span>
+                        <span>{pct}%</span>
+                    </div>
+                </div>
+
+                {/* Esquinas doradas */}
+                {['tl', 'tr', 'bl', 'br'].map(pos => (
+                    <div key={pos} className={`las2-card-corner las2-card-corner--${pos}`} />
+                ))}
+
+                {/* Broche lateral */}
+                <div className="las2-card-clasp">
+                    <div className="las2-card-clasp-strap las2-card-clasp-strap--top" />
+                    <div className="las2-card-clasp-buckle"><div className="las2-card-clasp-buckle-inner" /></div>
+                    <div className="las2-card-clasp-strap las2-card-clasp-strap--bot" />
+                </div>
+            </button>
 
             {panelOpen && (
                 <AlbumPanel
@@ -944,7 +1109,6 @@ function AlbumBook({ albumId, meta, definitions, progress, collection, locked, p
    MAIN EXPORT
 ══════════════════════════════════════════ */
 export default function LegendaryAlbumsSection({ definitions, progress, collection }) {
-    // isUnlocked needs to be computed first so useMemo can use it
     const unlockedSet = React.useMemo(() => {
         const set = new Set();
         for (let i = 0; i < ORDER.length; i++) {
@@ -964,18 +1128,15 @@ export default function LegendaryAlbumsSection({ definitions, progress, collecti
     const prevUsedIdsMap = React.useMemo(() => {
         const map = {};
         const globalUsed = new Set();
-
         for (const albumId of ORDER) {
             if (!unlockedSet.has(albumId)) {
                 map[albumId] = new Set(globalUsed);
                 continue;
             }
-
             map[albumId] = new Set(globalUsed);
             const { usedIds } = buildSlotLayout(albumId, collection, globalUsed);
             usedIds.forEach(id => globalUsed.add(id));
         }
-
         return map;
     }, [collection, unlockedSet]);
 
@@ -983,7 +1144,7 @@ export default function LegendaryAlbumsSection({ definitions, progress, collecti
         <div className="las2-root">
             <div className="las2-row">
                 {ORDER.map(albumId => (
-                    <AlbumBook
+                    <AlbumCard
                         key={albumId}
                         albumId={albumId}
                         meta={ALBUM_META[albumId]}

@@ -13,6 +13,7 @@
 .las2-root {
     display: flex;
     flex-direction: column;
+    height: 100%;
     gap: 18px;
 }
 
@@ -54,8 +55,11 @@
 .las2-row {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 14px;
+    gap: 30px;
     align-items: stretch;
+    padding: 0 8px;
+    flex: 1;
+    min-height: 0;
 }
 
 @media (max-width: 780px) {
@@ -76,6 +80,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100%;
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -131,8 +136,7 @@
         inset 1px 0 0 rgba(255, 255, 255, 0.06);
     position: relative;
     width: 100%;
-    aspect-ratio: 3/4;
-    min-height: 120px;
+    height: 100%;
     z-index: 1;
     transition: box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -1818,4 +1822,445 @@
     background: rgba(255, 255, 255, 0.02);
     border-color: color-mix(in srgb, var(--acc, #a599d9) 30%, #2A2638);
     color: color-mix(in srgb, var(--acc, #a599d9) 25%, #38334F);
+}
+
+/* ════════════════════════════════════════════════
+   LAS2-CARD  —  nuevo diseño tipo libro (imagen ref)
+   Reemplaza .las2-book / .las2-spine / .las2-cover
+════════════════════════════════════════════════ */
+
+/* ── Wrapper raíz: button ── */
+.las2-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    background: var(--cover-bg, #1a1726);
+    border-radius: 4px 6px 6px 4px;
+
+    /* Lomo de libro: borde izquierdo grueso del color de la spine */
+    box-shadow:
+        /* lomo pronunciado izquierdo */
+        inset 18px 0 0 0 var(--spine, #5b4fd8),
+        inset 19px 0 0 0 color-mix(in srgb, var(--spine, #5b4fd8) 60%, black),
+        /* sombra interna lomo */
+        inset 22px 0 12px -10px rgba(0, 0, 0, 0.55),
+        /* brillo interior del lomo */
+        inset 5px 0 4px -2px rgba(255, 255, 255, 0.12),
+        /* sombra externa libro */
+        4px 8px 0 rgba(0, 0, 0, 0.35),
+        8px 18px 30px rgba(0, 0, 0, 0.28),
+        /* borde accent derecho */
+        inset -2px 0 0 0 rgba(var(--acc-rgb, 165, 153, 217), 0.45);
+
+    overflow: visible;
+    transition:
+        transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Textura sutil sobre toda la portada */
+.las2-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        repeating-linear-gradient(0deg,
+            transparent,
+            transparent 3px,
+            rgba(255, 255, 255, 0.012) 3px,
+            rgba(255, 255, 255, 0.012) 4px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Brillo diagonal de portada */
+.las2-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.07) 0%,
+            transparent 38%,
+            transparent 62%,
+            rgba(255, 255, 255, 0.03) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ── Hover / focus ── */
+.las2-card:not(:disabled):not(.las2-card--locked):hover {
+    transform: translateY(-10px) rotate(-1deg);
+    box-shadow:
+        inset 18px 0 0 0 var(--spine, #5b4fd8),
+        inset 19px 0 0 0 color-mix(in srgb, var(--spine, #5b4fd8) 60%, black),
+        inset 22px 0 12px -10px rgba(0, 0, 0, 0.55),
+        inset 5px 0 4px -2px rgba(255, 255, 255, 0.14),
+        6px 20px 0 rgba(0, 0, 0, 0.38),
+        14px 32px 48px rgba(0, 0, 0, 0.38),
+        inset -2px 0 0 0 rgba(var(--acc-rgb, 165, 153, 217), 0.6),
+        0 0 0 1px rgba(var(--acc-rgb, 165, 153, 217), 0.18);
+}
+
+/* ── Estado bloqueado ── */
+.las2-card--locked {
+    opacity: 0.52;
+    filter: grayscale(0.65) brightness(0.75);
+    cursor: not-allowed;
+}
+
+/* ── Número (top-left, encima del lomo) ── */
+.las2-card-number {
+    position: absolute;
+    top: 9px;
+    left: 4px;
+    width: 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.55);
+    text-align: center;
+    letter-spacing: 0.05em;
+    z-index: 4;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+}
+
+/* ── Tag (ACTIVO / TEMPORADA / BLOQUEADO) ── */
+.las2-card-tag {
+    position: absolute;
+    top: 8px;
+    right: 7px;
+    z-index: 4;
+    font-family: 'DM Mono', monospace;
+    font-size: 5.5px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(var(--acc-rgb, 165, 153, 217), 0.85);
+    background: rgba(var(--acc-rgb, 165, 153, 217), 0.08);
+    border: 0.5px solid rgba(var(--acc-rgb, 165, 153, 217), 0.28);
+    padding: 2px 5px;
+    border-radius: 2px;
+}
+
+.las2-card-tag--active {
+    color: #fff;
+    background: rgba(var(--acc-rgb, 165, 153, 217), 0.22);
+    border-color: rgba(var(--acc-rgb, 165, 153, 217), 0.55);
+    animation: las2-tag-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes las2-tag-pulse {
+
+    0%,
+    100% {
+        box-shadow: none;
+    }
+
+    50% {
+        box-shadow: 0 0 8px rgba(var(--acc-rgb, 165, 153, 217), 0.4);
+    }
+}
+
+.las2-card-tag--locked {
+    color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Área de ilustración central ── */
+.las2-card-art {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* desplazada del lomo */
+    margin-left: 18px;
+    padding: 10px 6px 6px;
+    overflow: hidden;
+}
+
+/* SVG de portada ocupa todo el área */
+.las2-card-art svg,
+.las2-card-art>* {
+    width: 100%;
+    height: 100%;
+}
+
+/* ── Lock art (álbum bloqueado) ── */
+.las2-card-lock-art {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+}
+
+.las2-card-lock-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.22);
+    position: relative;
+}
+
+.las2-card-lock-icon::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    animation: las2-lock-pulse 2.8s ease-in-out infinite;
+}
+
+.las2-card-lock-msg {
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.2);
+    text-align: center;
+    padding: 0 8px;
+    line-height: 1.5;
+}
+
+/* ── Barra de progreso (bottom) ── */
+.las2-card-progress {
+    position: relative;
+    z-index: 3;
+    margin-left: 18px;
+    padding: 0 8px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.las2-card-progress-bar {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.las2-card-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg,
+            var(--acc, #a599d9) 0%,
+            color-mix(in srgb, var(--acc, #a599d9) 70%, #fff) 100%);
+    border-radius: 2px;
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 0 6px rgba(var(--acc-rgb, 165, 153, 217), 0.5);
+}
+
+.las2-card-progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.06em;
+}
+
+/* ── Esquinas doradas ── */
+.las2-card-corner {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    z-index: 5;
+    pointer-events: none;
+    background: linear-gradient(135deg, #e8c97a 0%, #b08a3c 50%, #d4aa60 100%);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.las2-card-corner--tl {
+    top: 0;
+    left: 18px;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    border-radius: 1px 0 0 0;
+}
+
+.las2-card-corner--tr {
+    top: 0;
+    right: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    border-radius: 0 1px 0 0;
+}
+
+.las2-card-corner--bl {
+    bottom: 0;
+    left: 18px;
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+    border-radius: 0 0 0 1px;
+}
+
+.las2-card-corner--br {
+    bottom: 0;
+    right: 0;
+    clip-path: polygon(100% 0, 0 100%, 100% 100%);
+    border-radius: 0 0 1px 0;
+}
+
+/* ── Broche lateral derecho ── */
+.las2-card-clasp {
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+}
+
+.las2-card-clasp-strap--top,
+.las2-card-clasp-strap--bot {
+    width: 5px;
+    height: 20px;
+    background: linear-gradient(90deg,
+            color-mix(in srgb, var(--acc, #a599d9) 35%, #7a6a50) 0%,
+            #c8a860 55%,
+            #8a6840 100%);
+    border-radius: 1px;
+}
+
+.las2-card-clasp-buckle {
+    width: 9px;
+    height: 13px;
+    background: linear-gradient(135deg, #e0c080 0%, #8a6030 45%, #c8a050 100%);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.las2-card-clasp-buckle-inner {
+    width: 5px;
+    height: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    border-radius: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.22), transparent);
+}
+
+/* ── Líneas de texto en el lomo (decorativas) ── */
+.las2-card::before {
+    /* override anterior — ya definido arriba, textura */
+}
+
+/* Pequeño brillo en el lomo */
+.las2-card-spine-sheen {
+    position: absolute;
+    left: 2px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    z-index: 3;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 255, 0.18) 0%,
+            rgba(255, 255, 255, 0.06) 40%,
+            rgba(255, 255, 255, 0.0) 100%);
+    pointer-events: none;
+    border-radius: 2px 0 0 2px;
+}
+
+/* ── Página lateral (hojas visibles al costado) ── */
+.las2-card-pages {
+    position: absolute;
+    top: 4px;
+    right: -7px;
+    bottom: 4px;
+    width: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.las2-card-page-leaf {
+    flex: 1;
+    background: color-mix(in srgb, var(--acc, #a599d9) 15%, #ddd8cf);
+    border-radius: 0 1px 1px 0;
+    border-right: 1px solid color-mix(in srgb, var(--acc, #a599d9) 25%, #b8b0a0);
+    transform: translateX(calc(var(--i, 0) * 1.2px));
+    opacity: calc(0.65 - var(--i, 0) * 0.18);
+}
+
+[data-theme="dark"] .las2-card-page-leaf {
+    background: color-mix(in srgb, var(--acc, #a599d9) 12%, #1e1a2a);
+    border-right-color: color-mix(in srgb, var(--acc, #a599d9) 20%, #2a2438);
+}
+
+/* ── Nombre del álbum en el lomo ── */
+.las2-card-spine-label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 18px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    pointer-events: none;
+}
+
+.las2-card-spine-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 5.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.75);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    max-height: 60%;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Responsive ── */
+@media (max-width: 780px) {
+    .las2-card {
+        min-height: 170px;
+    }
+
+    .las2-card-corner {
+        width: 9px;
+        height: 9px;
+    }
+}
+
+@media (max-width: 440px) {
+    .las2-card {
+        min-height: 140px;
+    }
 }
