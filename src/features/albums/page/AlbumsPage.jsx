@@ -98,27 +98,6 @@ export default function AlbumsPage({ currentUser }) {
             {/* ══ TAB: RESUMEN ════════════════════════════════════════════ */}
             {activePage === 'resumen' && (
                 <>
-                    {/* ── HERO STRIP ── */}
-                    <motion.div
-                        className="alp-hero"
-                        variants={panelVariants}
-                        custom={0}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        <div className="alp-hero-left">
-                            <div className="alp-hero-eyebrow">
-                                <span className="alp-hero-eyebrow-dot" />
-                                Temporada 25 · 26
-                            </div>
-                            <h1 className="alp-hero-title">
-                                Global<span className="alp-hero-title-accent">Albums</span>
-                            </h1>
-                            <p className="alp-hero-sub">
-                                Colecciona · Completa · Demuestra quién sabe de fútbol
-                            </p>
-                        </div>
-                    </motion.div>
 
                     {/* ── BODY: dos columnas ── */}
                     <div className="alp-body">
