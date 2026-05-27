@@ -7,6 +7,7 @@ import { useAlbumProgress } from '../hooks/useAlbumProgress';
 import { useAlbumDefinitions } from '../hooks/useAlbumDefinitions';
 import { usePackOpening } from '../hooks/usePackOpening';
 import { computeAndSyncAlbumProgress } from '../services/albums.service';
+import AlbumsPageNav from '../components/AlbumsPageNav';
 import AlbumsSectionNav from '../components/AlbumsSectionNav';
 import LegendaryAlbumsSection from '../components/LegendaryAlbumsSection';
 import StarCollectionSection from '../components/StarCollectionSection';
@@ -41,6 +42,7 @@ const panelVariants = {
 
 export default function AlbumsPage({ currentUser }) {
     const user = currentUser;
+    const [activePage, setActivePage] = useState('resumen');
     const [activeSection, setActiveSection] = useState('legendary');
     const [modalOpen, setModalOpen] = useState(false);
     const { allCards, loading: cardsLoading, refresh: refreshCards } = useAlbumCards();
@@ -90,146 +92,154 @@ export default function AlbumsPage({ currentUser }) {
     return (
         <div className="alp-root">
 
-            {/* ══ HERO STRIP ══════════════════════════════════════════════ */}
-            <motion.div
-                className="alp-hero"
-                variants={panelVariants}
-                custom={0}
-                initial="hidden"
-                animate="visible"
-            >
-                <div className="alp-hero-left">
-                    <div className="alp-hero-eyebrow">
-                        <span className="alp-hero-eyebrow-dot" />
-                        Temporada 25 · 26
-                    </div>
-                    <h1 className="alp-hero-title">
-                        Global<span className="alp-hero-title-accent">Albums</span>
-                    </h1>
-                    <p className="alp-hero-sub">
-                        Colecciona · Completa · Demuestra quién sabe de fútbol
-                    </p>
-                </div>
+            {/* ══ NAV PRINCIPAL (siempre visible arriba) ══════════════════ */}
+            <AlbumsPageNav active={activePage} onChange={setActivePage} />
 
-            </motion.div>
-
-            {/* ══ BODY: dos columnas ══════════════════════════════════════ */}
-            <div className="alp-body">
-
-                {/* ── PANEL IZQUIERDO: Álbum activo ── */}
-                <motion.aside
-                    className="alp-active-panel"
-                    variants={panelVariants}
-                    custom={1}
-                    initial="hidden"
-                    animate="visible"
-                >
-                    <span className="alp-panel-eyebrow">Álbum activo</span>
-
-                    <div className="alp-active-name">
-                        {activeAlbum?.name ?? '—'}
-                        {activeCompleted && (
-                            <span className="alp-active-badge alp-active-badge--done">Completado</span>
-                        )}
-                    </div>
-
-                    <p className="alp-active-desc">
-                        {activeAlbum?.description ?? 'Colecciona las leyendas que marcaron la historia del fútbol.'}
-                    </p>
-
-                    {/* Barra de progreso inline */}
-                    <div className="alp-active-progress">
-                        <div className="alp-active-progress-track">
-                            <div
-                                className="alp-active-progress-fill"
-                                style={{ width: `${Math.min(activePct, 100)}%` }}
-                            />
-                        </div>
-                        <div className="alp-active-progress-labels">
-                            <span className="alp-active-progress-count">
-                                <strong>{activeUnique}</strong>
-                                <span>/{activeRequired} figuritas</span>
-                            </span>
-                            <span className="alp-active-progress-pct">{activePct}%</span>
-                        </div>
-                    </div>
-
-                    {/* Boost activo */}
-                    {boostActive && (
-                        <div className="alp-active-boost">
-                            <span className="alp-boost-icon">⚡</span>
-                            <span className="alp-boost-text">
-                                Boost activo · <strong>+25%</strong> probabilidades
-                            </span>
-                            <span className="alp-boost-remaining">
-                                {boostPacksRemaining} / 5 sobres restantes
-                            </span>
-                        </div>
-                    )}
-                </motion.aside>
-
-                {/* ── PANEL DERECHO: sobres disponibles ── */}
-                <motion.aside
-                    className="alp-packs-panel"
-                    variants={panelVariants}
-                    custom={2}
-                    initial="hidden"
-                    animate="visible"
-                >
-                    <div className="alp-packs-header">
-                        <span className="alp-panel-eyebrow">Sobres disponibles</span>
-                        {packsAvailable > 0 && (
-                            <span className="alp-packs-badge">{packsAvailable}</span>
-                        )}
-                    </div>
-
-                    {packsAvailable > 0 ? (
-                        <>
-                            <p className="alp-packs-desc">
-                                Tienes {packsAvailable} {packsAvailable === 1 ? 'sobre listo' : 'sobres listos'} para abrir.
+            {/* ══ TAB: RESUMEN ════════════════════════════════════════════ */}
+            {activePage === 'resumen' && (
+                <>
+                    {/* ── HERO STRIP ── */}
+                    <motion.div
+                        className="alp-hero"
+                        variants={panelVariants}
+                        custom={0}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        <div className="alp-hero-left">
+                            <div className="alp-hero-eyebrow">
+                                <span className="alp-hero-eyebrow-dot" />
+                                Temporada 25 · 26
+                            </div>
+                            <h1 className="alp-hero-title">
+                                Global<span className="alp-hero-title-accent">Albums</span>
+                            </h1>
+                            <p className="alp-hero-sub">
+                                Colecciona · Completa · Demuestra quién sabe de fútbol
                             </p>
-                            <button className="alp-packs-open-btn" onClick={handleOpenModal}>
-                                <Package size={16} strokeWidth={2} />
-                                Abrir sobres
-                            </button>
-                        </>
-                    ) : (
-                        <p className="alp-packs-empty">
-                            No hay sobres disponibles. ¡Sigue jugando para ganar más!
-                        </p>
-                    )}
-                </motion.aside>
-            </div>
+                        </div>
+                    </motion.div>
 
-            {/* ══ SECCIÓN SCROLLEABLE: Nav + contenido ══════════════════ */}
-            <div className="alp-section-area">
-                <AlbumsSectionNav active={activeSection} onChange={setActiveSection} />
+                    {/* ── BODY: dos columnas ── */}
+                    <div className="alp-body">
 
-                <div className="alp-section-scroll">
-                    {activeSection === 'legendary' && (
-                        <LegendaryAlbumsSection
-                            definitions={legendary}
-                            progress={progress}
-                            collection={collection}
-                        />
-                    )}
-                    {activeSection === 'stars' && !collectionLoading && (
-                        <StarCollectionSection
-                            collection={collection}
-                            allCards={allCards}
-                        />
-                    )}
-                    {activeSection === 'cult' && !collectionLoading && (
-                        <CultAlbumsSection
-                            definitions={cult}
-                            collection={collection}
-                            allCards={allCards}
-                            currentUserId={user?.id}
-                        />
-                    )}
+                        {/* Panel izquierdo: Álbum activo */}
+                        <motion.aside
+                            className="alp-active-panel"
+                            variants={panelVariants}
+                            custom={1}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            <span className="alp-panel-eyebrow">Álbum activo</span>
+
+                            <div className="alp-active-name">
+                                {activeAlbum?.name ?? '—'}
+                                {activeCompleted && (
+                                    <span className="alp-active-badge alp-active-badge--done">Completado</span>
+                                )}
+                            </div>
+
+                            <p className="alp-active-desc">
+                                {activeAlbum?.description ?? 'Colecciona las leyendas que marcaron la historia del fútbol.'}
+                            </p>
+
+                            <div className="alp-active-progress">
+                                <div className="alp-active-progress-track">
+                                    <div
+                                        className="alp-active-progress-fill"
+                                        style={{ width: `${Math.min(activePct, 100)}%` }}
+                                    />
+                                </div>
+                                <div className="alp-active-progress-labels">
+                                    <span className="alp-active-progress-count">
+                                        <strong>{activeUnique}</strong>
+                                        <span>/{activeRequired} figuritas</span>
+                                    </span>
+                                    <span className="alp-active-progress-pct">{activePct}%</span>
+                                </div>
+                            </div>
+
+                            {boostActive && (
+                                <div className="alp-active-boost">
+                                    <span className="alp-boost-icon">⚡</span>
+                                    <span className="alp-boost-text">
+                                        Boost activo · <strong>+25%</strong> probabilidades
+                                    </span>
+                                    <span className="alp-boost-remaining">
+                                        {boostPacksRemaining} / 5 sobres restantes
+                                    </span>
+                                </div>
+                            )}
+                        </motion.aside>
+
+                        {/* Panel derecho: Sobres disponibles */}
+                        <motion.aside
+                            className="alp-packs-panel"
+                            variants={panelVariants}
+                            custom={2}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            <div className="alp-packs-header">
+                                <span className="alp-panel-eyebrow">Sobres disponibles</span>
+                                {packsAvailable > 0 && (
+                                    <span className="alp-packs-badge">{packsAvailable}</span>
+                                )}
+                            </div>
+
+                            {packsAvailable > 0 ? (
+                                <>
+                                    <p className="alp-packs-desc">
+                                        Tienes {packsAvailable} {packsAvailable === 1 ? 'sobre listo' : 'sobres listos'} para abrir.
+                                    </p>
+                                    <button className="alp-packs-open-btn" onClick={handleOpenModal}>
+                                        <Package size={16} strokeWidth={2} />
+                                        Abrir sobres
+                                    </button>
+                                </>
+                            ) : (
+                                <p className="alp-packs-empty">
+                                    No hay sobres disponibles. ¡Sigue jugando para ganar más!
+                                </p>
+                            )}
+                        </motion.aside>
+                    </div>
+                </>
+            )}
+
+            {/* ══ TAB: COLECCIÓN ══════════════════════════════════════════ */}
+            {activePage === 'coleccion' && (
+                <div className="alp-section-area">
+                    <AlbumsSectionNav active={activeSection} onChange={setActiveSection} />
+
+                    <div className="alp-section-scroll">
+                        {activeSection === 'legendary' && (
+                            <LegendaryAlbumsSection
+                                definitions={legendary}
+                                progress={progress}
+                                collection={collection}
+                            />
+                        )}
+                        {activeSection === 'stars' && !collectionLoading && (
+                            <StarCollectionSection
+                                collection={collection}
+                                allCards={allCards}
+                            />
+                        )}
+                        {activeSection === 'cult' && !collectionLoading && (
+                            <CultAlbumsSection
+                                definitions={cult}
+                                collection={collection}
+                                allCards={allCards}
+                                currentUserId={user?.id}
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
 
+            {/* ══ MODAL APERTURA DE SOBRES ════════════════════════════════ */}
             <PackOpeningModal
                 isOpen={modalOpen}
                 phase={phase}

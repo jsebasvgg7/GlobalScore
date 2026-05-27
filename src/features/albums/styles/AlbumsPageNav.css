@@ -1,0 +1,171 @@
+/* ════════════════════════════════════════════════
+   ALBUMS PAGE NAV — top-level tab bar
+   Matches the GlobalScore header style from design
+════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap');
+
+.apn-root {
+    flex-shrink: 0;
+    background: #EAE7E1;
+    border-bottom: 0.5px solid #d4cfc8;
+    z-index: 10;
+}
+
+[data-theme="dark"] .apn-root {
+    background: #1A1726;
+    border-bottom-color: #2A2638;
+}
+
+.apn-inner {
+    padding: 0 28px;
+}
+
+.apn-track {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    width: 100%;
+}
+
+/* ── TAB BASE ── */
+.apn-tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 16px;
+    min-height: 46px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #9895a6;
+    white-space: nowrap;
+    transition: color 0.15s ease, background 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    margin-bottom: -0.5px;
+}
+
+[data-theme="dark"] .apn-tab {
+    color: #5A5572;
+}
+
+.apn-tab:hover:not(.apn-tab--coming):not(.apn-tab--active) {
+    color: #5b4fd8;
+    background: rgba(91, 79, 216, 0.04);
+}
+
+[data-theme="dark"] .apn-tab:hover:not(.apn-tab--coming):not(.apn-tab--active) {
+    color: #A599D9;
+    background: rgba(165, 153, 217, 0.06);
+}
+
+/* ── ACTIVE ── */
+.apn-tab--active {
+    color: #5b4fd8;
+    border-bottom-color: transparent;
+}
+
+[data-theme="dark"] .apn-tab--active {
+    color: #A599D9;
+}
+
+.apn-underline {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #5b4fd8;
+    border-radius: 1px 1px 0 0;
+}
+
+[data-theme="dark"] .apn-underline {
+    background: #A599D9;
+}
+
+/* ── ICON ── */
+.apn-tab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+}
+
+.apn-tab:hover .apn-tab-icon,
+.apn-tab--active .apn-tab-icon {
+    opacity: 1;
+}
+
+/* ── LABEL ── */
+.apn-tab-label {
+    line-height: 1;
+}
+
+/* ── COMING SOON ── */
+.apn-tab--coming {
+    cursor: default;
+    opacity: 0.5;
+}
+
+.apn-tab--coming:hover {
+    color: #9895a6;
+    background: transparent;
+}
+
+[data-theme="dark"] .apn-tab--coming:hover {
+    color: #5A5572;
+}
+
+.apn-soon-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 7px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5b4fd8;
+    background: rgba(91, 79, 216, 0.1);
+    border: 0.5px solid rgba(91, 79, 216, 0.25);
+    border-radius: 20px;
+    line-height: 1;
+}
+
+[data-theme="dark"] .apn-soon-pill {
+    color: #A599D9;
+    background: rgba(165, 153, 217, 0.1);
+    border-color: rgba(165, 153, 217, 0.2);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+    .apn-inner {
+        padding: 0 12px;
+    }
+
+    .apn-tab {
+        padding: 0 10px;
+        min-height: 42px;
+        font-size: 11px;
+        gap: 5px;
+    }
+
+    .apn-soon-pill {
+        display: none;
+    }
+}
+
+@media (max-width: 380px) {
+    .apn-tab-icon {
+        display: none;
+    }
+}
