@@ -981,11 +981,6 @@ export default function LegendaryAlbumsSection({ definitions, progress, collecti
 
     return (
         <div className="las2-root">
-            <div className="las2-eyebrow">
-                <span>Álbumes Legendarios</span>
-                <div className="las2-eyebrow-line" />
-                <span className="las2-eyebrow-count">5 álbumes</span>
-            </div>
             <div className="las2-row">
                 {ORDER.map(albumId => (
                     <AlbumBook

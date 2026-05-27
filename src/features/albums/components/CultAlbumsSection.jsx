@@ -187,8 +187,8 @@ function CultStickerCard({ index, item, meta }) {
 
     if (filled) {
         const resolvedImg = card?.image_path
-    ? (card.image_path.startsWith('http') ? card.image_path : getHistoricalImageUrl(card.image_path))
-    : null;
+            ? (card.image_path.startsWith('http') ? card.image_path : getHistoricalImageUrl(card.image_path))
+            : null;
         return (
             <div className="cas2-sticker cas2-sticker--filled" style={{ '--acc': meta.color }}>
                 {/* Banda top degradado */}
@@ -897,91 +897,91 @@ function SpecialBook({ userId }) {
     const coverBg = '#13001f';
 
     return (
-            <>
-                <div className="cas2-book-wrap">
-                    <div className="cas2-page-stack">
-                        {[2, 1, 0].map(i => (
-                            <div key={i} className="cas2-page-leaf" style={{ '--li': i, '--acc': color }} />
-                        ))}
-                    </div>
-
-                    <button
-                        className={`cas2-book${isCompleted ? ' cas2-book--done' : ''}${!loading && !hasAccess ? ' cas2-book--special-locked' : ''}`}
-                        style={{
-                            '--spine': color,
-                            '--spine-alt': colorAlt,
-                            '--acc': color,
-                            '--acc-rgb': colorRgb,
-                            '--cover-bg': coverBg,
-                        }}
-                        onClick={() => setPanelOpen(true)}
-                        disabled={loading}
-                    >
-                        {/* Lomo */}
-                        <div className="cas2-spine">
-                            <span className="cas2-spine-num">04</span>
-                            <span className="cas2-spine-label">ÚNICOS</span>
-                            <div className="cas2-spine-lines">
-                                {[0, 1, 2].map(i => <div key={i} className="cas2-spine-line" />)}
-                            </div>
-                        </div>
-
-                        {/* Portada */}
-                        <div className="cas2-cover">
-                            <div className="cas2-cover-art">
-                                <SpecialCoverIllustration />
-                            </div>
-
-                            <div className="cas2-clasp">
-                                <div className="cas2-clasp-strap cas2-clasp-strap--top" />
-                                <div className="cas2-clasp-buckle"><div className="cas2-clasp-buckle-inner" /></div>
-                                <div className="cas2-clasp-strap cas2-clasp-strap--bot" />
-                            </div>
-
-                            {['tl', 'tr', 'bl', 'br'].map(pos => (
-                                <div key={pos} className={`cas2-corner cas2-corner--${pos}`} />
-                            ))}
-
-                            <div className="cas2-cover-tag">ESPECIAL · ÚNICO</div>
-                            <div className="cas2-cover-id">ID: SPL-UNIQUE</div>
-
-                            {/* Badge de rareza especial */}
-                            <div className="cas2-rarity cas2-rarity--special">
-                                <div className="cas2-rarity-stars">
-                                    {[0, 1, 2, 3, 4].map(i => <span key={i}>✦</span>)}
-                                </div>
-                                <span className="cas2-rarity-label">IRREPETIBLE</span>
-                            </div>
-
-                            <div className="cas2-cover-footer">
-                                <div className="cas2-cover-footer-info">
-                                    <span className="cas2-cover-count">{owned} / {total || '?'} CARTAS</span>
-                                    {isCompleted && <span className="cas2-done-tick">✓</span>}
-                                </div>
-                                <div className="cas2-mini-bar">
-                                    <div className="cas2-mini-bar-fill" style={{ width: `${pct}%` }} />
-                                </div>
-                                <span className="cas2-cover-hint">Abrir álbum →</span>
-                            </div>
-                        </div>
-                    </button>
-
-                    {/* Etiqueta BLOQUEADO — visible solo cuando no hay acceso */}
-                    {!loading && !hasAccess && (
-                        <span className="cas2-locked-label">BLOQUEADO</span>
-                    )}
+        <>
+            <div className="cas2-book-wrap">
+                <div className="cas2-page-stack">
+                    {[2, 1, 0].map(i => (
+                        <div key={i} className="cas2-page-leaf" style={{ '--li': i, '--acc': color }} />
+                    ))}
                 </div>
 
-                {panelOpen && (
-                    <SpecialPanel
-                        specialCards={specialCards}
-                        totalSpecial={total}
-                        onClose={() => setPanelOpen(false)}
-                    />
+                <button
+                    className={`cas2-book${isCompleted ? ' cas2-book--done' : ''}${!loading && !hasAccess ? ' cas2-book--special-locked' : ''}`}
+                    style={{
+                        '--spine': color,
+                        '--spine-alt': colorAlt,
+                        '--acc': color,
+                        '--acc-rgb': colorRgb,
+                        '--cover-bg': coverBg,
+                    }}
+                    onClick={() => setPanelOpen(true)}
+                    disabled={loading}
+                >
+                    {/* Lomo */}
+                    <div className="cas2-spine">
+                        <span className="cas2-spine-num">04</span>
+                        <span className="cas2-spine-label">ÚNICOS</span>
+                        <div className="cas2-spine-lines">
+                            {[0, 1, 2].map(i => <div key={i} className="cas2-spine-line" />)}
+                        </div>
+                    </div>
+
+                    {/* Portada */}
+                    <div className="cas2-cover">
+                        <div className="cas2-cover-art">
+                            <SpecialCoverIllustration />
+                        </div>
+
+                        <div className="cas2-clasp">
+                            <div className="cas2-clasp-strap cas2-clasp-strap--top" />
+                            <div className="cas2-clasp-buckle"><div className="cas2-clasp-buckle-inner" /></div>
+                            <div className="cas2-clasp-strap cas2-clasp-strap--bot" />
+                        </div>
+
+                        {['tl', 'tr', 'bl', 'br'].map(pos => (
+                            <div key={pos} className={`cas2-corner cas2-corner--${pos}`} />
+                        ))}
+
+                        <div className="cas2-cover-tag">ESPECIAL · ÚNICO</div>
+                        <div className="cas2-cover-id">ID: SPL-UNIQUE</div>
+
+                        {/* Badge de rareza especial */}
+                        <div className="cas2-rarity cas2-rarity--special">
+                            <div className="cas2-rarity-stars">
+                                {[0, 1, 2, 3, 4].map(i => <span key={i}>✦</span>)}
+                            </div>
+                            <span className="cas2-rarity-label">IRREPETIBLE</span>
+                        </div>
+
+                        <div className="cas2-cover-footer">
+                            <div className="cas2-cover-footer-info">
+                                <span className="cas2-cover-count">{owned} / {total || '?'} CARTAS</span>
+                                {isCompleted && <span className="cas2-done-tick">✓</span>}
+                            </div>
+                            <div className="cas2-mini-bar">
+                                <div className="cas2-mini-bar-fill" style={{ width: `${pct}%` }} />
+                            </div>
+                            <span className="cas2-cover-hint">Abrir álbum →</span>
+                        </div>
+                    </div>
+                </button>
+
+                {/* Etiqueta BLOQUEADO — visible solo cuando no hay acceso */}
+                {!loading && !hasAccess && (
+                    <span className="cas2-locked-label">BLOQUEADO</span>
                 )}
-            </>
-        );
-    }
+            </div>
+
+            {panelOpen && (
+                <SpecialPanel
+                    specialCards={specialCards}
+                    totalSpecial={total}
+                    onClose={() => setPanelOpen(false)}
+                />
+            )}
+        </>
+    );
+}
 
 // ══════════════════════════════════════════════════════════════
 //  EXPORT PRINCIPAL
@@ -998,11 +998,6 @@ export default function CultAlbumsSection({ definitions, collection, allCards, c
 
     return (
         <div className="cas2-root">
-            <div className="cas2-eyebrow">
-                <span>Álbum de Culto · Categorías Especiales</span>
-                <div className="cas2-eyebrow-line" />
-                <span className="cas2-eyebrow-count">{categories.length + extras.length + 1} álbumes</span>
-            </div>
 
             <div className="cas2-row">
                 {categories.map(({ id }) => (
