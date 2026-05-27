@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Package, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Package, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAlbumPacks } from '../hooks/useAlbumPacks';
 import { useAlbumCollection } from '../hooks/useAlbumCollection';
@@ -16,42 +16,7 @@ import PackOpeningModal from '../components/PackOpeningModal';
 import { useAlbumCards } from '../hooks/useAlbumCards';
 import './AlbumsPage.css';
 
-// ─────────────────────────────────────────────────────────────
-// Metadata idéntica a LegendaryAlbumsSection (para el AlbumBook)
-// ─────────────────────────────────────────────────────────────
-const ALBUM_META = {
-    legendary_1: {
-        label: 'Foundations', shortLabel: 'LEG I', subtitle: 'FOUNDATIONS',
-        spine: '#5b4fd8', spineAlt: '#3d34a5', accent: '#a599d9', accentRgb: '165,153,217',
-        tag: 'TEMPORADA 25·26', number: '01', coverBg: '#1a1726', rarityLevel: 3, rarityLabel: 'FUNDACIÓN',
-    },
-    legendary_2: {
-        label: 'Rising Legends', shortLabel: 'LEG II', subtitle: 'RISING LEGENDS',
-        spine: '#7c3aed', spineAlt: '#5b1fbd', accent: '#c4b5fd', accentRgb: '196,181,253',
-        tag: 'TEMPORADA 25·26', number: '02', coverBg: '#160e2a', rarityLevel: 4, rarityLabel: 'LEYENDA+',
-    },
-    legendary_3: {
-        label: 'Historical Depth', shortLabel: 'LEG III', subtitle: 'HISTORICAL DEPTH',
-        spine: '#1D9E75', spineAlt: '#0d6e50', accent: '#34d399', accentRgb: '52,211,153',
-        tag: 'TEMPORADA 25·26', number: '03', coverBg: '#0a1f18', rarityLevel: 5, rarityLabel: 'ÉLITE',
-    },
-    legendary_4: {
-        label: 'Elite Construction', shortLabel: 'LEG IV', subtitle: 'ELITE CONSTRUCTION',
-        spine: '#b45309', spineAlt: '#7c3b00', accent: '#f59e0b', accentRgb: '245,158,11',
-        tag: 'TEMPORADA 25·26', number: '04', coverBg: '#1a1200', rarityLevel: 5, rarityLabel: 'GOAT',
-    },
-    legendary_5: {
-        label: 'The Immortals', shortLabel: 'LEG V', subtitle: 'THE IMMORTALS',
-        spine: '#9d174d', spineAlt: '#6b1130', accent: '#f472b6', accentRgb: '244,114,182',
-        tag: 'ENDGAME', number: '05', coverBg: '#1a0e15', rarityLevel: 5, rarityLabel: 'INMORTAL',
-    },
-};
-
-const LEG_ORDER = ['legendary_1', 'legendary_2', 'legendary_3', 'legendary_4', 'legendary_5'];
-
-// ─────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────
 function getActiveAlbum(legendary, progress) {
     if (!legendary?.length) return null;
     const active = legendary.find(def => {
@@ -60,116 +25,189 @@ function getActiveAlbum(legendary, progress) {
     });
     return active || legendary[legendary.length - 1];
 }
-
 function getAlbumProgress(albumId, progress) {
     return progress?.find(p => p.album_id === albumId) ?? null;
 }
 
-// ─────────────────────────────────────────────────────────────
-// Variantes de animación
-// ─────────────────────────────────────────────────────────────
+// ── Metadata del libro activo (colores por album_id) ─────────
+const ALBUM_META = {
+    legendary_1: { spine: '#5b4fd8', spineAlt: '#3d34a5', accent: '#a599d9', accentRgb: '165,153,217', coverBg: '#1a1726', shortLabel: 'LEG I', number: '01', rarityLevel: 3, rarityLabel: 'FUNDACIÓN', tag: 'TEMPORADA 25·26' },
+    legendary_2: { spine: '#7c3aed', spineAlt: '#5b1fbd', accent: '#c4b5fd', accentRgb: '196,181,253', coverBg: '#160e2a', shortLabel: 'LEG II', number: '02', rarityLevel: 4, rarityLabel: 'LEYENDA+', tag: 'TEMPORADA 25·26' },
+    legendary_3: { spine: '#1D9E75', spineAlt: '#0d6e50', accent: '#34d399', accentRgb: '52,211,153', coverBg: '#0a1f18', shortLabel: 'LEG III', number: '03', rarityLevel: 5, rarityLabel: 'ÉLITE', tag: 'TEMPORADA 25·26' },
+    legendary_4: { spine: '#b45309', spineAlt: '#7c3b00', accent: '#f59e0b', accentRgb: '245,158,11', coverBg: '#1a1200', shortLabel: 'LEG IV', number: '04', rarityLevel: 5, rarityLabel: 'GOAT', tag: 'TEMPORADA 25·26' },
+    legendary_5: { spine: '#9d174d', spineAlt: '#6b1130', accent: '#f472b6', accentRgb: '244,114,182', coverBg: '#1a0e15', shortLabel: 'LEG V', number: '05', rarityLevel: 5, rarityLabel: 'INMORTAL', tag: 'ENDGAME' },
+};
+const DEFAULT_META = { spine: '#5b4fd8', spineAlt: '#3d34a5', accent: '#a599d9', accentRgb: '165,153,217', coverBg: '#1a1726', shortLabel: 'ALB', number: '01', rarityLevel: 1, rarityLabel: '', tag: '' };
+
+// ── Variants animación ────────────────────────────────────────
 const panelVariants = {
     hidden: { opacity: 0, y: 10 },
-    visible: (i) => ({
-        opacity: 1, y: 0,
-        transition: { duration: 0.28, ease: 'easeOut', delay: i * 0.06 },
-    }),
+    visible: (i) => ({ opacity: 1, y: 0, transition: { duration: 0.28, ease: 'easeOut', delay: i * 0.06 } }),
 };
 
 // ─────────────────────────────────────────────────────────────
-// ActiveAlbumBook  — replica visual del libro del álbum activo
+// ActiveAlbumHero — libro grande con soporte
 // ─────────────────────────────────────────────────────────────
-function ActiveAlbumBook({ albumId, pct, filled, total }) {
-    const meta = ALBUM_META[albumId];
-    if (!meta) return null;
+function ActiveAlbumHero({ albumId, name, description, pct, filled, total, onViewAlbum, activeCompleted }) {
+    const meta = ALBUM_META[albumId] ?? DEFAULT_META;
 
     return (
-        <div className="alp-active-book">
-            {/* Hojas apiladas detrás */}
-            <div className="alp-active-book-pages">
-                {[2, 1, 0].map(i => (
-                    <div key={i} className="alp-active-book-leaf"
-                        style={{ '--li': i, '--acc': meta.accent }} />
-                ))}
-            </div>
+        <div className="alp-hero-layout">
+            {/* Columna izquierda: info + stats */}
+            <div className="alp-hero-info">
+                <span className="alp-panel-eyebrow">Álbum activo</span>
 
-            {/* Libro principal */}
-            <div className="alp-active-book-body"
-                style={{
-                    '--spine': meta.spine,
-                    '--spine-alt': meta.spineAlt,
-                    '--acc': meta.accent,
-                    '--acc-rgb': meta.accentRgb,
-                    '--cover-bg': meta.coverBg,
-                }}>
-
-                {/* Lomo */}
-                <div className="alp-active-book-spine">
-                    <span className="alp-active-book-spine-num">{meta.number}</span>
-                    <span className="alp-active-book-spine-label">{meta.shortLabel}</span>
+                <div className="alp-active-name">
+                    {name ?? '—'}
+                    {activeCompleted && (
+                        <span className="alp-active-badge alp-active-badge--done">Completado</span>
+                    )}
                 </div>
 
-                {/* Portada */}
-                <div className="alp-active-book-cover">
-                    {/* Tag */}
-                    <div className="alp-active-book-tag">{meta.tag}</div>
+                <p className="alp-active-desc">
+                    {description ?? 'Colecciona las leyendas que marcaron la historia del fútbol.'}
+                </p>
 
-                    {/* Esquinas doradas */}
-                    {['tl', 'tr', 'bl', 'br'].map(pos => (
-                        <div key={pos} className={`alp-active-book-corner alp-active-book-corner--${pos}`} />
-                    ))}
+                {/* Stats grandes */}
+                <div className="alp-hero-stats">
+                    <div className="alp-hero-stat">
+                        <span className="alp-hero-stat-val">{filled}</span>
+                        <span className="alp-hero-stat-label">Figuritas</span>
+                    </div>
+                    <div className="alp-hero-stat-divider" />
+                    <div className="alp-hero-stat">
+                        <span className="alp-hero-stat-val">{pct}<span className="alp-hero-stat-pct-sym">%</span></span>
+                        <span className="alp-hero-stat-label">Completado</span>
+                    </div>
+                </div>
 
-                    {/* Broche */}
-                    <div className="alp-active-book-clasp">
-                        <div className="alp-active-book-clasp-strap alp-active-book-clasp-strap--top" />
-                        <div className="alp-active-book-clasp-buckle">
-                            <div className="alp-active-book-clasp-inner" />
-                        </div>
-                        <div className="alp-active-book-clasp-strap alp-active-book-clasp-strap--bot" />
+                {/* Barra de progreso */}
+                <div className="alp-active-progress">
+                    <div className="alp-active-progress-track">
+                        <div className="alp-active-progress-fill" style={{ width: `${Math.min(pct, 100)}%` }} />
+                        <div className="alp-active-progress-glow" style={{ left: `${Math.min(pct, 99)}%` }} />
+                    </div>
+                    <div className="alp-active-progress-labels">
+                        <span className="alp-active-progress-count">
+                            <strong>{filled}</strong> / {total} figuritas
+                        </span>
+                        <span className="alp-active-progress-pct">{pct}%</span>
+                    </div>
+                </div>
+
+                <button className="alp-view-album-btn" onClick={onViewAlbum}>
+                    Ver álbum →
+                </button>
+            </div>
+
+            {/* Columna derecha: libro 3D grande + soporte */}
+            <div className="alp-hero-book-wrap">
+                <div className="alp-hero-book-scene">
+                    {/* Hojas apiladas */}
+                    <div className="alp-hero-pages">
+                        {[2, 1, 0].map(i => (
+                            <div key={i} className="alp-hero-page-leaf"
+                                style={{ '--li': i, '--acc': meta.accent }} />
+                        ))}
                     </div>
 
-                    {/* Ilustración central */}
-                    <div className="alp-active-book-art">
-                        <svg viewBox="0 0 80 90" fill="none" className="alp-active-book-art-svg">
-                            <circle cx="40" cy="42" r="28"
-                                stroke={meta.accent} strokeOpacity="0.2" strokeWidth="1" />
-                            <circle cx="40" cy="42" r="20"
-                                stroke={meta.accent} strokeOpacity="0.35" strokeWidth="0.8" />
-                            {/* Escudo */}
-                            <path d="M40 22 L54 28 L54 44 C54 54 40 60 40 60 C40 60 26 54 26 44 L26 28 Z"
-                                fill={meta.accent} fillOpacity="0.15"
-                                stroke={meta.accent} strokeOpacity="0.5" strokeWidth="1" />
-                            <circle cx="40" cy="42" r="6"
-                                fill={meta.accent} fillOpacity="0.25" />
-                            {/* Estrellas */}
-                            {Array.from({ length: Math.min(meta.rarityLevel, 5) }, (_, i) => {
-                                const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
-                                const r = 14;
-                                return (
-                                    <circle key={i}
-                                        cx={40 + Math.cos(angle) * r}
-                                        cy={42 + Math.sin(angle) * r}
-                                        r="1.5"
-                                        fill={meta.accent} fillOpacity="0.7" />
-                                );
-                            })}
-                        </svg>
-                    </div>
+                    {/* El libro */}
+                    <div className="alp-hero-book"
+                        style={{
+                            '--spine': meta.spine,
+                            '--spine-alt': meta.spineAlt,
+                            '--acc': meta.accent,
+                            '--acc-rgb': meta.accentRgb,
+                            '--cover-bg': meta.coverBg,
+                        }}>
 
-                    {/* Footer con barra */}
-                    <div className="alp-active-book-footer">
-                        <span className="alp-active-book-count">{filled} / {total} ITEMS</span>
-                        <div className="alp-active-book-bar">
-                            <div className="alp-active-book-bar-fill" style={{ width: `${pct}%` }} />
+                        {/* Lomo */}
+                        <div className="alp-hero-spine">
+                            <span className="alp-hero-spine-num">{meta.number}</span>
+                            <span className="alp-hero-spine-label">{meta.shortLabel}</span>
+                            <div className="alp-hero-spine-lines">
+                                {[0, 1, 2].map(i => <div key={i} className="alp-hero-spine-line" />)}
+                            </div>
+                        </div>
+
+                        {/* Portada */}
+                        <div className="alp-hero-cover">
+                            {/* Tag */}
+                            <div className="alp-hero-cover-tag">{meta.tag}</div>
+
+                            {/* Esquinas doradas */}
+                            {['tl', 'tr', 'bl', 'br'].map(pos => (
+                                <div key={pos} className={`alp-hero-corner alp-hero-corner--${pos}`} />
+                            ))}
+
+                            {/* Broche */}
+                            <div className="alp-hero-clasp">
+                                <div className="alp-hero-clasp-strap alp-hero-clasp-strap--top" />
+                                <div className="alp-hero-clasp-buckle">
+                                    <div className="alp-hero-clasp-inner" />
+                                </div>
+                                <div className="alp-hero-clasp-strap alp-hero-clasp-strap--bot" />
+                            </div>
+
+                            {/* Arte central */}
+                            <div className="alp-hero-art">
+                                <svg viewBox="0 0 120 140" fill="none" className="alp-hero-art-svg">
+                                    <circle cx="60" cy="65" r="44"
+                                        stroke={meta.accent} strokeOpacity="0.12" strokeWidth="1.5" />
+                                    <circle cx="60" cy="65" r="32"
+                                        stroke={meta.accent} strokeOpacity="0.22" strokeWidth="1" />
+                                    <circle cx="60" cy="65" r="20"
+                                        stroke={meta.accent} strokeOpacity="0.15" strokeWidth="0.8" />
+                                    {/* Escudo */}
+                                    <path d="M60 34 L78 42 L78 64 C78 76 60 84 60 84 C60 84 42 76 42 64 L42 42 Z"
+                                        fill={meta.accent} fillOpacity="0.12"
+                                        stroke={meta.accent} strokeOpacity="0.5" strokeWidth="1.2" />
+                                    <circle cx="60" cy="60" r="8"
+                                        fill={meta.accent} fillOpacity="0.2" />
+                                    <circle cx="60" cy="60" r="4"
+                                        fill={meta.accent} fillOpacity="0.4" />
+                                    {/* Estrellas de rareza */}
+                                    {Array.from({ length: Math.min(meta.rarityLevel, 5) }, (_, i) => {
+                                        const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
+                                        const r = 22;
+                                        return (
+                                            <circle key={i}
+                                                cx={60 + Math.cos(angle) * r}
+                                                cy={65 + Math.sin(angle) * r}
+                                                r="2" fill={meta.accent} fillOpacity="0.7" />
+                                        );
+                                    })}
+                                    {/* Label rareza */}
+                                    <text x="60" y="108" textAnchor="middle"
+                                        fontFamily="DM Mono, monospace" fontSize="7"
+                                        fontWeight="700" letterSpacing="2"
+                                        fill={meta.accent} fillOpacity="0.5">
+                                        {meta.rarityLabel}
+                                    </text>
+                                </svg>
+                            </div>
+
+                            {/* Footer del libro */}
+                            <div className="alp-hero-cover-footer">
+                                <div className="alp-hero-cover-footer-info">
+                                    <span className="alp-hero-cover-count">{filled} / {total} ITEMS</span>
+                                    {activeCompleted && <span className="alp-hero-done-tick">✓</span>}
+                                </div>
+                                <div className="alp-hero-cover-bar">
+                                    <div className="alp-hero-cover-bar-fill" style={{ width: `${pct}%` }} />
+                                </div>
+                            </div>
+
+                            {/* Badge ACTIVO */}
+                            <div className="alp-hero-active-badge">ACTIVO</div>
                         </div>
                     </div>
 
-                    {/* Rareza */}
-                    <div className="alp-active-book-rarity">
-                        <div className="alp-active-book-rarity-stars">
-                            {Array.from({ length: meta.rarityLevel }, (_, i) => <span key={i}>★</span>)}
-                        </div>
-                        <span className="alp-active-book-rarity-label">{meta.rarityLabel}</span>
+                    {/* Soporte / pedestal */}
+                    <div className="alp-hero-pedestal">
+                        <div className="alp-hero-pedestal-top" />
+                        <div className="alp-hero-pedestal-body" />
+                        <div className="alp-hero-pedestal-shadow" />
                     </div>
                 </div>
             </div>
@@ -204,8 +242,7 @@ function BoostProgressBar({ boostActive, boostPacksRemaining, packsOpenedSinceLa
                             <div className="alp-boost-milestone-dot">
                                 {passed
                                     ? <span className="alp-boost-milestone-check">✓</span>
-                                    : <span className="alp-boost-milestone-num">{m.pos}</span>
-                                }
+                                    : <span className="alp-boost-milestone-num">{m.pos}</span>}
                             </div>
                             <span className="alp-boost-milestone-label">{m.label}</span>
                         </div>
@@ -241,35 +278,36 @@ function BoostProgressBar({ boostActive, boostPacksRemaining, packsOpenedSinceLa
 }
 
 // ─────────────────────────────────────────────────────────────
-// Pack3D
+// Pack3D — centrado vertical
 // ─────────────────────────────────────────────────────────────
 function Pack3D({ count, onClick }) {
     return (
         <div className="alp-pack3d-wrap">
+            {/* Sobre SVG grande centrado */}
             <div className="alp-pack3d-stack">
                 <div className="alp-pack3d-shadow alp-pack3d-shadow--3" />
                 <div className="alp-pack3d-shadow alp-pack3d-shadow--2" />
                 <div className="alp-pack3d-main">
                     <svg viewBox="0 0 90 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="alp-pack3d-svg">
                         <defs>
-                            <linearGradient id="packGrad" x1="0" y1="0" x2="1" y2="1">
+                            <linearGradient id="packGrad2" x1="0" y1="0" x2="1" y2="1">
                                 <stop offset="0%" stopColor="#7B6FE8" />
                                 <stop offset="100%" stopColor="#4a3fc7" />
                             </linearGradient>
-                            <linearGradient id="packShine" x1="0" y1="0" x2="0" y2="1">
+                            <linearGradient id="packShine2" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
                                 <stop offset="100%" stopColor="rgba(255,255,255,0)" />
                             </linearGradient>
-                            <linearGradient id="packTab" x1="0" y1="0" x2="1" y2="0">
+                            <linearGradient id="packTab2" x1="0" y1="0" x2="1" y2="0">
                                 <stop offset="0%" stopColor="#5b4fd8" />
                                 <stop offset="100%" stopColor="#8b7fc7" />
                             </linearGradient>
                         </defs>
                         <ellipse cx="45" cy="112" rx="30" ry="5" fill="rgba(91,79,216,0.25)" />
-                        <rect x="8" y="22" width="74" height="90" rx="6" fill="url(#packGrad)" />
+                        <rect x="8" y="22" width="74" height="90" rx="6" fill="url(#packGrad2)" />
                         <rect x="8" y="22" width="74" height="90" rx="6" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-                        <rect x="8" y="22" width="74" height="24" rx="6" fill="url(#packTab)" />
-                        <rect x="8" y="34" width="74" height="12" fill="url(#packTab)" />
+                        <rect x="8" y="22" width="74" height="24" rx="6" fill="url(#packTab2)" />
+                        <rect x="8" y="34" width="74" height="12" fill="url(#packTab2)" />
                         <line x1="8" y1="46" x2="82" y2="46" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeDasharray="4 3" />
                         <line x1="22" y1="22" x2="22" y2="112" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" />
                         {[58, 68, 78, 88, 98].map(y => (
@@ -278,17 +316,19 @@ function Pack3D({ count, onClick }) {
                         <path d="M45 54 L56 59 L56 70 C56 76 45 81 45 81 C45 81 34 76 34 70 L34 59 Z"
                             fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
                         <circle cx="45" cy="67" r="4" fill="rgba(255,255,255,0.2)" />
-                        <rect x="8" y="22" width="38" height="90" rx="6" fill="url(#packShine)" />
+                        <rect x="8" y="22" width="38" height="90" rx="6" fill="url(#packShine2)" />
                         <circle cx="68" cy="32" r="1.5" fill="rgba(255,255,255,0.6)" />
                         <circle cx="75" cy="38" r="1" fill="rgba(255,255,255,0.4)" />
                         <circle cx="63" cy="40" r="0.8" fill="rgba(255,255,255,0.3)" />
                     </svg>
                 </div>
             </div>
+
+            {/* Info centrada debajo del sobre */}
             <div className="alp-pack3d-info">
                 <div className="alp-pack3d-count-row">
                     <span className="alp-pack3d-label">Sobres disponibles</span>
-                    <span className="alp-pack3d-badge">{count}</span>
+                    {count > 0 && <span className="alp-pack3d-badge">{count}</span>}
                 </div>
                 <p className="alp-pack3d-desc">
                     {count > 0
@@ -308,8 +348,7 @@ function Pack3D({ count, onClick }) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// AlbumsCarousel — flechas navegan entre secciones, muestra
-// los componentes reales sin su navbar interna
+// AlbumsCarousel — secciones reales con flechas
 // ─────────────────────────────────────────────────────────────
 const SECTIONS = [
     { id: 'legendary', label: 'Tus Álbumes Legendary' },
@@ -321,17 +360,13 @@ function AlbumsCarousel({ legendary, progress, collection, allCards, cult, curre
     const [sectionIdx, setSectionIdx] = useState(0);
     const section = SECTIONS[sectionIdx];
 
-    const totalLeg = legendary?.length ?? 0;
-    const totalStars = 5; // StarCollectionSection tiene 5 tiers fijos
-    const totalCult = cult?.length ?? 0;
-    const totals = [totalLeg, totalStars, totalCult];
+    const totals = [legendary?.length ?? 0, 5, cult?.length ?? 0];
 
     const handlePrev = () => setSectionIdx(i => (i - 1 + SECTIONS.length) % SECTIONS.length);
     const handleNext = () => setSectionIdx(i => (i + 1) % SECTIONS.length);
 
     return (
         <div className="alp-carousel">
-            {/* ── Header ── */}
             <div className="alp-carousel-header">
                 <span className="alp-carousel-title">{section.label}</span>
                 <div className="alp-carousel-nav">
@@ -345,7 +380,6 @@ function AlbumsCarousel({ legendary, progress, collection, allCards, cult, curre
                 </div>
             </div>
 
-            {/* ── Contenido real ── */}
             <AnimatePresence mode="wait">
                 <motion.div
                     key={section.id}
@@ -408,13 +442,11 @@ export default function AlbumsPage({ currentUser }) {
     });
 
     useEffect(() => { refreshCards(); }, []);
-
     useEffect(() => {
         if (user?.id) {
             computeAndSyncAlbumProgress(user.id).then(() => refreshProgress());
         }
     }, [user?.id]);
-
     useEffect(() => {
         if (phase === 'revealing') {
             const t = setTimeout(() => setPhase('done'), 3200);
@@ -426,7 +458,6 @@ export default function AlbumsPage({ currentUser }) {
     const handleCloseModal = () => { reset(); setModalOpen(false); };
     const handleReset = async () => { await refreshPacks(); reset(); };
 
-    // Álbum activo
     const activeAlbum = getActiveAlbum(legendary, progress);
     const activeAlbumProgress = activeAlbum ? getAlbumProgress(activeAlbum.id, progress) : null;
     const activeUnique = activeAlbumProgress?.unique_cards ?? 0;
@@ -436,71 +467,32 @@ export default function AlbumsPage({ currentUser }) {
 
     return (
         <div className="alp-root">
-
-            {/* ══ NAV PRINCIPAL ══════════════════════════════════════════ */}
             <AlbumsPageNav active={activePage} onChange={setActivePage} />
 
-            {/* ══ TAB: RESUMEN ══════════════════════════════════════════ */}
             {activePage === 'resumen' && (
                 <>
-                    {/* ── BODY: panel izq + panel der ── */}
+                    {/* ── BODY: panel izq grande + panel der ── */}
                     <div className="alp-body">
 
-                        {/* Panel izquierdo: info + libro activo */}
+                        {/* Panel izquierdo 57% — libro hero */}
                         <motion.aside
                             className="alp-active-panel"
                             variants={panelVariants} custom={1}
                             initial="hidden" animate="visible"
                         >
-                            <div className="alp-active-panel-inner">
-                                {/* Info columna izquierda */}
-                                <div className="alp-active-info">
-                                    <span className="alp-panel-eyebrow">Álbum activo</span>
-
-                                    <div className="alp-active-name">
-                                        {activeAlbum?.name ?? '—'}
-                                        {activeCompleted && (
-                                            <span className="alp-active-badge alp-active-badge--done">Completado</span>
-                                        )}
-                                    </div>
-
-                                    <p className="alp-active-desc">
-                                        {activeAlbum?.description ?? 'Colecciona las leyendas que marcaron la historia del fútbol.'}
-                                    </p>
-
-                                    {/* Barra de progreso */}
-                                    <div className="alp-active-progress">
-                                        <div className="alp-active-progress-track">
-                                            <div className="alp-active-progress-fill"
-                                                style={{ width: `${Math.min(activePct, 100)}%` }} />
-                                            <div className="alp-active-progress-glow"
-                                                style={{ left: `${Math.min(activePct, 99)}%` }} />
-                                        </div>
-                                        <div className="alp-active-progress-labels">
-                                            <span className="alp-active-progress-count">
-                                                <strong>{activeUnique}</strong>
-                                                <span> / {activeRequired} figuritas</span>
-                                            </span>
-                                            <span className="alp-active-progress-pct">{activePct}%</span>
-                                        </div>
-                                    </div>
-
-                                    <button className="alp-view-album-btn">Ver álbum →</button>
-                                </div>
-
-                                {/* Libro 3D del álbum activo */}
-                                {activeAlbum?.id && (
-                                    <ActiveAlbumBook
-                                        albumId={activeAlbum.id}
-                                        pct={activePct}
-                                        filled={activeUnique}
-                                        total={activeRequired}
-                                    />
-                                )}
-                            </div>
+                            <ActiveAlbumHero
+                                albumId={activeAlbum?.id}
+                                name={activeAlbum?.name}
+                                description={activeAlbum?.description}
+                                pct={activePct}
+                                filled={activeUnique}
+                                total={activeRequired}
+                                activeCompleted={activeCompleted}
+                                onViewAlbum={() => { }}
+                            />
                         </motion.aside>
 
-                        {/* Panel derecho: Boost progress + Sobre 3D */}
+                        {/* Panel derecho 43% — boost + sobre */}
                         <motion.aside
                             className="alp-right-panel"
                             variants={panelVariants} custom={2}
@@ -516,7 +508,7 @@ export default function AlbumsPage({ currentUser }) {
                         </motion.aside>
                     </div>
 
-                    {/* ── CARRUSEL (ocupa el resto de la pantalla) ── */}
+                    {/* ── CARRUSEL INFERIOR ── */}
                     <motion.div
                         className="alp-carousel-area"
                         variants={panelVariants} custom={3}
@@ -535,37 +527,23 @@ export default function AlbumsPage({ currentUser }) {
                 </>
             )}
 
-            {/* ══ TAB: COLECCIÓN ══════════════════════════════════════ */}
             {activePage === 'coleccion' && (
                 <div className="alp-section-area">
                     <AlbumsSectionNav active={activeSection} onChange={setActiveSection} />
                     <div className="alp-section-scroll">
                         {activeSection === 'legendary' && (
-                            <LegendaryAlbumsSection
-                                definitions={legendary}
-                                progress={progress}
-                                collection={collection}
-                            />
+                            <LegendaryAlbumsSection definitions={legendary} progress={progress} collection={collection} />
                         )}
                         {activeSection === 'stars' && !collectionLoading && (
-                            <StarCollectionSection
-                                collection={collection}
-                                allCards={allCards}
-                            />
+                            <StarCollectionSection collection={collection} allCards={allCards} />
                         )}
                         {activeSection === 'cult' && !collectionLoading && (
-                            <CultAlbumsSection
-                                definitions={cult}
-                                collection={collection}
-                                allCards={allCards}
-                                currentUserId={user?.id}
-                            />
+                            <CultAlbumsSection definitions={cult} collection={collection} allCards={allCards} currentUserId={user?.id} />
                         )}
                     </div>
                 </div>
             )}
 
-            {/* ══ MODAL ══════════════════════════════════════════════ */}
             <PackOpeningModal
                 isOpen={modalOpen}
                 phase={phase}

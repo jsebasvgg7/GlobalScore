@@ -54,7 +54,7 @@
 .scs2-row {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
+    gap: 14px;
     align-items: stretch;
 }
 
@@ -127,7 +127,7 @@
     position: relative;
     width: 100%;
     aspect-ratio: 3/4;
-    min-height: 160px;
+    min-height: 120px;
     z-index: 1;
     transition: box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
