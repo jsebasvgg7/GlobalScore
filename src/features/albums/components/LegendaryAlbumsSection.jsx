@@ -674,12 +674,6 @@ function StickerCard({ index, card, collectionItem, accent, slotType, reqLabel }
     return (
         <div className={`las2-sticker las2-sticker--empty${isReqSlot ? ' las2-sticker--req-empty' : ''}`}
             style={{ '--acc': accent }}>
-            {isReqSlot && (
-                <div className="las2-req-badge">
-                    <span className="las2-req-badge-stars">{reqLabel}</span>
-                    <span className="las2-req-badge-label">REQ</span>
-                </div>
-            )}
             <div className="las2-sticker-header">
                 <span className="las2-sticker-num">{num}</span>
             </div>

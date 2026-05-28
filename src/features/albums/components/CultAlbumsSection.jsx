@@ -462,81 +462,57 @@ function CultBook({ defId, meta, collection, allCards }) {
 
     return (
         <>
-            <div className="cas2-book-wrap">
-                {/* Páginas apiladas detrás */}
-                <div className="cas2-page-stack">
-                    {[2, 1, 0].map(i => (
-                        <div key={i} className="cas2-page-leaf" style={{ '--li': i, '--acc': meta.color }} />
-                    ))}
+            <button
+                className={`cas2-card${isCompleted ? ' cas2-card--done' : ''}`}
+                style={{
+                    '--spine': meta.color,
+                    '--spine-alt': meta.colorAlt,
+                    '--acc': meta.color,
+                    '--acc-rgb': meta.colorRgb,
+                    '--cover-bg': meta.coverBg,
+                }}
+                onClick={() => setPanelOpen(true)}
+            >
+                {/* Número en el lomo */}
+                <div className="cas2-card-number">{meta.number}</div>
+
+                {/* Tag */}
+                <div className="cas2-card-tag">{meta.tag}</div>
+
+                {/* Área de ilustración */}
+                <div className="cas2-card-art">
+                    <CultCoverIllustration
+                        defId={defId}
+                        color={meta.color}
+                        colorRgb={meta.colorRgb}
+                    />
                 </div>
 
-                <button
-                    className={`cas2-book${isCompleted ? ' cas2-book--done' : ''}`}
-                    style={{
-                        '--spine': meta.color,
-                        '--spine-alt': meta.colorAlt,
-                        '--acc': meta.color,
-                        '--acc-rgb': meta.colorRgb,
-                        '--cover-bg': meta.coverBg,
-                    }}
-                    onClick={() => setPanelOpen(true)}
-                >
-                    {/* Lomo */}
-                    <div className="cas2-spine">
-                        <span className="cas2-spine-num">{meta.number}</span>
-                        <span className="cas2-spine-label">{meta.shortLabel}</span>
-                        <div className="cas2-spine-lines">
-                            {[0, 1, 2].map(i => <div key={i} className="cas2-spine-line" />)}
-                        </div>
+                {/* Barra de progreso */}
+                <div className="cas2-card-progress">
+                    <div className="cas2-card-progress-bar">
+                        <div className="cas2-card-progress-fill" style={{ width: `${pct}%` }} />
                     </div>
-
-                    {/* Portada */}
-                    <div className="cas2-cover">
-                        <div className="cas2-cover-art">
-                            <CultCoverIllustration defId={defId} color={meta.color} colorRgb={meta.colorRgb} />
-                        </div>
-
-                        {/* Hebilla */}
-                        <div className="cas2-clasp">
-                            <div className="cas2-clasp-strap cas2-clasp-strap--top" />
-                            <div className="cas2-clasp-buckle"><div className="cas2-clasp-buckle-inner" /></div>
-                            <div className="cas2-clasp-strap cas2-clasp-strap--bot" />
-                        </div>
-
-                        {/* Cantoneras */}
-                        {['tl', 'tr', 'bl', 'br'].map(pos => (
-                            <div key={pos} className={`cas2-corner cas2-corner--${pos}`} />
-                        ))}
-
-                        <div className="cas2-cover-tag">{meta.tag}</div>
-                        <div className="cas2-cover-id">ID: CLT-{meta.number}</div>
-
-                        {/* Ícono central */}
-                        <div className="cas2-cover-title-block">
-                        </div>
-
-                        {/* Rarity badge */}
-                        <div className="cas2-rarity">
-                            <div className="cas2-rarity-stars">
-                                {Array.from({ length: meta.rarityLevel }, (_, i) => <span key={i}>★</span>)}
-                            </div>
-                            <span className="cas2-rarity-label">{meta.rarityLabel}</span>
-                        </div>
-
-                        {/* Footer del libro */}
-                        <div className="cas2-cover-footer">
-                            <div className="cas2-cover-footer-info">
-                                <span className="cas2-cover-count">{owned.length} / {total || '?'} CARTAS</span>
-                                {isCompleted && <span className="cas2-done-tick">✓</span>}
-                            </div>
-                            <div className="cas2-mini-bar">
-                                <div className="cas2-mini-bar-fill" style={{ width: `${pct}%` }} />
-                            </div>
-                            <span className="cas2-cover-hint">Abrir álbum →</span>
-                        </div>
+                    <div className="cas2-card-progress-info">
+                        <span>{owned.length} / {total || '?'} CARTAS</span>
+                        <span>{pct}%</span>
                     </div>
-                </button>
-            </div>
+                </div>
+
+                {/* Esquinas doradas */}
+                {['tl', 'tr', 'bl', 'br'].map(pos => (
+                    <div key={pos} className={`cas2-card-corner cas2-card-corner--${pos}`} />
+                ))}
+
+                {/* Broche lateral */}
+                <div className="cas2-card-clasp">
+                    <div className="cas2-card-clasp-strap cas2-card-clasp-strap--top" />
+                    <div className="cas2-card-clasp-buckle">
+                        <div className="cas2-card-clasp-buckle-inner" />
+                    </div>
+                    <div className="cas2-card-clasp-strap cas2-card-clasp-strap--bot" />
+                </div>
+            </button>
 
             {panelOpen && (
                 <CultPanel
@@ -550,6 +526,7 @@ function CultBook({ defId, meta, collection, allCards }) {
         </>
     );
 }
+
 
 // ── Ilustración de portada para el álbum especial ─────────────────────────────
 function SpecialCoverIllustration() {
@@ -898,79 +875,72 @@ function SpecialBook({ userId }) {
 
     return (
         <>
-            <div className="cas2-book-wrap">
-                <div className="cas2-page-stack">
-                    {[2, 1, 0].map(i => (
-                        <div key={i} className="cas2-page-leaf" style={{ '--li': i, '--acc': color }} />
-                    ))}
+            <button
+                className={[
+                    'cas2-card',
+                    'cas2-card--special',
+                    isCompleted ? 'cas2-card--done' : '',
+                    !loading && !hasAccess ? 'cas2-card--locked' : '',
+                ].filter(Boolean).join(' ')}
+                style={{
+                    '--spine': color,
+                    '--spine-alt': colorAlt,
+                    '--acc': color,
+                    '--acc-rgb': colorRgb,
+                    '--cover-bg': coverBg,
+                }}
+                onClick={() => !loading && setPanelOpen(true)}
+                disabled={loading}
+            >
+                {/* Número en el lomo */}
+                <div className="cas2-card-number">04</div>
+
+                {/* Tag */}
+                <div className="cas2-card-tag cas2-card-tag--special">ESPECIAL · ÚNICO</div>
+
+                {/* Área de ilustración */}
+                <div className="cas2-card-art">
+                    {!loading && !hasAccess ? (
+                        <div className="cas2-card-lock-art">
+                            <div className="cas2-card-lock-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4"
+                                    width="38" height="38" aria-hidden="true">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" />
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
+                            </div>
+                            <span className="cas2-card-lock-msg">BLOQUEADO</span>
+                        </div>
+                    ) : (
+                        <SpecialCoverIllustration />
+                    )}
                 </div>
 
-                <button
-                    className={`cas2-book${isCompleted ? ' cas2-book--done' : ''}${!loading && !hasAccess ? ' cas2-book--special-locked' : ''}`}
-                    style={{
-                        '--spine': color,
-                        '--spine-alt': colorAlt,
-                        '--acc': color,
-                        '--acc-rgb': colorRgb,
-                        '--cover-bg': coverBg,
-                    }}
-                    onClick={() => setPanelOpen(true)}
-                    disabled={loading}
-                >
-                    {/* Lomo */}
-                    <div className="cas2-spine">
-                        <span className="cas2-spine-num">04</span>
-                        <span className="cas2-spine-label">ÚNICOS</span>
-                        <div className="cas2-spine-lines">
-                            {[0, 1, 2].map(i => <div key={i} className="cas2-spine-line" />)}
-                        </div>
+                {/* Barra de progreso */}
+                <div className="cas2-card-progress">
+                    <div className="cas2-card-progress-bar">
+                        <div className="cas2-card-progress-fill" style={{ width: `${pct}%` }} />
                     </div>
-
-                    {/* Portada */}
-                    <div className="cas2-cover">
-                        <div className="cas2-cover-art">
-                            <SpecialCoverIllustration />
-                        </div>
-
-                        <div className="cas2-clasp">
-                            <div className="cas2-clasp-strap cas2-clasp-strap--top" />
-                            <div className="cas2-clasp-buckle"><div className="cas2-clasp-buckle-inner" /></div>
-                            <div className="cas2-clasp-strap cas2-clasp-strap--bot" />
-                        </div>
-
-                        {['tl', 'tr', 'bl', 'br'].map(pos => (
-                            <div key={pos} className={`cas2-corner cas2-corner--${pos}`} />
-                        ))}
-
-                        <div className="cas2-cover-tag">ESPECIAL · ÚNICO</div>
-                        <div className="cas2-cover-id">ID: SPL-UNIQUE</div>
-
-                        {/* Badge de rareza especial */}
-                        <div className="cas2-rarity cas2-rarity--special">
-                            <div className="cas2-rarity-stars">
-                                {[0, 1, 2, 3, 4].map(i => <span key={i}>✦</span>)}
-                            </div>
-                            <span className="cas2-rarity-label">IRREPETIBLE</span>
-                        </div>
-
-                        <div className="cas2-cover-footer">
-                            <div className="cas2-cover-footer-info">
-                                <span className="cas2-cover-count">{owned} / {total || '?'} CARTAS</span>
-                                {isCompleted && <span className="cas2-done-tick">✓</span>}
-                            </div>
-                            <div className="cas2-mini-bar">
-                                <div className="cas2-mini-bar-fill" style={{ width: `${pct}%` }} />
-                            </div>
-                            <span className="cas2-cover-hint">Abrir álbum →</span>
-                        </div>
+                    <div className="cas2-card-progress-info">
+                        <span>{owned} / {total || '?'} CARTAS</span>
+                        <span>{pct}%</span>
                     </div>
-                </button>
+                </div>
 
-                {/* Etiqueta BLOQUEADO — visible solo cuando no hay acceso */}
-                {!loading && !hasAccess && (
-                    <span className="cas2-locked-label">BLOQUEADO</span>
-                )}
-            </div>
+                {/* Esquinas doradas */}
+                {['tl', 'tr', 'bl', 'br'].map(pos => (
+                    <div key={pos} className={`cas2-card-corner cas2-card-corner--${pos}`} />
+                ))}
+
+                {/* Broche lateral */}
+                <div className="cas2-card-clasp">
+                    <div className="cas2-card-clasp-strap cas2-card-clasp-strap--top" />
+                    <div className="cas2-card-clasp-buckle">
+                        <div className="cas2-card-clasp-buckle-inner" />
+                    </div>
+                    <div className="cas2-card-clasp-strap cas2-card-clasp-strap--bot" />
+                </div>
+            </button>
 
             {panelOpen && (
                 <SpecialPanel
@@ -982,6 +952,7 @@ function SpecialBook({ userId }) {
         </>
     );
 }
+
 
 // ══════════════════════════════════════════════════════════════
 //  EXPORT PRINCIPAL

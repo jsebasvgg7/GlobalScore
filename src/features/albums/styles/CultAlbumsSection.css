@@ -13,7 +13,10 @@
 .cas2-root {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
 }
 
 .cas2-eyebrow {
@@ -53,25 +56,45 @@
 
 .cas2-row {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 14px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
     align-items: stretch;
-    justify-content: start;
+    padding: 0 8px;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    max-width: 1000px;
+}
+
+/* El cas2-card debe tener el mismo min-height que las2-card */
+.cas2-card {
+    min-height: 260px;
 }
 
 @media (max-width: 780px) {
     .cas2-row {
         grid-template-columns: repeat(2, 1fr);
-        gap: 18px;
+        gap: 16px;
+        max-width: none;
+    }
+
+    .cas2-card {
+        min-height: 200px;
     }
 }
 
 @media (max-width: 440px) {
     .cas2-row {
-        grid-template-columns: repeat(1, 1fr);
-        gap: 14px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        max-width: none;
+    }
+
+    .cas2-card {
+        min-height: 160px;
     }
 }
+
 
 .cas2-book-wrap {
     position: relative;
@@ -1633,11 +1656,6 @@
     color: #c084fc;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   ÁLBUM ESPECIAL — Estado bloqueado (usuario sin acceso)
-   Clase .cas2-book--special-locked en el <button> del libro
-══════════════════════════════════════════════════════════════ */
-
 .cas2-book--special-locked {
     cursor: default;
     pointer-events: none;
@@ -1707,4 +1725,363 @@
     white-space: nowrap;
     pointer-events: none;
     text-transform: uppercase;
+}
+
+/* ── cas2-card: nueva tarjeta tipo libro (mismo patrón que las2-card) ── */
+.cas2-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    background: var(--cover-bg, #0f0d1a);
+    border-radius: 4px 6px 6px 4px;
+    box-shadow:
+        inset 18px 0 0 0 var(--spine, #5b4fd8),
+        inset 19px 0 0 0 color-mix(in srgb, var(--spine, #5b4fd8) 60%, black),
+        inset 22px 0 12px -10px rgba(0, 0, 0, 0.55),
+        inset 5px 0 4px -2px rgba(255, 255, 255, 0.12),
+        4px 8px 0 rgba(0, 0, 0, 0.35),
+        8px 18px 30px rgba(0, 0, 0, 0.28),
+        inset -2px 0 0 0 rgba(var(--acc-rgb, 91, 79, 216), 0.45);
+    overflow: visible;
+    transition:
+        transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cas2-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        repeating-linear-gradient(0deg,
+            transparent,
+            transparent 3px,
+            rgba(255, 255, 255, 0.012) 3px,
+            rgba(255, 255, 255, 0.012) 4px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.cas2-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.07) 0%,
+            transparent 38%,
+            transparent 62%,
+            rgba(255, 255, 255, 0.03) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cas2-card:not(:disabled):hover {
+    transform: translateY(-10px) rotate(-1deg);
+    box-shadow:
+        inset 18px 0 0 0 var(--spine, #5b4fd8),
+        inset 19px 0 0 0 color-mix(in srgb, var(--spine, #5b4fd8) 60%, black),
+        inset 22px 0 12px -10px rgba(0, 0, 0, 0.55),
+        inset 5px 0 4px -2px rgba(255, 255, 255, 0.14),
+        6px 20px 0 rgba(0, 0, 0, 0.38),
+        14px 32px 48px rgba(0, 0, 0, 0.38),
+        inset -2px 0 0 0 rgba(var(--acc-rgb, 91, 79, 216), 0.6),
+        0 0 0 1px rgba(var(--acc-rgb, 91, 79, 216), 0.18);
+}
+
+/* ── Variante especial (púrpura) ── */
+.cas2-card--special {
+    box-shadow:
+        inset 18px 0 0 0 var(--spine, #a855f7),
+        inset 19px 0 0 0 color-mix(in srgb, var(--spine, #a855f7) 60%, black),
+        inset 22px 0 12px -10px rgba(0, 0, 0, 0.55),
+        inset 5px 0 4px -2px rgba(255, 255, 255, 0.14),
+        4px 8px 0 rgba(0, 0, 0, 0.35),
+        8px 18px 30px rgba(0, 0, 0, 0.28),
+        inset -2px 0 0 0 rgba(168, 85, 247, 0.5),
+        0 0 0 1px rgba(168, 85, 247, 0.1);
+}
+
+/* ── Variante bloqueada ── */
+.cas2-card--locked {
+    opacity: 0.55;
+    filter: grayscale(0.5) brightness(0.8);
+    cursor: not-allowed;
+}
+
+/* ── Número en el lomo ── */
+.cas2-card-number {
+    position: absolute;
+    top: 9px;
+    left: 4px;
+    width: 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.55);
+    text-align: center;
+    letter-spacing: 0.05em;
+    z-index: 4;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    line-height: 1;
+}
+
+/* ── Tag (top-right) ── */
+.cas2-card-tag {
+    position: absolute;
+    top: 8px;
+    right: 7px;
+    z-index: 4;
+    font-family: 'DM Mono', monospace;
+    font-size: 5.5px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(var(--acc-rgb, 91, 79, 216), 0.85);
+    background: rgba(var(--acc-rgb, 91, 79, 216), 0.08);
+    border: 0.5px solid rgba(var(--acc-rgb, 91, 79, 216), 0.28);
+    padding: 2px 5px;
+    border-radius: 2px;
+}
+
+.cas2-card-tag--special {
+    color: #c084fc;
+    background: rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.35);
+    animation: cas2-tag-special 2.5s ease-in-out infinite;
+}
+
+@keyframes cas2-tag-special {
+
+    0%,
+    100% {
+        box-shadow: none;
+    }
+
+    50% {
+        box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+    }
+}
+
+/* ── Área de ilustración central ── */
+.cas2-card-art {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 18px;
+    padding: 10px 6px 6px;
+    overflow: hidden;
+}
+
+.cas2-card-art svg,
+.cas2-card-art>* {
+    width: 100%;
+    height: 100%;
+}
+
+/* ── Lock art (álbum bloqueado) ── */
+.cas2-card-lock-art {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+}
+
+.cas2-card-lock-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.22);
+    position: relative;
+}
+
+.cas2-card-lock-icon::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    animation: cas2-lock-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes cas2-lock-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    70%,
+    100% {
+        transform: scale(1.7);
+        opacity: 0;
+    }
+}
+
+.cas2-card-lock-msg {
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+/* ── Barra de progreso (bottom) ── */
+.cas2-card-progress {
+    position: relative;
+    z-index: 3;
+    margin-left: 18px;
+    padding: 0 8px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.cas2-card-progress-bar {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.cas2-card-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg,
+            var(--acc, #5b4fd8) 0%,
+            color-mix(in srgb, var(--acc, #5b4fd8) 70%, #fff) 100%);
+    border-radius: 2px;
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 0 6px rgba(var(--acc-rgb, 91, 79, 216), 0.5);
+}
+
+.cas2-card-progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.06em;
+}
+
+/* ── Esquinas doradas ── */
+.cas2-card-corner {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    z-index: 5;
+    pointer-events: none;
+    background: linear-gradient(135deg, #e8c97a 0%, #b08a3c 50%, #d4aa60 100%);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.cas2-card-corner--tl {
+    top: 0;
+    left: 18px;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    border-radius: 1px 0 0 0;
+}
+
+.cas2-card-corner--tr {
+    top: 0;
+    right: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    border-radius: 0 1px 0 0;
+}
+
+.cas2-card-corner--bl {
+    bottom: 0;
+    left: 18px;
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+    border-radius: 0 0 0 1px;
+}
+
+.cas2-card-corner--br {
+    bottom: 0;
+    right: 0;
+    clip-path: polygon(100% 0, 0 100%, 100% 100%);
+    border-radius: 0 0 1px 0;
+}
+
+/* ── Broche lateral derecho ── */
+.cas2-card-clasp {
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+}
+
+.cas2-card-clasp-strap--top,
+.cas2-card-clasp-strap--bot {
+    width: 5px;
+    height: 20px;
+    background: linear-gradient(90deg,
+            color-mix(in srgb, var(--acc, #5b4fd8) 35%, #7a6a50) 0%,
+            #c8a860 55%,
+            #8a6840 100%);
+    border-radius: 1px;
+}
+
+.cas2-card-clasp-buckle {
+    width: 9px;
+    height: 13px;
+    background: linear-gradient(135deg, #e0c080 0%, #8a6030 45%, #c8a050 100%);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.cas2-card-clasp-buckle-inner {
+    width: 5px;
+    height: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    border-radius: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.22), transparent);
+}
+
+@media (max-width: 780px) {
+    .cas2-card {
+        min-height: 170px;
+    }
+
+    .cas2-card-corner {
+        width: 9px;
+        height: 9px;
+    }
+}
+
+@media (max-width: 440px) {
+    .cas2-card {
+        min-height: 140px;
+    }
 }
