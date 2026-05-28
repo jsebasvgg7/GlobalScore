@@ -224,13 +224,12 @@ function BoostProgressBar({ boostActive, boostPacksRemaining, packsOpenedSinceLa
     const PACKS_PER_BOOST = 10;
     const progress = boostActive ? 100 : Math.min((packsOpenedSinceLast / PACKS_PER_BOOST) * 100, 100);
 
-    // 5 nodes: START + 4 rewards
     const nodes = [
         { pos: 0, label: 'Inicio', reward: null },
-        { pos: 25, label: '10 Sobre\nPremium', reward: '10' },
-        { pos: 50, label: '20 Boost\nÉpico', reward: '20', isCurrent: true },
-        { pos: 75, label: '30 Sobre\nÉlite', reward: '30' },
-        { pos: 100, label: '40 Álbum\nEspecial', reward: '👑' },
+        { pos: 25, label: '10\nPremium', reward: '10' },
+        { pos: 50, label: '20\nÉpico', reward: '20' },
+        { pos: 75, label: '30\nÉlite', reward: '30' },
+        { pos: 100, label: '40\nEspecial', reward: '👑' },
     ];
 
     return (
@@ -240,14 +239,10 @@ function BoostProgressBar({ boostActive, boostPacksRemaining, packsOpenedSinceLa
                 <button className="alp-boost-bar-ver">Ver todo →</button>
             </div>
 
-            {/* Connected milestone track */}
             <div className="alp-season-track">
-                {/* Background track line */}
                 <div className="alp-season-track-line">
                     <div className="alp-season-track-fill" style={{ width: `${progress}%` }} />
                 </div>
-
-                {/* Nodes */}
                 <div className="alp-season-nodes">
                     {nodes.map((node, i) => {
                         const passed = progress >= node.pos;
@@ -267,21 +262,35 @@ function BoostProgressBar({ boostActive, boostPacksRemaining, packsOpenedSinceLa
                 </div>
             </div>
 
-            {/* Boost status row */}
-            <div className="alp-boost-info-row">
+            {/* Boost status card */}
+            <div className={`alp-boost-info-row${boostActive ? ' alp-boost-info-row--active' : ''}`}>
                 {boostActive ? (
                     <>
-                        <span className="alp-boost-active-tag">⚡ BOOST ACTIVO</span>
-                        <span className="alp-boost-packs-left">
-                            <strong>{boostPacksRemaining}</strong> / 5 sobres restantes
-                        </span>
+                        <div className="alp-boost-info-left">
+                            <span className="alp-boost-info-icon">⚡</span>
+                            <div className="alp-boost-info-texts">
+                                <span className="alp-boost-active-tag">Boost activo</span>
+                                <span className="alp-boost-active-sub">+25% probabilidades</span>
+                            </div>
+                        </div>
+                        <div className={`alp-boost-packs-left alp-boost-packs-left--active`}>
+                            <strong>{boostPacksRemaining}</strong>
+                            / 5 sobres
+                        </div>
                     </>
                 ) : (
                     <>
-                        <span className="alp-boost-inactive-tag">Próximo boost</span>
-                        <span className="alp-boost-packs-left">
-                            <strong>{PACKS_PER_BOOST - packsOpenedSinceLast}</strong> sobres para boost
-                        </span>
+                        <div className="alp-boost-info-left">
+                            <span className="alp-boost-info-icon">🎯</span>
+                            <div className="alp-boost-info-texts">
+                                <span className="alp-boost-inactive-tag">Próximo boost</span>
+                                <span className="alp-boost-inactive-sub">cada 10 sobres</span>
+                            </div>
+                        </div>
+                        <div className="alp-boost-packs-left">
+                            <strong>{PACKS_PER_BOOST - packsOpenedSinceLast}</strong>
+                            sobres restantes
+                        </div>
                     </>
                 )}
             </div>
@@ -483,7 +492,8 @@ export default function AlbumsPage({ currentUser }) {
 
     return (
         <div className="alp-root">
-            <AlbumsPageNav active={activePage} onChange={setActivePage} />
+            {/* por ahora no se habilitara la nav primero trabajaremos en los albums*/}
+            {/* <AlbumsPageNav active={activePage} onChange={setActivePage} /> */}
 
             {activePage === 'resumen' && (
                 <>

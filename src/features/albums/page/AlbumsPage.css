@@ -39,12 +39,12 @@
 }
 
 /* ══════════════════════════════════════════════
-   BODY — 57% izq / 43% der
+   BODY — 63% izq / 37% der
 ══════════════════════════════════════════════ */
 .alp-body {
     flex-shrink: 0;
     display: grid;
-    grid-template-columns: 57fr 43fr;
+    grid-template-columns: 63fr 37fr;
     border-bottom: 0.5px solid #d4cfc8;
     height: 54%;
 }
@@ -717,10 +717,10 @@
 
 /* ── Boost bar (compacta) ── */
 .alp-boost-bar {
-    padding: 14px 18px 12px;
+    padding: 16px 20px 14px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     flex-shrink: 0;
     border-bottom: 0.5px solid #d4cfc8;
 }
@@ -759,6 +759,9 @@
     padding: 0;
     opacity: .65;
     transition: opacity .15s;
+    display: flex;
+    align-items: center;
+    gap: 3px;
 }
 
 .alp-boost-bar-ver:hover {
@@ -772,20 +775,17 @@
 /* ── Connected Season Track ── */
 .alp-season-track {
     position: relative;
-    padding: 4px 2px 2px;
+    padding: 6px 2px 4px;
 }
 
-/* The horizontal line behind nodes */
 .alp-season-track-line {
     position: absolute;
-    top: 50%;
-    left: 12px;
-    right: 12px;
+    top: 17px;
+    left: 20px;
+    right: 20px;
     height: 3px;
     background: rgba(91, 79, 216, .12);
     border-radius: 2px;
-    transform: translateY(-10px);
-    /* align with node centers */
     overflow: hidden;
 }
 
@@ -804,7 +804,6 @@
     background: linear-gradient(90deg, #d97706, #f59e0b);
 }
 
-/* Nodes row */
 .alp-season-nodes {
     position: relative;
     display: flex;
@@ -817,13 +816,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     flex: 1;
 }
 
 .alp-season-node {
-    width: 22px;
-    height: 22px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     border: 2px solid #d4cfc8;
     background: #f0ede8;
@@ -831,7 +830,7 @@
     align-items: center;
     justify-content: center;
     font-family: 'DM Mono', monospace;
-    font-size: 7px;
+    font-size: 8px;
     font-weight: 700;
     color: #a0a0b0;
     transition: all .25s;
@@ -863,12 +862,12 @@
 }
 
 .alp-season-node-check {
-    font-size: 10px;
+    font-size: 11px;
     line-height: 1;
 }
 
 .alp-season-node-val {
-    font-size: 7px;
+    font-size: 8px;
     font-weight: 800;
 }
 
@@ -878,7 +877,7 @@
     font-weight: 600;
     text-align: center;
     color: #a0a0b0;
-    line-height: 1.35;
+    line-height: 1.4;
     white-space: pre-line;
 }
 
@@ -886,7 +885,6 @@
     color: #5A5572;
 }
 
-.alp-season-node--passed+.alp-season-node-label,
 .alp-season-node-wrap:has(.alp-season-node--passed) .alp-season-node-label {
     color: #5b4fd8;
 }
@@ -895,10 +893,42 @@
     color: #A599D9;
 }
 
+/* ── Boost status card ── */
 .alp-boost-info-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 4px;
+    border: 1px solid rgba(91, 79, 216, .15);
+    background: rgba(91, 79, 216, .04);
+}
+
+[data-theme="dark"] .alp-boost-info-row {
+    border-color: rgba(139, 127, 199, .18);
+    background: rgba(139, 127, 199, .06);
+}
+
+.alp-boost-info-row--active {
+    border-color: rgba(245, 158, 11, .25);
+    background: rgba(245, 158, 11, .05);
+}
+
+.alp-boost-info-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.alp-boost-info-icon {
+    font-size: 14px;
+    line-height: 1;
+}
+
+.alp-boost-info-texts {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
 }
 
 .alp-boost-active-tag {
@@ -906,19 +936,18 @@
     font-size: 9px;
     font-weight: 700;
     color: #f59e0b;
-    animation: alp-tag-pulse 1.5s ease-in-out infinite;
+    letter-spacing: .08em;
+    text-transform: uppercase;
 }
 
-@keyframes alp-tag-pulse {
+.alp-boost-active-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: #a0a0b0;
+}
 
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: .6;
-    }
+[data-theme="dark"] .alp-boost-active-sub {
+    color: #5A5572;
 }
 
 .alp-boost-inactive-tag {
@@ -926,25 +955,41 @@
     font-size: 9px;
     font-weight: 700;
     color: #a0a0b0;
+    letter-spacing: .06em;
+    text-transform: uppercase;
 }
 
-[data-theme="dark"] .alp-boost-inactive-tag {
-    color: #5A5572;
+.alp-boost-inactive-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: #b0b0c0;
+}
+
+[data-theme="dark"] .alp-boost-inactive-sub {
+    color: #4A4462;
 }
 
 .alp-boost-packs-left {
     font-family: 'DM Mono', monospace;
     font-size: 9px;
     color: #a0a0b0;
+    text-align: right;
 }
 
 .alp-boost-packs-left strong {
+    display: block;
+    font-size: 16px;
+    font-weight: 800;
     color: #5b4fd8;
-    font-size: 11px;
+    line-height: 1.1;
 }
 
 [data-theme="dark"] .alp-boost-packs-left strong {
     color: #A599D9;
+}
+
+.alp-boost-packs-left--active strong {
+    color: #f59e0b;
 }
 
 /* ── Pack 3D — todo centrado ── */
