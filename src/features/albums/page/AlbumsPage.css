@@ -707,6 +707,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    min-height: 0;
 }
 
 .alp-right-divider {
@@ -953,22 +954,41 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    padding: 16px 20px 20px;
+    padding: 20px 28px;
+    overflow: hidden;
+    min-height: 0;
+    gap: 14px;
+    width: 100%;
+}
+
+.alp-pack3d-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+}
+
+.alp-pack3d-row-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
 }
 
 /* Sobre centrado */
 .alp-pack3d-stack {
     position: relative;
-    width: 120px;
-    height: 158px;
+    width: 130px;
+    height: 172px;
     flex-shrink: 0;
 }
 
 .alp-pack3d-shadow {
     position: absolute;
-    width: 98px;
-    height: 130px;
+    width: 106px;
+    height: 140px;
     border-radius: 6px;
     background: linear-gradient(135deg, #7B6FE8, #4a3fc7);
 }
@@ -1008,26 +1028,27 @@
 }
 
 .alp-pack3d-svg {
-    width: 120px;
-    height: 158px;
+    width: 130px;
+    height: 172px;
 }
 
 /* Info debajo del sobre — centrada */
 .alp-pack3d-info {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    text-align: center;
-    width: 100%;
-    max-width: 220px;
+    align-items: flex-start;
+    gap: 8px;
+    text-align: left;
+    flex: 1;
 }
 
 .alp-pack3d-count-row {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 8px;
+    width: 100%;
+    padding-left: 4px;
 }
 
 .alp-pack3d-label {
@@ -1058,7 +1079,7 @@
 }
 
 .alp-pack3d-desc {
-    font-size: 11px;
+    font-size: 13px;
     color: #7a7690;
     margin: 0;
     line-height: 1.5;
@@ -1073,12 +1094,12 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 10px 22px;
+    padding: 13px 32px;
     border: none;
     background: #5b4fd8;
     color: #fff;
     font-family: 'DM Mono', monospace;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: .1em;
     text-transform: uppercase;

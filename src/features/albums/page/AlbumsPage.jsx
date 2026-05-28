@@ -295,65 +295,69 @@ function BoostProgressBar({ boostActive, boostPacksRemaining, packsOpenedSinceLa
 function Pack3D({ count, onClick }) {
     return (
         <div className="alp-pack3d-wrap">
-            {/* Sobre SVG grande centrado */}
-            <div className="alp-pack3d-stack">
-                <div className="alp-pack3d-shadow alp-pack3d-shadow--3" />
-                <div className="alp-pack3d-shadow alp-pack3d-shadow--2" />
-                <div className="alp-pack3d-main">
-                    <svg viewBox="0 0 90 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="alp-pack3d-svg">
-                        <defs>
-                            <linearGradient id="packGrad2" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stopColor="#7B6FE8" />
-                                <stop offset="100%" stopColor="#4a3fc7" />
-                            </linearGradient>
-                            <linearGradient id="packShine2" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
-                                <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-                            </linearGradient>
-                            <linearGradient id="packTab2" x1="0" y1="0" x2="1" y2="0">
-                                <stop offset="0%" stopColor="#5b4fd8" />
-                                <stop offset="100%" stopColor="#8b7fc7" />
-                            </linearGradient>
-                        </defs>
-                        <ellipse cx="45" cy="112" rx="30" ry="5" fill="rgba(91,79,216,0.25)" />
-                        <rect x="8" y="22" width="74" height="90" rx="6" fill="url(#packGrad2)" />
-                        <rect x="8" y="22" width="74" height="90" rx="6" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-                        <rect x="8" y="22" width="74" height="24" rx="6" fill="url(#packTab2)" />
-                        <rect x="8" y="34" width="74" height="12" fill="url(#packTab2)" />
-                        <line x1="8" y1="46" x2="82" y2="46" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeDasharray="4 3" />
-                        <line x1="22" y1="22" x2="22" y2="112" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" />
-                        {[58, 68, 78, 88, 98].map(y => (
-                            <line key={y} x1="28" y1={y} x2="76" y2={y} stroke="rgba(255,255,255,0.1)" strokeWidth="0.8" />
-                        ))}
-                        <path d="M45 54 L56 59 L56 70 C56 76 45 81 45 81 C45 81 34 76 34 70 L34 59 Z"
-                            fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
-                        <circle cx="45" cy="67" r="4" fill="rgba(255,255,255,0.2)" />
-                        <rect x="8" y="22" width="38" height="90" rx="6" fill="url(#packShine2)" />
-                        <circle cx="68" cy="32" r="1.5" fill="rgba(255,255,255,0.6)" />
-                        <circle cx="75" cy="38" r="1" fill="rgba(255,255,255,0.4)" />
-                        <circle cx="63" cy="40" r="0.8" fill="rgba(255,255,255,0.3)" />
-                    </svg>
-                </div>
+            {/* Badge encima de todo */}
+            <div className="alp-pack3d-count-row">
+                <span className="alp-pack3d-label">Sobres disponibles</span>
+                {count > 0 && <span className="alp-pack3d-badge">{count}</span>}
             </div>
 
-            {/* Info centrada debajo del sobre */}
-            <div className="alp-pack3d-info">
-                <div className="alp-pack3d-count-row">
-                    <span className="alp-pack3d-label">Sobres disponibles</span>
-                    {count > 0 && <span className="alp-pack3d-badge">{count}</span>}
+            {/* Fila: sobre izq + info der */}
+            <div className="alp-pack3d-row">
+                <div className="alp-pack3d-stack">
+                    <div className="alp-pack3d-shadow alp-pack3d-shadow--3" />
+                    <div className="alp-pack3d-shadow alp-pack3d-shadow--2" />
+                    <div className="alp-pack3d-main">
+                        <svg viewBox="0 0 90 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="alp-pack3d-svg">
+                            <defs>
+                                <linearGradient id="packGrad2" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stopColor="#7B6FE8" />
+                                    <stop offset="100%" stopColor="#4a3fc7" />
+                                </linearGradient>
+                                <linearGradient id="packShine2" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
+                                    <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+                                </linearGradient>
+                                <linearGradient id="packTab2" x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stopColor="#5b4fd8" />
+                                    <stop offset="100%" stopColor="#8b7fc7" />
+                                </linearGradient>
+                            </defs>
+                            <ellipse cx="45" cy="112" rx="30" ry="5" fill="rgba(91,79,216,0.25)" />
+                            <rect x="8" y="22" width="74" height="90" rx="6" fill="url(#packGrad2)" />
+                            <rect x="8" y="22" width="74" height="90" rx="6" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+                            <rect x="8" y="22" width="74" height="24" rx="6" fill="url(#packTab2)" />
+                            <rect x="8" y="34" width="74" height="12" fill="url(#packTab2)" />
+                            <line x1="8" y1="46" x2="82" y2="46" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeDasharray="4 3" />
+                            <line x1="22" y1="22" x2="22" y2="112" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" />
+                            {[58, 68, 78, 88, 98].map(y => (
+                                <line key={y} x1="28" y1={y} x2="76" y2={y} stroke="rgba(255,255,255,0.1)" strokeWidth="0.8" />
+                            ))}
+                            <path d="M45 54 L56 59 L56 70 C56 76 45 81 45 81 C45 81 34 76 34 70 L34 59 Z"
+                                fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+                            <circle cx="45" cy="67" r="4" fill="rgba(255,255,255,0.2)" />
+                            <rect x="8" y="22" width="38" height="90" rx="6" fill="url(#packShine2)" />
+                            <circle cx="68" cy="32" r="1.5" fill="rgba(255,255,255,0.6)" />
+                            <circle cx="75" cy="38" r="1" fill="rgba(255,255,255,0.4)" />
+                            <circle cx="63" cy="40" r="0.8" fill="rgba(255,255,255,0.3)" />
+                        </svg>
+                    </div>
                 </div>
-                <p className="alp-pack3d-desc">
-                    {count > 0
-                        ? `Tienes ${count} ${count === 1 ? 'sobre listo' : 'sobres listos'} para abrir.`
-                        : 'No hay sobres disponibles. ¡Sigue jugando para ganar más!'}
-                </p>
-                {count > 0 && (
-                    <button className="alp-pack3d-btn" onClick={onClick}>
-                        <Package size={15} strokeWidth={2} />
-                        Abrir sobres
-                    </button>
-                )}
-                <button className="alp-pack3d-rarity-link">Ver probabilidad de rarezas →</button>
+
+                {/* Info derecha */}
+                <div className="alp-pack3d-info">
+                    <p className="alp-pack3d-desc">
+                        {count > 0
+                            ? `Tienes ${count} ${count === 1 ? 'sobre listo' : 'sobres listos'} para abrir.`
+                            : 'No hay sobres disponibles. ¡Sigue jugando para ganar más!'}
+                    </p>
+                    {count > 0 && (
+                        <button className="alp-pack3d-btn" onClick={onClick}>
+                            <Package size={15} strokeWidth={2} />
+                            Abrir sobres
+                        </button>
+                    )}
+                    <button className="alp-pack3d-rarity-link">Ver probabilidad de rarezas →</button>
+                </div>
             </div>
         </div>
     );
