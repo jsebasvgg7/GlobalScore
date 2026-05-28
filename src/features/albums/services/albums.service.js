@@ -174,14 +174,9 @@ function rollRandom(cards) {
 }
 
 export async function openPack(userId) {
-    const { data: packs, error: consumeError } = await supabase
-        .rpc('consume_pack', { p_user_id: userId });
-
-    if (consumeError) {
-        if (consumeError.message?.includes('NO_PACKS_AVAILABLE')) {
-            throw new Error('No hay sobres disponibles');
-        }
-        throw consumeError;
+    const packs = await getUserPacks(userId);
+    if (!packs || packs.packs_available < 1) {
+        throw new Error('No hay sobres disponibles');
     }
 
     const [players, teams, competitions, events] = await Promise.all([
@@ -191,14 +186,48 @@ export async function openPack(userId) {
         getAlbumCardsByType('event'),
     ]);
 
-    const boosted = packs.boost_active;       // ya actualizado por el RPC
-    const boostTriggered = packs.boost_packs_remaining === 3 && boosted; // recién activado
-
+    const boosted = packs.boost_active === true;
     const drawnPlayer = rollPlayerByRarity(players, boosted);
     const drawnTeam = rollRandom(teams);
     const drawnCompetition = rollRandom(competitions);
     const drawnEvent = rollRandom(events);
     const drawn = [drawnPlayer, drawnTeam, drawnCompetition, drawnEvent].filter(Boolean);
+
+    const newTotalOpened = packs.total_packs_opened + 1;
+    const boostTriggered = packs.total_packs_opened > 0 && newTotalOpened % 10 === 0;
+
+    let newBoostActive = boosted;
+    let newBoostRemaining = packs.boost_packs_remaining ?? 0;
+
+    if (boostTriggered) {
+        newBoostActive = true;
+        newBoostRemaining = 3;
+    } else if (boosted) {
+        newBoostRemaining = newBoostRemaining - 1;
+        if (newBoostRemaining <= 0) {
+            newBoostActive = false;
+            newBoostRemaining = 0;
+        }
+    }
+
+    // Optimistic lock: solo actualiza si packs_available no cambió desde que lo leímos
+    const { data: updated, error: packError } = await supabase
+        .from('album_packs')
+        .update({
+            packs_available: packs.packs_available - 1,
+            total_packs_opened: newTotalOpened,
+            boost_active: newBoostActive,
+            boost_packs_remaining: newBoostRemaining,
+            updated_at: new Date().toISOString(),
+        })
+        .eq('user_id', userId)
+        .eq('packs_available', packs.packs_available)  // <-- esto es el lock
+        .select();
+
+    if (packError) throw packError;
+    if (!updated || updated.length === 0) {
+        throw new Error('No hay sobres disponibles');
+    }
 
     for (const card of drawn) {
         await upsertCollectionCard(userId, card.id);

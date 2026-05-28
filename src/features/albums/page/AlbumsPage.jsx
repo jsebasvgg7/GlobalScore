@@ -263,7 +263,6 @@ function BoostProgressBar({ boostActive, boostPacksRemaining, packsOpenedSinceLa
                 {boostActive ? (
                     <>
                         <div className="alp-boost-info-left">
-                            <span className="alp-boost-info-icon">RUN</span>
                             <div className="alp-boost-info-texts">
                                 <span className="alp-boost-active-tag">Boost activo</span>
                                 <span className="alp-boost-active-sub">+25% probabilidades</span>
