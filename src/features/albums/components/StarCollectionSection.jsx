@@ -589,78 +589,62 @@ function StarBook({ level, meta, collection, allCards }) {
 
     return (
         <>
-            <div className="scs2-book-wrap">
-                <div className="scs2-page-stack">
-                    {[2, 1, 0].map(i => (
-                        <div key={i} className="scs2-page-leaf" style={{ '--li': i, '--acc': meta.accent }} />
-                    ))}
+            <button
+                className={[
+                    'scs2-card',
+                    isCompleted ? 'scs2-card--done' : '',
+                    meta.golden ? 'scs2-card--golden' : '',
+                ].filter(Boolean).join(' ')}
+                style={{
+                    '--spine': meta.spine,
+                    '--spine-alt': meta.spineAlt,
+                    '--acc': meta.accent,
+                    '--acc-rgb': meta.accentRgb,
+                    '--cover-bg': meta.coverBg,
+                }}
+                onClick={() => setPanelOpen(true)}
+            >
+                {/* Número en el lomo */}
+                <div className="scs2-card-number">{meta.number}</div>
+
+                {/* Tag nivel */}
+                <div className="scs2-card-tag">{meta.tag}</div>
+
+                {/* Área de ilustración */}
+                <div className="scs2-card-art">
+                    <StarCoverIllustration
+                        level={level}
+                        accent={meta.accent}
+                        accentRgb={meta.accentRgb}
+                        locked={false}
+                    />
                 </div>
 
-                <button
-                    className={`scs2-book${isCompleted ? ' scs2-book--done' : ''}${meta.golden ? ' scs2-book--golden' : ''}`}
-                    style={{
-                        '--spine': meta.spine,
-                        '--spine-alt': meta.spineAlt,
-                        '--acc': meta.accent,
-                        '--acc-rgb': meta.accentRgb,
-                        '--cover-bg': meta.coverBg,
-                    }}
-                    onClick={() => setPanelOpen(true)}
-                >
-                    {/* Lomo */}
-                    <div className="scs2-spine">
-                        <span className="scs2-spine-num">{meta.number}</span>
-                        <span className="scs2-spine-label">{meta.shortLabel}</span>
-                        <div className="scs2-spine-lines">
-                            {[0, 1, 2].map(i => <div key={i} className="scs2-spine-line" />)}
-                        </div>
+                {/* Barra de progreso */}
+                <div className="scs2-card-progress">
+                    <div className="scs2-card-progress-bar">
+                        <div className="scs2-card-progress-fill" style={{ width: `${pct}%` }} />
                     </div>
-
-                    {/* Portada */}
-                    <div className="scs2-cover">
-                        <div className="scs2-cover-art">
-                            <StarCoverIllustration level={level} accent={meta.accent} accentRgb={meta.accentRgb} locked={false} />
-                        </div>
-                        <div className="scs2-clasp">
-                            <div className="scs2-clasp-strap scs2-clasp-strap--top" />
-                            <div className="scs2-clasp-buckle"><div className="scs2-clasp-buckle-inner" /></div>
-                            <div className="scs2-clasp-strap scs2-clasp-strap--bot" />
-                        </div>
-                        {['tl', 'tr', 'bl', 'br'].map(pos => (
-                            <div key={pos} className={`scs2-corner scs2-corner--${pos}`} />
-                        ))}
-
-                        <div className="scs2-cover-tag">{meta.tag}</div>
-                        <div className="scs2-cover-id">ID: STR-{meta.number === '✦' ? 'GOAT' : meta.number}</div>
-
-                        <div className="scs2-cover-title-block">
-                            <div className="scs2-cover-stars-row">
-                                {Array.from({ length: 5 }, (_, i) => (
-                                    <span key={i} className={`scs2-cover-star${i < level ? ' scs2-cover-star--lit' : ''}`}>★</span>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="scs2-cover-footer">
-                            <div className="scs2-cover-footer-info">
-                                <span className="scs2-cover-count">{owned.length} / {total || '?'} JUGADORES</span>
-                                {isCompleted && <span className="scs2-done-tick">✓</span>}
-                            </div>
-                            <div className="scs2-mini-bar">
-                                <div className="scs2-mini-bar-fill" style={{ width: `${pct}%` }} />
-                            </div>
-                            <span className="scs2-cover-hint">Abrir álbum →</span>
-                        </div>
-
-                        <div className={`scs2-rarity${meta.golden ? ' scs2-rarity--golden' : ''}`}>
-                            <div className="scs2-rarity-stars">
-                                {Array.from({ length: meta.rarityLevel }, (_, i) => <span key={i}>★</span>)}
-                            </div>
-                            <span className="scs2-rarity-label">{meta.rarityLabel}</span>
-                        </div>
+                    <div className="scs2-card-progress-info">
+                        <span>{owned.length} / {total || '?'} JUGADORES</span>
+                        <span>{pct}%</span>
                     </div>
-                </button>
-            </div>
+                </div>
+
+                {/* Esquinas doradas */}
+                {['tl', 'tr', 'bl', 'br'].map(pos => (
+                    <div key={pos} className={`scs2-card-corner scs2-card-corner--${pos}`} />
+                ))}
+
+                {/* Broche lateral */}
+                <div className="scs2-card-clasp">
+                    <div className="scs2-card-clasp-strap scs2-card-clasp-strap--top" />
+                    <div className="scs2-card-clasp-buckle">
+                        <div className="scs2-card-clasp-buckle-inner" />
+                    </div>
+                    <div className="scs2-card-clasp-strap scs2-card-clasp-strap--bot" />
+                </div>
+            </button>
 
             {panelOpen && (
                 <StarPanel
@@ -674,6 +658,7 @@ function StarBook({ level, meta, collection, allCards }) {
         </>
     );
 }
+
 
 /* ══════════════════════════════════════════
    EXPORT PRINCIPAL
