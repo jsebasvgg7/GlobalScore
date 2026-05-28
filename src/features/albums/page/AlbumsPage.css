@@ -1401,24 +1401,8 @@
     }
 }
 
-@media (max-width: 640px) {
-    .alp-hero-layout {
-        flex-direction: column;
-    }
-
-    .alp-hero-book-wrap {
+@media (max-width: 768px) {
+    .alp-root {
         display: none;
-    }
-
-    .alp-hero-info {
-        padding: 16px;
-    }
-
-    .alp-carousel-header {
-        padding: 8px 14px;
-    }
-
-    .alp-section-scroll {
-        padding: 12px 14px 20px;
     }
 }

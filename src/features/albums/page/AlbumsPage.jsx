@@ -14,6 +14,7 @@ import StarCollectionSection from '../components/StarCollectionSection';
 import CultAlbumsSection from '../components/CultAlbumsSection';
 import PackOpeningModal from '../components/PackOpeningModal';
 import { useAlbumCards } from '../hooks/useAlbumCards';
+import AlbumsPageMobile from '../components/mobile/AlbumsPageMobile';
 import './AlbumsPage.css';
 
 // ── Helpers ───────────────────────────────────────────────────
@@ -491,79 +492,84 @@ export default function AlbumsPage({ currentUser }) {
     const activeCompleted = activeAlbumProgress?.is_completed ?? false;
 
     return (
-        <div className="alp-root">
-            {/* por ahora no se habilitara la nav primero trabajaremos en los albums*/}
-            {/* <AlbumsPageNav active={activePage} onChange={setActivePage} /> */}
+        <>
+            <div className="alp-root">
+                {/* por ahora no se habilitara la nav primero trabajaremos en los albums*/}
+                {/* <AlbumsPageNav active={activePage} onChange={setActivePage} /> */}
 
-            {activePage === 'resumen' && (
-                <>
-                    {/* ── BODY: panel izq grande + panel der ── */}
-                    <div className="alp-body">
+                {activePage === 'resumen' && (
+                    <>
+                        {/* ── BODY: panel izq grande + panel der ── */}
+                        <div className="alp-body">
 
-                        {/* Panel izquierdo 57% — libro hero */}
-                        <motion.aside
-                            className="alp-active-panel"
-                            variants={panelVariants} custom={1}
+                            {/* Panel izquierdo 57% — libro hero */}
+                            <motion.aside
+                                className="alp-active-panel"
+                                variants={panelVariants} custom={1}
+                                initial="hidden" animate="visible"
+                            >
+                                <ActiveAlbumHero
+                                    albumId={activeAlbum?.id}
+                                    name={activeAlbum?.name}
+                                    description={activeAlbum?.description}
+                                    pct={activePct}
+                                    filled={activeUnique}
+                                    total={activeRequired}
+                                    activeCompleted={activeCompleted}
+                                    onViewAlbum={() => setActivePage('coleccion')}
+                                />
+                            </motion.aside>
+
+                            {/* Panel derecho 43% — boost + sobre */}
+                            <motion.aside
+                                className="alp-right-panel"
+                                variants={panelVariants} custom={2}
+                                initial="hidden" animate="visible"
+                            >
+                                <BoostProgressBar
+                                    boostActive={boostActive}
+                                    boostPacksRemaining={boostPacksRemaining}
+                                    packsOpenedSinceLast={packsOpenedSinceLast ?? 0}
+                                />
+                                <div className="alp-right-divider" />
+                                <Pack3D count={packsAvailable} onClick={handleOpenModal} />
+                            </motion.aside>
+                        </div>
+
+                        {/* ── CARRUSEL INFERIOR ── */}
+                        <motion.div
+                            className="alp-carousel-area"
+                            variants={panelVariants} custom={3}
                             initial="hidden" animate="visible"
                         >
-                            <ActiveAlbumHero
-                                albumId={activeAlbum?.id}
-                                name={activeAlbum?.name}
-                                description={activeAlbum?.description}
-                                pct={activePct}
-                                filled={activeUnique}
-                                total={activeRequired}
-                                activeCompleted={activeCompleted}
-                                onViewAlbum={() => setActivePage('coleccion')}
+                            <AlbumsCarousel
+                                legendary={legendary}
+                                progress={progress}
+                                collection={collection}
+                                allCards={allCards}
+                                cult={cult}
+                                currentUserId={user?.id}
+                                collectionLoading={collectionLoading}
                             />
-                        </motion.aside>
+                        </motion.div>
+                    </>
+                )}
 
-                        {/* Panel derecho 43% — boost + sobre */}
-                        <motion.aside
-                            className="alp-right-panel"
-                            variants={panelVariants} custom={2}
-                            initial="hidden" animate="visible"
-                        >
-                            <BoostProgressBar
-                                boostActive={boostActive}
-                                boostPacksRemaining={boostPacksRemaining}
-                                packsOpenedSinceLast={packsOpenedSinceLast ?? 0}
-                            />
-                            <div className="alp-right-divider" />
-                            <Pack3D count={packsAvailable} onClick={handleOpenModal} />
-                        </motion.aside>
-                    </div>
+                <PackOpeningModal
+                    isOpen={modalOpen}
+                    phase={phase}
+                    result={result}
+                    packsAvailable={packsAvailable}
+                    isGoat={isGoat}
+                    isLegend={isLegend}
+                    onOpen={() => open(user?.id)}
+                    onClose={handleCloseModal}
+                    onReset={handleReset}
+                />
+            </div>
 
-                    {/* ── CARRUSEL INFERIOR ── */}
-                    <motion.div
-                        className="alp-carousel-area"
-                        variants={panelVariants} custom={3}
-                        initial="hidden" animate="visible"
-                    >
-                        <AlbumsCarousel
-                            legendary={legendary}
-                            progress={progress}
-                            collection={collection}
-                            allCards={allCards}
-                            cult={cult}
-                            currentUserId={user?.id}
-                            collectionLoading={collectionLoading}
-                        />
-                    </motion.div>
-                </>
-            )}
+            <AlbumsPageMobile />
 
-            <PackOpeningModal
-                isOpen={modalOpen}
-                phase={phase}
-                result={result}
-                packsAvailable={packsAvailable}
-                isGoat={isGoat}
-                isLegend={isLegend}
-                onOpen={() => open(user?.id)}
-                onClose={handleCloseModal}
-                onReset={handleReset}
-            />
-        </div>
+        </>
     );
 }
