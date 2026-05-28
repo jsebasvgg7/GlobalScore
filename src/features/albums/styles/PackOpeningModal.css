@@ -1620,32 +1620,33 @@
 .pom2-sticker-avatar-zone {
     flex: 1;
     display: flex;
-    align-items: stretch;
-    justify-content: stretch;
-    padding: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 0 4px;
     position: relative;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .pom2-sticker-img {
-    width: 100%;
-    height: 100%;
+    width: 72%;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     object-position: center top;
-    border-radius: 0;
+    border-radius: 50%;
     position: relative;
     z-index: 1;
     display: block;
-    flex: 1;
+    flex-shrink: 0;
+    border: 2px solid color-mix(in srgb, var(--acc, #8B7FC7) 55%, transparent);
 }
 
 .pom2-sticker-avatar {
-    width: 100%;
-    flex: 1;
-    border-radius: 0;
+    width: 72%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
     background: color-mix(in srgb, var(--acc, #8B7FC7) 12%, transparent);
-    border: none;
+    border: 2px solid color-mix(in srgb, var(--acc, #8B7FC7) 40%, transparent);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1655,26 +1656,24 @@
     position: relative;
     z-index: 1;
     letter-spacing: 0.04em;
+    flex-shrink: 0;
 }
 
-/* ring svg — hidden, kept for DOM compat */
+/* ring svg — overlay sobre toda la carta */
 .pom2-sticker-ring-svg {
-    display: none;
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+    opacity: 0.65;
 }
 
-/* Subtle gradient fade at bottom of image zone */
+/* sin gradiente fade — la imagen ya es circular */
 .pom2-sticker-avatar-zone::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 40%;
-    background: linear-gradient(to top,
-            color-mix(in srgb, var(--acc, #8B7FC7) 30%, transparent) 0%,
-            transparent 100%);
-    pointer-events: none;
-    z-index: 2;
+    display: none;
 }
 
 .pom2-sticker-stars {

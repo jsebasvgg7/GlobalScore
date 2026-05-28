@@ -71,16 +71,6 @@ function CardBack() {
     return (
         <div className="pom2-card-back">
             <div className="pom2-card-back-grid" aria-hidden="true" />
-            <div className="pom2-card-back-logo" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
-                    <path d="M24 4L6 12V24C6 33 14 41 24 44C34 41 42 33 42 24V12L24 4Z"
-                        stroke="currentColor" strokeWidth="1.5" strokeOpacity=".55"
-                        fill="none" strokeLinejoin="round" />
-                    <text x="24" y="29" textAnchor="middle"
-                        fontFamily="'DM Mono', monospace" fontSize="10"
-                        fontWeight="700" fill="currentColor" fillOpacity=".5">GA</text>
-                </svg>
-            </div>
             <span className="pom2-back-corner pom2-back-corner--tl">GA</span>
             <span className="pom2-back-corner pom2-back-corner--br">GA</span>
         </div>
@@ -121,21 +111,22 @@ function CardFront({ type, card, isGoat, index = 0 }) {
                 ) : (
                     <div className="pom2-sticker-avatar">{getInitials(card?.name)}</div>
                 )}
-                <svg className="pom2-sticker-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
-                    <defs>
-                        <linearGradient id={`sg-pom-${num}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor={color} stopOpacity="0.9" />
-                            <stop offset="50%" stopColor="#fff" stopOpacity="0.7" />
-                            <stop offset="100%" stopColor={color} stopOpacity="0.9" />
-                        </linearGradient>
-                    </defs>
-                    <circle cx="50" cy="50" r="46"
-                        fill="none"
-                        stroke={`url(#sg-pom-${num})`}
-                        strokeWidth="2"
-                        strokeDasharray={isGoatCard ? "none" : "6 3"} />
-                </svg>
             </div>
+
+            <svg className="pom2-sticker-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+                <defs>
+                    <linearGradient id={`sg-pom-${num}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor={color} stopOpacity="0.9" />
+                        <stop offset="50%" stopColor="#fff" stopOpacity="0.7" />
+                        <stop offset="100%" stopColor={color} stopOpacity="0.9" />
+                    </linearGradient>
+                </defs>
+                <circle cx="50" cy="48" r="43"
+                    fill="none"
+                    stroke={`url(#sg-pom-${num})`}
+                    strokeWidth="2"
+                    strokeDasharray={isGoatCard ? "none" : "6 3"} />
+            </svg>
 
             <div className="pom2-sticker-stars">
                 {isPlayer ? (
