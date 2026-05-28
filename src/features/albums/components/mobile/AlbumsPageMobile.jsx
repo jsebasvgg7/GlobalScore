@@ -329,17 +329,9 @@ function AlbumCarouselBlock({ title, icon: Icon, items, renderItem }) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// TAB: Álbumes — 3 carruseles: legendary, estrellas, culto
+// TAB: Álbumes — 3
 // ─────────────────────────────────────────────────────────────
-function AlbumsTab({
-    legendary,
-    progress,
-    collection,
-    allCards,
-    cult,
-    activeAlbumId,
-    currentUserId,
-}) {
+function AlbumsTab({ legendary, progress, collection, allCards, cult, activeAlbumId, currentUserId, forcedOpenAlbumId, onForcedOpenHandled }) {
     return (
         <div className="alb-mob-albums-tab">
 
@@ -351,11 +343,11 @@ function AlbumsTab({
                     <span className="alb-mob-carousel-count">{legendary?.length ?? 0}</span>
                 </div>
                 <div className="alb-mob-section-wrap">
-                    <LegendaryAlbumsSection
-                        definitions={legendary}
+                    <LegendaryAlbumsSection definitions={legendary}
                         progress={progress}
                         collection={collection}
-                    />
+                        forcedOpenAlbumId={forcedOpenAlbumId}
+                        onForcedOpenHandled={() => setForcedOpenAlbumId(null)} />
                 </div>
             </div>
 
@@ -422,6 +414,7 @@ export default function AlbumsPageMobile() {
     const [userId, setUserId] = useState(null);
     const [activeTab, setActiveTab] = useState('inicio');
     const [modalOpen, setModalOpen] = useState(false);
+    const [forcedOpenAlbumId, setForcedOpenAlbumId] = useState(null);
 
     useEffect(() => {
         supabase.auth.getUser().then(({ data }) => {
@@ -495,7 +488,7 @@ export default function AlbumsPageMobile() {
                 </button>
                 <div className="alb-mob-header-center">
                     <BookOpen size={12} strokeWidth={2} />
-                    <span>Mis álbumes</span>
+                    <span>GlobalAlbums</span>
                 </div>
                 {packsAvailable > 0 ? (
                     <button
@@ -555,7 +548,12 @@ export default function AlbumsPageMobile() {
                         </div>
                     </div>
                     <div className="alb-mob-hero-actions">
-                        <button className="alb-mob-btn-primary">Ver álbum →</button>
+                        <button className="alb-mob-btn-primary" onClick={() => {
+                            setActiveTab('albums');
+                            setTimeout(() => setForcedOpenAlbumId(activeAlbum?.id), 50);
+                        }}>
+                            Ver álbum →
+                        </button>
                         <button className="alb-mob-btn-secondary">Info</button>
                     </div>
                     <div className="alb-mob-scroll-handle" aria-hidden="true" />

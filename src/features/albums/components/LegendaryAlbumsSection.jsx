@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Lock, Crown, Search, ChevronLeft, ChevronRight, X, Gift } from 'lucide-react';
 import '../styles/LegendaryAlbumsSection.css';
 import '../styles/mobile/LegendaryAlbumsSection.mobile.css';
@@ -1000,11 +1000,17 @@ function AlbumPanel({ albumId, meta, definitions, progress, collection, prevUsed
 }
 
 /* ══════════════════════════════════════════
-   TARJETA DE ÁLBUM — diseño imagen 2
-   (tarjeta grande con SVG, nombre, progreso)
+   TARJETA DE ÁLBUM
 ══════════════════════════════════════════ */
-function AlbumCard({ albumId, meta, definitions, progress, collection, locked, prevUsedIds }) {
+function AlbumCard({ albumId, meta, definitions, progress, collection, locked, prevUsedIds, forcedOpen, onForcedOpenHandled }) {
     const [panelOpen, setPanelOpen] = useState(false);
+
+    useEffect(() => {
+        if (forcedOpen) {
+            setPanelOpen(true);
+            onForcedOpenHandled?.();
+        }
+    }, [forcedOpen]);
     const isCompleted = progress.find(p => p.album_id === albumId)?.is_completed ?? false;
 
     const { filled, pct } = locked
@@ -1013,6 +1019,7 @@ function AlbumCard({ albumId, meta, definitions, progress, collection, locked, p
 
     const slotDef = LEG_SLOT_REQS[albumId] ?? { slots: 30 };
     const isActive = !locked && !isCompleted;
+
 
     return (
         <>
@@ -1102,7 +1109,17 @@ function AlbumCard({ albumId, meta, definitions, progress, collection, locked, p
 /* ══════════════════════════════════════════
    MAIN EXPORT
 ══════════════════════════════════════════ */
-export default function LegendaryAlbumsSection({ definitions, progress, collection }) {
+// DESPUÉS
+export default function LegendaryAlbumsSection({ definitions, progress, collection, forcedOpenAlbumId, onForcedOpenHandled }) {
+    const [openPanelId, setOpenPanelId] = useState(null);
+
+    useEffect(() => {
+        if (forcedOpenAlbumId) {
+            setOpenPanelId(forcedOpenAlbumId);
+            onForcedOpenHandled?.();
+        }
+    }, [forcedOpenAlbumId]);
+
     const unlockedSet = React.useMemo(() => {
         const set = new Set();
         for (let i = 0; i < ORDER.length; i++) {
@@ -1138,16 +1155,12 @@ export default function LegendaryAlbumsSection({ definitions, progress, collecti
         <div className="las2-root">
             <div className="las2-row">
                 {ORDER.map(albumId => (
-                    <AlbumCard
-                        key={albumId}
-                        albumId={albumId}
-                        meta={ALBUM_META[albumId]}
-                        definitions={definitions}
-                        progress={progress}
-                        collection={collection}
-                        locked={!isUnlocked(albumId)}
-                        prevUsedIds={prevUsedIdsMap[albumId]}
-                    />
+                    <React.Fragment key={albumId}>
+                        <AlbumCard albumId={albumId} meta={ALBUM_META[albumId]} definitions={definitions} progress={progress} collection={collection} locked={!isUnlocked(albumId)} prevUsedIds={prevUsedIdsMap[albumId]} />
+                        {openPanelId === albumId && (
+                            <AlbumPanel albumId={albumId} meta={ALBUM_META[albumId]} definitions={definitions} progress={progress} collection={collection} prevUsedIds={prevUsedIdsMap[albumId]} onClose={() => setOpenPanelId(null)} />
+                        )}
+                    </React.Fragment>
                 ))}
             </div>
         </div>

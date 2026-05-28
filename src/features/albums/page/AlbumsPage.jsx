@@ -95,10 +95,6 @@ function ActiveAlbumHero({ albumId, name, description, pct, filled, total, onVie
                         <span className="alp-active-progress-pct">{pct}%</span>
                     </div>
                 </div>
-
-                <button className="alp-view-album-btn">
-                    Ver álbum →
-                </button>
             </div>
 
             {/* Columna derecha: libro 3D grande + soporte */}
@@ -230,14 +226,13 @@ function BoostProgressBar({ boostActive, boostPacksRemaining, packsOpenedSinceLa
         { pos: 25, label: '10\nPremium', reward: '10' },
         { pos: 50, label: '20\nÉpico', reward: '20' },
         { pos: 75, label: '30\nÉlite', reward: '30' },
-        { pos: 100, label: '40\nEspecial', reward: '👑' },
+        { pos: 100, label: '40\nEspecial', reward: 'TOP' },
     ];
 
     return (
         <div className={`alp-boost-bar${boostActive ? ' alp-boost-bar--active' : ''}`}>
             <div className="alp-boost-bar-header">
-                <span className="alp-boost-bar-eyebrow">Camino de temporada</span>
-                <button className="alp-boost-bar-ver">Ver todo →</button>
+                <span className="alp-boost-bar-eyebrow">Progreso de sobres</span>
             </div>
 
             <div className="alp-season-track">
@@ -268,7 +263,7 @@ function BoostProgressBar({ boostActive, boostPacksRemaining, packsOpenedSinceLa
                 {boostActive ? (
                     <>
                         <div className="alp-boost-info-left">
-                            <span className="alp-boost-info-icon">⚡</span>
+                            <span className="alp-boost-info-icon">RUN</span>
                             <div className="alp-boost-info-texts">
                                 <span className="alp-boost-active-tag">Boost activo</span>
                                 <span className="alp-boost-active-sub">+25% probabilidades</span>
@@ -282,7 +277,6 @@ function BoostProgressBar({ boostActive, boostPacksRemaining, packsOpenedSinceLa
                 ) : (
                     <>
                         <div className="alp-boost-info-left">
-                            <span className="alp-boost-info-icon">🎯</span>
                             <div className="alp-boost-info-texts">
                                 <span className="alp-boost-inactive-tag">Próximo boost</span>
                                 <span className="alp-boost-inactive-sub">cada 10 sobres</span>
@@ -366,7 +360,6 @@ function Pack3D({ count, onClick }) {
                             Abrir sobres
                         </button>
                     )}
-                    <button className="alp-pack3d-rarity-link">Ver probabilidad de rarezas →</button>
                 </div>
             </div>
         </div>
@@ -499,10 +492,10 @@ export default function AlbumsPage({ currentUser }) {
 
                 {activePage === 'resumen' && (
                     <>
-                        {/* ── BODY: panel izq grande + panel der ── */}
+                        {/* panel izq grande + panel der ── */}
                         <div className="alp-body">
 
-                            {/* Panel izquierdo 57% — libro hero */}
+                            {/* Panel izquierdo */}
                             <motion.aside
                                 className="alp-active-panel"
                                 variants={panelVariants} custom={1}
@@ -520,7 +513,7 @@ export default function AlbumsPage({ currentUser }) {
                                 />
                             </motion.aside>
 
-                            {/* Panel derecho 43% — boost + sobre */}
+                            {/* Panel derecho */}
                             <motion.aside
                                 className="alp-right-panel"
                                 variants={panelVariants} custom={2}

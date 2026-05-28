@@ -6,107 +6,123 @@
    ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
    MOBILE — responsive chaos
 ════════════════════════════════════════════════ */
-
 @media (max-width: 768px) {
-
   .las2-root {
-    gap: 12px;
-  }
-
-  .las2-eyebrow {
-    font-size: 8px;
-    gap: 8px;
+    gap: 0;
+    height: auto;
   }
 
   .las2-row {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    padding-bottom: 72px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 12px 16px 16px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    min-height: 0;
   }
 
-  .las2-book {
-    aspect-ratio: 3/4;
-    min-height: 140px;
-  }
-
-  .las2-book-wrap:not(.las2-book-wrap--locked):hover {
-    transform: none;
-  }
-
-  .las2-spine {
-    width: 16px;
-    padding: 8px 0 6px;
-  }
-
-  .las2-spine-num {
-    font-size: 7px;
-  }
-
-  .las2-spine-label {
-    font-size: 5px;
-  }
-
-  .las2-cover {
-    padding: 6px 5px 5px;
-    gap: 3px;
-  }
-
-  .las2-cover-tag {
-    font-size: 4.5px;
-    padding: 1px 4px;
-  }
-
-  .las2-cover-id {
-    font-size: 4px;
-    top: 5px;
-    right: 10px;
-  }
-
-  .las2-rarity {
-    top: 20px;
-    right: 8px;
-    padding: 2px 4px 1px;
-  }
-
-  .las2-rarity-stars span {
-    font-size: 5px;
-  }
-
-  .las2-rarity-label {
-    font-size: 4px;
-  }
-
-  .las2-cover-footer {
-    gap: 3px;
-  }
-
-  .las2-cover-count {
-    font-size: 6px;
-    letter-spacing: 0.04em;
-  }
-
-  .las2-cover-hint {
+  .las2-row::-webkit-scrollbar {
     display: none;
   }
 
-  .las2-lock-msg {
+  .las2-card {
+    flex: 0 0 140px;
+    width: 140px;
+    min-height: 190px;
+    height: 190px;
+    border-radius: 4px 6px 6px 4px;
+  }
+
+  .las2-card:not(:disabled):not(.las2-card--locked):hover {
+    transform: none;
+    box-shadow:
+      inset 18px 0 0 0 var(--spine, #5b4fd8),
+      inset 19px 0 0 0 color-mix(in srgb, var(--spine, #5b4fd8) 60%, black),
+      inset 22px 0 12px -10px rgba(0, 0, 0, 0.55),
+      inset 5px 0 4px -2px rgba(255, 255, 255, 0.12),
+      4px 8px 0 rgba(0, 0, 0, 0.35),
+      8px 18px 30px rgba(0, 0, 0, 0.28),
+      inset -2px 0 0 0 rgba(var(--acc-rgb, 165, 153, 217), 0.45);
+  }
+
+  .las2-card-number {
+    font-size: 6px;
+    top: 8px;
+    left: 3px;
+    width: 14px;
+  }
+
+  .las2-card-tag {
+    font-size: 4.5px;
+    padding: 2px 4px;
+    top: 6px;
+    right: 5px;
+    letter-spacing: 0.1em;
+  }
+
+  .las2-card-art {
+    margin-left: 18px;
+    padding: 8px 5px 4px;
+  }
+
+  .las2-card-lock-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .las2-card-lock-msg {
     font-size: 5px;
     padding: 0 4px;
+    line-height: 1.4;
+    text-align: center;
   }
 
-  .las2-lock-core {
-    width: 28px;
-    height: 28px;
+  .las2-card-progress {
+    margin-left: 18px;
+    padding: 0 6px 6px;
+    gap: 2px;
   }
 
-  .las2-page-stack {
-    right: -4px;
+  .las2-card-progress-bar {
+    height: 2px;
+  }
+
+  .las2-card-progress-info {
+    font-size: 5px;
+  }
+
+  .las2-card-corner {
+    width: 8px;
+    height: 8px;
+  }
+
+  .las2-card-corner--tl {
+    left: 18px;
+  }
+
+  .las2-card-corner--bl {
+    left: 18px;
+  }
+
+  .las2-card-clasp-strap--top,
+  .las2-card-clasp-strap--bot {
+    height: 14px;
+    width: 4px;
+  }
+
+  .las2-card-clasp-buckle {
     width: 7px;
+    height: 10px;
   }
 
-  .las2-overlay {
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+  .las2-card-clasp-buckle-inner {
+    width: 4px;
+    height: 6px;
   }
 
   .las2-panel {
@@ -138,16 +154,13 @@
   .las2-panel-body {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
-    overflow: hidden;
   }
 
   .las2-panel-sidebar {
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    overflow: visible;
-    max-height: 160px;
+    max-height: 148px;
     flex-direction: row;
-    align-items: stretch;
   }
 
   .las2-panel-sidebar::before {
@@ -161,7 +174,7 @@
   }
 
   .las2-panel-sidebar-inner {
-    padding: 14px 14px 10px 16px;
+    padding: 16px 14px 10px 16px;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
@@ -173,15 +186,23 @@
     display: none;
   }
 
+  .las2-sidebar-divider {
+    display: none;
+  }
+
+  .las2-sidebar-desc-block {
+    display: none;
+  }
+
   .las2-sidebar-id {
     text-align: left;
     width: 100%;
+    font-size: 7px;
     margin-bottom: 0;
-    font-size: 8px;
   }
 
   .las2-sidebar-title {
-    font-size: 20px;
+    font-size: 22px;
     margin: 0;
     flex-shrink: 0;
   }
@@ -193,7 +214,7 @@
   }
 
   .las2-sidebar-count-big {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .las2-sidebar-count-sep {
@@ -201,11 +222,7 @@
   }
 
   .las2-sidebar-count-label {
-    font-size: 8px;
-  }
-
-  .las2-sidebar-divider {
-    display: none;
+    font-size: 7px;
   }
 
   .las2-sidebar-pbar-wrap {
@@ -228,21 +245,16 @@
   }
 
   .las2-chip {
-    font-size: 7px;
+    font-size: 6px;
     padding: 2px 5px;
   }
 
-  .las2-sidebar-desc-block {
-    display: none;
-  }
-
-  /* Topbar */
   .las2-modal-topbar {
-    height: 48px;
+    height: 46px;
   }
 
   .las2-modal-topbar-title {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .las2-modal-topbar-season {
@@ -256,13 +268,12 @@
 
   .las2-modal-footer {
     height: 48px;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
     margin-bottom: 56px;
   }
 
   .las2-footer-stat {
     padding: 0 12px;
-    min-width: 70px;
+    min-width: 68px;
   }
 
   .las2-footer-stat-label {
@@ -279,7 +290,6 @@
   }
 
   .las2-pagination-info {
-    font-size: 8px;
     display: none;
   }
 
@@ -302,14 +312,6 @@
     gap: 8px;
   }
 
-  .las2-zone-header-label {
-    font-size: 6px;
-  }
-
-  .las2-zone-header-count {
-    font-size: 6px;
-  }
-
   .las2-panel-toolbar {
     padding: 8px 12px;
   }
@@ -318,12 +320,22 @@
     height: 30px;
     font-size: 9px;
   }
+
+  .las2-zone-header-label {
+    font-size: 6px;
+  }
+
+  .las2-zone-header-count {
+    font-size: 6px;
+  }
 }
 
 @media (max-width: 380px) {
-  .las2-row {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+  .las2-card {
+    flex: 0 0 120px;
+    width: 120px;
+    min-height: 168px;
+    height: 168px;
   }
 
   .las2-sticker-grid {

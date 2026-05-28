@@ -6,95 +6,111 @@
    ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
    MOBILE — responsive chaos
 ════════════════════════════════════════════════ */
-
 @media (max-width: 768px) {
-
   .scs2-root {
-    gap: 12px;
-  }
-
-  .scs2-eyebrow {
-    font-size: 8px;
-    gap: 8px;
+    gap: 0;
+    height: auto;
   }
 
   .scs2-row {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    padding-bottom: 72px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 12px 16px 16px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    min-height: 0;
   }
 
-  .scs2-book-wrap:hover {
-    transform: none;
-  }
-
-  .scs2-book {
-    aspect-ratio: 3/4;
-    min-height: 120px;
-  }
-
-  .scs2-spine {
-    width: 16px;
-    padding: 8px 0 6px;
-  }
-
-  .scs2-spine-num {
-    font-size: 7px;
-  }
-
-  .scs2-spine-label {
-    font-size: 4.5px;
-  }
-
-  .scs2-cover {
-    padding: 5px 4px 5px;
-    gap: 3px;
-  }
-
-  .scs2-cover-tag {
-    font-size: 4px;
-    padding: 1px 3px;
-  }
-
-  .scs2-cover-id {
-    font-size: 3.5px;
-    top: 5px;
-    right: 8px;
-  }
-
-  .scs2-cover-stars-row {
-    gap: 1px;
-  }
-
-  .scs2-cover-star {
-    font-size: 9px;
-  }
-
-  .scs2-rarity {
-    top: 18px;
-    right: 6px;
-    padding: 2px 3px 1px;
-  }
-
-  .scs2-rarity-stars span {
-    font-size: 4.5px;
-  }
-
-  .scs2-rarity-label {
-    font-size: 3.5px;
-  }
-
-  .scs2-cover-count {
-    font-size: 5.5px;
-  }
-
-  .scs2-cover-hint {
+  .scs2-row::-webkit-scrollbar {
     display: none;
   }
 
-  .scs2-page-stack {
-    right: -4px;
+  .scs2-card {
+    flex: 0 0 130px;
+    width: 130px;
+    min-height: 180px;
+    height: 180px;
+    border-radius: 4px 6px 6px 4px;
+  }
+
+  .scs2-card:hover {
+    transform: none;
+    box-shadow:
+      inset 18px 0 0 0 var(--spine, #e55b5b),
+      inset 19px 0 0 0 color-mix(in srgb, var(--spine, #e55b5b) 60%, black),
+      inset 22px 0 12px -10px rgba(0, 0, 0, 0.55),
+      inset 5px 0 4px -2px rgba(255, 255, 255, 0.12),
+      4px 8px 0 rgba(0, 0, 0, 0.35),
+      8px 18px 30px rgba(0, 0, 0, 0.28),
+      inset -2px 0 0 0 rgba(var(--acc-rgb, 248, 113, 113), 0.45);
+  }
+
+  .scs2-card-number {
+    font-size: 6px;
+    top: 8px;
+    left: 3px;
+    width: 14px;
+  }
+
+  .scs2-card-tag {
+    font-size: 4.5px;
+    padding: 2px 4px;
+    top: 6px;
+    right: 5px;
+    letter-spacing: 0.1em;
+  }
+
+  .scs2-card-art {
+    margin-left: 18px;
+    padding: 8px 5px 4px;
+  }
+
+  .scs2-card-progress {
+    margin-left: 18px;
+    padding: 0 6px 6px;
+    gap: 2px;
+  }
+
+  .scs2-card-progress-bar {
+    height: 2px;
+  }
+
+  .scs2-card-progress-info {
+    font-size: 5px;
+  }
+
+  .scs2-card-corner {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scs2-card-corner--tl {
+    left: 18px;
+  }
+
+  .scs2-card-corner--bl {
+    left: 18px;
+  }
+
+  .scs2-card-clasp-strap--top,
+  .scs2-card-clasp-strap--bot {
+    height: 14px;
+    width: 4px;
+  }
+
+  .scs2-card-clasp-buckle {
     width: 7px;
+    height: 10px;
+  }
+
+  .scs2-card-clasp-buckle-inner {
+    width: 4px;
+    height: 6px;
   }
 
   .scs2-panel {
@@ -146,7 +162,7 @@
   }
 
   .scs2-panel-sidebar-inner {
-    padding: 14px 14px 10px 16px;
+    padding: 16px 14px 10px 16px;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
@@ -169,12 +185,12 @@
   .scs2-sidebar-id {
     text-align: left;
     width: 100%;
-    font-size: 8px;
+    font-size: 7px;
     margin-bottom: 0;
   }
 
   .scs2-sidebar-title {
-    font-size: 20px;
+    font-size: 22px;
     margin: 0;
   }
 
@@ -184,7 +200,7 @@
   }
 
   .scs2-sidebar-count-big {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .scs2-sidebar-count-sep {
@@ -192,7 +208,7 @@
   }
 
   .scs2-sidebar-count-label {
-    font-size: 8px;
+    font-size: 7px;
   }
 
   .scs2-sidebar-pbar-wrap {
@@ -215,16 +231,16 @@
   }
 
   .scs2-chip {
-    font-size: 7px;
+    font-size: 6px;
     padding: 2px 5px;
   }
 
   .scs2-modal-topbar {
-    height: 48px;
+    height: 46px;
   }
 
   .scs2-modal-topbar-title {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .scs2-modal-topbar-season {
@@ -243,7 +259,7 @@
 
   .scs2-footer-stat {
     padding: 0 12px;
-    min-width: 70px;
+    min-width: 68px;
   }
 
   .scs2-footer-stat-label {
@@ -293,9 +309,11 @@
 }
 
 @media (max-width: 380px) {
-  .scs2-row {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+  .scs2-card {
+    flex: 0 0 116px;
+    width: 116px;
+    min-height: 160px;
+    height: 160px;
   }
 
   .scs2-sticker-grid {
