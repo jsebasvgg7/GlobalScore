@@ -191,41 +191,14 @@ export async function openPack(userId) {
         getAlbumCardsByType('event'),
     ]);
 
-    const boosted = packs.boost_active === true;
+    const boosted = packs.boost_active;       // ya actualizado por el RPC
+    const boostTriggered = packs.boost_packs_remaining === 3 && boosted; // recién activado
+
     const drawnPlayer = rollPlayerByRarity(players, boosted);
     const drawnTeam = rollRandom(teams);
     const drawnCompetition = rollRandom(competitions);
     const drawnEvent = rollRandom(events);
     const drawn = [drawnPlayer, drawnTeam, drawnCompetition, drawnEvent].filter(Boolean);
-
-    const newTotalOpened = packs.total_packs_opened + 1;
-    const boostTriggered = packs.total_packs_opened > 0 && newTotalOpened % 10 === 0;
-
-    let newBoostActive = boosted;
-    let newBoostRemaining = packs.boost_packs_remaining ?? 0;
-
-    if (boostTriggered) {
-        newBoostActive = true;
-        newBoostRemaining = 3;
-    } else if (boosted) {
-        newBoostRemaining = newBoostRemaining - 1;
-        if (newBoostRemaining <= 0) {
-            newBoostActive = false;
-            newBoostRemaining = 0;
-        }
-    }
-
-    const { error: packError } = await supabase
-        .from('album_packs')
-        .update({
-            total_packs_opened: newTotalOpened,
-            boost_active: newBoostActive,
-            boost_packs_remaining: newBoostRemaining,
-            updated_at: new Date().toISOString(),
-        })
-        .eq('user_id', userId);
-
-    if (packError) throw packError;
 
     for (const card of drawn) {
         await upsertCollectionCard(userId, card.id);
@@ -251,7 +224,6 @@ export async function openPack(userId) {
         boostTriggered,
     };
 }
-
 // ── Colección ──────────────────────────────────────────────────────────────
 
 export async function getUserCollection(userId) {
