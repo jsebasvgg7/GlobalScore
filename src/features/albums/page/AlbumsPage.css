@@ -75,11 +75,11 @@
 
 /* Columna info */
 .alp-hero-info {
-    flex: 0 0 42%;
+    flex: 0 0 46%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 22px 20px 20px 24px;
+    gap: 14px;
+    padding: 10px 16px 18px 32px;
     justify-content: center;
 }
 
@@ -87,19 +87,20 @@
 .alp-hero-book-wrap {
     flex: 1;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
-    padding: 16px 20px 0;
+    padding: 10px 24px 0 16px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    background: radial-gradient(ellipse 70% 80% at 50% 60%, rgba(91, 79, 216, .06) 0%, transparent 70%);
 }
 
 /* ── Eyebrow / nombre / desc ── */
 .alp-panel-eyebrow {
     font-family: 'DM Mono', monospace;
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: #5b4fd8;
 }
@@ -113,11 +114,11 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    font-size: 1.55rem;
+    font-size: 2.6rem;
     font-weight: 800;
     color: #1a1726;
-    letter-spacing: -0.025em;
-    line-height: 1.1;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
 }
 
 [data-theme="dark"] .alp-active-name {
@@ -140,7 +141,7 @@
 }
 
 .alp-active-desc {
-    font-size: 11px;
+    font-size: 13px;
     color: #7a7690;
     margin: 0;
     line-height: 1.55;
@@ -166,7 +167,7 @@
 
 .alp-hero-stat-val {
     font-family: 'DM Mono', monospace;
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: 800;
     color: #1a1726;
     letter-spacing: -0.04em;
@@ -178,7 +179,7 @@
 }
 
 .alp-hero-stat-pct-sym {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     font-weight: 700;
     opacity: 0.55;
     margin-left: 1px;
@@ -186,7 +187,7 @@
 
 .alp-hero-stat-label {
     font-family: 'DM Mono', monospace;
-    font-size: 8px;
+    font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -199,7 +200,7 @@
 
 .alp-hero-stat-divider {
     width: 1px;
-    height: 36px;
+    height: 48px;
     background: #d4cfc8;
     flex-shrink: 0;
 }
@@ -217,9 +218,9 @@
 
 .alp-active-progress-track {
     position: relative;
-    height: 6px;
+    height: 8px;
     background: rgba(91, 79, 216, .1);
-    border-radius: 3px;
+    border-radius: 4px;
     overflow: visible;
 }
 
@@ -268,13 +269,13 @@
 
 .alp-active-progress-count {
     font-family: 'DM Mono', monospace;
-    font-size: 10px;
+    font-size: 11px;
     color: #a0a0b0;
 }
 
 .alp-active-progress-count strong {
     color: #1a1726;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 [data-theme="dark"] .alp-active-progress-count strong {
@@ -283,7 +284,7 @@
 
 .alp-active-progress-pct {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
     color: #5b4fd8;
 }
@@ -297,12 +298,12 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 16px;
+    padding: 10px 20px;
     border: 1.5px solid rgba(91, 79, 216, .35);
     background: rgba(91, 79, 216, .06);
     color: #5b4fd8;
     font-family: 'DM Mono', monospace;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -310,6 +311,7 @@
     align-self: flex-start;
     border-radius: 2px;
     transition: background .15s, border-color .15s;
+    margin-top: 2px;
 }
 
 .alp-view-album-btn:hover {
@@ -331,7 +333,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 180px;
+    width: 260px;
+    perspective: 900px;
 }
 
 /* Hojas apiladas detrás */
@@ -339,47 +342,51 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 180px;
-    height: 230px;
+    width: 248px;
+    height: 312px;
     pointer-events: none;
 }
 
 .alp-hero-page-leaf {
     position: absolute;
-    top: calc(var(--li) * 4px);
-    left: calc(var(--li) * -4px);
-    width: 180px;
-    height: 230px;
+    top: calc(var(--li) * 5px);
+    left: calc(var(--li) * -5px);
+    width: 248px;
+    height: 312px;
     background: color-mix(in srgb, var(--acc) 14%, #1e1c28);
     border-radius: 4px;
-    opacity: calc(0.35 - var(--li) * 0.1);
-    transform: rotate(calc(var(--li) * -2deg));
+    opacity: calc(0.3 - var(--li) * 0.08);
+    transform: rotate(calc(var(--li) * -2.5deg)) rotateY(-12deg);
+    transform-origin: bottom center;
 }
 
 /* Libro principal */
 .alp-hero-book {
     position: relative;
     display: flex;
-    width: 180px;
-    height: 230px;
-    border-radius: 3px 5px 5px 3px;
+    width: 248px;
+    height: 312px;
+    border-radius: 3px 6px 6px 3px;
     overflow: hidden;
     box-shadow:
-        6px 10px 0 rgba(0, 0, 0, .35),
-        14px 24px 40px rgba(0, 0, 0, .28),
+        -4px 8px 0 rgba(0, 0, 0, .25),
+        12px 18px 0 rgba(0, 0, 0, .3),
+        20px 32px 48px rgba(0, 0, 0, .32),
         inset 1px 0 0 rgba(255, 255, 255, .06);
     z-index: 2;
-    transition: transform .3s ease, box-shadow .3s ease;
+    transform: rotateY(-14deg) rotateZ(2deg);
+    transform-origin: bottom center;
+    transition: transform .4s ease, box-shadow .4s ease;
 }
 
 .alp-hero-book:hover {
-    transform: translateY(-4px) rotate(0.5deg);
-    box-shadow: 8px 16px 0 rgba(0, 0, 0, .38), 18px 32px 48px rgba(0, 0, 0, .3), inset 1px 0 0 rgba(255, 255, 255, .1);
+    transform: rotateY(-10deg) rotateZ(1deg) translateY(-6px);
+    box-shadow: -3px 10px 0 rgba(0, 0, 0, .22), 14px 24px 0 rgba(0, 0, 0, .28), 24px 40px 56px rgba(0, 0, 0, .3), inset 1px 0 0 rgba(255, 255, 255, .1);
 }
 
 /* Lomo */
 .alp-hero-spine {
-    width: 24px;
+    width: 28px;
     flex-shrink: 0;
     background: linear-gradient(180deg, var(--spine) 0%, var(--spine-alt) 100%);
     display: flex;
@@ -482,7 +489,7 @@
 
 .alp-hero-corner--tl {
     top: 0;
-    left: 24px;
+    left: 28px;
     clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
@@ -494,7 +501,7 @@
 
 .alp-hero-corner--bl {
     bottom: 0;
-    left: 24px;
+    left: 28px;
     clip-path: polygon(0 0, 0 100%, 100% 100%);
 }
 
@@ -503,6 +510,7 @@
     right: 0;
     clip-path: polygon(100% 0, 0 100%, 100% 100%);
 }
+
 
 /* Broche */
 .alp-hero-clasp {
@@ -558,7 +566,7 @@
 .alp-hero-art-svg {
     width: 100%;
     height: auto;
-    max-width: 130px;
+    max-width: 155px;
 }
 
 /* Footer del libro */
@@ -604,63 +612,92 @@
     transition: width .5s ease;
 }
 
-/* Badge ACTIVO */
+/* Badge ACTIVO — top-right of book wrap */
 .alp-hero-active-badge {
     position: absolute;
-    top: 8px;
-    right: 14px;
+    top: 10px;
+    right: 12px;
     font-family: 'DM Mono', monospace;
     font-size: 6px;
     font-weight: 700;
     letter-spacing: .14em;
     text-transform: uppercase;
-    padding: 2px 6px;
+    padding: 3px 8px;
     background: #5b4fd8;
     color: #fff;
     border-radius: 2px;
-    z-index: 4;
+    z-index: 10;
 }
 
 /* ══════════════════════════════════════════════
-   PEDESTAL / SOPORTE
+   PEDESTAL — 3-tier circular platform
 ══════════════════════════════════════════════ */
 .alp-hero-pedestal {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 220px;
     z-index: 1;
-    margin-top: -2px;
+    margin-top: -6px;
+    position: relative;
 }
 
+/* Tier 1 — widest top platform (book rests here) */
 .alp-hero-pedestal-top {
-    width: 200px;
-    height: 10px;
-    background: linear-gradient(180deg, #e8e3da 0%, #d4cfc8 100%);
-    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, .08);
+    width: 268px;
+    height: 18px;
+    background: linear-gradient(180deg, #f0ece5 0%, #ddd8cf 60%, #c8c2b8 100%);
+    border-radius: 50% 50% 46% 46% / 80% 80% 20% 20%;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, .12),
+        0 1px 0 rgba(255, 255, 255, .8) inset,
+        0 -2px 6px rgba(0, 0, 0, .08) inset;
+    position: relative;
 }
 
 [data-theme="dark"] .alp-hero-pedestal-top {
-    background: linear-gradient(180deg, #2A2638 0%, #1e1c28 100%);
+    background: linear-gradient(180deg, #2E2B3E 0%, #232030 60%, #1a1826 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .4), 0 1px 0 rgba(255, 255, 255, .05) inset;
 }
 
+/* Tier 2 — mid platform */
 .alp-hero-pedestal-body {
-    width: 160px;
-    height: 6px;
-    background: linear-gradient(180deg, #d4cfc8 0%, #c0bbb3 100%);
-    border-radius: 0 0 4px 4px;
+    width: 210px;
+    height: 14px;
+    background: linear-gradient(180deg, #e4dfd6 0%, #cdc7bd 60%, #bab4a8 100%);
+    border-radius: 46% 46% 44% 44% / 70% 70% 30% 30%;
+    margin-top: -2px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .1), 0 1px 0 rgba(255, 255, 255, .6) inset;
 }
 
 [data-theme="dark"] .alp-hero-pedestal-body {
-    background: linear-gradient(180deg, #1e1c28 0%, #18161f 100%);
+    background: linear-gradient(180deg, #252233 0%, #1c1a28 60%, #14121e 100%);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .35), 0 1px 0 rgba(255, 255, 255, .04) inset;
 }
 
+/* Tier 3 — narrow bottom */
 .alp-hero-pedestal-shadow {
-    width: 200px;
-    height: 12px;
-    background: radial-gradient(ellipse at center, rgba(0, 0, 0, .18) 0%, transparent 70%);
+    width: 155px;
+    height: 10px;
+    background: linear-gradient(180deg, #d8d2c8 0%, #c2bcb0 100%);
+    border-radius: 44% 44% 42% 42% / 70% 70% 30% 30%;
+    margin-top: -1px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .18), 0 1px 0 rgba(255, 255, 255, .4) inset;
+}
+
+[data-theme="dark"] .alp-hero-pedestal-shadow {
+    background: linear-gradient(180deg, #1a1826 0%, #120f1c 100%);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .03) inset;
+}
+
+/* Ground shadow under all tiers */
+.alp-hero-pedestal::after {
+    content: '';
+    display: block;
+    width: 240px;
+    height: 14px;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, .2) 0%, transparent 72%);
     border-radius: 50%;
+    margin-top: 4px;
 }
 
 /* ══════════════════════════════════════════════
@@ -669,25 +706,26 @@
 .alp-right-panel {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .alp-right-divider {
-    height: 0.5px;
-    background: #d4cfc8;
-    flex-shrink: 0;
-}
-
-[data-theme="dark"] .alp-right-divider {
-    background: #2A2638;
+    display: none;
+    /* divider now on boost-bar bottom border */
 }
 
 /* ── Boost bar (compacta) ── */
 .alp-boost-bar {
-    padding: 12px 18px 10px;
+    padding: 14px 18px 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     flex-shrink: 0;
+    border-bottom: 0.5px solid #d4cfc8;
+}
+
+[data-theme="dark"] .alp-boost-bar {
+    border-bottom-color: #2A2638;
 }
 
 .alp-boost-bar-header {
@@ -730,26 +768,63 @@
     color: #A599D9;
 }
 
-/* Milestones */
-.alp-boost-milestones {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 2px;
+/* ── Connected Season Track ── */
+.alp-season-track {
+    position: relative;
+    padding: 4px 2px 2px;
 }
 
-.alp-boost-milestone {
+/* The horizontal line behind nodes */
+.alp-season-track-line {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    right: 12px;
+    height: 3px;
+    background: rgba(91, 79, 216, .12);
+    border-radius: 2px;
+    transform: translateY(-10px);
+    /* align with node centers */
+    overflow: hidden;
+}
+
+[data-theme="dark"] .alp-season-track-line {
+    background: rgba(139, 127, 199, .14);
+}
+
+.alp-season-track-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4a3fc7, #8b7fc7);
+    border-radius: 2px;
+    transition: width .6s cubic-bezier(.23, 1, .32, 1);
+}
+
+.alp-boost-bar--active .alp-season-track-fill {
+    background: linear-gradient(90deg, #d97706, #f59e0b);
+}
+
+/* Nodes row */
+.alp-season-nodes {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 1;
+}
+
+.alp-season-node-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
+    gap: 4px;
     flex: 1;
 }
 
-.alp-boost-milestone-dot {
-    width: 20px;
-    height: 20px;
+.alp-season-node {
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    border: 1.5px solid #d4cfc8;
+    border: 2px solid #d4cfc8;
     background: #f0ede8;
     display: flex;
     align-items: center;
@@ -758,102 +833,65 @@
     font-size: 7px;
     font-weight: 700;
     color: #a0a0b0;
-    transition: all .2s;
+    transition: all .25s;
+    flex-shrink: 0;
 }
 
-[data-theme="dark"] .alp-boost-milestone-dot {
+[data-theme="dark"] .alp-season-node {
     border-color: #38334F;
     background: #1A1726;
     color: #6E6680;
 }
 
-.alp-boost-milestone--passed .alp-boost-milestone-dot {
+.alp-season-node--passed {
     border-color: #5b4fd8;
     background: #5b4fd8;
     color: #fff;
 }
 
-.alp-boost-milestone--current .alp-boost-milestone-dot {
+.alp-boost-bar--active .alp-season-node--passed {
+    border-color: #f59e0b;
+    background: #f59e0b;
+}
+
+.alp-season-node--current {
     border-color: #f59e0b;
     background: rgba(245, 158, 11, .12);
     color: #f59e0b;
-    box-shadow: 0 0 7px rgba(245, 158, 11, .35);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, .18);
 }
 
-.alp-boost-milestone-check {
-    font-size: 9px;
+.alp-season-node-check {
+    font-size: 10px;
+    line-height: 1;
 }
 
-.alp-boost-milestone-num {
+.alp-season-node-val {
     font-size: 7px;
+    font-weight: 800;
 }
 
-.alp-boost-milestone-label {
+.alp-season-node-label {
     font-family: 'DM Mono', monospace;
     font-size: 7px;
     font-weight: 600;
     text-align: center;
     color: #a0a0b0;
-    line-height: 1.3;
+    line-height: 1.35;
     white-space: pre-line;
 }
 
-[data-theme="dark"] .alp-boost-milestone-label {
+[data-theme="dark"] .alp-season-node-label {
     color: #5A5572;
 }
 
-.alp-boost-milestone--passed .alp-boost-milestone-label {
+.alp-season-node--passed+.alp-season-node-label,
+.alp-season-node-wrap:has(.alp-season-node--passed) .alp-season-node-label {
     color: #5b4fd8;
 }
 
-[data-theme="dark"] .alp-boost-milestone--passed .alp-boost-milestone-label {
+[data-theme="dark"] .alp-season-node-wrap:has(.alp-season-node--passed) .alp-season-node-label {
     color: #A599D9;
-}
-
-/* Track */
-.alp-boost-track-wrap {
-    padding: 0 2px;
-}
-
-.alp-boost-track {
-    height: 7px;
-    background: rgba(91, 79, 216, .1);
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-[data-theme="dark"] .alp-boost-track {
-    background: rgba(139, 127, 199, .1);
-}
-
-.alp-boost-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #4a3fc7, #8b7fc7);
-    border-radius: 4px;
-    position: relative;
-    overflow: hidden;
-    transition: width .6s cubic-bezier(.23, 1, .32, 1);
-}
-
-.alp-boost-bar--active .alp-boost-fill {
-    background: linear-gradient(90deg, #d97706, #f59e0b, #fcd34d);
-}
-
-.alp-boost-fill-shimmer {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, .22) 45%, rgba(255, 255, 255, .32) 50%, rgba(255, 255, 255, .22) 55%, transparent 100%);
-    animation: alp-shimmer 2.2s ease-in-out infinite;
-}
-
-@keyframes alp-shimmer {
-    0% {
-        transform: translateX(-100%);
-    }
-
-    100% {
-        transform: translateX(220%);
-    }
 }
 
 .alp-boost-info-row {
@@ -915,15 +953,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 14px;
-    padding: 10px 20px 18px;
+    gap: 12px;
+    padding: 16px 20px 20px;
 }
 
 /* Sobre centrado */
 .alp-pack3d-stack {
     position: relative;
-    width: 110px;
-    height: 145px;
+    width: 120px;
+    height: 158px;
     flex-shrink: 0;
 }
 
@@ -937,14 +975,14 @@
 
 .alp-pack3d-shadow--3 {
     top: 10px;
-    left: 10px;
+    left: 12px;
     transform: rotate(5deg);
     opacity: .16;
 }
 
 .alp-pack3d-shadow--2 {
     top: 5px;
-    left: 5px;
+    left: 6px;
     transform: rotate(2.5deg);
     opacity: .26;
 }
@@ -970,8 +1008,8 @@
 }
 
 .alp-pack3d-svg {
-    width: 110px;
-    height: 145px;
+    width: 120px;
+    height: 158px;
 }
 
 /* Info debajo del sobre — centrada */
@@ -998,7 +1036,7 @@
     font-weight: 700;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: #a0a0b0;
+    color: #6a6680;
 }
 
 [data-theme="dark"] .alp-pack3d-label {
@@ -1012,15 +1050,11 @@
     background: #5b4fd8;
     color: #fff;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-}
-
-[data-theme="dark"] .alp-pack3d-badge {
-    background: #7366B3;
 }
 
 .alp-pack3d-desc {

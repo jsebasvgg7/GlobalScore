@@ -31,11 +31,11 @@ function getAlbumProgress(albumId, progress) {
 
 // ── Metadata del libro activo (colores por album_id) ─────────
 const ALBUM_META = {
-    legendary_1: { spine: '#5b4fd8', spineAlt: '#3d34a5', accent: '#a599d9', accentRgb: '165,153,217', coverBg: '#1a1726', shortLabel: 'LEG I', number: '01', rarityLevel: 3, rarityLabel: 'FUNDACIÓN', tag: 'TEMPORADA 25·26' },
-    legendary_2: { spine: '#7c3aed', spineAlt: '#5b1fbd', accent: '#c4b5fd', accentRgb: '196,181,253', coverBg: '#160e2a', shortLabel: 'LEG II', number: '02', rarityLevel: 4, rarityLabel: 'LEYENDA+', tag: 'TEMPORADA 25·26' },
+    legendary_1: { spine: '#5b4fd8', spineAlt: '#3d34a5', accent: '#a599d9', accentRgb: '165,153,217', coverBg: '#1a1726', shortLabel: 'LEG I', number: '01', rarityLevel: 3, rarityLabel: 'FUNDADORES', tag: 'TEMPORADA 25·26' },
+    legendary_2: { spine: '#7c3aed', spineAlt: '#5b1fbd', accent: '#c4b5fd', accentRgb: '196,181,253', coverBg: '#160e2a', shortLabel: 'LEG II', number: '02', rarityLevel: 4, rarityLabel: 'LEYENDAS', tag: 'TEMPORADA 25·26' },
     legendary_3: { spine: '#1D9E75', spineAlt: '#0d6e50', accent: '#34d399', accentRgb: '52,211,153', coverBg: '#0a1f18', shortLabel: 'LEG III', number: '03', rarityLevel: 5, rarityLabel: 'ÉLITE', tag: 'TEMPORADA 25·26' },
-    legendary_4: { spine: '#b45309', spineAlt: '#7c3b00', accent: '#f59e0b', accentRgb: '245,158,11', coverBg: '#1a1200', shortLabel: 'LEG IV', number: '04', rarityLevel: 5, rarityLabel: 'GOAT', tag: 'TEMPORADA 25·26' },
-    legendary_5: { spine: '#9d174d', spineAlt: '#6b1130', accent: '#f472b6', accentRgb: '244,114,182', coverBg: '#1a0e15', shortLabel: 'LEG V', number: '05', rarityLevel: 5, rarityLabel: 'INMORTAL', tag: 'ENDGAME' },
+    legendary_4: { spine: '#b45309', spineAlt: '#7c3b00', accent: '#f59e0b', accentRgb: '245,158,11', coverBg: '#1a1200', shortLabel: 'LEG IV', number: '04', rarityLevel: 5, rarityLabel: 'GOATS', tag: 'TEMPORADA 25·26' },
+    legendary_5: { spine: '#9d174d', spineAlt: '#6b1130', accent: '#f472b6', accentRgb: '244,114,182', coverBg: '#1a0e15', shortLabel: 'LEG V', number: '05', rarityLevel: 5, rarityLabel: 'INMORTALES', tag: 'ENDGAME' },
 };
 const DEFAULT_META = { spine: '#5b4fd8', spineAlt: '#3d34a5', accent: '#a599d9', accentRgb: '165,153,217', coverBg: '#1a1726', shortLabel: 'ALB', number: '01', rarityLevel: 1, rarityLabel: '', tag: '' };
 
@@ -95,7 +95,7 @@ function ActiveAlbumHero({ albumId, name, description, pct, filled, total, onVie
                     </div>
                 </div>
 
-                <button className="alp-view-album-btn" onClick={onViewAlbum}>
+                <button className="alp-view-album-btn">
                     Ver álbum →
                 </button>
             </div>
@@ -198,8 +198,6 @@ function ActiveAlbumHero({ albumId, name, description, pct, filled, total, onVie
                                 </div>
                             </div>
 
-                            {/* Badge ACTIVO */}
-                            <div className="alp-hero-active-badge">ACTIVO</div>
                         </div>
                     </div>
 
@@ -209,53 +207,67 @@ function ActiveAlbumHero({ albumId, name, description, pct, filled, total, onVie
                         <div className="alp-hero-pedestal-body" />
                         <div className="alp-hero-pedestal-shadow" />
                     </div>
+
                 </div>
+
+                {/* Badge ACTIVO — esquina superior derecha del wrap */}
+                <div className="alp-hero-active-badge">ACTIVO</div>
             </div>
         </div>
     );
 }
 
 // ─────────────────────────────────────────────────────────────
-// BoostProgressBar
+// BoostProgressBar — connected milestone track
 // ─────────────────────────────────────────────────────────────
 function BoostProgressBar({ boostActive, boostPacksRemaining, packsOpenedSinceLast = 0 }) {
     const PACKS_PER_BOOST = 10;
     const progress = boostActive ? 100 : Math.min((packsOpenedSinceLast / PACKS_PER_BOOST) * 100, 100);
-    const milestones = [
-        { pos: 25, label: '10 Sobre\nPremium' },
-        { pos: 50, label: '20 Boost\nÉpico' },
-        { pos: 75, label: '30 Sobre\nÉlite' },
-        { pos: 100, label: '40 Álbum\nEspecial' },
+
+    // 5 nodes: START + 4 rewards
+    const nodes = [
+        { pos: 0, label: 'Inicio', reward: null },
+        { pos: 25, label: '10 Sobre\nPremium', reward: '10' },
+        { pos: 50, label: '20 Boost\nÉpico', reward: '20', isCurrent: true },
+        { pos: 75, label: '30 Sobre\nÉlite', reward: '30' },
+        { pos: 100, label: '40 Álbum\nEspecial', reward: '👑' },
     ];
+
     return (
         <div className={`alp-boost-bar${boostActive ? ' alp-boost-bar--active' : ''}`}>
             <div className="alp-boost-bar-header">
                 <span className="alp-boost-bar-eyebrow">Camino de temporada</span>
                 <button className="alp-boost-bar-ver">Ver todo →</button>
             </div>
-            <div className="alp-boost-milestones">
-                {milestones.map((m, i) => {
-                    const passed = progress >= m.pos;
-                    const current = !passed && (i === 0 ? progress > 0 : progress >= milestones[i - 1].pos);
-                    return (
-                        <div key={m.pos} className={`alp-boost-milestone${passed ? ' alp-boost-milestone--passed' : ''}${current ? ' alp-boost-milestone--current' : ''}`}>
-                            <div className="alp-boost-milestone-dot">
-                                {passed
-                                    ? <span className="alp-boost-milestone-check">✓</span>
-                                    : <span className="alp-boost-milestone-num">{m.pos}</span>}
+
+            {/* Connected milestone track */}
+            <div className="alp-season-track">
+                {/* Background track line */}
+                <div className="alp-season-track-line">
+                    <div className="alp-season-track-fill" style={{ width: `${progress}%` }} />
+                </div>
+
+                {/* Nodes */}
+                <div className="alp-season-nodes">
+                    {nodes.map((node, i) => {
+                        const passed = progress >= node.pos;
+                        const isCurrent = !passed && (i === 0 ? progress > 0 : progress > nodes[i - 1].pos);
+                        return (
+                            <div key={node.pos} className="alp-season-node-wrap">
+                                <div className={`alp-season-node${passed ? ' alp-season-node--passed' : ''}${isCurrent ? ' alp-season-node--current' : ''}`}>
+                                    {passed
+                                        ? <span className="alp-season-node-check">✓</span>
+                                        : <span className="alp-season-node-val">{node.reward ?? ''}</span>
+                                    }
+                                </div>
+                                <span className="alp-season-node-label">{node.label}</span>
                             </div>
-                            <span className="alp-boost-milestone-label">{m.label}</span>
-                        </div>
-                    );
-                })}
-            </div>
-            <div className="alp-boost-track-wrap">
-                <div className="alp-boost-track">
-                    <div className="alp-boost-fill" style={{ width: `${progress}%` }}>
-                        <div className="alp-boost-fill-shimmer" />
-                    </div>
+                        );
+                    })}
                 </div>
             </div>
+
+            {/* Boost status row */}
             <div className="alp-boost-info-row">
                 {boostActive ? (
                     <>
@@ -488,7 +500,7 @@ export default function AlbumsPage({ currentUser }) {
                                 filled={activeUnique}
                                 total={activeRequired}
                                 activeCompleted={activeCompleted}
-                                onViewAlbum={() => { }}
+                                onViewAlbum={() => setActivePage('coleccion')}
                             />
                         </motion.aside>
 
@@ -525,23 +537,6 @@ export default function AlbumsPage({ currentUser }) {
                         />
                     </motion.div>
                 </>
-            )}
-
-            {activePage === 'coleccion' && (
-                <div className="alp-section-area">
-                    <AlbumsSectionNav active={activeSection} onChange={setActiveSection} />
-                    <div className="alp-section-scroll">
-                        {activeSection === 'legendary' && (
-                            <LegendaryAlbumsSection definitions={legendary} progress={progress} collection={collection} />
-                        )}
-                        {activeSection === 'stars' && !collectionLoading && (
-                            <StarCollectionSection collection={collection} allCards={allCards} />
-                        )}
-                        {activeSection === 'cult' && !collectionLoading && (
-                            <CultAlbumsSection definitions={cult} collection={collection} allCards={allCards} currentUserId={user?.id} />
-                        )}
-                    </div>
-                </div>
             )}
 
             <PackOpeningModal

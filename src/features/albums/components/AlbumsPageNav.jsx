@@ -25,7 +25,7 @@ const TABS = [
                 <line x1="5" y1="9" x2="8" y2="9" />
             </svg>
         ),
-        coming: false,
+        coming: true,
     },
     {
         id: 'sobres',

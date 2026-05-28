@@ -48,7 +48,7 @@ const LEG_SLOT_REQS = {
 
 const ALBUM_META = {
     legendary_1: {
-        label: 'LEGENDARIOS',
+        label: 'FUNDACIÓN',
         shortLabel: 'LEG I',
         subtitle: 'Colecciona las leyendas que marcaron la historia del fútbol.',
         req: '30 jugadores · mín. 5×⭐⭐⭐⭐',
@@ -63,7 +63,7 @@ const ALBUM_META = {
         rarityLabel: 'FUNDACIÓN',
     },
     legendary_2: {
-        label: 'ESTRELLAS',
+        label: 'LEYENDAS',
         shortLabel: 'LEG II',
         subtitle: 'Las estrellas que brillaron en cada era del fútbol mundial.',
         req: '30 jugadores · 5×⭐⭐⭐ + 5×⭐⭐⭐⭐',
@@ -78,7 +78,7 @@ const ALBUM_META = {
         rarityLabel: 'LEYENDA',
     },
     legendary_3: {
-        label: 'FUTURO',
+        label: 'ÉLITE',
         shortLabel: 'LEG III',
         subtitle: 'Los jugadores que están escribiendo la historia hoy.',
         req: '30 jugadores · 5×⭐⭐ + 5×⭐⭐⭐ + 5×⭐⭐⭐⭐',
@@ -93,7 +93,7 @@ const ALBUM_META = {
         rarityLabel: 'ÉLITE',
     },
     legendary_4: {
-        label: 'HÉROES',
+        label: 'GOAT',
         shortLabel: 'LEG IV',
         subtitle: 'Los héroes que dejaron su huella en torneos históricos.',
         req: '30 jugadores · 5×⭐⭐ + 5×⭐⭐⭐ + 5×⭐⭐⭐⭐ + 1×⭐⭐⭐⭐⭐',
@@ -244,7 +244,7 @@ function AlbumCoverIllustration({ albumId, accent, accentRgb }) {
                 <text x="90" y="160" textAnchor="middle"
                     fontFamily="'DM Mono', monospace" fontSize="15" fontWeight="800"
                     letterSpacing="3" fill={accent} opacity="0.9">
-                    LEGENDARIOS
+                    FUNDADORES
                 </text>
                 <text x="90" y="176" textAnchor="middle"
                     fontFamily="'DM Mono', monospace" fontSize="8" fontWeight="600"
@@ -295,7 +295,7 @@ function AlbumCoverIllustration({ albumId, accent, accentRgb }) {
                 <text x="90" y="158" textAnchor="middle"
                     fontFamily="'DM Mono', monospace" fontSize="15" fontWeight="800"
                     letterSpacing="3" fill={accent} opacity="0.9">
-                    ESTRELLAS
+                    LEYENDAS
                 </text>
                 <text x="90" y="174" textAnchor="middle"
                     fontFamily="'DM Mono', monospace" fontSize="8" fontWeight="600"
@@ -339,7 +339,7 @@ function AlbumCoverIllustration({ albumId, accent, accentRgb }) {
                 <text x="90" y="160" textAnchor="middle"
                     fontFamily="'DM Mono', monospace" fontSize="15" fontWeight="800"
                     letterSpacing="5" fill={accent} opacity="0.9">
-                    FUTURO
+                    ÉLITE
                 </text>
                 <text x="90" y="176" textAnchor="middle"
                     fontFamily="'DM Mono', monospace" fontSize="8" fontWeight="600"
@@ -388,7 +388,7 @@ function AlbumCoverIllustration({ albumId, accent, accentRgb }) {
                 <text x="90" y="160" textAnchor="middle"
                     fontFamily="'DM Mono', monospace" fontSize="15" fontWeight="800"
                     letterSpacing="4" fill={accent} opacity="0.9">
-                    HÉROES
+                    GOATS
                 </text>
                 <text x="90" y="176" textAnchor="middle"
                     fontFamily="'DM Mono', monospace" fontSize="8" fontWeight="600"
