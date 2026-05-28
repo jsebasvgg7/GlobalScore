@@ -174,9 +174,14 @@ function rollRandom(cards) {
 }
 
 export async function openPack(userId) {
-    const packs = await getUserPacks(userId);
-    if (!packs || packs.packs_available < 1) {
-        throw new Error('No hay sobres disponibles');
+    const { data: packs, error: consumeError } = await supabase
+        .rpc('consume_pack', { p_user_id: userId });
+
+    if (consumeError) {
+        if (consumeError.message?.includes('NO_PACKS_AVAILABLE')) {
+            throw new Error('No hay sobres disponibles');
+        }
+        throw consumeError;
     }
 
     const [players, teams, competitions, events] = await Promise.all([
@@ -213,9 +218,7 @@ export async function openPack(userId) {
     const { error: packError } = await supabase
         .from('album_packs')
         .update({
-            packs_available: packs.packs_available - 1,
             total_packs_opened: newTotalOpened,
-            total_packs_earned: packs.total_packs_earned,
             boost_active: newBoostActive,
             boost_packs_remaining: newBoostRemaining,
             updated_at: new Date().toISOString(),
