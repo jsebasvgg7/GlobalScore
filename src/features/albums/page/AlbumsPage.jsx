@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Package, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAlbumPacks } from '../hooks/useAlbumPacks';
@@ -451,6 +451,7 @@ export default function AlbumsPage({ currentUser }) {
 
     const { open, reset, phase, result, isGoat, isLegend, setPhase } = usePackOpening({
         onPackOpened: async () => {
+            await new Promise(r => setTimeout(r, 500));
             await refreshPacks();
             await computeAndSyncAlbumProgress(user?.id);
             refreshCollection();
@@ -474,7 +475,10 @@ export default function AlbumsPage({ currentUser }) {
 
     const handleOpenModal = () => { reset(); setModalOpen(true); };
     const handleCloseModal = () => { reset(); setModalOpen(false); };
-    const handleReset = async () => { await refreshPacks(); reset(); };
+    const handleReset = useCallback(async () => {
+        reset();
+        await refreshPacks();
+    }, [reset, refreshPacks]);
 
     const activeAlbum = getActiveAlbum(legendary, progress);
     const activeAlbumProgress = activeAlbum ? getAlbumProgress(activeAlbum.id, progress) : null;

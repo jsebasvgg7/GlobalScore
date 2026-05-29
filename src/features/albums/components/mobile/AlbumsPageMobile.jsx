@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     ChevronLeft, Package, BookOpen, Crown, Star, BookMarked,
@@ -445,8 +445,9 @@ export default function AlbumsPageMobile() {
 
     const { open, reset, phase, result, isGoat, isLegend, setPhase } = usePackOpening({
         onPackOpened: async () => {
+            await new Promise(r => setTimeout(r, 500));
             await refreshPacks();
-            await computeAndSyncAlbumProgress(userId);
+            await computeAndSyncAlbumProgress(user?.id);
             refreshCollection();
             refreshProgress();
             refreshCards();
@@ -476,7 +477,10 @@ export default function AlbumsPageMobile() {
 
     const handleOpenModal = () => { reset(); setModalOpen(true); };
     const handleCloseModal = () => { reset(); setModalOpen(false); };
-    const handleReset = async () => { await refreshPacks(); reset(); };
+    const handleReset = useCallback(async () => {
+        reset();
+        await refreshPacks();
+    }, [reset, refreshPacks]);
 
     return (
         <div className="alb-mob-root">

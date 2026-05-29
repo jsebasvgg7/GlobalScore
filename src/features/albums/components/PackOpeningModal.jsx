@@ -216,7 +216,11 @@ function StepsPanel({ phase, packsAvailable, albumName, albumCode, isGoat, onRes
 
     const handleReset = async () => {
         setResetting(true);
-        await onReset();
+        try {
+            await onReset();
+        } finally {
+            setResetting(false);
+        }
     };
 
     const steps = [
