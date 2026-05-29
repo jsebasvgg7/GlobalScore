@@ -491,7 +491,7 @@ export default function AlbumsPage({ currentUser }) {
         <>
             <div className="alp-root">
                 {/* por ahora no se habilitara la nav primero trabajaremos en los albums*/}
-                {/* <AlbumsPageNav active={activePage} onChange={setActivePage} /> */}
+                <AlbumsPageNav active={activePage} onChange={setActivePage} />
 
                 {activePage === 'resumen' && (
                     <>

@@ -10,50 +10,40 @@
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
-/* ══════════════════════════════════════════════
-   DESIGN TOKENS
-══════════════════════════════════════════════ */
 .pom2-overlay {
-    /* ── DEFAULT (dark) — tokens from system index.css ── */
+
     --pom2-bg: #13111A;
     --pom2-surface: #1A1824;
     --pom2-header-bg: #0D0B12;
     --pom2-pack-bg: #13111A;
 
-    /* borders */
     --pom2-border: #38334F;
     --pom2-border-mid: rgba(56, 51, 79, 0.55);
     --pom2-rule: 2px solid #38334F;
 
-    /* text */
     --pom2-text: #F0EDF8;
     --pom2-text-inv: #13111A;
     --pom2-muted: #B8B0D0;
     --pom2-dim: #6E6680;
     --pom2-hint: rgba(196, 187, 232, 0.50);
 
-    /* accent — system purple */
     --pom2-accent: #8B7FC7;
     --pom2-accent-dark: #7366B3;
     --pom2-accent-faint: rgba(139, 127, 199, 0.12);
 
-    /* pack */
     --pom2-pack-spine: #8B7FC7;
     --pom2-pack-face: #0D0B12;
     --pom2-pack-tab: #221F2E;
     --pom2-pack-border: #8B7FC7;
 
-    /* card back */
     --pom2-back-bg: #0D0B12;
     --pom2-back-border: #8B7FC7;
     --pom2-back-text: rgba(139, 127, 199, 0.70);
 
-    /* progress dots */
     --pom2-dot-empty: rgba(56, 51, 79, 0.60);
     --pom2-dot-border: #38334F;
     --pom2-dot-done: #8B7FC7;
 
-    /* sticker card */
     --pom2-sticker-bg: #221F2E;
     --pom2-sticker-border: #38334F;
     --pom2-sticker-name: #F0EDF8;
@@ -65,13 +55,11 @@
     --pom2-star-off: #38334F;
     --pom2-star-on: var(--acc, #8B7FC7);
 
-    /* fonts */
     --f-display: 'Bebas Neue', 'DM Mono', monospace;
     --f-mono: 'DM Mono', monospace;
     --f-body: 'Space Grotesk', sans-serif;
 }
 
-/* ── light theme — uses system light tokens ── */
 [data-theme="light"] .pom2-overlay {
     --pom2-bg: #EAE7E1;
     --pom2-surface: #E0DDD7;
@@ -105,9 +93,22 @@
     --pom2-pack-tab: #31323e;
     --pom2-pack-border: #60519b;
     --pom2-dot-done: #60519b;
+    --pom2-steps-lbl-tag: rgba(200, 195, 230, 0.65);
+    --pom2-steps-lbl-name: #c4bcf5;
+    --pom2-steps-lbl-season: rgba(200, 195, 230, 0.55);
+    --pom2-step-num-idle: rgba(200, 195, 230, 0.30);
+    --pom2-step-label-idle: rgba(220, 215, 245, 0.50);
+    --pom2-step-sub-idle: rgba(200, 195, 230, 0.38);
+    --pom2-step-label-done: rgba(200, 195, 230, 0.55);
+    --pom2-step-sub-done: rgba(200, 195, 230, 0.38);
+    --pom2-steps-count-n: rgba(240, 237, 248, 0.95);
+    --pom2-steps-count-lbl: rgba(200, 195, 230, 0.60);
+    --pom2-barcode-bar: rgba(200, 195, 230, 0.25);
+    --pom2-header-muted: rgba(200, 195, 230, 0.60);
+    --pom2-header-val: rgba(240, 237, 248, 0.90);
+    --pom2-header-strong: #c4bcf5;
 }
 
-/* ── dark theme (explicit) — mirrors default ── */
 [data-theme="dark"] .pom2-overlay {
     --pom2-bg: #13111A;
     --pom2-surface: #1A1824;
@@ -143,10 +144,6 @@
     --pom2-pack-border: #8B7FC7;
 }
 
-
-/* ══════════════════════════════════════════════
-   OVERLAY
-══════════════════════════════════════════════ */
 .pom2-overlay {
     position: fixed;
     inset: 0;
@@ -171,10 +168,6 @@
     }
 }
 
-
-/* ══════════════════════════════════════════════
-   MODAL SHELL
-══════════════════════════════════════════════ */
 .pom2-modal {
     position: relative;
     width: 100%;
@@ -212,10 +205,6 @@
     box-shadow: 6px 6px 0 #8B5CF6;
 }
 
-
-/* ══════════════════════════════════════════════
-   HEADER — newspaper masthead style
-══════════════════════════════════════════════ */
 .pom2-header {
     display: flex;
     align-items: stretch;
@@ -228,7 +217,6 @@
     gap: 0;
 }
 
-/* colour block left accent */
 .pom2-header-accent {
     width: 48px;
     background: var(--pom2-accent);
@@ -312,11 +300,6 @@
     border-color: var(--pom2-accent);
 }
 
-
-/* ══════════════════════════════════════════════
-   BODY LAYOUT
-   Order: Steps (left) | Pack/Holo (center) | Cards (right)
-══════════════════════════════════════════════ */
 .pom2-body {
     flex: 1;
     min-height: 0;
@@ -331,10 +314,6 @@
     align-self: stretch;
 }
 
-
-/* ══════════════════════════════════════════════
-   PACK PANEL (left)
-══════════════════════════════════════════════ */
 .pom2-pack-panel {
     width: 412px;
     flex-shrink: 0;
@@ -349,7 +328,6 @@
     overflow: hidden;
 }
 
-/* editorial grid texture */
 .pom2-pack-bg-pattern {
     position: absolute;
     inset: 0;
@@ -365,7 +343,6 @@
         repeating-linear-gradient(90deg, transparent, transparent 27px, rgba(139, 127, 199, 0.04) 28px);
 }
 
-/* diagonal stripe decoration — top right corner */
 .pom2-pack-panel::before {
     content: '';
     position: absolute;
@@ -385,7 +362,6 @@
             rgba(240, 237, 230, 0.07) 5px, rgba(240, 237, 230, 0.07) 7px);
 }
 
-/* pack counter */
 .pom2-pack-count {
     display: flex;
     flex-direction: column;
@@ -420,7 +396,6 @@
     margin-top: 4px;
 }
 
-/* open CTA */
 .pom2-pack-cta {
     display: flex;
     align-items: center;
@@ -464,8 +439,6 @@
     display: none;
 }
 
-/* remove old sheen */
-
 .pom2-pack-opening-lbl {
     font-family: var(--f-mono);
     font-size: 9px;
@@ -506,10 +479,6 @@
     pointer-events: none;
 }
 
-
-/* ══════════════════════════════════════════════
-   ENVELOPE
-══════════════════════════════════════════════ */
 .pom2-env-wrap {
     position: relative;
     width: 130px;
@@ -705,7 +674,6 @@
     border-radius: 0;
 }
 
-/* envelope state machine */
 .pom2-env-wrap--idle {
     animation: pom2-env-float 3.5s ease-in-out infinite;
     cursor: default;
@@ -815,10 +783,6 @@
     display: none;
 }
 
-
-/* ══════════════════════════════════════════════
-   WAITING SLOTS
-══════════════════════════════════════════════ */
 .pom2-waiting-slot {
     position: relative;
     border-radius: 0;
@@ -858,10 +822,6 @@
     animation: pom2-blink 1.6s ease-in-out infinite;
 }
 
-
-/* ══════════════════════════════════════════════
-   HOLO SCANNER
-══════════════════════════════════════════════ */
 .pom2-holo {
     position: absolute;
     inset: 0;
@@ -988,7 +948,6 @@
     }
 }
 
-/* editorial corner crosses instead of brackets */
 .pom2-holo-corner {
     position: absolute;
     width: 14px;
@@ -1353,10 +1312,6 @@
     border-color: var(--pom2-accent);
 }
 
-
-/* ══════════════════════════════════════════════
-   CARDS PANEL (right)
-══════════════════════════════════════════════ */
 .pom2-cards-panel {
     flex: 1;
     min-width: 0;
@@ -1386,7 +1341,6 @@
     color: var(--pom2-text);
 }
 
-/* Progress dots — square editorial style */
 .pom2-progress-dots {
     display: flex;
     gap: 4px;
@@ -1408,7 +1362,6 @@
     transform: scale(1.15);
 }
 
-/* 2×2 card grid */
 .pom2-cards-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1438,10 +1391,6 @@
     font-size: 13px;
 }
 
-
-/* ══════════════════════════════════════════════
-   FLIP SLOT
-══════════════════════════════════════════════ */
 .pom2-flip-slot {
     perspective: 900px;
     position: relative;
@@ -1488,10 +1437,6 @@
     transform: rotateY(180deg);
 }
 
-
-/* ══════════════════════════════════════════════
-   CARD BACK
-══════════════════════════════════════════════ */
 .pom2-card-back {
     position: absolute;
     inset: 0;
@@ -1506,7 +1451,6 @@
     overflow: hidden;
 }
 
-/* diagonal hatch texture */
 .pom2-card-back-grid {
     position: absolute;
     inset: 0;
@@ -1548,10 +1492,6 @@
     transform: rotate(180deg);
 }
 
-
-/* ══════════════════════════════════════════════
-   CARD FRONT (sticker) — brutalist editorial
-══════════════════════════════════════════════ */
 .pom2-card-front {
     position: absolute;
     inset: 0;
@@ -1576,7 +1516,6 @@
     background: #1A1500 !important;
 }
 
-/* top accent band — solid block colour */
 .pom2-sticker-topband {
     width: 100%;
     height: 6px;
@@ -1659,7 +1598,6 @@
     flex-shrink: 0;
 }
 
-/* ring svg — overlay sobre toda la carta */
 .pom2-sticker-ring-svg {
     display: block;
     position: absolute;
@@ -1671,7 +1609,6 @@
     opacity: 0.65;
 }
 
-/* sin gradiente fade — la imagen ya es circular */
 .pom2-sticker-avatar-zone::after {
     display: none;
 }
@@ -1746,7 +1683,6 @@
     text-align: center;
 }
 
-/* foil shimmer */
 .pom2-sticker-foil {
     position: absolute;
     inset: 0;
@@ -1764,10 +1700,6 @@
     opacity: 1;
 }
 
-
-/* ══════════════════════════════════════════════
-   GOAT PARTICLES
-══════════════════════════════════════════════ */
 .pom2-particles {
     position: absolute;
     inset: 0;
@@ -1799,10 +1731,6 @@
     }
 }
 
-
-/* ══════════════════════════════════════════════
-   TAP HINT
-══════════════════════════════════════════════ */
 .pom2-tap-hint {
     position: absolute;
     bottom: -14px;
@@ -1831,10 +1759,6 @@
     }
 }
 
-
-/* ══════════════════════════════════════════════
-   ACTION BUTTONS
-══════════════════════════════════════════════ */
 .pom2-actions {
     display: flex;
     flex-direction: column;
@@ -1849,7 +1773,6 @@
     display: none;
 }
 
-/* "Abrir otro" */
 .pom2-btn-again {
     display: flex;
     align-items: center;
@@ -1924,10 +1847,6 @@
     text-decoration-color: var(--pom2-muted);
 }
 
-
-/* ══════════════════════════════════════════════
-   CONFETTI BURST
-══════════════════════════════════════════════ */
 .pom2-confetti {
     position: absolute;
     inset: 0;
@@ -1973,10 +1892,6 @@
     }
 }
 
-
-/* ══════════════════════════════════════════════
-   PACK DONE PANEL
-══════════════════════════════════════════════ */
 .pom2-done-panel {
     width: 200px;
     flex-shrink: 0;
@@ -2134,12 +2049,7 @@
     }
 }
 
-
-/* ══════════════════════════════════════════════
-   MOBILE — ≤ 520px
-══════════════════════════════════════════════ */
 @media (max-width: 520px) {
-
     .pom2-overlay {
         padding: 0;
         align-items: flex-end;
@@ -2224,9 +2134,6 @@
     }
 }
 
-/* ══════════════════════════════════════════════
-   HEADER — new counter + rarity legend
-══════════════════════════════════════════════ */
 .pom2-header-counter {
     display: flex;
     flex-direction: column;
@@ -2243,7 +2150,7 @@
     font-size: 7px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: rgba(220, 210, 255, 0.45);
+    color: var(--pom2-header-muted, rgba(220, 210, 255, 0.45));
     line-height: 1;
 }
 
@@ -2251,12 +2158,12 @@
     font-family: var(--f-mono);
     font-size: 13px;
     font-weight: 500;
-    color: rgba(240, 237, 230, 0.85);
+    color: var(--pom2-header-val, rgba(240, 237, 230, 0.85));
     line-height: 1;
 }
 
 .pom2-header-counter-val strong {
-    color: #A99FFF;
+    color: var(--pom2-header-strong, #A99FFF);
     font-family: var(--f-display);
     font-size: 17px;
     font-weight: 400;
@@ -2264,11 +2171,10 @@
 }
 
 .pom2-header-counter-sep {
-    color: rgba(220, 210, 255, 0.45);
+    color: var(--pom2-header-muted, rgba(220, 210, 255, 0.45));
     font-size: 11px;
 }
 
-/* rarity legend in header */
 .pom2-header-rarity {
     display: flex;
     align-items: center;
@@ -2302,14 +2208,10 @@
     font-size: 7px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(220, 210, 255, 0.45);
+    color: var(--pom2-header-muted, rgba(220, 210, 255, 0.45));
     margin-right: 5px;
 }
 
-
-/* ══════════════════════════════════════════════
-   STEPS PANEL — left editorial column
-══════════════════════════════════════════════ */
 .pom2-steps-panel {
     width: 200px;
     flex-shrink: 0;
@@ -2322,7 +2224,6 @@
     border-right: var(--pom2-rule);
 }
 
-/* diagonal stripe corner decoration */
 .pom2-steps-panel::before {
     content: '';
     position: absolute;
@@ -2336,7 +2237,6 @@
     pointer-events: none;
 }
 
-/* pack label block */
 .pom2-steps-pack-label {
     display: flex;
     flex-direction: column;
@@ -2351,7 +2251,7 @@
     font-size: 7px;
     letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: rgba(220, 210, 255, 0.45);
+    color: var(--pom2-steps-lbl-tag, rgba(220, 210, 255, 0.45));
     line-height: 1;
 }
 
@@ -2360,7 +2260,7 @@
     font-size: 18px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #A99FFF;
+    color: var(--pom2-steps-lbl-name, #A99FFF);
     line-height: 1;
     margin-top: 3px;
 }
@@ -2369,7 +2269,7 @@
     font-family: var(--f-mono);
     font-size: 8px;
     letter-spacing: 0.12em;
-    color: rgba(220, 210, 255, 0.40);
+    color: var(--pom2-steps-lbl-season, rgba(220, 210, 255, 0.40));
     line-height: 1;
 }
 
@@ -2379,10 +2279,9 @@
     flex-shrink: 0;
     margin: 0;
     opacity: 0;
-    /* hidden — used as spacer */
+
 }
 
-/* step list */
 .pom2-steps-list {
     display: flex;
     flex-direction: column;
@@ -2406,7 +2305,7 @@
     font-family: var(--f-display);
     font-size: 22px;
     letter-spacing: 0.02em;
-    color: rgba(220, 210, 255, 0.16);
+    color: var(--pom2-step-num-idle, rgba(220, 210, 255, 0.16));
     line-height: 1;
     padding: 14px 12px 14px 16px;
     flex-shrink: 0;
@@ -2429,7 +2328,7 @@
     font-size: 13px;
     letter-spacing: 0.10em;
     text-transform: uppercase;
-    color: rgba(220, 210, 255, 0.28);
+    color: var(--pom2-step-label-idle, rgba(220, 210, 255, 0.28));
     line-height: 1;
     transition: color 0.18s;
 }
@@ -2438,7 +2337,7 @@
     font-family: var(--f-mono);
     font-size: 7.5px;
     letter-spacing: 0.08em;
-    color: rgba(220, 210, 255, 0.18);
+    color: var(--pom2-step-sub-idle, rgba(220, 210, 255, 0.18));
     line-height: 1.3;
     transition: color 0.18s;
 }
@@ -2451,7 +2350,6 @@
     transition: background 0.18s;
 }
 
-/* active step */
 .pom2-step--active {
     background: rgba(139, 127, 199, 0.07);
 }
@@ -2482,24 +2380,22 @@
     background: var(--pom2-accent);
 }
 
-/* done step */
 .pom2-step--done .pom2-step-num {
     color: rgba(139, 127, 199, 0.45);
 }
 
 .pom2-step--done .pom2-step-label {
-    color: rgba(220, 210, 255, 0.40);
+    color: var(--pom2-step-label-done, rgba(220, 210, 255, 0.40));
 }
 
 .pom2-step--done .pom2-step-sub {
-    color: rgba(220, 210, 255, 0.22);
+    color: var(--pom2-step-sub-done, rgba(220, 210, 255, 0.22));
 }
 
 .pom2-step--done .pom2-step-dot {
     background: rgba(139, 127, 199, 0.30);
 }
 
-/* pack info row at bottom of steps */
 .pom2-steps-pack-info {
     display: flex;
     align-items: center;
@@ -2530,7 +2426,7 @@
 .pom2-steps-count-n {
     font-family: var(--f-display);
     font-size: 18px;
-    color: rgba(240, 237, 230, 0.90);
+    color: var(--pom2-steps-count-n, rgba(240, 237, 230, 0.90));
     line-height: 1;
     letter-spacing: 0.04em;
 }
@@ -2540,11 +2436,10 @@
     font-size: 7px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(220, 210, 255, 0.45);
+    color: var(--pom2-steps-count-lbl, rgba(220, 210, 255, 0.45));
     line-height: 1;
 }
 
-/* action buttons in steps panel */
 .pom2-steps-actions {
     display: flex;
     flex-direction: column;
@@ -2570,9 +2465,6 @@
     width: 100%;
 }
 
-/* ══════════════════════════════════════════════
-   PACK BARCODE — top of center panel
-══════════════════════════════════════════════ */
 .pom2-pack-barcode {
     display: flex;
     flex-direction: column;
@@ -2592,7 +2484,7 @@
 
 .pom2-barcode-bar {
     width: var(--bw, 2px);
-    background: rgba(220, 210, 255, 0.18);
+    background: var(--pom2-barcode-bar, rgba(220, 210, 255, 0.18));
     flex-shrink: 0;
 }
 
@@ -2604,12 +2496,9 @@
     text-transform: uppercase;
 }
 
-/* ══════════════════════════════════════════════
-   CARDS PANEL — rarity legend row
-══════════════════════════════════════════════ */
 .pom2-cards-rarity-legend {
     display: none;
-    /* handled in header on desktop */
+
     align-items: center;
     gap: 5px;
     flex-shrink: 0;
@@ -2645,7 +2534,6 @@
     margin-right: 4px;
 }
 
-/* cards panel active state (post-opening) */
 .pom2-cards-panel--active {
     background: var(--pom2-surface);
 }
