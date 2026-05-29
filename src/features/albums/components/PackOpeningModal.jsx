@@ -71,16 +71,6 @@ function CardBack() {
     return (
         <div className="pom2-card-back">
             <div className="pom2-card-back-grid" aria-hidden="true" />
-            <div className="pom2-card-back-logo" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
-                    <path d="M24 4L6 12V24C6 33 14 41 24 44C34 41 42 33 42 24V12L24 4Z"
-                        stroke="currentColor" strokeWidth="1.5" strokeOpacity=".55"
-                        fill="none" strokeLinejoin="round" />
-                    <text x="24" y="29" textAnchor="middle"
-                        fontFamily="'DM Mono', monospace" fontSize="10"
-                        fontWeight="700" fill="currentColor" fillOpacity=".5">GA</text>
-                </svg>
-            </div>
             <span className="pom2-back-corner pom2-back-corner--tl">GA</span>
             <span className="pom2-back-corner pom2-back-corner--br">GA</span>
         </div>
@@ -121,21 +111,22 @@ function CardFront({ type, card, isGoat, index = 0 }) {
                 ) : (
                     <div className="pom2-sticker-avatar">{getInitials(card?.name)}</div>
                 )}
-                <svg className="pom2-sticker-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
-                    <defs>
-                        <linearGradient id={`sg-pom-${num}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor={color} stopOpacity="0.9" />
-                            <stop offset="50%" stopColor="#fff" stopOpacity="0.7" />
-                            <stop offset="100%" stopColor={color} stopOpacity="0.9" />
-                        </linearGradient>
-                    </defs>
-                    <circle cx="50" cy="50" r="46"
-                        fill="none"
-                        stroke={`url(#sg-pom-${num})`}
-                        strokeWidth="2"
-                        strokeDasharray={isGoatCard ? "none" : "6 3"} />
-                </svg>
             </div>
+
+            <svg className="pom2-sticker-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+                <defs>
+                    <linearGradient id={`sg-pom-${num}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor={color} stopOpacity="0.9" />
+                        <stop offset="50%" stopColor="#fff" stopOpacity="0.7" />
+                        <stop offset="100%" stopColor={color} stopOpacity="0.9" />
+                    </linearGradient>
+                </defs>
+                <circle cx="50" cy="48" r="43"
+                    fill="none"
+                    stroke={`url(#sg-pom-${num})`}
+                    strokeWidth="2"
+                    strokeDasharray={isGoatCard ? "none" : "6 3"} />
+            </svg>
 
             <div className="pom2-sticker-stars">
                 {isPlayer ? (
@@ -219,46 +210,83 @@ function ConfettiBurst() {
     );
 }
 
-/* ─── PackDonePanel ─────────────────────────────────────────────────────── */
-function PackDonePanel({ cards, packsAvailable, onReset, onClose }) {
+/* ─── StepsPanel — left editorial column ────────────────────────────────── */
+function StepsPanel({ phase, packsAvailable, albumName, albumCode, isGoat, onReset, onClose, allFlipped }) {
     const [resetting, setResetting] = useState(false);
 
     const handleReset = async () => {
         setResetting(true);
-        await onReset();
+        try {
+            await onReset();
+        } finally {
+            setResetting(false);
+        }
     };
 
-    return (
-        <div className="pom2-done-panel">
-            <div className="pom2-pack-bg-pattern" aria-hidden="true" />
-            <ConfettiBurst />
+    const steps = [
+        { n: '01', key: 'idle', label: 'PREPARANDO', sub: 'Iniciando apertura' },
+        { n: '02', key: 'animating', label: 'REVELANDO', sub: 'Descubriendo cartas' },
+        { n: '03', key: 'revealing', label: 'FINALIZANDO', sub: 'Completando apertura' },
+    ];
 
-            <div className="pom2-done-badge" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path d="M5 13l4 4L19 7" stroke="#10B981" strokeWidth="2.2"
-                        strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+    const activeIdx = phase === 'idle' ? 0 : phase === 'animating' ? 1 : 2;
+
+    return (
+        <div className="pom2-steps-panel">
+            {/* pack label */}
+            <div className="pom2-steps-pack-label">
+                <span className="pom2-steps-lbl-tag">SOBRE</span>
+                <span className="pom2-steps-lbl-name">{albumName || 'GLOBAL ALBUMS'}</span>
+                <span className="pom2-steps-lbl-season">Temporada {albumCode || '25/26'}</span>
             </div>
 
-            <p className="pom2-done-title">¡Sobre completado!</p>
+            <div className="pom2-steps-rule" />
 
-            <div className="pom2-done-thumbs">
-                {cards.map(({ type, card }, i) => {
-                    const color = TYPE_COLOR[type] || '#7C6FFF';
-                    const label = TYPE_LABEL[type] || type;
-                    const initials = card?.name
-                        ? card.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()
-                        : label.slice(0, 2).toUpperCase();
+            {/* step list */}
+            <div className="pom2-steps-list">
+                {steps.map((s, i) => {
+                    const isDone = i < activeIdx;
+                    const isActive = i === activeIdx;
                     return (
-                        <div key={i} className="pom2-done-thumb" style={{ '--acc': color }}>
-                            <span className="pom2-done-thumb-init">{initials}</span>
-                            <span className="pom2-done-thumb-type">{label}</span>
+                        <div key={s.key} className={[
+                            'pom2-step',
+                            isActive ? 'pom2-step--active' : '',
+                            isDone ? 'pom2-step--done' : '',
+                        ].filter(Boolean).join(' ')}>
+                            <div className="pom2-step-num">{s.n}</div>
+                            <div className="pom2-step-body">
+                                <span className="pom2-step-label">{s.label}</span>
+                                <span className="pom2-step-sub">{s.sub}</span>
+                            </div>
+                            <div className="pom2-step-dot" aria-hidden="true" />
                         </div>
                     );
                 })}
             </div>
 
-            <div className="pom2-actions">
+            <div className="pom2-steps-rule" />
+
+            {/* pack thumbnail + count */}
+            <div className="pom2-steps-pack-info">
+                <div className="pom2-steps-pack-thumb" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 48 48" fill="none">
+                        <path d="M24 4L6 12V24C6 33 14 41 24 44C34 41 42 33 42 24V12L24 4Z"
+                            stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinejoin="round" />
+                        <text x="24" y="29" textAnchor="middle"
+                            fontFamily="'DM Mono',monospace" fontSize="10"
+                            fontWeight="700" fill="currentColor">GA</text>
+                    </svg>
+                </div>
+                <div className="pom2-steps-count-group">
+                    <span className="pom2-steps-count-n">+</span>
+                    <span className="pom2-steps-count-lbl">
+                        {packsAvailable} {packsAvailable === 1 ? 'sobre' : 'sobres'}
+                    </span>
+                </div>
+            </div>
+
+            {/* action buttons — shown after all flipped */}
+            <div className={`pom2-steps-actions${allFlipped ? ' pom2-steps-actions--visible' : ''}`}>
                 {packsAvailable > 0 && (
                     <button className="pom2-btn-again" onClick={handleReset} disabled={resetting}>
                         {resetting ? 'Cargando…' : 'Abrir otro'}
@@ -433,8 +461,8 @@ function HoloScanner({ phase, isGoat, flippedCount, totalCards }) {
     );
 }
 
-/* ─── EnvelopePack ───────────────────────────────────────────────────────── */
-function EnvelopePack({ count, phase, onOpen, isOpening, allFlipped, packsAvailable, onReset, onClose, isGoat, flippedCount, totalCards }) {
+/* ─── EnvelopePack — center panel ───────────────────────────────────────── */
+function EnvelopePack({ count, phase, onOpen, isOpening, isGoat, flippedCount, totalCards }) {
     const [envPhase, setEnvPhase] = useState('idle');
     const [scannerActive, setScannerActive] = useState(false);
 
@@ -455,15 +483,21 @@ function EnvelopePack({ count, phase, onOpen, isOpening, allFlipped, packsAvaila
         }
     }, [phase]);
 
-    useEffect(() => {
-        if (allFlipped) setScannerActive(false);
-    }, [allFlipped]);
-
     const isGone = envPhase === 'gone' || phase === 'revealing' || phase === 'done';
 
     return (
         <div className="pom2-pack-panel">
             <div className="pom2-pack-bg-pattern" aria-hidden="true" />
+
+            {/* barcode top decoration */}
+            <div className="pom2-pack-barcode" aria-hidden="true">
+                <div className="pom2-barcode-lines">
+                    {Array.from({ length: 20 }).map((_, i) => (
+                        <div key={i} className="pom2-barcode-bar" style={{ '--bw': `${1 + (i % 3)}px` }} />
+                    ))}
+                </div>
+                <span className="pom2-barcode-code">GS-25/26</span>
+            </div>
 
             {!isGone && (
                 <div className={`pom2-env-wrap pom2-env-wrap--${envPhase}`} data-env-phase={envPhase} aria-hidden="true">
@@ -520,7 +554,7 @@ function EnvelopePack({ count, phase, onOpen, isOpening, allFlipped, packsAvaila
                     aria-label="Abrir sobre"
                     aria-busy={isOpening}
                 >
-                    {isOpening ? 'Abriendo…' : 'Abrir sobre'}
+                    {isOpening ? 'Abriendo…' : 'Toca para abrir'}
                     {!isOpening && (
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                             <path d="M2 6h8M7 3l3 3-3 3"
@@ -547,8 +581,8 @@ function EnvelopePack({ count, phase, onOpen, isOpening, allFlipped, packsAvaila
     );
 }
 
-/* ─── CardsPanel ─────────────────────────────────────────────────────────── */
-function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, packsAvailable, onReset, onClose }) {
+/* ─── CardsPanel — right column ─────────────────────────────────────────── */
+function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, packsAvailable, onReset, onClose, phase }) {
     const [resetting, setResetting] = useState(false);
 
     const handleReset = async () => {
@@ -556,16 +590,33 @@ function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, pa
         await onReset();
     };
 
+    const isRevealing = phase === 'revealing' || phase === 'done';
+
     return (
-        <div className="pom2-cards-panel">
+        <div className={[
+            'pom2-cards-panel',
+            isRevealing ? 'pom2-cards-panel--active' : '',
+        ].filter(Boolean).join(' ')}>
+
+            {/* cards panel header */}
             <div className="pom2-cards-header">
-                <span className="pom2-cards-tag">Tus cartas</span>
+                <span className="pom2-cards-tag">TUS CARTAS</span>
                 <div className="pom2-progress-dots" aria-label={`${flippedSet.size} de ${cards.length} reveladas`}>
                     {cards.map((_, i) => (
                         <span key={i}
                             className={`pom2-pdot${flippedSet.has(i) ? ' pom2-pdot--done' : ''}`} />
                     ))}
                 </div>
+            </div>
+
+            {/* rarity legend */}
+            <div className="pom2-cards-rarity-legend" aria-hidden="true">
+                <span className="pom2-rarity-dot pom2-rarity-dot--raro" />
+                <span className="pom2-rarity-lbl">RARO</span>
+                <span className="pom2-rarity-dot pom2-rarity-dot--epico" />
+                <span className="pom2-rarity-lbl">ÉPICO</span>
+                <span className="pom2-rarity-dot pom2-rarity-dot--legendario" />
+                <span className="pom2-rarity-lbl">LEGENDARIO</span>
             </div>
 
             <div className="pom2-cards-grid">
@@ -603,6 +654,7 @@ function CardsPanel({ cards, isDealt, flippedSet, onFlip, isGoat, allFlipped, pa
                 </div>
             )}
 
+            {/* mobile-only action row */}
             {allFlipped && (
                 <div className="pom2-mobile-actions">
                     {packsAvailable > 0 && (
@@ -632,6 +684,8 @@ export default function PackOpeningModal({
     onOpen,
     onClose,
     onReset,
+    albumName,
+    albumCode,
 }) {
     const [flippedCards, setFlippedCards] = useState(new Set());
     const [isDealt, setIsDealt] = useState(false);
@@ -678,8 +732,8 @@ export default function PackOpeningModal({
     const titles = {
         idle: 'Apertura de sobre',
         animating: 'Abriendo…',
-        revealing: isGoat ? '¡Figurita GOAT!' : '¡Tus cartas!',
-        done: isGoat ? '¡Figurita GOAT!' : '¡Tus cartas!',
+        revealing: isGoat ? '¡Figurita GOAT!' : 'Apertura de sobre',
+        done: isGoat ? '¡Figurita GOAT!' : 'Apertura de sobre',
     };
 
     return (
@@ -698,12 +752,34 @@ export default function PackOpeningModal({
                 `pom2-modal--${phase}`,
             ].filter(Boolean).join(' ')}>
 
+                {/* ── HEADER ── */}
                 <div className="pom2-header">
                     <div className="pom2-header-accent" aria-hidden="true" />
                     <div className="pom2-header-text">
-                        <span className="pom2-eyebrow">Global Albums · 25/26</span>
+                        <span className="pom2-eyebrow">Global Albums · {albumCode || '25/26'}</span>
                         <span className="pom2-title">{titles[phase] ?? titles.idle}</span>
                     </div>
+
+                    {/* progress counter — right side */}
+                    <div className="pom2-header-counter" aria-hidden="true">
+                        <span className="pom2-header-counter-label">TUS CARTAS</span>
+                        <span className="pom2-header-counter-val">
+                            <strong>{flippedCards.size}</strong>
+                            <span className="pom2-header-counter-sep"> / </span>
+                            {CARD_ORDER.length}
+                        </span>
+                    </div>
+
+                    {/* rarity legend in header */}
+                    <div className="pom2-header-rarity" aria-hidden="true">
+                        <span className="pom2-hr-dot pom2-hr-dot--raro" />
+                        <span className="pom2-hr-lbl">RARO</span>
+                        <span className="pom2-hr-dot pom2-hr-dot--epico" />
+                        <span className="pom2-hr-lbl">ÉPICO</span>
+                        <span className="pom2-hr-dot pom2-hr-dot--legend" />
+                        <span className="pom2-hr-lbl">LEGENDARIO</span>
+                    </div>
+
                     {(allFlipped || phase === 'idle') && (
                         <button
                             className="pom2-close"
@@ -721,32 +797,37 @@ export default function PackOpeningModal({
 
                 <div className="pom2-header-sep" aria-hidden="true" />
 
+                {/* ── BODY: 3 columns ── */}
                 <div className="pom2-body">
-                    {allFlipped ? (
-                        <PackDonePanel
-                            cards={cards}
-                            packsAvailable={packsAvailable}
-                            onReset={onReset}
-                            onClose={onClose}
-                        />
-                    ) : (
-                        <EnvelopePack
-                            count={packsAvailable}
-                            phase={phase}
-                            onOpen={onOpen}
-                            isOpening={isOpening}
-                            allFlipped={allFlipped}
-                            packsAvailable={packsAvailable}
-                            onReset={onReset}
-                            onClose={onClose}
-                            isGoat={isGoat}
-                            flippedCount={flippedCards.size}
-                            totalCards={CARD_ORDER.length}
-                        />
-                    )}
+
+                    {/* LEFT: steps / done panel */}
+                    <StepsPanel
+                        phase={phase}
+                        packsAvailable={packsAvailable}
+                        albumName={albumName}
+                        albumCode={albumCode}
+                        isGoat={isGoat}
+                        onReset={onReset}
+                        onClose={onClose}
+                        allFlipped={allFlipped}
+                    />
 
                     <div className="pom2-divider" aria-hidden="true" />
 
+                    {/* CENTER: envelope */}
+                    <EnvelopePack
+                        count={packsAvailable}
+                        phase={phase}
+                        onOpen={onOpen}
+                        isOpening={isOpening}
+                        isGoat={isGoat}
+                        flippedCount={flippedCards.size}
+                        totalCards={CARD_ORDER.length}
+                    />
+
+                    <div className="pom2-divider" aria-hidden="true" />
+
+                    {/* RIGHT: cards */}
                     <CardsPanel
                         cards={cards}
                         isDealt={isDealt}
@@ -757,6 +838,7 @@ export default function PackOpeningModal({
                         packsAvailable={packsAvailable}
                         onReset={onReset}
                         onClose={onClose}
+                        phase={phase}
                     />
                 </div>
             </div>

@@ -6,119 +6,112 @@
    ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
    MOBILE — responsive chaos
 ════════════════════════════════════════════════ */
-
 @media (max-width: 768px) {
-
   .cas2-root {
-    gap: 12px;
-  }
-
-  .cas2-eyebrow {
-    font-size: 8px;
-    gap: 8px;
+    gap: 0;
+    height: auto;
   }
 
   .cas2-row {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    padding-bottom: 72px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 12px 16px 16px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    min-height: 0;
+    max-width: none;
   }
 
-  .cas2-book-wrap:hover {
-    transform: none;
-  }
-
-  .cas2-book {
-    aspect-ratio: 3/4;
-    min-height: 140px;
-  }
-
-  .cas2-spine {
-    width: 18px;
-    padding: 10px 0 8px;
-  }
-
-  .cas2-spine-num {
-    font-size: 8px;
-  }
-
-  .cas2-spine-label {
-    font-size: 5px;
-  }
-
-  .cas2-spine-lines {
-    width: 8px;
-  }
-
-  .cas2-cover {
-    padding: 7px 8px 6px;
-    gap: 4px;
-  }
-
-  .cas2-cover-tag {
-    font-size: 5px;
-    padding: 2px 5px;
-  }
-
-  .cas2-cover-id {
-    font-size: 4px;
-    top: 6px;
-    right: 10px;
-  }
-
-  .cas2-cover-title-block {
-    flex: 1;
-  }
-
-  .cas2-cover-icon {
-    font-size: 1.8rem;
-  }
-
-  .cas2-rarity {
-    top: 20px;
-    right: 10px;
-    padding: 2px 4px 2px;
-  }
-
-  .cas2-rarity-stars span {
-    font-size: 5px;
-  }
-
-  .cas2-rarity-label {
-    font-size: 4px;
-  }
-
-  .cas2-cover-count {
-    font-size: 6px;
-  }
-
-  .cas2-cover-hint {
+  .cas2-row::-webkit-scrollbar {
     display: none;
   }
 
-  .cas2-done-tick {
-    font-size: 7px;
+  .cas2-card {
+    flex: 0 0 130px;
+    width: 130px;
+    min-height: 180px;
+    height: 180px;
+    border-radius: 4px 6px 6px 4px;
   }
 
-  .cas2-page-stack {
-    right: -4px;
-    width: 7px;
+  .cas2-card:not(:disabled):hover {
+    transform: none;
+    box-shadow:
+      inset 18px 0 0 0 var(--spine, #5b4fd8),
+      inset 19px 0 0 0 color-mix(in srgb, var(--spine, #5b4fd8) 60%, black),
+      inset 22px 0 12px -10px rgba(0, 0, 0, 0.55),
+      inset 5px 0 4px -2px rgba(255, 255, 255, 0.12),
+      4px 8px 0 rgba(0, 0, 0, 0.35),
+      8px 18px 30px rgba(0, 0, 0, 0.28),
+      inset -2px 0 0 0 rgba(var(--acc-rgb, 91, 79, 216), 0.45);
   }
 
-  .cas2-corner {
+  .cas2-card-number {
+    font-size: 6px;
+    top: 8px;
+    left: 3px;
+    width: 14px;
+  }
+
+  .cas2-card-tag {
+    font-size: 4.5px;
+    padding: 2px 4px;
+    top: 6px;
+    right: 5px;
+    letter-spacing: 0.1em;
+  }
+
+  .cas2-card-art {
+    margin-left: 18px;
+    padding: 8px 5px 4px;
+  }
+
+  .cas2-card-progress {
+    margin-left: 18px;
+    padding: 0 6px 6px;
+    gap: 2px;
+  }
+
+  .cas2-card-progress-bar {
+    height: 2px;
+  }
+
+  .cas2-card-progress-info {
+    font-size: 5px;
+  }
+
+  .cas2-card-corner {
     width: 8px;
     height: 8px;
   }
 
-  .cas2-clasp-strap--top,
-  .cas2-clasp-strap--bot {
-    height: 16px;
+  .cas2-card-corner--tl {
+    left: 18px;
+  }
+
+  .cas2-card-corner--bl {
+    left: 18px;
+  }
+
+  .cas2-card-clasp-strap--top,
+  .cas2-card-clasp-strap--bot {
+    height: 14px;
     width: 4px;
   }
 
-  .cas2-clasp-buckle {
+  .cas2-card-clasp-buckle {
     width: 7px;
     height: 10px;
+  }
+
+  .cas2-card-clasp-buckle-inner {
+    width: 4px;
+    height: 6px;
   }
 
   .cas2-panel {
@@ -170,7 +163,7 @@
   }
 
   .cas2-panel-sidebar-inner {
-    padding: 14px 14px 10px 16px;
+    padding: 16px 14px 10px 16px;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
@@ -193,12 +186,12 @@
   .cas2-sidebar-id {
     text-align: left;
     width: 100%;
-    font-size: 8px;
+    font-size: 7px;
     margin-bottom: 0;
   }
 
   .cas2-sidebar-title {
-    font-size: 20px;
+    font-size: 22px;
     margin: 0;
   }
 
@@ -208,7 +201,7 @@
   }
 
   .cas2-sidebar-count-big {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .cas2-sidebar-count-sep {
@@ -216,7 +209,7 @@
   }
 
   .cas2-sidebar-count-label {
-    font-size: 8px;
+    font-size: 7px;
   }
 
   .cas2-sidebar-pbar-wrap {
@@ -239,16 +232,16 @@
   }
 
   .cas2-chip {
-    font-size: 7px;
+    font-size: 6px;
     padding: 2px 5px;
   }
 
   .cas2-modal-topbar {
-    height: 48px;
+    height: 46px;
   }
 
   .cas2-modal-topbar-title {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .cas2-modal-topbar-season {
@@ -267,7 +260,7 @@
 
   .cas2-footer-stat {
     padding: 0 12px;
-    min-width: 70px;
+    min-width: 68px;
   }
 
   .cas2-footer-stat-label {
@@ -316,21 +309,16 @@
   }
 }
 
-@media (max-width: 480px) {
-
-  .cas2-row {
-    max-width: 100%;
+@media (max-width: 380px) {
+  .cas2-card {
+    flex: 0 0 116px;
+    width: 116px;
+    min-height: 160px;
+    height: 160px;
   }
 
   .cas2-sticker-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
-  }
-}
-
-@media (max-width: 380px) {
-  .cas2-row {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
   }
 }

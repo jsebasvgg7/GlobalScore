@@ -210,19 +210,24 @@ export async function openPack(userId) {
         }
     }
 
-    const { error: packError } = await supabase
+    // Optimistic lock: solo actualiza si packs_available no cambió desde que lo leímos
+    const { data: updated, error: packError } = await supabase
         .from('album_packs')
         .update({
             packs_available: packs.packs_available - 1,
             total_packs_opened: newTotalOpened,
-            total_packs_earned: packs.total_packs_earned,
             boost_active: newBoostActive,
             boost_packs_remaining: newBoostRemaining,
             updated_at: new Date().toISOString(),
         })
-        .eq('user_id', userId);
+        .eq('user_id', userId)
+        .eq('packs_available', packs.packs_available)  // <-- esto es el lock
+        .select();
 
     if (packError) throw packError;
+    if (!updated || updated.length === 0) {
+        throw new Error('No hay sobres disponibles');
+    }
 
     for (const card of drawn) {
         await upsertCollectionCard(userId, card.id);
@@ -248,7 +253,6 @@ export async function openPack(userId) {
         boostTriggered,
     };
 }
-
 // ── Colección ──────────────────────────────────────────────────────────────
 
 export async function getUserCollection(userId) {
