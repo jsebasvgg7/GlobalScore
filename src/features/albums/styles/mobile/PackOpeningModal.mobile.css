@@ -44,7 +44,7 @@
         }
     }
 
-    /* ── Header: hide counter and rarity on mobile ── */
+    /* ── Header ── */
     .pom2-header {
         flex-shrink: 0;
         height: 50px;
@@ -54,6 +54,17 @@
     .pom2-header-counter,
     .pom2-header-rarity {
         display: none;
+    }
+
+    /* header rarity dot/label (desktop uses .pom2-hr-dot / .pom2-hr-lbl) */
+    .pom2-hr-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .pom2-hr-lbl {
+        font-size: 6px;
+        letter-spacing: 0.14em;
     }
 
     /* ── Body: stacked panels with slide transition ── */
@@ -66,7 +77,7 @@
         position: relative;
     }
 
-    /* Steps panel hidden on mobile — replaced by cards panel header */
+    /* Steps panel hidden on mobile */
     .pom2-steps-panel {
         display: none;
     }
@@ -75,7 +86,9 @@
         display: none;
     }
 
-    /* PACK PANEL — fills full body, slides out on reveal */
+    /* ══════════════════════════════════
+       PACK PANEL — fills full body, slides out on reveal
+    ══════════════════════════════════ */
     .pom2-pack-panel {
         position: absolute;
         inset: 0;
@@ -150,7 +163,9 @@
         display: none;
     }
 
-    /* CARDS PANEL — slides in from the right on reveal */
+    /* ══════════════════════════════════
+       CARDS PANEL — slides in from the right on reveal
+    ══════════════════════════════════ */
     .pom2-cards-panel {
         position: absolute;
         inset: 0;
@@ -159,8 +174,8 @@
         display: flex;
         flex-direction: column;
         background: var(--pom2-surface);
-        padding: 12px 12px 8px;
-        gap: 8px;
+        padding: 10px 10px 8px;
+        gap: 6px;
         overflow: hidden;
         opacity: 0;
         transform: translateX(100%);
@@ -178,21 +193,43 @@
         z-index: 3;
     }
 
-    /* Rarity legend visible in cards panel on mobile */
-    .pom2-cards-rarity-legend {
-        display: flex;
-    }
-
-    /* Cards header */
+    /* ── Cards header — single row: title left, dots+rarity right ── */
     .pom2-cards-header {
         flex-shrink: 0;
-        padding: 0 2px 6px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2px 8px;
         border-bottom: var(--pom2-rule);
+        gap: 8px;
+    }
+
+    /* Rarity legend — inline in header row on mobile (like desktop) */
+    .pom2-cards-rarity-legend {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border-bottom: none;
+        padding: 0;
+    }
+
+    .pom2-rarity-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .pom2-rarity-lbl {
+        font-size: 6px;
+        letter-spacing: 0.14em;
+        margin-right: 3px;
     }
 
     .pom2-cards-tag {
-        font-size: 12px;
-        letter-spacing: 0.10em;
+        font-family: var(--f-display);
+        font-size: 14px;
+        letter-spacing: 0.12em;
+        color: var(--pom2-text);
+        flex-shrink: 0;
     }
 
     .pom2-pdot {
@@ -202,14 +239,18 @@
     }
 
     .pom2-progress-dots {
-        gap: 5px;
+        gap: 4px;
+        flex-shrink: 0;
     }
 
-    /* Grid — 2×2 fills the panel height */
+    /* ══════════════════════════════════
+       CARD GRID — 2×2, fills remaining space
+    ══════════════════════════════════ */
     .pom2-cards-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 8px;
+        grid-template-rows: 1fr 1fr;
+        gap: 6px;
         flex: 1;
         min-height: 0;
         overflow: hidden;
@@ -264,18 +305,23 @@
     }
 
     .pom2-sticker-avatar-zone {
-        padding: 0;
+        padding: 2px 0;
     }
 
     .pom2-sticker-img {
-        width: 100%;
-        height: 100%;
+        width: 72%;
+        height: auto;
+        aspect-ratio: 1 / 1;
     }
 
     .pom2-sticker-avatar {
-        width: 100%;
+        width: 72%;
         font-size: 14px;
         border-radius: 0;
+    }
+
+    .pom2-sticker-stars {
+        padding: 0 4px 1px;
     }
 
     .pom2-star {
@@ -288,16 +334,18 @@
         border-radius: 0;
     }
 
+    .pom2-sticker-info {
+        padding: 3px 4px 4px;
+        gap: 1px;
+    }
+
     .pom2-sticker-name {
-        font-size: 6px;
+        font-size: 7px;
+        letter-spacing: 0.04em;
     }
 
     .pom2-sticker-pos {
         font-size: 5.5px;
-    }
-
-    .pom2-sticker-info {
-        padding: 3px 3px 3px;
     }
 
     .pom2-tap-hint {
@@ -305,20 +353,47 @@
         bottom: -14px;
     }
 
+    /* ── "¡SOBRE COMPLETADO!" row ── */
     .pom2-cards-hint,
     .pom2-cards-done {
+        font-family: var(--f-mono);
         font-size: 8px;
-        padding: 2px 0;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--pom2-muted);
+        text-align: center;
         flex-shrink: 0;
+        margin: 0;
+        padding: 2px 0;
     }
 
-    /* Mobile action row (horizontal) */
-    .pom2-cards-panel .pom2-mobile-actions {
+    .pom2-cards-done {
+        color: var(--pom2-dot-done);
+        font-family: var(--f-display);
+        font-size: 13px;
+        letter-spacing: 0.10em;
+    }
+
+    .pom2-cards-done-wrap {
+        position: relative;
         display: flex;
-        flex-direction: row;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        flex-shrink: 0;
+        height: 20px;
+        overflow: visible;
+    }
+
+    /* ── Action buttons — column layout matching desktop ── */
+    .pom2-actions {
+        display: none;
+    }
+
+    .pom2-cards-panel .pom2-mobile-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
         flex-shrink: 0;
         padding: 4px 0 2px;
     }
@@ -328,38 +403,110 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        padding: 10px 20px;
+        padding: 11px 20px;
         background: var(--pom2-accent);
-        border: none;
+        border: 2px solid var(--pom2-accent);
         border-radius: 0;
         color: #fff;
-        font-family: 'DM Mono', monospace;
-        font-size: 9px;
-        font-weight: 700;
+        font-family: var(--f-display);
+        font-size: 14px;
+        font-weight: 400;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         cursor: pointer;
         max-width: none;
-        width: auto;
-        box-shadow: 2px 2px 0 rgba(124, 111, 255, 0.35);
-        transition: background 0.14s, transform 0.12s;
+        width: 100%;
+        box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.25);
+        transition: background 0.12s, transform 0.10s, box-shadow 0.10s;
     }
 
     .pom2-btn-again:hover {
         background: var(--pom2-accent-dark);
+        transform: translate(-1px, -1px);
+        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.30);
     }
 
     .pom2-btn-collection {
-        font-size: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        letter-spacing: 0.10em;
         color: var(--pom2-muted);
         text-decoration-color: var(--pom2-dim);
         white-space: nowrap;
         border-radius: 0;
+        padding: 2px 0;
     }
 
     .pom2-btn-collection:hover {
         color: var(--pom2-text);
         text-decoration-color: var(--pom2-muted);
+    }
+
+    /* ── Badge (pack count inside button) ── */
+    .pom2-badge {
+        width: 18px;
+        height: 18px;
+        font-size: 9px;
+    }
+
+    /* ══════════════════════════════════
+       DONE PANEL — slides in when all cards are flipped
+    ══════════════════════════════════ */
+    .pom2-done-panel {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 20px 16px 18px;
+        background: var(--pom2-pack-bg);
+        overflow: hidden;
+        opacity: 0;
+        transform: translateX(-100%);
+        transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+            transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .pom2-modal--done .pom2-done-panel {
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: auto;
+    }
+
+    .pom2-done-badge {
+        width: 40px;
+        height: 40px;
+    }
+
+    .pom2-done-title {
+        font-size: 10px;
+        letter-spacing: 0.14em;
+    }
+
+    .pom2-done-thumbs {
+        gap: 5px;
+        max-width: 140px;
+    }
+
+    .pom2-done-thumb {
+        padding: 6px 3px 5px;
+        gap: 2px;
+    }
+
+    .pom2-done-thumb-init {
+        font-size: 11px;
+    }
+
+    .pom2-done-thumb-type {
+        font-size: 5.5px;
     }
 }
 
@@ -377,6 +524,16 @@
         padding: 20px 20px 30px;
     }
 
+    .pom2-done-panel {
+        gap: 10px;
+        padding: 16px 14px 16px;
+    }
+
+    .pom2-done-thumbs {
+        max-width: 120px;
+        gap: 4px;
+    }
+
     .pom2-env-wrap {
         width: 118px;
         height: 167px;
@@ -392,13 +549,13 @@
         min-width: 160px;
     }
 
-    .pom2-cards-grid {
-        gap: 7px;
-    }
-
     .pom2-cards-panel {
         padding: 10px 10px 7px;
-        gap: 7px;
+        gap: 6px;
+    }
+
+    .pom2-cards-grid {
+        gap: 5px;
     }
 
     .pom2-sticker-topband {
@@ -406,11 +563,16 @@
     }
 
     .pom2-sticker-name {
-        font-size: 5.5px;
+        font-size: 6.5px;
     }
 
     .pom2-card-type-label {
         font-size: 5px;
+    }
+
+    .pom2-btn-again {
+        font-size: 13px;
+        padding: 10px 16px;
     }
 }
 
@@ -422,6 +584,25 @@
     .pom2-pack-panel {
         gap: 12px;
         padding: 16px 16px 24px;
+    }
+
+    .pom2-done-panel {
+        gap: 8px;
+        padding: 12px 12px 14px;
+    }
+
+    .pom2-done-thumbs {
+        max-width: 100px;
+        gap: 3px;
+    }
+
+    .pom2-done-thumb-init {
+        font-size: 10px;
+    }
+
+    .pom2-done-badge {
+        width: 34px;
+        height: 34px;
     }
 
     .pom2-env-wrap {
@@ -439,16 +620,17 @@
         min-width: 140px;
     }
 
-    .pom2-cards-grid {
-        gap: 6px;
-    }
-
     .pom2-cards-panel {
         padding: 8px 8px 5px;
+        gap: 5px;
+    }
+
+    .pom2-cards-grid {
+        gap: 4px;
     }
 
     .pom2-sticker-name {
-        font-size: 5px;
+        font-size: 5.5px;
     }
 
     .pom2-card-type-label {
@@ -461,5 +643,10 @@
 
     .pom2-star {
         font-size: 6px;
+    }
+
+    .pom2-btn-again {
+        font-size: 12px;
+        padding: 9px 14px;
     }
 }
