@@ -1435,7 +1435,7 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 0;
-  padding: 14px 16px;
+  padding: 18px 16px;
   border: 0.5px solid var(--border);
   border-top: none;
   background: var(--bg);
@@ -1474,7 +1474,7 @@
   font-weight: 800;
   font-family: 'DM Mono', monospace;
   color: var(--text-primary);
-  padding: 0 18px;
+  padding: 8px 18px;
   flex-shrink: 0;
   letter-spacing: 0.04em;
   white-space: nowrap;
@@ -1482,7 +1482,7 @@
 
 .hep-ko-decisive-chip {
   position: absolute;
-  bottom: 5px;
+  bottom: 9px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 8px;
