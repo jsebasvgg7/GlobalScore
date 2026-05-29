@@ -2488,6 +2488,9 @@ export default function AdminHistorical() {
   const [activeTab, setActiveTab] = useState("players");
   const [panel, setPanel] = useState(null);
   const [search, setSearch] = useState("");
+  const [filterPosition, setFilterPosition] = useState("");
+  const [filterCountry, setFilterCountry] = useState("");
+  const [filterSignificance, setFilterSignificance] = useState("");
 
   const {
     players, teams, competitions, events, users,
@@ -2516,7 +2519,11 @@ export default function AdminHistorical() {
   const q = search.toLowerCase();
   const filteredPlayers = players
     .filter(p => p.name.toLowerCase().includes(q))
-    .sort((a, b) => (b.significance_level ?? 0) - (a.significance_level ?? 0)); const filteredTeams = teams.filter(t => t.name.toLowerCase().includes(q));
+    .filter(p => !filterPosition || p.position === filterPosition)
+    .filter(p => !filterCountry || (p.country || "").toLowerCase().includes(filterCountry.toLowerCase()))
+    .filter(p => !filterSignificance || p.significance_level === Number(filterSignificance))
+    .sort((a, b) => (b.significance_level ?? 0) - (a.significance_level ?? 0));
+  const filteredTeams = teams.filter(t => t.name.toLowerCase().includes(q));
   const filteredCompetitions = competitions.filter(c => c.name.toLowerCase().includes(q));
   const filteredEvents = events.filter(e => e.title.toLowerCase().includes(q));
 
@@ -2610,12 +2617,33 @@ export default function AdminHistorical() {
               </div>
             )}
             {!loading && !error && <>
-              {activeTab === "players" && (
+              {activeTab === "players" && <>
+                <div className="ah-controls" style={{ height: "auto", padding: "6px 14px", gap: 6, flexWrap: "wrap" }}>
+                  <select className="ah-pinput" style={{ flex: 1, minWidth: 100, height: 28, fontSize: 10 }}
+                    value={filterPosition} onChange={e => setFilterPosition(e.target.value)}>
+                    <option value="">Todas las posiciones</option>
+                    {POSITIONS.map(p => <option key={p} value={p}>{POSITION_LABEL[p] || p}</option>)}
+                  </select>
+                  <select className="ah-pinput" style={{ flex: 1, minWidth: 90, height: 28, fontSize: 10 }}
+                    value={filterSignificance} onChange={e => setFilterSignificance(e.target.value)}>
+                    <option value="">Todas las estrellas</option>
+                    {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{"★".repeat(n)}</option>)}
+                  </select>
+                  <input className="ah-pinput" style={{ flex: 1, minWidth: 80, height: 28, fontSize: 10 }}
+                    placeholder="País..." value={filterCountry}
+                    onChange={e => setFilterCountry(e.target.value)} />
+                  {(filterPosition || filterCountry || filterSignificance) && (
+                    <button className="ah-search-clear" style={{ height: 28, padding: "0 8px", border: "0.5px solid var(--border)" }}
+                      onClick={() => { setFilterPosition(""); setFilterCountry(""); setFilterSignificance(""); }}>
+                      Limpiar
+                    </button>
+                  )}
+                </div>
                 <HistoricalList items={filteredPlayers} selectedId={selectedId}
                   onEdit={openEdit} onDelete={deletePlayer} onTogglePublish={togglePlayerPublished}
                   renderTitle={p => p.name} renderMeta={renderPlayerMeta}
                   emptyMsg="No hay jugadores históricos." />
-              )}
+              </>}
               {activeTab === "teams" && (
                 <HistoricalList items={filteredTeams} selectedId={selectedId}
                   onEdit={openEdit} onDelete={deleteTeam} onTogglePublish={toggleTeamPublished}
