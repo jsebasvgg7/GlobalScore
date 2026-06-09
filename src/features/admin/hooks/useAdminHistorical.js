@@ -5,6 +5,10 @@ import {
   uploadHistoricalImage,
   getHistoricalImageUrl,
   deleteHistoricalImage,
+  getEventMoments,
+  setEventMoments as setEventMomentsService,
+  getEventProtagonists,
+  setEventProtagonists as setEventProtagonistsService,
 } from '../services/admin.service';
 
 // ─── Re-exportamos los helpers para quien los importe desde el hook ───────────
@@ -931,6 +935,44 @@ export function useAdminHistorical() {
     if (insErr) throw insErr;
   };
 
+  // ══════════════════════════════════════════════════════════════════════════
+  //  EVENT MOMENTS
+  // ══════════════════════════════════════════════════════════════════════════
+  const getEventMomentsHook = async (eventId) => {
+    return await getEventMoments(eventId);
+  };
+
+  const setEventMomentsHook = async (eventId, rows) => {
+    const cleaned = (rows || []).map((r, idx) => ({
+      minute: r.minute !== '' && r.minute != null ? int(r.minute) : null,
+      moment_date: str(r.moment_date),
+      title: str(r.title) || '',
+      description: str(r.description),
+      icon: str(r.icon),
+      sort_order: int(r.sort_order) ?? idx,
+    }));
+    await setEventMomentsService(eventId, cleaned);
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  EVENT PROTAGONISTS
+  // ══════════════════════════════════════════════════════════════════════════
+  const getEventProtagonistsHook = async (eventId) => {
+    return await getEventProtagonists(eventId);
+  };
+
+  const setEventProtagonistsHook = async (eventId, rows) => {
+    const cleaned = (rows || []).map((r, idx) => ({
+      player_id: uuid(r.player_id),
+      team_id: uuid(r.team_id),
+      name_override: str(r.name_override),
+      role_label: str(r.role_label),
+      icon: str(r.icon),
+      sort_order: int(r.sort_order) ?? idx,
+    }));
+    await setEventProtagonistsService(eventId, cleaned);
+  };
+
   // ── Return ─────────────────────────────────────────────────────────────────
   return {
     players, teams, competitions, events, users,
@@ -954,5 +996,9 @@ export function useAdminHistorical() {
     getEventSquad, setEventSquad,
     getEventStandings, setEventStandings,
     getEventKnockout, setEventKnockout,
+    getEventMoments: getEventMomentsHook,
+    setEventMoments: setEventMomentsHook,
+    getEventProtagonists: getEventProtagonistsHook,
+    setEventProtagonists: setEventProtagonistsHook,
   };
 }

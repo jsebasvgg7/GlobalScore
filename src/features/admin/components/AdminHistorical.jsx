@@ -1798,6 +1798,8 @@ function EventPanel({
   onGetEventSquad, onSetEventSquad,
   onGetEventStandings, onSetEventStandings,
   onGetEventKnockout, onSetEventKnockout,
+  onGetEventMoments, onSetEventMoments,
+  onGetEventProtagonists, onSetEventProtagonists,
 }) {
   const isEdit = !!event?.id;
   const [form, setForm] = useState(event?.id ? { ...EVENT_EMPTY, ...event } : { ...EVENT_EMPTY });
@@ -1824,6 +1826,10 @@ function EventPanel({
   const [eventStandings, setEventStandings] = useState([]);
   const [eventKnockout, setEventKnockout] = useState([]);
 
+  // Momentos y protagonistas (ambas categorías)
+  const [moments, setMoments] = useState([]);
+  const [protagonists, setProtagonists] = useState([]);
+
   // Cargar datos al editar
   useEffect(() => {
     if (!isEdit) return;
@@ -1836,7 +1842,9 @@ function EventPanel({
       onGetEventSquad ? onGetEventSquad(event.id) : Promise.resolve([]),
       onGetEventStandings ? onGetEventStandings(event.id) : Promise.resolve([]),
       onGetEventKnockout ? onGetEventKnockout(event.id) : Promise.resolve([]),
-    ]).then(([rel, lins, sq, sts, ko]) => {
+      onGetEventMoments ? onGetEventMoments(event.id) : Promise.resolve([]),
+      onGetEventProtagonists ? onGetEventProtagonists(event.id) : Promise.resolve([]),
+    ]).then(([rel, lins, sq, sts, ko, mom, prot]) => {
       setRelations({
         playerIds: rel.players.map(p => p.player_id),
         teamIds: rel.teams.map(t => t.team_id),
@@ -1861,6 +1869,9 @@ function EventPanel({
       const koData = (ko || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() }));
       setEventKnockout(koData);
       if (koData.length > 0) setEventCompType("knockout");
+
+      setMoments((mom || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
+      setProtagonists((prot || []).map(r => ({ ...r, _id: r.id || Date.now() + Math.random() })));
 
     }).catch(() => { }).finally(() => setLoadingData(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1890,6 +1901,8 @@ function EventPanel({
       case "event_squad": apply(setSquad); break;
       case "event_standings": apply(setEventStandings); break;
       case "event_knockout": apply(setEventKnockout); break;
+      case "event_moments": apply(setMoments); break;
+      case "event_protagonists": apply(setProtagonists); break;
       default: break;
     }
   };
@@ -2009,6 +2022,12 @@ function EventPanel({
         }
         if (onSetEventKnockout) {
           await onSetEventKnockout(id, eventKnockout.map(({ _id, ...r }) => r));
+        }
+        if (onSetEventMoments) {
+          await onSetEventMoments(id, moments.map(({ _id, ...r }) => r));
+        }
+        if (onSetEventProtagonists) {
+          await onSetEventProtagonists(id, protagonists.map(({ _id, ...r }) => r));
         }
       }
       onClose();

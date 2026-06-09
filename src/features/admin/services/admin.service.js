@@ -548,3 +548,89 @@ export const deleteHistoricalImage = async (imagePath) => {
     if (!imagePath || imagePath.startsWith('http')) return;
     await supabase.storage.from('historical').remove([imagePath]);
 };
+
+// ════════════════════════════════════════════════════════════
+//  HISTORICAL — EVENT MOMENTS
+// ════════════════════════════════════════════════════════════
+
+export const getEventMoments = async (eventId) => {
+    const { data, error } = await supabase
+        .from('historical_event_moments')
+        .select('*')
+        .eq('event_id', eventId)
+        .order('sort_order', { ascending: true });
+    if (error) throw error;
+    return data || [];
+};
+
+export const setEventMoments = async (eventId, rows) => {
+    const { error: delErr } = await supabase
+        .from('historical_event_moments')
+        .delete()
+        .eq('event_id', eventId);
+    if (delErr) throw delErr;
+    if (!rows?.length) return;
+
+    const toInsert = rows.map((r, idx) => ({
+        event_id: eventId,
+        minute: r.minute !== '' && r.minute != null ? parseInt(r.minute, 10) : null,
+        moment_date: r.moment_date?.trim() || null,
+        title: r.title?.trim() || '',
+        description: r.description?.trim() || null,
+        icon: r.icon?.trim() || null,
+        sort_order: r.sort_order != null ? parseInt(r.sort_order, 10) : idx,
+    }));
+
+    const { error } = await supabase
+        .from('historical_event_moments')
+        .insert(toInsert);
+    if (error) throw error;
+};
+
+// ════════════════════════════════════════════════════════════
+//  HISTORICAL — EVENT PROTAGONISTS
+// ════════════════════════════════════════════════════════════
+
+export const getEventProtagonists = async (eventId) => {
+    const { data, error } = await supabase
+        .from('historical_event_protagonists')
+        .select('*')
+        .eq('event_id', eventId)
+        .order('sort_order', { ascending: true });
+    if (error) throw error;
+    return data || [];
+};
+
+export const setEventProtagonists = async (eventId, rows) => {
+    const { error: delErr } = await supabase
+        .from('historical_event_protagonists')
+        .delete()
+        .eq('event_id', eventId);
+    if (delErr) throw delErr;
+    if (!rows?.length) return;
+
+    const toInsert = rows.map((r, idx) => {
+        // Garantizar constraint: player_id XOR team_id XOR name_override
+        const player_id = r.player_id?.trim() || null;
+        const team_id = r.team_id?.trim() || null;
+        const name_override = r.name_override?.trim() || null;
+
+        return {
+            event_id: eventId,
+            player_id: player_id || null,
+            team_id: team_id || null,
+            name_override: name_override || null,
+            role_label: r.role_label?.trim() || null,
+            icon: r.icon?.trim() || null,
+            sort_order: r.sort_order != null ? parseInt(r.sort_order, 10) : idx,
+        };
+        // Descartar filas donde ningún sujeto esté definido (violarían el constraint)
+    }).filter(r => r.player_id || r.team_id || r.name_override);
+
+    if (!toInsert.length) return;
+
+    const { error } = await supabase
+        .from('historical_event_protagonists')
+        .insert(toInsert);
+    if (error) throw error;
+};
