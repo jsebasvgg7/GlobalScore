@@ -13,7 +13,10 @@ export const insertMatch = async (match) => {
 export const updateMatchResult = async (matchId, updateData) => {
     const { error } = await supabase
         .from('matches')
-        .update(updateData)
+        .update({
+            ...updateData,
+            status: 'finished',
+        })
         .eq('id', matchId);
     if (error) throw error;
 };
@@ -50,8 +53,8 @@ export const updatePredictionPoints = async (predictionId, pointsEarned, advanci
     const resultType = pointsEarned === 5
         ? 'exact'
         : pointsEarned === 3
-            ? 'correct'
-            : 'wrong';
+            ? 'result'
+            : 'miss';
 
     const { error } = await supabase
         .from('predictions')
