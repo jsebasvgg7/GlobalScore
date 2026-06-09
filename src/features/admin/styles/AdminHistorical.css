@@ -3154,6 +3154,60 @@
   height: calc(100vh - 56px);
 }
 
+/* ══════════════════════════════════════════════════════════════════════════════
+   MOMENTOS & PROTAGONISTAS — Añadir al final de AdminHistorical.css
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Pills de columnas — Momentos (naranja timeline) ────────────── */
+.di-root[data-mode="event_moments"] .di-hint-col-pill {
+  background: rgba(249, 115, 22, 0.07);
+  border-color: rgba(249, 115, 22, 0.22);
+  color: #c2410c;
+}
+
+.di-root[data-mode="event_moments"] .di-hint-col-n {
+  background: #f97316;
+  color: #fff;
+}
+
+/* ── Pills de columnas — Protagonistas (dorado/estrella) ─────────── */
+.di-root[data-mode="event_protagonists"] .di-hint-col-pill {
+  background: rgba(234, 179, 8, 0.07);
+  border-color: rgba(234, 179, 8, 0.22);
+  color: #a16207;
+}
+
+.di-root[data-mode="event_protagonists"] .di-hint-col-n {
+  background: #eab308;
+  color: #fff;
+}
+
+/* ── EditableTable — sección momentos: columna icono centrada ───── */
+.ah-etable-input[data-col="icon"] {
+  text-align: center;
+  font-size: 14px !important;
+  letter-spacing: 0;
+}
+
+/* ── EditableTable — sección protagonistas: columna icono ────────── */
+.ah-etable-input[data-col="icon"],
+.ah-etable-input[data-col="minute"] {
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+}
+
+/* ── Accent line color para tab momentos ─────────────────────────── */
+.ah-inner-tab--active[data-tab="momentos"] {
+  color: #f97316;
+  border-bottom-color: #f97316;
+}
+
+/* ── Accent line color para tab protagonistas ────────────────────── */
+.ah-inner-tab--active[data-tab="protagonistas"] {
+  color: #eab308;
+  border-bottom-color: #eab308;
+}
+
 /* ── Responsive ───────────────────────────────────────────────────────────── */
 @media (max-width: 691px) {
   .ah-event-images-row {

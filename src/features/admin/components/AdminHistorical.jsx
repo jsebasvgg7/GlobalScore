@@ -1973,6 +1973,30 @@ function EventPanel({
     },
   ];
 
+  const momentCols = [
+    { key: "minute", label: "Min", flex: 0.7, type: "number", placeholder: "23" },
+    { key: "moment_date", label: "Fecha", flex: 1.5, placeholder: "14 jul 1930" },
+    { key: "icon", label: "Icono", flex: 0.6, placeholder: "⚽" },
+    { key: "title", label: "Título", flex: 3, placeholder: "Messi abre el marcador" },
+    { key: "description", label: "Detalle", flex: 3, placeholder: "Descripción opcional..." },
+    { key: "sort_order", label: "#", flex: 0.5, type: "number", placeholder: "1" },
+  ];
+
+  const protagonistCols = [
+    { key: "icon", label: "Icono", flex: 0.6, placeholder: "⭐" },
+    { key: "name_override", label: "Nombre libre", flex: 2, placeholder: "Di María (si no tiene ficha)" },
+    {
+      key: "player_id", label: "Jugador (ficha)", flex: 2, type: "select",
+      options: [{ value: "", label: "— ninguno —" }, ...players.map(p => ({ value: p.id, label: p.name }))],
+    },
+    {
+      key: "team_id", label: "Equipo (ficha)", flex: 2, type: "select",
+      options: [{ value: "", label: "— ninguno —" }, ...teams.map(t => ({ value: t.id, label: t.name }))],
+    },
+    { key: "role_label", label: "Rol", flex: 2, placeholder: "Héroe de la Final" },
+    { key: "sort_order", label: "#", flex: 0.5, type: "number", placeholder: "1" },
+  ];
+
   // ── Tabs dinámicas ─────────────────────────────────────────────────────────
   const isPlayer = form.event_category === "player";
   const isTeam = form.event_category === "team";
@@ -1982,6 +2006,8 @@ function EventPanel({
     isPlayer && { key: "lineup", label: "Alineaciones" },
     isTeam && { key: "squad", label: "Plantel" },
     isTeam && { key: "tabla", label: "Competición" },
+    { key: "momentos", label: "Momentos" },
+    { key: "protagonistas", label: "Protagonistas" },
     { key: "impacto", label: "Impacto" },
     { key: "vinculos", label: "Vínculos" },
   ].filter(Boolean);
@@ -2313,6 +2339,52 @@ function EventPanel({
               />
             )}
           </>}
+        </div>
+      )}
+
+      {/* ── TAB MOMENTOS ── */}
+      {tab === "momentos" && (
+        <div className="ah-panel-section ah-panel-section--table">
+          <span className="ah-panel-sep">⏱ Timeline de momentos del evento — ordena por sort_order</span>
+          <EditableTable
+            columns={momentCols}
+            rows={moments}
+            onAdd={() => setMoments(prev => [
+              ...prev,
+              {
+                _id: Date.now(), minute: "", moment_date: "", icon: "⚽",
+                title: "", description: "", sort_order: prev.length
+              },
+            ])}
+            onRemove={(idx) => setMoments(prev => prev.filter((_, i) => i !== idx))}
+            onUpdate={(idx, key, val) => setMoments(prev =>
+              prev.map((r, i) => i === idx ? { ...r, [key]: val } : r)
+            )}
+            addLabel="Añadir momento"
+          />
+        </div>
+      )}
+
+      {/* ── TAB PROTAGONISTAS ── */}
+      {tab === "protagonistas" && (
+        <div className="ah-panel-section ah-panel-section--table">
+          <span className="ah-panel-sep">⭐ Personajes clave — player_id O team_id O nombre libre</span>
+          <EditableTable
+            columns={protagonistCols}
+            rows={protagonists}
+            onAdd={() => setProtagonists(prev => [
+              ...prev,
+              {
+                _id: Date.now(), icon: "⭐", name_override: "",
+                player_id: "", team_id: "", role_label: "", sort_order: prev.length
+              },
+            ])}
+            onRemove={(idx) => setProtagonists(prev => prev.filter((_, i) => i !== idx))}
+            onUpdate={(idx, key, val) => setProtagonists(prev =>
+              prev.map((r, i) => i === idx ? { ...r, [key]: val } : r)
+            )}
+            addLabel="Añadir protagonista"
+          />
         </div>
       )}
 
@@ -2767,6 +2839,8 @@ export default function AdminHistorical() {
                 onGetEventSquad={getEventSquad} onSetEventSquad={setEventSquad}
                 onGetEventStandings={getEventStandings} onSetEventStandings={setEventStandings}
                 onGetEventKnockout={getEventKnockout} onSetEventKnockout={setEventKnockout}
+                onGetEventMoments={getEventMoments} onSetEventMoments={setEventMoments}
+                onGetEventProtagonists={getEventProtagonists} onSetEventProtagonists={setEventProtagonists}
               />
             )}
           </div>
