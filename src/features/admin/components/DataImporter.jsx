@@ -89,6 +89,21 @@ const FORMAT_HELP = {
     hint: "Ronda · Local · G(L) · G(V) · Visitante · Ganador(team_a/team_b) · Decisivo(true/false)",
     columns: ["round", "team_a", "score_a", "score_b", "team_b", "winner", "is_decisive"],
   },
+  // ── Eventos — Momentos ────────────────────────────────────────────────────────
+  event_moments: {
+    label: "Momentos del Evento",
+    placeholder: `23\t\t⚽\tMessi abre el marcador\tDescripción opcional\t1\n45\t\t🟨\tTarjeta amarilla a Ramos\t\t2\n\t14 jun 1986\t🤚\tLa Mano de Dios\tEl gol más polémico de la historia\t3`,
+    hint: "Minuto · Fecha(texto libre) · Icono · Título · Descripción(opcional) · Orden",
+    columns: ["minute", "moment_date", "icon", "title", "description", "sort_order"],
+  },
+
+  // ── Eventos — Protagonistas ───────────────────────────────────────────────────
+  event_protagonists: {
+    label: "Protagonistas del Evento",
+    placeholder: `⭐\t\t\tDiego Maradona\tHéroe de la Final\t1\n🏆\t\t\tArgentina\tCampeón del Mundo\t2\n🎯\t\t\tGary Lineker\tGoleador del Torneo\t3`,
+    hint: "Icono · player_id(UUID o vacío) · team_id(UUID o vacío) · Nombre libre · Rol · Orden",
+    columns: ["icon", "player_id", "team_id", "name_override", "role_label", "sort_order"],
+  },
 };
 
 // ─── Parser universal (tab, coma, punto y coma, pipe) ─────────────────────────
@@ -185,7 +200,7 @@ function parseData(raw, mode) {
         "start_year", "end_year", "year", "appearances", "goals", "assists", "caps",
         "points", "wins", "draws", "losses", "goals_for", "goals_against",
         "score_a", "score_b", "penalties_a", "penalties_b", "position",
-        "shirt_number", "match_number", "pos_x", "pos_y",
+        "shirt_number", "match_number", "pos_x", "pos_y", "minute", "sort_order",
       ].includes(col)) {
         if (val !== "" && isNaN(Number(val))) {
           errors.push(`Línea ${idx + 1}, col "${col}": se esperaba número, recibió "${val}"`);
@@ -213,6 +228,8 @@ const EVENT_MODE_OPTIONS = [
   { value: "event_squad", label: "👥 Plantel" },
   { value: "event_standings", label: "📊 Tabla" },
   { value: "event_knockout", label: "⚔️ Eliminatorias" },
+  { value: "event_moments", label: "⏱ Momentos" },
+  { value: "event_protagonists", label: "⭐ Protagonistas" },
 ];
 
 // ─── Componente ───────────────────────────────────────────────────────────────

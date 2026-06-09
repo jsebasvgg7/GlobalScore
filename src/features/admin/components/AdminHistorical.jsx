@@ -2345,6 +2345,11 @@ function EventPanel({
       {/* ── TAB MOMENTOS ── */}
       {tab === "momentos" && (
         <div className="ah-panel-section ah-panel-section--table">
+          <DataImporter
+            mode="event_moments"
+            allowModeSwitch={false}
+            onImport={(rows, importMode) => handleEventImport(rows, importMode, "event_moments")}
+          />
           <span className="ah-panel-sep">⏱ Timeline de momentos del evento — ordena por sort_order</span>
           <EditableTable
             columns={momentCols}
@@ -2368,6 +2373,11 @@ function EventPanel({
       {/* ── TAB PROTAGONISTAS ── */}
       {tab === "protagonistas" && (
         <div className="ah-panel-section ah-panel-section--table">
+          <DataImporter
+            mode="event_protagonists"
+            allowModeSwitch={false}
+            onImport={(rows, importMode) => handleEventImport(rows, importMode, "event_protagonists")}
+          />
           <span className="ah-panel-sep">⭐ Personajes clave — player_id O team_id O nombre libre</span>
           <EditableTable
             columns={protagonistCols}
@@ -2594,7 +2604,6 @@ export default function AdminHistorical() {
     createEvent, updateEvent, deleteEvent, toggleEventPublished,
     getPlayerTeams, setPlayerTeams,
     getEventRelations, setEventRelations,
-    // Nuevas funciones (agregar al hook)
     getPlayerCareer, setPlayerCareer,
     getPlayerNational, setPlayerNational,
     getPlayerTitles, setPlayerTitles,
@@ -2605,6 +2614,8 @@ export default function AdminHistorical() {
     getEventSquad, setEventSquad,
     getEventStandings, setEventStandings,
     getEventKnockout, setEventKnockout,
+    getEventMoments, setEventMoments,
+    getEventProtagonists, setEventProtagonists,
   } = useAdminHistorical();
 
   const q = search.toLowerCase();
