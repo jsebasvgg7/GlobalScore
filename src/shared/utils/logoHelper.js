@@ -126,29 +126,39 @@ export const teamSlugMap = {
 };
 
 // ============================================
-// MAPEO DE SELECCIONES NACIONALES (FIFA)
+// MAPEO DE SELECCIONES NACIONALES (FIFA World Cup)
 // ============================================
 export const countrySlugMap = {
   // Europa
   'GER': 'alemania',
   'AUT': 'austria',
   'BEL': 'belgica',
+  'BIH': 'bosnia',
   'CRO': 'croacia',
+  'CZE': 'chequis',
   'DEN': 'dinamarca',
   'SCO': 'escocia',
+  'SVN': 'eslovenia',
   'ESP': 'espana',
+  'FIN': 'finlandia',
   'FRA': 'francia',
+  'WAL': 'gales',
+  'GRE': 'grecia',
   'NED': 'paisesbajos',
+  'ISL': 'islandia',
+  'ITA': 'italia',
+  'ENG': 'inglaterra',
+  'NIR': 'irlandadelnorte',
+  'LUX': 'luxemburgo',
+  'MKD': 'macedonia',
   'NOR': 'noruega',
   'POL': 'polonia',
   'POR': 'portugal',
-  'SUI': 'suiza',
-  'TUR': 'turquia',
-  'ITA': 'italia',
-  'ENG': 'inglaterra',
-  'INT': 'irlandadelnorte',
   'RUM': 'rumania',
+  'SRB': 'serbia',
+  'SUI': 'suiza',
   'SWE': 'suecia',
+  'TUR': 'turquia',
   'UKR': 'ucrania',
 
   // América
@@ -156,39 +166,47 @@ export const countrySlugMap = {
   'BOL': 'bolivia',
   'BRA': 'brasil',
   'CAN': 'canada',
+  'CHI': 'chile',
   'COL': 'colombia',
   'CRC': 'costarica',
   'CUR': 'curacao',
   'ECU': 'ecuador',
+  'SLV': 'elsalvador',
+  'GUA': 'guatemala',
+  'HTI': 'haiti',
+  'HON': 'honduras',
   'MEX': 'mexico',
   'PAN': 'panama',
   'PAR': 'paraguay',
+  'PER': 'peru',
   'URU': 'uruguay',
   'USA': 'usa',
-  'HTI': 'haiti',
+  'VEN': 'venezuela',
 
   // África
   'ALG': 'argelia',
+  'CMR': 'camerun',
   'CPV': 'caboverde',
   'CIV': 'costamarfil',
   'COG': 'congo',
   'EGY': 'egipto',
   'GHA': 'ghana',
+  'MDG': 'madagascar',
   'MAR': 'marruecos',
+  'NGA': 'nigeria',
   'SEN': 'senegal',
   'RSA': 'sudafrica',
   'TUN': 'tunez',
-  'CMR': 'camerun',
-  'NGA': 'nigeria',
 
   // Asia
+  'IRQ': 'irak',
   'IRN': 'iran',
   'JPN': 'japon',
   'JOR': 'jordan',
   'KOR': 'coreadelsur',
   'QAT': 'qatar',
-  'UZB': 'uzbekistan',
   'KSA': 'arabiasaudita',
+  'UZB': 'uzbekistan',
 
   // Oceanía
   'AUS': 'australia',
@@ -238,6 +256,7 @@ export const leagueMap = {
 // ============================================
 export const leagueLogoUrlMap = {
   // FIFA
+  'FIFA World Cup': 'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/FIFA World Cup.png',
   'FIFA': 'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/FIFA.png',
 
   // Competiciones Europeas
@@ -310,17 +329,49 @@ export function getTeamLogoUrl(supabase, leagueSlug, teamSlug) {
   return data.publicUrl;
 }
 
+// Ligas que tienen carpeta real de logos en el bucket
+const DOMESTIC_LEAGUE_SLUGS = [
+  'la-liga',
+  'premier-league',
+  'serie-a',
+  'bundesliga',
+  'ligue-1',
+];
+
+// Competiciones europeas que no tienen carpeta propia —
+// sus equipos pertenecen a alguna liga domestica
+const EUROPEAN_COMPETITIONS = new Set([
+  'Champions League',
+  'Europa League',
+  'Conference League',
+]);
+
 export function getLogoUrlByTeamName(supabase, teamName, leagueName) {
-  // Si es liga FIFA, usar logos de selecciones nacionales
-  if (leagueName === 'FIFA') {
+  // Si es FIFA World Cup, usar logos de selecciones nacionales
+  if (leagueName === 'FIFA World Cup') {
     return getCountryLogoUrl(supabase, teamName);
   }
 
   const teamSlug = teamSlugMap[teamName];
-  const leagueSlug = leagueMap[leagueName];
+  if (!teamSlug) {
+    console.warn(`Logo de equipo no encontrado: "${teamName}"`);
+    return null;
+  }
 
-  if (!teamSlug || !leagueSlug) {
-    console.warn(`⚠️ Logo de equipo no encontrado: "${teamName}" en "${leagueName}"`);
+  // Para competiciones europeas: buscar el equipo en todas las ligas domesticas
+  if (EUROPEAN_COMPETITIONS.has(leagueName)) {
+    for (const leagueSlug of DOMESTIC_LEAGUE_SLUGS) {
+      const url = getTeamLogoUrl(supabase, leagueSlug, teamSlug);
+      if (url) return url;
+    }
+    console.warn(`No se encontro liga domestica para "${teamName}" en "${leagueName}"`);
+    return null;
+  }
+
+  // Liga domestica normal
+  const leagueSlug = leagueMap[leagueName];
+  if (!leagueSlug) {
+    console.warn(`Liga no encontrada: "${leagueName}"`);
     return null;
   }
 
