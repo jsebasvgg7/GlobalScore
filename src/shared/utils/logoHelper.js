@@ -135,7 +135,7 @@ export const countrySlugMap = {
   'BEL': 'belgica',
   'BIH': 'bosnia',
   'CRO': 'croacia',
-  'CZE': 'chequis',
+  'CZE': 'chequia',
   'DEN': 'dinamarca',
   'SCO': 'escocia',
   'SVN': 'eslovenia',
