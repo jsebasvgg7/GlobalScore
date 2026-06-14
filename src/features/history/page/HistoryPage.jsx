@@ -28,10 +28,13 @@ import {
 
   HistoryWelcomeScreen,
   SectionHeaderMobile,
+  HistoryVaultLanding
 } from '@/features/history';
 
 import "./HistoryPage.css";
+
 import "../styles/mobile/HistoryPageMobile.css";
+
 // ─── Helpers ──────────────────────────────────────────────────
 const LEGACY_COLOR = {
   "Goal Scorer": "#f59e0b", "Tactician": "#3b82f6",
@@ -474,6 +477,7 @@ export default function HistoryPage() {
     () => !sessionStorage.getItem("vault_visited")
   );
   const [showMenu, setShowMenu] = useState(true);
+  const [showVaultLanding, setShowVaultLanding] = useState(true);
   const isMobile = useIsMobile();
 
   const location = useLocation();
@@ -481,6 +485,7 @@ export default function HistoryPage() {
   useEffect(() => {
     if (location.state?.reset) {
       setShowMenu(true);
+      setShowVaultLanding(true);
       setActiveSection("players");
       setSelectedPlayerId(null);
       window.scrollTo({ top: 0, behavior: "instant" });
@@ -510,6 +515,16 @@ export default function HistoryPage() {
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
+  const handleBackToVaultLanding = () => {
+    setShowVaultLanding(true);
+    setShowMenu(true);
+    setSelectedPlayerId(null);
+    setPreselectedTeamId(null);
+    setPreselectedEvent(null);
+    setPreselectedCompId(null);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
   const handleSectionChange = (section, item = null) => {
     setActiveSection(section);
     setSelectedPlayerId(null);
@@ -531,6 +546,39 @@ export default function HistoryPage() {
         onEnter={() => {
           sessionStorage.setItem("vault_visited", "true");
           setShowWelcome(false);
+        }}
+      />
+    );
+  }
+
+  // ── Vault Landing — solo mobile, capa previa al menú ─────────
+  if (isMobile && showMenu && showVaultLanding) {
+    return (
+      <HistoryVaultLanding
+        onNavigate={(section, id) => {
+          setShowVaultLanding(false);
+
+          if (section === 'competitions') {
+            setShowMenu(false);
+            handleSectionChange('competitions', id ? { id } : null);
+          } else if (section === 'events') {
+            setShowMenu(false);
+            handleSectionChange('events', id ? { id } : null);
+          } else if (section === 'players') {
+            setShowMenu(false);
+            handleSectionChange('players', id ? { id } : null);
+          } else if (section === 'teams') {
+            setShowMenu(false);
+            handleSectionChange('teams', id ? { id } : null);
+          } else if (section === 'event-detail') {
+            setShowMenu(false);
+            handleSectionChange('events', { id });
+          } else if (section === 'team-detail') {
+            setShowMenu(false);
+            handleSectionChange('teams', { id });
+          } else {
+            setShowMenu(true);
+          }
         }}
       />
     );

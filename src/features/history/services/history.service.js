@@ -158,12 +158,26 @@ export const fetchPlayerTitles = async (playerId) => {
 //  TEAMS
 // ════════════════════════════════════════════════════════════
 
+// Listado completo — todas las columnas, sin límite (usado por la página EQUI)
 export const fetchPublishedTeams = async () => {
     const { data, error } = await supabase
         .from('historical_teams')
         .select('*')
         .eq('is_published', true)
         .order('era_dominance', { ascending: true });
+
+    if (error) throw error;
+    return data || [];
+};
+
+// Landing strip — solo los campos visibles, limitado a 6 (usado solo por HistoryVaultLanding)
+export const fetchLandingTeams = async () => {
+    const { data, error } = await supabase
+        .from('historical_teams')
+        .select('id, name, era_dominance, image_path')
+        .eq('is_published', true)
+        .order('era_dominance', { ascending: true })
+        .limit(6);
 
     if (error) throw error;
     return data || [];
@@ -192,15 +206,39 @@ export const fetchTeamDetail = async (teamId) => {
     if (teamRes.error) throw teamRes.error;
 
     return {
-        team:    teamRes.data,
-        lineup:  lineupRes.data || [],
-        titles:  titlesRes.data || [],
+        team: teamRes.data,
+        lineup: lineupRes.data || [],
+        titles: titlesRes.data || [],
     };
 };
 
 // ════════════════════════════════════════════════════════════
 //  COMPETITIONS
 // ════════════════════════════════════════════════════════════
+
+// Landing stats — HEAD requests, cero filas viajan por la red
+export const fetchLandingCounts = async () => {
+    const [playersRes, compsRes] = await Promise.all([
+        supabase
+            .from('historical_players')
+            .select('*', { count: 'exact', head: true })
+            .eq('is_published', true)
+            .eq('is_special', false),
+
+        supabase
+            .from('historical_competitions')
+            .select('*', { count: 'exact', head: true })
+            .eq('is_published', true),
+    ]);
+
+    if (playersRes.error) throw playersRes.error;
+    if (compsRes.error) throw compsRes.error;
+
+    return {
+        players: playersRes.count ?? 0,
+        competitions: compsRes.count ?? 0,
+    };
+};
 
 export const fetchPublishedCompetitions = async () => {
     const { data, error } = await supabase
@@ -243,9 +281,9 @@ export const fetchCompetitionDetail = async (competitionId) => {
 
     return {
         competition: compRes.data,
-        groups:      groupsRes.data || [],
-        standings:   standRes.data  || [],
-        knockout:    knockRes.data   || [],
+        groups: groupsRes.data || [],
+        standings: standRes.data || [],
+        knockout: knockRes.data || [],
     };
 };
 
@@ -253,6 +291,7 @@ export const fetchCompetitionDetail = async (competitionId) => {
 //  EVENTS
 // ════════════════════════════════════════════════════════════
 
+// Listado completo — con JOINs de protagonista/equipo, sin límite (usado por la página EVE)
 export const fetchPublishedEvents = async () => {
     const { data, error } = await supabase
         .from('historical_events')
@@ -263,6 +302,19 @@ export const fetchPublishedEvents = async () => {
         `)
         .eq('is_published', true)
         .order('event_date', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+};
+
+// Landing carousel — solo los campos visibles, sin JOINs, limitado a 8 (usado solo por HistoryVaultLanding)
+export const fetchLandingEvents = async () => {
+    const { data, error } = await supabase
+        .from('historical_events')
+        .select('id, title, event_type, event_date, image_path')
+        .eq('is_published', true)
+        .order('event_date', { ascending: false })
+        .limit(8);
 
     if (error) throw error;
     return data || [];
@@ -307,14 +359,14 @@ export const fetchEventDetail = async (eventId) => {
     const allLineups = linRes.data || [];
 
     return {
-        event:     ev,
+        event: ev,
         lineups: {
             team_a: allLineups.filter((l) => l.team_side === 'team_a'),
             team_b: allLineups.filter((l) => l.team_side === 'team_b'),
         },
-        squad:     sqRes.data || [],
+        squad: sqRes.data || [],
         standings: stRes.data || [],
-        knockout:  koRes.data || [],
+        knockout: koRes.data || [],
     };
 };
 
@@ -348,9 +400,9 @@ export const createSpecialPlayer = async (playerData, ownerUserId) => {
         .insert({
             ...playerData,
             significance_level: 5,       // siempre 5 estrellas
-            is_special:         true,
-            special_owner_id:   ownerUserId,
-            is_published:       false,    // el admin publica manualmente
+            is_special: true,
+            special_owner_id: ownerUserId,
+            is_published: false,    // el admin publica manualmente
         })
         .select()
         .single();

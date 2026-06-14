@@ -1,0 +1,631 @@
+/* ════════════════════════════════════════════════
+   ██╗  ██╗██╗███████╗████████╗ ██████╗ ██████╗ ██╗   ██╗
+   ██║  ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗╚██╗ ██╔╝
+   ███████║██║███████╗   ██║   ██║   ██║██████╔╝ ╚████╔╝ 
+   ██╔══██║██║╚════██║   ██║   ██║   ██║██╔══██╗  ╚██╔╝  
+   ██║  ██║██║███████║   ██║   ╚██████╔╝██║  ██║   ██║   
+   HISTORY — legacy layer
+════════════════════════════════════════════════ */
+
+/* ── Tokens locales ──── */
+.hvl {
+    --hvl-cream: #F5F0E8;
+    --hvl-black: #1A1A1A;
+    --hvl-purple: #6C5CE7;
+    --hvl-gold: #F4B942;
+    --hvl-green: #00B894;
+    --hvl-border: 1.5px solid rgba(26, 26, 26, 0.65);
+    --hvl-shadow: 2px 2px 0 rgba(26, 26, 26, 0.18);
+    --hvl-shadow-card: 2px 2px 0 rgba(26, 26, 26, 0.14);
+    --hvl-radius: 0;
+
+    font-family: 'DM Mono', 'Courier New', monospace;
+    background-color: var(--hvl-cream);
+    color: var(--hvl-black);
+    padding: 0 0 0 0;
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px) + 1rem);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ── Loading ─────────────────────────────────────────────────── */
+.hvl-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 60px - 56px - env(safe-area-inset-bottom, 0px));
+    gap: 1rem;
+    font-family: 'DM Mono', monospace;
+    background: var(--hvl-cream, #F5F0E8);
+}
+
+.hvl-loading__spinner {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border: 2px solid rgba(26, 26, 26, 0.15);
+    border-top-color: #6C5CE7;
+    border-right-color: #6C5CE7;
+    border-radius: 0;
+    /* cuadrado como el sistema */
+    animation: hvl-spin 0.75s linear infinite;
+}
+
+.hvl-loading__text {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(26, 26, 26, 0.5);
+    animation: hvl-label-fade 1.2s ease-in-out infinite;
+}
+
+@keyframes hvl-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes hvl-label-fade {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.hvl__header {
+    padding: 1.25rem 1rem 1rem;
+    border-bottom: var(--hvl-border);
+}
+
+.hvl__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.hvl__breadcrumb-active {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    background: var(--hvl-purple);
+    color: #fff;
+    padding: 0.2rem 0.5rem;
+    border: 1.5px solid rgba(26, 26, 26, 0.65);
+}
+
+.hvl__breadcrumb-sep {
+    font-size: 0.7rem;
+    color: var(--hvl-black);
+    opacity: 0.4;
+}
+
+.hvl__breadcrumb-passive {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--hvl-black);
+    opacity: 0.55;
+}
+
+.hvl__title {
+    font-size: 2.4rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin: 0 0 0.5rem;
+}
+
+.hvl__subtitle {
+    font-size: 0.8rem;
+    font-style: italic;
+    opacity: 0.6;
+    margin: 0;
+    border-left: 3px solid var(--hvl-purple);
+    padding-left: 0.6rem;
+}
+
+/* ── Stats row — con márgenes laterales ──────────────────────── */
+.hvl__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: var(--hvl-border);
+    /* Márgenes laterales + borde exterior visible */
+    margin: 0 1rem;
+    border: var(--hvl-border);
+    box-shadow: var(--hvl-shadow);
+    margin-bottom: 0;
+}
+
+/* Ajuste: el borde inferior de la sección lo manejamos con wrapper */
+.hvl__stats-wrap {
+    padding: 1rem 1rem 0;
+    border-bottom: var(--hvl-border);
+    padding-bottom: 1rem;
+}
+
+.hvl__stat-card {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 0.75rem;
+    border-right: var(--hvl-border);
+}
+
+.hvl__stat-card:last-child {
+    border-right: none;
+}
+
+.hvl__stat-card svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    padding: 4px;
+    border: var(--hvl-border);
+    color: #fff;
+}
+
+.hvl__stat-card--purple svg {
+    background: var(--hvl-purple);
+}
+
+.hvl__stat-card--gold svg {
+    background: var(--hvl-gold);
+}
+
+.hvl__stat-card--green svg {
+    background: var(--hvl-green);
+}
+
+.hvl__stat-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.hvl__stat-num {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.hvl__stat-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    opacity: 0.55;
+}
+
+/* ── Carousel — con márgenes y foto sin cortar la parte superior ─ */
+.hvl__carousel-wrap {
+    margin: 0;
+    border-bottom: var(--hvl-border);
+}
+
+/* Contenedor con márgenes laterales y borde exterior */
+.hvl__carousel-frame {
+    margin: 1rem 1rem 0;
+    border: var(--hvl-border);
+    overflow: hidden;
+    box-shadow: var(--hvl-shadow);
+}
+
+.hvl__carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.hvl__carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.hvl__carousel-card {
+    position: relative;
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    height: 240px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.hvl__carousel-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Ancla la imagen desde arriba → no corta la parte superior */
+    object-position: top center;
+    display: block;
+}
+
+.hvl__carousel-img--placeholder {
+    background: #2a2a2a;
+}
+
+.hvl__carousel-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+            rgba(0, 0, 0, 0.80) 0%,
+            rgba(0, 0, 0, 0.08) 55%,
+            transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.75rem;
+}
+
+.hvl__carousel-tag {
+    align-self: flex-start;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    background: var(--hvl-purple);
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
+}
+
+.hvl__carousel-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.hvl__carousel-year {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 0.15rem;
+    letter-spacing: 0.08em;
+}
+
+.hvl__carousel-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.25;
+    max-width: 230px;
+}
+
+.hvl__carousel-arrow {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    background: var(--hvl-purple);
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.15s;
+}
+
+.hvl__carousel-arrow:active {
+    opacity: 0.8;
+}
+
+.hvl__carousel-arrow svg {
+    width: 16px;
+    height: 16px;
+    color: #fff;
+    stroke: #fff;
+}
+
+/* dots */
+.hvl__carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 0.65rem 0 0.5rem;
+}
+
+.hvl__dot {
+    width: 24px;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1.5px solid rgba(26, 26, 26, 0.3);
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s, width 0.2s;
+}
+
+.hvl__dot--active {
+    background: var(--hvl-purple);
+    border-color: var(--hvl-purple);
+    width: 32px;
+}
+
+/* ── Sección header compartido ───────────────────────────────── */
+.hvl__section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1rem 0.75rem;
+}
+
+.hvl__section-header-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.hvl__section-bar {
+    display: inline-block;
+    width: 3px;
+    height: 16px;
+    background: var(--hvl-purple);
+    flex-shrink: 0;
+}
+
+.hvl__section-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ── Section cards ───────────────────────────────────────────── */
+.hvl__sections {
+    border-bottom: var(--hvl-border);
+    padding-bottom: 1rem;
+}
+
+.hvl__section-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 1rem;
+    gap: 0.6rem;
+}
+
+.hvl__section-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #fff;
+    border: var(--hvl-border);
+    /* Sombra más suave */
+    box-shadow: var(--hvl-shadow-card);
+    padding: 0.75rem 0.6rem;
+    cursor: pointer;
+    text-align: left;
+    gap: 0.4rem;
+    transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.hvl__section-card:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 rgba(26, 26, 26, 0.2);
+}
+
+.hvl__section-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: var(--hvl-border);
+    flex-shrink: 0;
+}
+
+.hvl__section-icon svg {
+    width: 16px;
+    height: 16px;
+    color: #fff;
+    stroke: #fff;
+}
+
+.hvl__section-name {
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.hvl__section-desc {
+    font-size: 0.58rem;
+    opacity: 0.5;
+    margin: 0;
+    line-height: 1.4;
+    flex: 1;
+}
+
+.hvl__section-footer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.25rem;
+}
+
+.hvl__section-arrow {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: var(--hvl-border);
+}
+
+.hvl__section-arrow svg {
+    width: 11px;
+    height: 11px;
+    color: #fff;
+    stroke: #fff;
+}
+
+/* ── Equipos destacados ──────────────────────────────────────── */
+.hvl__teams {
+    /* Sin padding-bottom extra — el .hvl root ya lo maneja con el nav */
+    padding-bottom: 0.25rem;
+}
+
+.hvl__teams-see-all {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    background: none;
+    border: var(--hvl-border);
+    padding: 0.3rem 0.5rem;
+    cursor: pointer;
+    box-shadow: var(--hvl-shadow-card);
+    transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.hvl__teams-see-all:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+}
+
+.hvl__teams-see-all-icon {
+    width: 16px;
+    height: 16px;
+    background: var(--hvl-purple);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(26, 26, 26, 0.5);
+}
+
+.hvl__teams-see-all-icon svg {
+    width: 10px;
+    height: 10px;
+    color: #fff;
+    stroke: #fff;
+}
+
+.hvl__teams-strip {
+    display: flex;
+    overflow-x: auto;
+    gap: 0.6rem;
+    padding: 0 1rem 0.5rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.hvl__teams-strip::-webkit-scrollbar {
+    display: none;
+}
+
+.hvl__team-card {
+    flex: 0 0 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    border: var(--hvl-border);
+    box-shadow: var(--hvl-shadow-card);
+    padding: 0.6rem 0.4rem 0.5rem;
+    cursor: pointer;
+    gap: 0.35rem;
+    transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.hvl__team-card:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+}
+
+.hvl__team-img-wrap {
+    width: 70px;
+    height: 70px;
+    border: var(--hvl-border);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.hvl__team-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.hvl__team-img--placeholder {
+    width: 100%;
+    height: 100%;
+    background: #e0ddd5;
+}
+
+.hvl__team-name {
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-align: center;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.hvl__team-era {
+    font-size: 0.55rem;
+    opacity: 0.45;
+    margin: 0;
+    text-align: center;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .hvl-loading__spinner {
+        animation: none;
+        border-top-color: rgba(26, 26, 26, 0.5);
+    }
+
+    .hvl-loading__text {
+        animation: none;
+        opacity: 0.6;
+    }
+
+    .hvl__section-card,
+    .hvl__team-card,
+    .hvl__teams-see-all {
+        transition: none;
+    }
+}
+
+/* ── Stat skeleton (mientras cargan counts) ──────────────────── */
+.hvl__stat-skeleton {
+    display: inline-block;
+    width: 36px;
+    height: 14px;
+    background: linear-gradient(90deg,
+            rgba(26, 26, 26, 0.08) 25%,
+            rgba(26, 26, 26, 0.14) 50%,
+            rgba(26, 26, 26, 0.08) 75%);
+    background-size: 200% 100%;
+    animation: hvl-shimmer 1.2s ease-in-out infinite;
+    margin-bottom: 2px;
+}
+
+@keyframes hvl-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hvl__stat-skeleton {
+        animation: none;
+        background: rgba(26, 26, 26, 0.1);
+    }
+}
