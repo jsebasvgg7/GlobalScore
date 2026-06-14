@@ -47,6 +47,7 @@ export default function HistoryVaultLanding({ onNavigate }) {
     const [carouselIdx, setCarouselIdx] = useState(0);
     const carouselRef = useRef(null);
     const autoplayRef = useRef(null);
+    const isProgrammaticScroll = useRef(false); // evita el loop scroll↔state
 
     // ── FASE 1: solo eventos — desbloquea la UI lo antes posible
     useEffect(() => {
@@ -59,7 +60,7 @@ export default function HistoryVaultLanding({ onNavigate }) {
     // ── FASE 2: counts ligeros + teams — en paralelo, sin bloquear
     useEffect(() => {
         Promise.allSettled([
-            fetchLandingCounts(),        // solo COUNT(*), no descarga filas
+            fetchLandingCounts(),
             fetchLandingTeams(),
         ]).then(([countsRes, teamsRes]) => {
             if (countsRes.status === 'fulfilled') {
@@ -72,27 +73,46 @@ export default function HistoryVaultLanding({ onNavigate }) {
         });
     }, []);
 
-    // ── Autoplay carousel ─────────────────────────────────────
+    // ── Scroll programático al cambiar índice (dots / autoplay) ──
+    // Usa scrollLeft directo — scrollIntoView mueve toda la página
+    const scrollToIdx = (idx) => {
+        if (!carouselRef.current) return;
+        isProgrammaticScroll.current = true;
+        carouselRef.current.scrollTo({
+            left: idx * carouselRef.current.offsetWidth,
+            behavior: 'smooth',
+        });
+        // Después del smooth-scroll (~400 ms) volvemos a escuchar al usuario
+        setTimeout(() => { isProgrammaticScroll.current = false; }, 500);
+    };
+
+    // ── Autoplay ──────────────────────────────────────────────
+    const startAutoplay = () => {
+        clearInterval(autoplayRef.current);
+        autoplayRef.current = setInterval(() => {
+            setCarouselIdx((prev) => {
+                const next = (prev + 1) % events.length;
+                scrollToIdx(next);
+                return next;
+            });
+        }, 4000);
+    };
+
     useEffect(() => {
         if (!events.length) return;
-        autoplayRef.current = setInterval(() => {
-            setCarouselIdx((prev) => (prev + 1) % events.length);
-        }, 4000);
+        startAutoplay();
         return () => clearInterval(autoplayRef.current);
-    }, [events.length]);
+    }, [events.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // ── Scroll carousel al cambiar índice ─────────────────────
-    useEffect(() => {
-        if (!carouselRef.current) return;
-        const card = carouselRef.current.children[carouselIdx];
-        card?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }, [carouselIdx]);
-
+    // ── Sincronizar índice cuando el usuario arrastra manualmente ─
     const handleCarouselScroll = () => {
+        if (isProgrammaticScroll.current) return; // ignorar scroll propio
         if (!carouselRef.current) return;
         const { scrollLeft, offsetWidth } = carouselRef.current;
-        setCarouselIdx(Math.round(scrollLeft / offsetWidth));
-        clearInterval(autoplayRef.current);
+        const newIdx = Math.round(scrollLeft / offsetWidth);
+        setCarouselIdx(newIdx);
+        // Pausar autoplay y reanudar con el nuevo índice
+        startAutoplay();
     };
 
     // ── Solo bloquea mientras llegan los eventos (carousel) ───
@@ -212,7 +232,7 @@ export default function HistoryVaultLanding({ onNavigate }) {
                             <button
                                 key={i}
                                 className={`hvl__dot ${i === carouselIdx ? 'hvl__dot--active' : ''}`}
-                                onClick={() => setCarouselIdx(i)}
+                                onClick={() => { setCarouselIdx(i); scrollToIdx(i); }}
                                 aria-label={`Ir a slide ${i + 1}`}
                             />
                         ))}

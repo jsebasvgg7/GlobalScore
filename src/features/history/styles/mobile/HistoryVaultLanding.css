@@ -397,7 +397,6 @@
     align-items: flex-start;
     background: #fff;
     border: var(--hvl-border);
-    /* Sombra más suave */
     box-shadow: var(--hvl-shadow-card);
     padding: 0.75rem 0.6rem;
     cursor: pointer;
