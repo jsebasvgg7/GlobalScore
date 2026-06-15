@@ -182,6 +182,7 @@ export const countrySlugMap = {
   'URU': 'uruguay',
   'USA': 'usa',
   'VEN': 'venezuela',
+  'CDV': 'caboverde',
 
   // África
   'ALG': 'argelia',
