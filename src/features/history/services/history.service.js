@@ -333,7 +333,7 @@ export const fetchEventDetail = async (eventId) => {
 
     if (evErr) throw evErr;
 
-    const [linRes, sqRes, stRes, koRes] = await Promise.all([
+    const [linRes, sqRes, stRes, koRes, momRes, protaRes] = await Promise.all([
         supabase
             .from('historical_event_lineups')
             .select('*')
@@ -354,6 +354,22 @@ export const fetchEventDetail = async (eventId) => {
             .select('*')
             .eq('event_id', eventId)
             .order('sort_order'),
+        // ── NUEVO: momentos clave del evento ──────────────────
+        supabase
+            .from('historical_event_moments')
+            .select('*')
+            .eq('event_id', eventId)
+            .order('sort_order'),
+        // ── NUEVO: protagonistas del evento ───────────────────
+        supabase
+            .from('historical_event_protagonists')
+            .select(`
+                *,
+                historical_players(id, name, image_path, country, position),
+                historical_teams(id, name, image_path, primary_color)
+            `)
+            .eq('event_id', eventId)
+            .order('sort_order'),
     ]);
 
     const allLineups = linRes.data || [];
@@ -367,6 +383,8 @@ export const fetchEventDetail = async (eventId) => {
         squad: sqRes.data || [],
         standings: stRes.data || [],
         knockout: koRes.data || [],
+        moments: momRes.data || [],       // ← NUEVO
+        protagonists: protaRes.data || [], // ← NUEVO
     };
 };
 

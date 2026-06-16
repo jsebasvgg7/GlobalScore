@@ -61,6 +61,8 @@ export function useHistoricalEventDetail(eventId) {
   const [squad, setSquad] = useState([]);
   const [standings, setStandings] = useState([]);
   const [knockout, setKnockout] = useState([]);
+  const [moments, setMoments] = useState([]);
+  const [protagonists, setProtagonists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -75,6 +77,8 @@ export function useHistoricalEventDetail(eventId) {
       setSquad(detail.squad);
       setStandings(detail.standings);
       setKnockout(detail.knockout);
+      setMoments(detail.moments || []);
+      setProtagonists(detail.protagonists || []);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -84,5 +88,9 @@ export function useHistoricalEventDetail(eventId) {
 
   useEffect(() => { load(); }, [load]);
 
-  return { event, lineups, squad, standings, knockout, loading, error, reload: load };
+  return {
+    event, lineups, squad, standings, knockout,
+    moments, protagonists,
+    loading, error, reload: load,
+  };
 }

@@ -806,7 +806,7 @@ function TabHistoria({ player, career, national, titles }) {
     if (player.birth_year) list.push({
       year: player.birth_year, type: 'birth',
       title: `NACE EN ${player.country?.toUpperCase() || '—'}`,
-      desc: player.country ? 'Inicio de una historia en el fútbol mundial.' : null,
+      desc: player.country ? 'Inicio de una historia en el fútbol' : null,
     });
     (career || []).forEach((c) => {
       if (c.start_year) list.push({

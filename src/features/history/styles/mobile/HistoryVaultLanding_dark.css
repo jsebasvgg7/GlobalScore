@@ -1,0 +1,244 @@
+/* ════════════════════════════════════════════════
+   ██╗  ██╗██╗███████╗████████╗ ██████╗ ██████╗ ██╗   ██╗
+   ██║  ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗╚██╗ ██╔╝
+   ███████║██║███████╗   ██║   ██║   ██║██████╔╝ ╚████╔╝ 
+   ██╔══██║██║╚════██║   ██║   ██║   ██║██╔══██╗  ╚██╔╝  
+   ██║  ██║██║███████║   ██║   ╚██████╔╝██║  ██║   ██║   
+   HISTORY — legacy layer · DARK MODE
+════════════════════════════════════════════════ */
+
+/* ── TOKENS DARK ─────────────────────────────────────────────── */
+[data-theme="dark"] .hvl {
+    --hvl-cream:       #13111A;
+    --hvl-black:       #F0EDF8;
+    --hvl-purple:      #8B7FC7;
+    --hvl-gold:        #F5A623;
+    --hvl-green:       #22C58B;
+    --hvl-border:      1.5px solid #38334F;
+    --hvl-shadow:      2px 2px 0 rgba(0, 0, 0, .70);
+    --hvl-shadow-card: 2px 2px 0 rgba(0, 0, 0, .60);
+    color-scheme: dark;
+}
+
+/* ════════════════════════════════════════════════════════════
+   ROOT
+════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hvl {
+    background-color: var(--hvl-cream);
+    color: var(--hvl-black);
+}
+
+/* ── Loading ─────────────────────────────────────────────────── */
+[data-theme="dark"] .hvl-loading {
+    background: #13111A;
+}
+
+[data-theme="dark"] .hvl-loading__spinner {
+    border-color: rgba(240, 237, 248, .12);
+    border-top-color:  var(--hvl-purple);
+    border-right-color: var(--hvl-purple);
+}
+
+[data-theme="dark"] .hvl-loading__text {
+    color: rgba(240, 237, 248, .45);
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+[data-theme="dark"] .hvl__header {
+    border-bottom-color: #38334F;
+}
+
+[data-theme="dark"] .hvl__breadcrumb-active {
+    background: var(--hvl-purple);
+    border-color: #38334F;
+    color: #fff;
+}
+
+[data-theme="dark"] .hvl__breadcrumb-sep {
+    color: var(--hvl-black);
+    opacity: .3;
+}
+
+[data-theme="dark"] .hvl__breadcrumb-passive {
+    color: var(--hvl-black);
+    opacity: .45;
+}
+
+[data-theme="dark"] .hvl__title {
+    color: var(--hvl-black);
+}
+
+[data-theme="dark"] .hvl__subtitle {
+    border-left-color: var(--hvl-purple);
+    color: var(--hvl-black);
+    opacity: .55;
+}
+
+/* ── Stats ───────────────────────────────────────────────────── */
+[data-theme="dark"] .hvl__stats-wrap {
+    border-bottom-color: #38334F;
+}
+
+[data-theme="dark"] .hvl__stats {
+    border-color: #38334F;
+    box-shadow: var(--hvl-shadow);
+    background: #1A1824;
+}
+
+[data-theme="dark"] .hvl__stat-card {
+    border-right-color: #38334F;
+    background: #1A1824;
+}
+
+[data-theme="dark"] .hvl__stat-card svg {
+    border-color: #38334F;
+}
+
+/* Los colores de fondo de los íconos se heredan del inline style — solo ajustamos opacidad */
+[data-theme="dark"] .hvl__stat-card--purple svg { background: var(--hvl-purple); }
+[data-theme="dark"] .hvl__stat-card--gold    svg { background: var(--hvl-gold); }
+[data-theme="dark"] .hvl__stat-card--green   svg { background: var(--hvl-green); }
+
+[data-theme="dark"] .hvl__stat-num {
+    color: var(--hvl-black);
+}
+
+[data-theme="dark"] .hvl__stat-label {
+    color: rgba(240, 237, 248, .5);
+}
+
+/* ── Carousel ────────────────────────────────────────────────── */
+[data-theme="dark"] .hvl__carousel-wrap {
+    border-bottom-color: #38334F;
+}
+
+[data-theme="dark"] .hvl__carousel-frame {
+    border-color: #38334F;
+    box-shadow: var(--hvl-shadow);
+}
+
+[data-theme="dark"] .hvl__carousel-img--placeholder {
+    background: #2a2535;
+}
+
+/* El overlay ya usa rgba negro — funciona igual en dark */
+
+[data-theme="dark"] .hvl__carousel-tag {
+    background: var(--hvl-purple);
+    border-color: rgba(240, 237, 248, .5);
+}
+
+[data-theme="dark"] .hvl__carousel-arrow {
+    background: var(--hvl-purple);
+    border-color: rgba(240, 237, 248, .5);
+}
+
+/* Dots */
+[data-theme="dark"] .hvl__dot {
+    background: rgba(240, 237, 248, .10);
+    border-color: #38334F;
+}
+
+[data-theme="dark"] .hvl__dot--active {
+    background: var(--hvl-purple);
+    border-color: var(--hvl-purple);
+}
+
+/* ── Sección header compartido ───────────────────────────────── */
+[data-theme="dark"] .hvl__section-bar {
+    background: var(--hvl-purple);
+}
+
+[data-theme="dark"] .hvl__section-title {
+    color: var(--hvl-black);
+}
+
+/* ── Section cards ───────────────────────────────────────────── */
+[data-theme="dark"] .hvl__sections {
+    border-bottom-color: #38334F;
+}
+
+[data-theme="dark"] .hvl__section-card {
+    background: #1A1824;
+    border-color: #38334F;
+    box-shadow: var(--hvl-shadow-card);
+    color: var(--hvl-black);
+}
+
+[data-theme="dark"] .hvl__section-card:active {
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, .7);
+}
+
+[data-theme="dark"] .hvl__section-icon {
+    border-color: #38334F;
+    /* background-color viene del inline style — no se toca */
+}
+
+[data-theme="dark"] .hvl__section-name {
+    color: var(--hvl-black);
+}
+
+[data-theme="dark"] .hvl__section-desc {
+    color: rgba(240, 237, 248, .45);
+}
+
+[data-theme="dark"] .hvl__section-arrow {
+    border-color: #38334F;
+    /* background-color viene del inline style — no se toca */
+}
+
+/* ── Equipos destacados ──────────────────────────────────────── */
+[data-theme="dark"] .hvl__teams-see-all {
+    border-color: #38334F;
+    color: var(--hvl-black);
+    background: #1A1824;
+    box-shadow: var(--hvl-shadow-card);
+}
+
+[data-theme="dark"] .hvl__teams-see-all:active {
+    box-shadow: none;
+}
+
+[data-theme="dark"] .hvl__teams-see-all-icon {
+    background: var(--hvl-purple);
+    border-color: #38334F;
+}
+
+[data-theme="dark"] .hvl__team-card {
+    background: #1A1824;
+    border-color: #38334F;
+    box-shadow: var(--hvl-shadow-card);
+    color: var(--hvl-black);
+}
+
+[data-theme="dark"] .hvl__team-card:active {
+    box-shadow: none;
+}
+
+[data-theme="dark"] .hvl__team-img-wrap {
+    border-color: #38334F;
+}
+
+[data-theme="dark"] .hvl__team-img--placeholder {
+    background: #2a2535;
+}
+
+[data-theme="dark"] .hvl__team-name {
+    color: var(--hvl-black);
+}
+
+[data-theme="dark"] .hvl__team-era {
+    color: rgba(240, 237, 248, .40);
+}
+
+/* ── Stat skeleton ───────────────────────────────────────────── */
+[data-theme="dark"] .hvl__stat-skeleton {
+    background: linear-gradient(
+        90deg,
+        rgba(240, 237, 248, .07) 25%,
+        rgba(240, 237, 248, .13) 50%,
+        rgba(240, 237, 248, .07) 75%
+    );
+    background-size: 200% 100%;
+    animation: hvl-shimmer 1.2s ease-in-out infinite;
+}

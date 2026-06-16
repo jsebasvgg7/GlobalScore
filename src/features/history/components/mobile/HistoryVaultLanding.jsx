@@ -6,7 +6,7 @@ import {
     getHistoricalImageUrl,
 } from '@/features/history/services/history.service';
 import '../../styles/mobile/HistoryVaultLanding.css';
-
+import '../../styles/mobile/HistoryVaultLanding_dark.css';
 // ─── Íconos inline ───────────────────────────────────────────
 const IconTrophy = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M6 2h12v6a6 6 0 0 1-12 0V2Z" /><path d="M6 4H3a3 3 0 0 0 3 3" /><path d="M18 4h3a3 3 0 0 1-3 3" /><path d="M12 14v4" /><path d="M8 18h8" /></svg>;
 const IconUser = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" /></svg>;
