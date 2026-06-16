@@ -1,67 +1,300 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
-  Search, X, Star, ChevronRight, ArrowLeft, RefreshCw, AlertCircle,
-  Shield, Zap, Filter, Users2, Flag, Award, Trophy, TrendingUp,
-} from "lucide-react";
+  useHistoricalEvents,
+  HistoryRightPanel,
+  TeamsRightPanel,
+  EventsRightPanel,
+  HistoryMenuDesktop,
+  HistoricalEventsPage,
+  HistoricalEventsMobile,
+  HistoricalTeamsPage,
+  HistoricalTeamsMobile,
+  HistoricalCompetitionsPage,
+  HistoricalCompetitionsMobile,
+  HistoryWelcomeScreen,
+  HistoryVaultLanding,
+  HistoricalPlayersMobile,
+} from '@/features/history';
+
+import "./HistoryPage.css";
+import "../styles/mobile/HistoryPageMobile.css";
+
+// ─── Helpers ──────────────────────────────────────────────────
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth <= breakpoint);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, [breakpoint]);
+  return isMobile;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  WRAPPER DE EVENTOS (desktop)
+// ══════════════════════════════════════════════════════════════
+function EventsSectionWrapper({ onBack, initialEvent }) {
+  const { allEvents } = useHistoricalEvents();
+  const [selectedEvent, setSelectedEvent] = useState(initialEvent || null);
+
+  return (
+    <div className="hp-shell">
+      <div className="hp-root">
+        <HistoricalEventsPage
+          selectedEvent={selectedEvent}
+          onEventSelect={(ev) => setSelectedEvent(ev)}
+          onBack={onBack}
+        />
+      </div>
+      <EventsRightPanel
+        allEvents={allEvents}
+        selectedEvent={selectedEvent}
+        onSelectEvent={(ev) => setSelectedEvent(ev)}
+      />
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+//  PÁGINA PRINCIPAL
+// ══════════════════════════════════════════════════════════════
+export default function HistoryPage() {
+  const [activeSection, setActiveSection] = useState("players");
+  const [preselectedPlayerId, setPreselectedPlayerId] = useState(null);
+  const [preselectedTeamId, setPreselectedTeamId] = useState(null);
+  const [preselectedEvent, setPreselectedEvent] = useState(null);
+  const [preselectedCompId, setPreselectedCompId] = useState(null);
+
+  const [showWelcome, setShowWelcome] = useState(
+    () => !sessionStorage.getItem("vault_visited")
+  );
+  const [showVaultLanding, setShowVaultLanding] = useState(true);
+  const [showMenu, setShowMenu] = useState(true);
+
+  const isMobile = useIsMobile();
+  const location = useLocation();
+
+  // Reset desde navegación externa
+  useEffect(() => {
+    if (location.state?.reset) {
+      setShowMenu(true);
+      setShowVaultLanding(true);
+      setActiveSection("players");
+      setPreselectedPlayerId(null);
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }, [location.state?.reset]);
+
+  const handleBackToMenu = () => {
+    setShowMenu(true);
+    setShowVaultLanding(true);
+    setPreselectedPlayerId(null);
+    setPreselectedTeamId(null);
+    setPreselectedEvent(null);
+    setPreselectedCompId(null);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
+  const handleSectionChange = (section, item = null) => {
+    setActiveSection(section);
+    setPreselectedPlayerId(null);
+    setPreselectedTeamId(null);
+    setPreselectedEvent(null);
+    setPreselectedCompId(null);
+
+    if (item) {
+      if (section === "players") setPreselectedPlayerId(item.id ?? item);
+      if (section === "teams") setPreselectedTeamId(item.id ?? item);
+      if (section === "events") setPreselectedEvent(item);
+      if (section === "competitions") setPreselectedCompId(item.id ?? item);
+    }
+
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
+  // ── Pantalla de bienvenida ─────────────────────────────────
+  if (showWelcome) {
+    return (
+      <HistoryWelcomeScreen
+        onEnter={() => {
+          sessionStorage.setItem("vault_visited", "true");
+          setShowWelcome(false);
+        }}
+      />
+    );
+  }
+
+  // ── Vault Landing (solo mobile) ────────────────────────────
+  if (isMobile && showMenu && showVaultLanding) {
+    return (
+      <HistoryVaultLanding
+        onNavigate={(section, id) => {
+          setShowVaultLanding(false);
+
+          const itemById = id ? { id } : null;
+
+          if (section === "players") {
+            setShowMenu(false);
+            handleSectionChange("players", itemById);
+          } else if (section === "teams" || section === "team-detail") {
+            setShowMenu(false);
+            handleSectionChange("teams", itemById);
+          } else if (section === "events" || section === "event-detail") {
+            setShowMenu(false);
+            handleSectionChange("events", itemById);
+          } else if (section === "competitions") {
+            setShowMenu(false);
+            handleSectionChange("competitions", itemById);
+          } else {
+            // Cualquier otra sección: mostrar el menú mobile de secciones
+            setShowMenu(true);
+          }
+        }}
+      />
+    );
+  }
+
+  // ── Menú desktop (cuando showMenu=true en desktop) ─────────
+  if (showMenu && !isMobile) {
+    return (
+      <HistoryMenuDesktop
+        onSectionChange={(key) => {
+          setShowMenu(false);
+          handleSectionChange(key);
+        }}
+      />
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  SECCIÓN: JUGADORES
+  //  Mobile → HistoricalPlayersMobile (auto-contenido, sin menú externo)
+  //  Desktop → listado + HistoryRightPanel
+  // ══════════════════════════════════════════════════════════
+  if (activeSection === "players") {
+    if (isMobile) {
+      return (
+        <HistoricalPlayersMobile
+          initialPlayerId={preselectedPlayerId}
+          onBack={handleBackToMenu}
+        />
+      );
+    }
+
+    // Desktop players — importamos lo necesario aquí dentro
+    // para no ensuciar el scope global con hooks no usados en mobile
+    return <DesktopPlayersSection onBack={handleBackToMenu} />;
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  SECCIÓN: EQUIPOS
+  // ══════════════════════════════════════════════════════════
+  if (activeSection === "teams") {
+    if (isMobile) {
+      return (
+        <HistoricalTeamsMobile
+          initialSelectedId={preselectedTeamId}
+          onBack={handleBackToMenu}
+        />
+      );
+    }
+    return (
+      <div className="hp-shell">
+        <div className="hp-root">
+          <HistoricalTeamsPage
+            initialSelectedId={preselectedTeamId}
+            onBack={handleBackToMenu}
+          />
+        </div>
+        <TeamsRightPanel />
+      </div>
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  SECCIÓN: EVENTOS
+  // ══════════════════════════════════════════════════════════
+  if (activeSection === "events") {
+    if (isMobile) {
+      return (
+        <HistoricalEventsMobile
+          initialSelectedEvent={preselectedEvent}
+          onBack={handleBackToMenu}
+        />
+      );
+    }
+    return (
+      <EventsSectionWrapper
+        onBack={handleBackToMenu}
+        initialEvent={preselectedEvent}
+      />
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  SECCIÓN: COMPETENCIAS
+  // ══════════════════════════════════════════════════════════
+  if (activeSection === "competitions") {
+    if (isMobile) {
+      return (
+        <HistoricalCompetitionsMobile
+          initialSelectedId={preselectedCompId}
+          onBack={handleBackToMenu}
+        />
+      );
+    }
+    return (
+      <div className="hp-shell">
+        <div className="hp-root">
+          <HistoricalCompetitionsPage
+            initialSelectedId={preselectedCompId}
+            onBack={handleBackToMenu}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Fallback
+  return null;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  DESKTOP PLAYERS SECTION
+//  Separado para no importar hooks de players en mobile paths
+// ══════════════════════════════════════════════════════════════
+import { Search, X, Filter, ArrowLeft, RefreshCw, AlertCircle, Users2, Star, ChevronRight, Shield, Zap, Trophy, Flag, Award } from "lucide-react";
 import {
   useHistoricalPlayers,
   useHistoricalPlayerDetail,
   getHistoricalImageUrl,
-  useHistoricalEvents,
+} from '@/features/history/hooks/useHistoricalPlayers';
+import { HistoryRightPanel as RightPanel } from '@/features/history';
 
-  HistoryRightPanel,
-  TeamsRightPanel,
-  EventsRightPanel,
-
-  HistoryMenuDesktop,
-  HistoryMenuMobile,
-
-  HistoricalEventsPage,
-  HistoricalEventsMobile,
-
-  HistoricalTeamsPage,
-  HistoricalTeamsMobile,
-
-  HistoricalCompetitionsPage,
-  HistoricalCompetitionsMobile,
-
-  HistoryWelcomeScreen,
-  SectionHeaderMobile,
-  HistoryVaultLanding
-} from '@/features/history';
-
-import "./HistoryPage.css";
-
-import "../styles/mobile/HistoryPageMobile.css";
-
-// ─── Helpers ──────────────────────────────────────────────────
 const LEGACY_COLOR = {
   "Goal Scorer": "#f59e0b", "Tactician": "#3b82f6",
   "Innovator": "#8b5cf6", "Leader": "#10b981", "Goalkeeper": "#ec4899",
 };
 const POSITION_LABEL = {
-  "Forward": "Delantero", "Midfielder": "Centrocampista", "All-rounder": "Todocampista", "Play-maker": "Media Punta",
+  "Forward": "Delantero", "Midfielder": "Centrocampista",
+  "All-rounder": "Todocampista", "Play-maker": "Media Punta",
   "Defender": "Defensor", "Goalkeeper": "Portero",
 };
 const LEGACY_LABEL = {
   "Goal Scorer": "Goleador", "Tactician": "Táctico",
-  "Innovator": "Genio", "Leader": "Líder", "Goalkeeper": "Portero", "Technician": "Técnico",
+  "Innovator": "Genio", "Leader": "Líder",
+  "Goalkeeper": "Portero", "Technician": "Técnico",
 };
 const EVENT_TYPE_LABEL = {
   "Championship": "Campeonato", "Historic Match": "Partido Histórico",
   "Legendary Performance": "Actuación Legendaria",
   "Era Defining": "Definió una Era", "Record": "Récord",
 };
-const TITLE_CAT_LABEL = {
-  "club": "Club", "national": "Selección", "individual": "Individual",
-};
-const TITLE_CAT_COLOR = {
-  "club": "var(--accent)", "national": "#1D9E75", "individual": "#f59e0b",
-};
+const TITLE_CAT_LABEL = { "club": "Club", "national": "Selección", "individual": "Individual" };
+const TITLE_CAT_COLOR = { "club": "var(--accent)", "national": "#1D9E75", "individual": "#f59e0b" };
 const SIGNIFICANCE_LABEL = ["", "Activo", "Notable", "Iconico", "Leyenda", "GOAT"];
 
-// ─── Badge jugador activo (significance_level === 1) ──────────
 function ActiveBadge() {
   return (
     <span className="hp-active-badge">
@@ -71,10 +304,8 @@ function ActiveBadge() {
   );
 }
 
-// ─── Estrellas (historical levels 2-5) ───────────────────────
 function SignificanceStars({ value }) {
   if (value === 1) return <ActiveBadge />;
-
   return (
     <span className="hp-stars">
       {[1, 2, 3, 4, 5].map((n) => (
@@ -85,16 +316,6 @@ function SignificanceStars({ value }) {
       ))}
     </span>
   );
-}
-
-function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint);
-  useEffect(() => {
-    const handler = () => setIsMobile(window.innerWidth <= breakpoint);
-    window.addEventListener("resize", handler);
-    return () => window.removeEventListener("resize", handler);
-  }, [breakpoint]);
-  return isMobile;
 }
 
 function LegacyBadge({ type }) {
@@ -133,10 +354,9 @@ function PlayerCard({ player, onClick, isActive, onMouseEnter, onMouseLeave }) {
         </div>
         <div className="hp-card-meta">
           {player.country && <span className="hp-card-country">{player.country}</span>}
-          {player.position && <><span className="hp-card-sep">·</span><span className="hp-card-position">{POSITION_LABEL[player.position] || player.position}</span></>}
-          {player.ballon_dor_count > 0 && (
-            <>
-              <span className="hp-card-sep">·</span>
+          {player.position && (
+            <><span className="hp-card-sep">·</span>
+              <span className="hp-card-position">{POSITION_LABEL[player.position] || player.position}</span>
             </>
           )}
         </div>
@@ -150,9 +370,6 @@ function PlayerCard({ player, onClick, isActive, onMouseEnter, onMouseLeave }) {
   );
 }
 
-// ══════════════════════════════════════════════════════════════
-//  DETALLE DE JUGADOR
-// ══════════════════════════════════════════════════════════════
 function PlayerDetail({ playerId, onBack }) {
   const { player, teams, events, career, national, titles, loading, error, reload } =
     useHistoricalPlayerDetail(playerId);
@@ -220,11 +437,8 @@ function PlayerDetail({ playerId, onBack }) {
         </div>
         <div className="hp-detail-hero-info">
           <h1 className="hp-detail-name">{player.name}</h1>
-
           <div className="hp-detail-chips">
-            {player.country && (
-              <span className="hp-detail-chip hp-chip--country">{player.country}</span>
-            )}
+            {player.country && <span className="hp-detail-chip hp-chip--country">{player.country}</span>}
             {player.position && (
               <span className="hp-detail-chip hp-chip--pos">
                 {POSITION_LABEL[player.position] || player.position}
@@ -236,26 +450,23 @@ function PlayerDetail({ playerId, onBack }) {
               </span>
             ) : (
               player.legacy_type && (
-                <span
-                  className="hp-detail-chip"
-                  style={{ color: LEGACY_COLOR[player.legacy_type] || "var(--accent)", borderColor: `color-mix(in srgb, ${LEGACY_COLOR[player.legacy_type] || "var(--accent)"} 35%, transparent)`, background: `color-mix(in srgb, ${LEGACY_COLOR[player.legacy_type] || "var(--accent)"} 7%, transparent)` }}
-                >
+                <span className="hp-detail-chip" style={{
+                  color: LEGACY_COLOR[player.legacy_type] || "var(--accent)",
+                  borderColor: `color-mix(in srgb, ${LEGACY_COLOR[player.legacy_type] || "var(--accent)"} 35%, transparent)`,
+                  background: `color-mix(in srgb, ${LEGACY_COLOR[player.legacy_type] || "var(--accent)"} 7%, transparent)`,
+                }}>
                   {LEGACY_LABEL[player.legacy_type] || player.legacy_type}
                 </span>
               )
             )}
-            {lifespan && (
-              <span className="hp-detail-chip hp-chip--life">{lifespan}</span>
-            )}
+            {lifespan && <span className="hp-detail-chip hp-chip--life">{lifespan}</span>}
           </div>
-
           <div className="hp-detail-sig-row">
             <SignificanceStars value={player.significance_level || 0} />
             <span className={`hp-detail-sig-label${isActive ? " hp-detail-sig-label--active" : ""}`}>
               {SIGNIFICANCE_LABEL[player.significance_level || 0]}
             </span>
           </div>
-
           {player.legacy_type && player.ballon_dor_count > 0 && (
             <LegacyBadge type={player.legacy_type} />
           )}
@@ -280,9 +491,7 @@ function PlayerDetail({ playerId, onBack }) {
           {(titles || []).filter(t => t.title_category !== "individual").length > 0 && (
             <div className="hp-stat-cell hp-stat-cell--gold">
               <span className="hp-stat-n">
-                {(titles || [])
-                  .filter(t => t.title_category !== "individual")
-                  .reduce((sum, t) => sum + (parseInt(t.quantity) || 1), 0)}
+                {(titles || []).filter(t => t.title_category !== "individual").reduce((s, t) => s + (parseInt(t.quantity) || 1), 0)}
               </span>
               <span className="hp-stat-lbl">Títulos</span>
             </div>
@@ -292,7 +501,7 @@ function PlayerDetail({ playerId, onBack }) {
 
       {player.impact_summary && (
         <section className="hp-detail-section">
-          <span className="hp-detail-sep">Trasendecia</span>
+          <span className="hp-detail-sep">Trascendencia</span>
           <p className="hp-detail-impact">{player.impact_summary}</p>
         </section>
       )}
@@ -313,13 +522,15 @@ function PlayerDetail({ playerId, onBack }) {
           <span className="hp-detail-sep"><Shield size={11} /> Trayectoria en Clubes</span>
           <div className="hp-career-table-wrap">
             <table className="hp-career-table">
-              <thead><tr><th>Club</th><th>País</th><th>Período</th><th className="hp-th-num">PJ</th><th className="hp-th-num">Goles</th><th className="hp-th-num">Asist.</th><th>Nota</th></tr></thead>
+              <thead>
+                <tr><th>Club</th><th>País</th><th>Período</th><th className="hp-th-num">PJ</th><th className="hp-th-num">Goles</th><th className="hp-th-num">Asist.</th><th>Nota</th></tr>
+              </thead>
               <tbody>
                 {career.map((row, i) => (
                   <tr key={i}>
                     <td className="hp-td-club">{row.team_name || "—"}</td>
                     <td className="hp-td-country">{row.team_country || "—"}</td>
-                    <td className="hp-td-period">{row.start_year || "?"}{" – "}{row.end_year || "?"}</td>
+                    <td className="hp-td-period">{row.start_year || "?"} – {row.end_year || "?"}</td>
                     <td className="hp-td-num">{row.appearances || "—"}</td>
                     <td className="hp-td-num">{row.goals || "—"}</td>
                     <td className="hp-td-num">{row.assists || "—"}</td>
@@ -337,12 +548,14 @@ function PlayerDetail({ playerId, onBack }) {
           <span className="hp-detail-sep"><Flag size={11} /> Selección Nacional</span>
           <div className="hp-career-table-wrap">
             <table className="hp-career-table">
-              <thead><tr><th>Selección</th><th>Período</th><th className="hp-th-num">Partidos</th><th className="hp-th-num">Goles</th><th className="hp-th-num">Asist.</th><th>Nota</th></tr></thead>
+              <thead>
+                <tr><th>Selección</th><th>Período</th><th className="hp-th-num">Partidos</th><th className="hp-th-num">Goles</th><th className="hp-th-num">Asist.</th><th>Nota</th></tr>
+              </thead>
               <tbody>
                 {national.map((row, i) => (
                   <tr key={i}>
                     <td className="hp-td-club">{row.country || "—"}</td>
-                    <td className="hp-td-period">{row.start_year || "?"}{" – "}{row.end_year || "?"}</td>
+                    <td className="hp-td-period">{row.start_year || "?"} – {row.end_year || "?"}</td>
                     <td className="hp-td-num">{row.caps || "—"}</td>
                     <td className="hp-td-num">{row.goals || "—"}</td>
                     <td className="hp-td-num">{row.assists || "—"}</td>
@@ -365,7 +578,10 @@ function PlayerDetail({ playerId, onBack }) {
               return (
                 <div key={i} className="hp-team-row">
                   <div className="hp-team-logo-wrap">
-                    {teamImg ? <img src={teamImg} alt={team?.name} className="hp-team-logo" /> : <div className="hp-team-logo-ph"><Shield size={14} /></div>}
+                    {teamImg
+                      ? <img src={teamImg} alt={team?.name} className="hp-team-logo" />
+                      : <div className="hp-team-logo-ph"><Shield size={14} /></div>
+                    }
                   </div>
                   <div className="hp-team-info">
                     <span className="hp-team-name">{team?.name}</span>
@@ -415,7 +631,9 @@ function PlayerDetail({ playerId, onBack }) {
               if (!catTitles || catTitles.length === 0) return null;
               return (
                 <div key={cat} className="hp-titles-group">
-                  <span className="hp-titles-cat-label" style={{ "--cat-color": TITLE_CAT_COLOR[cat] }}>{TITLE_CAT_LABEL[cat]}</span>
+                  <span className="hp-titles-cat-label" style={{ "--cat-color": TITLE_CAT_COLOR[cat] }}>
+                    {TITLE_CAT_LABEL[cat]}
+                  </span>
                   <div className="hp-titles-list">
                     {catTitles.map((t, i) => (
                       <div key={i} className="hp-title-row" style={{ "--cat-color": TITLE_CAT_COLOR[cat] }}>
@@ -437,61 +655,7 @@ function PlayerDetail({ playerId, onBack }) {
   );
 }
 
-// ══════════════════════════════════════════════════════════════
-//  WRAPPER DE EVENTOS
-// ══════════════════════════════════════════════════════════════
-function EventsSectionWrapper({ onBack, initialEvent }) {
-  const { allEvents } = useHistoricalEvents();
-  const [selectedEvent, setSelectedEvent] = useState(initialEvent || null);
-
-  return (
-    <div className="hp-shell">
-      <div className="hp-root">
-        <HistoricalEventsPage
-          selectedEvent={selectedEvent}
-          onEventSelect={(ev) => setSelectedEvent(ev)}
-          onBack={onBack}
-        />
-      </div>
-      <EventsRightPanel
-        allEvents={allEvents}
-        selectedEvent={selectedEvent}
-        onSelectEvent={(ev) => setSelectedEvent(ev)}
-      />
-    </div>
-  );
-}
-
-// ══════════════════════════════════════════════════════════════
-//  PÁGINA PRINCIPAL
-// ══════════════════════════════════════════════════════════════
-export default function HistoryPage() {
-  const [activeSection, setActiveSection] = useState("players");
-  const [selectedPlayerId, setSelectedPlayerId] = useState(null);
-  const [preselectedTeamId, setPreselectedTeamId] = useState(null);
-  const [preselectedEvent, setPreselectedEvent] = useState(null);
-  const [preselectedCompId, setPreselectedCompId] = useState(null);
-  const [hoveredPlayer, setHoveredPlayer] = useState(null);
-  const [showFilters, setShowFilters] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(
-    () => !sessionStorage.getItem("vault_visited")
-  );
-  const [showMenu, setShowMenu] = useState(true);
-  const [showVaultLanding, setShowVaultLanding] = useState(true);
-  const isMobile = useIsMobile();
-
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.state?.reset) {
-      setShowMenu(true);
-      setShowVaultLanding(true);
-      setActiveSection("players");
-      setSelectedPlayerId(null);
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }
-  }, [location.state?.reset]);
-
+function DesktopPlayersSection({ onBack }) {
   const {
     players, allPlayers, loading, error, reload,
     search, setSearch,
@@ -502,125 +666,23 @@ export default function HistoryPage() {
     positions, legacies,
   } = useHistoricalPlayers();
 
+  const [selectedPlayerId, setSelectedPlayerId] = useState(null);
+  const [hoveredPlayer, setHoveredPlayer] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
+
   const hasActiveFilters = filterPosition || filterBallonDor || filterLegacy || filterSignificance;
-  const clearFilters = () => { setFilterPosition(""); setFilterBallonDor(""); setFilterLegacy(""); setFilterSignificance(""); };
+  const clearFilters = () => {
+    setFilterPosition(""); setFilterBallonDor(""); setFilterLegacy(""); setFilterSignificance("");
+  };
   const panelPlayer = hoveredPlayer || (selectedPlayerId ? allPlayers.find((p) => p.id === selectedPlayerId) || null : null);
 
-  const handleBackToMenu = () => {
-    setShowMenu(true);
-    setSelectedPlayerId(null);
-    setPreselectedTeamId(null);
-    setPreselectedEvent(null);
-    setPreselectedCompId(null);
-    window.scrollTo({ top: 0, behavior: "instant" });
-  };
-
-  const handleBackToVaultLanding = () => {
-    setShowVaultLanding(true);
-    setShowMenu(true);
-    setSelectedPlayerId(null);
-    setPreselectedTeamId(null);
-    setPreselectedEvent(null);
-    setPreselectedCompId(null);
-    window.scrollTo({ top: 0, behavior: "instant" });
-  };
-
-  const handleSectionChange = (section, item = null) => {
-    setActiveSection(section);
-    setSelectedPlayerId(null);
-
-    if (item) {
-      if (section === "players") setSelectedPlayerId(item.id);
-      if (section === "teams") setPreselectedTeamId(item.id);
-      if (section === "events") setPreselectedEvent(item);
-      if (section === "competitions") setPreselectedCompId(item.id);
-    }
-
-    window.scrollTo({ top: 0, behavior: "instant" });
-  };
-
-  // ── Pantalla de bienvenida ────────────────────────────────────
-  if (showWelcome) {
-    return (
-      <HistoryWelcomeScreen
-        onEnter={() => {
-          sessionStorage.setItem("vault_visited", "true");
-          setShowWelcome(false);
-        }}
-      />
-    );
-  }
-
-  // ── Vault Landing — solo mobile, capa previa al menú ─────────
-  if (isMobile && showMenu && showVaultLanding) {
-    return (
-      <HistoryVaultLanding
-        onNavigate={(section, id) => {
-          setShowVaultLanding(false);
-
-          if (section === 'competitions') {
-            setShowMenu(false);
-            handleSectionChange('competitions', id ? { id } : null);
-          } else if (section === 'events') {
-            setShowMenu(false);
-            handleSectionChange('events', id ? { id } : null);
-          } else if (section === 'players') {
-            setShowMenu(false);
-            handleSectionChange('players', id ? { id } : null);
-          } else if (section === 'teams') {
-            setShowMenu(false);
-            handleSectionChange('teams', id ? { id } : null);
-          } else if (section === 'event-detail') {
-            setShowMenu(false);
-            handleSectionChange('events', { id });
-          } else if (section === 'team-detail') {
-            setShowMenu(false);
-            handleSectionChange('teams', { id });
-          } else {
-            setShowMenu(true);
-          }
-        }}
-      />
-    );
-  }
-
-  // ── Menú principal (desktop y mobile) ────────────────────────
-  if (showMenu) {
-    return isMobile
-      ? (
-        <HistoryMenuMobile
-          onSectionChange={(key, item) => {
-            setShowMenu(false);
-            handleSectionChange(key, item);
-          }}
-        />
-      )
-      : (
-        <HistoryMenuDesktop
-          onSectionChange={(key) => {
-            setShowMenu(false);
-            handleSectionChange(key);
-          }}
-        />
-      );
-  }
-
-  if (activeSection === "players" && selectedPlayerId) {
-    // Mobile: sin panel lateral, onBack → menú mobile
-    if (isMobile) {
-      return (
-        <div className="hp-root hp-root--detail">
-          <PlayerDetail playerId={selectedPlayerId} onBack={handleBackToMenu} />
-        </div>
-      );
-    }
-    // Desktop: con panel lateral, onBack → vuelve al listado
+  if (selectedPlayerId) {
     return (
       <div className="hp-shell">
         <div className="hp-root hp-root--detail">
           <PlayerDetail playerId={selectedPlayerId} onBack={() => setSelectedPlayerId(null)} />
         </div>
-        <HistoryRightPanel
+        <RightPanel
           allPlayers={allPlayers}
           selectedPlayer={panelPlayer}
           onSelectPlayer={(p) => setSelectedPlayerId(p.id)}
@@ -629,129 +691,14 @@ export default function HistoryPage() {
     );
   }
 
-  if (activeSection === "teams") {
-
-    // ── MOBILE ─────────────────────────────
-    if (isMobile) {
-      return (
-        <HistoricalTeamsMobile
-          initialSelectedId={preselectedTeamId}
-          onBack={handleBackToMenu}
-        />
-      );
-    }
-
-    // ── DESKTOP ────────────────────────────
-    return (
-      <div className="hp-shell">
-        <div className="hp-root">
-          <HistoricalTeamsPage
-            initialSelectedId={preselectedTeamId}
-            onBack={handleBackToMenu}
-          />
-        </div>
-
-        <TeamsRightPanel />
-      </div>
-    );
-  }
-
-  if (activeSection === "events") {
-
-    // Mobile con detalle directo
-    if (isMobile && preselectedEvent) {
-      return (
-        <HistoricalEventsMobile
-          initialSelectedEvent={preselectedEvent}
-          onBack={handleBackToMenu}
-        />
-      );
-    }
-
-    // Mobile sin detalle
-    if (isMobile) {
-      return (
-        <HistoricalEventsMobile
-          onBack={handleBackToMenu}
-        />
-      );
-    }
-
-    // Desktop
-    return (
-      <EventsSectionWrapper
-        onBack={handleBackToMenu}
-        initialEvent={preselectedEvent}
-      />
-    );
-  }
-
-  if (activeSection === "competitions") {
-    // Mobile con detalle
-    if (isMobile && preselectedCompId) {
-      return (
-        <HistoricalCompetitionsMobile
-          initialSelectedId={preselectedCompId}
-          onBack={() => {
-            setPreselectedCompId(null);
-            setShowMenu(true);
-          }}
-        />
-      );
-    }
-
-    // Mobile sin detalle
-    if (isMobile) {
-      return (
-        <HistoricalCompetitionsMobile
-          onBack={() => setShowMenu(true)}
-        />
-      );
-    }
-
-    return (
-      <div className="hp-shell">
-        <div className="hp-root">
-          <HistoricalCompetitionsPage
-            initialSelectedId={preselectedCompId}
-            onBack={handleBackToMenu}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  // ── Vista jugadores — mobile: todo via HistoryMenuMobile ─────
-  if (isMobile) {
-    return (
-      <HistoryMenuMobile
-        initialSection="players"
-        onSectionChange={(key, item) => handleSectionChange(key, item)}
-      />
-    );
-  }
-
   return (
     <div className="hp-shell">
       <div className="hp-root">
-
-        <div className="hp-mobile-header-wrap">
-          <SectionHeaderMobile
-            section="players"
-            items={allPlayers}
-            onRandomSelect={(p) => {
-              setSelectedPlayerId(p.id);
-              window.scrollTo({ top: 0, behavior: "instant" });
-            }}
-            onBack={handleBackToMenu}
-          />
-        </div>
-
         <header className="hp-header hp-header--desktop">
           <div className="hp-header-left">
             <div className="hp-header-icon"><Users2 size={18} strokeWidth={1.5} /></div>
             <div>
-              <h1 className="hp-header-title">JUGADORES HISTORICOS</h1>
+              <h1 className="hp-header-title">JUGADORES HISTÓRICOS</h1>
               <p className="hp-header-sub">{allPlayers.length} leyenda{allPlayers.length !== 1 ? "s" : ""} del fútbol mundial</p>
             </div>
           </div>
@@ -772,7 +719,7 @@ export default function HistoryPage() {
             >
               <Filter size={12} /> {hasActiveFilters && <span className="hp-filter-dot" />}
             </button>
-            <button className="hp-back-vault-btn" onClick={handleBackToMenu}>
+            <button className="hp-back-vault-btn" onClick={onBack}>
               <ArrowLeft size={12} />
             </button>
           </div>
@@ -796,7 +743,7 @@ export default function HistoryPage() {
                 </select>
               </div>
               <div className="hp-filter-group">
-                <label className="hp-filter-label">Tipo de legado</label>
+                <label className="hp-filter-label">Legado</label>
                 <select className="hp-filter-select" value={filterLegacy} onChange={(e) => setFilterLegacy(e.target.value)}>
                   <option value="">Todos</option>
                   {legacies.map((l) => <option key={l} value={l}>{LEGACY_LABEL[l] || l}</option>)}
@@ -804,11 +751,7 @@ export default function HistoryPage() {
               </div>
               <div className="hp-filter-group">
                 <label className="hp-filter-label">Nivel</label>
-                <select
-                  className="hp-filter-select"
-                  value={filterSignificance}
-                  onChange={(e) => setFilterSignificance(e.target.value)}
-                >
+                <select className="hp-filter-select" value={filterSignificance} onChange={(e) => setFilterSignificance(e.target.value)}>
                   <option value="">Todos</option>
                   <option value="5">GOAT</option>
                   <option value="4">Leyenda</option>
@@ -826,7 +769,11 @@ export default function HistoryPage() {
           </div>
         )}
 
-        {loading && <div className="hp-state-msg"><RefreshCw size={18} className="hp-spin" /><span>Cargando leyendas...</span></div>}
+        {loading && (
+          <div className="hp-state-msg">
+            <RefreshCw size={18} className="hp-spin" /><span>Cargando leyendas...</span>
+          </div>
+        )}
         {error && !loading && (
           <div className="hp-state-error">
             <AlertCircle size={18} /><p>{error}</p>
@@ -856,7 +803,10 @@ export default function HistoryPage() {
                   key={player.id}
                   player={player}
                   isActive={player.id === selectedPlayerId}
-                  onClick={(p) => { setSelectedPlayerId(p.id); window.scrollTo({ top: 0, behavior: "instant" }); }}
+                  onClick={(p) => {
+                    setSelectedPlayerId(p.id);
+                    window.scrollTo({ top: 0, behavior: "instant" });
+                  }}
                   onMouseEnter={() => setHoveredPlayer(player)}
                   onMouseLeave={() => setHoveredPlayer(null)}
                 />
@@ -866,7 +816,7 @@ export default function HistoryPage() {
         )}
       </div>
 
-      <HistoryRightPanel
+      <RightPanel
         allPlayers={allPlayers}
         selectedPlayer={panelPlayer}
         onSelectPlayer={(p) => setSelectedPlayerId(p.id)}

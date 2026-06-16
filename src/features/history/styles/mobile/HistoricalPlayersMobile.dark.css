@@ -1,0 +1,870 @@
+/* ════════════════════════════════════════════════
+   ███╗   ███╗ ██████╗ ██████╗ ██╗██╗     ███████╗
+   ████╗ ████║██╔═══██╗██╔══██╗██║██║     ██╔════╝
+   ██╔████╔██║██║   ██║██████╔╝██║██║     █████╗  
+   ██║╚██╔╝██║██║   ██║██╔══██╗██║██║     ██╔══╝  
+   ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║███████╗███████╗
+   MOBILE — responsive chaos
+════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════════
+   TOKENS DARK 
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-root,
+[data-theme="dark"] .hpm-detail {
+  --hpm-bg: #0E0F14;
+  --hpm-card: #151720;
+  --hpm-dark: #E8E5DE;
+  --hpm-accent: #7B6EF5;
+  --hpm-gold: #F5A623;
+  --hpm-green: #22C58B;
+  --hpm-muted: #5A5C72;
+  --hpm-border: rgba(255, 255, 255, 0.10);
+  --hpm-border-l: rgba(255, 255, 255, 0.07);
+  --hpm-mono: 'DM Mono', 'Courier New', monospace;
+
+  color-scheme: dark;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ESCONDER BOTTOM NAV l.
+══════════════════════════════════════════════════════════════ */
+.hpm-hide-bottom-nav .mhd-bottom-nav {
+  display: none !important;
+}
+
+/* También vale para el layout antiguo si lo tuvieras */
+.hpm-hide-bottom-nav .gs-bottom-nav,
+.hpm-hide-bottom-nav [class*="bottom-nav"],
+.hpm-hide-bottom-nav [class*="bottomNav"] {
+  display: none !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FONDO Y SCROLLBAR
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-root {
+  background: var(--hpm-bg);
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-root::-webkit-scrollbar {
+  width: 4px;
+}
+
+[data-theme="dark"] .hpm-root::-webkit-scrollbar-track {
+  background: var(--hpm-bg);
+}
+
+[data-theme="dark"] .hpm-root::-webkit-scrollbar-thumb {
+  background: rgba(123, 110, 245, 0.35);
+  border-radius: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HEADER LISTADO
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-header {
+  background: var(--hpm-bg);
+  border-bottom-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-dot-grid circle {
+  fill: rgba(255, 255, 255, 0.06);
+  opacity: 1;
+}
+
+[data-theme="dark"] .hpm-back-btn {
+  background: var(--hpm-card);
+  border-color: var(--hpm-border);
+  color: var(--hpm-dark);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="dark"] .hpm-back-btn:active {
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="dark"] .hpm-breadcrumb-sep {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-breadcrumb-active {
+  background: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-title-bar {
+  background: var(--hpm-accent);
+  border-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-title {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-subtitle {
+  color: var(--hpm-muted);
+}
+
+/* Stats strip */
+[data-theme="dark"] .hpm-stats {
+  border-color: var(--hpm-border);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .hpm-stat-cell {
+  background: var(--hpm-card);
+  border-right-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-stat-icon {
+  border-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-stat-cell--accent .hpm-stat-icon {
+  background: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-stat-cell--gold .hpm-stat-icon {
+  background: var(--hpm-gold);
+}
+
+[data-theme="dark"] .hpm-stat-cell--green .hpm-stat-icon {
+  background: var(--hpm-green);
+}
+
+[data-theme="dark"] .hpm-stat-num {
+  color: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-stat-lbl {
+  color: var(--hpm-muted);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SEARCH BAR
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-search-row {
+  background: var(--hpm-bg);
+  border-bottom-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-search-wrap {
+  background: var(--hpm-card);
+  border-color: var(--hpm-border);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .hpm-search-input {
+  color: var(--hpm-dark);
+  background: transparent;
+}
+
+[data-theme="dark"] .hpm-search-input::placeholder {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-search-ico {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-search-clear {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-icon-btn {
+  background: var(--hpm-card);
+  border-color: var(--hpm-border);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-icon-btn:active {
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .hpm-icon-btn--active {
+  background: var(--hpm-accent);
+  color: #fff;
+  border-color: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-icon-btn--dark {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--hpm-dark);
+  border-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-filter-dot {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--hpm-accent);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   COUNTER ROW
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-counter-row {
+  background: var(--hpm-bg);
+  border-bottom-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-counter-bar {
+  background: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-counter-label {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-counter-badge {
+  background: var(--hpm-accent);
+  color: #fff;
+  border-color: var(--hpm-border);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PLAYER CARD GRID
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-grid {
+  background: var(--hpm-bg);
+}
+
+[data-theme="dark"] .hpm-player-card {
+  background: var(--hpm-card);
+  border-color: var(--hpm-border);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.65);
+}
+
+[data-theme="dark"] .hpm-player-card:active {
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.65);
+}
+
+[data-theme="dark"] .hpm-card-photo {
+  background: color-mix(in srgb, var(--hpm-accent) 12%, #0E0F14);
+}
+
+[data-theme="dark"] .hpm-card-goat {
+  background: var(--hpm-gold);
+  color: #000;
+}
+
+[data-theme="dark"] .hpm-card-num {
+  background: rgba(0, 0, 0, 0.80);
+  color: rgba(255, 255, 255, 0.65);
+}
+
+[data-theme="dark"] .hpm-card-more {
+  background: rgba(0, 0, 0, 0.70);
+  color: rgba(255, 255, 255, 0.65);
+}
+
+[data-theme="dark"] .hpm-card-body {
+  background: var(--hpm-card);
+}
+
+[data-theme="dark"] .hpm-card-name {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-card-country {
+  color: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-card-pos {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-card-trophy {
+  color: var(--hpm-gold);
+}
+
+[data-theme="dark"] .hpm-initials {
+  color: color-mix(in srgb, var(--hpm-accent) 30%, transparent);
+}
+
+/* Loading / error / empty */
+[data-theme="dark"] .hpm-loading,
+[data-theme="dark"] .hpm-error {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-empty-grid {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-empty-grid p {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-error button {
+  background: var(--hpm-card);
+  border-color: var(--hpm-border);
+  color: var(--hpm-dark);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FILTER SHEET
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-sheet-backdrop {
+  background: rgba(0, 0, 0, 0.72);
+}
+
+[data-theme="dark"] .hpm-sheet {
+  background: var(--hpm-card);
+  border-top-color: var(--hpm-border);
+  box-shadow: 0 -4px 0 rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="dark"] .hpm-sheet-handle {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .hpm-sheet-title {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-sheet-clear {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-sheet-group-label {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-sheet-chip {
+  border-color: var(--hpm-border);
+  color: var(--hpm-dark);
+  background: transparent;
+}
+
+[data-theme="dark"] .hpm-sheet-chip--on {
+  background: var(--hpm-accent);
+  color: #fff;
+  border-color: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-sheet-apply {
+  background: var(--hpm-accent);
+  color: #fff;
+  border-color: rgba(123, 110, 245, 0.4);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RANDOM MODAL
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-modal-backdrop {
+  background: rgba(0, 0, 0, 0.80);
+}
+
+[data-theme="dark"] .hpm-modal {
+  background: var(--hpm-card);
+  border-color: var(--hpm-border);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.70);
+}
+
+[data-theme="dark"] .hpm-modal-header {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--hpm-dark);
+  border-bottom: 1px solid var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-modal-close {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-slot {
+  border-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-slot--revealed {
+  background: rgba(123, 110, 245, 0.07);
+  border-left-color: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-slot-empty {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-slot-name {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-slot-meta {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-slot-arrow {
+  color: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-slot-avatar {
+  background: rgba(123, 110, 245, 0.10);
+  border-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-slot-goat {
+  background: var(--hpm-gold);
+  color: #000;
+}
+
+[data-theme="dark"] .hpm-slot-status {
+  color: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-slot-dot {
+  background: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-modal-cta {
+  background: var(--hpm-accent);
+  color: #fff;
+  border-color: rgba(123, 110, 245, 0.35);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .hpm-modal-secondary {
+  background: transparent;
+  color: var(--hpm-dark);
+  border-color: var(--hpm-border);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DETALLE — top bar + tab bar
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-detail {
+  background: var(--hpm-bg);
+}
+
+[data-theme="dark"] .hpm-detail-topbar {
+  background: var(--hpm-bg);
+  border-bottom-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-detail-back {
+  background: var(--hpm-card);
+  border-color: var(--hpm-border);
+  color: var(--hpm-dark);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="dark"] .hpm-detail-back:active {
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="dark"] .hpm-detail-breadcrumb-path {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-detail-breadcrumb-name {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-detail-badge {
+  border-color: var(--hpm-border);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .hpm-detail-badge--goat {
+  background: var(--hpm-gold);
+  color: #000;
+}
+
+[data-theme="dark"] .hpm-detail-badge--sig {
+  background: var(--hpm-accent);
+  color: #fff;
+}
+
+/* Bottom tab bar */
+[data-theme="dark"] .hpm-tab-bar {
+  background: var(--hpm-bg);
+  border-top-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-tab-btn {
+  color: var(--hpm-muted);
+  border-right-color: var(--hpm-border);
+  background: transparent;
+}
+
+[data-theme="dark"] .hpm-tab-btn--active {
+  background: var(--hpm-accent);
+  color: #fff;
+}
+
+/* Scrollbar en tab content */
+[data-theme="dark"] .hpm-tab-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+
+[data-theme="dark"] .hpm-tab-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+[data-theme="dark"] .hpm-tab-scroll::-webkit-scrollbar-thumb {
+  background: rgba(123, 110, 245, 0.25);
+  border-radius: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TAB HEADER COMPARTIDO
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-tab-header,
+[data-theme="dark"] .hpm-palmares-header {
+  background: var(--hpm-card);
+  border-bottom-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-tab-icon {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--hpm-border);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.55);
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-tab-header-title {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-tab-header-sub {
+  color: var(--hpm-muted);
+}
+
+/* Section helpers */
+[data-theme="dark"] .hpm-section-header {}
+
+[data-theme="dark"] .hpm-section-bar {
+  background: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-section-label {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-section-dot {
+  border-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-section-dot-label {
+  /* color set inline */
+}
+
+/* Empty */
+[data-theme="dark"] .hpm-empty {
+  color: var(--hpm-muted);
+}
+
+/* Loading / error states */
+[data-theme="dark"] .hpm-detail-loading,
+[data-theme="dark"] .hpm-detail-error {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-detail-error button {
+  background: var(--hpm-card);
+  border-color: var(--hpm-border);
+  color: var(--hpm-dark);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TAB RESUMEN
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-resumen-hero {
+  background: var(--hpm-card);
+  border-bottom-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-resumen-photo {
+  border-color: var(--hpm-border);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.65);
+  background: rgba(123, 110, 245, 0.10);
+}
+
+[data-theme="dark"] .hpm-photo-goat {
+  background: var(--hpm-gold);
+  color: #000;
+}
+
+[data-theme="dark"] .hpm-photo-active {
+  background: var(--hpm-green);
+  color: #fff;
+}
+
+[data-theme="dark"] .hpm-photo-ballon {
+  background: rgba(0, 0, 0, 0.85);
+  color: var(--hpm-gold);
+  border-color: var(--hpm-gold);
+}
+
+[data-theme="dark"] .hpm-resumen-archivo {
+  color: var(--hpm-accent);
+  border-color: rgba(123, 110, 245, 0.35);
+}
+
+[data-theme="dark"] .hpm-resumen-name {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-resumen-legacy {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-resumen-sig-label {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-chip {
+  border-color: var(--hpm-border);
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-chip--accent {
+  color: var(--hpm-accent);
+  border-color: rgba(123, 110, 245, 0.30);
+}
+
+/* Stats grid 2×3 */
+[data-theme="dark"] .hpm-stats-grid {
+  border-color: var(--hpm-border);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.60);
+}
+
+[data-theme="dark"] .hpm-stat-cell-grid {
+  background: var(--hpm-card);
+  border-right-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-stat-cell-grid:nth-child(4),
+[data-theme="dark"] .hpm-stat-cell-grid:nth-child(5),
+[data-theme="dark"] .hpm-stat-cell-grid:nth-child(6) {
+  border-top-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-stat-cell-num {
+  color: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-stat-cell-lbl {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-stat-cell-grid--gold .hpm-stat-cell-num {
+  color: var(--hpm-gold);
+}
+
+/* Impact card */
+[data-theme="dark"] .hpm-impact-card {
+  background: rgba(123, 110, 245, 0.06);
+  border-left-color: var(--hpm-accent);
+  border-top-color: var(--hpm-border);
+  border-right-color: var(--hpm-border);
+  border-bottom-color: var(--hpm-border);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.50);
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-description {
+  color: var(--hpm-muted);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TAB TRAYECTORIA
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-tline-year {
+  color: #fff;
+  border-color: var(--hpm-border);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
+  /* background se pone inline con color de acento */
+}
+
+[data-theme="dark"] .hpm-tline-card {
+  background: var(--hpm-card);
+  border-color: var(--hpm-border);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="dark"] .hpm-tline-card--national {
+  background: rgba(34, 197, 139, 0.06);
+}
+
+[data-theme="dark"] .hpm-tline-club {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-tline-note {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-tline-stats {
+  border-top-color: var(--hpm-border);
+}
+
+[data-theme="dark"] .hpm-mini-stat-val {
+  /* color set inline */
+}
+
+[data-theme="dark"] .hpm-mini-stat-lbl {
+  color: var(--hpm-muted);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TAB EQUIPOS & MOMENTOS
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-equi-row {
+  background: var(--hpm-card);
+  border-color: var(--hpm-border);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="dark"] .hpm-equi-logo {
+  background: rgba(123, 110, 245, 0.08);
+  border-color: var(--hpm-border);
+  color: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-equi-name {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-equi-country {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-equi-roles {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-equi-years {
+  color: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-moment-row {
+  border-color: var(--hpm-border);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="dark"] .hpm-moment-thumb {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--hpm-accent);
+}
+
+[data-theme="dark"] .hpm-moment-info {
+  background: var(--hpm-card);
+}
+
+[data-theme="dark"] .hpm-moment-type {
+  background: var(--hpm-accent);
+  color: #fff;
+}
+
+[data-theme="dark"] .hpm-moment-year {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-moment-title {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-moment-role {
+  color: var(--hpm-muted);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TAB PALMARÉS
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-palmares-total {
+  background: var(--hpm-gold);
+  color: #000;
+  border-color: var(--hpm-border);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.50);
+}
+
+[data-theme="dark"] .hpm-title-row {
+  background: var(--hpm-card);
+  border-top-color: var(--hpm-border);
+  border-right-color: var(--hpm-border);
+  border-bottom-color: var(--hpm-border);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.30);
+}
+
+[data-theme="dark"] .hpm-title-icon {
+  border-color: rgba(255, 255, 255, 0.06);
+  background: rgba(123, 110, 245, 0.08);
+}
+
+[data-theme="dark"] .hpm-title-name {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-title-year {
+  color: var(--hpm-muted);
+}
+
+[data-theme="dark"] .hpm-title-count {
+  background: var(--tcolor, var(--hpm-accent));
+  color: #fff;
+  border-color: var(--hpm-border);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TAB HISTORIA — timeline
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-historia-year {
+  color: #fff;
+  border-color: var(--hpm-border);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
+  /* background inline */
+}
+
+[data-theme="dark"] .hpm-historia-card {
+  background: var(--hpm-card);
+  border-top-color: var(--hpm-border);
+  border-right-color: var(--hpm-border);
+  border-bottom-color: var(--hpm-border);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.30);
+}
+
+[data-theme="dark"] .hpm-historia-icon-wrap {
+  border-color: rgba(255, 255, 255, 0.06);
+  /* background inline */
+}
+
+[data-theme="dark"] .hpm-historia-title {
+  color: var(--hpm-dark);
+}
+
+[data-theme="dark"] .hpm-historia-desc {
+  color: var(--hpm-muted);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   GLOW DE ACENTO SUTIL — separa el detalle del fondo oscuro
+══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] .hpm-detail-topbar::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(123, 110, 245, 0.25) 30%,
+      rgba(123, 110, 245, 0.25) 70%,
+      transparent);
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   REDUCED MOTION — reutilizamos las reglas del CSS base,
+   aquí solo asegurar que el glow no use transition pesada
+══════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="dark"] .hpm-detail-topbar::after {
+    display: none;
+  }
+}

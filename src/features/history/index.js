@@ -17,6 +17,7 @@ export { default as HistoryMenuMobile } from './components/mobile/HistoryMenuMob
 export { default as KnockoutBracketMobile } from './components/mobile/KnockoutBracketMobile'
 export { default as SectionHeaderMobile } from './components/mobile/SectionHeaderMobile'
 export { default as HistoryVaultLanding } from './components/mobile/HistoryVaultLanding';
+export { default as HistoricalPlayersMobile } from './components/mobile/HistoricalPlayersMobile';
 
 // Hooks
 export * from './hooks/useHistoricalCompetitions'

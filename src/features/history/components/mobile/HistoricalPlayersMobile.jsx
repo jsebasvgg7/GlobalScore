@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import {
   ArrowLeft, Search, X, Filter, Shuffle,
   User, Shield, Globe, Trophy, Clock, TrendingUp,
@@ -10,17 +10,8 @@ import {
   useHistoricalPlayerDetail,
   getHistoricalImageUrl,
 } from '@/features/history/hooks/useHistoricalPlayers';
-import './HistoricalPlayersMobile.css';
-
-// ─── Paleta / tokens (fiel a Flutter kHist*) ───────────────────
-// --hpm-bg      #F0EDE8  crema
-// --hpm-card    #EBE7E1
-// --hpm-dark    #1A1A2E
-// --hpm-accent  #5B4FD8  violeta
-// --hpm-gold    #F59E0B
-// --hpm-green   #1D9E75
-// --hpm-muted   #88887D
-// --hpm-border  #1A1A2E  borde duro neobrutalista
+import '../../styles/mobile/HistoricalPlayersMobile.css';
+import '../../styles/mobile/HistoricalPlayersMobile.dark.css';
 
 // ─── Diccionarios ──────────────────────────────────────────────
 const POSITION_LABEL = {
@@ -73,12 +64,7 @@ const FILTER_OPTIONS = [
 
 function DotGrid({ cols = 5, rows = 4 }) {
   return (
-    <svg
-      className="hpm-dot-grid"
-      width={cols * 14}
-      height={rows * 14}
-      aria-hidden="true"
-    >
+    <svg className="hpm-dot-grid" width={cols * 14} height={rows * 14} aria-hidden="true">
       {Array.from({ length: rows }, (_, r) =>
         Array.from({ length: cols }, (_, c) => (
           <circle key={`${r}-${c}`} cx={c * 14 + 7} cy={r * 14 + 7} r={1.5} />
@@ -100,35 +86,29 @@ function Stars({ level, size = 10 }) {
   return (
     <span className="hpm-stars">
       {[1, 2, 3, 4, 5].map((n) => (
-        <Star key={n} size={size} fill={n <= level ? '#F59E0B' : 'none'}
+        <Star key={n} size={size}
+          fill={n <= level ? '#F59E0B' : 'none'}
           stroke={n <= level ? '#F59E0B' : '#C4BFB8'} />
       ))}
     </span>
   );
 }
 
-function Skel({ w = '100%', h = 14 }) {
-  return <span className="hpm-skel" style={{ width: w, height: h }} />;
-}
-
 // ══════════════════════════════════════════════════════════════
-//  HEADER DE LISTADO — fiel a _PlayersHeader Flutter
+//  HEADER — fiel a _PlayersHeader Flutter
 // ══════════════════════════════════════════════════════════════
 function PlayersHeader({ total, goats, countries, onBack }) {
   return (
     <header className="hpm-header">
-      <DotGrid cols={5} rows={4} />
-
-      {/* Breadcrumb */}
+      <DotGrid cols={6} rows={4} />
       <div className="hpm-breadcrumb">
         <button className="hpm-back-btn" onClick={onBack} aria-label="Volver">
           <ArrowLeft size={10} />
           <span>HISTÓRICO</span>
         </button>
+        <span className="hpm-breadcrumb-sep">›</span>
         <span className="hpm-breadcrumb-active">JUGADORES</span>
       </div>
-
-      {/* Título */}
       <div className="hpm-title-row">
         <div className="hpm-title-bar" />
         <div>
@@ -136,8 +116,6 @@ function PlayersHeader({ total, goats, countries, onBack }) {
           <p className="hpm-subtitle">Explora las leyendas del fútbol.</p>
         </div>
       </div>
-
-      {/* Stats strip — fiel a _StatsStrip Flutter */}
       <div className="hpm-stats-wrap">
         <div className="hpm-stats">
           <div className="hpm-stat-cell hpm-stat-cell--accent">
@@ -168,7 +146,7 @@ function PlayersHeader({ total, goats, countries, onBack }) {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  BARRA DE BÚSQUEDA — fiel a _SearchBar Flutter
+//  SEARCH BAR
 // ══════════════════════════════════════════════════════════════
 function SearchBar({ value, onChange, onClear, onFilter, hasFilters, filterCount, onRandom }) {
   return (
@@ -187,7 +165,6 @@ function SearchBar({ value, onChange, onClear, onFilter, hasFilters, filterCount
           </button>
         )}
       </div>
-
       <button
         className={`hpm-icon-btn ${hasFilters ? 'hpm-icon-btn--active' : ''}`}
         onClick={onFilter}
@@ -196,7 +173,6 @@ function SearchBar({ value, onChange, onClear, onFilter, hasFilters, filterCount
         <Filter size={15} />
         {hasFilters && <span className="hpm-filter-dot">{filterCount}</span>}
       </button>
-
       <button className="hpm-icon-btn hpm-icon-btn--dark" onClick={onRandom} aria-label="Aleatorio">
         <Shuffle size={15} />
       </button>
@@ -205,7 +181,7 @@ function SearchBar({ value, onChange, onClear, onFilter, hasFilters, filterCount
 }
 
 // ══════════════════════════════════════════════════════════════
-//  COUNTER ROW — _CounterRow Flutter
+//  COUNTER ROW
 // ══════════════════════════════════════════════════════════════
 function CounterRow({ count }) {
   return (
@@ -220,19 +196,16 @@ function CounterRow({ count }) {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  PLAYER CARD — PlayerCard Flutter (grid 2 cols)
+//  PLAYER CARD — grid 2 cols neobrutalista
 // ══════════════════════════════════════════════════════════════
 function PlayerCard({ player, onClick }) {
   const img = getHistoricalImageUrl(player.image_path);
   const sig = player.significance_level || 0;
   const isGoat = sig === 5;
-  const isActive = sig === 1;
-  // número decorativo determinista
   const num = (Math.abs(player.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0)) % 99) + 1;
 
   return (
     <article className="hpm-player-card" onClick={() => onClick(player)}>
-      {/* Foto */}
       <div className="hpm-card-photo">
         {img
           ? <img src={img} alt={player.name} className="hpm-card-img" />
@@ -242,19 +215,14 @@ function PlayerCard({ player, onClick }) {
         <span className="hpm-card-num">#{num}</span>
         <span className="hpm-card-more">···</span>
       </div>
-
-      {/* Info */}
       <div className="hpm-card-body">
         <p className="hpm-card-name">{player.name.toUpperCase()}</p>
-        {player.country && (
-          <p className="hpm-card-country">{player.country.toUpperCase()}</p>
-        )}
+        {player.country && <p className="hpm-card-country">{player.country.toUpperCase()}</p>}
         {player.position && (
           <p className="hpm-card-pos">
             {(POSITION_LABEL[player.position] || player.position).toUpperCase()}
           </p>
         )}
-        {/* Trofeos como Flutter */}
         {sig > 0 && (
           <div className="hpm-card-trophies">
             {Array.from({ length: Math.min(sig, 5) }, (_, i) => (
@@ -268,16 +236,13 @@ function PlayerCard({ player, onClick }) {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  FILTER SHEET — _FilterSheet Flutter
+//  FILTER SHEET
 // ══════════════════════════════════════════════════════════════
 function FilterSheet({ activeFilters, onApply, onClose }) {
   const [draft, setDraft] = useState({ ...activeFilters });
-
   const toggle = (key, val) =>
     setDraft((prev) => ({ ...prev, [key]: prev[key] === val ? '' : val }));
-
   const hasActive = Object.values(draft).some(Boolean);
-  const activeCount = Object.values(draft).filter(Boolean).length;
 
   return (
     <div className="hpm-sheet-backdrop" onClick={onClose}>
@@ -292,7 +257,6 @@ function FilterSheet({ activeFilters, onApply, onClose }) {
             </button>
           )}
         </div>
-
         <div className="hpm-sheet-body">
           {FILTER_OPTIONS.map((group) => (
             <div key={group.key} className="hpm-sheet-group">
@@ -314,7 +278,6 @@ function FilterSheet({ activeFilters, onApply, onClose }) {
             </div>
           ))}
         </div>
-
         <div className="hpm-sheet-footer">
           <button className="hpm-sheet-apply" onClick={() => { onApply(draft); onClose(); }}>
             APLICAR FILTROS
@@ -326,41 +289,43 @@ function FilterSheet({ activeFilters, onApply, onClose }) {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  RANDOM MODAL — _RandomPlayerModal Flutter
+//  RANDOM MODAL — fiel a _RandomPlayerModal Flutter
 // ══════════════════════════════════════════════════════════════
 function RandomModal({ players, onSelect, onClose }) {
   const [displayed, setDisplayed] = useState(null);
-  const [phase, setPhase] = useState('spinning'); // spinning | revealed
+  const [phase, setPhase] = useState('spinning');
   const winner = useRef(players[Math.floor(Math.random() * players.length)]);
+  const ivRef = useRef(null);
+  const toRef = useRef(null);
 
-  useEffect(() => {
+  const runSpin = (win) => {
+    if (ivRef.current) clearInterval(ivRef.current);
+    if (toRef.current) clearTimeout(toRef.current);
     let i = 0;
-    const iv = setInterval(() => {
+    ivRef.current = setInterval(() => {
       setDisplayed(players[i % players.length]);
       i++;
     }, 80);
-    const to = setTimeout(() => {
-      clearInterval(iv);
-      setDisplayed(winner.current);
+    toRef.current = setTimeout(() => {
+      clearInterval(ivRef.current);
+      setDisplayed(win);
       setPhase('revealed');
     }, 2800);
-    return () => { clearInterval(iv); clearTimeout(to); };
+  };
+
+  useEffect(() => {
+    runSpin(winner.current);
+    return () => {
+      if (ivRef.current) clearInterval(ivRef.current);
+      if (toRef.current) clearTimeout(toRef.current);
+    };
   }, []);
 
   const spin = () => {
     winner.current = players[Math.floor(Math.random() * players.length)];
     setPhase('spinning');
     setDisplayed(null);
-    let i = 0;
-    const iv = setInterval(() => {
-      setDisplayed(players[i % players.length]);
-      i++;
-    }, 80);
-    setTimeout(() => {
-      clearInterval(iv);
-      setDisplayed(winner.current);
-      setPhase('revealed');
-    }, 2800);
+    runSpin(winner.current);
   };
 
   const img = displayed ? getHistoricalImageUrl(displayed.image_path) : null;
@@ -368,14 +333,11 @@ function RandomModal({ players, onSelect, onClose }) {
   return (
     <div className="hpm-modal-backdrop" onClick={onClose}>
       <div className="hpm-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
         <div className="hpm-modal-header">
           <Shuffle size={13} />
           <span>MODO ALEATORIO</span>
           <button className="hpm-modal-close" onClick={onClose}><X size={13} /></button>
         </div>
-
-        {/* Slot */}
         <div className="hpm-modal-body">
           <div className={`hpm-slot ${phase === 'revealed' ? 'hpm-slot--revealed' : 'hpm-slot--spinning'}`}>
             {displayed ? (
@@ -404,7 +366,11 @@ function RandomModal({ players, onSelect, onClose }) {
           </div>
 
           {phase === 'spinning' && (
-            <p className="hpm-slot-status">BUSCANDO...</p>
+            <div className="hpm-slot-status-row">
+              <span className="hpm-slot-dot" />
+              <span className="hpm-slot-status">BUSCANDO...</span>
+              <span className="hpm-slot-dot" />
+            </div>
           )}
 
           {phase === 'revealed' && (
@@ -455,10 +421,7 @@ function PlayerDetailView({ playerId, onBack }) {
 
   return (
     <div className="hpm-detail">
-      {/* Top bar — _DetailTopBar Flutter */}
       <DetailTopBar player={player} onBack={onBack} />
-
-      {/* Tab content */}
       <div className="hpm-detail-content">
         {tab === 'resumen' && <TabResumen player={player} career={career} national={national} titles={titles} />}
         {tab === 'trayectoria' && <TabTrayectoria career={career} national={national} />}
@@ -466,8 +429,6 @@ function PlayerDetailView({ playerId, onBack }) {
         {tab === 'palmares' && <TabPalmares titles={titles} />}
         {tab === 'historia' && <TabHistoria player={player} career={career} national={national} titles={titles} />}
       </div>
-
-      {/* Bottom tab bar — _DetailTabBar Flutter */}
       <nav className="hpm-tab-bar">
         {TABS.map(({ key, label, Icon }) => (
           <button
@@ -484,6 +445,7 @@ function PlayerDetailView({ playerId, onBack }) {
   );
 }
 
+// ── Detail Top Bar ──────────────────────────────────────────────
 function DetailTopBar({ player, onBack }) {
   const sig = player.significance_level || 0;
   const isGoat = sig === 5;
@@ -507,7 +469,9 @@ function DetailTopBar({ player, onBack }) {
   );
 }
 
-// ── TAB RESUMEN — fiel a PlayerTabResumen Flutter ──────────────
+// ══════════════════════════════════════════════════════════════
+//  TAB RESUMEN — fiel a PlayerTabResumen Flutter
+// ══════════════════════════════════════════════════════════════
 function TabResumen({ player, career, national, titles }) {
   const img = getHistoricalImageUrl(player.image_path);
   const sig = player.significance_level || 0;
@@ -528,10 +492,7 @@ function TabResumen({ player, career, national, titles }) {
     { goals: 0, assists: 0, apps: 0, clubs: 0 }
   );
   const nat = (national || []).reduce(
-    (a, r) => ({
-      caps: a.caps + (parseInt(r.caps) || 0),
-      goals: a.goals + (parseInt(r.goals) || 0),
-    }),
+    (a, r) => ({ caps: a.caps + (parseInt(r.caps) || 0), goals: a.goals + (parseInt(r.goals) || 0) }),
     { caps: 0, goals: 0 }
   );
   const titlesCount = (titles || []).reduce(
@@ -542,26 +503,20 @@ function TabResumen({ player, career, national, titles }) {
     <div className="hpm-tab-scroll">
       {/* Hero section */}
       <div className="hpm-resumen-hero">
-        <DotGrid cols={5} rows={4} />
+        <DotGrid cols={5} rows={3} />
         <div className="hpm-resumen-row">
-          {/* Foto */}
           <div className="hpm-resumen-photo-wrap">
             <div className="hpm-resumen-photo">
-              {img
-                ? <img src={img} alt={player.name} />
-                : <PlayerInitials name={player.name} />
-              }
+              {img ? <img src={img} alt={player.name} /> : <PlayerInitials name={player.name} />}
               {isGoat && <span className="hpm-photo-goat">GOAT</span>}
-              {isActive && <span className="hpm-photo-active">EN ACTIVO</span>}
+              {isActive && <span className="hpm-photo-active">ACTIVO</span>}
               {(player.ballon_dor_count || 0) > 0 && (
                 <span className="hpm-photo-ballon">
-                  <Trophy size={9} /> {player.ballon_dor_count}
+                  <Trophy size={8} /> {player.ballon_dor_count}
                 </span>
               )}
             </div>
           </div>
-
-          {/* Info derecha */}
           <div className="hpm-resumen-info">
             <span className="hpm-resumen-archivo">+ ARCHIVO HISTÓRICO</span>
             <h2 className="hpm-resumen-name">{player.name.toUpperCase()}</h2>
@@ -573,8 +528,7 @@ function TabResumen({ player, career, national, titles }) {
             {sig >= 2 && (
               <div className="hpm-resumen-stars">
                 <Stars level={sig} size={11} />
-                <span className="hpm-resumen-sig-label"
-                  style={{ color: isGoat ? '#F59E0B' : '#88887D' }}>
+                <span className="hpm-resumen-sig-label" style={{ color: isGoat ? '#F59E0B' : '#88887D' }}>
                   {SIG_LABEL[sig]?.toUpperCase()}
                 </span>
               </div>
@@ -588,17 +542,16 @@ function TabResumen({ player, career, national, titles }) {
         </div>
       </div>
 
-      {/* Stats grid 2x3 — _StatsGrid Flutter */}
+      {/* Stats grid 2x3 */}
       <div className="hpm-stats-grid">
         <StatCell value={totals.goals + nat.goals || '—'} label="GOLES" />
         <StatCell value={totals.assists || '—'} label="ASISTENCIAS" />
         <StatCell value={nat.goals || '—'} label="INT'L GOLES" />
         <StatCell value={totals.clubs || '—'} label="CLUBES" />
-        <StatCell value={nat.caps || '—'} label="INT'L PARTIDOS" />
+        <StatCell value={nat.caps || '—'} label="INT'L PART." />
         <StatCell value={titlesCount || '—'} label="TÍTULOS" highlight />
       </div>
 
-      {/* Trascendencia */}
       {player.impact_summary && (
         <>
           <SectionHeader label="TRASCENDENCIA" />
@@ -608,7 +561,6 @@ function TabResumen({ player, career, national, titles }) {
         </>
       )}
 
-      {/* Descripción */}
       {player.description && (
         <>
           <SectionHeader label="DESCRIPCIÓN" />
@@ -629,12 +581,17 @@ function StatCell({ value, label, highlight }) {
   );
 }
 
-// ── TAB TRAYECTORIA — PlayerTabTrayectoria Flutter ─────────────
+// ══════════════════════════════════════════════════════════════
+//  TAB TRAYECTORIA — fiel a PlayerTabTrayectoria Flutter
+// ══════════════════════════════════════════════════════════════
 function TabTrayectoria({ career, national }) {
   return (
     <div className="hpm-tab-scroll">
-      <TabHeader icon={<TrendingUp size={17} />} title="TRAYECTORIA"
-        subtitle={`${(career || []).length} clubes · ${(national || []).length} selecciones`} />
+      <TabHeader
+        icon={<TrendingUp size={17} />}
+        title="TRAYECTORIA"
+        subtitle={`${(career || []).length} clubes · ${(national || []).length} selecciones`}
+      />
 
       {(career || []).length === 0 && (national || []).length === 0 && (
         <Empty msg="Sin datos de trayectoria" />
@@ -644,9 +601,8 @@ function TabTrayectoria({ career, national }) {
         <>
           <SectionDot label="CLUBES" color="var(--hpm-accent)" />
           <div className="hpm-timeline">
-            {(career || []).map((entry, i) => (
-              <TimelineItem key={i} year={entry.start_year} isLast={i === career.length - 1}
-                color="var(--hpm-accent)">
+            {career.map((entry, i) => (
+              <TimelineItem key={i} year={entry.start_year} isLast={i === career.length - 1} color="var(--hpm-accent)">
                 <div className="hpm-tline-card">
                   <div className="hpm-tline-card-top">
                     <span className="hpm-tline-club">{entry.team_name?.toUpperCase() || '—'}</span>
@@ -675,9 +631,8 @@ function TabTrayectoria({ career, national }) {
         <>
           <SectionDot label="SELECCIÓN NACIONAL" color="var(--hpm-green)" />
           <div className="hpm-timeline">
-            {(national || []).map((entry, i) => (
-              <TimelineItem key={i} year={entry.start_year} isLast={i === national.length - 1}
-                color="var(--hpm-green)">
+            {national.map((entry, i) => (
+              <TimelineItem key={i} year={entry.start_year} isLast={i === national.length - 1} color="var(--hpm-green)">
                 <div className="hpm-tline-card hpm-tline-card--national">
                   <div className="hpm-tline-card-top">
                     <span className="hpm-tline-club">{entry.country?.toUpperCase() || '—'}</span>
@@ -703,30 +658,31 @@ function TabTrayectoria({ career, national }) {
   );
 }
 
-// ── TAB EQUIPOS & MOMENTOS — PlayerTabEquipos Flutter ──────────
+// ══════════════════════════════════════════════════════════════
+//  TAB EQUIPOS & MOMENTOS
+// ══════════════════════════════════════════════════════════════
 function TabEquipos({ teams, events }) {
   const hasData = (teams || []).length > 0 || (events || []).length > 0;
   return (
     <div className="hpm-tab-scroll">
-      <TabHeader icon={<Shield size={17} />} title="EQUIPOS & MOMENTOS"
-        subtitle={!hasData ? 'Sin registros' : `${(teams || []).length} equipo${(teams || []).length !== 1 ? 's' : ''} histórico${(teams || []).length !== 1 ? 's' : ''}`} />
-
+      <TabHeader
+        icon={<Shield size={17} />}
+        title="EQUIPOS & MOMENTOS"
+        subtitle={!hasData ? 'Sin registros' : `${(teams || []).length} equipo${(teams || []).length !== 1 ? 's' : ''} histórico${(teams || []).length !== 1 ? 's' : ''}`}
+      />
       {!hasData && <Empty msg="Sin datos de equipos ni momentos" />}
 
       {(teams || []).length > 0 && (
         <>
           <SectionDot label="EQUIPOS HISTÓRICOS" color="var(--hpm-accent)" />
           <div className="hpm-equi-list">
-            {(teams || []).map((row, i) => {
+            {teams.map((row, i) => {
               const team = row.historical_teams;
               const tImg = getHistoricalImageUrl(team?.image_path);
               return (
                 <div key={i} className="hpm-equi-row">
                   <div className="hpm-equi-logo">
-                    {tImg
-                      ? <img src={tImg} alt={team?.name} />
-                      : <Shield size={22} />
-                    }
+                    {tImg ? <img src={tImg} alt={team?.name} /> : <Shield size={22} />}
                   </div>
                   <div className="hpm-equi-info">
                     <span className="hpm-equi-name">{team?.name?.toUpperCase()}</span>
@@ -747,23 +703,18 @@ function TabEquipos({ teams, events }) {
         <>
           <SectionDot label="MOMENTOS HISTÓRICOS" color="var(--hpm-gold)" />
           <div className="hpm-moments-list">
-            {(events || []).map((row, i) => {
+            {events.map((row, i) => {
               const ev = row.historical_events;
               const evImg = getHistoricalImageUrl(ev?.image_path);
               const year = ev?.event_date ? new Date(ev.event_date).getFullYear() : null;
               return (
                 <div key={i} className="hpm-moment-row">
                   <div className="hpm-moment-thumb">
-                    {evImg
-                      ? <img src={evImg} alt={ev?.title} />
-                      : <Zap size={22} />
-                    }
+                    {evImg ? <img src={evImg} alt={ev?.title} /> : <Zap size={22} />}
                   </div>
                   <div className="hpm-moment-info">
                     <div className="hpm-moment-meta">
-                      {ev?.event_type && (
-                        <span className="hpm-moment-type">{ev.event_type.toUpperCase()}</span>
-                      )}
+                      {ev?.event_type && <span className="hpm-moment-type">{ev.event_type.toUpperCase()}</span>}
                       {year && <span className="hpm-moment-year">{year}</span>}
                     </div>
                     <span className="hpm-moment-title">{ev?.title}</span>
@@ -780,7 +731,9 @@ function TabEquipos({ teams, events }) {
   );
 }
 
-// ── TAB PALMARÉS — PlayerTabPalmares Flutter ───────────────────
+// ══════════════════════════════════════════════════════════════
+//  TAB PALMARÉS — fiel a PlayerTabPalmares Flutter
+// ══════════════════════════════════════════════════════════════
 function TabPalmares({ titles }) {
   const cats = { club: [], national: [], individual: [] };
   (titles || []).forEach((t) => {
@@ -836,16 +789,38 @@ function TabPalmares({ titles }) {
   );
 }
 
-// ── TAB HISTORIA — PlayerTabHistoria Flutter ───────────────────
+// ══════════════════════════════════════════════════════════════
+//  TAB HISTORIA — fiel a PlayerTabHistoria Flutter (timeline)
+// ══════════════════════════════════════════════════════════════
 function TabHistoria({ player, career, national, titles }) {
+  const TYPE_COLOR = {
+    birth: 'var(--hpm-gold)',
+    club: 'var(--hpm-accent)',
+    national: 'var(--hpm-green)',
+    award: 'var(--hpm-gold)',
+  };
+  const TYPE_ICON = { birth: '🐣', club: '🛡️', national: '🌍', award: '🏆' };
+
   const events = useMemo(() => {
     const list = [];
-    if (player.birth_year) list.push({ year: player.birth_year, type: 'birth', title: `NACE EN ${player.country?.toUpperCase() || '—'}`, desc: null });
+    if (player.birth_year) list.push({
+      year: player.birth_year, type: 'birth',
+      title: `NACE EN ${player.country?.toUpperCase() || '—'}`,
+      desc: player.country ? 'Inicio de una historia en el fútbol mundial.' : null,
+    });
     (career || []).forEach((c) => {
-      if (c.start_year) list.push({ year: c.start_year, type: 'club', title: c.role_note?.toUpperCase() || `LLEGA A ${c.team_name?.toUpperCase()}`, desc: c.team_name });
+      if (c.start_year) list.push({
+        year: c.start_year, type: 'club',
+        title: c.role_note?.toUpperCase() || `LLEGA A ${c.team_name?.toUpperCase()}`,
+        desc: c.team_country ? `${c.team_name} · ${c.team_country}` : c.team_name,
+      });
     });
     (national || []).forEach((n) => {
-      if (n.start_year) list.push({ year: n.start_year, type: 'national', title: `DEBUTA CON ${n.country?.toUpperCase()}`, desc: n.role_note });
+      if (n.start_year) list.push({
+        year: n.start_year, type: 'national',
+        title: `DEBUTA CON ${n.country?.toUpperCase()}`,
+        desc: n.role_note,
+      });
     });
     (titles || []).forEach((t) => {
       if (t.title_category === 'individual' && t.year) {
@@ -860,14 +835,10 @@ function TabHistoria({ player, career, national, titles }) {
     ? `${player.birth_year}${player.death_year ? ` – ${player.death_year}` : ' – Presente'}`
     : 'Línea de tiempo';
 
-  const TYPE_COLOR = { birth: 'var(--hpm-gold)', club: 'var(--hpm-accent)', national: 'var(--hpm-green)', award: 'var(--hpm-gold)' };
-  const TYPE_ICON = { birth: '🐣', club: '🛡️', national: '🌍', award: '🏆' };
-
   return (
     <div className="hpm-tab-scroll">
       <TabHeader icon={<BookOpen size={17} />} title="HISTORIA" subtitle={lifespan} />
       {events.length === 0 && <Empty msg="Sin datos históricos" />}
-
       <div className="hpm-historia-timeline">
         {events.map((ev, i) => (
           <div key={i} className="hpm-historia-row">
@@ -876,11 +847,11 @@ function TabHistoria({ player, career, national, titles }) {
                 {ev.year}
               </span>
               {i < events.length - 1 && (
-                <span className="hpm-historia-line" style={{ background: TYPE_COLOR[ev.type] }} />
+                <span className="hpm-historia-line" style={{ background: `color-mix(in srgb, ${TYPE_COLOR[ev.type] || 'var(--hpm-accent)'} 35%, transparent)` }} />
               )}
             </div>
             <div className="hpm-historia-card" style={{ '--hc': TYPE_COLOR[ev.type] || 'var(--hpm-accent)' }}>
-              <div className="hpm-historia-icon-wrap" style={{ background: `${TYPE_COLOR[ev.type]}22` }}>
+              <div className="hpm-historia-icon-wrap" style={{ background: `color-mix(in srgb, ${TYPE_COLOR[ev.type] || 'var(--hpm-accent)'} 15%, transparent)` }}>
                 <span style={{ fontSize: 14 }}>{TYPE_ICON[ev.type]}</span>
               </div>
               <div className="hpm-historia-text">
@@ -932,7 +903,7 @@ function TimelineItem({ year, isLast, color, children }) {
     <div className="hpm-tline-item">
       <div className="hpm-tline-left">
         <span className="hpm-tline-year" style={{ background: color }}>{year || '?'}</span>
-        {!isLast && <span className="hpm-tline-connector" style={{ background: `${color}44` }} />}
+        {!isLast && <span className="hpm-tline-connector" style={{ background: `color-mix(in srgb, ${color} 35%, transparent)` }} />}
       </div>
       <div className="hpm-tline-body">{children}</div>
     </div>
@@ -954,9 +925,13 @@ function Empty({ msg }) {
 
 // ══════════════════════════════════════════════════════════════
 //  COMPONENTE PRINCIPAL — HistoricalPlayersMobile
+//  Auto-contenido: tiene su propio header, búsqueda, filtros,
+//  modal aleatorio y detalle con 5 tabs.
+//  No depende de HistoryMenuMobile ni de HistoryPage para nav interna.
 // ══════════════════════════════════════════════════════════════
 export default function HistoricalPlayersMobile({ onBack, initialPlayerId }) {
-  const { allPlayers, loading, error, reload,
+  const {
+    allPlayers, loading, error, reload,
     search, setSearch,
     filterPosition, setFilterPosition,
     filterLegacy, setFilterLegacy,
@@ -968,19 +943,28 @@ export default function HistoricalPlayersMobile({ onBack, initialPlayerId }) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Si llega un initialPlayerId externo, usarlo
   useEffect(() => {
     if (initialPlayerId) setSelectedId(initialPlayerId);
   }, [initialPlayerId]);
 
-  // Sync filtros con el hook existente
+  // ── Esconder el bottom nav global mientras se ve el detalle ──
+  useEffect(() => {
+    const root = document.body;
+    if (selectedId) {
+      root.classList.add('hpm-hide-bottom-nav');
+    } else {
+      root.classList.remove('hpm-hide-bottom-nav');
+    }
+    return () => root.classList.remove('hpm-hide-bottom-nav');
+  }, [selectedId]);
+
+  // Sync filtros con el hook
   useEffect(() => {
     setFilterPosition(filters.position || '');
     setFilterLegacy(filters.legacy_type || '');
     setFilterSignificance(filters.significance_level || '');
   }, [filters]);
 
-  // Jugadores filtrados (el hook ya aplica search + position/legacy/sig)
   const players = useMemo(() => {
     return allPlayers.filter((p) => {
       if (filters.position && p.position !== filters.position) return false;
@@ -1002,7 +986,7 @@ export default function HistoricalPlayersMobile({ onBack, initialPlayerId }) {
   const hasFilters = Object.values(filters).some(Boolean);
   const filterCount = Object.values(filters).filter(Boolean).length;
 
-  // Si hay un jugador seleccionado, mostrar detalle
+  // Vista de detalle — reemplaza la pantalla completa
   if (selectedId) {
     return (
       <PlayerDetailView
@@ -1012,6 +996,7 @@ export default function HistoricalPlayersMobile({ onBack, initialPlayerId }) {
     );
   }
 
+  // Vista de listado
   return (
     <div className="hpm-root">
       <PlayersHeader
@@ -1051,7 +1036,11 @@ export default function HistoricalPlayersMobile({ onBack, initialPlayerId }) {
           <div className="hpm-empty-grid">
             <User size={32} strokeWidth={1} />
             <p>{allPlayers.length === 0 ? 'Aún no hay jugadores históricos' : 'Sin coincidencias'}</p>
-            <span>{allPlayers.length === 0 ? 'El administrador publicará las leyendas pronto.' : 'Prueba con otro nombre o ajusta los filtros.'}</span>
+            <span>
+              {allPlayers.length === 0
+                ? 'El administrador publicará las leyendas pronto.'
+                : 'Prueba con otro nombre o ajusta los filtros.'}
+            </span>
           </div>
         )}
         {!loading && !error && players.map((p) => (
