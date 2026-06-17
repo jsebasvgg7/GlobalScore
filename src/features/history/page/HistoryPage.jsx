@@ -128,30 +128,31 @@ export default function HistoryPage() {
   // ── Vault Landing (solo mobile) ────────────────────────────
   if (isMobile && showMenu && showVaultLanding) {
     return (
-      <HistoryVaultLanding
-        onNavigate={(section, id) => {
-          setShowVaultLanding(false);
+      <div className="hpm-view">
+        <HistoryVaultLanding
+          onNavigate={(section, id) => {
+            setShowVaultLanding(false);
 
-          const itemById = id ? { id } : null;
+            const itemById = id ? { id } : null;
 
-          if (section === "players") {
-            setShowMenu(false);
-            handleSectionChange("players", itemById);
-          } else if (section === "teams" || section === "team-detail") {
-            setShowMenu(false);
-            handleSectionChange("teams", itemById);
-          } else if (section === "events" || section === "event-detail") {
-            setShowMenu(false);
-            handleSectionChange("events", itemById);
-          } else if (section === "competitions") {
-            setShowMenu(false);
-            handleSectionChange("competitions", itemById);
-          } else {
-            // Cualquier otra sección: mostrar el menú mobile de secciones
-            setShowMenu(true);
-          }
-        }}
-      />
+            if (section === "players") {
+              setShowMenu(false);
+              handleSectionChange("players", itemById);
+            } else if (section === "teams" || section === "team-detail") {
+              setShowMenu(false);
+              handleSectionChange("teams", itemById);
+            } else if (section === "events" || section === "event-detail") {
+              setShowMenu(false);
+              handleSectionChange("events", itemById);
+            } else if (section === "competitions") {
+              setShowMenu(false);
+              handleSectionChange("competitions", itemById);
+            } else {
+              setShowMenu(true);
+            }
+          }}
+        />
+      </div>
     );
   }
 
@@ -193,10 +194,12 @@ export default function HistoryPage() {
   if (activeSection === "teams") {
     if (isMobile) {
       return (
-        <HistoricalTeamsMobile
-          initialSelectedId={preselectedTeamId}
-          onBack={handleBackToMenu}
-        />
+        <div className="hpm-view">
+          <HistoricalTeamsMobile
+            initialSelectedId={preselectedTeamId}
+            onBack={handleBackToMenu}
+          />
+        </div>
       );
     }
     return (

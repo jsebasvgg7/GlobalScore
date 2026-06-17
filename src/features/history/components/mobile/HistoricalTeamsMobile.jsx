@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useLayoutEffect, useRef, useMemo } from "react";
 import {
   Shield, ArrowLeft, RefreshCw, AlertCircle,
   Trophy, Star, MapPin, Calendar, User2,
@@ -640,6 +640,10 @@ function TeamDetailView({ teamId, onBack }) {
   const { team, lineup, titles, loading, error, reload } = useHistoricalTeamDetail(teamId);
   const [tab, setTab] = useState("resumen");
 
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Ocultar bottom nav global igual que players
   useEffect(() => {
     const root = document.body;
@@ -693,6 +697,10 @@ export default function HistoricalTeamsMobile({ onBack, initialSelectedId }) {
   const [selectedId, setSelectedId] = useState(initialSelectedId || null);
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     setSelectedId(initialSelectedId || null);

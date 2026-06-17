@@ -131,6 +131,13 @@
   --hp-muted: #5A566E;
 }
 
+.hpm-view {
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* ════════════════════════════════════════════════
    MOBILE OVERRIDES — solo ≤768px
 ════════════════════════════════════════════════ */
