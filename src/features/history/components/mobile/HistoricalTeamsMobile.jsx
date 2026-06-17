@@ -1,27 +1,27 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import {
   Shield, ArrowLeft, RefreshCw, AlertCircle,
   Trophy, Star, MapPin, Calendar, User2,
-  Search, X, ChevronRight, Shuffle,
+  Search, X, ChevronRight, Shuffle, Globe,
 } from "lucide-react";
 import { useHistoricalTeams, useHistoricalTeamDetail } from "../../hooks/useHistoricalTeams";
 import { getHistoricalImageUrl } from "../../hooks/useHistoricalPlayers";
 import "../../styles/mobile/HistoricalTeamsMobile.css";
+import "../../styles/mobile/HistoricalTeamsMobile.dark.css";
 
-const LEGACY_TEAM_LABEL = {
+// ── Diccionarios ────────────────────────────────────────────────
+const LEGACY_LABEL = {
   "Dynastic": "Dinástico",
   "Innovative": "Innovador",
   "Continental": "Continental",
   "National": "Nacional",
 };
-
 const LEGACY_COLOR = {
   "Dynastic": "#f59e0b",
   "Innovative": "#8b5cf6",
   "Continental": "#3b82f6",
   "National": "#10b981",
 };
-
 const POSITION_ROLE_LABEL = {
   "GK": "Portero", "CB": "Defensa Central", "LB": "Lateral Izq.",
   "RB": "Lateral Der.", "CDM": "Med. Def.", "CM": "Centrocampista",
@@ -30,15 +30,288 @@ const POSITION_ROLE_LABEL = {
   "SS": "Segundo Delantero",
 };
 
-const SECTIONS = [
-  { key: "history", label: "Historia", icon: Trophy },
-  { key: "titles", label: "Palmarés", icon: Star },
-  { key: "squad", label: "Alineación", icon: Shield },
+// ══════════════════════════════════════════════════════════════
+//  MICRO-HELPERS
+// ══════════════════════════════════════════════════════════════
+function DotGrid({ cols = 5, rows = 4 }) {
+  return (
+    <svg className="htm-dot-grid" width={cols * 14} height={rows * 14} aria-hidden="true">
+      {Array.from({ length: rows }, (_, r) =>
+        Array.from({ length: cols }, (_, c) => (
+          <circle key={`${r}-${c}`} cx={c * 14 + 7} cy={r * 14 + 7} r={1.5} />
+        ))
+      )}
+    </svg>
+  );
+}
+
+function TeamInitials({ name, color }) {
+  const words = (name || "").split(" ");
+  const init = words.length >= 2
+    ? (words[0][0] + words[1][0]).toUpperCase()
+    : (name || "??").slice(0, 2).toUpperCase();
+  return (
+    <span className="htm-card-initials" style={{ color: color ? `${color}70` : "rgba(91,79,216,0.4)" }}>
+      {init}
+    </span>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+//  HEADER — fiel a _TeamsHeader Flutter
+// ══════════════════════════════════════════════════════════════
+function TeamsHeader({ total, legendary, countries, onBack }) {
+  return (
+    <header className="htm-header">
+      <DotGrid cols={6} rows={4} />
+      <div className="htm-breadcrumb">
+        <button className="htm-back-btn" onClick={onBack} aria-label="Volver">
+          <ArrowLeft size={10} />
+          <span>HISTÓRICO</span>
+        </button>
+        <span className="htm-breadcrumb-sep">›</span>
+        <span className="htm-breadcrumb-active">EQUIPOS</span>
+      </div>
+      <div className="htm-title-row">
+        <div className="htm-title-bar" />
+        <div>
+          <h1 className="htm-title">
+            <span className="htm-title-solid">EQUI</span>
+            <span className="htm-title-accent">POS</span>
+          </h1>
+          <p className="htm-subtitle">Equipos que definieron una era</p>
+        </div>
+      </div>
+      <div className="htm-stats-wrap">
+        <div className="htm-stats">
+          <div className="htm-stat-cell htm-stat-cell--accent">
+            <div className="htm-stat-icon"><Shield size={15} /></div>
+            <div className="htm-stat-info">
+              <span className="htm-stat-num">{total || "—"}</span>
+              <span className="htm-stat-lbl">EQUIPOS</span>
+            </div>
+          </div>
+          <div className="htm-stat-cell htm-stat-cell--gold">
+            <div className="htm-stat-icon"><Trophy size={15} /></div>
+            <div className="htm-stat-info">
+              <span className="htm-stat-num">{legendary || "—"}</span>
+              <span className="htm-stat-lbl">LEYENDAS</span>
+            </div>
+          </div>
+          <div className="htm-stat-cell htm-stat-cell--green">
+            <div className="htm-stat-icon"><Globe size={15} /></div>
+            <div className="htm-stat-info">
+              <span className="htm-stat-num">{countries || "—"}</span>
+              <span className="htm-stat-lbl">PAÍSES</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SEARCH BAR
+// ══════════════════════════════════════════════════════════════
+function SearchBar({ value, onChange, onClear, onRandom }) {
+  return (
+    <div className="htm-search-row">
+      <div className="htm-search-wrap">
+        <Search size={14} className="htm-search-ico" />
+        <input
+          className="htm-search-input"
+          placeholder="Buscar equipo..."
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+        {value && (
+          <button className="htm-search-clear" onClick={onClear} aria-label="Limpiar">
+            <X size={12} />
+          </button>
+        )}
+      </div>
+      <button className="htm-icon-btn htm-icon-btn--dark" onClick={onRandom} aria-label="Aleatorio">
+        <Shuffle size={15} />
+      </button>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+//  COUNTER ROW
+// ══════════════════════════════════════════════════════════════
+function CounterRow({ count }) {
+  return (
+    <div className="htm-counter-row">
+      <div className="htm-counter-left">
+        <span className="htm-counter-bar" />
+        <span className="htm-counter-label">EQUIPOS</span>
+      </div>
+      <span className="htm-counter-badge">{count} ENCONTRADOS</span>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+//  TEAM CARD — grid 2 cols neobrutalista (igual que PlayerCard)
+// ══════════════════════════════════════════════════════════════
+function TeamCard({ team, onClick, index }) {
+  const img = getHistoricalImageUrl(team.image_path);
+  const isLegendary = ["Dynastic", "Dominant"].includes(team.legacy_type);
+  const legColor = LEGACY_COLOR[team.legacy_type] || "var(--htm-accent)";
+
+  return (
+    <article
+      className="htm-team-card"
+      onClick={() => onClick(team)}
+      style={{ "--i": index }}
+    >
+      <div className="htm-card-photo" style={{ "--tc": team.primary_color || "#5b4fd8" }}>
+        {/* Left color stripe */}
+        <div className="htm-card-stripe" style={{ background: team.primary_color || "var(--htm-accent)" }} />
+        {/* Background tint */}
+        <div className="htm-card-bg-tint" style={{ background: team.primary_color ? `${team.primary_color}1a` : "rgba(91,79,216,0.08)" }} />
+        {img
+          ? <img src={img} alt={team.name} className="htm-card-img" />
+          : <TeamInitials name={team.name} color={team.primary_color} />
+        }
+        {isLegendary && <span className="htm-card-top">TOP</span>}
+        <span className="htm-card-more">···</span>
+        {team.era_dominance && (
+          <span className="htm-card-era" style={{ color: team.primary_color || "var(--htm-accent)" }}>
+            {team.era_dominance}
+          </span>
+        )}
+      </div>
+      <div className="htm-card-body">
+        <p className="htm-card-name">{(team.name || "").toUpperCase()}</p>
+        {team.country && <p className="htm-card-country">{team.country.toUpperCase()}</p>}
+        {team.titles_count > 0 && (
+          <div className="htm-card-trophies">
+            {Array.from({ length: Math.min(team.titles_count, 5) }, (_, i) => (
+              <Trophy key={i} size={10} className="htm-card-trophy" />
+            ))}
+            {team.titles_count > 5 && (
+              <span className="htm-card-trophy-extra">+{team.titles_count - 5}</span>
+            )}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+//  RANDOM MODAL — fiel a _RandomTeamModal Flutter
+// ══════════════════════════════════════════════════════════════
+function RandomModal({ teams, onSelect, onClose }) {
+  const [displayed, setDisplayed] = useState(null);
+  const [phase, setPhase] = useState("spinning");
+  const winner = useRef(teams[Math.floor(Math.random() * teams.length)]);
+  const ivRef = useRef(null);
+  const toRef = useRef(null);
+
+  const runSpin = (win) => {
+    if (ivRef.current) clearInterval(ivRef.current);
+    if (toRef.current) clearTimeout(toRef.current);
+    let i = 0;
+    ivRef.current = setInterval(() => {
+      setDisplayed(teams[i % teams.length]);
+      i++;
+    }, 80);
+    toRef.current = setTimeout(() => {
+      clearInterval(ivRef.current);
+      setDisplayed(win);
+      setPhase("revealed");
+    }, 2800);
+  };
+
+  useEffect(() => {
+    runSpin(winner.current);
+    return () => {
+      if (ivRef.current) clearInterval(ivRef.current);
+      if (toRef.current) clearTimeout(toRef.current);
+    };
+  }, []);
+
+  const spin = () => {
+    winner.current = teams[Math.floor(Math.random() * teams.length)];
+    setPhase("spinning");
+    setDisplayed(null);
+    runSpin(winner.current);
+  };
+
+  const img = displayed ? getHistoricalImageUrl(displayed.image_path) : null;
+
+  return (
+    <div className="htm-modal-backdrop" onClick={onClose}>
+      <div className="htm-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="htm-modal-header">
+          <Shuffle size={13} />
+          <span>MODO ALEATORIO</span>
+          <button className="htm-modal-close" onClick={onClose}><X size={13} /></button>
+        </div>
+        <div className="htm-modal-body">
+          <div className={`htm-slot ${phase === "revealed" ? "htm-slot--revealed" : "htm-slot--spinning"}`}>
+            {displayed ? (
+              <div className="htm-slot-row">
+                <div className="htm-slot-avatar" style={{ "--tc": displayed.primary_color || "#5b4fd8" }}>
+                  {img
+                    ? <img src={img} alt={displayed.name} />
+                    : <TeamInitials name={displayed.name} color={displayed.primary_color} />
+                  }
+                </div>
+                <div className="htm-slot-info">
+                  <p className="htm-slot-name">{(displayed.name || "").toUpperCase()}</p>
+                  <p className="htm-slot-meta">
+                    {displayed.country}
+                    {displayed.era_dominance ? ` · ${displayed.era_dominance}` : ""}
+                  </p>
+                </div>
+                {phase === "revealed" && <ChevronRight size={16} className="htm-slot-arrow" />}
+              </div>
+            ) : (
+              <div className="htm-slot-empty"><RefreshCw size={22} className="htm-spin" /></div>
+            )}
+          </div>
+
+          {phase === "spinning" && (
+            <div className="htm-slot-status-row">
+              <span className="htm-slot-dot" />
+              <span className="htm-slot-status">BUSCANDO...</span>
+              <span className="htm-slot-dot" />
+            </div>
+          )}
+
+          {phase === "revealed" && (
+            <>
+              <button className="htm-modal-cta" onClick={() => { onSelect(winner.current); onClose(); }}>
+                VER EQUIPO →
+              </button>
+              <button className="htm-modal-secondary" onClick={spin}>
+                OTRO →
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+//  DETALLE — 3 tabs fiel a Flutter TeamDetail
+// ══════════════════════════════════════════════════════════════
+const TABS = [
+  { key: "resumen", label: "RESUMEN", Icon: Shield },
+  { key: "palmares", label: "PALMARÉS", Icon: Trophy },
+  { key: "alineacion", label: "ALINEACIÓN", Icon: Star },
 ];
 
+// ── Retro Field (campo SVG) ──────────────────────────────────
 function RetroField({ lineup, primaryColor, secondaryColor }) {
   const [hovered, setHovered] = useState(null);
-
   const isDark = (hex) => {
     if (!hex || hex.length < 7) return false;
     const r = parseInt(hex.slice(1, 3), 16);
@@ -46,7 +319,6 @@ function RetroField({ lineup, primaryColor, secondaryColor }) {
     const b = parseInt(hex.slice(5, 7), 16);
     return (r * 0.299 + g * 0.587 + b * 0.114) < 128;
   };
-
   const numColor = isDark(primaryColor) ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.75)";
 
   return (
@@ -75,7 +347,6 @@ function RetroField({ lineup, primaryColor, secondaryColor }) {
           <rect x="120" y="6" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
           <rect x="120" y="404" width="60" height="10" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
         </svg>
-
         {lineup.map((player) => {
           const cx = 12 + (player.pos_x / 100) * 276;
           const cy = 12 + (player.pos_y / 100) * 396;
@@ -94,7 +365,8 @@ function RetroField({ lineup, primaryColor, secondaryColor }) {
                   stroke={secondaryColor || "#000"}
                   strokeWidth="1.2"
                 />
-                <text x="18" y="22" textAnchor="middle" fontSize="9" fontWeight="800" fontFamily="'DM Mono', monospace" fill={numColor}>
+                <text x="18" y="22" textAnchor="middle" fontSize="9" fontWeight="800"
+                  fontFamily="'DM Mono', monospace" fill={numColor}>
                   {player.shirt_number}
                 </text>
               </svg>
@@ -121,7 +393,7 @@ function LineupList({ lineup, primaryColor }) {
     <div className="htm-lineup-list">
       {lineup.map((p) => (
         <div key={p.id} className="htm-lineup-row">
-          <span className="htm-lineup-num" style={{ background: primaryColor || "var(--accent)" }}>
+          <span className="htm-lineup-num" style={{ background: primaryColor || "var(--htm-accent)" }}>
             {p.shirt_number}
           </span>
           <div className="htm-lineup-info">
@@ -136,195 +408,331 @@ function LineupList({ lineup, primaryColor }) {
   );
 }
 
-function TeamDetail({ teamId, onBack }) {
-  const { team, lineup, titles, loading, error, reload } = useHistoricalTeamDetail(teamId);
-  const [activeSection, setActiveSection] = useState("history");
+// ── Tab Resumen ───────────────────────────────────────────────
+function TabResumen({ team }) {
+  const legColor = LEGACY_COLOR[team.legacy_type] || "var(--htm-accent)";
+  return (
+    <div className="htm-tab-content">
+      <div className="htm-tab-header">
+        <div className="htm-tab-icon"><Shield size={16} /></div>
+        <div>
+          <p className="htm-tab-header-title">IDENTIDAD DEL EQUIPO</p>
+          <p className="htm-tab-header-sub">Historia y datos del club</p>
+        </div>
+      </div>
 
-  if (loading) return (
-    <div className="htm-state htm-state--loading">
-      <RefreshCw size={16} className="htm-spin" />
-      <span>Cargando equipo...</span>
+      {/* Stats grid */}
+      <div className="htm-resumen-stats">
+        {team.titles_count > 0 && (
+          <div className="htm-resumen-stat">
+            <span className="htm-resumen-stat-num" style={{ color: "var(--htm-gold)" }}>{team.titles_count}</span>
+            <span className="htm-resumen-stat-lbl">TÍTULOS</span>
+          </div>
+        )}
+        {team.squad_size && (
+          <div className="htm-resumen-stat">
+            <span className="htm-resumen-stat-num" style={{ color: "var(--htm-accent)" }}>{team.squad_size}</span>
+            <span className="htm-resumen-stat-lbl">JUGADORES</span>
+          </div>
+        )}
+        {team.country && (
+          <div className="htm-resumen-stat">
+            <span className="htm-resumen-stat-num" style={{ color: "var(--htm-green)", fontSize: "11px" }}>{team.country}</span>
+            <span className="htm-resumen-stat-lbl">PAÍS</span>
+          </div>
+        )}
+      </div>
+
+      {/* Info chips */}
+      <div className="htm-resumen-chips">
+        {team.legacy_type && (
+          <div className="htm-resumen-chip">
+            <span className="htm-resumen-chip-lbl">TIPO</span>
+            <span className="htm-resumen-chip-val" style={{ color: legColor, borderColor: `${legColor}44` }}>
+              {LEGACY_LABEL[team.legacy_type] || team.legacy_type}
+            </span>
+          </div>
+        )}
+        {team.era_dominance && (
+          <div className="htm-resumen-chip htm-resumen-chip--dark">
+            <span className="htm-resumen-chip-lbl">ERA DE DOMINIO</span>
+            <span className="htm-resumen-chip-val">{team.era_dominance}</span>
+          </div>
+        )}
+        {team.formation && (
+          <div className="htm-resumen-chip">
+            <span className="htm-resumen-chip-lbl">FORMACIÓN</span>
+            <span className="htm-resumen-chip-val">{team.formation}</span>
+          </div>
+        )}
+        {team.manager && (
+          <div className="htm-resumen-chip">
+            <span className="htm-resumen-chip-lbl">ENTRENADOR</span>
+            <span className="htm-resumen-chip-val">{team.manager}</span>
+          </div>
+        )}
+      </div>
+
+      {/* History text */}
+      {(team.historical_note || team.description) && (
+        <div className="htm-section-header">
+          <span className="htm-section-bar" />
+          <span className="htm-section-label">HISTORIA DEL CLUB</span>
+        </div>
+      )}
+      {(team.historical_note || team.description) && (
+        <div className="htm-history-body">
+          {(team.historical_note || team.description).split("\n").map((p, i) =>
+            p.trim() ? <p key={i}>{p.trim()}</p> : null
+          )}
+        </div>
+      )}
+      <div className="htm-tab-bottom-space" />
     </div>
   );
+}
 
-  if (error || !team) return (
-    <div className="htm-state htm-state--error">
-      <AlertCircle size={18} />
-      <p>{error || "Equipo no encontrado"}</p>
-      <button className="htm-retry-btn" onClick={reload}>
-        <RefreshCw size={11} /> Reintentar
-      </button>
+// ── Tab Palmarés ──────────────────────────────────────────────
+function TabPalmares({ team, titles }) {
+  return (
+    <div className="htm-tab-content">
+      <div className="htm-tab-header">
+        <div className="htm-tab-icon"><Trophy size={16} /></div>
+        <div>
+          <p className="htm-tab-header-title">PALMARÉS</p>
+          <p className="htm-tab-header-sub">Historial de títulos del equipo</p>
+        </div>
+      </div>
+
+      {team.titles_count > 0 && (
+        <div className="htm-palmares-total">
+          <div className="htm-palmares-trophy-big">
+            <Trophy size={28} />
+          </div>
+          <div>
+            <p className="htm-palmares-total-num">{team.titles_count}</p>
+            <p className="htm-palmares-total-lbl">TÍTULOS TOTALES</p>
+          </div>
+        </div>
+      )}
+
+      {titles.length === 0 ? (
+        <div className="htm-empty-block">
+          <Trophy size={28} strokeWidth={1} />
+          <p>Sin títulos registrados</p>
+        </div>
+      ) : (
+        <div className="htm-section-header">
+          <span className="htm-section-bar" />
+          <span className="htm-section-label">OTROS</span>
+          <span className="htm-section-badge">{titles.length}</span>
+        </div>
+      )}
+
+      {titles.length > 0 && (
+        <div className="htm-titles-list">
+          {titles.map((t, i) => (
+            <div key={t.id} className="htm-title-row" style={{ "--i": i }}>
+              <div className="htm-title-icon" style={{ background: team.primary_color || "var(--htm-accent)" }}>
+                <Trophy size={12} color="#fff" />
+              </div>
+              <div className="htm-title-info">
+                <span className="htm-title-name">{t.title_name}</span>
+                {t.year && <span className="htm-title-year">{t.year}</span>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      <div className="htm-tab-bottom-space" />
     </div>
   );
+}
 
-  const imgUrl = getHistoricalImageUrl(team.image_path);
-  const legColor = LEGACY_COLOR[team.legacy_type] || "var(--accent)";
+// ── Tab Alineación ────────────────────────────────────────────
+function TabAlineacion({ team, lineup }) {
+  return (
+    <div className="htm-tab-content">
+      <div className="htm-tab-header">
+        <div className="htm-tab-icon"><Star size={16} /></div>
+        <div>
+          <p className="htm-tab-header-title">
+            ALINEACIÓN HISTÓRICA
+            {team.formation && <span className="htm-formation-tag">{team.formation}</span>}
+          </p>
+          <p className="htm-tab-header-sub">Toca un jugador para su detalle</p>
+        </div>
+      </div>
+
+      {lineup.length === 0 ? (
+        <div className="htm-empty-block">
+          <Shield size={28} strokeWidth={1} />
+          <p>Alineación no disponible</p>
+        </div>
+      ) : (
+        <>
+          <div className="htm-section-header">
+            <span className="htm-section-bar" />
+            <span className="htm-section-label">PLANTILLA COMPLETA</span>
+            <span className="htm-section-badge">{lineup.length}</span>
+          </div>
+          <RetroField lineup={lineup} primaryColor={team.primary_color} secondaryColor={team.secondary_color} />
+          <div className="htm-section-header">
+            <span className="htm-section-bar" />
+            <span className="htm-section-label">TITULARES</span>
+            <span className="htm-section-badge">{lineup.length}</span>
+          </div>
+          <LineupList lineup={lineup} primaryColor={team.primary_color} />
+        </>
+      )}
+      <div className="htm-tab-bottom-space" />
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+//  DETAIL TOP BAR
+// ══════════════════════════════════════════════════════════════
+function DetailTopBar({ team, onBack }) {
+  const img = getHistoricalImageUrl(team.image_path);
+  const legColor = LEGACY_COLOR[team.legacy_type] || "var(--htm-accent)";
 
   return (
-    <div className="htm-detail">
-      <button className="htm-back-btn" onClick={onBack}>
-        <ArrowLeft size={13} /> Equipos
+    <div className="htm-detail-top" style={{ "--team-primary": team.primary_color || "#5b4fd8" }}>
+      <div className="htm-detail-hero-bg" />
+      <button className="htm-detail-back" onClick={onBack}>
+        <ArrowLeft size={10} />
+        <span>EQUIPOS</span>
       </button>
-
-      <div className="htm-detail-hero" style={{ "--team-primary": team.primary_color || "#5b4fd8" }}>
-        <div className="htm-detail-hero-bg" />
-        <div className="htm-detail-logo-wrap">
-          {imgUrl
-            ? <img src={imgUrl} alt={team.name} className="htm-detail-logo" />
-            : <Shield size={30} strokeWidth={1.2} />
+      <div className="htm-detail-hero-row">
+        <div className="htm-detail-avatar">
+          {img
+            ? <img src={img} alt={team.name} />
+            : <TeamInitials name={team.name} color={team.primary_color} />
           }
         </div>
-        <div className="htm-detail-hero-body">
+        <div className="htm-detail-hero-info">
           {team.legacy_type && (
-            <span className="htm-detail-legacy" style={{ "--lc": legColor }}>
-              {LEGACY_TEAM_LABEL[team.legacy_type] || team.legacy_type}
+            <span className="htm-detail-legacy" style={{ color: legColor, borderColor: `${legColor}55` }}>
+              {LEGACY_LABEL[team.legacy_type] || team.legacy_type}
             </span>
           )}
           <h1 className="htm-detail-name">{team.name}</h1>
           <div className="htm-detail-chips">
             {team.country && <span className="htm-chip"><MapPin size={9} />{team.country}</span>}
-            {team.founded_year && <span className="htm-chip"><Calendar size={9} />{team.founded_year}</span>}
             {team.era_dominance && <span className="htm-chip htm-chip--era">{team.era_dominance}</span>}
-            {team.formation && <span className="htm-chip htm-chip--form">{team.formation}</span>}
-            {team.manager && <span className="htm-chip"><User2 size={9} />{team.manager}</span>}
+            {team.titles_count > 0 && (
+              <span className="htm-chip htm-chip--titles">
+                <Trophy size={9} />{team.titles_count} títulos
+              </span>
+            )}
           </div>
-          {team.titles_count > 0 && (
-            <span className="htm-titles-chip">
-              <Trophy size={10} /> {team.titles_count} título{team.titles_count !== 1 ? "s" : ""}
-            </span>
-          )}
         </div>
       </div>
-
-      <nav className="htm-tabs">
-        {SECTIONS.map(({ key, label, icon: Icon }) => (
-          <button
-            key={key}
-            className={`htm-tab-btn ${activeSection === key ? "htm-tab-btn--active" : ""}`}
-            onClick={() => setActiveSection(key)}
-          >
-            <Icon size={11} />
-            {label}
-          </button>
-        ))}
-      </nav>
-
-      {activeSection === "history" && (
-        <div className="htm-section">
-          <div className="htm-section-label"><Trophy size={10} /> Por qué es histórico</div>
-          {team.historical_note || team.description ? (
-            <div className="htm-history-body">
-              {(team.historical_note || team.description).split("\n").map((p, i) =>
-                p.trim() ? <p key={i}>{p.trim()}</p> : null
-              )}
-            </div>
-          ) : (
-            <p className="htm-empty-note">Sin descripción histórica.</p>
-          )}
-        </div>
-      )}
-
-      {activeSection === "titles" && (
-        <div className="htm-section">
-          <div className="htm-section-label"><Star size={10} /> Palmarés</div>
-          {titles.length === 0 ? (
-            <div className="htm-empty-block">
-              <Star size={24} strokeWidth={1} />
-              <p>Sin títulos registrados</p>
-            </div>
-          ) : (
-            <div className="htm-titles-list">
-              {titles.map((t, i) => (
-                <div key={t.id} className="htm-title-row" style={{ "--i": i }}>
-                  <div className="htm-title-icon" style={{ background: team.primary_color || "var(--accent)" }}>
-                    <Trophy size={12} color="#fff" />
-                  </div>
-                  <div className="htm-title-info">
-                    <span className="htm-title-name">{t.title_name}</span>
-                    {t.year && <span className="htm-title-year">{t.year}</span>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {activeSection === "squad" && (
-        <div className="htm-section">
-          <div className="htm-section-label">
-            <Shield size={10} /> Alineación Histórica
-            {team.formation && <span className="htm-formation-tag">{team.formation}</span>}
-          </div>
-          {lineup.length === 0 ? (
-            <div className="htm-empty-block">
-              <Shield size={24} strokeWidth={1} />
-              <p>Alineación no disponible</p>
-            </div>
-          ) : (
-            <>
-              <RetroField lineup={lineup} primaryColor={team.primary_color} secondaryColor={team.secondary_color} />
-              <LineupList lineup={lineup} primaryColor={team.primary_color} />
-            </>
-          )}
-        </div>
-      )}
     </div>
   );
 }
 
+// ══════════════════════════════════════════════════════════════
+//  TEAM DETAIL VIEW
+// ══════════════════════════════════════════════════════════════
+function TeamDetailView({ teamId, onBack }) {
+  const { team, lineup, titles, loading, error, reload } = useHistoricalTeamDetail(teamId);
+  const [tab, setTab] = useState("resumen");
+
+  // Ocultar bottom nav global igual que players
+  useEffect(() => {
+    const root = document.body;
+    root.classList.add("htm-hide-bottom-nav");
+    return () => root.classList.remove("htm-hide-bottom-nav");
+  }, []);
+
+  if (loading) return (
+    <div className="htm-detail-loading">
+      <RefreshCw size={20} className="htm-spin" />
+      <span>Cargando equipo...</span>
+    </div>
+  );
+  if (error || !team) return (
+    <div className="htm-detail-error">
+      <AlertCircle size={18} />
+      <p>{error || "Equipo no encontrado"}</p>
+      <button onClick={reload}><RefreshCw size={12} /> Reintentar</button>
+    </div>
+  );
+
+  return (
+    <div className="htm-detail">
+      <DetailTopBar team={team} onBack={onBack} />
+      <div className="htm-detail-content">
+        {tab === "resumen" && <TabResumen team={team} />}
+        {tab === "palmares" && <TabPalmares team={team} titles={titles} />}
+        {tab === "alineacion" && <TabAlineacion team={team} lineup={lineup} />}
+      </div>
+      <nav className="htm-tab-bar">
+        {TABS.map(({ key, label, Icon }) => (
+          <button
+            key={key}
+            className={`htm-tab-btn ${tab === key ? "htm-tab-btn--active" : ""}`}
+            onClick={() => setTab(key)}
+          >
+            <Icon size={17} />
+            <span>{label}</span>
+          </button>
+        ))}
+      </nav>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+//  COMPONENTE PRINCIPAL
+// ══════════════════════════════════════════════════════════════
 export default function HistoricalTeamsMobile({ onBack, initialSelectedId }) {
+  const { teams, loading, error, reload } = useHistoricalTeams();
   const [selectedId, setSelectedId] = useState(initialSelectedId || null);
   const [search, setSearch] = useState("");
-  const [spinning, setSpinning] = useState(false);
-  const [spinResult, setSpinResult] = useState(null);
-  const spinTimer = useRef(null);
-
-  const { teams, loading, error, reload } = useHistoricalTeams();
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     setSelectedId(initialSelectedId || null);
   }, [initialSelectedId]);
 
-  const filtered = teams.filter(t =>
-    !search || t.name?.toLowerCase().includes(search.toLowerCase()) || t.country?.toLowerCase().includes(search.toLowerCase())
+  // Ocultar bottom nav cuando hay detalle
+  useEffect(() => {
+    const root = document.body;
+    if (selectedId) {
+      root.classList.add("htm-hide-bottom-nav");
+    } else {
+      root.classList.remove("htm-hide-bottom-nav");
+    }
+    return () => root.classList.remove("htm-hide-bottom-nav");
+  }, [selectedId]);
+
+  const filtered = useMemo(() => {
+    if (!search) return teams;
+    const q = search.toLowerCase();
+    return teams.filter(t =>
+      t.name?.toLowerCase().includes(q) || t.country?.toLowerCase().includes(q)
+    );
+  }, [teams, search]);
+
+  const legendary = useMemo(
+    () => teams.filter(t => ["Dynastic", "Dominant"].includes(t.legacy_type)).length,
+    [teams]
   );
-
-  const handleSpin = () => {
-    if (!teams.length || spinning) return;
-    setSpinResult(null);
-    setSpinning(true);
-    let count = 0;
-    const interval = setInterval(() => {
-      setSpinResult(teams[Math.floor(Math.random() * teams.length)]);
-      count++;
-      if (count > 10) {
-        clearInterval(interval);
-        const final = teams[Math.floor(Math.random() * teams.length)];
-        setSpinResult(final);
-        setSpinning(false);
-      }
-    }, 80);
-    spinTimer.current = interval;
-  };
-
-  const handleSpinGo = () => {
-    if (spinResult) setSelectedId(spinResult.id);
-  };
-
-  const clearSpin = () => setSpinResult(null);
+  const countries = useMemo(
+    () => new Set(teams.map(t => t.country).filter(Boolean)).size,
+    [teams]
+  );
 
   if (selectedId) {
     return (
       <div className="htm-root">
-        <TeamDetail
+        <TeamDetailView
           teamId={selectedId}
           onBack={() => {
-            if (initialSelectedId) {
-              onBack?.();
-              return;
-            }
-
+            if (initialSelectedId) { onBack?.(); return; }
             setSelectedId(null);
           }}
         />
@@ -334,145 +742,58 @@ export default function HistoricalTeamsMobile({ onBack, initialSelectedId }) {
 
   return (
     <div className="htm-root">
-      <div className="htm-header">
-        <div className="htm-header-bg" />
-        <button className="htm-header-back" onClick={onBack}>
-          <ArrowLeft size={16} />
-        </button>
+      <TeamsHeader
+        total={teams.length}
+        legendary={legendary}
+        countries={countries}
+        onBack={onBack}
+      />
 
-        <div className="htm-header-inner">
-          <div className="htm-eyebrow">
-            <span className="htm-eyebrow-line" />
-            <span className="htm-eyebrow-text">Archivo Histórico</span>
-            <span className="htm-eyebrow-line" />
-          </div>
-          <div className="htm-title">
-            <span className="htm-title-solid">EQUI</span>
-            <span className="htm-title-outline">POS</span>
-          </div>
-          <p className="htm-subtitle">Equipos legendarios del fútbol</p>
+      <SearchBar
+        value={search}
+        onChange={setSearch}
+        onClear={() => setSearch("")}
+        onRandom={() => teams.length > 0 && setModalOpen(true)}
+      />
 
-          <div className="htm-spin-zone">
-            <button className={`htm-spin-btn ${spinning ? "htm-spin-btn--off" : ""}`} onClick={handleSpin}>
-              <Shuffle size={13} />
-              {spinning ? "Sorteando..." : "Equipo Aleatorio"}
-            </button>
+      <CounterRow count={filtered.length} />
 
-            {spinResult && (
-              <div className={`htm-slot-wrap ${spinning ? "htm-slot-wrap--spin" : "htm-slot-wrap--done"}`} onClick={handleSpinGo}>
-                <div className="htm-slot-item">
-                  <div className="htm-slot-logo">
-                    {getHistoricalImageUrl(spinResult.image_path)
-                      ? <img src={getHistoricalImageUrl(spinResult.image_path)} alt={spinResult.name} />
-                      : <Shield size={16} />
-                    }
-                  </div>
-                  <div className="htm-slot-info">
-                    <span className="htm-slot-name">{spinResult.name}</span>
-                    <span className="htm-slot-meta">{spinResult.country}{spinResult.era_dominance ? ` · ${spinResult.era_dominance}` : ""}</span>
-                  </div>
-                  {!spinning && <ChevronRight size={14} className="htm-slot-chevron" />}
-                </div>
-                {!spinning && (
-                  <button className="htm-slot-clear" onClick={(e) => { e.stopPropagation(); clearSpin(); }}>
-                    <X size={12} />
-                  </button>
-                )}
-              </div>
-            )}
+      <div className="htm-grid">
+        {loading && (
+          <div className="htm-loading">
+            <RefreshCw size={20} className="htm-spin" />
+            <span>Cargando equipos...</span>
           </div>
-        </div>
+        )}
+        {!loading && error && (
+          <div className="htm-error">
+            <AlertCircle size={18} />
+            <p>{error}</p>
+            <button onClick={reload}><RefreshCw size={12} /> Reintentar</button>
+          </div>
+        )}
+        {!loading && !error && filtered.length === 0 && (
+          <div className="htm-empty-grid">
+            <Shield size={32} strokeWidth={1} />
+            <p>{teams.length === 0 ? "Aún no hay equipos históricos" : "Sin coincidencias"}</p>
+            <span>
+              {teams.length === 0
+                ? "El administrador publicará los equipos pronto."
+                : "Prueba con otro nombre."}
+            </span>
+          </div>
+        )}
+        {!loading && !error && filtered.map((team, idx) => (
+          <TeamCard key={team.id} team={team} index={idx} onClick={(t) => setSelectedId(t.id)} />
+        ))}
       </div>
 
-      <div className="htm-toolbar">
-        <div className={`htm-search-box ${search ? "htm-search-box--active" : ""}`}>
-          <Search size={13} className="htm-search-ico" />
-          <input
-            className="htm-search-input"
-            placeholder="Buscar equipo, país..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-          {search && (
-            <button className="htm-search-clear" onClick={() => setSearch("")}>
-              <X size={11} />
-            </button>
-          )}
-        </div>
-      </div>
-
-      <div className="htm-results-bar">
-        <span className="htm-results-count">{filtered.length} equipo{filtered.length !== 1 ? "s" : ""}</span>
-      </div>
-
-      {loading && (
-        <div className="htm-state htm-state--loading">
-          <RefreshCw size={15} className="htm-spin" />
-          <span>Cargando equipos...</span>
-        </div>
-      )}
-
-      {!loading && error && (
-        <div className="htm-state htm-state--error">
-          <AlertCircle size={18} />
-          <p>{error}</p>
-          <button className="htm-retry-btn" onClick={reload}>
-            <RefreshCw size={11} /> Reintentar
-          </button>
-        </div>
-      )}
-
-      {!loading && !error && filtered.length === 0 && (
-        <div className="htm-state htm-state--empty">
-          <Shield size={32} strokeWidth={1} />
-          <p>{search ? "Sin coincidencias" : "Aún no hay equipos"}</p>
-          <span>{search ? "Prueba con otro nombre." : "El administrador publicará los equipos pronto."}</span>
-        </div>
-      )}
-
-      {!loading && !error && filtered.length > 0 && (
-        <div className="htm-list">
-          {filtered.map((team, idx) => {
-            const imgUrl = getHistoricalImageUrl(team.image_path);
-            const legColor = LEGACY_COLOR[team.legacy_type] || "var(--accent)";
-            return (
-              <button
-                key={team.id}
-                className="htm-card"
-                style={{ "--tc": team.primary_color || "#5b4fd8", "--i": idx }}
-                onClick={() => setSelectedId(team.id)}
-              >
-                <div className="htm-card-stripe" style={{ background: team.primary_color || "var(--accent)" }} />
-                <div className="htm-card-logo">
-                  {imgUrl
-                    ? <img src={imgUrl} alt={team.name} />
-                    : <Shield size={20} strokeWidth={1.2} />
-                  }
-                </div>
-                <div className="htm-card-body">
-                  <span className="htm-card-name">{team.name}</span>
-                  <div className="htm-card-meta">
-                    {team.country && <span>{team.country}</span>}
-                    {team.era_dominance && <><span className="htm-sep">·</span><span>{team.era_dominance}</span></>}
-                  </div>
-                  <div className="htm-card-footer">
-                    {team.legacy_type && (
-                      <span className="htm-card-legacy" style={{ color: legColor, borderColor: legColor + "44" }}>
-                        {LEGACY_TEAM_LABEL[team.legacy_type] || team.legacy_type}
-                      </span>
-                    )}
-                    {team.titles_count > 0 && (
-                      <span className="htm-card-titles">
-                        <Trophy size={9} /> {team.titles_count}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <ChevronRight size={14} className="htm-card-chevron" />
-              </button>
-            );
-          })}
-        </div>
+      {modalOpen && (
+        <RandomModal
+          teams={teams}
+          onSelect={(t) => { setSelectedId(t.id); setModalOpen(false); }}
+          onClose={() => setModalOpen(false)}
+        />
       )}
     </div>
   );
