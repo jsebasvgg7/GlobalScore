@@ -1044,9 +1044,9 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
     if (!form.name.trim()) { setError("El nombre es obligatorio"); return; }
 
     // Validar dorsales 1-11 (constraint de BD)
-    const invalid = lineup.filter(p => p.player_name.trim() && (Number(p.shirt_number) < 1 || Number(p.shirt_number) > 11));
+    const invalid = lineup.filter(p => p.player_name.trim() && (Number(p.shirt_number) < 1 || Number(p.shirt_number) > 99));
     if (invalid.length > 0) {
-      setError(`Los dorsales deben ser entre 1 y 11. Revisa: ${invalid.map(p => p.shirt_number).join(", ")}`);
+      setError(`Los dorsales deben ser entre 1 y 99. Revisa: ${invalid.map(p => p.shirt_number).join(", ")}`);
       return;
     }
 
@@ -1238,11 +1238,11 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
                     <PInput
                       type="number"
                       min="1"
-                      max="11"
+                      max="99"
                       value={p.shirt_number ?? ""}
                       onChange={e => updateLineupPlayer(p._id, "shirt_number", e.target.value)}
                       className="ah-lineup-dorsal"
-                      title="Dorsal (1-11)"
+                      title="Dorsal (1-99)"
                       placeholder="#"
                     />
                     {/* Nombre */}
@@ -1290,7 +1290,7 @@ function TeamPanel({ team, competitions, onSave, onClose, onGetLineup, onSetLine
 
               {/* Nota sobre constraint de BD */}
               <div className="ah-lineup-db-note">
-                ⚠ La base de datos acepta dorsales del 1 al 11. Jugadores con dorsal fuera de ese rango no se guardarán.
+                ℹ Los dorsales pueden ir del 1 al 99, respetando el número histórico de cada jugador.
               </div>
             </>
           )}
