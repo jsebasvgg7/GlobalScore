@@ -60,6 +60,7 @@ export default function AdminRightPanel({
     achievements: 'var(--accent)',
     titles: '#3b82f6',
     crowns: '#c9a227',
+    trophies: '#0ea5a8',
     banners: 'var(--accent)',
   };
   const panelColor = panelMode === 'finish' ? '#1D9E75' : sectionColors[activeSection] || 'var(--accent)';
@@ -123,6 +124,7 @@ function PanelHeader({ activeSection, panelMode, panelItem, onResetPanel }) {
     achievements: { add: 'Nuevo Logro', finish: '', edit: 'Editar Logro' },
     titles: { add: 'Nuevo Título', finish: '', edit: 'Editar Título' },
     crowns: { add: 'Otorgar Corona', finish: '', edit: '' },
+    trophies: { add: 'Otorgar Trofeo', finish: '', edit: '' },
     banners: { add: 'Crear Banner', finish: '', edit: '', assign: 'Asignar Banner' },
   };
 
@@ -222,6 +224,7 @@ function AddForm({ activeSection, onAdd, users }) {
     case 'achievements': return <AddAchievementForm onAdd={onAdd} />;
     case 'titles': return <AddTitleForm onAdd={onAdd} />;
     case 'crowns': return <AddCrownForm onAdd={onAdd} users={users} />;
+    case 'trophies': return <AddTrophyForm onAdd={onAdd} users={users} />;
     case 'banners': return <AddBannerForm onAdd={onAdd} />;
     default: return <MatchForm onAdd={onAdd} styles={ADM_STYLES} />;
   }
@@ -361,6 +364,41 @@ function AddCrownForm({ onAdd, users = [] }) {
       <button className="adm-submit-btn adm-submit-btn--gold" onClick={submit} disabled={sending || !topUser}>
         {sending ? <span className="adm-spinner" /> : <Crown size={14} />}
         <span>{sending ? 'Otorgando...' : 'Otorgar Corona'}</span>
+      </button>
+    </div>
+  );
+}
+
+/* ── ADD TROPHY (Ranking Global) ── */
+function AddTrophyForm({ onAdd, users = [] }) {
+  const [edition, setEdition] = useState(new Date().getFullYear().toString());
+  const [sending, setSending] = useState(false);
+  const topUser = users[0];
+
+  const submit = async () => {
+    if (!edition || !topUser) return;
+    setSending(true);
+    try { await onAdd({ winnerId: topUser.id, editionLabel: edition }); }
+    finally { setSending(false); }
+  };
+
+  return (
+    <div className="adm-form">
+      <div className="adm-crown-info">
+        <Trophy size={28} style={{ color: '#0ea5a8' }} />
+        <p>Otorga el trofeo del ranking global al usuario con más puntos acumulados.</p>
+        {topUser && (
+          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>
+            Ganador: <strong>{topUser.name}</strong> ({topUser.points} pts)
+          </p>
+        )}
+      </div>
+      <Field label="Edición / Temporada" required hint="Ej: 2026, o 'Temporada 1'">
+        <Input value={edition} onChange={e => setEdition(e.target.value)} />
+      </Field>
+      <button className="adm-submit-btn adm-submit-btn--gold" onClick={submit} disabled={sending || !topUser}>
+        {sending ? <span className="adm-spinner" /> : <Trophy size={14} />}
+        <span>{sending ? 'Otorgando...' : 'Otorgar Trofeo'}</span>
       </button>
     </div>
   );

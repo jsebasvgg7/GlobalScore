@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Crown, Star, Zap } from "lucide-react";
+import { Crown, Trophy, Star, Zap } from "lucide-react";
 import HistoryTriggerCard from "./HistoryTriggerCard";
 import HistoryPanel from "./HistoryPanel";
 import "../styles/HallOfFamePanel.css";
@@ -14,6 +14,11 @@ const META = [
   { label: "BRONCE", color: "#a0652a" },
 ];
 
+const TYPE_CONFIG = {
+  monthly: { Icon: Crown, color: "#c9a227", unitLabel: "coronas", periodLabel: "Título" },
+  global: { Icon: Trophy, color: "#0ea5a8", unitLabel: "trofeos", periodLabel: "Edición" },
+};
+
 function Avatar({ user }) {
   if (user?.avatar_url) {
     return <img src={user.avatar_url} alt={user.name} className="hofp-av" />;
@@ -25,12 +30,14 @@ function Avatar({ user }) {
   );
 }
 
-export default function HallOfFamePanel({ champions = [] }) {
+export default function HallOfFamePanel({ champions = [], type = "monthly" }) {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const cfg = TYPE_CONFIG[type] || TYPE_CONFIG.monthly;
+  const TypeIcon = cfg.Icon;
 
   const top3 = champions.slice(0, 3);
-  const totalCrowns = champions.reduce((acc, c) => acc + (c.monthly_championships || 0), 0);
-  const maxCrowns = champions[0]?.monthly_championships || 0;
+  const totalUnits = champions.reduce((acc, c) => acc + (c.championships || 0), 0);
+  const maxUnits = champions[0]?.championships || 0;
   const totalChamps = champions.length;
 
   return (
@@ -44,8 +51,6 @@ export default function HallOfFamePanel({ champions = [] }) {
 
       {/* ── PANEL SWAP ── */}
       {isHistoryOpen ? (
-        /* When history is open, render HistoryPanel INLINE
-           (it fills the remaining space inside hofp-root) */
         <div className="hofp-history-wrap">
           <HistoryPanel />
         </div>
@@ -62,7 +67,6 @@ export default function HallOfFamePanel({ champions = [] }) {
                   className="hofp-step"
                   style={{ marginLeft: ml, borderLeftColor: meta.color }}
                 >
-                  {/* Barra lateral con número */}
                   <div className="hofp-step-rank" style={{ background: meta.color }}>
                     {i + 1}
                   </div>
@@ -77,22 +81,22 @@ export default function HallOfFamePanel({ champions = [] }) {
                       <div className="hofp-step-info">
                         <span className="hofp-step-name">{champ.name}</span>
                         <span className="hofp-step-pts" style={{ color: meta.color }}>
-                          {fmt(champ.championship_points)} pts
+                          {fmt(champ.points)} pts
                         </span>
                       </div>
                     </div>
 
                     <div className="hofp-step-stats">
                       <span className="hofp-step-stat">
-                        <Crown size={10} style={{ color: meta.color }} />
+                        <TypeIcon size={10} style={{ color: meta.color }} />
                         <span className="hofp-step-stat-val" style={{ color: meta.color }}>
-                          {champ.monthly_championships}
+                          {champ.championships}
                         </span>
-                        <span className="hofp-step-stat-lbl">coronas</span>
+                        <span className="hofp-step-stat-lbl">{cfg.unitLabel}</span>
                       </span>
                       <span className="hofp-step-stat">
                         <span className="hofp-step-stat-lbl">
-                          {champ.championship_month_year || "—"}
+                          {champ.period || "—"}
                         </span>
                       </span>
                     </div>
@@ -103,7 +107,7 @@ export default function HallOfFamePanel({ champions = [] }) {
           </div>
 
           {/* ── STATS GLOBALES ── */}
-          <div className="hofp-global">
+          <div className="hofp-global" style={{ background: cfg.color }}>
             <div className="hofp-global-title">ESTADÍSTICAS GENERALES</div>
 
             <div className="hofp-global-row">
@@ -111,12 +115,12 @@ export default function HallOfFamePanel({ champions = [] }) {
               <span className="hofp-global-val">{totalChamps}</span>
             </div>
             <div className="hofp-global-row">
-              <span className="hofp-global-lbl">Coronas totales</span>
-              <span className="hofp-global-val hofp-global-val--gold">{totalCrowns}</span>
+              <span className="hofp-global-lbl">{cfg.unitLabel.charAt(0).toUpperCase() + cfg.unitLabel.slice(1)} totales</span>
+              <span className="hofp-global-val hofp-global-val--gold">{totalUnits}</span>
             </div>
             <div className="hofp-global-row">
-              <span className="hofp-global-lbl">Récord coronas</span>
-              <span className="hofp-global-val hofp-global-val--gold">{maxCrowns}</span>
+              <span className="hofp-global-lbl">Récord {cfg.unitLabel}</span>
+              <span className="hofp-global-val hofp-global-val--gold">{maxUnits}</span>
             </div>
             {champions[0] && (
               <div className="hofp-global-row">

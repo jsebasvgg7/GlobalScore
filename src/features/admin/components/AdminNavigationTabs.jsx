@@ -9,6 +9,7 @@ const TAB_LABELS = {
   achievements: 'Log',
   titles: 'Tít',
   crowns: 'Cor',
+  trophies: 'Glo',
   banners: 'Ban',
 };
 
@@ -21,6 +22,7 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
     { id: 'achievements', icon: Shield, badge: 0 },
     { id: 'titles', icon: Package, badge: 0 },
     { id: 'crowns', icon: Crown, badge: stats.crowns?.thisMonth === 0 ? '!' : 0 },
+    { id: 'trophies', icon: Trophy, badge: 0 },
     { id: 'banners', icon: Image, badge: 0 },
   ];
 

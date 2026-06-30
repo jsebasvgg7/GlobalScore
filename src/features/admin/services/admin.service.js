@@ -479,6 +479,29 @@ export const resetMonthlyStats = async () => {
 };
 
 // ════════════════════════════════════════════════════════════
+//  TROPHIES / GLOBAL CHAMPIONSHIPS
+// ════════════════════════════════════════════════════════════
+
+export const awardGlobalTrophy = async (winnerId, editionLabel, adminId) => {
+    const { data, error } = await supabase.rpc('award_global_championship', {
+        winner_user_id: winnerId,
+        edition_label: editionLabel,
+        awarded_by_user_id: adminId,
+    });
+    if (error) throw error;
+    return data;
+};
+
+export const resetGlobalStats = async () => {
+    const { data, error } = await supabase.rpc('reset_all_global_stats');
+    if (error) throw error;
+    if (data && !data.success) {
+        throw new Error(data.error || 'Error desconocido en reset');
+    }
+    return data;
+};
+
+// ════════════════════════════════════════════════════════════
 //  LOAD ALL ADMIN DATA
 // ════════════════════════════════════════════════════════════
 
@@ -492,6 +515,8 @@ export const loadAllAdminData = async () => {
         userData,
         historyData,
         bannerData,
+        globalUserData,
+        trophyHistoryData,
     ] = await Promise.all([
         supabase
             .from('matches')
@@ -515,6 +540,15 @@ export const loadAllAdminData = async () => {
             .from('available_banners')
             .select('*')
             .order('created_at', { ascending: false }),
+        supabase
+            .from('users')
+            .select('*')
+            .order('points', { ascending: false })
+            .limit(10),
+        supabase
+            .from('global_championship_history')
+            .select('*, users(name)')
+            .order('awarded_at', { ascending: false }),
     ]);
 
     return {
@@ -526,6 +560,8 @@ export const loadAllAdminData = async () => {
         users: userData.data || [],
         crownHistory: historyData.data || [],
         banners: bannerData.data || [],
+        globalUsers: globalUserData.data || [],
+        trophyHistory: trophyHistoryData.data || [],
     };
 };
 

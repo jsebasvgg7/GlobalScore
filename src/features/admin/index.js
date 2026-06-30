@@ -25,6 +25,7 @@ export { default as FinishAwardModal } from './components/FinishAwardModal'
 export { default as FinishLeagueModal } from './components/FinishLeagueModal'
 export { default as FinishMatchModal } from './components/FinishMatchModal'
 export { default as AdminHistorical } from './components/AdminHistorical'
+export { default as AdminTrophiesSection } from './components/AdminTrophiesSection'
 
 // Mobile
 export {
@@ -38,6 +39,7 @@ export * from './hooks/useAdminAchievements'
 export * from './hooks/useAdminAwards'
 export * from './hooks/useAdminBanners'
 export * from './hooks/useAdminCrowns'
+export * from './hooks/useAdminTrophies'
 export * from './hooks/useAdminData'
 export * from './hooks/useAdminHistorical'
 export * from './hooks/useAdminLeagues'

@@ -9,6 +9,7 @@ import {
   useAdminAwards,
   useAdminAchievements,
   useAdminCrowns,
+  useAdminTrophies,
   useAdminBanners
 } from '@/features/admin';
 
@@ -32,6 +33,7 @@ import {
   AdminAchievementsList,
   AdminTitlesList,
   AdminCrownsSection,
+  AdminTrophiesSection,
   AdminBannersList,
   AdminRightPanel,
   AdminHistorical,
@@ -70,6 +72,7 @@ export default function AdminPage({ currentUser }) {
   const {
     matches, leagues, awards, achievements, titles,
     users, crownHistory, banners,
+    globalUsers, trophyHistory,
     loading, loadData,
   } = useAdminData();
 
@@ -88,6 +91,9 @@ export default function AdminPage({ currentUser }) {
 
   const { handleAwardCrown, handleResetMonthlyStats }
     = useAdminCrowns(loadData, toast);
+
+  const { handleAwardTrophy, handleResetGlobalStats }
+    = useAdminTrophies(loadData, toast);
 
   const { handleCreateBanner, handleDeleteBanner, handleAssignBanner, handleRevokeBanner }
     = useAdminBanners(loadData, toast);
@@ -141,6 +147,8 @@ export default function AdminPage({ currentUser }) {
       case 'titles': await handleSaveTitle(data); break;
       case 'crowns': await handleAwardCrown(
         data.winnerId, data.monthLabel, currentUser?.id); break;
+      case 'trophies': await handleAwardTrophy(
+        data.winnerId, data.editionLabel, currentUser?.id); break;
       case 'banners': await handleCreateBanner(
         { name: data.name, description: data.description }, data.file); break;
       default: break;
@@ -180,10 +188,10 @@ export default function AdminPage({ currentUser }) {
   // ── Filtered items ────────────────────────────────────────────
   const filteredItems = getFilteredItems(
     activeSection, searchTerm, filterStatus,
-    { matches, leagues, awards, achievements, titles, users, crownHistory, banners }
+    { matches, leagues, awards, achievements, titles, users, crownHistory, banners, globalUsers, trophyHistory }
   );
 
-  const stats = calculateStats({ matches, leagues, awards, achievements, titles, crownHistory, banners });
+  const stats = calculateStats({ matches, leagues, awards, achievements, titles, crownHistory, banners, trophyHistory });
 
   // ── La sección histórica tiene su propio layout completo ──────
   // No necesita el panel derecho ni los controles normales
@@ -278,6 +286,13 @@ export default function AdminPage({ currentUser }) {
                     onResetStats={handleResetMonthlyStats}
                   />
                 )}
+                {activeSection === 'trophies' && (
+                  <AdminTrophiesSection
+                    top10={filteredItems.top10}
+                    history={filteredItems.history}
+                    onResetStats={handleResetGlobalStats}
+                  />
+                )}
                 {activeSection === 'banners' && (
                   <AdminBannersList
                     banners={Array.isArray(filteredItems) ? filteredItems : banners}
@@ -287,7 +302,7 @@ export default function AdminPage({ currentUser }) {
                 )}
 
                 {Array.isArray(filteredItems) && filteredItems.length === 0 &&
-                  activeSection !== 'crowns' && (
+                  activeSection !== 'crowns' && activeSection !== 'trophies' && (
                     <div className="admin-empty-state">
                       <AlertCircle size={40} />
                       <p>No hay {activeSection} para mostrar</p>
@@ -308,7 +323,7 @@ export default function AdminPage({ currentUser }) {
               onSave={handlePanelSave}
               onDelete={handlePanelDelete}
               onResetPanel={resetPanel}
-              users={users}
+              users={activeSection === 'trophies' ? globalUsers : users}
               banners={banners}
               onAssignBanner={handleAssignBanner}
               onRevokeBanner={handleRevokeBanner}
@@ -333,7 +348,7 @@ export default function AdminPage({ currentUser }) {
               onFinish={handlePanelFinish}
               onSave={handlePanelSave}
               onDelete={handlePanelDelete}
-              users={users}
+              users={activeSection === 'trophies' ? globalUsers : users}
               banners={banners}
               onAssignBanner={handleAssignBanner}
               onRevokeBanner={handleRevokeBanner}

@@ -1,8 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Crown, ChevronLeft, ChevronRight, Star, Trophy, Zap } from 'lucide-react';
+import { Crown, Trophy, ChevronLeft, ChevronRight, Star, Zap } from 'lucide-react';
 import '../styles/HallOfFame.css';
 
 const fmt = (n) => Number(n || 0).toLocaleString('es-ES');
+
+/* ── Config por tipo de salón ── */
+const TYPE_CONFIG = {
+  monthly: {
+    Icon: Crown,
+    accentColor: '#c9a227',
+    subtitle: 'Campeones Mensuales',
+    unitLabel: 'coronas',
+    periodLabel: 'Título',
+  },
+  global: {
+    Icon: Trophy,
+    accentColor: '#0ea5a8',
+    subtitle: 'Campeones del Ranking Global',
+    unitLabel: 'trofeos',
+    periodLabel: 'Edición',
+  },
+};
 
 /* ── Avatar ── */
 function Avatar({ user, size = 80, onClick }) {
@@ -31,7 +49,7 @@ function Avatar({ user, size = 80, onClick }) {
   );
 }
 
-/* ── Metadatos por posición ── */
+/* ── Metadatos por posición (rank), independiente del tipo ── */
 const META = [
   { label: 'ORO', color: '#c9a227', bg: 'rgba(201,162,39,0.08)', border: '#c9a227' },
   { label: 'PLATA', color: '#8a8a8a', bg: 'rgba(138,138,138,0.07)', border: '#8a8a8a' },
@@ -41,11 +59,18 @@ const META = [
 /* ════════════════════════════════════════
    MAIN COMPONENT
 ════════════════════════════════════════ */
-export default function HallOfFame({ champions = [], onSelectUser }) {
+export default function HallOfFame({ champions = [], onSelectUser, type = 'monthly' }) {
   const [active, setActive] = useState(0);
   const [dir, setDir] = useState(null); // 'left' | 'right' | null
   const timerRef = useRef(null);
   const total = champions.length;
+  const cfg = TYPE_CONFIG[type] || TYPE_CONFIG.monthly;
+  const TypeIcon = cfg.Icon;
+
+  /* Reiniciar el carrusel al cambiar de tipo (mensual/global) */
+  useEffect(() => {
+    setActive(0);
+  }, [type]);
 
   /* Auto-advance 6s */
   useEffect(() => {
@@ -84,17 +109,17 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
       {/* ════ HEADER ════ */}
       <div className="hof-header">
         <div className="hof-header-line hof-header-line--left" />
-        <Crown size={14} className="hof-header-crown" />
-        <span className="hof-header-title">Salón de la Fama</span>
+        <TypeIcon size={14} className="hof-header-crown" style={{ color: cfg.accentColor }} />
+        <span className="hof-header-title" style={{ color: cfg.accentColor }}>Salón de la Fama</span>
         <div className="hof-header-line hof-header-line--right" />
       </div>
 
-      <div className="hof-sub">Campeones Mensuales · {total} registrado{total !== 1 ? 's' : ''}</div>
+      <div className="hof-sub">{cfg.subtitle} · {total} registrado{total !== 1 ? 's' : ''}</div>
 
       {/* ════ EMPTY ════ */}
       {total === 0 ? (
         <div className="hof-empty">
-          <Crown size={48} className="hof-empty-icon" />
+          <TypeIcon size={48} className="hof-empty-icon" />
           <p>Aún no hay campeones registrados</p>
         </div>
       ) : (
@@ -140,19 +165,19 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
                   {/* Nombre */}
                   <h2 className="hof-card-name">{champ.name}</h2>
 
-                  {/* Coronas */}
+                  {/* Íconos de campeonatos (coronas o trofeos) */}
                   <div className="hof-card-crowns">
-                    {Array.from({ length: Math.min(champ.monthly_championships, 8) }).map((_, i) => (
-                      <Crown
+                    {Array.from({ length: Math.min(champ.championships, 8) }).map((_, i) => (
+                      <TypeIcon
                         key={i}
                         size={16}
                         className="hof-crown-mini"
                         style={{ color: meta.color, animationDelay: `${i * 0.1}s` }}
                       />
                     ))}
-                    {champ.monthly_championships > 8 && (
+                    {champ.championships > 8 && (
                       <span className="hof-crowns-extra" style={{ color: meta.color }}>
-                        +{champ.monthly_championships - 8}
+                        +{champ.championships - 8}
                       </span>
                     )}
                   </div>
@@ -160,25 +185,25 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
                   {/* Stats grid */}
                   <div className="hof-card-stats">
                     <div className="hof-card-stat">
-                      <Crown size={13} style={{ color: meta.color }} />
+                      <TypeIcon size={13} style={{ color: meta.color }} />
                       <span className="hof-stat-val" style={{ color: meta.color }}>
-                        {champ.monthly_championships}
+                        {champ.championships}
                       </span>
-                      <span className="hof-stat-lbl">Coronas</span>
+                      <span className="hof-stat-lbl">{cfg.unitLabel}</span>
                     </div>
                     <div className="hof-card-stat-sep" />
                     <div className="hof-card-stat">
                       <Zap size={13} style={{ color: '#5b4fd8' }} />
-                      <span className="hof-stat-val">{fmt(champ.championship_points)}</span>
+                      <span className="hof-stat-val">{fmt(champ.points)}</span>
                       <span className="hof-stat-lbl">Max pts</span>
                     </div>
                     <div className="hof-card-stat-sep" />
                     <div className="hof-card-stat">
                       <Star size={13} style={{ color: '#1D9E75' }} />
                       <span className="hof-stat-val hof-stat-val--sm">
-                        {champ.championship_month_year || '—'}
+                        {champ.period || '—'}
                       </span>
-                      <span className="hof-stat-lbl">Título</span>
+                      <span className="hof-stat-lbl">{cfg.periodLabel}</span>
                     </div>
                   </div>
 
@@ -223,10 +248,10 @@ export default function HallOfFame({ champions = [], onSelectUser }) {
                     <div className="hof-top3-info">
                       <span className="hof-top3-name">{u.name}</span>
                       <span className="hof-top3-crowns" style={{ color: m.color }}>
-                        <Crown size={10} /> {u.monthly_championships} coronas
+                        <TypeIcon size={10} /> {u.championships} {cfg.unitLabel}
                       </span>
                     </div>
-                    <span className="hof-top3-pts">{fmt(u.championship_points)}</span>
+                    <span className="hof-top3-pts">{fmt(u.points)}</span>
                   </div>
                 );
               })}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Target, TrendingUp, Calendar, Globe, Zap,
-  BarChart3, Crown, Users, BookOpen
+  BarChart3, Crown, Trophy, Users, BookOpen
 } from 'lucide-react';
 import { supabase } from '@/shared/services/supabase/client';
 import {
@@ -24,6 +24,8 @@ export default function RankingPage({ currentUser }) {
   const [sortBy, setSortBy] = useState('points');
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [champions, setChampions] = useState([]);
+  const [globalChampions, setGlobalChampions] = useState([]);
+  const [hofType, setHofType] = useState('monthly'); // 'monthly' | 'global'
   const [albumProgress, setAlbumProgress] = useState({});
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -38,6 +40,7 @@ export default function RankingPage({ currentUser }) {
     checkAndResetMonthly();
     loadUsers();
     loadTopChampions();
+    loadTopGlobalChampions();
     loadAlbumProgress();
   }, []);
 
@@ -65,6 +68,7 @@ export default function RankingPage({ currentUser }) {
     } catch (err) { console.error(err); } finally { setLoading(false); }
   };
 
+  /* ── Campeones MENSUALES (coronas) ── */
   const loadTopChampions = async () => {
     try {
       const { data: historyData, error } = await supabase
@@ -78,7 +82,7 @@ export default function RankingPage({ currentUser }) {
       historyData.forEach(r => {
         if (!map[r.user_id]) map[r.user_id] = { count: 0, champs: [] };
         map[r.user_id].count++;
-        map[r.user_id].champs.push({ points: r.points, monthYear: r.month_year });
+        map[r.user_id].champs.push({ points: r.points, period: r.month_year });
       });
 
       const { data: usersData } = await supabase
@@ -88,34 +92,72 @@ export default function RankingPage({ currentUser }) {
       setChampions(
         usersData.map(u => ({
           ...u,
-          monthly_championships: map[u.id].count,
-          championship_points: map[u.id].champs[0].points,
-          championship_month_year: map[u.id].champs[0].monthYear,
+          championships: map[u.id].count,
+          points: map[u.id].champs[0].points,
+          period: map[u.id].champs[0].period,
         }))
           .sort((a, b) =>
-            b.monthly_championships - a.monthly_championships ||
-            b.championship_points - a.championship_points
+            b.championships - a.championships ||
+            b.points - a.points
           )
           .slice(0, 10)
       );
     } catch (err) { console.error(err); setChampions([]); }
   };
+
+  /* ── Campeones GLOBALES (trofeos) ── */
+  const loadTopGlobalChampions = async () => {
+    try {
+      const { data: historyData, error } = await supabase
+        .from('global_championship_history')
+        .select('user_id, points, edition_label, awarded_at')
+        .order('awarded_at', { ascending: false });
+      if (error) throw error;
+      if (!historyData?.length) { setGlobalChampions([]); return; }
+
+      const map = {};
+      historyData.forEach(r => {
+        if (!map[r.user_id]) map[r.user_id] = { count: 0, champs: [] };
+        map[r.user_id].count++;
+        map[r.user_id].champs.push({ points: r.points, period: r.edition_label });
+      });
+
+      const { data: usersData } = await supabase
+        .from('users').select('id, name, avatar_url').in('id', Object.keys(map));
+      if (!usersData?.length) { setGlobalChampions([]); return; }
+
+      setGlobalChampions(
+        usersData.map(u => ({
+          ...u,
+          championships: map[u.id].count,
+          points: map[u.id].champs[0].points,
+          period: map[u.id].champs[0].period,
+        }))
+          .sort((a, b) =>
+            b.championships - a.championships ||
+            b.points - a.points
+          )
+          .slice(0, 10)
+      );
+    } catch (err) { console.error(err); setGlobalChampions([]); }
+  };
+
   const loadAlbumProgress = async () => {
-  try {
-    const { data, error } = await supabase
-      .from('album_progress')
-      .select('user_id, album_id, is_completed')
-      .in('album_id', ['legendary_1', 'legendary_2', 'legendary_3', 'legendary_4', 'legendary_5'])
-      .eq('is_completed', true);
-    if (error) throw error;
-    const map = {};
-    (data || []).forEach(row => {
-      if (!map[row.user_id]) map[row.user_id] = 0;
-      map[row.user_id]++;
-    });
-    setAlbumProgress(map);
-  } catch (err) { console.error(err); }
-};
+    try {
+      const { data, error } = await supabase
+        .from('album_progress')
+        .select('user_id, album_id, is_completed')
+        .in('album_id', ['legendary_1', 'legendary_2', 'legendary_3', 'legendary_4', 'legendary_5'])
+        .eq('is_completed', true);
+      if (error) throw error;
+      const map = {};
+      (data || []).forEach(row => {
+        if (!map[row.user_id]) map[row.user_id] = 0;
+        map[row.user_id]++;
+      });
+      setAlbumProgress(map);
+    } catch (err) { console.error(err); }
+  };
 
   const getRankingData = () => {
     const monthly = rankingType === 'monthly';
@@ -157,11 +199,12 @@ export default function RankingPage({ currentUser }) {
 
   if (loading) return <GlobalLoader variant="page" />;
 
+  const activeHofChampions = hofType === 'monthly' ? champions : globalChampions;
+
   return (
     <>
       {/* ══════════════════════════════════════
           VISTA MOBILE — solo ≤768px
-          Componente propio, no toca desktop
       ══════════════════════════════════════ */}
       <MobileRanking
         users={users}
@@ -194,7 +237,16 @@ export default function RankingPage({ currentUser }) {
 
           {rankingType === 'halloffame' ? (
             <div className="lb-hof-wrap">
-              <HallOfFame champions={champions} onSelectUser={setSelectedUserId} />
+              {/* Sub-tabs: Mensual (coronas) vs Global (trofeos) */}
+              <div className="lb-tabs-bar" style={{ height: 42 }}>
+                <button className={`lb-tab${hofType === 'monthly' ? ' active' : ''}`} onClick={() => setHofType('monthly')}>
+                  <Crown size={13} /><span>Mensual</span>
+                </button>
+                <button className={`lb-tab${hofType === 'global' ? ' active' : ''}`} onClick={() => setHofType('global')}>
+                  <Trophy size={13} /><span>Global</span>
+                </button>
+              </div>
+              <HallOfFame champions={activeHofChampions} type={hofType} onSelectUser={setSelectedUserId} />
             </div>
           ) : (
             <div className="lb-grid">
@@ -331,7 +383,7 @@ export default function RankingPage({ currentUser }) {
             rankingType={rankingType}
           />
         ) : (
-          <HallOfFamePanel champions={champions} />
+          <HallOfFamePanel champions={activeHofChampions} type={hofType} />
         )}
       </div>
 

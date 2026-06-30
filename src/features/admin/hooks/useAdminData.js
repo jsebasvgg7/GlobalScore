@@ -11,6 +11,8 @@ export const useAdminData = () => {
   const [users, setUsers] = useState([]);
   const [crownHistory, setCrownHistory] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [globalUsers, setGlobalUsers] = useState([]);
+  const [trophyHistory, setTrophyHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
@@ -25,6 +27,8 @@ export const useAdminData = () => {
       setUsers(data.users);
       setCrownHistory(data.crownHistory);
       setBanners(data.banners);
+      setGlobalUsers(data.globalUsers);
+      setTrophyHistory(data.trophyHistory);
     } catch (err) {
       console.error('Error loading data:', err);
       throw err;
@@ -46,6 +50,8 @@ export const useAdminData = () => {
     users,
     crownHistory,
     banners,
+    globalUsers,
+    trophyHistory,
     loading,
     loadData,
   };
