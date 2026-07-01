@@ -43,6 +43,7 @@ export default function HistoryVaultLanding({ onNavigate }) {
     const [teams, setTeams] = useState([]);
     const [playerCount, setPlayerCount] = useState(null); // null = aún cargando
     const [compCount, setCompCount] = useState(null);
+    const [teamCount, setTeamCount] = useState(null); // null = aún cargando
 
     const [carouselIdx, setCarouselIdx] = useState(0);
     const carouselRef = useRef(null);
@@ -66,6 +67,7 @@ export default function HistoryVaultLanding({ onNavigate }) {
             if (countsRes.status === 'fulfilled') {
                 setPlayerCount(countsRes.value.players);
                 setCompCount(countsRes.value.competitions);
+                setTeamCount(countsRes.value.teams);
             }
             if (teamsRes.status === 'fulfilled') {
                 setTeams(teamsRes.value.slice(0, 6));
@@ -173,9 +175,9 @@ export default function HistoryVaultLanding({ onNavigate }) {
                     <div className="hvl__stat-card hvl__stat-card--green">
                         <IconShield />
                         <div className="hvl__stat-info">
-                            {teams.length === 0
+                            {teamCount === null
                                 ? <StatSkeleton />
-                                : <span className="hvl__stat-num">{teams.length}</span>
+                                : <span className="hvl__stat-num">{teamCount}</span>
                             }
                             <span className="hvl__stat-label">EQUIPOS</span>
                         </div>

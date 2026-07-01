@@ -218,7 +218,7 @@ export const fetchTeamDetail = async (teamId) => {
 
 // Landing stats — HEAD requests, cero filas viajan por la red
 export const fetchLandingCounts = async () => {
-    const [playersRes, compsRes] = await Promise.all([
+    const [playersRes, compsRes, teamsRes] = await Promise.all([
         supabase
             .from('historical_players')
             .select('*', { count: 'exact', head: true })
@@ -229,14 +229,21 @@ export const fetchLandingCounts = async () => {
             .from('historical_competitions')
             .select('*', { count: 'exact', head: true })
             .eq('is_published', true),
+
+        supabase
+            .from('historical_teams')
+            .select('*', { count: 'exact', head: true })
+            .eq('is_published', true),
     ]);
 
     if (playersRes.error) throw playersRes.error;
     if (compsRes.error) throw compsRes.error;
+    if (teamsRes.error) throw teamsRes.error;
 
     return {
         players: playersRes.count ?? 0,
         competitions: compsRes.count ?? 0,
+        teams: teamsRes.count ?? 0,
     };
 };
 
