@@ -27,6 +27,7 @@
   --mup2-border: #d4cfc8;
   --mup2-border-hard: #c4bfb8;
   --mup2-gold: #c9a227;
+  --mup2-teal: #0ea5a8;
   --mup2-shadow: none;
   --mup2-win-h: 88dvh;
   --mup2-win-w: min(460px, 96vw);
@@ -44,6 +45,7 @@
   --mup2-border: #2e2e2e;
   --mup2-border-hard: #3d3660;
   --mup2-gold: #c9a227;
+  --mup2-teal: #0ea5a8;
 }
 
 [data-style="neumorphism"] .mup2-overlay {
@@ -61,6 +63,7 @@
   --mup2-border: rgba(166, 158, 148, .25);
   --mup2-border-hard: rgba(166, 158, 148, .4);
   --mup2-gold: #C9961A;
+  --mup2-teal: #0ea5a8;
   --nm-light: rgba(255, 255, 255, .80);
   --nm-dark: rgba(166, 158, 148, .38);
   --nm-il: rgba(255, 255, 255, .65);
@@ -92,6 +95,7 @@
   --mup2-border: rgba(255, 255, 255, .05);
   --mup2-border-hard: rgba(255, 255, 255, .09);
   --mup2-gold: #c9a227;
+  --mup2-teal: #0ea5a8;
   --nm-light: rgba(40, 37, 55, .9);
   --nm-dark: rgba(10, 9, 16, .7);
   --nm-il: rgba(40, 37, 55, .7);
@@ -1345,6 +1349,83 @@
 }
 
 /* ================================================================
+   TROPHY LIST — BRUTALIST (idéntico a crown, en teal)
+================================================================ */
+
+[data-style="brutalist"] .mup2-trophy-list {
+  display: flex;
+  flex-direction: column;
+}
+
+[data-style="brutalist"] .mup2-trophy-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  background: var(--mup2-card);
+  border-bottom: 1px solid var(--mup2-border);
+  border-left: 3px solid var(--mup2-teal);
+  transition: background .1s;
+}
+
+[data-style="brutalist"] .mup2-trophy-row:last-child {
+  border-bottom: none;
+}
+
+[data-style="brutalist"] .mup2-trophy-row:nth-child(even) {
+  background: var(--mup2-bg);
+}
+
+[data-style="brutalist"] .mup2-trophy-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(14, 165, 168, .1);
+  border: 1px solid rgba(14, 165, 168, .25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+[data-style="brutalist"] .mup2-trophy-rank {
+  font-size: 7px;
+  font-weight: 700;
+  font-family: var(--mup2-mono);
+  color: var(--mup2-teal);
+  letter-spacing: .06em;
+  line-height: 1;
+}
+
+[data-style="brutalist"] .mup2-trophy-period {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--mup2-mono);
+  color: var(--mup2-text);
+  letter-spacing: -.01em;
+}
+
+[data-style="brutalist"] .mup2-trophy-pts {
+  font-size: 9px;
+  font-family: var(--mup2-mono);
+  color: #34d399;
+  letter-spacing: .04em;
+}
+
+[data-style="brutalist"] .mup2-trophy-badge {
+  font-size: 7px;
+  font-weight: 700;
+  font-family: var(--mup2-mono);
+  letter-spacing: .12em;
+  color: var(--mup2-teal);
+  border: 1px solid rgba(14, 165, 168, .3);
+  padding: 2px 6px;
+  background: rgba(14, 165, 168, .06);
+  flex-shrink: 0;
+}
+
+/* ================================================================
    CROWN LIST — NEUMORPHISM
 ================================================================ */
 
@@ -1411,6 +1492,81 @@
   font-family: var(--mup2-sans);
   letter-spacing: .08em;
   color: var(--mup2-gold);
+  background: var(--mup2-bg);
+  box-shadow: var(--nm-sm);
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* ================================================================
+   TROPHY LIST — NEUMORPHISM (idéntico a crown, en teal)
+================================================================ */
+
+[data-style="neumorphism"] .mup2-trophy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 14px 8px;
+}
+
+[data-style="neumorphism"] .mup2-trophy-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--mup2-bg);
+  border-radius: var(--r-lg);
+  box-shadow: var(--nm-s);
+  border-left: 4px solid var(--mup2-teal);
+}
+
+[data-style="neumorphism"] .mup2-trophy-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--mup2-bg);
+  border-radius: 50%;
+  box-shadow: var(--nm-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+[data-style="neumorphism"] .mup2-trophy-rank {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: var(--mup2-sans);
+  color: var(--mup2-teal);
+  letter-spacing: .04em;
+  line-height: 1;
+}
+
+[data-style="neumorphism"] .mup2-trophy-period {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: var(--mup2-sans);
+  color: var(--mup2-text);
+  letter-spacing: -.02em;
+}
+
+[data-style="neumorphism"] .mup2-trophy-pts {
+  font-size: 10px;
+  font-weight: 600;
+  font-family: var(--mup2-sans);
+  color: #3DAA80;
+  letter-spacing: .02em;
+}
+
+[data-style="neumorphism"] .mup2-trophy-badge {
+  font-size: 8px;
+  font-weight: 700;
+  font-family: var(--mup2-sans);
+  letter-spacing: .08em;
+  color: var(--mup2-teal);
   background: var(--mup2-bg);
   box-shadow: var(--nm-sm);
   padding: 3px 9px;

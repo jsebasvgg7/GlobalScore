@@ -171,7 +171,9 @@ export default function RankingPage({ currentUser }) {
 
   const rankingUsers = getRankingData();
 
-  const filteredUsers = [...rankingUsers].sort((a, b) => {
+  const filteredUsers = [...rankingUsers]
+  .filter(u => u.rankPoints > 0)
+  .sort((a, b) => {
     if (sortBy === 'accuracy') {
       const accA = a.rankPredictions > 0 ? a.rankCorrect / a.rankPredictions : 0;
       const accB = b.rankPredictions > 0 ? b.rankCorrect / b.rankPredictions : 0;
@@ -212,9 +214,9 @@ export default function RankingPage({ currentUser }) {
         rankingType={rankingType}
         onChangeType={setRankingType}
         champions={champions}
+        globalChampions={globalChampions}
         albumProgress={albumProgress}
       />
-
       {/* ══════════════════════════════════════
           VISTA DESKTOP — solo >768px
       ══════════════════════════════════════ */}

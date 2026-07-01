@@ -176,50 +176,66 @@ function PanelStats({ user }) {
 }
 
 /* ════════════════════════════════════════════
-   PANEL — CAMPEONATOS
+   PANEL — TÍTULOS (Coronas + Trofeos)
 ════════════════════════════════════════════ */
-function PanelChampions({ userId }) {
-  const [history, setHistory] = useState([]);
+function PanelTitles({ userId }) {
+  const [crownHistory, setCrownHistory] = useState([]);
+  const [trophyHistory, setTrophyHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const { data } = await supabase
-        .from("monthly_championship_history")
-        .select("*")
-        .eq("user_id", userId)
-        .order("awarded_at", { ascending: false });
-      setHistory(data || []);
+      const [{ data: crowns }, { data: trophies }] = await Promise.all([
+        supabase
+          .from("monthly_championship_history")
+          .select("*")
+          .eq("user_id", userId)
+          .order("awarded_at", { ascending: false }),
+        supabase
+          .from("global_championship_history")
+          .select("*")
+          .eq("user_id", userId)
+          .order("awarded_at", { ascending: false }),
+      ]);
+      setCrownHistory(crowns || []);
+      setTrophyHistory(trophies || []);
       setLoading(false);
     })();
   }, [userId]);
 
-  return (
-    <div className="mup2-panel">
-      <div className="mup2-sec-hdr">
-        <div className="mup2-sec-line" style={{ background: "#c9a227" }} />
-        <span className="mup2-sec-lbl">CORONAS</span>
-        <span className="mup2-sec-extra" style={{ color: "#c9a227" }}>
-          {history.length}
-        </span>
-      </div>
-
-      {loading ? (
+  if (loading) {
+    return (
+      <div className="mup2-panel">
         <div className="mup2-loading-row">
           <span className="mup2-loading-dot" />
           <span className="mup2-loading-dot" style={{ animationDelay: "0.15s" }} />
           <span className="mup2-loading-dot" style={{ animationDelay: "0.3s" }} />
         </div>
-      ) : history.length === 0 ? (
+      </div>
+    );
+  }
+
+  return (
+    <div className="mup2-panel">
+      {/* ── CORONAS (Mensual) ── */}
+      <div className="mup2-sec-hdr">
+        <div className="mup2-sec-line" style={{ background: "#c9a227" }} />
+        <span className="mup2-sec-lbl">CORONAS · MENSUAL</span>
+        <span className="mup2-sec-extra" style={{ color: "#c9a227" }}>
+          {crownHistory.length}
+        </span>
+      </div>
+
+      {crownHistory.length === 0 ? (
         <div className="mup2-empty">
           <Crown size={32} color="var(--mup2-border)" />
-          <span>Sin campeonatos aún</span>
+          <span>Sin campeonatos mensuales aún</span>
         </div>
       ) : (
         <div className="mup2-crown-list">
-          {history.map((h, i) => (
-            <div key={i} className="mup2-crown-row">
+          {crownHistory.map((h, i) => (
+            <div key={h.id || i} className="mup2-crown-row">
               <div className="mup2-crown-icon">
                 <Crown size={14} color="#c9a227" />
                 <span className="mup2-crown-rank">#{i + 1}</span>
@@ -229,6 +245,38 @@ function PanelChampions({ userId }) {
                 <span className="mup2-crown-pts">+{fmt(h.points)} pts</span>
               </div>
               <span className="mup2-crown-badge">CAMPEÓN</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ── TROFEOS (Global) ── */}
+      <div className="mup2-sec-hdr">
+        <div className="mup2-sec-line" style={{ background: "#0ea5a8" }} />
+        <span className="mup2-sec-lbl">TROFEOS · GLOBAL</span>
+        <span className="mup2-sec-extra" style={{ color: "#0ea5a8" }}>
+          {trophyHistory.length}
+        </span>
+      </div>
+
+      {trophyHistory.length === 0 ? (
+        <div className="mup2-empty">
+          <Trophy size={32} color="var(--mup2-border)" />
+          <span>Sin trofeos del ranking global aún</span>
+        </div>
+      ) : (
+        <div className="mup2-trophy-list">
+          {trophyHistory.map((h, i) => (
+            <div key={h.id || i} className="mup2-trophy-row">
+              <div className="mup2-trophy-icon">
+                <Trophy size={14} color="#0ea5a8" />
+                <span className="mup2-trophy-rank">#{i + 1}</span>
+              </div>
+              <div className="mup2-trophy-info">
+                <span className="mup2-trophy-period">{h.edition_label || "—"}</span>
+                <span className="mup2-trophy-pts">+{fmt(h.points)} pts</span>
+              </div>
+              <span className="mup2-trophy-badge">CAMPEÓN</span>
             </div>
           ))}
         </div>
@@ -632,7 +680,7 @@ export default function MobileUserProfile({ userId, onClose }) {
           {/* Tabs */}
           <div className="mup2-tabs">
             <TabBtn id="stats" active={tab === "stats"} onClick={setTab}>STATS</TabBtn>
-            <TabBtn id="crowns" active={tab === "crowns"} onClick={setTab}>CORONAS</TabBtn>
+            <TabBtn id="titulos" active={tab === "titulos"} onClick={setTab}>TÍTULOS</TabBtn>
             <TabBtn id="logros" active={tab === "logros"} onClick={setTab}>LOGROS</TabBtn>
             <TabBtn id="albums" active={tab === "albums"} onClick={setTab}>ÁLBUMES</TabBtn>
           </div>
@@ -651,7 +699,7 @@ export default function MobileUserProfile({ userId, onClose }) {
           ) : (
             <>
               {tab === "stats" && <PanelStats user={user} />}
-              {tab === "crowns" && <PanelChampions userId={userId} />}
+              {tab === "titulos" && <PanelTitles userId={userId} />}
               {tab === "logros" && <PanelAchievements user={user} />}
               {tab === "albums" && <PanelAlbums userId={userId} />}
             </>

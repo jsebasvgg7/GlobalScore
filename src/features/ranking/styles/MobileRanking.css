@@ -242,6 +242,79 @@
   flex-shrink: 0;
 }
 
+/* ── SUB-TABS HOF: Mensual / Global ── */
+[data-style="brutalist"] .mrk-hof-subtabs {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  background: var(--mrk-card);
+  border-bottom: 1px solid var(--mrk-border);
+  flex-shrink: 0;
+}
+
+[data-style="brutalist"] .mrk-hof-subtab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 100%;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mrk-mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--mrk-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+
+[data-style="brutalist"] .mrk-hof-subtab.active {
+  color: var(--mrk-accent);
+  border-bottom-color: var(--mrk-accent);
+}
+
+[data-style="neumorphism"] .mrk-hof-subtabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px 2px;
+  flex-shrink: 0;
+}
+
+[data-style="neumorphism"] .mrk-hof-subtab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--mrk-sans);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--mrk-muted);
+  background: var(--mrk-bg);
+  border: none;
+  border-radius: var(--r-pill);
+  box-shadow: var(--nm-sm);
+  cursor: pointer;
+  transition: box-shadow .18s, color .18s;
+}
+
+[data-style="neumorphism"] .mrk-hof-subtab.active {
+  color: var(--mrk-accent);
+  box-shadow: var(--nm-i);
+}
+
+.mrk-hof-subtab svg {
+  flex-shrink: 0;
+}
+
 [data-style="brutalist"] .mrk-stats-row {
   display: flex;
   align-items: center;

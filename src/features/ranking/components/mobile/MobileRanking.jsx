@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Globe, Calendar, Crown, ChevronLeft, ChevronRight, Zap, Star, BookOpen } from "lucide-react";
+import { Globe, Calendar, Crown, Trophy, ChevronLeft, ChevronRight, Zap, Star, BookOpen } from "lucide-react";
 import { MobileUserProfile } from "@/features/profile";
 import "../../styles/MobileRanking.css";
 
@@ -10,6 +10,12 @@ const HOF_META = [
   { label: "PLATA", color: "#8a8a8a" },
   { label: "BRONCE", color: "#a0652a" },
 ];
+
+/* ── Config por tipo de Salón de la Fama ── */
+const HOF_TYPE_CONFIG = {
+  monthly: { Icon: Crown, color: "#c9a227", unitLabel: "coronas", periodLabel: "Título" },
+  global: { Icon: Trophy, color: "#0ea5a8", unitLabel: "trofeos", periodLabel: "Edición" },
+};
 
 /* ── Avatar genérico ── */
 function MobAvatar({ user, size = "md" }) {
@@ -26,8 +32,6 @@ function MobAvatar({ user, size = "md" }) {
 /* ── Tarjeta del podio (ranking) ── */
 function PodiumCard({ user, rank, onSelect }) {
   if (!user) return null;
-  const accuracy = user.rankPredictions > 0
-    ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
   const mods = ["gold", "silver", "bronze"];
   const labels = ["ORO", "PLATA", "BRONCE"];
 
@@ -83,11 +87,18 @@ function TableRow({ user, pos, isMe, onSelect, legCount = 0 }) {
 /* ════════════════════════════════════════
    HOF CARRUSEL MOBILE
 ════════════════════════════════════════ */
-function MobHofCarousel({ champions, onSelect }) {
+function MobHofCarousel({ champions, onSelect, hofType }) {
   const [active, setActive] = useState(0);
   const [exiting, setExiting] = useState(false);
   const timerRef = useRef(null);
   const total = champions.length;
+  const cfg = HOF_TYPE_CONFIG[hofType] || HOF_TYPE_CONFIG.monthly;
+  const TypeIcon = cfg.Icon;
+
+  /* Reiniciar el carrusel al cambiar de tipo (mensual/global) */
+  useEffect(() => {
+    setActive(0);
+  }, [hofType]);
 
   useEffect(() => {
     if (total <= 1) return;
@@ -110,6 +121,8 @@ function MobHofCarousel({ champions, onSelect }) {
 
   const champ = champions[active];
   const meta = HOF_META[Math.min(active, 2)];
+
+  if (!champ) return null;
 
   return (
     <div className="mrk-hof-carousel">
@@ -136,14 +149,14 @@ function MobHofCarousel({ champions, onSelect }) {
 
           <span className="mrk-hof-name">{champ.name}</span>
 
-          {/* Coronas */}
+          {/* Coronas / Trofeos */}
           <div className="mrk-hof-crowns">
-            {Array.from({ length: Math.min(champ.monthly_championships, 6) }).map((_, i) => (
-              <Crown key={i} size={14} style={{ color: meta.color }} />
+            {Array.from({ length: Math.min(champ.championships || 0, 6) }).map((_, i) => (
+              <TypeIcon key={i} size={14} style={{ color: meta.color }} />
             ))}
-            {champ.monthly_championships > 6 && (
+            {champ.championships > 6 && (
               <span className="mrk-hof-crowns-extra" style={{ color: meta.color }}>
-                +{champ.monthly_championships - 6}
+                +{champ.championships - 6}
               </span>
             )}
           </div>
@@ -152,21 +165,21 @@ function MobHofCarousel({ champions, onSelect }) {
           <div className="mrk-hof-stats">
             <div className="mrk-hof-stat">
               <span className="mrk-hof-stat-val" style={{ color: meta.color }}>
-                {champ.monthly_championships}
+                {champ.championships || 0}
               </span>
-              <span className="mrk-hof-stat-lbl">Coronas</span>
+              <span className="mrk-hof-stat-lbl">{cfg.unitLabel}</span>
             </div>
             <div className="mrk-hof-stat-sep" />
             <div className="mrk-hof-stat">
-              <span className="mrk-hof-stat-val">{fmt(champ.championship_points)}</span>
+              <span className="mrk-hof-stat-val">{fmt(champ.points)}</span>
               <span className="mrk-hof-stat-lbl">Max pts</span>
             </div>
             <div className="mrk-hof-stat-sep" />
             <div className="mrk-hof-stat">
               <span className="mrk-hof-stat-val mrk-hof-stat-val--sm">
-                {champ.championship_month_year || "—"}
+                {champ.period || "—"}
               </span>
-              <span className="mrk-hof-stat-lbl">Título</span>
+              <span className="mrk-hof-stat-lbl">{cfg.periodLabel}</span>
             </div>
           </div>
         </div>
@@ -204,11 +217,11 @@ function MobHofCarousel({ champions, onSelect }) {
                 <div className="mrk-hof-list-info">
                   <span className="mrk-hof-list-name">{u.name}</span>
                   <span className="mrk-hof-list-crowns" style={{ color: m.color }}>
-                    <Crown size={9} /> {u.monthly_championships} coronas
+                    <TypeIcon size={9} /> {u.championships || 0} {cfg.unitLabel}
                   </span>
                 </div>
                 <span className="mrk-hof-list-pts" style={{ color: m.color }}>
-                  {fmt(u.championship_points)}
+                  {fmt(u.points)}
                 </span>
               </div>
             );
@@ -228,9 +241,11 @@ export default function MobileRanking({
   rankingType = "global",
   onChangeType,
   champions = [],
+  globalChampions = [],
   albumProgress = {},
 }) {
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [hofType, setHofType] = useState("monthly"); // 'monthly' | 'global'
 
   const rankingUsers = users.map((u) => ({
     ...u,
@@ -239,14 +254,20 @@ export default function MobileRanking({
     rankPredictions: rankingType === "monthly" ? u.monthly_predictions || 0 : u.predictions || 0,
   }));
 
-  const sorted = [...rankingUsers].sort((a, b) => b.rankPoints - a.rankPoints);
+  const sorted = [...rankingUsers]
+    .filter((u) => u.rankPoints > 0)
+    .sort((a, b) => b.rankPoints - a.rankPoints);
   const top3 = sorted.slice(0, 3);
   const rest = sorted.slice(3);
 
   const totalRegistered = users.length;
   const totalParticipated = rankingUsers.filter((u) => u.rankPredictions > 0).length;
   const leader = sorted[0] || null;
-  const hofLeader = champions[0] || null;
+
+  const activeChampions = hofType === "monthly" ? champions : globalChampions;
+  const hofCfg = HOF_TYPE_CONFIG[hofType] || HOF_TYPE_CONFIG.monthly;
+  const HofTypeIcon = hofCfg.Icon;
+  const hofLeader = activeChampions[0] || null;
 
   const getCurrentMonthLabel = () => {
     const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
@@ -274,29 +295,47 @@ export default function MobileRanking({
         ))}
       </div>
 
+      {/* ── SUB-TABS HOF: Mensual (coronas) / Global (trofeos) ── */}
+      {rankingType === "halloffame" && (
+        <div className="mrk-hof-subtabs">
+          <button
+            className={`mrk-hof-subtab${hofType === "monthly" ? " active" : ""}`}
+            onClick={() => setHofType("monthly")}
+          >
+            <Crown size={12} /><span>Mensual</span>
+          </button>
+          <button
+            className={`mrk-hof-subtab${hofType === "global" ? " active" : ""}`}
+            onClick={() => setHofType("global")}
+          >
+            <Trophy size={12} /><span>Global</span>
+          </button>
+        </div>
+      )}
+
       {/* ── STATS ROW — cambia según tab ── */}
       <div className="mrk-stats-row">
         {rankingType === "halloffame" ? (
           /* Stats del HOF */
           <>
             <div className="mrk-stat-block">
-              <span className="mrk-stat-num">{champions.length}</span>
+              <span className="mrk-stat-num">{activeChampions.length}</span>
               <span className="mrk-stat-lbl">Campeones</span>
             </div>
             <div className="mrk-stat-divider" />
             <div className="mrk-stat-block">
               <span className="mrk-stat-num">
-                {champions.reduce((acc, c) => acc + (c.monthly_championships || 0), 0)}
+                {activeChampions.reduce((acc, c) => acc + (c.championships || 0), 0)}
               </span>
-              <span className="mrk-stat-lbl">Coronas</span>
+              <span className="mrk-stat-lbl">{hofCfg.unitLabel.charAt(0).toUpperCase() + hofCfg.unitLabel.slice(1)}</span>
             </div>
             {hofLeader && (
               <>
                 <div className="mrk-stat-divider" />
                 <div className="mrk-stat-block mrk-stat-block--leader">
                   <span className="mrk-stat-leader-name">{hofLeader.name}</span>
-                  <span className="mrk-stat-leader-pts" style={{ color: "#c9a227" }}>
-                    {hofLeader.monthly_championships} 👑
+                  <span className="mrk-stat-leader-pts" style={{ color: hofCfg.color, display: "flex", alignItems: "center", gap: 4 }}>
+                    {hofLeader.championships || 0} <HofTypeIcon size={11} />
                   </span>
                   <span className="mrk-stat-lbl">Dominador</span>
                 </div>
@@ -331,13 +370,13 @@ export default function MobileRanking({
 
       {/* ════ SALÓN DE LA FAMA ════ */}
       {rankingType === "halloffame" && (
-        champions.length === 0 ? (
+        activeChampions.length === 0 ? (
           <div className="mrk-hof-empty">
-            <Crown size={44} className="mrk-hof-empty-icon" />
+            <HofTypeIcon size={44} className="mrk-hof-empty-icon" />
             <p>Aún no hay campeones registrados</p>
           </div>
         ) : (
-          <MobHofCarousel champions={champions} onSelect={setSelectedUserId} />
+          <MobHofCarousel champions={activeChampions} onSelect={setSelectedUserId} hofType={hofType} />
         )
       )}
 

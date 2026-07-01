@@ -120,6 +120,19 @@ function CrownEntry({ crown, index }) {
   );
 }
 
+function TrophyEntry({ trophy, index }) {
+  return (
+    <div className="upp-trophy-entry" style={{ animationDelay: `${index * 70}ms` }}>
+      <Trophy size={14} fill="#0ea5a8" color="#078a8c" />
+      <div className="upp-trophy-info">
+        <span className="upp-trophy-period">{trophy.edition_label}</span>
+        <span className="upp-trophy-pts">{fmt(trophy.points)} pts</span>
+      </div>
+      <div className="upp-trophy-pos">#{index + 1}</div>
+    </div>
+  );
+}
+
 /* ── Fila individual de logro ── */
 function AchievementRow({ ach, unlocked }) {
   const color = unlocked
@@ -175,6 +188,7 @@ export default function UserProfilePanel({ userId, onClose }) {
   const [showImage, setShowImage] = useState(false);
   const [userRanking, setUserRanking] = useState({ position: 0, totalUsers: 0 });
   const [crowns, setCrowns] = useState([]);
+  const [trophies, setTrophies] = useState([]);
   const [streakData, setStreakData] = useState({ current_streak: 0, best_streak: 0 });
   const [allAch, setAllAch] = useState([]);
   const [titles, setTitles] = useState([]);
@@ -193,6 +207,7 @@ export default function UserProfilePanel({ userId, onClose }) {
         { data: user },
         { data: allUsers },
         { data: history },
+        { data: trophyHistory },
         { data: available },
         { data: availTitles },
         { data: albumProg },
@@ -200,6 +215,7 @@ export default function UserProfilePanel({ userId, onClose }) {
         supabase.from('users').select('*').eq('id', userId).single(),
         supabase.from('users').select('id, points').order('points', { ascending: false }),
         supabase.from('monthly_championship_history').select('*').eq('user_id', userId).order('awarded_at', { ascending: false }),
+        supabase.from('global_championship_history').select('*').eq('user_id', userId).order('awarded_at', { ascending: false }),
         supabase.from('available_achievements').select('*').order('requirement_value', { ascending: true }),
         supabase.from('available_titles').select('*'),
         supabase.from('album_progress')
@@ -212,6 +228,7 @@ export default function UserProfilePanel({ userId, onClose }) {
       setUserData(user);
       setStreakData({ current_streak: user?.current_streak || 0, best_streak: user?.best_streak || 0 });
       setCrowns(history || []);
+      setTrophies(trophyHistory || []);
       setAllAch(available || []);
 
       if (allUsers) {
@@ -264,6 +281,7 @@ export default function UserProfilePanel({ userId, onClose }) {
   const lvlPts = pointsInLevel(userData.points || 0);
   const activeTitle = getActiveTitle();
   const totalCrowns = userData.monthly_championships || 0;
+  const totalTrophies = userData.global_championships || 0;
   const firstName = userData.name?.split(' ')[0] || 'Jugador';
   const initials = (userData.name || 'U').slice(0, 2).toUpperCase();
 
@@ -282,7 +300,7 @@ export default function UserProfilePanel({ userId, onClose }) {
   const tabs = [
   { id: 'stats', label: 'Stats', icon: TrendingUp },
   { id: 'logros', label: 'Logros', icon: Star },
-  { id: 'coronas', label: 'Coronas', icon: Crown },
+  { id: 'titulos', label: 'Títulos', icon: Medal },
   { id: 'albums', label: 'Álbumes', icon: BookOpen },
 ];
 
@@ -505,15 +523,17 @@ export default function UserProfilePanel({ userId, onClose }) {
             </div>
           )}
 
-          {/* ════ CORONAS ════ */}
-          {activeTab === 'coronas' && (
+          {/* ════ TÍTULOS (Coronas + Trofeos) ════ */}
+          {activeTab === 'titulos' && (
             <div className="upp-tab-panel">
-              <SectionDivider icon={Crown} label="Campeonatos" color="#c9a227" />
+
+              {/* ── CORONAS (Mensual) ── */}
+              <SectionDivider icon={Crown} label="Coronas · Mensual" color="#c9a227" />
 
               {totalCrowns === 0 ? (
                 <div className="upp-empty">
                   <Crown size={40} opacity={0.2} />
-                  <p>¡Aún no ha ganado ningún campeonato!</p>
+                  <p>¡Aún no ha ganado ningún campeonato mensual!</p>
                   <span>Acumula puntos este mes para ganar</span>
                 </div>
               ) : (
@@ -540,21 +560,49 @@ export default function UserProfilePanel({ userId, onClose }) {
                 </div>
               )}
 
-              <SectionDivider icon={TrendingUp} label="Este mes" color="#10B981" />
-              <div className="upp-stats-grid">
-                <StatCard icon={Zap} label="Pts mes" value={fmt(userData.monthly_points)} accent="#8b7fc7" />
-                <StatCard icon={Target} label="Preds mes" value={fmt(userData.monthly_predictions)} accent="#3B82F6" />
-                <StatCard icon={Star} label="Correctas" value={fmt(userData.monthly_correct)} accent="#10B981" />
-                <StatCard icon={Crown} label="Coronas" value={totalCrowns} accent="#c9a227" />
-              </div>
-
               {crowns.length > 0 && (
-                <>
-                  <SectionDivider icon={Calendar} label="Historial" color="#5b4fd8" />
-                  <div className="upp-crown-history">
-                    {crowns.map((c, i) => <CrownEntry key={c.id} crown={c} index={i} />)}
+                <div className="upp-crown-history">
+                  {crowns.map((c, i) => <CrownEntry key={c.id} crown={c} index={i} />)}
+                </div>
+              )}
+
+              {/* ── TROFEOS (Global) ── */}
+              <SectionDivider icon={Trophy} label="Trofeos · Global" color="#0ea5a8" />
+
+              {totalTrophies === 0 ? (
+                <div className="upp-empty">
+                  <Trophy size={40} opacity={0.2} />
+                  <p>¡Aún no ha ganado el Ranking Global!</p>
+                  <span>Domina la temporada completa para ganar</span>
+                </div>
+              ) : (
+                <div className="upp-trophies-showcase">
+                  <Trophy size={40} fill="#0ea5a8" color="#078a8c" />
+                  <div>
+                    <span className="upp-trophies-num">{totalTrophies}</span>
+                    <span className="upp-trophies-lbl">
+                      {totalTrophies === 1 ? 'Trofeo' : 'Trofeos'} ganados
+                    </span>
                   </div>
-                </>
+                  <div className="upp-trophies-icons">
+                    {Array.from({ length: Math.min(totalTrophies, 6) }).map((_, i) => (
+                      <Trophy
+                        key={i}
+                        size={20}
+                        fill="#0ea5a8"
+                        color="#078a8c"
+                        style={{ opacity: 1 - i * 0.06, transform: `rotate(${(i % 2 === 0 ? -1 : 1) * 5}deg)` }}
+                      />
+                    ))}
+                    {totalTrophies > 6 && <span className="upp-trophies-more">+{totalTrophies - 6}</span>}
+                  </div>
+                </div>
+              )}
+
+              {trophies.length > 0 && (
+                <div className="upp-trophy-history">
+                  {trophies.map((t, i) => <TrophyEntry key={t.id} trophy={t} index={i} />)}
+                </div>
               )}
             </div>
           )}
