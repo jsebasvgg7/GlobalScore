@@ -1,0 +1,277 @@
+/* ════════════════════════════════════════════════════
+   HCM — Dark Mode  ·  Paleta morada #13111A
+   Fiel a la estructura de HistoricalCompetitionsPageMobile.css
+════════════════════════════════════════════════════ */
+
+/* ─────── tokens de paleta ─────── */
+[data-theme="dark"] .hcm-root {
+  --hcm-bg:       #13111A;
+  --hcm-dark:     #F0EDF8;
+  --hcm-accent:   #8B7FC7;
+  --hcm-gold:     #E8A020;
+  --hcm-green:    #3DAA80;
+  --hcm-muted:    #8B84A0;
+  --hcm-border:   #38334F;
+  --hcm-border-l: rgba(184,176,208,0.18);
+  --hcm-card:     #1A1824;
+  --hcm-purple:   #8B7FC7;
+  --hcm-type-international: #E8A020;
+  --hcm-type-continental:   #3DAA80;
+  --hcm-type-domestic:      #8B7FC7;
+  --hcm-col-header-bg: #221F2E;
+  --hcm-logo-bg:  #221F2E;
+
+  background: #13111A;
+  color: #F0EDF8;
+}
+
+/* ─────── header ─────── */
+[data-theme="dark"] .hcm-header {
+  background: #13111A;
+  border-bottom-color: #38334F;
+}
+[data-theme="dark"] .hcm-header-dotgrid span { background: #38334F; }
+
+[data-theme="dark"] .hcm-back-btn {
+  background: #1A1824;
+  border-color: #38334F;
+  color: #F0EDF8;
+  box-shadow: 2px 2px 0 rgba(0,0,0,.5);
+}
+[data-theme="dark"] .hcm-back-btn:active { box-shadow: 1px 1px 0 rgba(0,0,0,.5); }
+
+[data-theme="dark"] .hcm-header-badge { box-shadow: 2px 2px 0 rgba(0,0,0,.5); }
+
+[data-theme="dark"] .hcm-title { color: #F0EDF8; }
+[data-theme="dark"] .hcm-subtitle { color: #8B84A0; }
+
+/* ─────── stats ─────── */
+[data-theme="dark"] .hcm-stats { border-bottom-color: #38334F; }
+[data-theme="dark"] .hcm-stat-cell { border-right-color: rgba(184,176,208,0.18); }
+[data-theme="dark"] .hcm-stat-icon { box-shadow: 2px 2px 0 rgba(0,0,0,.5); }
+[data-theme="dark"] .hcm-stat-label { color: #8B84A0; }
+
+/* ─────── toolbar / search ─────── */
+[data-theme="dark"] .hcm-toolbar { border-bottom-color: rgba(184,176,208,0.18); }
+
+[data-theme="dark"] .hcm-search-box {
+  background: #1A1824;
+  border-color: #38334F;
+  box-shadow: 2px 2px 0 rgba(0,0,0,.5);
+}
+[data-theme="dark"] .hcm-search-ico { color: #8B84A0; }
+[data-theme="dark"] .hcm-search-input { color: #F0EDF8; }
+[data-theme="dark"] .hcm-search-input::placeholder { color: #8B84A0; }
+[data-theme="dark"] .hcm-search-clear { color: #8B84A0; }
+[data-theme="dark"] .hcm-search-clear:active { color: #F0EDF8; }
+
+[data-theme="dark"] .hcm-shuffle-btn {
+  background: #F0EDF8;
+  color: #13111A;
+  box-shadow: 2px 2px 0 rgba(139,127,199,.4);
+}
+[data-theme="dark"] .hcm-shuffle-btn:active:not(:disabled) { box-shadow: 1px 1px 0 rgba(139,127,199,.4); }
+
+/* ─────── counter row ─────── */
+[data-theme="dark"] .hcm-counter-row { border-bottom-color: #38334F; }
+[data-theme="dark"] .hcm-counter-label { color: #8B84A0; }
+[data-theme="dark"] .hcm-counter-badge {
+  background: #8B7FC7;
+  border-color: #38334F;
+}
+
+/* ─────── cards ─────── */
+[data-theme="dark"] .hcm-card {
+  background: #1A1824;
+  border-color: #38334F;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.5);
+}
+
+[data-theme="dark"] .hcm-card-logo {
+  background: #221F2E;
+  border-right-color: rgba(184,176,208,0.18);
+  color: #8B84A0;
+}
+
+[data-theme="dark"] .hcm-card-name { color: #F0EDF8; }
+[data-theme="dark"] .hcm-card-fmt {
+  background: #221F2E;
+  color: #8B84A0;
+}
+[data-theme="dark"] .hcm-card-meta { color: #8B84A0; }
+[data-theme="dark"] .hcm-card-year { color: #8B84A0; }
+[data-theme="dark"] .hcm-sep { color: #38334F; }
+[data-theme="dark"] .hcm-card-winner { color: #e8a020; }
+[data-theme="dark"] .hcm-card-chevron { color: #8B84A0; }
+
+/* ─────── estados ─────── */
+[data-theme="dark"] .hcm-state { color: #8B84A0; }
+[data-theme="dark"] .hcm-state--empty p { color: #8B84A0; }
+[data-theme="dark"] .hcm-retry-btn {
+  background: #1A1824;
+  border-color: #38334F;
+  color: #F0EDF8;
+  box-shadow: 2px 2px 0 rgba(0,0,0,.5);
+}
+
+/* ─────── detalle: topbar ─────── */
+[data-theme="dark"] .hcm-detail-topbar {
+  background: #13111A;
+  border-bottom-color: #38334F;
+}
+[data-theme="dark"] .hcm-detail-back {
+  background: #1A1824;
+  border-color: #38334F;
+  color: #F0EDF8;
+  box-shadow: 2px 2px 0 rgba(0,0,0,.5);
+}
+[data-theme="dark"] .hcm-detail-breadcrumb { color: #8B84A0; }
+[data-theme="dark"] .hcm-detail-title { color: #F0EDF8; }
+
+/* ─────── detalle: hero card / meta grid ─────── */
+[data-theme="dark"] .hcm-hero-card {
+  background: #1A1824;
+  border-color: #38334F;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.5);
+}
+[data-theme="dark"] .hcm-hero-logo {
+  background: #221F2E;
+  border-color: rgba(184,176,208,0.18);
+}
+[data-theme="dark"] .hcm-hero-name { color: #F0EDF8; }
+[data-theme="dark"] .hcm-hero-meta { color: #8B84A0; }
+[data-theme="dark"] .hcm-hero-winner { color: #e8a020; }
+
+[data-theme="dark"] .hcm-meta-item {
+  background: #1A1824;
+  border-color: #38334F;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.5);
+}
+[data-theme="dark"] .hcm-meta-icon { box-shadow: 2px 2px 0 rgba(0,0,0,.5); }
+[data-theme="dark"] .hcm-meta-label { color: #8B84A0; }
+[data-theme="dark"] .hcm-meta-value { color: #F0EDF8; }
+
+/* ─────── detalle: sección + descripción ─────── */
+[data-theme="dark"] .hcm-section-header-label { color: #8B7FC7; }
+[data-theme="dark"] .hcm-desc-box {
+  background: #1A1824;
+  border-color: #38334F;
+  box-shadow: 3px 3px 0 rgba(56,51,79,.6);
+}
+[data-theme="dark"] .hcm-desc-box p { color: #F0EDF8; }
+
+/* ─────── tablas ─────── */
+[data-theme="dark"] .hcm-group-table {
+  background: #1A1824;
+  border-color: #38334F;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.5);
+}
+[data-theme="dark"] .hcm-group-header { background: #221F2E; }
+
+[data-theme="dark"] .hcm-standings-wrap {
+  background: #1A1824;
+  border-color: #38334F;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.5);
+}
+
+[data-theme="dark"] .hcm-col-headers { background: #221F2E; }
+[data-theme="dark"] .hcm-th { color: #8B84A0; }
+
+[data-theme="dark"] .hcm-row {
+  background: #1A1824;
+  border-top-color: rgba(184,176,208,0.18);
+}
+[data-theme="dark"] .hcm-row--adv { background: rgba(61,170,128,.1); }
+[data-theme="dark"] .hcm-row--champion { background: rgba(232,160,32,.08); }
+
+[data-theme="dark"] .hcm-row-pos-num { color: #8B84A0; }
+[data-theme="dark"] .hcm-row-team { color: #F0EDF8; }
+[data-theme="dark"] .hcm-champion-tag { color: #000; }
+
+[data-theme="dark"] .hcm-td { color: #F0EDF8; }
+[data-theme="dark"] .hcm-td--pts-champion { color: #3DAA80; }
+
+[data-theme="dark"] .hcm-legend {
+  background: #1A1824;
+  border-color: #38334F;
+}
+[data-theme="dark"] .hcm-legend span:last-child { color: #8B84A0; }
+
+[data-theme="dark"] .hcm-knockout-empty { color: #8B84A0; }
+
+/* ─────── llave (knockout) ─────── */
+[data-theme="dark"] .hcm-ko-round-header { border-bottom-color: #38334F; }
+[data-theme="dark"] .hcm-ko-round-count { color: #8B84A0; }
+[data-theme="dark"] .hcm-ko-match {
+  background: #1A1824;
+  border-color: #38334F;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.5);
+}
+[data-theme="dark"] .hcm-ko-match--final {
+  border-color: #E8A020;
+  box-shadow: 3px 3px 0 rgba(232,160,32,.45);
+}
+[data-theme="dark"] .hcm-ko-name { color: #8B84A0; }
+[data-theme="dark"] .hcm-ko-team--win .hcm-ko-name { color: #F0EDF8; }
+[data-theme="dark"] .hcm-ko-score { color: #8B84A0; }
+[data-theme="dark"] .hcm-ko-team--win .hcm-ko-score { color: #8B7FC7; }
+[data-theme="dark"] .hcm-ko-match--final .hcm-ko-team--win .hcm-ko-score { color: #E8A020; }
+[data-theme="dark"] .hcm-ko-divider { border-top-color: rgba(184,176,208,0.18); }
+[data-theme="dark"] .hcm-ko-pen { background: #1A1824; color: #8B84A0; }
+[data-theme="dark"] .hcm-ko-notes { border-top-color: rgba(184,176,208,0.18); color: #8B84A0; }
+[data-theme="dark"] .hcm-ko-arrow-line { background: #38334F; }
+[data-theme="dark"] .hcm-ko-arrow-icon { color: #8B84A0; }
+
+/* ─────── detalle: nav bar inferior ─────── */
+[data-theme="dark"] .hcm-detail-navbar {
+  background: #13111A;
+  border-top-color: #38334F;
+  box-shadow: 0 -3px 0 rgba(0,0,0,.5), 0 -10px 24px rgba(0,0,0,.45);
+}
+[data-theme="dark"] .hcm-detail-nav-btn {
+  color: #8B84A0;
+  border-right-color: rgba(184,176,208,0.1);
+}
+[data-theme="dark"] .hcm-detail-nav-btn--active {
+  background: #8B7FC7;
+  color: #F0EDF8;
+}
+
+/* ─────── modal aleatorio ─────── */
+[data-theme="dark"] .hcm-rand-backdrop { background: rgba(0,0,0,.75); }
+[data-theme="dark"] .hcm-rand-modal {
+  background: #13111A;
+  border-color: #38334F;
+  box-shadow: 6px 6px 0 rgba(0,0,0,.6);
+}
+[data-theme="dark"] .hcm-rand-header { background: #221F2E; }
+[data-theme="dark"] .hcm-rand-slot {
+  border-color: #38334F;
+  background: rgba(139,127,199,.08);
+}
+[data-theme="dark"] .hcm-rand-avatar { border-color: #38334F; }
+[data-theme="dark"] .hcm-rand-name { color: #F0EDF8; }
+[data-theme="dark"] .hcm-rand-meta { color: #8B84A0; }
+[data-theme="dark"] .hcm-rand-arrow { color: #8B7FC7; }
+[data-theme="dark"] .hcm-rand-empty { color: #8B84A0; }
+[data-theme="dark"] .hcm-rand-dot { background: #8B7FC7; }
+[data-theme="dark"] .hcm-rand-status { color: #8B7FC7; }
+[data-theme="dark"] .hcm-rand-cta {
+  background: #8B7FC7;
+  border-color: #38334F;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.5);
+}
+[data-theme="dark"] .hcm-rand-secondary {
+  border-color: #38334F;
+  color: #F0EDF8;
+}
+[data-theme="dark"] .hcm-rand-secondary:active { background: rgba(139,127,199,.1); }
+
+/* ─────── fix fondo blanco en overscroll / modo oscuro ─────── */
+html[data-theme="dark"],
+body[data-theme="dark"],
+[data-theme="dark"] html,
+[data-theme="dark"] body,
+[data-theme="dark"] #root {
+  background: #13111A;
+}
