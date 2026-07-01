@@ -26,6 +26,7 @@ export { default as FinishLeagueModal } from './components/FinishLeagueModal'
 export { default as FinishMatchModal } from './components/FinishMatchModal'
 export { default as AdminHistorical } from './components/AdminHistorical'
 export { default as AdminTrophiesSection } from './components/AdminTrophiesSection'
+export { default as AdminBotsSection } from './components/AdminBotsSection'
 
 // Mobile
 export {
@@ -44,6 +45,7 @@ export * from './hooks/useAdminData'
 export * from './hooks/useAdminHistorical'
 export * from './hooks/useAdminLeagues'
 export * from './hooks/useAdminMatches'
+export * from './hooks/useAdminBots'
 
 // Servicio
 export * from './services'

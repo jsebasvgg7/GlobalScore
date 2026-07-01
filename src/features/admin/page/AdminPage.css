@@ -921,6 +921,34 @@
   min-height: 100%;
 }
 
+.admin-bots-section {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.admin-bots-list {
+  overflow-y: auto;
+}
+
+.admin-bot-card {
+  width: 100%;
+  border: none;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.admin-bot-card:last-child {
+  border-bottom: none;
+}
+
+.admin-bot-av {
+  width: 32px;
+  height: 32px;
+}
+
 .admin-crowns-section>.section-header:first-child,
 .admin-crowns-section>div:nth-child(1),
 .admin-crowns-section>div:nth-child(2) {

@@ -502,6 +502,46 @@ export const resetGlobalStats = async () => {
 };
 
 // ════════════════════════════════════════════════════════════
+//  BOTS DE RELLENO
+// ════════════════════════════════════════════════════════════
+
+// Dispara la "ruleta" de puntos para todos los bots activos (is_bot = true).
+// Se debe llamar cada vez que se finaliza un partido.
+export const awardBotPoints = async () => {
+    const { data, error } = await supabase.rpc('award_bot_points');
+    if (error) {
+        console.error('Error al otorgar puntos a los bots:', error);
+        throw error;
+    }
+    return data;
+};
+
+// Sube la foto de un bot a Cloudinary y retorna la URL pública lista para
+// guardar directamente en users.avatar_url.
+export const uploadBotAvatar = async (file) => {
+    return await uploadToCloudinary(file, 'bots');
+};
+
+// Actualiza únicamente nombre y/o foto de un bot. El resto de sus campos
+// (puntos, nivel, etc.) son 100% automáticos vía award_bot_points().
+export const updateBotProfile = async (id, { name, avatar_url }) => {
+    const payload = {};
+    if (name !== undefined) payload.name = name;
+    if (avatar_url !== undefined) payload.avatar_url = avatar_url;
+
+    const { data, error } = await supabase
+        .from('users')
+        .update(payload)
+        .eq('id', id)
+        .eq('is_bot', true)
+        .select()
+        .single();
+
+    if (error) throw error;
+    return data;
+};
+
+// ════════════════════════════════════════════════════════════
 //  LOAD ALL ADMIN DATA
 // ════════════════════════════════════════════════════════════
 
@@ -517,6 +557,7 @@ export const loadAllAdminData = async () => {
         bannerData,
         globalUserData,
         trophyHistoryData,
+        botData,
     ] = await Promise.all([
         supabase
             .from('matches')
@@ -530,6 +571,7 @@ export const loadAllAdminData = async () => {
         supabase
             .from('users')
             .select('*')
+            .eq('is_bot', false)
             .order('monthly_points', { ascending: false })
             .limit(10),
         supabase
@@ -543,12 +585,18 @@ export const loadAllAdminData = async () => {
         supabase
             .from('users')
             .select('*')
+            .eq('is_bot', false)
             .order('points', { ascending: false })
             .limit(10),
         supabase
             .from('global_championship_history')
             .select('*, users(name)')
             .order('awarded_at', { ascending: false }),
+        supabase
+            .from('users')
+            .select('*')
+            .eq('is_bot', true)
+            .order('name', { ascending: true }),
     ]);
 
     return {
@@ -562,6 +610,7 @@ export const loadAllAdminData = async () => {
         banners: bannerData.data || [],
         globalUsers: globalUserData.data || [],
         trophyHistory: trophyHistoryData.data || [],
+        bots: botData.data || [],
     };
 };
 

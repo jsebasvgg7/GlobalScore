@@ -10,7 +10,8 @@ import {
   useAdminAchievements,
   useAdminCrowns,
   useAdminTrophies,
-  useAdminBanners
+  useAdminBanners,
+  useAdminBots
 } from '@/features/admin';
 
 // Utils
@@ -37,6 +38,7 @@ import {
   AdminBannersList,
   AdminRightPanel,
   AdminHistorical,
+  AdminBotsSection,
 
 } from '@/features/admin';
 
@@ -73,6 +75,7 @@ export default function AdminPage({ currentUser }) {
     matches, leagues, awards, achievements, titles,
     users, crownHistory, banners,
     globalUsers, trophyHistory,
+    bots,
     loading, loadData,
   } = useAdminData();
 
@@ -97,6 +100,9 @@ export default function AdminPage({ currentUser }) {
 
   const { handleCreateBanner, handleDeleteBanner, handleAssignBanner, handleRevokeBanner }
     = useAdminBanners(loadData, toast);
+
+  const { handleSaveBot }
+    = useAdminBots(loadData, toast);
 
   // ── Cambiar tab → resetear panel ─────────────────────────────
   const handleSetSection = (section) => {
@@ -169,6 +175,7 @@ export default function AdminPage({ currentUser }) {
     switch (activeSection) {
       case 'achievements': await handleSaveAchievement(data); break;
       case 'titles': await handleSaveTitle(data); break;
+      case 'bots': await handleSaveBot(data); break;
       default: break;
     }
     loadData();
@@ -188,10 +195,10 @@ export default function AdminPage({ currentUser }) {
   // ── Filtered items ────────────────────────────────────────────
   const filteredItems = getFilteredItems(
     activeSection, searchTerm, filterStatus,
-    { matches, leagues, awards, achievements, titles, users, crownHistory, banners, globalUsers, trophyHistory }
+    { matches, leagues, awards, achievements, titles, users, crownHistory, banners, globalUsers, trophyHistory, bots }
   );
 
-  const stats = calculateStats({ matches, leagues, awards, achievements, titles, crownHistory, banners, trophyHistory });
+  const stats = calculateStats({ matches, leagues, awards, achievements, titles, crownHistory, banners, trophyHistory, bots });
 
   // ── La sección histórica tiene su propio layout completo ──────
   // No necesita el panel derecho ni los controles normales
@@ -300,9 +307,15 @@ export default function AdminPage({ currentUser }) {
                     onAssign={handleAssignClick}
                   />
                 )}
+                {activeSection === 'bots' && (
+                  <AdminBotsSection
+                    bots={Array.isArray(filteredItems) ? filteredItems : []}
+                    onEdit={handleEditClick}
+                  />
+                )}
 
                 {Array.isArray(filteredItems) && filteredItems.length === 0 &&
-                  activeSection !== 'crowns' && activeSection !== 'trophies' && (
+                  activeSection !== 'crowns' && activeSection !== 'trophies' && activeSection !== 'bots' && (
                     <div className="admin-empty-state">
                       <AlertCircle size={40} />
                       <p>No hay {activeSection} para mostrar</p>

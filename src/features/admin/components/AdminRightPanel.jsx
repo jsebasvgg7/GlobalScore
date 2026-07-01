@@ -3,7 +3,7 @@ import {
   Plus, CheckCircle, X, Trophy, Target, Award, Shield,
   Package, Crown, Image, Home, Plane, Calendar, Clock,
   Zap, Star, Flame, AlertCircle, ChevronLeft, Trash2,
-  Edit2, UserCheck, Search
+  Edit2, UserCheck, Search, Bot
 } from 'lucide-react';
 import MatchForm from '../forms/MatchForm';
 import FinishMatchForm from '../forms/FinishMatchForm';
@@ -62,6 +62,7 @@ export default function AdminRightPanel({
     crowns: '#c9a227',
     trophies: '#0ea5a8',
     banners: 'var(--accent)',
+    bots: '#8b5cf6',
   };
   const panelColor = panelMode === 'finish' ? '#1D9E75' : sectionColors[activeSection] || 'var(--accent)';
 
@@ -126,6 +127,7 @@ function PanelHeader({ activeSection, panelMode, panelItem, onResetPanel }) {
     crowns: { add: 'Otorgar Corona', finish: '', edit: '' },
     trophies: { add: 'Otorgar Trofeo', finish: '', edit: '' },
     banners: { add: 'Crear Banner', finish: '', edit: '', assign: 'Asignar Banner' },
+    bots: { add: 'Bots de Relleno', finish: '', edit: 'Editar Bot' },
   };
 
   const sectionColors = {
@@ -136,6 +138,7 @@ function PanelHeader({ activeSection, panelMode, panelItem, onResetPanel }) {
     titles: '#3b82f6',
     crowns: '#c9a227',
     banners: 'var(--accent)',
+    bots: '#8b5cf6',
   };
 
   const title = titles[activeSection]?.[panelMode] || titles[activeSection]?.add || '';
@@ -226,8 +229,28 @@ function AddForm({ activeSection, onAdd, users }) {
     case 'crowns': return <AddCrownForm onAdd={onAdd} users={users} />;
     case 'trophies': return <AddTrophyForm onAdd={onAdd} users={users} />;
     case 'banners': return <AddBannerForm onAdd={onAdd} />;
+    case 'bots': return <BotsInfo />;
     default: return <MatchForm onAdd={onAdd} styles={ADM_STYLES} />;
   }
+}
+
+/* ── BOTS INFO ── */
+function BotsInfo() {
+  return (
+    <div className="adm-form">
+      <div className="adm-crown-info">
+        <Bot size={28} style={{ color: '#8b5cf6' }} />
+        <p>
+          Los 50 bots de relleno ya existen (creados por SQL) y no pueden
+          agregarse ni eliminarse desde aquí.
+        </p>
+        <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>
+          Selecciona un bot de la lista para editar su nombre o su foto.
+          Sus puntos se otorgan automáticamente al finalizar cada partido.
+        </p>
+      </div>
+    </div>
+  );
 }
 
 /* ── ADD ACHIEVEMENT ── */
@@ -483,6 +506,7 @@ function EditForm({ activeSection, item, onSave, onDelete, onResetPanel }) {
   switch (activeSection) {
     case 'achievements': return <EditAchievementForm item={item} onSave={onSave} onDelete={onDelete} onResetPanel={onResetPanel} />;
     case 'titles': return <EditTitleForm item={item} onSave={onSave} onDelete={onDelete} onResetPanel={onResetPanel} />;
+    case 'bots': return <EditBotForm item={item} onSave={onSave} onResetPanel={onResetPanel} />;
     default: return null;
   }
 }
@@ -556,6 +580,74 @@ function EditTitleForm({ item, onSave, onDelete, onResetPanel }) {
         <button className="adm-delete-btn" onClick={() => { onDelete(form.id); onResetPanel(); }}><Trash2 size={13} /><span>Eliminar</span></button>
         <button className="adm-submit-btn" onClick={() => { onSave(form); onResetPanel(); }}><Edit2 size={14} /><span>Guardar</span></button>
       </div>
+    </div>
+  );
+}
+
+/* ================================================================
+   EDIT BOT FORM (nombre y foto únicamente)
+================================================================ */
+function EditBotForm({ item, onSave, onResetPanel }) {
+  const [name, setName] = useState(item.name || '');
+  const [imageFile, setImageFile] = useState(null);
+  const [preview, setPreview] = useState(item.avatar_url || null);
+  const [saving, setSaving] = useState(false);
+  const fileRef = React.useRef(null);
+
+  const handleFile = (file) => {
+    if (!file || !file.type.startsWith('image/')) return;
+    setImageFile(file);
+    const r = new FileReader();
+    r.onloadend = () => setPreview(r.result);
+    r.readAsDataURL(file);
+  };
+
+  const submit = async () => {
+    if (!name.trim()) return;
+    setSaving(true);
+    try {
+      await onSave({ id: item.id, name: name.trim(), avatar_url: item.avatar_url, file: imageFile });
+      onResetPanel();
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="adm-form">
+      <div
+        className={`adm-drop-zone ${preview ? 'has-image' : ''}`}
+        onClick={() => fileRef.current?.click()}
+        onDragOver={e => e.preventDefault()}
+        onDrop={e => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); }}
+        style={{ borderRadius: '50%', width: 96, height: 96, margin: '0 auto' }}
+      >
+        {preview ? (
+          <>
+            <img src={preview} alt="Preview" className="adm-drop-preview" style={{ borderRadius: '50%' }} />
+            <div className="adm-drop-overlay" style={{ borderRadius: '50%' }}><Image size={16} /><span>Cambiar</span></div>
+          </>
+        ) : (
+          <div className="adm-drop-content">
+            <Bot size={20} style={{ opacity: 0.3 }} />
+          </div>
+        )}
+        <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleFile(e.target.files[0])} />
+      </div>
+
+      <Field label="Nombre" required>
+        <Input value={name} onChange={e => setName(e.target.value)} />
+      </Field>
+
+      <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: "'DM Mono', monospace", display: 'flex', gap: 14, padding: '4px 2px' }}>
+        <span>{item.points || 0} pts global</span>
+        <span>{item.monthly_points || 0} pts mensual</span>
+      </div>
+
+      <button className="adm-submit-btn" onClick={submit} disabled={saving || !name.trim()}>
+        {saving ? <span className="adm-spinner" /> : <Edit2 size={14} />}
+        <span>{saving ? 'Guardando...' : 'Guardar Cambios'}</span>
+      </button>
     </div>
   );
 }

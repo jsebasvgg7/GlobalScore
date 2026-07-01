@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trophy, Target, Award, Shield, Package, Crown, Image, BookOpen } from 'lucide-react';
+import { Trophy, Target, Award, Shield, Package, Crown, Image, BookOpen, Bot } from 'lucide-react';
 
 const TAB_LABELS = {
   historical: 'His',
@@ -11,6 +11,7 @@ const TAB_LABELS = {
   crowns: 'Cor',
   trophies: 'Glo',
   banners: 'Ban',
+  bots: 'Bot',
 };
 
 export default function AdminNavigationTabs({ activeSection, setActiveSection, stats }) {
@@ -24,6 +25,7 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
     { id: 'crowns', icon: Crown, badge: stats.crowns?.thisMonth === 0 ? '!' : 0 },
     { id: 'trophies', icon: Trophy, badge: 0 },
     { id: 'banners', icon: Image, badge: 0 },
+    { id: 'bots', icon: Bot, badge: 0 },
   ];
 
   return (

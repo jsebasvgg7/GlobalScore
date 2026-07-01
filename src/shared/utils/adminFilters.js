@@ -1,5 +1,5 @@
 export const getFilteredItems = (activeSection, searchTerm, filterStatus, data) => {
-  const { matches, leagues, awards, achievements, titles, users, crownHistory, banners, globalUsers, trophyHistory } = data;
+  const { matches, leagues, awards, achievements, titles, users, crownHistory, banners, globalUsers, trophyHistory, bots } = data;
   const term = searchTerm.toLowerCase();
 
   switch (activeSection) {
@@ -62,13 +62,18 @@ export const getFilteredItems = (activeSection, searchTerm, filterStatus, data) 
         !term || b.name?.toLowerCase().includes(term)
       );
 
+    case 'bots':
+      return (bots || []).filter(b =>
+        !term || b.name?.toLowerCase().includes(term)
+      );
+
     default:
       return [];
   }
 };
 
 export const calculateStats = (data) => {
-  const { matches, leagues, awards, achievements, titles, crownHistory, banners, trophyHistory } = data;
+  const { matches, leagues, awards, achievements, titles, crownHistory, banners, trophyHistory, bots } = data;
 
   const now = new Date();
   const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -109,6 +114,9 @@ export const calculateStats = (data) => {
     },
     banners: {
       total: (banners || []).length,
+    },
+    bots: {
+      total: (bots || []).length,
     },
   };
 };

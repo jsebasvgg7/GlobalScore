@@ -8,6 +8,7 @@ import {
   getUserStats,
   updateUserStats,
   updatePredictionPoints,
+  awardBotPoints,
 } from '../services/admin.service';
 import { awardPackToUser } from '@/features/albums/services/albums.service';
 
@@ -53,6 +54,13 @@ export const useAdminMatches = (loadData, toast) => {
       if (advancingTeam) updateData.advancing_team = advancingTeam;
 
       await updateMatchResult(matchId, updateData);
+
+      // 1.b Ruleta de puntos para los bots de relleno (no bloquea el flujo si falla)
+      try {
+        await awardBotPoints();
+      } catch (botErr) {
+        console.error('⚠️ Error al otorgar puntos a los bots:', botErr);
+      }
 
       // 2. Obtener partido con todas sus predicciones
       const match = await getMatchWithPredictions(matchId);
