@@ -69,6 +69,12 @@
 .hcm-root--detail-shell {
   animation: none;
 }
+/* Mismo problema que arriba: mientras el modal aleatorio está abierto,
+   el transform residual de la animación de entrada de hcm-root lo
+   convierte en containing block y rompe el position:fixed del backdrop. */
+.hcm-root--modal-open {
+  animation: none;
+}
 
 .hcm-detail {
   display: flex;
@@ -772,6 +778,7 @@
 .hcm-row--champion { background: rgba(212,160,23,.07); }
 
 .hcm-row-pos-dot {
+  display: inline-block;
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -820,6 +827,7 @@
   margin-top: 10px;
 }
 .hcm-legend-dot {
+  display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -1034,7 +1042,7 @@
   position: fixed;
   inset: 0;
   background: rgba(26,26,26,.70);
-  z-index: 200;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;

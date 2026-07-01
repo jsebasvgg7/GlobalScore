@@ -4,7 +4,8 @@
 ════════════════════════════════════════════════════ */
 
 /* ─────── tokens de paleta ─────── */
-[data-theme="dark"] .hcm-root {
+[data-theme="dark"] .hcm-root,
+[data-theme="dark"] .hcm-detail {
   --hcm-bg:       #13111A;
   --hcm-dark:     #F0EDF8;
   --hcm-accent:   #8B7FC7;

@@ -499,24 +499,29 @@ function CompetitionDetail({ competitionId, onBack }) {
 /* ══════════════════════════════════════════════════════════════
    MODAL ALEATORIO — fiel a _RandomModal / _RandomSlot
 ══════════════════════════════════════════════════════════════ */
-function RandomSlot({ comp, done }) {
+function RandomSlot({ comp, running, done }) {
   const imgUrl = getHistoricalImageUrl(comp.image_path);
   const tc = typeColor(comp.type);
+  const stateClass = running
+    ? "hcm-rand-slot--spinning"
+    : done
+      ? "hcm-rand-slot--revealed"
+      : "";
+
   return (
-    <div className={`hcm-modal-slot ${done ? "hcm-modal-slot--done" : ""}`}>
-      <div className="hcm-modal-slot-logo">
-        {imgUrl ? <img src={imgUrl} alt={comp.name} /> : <Trophy size={32} color={tc} />}
+    <div className={`hcm-rand-slot ${stateClass}`} style={{ "--tc": tc }}>
+      <div className="hcm-rand-slot-row">
+        <div className="hcm-rand-avatar">
+          {imgUrl ? <img src={imgUrl} alt={comp.name} /> : <Trophy size={22} color={tc} />}
+        </div>
+        <div className="hcm-rand-info">
+          <p className="hcm-rand-name">{comp.name}</p>
+          <p className="hcm-rand-meta">
+            {[comp.type && typeLabel(comp.type), comp.year, comp.country].filter(Boolean).join(" · ")}
+          </p>
+        </div>
+        {done && <ArrowRight size={18} className="hcm-rand-arrow" />}
       </div>
-      <div className="hcm-modal-slot-info">
-        {comp.type && <CompBadge label={typeLabel(comp.type)} bg={tc} />}
-        <span className="hcm-modal-slot-name">{comp.name}</span>
-        {(comp.year || comp.country) && (
-          <span className="hcm-modal-slot-meta">
-            {[comp.year, comp.country].filter(Boolean).join(" · ")}
-          </span>
-        )}
-      </div>
-      {done && <ArrowRight size={18} className="hcm-modal-slot-arrow" />}
     </div>
   );
 }
@@ -525,7 +530,7 @@ function RandomModal({ competitions, onClose, onSelect }) {
   const [current, setCurrent] = useState(null);
   const [running, setRunning] = useState(false);
   const [done, setDone] = useState(false);
-  const winner = useRef(null);
+  const winner = useRef(competitions.length > 0 ? competitions[Math.floor(Math.random() * competitions.length)] : null);
   const ivRef = useRef(null);
   const toRef = useRef(null);
 
@@ -550,51 +555,58 @@ function RandomModal({ competitions, onClose, onSelect }) {
     }, 2400);
   };
 
-  useEffect(() => () => {
-    clearInterval(ivRef.current);
-    clearTimeout(toRef.current);
+  // Arranca el sorteo automáticamente al montar el modal
+  useEffect(() => {
+    start();
+    return () => {
+      clearInterval(ivRef.current);
+      clearTimeout(toRef.current);
+    };
   }, []);
 
   return (
-    <div className="hcm-modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="hcm-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="hcm-modal-handle" />
-        <div className="hcm-modal-title-row">
-          <span className="hcm-modal-title-bar" />
-          <span className="hcm-modal-title">COMPETICIÓN ALEATORIA</span>
+    <div className="hcm-rand-backdrop" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="hcm-rand-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="hcm-rand-header">
+          <span>COMPETICIÓN ALEATORIA</span>
+          <button className="hcm-rand-close" onClick={onClose} aria-label="Cerrar">
+            <X size={16} />
+          </button>
         </div>
 
-        {current && <RandomSlot comp={current} done={done} />}
+        <div className="hcm-rand-body">
+          {current ? (
+            <RandomSlot comp={current} running={running} done={done} />
+          ) : (
+            <div className="hcm-rand-empty">
+              <Shuffle size={22} strokeWidth={1.4} />
+            </div>
+          )}
 
-        {!running && !done && (
-          <button className="hcm-modal-btn hcm-modal-btn--spin" onClick={start}>
-            <Shuffle size={14} />
-            <span>GIRAR</span>
-          </button>
-        )}
+          {running && (
+            <div className="hcm-rand-status-row">
+              <span className="hcm-rand-dot" />
+              <span className="hcm-rand-status">GIRANDO…</span>
+            </div>
+          )}
 
-        {running && (
-          <div className="hcm-modal-spinning">GIRANDO…</div>
-        )}
-
-        {done && !running && (
-          <>
-            <button
-              className="hcm-modal-btn hcm-modal-btn--go"
-              onClick={() => { onSelect(winner.current); onClose(); }}
-            >
-              <ArrowRight size={14} />
-              <span>VER COMPETICIÓN</span>
-            </button>
-            <button
-              className="hcm-modal-btn hcm-modal-btn--again"
-              onClick={() => { setDone(false); setCurrent(null); }}
-            >
-              <RefreshCw size={14} />
-              <span>GIRAR DE NUEVO</span>
-            </button>
-          </>
-        )}
+          {done && !running && (
+            <>
+              <button
+                className="hcm-rand-cta"
+                onClick={() => { onSelect(winner.current); onClose(); }}
+              >
+                <span>VER COMPETICIÓN</span>
+              </button>
+              <button
+                className="hcm-rand-secondary"
+                onClick={() => { setDone(false); setCurrent(null); }}
+              >
+                <span>GIRAR DE NUEVO</span>
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -637,7 +649,7 @@ export default function HistoricalCompetitionsMobile({ onBack, initialSelectedId
   }
 
   return (
-    <div className="hcm-root">
+    <div className={`hcm-root${showRandom ? " hcm-root--modal-open" : ""}`}>
       <CompHeader onBack={onBack} />
 
       <StatsStrip total={totalTorneos} intl={totalIntl} continental={totalCont} />
