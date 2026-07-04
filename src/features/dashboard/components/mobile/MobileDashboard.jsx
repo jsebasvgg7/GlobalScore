@@ -168,6 +168,20 @@ function FullWidthMatchCard({ match, userPred, variant = "hero" }) {
   );
 }
 
+// Card fantasma — placeholder decorativo que rellena huecos del grid bento
+// de Partidos cuando hay menos de 3 items (1 o 2 partidos pendientes)
+function GhostMatchCard() {
+  return (
+    <div className="mob2-fw-card mob2-fw-card--small mob2-fw-card--ghost">
+      <div className="mob2-sm-body">
+        <span className="mob2-sm-tag mob2-sm-tag--ghost">// PRÓXIMAMENTE</span>
+        <span className="mob2-sm-title mob2-sm-title--ghost">Nuevo partido</span>
+        <span className="mob2-sm-meta mob2-sm-meta--ghost">Aún sin confirmar</span>
+      </div>
+    </div>
+  );
+}
+
 // Card de liga — hero (grande, morada) para la 1ra, small para el resto
 function FullWidthLeagueCard({ league, userPrediction, variant = "hero" }) {
   const hasPred = userPrediction !== undefined;
@@ -580,7 +594,7 @@ export default function MobileDashboard({
     if (activeTab === "matches") {
       if (loading) return [0, 1, 2].map(i => <SkeletonCard key={i} />);
       if (previewMatches.length === 0) return <EmptyMatchesScroll onOpen={p => setActivePage(p)} />;
-      return previewMatches.map((m, i) => (
+      const matchCards = previewMatches.map((m, i) => (
         <FullWidthMatchCard
           key={m.id}
           match={m}
@@ -588,6 +602,13 @@ export default function MobileDashboard({
           variant={i === 0 ? "hero" : "small"}
         />
       ));
+      // Grid bento = 1 hero + 2 smalls. Si hay 1 o 2 partidos, se rellenan
+      // los huecos con cards fantasma decorativas ("Nuevo partido próximamente")
+      const ghostsNeeded = Math.max(0, 3 - matchCards.length);
+      const ghostCards = Array.from({ length: ghostsNeeded }, (_, i) => (
+        <GhostMatchCard key={`ghost-${i}`} />
+      ));
+      return [...matchCards, ...ghostCards];
     }
 
     if (activeTab === "leagues") {

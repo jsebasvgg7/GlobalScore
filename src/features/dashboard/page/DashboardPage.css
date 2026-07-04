@@ -678,3 +678,16 @@
   width: 100% !important;
   max-width: 100% !important;
 }
+
+/* ════════════════════════════════════════════════
+   MEDIA QUERIES
+════════════════════════════════════════════════ */
+
+/* Ocultar dashboard de escritorio en mobile — evita que
+   .db-root.page-root se muestre a la par de MobileDashboard
+   (MobileDashboard.css se encarga de ocultar este último en desktop) */
+@media (max-width: 767px) {
+  .db-root.page-root {
+    display: none;
+  }
+}

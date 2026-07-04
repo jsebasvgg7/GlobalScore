@@ -1130,6 +1130,26 @@
   color: rgba(26, 26, 46, .55);
 }
 
+/* Card fantasma — placeholder decorativo, sin hover ni acción */
+.mob2-fw-card--ghost {
+  background: transparent;
+  border: 1px dashed var(--m-border-hard);
+  box-shadow: none;
+  opacity: .5;
+  cursor: default;
+  pointer-events: none;
+}
+
+.mob2-sm-tag--ghost,
+.mob2-sm-title--ghost,
+.mob2-sm-meta--ghost {
+  color: var(--m-muted);
+}
+
+.mob2-sm-title--ghost {
+  font-weight: 500;
+}
+
 .mob2-fw-accent {
   height: 5px;
   width: 100%;
@@ -2643,6 +2663,15 @@
 /* ════════════════════════════════════════════════
    MEDIA QUERIES
 ════════════════════════════════════════════════ */
+
+/* Ocultar dashboard mobile en desktop — evita que .mob2-root
+   se muestre a la par del dashboard de escritorio (DashboardPage.css
+   se encarga de ocultar este último en pantallas chicas) */
+@media (min-width: 768px) {
+  .mob2-root {
+    display: none;
+  }
+}
 
 /* Pantallas muy pequeñas */
 @media screen and (max-width:380px) {
