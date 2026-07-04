@@ -6,9 +6,9 @@ import "../../styles/MobileRanking.css";
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
 
 const HOF_META = [
-  { label: "ORO", color: "#c9a227" },
-  { label: "PLATA", color: "#8a8a8a" },
-  { label: "BRONCE", color: "#a0652a" },
+  { label: "ORO", color: "#c9a227", bg: "#FFC72C", textColor: "#4A3200" },
+  { label: "PLATA", color: "#6b6b6b", bg: "#D9D9D9", textColor: "#3A3A3A" },
+  { label: "BRONCE", color: "#a0652a", bg: "#E8A66E", textColor: "#4A2A0C" },
 ];
 
 /* ── Config por tipo de Salón de la Fama ── */
@@ -131,18 +131,16 @@ function MobHofCarousel({ champions, onSelect, hofType }) {
       <div className="mrk-hof-card-row">
 
         <div className={`mrk-hof-card${exiting ? " mrk-hof-card--exit" : ""}`}
-          style={{ borderTopColor: meta.color }}>
+          style={{ "--mrk-hof-card-bg": meta.bg }}>
 
           <div className="mrk-hof-card-top">
-            <span className="mrk-hof-medal" style={{ color: meta.color }}>{meta.label}</span>
-            <span className="mrk-hof-pos" style={{ background: meta.color }}>#{active + 1}</span>
+            <span className="mrk-hof-medal" style={{ color: meta.textColor }}>{meta.label}</span>
+            <span className="mrk-hof-pos" style={{ background: meta.color, color: meta.textColor }}>#{active + 1}</span>
           </div>
 
           {/* Avatar */}
           <button className="mrk-hof-av-btn" onClick={() => onSelect(champ.id)}>
-            <div className="mrk-hof-av-ring" style={{
-              background: `linear-gradient(135deg, ${meta.color}88, ${meta.color})`
-            }}>
+            <div className="mrk-hof-av-ring" style={{ "--mrk-hof-medal-color": meta.color }}>
               <MobAvatar user={champ} size="hof" />
             </div>
           </button>
@@ -152,7 +150,7 @@ function MobHofCarousel({ champions, onSelect, hofType }) {
           {/* Coronas / Trofeos */}
           <div className="mrk-hof-crowns">
             {Array.from({ length: Math.min(champ.championships || 0, 6) }).map((_, i) => (
-              <TypeIcon key={i} size={14} style={{ color: meta.color }} />
+              <TypeIcon key={i} size={14} style={{ color: meta.textColor }} />
             ))}
             {champ.championships > 6 && (
               <span className="mrk-hof-crowns-extra" style={{ color: meta.color }}>
@@ -210,7 +208,7 @@ function MobHofCarousel({ champions, onSelect, hofType }) {
                 style={{ borderLeftColor: i === active ? m.color : "transparent" }}
                 onClick={() => nav(i > active ? "right" : "left", i)}
               >
-                <span className="mrk-hof-list-badge" style={{ background: m.color }}>
+                <span className="mrk-hof-list-badge" style={{ background: m.color, color: m.textColor }}>
                   {i + 1}
                 </span>
                 <MobAvatar user={u} size="sm" />
@@ -295,26 +293,26 @@ export default function MobileRanking({
         ))}
       </div>
 
-      {/* ── SUB-TABS HOF: Mensual (coronas) / Global (trofeos) ── */}
+      {/* ── ORÉJITAS HOF: Mensual (coronas) / Global (trofeos) ── */}
       {rankingType === "halloffame" && (
-        <div className="mrk-hof-subtabs">
+        <div className="mrk-hof-ears">
           <button
-            className={`mrk-hof-subtab${hofType === "monthly" ? " active" : ""}`}
+            className={`mrk-hof-ear${hofType === "monthly" ? " active" : ""}`}
             onClick={() => setHofType("monthly")}
           >
-            <Crown size={12} /><span>Mensual</span>
+            <Crown size={11} /><span>Mensual</span>
           </button>
           <button
-            className={`mrk-hof-subtab${hofType === "global" ? " active" : ""}`}
+            className={`mrk-hof-ear${hofType === "global" ? " active" : ""}`}
             onClick={() => setHofType("global")}
           >
-            <Trophy size={12} /><span>Global</span>
+            <Trophy size={11} /><span>Global</span>
           </button>
         </div>
       )}
 
       {/* ── STATS ROW — cambia según tab ── */}
-      <div className="mrk-stats-row">
+      <div className={`mrk-stats-row${rankingType === "halloffame" ? " mrk-stats-row--hof" : ""}`}>
         {rankingType === "halloffame" ? (
           /* Stats del HOF */
           <>
@@ -392,15 +390,21 @@ export default function MobileRanking({
           <div className="mrk-podium-stage">
             <div className="mrk-podium-col mrk-podium-col--second">
               <PodiumCard user={top3[1]} rank={1} onSelect={setSelectedUserId} />
-              <div className="mrk-podium-step mrk-podium-step--second" />
+              <div className="mrk-podium-step mrk-podium-step--second">
+                <Trophy size={16} className="mrk-podium-step-icon" />
+              </div>
             </div>
             <div className="mrk-podium-col mrk-podium-col--first">
               <PodiumCard user={top3[0]} rank={0} onSelect={setSelectedUserId} />
-              <div className="mrk-podium-step mrk-podium-step--first" />
+              <div className="mrk-podium-step mrk-podium-step--first">
+                <Trophy size={22} className="mrk-podium-step-icon" />
+              </div>
             </div>
             <div className="mrk-podium-col mrk-podium-col--third">
               <PodiumCard user={top3[2]} rank={2} onSelect={setSelectedUserId} />
-              <div className="mrk-podium-step mrk-podium-step--third" />
+              <div className="mrk-podium-step mrk-podium-step--third">
+                <Trophy size={14} className="mrk-podium-step-icon" />
+              </div>
             </div>
           </div>
         </div>
