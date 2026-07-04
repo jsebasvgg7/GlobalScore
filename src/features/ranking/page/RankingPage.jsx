@@ -163,9 +163,9 @@ export default function RankingPage({ currentUser }) {
     const monthly = rankingType === 'monthly';
     return users.map(u => ({
       ...u,
-      rankPoints: monthly ? (u.monthly_points || 0) : (u.points || 0),
-      rankCorrect: monthly ? (u.monthly_correct || 0) : (u.correct || 0),
-      rankPredictions: monthly ? (u.monthly_predictions || 0) : (u.predictions || 0),
+      rankPoints: monthly ? (u.monthly_points || 0) : (u.season_points || 0),
+      rankCorrect: monthly ? (u.monthly_correct || 0) : (u.season_correct || 0),
+      rankPredictions: monthly ? (u.monthly_predictions || 0) : (u.season_predictions || 0),
     }));
   };
 

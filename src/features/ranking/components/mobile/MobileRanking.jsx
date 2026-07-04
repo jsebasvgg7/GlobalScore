@@ -29,28 +29,49 @@ function MobAvatar({ user, size = "md" }) {
   );
 }
 
-/* ── Tarjeta del podio (ranking) ── */
-function PodiumCard({ user, rank, onSelect }) {
+/* ── Celda bento del líder (hero, ocupa 2 filas) ── */
+function PodiumHero({ user, onSelect }) {
   if (!user) return null;
-  const mods = ["gold", "silver", "bronze"];
-  const labels = ["ORO", "PLATA", "BRONCE"];
+  const accuracy = user.rankPredictions > 0
+    ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
 
   return (
-    <div className={`mrk-podium-card mrk-podium-card--${mods[rank]}`}>
-      <span className="mrk-podium-medal">{labels[rank]}</span>
-      <button className="mrk-podium-av-btn" onClick={() => onSelect(user.id)}>
-        <div className="mrk-podium-av-ring">
-          <MobAvatar user={user} size="podium" />
-        </div>
-        <span className="mrk-podium-num">{rank + 1}</span>
-      </button>
-      <span className="mrk-podium-name">{user.name}</span>
-      <span className="mrk-podium-pts">{fmt(user.rankPoints)} pts</span>
-    </div>
+    <button className="mrk-bento-hero" onClick={() => onSelect(user.id)}>
+      <span className="mrk-bento-hero-tag">#1 LÍDER</span>
+      <Crown size={20} className="mrk-bento-hero-crown" />
+      <div className="mrk-bento-hero-av">
+        <MobAvatar user={user} size="hero" />
+      </div>
+      <span className="mrk-bento-hero-name">{user.name}</span>
+      <span className="mrk-bento-hero-pts">{fmt(user.rankPoints)}</span>
+      <span className="mrk-bento-hero-pts-lbl">Puntos</span>
+      <div className="mrk-bento-hero-foot">
+        <span>{user.rankCorrect} aciertos</span>
+        <span className="mrk-bento-hero-acc">{accuracy}%</span>
+      </div>
+    </button>
   );
 }
 
-/* ── Fila tabla (ranking) ── */
+/* ── Celda bento compacta (#2 / #3) ── */
+function PodiumMini({ user, rank, onSelect }) {
+  if (!user) return null;
+  const mods = ["", "silver", "bronze"];
+  return (
+    <button className={`mrk-bento-mini mrk-bento-mini--${mods[rank]}`} onClick={() => onSelect(user.id)}>
+      <div className="mrk-bento-mini-av">
+        <MobAvatar user={user} size="sm" />
+        <span className="mrk-bento-mini-badge">{rank + 1}</span>
+      </div>
+      <div className="mrk-bento-mini-info">
+        <span className="mrk-bento-mini-name">{user.name}</span>
+        <span className="mrk-bento-mini-pts">{fmt(user.rankPoints)} pts &middot; #{rank + 1}</span>
+      </div>
+    </button>
+  );
+}
+
+/* ── Fila tabla (ranking) — estilo tile bento ── */
 function TableRow({ user, pos, isMe, onSelect, legCount = 0 }) {
   const accuracy = user.rankPredictions > 0
     ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
@@ -79,7 +100,6 @@ function TableRow({ user, pos, isMe, onSelect, legCount = 0 }) {
         <span className="mrk-row-pts">{fmt(user.rankPoints)}<span className="mrk-row-pts-lbl">pts</span></span>
         <span className="mrk-row-acc">{accuracy}%</span>
       </div>
-      
     </div>
   );
 }
@@ -247,9 +267,9 @@ export default function MobileRanking({
 
   const rankingUsers = users.map((u) => ({
     ...u,
-    rankPoints: rankingType === "monthly" ? u.monthly_points || 0 : u.points || 0,
-    rankCorrect: rankingType === "monthly" ? u.monthly_correct || 0 : u.correct || 0,
-    rankPredictions: rankingType === "monthly" ? u.monthly_predictions || 0 : u.predictions || 0,
+    rankPoints: rankingType === "monthly" ? u.monthly_points || 0 : u.season_points || 0,
+    rankCorrect: rankingType === "monthly" ? u.monthly_correct || 0 : u.season_correct || 0,
+    rankPredictions: rankingType === "monthly" ? u.monthly_predictions || 0 : u.season_predictions || 0,
   }));
 
   const sorted = [...rankingUsers]
@@ -311,60 +331,34 @@ export default function MobileRanking({
         </div>
       )}
 
-      {/* ── STATS ROW — cambia según tab ── */}
-      <div className={`mrk-stats-row${rankingType === "halloffame" ? " mrk-stats-row--hof" : ""}`}>
-        {rankingType === "halloffame" ? (
-          /* Stats del HOF */
-          <>
-            <div className="mrk-stat-block">
-              <span className="mrk-stat-num">{activeChampions.length}</span>
-              <span className="mrk-stat-lbl">Campeones</span>
-            </div>
-            <div className="mrk-stat-divider" />
-            <div className="mrk-stat-block">
-              <span className="mrk-stat-num">
-                {activeChampions.reduce((acc, c) => acc + (c.championships || 0), 0)}
-              </span>
-              <span className="mrk-stat-lbl">{hofCfg.unitLabel.charAt(0).toUpperCase() + hofCfg.unitLabel.slice(1)}</span>
-            </div>
-            {hofLeader && (
-              <>
-                <div className="mrk-stat-divider" />
-                <div className="mrk-stat-block mrk-stat-block--leader">
-                  <span className="mrk-stat-leader-name">{hofLeader.name}</span>
-                  <span className="mrk-stat-leader-pts" style={{ color: hofCfg.color, display: "flex", alignItems: "center", gap: 4 }}>
-                    {hofLeader.championships || 0} <HofTypeIcon size={11} />
-                  </span>
-                  <span className="mrk-stat-lbl">Dominador</span>
-                </div>
-              </>
-            )}
-          </>
-        ) : (
-          /* Stats del ranking */
-          <>
-            <div className="mrk-stat-block">
-              <span className="mrk-stat-num">{totalRegistered}</span>
-              <span className="mrk-stat-lbl">Registrados</span>
-            </div>
-            <div className="mrk-stat-divider" />
-            <div className="mrk-stat-block">
-              <span className="mrk-stat-num">{totalParticipated}</span>
-              <span className="mrk-stat-lbl">Participantes</span>
-            </div>
-            {leader && (
-              <>
-                <div className="mrk-stat-divider" />
-                <div className="mrk-stat-block mrk-stat-block--leader">
-                  <span className="mrk-stat-leader-name">{leader.name}</span>
-                  <span className="mrk-stat-leader-pts">{fmt(leader.rankPoints)} pts</span>
-                  <span className="mrk-stat-lbl">Líder</span>
-                </div>
-              </>
-            )}
-          </>
-        )}
-      </div>
+      {/* ── STATS ROW HOF (solo para Salón de la Fama) ── */}
+      {rankingType === "halloffame" && (
+        <div className="mrk-stats-row mrk-stats-row--hof">
+          <div className="mrk-stat-block">
+            <span className="mrk-stat-num">{activeChampions.length}</span>
+            <span className="mrk-stat-lbl">Campeones</span>
+          </div>
+          <div className="mrk-stat-divider" />
+          <div className="mrk-stat-block">
+            <span className="mrk-stat-num">
+              {activeChampions.reduce((acc, c) => acc + (c.championships || 0), 0)}
+            </span>
+            <span className="mrk-stat-lbl">{hofCfg.unitLabel.charAt(0).toUpperCase() + hofCfg.unitLabel.slice(1)}</span>
+          </div>
+          {hofLeader && (
+            <>
+              <div className="mrk-stat-divider" />
+              <div className="mrk-stat-block mrk-stat-block--leader">
+                <span className="mrk-stat-leader-name">{hofLeader.name}</span>
+                <span className="mrk-stat-leader-pts" style={{ color: hofCfg.color, display: "flex", alignItems: "center", gap: 4 }}>
+                  {hofLeader.championships || 0} <HofTypeIcon size={11} />
+                </span>
+                <span className="mrk-stat-lbl">Dominador</span>
+              </div>
+            </>
+          )}
+        </div>
+      )}
 
       {/* ════ SALÓN DE LA FAMA ════ */}
       {rankingType === "halloffame" && (
@@ -378,33 +372,24 @@ export default function MobileRanking({
         )
       )}
 
-      {/* ════ PODIO ════ */}
+      {/* ════ BENTO: STATS + PODIO ════ */}
       {rankingType !== "halloffame" && top3.length > 0 && (
-        <div className="mrk-podium-wrap">
-          <div className="mrk-podium-header">
-            <div className="mrk-podium-header-line mrk-podium-header-line--left" />
-            <Crown size={13} className="mrk-podium-crown" />
-            <span className="mrk-podium-title">Podio</span>
-            <div className="mrk-podium-header-line mrk-podium-header-line--right" />
+        <div className="mrk-bento-wrap">
+          <div className="mrk-bento-stats">
+            <div className="mrk-bento-stat-tile">
+              <span className="mrk-bento-stat-num">{totalRegistered}</span>
+              <span className="mrk-bento-stat-lbl">Registrados</span>
+            </div>
+            <div className="mrk-bento-stat-tile">
+              <span className="mrk-bento-stat-num">{totalParticipated}</span>
+              <span className="mrk-bento-stat-lbl">Participantes</span>
+            </div>
           </div>
-          <div className="mrk-podium-stage">
-            <div className="mrk-podium-col mrk-podium-col--second">
-              <PodiumCard user={top3[1]} rank={1} onSelect={setSelectedUserId} />
-              <div className="mrk-podium-step mrk-podium-step--second">
-                <Trophy size={16} className="mrk-podium-step-icon" />
-              </div>
-            </div>
-            <div className="mrk-podium-col mrk-podium-col--first">
-              <PodiumCard user={top3[0]} rank={0} onSelect={setSelectedUserId} />
-              <div className="mrk-podium-step mrk-podium-step--first">
-                <Trophy size={22} className="mrk-podium-step-icon" />
-              </div>
-            </div>
-            <div className="mrk-podium-col mrk-podium-col--third">
-              <PodiumCard user={top3[2]} rank={2} onSelect={setSelectedUserId} />
-              <div className="mrk-podium-step mrk-podium-step--third">
-                <Trophy size={14} className="mrk-podium-step-icon" />
-              </div>
+          <div className="mrk-bento-grid">
+            <PodiumHero user={top3[0]} onSelect={setSelectedUserId} />
+            <div className="mrk-bento-side">
+              <PodiumMini user={top3[1]} rank={1} onSelect={setSelectedUserId} />
+              <PodiumMini user={top3[2]} rank={2} onSelect={setSelectedUserId} />
             </div>
           </div>
         </div>

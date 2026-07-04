@@ -116,14 +116,20 @@ export const useAdminMatches = (loadData, toast) => {
 
         // Actualizar usuario con todas las estadísticas
         await updateUserStats(prediction.user_id, {
+          // 🌍 Estadísticas globales (histórico completo, nunca se resetea)
           points: (userData.points || 0) + totalPoints,
           predictions: (userData.predictions || 0) + 1,
           correct: (userData.correct || 0) + (totalPoints > 0 ? 1 : 0),
           current_streak: newCurrentStreak,
           best_streak: newBestStreak,
+          // 📅 Estadísticas mensuales
           monthly_points: (userData.monthly_points || 0) + totalPoints,
           monthly_predictions: (userData.monthly_predictions || 0) + 1,
           monthly_correct: (userData.monthly_correct || 0) + (totalPoints > 0 ? 1 : 0),
+          // 🏆 Estadísticas de temporada (usadas por el ranking global visible)
+          season_points: (userData.season_points || 0) + totalPoints,
+          season_predictions: (userData.season_predictions || 0) + 1,
+          season_correct: (userData.season_correct || 0) + (totalPoints > 0 ? 1 : 0),
         });
       }
 
