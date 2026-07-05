@@ -177,43 +177,65 @@
   flex-shrink: 0;
 }
 
-/* ── ORÉJITAS HOF: Mensual / Global (bloques independientes que sobresalen) ── */
-.mrk-hof-ears {
-  display: flex;
-  gap: 14px;
-  padding: 0 24px;
+/* ── ZONA HOF: fondo con luz dorada sutil, da identidad a toda la sección ── */
+.mrk-hof-zone {
   position: relative;
-  z-index: 2;
-  margin-bottom: 6px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(201, 162, 39, .10) 0%, rgba(201, 162, 39, 0) 55%),
+    var(--mrk-bg);
+  padding-bottom: 4px;
+  overflow: hidden;
 }
 
-.mrk-hof-ear {
+.mrk-hof-zone::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  height: 260px;
+  background-image: repeating-conic-gradient(from 0deg at 50% -40%,
+      rgba(201, 162, 39, .08) 0deg 6deg,
+      transparent 6deg 14deg);
+  pointer-events: none;
+}
+
+/* ── Segmented control: Mensual / Global, mismo lenguaje que mrk-tabs ── */
+.mrk-hof-switch {
+  position: relative;
+  display: flex;
+  margin: 12px 16px 0;
+  border: 1px solid var(--mrk-border-hard);
+  box-shadow: 2px 2px 0px var(--mrk-shadow-color);
+  background: var(--mrk-surface);
+}
+
+.mrk-hof-switch button {
+  flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
-  padding: 8px 12px;
+  height: 34px;
   font-size: 9px;
   font-weight: 700;
   font-family: var(--mrk-mono);
-  letter-spacing: .08em;
+  letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--mrk-muted);
-  background: var(--mrk-surface);
-  border: 1px solid var(--mrk-border-hard);
-  box-shadow: var(--mrk-shadow-sm);
+  background: transparent;
+  border: none;
   cursor: pointer;
-  transition: color .15s, background .15s, transform .15s;
+  transition: color .15s, background .15s;
 }
 
-.mrk-hof-ear.active {
-  color: var(--mrk-accent);
-  background: var(--mrk-accent-subtle);
-  border-color: var(--mrk-accent);
-  transform: translateY(-3px);
+.mrk-hof-switch button:first-child {
+  border-right: 1px solid var(--mrk-border-hard);
 }
 
-.mrk-hof-ear svg {
-  flex-shrink: 0;
+.mrk-hof-switch button.active {
+  color: #fff;
+  background: var(--mrk-accent);
 }
 
 /* ════════════════════════════════════════════════
@@ -1151,14 +1173,17 @@
 }
 
 /* ════════════════════════════════════════════════
-   HOF SALÓN — layout fijo (hero + grid + hitos + tabla)
+   HOF SALÓN — medallón (identidad) + grid + hitos + tabla
+   Bordes y sombras livianos en todo, salvo el medallón
+   que conserva un poco más de peso por ser la pieza focal
 ════════════════════════════════════════════════ */
 
 .mrk-salon {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
   padding: 14px 16px 0;
+  position: relative;
   animation: mrk-fade-up .25s ease both;
 }
 
@@ -1182,160 +1207,220 @@
   flex-shrink: 0;
 }
 
-/* ── Card líder supremo (fija, siempre visible) ── */
-.mrk-salon-leader {
+.mrk-salon-section-count {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--mrk-accent);
+}
+
+/* ── EL MEDALLÓN: pieza de identidad única del Salón ──
+   Cinta morada arriba (como una medalla real), fondo dorado
+   radial saturado, coronas grandes semitransparentes de fondo.
+   Es la única pieza de toda la app con esta forma — por diseño. */
+.mrk-medallion-wrap {
   position: relative;
-  width: 100%;
-  border: 3px solid var(--mrk-border-hard);
-  background: var(--mrk-gold);
-  box-shadow: 5px 5px 0px var(--mrk-shadow-color);
-  padding: 16px 18px 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  cursor: pointer;
-  font-family: var(--mrk-mono);
-  text-align: left;
-  overflow: hidden;
-  transition: transform .12s, box-shadow .12s;
+  padding-top: 14px;
 }
 
-.mrk-salon-leader:active {
-  transform: translate(2px, 2px);
-  box-shadow: 3px 3px 0px var(--mrk-shadow-color);
+.mrk-medallion-ribbon {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 46px;
+  height: 34px;
+  z-index: 0;
 }
 
-.mrk-salon-leader::after {
+.mrk-medallion-ribbon::before,
+.mrk-medallion-ribbon::after {
   content: "";
   position: absolute;
-  top: -30%;
-  right: -12%;
-  width: 140px;
-  height: 140px;
-  background: repeating-linear-gradient(45deg,
-      rgba(0, 0, 0, .06) 0px,
-      rgba(0, 0, 0, .06) 3px,
-      transparent 3px,
-      transparent 14px);
-  transform: rotate(12deg);
-  pointer-events: none;
+  top: 0;
+  width: 20px;
+  height: 34px;
+  background: var(--mrk-accent);
 }
 
-.mrk-salon-leader-tag {
+.mrk-medallion-ribbon::before {
+  left: 1px;
+  transform: skewX(8deg);
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
+}
+
+.mrk-medallion-ribbon::after {
+  right: 1px;
+  transform: skewX(-8deg);
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
+}
+
+.mrk-medallion {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  border: 1px solid var(--mrk-border-hard);
+  background: radial-gradient(circle at 32% 26%, #FFDE7A 0%, var(--mrk-gold) 42%, #C9860A 100%);
+  box-shadow: 3px 3px 0px var(--mrk-shadow-color);
+  padding: 20px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  cursor: pointer;
+  font-family: var(--mrk-mono);
+  transition: transform .12s;
+}
+
+.mrk-medallion:active {
+  transform: scale(.99);
+}
+
+.mrk-medallion-crownfield {
   position: absolute;
-  top: 10px;
-  left: 12px;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-content: center;
+  opacity: .14;
+  color: #5c3d05;
+  pointer-events: none;
+  transform: rotate(-8deg) scale(1.3);
+}
+
+.mrk-medallion-tag {
+  position: relative;
+  z-index: 1;
   font-size: 8px;
   font-weight: 700;
   letter-spacing: .14em;
-  color: var(--mrk-bg);
-  background: var(--mrk-border-hard);
-  padding: 3px 8px;
-  z-index: 1;
+  text-transform: uppercase;
+  color: #5c3d05;
+  margin-bottom: 8px;
 }
 
-.mrk-salon-leader-pos {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: .04em;
-  color: var(--mrk-gold-text);
-  background: var(--mrk-bg);
-  border: 2px solid var(--mrk-border-hard);
-  padding: 2px 8px;
+.mrk-medallion-av {
+  position: relative;
   z-index: 1;
-}
-
-.mrk-salon-leader-av {
-  flex-shrink: 0;
-  margin-top: 14px;
-  z-index: 1;
-}
-
-.mrk-salon-leader-av-ring {
-  padding: 3px;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
   border: 3px solid var(--mrk-border-hard);
   background: var(--mrk-bg);
-  box-shadow: 3px 3px 0px rgba(0, 0, 0, .25);
-}
-
-.mrk-salon-leader-body {
-  flex: 1;
-  min-width: 0;
-  margin-top: 14px;
-  z-index: 1;
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, .22);
 }
 
-.mrk-salon-leader-name {
-  font-size: 19px;
+.mrk-medallion-av img,
+.mrk-medallion-av .mrk-av {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: none;
+}
+
+.mrk-medallion-name {
+  position: relative;
+  z-index: 1;
+  font-size: 20px;
   font-weight: 700;
   color: var(--mrk-border-hard);
+  margin-top: 10px;
   line-height: 1.05;
-  letter-spacing: -.01em;
+  max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.mrk-salon-leader-title {
+.mrk-medallion-title {
+  position: relative;
+  z-index: 1;
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: .1em;
+  letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--mrk-gold-text);
+  color: #5c3d05;
+  margin-top: 4px;
 }
 
-.mrk-salon-leader-crowns {
+.mrk-medallion-crowns {
+  position: relative;
+  z-index: 1;
   display: flex;
-  gap: 2px;
-  margin: 2px 0 4px;
+  gap: 3px;
+  margin-top: 8px;
 }
 
-.mrk-salon-leader-stats {
+.mrk-medallion-stats {
+  position: relative;
+  z-index: 1;
   display: flex;
-  gap: 12px;
-  border-top: 2px solid rgba(26, 26, 46, .25);
-  padding-top: 7px;
+  margin-top: 14px;
+  width: 100%;
+  border-top: 1px solid rgba(26, 26, 46, .22);
+  padding-top: 10px;
 }
 
-.mrk-salon-leader-stat {
+.mrk-medallion-stat {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
 
-.mrk-salon-leader-stat-val {
-  font-size: 15px;
+.mrk-medallion-stat + .mrk-medallion-stat {
+  border-left: 1px solid rgba(26, 26, 46, .22);
+}
+
+.mrk-medallion-stat-val {
+  font-size: 17px;
   font-weight: 700;
   color: var(--mrk-border-hard);
   line-height: 1;
   letter-spacing: -.02em;
 }
 
-.mrk-salon-leader-stat-lbl {
+.mrk-medallion-stat-lbl {
   font-size: 7px;
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--mrk-gold-text);
+  color: #5c3d05;
   opacity: .85;
 }
 
-[data-theme="dark"] .mrk-salon-leader {
-  background: var(--mrk-gold);
+.mrk-medallion-bar-wrap {
+  position: relative;
+  z-index: 1;
+  margin-top: 12px;
+  width: 100%;
 }
 
-[data-theme="dark"] .mrk-salon-leader-name,
-[data-theme="dark"] .mrk-salon-leader-title,
-[data-theme="dark"] .mrk-salon-leader-stat-val,
-[data-theme="dark"] .mrk-salon-leader-stat-lbl,
-[data-theme="dark"] .mrk-salon-leader-pos {
-  color: #2A1E00;
+.mrk-medallion-bar-lbl {
+  display: flex;
+  justify-content: space-between;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #5c3d05;
+  margin-bottom: 3px;
+}
+
+.mrk-medallion-bar-track {
+  height: 5px;
+  border: 1px solid var(--mrk-border-hard);
+  background: rgba(26, 26, 46, .12);
+}
+
+.mrk-medallion-bar-fill {
+  height: 100%;
+  background: var(--mrk-accent);
 }
 
 /* ── Grid 2x2: leyendas del salón (#2 a #5) ── */
@@ -1347,10 +1432,11 @@
 
 .mrk-salon-card {
   position: relative;
-  border: 2px solid var(--mrk-border-soft);
+  border: 1px solid var(--mrk-border-hard);
+  border-left: 4px solid var(--mrk-border-hard);
   background: var(--mrk-card);
-  box-shadow: var(--mrk-shadow-card);
-  padding: 10px 10px 12px;
+  box-shadow: 2px 2px 0px var(--mrk-shadow-color);
+  padding: 10px 10px 11px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1358,12 +1444,19 @@
   cursor: pointer;
   font-family: var(--mrk-mono);
   text-align: left;
-  transition: transform .12s, box-shadow .12s;
+  transition: transform .12s;
 }
 
 .mrk-salon-card:active {
-  transform: translate(1.5px, 1.5px);
-  box-shadow: var(--mrk-shadow-sm);
+  transform: scale(.98);
+}
+
+.mrk-salon-card--2 {
+  border-left-color: var(--mrk-silver);
+}
+
+.mrk-salon-card--3 {
+  border-left-color: var(--mrk-bronze);
 }
 
 .mrk-salon-card-pos {
@@ -1377,19 +1470,19 @@
   justify-content: center;
   font-size: 9px;
   font-weight: 700;
-  border: 1.5px solid var(--mrk-border-hard);
+  border: 1px solid var(--mrk-border-hard);
   background: var(--mrk-bg);
   color: var(--mrk-muted);
 }
 
 .mrk-salon-card--2 .mrk-salon-card-pos {
   background: var(--mrk-silver);
-  color: var(--mrk-silver-text);
+  color: #fff;
 }
 
 .mrk-salon-card--3 .mrk-salon-card-pos {
   background: var(--mrk-bronze);
-  color: var(--mrk-bronze-text);
+  color: #fff;
 }
 
 .mrk-salon-card-name {
@@ -1411,37 +1504,34 @@
   color: var(--mrk-gold-text);
 }
 
-.mrk-salon-card-stats {
-  display: flex;
-  width: 100%;
-  gap: 8px;
-  border-top: 1px solid var(--mrk-border);
-  padding-top: 6px;
+.mrk-salon-card-pts {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--mrk-text);
+  line-height: 1;
+  letter-spacing: -.02em;
   margin-top: 2px;
 }
 
-.mrk-salon-card-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 0px;
-}
-
-.mrk-salon-card-stat-val {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--mrk-text);
-  line-height: 1.2;
-}
-
-.mrk-salon-card-stat-lbl {
-  font-size: 6.5px;
+.mrk-salon-card-pts-lbl {
+  font-size: 7px;
   font-weight: 700;
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--mrk-muted);
 }
 
-/* ── Hitos del Salón: 2x2 con iconos ── */
+.mrk-salon-card-period {
+  font-size: 8px;
+  font-weight: 600;
+  color: var(--mrk-muted);
+  margin-top: 4px;
+  border-top: 1px solid var(--mrk-border);
+  padding-top: 5px;
+  width: 100%;
+}
+
+/* ── Hitos del Salón: 2x2, ícono + número grande ── */
 .mrk-salon-hitos {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1450,23 +1540,29 @@
 
 .mrk-salon-hito {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 8px;
-  border: 2px solid var(--mrk-border-soft);
+  border: 1px solid var(--mrk-border-hard);
   background: var(--mrk-surface);
-  box-shadow: var(--mrk-shadow-card);
-  padding: 10px;
+  box-shadow: 2px 2px 0px var(--mrk-shadow-color);
+  padding: 11px;
   font-family: var(--mrk-mono);
+}
+
+.mrk-salon-hito-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
 .mrk-salon-hito-icon {
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid var(--mrk-border-hard);
+  border: 1px solid var(--mrk-border-hard);
   background: var(--mrk-accent-subtle);
   color: var(--mrk-accent);
 }
@@ -1477,25 +1573,18 @@
 }
 
 .mrk-salon-hito--fire .mrk-salon-hito-icon {
-  background: rgba(224, 90, 40, .12);
-  color: #e05a28;
+  background: #F0A860;
+  color: #5c2c05;
 }
 
 .mrk-salon-hito--target .mrk-salon-hito-icon {
-  background: rgba(29, 158, 117, .12);
-  color: var(--mrk-green);
+  background: #7FD9B6;
+  color: #05452e;
 }
 
 .mrk-salon-hito--shield .mrk-salon-hito-icon {
-  background: rgba(212, 83, 126, .1);
-  color: #d4537e;
-}
-
-.mrk-salon-hito-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
+  background: #E896B4;
+  color: #5c1530;
 }
 
 .mrk-salon-hito-lbl {
@@ -1507,21 +1596,23 @@
 }
 
 .mrk-salon-hito-val {
-  font-size: 12px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--mrk-text);
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+
+.mrk-salon-hito-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mrk-accent);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.mrk-salon-hito-name {
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--mrk-accent);
-}
-
-/* ── Tabla final: resto de campeones (liviana) ── */
+/* ── Tabla final: resto de campeones (la más liviana de todas) ── */
 .mrk-salon-table {
   border-top: 1px solid var(--mrk-border);
 }
@@ -1555,7 +1646,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 2px;
+  padding: 9px 2px;
   border-bottom: 1px solid var(--mrk-border);
   cursor: pointer;
   background: none;
@@ -1603,11 +1694,14 @@
   color: var(--mrk-text);
 }
 
-.mrk-salon-trow-num-sm {
-  display: block;
-  font-size: 8px;
-  font-weight: 600;
-  color: var(--mrk-muted);
+/* Stats row — variante liviana solo para HOF */
+.mrk-stats-row--hof {
+  margin-top: 10px;
+}
+
+.mrk-stats-row--hof .mrk-stat-block {
+  border: 1px solid var(--mrk-border-hard);
+  box-shadow: 2px 2px 0px var(--mrk-shadow-color);
 }
 
 /* Empty HOF */
@@ -1659,12 +1753,12 @@
     font-size: 22px;
   }
 
-  .mrk-salon-leader-name {
-    font-size: 16px;
+  .mrk-medallion-name {
+    font-size: 17px;
   }
 
-  .mrk-salon-leader-stats {
-    gap: 8px;
+  .mrk-medallion-stat-val {
+    font-size: 15px;
   }
 
   .mrk-salon-hitos {

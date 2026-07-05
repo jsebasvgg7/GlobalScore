@@ -84,9 +84,14 @@ export default function RankingPage({ currentUser }) {
         map[r.user_id].count++;
         map[r.user_id].champs.push({ points: r.points, period: r.month_year });
       });
+      // Nota: champs[0] = título más reciente de cada usuario, porque
+      // historyData ya viene ordenado por awarded_at desc desde el query.
+      // Si ese orden cambia, actualizar este comentario y el .slice/.sort.
 
       const { data: usersData } = await supabase
-        .from('users').select('id, name, avatar_url').in('id', Object.keys(map));
+        .from('users')
+        .select('id, name, avatar_url, best_streak, correct, predictions')
+        .in('id', Object.keys(map));
       if (!usersData?.length) { setChampions([]); return; }
 
       setChampions(
@@ -123,7 +128,9 @@ export default function RankingPage({ currentUser }) {
       });
 
       const { data: usersData } = await supabase
-        .from('users').select('id, name, avatar_url').in('id', Object.keys(map));
+        .from('users')
+        .select('id, name, avatar_url, best_streak, correct, predictions')
+        .in('id', Object.keys(map));
       if (!usersData?.length) { setGlobalChampions([]); return; }
 
       setGlobalChampions(
