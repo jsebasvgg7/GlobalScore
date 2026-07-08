@@ -84,18 +84,28 @@ export default function RankingPage({ currentUser }) {
         map[r.user_id].count++;
         map[r.user_id].champs.push({ points: r.points, period: r.month_year });
       });
+      // Nota: champs[0] = título más reciente de cada usuario, porque
+      // historyData ya viene ordenado por awarded_at desc desde el query.
+      // Si ese orden cambia, actualizar este comentario y el .slice/.sort.
 
       const { data: usersData } = await supabase
-        .from('users').select('id, name, avatar_url').in('id', Object.keys(map));
+        .from('users')
+        .select('id, name, avatar_url, best_streak, correct, predictions')
+        .in('id', Object.keys(map));
       if (!usersData?.length) { setChampions([]); return; }
 
       setChampions(
-        usersData.map(u => ({
-          ...u,
-          championships: map[u.id].count,
-          points: map[u.id].champs[0].points,
-          period: map[u.id].champs[0].period,
-        }))
+        usersData.map(u => {
+          const champs = map[u.id].champs;
+          const maxPointsChamp = champs.reduce((best, c) => c.points > best.points ? c : best, champs[0]);
+          const firstPeriodChamp = champs.reduce((first, c) => c.period < first.period ? c : first, champs[0]);
+          return {
+            ...u,
+            championships: map[u.id].count,
+            points: maxPointsChamp.points,
+            period: firstPeriodChamp.period,
+          };
+        })
           .sort((a, b) =>
             b.championships - a.championships ||
             b.points - a.points
@@ -123,16 +133,23 @@ export default function RankingPage({ currentUser }) {
       });
 
       const { data: usersData } = await supabase
-        .from('users').select('id, name, avatar_url').in('id', Object.keys(map));
+        .from('users')
+        .select('id, name, avatar_url, best_streak, correct, predictions')
+        .in('id', Object.keys(map));
       if (!usersData?.length) { setGlobalChampions([]); return; }
 
       setGlobalChampions(
-        usersData.map(u => ({
-          ...u,
-          championships: map[u.id].count,
-          points: map[u.id].champs[0].points,
-          period: map[u.id].champs[0].period,
-        }))
+        usersData.map(u => {
+          const champs = map[u.id].champs;
+          const maxPointsChamp = champs.reduce((best, c) => c.points > best.points ? c : best, champs[0]);
+          const firstPeriodChamp = champs.reduce((first, c) => c.period < first.period ? c : first, champs[0]);
+          return {
+            ...u,
+            championships: map[u.id].count,
+            points: maxPointsChamp.points,
+            period: firstPeriodChamp.period,
+          };
+        })
           .sort((a, b) =>
             b.championships - a.championships ||
             b.points - a.points
@@ -163,9 +180,9 @@ export default function RankingPage({ currentUser }) {
     const monthly = rankingType === 'monthly';
     return users.map(u => ({
       ...u,
-      rankPoints: monthly ? (u.monthly_points || 0) : (u.points || 0),
-      rankCorrect: monthly ? (u.monthly_correct || 0) : (u.correct || 0),
-      rankPredictions: monthly ? (u.monthly_predictions || 0) : (u.predictions || 0),
+      rankPoints: monthly ? (u.monthly_points || 0) : (u.season_points || 0),
+      rankCorrect: monthly ? (u.monthly_correct || 0) : (u.season_correct || 0),
+      rankPredictions: monthly ? (u.monthly_predictions || 0) : (u.season_predictions || 0),
     }));
   };
 

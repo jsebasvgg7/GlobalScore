@@ -1,6 +1,6 @@
 import React from "react";
 import { Bell, Trophy, CheckCircle2, BellRing, BellOff } from "lucide-react";
-import "../../styles/MobileNotifications.css";
+import "./MobileNotifications.css";
 
 // ── Pill de tipo ─────────────────────────────────────────────────
 function TypeBadge({ type }) {

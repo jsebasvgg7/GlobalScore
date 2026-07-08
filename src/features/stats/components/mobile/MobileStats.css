@@ -1,0 +1,726 @@
+/* ════════════════════════════════════════════════
+   ███████╗████████╗ █████╗ ████████╗███████╗
+   ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝
+   ███████╗   ██║   ███████║   ██║   ███████╗
+   ╚════██║   ██║   ██╔══██║   ██║   ╚════██║
+   ███████║   ██║   ██║  ██║   ██║   ███████║
+   MOBILE — neobrutalista, autocontenido
+════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+
+.mst-root {
+  --m-bg: #F0EDE8;
+  --m-card: #EAE7E1;
+  --m-surface: #F5F2EC;
+  --m-border: #1A1A2E;
+  --m-border-hard: #1A1A2E;
+  --m-accent: #5b4fd8;
+  --m-accent-l: #8b7fc7;
+  --m-text: #1A1A2E;
+  --m-muted: #6B6580;
+  --m-mono: 'DM Mono', 'Courier New', monospace;
+  --m-green: #1D9E75;
+  --m-amber: #f59e0b;
+  --m-gold: #c9a227;
+  --m-silver: #9ca3af;
+  --m-bronze: #cd7c30;
+  --bru-shadow-color: rgba(58, 48, 38, .35);
+  --bru-shadow: 2px 2px 0px var(--bru-shadow-color);
+  --bru-shadow-sm: 1.5px 1.5px 0px var(--bru-shadow-color);
+  --bru-shadow-lg: 2.5px 2.5px 0px var(--bru-shadow-color);
+  --bru-active: 1px 1px 0px var(--bru-shadow-color);
+
+  font-family: var(--m-mono);
+  background: var(--m-bg);
+  padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+}
+
+[data-theme="dark"] .mst-root {
+  --m-bg: #13111A;
+  --m-card: #1A1824;
+  --m-surface: #221F2E;
+  --m-border: #38334F;
+  --m-border-hard: #38334F;
+  --m-accent: #8B7FC7;
+  --m-accent-l: #A599D9;
+  --m-text: #F0EDF8;
+  --m-muted: #B8B0D0;
+  --m-green: #2DC98A;
+  --m-amber: #FBB040;
+  --m-gold: #D4A832;
+  --m-silver: #8A8FA8;
+  --m-bronze: #C07A40;
+  --bru-shadow-color: rgba(0, 0, 0, .4);
+}
+
+@keyframes mst-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mst-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 768px) {
+  .mst-root {
+    display: none;
+  }
+}
+
+/* ── Topbar de rango (Todo / Mes) ── */
+.mst-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px 10px;
+  animation: mst-fade-in .3s ease both;
+}
+
+.mst-topbar-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--m-mono);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--m-text);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.mst-topbar-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--m-accent);
+  flex-shrink: 0;
+  box-shadow: 1px 1px 0 var(--m-accent-l);
+}
+
+.mst-range-pills {
+  display: flex;
+  gap: 4px;
+}
+
+.mst-range-pill {
+  font-family: var(--m-mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border: 1px solid var(--m-border-hard);
+  background: var(--m-card);
+  color: var(--m-muted);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .12s, color .12s, box-shadow .08s, transform .08s;
+}
+
+.mst-range-pill:active {
+  transform: translate(1px, 1px);
+}
+
+.mst-range-pill.active {
+  background: var(--m-accent);
+  border-color: var(--m-border-hard);
+  color: #fff;
+  box-shadow: var(--bru-shadow-sm);
+}
+
+/* ── Hero bento: Precisión (grande) + Exactos/Correctos/Puntos (chicas) ── */
+.mst-hero {
+  margin: 6px 18px 0;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 10px;
+  animation: mst-fade-up .3s ease .05s both;
+}
+
+.mst-hero-main {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  min-height: 158px;
+  background: var(--m-accent);
+  border: 1px solid var(--m-border-hard);
+  box-shadow: var(--bru-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px 14px 14px;
+  color: #fff;
+}
+
+.mst-hero-small {
+  grid-column: 2;
+  background: var(--m-card);
+  border: 1px solid var(--m-border-hard);
+  box-shadow: var(--bru-shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 9px 10px;
+  min-height: 74px;
+}
+
+.mst-hero-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mst-hero-main .mst-hero-icon {
+  background: rgba(255, 255, 255, .18);
+  color: #fff;
+}
+
+.mst-hero-small .mst-hero-icon {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  opacity: .5;
+}
+
+.mst-hero-lbl {
+  font-family: var(--m-mono);
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.mst-hero-main .mst-hero-lbl {
+  color: rgba(255, 255, 255, .8);
+  margin-top: 8px;
+}
+
+.mst-hero-small .mst-hero-lbl {
+  color: var(--m-accent);
+  padding-right: 20px;
+}
+
+.mst-hero-main-val {
+  font-family: var(--m-mono);
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  line-height: 1;
+  color: #fff;
+}
+
+.mst-hero-sub {
+  font-family: var(--m-mono);
+  font-size: 8.5px;
+  letter-spacing: .02em;
+}
+
+.mst-hero-main .mst-hero-sub {
+  color: rgba(255, 255, 255, .7);
+  margin-top: 4px;
+}
+
+.mst-hero-small-val {
+  font-family: var(--m-mono);
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--m-text);
+  letter-spacing: -.02em;
+  line-height: 1;
+  position: relative;
+}
+
+.mst-hero-small .mst-hero-sub {
+  color: var(--m-muted);
+  margin-top: 1px;
+}
+
+.mst-hero-small--green {
+  grid-column: 1 / 3;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 12px 18px;
+}
+
+.mst-hero-small--green .mst-hero-icon {
+  position: static;
+  opacity: 1;
+  width: 30px;
+  height: 30px;
+  background: rgba(29, 158, 117, .12);
+  color: var(--m-green);
+  flex-shrink: 0;
+}
+
+.mst-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mst-hero-small--green .mst-hero-lbl {
+  padding-right: 0;
+}
+
+.mst-hero-small--green .mst-hero-small-val {
+  font-size: 26px;
+}
+
+.mst-hero-small--green .mst-hero-sub {
+  margin-left: auto;
+}
+
+.mst-hero-small--amber .mst-hero-small-val {
+  color: var(--m-amber);
+}
+
+.mst-hero-small--gold .mst-hero-small-val {
+  color: var(--m-gold);
+}
+
+/* ── Section header ── */
+.mst-sec-hdr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 18px 10px;
+  animation: mst-fade-in .3s ease both;
+}
+
+.mst-sec-sq {
+  width: 5px;
+  height: 5px;
+  background: var(--m-accent);
+  flex-shrink: 0;
+  box-shadow: 1px 1px 0 var(--m-accent-l);
+}
+
+.mst-sec-title {
+  font-family: var(--m-mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+}
+
+/* ── Desglose de resultados (3 filas con barra) ── */
+.mst-results {
+  margin: 0 18px;
+  background: var(--m-card);
+  border: 1px solid var(--m-border-hard);
+  box-shadow: var(--bru-shadow);
+  padding: 4px 14px;
+}
+
+.mst-result-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--m-border);
+}
+
+.mst-result-item:last-child {
+  border-bottom: none;
+}
+
+.mst-result-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.mst-result-left {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.mst-result-num {
+  font-family: var(--m-mono);
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  line-height: 1;
+  color: var(--m-text);
+}
+
+.mst-result-pts {
+  font-family: var(--m-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--m-green);
+}
+
+.mst-result-pts--red {
+  color: var(--m-muted);
+}
+
+.mst-result-pct {
+  font-family: var(--m-mono);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--m-muted);
+}
+
+.mst-result-name {
+  font-family: var(--m-mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+  margin-bottom: 6px;
+}
+
+.mst-result-bar-wrap {
+  height: 5px;
+  background: var(--m-bg);
+  border: 1px solid var(--m-border-hard);
+  overflow: hidden;
+}
+
+.mst-result-bar {
+  height: 100%;
+  transition: width .5s ease;
+}
+
+/* ── Ligas: filas espaciosas estilo mrk-row ── */
+.mst-leagues {
+  margin: 0 18px;
+  background: var(--m-card);
+  border: 1px solid var(--m-border-hard);
+  box-shadow: var(--bru-shadow);
+  overflow: hidden;
+}
+
+.mst-league-thead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--m-surface);
+  border-bottom: 1px solid var(--m-border-hard);
+}
+
+.mst-league-thead span {
+  font-family: var(--m-mono);
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+}
+
+.mst-lth-rank {
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.mst-lth-name {
+  flex: 1;
+}
+
+.mst-lth-pts {
+  width: 44px;
+  text-align: right;
+}
+
+.mst-lth-acc {
+  width: 70px;
+  text-align: right;
+}
+
+.mst-league-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--m-border);
+}
+
+.mst-league-row:last-child {
+  border-bottom: none;
+}
+
+.mst-rank-badge {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--m-mono);
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--m-bg);
+  border: 1px solid var(--m-border);
+  color: var(--m-muted);
+  flex-shrink: 0;
+}
+
+.mst-rank-badge--1 {
+  background: var(--m-gold) !important;
+  color: #fff !important;
+  border-color: var(--m-border-hard) !important;
+}
+
+.mst-rank-badge--2 {
+  background: var(--m-silver) !important;
+  color: #fff !important;
+  border-color: var(--m-border-hard) !important;
+}
+
+.mst-rank-badge--3 {
+  background: var(--m-bronze) !important;
+  color: #fff !important;
+  border-color: var(--m-border-hard) !important;
+}
+
+.mst-league-name {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--m-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--m-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mst-league-pts {
+  width: 44px;
+  flex-shrink: 0;
+  text-align: right;
+  font-family: var(--m-mono);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--m-gold);
+}
+
+.mst-league-acc {
+  width: 70px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mst-league-acc-bar {
+  width: 32px;
+  height: 4px;
+  background: var(--m-bg);
+  border: 1px solid var(--m-border);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.mst-league-acc-fill {
+  height: 100%;
+  background: var(--m-green);
+}
+
+.mst-league-acc-pct {
+  font-family: var(--m-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--m-green);
+  flex-shrink: 0;
+}
+
+/* ── Días: 7 barras verticales ── */
+.mst-days {
+  margin: 0 18px;
+  background: var(--m-card);
+  border: 1px solid var(--m-border-hard);
+  box-shadow: var(--bru-shadow);
+  padding: 14px 10px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.mst-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.mst-day-lbl {
+  font-family: var(--m-mono);
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+}
+
+.mst-day-pct {
+  font-family: var(--m-mono);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--m-text);
+  line-height: 1;
+}
+
+.mst-day-bar-wrap {
+  width: 100%;
+  height: 46px;
+  background: var(--m-bg);
+  border: 1px solid var(--m-border);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.mst-day-fill {
+  width: 100%;
+  background: var(--m-accent);
+  transition: height .5s ease;
+}
+
+.mst-day-detail {
+  font-family: var(--m-mono);
+  font-size: 6.5px;
+  color: var(--m-muted);
+}
+
+/* ── Distribución de puntos ── */
+.mst-dist {
+  margin: 0 18px;
+  background: var(--m-card);
+  border: 1px solid var(--m-border-hard);
+  box-shadow: var(--bru-shadow);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mst-dist-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.mst-dist-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.mst-dist-name {
+  font-family: var(--m-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--m-text);
+}
+
+.mst-dist-val {
+  font-family: var(--m-mono);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--m-text);
+}
+
+.mst-dist-track {
+  height: 6px;
+  background: var(--m-bg);
+  border: 1px solid var(--m-border-hard);
+  overflow: hidden;
+}
+
+.mst-dist-fill {
+  height: 100%;
+  transition: width .5s ease;
+}
+
+/* ── Pronósticos especiales: bento 2x2 ── */
+.mst-forecast {
+  margin: 0 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.mst-forecast-item {
+  background: var(--m-card);
+  border: 1px solid var(--m-border-hard);
+  box-shadow: var(--bru-shadow);
+  padding: 12px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mst-forecast-val {
+  font-family: var(--m-mono);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--m-text);
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+
+.mst-forecast-val--green {
+  color: var(--m-green);
+}
+
+.mst-forecast-lbl {
+  font-family: var(--m-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+}
+
+/* ── Estados: loading / empty ── */
+.mst-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.mst-empty-icon {
+  font-size: 34px;
+  opacity: .25;
+  line-height: 1;
+}
+
+.mst-empty-title {
+  font-family: var(--m-mono);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--m-text);
+}
+
+.mst-empty-sub {
+  font-family: var(--m-mono);
+  font-size: 10px;
+  color: var(--m-muted);
+}

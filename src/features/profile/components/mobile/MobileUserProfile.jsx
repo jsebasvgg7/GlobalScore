@@ -9,7 +9,7 @@ import {
   BadgeCheck,
 } from "lucide-react";
 import { supabase } from "@/shared/services/supabase/client";
-import "../../styles/MobileUserProfile.css";
+import "./MobileUserProfile.css";
 
 /* ── helpers ── */
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");

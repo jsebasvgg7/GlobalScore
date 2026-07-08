@@ -71,12 +71,13 @@ function OverviewTab({ userData, currentUser, userRanking }) {
   const { pointsInLevel, pointsToNextLevel, levelProgress } = calculateLevelProgress(userData, currentUser);
 
   const items = [
-    { label: 'Predicciones', value: fmt(currentUser?.predictions || 0), icon: Target, color: '#c9a227' },
-    { label: 'Puntos', value: fmt(currentUser?.points || 0), icon: Zap, color: '#5b4fd8' },
+    { label: 'Predicciones', value: fmt(currentUser?.season_predictions || 0), icon: Target, color: '#c9a227' },
+    { label: 'Puntos', value: fmt(currentUser?.season_points || 0), icon: Zap, color: '#5b4fd8' },
     { label: 'Precisión', value: `${accuracy}%`, icon: TrendingUp, color: '#1D9E75' },
     { label: 'Nivel', value: userData.level || 1, icon: Star, color: '#a0652a' },
     { label: 'Ranking', value: `#${userRanking.position || '—'}`, icon: Trophy, color: '#8a8a8a' },
-    { label: 'Campeonatos', value: userData.monthly_championships || 0, icon: Crown, color: '#c9a227' },
+    { label: 'Camp. Mes', value: currentUser?.monthly_championships || 0, icon: Crown, color: '#c9a227' },
+    { label: 'Camp. Global', value: currentUser?.global_championships || 0, icon: Crown, color: '#8b7fc7' },
   ];
 
   return (

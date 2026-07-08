@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CheckCircle2, Trophy, Target, Award, Star, Shield, Clock } from "lucide-react";
-import '../../styles/MobileCardsGlobal.css';
+import './MobileCardsGlobal.css';
 // ── Icono espadas knockout ───────────────────────────────────────
 const SwordsIcon = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none"

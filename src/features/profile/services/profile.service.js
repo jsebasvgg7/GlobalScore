@@ -104,7 +104,8 @@ export const fetchUserPredictionsWithMatches = async (userId) => {
         .select(`
             *,
             matches (
-                result_home, result_away, status, date
+                result_home, result_away, status, date,
+                is_knockout, advancing_team
             )
         `)
         .eq('user_id', userId)

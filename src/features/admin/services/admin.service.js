@@ -74,7 +74,7 @@ export const updatePredictionPoints = async (predictionId, pointsEarned, advanci
 export const getUserStats = async (userId) => {
     const { data, error } = await supabase
         .from('users')
-        .select('points, predictions, correct, best_streak, current_streak, monthly_points, monthly_predictions, monthly_correct')
+        .select('points, predictions, correct, best_streak, current_streak, monthly_points, monthly_predictions, monthly_correct, season_points, season_predictions, season_correct')
         .eq('id', userId)
         .single();
     if (error) throw error;

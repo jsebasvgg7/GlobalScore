@@ -4,7 +4,7 @@ import {
   ChevronRight, ChevronDown, Moon, Sun,
   BarChart2, Award, Crown, FileText, NotebookPen,
   Edit2, User, Bell, Lock, ArrowLeft,
-  Target, Zap, TrendingUp, Star, Trophy,
+  Target, Star, Trophy,
   Heart, Globe, Activity, Shield, Gamepad2,
   Calendar, CheckCircle2, XCircle, Clock,
   ArrowUpDown, Image, Check, Save, X,
@@ -20,9 +20,24 @@ import {
   calculateLevelProgress,
   getIconEmoji,
 } from "@/shared/utils/profileUtils";
-import "../../styles/MobileProfileMain.css";
+import "./MobileProfileMain.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
+
+/* ── Bento pattern for achievements grid: cycles through a fixed
+   sequence of size/accent variants so the layout looks organic and
+   asymmetric but stays stable across renders (no Math.random). ── */
+const BENTO_PATTERN = [
+  "big accent-a", "", "", "",
+  "", "wide accent-b", "", "tall",
+  "", "", "wide accent-c", "",
+  "tall", "", "", "big accent-a",
+];
+function getBentoClass(index) {
+  const variant = BENTO_PATTERN[index % BENTO_PATTERN.length];
+  if (!variant) return "mpm-ach-card";
+  return "mpm-ach-card " + variant.split(" ").map((v) => `mpm-ach-card--${v}`).join(" ");
+}
 
 const TAB_LABELS = {
   overview: "Estadísticas",
@@ -65,17 +80,18 @@ function StatChip({ value, label }) {
 }
 
 /* ── Nav row ── */
-function NavRow({ icon: Icon, label, desc, color, onClick, right }) {
+function NavRow({ icon: Icon, label, desc, color, onClick, right, className = "" }) {
+  const isTile = className.includes("mpm-row--tile");
   return (
-    <button className="mpm-row" onClick={onClick}>
+    <button className={`mpm-row ${className}`.trim()} onClick={onClick}>
       <div className="mpm-row-icon" style={{ background: color }}>
-        <Icon size={17} color="#fff" />
+        <Icon size={isTile ? 16 : 17} color="#fff" />
       </div>
       <div className="mpm-row-body">
         <span className="mpm-row-lbl">{label}</span>
         {desc && <span className="mpm-row-desc">{desc}</span>}
       </div>
-      {right || <ChevronRight size={15} className="mpm-row-arrow" />}
+      {!isTile && (right || <ChevronRight size={15} className="mpm-row-arrow" />)}
     </button>
   );
 }
@@ -114,41 +130,64 @@ function OverviewTab({ userData, currentUser, userRanking }) {
   const { pointsInLevel, pointsToNextLevel, levelProgress } =
     calculateLevelProgress(userData, currentUser);
 
-  const items = [
-    { label: "Predicciones", value: fmt(currentUser?.predictions || 0), icon: Target, color: "#c9a227" },
-    { label: "Puntos", value: fmt(currentUser?.points || 0), icon: Zap, color: "#5b4fd8" },
-    { label: "Precisión", value: `${accuracy}%`, icon: TrendingUp, color: "#1D9E75" },
-    { label: "Nivel", value: userData.level || 1, icon: Star, color: "#a0652a" },
-    { label: "Ranking", value: `#${userRanking?.position || "—"}`, icon: Trophy, color: "#8a8a8a" },
-    { label: "Campeonatos", value: userData.monthly_championships || 0, icon: Crown, color: "#c9a227" },
+  const smallStats = [
+    { label: "Predicciones", value: fmt(currentUser?.season_predictions || 0) },
+    { label: "Ranking", value: `#${userRanking?.position || "—"}` },
+    { label: "Nivel", value: userData.level || 1 },
   ];
 
   return (
-    <div className="mpm-tab-content">
-      <div className="mpm-level-block">
-        <div className="mpm-level-row">
-          <span className="mpm-level-lbl">NIVEL {userData.level || 1}</span>
-          <span className="mpm-level-pts">{pointsInLevel}/20 XP</span>
-          <span className="mpm-level-next">—{pointsToNextLevel} pts</span>
-        </div>
-        <div className="mpm-level-track">
-          <div className="mpm-level-fill" style={{ width: `${levelProgress}%` }} />
+    <div className="mpm-tab-content mpm-tab-content--overview">
+      <div className="mpm-level-block mpm-level-block--hero">
+        <div className="mpm-level-hero-row">
+          <div className="mpm-level-hero-num">
+            <span className="mpm-level-hero-lbl">NIVEL</span>
+            <span className="mpm-level-hero-val">{userData.level || 1}</span>
+          </div>
+          <div className="mpm-level-hero-progress">
+            <div className="mpm-level-row">
+              <span className="mpm-level-pts">{pointsInLevel}/20 XP</span>
+              <span className="mpm-level-next">—{pointsToNextLevel} pts</span>
+            </div>
+            <div className="mpm-level-track">
+              <div className="mpm-level-fill" style={{ width: `${levelProgress}%` }} />
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="mpm-stats-grid">
-        {items.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div className="mpm-stat-cell" key={item.label}>
-              <div className="mpm-stat-icon" style={{ background: item.color }}>
-                <Icon size={13} color="#fff" />
-              </div>
-              <div className="mpm-stat-val">{item.value}</div>
-              <div className="mpm-stat-lbl">{item.label}</div>
-            </div>
-          );
-        })}
+      <div className="mpm-bento-main">
+        <div className="mpm-bento-cell mpm-bento-cell--points">
+          <span className="mpm-bento-lbl">Puntos temporada</span>
+          <span className="mpm-bento-val">{fmt(currentUser?.season_points || 0)}</span>
+        </div>
+        <div className="mpm-bento-cell mpm-bento-cell--accuracy">
+          <span className="mpm-bento-lbl">Precisión</span>
+          <span className="mpm-bento-val">{accuracy}%</span>
+        </div>
+        {smallStats.map((item) => (
+          <div className="mpm-bento-cell mpm-bento-cell--neutral" key={item.label}>
+            <span className="mpm-bento-lbl">{item.label}</span>
+            <span className="mpm-bento-val">{item.value}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mpm-bento-champs">
+        <div className="mpm-bento-cell mpm-bento-cell--champ-month">
+          <Crown size={18} className="mpm-bento-champ-icon" />
+          <div>
+            <span className="mpm-bento-val">{currentUser?.monthly_championships || 0}</span>
+            <span className="mpm-bento-lbl">Camp. del mes</span>
+          </div>
+        </div>
+        <div className="mpm-bento-cell mpm-bento-cell--champ-global">
+          <Crown size={18} className="mpm-bento-champ-icon" />
+          <div>
+            <span className="mpm-bento-val">{currentUser?.global_championships || 0}</span>
+            <span className="mpm-bento-lbl">Camp. global</span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -214,8 +253,8 @@ function AchievementsTab({
         </div>
       ) : (
         <div className="mpm-achievements-grid">
-          {userAchievements.map((ach) => (
-            <div key={ach.id} className="mpm-ach-card">
+          {userAchievements.map((ach, i) => (
+            <div key={ach.id} className={getBentoClass(i)}>
               <div className="mpm-ach-emoji">{getIconEmoji(ach.icon)}</div>
               <div className="mpm-ach-name">{ach.name}</div>
               <div className="mpm-ach-desc">{ach.description}</div>
@@ -362,7 +401,7 @@ function HistoryTab({ predictionHistory, historyLoading }) {
           <Gamepad2 size={36} /><p>Sin predicciones</p>
         </div>
       ) : (
-        <div className="mpm-hist-list">
+        <div className="mpm-hist-grid">
           {filtered.map((pred) => {
             const result = getPredictionResult(pred);
             const match = pred.matches;
@@ -370,54 +409,34 @@ function HistoryTab({ predictionHistory, historyLoading }) {
               <div key={pred.id} className={`mpm-hist-card mpm-hist-card--${result.status}`}>
                 <div className="mpm-hist-card-hdr">
                   <span className="mpm-hist-league">{match?.league}</span>
-                  <span className="mpm-hist-date">
-                    <Calendar size={10} />{match?.date}
-                  </span>
+                  <span className="mpm-hist-date">{match?.date}</span>
                 </div>
-                <div className="mpm-hist-body">
-                  <div className="mpm-hist-team">
-                    <div className="mpm-hist-logo">
-                      {match?.home_team_logo_url
-                        ? <img src={match.home_team_logo_url} alt="" onError={(e) => (e.target.style.display = "none")} />
-                        : <span>{match?.home_team_logo || "⚽"}</span>}
-                    </div>
-                    <span className="mpm-hist-tname">{match?.home_team}</span>
-                  </div>
 
-                  <div className="mpm-hist-scores">
-                    <div className="mpm-hist-score-wrap">
-                      <div className="mpm-hist-score">{pred.home_score}</div>
-                      <div className="mpm-hist-score">{pred.away_score}</div>
-                    </div>
-                    {match?.status === "finished" && (
-                      <div className="mpm-hist-real">
-                        <span>{match.result_home}</span>
-                        <span className="mpm-hist-sep">-</span>
-                        <span>{match.result_away}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mpm-hist-team mpm-hist-team--right">
-                    <span className="mpm-hist-tname">{match?.away_team}</span>
-                    <div className="mpm-hist-logo">
-                      {match?.away_team_logo_url
-                        ? <img src={match.away_team_logo_url} alt="" onError={(e) => (e.target.style.display = "none")} />
-                        : <span>{match?.away_team_logo || "⚽"}</span>}
-                    </div>
-                  </div>
+                <div className="mpm-hist-teams-row">
+                  <span className="mpm-hist-tname">{match?.home_team}</span>
+                  <span className="mpm-hist-vs">vs</span>
+                  <span className="mpm-hist-tname">{match?.away_team}</span>
                 </div>
-                <div className="mpm-hist-card-ftr">
-                  <div className={`mpm-hist-result mpm-hist-result--${result.status}`}>
-                    {result.status === "exact" && <Trophy size={12} />}
-                    {result.status === "correct" && <CheckCircle2 size={12} />}
-                    {result.status === "wrong" && <XCircle size={12} />}
-                    {result.status === "pending" && <Clock size={12} />}
-                    <span>{result.label}</span>
+
+                <div className={`mpm-hist-scoreboard mpm-hist-scoreboard--${result.status}`}>
+                  {pred.home_score}-{pred.away_score}
+                </div>
+
+                {match?.status === "finished" ? (
+                  <div className="mpm-hist-real-lbl">
+                    Real: {match.result_home}-{match.result_away}
                   </div>
-                  {result.points > 0 && (
-                    <div className="mpm-hist-pts">+{result.points} pts</div>
-                  )}
+                ) : (
+                  <div className="mpm-hist-real-lbl">{match?.time || "Por jugar"}</div>
+                )}
+
+                <div className={`mpm-hist-badge mpm-hist-badge--${result.status}`}>
+                  {result.status === "exact" && <Trophy size={10} />}
+                  {result.status === "correct" && <CheckCircle2 size={10} />}
+                  {result.status === "wrong" && <XCircle size={10} />}
+                  {result.status === "pending" && <Clock size={10} />}
+                  <span>{result.label}</span>
+                  {result.points > 0 && <span className="mpm-hist-badge-pts">+{result.points}</span>}
                 </div>
               </div>
             );
@@ -478,19 +497,21 @@ function EditTab({
         {bannersLoading ? (
           <p className="mpm-form-note">Cargando banners...</p>
         ) : (
-          <div className="mpm-banner-list">
+          <div className="mpm-banner-grid">
             <button
-              className={`mpm-banner-opt${!userData.equipped_banner_url ? " active" : ""}`}
+              className={`mpm-banner-cell mpm-banner-cell--first${!userData.equipped_banner_url ? " active" : ""}`}
               onClick={() => setUserData({ ...userData, equipped_banner_url: null })}
             >
-              <div className="mpm-banner-preview mpm-banner-base" />
-              <span>Banner Base</span>
-              {!userData.equipped_banner_url && <Check size={12} className="mpm-banner-check" />}
+              <div className="mpm-banner-cell-bg mpm-banner-cell-bg--base" />
+              <span className="mpm-banner-cell-lbl">Banner Base</span>
+              {!userData.equipped_banner_url && (
+                <span className="mpm-banner-cell-check"><Check size={11} /></span>
+              )}
             </button>
             {userBanners.map((b) => (
               <button
                 key={b.id}
-                className={`mpm-banner-opt${userData.equipped_banner_url === b.image_url ? " active" : ""}`}
+                className={`mpm-banner-cell${userData.equipped_banner_url === b.image_url ? " active" : ""}`}
                 onClick={() =>
                   setUserData({
                     ...userData,
@@ -499,10 +520,10 @@ function EditTab({
                   })
                 }
               >
-                <img src={b.image_url} alt={b.name} className="mpm-banner-preview" />
-                <span>{b.name}</span>
+                <img src={b.image_url} alt="" className="mpm-banner-cell-bg" />
+                <span className="mpm-banner-cell-lbl">{b.name}</span>
                 {userData.equipped_banner_url === b.image_url && (
-                  <Check size={12} className="mpm-banner-check" />
+                  <span className="mpm-banner-cell-check"><Check size={11} /></span>
                 )}
               </button>
             ))}
@@ -513,35 +534,37 @@ function EditTab({
         )}
       </div>
 
-      {fields.map((f) => {
-        const Icon = f.icon;
-        return (
-          <div key={f.key} className="mpm-form-group">
-            <label className="mpm-form-label"><Icon size={13} /> {f.label}</label>
-            <input
-              type="text"
-              className="mpm-form-input"
-              value={userData[f.key] || ""}
-              onChange={(e) => setUserData({ ...userData, [f.key]: e.target.value })}
-              placeholder={f.placeholder}
-            />
-          </div>
-        );
-      })}
+      <div className="mpm-form-bento">
+        {fields.map((f) => {
+          const Icon = f.icon;
+          return (
+            <div key={f.key} className="mpm-form-group mpm-form-group--half">
+              <label className="mpm-form-label"><Icon size={13} /> {f.label}</label>
+              <input
+                type="text"
+                className="mpm-form-input"
+                value={userData[f.key] || ""}
+                onChange={(e) => setUserData({ ...userData, [f.key]: e.target.value })}
+                placeholder={f.placeholder}
+              />
+            </div>
+          );
+        })}
 
-      <div className="mpm-form-group">
-        <label className="mpm-form-label"><User size={13} /> Género</label>
-        <select
-          className="mpm-form-input"
-          value={userData.gender || ""}
-          onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
-        >
-          <option value="">Seleccionar...</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Femenino">Femenino</option>
-          <option value="Otro">Otro</option>
-          <option value="Prefiero no decir">Prefiero no decir</option>
-        </select>
+        <div className="mpm-form-group mpm-form-group--half">
+          <label className="mpm-form-label"><User size={13} /> Género</label>
+          <select
+            className="mpm-form-input"
+            value={userData.gender || ""}
+            onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
+          >
+            <option value="">Seleccionar...</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+            <option value="Prefiero no decir">Prefiero no decir</option>
+          </select>
+        </div>
       </div>
 
       <div className="mpm-form-group">
@@ -555,7 +578,7 @@ function EditTab({
         />
       </div>
 
-      <div className="mpm-form-actions">
+      <div className="mpm-form-actions mpm-form-actions--bento">
         <button className="mpm-save-btn" onClick={handleSave} disabled={loading}>
           {loading ? <Activity size={14} className="spinner" /> : <Save size={14} />}
           {loading ? "Guardando..." : "Guardar Cambios"}
@@ -761,10 +784,7 @@ export default function MobileProfileMain({
   const [showMobileNotes, setShowMobileNotes] = useState(false);
   const [appearanceOpen, setAppearanceOpen] = useState(false);
 
-  const accuracy =
-    currentUser?.predictions > 0
-      ? Math.round((currentUser.correct / currentUser.predictions) * 100)
-      : 0;
+ const accuracy = calculateAccuracy(currentUser);
 
   const isAdmin =
     currentUser?.role === "admin" || currentUser?.email === "tian@admin.com";
@@ -842,13 +862,16 @@ export default function MobileProfileMain({
   const currentMobileTab = isMobileSub ? mobileView.replace("tab:", "") : null;
 
   /* ── Nav groups ── */
+  const ACTIVITY_HERO = { id: "overview", icon: BarChart2, label: "Estadísticas", desc: "Ver tu rendimiento", color: "#1d9e75" };
+  const ACTIVITY_PAIR = [
+    { id: "achievements", icon: Award, label: "Logros", desc: `${currentUser?.achievements?.length || 0} items`, color: "#c9a227" },
+    { id: "championships", icon: Crown, label: "Campeonatos", desc: `${currentUser?.monthly_championships || 0} items`, color: "#8b7fc7" },
+  ];
+
   const NAV_GROUPS = [
     {
       label: "Mi actividad",
       items: [
-        { id: "overview", icon: BarChart2, label: "Estadísticas", desc: "Ver tu rendimiento", color: "#1d9e75" },
-        { id: "achievements", icon: Award, label: "Logros", desc: `${currentUser?.achievements?.length || 0} desbloqueados`, color: "#f59e0b" },
-        { id: "championships", icon: Crown, label: "Campeonatos", desc: `${currentUser?.monthly_championships || 0} coronas`, color: "#8b7fc7" },
         { id: "history", icon: FileText, label: "Historial", desc: "Todas tus predicciones", color: "#60a5fa" },
         { id: "notes", icon: NotebookPen, label: "Mis Notas", desc: "Bloc de notas cifrado", color: "#5b4fd8" },
       ],
@@ -929,13 +952,15 @@ export default function MobileProfileMain({
         <ChevronRight size={16} className="mpm-user-arrow" />
       </div>
 
-      {/* ── STATS ── */}
+      {/* ── STATS (bento: hero + 2 chicas apiladas) ── */}
       <div className="mpm-stats-row">
-        <StatChip value={fmt(currentUser?.points)} label="Puntos" />
-        <div className="mpm-stats-sep" />
-        <StatChip value={fmt(currentUser?.correct)} label="Aciertos" />
-        <div className="mpm-stats-sep" />
-        <StatChip value={`${accuracy}%`} label="Precisión" />
+        <div className="mpm-stat-hero">
+          <StatChip value={fmt(currentUser?.points)} label="Puntos" />
+        </div>
+        <div className="mpm-stats-side">
+          <StatChip value={fmt(currentUser?.correct)} label="Aciertos" />
+          <StatChip value={`${accuracy}%`} label="Precisión" />
+        </div>
       </div>
 
       {/* ── PREFERENCIAS ── */}
@@ -958,7 +983,7 @@ export default function MobileProfileMain({
           </button>
         </div>
 
-        {/* Apariencia */}
+        {/* Apariencia — oculto temporalmente, un solo estilo visual definido
         <div>
           <button className="mpm-row" onClick={() => setAppearanceOpen((o) => !o)}>
             <div className="mpm-row-icon" style={{ background: "#eab308" }}>
@@ -981,6 +1006,33 @@ export default function MobileProfileMain({
               <StyleSwitcher />
             </div>
           )}
+        </div>
+        */}
+      </div>
+
+      {/* ── MI ACTIVIDAD (bento: hero + par) ── */}
+      <div className="mpm-section-label">Mi actividad</div>
+      <div className="mpm-group">
+        <NavRow
+          icon={ACTIVITY_HERO.icon}
+          label={ACTIVITY_HERO.label}
+          desc={ACTIVITY_HERO.desc}
+          color={ACTIVITY_HERO.color}
+          onClick={() => handleNavigate(ACTIVITY_HERO.id)}
+          className="mpm-row--hero"
+        />
+        <div className="mpm-activity-pair">
+          {ACTIVITY_PAIR.map((item) => (
+            <NavRow
+              key={item.id}
+              icon={item.icon}
+              label={item.label}
+              desc={item.desc}
+              color={item.color}
+              onClick={() => handleNavigate(item.id)}
+              className="mpm-row--tile"
+            />
+          ))}
         </div>
       </div>
 

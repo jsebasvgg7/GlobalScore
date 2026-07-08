@@ -12,6 +12,36 @@ import './StatsPage.css';
 
 const fmt = (n) => Number(n || 0).toLocaleString('es-ES');
 
+/* ── Fetch paginado ──
+   Supabase/PostgREST limita cada request a un máximo de filas
+   (por defecto 1000, via db-max-rows). Sin .range() una query con
+   más de 1000 resultados se corta en silencio, sin lanzar error.
+   Esta función pagina con .range() hasta traer todas las filas. */
+const fetchAllPredictions = async (userId, dateLimit) => {
+  const pageSize = 1000;
+  let from = 0;
+  let all = [];
+
+  while (true) {
+    let q = supabase
+      .from('predictions')
+      .select('*, matches(id,league,home_team,away_team,result_home,result_away,status,date)')
+      .eq('user_id', userId)
+      .range(from, from + pageSize - 1);
+    if (dateLimit) q = q.gte('created_at', dateLimit);
+
+    const { data, error } = await q;
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+
+    all = all.concat(data);
+    if (data.length < pageSize) break; // última página
+    from += pageSize;
+  }
+
+  return all;
+};
+
 /* ── Icono cuadrado de hero ── */
 function HeroIcon({ color, children }) {
   return (
@@ -42,24 +72,19 @@ export default function StatsPage({ currentUser }) {
 
       const now = new Date();
       let dateLimit = null;
-      if (timeRange === 'week') {
-        dateLimit = new Date(now.setDate(now.getDate() - 7)).toISOString();
-      } else if (timeRange === 'month') {
-        dateLimit = new Date(now.setMonth(now.getMonth() - 1)).toISOString();
+      if (timeRange === 'month') {
+        // "Últ. 30 días": ventana móvil de 30 días desde ahora.
+        const d = new Date();
+        d.setDate(d.getDate() - 30);
+        dateLimit = d.toISOString();
       }
 
-      let matchQuery = supabase
-        .from('predictions')
-        .select('*, matches(id,league,home_team,away_team,result_home,result_away,status,date)')
-        .eq('user_id', currentUser.id);
-      if (dateLimit) matchQuery = matchQuery.gte('created_at', dateLimit);
-
       const [
-        { data: predictions },
+        predictions,
         { data: leaguePredictions },
         { data: awardPredictions },
       ] = await Promise.all([
-        matchQuery,
+        fetchAllPredictions(currentUser.id, dateLimit),
         supabase.from('league_predictions').select('*, leagues(*)').eq('user_id', currentUser.id),
         supabase.from('award_predictions').select('*, awards(*)').eq('user_id', currentUser.id),
       ]);
@@ -74,22 +99,31 @@ export default function StatsPage({ currentUser }) {
 
   /* ────────────────────────────────────────────────────────────
      PROCESS
+     Lee result_type / points_earned / advancing_points directamente
+     de la tabla predictions (fuente de verdad, ya calculada por el
+     admin al finalizar el partido) en vez de recalcular a mano con
+     Math.sign(). Así Stats nunca se desincroniza si cambian las
+     reglas de puntos en otro lugar del código.
   ──────────────────────────────────────────────────────────── */
   const processStats = (predictions, leaguePreds, awardPreds) => {
-    const finished = predictions.filter(p => p.matches?.status === 'finished');
+    // Solo predicciones ya puntuadas cuentan como "finalizadas" — una
+    // predicción de un partido finished pero sin result_type (caso que
+    // ya no debería ocurrir tras el fix del admin, pero por seguridad
+    // se trata igual que "pendiente" en vez de romper el cálculo).
+    const finished = predictions.filter(p => p.matches?.status === 'finished' && p.result_type != null);
 
-    let exact = 0, correctResult = 0, wrong = 0, totalPoints = 0;
+    let exact = 0, correctResult = 0, wrong = 0, totalPoints = 0, advancingPoints = 0, correctAdvancing = 0;
 
     finished.forEach(pred => {
-      const m = pred.matches;
-      const pd = Math.sign(pred.home_score - pred.away_score);
-      const rd = Math.sign(m.result_home - m.result_away);
-      if (pred.home_score === m.result_home && pred.away_score === m.result_away) {
-        exact++; totalPoints += 5;
-      } else if (pd === rd) {
-        correctResult++; totalPoints += 3;
-      } else {
-        wrong++;
+      if (pred.result_type === 'exact') exact++;
+      else if (pred.result_type === 'result') correctResult++;
+      else wrong++;
+
+      totalPoints += pred.points_earned || 0;
+
+      if (pred.advancing_points > 0) {
+        advancingPoints += pred.advancing_points;
+        correctAdvancing++;
       }
     });
 
@@ -99,25 +133,17 @@ export default function StatsPage({ currentUser }) {
       const league = pred.matches?.league;
       if (!league) return;
       if (!leagueMap[league]) leagueMap[league] = { total: 0, correct: 0, exact: 0, points: 0 };
-      const m = pred.matches;
-      const pd = Math.sign(pred.home_score - pred.away_score);
-      const rd = Math.sign(m.result_home - m.result_away);
       leagueMap[league].total++;
-      if (pred.home_score === m.result_home && pred.away_score === m.result_away) {
-        leagueMap[league].exact++; leagueMap[league].correct++; leagueMap[league].points += 5;
-      } else if (pd === rd) {
-        leagueMap[league].correct++; leagueMap[league].points += 3;
-      }
+      if (pred.result_type === 'exact') { leagueMap[league].exact++; leagueMap[league].correct++; }
+      else if (pred.result_type === 'result') { leagueMap[league].correct++; }
+      leagueMap[league].points += (pred.points_earned || 0) + (pred.advancing_points || 0);
     });
 
     /* Rachas */
     const sorted = [...finished].sort((a, b) => new Date(b.matches.date) - new Date(a.matches.date));
     let currentStreak = 0, bestStreak = 0, tempStreak = 0;
     sorted.forEach((pred, i) => {
-      const m = pred.matches;
-      const pd = Math.sign(pred.home_score - pred.away_score);
-      const rd = Math.sign(m.result_home - m.result_away);
-      const ok = pd === rd || (pred.home_score === m.result_home && pred.away_score === m.result_away);
+      const ok = (pred.points_earned || 0) > 0;
       if (ok) { tempStreak++; if (i === 0) currentStreak = tempStreak; bestStreak = Math.max(bestStreak, tempStreak); }
       else { tempStreak = 0; if (i === 0) currentStreak = 0; }
     });
@@ -127,10 +153,7 @@ export default function StatsPage({ currentUser }) {
     finished.forEach(pred => {
       const day = new Date(pred.matches.date).getDay();
       dayStats[day].total++;
-      const m = pred.matches;
-      const pd = Math.sign(pred.home_score - pred.away_score);
-      const rd = Math.sign(m.result_home - m.result_away);
-      if (pd === rd || (pred.home_score === m.result_home && pred.away_score === m.result_away)) dayStats[day].correct++;
+      if ((pred.points_earned || 0) > 0) dayStats[day].correct++;
     });
     /* Ordenar Lun→Dom */
     const orderedDays = [...dayStats.slice(1), dayStats[0]];
@@ -142,6 +165,7 @@ export default function StatsPage({ currentUser }) {
       totalPredictions: finished.length,
       pendingPredictions: predictions.length - finished.length,
       exact, correctResult, wrong, totalPoints,
+      advancingPoints, correctAdvancing,
       accuracy: finished.length > 0 ? Math.round(((exact + correctResult) / finished.length) * 100) : 0,
       exactAccuracy: finished.length > 0 ? Math.round((exact / finished.length) * 100) : 0,
       currentStreak, bestStreak,
@@ -153,7 +177,7 @@ export default function StatsPage({ currentUser }) {
       leaguePredictions: (leaguePreds || []).length,
       awardPredictions: (awardPreds || []).length,
       leaguePoints, awardPoints,
-      pointsFromMatches: totalPoints,
+      pointsFromMatches: totalPoints + advancingPoints,
       pointsFromLeagues: leaguePoints,
       pointsFromAwards: awardPoints,
     };
@@ -212,8 +236,7 @@ export default function StatsPage({ currentUser }) {
               <div className="sp-range-pills">
                 {[
                   { key: 'all', label: 'Todo' },
-                  { key: 'month', label: 'Mes' },
-                  { key: 'week', label: 'Semana' },
+                  { key: 'month', label: 'Últ. 30 días' },
                 ].map(({ key, label }) => (
                   <button
                     key={key}
@@ -255,7 +278,7 @@ export default function StatsPage({ currentUser }) {
                 <div className="sp-hero-block">
                   <HeroIcon color="#c9a227"><Zap size={15} /></HeroIcon>
                   <div className="sp-hero-lbl">Puntos ganados</div>
-                  <div className="sp-hero-num" style={{ color: '#c9a227' }}>{fmt(stats.totalPoints)}</div>
+                  <div className="sp-hero-num" style={{ color: '#c9a227' }}>{fmt(stats.pointsFromMatches)}</div>
                   <div className="sp-hero-sub">de partidos</div>
                 </div>
               </div>
