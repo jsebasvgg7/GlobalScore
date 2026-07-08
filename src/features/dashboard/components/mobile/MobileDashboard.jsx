@@ -7,7 +7,7 @@ import AlbumBookEntry from '@/features/albums/components/AlbumBookEntry';
 import { useAlbumPacks } from '@/features/albums/hooks/useAlbumPacks';
 import { useAlbumCollection } from '@/features/albums/hooks/useAlbumCollection';
 import { useAlbumProgress } from '@/features/albums/hooks/useAlbumProgress';
-import "../../styles/MobileDashboard.css";
+import "./MobileDashboard.css";
 
 const ClockSVG = () => (
   <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

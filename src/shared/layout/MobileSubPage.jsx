@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { ArrowLeft, Filter, ArrowUpDown, X, SlidersHorizontal } from "lucide-react";
 import { MatchCardMobile, LeagueCardMobile, AwardCardMobile } from '../../features/dashboard';
-import "../../features/dashboard/styles/MobileCardsGlobal.css";
+import "../../features/dashboard/components/mobile/MobileCardsGlobal.css";
 import "./MobileSubPage.css";
 
 // ── Categorías de liga ──────────────────────────────────────────

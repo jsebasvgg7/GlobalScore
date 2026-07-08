@@ -41,6 +41,7 @@
   --mpm-text: #1a1a2e;
   --mpm-muted: #6b6a63;
   --mpm-accent: #5b4fd8;
+  --mpm-brand-fill: #5b4fd8;
   --mpm-mono: 'DM Mono', monospace;
   --mpm-sans: 'DM Mono', monospace;
   --mpm-display: Georgia, serif;
@@ -64,6 +65,7 @@
   --mpm-text: #f0f1f7;
   --mpm-muted: #a599d9;
   --mpm-accent: #8b7fc7;
+  --mpm-brand-fill: #6d5fe8;
   --mpm-shadow: 2px 2px 0 rgba(0, 0, 0, .5);
   --mpm-shadow-sm: 1.5px 1.5px 0 rgba(0, 0, 0, .5);
 }
@@ -180,6 +182,8 @@
   -webkit-overflow-scrolling: touch;
   flex: 1;
   background: var(--mpm-bg);
+  display: flex;
+  flex-direction: column;
 }
 
 .mpm-banner {
@@ -758,6 +762,16 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+  min-height: 100%;
+}
+
+/* Overview tab fills the remaining sub-body height in a 3-row grid:
+   level block (auto) / bento block (grows) / champs (auto) */
+.mpm-tab-content--overview {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 10px;
+  flex: 1;
 }
 
 .mpm-section-hdr {
@@ -840,61 +854,167 @@
   border-radius: 3px;
 }
 
-.mpm-stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  border: var(--mpm-border-w, 1.5px) solid var(--mpm-border);
-  border-radius: var(--mpm-r-md);
-  overflow: hidden;
-  box-shadow: var(--mpm-shadow-sm);
+/* ── Level hero: big number + progress side by side ── */
+.mpm-level-block--hero {
+  padding: 14px 16px;
 }
 
+.mpm-level-hero-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 
-.mpm-stat-cell {
+.mpm-level-hero-num {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 8px;
-  gap: 6px;
+  flex-shrink: 0;
+  padding-right: 14px;
   border-right: var(--mpm-border-w, 1.5px) solid var(--mpm-border);
-  border-bottom: var(--mpm-border-w, 1.5px) solid var(--mpm-border);
-  background: var(--mpm-bg);
 }
 
-.mpm-stat-cell:nth-child(3n) {
-  border-right: none;
+.mpm-level-hero-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--mpm-muted);
+  font-family: var(--mpm-mono);
 }
 
-.mpm-stat-cell:nth-child(n+4) {
-  border-bottom: none;
+.mpm-level-hero-val {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--mpm-accent);
+  font-family: var(--mpm-mono);
+  letter-spacing: -0.02em;
 }
 
-.mpm-stat-icon {
-  width: 26px;
-  height: 26px;
+.mpm-level-hero-progress {
+  flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--mpm-r-sm);
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.mpm-level-hero-progress .mpm-level-row {
+  gap: 8px;
+}
+
+.mpm-level-hero-progress .mpm-level-pts {
+  flex: 1;
+}
+
+/* ── Bento: main block. Row 1 = points hero (full width),
+   Row 2 = accuracy + predictions/ranking/level as equal cells.
+   Fills all available vertical space via 1.3fr/1fr/1fr rows. ── */
+.mpm-bento-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1.1fr 1fr 1fr;
+  gap: 10px;
+  min-height: 0;
+}
+
+.mpm-bento-cell {
+  border: var(--mpm-border-w) solid var(--mpm-border);
+  border-radius: var(--mpm-r-md);
+  box-shadow: var(--mpm-shadow-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.mpm-bento-cell--points {
+  grid-column: 1 / 3;
+  background: var(--mpm-brand-fill, var(--mpm-accent));
+  padding: 18px 20px;
+}
+
+.mpm-bento-cell--accuracy {
+  background: #1D9E75;
+}
+
+.mpm-bento-cell--neutral {
+  background: var(--mpm-surface);
+}
+
+.mpm-bento-cell--neutral .mpm-bento-lbl {
+  color: var(--mpm-muted);
+  opacity: 1;
+}
+
+.mpm-bento-cell--neutral .mpm-bento-val {
+  color: var(--mpm-text);
+}
+
+.mpm-bento-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mpm-mono);
+  color: #fff;
+  opacity: 0.85;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mpm-bento-cell--points .mpm-bento-lbl {
+  font-size: 11px;
+}
+
+.mpm-bento-val {
+  font-size: 26px;
+  font-weight: 800;
+  font-family: var(--mpm-mono);
+  color: #fff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.mpm-bento-cell--points .mpm-bento-val {
+  font-size: 34px;
+}
+
+/* ── Bento: campeonatos ── */
+.mpm-bento-champs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
   flex-shrink: 0;
 }
 
-.mpm-stat-cell .mpm-stat-val {
-  font-size: 22px;
-  font-weight: 800;
-  font-family: var(--mpm-mono);
-  color: var(--mpm-text);
-  line-height: 1;
-  letter-spacing: -0.03em;
+.mpm-bento-champs .mpm-bento-cell {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 }
 
-.mpm-stat-cell .mpm-stat-lbl {
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--mpm-muted);
-  font-family: var(--mpm-mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.mpm-bento-cell--champ-month {
+  background: #c9a227;
+}
+
+.mpm-bento-cell--champ-global {
+  background: #8b7fc7;
+}
+
+.mpm-bento-champ-icon {
+  color: #fff;
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+
+.mpm-bento-champs .mpm-bento-val {
+  font-size: 20px;
+  display: block;
+}
+
+.mpm-bento-champs .mpm-bento-lbl {
+  display: block;
+  margin-top: 2px;
 }
 
 .mpm-active-title {
@@ -957,40 +1077,108 @@
 
 .mpm-achievements-grid {
   display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 78px;
+  grid-auto-flow: dense;
 }
 
 .mpm-ach-card {
   border: var(--mpm-border-w, 1.5px) solid var(--mpm-border);
   background: var(--mpm-bg);
-  padding: 16px 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 4px;
   text-align: center;
   border-radius: var(--mpm-r-md);
-  box-shadow: var(--mpm-shadow-sm);
+  overflow: hidden;
 }
 
+/* ── Bento variants: unlocked achievements get randomly assigned
+   wide/tall spans (see JS) for an organic, non-hierarchical
+   bento layout. Base size = 1x1 cell. ── */
+.mpm-ach-card--wide {
+  grid-column: span 2;
+}
+
+.mpm-ach-card--tall {
+  grid-row: span 2;
+}
+
+.mpm-ach-card--big {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.mpm-ach-card--accent-a {
+  background: var(--mpm-accent);
+  border-color: var(--mpm-text);
+}
+
+.mpm-ach-card--accent-b {
+  background: #c9a227;
+  border-color: var(--mpm-text);
+}
+
+.mpm-ach-card--accent-c {
+  background: #1D9E75;
+  border-color: var(--mpm-text);
+}
+
+.mpm-ach-card--accent-a .mpm-ach-name,
+.mpm-ach-card--accent-b .mpm-ach-name,
+.mpm-ach-card--accent-c .mpm-ach-name {
+  color: #fff;
+}
+
+.mpm-ach-card--accent-a .mpm-ach-desc {
+  color: #e0dcff;
+}
+
+.mpm-ach-card--accent-b .mpm-ach-desc {
+  color: #4a3d0a;
+}
+
+.mpm-ach-card--accent-c .mpm-ach-desc {
+  color: #dff5ec;
+}
 
 .mpm-ach-emoji {
-  font-size: 30px;
+  font-size: 22px;
   line-height: 1;
 }
 
+.mpm-ach-card--big .mpm-ach-emoji,
+.mpm-ach-card--wide .mpm-ach-emoji {
+  font-size: 26px;
+}
+
 .mpm-ach-name {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--mpm-text);
   font-family: var(--mpm-sans);
+  line-height: 1.2;
+}
+
+.mpm-ach-card--big .mpm-ach-name {
+  font-size: 13px;
 }
 
 .mpm-ach-desc {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--mpm-muted);
   font-family: var(--mpm-sans);
+  line-height: 1.3;
+  display: none;
+}
+
+.mpm-ach-card--big .mpm-ach-desc,
+.mpm-ach-card--wide .mpm-ach-desc {
+  display: block;
 }
 
 .mpm-crowns-hero {

@@ -4,7 +4,7 @@ import {
   ChevronRight, ChevronDown, Moon, Sun,
   BarChart2, Award, Crown, FileText, NotebookPen,
   Edit2, User, Bell, Lock, ArrowLeft,
-  Target, Zap, TrendingUp, Star, Trophy,
+  Target, Star, Trophy,
   Heart, Globe, Activity, Shield, Gamepad2,
   Calendar, CheckCircle2, XCircle, Clock,
   ArrowUpDown, Image, Check, Save, X,
@@ -20,9 +20,24 @@ import {
   calculateLevelProgress,
   getIconEmoji,
 } from "@/shared/utils/profileUtils";
-import "../../styles/MobileProfileMain.css";
+import "./MobileProfileMain.css";
 
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
+
+/* ── Bento pattern for achievements grid: cycles through a fixed
+   sequence of size/accent variants so the layout looks organic and
+   asymmetric but stays stable across renders (no Math.random). ── */
+const BENTO_PATTERN = [
+  "big accent-a", "", "", "",
+  "", "wide accent-b", "", "tall",
+  "", "", "wide accent-c", "",
+  "tall", "", "", "big accent-a",
+];
+function getBentoClass(index) {
+  const variant = BENTO_PATTERN[index % BENTO_PATTERN.length];
+  if (!variant) return "mpm-ach-card";
+  return "mpm-ach-card " + variant.split(" ").map((v) => `mpm-ach-card--${v}`).join(" ");
+}
 
 const TAB_LABELS = {
   overview: "Estadísticas",
@@ -115,41 +130,64 @@ function OverviewTab({ userData, currentUser, userRanking }) {
   const { pointsInLevel, pointsToNextLevel, levelProgress } =
     calculateLevelProgress(userData, currentUser);
 
-  const items = [
-    { label: "Predicciones", value: fmt(currentUser?.predictions || 0), icon: Target, color: "#c9a227" },
-    { label: "Puntos", value: fmt(currentUser?.points || 0), icon: Zap, color: "#5b4fd8" },
-    { label: "Precisión", value: `${accuracy}%`, icon: TrendingUp, color: "#1D9E75" },
-    { label: "Nivel", value: userData.level || 1, icon: Star, color: "#a0652a" },
-    { label: "Ranking", value: `#${userRanking?.position || "—"}`, icon: Trophy, color: "#8a8a8a" },
-    { label: "Campeonatos", value: userData.monthly_championships || 0, icon: Crown, color: "#c9a227" },
+  const smallStats = [
+    { label: "Predicciones", value: fmt(currentUser?.season_predictions || 0) },
+    { label: "Ranking", value: `#${userRanking?.position || "—"}` },
+    { label: "Nivel", value: userData.level || 1 },
   ];
 
   return (
-    <div className="mpm-tab-content">
-      <div className="mpm-level-block">
-        <div className="mpm-level-row">
-          <span className="mpm-level-lbl">NIVEL {userData.level || 1}</span>
-          <span className="mpm-level-pts">{pointsInLevel}/20 XP</span>
-          <span className="mpm-level-next">—{pointsToNextLevel} pts</span>
-        </div>
-        <div className="mpm-level-track">
-          <div className="mpm-level-fill" style={{ width: `${levelProgress}%` }} />
+    <div className="mpm-tab-content mpm-tab-content--overview">
+      <div className="mpm-level-block mpm-level-block--hero">
+        <div className="mpm-level-hero-row">
+          <div className="mpm-level-hero-num">
+            <span className="mpm-level-hero-lbl">NIVEL</span>
+            <span className="mpm-level-hero-val">{userData.level || 1}</span>
+          </div>
+          <div className="mpm-level-hero-progress">
+            <div className="mpm-level-row">
+              <span className="mpm-level-pts">{pointsInLevel}/20 XP</span>
+              <span className="mpm-level-next">—{pointsToNextLevel} pts</span>
+            </div>
+            <div className="mpm-level-track">
+              <div className="mpm-level-fill" style={{ width: `${levelProgress}%` }} />
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="mpm-stats-grid">
-        {items.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div className="mpm-stat-cell" key={item.label}>
-              <div className="mpm-stat-icon" style={{ background: item.color }}>
-                <Icon size={13} color="#fff" />
-              </div>
-              <div className="mpm-stat-val">{item.value}</div>
-              <div className="mpm-stat-lbl">{item.label}</div>
-            </div>
-          );
-        })}
+      <div className="mpm-bento-main">
+        <div className="mpm-bento-cell mpm-bento-cell--points">
+          <span className="mpm-bento-lbl">Puntos temporada</span>
+          <span className="mpm-bento-val">{fmt(currentUser?.season_points || 0)}</span>
+        </div>
+        <div className="mpm-bento-cell mpm-bento-cell--accuracy">
+          <span className="mpm-bento-lbl">Precisión</span>
+          <span className="mpm-bento-val">{accuracy}%</span>
+        </div>
+        {smallStats.map((item) => (
+          <div className="mpm-bento-cell mpm-bento-cell--neutral" key={item.label}>
+            <span className="mpm-bento-lbl">{item.label}</span>
+            <span className="mpm-bento-val">{item.value}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mpm-bento-champs">
+        <div className="mpm-bento-cell mpm-bento-cell--champ-month">
+          <Crown size={18} className="mpm-bento-champ-icon" />
+          <div>
+            <span className="mpm-bento-val">{currentUser?.monthly_championships || 0}</span>
+            <span className="mpm-bento-lbl">Camp. del mes</span>
+          </div>
+        </div>
+        <div className="mpm-bento-cell mpm-bento-cell--champ-global">
+          <Crown size={18} className="mpm-bento-champ-icon" />
+          <div>
+            <span className="mpm-bento-val">{currentUser?.global_championships || 0}</span>
+            <span className="mpm-bento-lbl">Camp. global</span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -215,8 +253,8 @@ function AchievementsTab({
         </div>
       ) : (
         <div className="mpm-achievements-grid">
-          {userAchievements.map((ach) => (
-            <div key={ach.id} className="mpm-ach-card">
+          {userAchievements.map((ach, i) => (
+            <div key={ach.id} className={getBentoClass(i)}>
               <div className="mpm-ach-emoji">{getIconEmoji(ach.icon)}</div>
               <div className="mpm-ach-name">{ach.name}</div>
               <div className="mpm-ach-desc">{ach.description}</div>
@@ -762,10 +800,7 @@ export default function MobileProfileMain({
   const [showMobileNotes, setShowMobileNotes] = useState(false);
   const [appearanceOpen, setAppearanceOpen] = useState(false);
 
-  const accuracy =
-    currentUser?.predictions > 0
-      ? Math.round((currentUser.correct / currentUser.predictions) * 100)
-      : 0;
+ const accuracy = calculateAccuracy(currentUser);
 
   const isAdmin =
     currentUser?.role === "admin" || currentUser?.email === "tian@admin.com";

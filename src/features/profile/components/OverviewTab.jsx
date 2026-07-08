@@ -8,51 +8,13 @@ export default function OverviewTab({ userData, currentUser, userRanking }) {
 
   // Datos de ejemplo para el diseño clínico
   const clinicalSections = [
-    {
-      id: 'stats',
-      title: 'Predicciones',
-      icon: Target,
-      color: 'yellow',
-      count: currentUser?.predictions || 0,
-    },
-    {
-      id: 'points',
-      title: 'Puntos totales',
-      icon: Zap,
-      color: 'pink',
-      count: currentUser?.points || 0,
-    },
-    {
-      id: 'accuracy',
-      title: 'Precisión',
-      icon: BarChart3,
-      color: 'green',
-      count: null,
-      subtitle: `${accuracy}% success rate`,
-    },
-    {
-      id: 'level',
-      title: 'Nivel actual',
-      icon: Trophy,
-      color: 'orange',
-      count: userData.level || 1,
-      subtitle: `${pointsInLevel}/20 puntos`,
-    },
-    {
-      id: 'ranking',
-      title: 'Global Ranking',
-      icon: Trophy,
-      color: 'teal',
-      count: userRanking.position || '--',
-      subtitle: `of ${userRanking.totalUsers} players`,
-    },
-    {
-      id: 'championships',
-      title: 'Campeonatos',
-      icon: Heart,
-      color: 'blue',
-      count: userData.monthly_championships || 0,
-    },
+    { id: 'stats', title: 'Predicciones', icon: Target, color: 'yellow', count: currentUser?.season_predictions || 0 },
+    { id: 'points', title: 'Puntos totales', icon: Zap, color: 'pink', count: currentUser?.season_points || 0 },
+    { id: 'accuracy', title: 'Precisión', icon: BarChart3, color: 'green', count: null, subtitle: `${accuracy}% success rate` },
+    { id: 'level', title: 'Nivel actual', icon: Trophy, color: 'orange', count: userData.level || 1, subtitle: `${pointsInLevel}/20 puntos` },
+    { id: 'ranking', title: 'Global Ranking', icon: Trophy, color: 'teal', count: userRanking.position || '--', subtitle: `of ${userRanking.totalUsers} players` },
+    { id: 'championships_month', title: 'Campeonatos del mes', icon: Heart, color: 'blue', count: currentUser?.monthly_championships || 0 },
+    { id: 'championships_global', title: 'Campeonatos globales', icon: Trophy, color: 'blue', count: currentUser?.global_championships || 0 },
   ];
 
   return (

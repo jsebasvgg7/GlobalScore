@@ -1,19 +1,15 @@
 import { useState, useEffect } from 'react';
 import { fetchUserPredictionsWithMatches } from '../services/profile.service';
 
-const checkPredictionCorrect = (prediction, match) => {
-  if (match.result_home === null || match.result_away === null) return false;
-
-  const predDiff = Math.sign(prediction.home_score - prediction.away_score);
-  const resultDiff = Math.sign(match.result_home - match.result_away);
-
-  return predDiff === resultDiff ||
-    (prediction.home_score === match.result_home && prediction.away_score === match.result_away);
+const isHit = (prediction, match) => {
+  if (prediction.result_type && prediction.result_type !== 'miss') return true;
+  if (match?.is_knockout && prediction.advancing_points > 0) return true;
+  return false;
 };
 
-const isConsecutive = (date1, date2) => {
-  const d1 = new Date(date1);
-  const d2 = new Date(date2);
+const isConsecutive = (dateA, dateB) => {
+  const d1 = new Date(dateA);
+  const d2 = new Date(dateB);
   const diffDays = Math.abs((d1 - d2) / (1000 * 60 * 60 * 24));
   return diffDays <= 7;
 };
@@ -29,30 +25,37 @@ export const useStreaks = (currentUser) => {
     try {
       const data = await fetchUserPredictionsWithMatches(currentUser.id);
 
+      // Solo partidos ya finalizados, y con result_type ya calculado (evita nulls en tránsito)
       const finishedPredictions = data
-        .filter(p => p.matches?.status === 'finished')
+        .filter(p => p.matches?.status === 'finished' && p.result_type != null)
         .sort((a, b) => new Date(b.matches.date) - new Date(a.matches.date));
 
       let currentStreak = 0;
       let bestStreak = 0;
       let tempStreak = 0;
-      let lastDate = null;
+      let stillCounting = true; // se apaga en cuanto encontramos un fallo o un corte, para current_streak
+      const lastDate = finishedPredictions[0]?.matches?.date || null;
 
       finishedPredictions.forEach((pred, index) => {
         const match = pred.matches;
-        const isCorrect = checkPredictionCorrect(pred, match);
+        const hit = isHit(pred, match);
+        const prevMatch = finishedPredictions[index - 1]?.matches;
 
-        if (index === 0) lastDate = match.date;
+        // Si hay un hueco de más de 7 días respecto al pick anterior, la racha se corta aquí
+        const brokeByGap = index > 0 && !isConsecutive(prevMatch.date, match.date);
 
-        if (isCorrect) {
+        if (brokeByGap) {
+          tempStreak = 0;
+          stillCounting = false;
+        }
+
+        if (hit) {
           tempStreak++;
-          if (index === 0 || isConsecutive(finishedPredictions[index - 1]?.matches.date, match.date)) {
-            currentStreak = tempStreak;
-          }
           bestStreak = Math.max(bestStreak, tempStreak);
+          if (stillCounting) currentStreak = tempStreak;
         } else {
           tempStreak = 0;
-          if (index === 0) currentStreak = 0;
+          stillCounting = false;
         }
       });
 

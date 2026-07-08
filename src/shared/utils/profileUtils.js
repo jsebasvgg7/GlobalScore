@@ -3,16 +3,20 @@ export const getPredictionResult = (pred) => {
     return { status: 'pending', points: 0, label: 'Pendiente' };
   }
 
-  const match = pred.matches;
-  const exactMatch = pred.home_score === match.result_home && pred.away_score === match.result_away;
-  const resultCorrect = Math.sign(pred.home_score - pred.away_score) === Math.sign(match.result_home - match.result_away);
+  const points = (pred.points_earned || 0) + (pred.advancing_points || 0);
 
-  if (exactMatch) {
-    return { status: 'exact', points: 5, label: 'Resultado Exacto' };
-  } else if (resultCorrect) {
-    return { status: 'correct', points: 3, label: 'Resultado Acertado' };
-  } else {
-    return { status: 'wrong', points: 0, label: 'Fallado' };
+  switch (pred.result_type) {
+    case 'exact':
+      return { status: 'exact', points, label: 'Resultado Exacto' };
+    case 'result':
+      return { status: 'correct', points, label: 'Resultado Acertado' };
+    case 'miss':
+    default:
+      // Si fue knockout y acertó quién avanza, no es un fallo total
+      if (pred.matches.is_knockout && pred.advancing_points > 0) {
+        return { status: 'correct', points, label: 'Avance Acertado' };
+      }
+      return { status: 'wrong', points, label: 'Fallado' };
   }
 };
 
@@ -47,7 +51,7 @@ export const getCategoryColor = (category) => {
 export const calculateLevelProgress = (userData, currentUser) => {
   const currentLevelPoints = (userData.level - 1) * 20;
   const nextLevelPoints = userData.level * 20;
-  const currentPoints = currentUser?.points || 0;
+  const currentPoints = currentUser?.season_points || 0;
   const pointsInLevel = currentPoints - currentLevelPoints;
   const pointsToNextLevel = nextLevelPoints - currentPoints;
   const levelProgress = (pointsInLevel / 20) * 100;
@@ -63,7 +67,7 @@ export const calculateLevelProgress = (userData, currentUser) => {
 };
 
 export const calculateAccuracy = (currentUser) => {
-  return currentUser?.predictions > 0 
-    ? Math.round((currentUser.correct / currentUser.predictions) * 100) 
-    : 0;
+  const predictions = currentUser?.season_predictions || 0;
+  const correct = currentUser?.season_correct || 0;
+  return predictions > 0 ? Math.round((correct / predictions) * 100) : 0;
 };
