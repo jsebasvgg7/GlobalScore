@@ -95,12 +95,17 @@ export default function RankingPage({ currentUser }) {
       if (!usersData?.length) { setChampions([]); return; }
 
       setChampions(
-        usersData.map(u => ({
-          ...u,
-          championships: map[u.id].count,
-          points: map[u.id].champs[0].points,
-          period: map[u.id].champs[0].period,
-        }))
+        usersData.map(u => {
+          const champs = map[u.id].champs;
+          const maxPointsChamp = champs.reduce((best, c) => c.points > best.points ? c : best, champs[0]);
+          const firstPeriodChamp = champs.reduce((first, c) => c.period < first.period ? c : first, champs[0]);
+          return {
+            ...u,
+            championships: map[u.id].count,
+            points: maxPointsChamp.points,
+            period: firstPeriodChamp.period,
+          };
+        })
           .sort((a, b) =>
             b.championships - a.championships ||
             b.points - a.points
@@ -134,12 +139,17 @@ export default function RankingPage({ currentUser }) {
       if (!usersData?.length) { setGlobalChampions([]); return; }
 
       setGlobalChampions(
-        usersData.map(u => ({
-          ...u,
-          championships: map[u.id].count,
-          points: map[u.id].champs[0].points,
-          period: map[u.id].champs[0].period,
-        }))
+        usersData.map(u => {
+          const champs = map[u.id].champs;
+          const maxPointsChamp = champs.reduce((best, c) => c.points > best.points ? c : best, champs[0]);
+          const firstPeriodChamp = champs.reduce((first, c) => c.period < first.period ? c : first, champs[0]);
+          return {
+            ...u,
+            championships: map[u.id].count,
+            points: maxPointsChamp.points,
+            period: firstPeriodChamp.period,
+          };
+        })
           .sort((a, b) =>
             b.championships - a.championships ||
             b.points - a.points

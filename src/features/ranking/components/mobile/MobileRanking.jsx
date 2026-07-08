@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Globe, Calendar, Crown, Trophy, ChevronLeft, ChevronRight, Zap, Star, BookOpen, Flame, Target, Shield } from "lucide-react";
+import { Globe, Calendar, Crown, Trophy, ChevronLeft, ChevronRight, Zap, Star, BookOpen, Flame, Target } from "lucide-react";
 import { MobileUserProfile } from "@/features/profile";
 import "../../styles/MobileRanking.css";
 
@@ -143,24 +143,10 @@ function MobSalonDeLaFama({ champions, onSelect, hofType }) {
   if (!leader) return null;
 
   /* accuracy real: misma fórmula que PanelStats / UserProfilePanel */
-  const withAccuracyField = (c) => {
-    const acc = c.accuracy
-      ?? (c.predictions > 0 ? Math.round((c.correct / c.predictions) * 100) : null);
-    return acc;
-  };
-
   const withStreak = champions.filter((c) => (c.best_streak || 0) > 0);
   const bestStreak = withStreak.length
     ? withStreak.reduce((best, c) => (c.best_streak > best.best_streak ? c : best))
     : null;
-
-  const accuracyCandidates = champions
-    .map((c) => ({ user: c, acc: withAccuracyField(c) }))
-    .filter((c) => c.acc !== null && c.acc > 0);
-  const mostAccurate = accuracyCandidates.length
-    ? accuracyCandidates.reduce((best, c) => (c.acc > best.acc ? c : best)).user
-    : null;
-  const mostAccurateValue = mostAccurate ? withAccuracyField(mostAccurate) : null;
 
   const topScorer = champions.reduce(
     (best, c) => (c.points || 0) > (best.points || 0) ? c : best, champions[0]
@@ -171,9 +157,6 @@ function MobSalonDeLaFama({ champions, onSelect, hofType }) {
     ? withPeriod.reduce((first, c) => (c.period < first.period ? c : first))
     : null;
 
-  const leaderAccuracy = leader.accuracy
-    ?? (leader.predictions > 0 ? Math.round((leader.correct / leader.predictions) * 100) : null);
-
   return (
     <div className="mrk-salon">
 
@@ -181,11 +164,6 @@ function MobSalonDeLaFama({ champions, onSelect, hofType }) {
       <div className="mrk-medallion-wrap">
         <div className="mrk-medallion-ribbon" />
         <button className="mrk-medallion" onClick={() => onSelect(leader.id)}>
-          <div className="mrk-medallion-crownfield">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <TypeIcon key={i} size={26} />
-            ))}
-          </div>
           <span className="mrk-medallion-tag">Leyenda suprema · #1</span>
           <div className="mrk-medallion-av">
             <MobAvatar user={leader} size="hof" />
@@ -211,17 +189,6 @@ function MobSalonDeLaFama({ champions, onSelect, hofType }) {
               <span className="mrk-medallion-stat-lbl">{cfg.periodLabel}</span>
             </div>
           </div>
-          {leaderAccuracy !== null && (
-            <div className="mrk-medallion-bar-wrap">
-              <div className="mrk-medallion-bar-lbl">
-                <span>Aciertos</span>
-                <span>{leaderAccuracy}%</span>
-              </div>
-              <div className="mrk-medallion-bar-track">
-                <div className="mrk-medallion-bar-fill" style={{ width: `${leaderAccuracy}%` }} />
-              </div>
-            </div>
-          )}
         </button>
       </div>
 
@@ -258,51 +225,43 @@ function MobSalonDeLaFama({ champions, onSelect, hofType }) {
         </div>
       )}
 
-      {/* ── Hitos del Salón: solo se muestran los que tienen datos reales ── */}
-      {(firstChamp || bestStreak || topScorer || mostAccurate) && (
+      {/* ── Hitos del Salón: bento (primero destacado + 2 minis) ── */}
+      {(firstChamp || bestStreak || topScorer) && (
         <div>
           <div className="mrk-salon-section-lbl">Hitos del salón</div>
-          <div className="mrk-salon-hitos" style={{ marginTop: 10 }}>
+          <div className="mrk-salon-hitos-bento" style={{ marginTop: 10 }}>
             {firstChamp && (
-              <div className="mrk-salon-hito mrk-salon-hito--gold">
+              <div className="mrk-salon-hito-bento mrk-salon-hito-bento--main mrk-salon-hito--gold">
                 <div className="mrk-salon-hito-top">
-                  <div className="mrk-salon-hito-icon"><Crown size={13} /></div>
+                  <div className="mrk-salon-hito-icon"><Crown size={14} /></div>
                   <span className="mrk-salon-hito-lbl">Primer campeón</span>
                 </div>
-                <span className="mrk-salon-hito-val">{firstChamp.period}</span>
+                <span className="mrk-salon-hito-val mrk-salon-hito-val--lg">{firstChamp.period}</span>
                 <span className="mrk-salon-hito-name">{firstChamp.name}</span>
               </div>
             )}
-            {bestStreak && (
-              <div className="mrk-salon-hito mrk-salon-hito--fire">
-                <div className="mrk-salon-hito-top">
-                  <div className="mrk-salon-hito-icon"><Flame size={13} /></div>
-                  <span className="mrk-salon-hito-lbl">Mejor racha</span>
+            <div className="mrk-salon-hito-bento-side">
+              {bestStreak && (
+                <div className="mrk-salon-hito-bento mrk-salon-hito--fire">
+                  <div className="mrk-salon-hito-top">
+                    <div className="mrk-salon-hito-icon"><Flame size={12} /></div>
+                    <span className="mrk-salon-hito-lbl">Mejor racha</span>
+                  </div>
+                  <span className="mrk-salon-hito-val">{bestStreak.best_streak}</span>
+                  <span className="mrk-salon-hito-name">{bestStreak.name}</span>
                 </div>
-                <span className="mrk-salon-hito-val">{bestStreak.best_streak}</span>
-                <span className="mrk-salon-hito-name">{bestStreak.name}</span>
-              </div>
-            )}
-            {topScorer && (
-              <div className="mrk-salon-hito mrk-salon-hito--target">
-                <div className="mrk-salon-hito-top">
-                  <div className="mrk-salon-hito-icon"><Target size={13} /></div>
-                  <span className="mrk-salon-hito-lbl">Máx. puntuación</span>
+              )}
+              {topScorer && (
+                <div className="mrk-salon-hito-bento mrk-salon-hito--target">
+                  <div className="mrk-salon-hito-top">
+                    <div className="mrk-salon-hito-icon"><Target size={12} /></div>
+                    <span className="mrk-salon-hito-lbl">Máx. puntuación</span>
+                  </div>
+                  <span className="mrk-salon-hito-val">{fmt(topScorer.points)}</span>
+                  <span className="mrk-salon-hito-name">{topScorer.name}</span>
                 </div>
-                <span className="mrk-salon-hito-val">{fmt(topScorer.points)}</span>
-                <span className="mrk-salon-hito-name">{topScorer.name}</span>
-              </div>
-            )}
-            {mostAccurate && (
-              <div className="mrk-salon-hito mrk-salon-hito--shield">
-                <div className="mrk-salon-hito-top">
-                  <div className="mrk-salon-hito-icon"><Shield size={13} /></div>
-                  <span className="mrk-salon-hito-lbl">Más certero</span>
-                </div>
-                <span className="mrk-salon-hito-val">{mostAccurateValue}%</span>
-                <span className="mrk-salon-hito-name">{mostAccurate.name}</span>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}

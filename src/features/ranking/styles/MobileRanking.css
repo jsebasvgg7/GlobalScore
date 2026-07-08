@@ -187,19 +187,6 @@
   overflow: hidden;
 }
 
-.mrk-hof-zone::before {
-  content: "";
-  position: absolute;
-  top: -20px;
-  left: 0;
-  right: 0;
-  height: 260px;
-  background-image: repeating-conic-gradient(from 0deg at 50% -40%,
-      rgba(201, 162, 39, .08) 0deg 6deg,
-      transparent 6deg 14deg);
-  pointer-events: none;
-}
-
 /* ── Segmented control: Mensual / Global, mismo lenguaje que mrk-tabs ── */
 .mrk-hof-switch {
   position: relative;
@@ -1532,13 +1519,20 @@
 }
 
 /* ── Hitos del Salón: 2x2, ícono + número grande ── */
-.mrk-salon-hitos {
+.mrk-salon-hitos-bento {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.1fr 1fr;
   gap: 8px;
 }
 
-.mrk-salon-hito {
+.mrk-salon-hito-bento-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mrk-salon-hito,
+.mrk-salon-hito-bento {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1547,6 +1541,15 @@
   box-shadow: 2px 2px 0px var(--mrk-shadow-color);
   padding: 11px;
   font-family: var(--mrk-mono);
+}
+
+.mrk-salon-hito-bento--main {
+  justify-content: center;
+  padding: 14px 12px;
+}
+
+.mrk-salon-hito-val--lg {
+  font-size: 26px;
 }
 
 .mrk-salon-hito-top {
@@ -1567,24 +1570,49 @@
   color: var(--mrk-accent);
 }
 
+.mrk-salon-hito--gold {
+  background: #F0C240;
+}
+
 .mrk-salon-hito--gold .mrk-salon-hito-icon {
-  background: var(--mrk-gold-bg);
-  color: var(--mrk-gold-text);
+  background: var(--mrk-border-hard);
+  color: #fff;
+}
+
+.mrk-salon-hito--gold .mrk-salon-hito-lbl,
+.mrk-salon-hito--gold .mrk-salon-hito-val,
+.mrk-salon-hito--gold .mrk-salon-hito-name {
+  color: #5c4405;
+}
+
+.mrk-salon-hito--fire {
+  background: #F0A860;
 }
 
 .mrk-salon-hito--fire .mrk-salon-hito-icon {
-  background: #F0A860;
+  background: var(--mrk-border-hard);
+  color: #fff;
+}
+
+.mrk-salon-hito--fire .mrk-salon-hito-lbl,
+.mrk-salon-hito--fire .mrk-salon-hito-val,
+.mrk-salon-hito--fire .mrk-salon-hito-name {
   color: #5c2c05;
 }
 
-.mrk-salon-hito--target .mrk-salon-hito-icon {
+.mrk-salon-hito--target {
   background: #7FD9B6;
-  color: #05452e;
 }
 
-.mrk-salon-hito--shield .mrk-salon-hito-icon {
-  background: #E896B4;
-  color: #5c1530;
+.mrk-salon-hito--target .mrk-salon-hito-icon {
+  background: var(--mrk-border-hard);
+  color: #fff;
+}
+
+.mrk-salon-hito--target .mrk-salon-hito-lbl,
+.mrk-salon-hito--target .mrk-salon-hito-val,
+.mrk-salon-hito--target .mrk-salon-hito-name {
+  color: #05452e;
 }
 
 .mrk-salon-hito-lbl {
@@ -1759,10 +1787,6 @@
 
   .mrk-medallion-stat-val {
     font-size: 15px;
-  }
-
-  .mrk-salon-hitos {
-    grid-template-columns: 1fr;
   }
 }
 
