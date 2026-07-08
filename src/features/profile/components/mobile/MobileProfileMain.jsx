@@ -65,17 +65,18 @@ function StatChip({ value, label }) {
 }
 
 /* ── Nav row ── */
-function NavRow({ icon: Icon, label, desc, color, onClick, right }) {
+function NavRow({ icon: Icon, label, desc, color, onClick, right, className = "" }) {
+  const isTile = className.includes("mpm-row--tile");
   return (
-    <button className="mpm-row" onClick={onClick}>
+    <button className={`mpm-row ${className}`.trim()} onClick={onClick}>
       <div className="mpm-row-icon" style={{ background: color }}>
-        <Icon size={17} color="#fff" />
+        <Icon size={isTile ? 16 : 17} color="#fff" />
       </div>
       <div className="mpm-row-body">
         <span className="mpm-row-lbl">{label}</span>
         {desc && <span className="mpm-row-desc">{desc}</span>}
       </div>
-      {right || <ChevronRight size={15} className="mpm-row-arrow" />}
+      {!isTile && (right || <ChevronRight size={15} className="mpm-row-arrow" />)}
     </button>
   );
 }
@@ -842,13 +843,16 @@ export default function MobileProfileMain({
   const currentMobileTab = isMobileSub ? mobileView.replace("tab:", "") : null;
 
   /* ── Nav groups ── */
+  const ACTIVITY_HERO = { id: "overview", icon: BarChart2, label: "Estadísticas", desc: "Ver tu rendimiento", color: "#1d9e75" };
+  const ACTIVITY_PAIR = [
+    { id: "achievements", icon: Award, label: "Logros", desc: `${currentUser?.achievements?.length || 0} items`, color: "#c9a227" },
+    { id: "championships", icon: Crown, label: "Campeonatos", desc: `${currentUser?.monthly_championships || 0} items`, color: "#8b7fc7" },
+  ];
+
   const NAV_GROUPS = [
     {
       label: "Mi actividad",
       items: [
-        { id: "overview", icon: BarChart2, label: "Estadísticas", desc: "Ver tu rendimiento", color: "#1d9e75" },
-        { id: "achievements", icon: Award, label: "Logros", desc: `${currentUser?.achievements?.length || 0} desbloqueados`, color: "#f59e0b" },
-        { id: "championships", icon: Crown, label: "Campeonatos", desc: `${currentUser?.monthly_championships || 0} coronas`, color: "#8b7fc7" },
         { id: "history", icon: FileText, label: "Historial", desc: "Todas tus predicciones", color: "#60a5fa" },
         { id: "notes", icon: NotebookPen, label: "Mis Notas", desc: "Bloc de notas cifrado", color: "#5b4fd8" },
       ],
@@ -929,13 +933,15 @@ export default function MobileProfileMain({
         <ChevronRight size={16} className="mpm-user-arrow" />
       </div>
 
-      {/* ── STATS ── */}
+      {/* ── STATS (bento: hero + 2 chicas apiladas) ── */}
       <div className="mpm-stats-row">
-        <StatChip value={fmt(currentUser?.points)} label="Puntos" />
-        <div className="mpm-stats-sep" />
-        <StatChip value={fmt(currentUser?.correct)} label="Aciertos" />
-        <div className="mpm-stats-sep" />
-        <StatChip value={`${accuracy}%`} label="Precisión" />
+        <div className="mpm-stat-hero">
+          <StatChip value={fmt(currentUser?.points)} label="Puntos" />
+        </div>
+        <div className="mpm-stats-side">
+          <StatChip value={fmt(currentUser?.correct)} label="Aciertos" />
+          <StatChip value={`${accuracy}%`} label="Precisión" />
+        </div>
       </div>
 
       {/* ── PREFERENCIAS ── */}
@@ -958,7 +964,7 @@ export default function MobileProfileMain({
           </button>
         </div>
 
-        {/* Apariencia */}
+        {/* Apariencia — oculto temporalmente, un solo estilo visual definido
         <div>
           <button className="mpm-row" onClick={() => setAppearanceOpen((o) => !o)}>
             <div className="mpm-row-icon" style={{ background: "#eab308" }}>
@@ -981,6 +987,33 @@ export default function MobileProfileMain({
               <StyleSwitcher />
             </div>
           )}
+        </div>
+        */}
+      </div>
+
+      {/* ── MI ACTIVIDAD (bento: hero + par) ── */}
+      <div className="mpm-section-label">Mi actividad</div>
+      <div className="mpm-group">
+        <NavRow
+          icon={ACTIVITY_HERO.icon}
+          label={ACTIVITY_HERO.label}
+          desc={ACTIVITY_HERO.desc}
+          color={ACTIVITY_HERO.color}
+          onClick={() => handleNavigate(ACTIVITY_HERO.id)}
+          className="mpm-row--hero"
+        />
+        <div className="mpm-activity-pair">
+          {ACTIVITY_PAIR.map((item) => (
+            <NavRow
+              key={item.id}
+              icon={item.icon}
+              label={item.label}
+              desc={item.desc}
+              color={item.color}
+              onClick={() => handleNavigate(item.id)}
+              className="mpm-row--tile"
+            />
+          ))}
         </div>
       </div>
 
