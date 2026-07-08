@@ -24,68 +24,41 @@ const CalSVG = () => (
 
 function NoMatchBanner() {
   return (
-    <div className="mob2-nm mob2-nm--empty">
-      <div className="mob2-nm-empty-brut">
-        <div className="mob2-nm-empty-brut-left">
-          <span className="mob2-nm-empty-brut-zero">0</span>
-          <div className="mob2-nm-empty-brut-bars">
-            <div className="mob2-nm-empty-brut-bar mob2-nm-empty-brut-bar--a" />
-            <div className="mob2-nm-empty-brut-bar mob2-nm-empty-brut-bar--b" />
-            <div className="mob2-nm-empty-brut-bar mob2-nm-empty-brut-bar--c" />
-          </div>
+    <div className="mob2-nm">
+      <div className="mob2-nm-card mob2-nm-card--empty">
+        <div className="mob2-nm-footer">
+          <span className="mob2-nm-chip">PRÓXIMO PARTIDO</span>
+          <span className="mob2-nm-meta"><CalSVG /> Temporada al día</span>
         </div>
-        <div className="mob2-nm-empty-brut-right">
-          <span className="mob2-nm-empty-brut-eyebrow">// PRÓXIMO PARTIDO</span>
-          <span className="mob2-nm-empty-brut-heading">SIN<br />PARTIDOS</span>
-          <span className="mob2-nm-empty-brut-rule" />
-          <span className="mob2-nm-empty-brut-caption">TEMPORADA AL DÍA</span>
-        </div>
-      </div>
-      <div className="mob2-nm-empty-neu">
-        <div className="mob2-nm-empty-neu-icon-wrap">
-          <div className="mob2-nm-empty-neu-ring mob2-nm-empty-neu-ring--outer" />
-          <div className="mob2-nm-empty-neu-ring mob2-nm-empty-neu-ring--inner" />
-          <div className="mob2-nm-empty-neu-center">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <div className="mob2-nm-teams mob2-nm-teams--empty">
+          <div className="mob2-nm-empty-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
               <circle cx="12" cy="12" r="9" />
               <polyline points="12 7 12 12 15 14" />
             </svg>
           </div>
-          <div className="mob2-nm-empty-neu-dot" />
+          <div className="mob2-nm-empty-center">
+            <span className="mob2-nm-empty-title">Sin partidos pendientes</span>
+            <span className="mob2-nm-empty-sub">Te avisamos cuando haya uno nuevo</span>
+          </div>
         </div>
-        <div className="mob2-nm-empty-neu-text">
-          <span className="mob2-nm-empty-neu-label">Próximo partido</span>
-          <span className="mob2-nm-empty-neu-title">Todo al día</span>
-          <span className="mob2-nm-empty-neu-sub">No hay partidos pendientes</span>
-        </div>
-        <div className="mob2-nm-empty-neu-check">✓</div>
       </div>
     </div>
   );
 }
 
-function EmptyMatchesScroll({ onOpen }) {
+function EmptyMatchesScroll() {
   return (
     <>
-      <div className="mob2-empty-matches-brut">
-        <div className="mob2-emb-accent" />
-        <div className="mob2-emb-inner">
-          <span className="mob2-emb-num">00</span>
-          <div className="mob2-emb-divider" />
-          <span className="mob2-emb-label">SIN<br />PARTIDOS<br />PEND.</span>
+      <div className="mob2-fw-card mob2-fw-card--hero mob2-fw-card--ghost mob2-fw-card--ghost-hero">
+        <div className="mob2-sm-body">
+          <span className="mob2-sm-tag mob2-sm-tag--ghost">// PRÓXIMO PARTIDO</span>
+          <span className="mob2-sm-title mob2-sm-title--ghost">Sin partidos pendientes</span>
+          <span className="mob2-sm-meta mob2-sm-meta--ghost">Temporada al día</span>
         </div>
-        <div className="mob2-emb-corner mob2-emb-corner--tl" />
-        <div className="mob2-emb-corner mob2-emb-corner--br" />
       </div>
-      <div className="mob2-empty-matches-neu">
-        <div className="mob2-emn-ball">⚽</div>
-        <span className="mob2-emn-title">Estás al día</span>
-        <span className="mob2-emn-sub">Sin pendientes</span>
-      </div>
-      <div className="mob2-more-card" onPointerDown={() => onOpen("matches")}>
-        <span className="mob2-more-sym">»</span>
-        <span>VER TODO</span>
-      </div>
+      <GhostMatchCard />
+      <GhostMatchCard />
     </>
   );
 }
@@ -361,7 +334,7 @@ function TabBar({ activeTab, onTabChange, counts, tabs: customTabs }) {
 
 function PodiumPanel({ users, currentUser }) {
   const sorted = useMemo(
-    () => [...users].sort((a, b) => b.points - a.points).slice(0, 3),
+    () => [...users].sort((a, b) => (b.season_points || 0) - (a.season_points || 0)).slice(0, 3),
     [users]
   );
 
@@ -391,7 +364,7 @@ function PodiumPanel({ users, currentUser }) {
                   </div>
                   <span className="mob2-pod-name">{(u.name || "—").substring(0, 8).toUpperCase()}</span>
                   {isMe && <span className="mob2-pod-you">TÚ</span>}
-                  <span className="mob2-pod-pts">{fmt(u.points)}</span>
+                  <span className="mob2-pod-pts">{fmt(u.season_points)}</span>
                   <span className="mob2-pod-medal">{medals[i]}</span>
                 </div>
                 <div className="mob2-pod-step" />
@@ -406,7 +379,10 @@ function PodiumPanel({ users, currentUser }) {
 
 function StatsPanel({ currentUser }) {
   const u = currentUser || {};
-  const accuracy = u.predictions > 0 ? Math.round((u.correct / u.predictions) * 100) : 0;
+  const seasonPoints = u.season_points || 0;
+  const seasonCorrect = u.season_correct || 0;
+  const seasonPredictions = u.season_predictions || 0;
+  const accuracy = seasonPredictions > 0 ? Math.round((seasonCorrect / seasonPredictions) * 100) : 0;
   const fmt = n => Number(n || 0).toLocaleString("es-ES");
 
   return (
@@ -414,13 +390,13 @@ function StatsPanel({ currentUser }) {
       <div className="mob2-fw-card mob2-fw-card--hero mob2-bento-hero">
         <div className="mob2-hero-body">
           <span className="mob2-hero-tag">PUNTOS</span>
-          <div className="mob2-bento-hero-val">{fmt(u.points)}</div>
+          <div className="mob2-bento-hero-val">{fmt(seasonPoints)}</div>
         </div>
       </div>
       <div className="mob2-fw-card mob2-fw-card--small mob2-bento-small">
         <div className="mob2-sm-body">
           <span className="mob2-sm-tag">ACIERTOS</span>
-          <span className="mob2-sm-title mob2-sm-title--lg">{fmt(u.correct)}</span>
+          <span className="mob2-sm-title mob2-sm-title--lg">{fmt(seasonCorrect)}</span>
         </div>
       </div>
       <div className="mob2-fw-card mob2-fw-card--small mob2-bento-small">
@@ -432,7 +408,7 @@ function StatsPanel({ currentUser }) {
       <div className="mob2-fw-card mob2-bento-wide">
         <div className="mob2-sm-body mob2-sm-body--row">
           <span className="mob2-sm-tag">PREDICCIONES</span>
-          <span className="mob2-sm-title mob2-sm-title--lg">{fmt(u.predictions)}</span>
+          <span className="mob2-sm-title mob2-sm-title--lg">{fmt(seasonPredictions)}</span>
         </div>
       </div>
     </div>
@@ -593,7 +569,7 @@ export default function MobileDashboard({
   const renderTabContent = () => {
     if (activeTab === "matches") {
       if (loading) return [0, 1, 2].map(i => <SkeletonCard key={i} />);
-      if (previewMatches.length === 0) return <EmptyMatchesScroll onOpen={p => setActivePage(p)} />;
+      if (previewMatches.length === 0) return <EmptyMatchesScroll />;
       const matchCards = previewMatches.map((m, i) => (
         <FullWidthMatchCard
           key={m.id}

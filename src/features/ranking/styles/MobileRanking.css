@@ -700,6 +700,27 @@
   box-shadow: inset 0 0 0 1px var(--mrk-accent-border);
 }
 
+/* Cuando la fila es top-3 Y es el usuario actual, prioriza el fondo de posición
+   (oro/plata/bronce) y usa el acento de "yo" solo como marco, sin pisar el
+   fondo ni el color de texto blanco que ya trae --gold/--silver/--bronze. */
+.mrk-row--gold.mrk-row--me,
+.mrk-row--silver.mrk-row--me,
+.mrk-row--bronze.mrk-row--me {
+  box-shadow: inset 0 0 0 2px var(--mrk-accent);
+}
+
+.mrk-row--gold.mrk-row--me {
+  background: var(--mrk-brand-fill) !important;
+}
+
+.mrk-row--silver.mrk-row--me {
+  background: var(--mrk-silver-bg) !important;
+}
+
+.mrk-row--bronze.mrk-row--me {
+  background: var(--mrk-bronze-bg) !important;
+}
+
 .mrk-row-num {
   width: 24px;
   height: 24px;
@@ -1169,7 +1190,7 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding: 14px 16px 0;
+  padding: 14px 16px 24px;
   position: relative;
   animation: mrk-fade-up .25s ease both;
 }
@@ -1571,7 +1592,7 @@
 }
 
 .mrk-salon-hito--gold {
-  background: #F0C240;
+  background: var(--mrk-accent);
 }
 
 .mrk-salon-hito--gold .mrk-salon-hito-icon {
@@ -1582,11 +1603,11 @@
 .mrk-salon-hito--gold .mrk-salon-hito-lbl,
 .mrk-salon-hito--gold .mrk-salon-hito-val,
 .mrk-salon-hito--gold .mrk-salon-hito-name {
-  color: #5c4405;
+  color: #fff;
 }
 
 .mrk-salon-hito--fire {
-  background: #F0A860;
+  background: var(--mrk-gold);
 }
 
 .mrk-salon-hito--fire .mrk-salon-hito-icon {
@@ -1597,11 +1618,12 @@
 .mrk-salon-hito--fire .mrk-salon-hito-lbl,
 .mrk-salon-hito--fire .mrk-salon-hito-val,
 .mrk-salon-hito--fire .mrk-salon-hito-name {
-  color: #5c2c05;
+  color: var(--mrk-border-hard);
 }
 
 .mrk-salon-hito--target {
-  background: #7FD9B6;
+  background: var(--mrk-surface);
+  border-width: 2px;
 }
 
 .mrk-salon-hito--target .mrk-salon-hito-icon {
@@ -1612,7 +1634,7 @@
 .mrk-salon-hito--target .mrk-salon-hito-lbl,
 .mrk-salon-hito--target .mrk-salon-hito-val,
 .mrk-salon-hito--target .mrk-salon-hito-name {
-  color: #05452e;
+  color: var(--mrk-text);
 }
 
 .mrk-salon-hito-lbl {

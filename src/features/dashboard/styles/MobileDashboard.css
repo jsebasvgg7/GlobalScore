@@ -267,130 +267,6 @@
   transform: translate(2px, 2px);
 }
 
-/* ── No Match Banner ── */
-.mob2-nm-empty-brut {
-  display: flex;
-  align-items: stretch;
-  width: 100%;
-  background: var(--m-card);
-  border: 1px solid var(--m-border-hard);
-  border-top: 3px solid var(--m-accent);
-  box-shadow: var(--bru-shadow-lg);
-  min-height: 100px;
-  overflow: hidden;
-  position: relative;
-  animation: mob2-fade-up .3s ease .12s both;
-}
-
-.mob2-nm-empty-brut::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 80px;
-  height: 80px;
-  background: repeating-linear-gradient(45deg,
-      transparent,
-      transparent 4px,
-      rgba(91, 79, 216, .05) 4px,
-      rgba(91, 79, 216, .05) 8px);
-  pointer-events: none;
-}
-
-.mob2-nm-empty-brut-left {
-  width: 78px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 14px 10px;
-  border-right: 1.5px solid var(--m-border-hard);
-  background: var(--m-bg);
-  box-shadow: inset -2px 0 0 rgba(0, 0, 0, .04);
-}
-
-.mob2-nm-empty-brut-zero {
-  font-family: var(--m-mono);
-  font-size: 44px;
-  font-weight: 700;
-  color: var(--m-border-hard);
-  line-height: 1;
-  letter-spacing: -3px;
-}
-
-.mob2-nm-empty-brut-bars {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  width: 100%;
-  padding: 0 4px;
-}
-
-.mob2-nm-empty-brut-bar {
-  height: 1.5px;
-  background: var(--m-border-hard);
-}
-
-.mob2-nm-empty-brut-bar--a {
-  width: 100%;
-}
-
-.mob2-nm-empty-brut-bar--b {
-  width: 65%;
-  background: var(--m-accent);
-  opacity: .5;
-}
-
-.mob2-nm-empty-brut-bar--c {
-  width: 40%;
-}
-
-.mob2-nm-empty-brut-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  padding: 16px 18px;
-}
-
-.mob2-nm-empty-brut-eyebrow {
-  font-family: var(--m-mono);
-  font-size: 7px;
-  font-weight: 700;
-  color: var(--m-accent);
-  letter-spacing: .22em;
-  text-transform: uppercase;
-}
-
-.mob2-nm-empty-brut-heading {
-  font-family: var(--m-mono);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--m-text);
-  letter-spacing: -.02em;
-  line-height: 1.05;
-}
-
-.mob2-nm-empty-brut-rule {
-  display: block;
-  width: 32px;
-  height: 2px;
-  background: var(--m-accent);
-  margin: 2px 0;
-}
-
-.mob2-nm-empty-brut-caption {
-  font-family: var(--m-mono);
-  font-size: 7px;
-  font-weight: 700;
-  color: var(--m-muted);
-  letter-spacing: .18em;
-  text-transform: uppercase;
-}
-
 /* ── Next Match Banner ── */
 .mob2-nm {
   margin: 13px 18px 0;
@@ -507,6 +383,56 @@
   box-shadow: var(--bru-shadow-sm);
   font-size: 16px;
   color: var(--m-text);
+}
+
+/* ── Next Match Banner — estado vacío (mismo morado, mismo alto) ── */
+.mob2-nm-card--empty {
+  cursor: default;
+}
+
+.mob2-nm-card--empty:active {
+  box-shadow: var(--bru-shadow-lg);
+  transform: none;
+}
+
+.mob2-nm-teams--empty {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 14px 20px;
+}
+
+.mob2-nm-empty-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255, 255, 255, .5);
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+}
+
+.mob2-nm-empty-center {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mob2-nm-empty-title {
+  font-family: var(--m-mono);
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -.01em;
+}
+
+.mob2-nm-empty-sub {
+  font-family: var(--m-mono);
+  font-size: 9px;
+  color: rgba(255, 255, 255, .75);
+  letter-spacing: .01em;
 }
 
 /* ── Section header ── */
@@ -989,36 +915,6 @@
   box-shadow: 1px 1px 0 rgba(0, 0, 0, .2);
 }
 
-/* ── More card ── */
-.mob2-more-card {
-  width: 56px;
-  flex-shrink: 0;
-  background: var(--m-card);
-  border: 1px solid var(--m-border-hard);
-  border-top: 2.5px solid var(--m-accent);
-  box-shadow: var(--bru-shadow);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  cursor: pointer;
-  color: var(--m-accent);
-  font-family: var(--m-mono);
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  min-height: 90px;
-  -webkit-tap-highlight-color: transparent;
-  transition: box-shadow .08s, transform .08s;
-}
-
-.mob2-more-card:active {
-  box-shadow: var(--bru-active);
-  transform: translate(2px, 2px);
-}
-
 /* ── Carrusel full-width (Partidos/Ligas/Premios) ── */
 .mob2-fw-scroll {
   display: grid;
@@ -1138,6 +1034,16 @@
   opacity: .5;
   cursor: default;
   pointer-events: none;
+}
+
+.mob2-fw-card--ghost-hero {
+  min-height: 190px;
+  justify-content: center;
+}
+
+.mob2-fw-card--ghost-hero .mob2-sm-body {
+  justify-content: center;
+  height: 100%;
 }
 
 .mob2-sm-tag--ghost,
@@ -1572,92 +1478,6 @@
   text-align: center;
 }
 
-/* ── Empty matches scroll ── */
-.mob2-empty-matches-brut {
-  width: 138px;
-  min-height: 90px;
-  flex-shrink: 0;
-  background: var(--m-card);
-  border: 1px solid var(--m-border-hard);
-  border-top: 2.5px solid var(--m-accent);
-  box-shadow: var(--bru-shadow);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  scroll-snap-align: start;
-  overflow: hidden;
-}
-
-.mob2-emb-accent {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--m-accent);
-  opacity: .4;
-}
-
-.mob2-emb-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 12px 14px;
-}
-
-.mob2-emb-num {
-  font-family: var(--m-mono);
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--m-border-hard);
-  letter-spacing: -1px;
-  line-height: 1;
-}
-
-.mob2-emb-divider {
-  width: 22px;
-  height: 1.5px;
-  background: var(--m-accent);
-}
-
-.mob2-emb-label {
-  font-family: var(--m-mono);
-  font-size: 6px;
-  font-weight: 700;
-  color: var(--m-muted);
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  text-align: center;
-  line-height: 1.6;
-}
-
-.mob2-emb-corner {
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  border-color: var(--m-accent);
-  border-style: solid;
-  opacity: .45;
-}
-
-.mob2-emb-corner--tl {
-  top: 5px;
-  left: 5px;
-  border-width: 1.5px 0 0 1.5px;
-}
-
-.mob2-emb-corner--br {
-  bottom: 5px;
-  right: 5px;
-  border-width: 0 1.5px 1.5px 0;
-}
-
-.mob2-empty-matches-neu {
-  display: none;
-}
-
 /* ── Skeleton ── */
 .mob2-sk-card {
   flex: 0 0 86%;
@@ -1887,10 +1707,6 @@
 
 [data-theme="dark"] .mob2-lc-input {
   box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .3);
-}
-
-.mob2-nm-empty-neu {
-  display: none;
 }
 
 .mob2-alb-panel {
@@ -2171,11 +1987,6 @@
   padding-bottom: 60px;
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
-}
-
-/* Shared empty state */
-.mob2-nm--empty {
-  cursor: default;
 }
 
 /* Next match teams (layout compartido) */
@@ -2707,10 +2518,6 @@
   .mob2-progress,
   .mob2-nm,
   .mob2-bottom-wrap {
-    animation: none;
-  }
-
-  .mob2-nm-empty-neu-ring--inner {
     animation: none;
   }
 }
