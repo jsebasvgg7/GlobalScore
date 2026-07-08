@@ -401,7 +401,7 @@ function HistoryTab({ predictionHistory, historyLoading }) {
           <Gamepad2 size={36} /><p>Sin predicciones</p>
         </div>
       ) : (
-        <div className="mpm-hist-list">
+        <div className="mpm-hist-grid">
           {filtered.map((pred) => {
             const result = getPredictionResult(pred);
             const match = pred.matches;
@@ -409,54 +409,34 @@ function HistoryTab({ predictionHistory, historyLoading }) {
               <div key={pred.id} className={`mpm-hist-card mpm-hist-card--${result.status}`}>
                 <div className="mpm-hist-card-hdr">
                   <span className="mpm-hist-league">{match?.league}</span>
-                  <span className="mpm-hist-date">
-                    <Calendar size={10} />{match?.date}
-                  </span>
+                  <span className="mpm-hist-date">{match?.date}</span>
                 </div>
-                <div className="mpm-hist-body">
-                  <div className="mpm-hist-team">
-                    <div className="mpm-hist-logo">
-                      {match?.home_team_logo_url
-                        ? <img src={match.home_team_logo_url} alt="" onError={(e) => (e.target.style.display = "none")} />
-                        : <span>{match?.home_team_logo || "⚽"}</span>}
-                    </div>
-                    <span className="mpm-hist-tname">{match?.home_team}</span>
-                  </div>
 
-                  <div className="mpm-hist-scores">
-                    <div className="mpm-hist-score-wrap">
-                      <div className="mpm-hist-score">{pred.home_score}</div>
-                      <div className="mpm-hist-score">{pred.away_score}</div>
-                    </div>
-                    {match?.status === "finished" && (
-                      <div className="mpm-hist-real">
-                        <span>{match.result_home}</span>
-                        <span className="mpm-hist-sep">-</span>
-                        <span>{match.result_away}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mpm-hist-team mpm-hist-team--right">
-                    <span className="mpm-hist-tname">{match?.away_team}</span>
-                    <div className="mpm-hist-logo">
-                      {match?.away_team_logo_url
-                        ? <img src={match.away_team_logo_url} alt="" onError={(e) => (e.target.style.display = "none")} />
-                        : <span>{match?.away_team_logo || "⚽"}</span>}
-                    </div>
-                  </div>
+                <div className="mpm-hist-teams-row">
+                  <span className="mpm-hist-tname">{match?.home_team}</span>
+                  <span className="mpm-hist-vs">vs</span>
+                  <span className="mpm-hist-tname">{match?.away_team}</span>
                 </div>
-                <div className="mpm-hist-card-ftr">
-                  <div className={`mpm-hist-result mpm-hist-result--${result.status}`}>
-                    {result.status === "exact" && <Trophy size={12} />}
-                    {result.status === "correct" && <CheckCircle2 size={12} />}
-                    {result.status === "wrong" && <XCircle size={12} />}
-                    {result.status === "pending" && <Clock size={12} />}
-                    <span>{result.label}</span>
+
+                <div className={`mpm-hist-scoreboard mpm-hist-scoreboard--${result.status}`}>
+                  {pred.home_score}-{pred.away_score}
+                </div>
+
+                {match?.status === "finished" ? (
+                  <div className="mpm-hist-real-lbl">
+                    Real: {match.result_home}-{match.result_away}
                   </div>
-                  {result.points > 0 && (
-                    <div className="mpm-hist-pts">+{result.points} pts</div>
-                  )}
+                ) : (
+                  <div className="mpm-hist-real-lbl">{match?.time || "Por jugar"}</div>
+                )}
+
+                <div className={`mpm-hist-badge mpm-hist-badge--${result.status}`}>
+                  {result.status === "exact" && <Trophy size={10} />}
+                  {result.status === "correct" && <CheckCircle2 size={10} />}
+                  {result.status === "wrong" && <XCircle size={10} />}
+                  {result.status === "pending" && <Clock size={10} />}
+                  <span>{result.label}</span>
+                  {result.points > 0 && <span className="mpm-hist-badge-pts">+{result.points}</span>}
                 </div>
               </div>
             );
@@ -517,19 +497,21 @@ function EditTab({
         {bannersLoading ? (
           <p className="mpm-form-note">Cargando banners...</p>
         ) : (
-          <div className="mpm-banner-list">
+          <div className="mpm-banner-grid">
             <button
-              className={`mpm-banner-opt${!userData.equipped_banner_url ? " active" : ""}`}
+              className={`mpm-banner-cell mpm-banner-cell--first${!userData.equipped_banner_url ? " active" : ""}`}
               onClick={() => setUserData({ ...userData, equipped_banner_url: null })}
             >
-              <div className="mpm-banner-preview mpm-banner-base" />
-              <span>Banner Base</span>
-              {!userData.equipped_banner_url && <Check size={12} className="mpm-banner-check" />}
+              <div className="mpm-banner-cell-bg mpm-banner-cell-bg--base" />
+              <span className="mpm-banner-cell-lbl">Banner Base</span>
+              {!userData.equipped_banner_url && (
+                <span className="mpm-banner-cell-check"><Check size={11} /></span>
+              )}
             </button>
             {userBanners.map((b) => (
               <button
                 key={b.id}
-                className={`mpm-banner-opt${userData.equipped_banner_url === b.image_url ? " active" : ""}`}
+                className={`mpm-banner-cell${userData.equipped_banner_url === b.image_url ? " active" : ""}`}
                 onClick={() =>
                   setUserData({
                     ...userData,
@@ -538,10 +520,10 @@ function EditTab({
                   })
                 }
               >
-                <img src={b.image_url} alt={b.name} className="mpm-banner-preview" />
-                <span>{b.name}</span>
+                <img src={b.image_url} alt="" className="mpm-banner-cell-bg" />
+                <span className="mpm-banner-cell-lbl">{b.name}</span>
                 {userData.equipped_banner_url === b.image_url && (
-                  <Check size={12} className="mpm-banner-check" />
+                  <span className="mpm-banner-cell-check"><Check size={11} /></span>
                 )}
               </button>
             ))}
@@ -552,35 +534,37 @@ function EditTab({
         )}
       </div>
 
-      {fields.map((f) => {
-        const Icon = f.icon;
-        return (
-          <div key={f.key} className="mpm-form-group">
-            <label className="mpm-form-label"><Icon size={13} /> {f.label}</label>
-            <input
-              type="text"
-              className="mpm-form-input"
-              value={userData[f.key] || ""}
-              onChange={(e) => setUserData({ ...userData, [f.key]: e.target.value })}
-              placeholder={f.placeholder}
-            />
-          </div>
-        );
-      })}
+      <div className="mpm-form-bento">
+        {fields.map((f) => {
+          const Icon = f.icon;
+          return (
+            <div key={f.key} className="mpm-form-group mpm-form-group--half">
+              <label className="mpm-form-label"><Icon size={13} /> {f.label}</label>
+              <input
+                type="text"
+                className="mpm-form-input"
+                value={userData[f.key] || ""}
+                onChange={(e) => setUserData({ ...userData, [f.key]: e.target.value })}
+                placeholder={f.placeholder}
+              />
+            </div>
+          );
+        })}
 
-      <div className="mpm-form-group">
-        <label className="mpm-form-label"><User size={13} /> Género</label>
-        <select
-          className="mpm-form-input"
-          value={userData.gender || ""}
-          onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
-        >
-          <option value="">Seleccionar...</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Femenino">Femenino</option>
-          <option value="Otro">Otro</option>
-          <option value="Prefiero no decir">Prefiero no decir</option>
-        </select>
+        <div className="mpm-form-group mpm-form-group--half">
+          <label className="mpm-form-label"><User size={13} /> Género</label>
+          <select
+            className="mpm-form-input"
+            value={userData.gender || ""}
+            onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
+          >
+            <option value="">Seleccionar...</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+            <option value="Prefiero no decir">Prefiero no decir</option>
+          </select>
+        </div>
       </div>
 
       <div className="mpm-form-group">
@@ -594,7 +578,7 @@ function EditTab({
         />
       </div>
 
-      <div className="mpm-form-actions">
+      <div className="mpm-form-actions mpm-form-actions--bento">
         <button className="mpm-save-btn" onClick={handleSave} disabled={loading}>
           {loading ? <Activity size={14} className="spinner" /> : <Save size={14} />}
           {loading ? "Guardando..." : "Guardar Cambios"}
