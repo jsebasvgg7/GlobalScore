@@ -806,7 +806,6 @@ El feature más ambicioso de GlobalScore: un sistema completo de figuritas colec
 - [x] App Android compilada y firmada via TWA
 - [x] GitHub Actions para reset semanal
 - [x] Sistema de Notas Personales
-- [x] StyleSwitcher en Mobile
 - [x] Módulo de Historia completo
 - [x] Migración a arquitectura feature-based
 - [x] Capas de servicio por dominio
