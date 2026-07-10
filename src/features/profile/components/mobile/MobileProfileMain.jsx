@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  ChevronRight, ChevronDown, Moon, Sun,
+  ChevronRight, Moon, Sun,
   BarChart2, Award, Crown, FileText, NotebookPen,
   Edit2, User, Bell, Lock, ArrowLeft,
   Target, Star, Trophy,
@@ -10,7 +10,6 @@ import {
   ArrowUpDown, Image, Check, Save, X,
   Filter,
 } from "lucide-react";
-import { StyleSwitcher } from "@/shared/layout";
 import AvatarUpload from "../AvatarUpload";
 import { MobileNotes } from '@/features/notes';
 import { supabase } from '@/shared/services/supabase/client';
@@ -655,11 +654,6 @@ function SettingsSection({
               <Toggle checked={theme === "dark"} onChange={toggleTheme} />
             </Row>
           </Card>
-          <Card title="Estilo visual">
-            <div className="mpm-appearance-panel">
-              <StyleSwitcher />
-            </div>
-          </Card>
           <Card title="Texto">
             <Row label="Tamaño de fuente" desc="Ajusta el tamaño del texto">
               <select
@@ -782,7 +776,6 @@ export default function MobileProfileMain({
   const navigate = useNavigate();
   const [mobileView, setMobileView] = useState("main");
   const [showMobileNotes, setShowMobileNotes] = useState(false);
-  const [appearanceOpen, setAppearanceOpen] = useState(false);
 
  const accuracy = calculateAccuracy(currentUser);
 
@@ -983,31 +976,6 @@ export default function MobileProfileMain({
           </button>
         </div>
 
-        {/* Apariencia — oculto temporalmente, un solo estilo visual definido
-        <div>
-          <button className="mpm-row" onClick={() => setAppearanceOpen((o) => !o)}>
-            <div className="mpm-row-icon" style={{ background: "#eab308" }}>
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-              </svg>
-            </div>
-            <div className="mpm-row-body">
-              <span className="mpm-row-lbl">Apariencia</span>
-              <span className="mpm-row-desc">Tema y estilo visual</span>
-            </div>
-            {appearanceOpen
-              ? <ChevronDown size={14} className="mpm-row-arrow" />
-              : <ChevronRight size={14} className="mpm-row-arrow" />}
-          </button>
-
-          {appearanceOpen && (
-            <div className="mpm-appearance-panel">
-              <StyleSwitcher />
-            </div>
-          )}
-        </div>
-        */}
       </div>
 
       {/* ── MI ACTIVIDAD (bento: hero + par) ── */}
