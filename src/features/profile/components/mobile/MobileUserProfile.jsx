@@ -94,15 +94,19 @@ function TabBtn({ id, active, onClick, children }) {
    PANEL — STATS
 ════════════════════════════════════════════ */
 function PanelStats({ user }) {
-  const acc = pct(user.correct || 0, user.predictions || 0);
+  const seasonAcc = pct(user.season_correct || 0, user.season_predictions || 0);
+  const totalAcc = pct(user.correct || 0, user.predictions || 0);
   const mAcc = pct(user.monthly_correct || 0, user.monthly_predictions || 0);
 
   const rows = [
-    { lbl: "PREDICCIONES", val: fmt(user.predictions || 0), accent: "var(--mup2-accent)" },
-    { lbl: "ACIERTOS", val: fmt(user.correct || 0), accent: "#34d399" },
-    { lbl: "PRECISIÓN", val: `${acc}%`, accent: "#f59e0b" },
+    { lbl: "PREDICCIONES TEMP.", val: fmt(user.season_predictions || 0), accent: "var(--mup2-accent)" },
+    { lbl: "ACIERTOS TEMP.", val: fmt(user.season_correct || 0), accent: "#34d399" },
+    { lbl: "PRECISIÓN TEMP.", val: `${seasonAcc}%`, accent: "#f59e0b" },
+    { lbl: "PUNTOS TEMP.", val: fmt(user.season_points || 0), accent: "var(--mup2-accent)" },
     { lbl: "PUNTOS TOTAL", val: fmt(user.points || 0), accent: "var(--mup2-accent)" },
     { lbl: "PUNTOS MES", val: fmt(user.monthly_points || 0), accent: "#a78bfa" },
+    { lbl: "PREDICCIONES TOTAL", val: fmt(user.predictions || 0), accent: "#a78bfa" },
+    { lbl: "PRECISIÓN TOTAL", val: `${totalAcc}%`, accent: "#fb923c" },
     { lbl: "PRED. MES", val: fmt(user.monthly_predictions || 0), accent: "#34d399" },
     { lbl: "ACIERTOS MES", val: fmt(user.monthly_correct || 0), accent: "#f59e0b" },
     { lbl: "PREC. MES", val: `${mAcc}%`, accent: "#fb923c" },
@@ -573,7 +577,7 @@ export default function MobileUserProfile({ userId, onClose }) {
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
   }, [tab]);
 
-  const acc = user ? pct(user.correct || 0, user.predictions || 0) : 0;
+  const acc = user ? pct(user.season_correct || 0, user.season_predictions || 0) : 0;
 
   return (
     <div className="mup2-overlay" onClick={onClose}>
@@ -618,6 +622,7 @@ export default function MobileUserProfile({ userId, onClose }) {
                     <div className="mup2-hero-banner-grid" />
                     <div className="mup2-hero-banner-orb mup2-hero-banner-orb--1" />
                     <div className="mup2-hero-banner-orb mup2-hero-banner-orb--2" />
+                    {/* orbes activados vía CSS: banner sólido morado + textura diagonal + orbe dorado */}
                   </>
                 )}
               </div>
@@ -659,7 +664,7 @@ export default function MobileUserProfile({ userId, onClose }) {
               </div>
               <div className="mup2-quick-sep" />
               <div className="mup2-quick-cell">
-                <span className="mup2-quick-val">{fmt(user.correct || 0)}</span>
+                <span className="mup2-quick-val">{fmt(user.season_correct ?? user.correct ?? 0)}</span>
                 <span className="mup2-quick-lbl">✓</span>
               </div>
               <div className="mup2-quick-sep" />
