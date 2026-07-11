@@ -961,7 +961,7 @@ export default function MobileProfileMain({
       <div className="mpm-group">
 
         {/* Dark mode toggle */}
-        <div className="mpm-row mpm-row--toggle">
+      <div className="mpm-row mpm-row--toggle">
           <div className="mpm-row-icon" style={{ background: "#6366f1" }}>
             {isDark ? <Moon size={17} color="#fff" /> : <Sun size={17} color="#fff" />}
           </div>
@@ -976,6 +976,32 @@ export default function MobileProfileMain({
           </button>
         </div>
 
+      </div>
+
+      {/* ── MI ACTIVIDAD (bento: hero + par) ── */}
+      <div className="mpm-section-label">Mi actividad</div>
+      <div className="mpm-group">
+        <NavRow
+          icon={ACTIVITY_HERO.icon}
+          label={ACTIVITY_HERO.label}
+          desc={ACTIVITY_HERO.desc}
+          color={ACTIVITY_HERO.color}
+          onClick={() => handleNavigate(ACTIVITY_HERO.id)}
+          className="mpm-row--hero"
+        />
+        <div className="mpm-activity-pair">
+          {ACTIVITY_PAIR.map((item) => (
+            <NavRow
+              key={item.id}
+              icon={item.icon}
+              label={item.label}
+              desc={item.desc}
+              color={item.color}
+              onClick={() => handleNavigate(item.id)}
+              className="mpm-row--tile"
+            />
+          ))}
+        </div>
       </div>
 
       {/* ── MI ACTIVIDAD (bento: hero + par) ── */}
