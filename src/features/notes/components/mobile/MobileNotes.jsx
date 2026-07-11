@@ -8,11 +8,11 @@ import './MobileNotes.css';
 
 // ── Colores ──────────────────────────────────────────────────────
 const COLORS = {
-  purple: { label: 'Morado', hex: '#8b7fc7' },
+  purple: { label: 'Morado', hex: '#5b4fd8' },
   green: { label: 'Verde', hex: '#1D9E75' },
   gold: { label: 'Dorado', hex: '#c9a227' },
-  red: { label: 'Rojo', hex: '#e07070' },
-  blue: { label: 'Azul', hex: '#60a5fa' },
+  red: { label: 'Rojo', hex: '#E24B4A' },
+  blue: { label: 'Azul', hex: '#378ADD' },
   gray: { label: 'Gris', hex: '#8186a0' },
 };
 
@@ -56,13 +56,20 @@ function NotesList({ notes, loading, onSelect, onNew, search, setSearch }) {
       {/* Header */}
       <div className="mn-list-header">
         <div className="mn-list-title-row">
-          <Lock size={11} className="mn-lock" />
-          <span className="mn-list-title">MIS NOTAS</span>
-          <span className="mn-list-count">{notes.length}</span>
+          <div className="mn-header-icon">
+            <Lock size={13} />
+          </div>
+          <div className="mn-header-text">
+            <span className="mn-list-title">Mis notas</span>
+            <span className="mn-header-sub">Cifradas · AES-256</span>
+          </div>
         </div>
-        <button className="mn-new-btn" onClick={onNew}>
-          <Plus size={16} />
-        </button>
+        <div className="mn-header-actions">
+          <span className="mn-list-count">{notes.length}</span>
+          <button className="mn-new-btn" onClick={onNew}>
+            <Plus size={16} />
+          </button>
+        </div>
       </div>
 
       {/* Búsqueda */}

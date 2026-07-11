@@ -1,26 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Bell, Trophy, CheckCircle2, BellRing, BellOff } from "lucide-react";
 import "./MobileNotifications.css";
 
-// ── Pill de tipo ─────────────────────────────────────────────────
-function TypeBadge({ type }) {
-  return (
-    <span className={`mnv-badge mnv-badge--${type}`}>
-      {type === "new" ? "Nuevo" : "Final"}
-    </span>
-  );
-}
-
-// ── Icono de tarjeta ─────────────────────────────────────────────
-function CardIcon({ type }) {
-  return (
-    <div className={`mnv-card-icon mnv-card-icon--${type}`}>
-      {type === "new"
-        ? <Trophy size={15} />
-        : <CheckCircle2 size={15} />}
-    </div>
-  );
-}
+const MAX_BENTO_ITEMS = 5;
 
 // ── Filtro individual ────────────────────────────────────────────
 function FilterBtn({ label, count, active, onClick }) {
@@ -35,40 +17,92 @@ function FilterBtn({ label, count, active, onClick }) {
   );
 }
 
-// ── Tarjeta de notificación ──────────────────────────────────────
-function NotifCard({ notif }) {
-  return (
-    <div className={`mnv-card mnv-card--${notif.type}`}>
-      <CardIcon type={notif.type} />
-      <div className="mnv-card-body">
-        <div className="mnv-card-title">{notif.description}</div>
-        <div className="mnv-card-meta">
-          <span>{notif.league}</span>
-          <span className="mnv-meta-sep">·</span>
-          <span>{notif.date}</span>
-          {notif.time && (
-            <>
-              <span className="mnv-meta-sep">·</span>
-              <span>{notif.time}</span>
-            </>
-          )}
+// ── Hero — próxima notificación nueva ────────────────────────────
+function NotifHero({ notif, onOpen }) {
+  if (!notif) {
+    return (
+      <div className="mnv-hero-wrap">
+        <div className="mnv-hero mnv-hero--empty">
+          <div className="mnv-hero-empty-row">
+            <div className="mnv-hero-empty-icon">
+              <BellOff size={20} strokeWidth={1.5} />
+            </div>
+            <div className="mnv-hero-empty-center">
+              <span className="mnv-hero-empty-title">Estás al día</span>
+              <span className="mnv-hero-empty-sub">Sin notificaciones nuevas por ahora</span>
+            </div>
+          </div>
         </div>
-        {notif.result && (
-          <div className="mnv-card-result">{notif.result}</div>
-        )}
       </div>
-      <TypeBadge type={notif.type} />
+    );
+  }
+
+  return (
+    <div className="mnv-hero-wrap">
+      <button className="mnv-hero" onClick={() => onOpen?.(notif)}>
+        <div className="mnv-hero-body">
+          <div className="mnv-hero-top">
+            <span className="mnv-hero-chip">Nueva</span>
+            <div className="mnv-hero-icon">
+              <Trophy size={13} />
+            </div>
+          </div>
+          <span className="mnv-hero-title">{notif.description}</span>
+          <div className="mnv-hero-meta">
+            <span>{notif.league}</span>
+            <span className="mnv-hero-meta-sep">·</span>
+            <span>{notif.date}</span>
+            {notif.time && (
+              <>
+                <span className="mnv-hero-meta-sep">·</span>
+                <span>{notif.time}</span>
+              </>
+            )}
+          </div>
+        </div>
+      </button>
     </div>
   );
 }
 
-// ── Empty state ──────────────────────────────────────────────────
-function EmptyState() {
+// ── Celda del bento (alta o chica) ───────────────────────────────
+function BentoCell({ notif, tall }) {
+  const isNew = notif.type === "new";
+
   return (
-    <div className="mnv-empty">
-      <Bell size={36} className="mnv-empty-icon" />
-      <div className="mnv-empty-title">Sin notificaciones</div>
-      <div className="mnv-empty-sub">Aquí aparecerán las novedades</div>
+    <div className={`mnv-cell mnv-cell--${tall ? "tall" : "small"} mnv-cell--${notif.type}`}>
+      <div className="mnv-cell-body">
+        <div className="mnv-cell-head">
+          <div className={`mnv-cell-icon mnv-cell-icon--${notif.type}`}>
+            {isNew ? <Trophy size={tall ? 15 : 12} /> : <CheckCircle2 size={tall ? 15 : 12} />}
+          </div>
+          <span className={`mnv-cell-badge mnv-cell-badge--${notif.type}`}>
+            {isNew ? "Nuevo" : "Final"}
+          </span>
+        </div>
+
+        <div>
+          <div className="mnv-cell-title">{notif.description}</div>
+          <div className="mnv-cell-meta">
+            {notif.league} · {notif.date}{notif.time ? ` · ${notif.time}` : ""}
+          </div>
+          {notif.result && (
+            <div className="mnv-cell-result">{notif.result}</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Celda fantasma — rellena huecos del bento ────────────────────
+function GhostCell({ tall }) {
+  return (
+    <div className={`mnv-cell mnv-cell--ghost mnv-cell--${tall ? "tall" : "small"}`}>
+      <div className="mnv-cell-body">
+        <span className="mnv-cell-ghost-eyebrow">// Próximamente</span>
+        <span className="mnv-cell-ghost-title">Sin más novedades</span>
+      </div>
     </div>
   );
 }
@@ -83,6 +117,17 @@ function LoadingState() {
   );
 }
 
+// ── Empty state (filtro sin resultados) ──────────────────────────
+function EmptyState() {
+  return (
+    <div className="mnv-empty">
+      <Bell size={32} className="mnv-empty-icon" strokeWidth={1.5} />
+      <div className="mnv-empty-title">Sin notificaciones</div>
+      <div className="mnv-empty-sub">Aquí aparecerán las novedades</div>
+    </div>
+  );
+}
+
 // ════════════════════════════════════════════════════════════════
 //  COMPONENTE PRINCIPAL
 // ════════════════════════════════════════════════════════════════
@@ -91,6 +136,7 @@ export default function MobileNotifications({
   loading = false,
   filter = "all",
   onFilterChange,
+  onOpenNotif,
   pushEnabled = false,
   pushLoading = false,
   onTogglePush,
@@ -101,6 +147,16 @@ export default function MobileNotifications({
   const filtered = notifications.filter(n =>
     filter === "all" ? true : n.type === filter
   );
+
+  // Notificación destacada del hero: la próxima "nueva" (independiente del filtro)
+  const heroNotif = useMemo(() => {
+    return notifications.filter(n => n.type === "new")[0] || null;
+  }, [notifications]);
+
+  // Bento: hasta MAX_BENTO_ITEMS del filtro activo.
+  // La celda alta siempre es la más reciente del filtro activo (nueva o final).
+  const bentoItems = filtered.slice(0, MAX_BENTO_ITEMS);
+  const ghostsNeeded = Math.max(0, MAX_BENTO_ITEMS - bentoItems.length);
 
   const FILTERS = [
     { key: "all", label: "Todas", count: notifications.length },
@@ -138,18 +194,24 @@ export default function MobileNotifications({
         ))}
       </div>
 
-      {/* ── LISTA ── */}
-      <div className="mnv-list">
-        {loading ? (
-          <LoadingState />
-        ) : filtered.length === 0 ? (
-          <EmptyState />
-        ) : (
-          filtered.map(notif => (
-            <NotifCard key={notif.id} notif={notif} />
-          ))
-        )}
-      </div>
+      {/* ── HERO ── */}
+      <NotifHero notif={heroNotif} onOpen={onOpenNotif} />
+
+      {/* ── BENTO ── */}
+      {loading ? (
+        <LoadingState />
+      ) : filtered.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <div className="mnv-bento">
+          {bentoItems.map((notif, i) => (
+            <BentoCell key={notif.id} notif={notif} tall={i === 0} />
+          ))}
+          {Array.from({ length: ghostsNeeded }, (_, i) => (
+            <GhostCell key={`ghost-${i}`} tall={bentoItems.length === 0 && i === 0} />
+          ))}
+        </div>
+      )}
 
     </div>
   );

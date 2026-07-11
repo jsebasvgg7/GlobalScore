@@ -12,7 +12,6 @@ import {
   HistoricalTeamsMobile,
   HistoricalCompetitionsPage,
   HistoricalCompetitionsMobile,
-  HistoryWelcomeScreen,
   HistoryVaultLanding,
   HistoricalPlayersMobile,
 } from '@/features/history';
@@ -66,9 +65,6 @@ export default function HistoryPage() {
   const [preselectedEvent, setPreselectedEvent] = useState(null);
   const [preselectedCompId, setPreselectedCompId] = useState(null);
 
-  const [showWelcome, setShowWelcome] = useState(
-    () => !sessionStorage.getItem("vault_visited")
-  );
   const [showVaultLanding, setShowVaultLanding] = useState(true);
   const [showMenu, setShowMenu] = useState(true);
 
@@ -112,18 +108,6 @@ export default function HistoryPage() {
 
     window.scrollTo({ top: 0, behavior: "instant" });
   };
-
-  // ── Pantalla de bienvenida ─────────────────────────────────
-  if (showWelcome) {
-    return (
-      <HistoryWelcomeScreen
-        onEnter={() => {
-          sessionStorage.setItem("vault_visited", "true");
-          setShowWelcome(false);
-        }}
-      />
-    );
-  }
 
   // ── Vault Landing (solo mobile) ────────────────────────────
   if (isMobile && showMenu && showVaultLanding) {

@@ -5,7 +5,6 @@ export { default as HistoricalTeamsPage } from './components/HistoricalTeamsPage
 export { default as HistoryMenuDesktop } from './components/HistoryMenuDesktop'
 export { default as HistoryRightPanel } from './components/HistoryRightPanel'
 export { default as HistorySectionNav } from './components/HistorySectionNav'
-export { default as HistoryWelcomeScreen } from './components/HistoryWelcomeScreen'
 export { default as EventsRightPanel } from './components/EventsRightPanel'
 export { default as TeamsRightPanel } from './components/TeamsRightPanel'
 

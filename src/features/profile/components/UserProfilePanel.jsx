@@ -276,7 +276,8 @@ export default function UserProfilePanel({ userId, onClose }) {
 
   if (!userData) return null;
 
-  const accuracy = acc(userData.correct, userData.predictions);
+  const accuracy = acc(userData.season_correct, userData.season_predictions);
+  const totalAccuracy = acc(userData.correct, userData.predictions);
   const lvlProg = levelProgress(userData.points || 0);
   const lvlPts = pointsInLevel(userData.points || 0);
   const activeTitle = getActiveTitle();
@@ -414,14 +415,22 @@ export default function UserProfilePanel({ userId, onClose }) {
                 </div>
               </div>
 
-              <SectionDivider icon={TrendingUp} label="Estadísticas globales" color="#5b4fd8" />
+              <SectionDivider icon={TrendingUp} label="Estadísticas de temporada" color="#5b4fd8" />
               <div className="upp-stats-grid">
-                <StatCard icon={Zap} label="Puntos" value={fmt(userData.points)} accent="#5b4fd8" />
-                <StatCard icon={Target} label="Predicciones" value={fmt(userData.predictions)} accent="#3B82F6" />
+                <StatCard icon={Zap} label="Puntos" value={fmt(userData.season_points)} accent="#5b4fd8" />
+                <StatCard icon={Target} label="Predicciones" value={fmt(userData.season_predictions)} accent="#3B82F6" />
                 <StatCard icon={Star} label="Precisión" value={`${accuracy}%`} accent="#10B981" />
-                <StatCard icon={Trophy} label="Correctas" value={fmt(userData.correct)} accent="#F59E0B" />
+                <StatCard icon={Trophy} label="Correctas" value={fmt(userData.season_correct)} accent="#F59E0B" />
                 <StatCard icon={Crown} label="Coronas" value={totalCrowns} accent="#c9a227" />
                 <StatCard icon={Award} label="Posición" value={`#${userRanking.position}`} accent="#EC4899" />
+              </div>
+
+              <SectionDivider icon={TrendingUp} label="Histórico total" color="#8b7fc7" />
+              <div className="upp-stats-grid">
+                <StatCard icon={Zap} label="Puntos" value={fmt(userData.points)} accent="#8b7fc7" />
+                <StatCard icon={Target} label="Predicciones" value={fmt(userData.predictions)} accent="#6366F1" />
+                <StatCard icon={Star} label="Precisión" value={`${totalAccuracy}%`} accent="#10B981" />
+                <StatCard icon={Trophy} label="Correctas" value={fmt(userData.correct)} accent="#F59E0B" />
               </div>
 
               <SectionDivider icon={Flame} label="Rachas" color="#EF4444" />

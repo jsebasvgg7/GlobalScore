@@ -5,4 +5,5 @@ dist
 *.log
 *.txt
 notas
+.gradle/
 random
