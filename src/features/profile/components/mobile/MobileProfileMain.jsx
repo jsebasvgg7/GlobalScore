@@ -855,7 +855,7 @@ export default function MobileProfileMain({
   const currentMobileTab = isMobileSub ? mobileView.replace("tab:", "") : null;
 
   /* ── Nav groups ── */
-  const ACTIVITY_HERO = { id: "overview", icon: BarChart2, label: "Estadísticas", desc: "Ver tu rendimiento", color: "#1d9e75" };
+  const ACTIVITY_HERO = { id: "overview", icon: BarChart2, label: "Estadísticas", desc: "Ver tu rendimiento", color: "#5b4fd8" };
   const ACTIVITY_PAIR = [
     { id: "achievements", icon: Award, label: "Logros", desc: `${currentUser?.achievements?.length || 0} items`, color: "#c9a227" },
     { id: "championships", icon: Crown, label: "Campeonatos", desc: `${currentUser?.monthly_championships || 0} items`, color: "#8b7fc7" },
@@ -976,32 +976,6 @@ export default function MobileProfileMain({
           </button>
         </div>
 
-      </div>
-
-      {/* ── MI ACTIVIDAD (bento: hero + par) ── */}
-      <div className="mpm-section-label">Mi actividad</div>
-      <div className="mpm-group">
-        <NavRow
-          icon={ACTIVITY_HERO.icon}
-          label={ACTIVITY_HERO.label}
-          desc={ACTIVITY_HERO.desc}
-          color={ACTIVITY_HERO.color}
-          onClick={() => handleNavigate(ACTIVITY_HERO.id)}
-          className="mpm-row--hero"
-        />
-        <div className="mpm-activity-pair">
-          {ACTIVITY_PAIR.map((item) => (
-            <NavRow
-              key={item.id}
-              icon={item.icon}
-              label={item.label}
-              desc={item.desc}
-              color={item.color}
-              onClick={() => handleNavigate(item.id)}
-              className="mpm-row--tile"
-            />
-          ))}
-        </div>
       </div>
 
       {/* ── MI ACTIVIDAD (bento: hero + par) ── */}

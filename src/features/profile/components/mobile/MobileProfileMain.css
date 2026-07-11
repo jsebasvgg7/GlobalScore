@@ -211,13 +211,11 @@
 .mpm-banner-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #1a0533 0%, #2d1b69 50%, #1e3a5f 100%);
+  background: var(--mpm-accent);
 }
 
 .mpm-banner-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.5) 100%);
+  display: none;
 }
 
 .mpm-banner-tag {
@@ -228,13 +226,13 @@
   font-weight: 700;
   letter-spacing: .18em;
   text-transform: uppercase;
-  color: #8b7fc7;
+  color: #fff;
 }
 
 .mpm-banner-tag {
-  border: 1px solid #60519b;
+  border: var(--mpm-border-w) solid var(--mpm-border);
   padding: 3px 8px;
-  background: rgba(10, 8, 20, .6);
+  background: var(--mpm-text);
   font-family: var(--mpm-mono);
 }
 
@@ -347,7 +345,7 @@
 }
 
 .mpm-stat-hero {
-  background: var(--mpm-text);
+  background: var(--mpm-accent);
   border: var(--mpm-border-w) solid var(--mpm-border);
   border-radius: var(--mpm-r-lg);
   box-shadow: var(--mpm-shadow);
@@ -369,12 +367,9 @@
   box-shadow: var(--mpm-shadow-sm);
 }
 
-.mpm-stats-side .mpm-stat:first-child {
-  background: #c9a227;
-}
-
+.mpm-stats-side .mpm-stat:first-child,
 .mpm-stats-side .mpm-stat:last-child {
-  background: #1D9E75;
+  background: var(--mpm-surface);
 }
 
 .mpm-stats-side .mpm-stat-val,
@@ -428,8 +423,8 @@
 
 
 [data-theme="dark"] .mpm-stat-hero {
-  background: #0D0B12;
-  border-color: rgba(240, 241, 247, .15);
+  background: var(--mpm-accent);
+  border-color: var(--mpm-border);
   box-shadow: 2px 2px 0 rgba(0, 0, 0, .5);
 }
 
@@ -574,7 +569,7 @@
 
 /* ── Hero row (Estadísticas): bloque color sólido ancho completo ── */
 .mpm-row--hero {
-  background: #1D9E75;
+  background: var(--mpm-accent);
   border: var(--mpm-border-w) solid var(--mpm-border);
   border-radius: var(--mpm-r-lg);
   box-shadow: var(--mpm-shadow);
@@ -588,17 +583,17 @@
 }
 
 .mpm-row--hero .mpm-row-icon {
-  background: var(--mpm-text) !important;
-  border-color: var(--mpm-text);
+  background: #1D9E75 !important;
+  border-color: var(--mpm-border);
 }
 
 .mpm-row--hero .mpm-row-lbl,
 .mpm-row--hero .mpm-row-desc {
-  color: #06281f;
+  color: #fff;
 }
 
 .mpm-row--hero .mpm-row-arrow {
-  color: #06281f;
+  color: #fff;
 }
 
 /* ── Activity pair grid (Logros / Campeonatos) ── */
@@ -1938,12 +1933,12 @@
 [data-theme="dark"] .mpm-row--hero .mpm-row-lbl,
 [data-theme="dark"] .mpm-row--hero .mpm-row-desc,
 [data-theme="dark"] .mpm-row--hero .mpm-row-arrow {
-  color: #eafff5;
+  color: #fff;
 }
 
 [data-theme="dark"] .mpm-row--hero .mpm-row-icon {
-  background: #06281f !important;
-  border-color: #06281f;
+  background: #1D9E75 !important;
+  border-color: var(--mpm-border);
 }
 
 [data-theme="dark"] .mpm-toggle {
