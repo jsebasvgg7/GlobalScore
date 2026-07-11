@@ -590,6 +590,129 @@
 }
 
 /* ════════════════════════════════════════════════
+   LISTA — resto de notificaciones tras el bento
+════════════════════════════════════════════════ */
+.mnv-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 18px 0;
+  animation: mnv-fade-up .3s ease .2s both;
+}
+
+.mnv-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  background: var(--mnv-card);
+  border: 1px solid var(--mnv-border-hard);
+  box-shadow: var(--mnv-shadow-sm);
+  padding: 10px 11px;
+  cursor: pointer;
+  font-family: var(--mnv-mono);
+  -webkit-tap-highlight-color: transparent;
+  transition: box-shadow .08s, transform .08s;
+}
+
+.mnv-row:active {
+  box-shadow: var(--mnv-active);
+  transform: translate(1px, 1px);
+}
+
+.mnv-row--new {
+  border-left: 3px solid var(--mnv-accent);
+}
+
+.mnv-row--finished {
+  border-left: 3px solid var(--mnv-green);
+}
+
+.mnv-row-icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border: 1px solid var(--mnv-border-hard);
+}
+
+.mnv-row-icon--new {
+  background: var(--mnv-accent);
+}
+
+.mnv-row-icon--finished {
+  background: var(--mnv-green);
+}
+
+.mnv-row-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mnv-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mnv-row-title {
+  font-family: var(--mnv-mono);
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--mnv-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mnv-row-badge {
+  flex-shrink: 0;
+  font-family: var(--mnv-mono);
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 2px 6px;
+}
+
+.mnv-row-badge--new {
+  background: var(--mnv-accent);
+}
+
+.mnv-row-badge--finished {
+  background: var(--mnv-green);
+}
+
+.mnv-row-meta {
+  font-family: var(--mnv-mono);
+  font-size: 8px;
+  color: var(--mnv-muted);
+  letter-spacing: .02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mnv-row-result {
+  flex-shrink: 0;
+  font-family: var(--mnv-mono);
+  font-weight: 800;
+  font-size: 10px;
+  color: var(--mnv-green);
+  border: 1px solid var(--mnv-green);
+  padding: 2px 7px;
+}
+
+/* ════════════════════════════════════════════════
    LOADING / EMPTY (sin resultados en el filtro)
 ════════════════════════════════════════════════ */
 .mnv-loading {
@@ -674,6 +797,10 @@
   .mnv-filter {
     font-size: 8.5px;
     padding: 8px 4px;
+  }
+
+  .mnv-row-title {
+    font-size: 10.5px;
   }
 }
 

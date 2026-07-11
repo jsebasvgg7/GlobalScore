@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Bell, Trophy, CheckCircle2, BellRing, BellOff } from "lucide-react";
 import "./MobileNotifications.css";
 
-const MAX_BENTO_ITEMS = 5;
+const MAX_BENTO_ITEMS = 3;
 
 // ── Filtro individual ────────────────────────────────────────────
 function FilterBtn({ label, count, active, onClick }) {
@@ -95,6 +95,36 @@ function BentoCell({ notif, tall }) {
   );
 }
 
+// ── Fila de lista — el resto de notificaciones tras el bento ─────
+function ListRow({ notif, onOpen }) {
+  const isNew = notif.type === "new";
+
+  return (
+    <button
+      className={`mnv-row mnv-row--${notif.type}`}
+      onClick={() => onOpen?.(notif)}
+    >
+      <div className={`mnv-row-icon mnv-row-icon--${notif.type}`}>
+        {isNew ? <Trophy size={13} /> : <CheckCircle2 size={13} />}
+      </div>
+      <div className="mnv-row-body">
+        <div className="mnv-row-top">
+          <span className="mnv-row-title">{notif.description}</span>
+          <span className={`mnv-row-badge mnv-row-badge--${notif.type}`}>
+            {isNew ? "Nuevo" : "Final"}
+          </span>
+        </div>
+        <div className="mnv-row-meta">
+          {notif.league} · {notif.date}{notif.time ? ` · ${notif.time}` : ""}
+        </div>
+      </div>
+      {notif.result && (
+        <div className="mnv-row-result">{notif.result}</div>
+      )}
+    </button>
+  );
+}
+
 // ── Celda fantasma — rellena huecos del bento ────────────────────
 function GhostCell({ tall }) {
   return (
@@ -157,6 +187,7 @@ export default function MobileNotifications({
   // La celda alta siempre es la más reciente del filtro activo (nueva o final).
   const bentoItems = filtered.slice(0, MAX_BENTO_ITEMS);
   const ghostsNeeded = Math.max(0, MAX_BENTO_ITEMS - bentoItems.length);
+  const listItems = filtered.slice(MAX_BENTO_ITEMS);
 
   const FILTERS = [
     { key: "all", label: "Todas", count: notifications.length },
@@ -209,6 +240,15 @@ export default function MobileNotifications({
           ))}
           {Array.from({ length: ghostsNeeded }, (_, i) => (
             <GhostCell key={`ghost-${i}`} tall={bentoItems.length === 0 && i === 0} />
+          ))}
+        </div>
+      )}
+
+      {/* ── LISTA — resto de notificaciones tras el bento ── */}
+      {!loading && listItems.length > 0 && (
+        <div className="mnv-list">
+          {listItems.map((notif) => (
+            <ListRow key={notif.id} notif={notif} onOpen={onOpenNotif} />
           ))}
         </div>
       )}
