@@ -9,6 +9,7 @@ import {
   BadgeCheck,
 } from "lucide-react";
 import { supabase } from "@/shared/services/supabase/client";
+import ImageViewer from "@/shared/ui/ImageViewer";
 import "./MobileUserProfile.css";
 
 /* ── helpers ── */
@@ -57,14 +58,15 @@ const CATEGORY_LABELS = {
 /* ════════════════════════════════════════════
    AVATAR
 ════════════════════════════════════════════ */
-function MupAvatar({ user, size = 56 }) {
+function MupAvatar({ user, size = 56, onOpen }) {
   if (user?.avatar_url) {
     return (
       <img
         src={user.avatar_url}
         alt={user.name}
-        className="mup2-avatar"
+        className={`mup2-avatar${onOpen ? " mup2-avatar--clickable" : ""}`}
         style={{ width: size, height: size }}
+        onClick={onOpen ? () => onOpen(user.avatar_url) : undefined}
       />
     );
   }
@@ -553,6 +555,7 @@ export default function MobileUserProfile({ userId, onClose }) {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("stats");
   const [rank, setRank] = useState(null);
+  const [viewerImage, setViewerImage] = useState(null);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -628,7 +631,7 @@ export default function MobileUserProfile({ userId, onClose }) {
               </div>
               <div className="mup2-hero-body">
                 <div className="mup2-hero-av-wrap">
-                  <MupAvatar user={user} size={56} />
+                  <MupAvatar user={user} size={56} onOpen={setViewerImage} />
                   <span className="mup2-hero-lv">NV {user.level || 1}</span>
                 </div>
                 <div className="mup2-hero-info">
@@ -719,6 +722,14 @@ export default function MobileUserProfile({ userId, onClose }) {
         </div>
 
       </div>
+
+      {viewerImage && (
+        <ImageViewer
+          imageUrl={viewerImage}
+          userName={user?.name}
+          onClose={() => setViewerImage(null)}
+        />
+      )}
     </div>
   );
 }

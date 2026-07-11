@@ -293,6 +293,16 @@
   flex-shrink: 0;
   box-shadow: var(--nb-shadow-sm);
   animation: mup2-avatar-in .32s var(--nb-ease-pop) both;
+  transition: transform var(--nb-dur-fast) var(--nb-ease-out), box-shadow var(--nb-dur-fast) var(--nb-ease-out);
+}
+
+.mup2-avatar--clickable {
+  cursor: pointer;
+}
+
+.mup2-avatar--clickable:active {
+  transform: translate(1.5px, 1.5px);
+  box-shadow: var(--nb-shadow-press);
 }
 
 .mup2-avatar--ph {
