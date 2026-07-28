@@ -16,7 +16,7 @@ import LegendaryAlbumsSection from '../LegendaryAlbumsSection';
 import StarCollectionSection from '../StarCollectionSection';
 import CultAlbumsSection from '../CultAlbumsSection';
 import PackOpeningModal from '../PackOpeningModal';
-import '../../styles/mobile/AlbumsPageMobile.css';
+import './AlbumsPageMobile.css';
 
 // ── Metadatos por album_id ───────────────────────────────────
 const ALBUM_META = {

@@ -545,7 +545,8 @@ export default function MobileDashboard({
   const [activeTab, setActiveTab] = useState("matches");
 
   const pendingMatches = useMemo(() => matches.filter(m => m.status === "pending"), [matches]);
-
+  const activeLeagues = useMemo(() => leagues.filter(l => l.status !== "finished"), [leagues]);
+  const activeAwards = useMemo(() => awards.filter(a => a.status !== "finished"), [awards]);
   const nextMatch = useMemo(() => {
     return matches
       .filter(m => m.status === "pending")
@@ -562,9 +563,9 @@ export default function MobileDashboard({
   ).length;
 
   const previewMatches = pendingMatches.slice(0, 3);
-  const previewLeagues = leagues.slice(0, 3);
-  const previewAwards = awards.slice(0, 3);
-  const tabCounts = { matches: pendingMatches.length, leagues: leagues.length, awards: awards.length };
+  const previewLeagues = activeLeagues.slice(0, 3);
+  const previewAwards = activeAwards.slice(0, 3);
+  const tabCounts = { matches: pendingMatches.length, leagues: activeLeagues.length, awards: activeAwards.length };
 
   const renderTabContent = () => {
     if (activeTab === "matches") {
@@ -626,8 +627,8 @@ export default function MobileDashboard({
         <MobileSubPage
           page={activePage}
           matches={matches}
-          leagues={leagues}
-          awards={awards}
+          leagues={activeLeagues}
+          awards={activeAwards}
           currentUser={currentUser}
           onPredict={onPredict}
           onLeaguePredict={onLeaguePredict}

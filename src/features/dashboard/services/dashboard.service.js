@@ -157,13 +157,14 @@ export const upsertLeaguePrediction = async (predictionData) => {
 };
 
 /**
- * Obtiene todas las ligas con predicciones.
+ * Obtiene las ligas NO finalizadas (pending) con predicciones.
  * @returns {Array}
  */
 export const fetchLeaguesWithPredictions = async () => {
     const { data, error } = await supabase
         .from('leagues')
-        .select('*, league_predictions(*)');
+        .select('*, league_predictions(*)')
+        .neq('status', 'finished');
     if (error) throw error;
     return data || [];
 };
@@ -251,17 +252,17 @@ export const upsertAwardPrediction = async (predictionData) => {
 };
 
 /**
- * Obtiene todos los premios con predicciones.
+ * Obtiene los premios NO finalizados (pending) con predicciones.
  * @returns {Array}
  */
 export const fetchAwardsWithPredictions = async () => {
     const { data, error } = await supabase
         .from('awards')
-        .select('*, award_predictions(*)');
+        .select('*, award_predictions(*)')
+        .neq('status', 'finished');
     if (error) throw error;
     return data || [];
 };
-
 /**
  * Inserta un nuevo premio.
  * @param {Object} award

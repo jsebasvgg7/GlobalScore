@@ -192,8 +192,8 @@ export default function DashboardPage() {
     return groups;
   }, [filteredMatches]);
 
-  const activeLeagues = leagues.filter((l) => l.status === "active");
-  const activeAwards = awards.filter((a) => a.status === "active");
+const activeLeagues = leagues.filter((l) => l.status !== "finished");
+const activeAwards = awards.filter((a) => a.status !== "finished");
   const isLoading = matchesLoading || leaguesLoading || awardsLoading;
 
   if (loading) return <PageLoader />;
@@ -357,7 +357,7 @@ export default function DashboardPage() {
                   <div className="matches-date-label">
                     <span>Temporada 2025 · 2026</span>
                   </div>
-                  {leagues.length === 0 ? (
+                  {activeLeagues.length === 0 ? (
                     <div className="matches-container">
                       <MatchesEmpty
                         leagueFilter="all"
@@ -367,7 +367,7 @@ export default function DashboardPage() {
                     </div>
                   ) : (
                     <div className="leagues-grid">
-                      {leagues.map((league) => (
+                     {activeLeagues.map((league) => (
                         <LeagueCard
                           key={league.id}
                           league={league}
@@ -388,7 +388,7 @@ export default function DashboardPage() {
                   <div className="matches-date-label">
                     <span>Temporada 2025 · 2026</span>
                   </div>
-                  {awards.length === 0 ? (
+                  {activeAwards.length === 0 ? (
                     <div className="matches-container">
                       <MatchesEmpty
                         leagueFilter="all"
@@ -398,7 +398,7 @@ export default function DashboardPage() {
                     </div>
                   ) : (
                     <div className="awards-grid">
-                      {awards.map((award) => (
+                     {activeAwards.map((award) => (
                         <AwardCard
                           key={award.id}
                           award={award}
