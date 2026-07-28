@@ -57,16 +57,10 @@ export default function MobileHeader({ currentUser }) {
           <span className="mhd-name">{firstName}</span>
         </div>
 
+        
         {/* Right: actions */}
         <div className="mhd-actions">
-          <button
-            className="mhd-btn"
-            onClick={() => navigate("world")}
-            aria-label="Mundial"
-          >
-            <Globe size={15} strokeWidth={2} />
-          </button>
-
+          
           {/* Theme toggle */}
           <button
             className="mhd-btn"

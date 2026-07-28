@@ -469,7 +469,7 @@ function AlbumsPanel({ currentUser, onNavigate }) {
         </div>
       </div>
 
-      {/* CTA */}
+      {/* CTA
       <button className="mob2-alb-cta" onClick={onNavigate}>
         <BookOpen size={16} />
         <span>Abrir GlobalAlbums</span>
@@ -478,6 +478,7 @@ function AlbumsPanel({ currentUser, onNavigate }) {
           <span className="mob2-alb-cta-badge">{packsAvailable}</span>
         )}
       </button>
+       */}
     </div>
   );
 }
