@@ -88,7 +88,7 @@ export const teamSlugMap = {
 
   // 🇩🇪 Alemania - Bundesliga
   'BAY': 'bayernmunchen',
-  'DOR': 'borussiadortmund',
+  'BVB': 'borussiadortmund',
   'RBL': 'rbleipzig',
   'B04': 'bayerleverkusen',
   'AUG': 'augsburgo',
