@@ -78,8 +78,8 @@ async function updateAllLogoUrls() {
     }
     
     // Generar URLs
-    const homeLogoUrl = getLogoUrlByTeamName(supabase, match.home_team, match.league);
-    const awayLogoUrl = getLogoUrlByTeamName(supabase, match.away_team, match.league);
+    const homeLogoUrl = await getLogoUrlByTeamName(supabase, match.home_team, match.league);
+    const awayLogoUrl = await getLogoUrlByTeamName(supabase, match.away_team, match.league);
     
     // Actualizar en la base de datos
     const { error: updateError } = await supabase

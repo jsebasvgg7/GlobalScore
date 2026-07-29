@@ -20,8 +20,8 @@ async function updateAllLogoUrls() {
   const missingLogos = new Set();
   
   for (const match of matches) {
-    const homeLogoUrl = getLogoUrlByTeamName(match.home_team, match.league);
-    const awayLogoUrl = getLogoUrlByTeamName(match.away_team, match.league);
+    const homeLogoUrl = await getLogoUrlByTeamName(supabase, match.home_team, match.league);
+    const awayLogoUrl = await getLogoUrlByTeamName(supabase, match.away_team, match.league);
     
     if (!homeLogoUrl || !awayLogoUrl) {
       console.log(`⚠️  Sin logo: ${match.home_team} vs ${match.away_team} (${match.league})`);

@@ -11,6 +11,7 @@ const WORLD_CUP_LOGOS_BUCKET = 'world-cup-logos';
 // MAPEO DE EQUIPOS (Clubes)
 // ============================================
 export const teamSlugMap = {
+  // 🇬🇧 Inglaterra - Premier League
   'MUN': 'manchesterunited',
   'LIV': 'liverpool',
   'ARS': 'arsenal',
@@ -31,6 +32,11 @@ export const teamSlugMap = {
   'BOU': 'bournemouth',
   'NFO': 'nottingham_forest',
   'BUR': 'burnley',
+  'COV': 'coventry',
+  'IPS': 'ipswich_town_',
+  'HUL': 'hull_city',
+
+  // 🇪🇸 España - LaLiga
   'RMA': 'realmadrid',
   'FCB': 'barcelona',
   'ATM': 'atlmadrid',
@@ -51,6 +57,11 @@ export const teamSlugMap = {
   'LEV': 'levante',
   'OVI': 'realoviedo',
   'OSA': 'osasuna',
+  'DEP': 'deportivolacoruna',
+  'RCS': 'racingsantander',
+  'MGA': 'malaga',
+
+  // 🇮🇹 Italia - Serie A
   'INT': 'inter',
   'MIL': 'milan',
   'JUV': 'juventus',
@@ -71,6 +82,11 @@ export const teamSlugMap = {
   'PIS': 'pisa',
   'COM': 'como',
   'CRE': 'cremonese',
+  'VEN': 'venezia',
+  'FRO': 'frosinone',
+  'MNZ': 'monza',
+
+  // 🇩🇪 Alemania - Bundesliga
   'BAY': 'bayernmunchen',
   'DOR': 'borussiadortmund',
   'RBL': 'rbleipzig',
@@ -89,6 +105,11 @@ export const teamSlugMap = {
   'HSV': 'hamburgo',
   'SVW': 'werderbremen',
   'KOE': 'koln',
+  'S04': 'schalke04',
+  'ELV': 'elversberg',
+  'PAD': 'paderborn07',
+
+  // 🇫🇷 Francia - Ligue 1
   'PSG': 'psg',
   'OGM': 'olimpiquemarsella',
   'OLY': 'olimpiquelyon',
@@ -108,6 +129,10 @@ export const teamSlugMap = {
   'RCS': 'racingstrasbourg',
   'PFC': 'paris_fc',
   'LEN': 'racinglens',
+  'EST': 'troyes',
+  'LEM': 'le_mans',
+
+  // 🌍 Otras ligas / competiciones europeas
   'AJA': 'ajax',
   'BEN': 'benfica',
   'SCP': 'sporting',
@@ -259,7 +284,7 @@ export const leagueLogoUrlMap = {
   // FIFA
   'FIFA World Cup': 'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/FIFA World Cup.png',
   'FIFA': 'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/FIFA.png',
-
+  'Club Friendly': 'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/clubfriendly.png',
   // Competiciones Europeas
   'Champions League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/42.png',
   'Europa League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/73.png',
@@ -304,6 +329,7 @@ export const leagueLogoMap = {
   'Champions League': 'champions',
   'Europa League': 'europa',
   'Conference League': 'conference',
+  'Club Friendly': 'clubfriendly',
 };
 
 // ============================================
@@ -345,9 +371,40 @@ const EUROPEAN_COMPETITIONS = new Set([
   'Champions League',
   'Europa League',
   'Conference League',
+  'Club Friendly',
 ]);
 
-export function getLogoUrlByTeamName(supabase, teamName, leagueName) {
+// Cache en memoria para no repetir el mismo .list() varias veces por sesion
+const teamLeagueCache = new Map();
+
+/**
+ * Busca en cual liga domestica vive realmente el archivo del equipo,
+ * verificando la existencia real con .list() (getPublicUrl NUNCA
+ * confirma que el archivo exista, siempre arma la URL igual sin importar
+ * si el archivo esta ahi o no).
+ * @returns {Promise<string|null>} el slug de la liga domestica, o null si no se encontro en ninguna
+ */
+async function findTeamLeagueSlug(supabase, teamSlug) {
+  if (teamLeagueCache.has(teamSlug)) {
+    return teamLeagueCache.get(teamSlug);
+  }
+
+  for (const leagueSlug of DOMESTIC_LEAGUE_SLUGS) {
+    const { data, error } = await supabase.storage
+      .from(TEAM_LOGOS_BUCKET)
+      .list(`leagues/${leagueSlug}`, { search: `${teamSlug}.png` });
+
+    if (!error && data && data.some(file => file.name === `${teamSlug}.png`)) {
+      teamLeagueCache.set(teamSlug, leagueSlug);
+      return leagueSlug;
+    }
+  }
+
+  teamLeagueCache.set(teamSlug, null);
+  return null;
+}
+
+export async function getLogoUrlByTeamName(supabase, teamName, leagueName) {
   // Si es FIFA World Cup, usar logos de selecciones nacionales
   if (leagueName === 'FIFA World Cup') {
     return getCountryLogoUrl(supabase, teamName);
@@ -359,14 +416,15 @@ export function getLogoUrlByTeamName(supabase, teamName, leagueName) {
     return null;
   }
 
-  // Para competiciones europeas: buscar el equipo en todas las ligas domesticas
+  // Para competiciones europeas / Club Friendly: el equipo no tiene carpeta
+  // propia, hay que verificar en cual liga domestica esta realmente el archivo
   if (EUROPEAN_COMPETITIONS.has(leagueName)) {
-    for (const leagueSlug of DOMESTIC_LEAGUE_SLUGS) {
-      const url = getTeamLogoUrl(supabase, leagueSlug, teamSlug);
-      if (url) return url;
+    const leagueSlug = await findTeamLeagueSlug(supabase, teamSlug);
+    if (!leagueSlug) {
+      console.warn(`No se encontro liga domestica para "${teamName}" en "${leagueName}"`);
+      return null;
     }
-    console.warn(`No se encontro liga domestica para "${teamName}" en "${leagueName}"`);
-    return null;
+    return getTeamLogoUrl(supabase, leagueSlug, teamSlug);
   }
 
   // Liga domestica normal

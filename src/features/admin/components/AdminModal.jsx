@@ -20,7 +20,7 @@ export default function AdminModal({ onAdd, onClose }) {
   });
   const [sending, setSending] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
       setForm({ ...form, [name]: checked });
@@ -29,22 +29,22 @@ export default function AdminModal({ onAdd, onClose }) {
     setForm({ ...form, [name]: value });
 
     if (name === "home_team" && value && form.league) {
-      const logoUrl = getLogoUrlByTeamName(supabase, value, form.league);
+      const logoUrl = await getLogoUrlByTeamName(supabase, value, form.league);
       if (logoUrl) setForm((p) => ({ ...p, home_team_logo_url: logoUrl }));
     }
     if (name === "away_team" && value && form.league) {
-      const logoUrl = getLogoUrlByTeamName(supabase, value, form.league);
+      const logoUrl = await getLogoUrlByTeamName(supabase, value, form.league);
       if (logoUrl) setForm((p) => ({ ...p, away_team_logo_url: logoUrl }));
     }
     if (name === "league" && value) {
       const leagueLogoUrl = getLeagueLogoUrlDirect(value);
       if (leagueLogoUrl) setForm((p) => ({ ...p, league_logo_url: leagueLogoUrl }));
       if (form.home_team) {
-        const hl = getLogoUrlByTeamName(supabase, form.home_team, value);
+        const hl = await getLogoUrlByTeamName(supabase, form.home_team, value);
         if (hl) setForm((p) => ({ ...p, home_team_logo_url: hl }));
       }
       if (form.away_team) {
-        const al = getLogoUrlByTeamName(supabase, form.away_team, value);
+        const al = await getLogoUrlByTeamName(supabase, form.away_team, value);
         if (al) setForm((p) => ({ ...p, away_team_logo_url: al }));
       }
     }
@@ -76,8 +76,8 @@ export default function AdminModal({ onAdd, onClose }) {
     setSending(true);
     try {
       const deadlineISO = `${form.deadLine}T${form.deadLine_time}:00`;
-      const homeLogoUrl = getLogoUrlByTeamName(supabase, form.home_team, form.league);
-      const awayLogoUrl = getLogoUrlByTeamName(supabase, form.away_team, form.league);
+      const homeLogoUrl = await getLogoUrlByTeamName(supabase, form.home_team, form.league);
+      const awayLogoUrl = await getLogoUrlByTeamName(supabase, form.away_team, form.league);
       const leagueLogoUrl = getLeagueLogoUrlDirect(form.league);
 
       const matchData = {

@@ -13,7 +13,7 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
     const [sending, setSending] = useState(false);
     const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         const { name, value, type, checked } = e.target;
 
         if (name === 'id' && value.length === 12) {
@@ -23,12 +23,14 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
             const home = value.slice(6, 9).toUpperCase();
             const away = value.slice(9, 12).toUpperCase();
             const dateStr = `${year}-${month}-${day}`;
+            const homeLogoUrl = await getLogoUrlByTeamName(supabase, home, form.league);
+            const awayLogoUrl = await getLogoUrlByTeamName(supabase, away, form.league);
             setForm(p => ({
                 ...p, id: value,
                 home_team: home, away_team: away,
                 date: dateStr, deadLine: dateStr,
-                home_team_logo_url: getLogoUrlByTeamName(supabase, home, p.league),
-                away_team_logo_url: getLogoUrlByTeamName(supabase, away, p.league),
+                home_team_logo_url: homeLogoUrl,
+                away_team_logo_url: awayLogoUrl,
             }));
             return;
         }
@@ -44,11 +46,11 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
         set(name, type === 'checkbox' ? checked : value);
 
         if (name === 'home_team' && value && form.league) {
-            const url = getLogoUrlByTeamName(supabase, value, form.league);
+            const url = await getLogoUrlByTeamName(supabase, value, form.league);
             if (url) set('home_team_logo_url', url);
         }
         if (name === 'away_team' && value && form.league) {
-            const url = getLogoUrlByTeamName(supabase, value, form.league);
+            const url = await getLogoUrlByTeamName(supabase, value, form.league);
             if (url) set('away_team_logo_url', url);
         }
         if (name === 'league' && value) {
@@ -62,12 +64,14 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
             !form.date || !form.time || !form.deadLine || !form.deadLine_time) return;
         setSending(true);
         try {
+            const homeLogoUrl = await getLogoUrlByTeamName(supabase, form.home_team, form.league);
+            const awayLogoUrl = await getLogoUrlByTeamName(supabase, form.away_team, form.league);
             await onAdd({
                 id: form.id, league: form.league,
                 home_team: form.home_team, away_team: form.away_team,
                 home_team_logo: form.home_team_logo, away_team_logo: form.away_team_logo,
-                home_team_logo_url: getLogoUrlByTeamName(supabase, form.home_team, form.league),
-                away_team_logo_url: getLogoUrlByTeamName(supabase, form.away_team, form.league),
+                home_team_logo_url: homeLogoUrl,
+                away_team_logo_url: awayLogoUrl,
                 league_logo_url: getLeagueLogoUrlDirect(form.league),
                 date: form.date, time: form.time,
                 deadline: `${form.deadLine}T${form.deadLine_time}:00`,
