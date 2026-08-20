@@ -355,7 +355,7 @@ const activeAwards = awards.filter((a) => a.status !== "finished");
               <div className="db-content db-content--leagues">
                 <div className="matches-date-group">
                   <div className="matches-date-label">
-                    <span>Temporada 2025 · 2026</span>
+                    <span>Temporada 2026 · 2027</span>
                   </div>
                   {activeLeagues.length === 0 ? (
                     <div className="matches-container">

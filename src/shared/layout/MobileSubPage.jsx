@@ -203,7 +203,7 @@ function LeaguesPage({ leagues, currentUser, onPredict, onBack }) {
 
       <div className="msp-season-label">
         <div className="msp-date-line" />
-        <span>TEMPORADA 2025 · 2026</span>
+        <span>TEMPORADA 2026 · 2027</span>
         <div className="msp-date-line" />
       </div>
 

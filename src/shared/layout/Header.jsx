@@ -84,7 +84,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
         <div className="gs-sidebar-bottom">
           <div className="gs-season-block">
             <span className="gs-season-label">TEMP</span>
-            <span className="gs-season-year">25/26</span>
+            <span className="gs-season-year">26/27</span>
           </div>
 
           <button

@@ -32,10 +32,10 @@ function getAlbumProgress(albumId, progress) {
 
 // ── Metadata del libro activo (colores por album_id) ─────────
 const ALBUM_META = {
-    legendary_1: { spine: '#5b4fd8', spineAlt: '#3d34a5', accent: '#a599d9', accentRgb: '165,153,217', coverBg: '#1a1726', shortLabel: 'LEG I', number: '01', rarityLevel: 3, rarityLabel: 'FUNDADORES', tag: 'TEMPORADA 25·26' },
-    legendary_2: { spine: '#7c3aed', spineAlt: '#5b1fbd', accent: '#c4b5fd', accentRgb: '196,181,253', coverBg: '#160e2a', shortLabel: 'LEG II', number: '02', rarityLevel: 4, rarityLabel: 'LEYENDAS', tag: 'TEMPORADA 25·26' },
-    legendary_3: { spine: '#1D9E75', spineAlt: '#0d6e50', accent: '#34d399', accentRgb: '52,211,153', coverBg: '#0a1f18', shortLabel: 'LEG III', number: '03', rarityLevel: 5, rarityLabel: 'ÉLITE', tag: 'TEMPORADA 25·26' },
-    legendary_4: { spine: '#b45309', spineAlt: '#7c3b00', accent: '#f59e0b', accentRgb: '245,158,11', coverBg: '#1a1200', shortLabel: 'LEG IV', number: '04', rarityLevel: 5, rarityLabel: 'GOATS', tag: 'TEMPORADA 25·26' },
+    legendary_1: { spine: '#5b4fd8', spineAlt: '#3d34a5', accent: '#a599d9', accentRgb: '165,153,217', coverBg: '#1a1726', shortLabel: 'LEG I', number: '01', rarityLevel: 3, rarityLabel: 'FUNDADORES', tag: 'TEMPORADA 26·27' },
+    legendary_2: { spine: '#7c3aed', spineAlt: '#5b1fbd', accent: '#c4b5fd', accentRgb: '196,181,253', coverBg: '#160e2a', shortLabel: 'LEG II', number: '02', rarityLevel: 4, rarityLabel: 'LEYENDAS', tag: 'TEMPORADA 26·27' },
+    legendary_3: { spine: '#1D9E75', spineAlt: '#0d6e50', accent: '#34d399', accentRgb: '52,211,153', coverBg: '#0a1f18', shortLabel: 'LEG III', number: '03', rarityLevel: 5, rarityLabel: 'ÉLITE', tag: 'TEMPORADA 26·27' },
+    legendary_4: { spine: '#b45309', spineAlt: '#7c3b00', accent: '#f59e0b', accentRgb: '245,158,11', coverBg: '#1a1200', shortLabel: 'LEG IV', number: '04', rarityLevel: 5, rarityLabel: 'GOATS', tag: 'TEMPORADA 26·27' },
     legendary_5: { spine: '#9d174d', spineAlt: '#6b1130', accent: '#f472b6', accentRgb: '244,114,182', coverBg: '#1a0e15', shortLabel: 'LEG V', number: '05', rarityLevel: 5, rarityLabel: 'INMORTALES', tag: 'ENDGAME' },
 };
 const DEFAULT_META = { spine: '#5b4fd8', spineAlt: '#3d34a5', accent: '#a599d9', accentRgb: '165,153,217', coverBg: '#1a1726', shortLabel: 'ALB', number: '01', rarityLevel: 1, rarityLabel: '', tag: '' };
