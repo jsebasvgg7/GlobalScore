@@ -1,10 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from '@/shared/services/supabase/client';
 import { ThemeProvider } from './context/ThemeContext';
 import { resetWelcome } from "@/features/auth/page/LoginPage";
 
 import { Header } from "@/shared/layout";
+import DesktopOSTestPage from "@/features/desktop-os/DesktopOSTestPage";
 import LoginPage from "@/features/auth/page/LoginPage";
 import RegisterPage from "@/features/auth/page/RegisterPage";
 import ForgotPasswordPage from "@/features/auth/page/ForgotPasswordPage";
@@ -21,6 +22,21 @@ import AlbumsPage from "@/features/albums/page/AlbumsPage";
 import NotesPage from "@/features/notes/page/NotesPage";
 import { PageLoader } from "@/shared/ui";
 import "./styles/layout.css";
+
+function AppHeader({ currentUser, users, onProfileClick }) {
+  const location = useLocation();
+  const isDesktopOS = location.pathname.startsWith("/os-test");
+
+  if (isDesktopOS) return null;
+
+  return (
+    <Header
+      currentUser={currentUser}
+      users={users}
+      onProfileClick={onProfileClick}
+    />
+  );
+}
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -215,14 +231,13 @@ export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
-        {session && currentUser && (
-          <Header
+       {session && currentUser && (
+          <AppHeader
             currentUser={currentUser}
             users={users}
             onProfileClick={() => setShowProfile(!showProfile)}
           />
         )}
-
         <Routes>
           {/* ── Rutas públicas ── */}
           <Route
@@ -279,7 +294,10 @@ export default function App() {
             path="/albums"
             element={session ? <AlbumsPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
-
+          <Route
+            path="/os-test"
+            element={session ? <DesktopOSTestPage currentUser={currentUser} users={users} /> : <Navigate to="/" replace />}
+          />
           <Route
             path="/profile"
             element={

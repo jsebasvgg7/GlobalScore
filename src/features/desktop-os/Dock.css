@@ -1,0 +1,72 @@
+/* ── Dock inferior — teclas flotantes ──────────────────────── */
+
+.dock {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  background: transparent;
+  z-index: 9999;
+}
+
+.dock-key {
+  width: 42px;
+  height: 42px;
+  background: #5B4FD8;
+  border: 2px solid #1A1A2E;
+  box-shadow: 2px 2px 0 rgba(26, 26, 46, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F5F2EC;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease, color 0.15s ease;
+  padding: 0;
+}
+
+.dock-key:hover {
+  transform: translateY(-3px);
+  box-shadow: 3px 5px 0 rgba(26, 26, 46, 0.35);
+}
+
+.dock-key:active {
+  transform: translateY(0);
+  box-shadow: 1px 1px 0 rgba(26, 26, 46, 0.35);
+}
+
+.dock-key--active {
+  background: #F5F2EC;
+  border-color: #1A1A2E;
+  color: #5B4FD8;
+}
+
+.dock-divider {
+  width: 1.5px;
+  height: 30px;
+  background: #1A1A2E;
+  opacity: 0.2;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .dock-key {
+  background: #5B4FD8;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 0 rgba(255, 255, 255, 0.15);
+  color: #F5F2EC;
+}
+
+[data-theme="dark"] .dock-key:hover {
+  box-shadow: 3px 5px 0 rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .dock-key--active {
+  background: #F5F2EC;
+  color: #5B4FD8;
+}
+
+[data-theme="dark"] .dock-divider {
+  background: rgba(255, 255, 255, 0.2);
+}

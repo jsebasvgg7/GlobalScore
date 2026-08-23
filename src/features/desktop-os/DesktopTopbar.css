@@ -1,0 +1,145 @@
+/* ── Topbar del escritorio OS — centrada, tono cream oscuro ── */
+
+.dt-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 20px 20px 0;
+  font-family: 'DM Mono', monospace;
+}
+
+.dt-bar {
+  width: 100%;
+  max-width: 760px;
+  height: 56px;
+  background: #D3D1C7;
+  border: 2.5px solid #1A1A2E;
+  box-shadow: 4px 4px 0 rgba(26, 26, 46, 0.35);
+  display: flex;
+  align-items: center;
+  padding: 0 26px;
+  gap: 24px;
+}
+
+.dt-logo {
+  width: 32px;
+  height: 32px;
+  background: #5B4FD8;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F5F2EC;
+  flex-shrink: 0;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dt-divider {
+  width: 2px;
+  height: 26px;
+  background: rgba(26, 26, 46, 0.18);
+  flex-shrink: 0;
+}
+
+.dt-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dt-nav-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(26, 26, 46, 0.4);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.dt-nav-btn:hover {
+  color: rgba(26, 26, 46, 0.7);
+}
+
+.dt-nav-btn--active {
+  color: #1A1A2E;
+}
+
+.dt-spacer {
+  flex: 1;
+}
+
+.dt-clock {
+  font-size: 18px;
+  color: #1A1A2E;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.dt-stats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 14px;
+  color: rgba(26, 26, 46, 0.65);
+}
+
+.dt-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.dt-avatar {
+  width: 32px;
+  height: 32px;
+  background: #5B4FD8;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F5F2EC;
+  font-size: 12px;
+  font-weight: 500;
+  flex-shrink: 0;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+}
+
+.dt-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+[data-theme="dark"] .dt-bar {
+  background: #2A2A3E;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .dt-clock,
+[data-theme="dark"] .dt-nav-btn--active {
+  color: #F5F2EC;
+}
+
+[data-theme="dark"] .dt-nav-btn {
+  color: rgba(245, 242, 236, 0.4);
+}
+
+[data-theme="dark"] .dt-nav-btn:hover {
+  color: rgba(245, 242, 236, 0.7);
+}
+
+[data-theme="dark"] .dt-stats {
+  color: rgba(245, 242, 236, 0.65);
+}
+
+[data-theme="dark"] .dt-divider {
+  background: rgba(245, 242, 236, 0.18);
+}

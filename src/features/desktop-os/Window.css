@@ -1,0 +1,92 @@
+/* ── Ventana genérica — sistema neobrutalista ─────────────── */
+
+.win {
+  position: absolute;
+  background: #FFFFFF;
+  border: 2px solid #1A1A2E;
+  font-family: 'DM Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.15s ease, opacity 0.15s ease;
+  max-height: 80vh;
+}
+
+.win--focused {
+  box-shadow: 5px 5px 0 #1A1A2E;
+  opacity: 1;
+}
+
+.win--dimmed {
+  box-shadow: 3px 3px 0 #1A1A2E;
+  opacity: 0.6;
+}
+
+.win-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  background: #1A1A2E;
+  color: #F5F2EC;
+  cursor: default;
+  flex-shrink: 0;
+}
+
+.win--focused .win-titlebar {
+  background: #5B4FD8;
+}
+
+.win-titlebar-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.win-titlebar-controls {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.win-btn {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid #F5F2EC;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.win-btn:hover {
+  background: #F5F2EC;
+}
+
+.win-btn--close:hover {
+  background: #E24B4A;
+  border-color: #E24B4A;
+}
+
+.win-body {
+  padding: 14px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Las páginas reales (RankingPage, etc.) fueron diseñadas para
+   ocupar toda la pantalla — al montarlas dentro de una ventana
+   hay que neutralizar min-height/width:100vw que traigan consigo. */
+.win-body > * {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+.win-empty {
+  font-size: 12px;
+  color: #888780;
+  margin: 0;
+}
