@@ -391,7 +391,7 @@ export default function MobileRanking({
       )}
 
       {/* ════ BENTO: STATS + PODIO ════ */}
-      {rankingType !== "halloffame" && top3.length > 0 && (
+      {rankingType !== "halloffame" && (
         <div className="mrk-bento-wrap">
           <div className="mrk-bento-stats">
             <div className="mrk-bento-stat-tile">
@@ -403,11 +403,18 @@ export default function MobileRanking({
               <span className="mrk-bento-stat-lbl">Participantes</span>
             </div>
           </div>
-          <div className="mrk-podium3">
-            <PodiumStep user={top3[1]} rank={2} onSelect={setSelectedUserId} />
-            <PodiumStep user={top3[0]} rank={1} onSelect={setSelectedUserId} />
-            <PodiumStep user={top3[2]} rank={3} onSelect={setSelectedUserId} />
-          </div>
+          {top3.length > 0 ? (
+            <div className="mrk-podium3">
+              <PodiumStep user={top3[1]} rank={2} onSelect={setSelectedUserId} />
+              <PodiumStep user={top3[0]} rank={1} onSelect={setSelectedUserId} />
+              <PodiumStep user={top3[2]} rank={3} onSelect={setSelectedUserId} />
+            </div>
+          ) : (
+            <div className="mrk-podium-empty">
+              <Target size={36} className="mrk-podium-empty-icon" />
+              <p>Aún no han puntuado</p>
+            </div>
+          )}
         </div>
       )}
 

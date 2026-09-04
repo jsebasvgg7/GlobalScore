@@ -360,6 +360,33 @@
   margin-bottom: 14px;
 }
 
+/* ── Empty state: cuando aún nadie ha puntuado en este ranking ── */
+.mrk-podium-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border: 2px solid var(--mrk-border-soft);
+  background: var(--mrk-card);
+  box-shadow: var(--mrk-shadow-card);
+  padding: 32px 16px;
+  text-align: center;
+  font-family: var(--mrk-mono);
+}
+
+.mrk-podium-empty-icon {
+  color: var(--mrk-muted);
+  opacity: .6;
+}
+
+.mrk-podium-empty p {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--mrk-muted);
+  margin: 0;
+}
+
 .mrk-podium-step {
   position: relative;
   border: 2px solid var(--mrk-border-soft);
@@ -455,7 +482,7 @@
 /* ── #1: sobresale en altura, fondo dorado, corona ── */
 .mrk-podium-step--gold {
   background: var(--mrk-gold);
-  border-color: var(--mrk-gold-text);
+  border-color: var(--mrk-gold);
   padding-top: 14px;
   margin-bottom: -14px;
   z-index: 1;
