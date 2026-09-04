@@ -29,44 +29,29 @@ function MobAvatar({ user, size = "md" }) {
   );
 }
 
-/* ── Celda bento del líder (hero, ocupa 2 filas) ── */
-function PodiumHero({ user, onSelect }) {
+/* ── Celda del podio clásico 2-1-3: misma pieza para los 3 puestos,
+     el modificador --1 (líder) le da altura extra y corona vía CSS ── */
+function PodiumStep({ user, rank, onSelect }) {
   if (!user) return null;
+  const mods = ["", "gold", "silver", "bronze"];
   const accuracy = user.rankPredictions > 0
     ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
 
   return (
-    <button className="mrk-bento-hero" onClick={() => onSelect(user.id)}>
-      <span className="mrk-bento-hero-tag">#1 LÍDER</span>
-      <Crown size={20} className="mrk-bento-hero-crown" />
-      <div className="mrk-bento-hero-av">
-        <MobAvatar user={user} size="hero" />
+    <button className={`mrk-podium-step mrk-podium-step--${mods[rank]}`} onClick={() => onSelect(user.id)}>
+      {rank === 1 && <Crown size={16} className="mrk-podium-step-crown" />}
+      <span className="mrk-podium-step-rank">{rank}</span>
+      <div className="mrk-podium-step-av">
+        <MobAvatar user={user} size={rank === 1 ? "hero" : "sm"} />
       </div>
-      <span className="mrk-bento-hero-name">{user.name}</span>
-      <span className="mrk-bento-hero-pts">{fmt(user.rankPoints)}</span>
-      <span className="mrk-bento-hero-pts-lbl">Puntos</span>
-      <div className="mrk-bento-hero-foot">
-        <span>{user.rankCorrect} aciertos</span>
-        <span className="mrk-bento-hero-acc">{accuracy}%</span>
-      </div>
-    </button>
-  );
-}
-
-/* ── Celda bento compacta (#2 / #3) ── */
-function PodiumMini({ user, rank, onSelect }) {
-  if (!user) return null;
-  const mods = ["", "silver", "bronze"];
-  return (
-    <button className={`mrk-bento-mini mrk-bento-mini--${mods[rank]}`} onClick={() => onSelect(user.id)}>
-      <div className="mrk-bento-mini-av">
-        <MobAvatar user={user} size="sm" />
-        <span className="mrk-bento-mini-badge">{rank + 1}</span>
-      </div>
-      <div className="mrk-bento-mini-info">
-        <span className="mrk-bento-mini-name">{user.name}</span>
-        <span className="mrk-bento-mini-pts">{fmt(user.rankPoints)} pts &middot; #{rank + 1}</span>
-      </div>
+      <span className="mrk-podium-step-name">{(user.name || "").split(" ")[0]}</span>
+      <span className="mrk-podium-step-pts">{fmt(user.rankPoints)}</span>
+      {rank === 1 && (
+        <span className="mrk-podium-step-foot">
+          <span>{user.rankCorrect} aciertos</span>
+          <span>{accuracy}%</span>
+        </span>
+      )}
     </button>
   );
 }
@@ -418,12 +403,10 @@ export default function MobileRanking({
               <span className="mrk-bento-stat-lbl">Participantes</span>
             </div>
           </div>
-          <div className="mrk-bento-grid">
-            <PodiumHero user={top3[0]} onSelect={setSelectedUserId} />
-            <div className="mrk-bento-side">
-              <PodiumMini user={top3[1]} rank={1} onSelect={setSelectedUserId} />
-              <PodiumMini user={top3[2]} rank={2} onSelect={setSelectedUserId} />
-            </div>
+          <div className="mrk-podium3">
+            <PodiumStep user={top3[1]} rank={2} onSelect={setSelectedUserId} />
+            <PodiumStep user={top3[0]} rank={1} onSelect={setSelectedUserId} />
+            <PodiumStep user={top3[2]} rank={3} onSelect={setSelectedUserId} />
           </div>
         </div>
       )}

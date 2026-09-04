@@ -350,212 +350,150 @@
   color: var(--mrk-muted);
 }
 
-.mrk-bento-grid {
+/* ── Podio clásico 2-1-3: tres columnas simétricas, el #1 sobresale
+     en altura (y con corona) para dar jerarquía visual inmediata ── */
+.mrk-podium3 {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: end;
   gap: 8px;
+  margin-bottom: 14px;
 }
 
-/* ── Celda hero: líder, compacta, sin aire de sobra ── */
-.mrk-bento-hero {
+.mrk-podium-step {
+  position: relative;
   border: 2px solid var(--mrk-border-soft);
-  background: var(--mrk-gold);
+  background: var(--mrk-surface);
   box-shadow: var(--mrk-shadow-card);
-  padding: 10px 12px;
+  padding: 10px 6px 9px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   cursor: pointer;
   font-family: var(--mrk-mono);
-  position: relative;
   transition: transform .12s, box-shadow .12s;
 }
 
-.mrk-bento-hero:active {
+.mrk-podium-step:active {
   transform: translate(1.5px, 1.5px);
   box-shadow: var(--mrk-shadow-sm);
 }
 
-.mrk-bento-hero-tag {
-  align-self: flex-start;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: .1em;
-  color: var(--mrk-gold-text);
-}
-
-.mrk-bento-hero-crown {
+.mrk-podium-step-rank {
   position: absolute;
-  top: 9px;
-  right: 9px;
-  color: var(--mrk-gold-text);
-  opacity: .35;
-}
-
-.mrk-bento-hero-av {
-  margin: 8px 0 6px;
-  border-radius: 0;
-}
-
-.mrk-bento-hero-name {
-  font-size: 12px;
+  top: 6px;
+  left: 6px;
+  font-size: 9px;
   font-weight: 700;
-  color: var(--mrk-border-hard);
+  color: var(--mrk-muted);
+}
+
+.mrk-podium-step-crown {
+  color: var(--mrk-gold-text);
   margin-bottom: 2px;
-  max-width: 140px;
+}
+
+.mrk-podium-step-av {
+  margin: 6px 0 6px;
+}
+
+.mrk-podium-step-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mrk-text);
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.mrk-bento-hero-pts {
-  font-size: 22px;
+.mrk-podium-step-pts {
+  font-size: 15px;
   font-weight: 700;
-  color: var(--mrk-gold-text);
-  line-height: 1;
+  color: var(--mrk-text);
+  line-height: 1.4;
   letter-spacing: -.02em;
 }
 
-.mrk-bento-hero-pts-lbl {
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: .1em;
-  color: var(--mrk-gold-text);
-  opacity: .75;
-  margin-bottom: 8px;
-}
-
-.mrk-bento-hero-foot {
+.mrk-podium-step-foot {
   width: 100%;
+  margin-top: 6px;
   border-top: 1px solid var(--mrk-border-hard);
   padding-top: 6px;
   display: flex;
   justify-content: space-between;
   font-size: 9px;
   font-weight: 700;
+}
+
+/* ── #2 y #3: mismo alto, borde y color marcan el puesto ── */
+.mrk-podium-step--silver {
+  border-color: var(--mrk-silver);
+}
+
+.mrk-podium-step--silver .mrk-podium-step-rank {
+  color: var(--mrk-silver-text);
+}
+
+.mrk-podium-step--silver .mrk-podium-step-pts {
+  color: var(--mrk-silver-text);
+}
+
+.mrk-podium-step--bronze {
+  border-color: var(--mrk-bronze);
+}
+
+.mrk-podium-step--bronze .mrk-podium-step-rank {
+  color: var(--mrk-bronze-text);
+}
+
+.mrk-podium-step--bronze .mrk-podium-step-pts {
+  color: var(--mrk-bronze-text);
+}
+
+/* ── #1: sobresale en altura, fondo dorado, corona ── */
+.mrk-podium-step--gold {
+  background: var(--mrk-gold);
+  border-color: var(--mrk-gold-text);
+  padding-top: 14px;
+  margin-bottom: -14px;
+  z-index: 1;
+}
+
+.mrk-podium-step--gold .mrk-podium-step-rank {
   color: var(--mrk-gold-text);
 }
 
-.mrk-bento-hero-acc {
+.mrk-podium-step--gold .mrk-podium-step-name,
+.mrk-podium-step--gold .mrk-podium-step-pts,
+.mrk-podium-step--gold .mrk-podium-step-foot {
+  color: var(--mrk-gold-text);
+}
+
+.mrk-podium-step--gold .mrk-podium-step-pts {
+  font-size: 20px;
+}
+
+.mrk-podium-step--gold .mrk-podium-step-foot {
+  border-top-color: var(--mrk-gold-text);
   opacity: .85;
 }
 
-[data-theme="dark"] .mrk-bento-hero {
+[data-theme="dark"] .mrk-podium-step--gold {
   background: var(--mrk-gold);
 }
 
-[data-theme="dark"] .mrk-bento-hero-tag,
-[data-theme="dark"] .mrk-bento-hero-crown,
-[data-theme="dark"] .mrk-bento-hero-pts,
-[data-theme="dark"] .mrk-bento-hero-pts-lbl,
-[data-theme="dark"] .mrk-bento-hero-foot {
+[data-theme="dark"] .mrk-podium-step--gold .mrk-podium-step-rank,
+[data-theme="dark"] .mrk-podium-step--gold .mrk-podium-step-crown,
+[data-theme="dark"] .mrk-podium-step--gold .mrk-podium-step-name,
+[data-theme="dark"] .mrk-podium-step--gold .mrk-podium-step-pts,
+[data-theme="dark"] .mrk-podium-step--gold .mrk-podium-step-foot {
   color: #2A1E00;
 }
 
-[data-theme="dark"] .mrk-bento-hero-foot {
+[data-theme="dark"] .mrk-podium-step--gold .mrk-podium-step-foot {
   border-top-color: #2A1E00;
-}
-
-/* ── Celdas mini: #2 / #3 apiladas al lado, altura ajustada al hero ── */
-.mrk-bento-side {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.mrk-bento-mini {
-  flex: 1;
-  border: 2px solid var(--mrk-border-soft);
-  background: var(--mrk-surface);
-  box-shadow: var(--mrk-shadow-card);
-  padding: 8px 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  text-align: left;
-  font-family: var(--mrk-mono);
-  transition: transform .12s, box-shadow .12s;
-}
-
-.mrk-bento-mini--silver {
-  border-color: var(--mrk-silver);
-  background: var(--mrk-silver-bg);
-}
-
-.mrk-bento-mini--bronze {
-  border-color: var(--mrk-bronze);
-  background: var(--mrk-bronze-bg);
-}
-
-.mrk-bento-mini:active {
-  transform: translate(1px, 1px);
-  box-shadow: none;
-}
-
-.mrk-bento-mini-av {
-  position: relative;
-  flex-shrink: 0;
-}
-
-.mrk-bento-mini-badge {
-  position: absolute;
-  bottom: -4px;
-  right: -4px;
-  width: 15px;
-  height: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 8px;
-  font-weight: 700;
-  font-family: var(--mrk-mono);
-  border: 1.5px solid var(--mrk-border-hard);
-}
-
-.mrk-bento-mini--silver .mrk-bento-mini-badge {
-  background: var(--mrk-silver);
-  color: var(--mrk-silver-text);
-}
-
-.mrk-bento-mini--bronze .mrk-bento-mini-badge {
-  background: var(--mrk-bronze);
-  color: var(--mrk-bronze-text);
-}
-
-[data-theme="dark"] .mrk-bento-mini--silver .mrk-bento-mini-badge,
-[data-theme="dark"] .mrk-bento-mini--bronze .mrk-bento-mini-badge {
-  color: #1A1824;
-}
-
-.mrk-bento-mini-info {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.mrk-bento-mini-name {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--mrk-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.mrk-bento-mini-pts {
-  font-size: 9px;
-  color: var(--mrk-muted);
-}
-
-.mrk-bento-mini--silver .mrk-bento-mini-pts {
-  color: var(--mrk-silver-text);
-}
-
-.mrk-bento-mini--bronze .mrk-bento-mini-pts {
-  color: var(--mrk-bronze-text);
 }
 
 /* ════════════════════════════════════════════════
@@ -1783,11 +1721,11 @@
     height: 54px;
   }
 
-  .mrk-bento-hero-pts {
+  .mrk-podium-step--gold .mrk-podium-step-pts {
     font-size: 22px;
   }
 
-  .mrk-bento-hero-name {
+  .mrk-podium-step-name {
     font-size: 12px;
   }
 
