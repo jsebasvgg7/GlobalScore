@@ -58,7 +58,7 @@ export const teamSlugMap = {
   'OVI': 'realoviedo',
   'OSA': 'osasuna',
   'DEP': 'deportivolacoruna',
-  'RCS': 'racingsantander',
+  'RDS': 'racingsantander',
   'MGA': 'malaga',
 
   // 🇮🇹 Italia - Serie A
