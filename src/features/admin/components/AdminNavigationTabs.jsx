@@ -25,7 +25,7 @@ export default function AdminNavigationTabs({ activeSection, setActiveSection, s
     { id: 'crowns', icon: Crown, badge: stats.crowns?.thisMonth === 0 ? '!' : 0 },
     { id: 'trophies', icon: Trophy, badge: 0 },
     { id: 'banners', icon: Image, badge: 0 },
-    { id: 'bots', icon: Bot, badge: 0 },
+    //{ id: 'bots', icon: Bot, badge: 0 },
   ];
 
   return (
