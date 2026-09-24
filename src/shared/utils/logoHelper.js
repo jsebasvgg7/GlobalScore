@@ -126,7 +126,6 @@ export const teamSlugMap = {
   'SBR': 'stadebretois',
   'LOR': 'lorient',
   'MET': 'metz',
-  'RCS': 'racingstrasbourg',
   'PFC': 'paris_fc',
   'LEN': 'racinglens',
   'EST': 'troyes',
@@ -284,6 +283,7 @@ export const leagueLogoUrlMap = {
   // FIFA
   'FIFA World Cup': 'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/FIFA World Cup.png',
   'FIFA': 'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/FIFA.png',
+  'Nations League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/9806.png',
   'Club Friendly': 'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/clubfriendly.png',
   // Competiciones Europeas
   'Champions League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/42.png',
@@ -405,8 +405,8 @@ async function findTeamLeagueSlug(supabase, teamSlug) {
 }
 
 export async function getLogoUrlByTeamName(supabase, teamName, leagueName) {
-  // Si es FIFA World Cup, usar logos de selecciones nacionales
-  if (leagueName === 'FIFA World Cup') {
+  // Si es FIFA, FIFA World Cup o Nations League, usar logos de selecciones nacionales
+  if (leagueName === 'FIFA World Cup' || leagueName === 'FIFA' || leagueName === 'Nations League') {
     return getCountryLogoUrl(supabase, teamName);
   }
 
