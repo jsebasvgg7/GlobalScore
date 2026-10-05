@@ -49,10 +49,10 @@
 ════════════════════════════════════════════════ */
 
 .mrk-root {
-  --mrk-bg: #F6F4FC;
-  --mrk-card: #EDE9FA;
-  --mrk-stats-row: #EDE9FA;
-  --mrk-surface: #FBFAFE;
+  --mrk-bg: #F0EDE8;
+  --mrk-card: #EAE7E1;
+  --mrk-stats-row: #F5F2EC;
+  --mrk-surface: #F5F2EC;
   --mrk-border: #5b4fd8;
   --mrk-border-hard: #5b4fd8;
   --mrk-accent: #5b4fd8;
@@ -84,7 +84,7 @@
   --mrk-line: #5b4fd8;
   --mrk-row-line: #5b4fd8;
   --mrk-lilac: #6F63D1;
-  --mrk-sheet-bg: #FBFAFE;
+  --mrk-sheet-bg: #F5F2EC;
   --mrk-glow: rgba(91, 79, 216, .22);
   --mrk-glow-strong: rgba(91, 79, 216, .70);
 }
