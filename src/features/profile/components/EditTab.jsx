@@ -238,6 +238,37 @@ export default function EditTab({
             rows={3}
           />
         </div>
+
+        {/* Acciones */}
+        <div className="form-actions-modern">
+          <button
+            className="save-button-modern"
+            onClick={handleSave}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Activity size={16} className="spinner" />
+                <span>Guardando...</span>
+              </>
+            ) : (
+              <>
+                <Save size={16} />
+                <span>Guardar</span>
+              </>
+            )}
+          </button>
+          <button
+            className="cancel-button-modern"
+            onClick={() => {
+              loadUserData();
+              setActiveTab('overview');
+            }}
+          >
+            <X size={16} />
+            <span>Cancelar</span>
+          </button>
+        </div>
       </div>
     </div>
   );
