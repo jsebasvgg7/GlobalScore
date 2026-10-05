@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Globe, Calendar, Crown, Trophy, ChevronLeft, ChevronRight, Zap, Star, BookOpen, Flame, Target } from "lucide-react";
+import { Globe, Calendar, Crown, Trophy, ChevronLeft, ChevronRight, Zap, Star, Flame, Target } from "lucide-react";
 import { MobileUserProfile } from "@/features/profile";
 import "./MobileRanking.css";
 
@@ -29,63 +29,81 @@ function MobAvatar({ user, size = "md" }) {
   );
 }
 
-/* ── Celda del podio clásico 2-1-3: misma pieza para los 3 puestos,
-     el modificador --1 (líder) le da altura extra y corona vía CSS ── */
-function PodiumStep({ user, rank, onSelect }) {
-  if (!user) return null;
-  const mods = ["", "gold", "silver", "bronze"];
-  const accuracy = user.rankPredictions > 0
-    ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
+/* ── Podio 2 · 1 · 3: cada bloque es un polígono SVG con trazo fijo
+     (non-scaling-stroke), así el borde se ve nítido sin importar la altura.
+     Los puestos exteriores tienen el bisel hacia afuera y el 1 en ambos lados ── */
+const POD_SHAPE = {
+  1: { poly: "0,15 18,0 82,0 100,15 100,100 0,100", capY: 15 },
+  2: { poly: "0,20 24,0 100,0 100,100 0,100", capY: 20 },
+  3: { poly: "0,0 76,0 100,20 100,100 0,100", capY: 20 },
+};
+
+const pad2 = (n) => String(n).padStart(2, "0");
+
+function PodiumStep({ user, rank, isMe, onSelect }) {
+  const { poly, capY } = POD_SHAPE[rank];
 
   return (
-    <button className={`mrk-podium-step mrk-podium-step--${mods[rank]}`} onClick={() => onSelect(user.id)}>
-      {rank === 1 && <Crown size={16} className="mrk-podium-step-crown" />}
-      <span className="mrk-podium-step-rank">{rank}</span>
-      <div className="mrk-podium-step-av">
-        <MobAvatar user={user} size={rank === 1 ? "hero" : "sm"} />
-      </div>
-      <span className="mrk-podium-step-name">{(user.name || "").split(" ")[0]}</span>
-      <span className="mrk-podium-step-pts">{fmt(user.rankPoints)}</span>
-      {rank === 1 && (
-        <span className="mrk-podium-step-foot">
-          <span>{user.rankCorrect} aciertos</span>
-          <span>{accuracy}%</span>
-        </span>
+    <div className={`mrk-pod mrk-pod--${rank}`}>
+      {user && (
+        <button
+          className={`mrk-pod-who${isMe ? " mrk-pod-who--me" : ""}`}
+          onClick={() => onSelect(user.id)}
+          aria-current={isMe ? "true" : undefined}
+        >
+          <span className="mrk-pod-av">
+            <MobAvatar user={user} size={rank === 1 ? "pod1" : "pod"} />
+            <span className="mrk-pod-tag">{pad2(rank)}</span>
+          </span>
+          <span className="mrk-pod-name">{user.name}</span>
+          <span className="mrk-pod-pts">{fmt(user.rankPoints)} pts</span>
+        </button>
       )}
-    </button>
+      <div className="mrk-pod-block" aria-hidden="true">
+        <svg className="mrk-pod-shape" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <polygon points={poly} />
+          <line x1="0" y1={capY} x2="100" y2={capY} />
+        </svg>
+        <span className="mrk-pod-num">{rank}</span>
+      </div>
+    </div>
   );
 }
 
-/* ── Fila tabla (ranking) — estilo tile bento ── */
-function TableRow({ user, pos, isMe, onSelect, legCount = 0 }) {
+/* ── Fila de la clasificación (puesto 4 en adelante) ── */
+function RankItem({ user, pos, isMe, index, onSelect }) {
   const accuracy = user.rankPredictions > 0
     ? Math.round((user.rankCorrect / user.rankPredictions) * 100) : 0;
-  const topMod = pos === 1 ? " mrk-row--gold"
-    : pos === 2 ? " mrk-row--silver"
-      : pos === 3 ? " mrk-row--bronze" : "";
 
   return (
-    <div className={`mrk-row${topMod}${isMe ? " mrk-row--me" : ""}`}>
-      <span className={`mrk-row-num mrk-row-num--${Math.min(pos, 4)}`}>{pos}</span>
-      <button className="mrk-row-user" onClick={() => onSelect(user.id)}>
-        <MobAvatar user={user} size="sm" />
-        <div className="mrk-row-info">
-          <span className="mrk-row-name">
-            {user.name}
-            {isMe && <span className="mrk-row-you">TÚ</span>}
+    <li className="mrk-item-li" style={{ "--i": Math.min(index, 10) }}>
+      <button
+        className={`mrk-item${isMe ? " mrk-item--me" : ""}`}
+        onClick={() => onSelect(user.id)}
+        aria-current={isMe ? "true" : undefined}
+      >
+        <span className="mrk-item-av">
+          <MobAvatar user={user} size="list" />
+          <span className="mrk-item-pos">{pad2(pos)}</span>
+        </span>
+        <span className="mrk-item-info">
+          <span className="mrk-item-name">
+            <span className="mrk-item-name-text">{user.name}</span>
+            {isMe && <span className="mrk-item-you">Tú</span>}
           </span>
-          <span className="mrk-row-sub">{user.rankCorrect} aciertos</span>
-        </div>
+          <span className="mrk-item-sub">
+            {user.rankCorrect}
+            <Target size={13} strokeWidth={1.75} role="img" aria-label="aciertos" />
+            <span aria-hidden="true">·</span>
+            {accuracy}%
+          </span>
+        </span>
+        <span className="mrk-item-score">
+          <span className="mrk-item-pts">{fmt(user.rankPoints)}</span>
+          <span className="mrk-item-pts-lbl">pts</span>
+        </span>
       </button>
-      <span className={`mrk-row-albums${legCount > 0 ? ' mrk-row-albums--active' : ''}${legCount === 5 ? ' mrk-row-albums--immortal' : ''}`}>
-      {legCount === 5 ? <Crown size={10} /> : <BookOpen size={10} />}
-      <span>{legCount}/5</span>
-    </span>
-      <div className="mrk-row-right">
-        <span className="mrk-row-pts">{fmt(user.rankPoints)}<span className="mrk-row-pts-lbl">pts</span></span>
-        <span className="mrk-row-acc">{accuracy}%</span>
-      </div>
-    </div>
+    </li>
   );
 }
 
@@ -291,7 +309,6 @@ export default function MobileRanking({
   onChangeType,
   champions = [],
   globalChampions = [],
-  albumProgress = {},
 }) {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [hofType, setHofType] = useState("monthly"); // 'monthly' | 'global'
@@ -328,7 +345,7 @@ export default function MobileRanking({
     <div className="mrk-root">
 
       {/* ── TABS ── */}
-      <div className="mrk-tabs">
+      <div className="mrk-tabs" role="tablist" aria-label="Tipo de ranking">
         {[
           { key: "global", icon: <Globe size={13} />, label: "Global" },
           { key: "monthly", icon: <Calendar size={13} />, label: "Mensual" },
@@ -336,6 +353,8 @@ export default function MobileRanking({
         ].map(({ key, icon, label }) => (
           <button
             key={key}
+            role="tab"
+            aria-selected={rankingType === key}
             className={`mrk-tab${rankingType === key ? " active" : ""}`}
             onClick={() => onChangeType?.(key)}
           >
@@ -390,24 +409,14 @@ export default function MobileRanking({
         </div>
       )}
 
-      {/* ════ BENTO: STATS + PODIO ════ */}
+      {/* ════ PODIO + CLASIFICACIÓN ════ */}
       {rankingType !== "halloffame" && (
-        <div className="mrk-bento-wrap">
-          <div className="mrk-bento-stats">
-            <div className="mrk-bento-stat-tile">
-              <span className="mrk-bento-stat-num">{totalRegistered}</span>
-              <span className="mrk-bento-stat-lbl">Registrados</span>
-            </div>
-            <div className="mrk-bento-stat-tile">
-              <span className="mrk-bento-stat-num">{totalParticipated}</span>
-              <span className="mrk-bento-stat-lbl">Participantes</span>
-            </div>
-          </div>
+        <>
           {top3.length > 0 ? (
-            <div className="mrk-podium3">
-              <PodiumStep user={top3[1]} rank={2} onSelect={setSelectedUserId} />
-              <PodiumStep user={top3[0]} rank={1} onSelect={setSelectedUserId} />
-              <PodiumStep user={top3[2]} rank={3} onSelect={setSelectedUserId} />
+            <div className="mrk-podium" role="group" aria-label="Podio: los tres primeros">
+              <PodiumStep user={top3[1]} rank={2} isMe={!!top3[1] && top3[1].id === currentUser?.id} onSelect={setSelectedUserId} />
+              <PodiumStep user={top3[0]} rank={1} isMe={top3[0].id === currentUser?.id} onSelect={setSelectedUserId} />
+              <PodiumStep user={top3[2]} rank={3} isMe={!!top3[2] && top3[2].id === currentUser?.id} onSelect={setSelectedUserId} />
             </div>
           ) : (
             <div className="mrk-podium-empty">
@@ -415,32 +424,40 @@ export default function MobileRanking({
               <p>Aún no han puntuado</p>
             </div>
           )}
-        </div>
-      )}
 
-      {/* ════ TABLA ════ */}
-      {rankingType !== "halloffame" && (
-        <div className="mrk-table">
-          <div className="mrk-table-header">
-            <span className="mrk-table-title">Clasificación</span>
-            <span className="mrk-table-sub">
-              {rankingType === "monthly" ? getCurrentMonthLabel() : "Global"}
-            </span>
-          </div>
-         {top3.map((user, i) => (
-          <TableRow key={user.id} user={user} pos={i + 1}
-            isMe={user.id === currentUser?.id}
-            onSelect={setSelectedUserId}
-            legCount={albumProgress[user.id] || 0} />
-        ))}
-        {rest.length > 0 && <div className="mrk-table-sep" />}
-        {rest.map((user, i) => (
-          <TableRow key={user.id} user={user} pos={i + 4}
-            isMe={user.id === currentUser?.id}
-            onSelect={setSelectedUserId}
-            legCount={albumProgress[user.id] || 0} />
-        ))}
-        </div>
+          <section className="mrk-sheet" aria-labelledby="mrk-sheet-title">
+            <header className="mrk-sheet-head">
+              <div>
+                <h2 id="mrk-sheet-title" className="mrk-sheet-title">Clasificación</h2>
+                <p className="mrk-sheet-meta">{totalParticipated} de {totalRegistered} participan</p>
+              </div>
+              <span className="mrk-sheet-period">
+                {rankingType === "monthly" ? getCurrentMonthLabel() : "Global"}
+              </span>
+            </header>
+
+            {rest.length > 0 ? (
+              <ol className="mrk-list">
+                {rest.map((user, i) => (
+                  <RankItem
+                    key={user.id}
+                    user={user}
+                    pos={i + 4}
+                    index={i}
+                    isMe={user.id === currentUser?.id}
+                    onSelect={setSelectedUserId}
+                  />
+                ))}
+              </ol>
+            ) : (
+              <p className="mrk-list-empty">
+                {top3.length > 0
+                  ? "Los demás jugadores aparecerán aquí cuando puntúen."
+                  : "La clasificación arranca con la primera puntuación."}
+              </p>
+            )}
+          </section>
+        </>
       )}
 
       {selectedUserId && (

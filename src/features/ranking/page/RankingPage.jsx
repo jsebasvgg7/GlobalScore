@@ -232,7 +232,6 @@ export default function RankingPage({ currentUser }) {
         onChangeType={setRankingType}
         champions={champions}
         globalChampions={globalChampions}
-        albumProgress={albumProgress}
       />
       {/* ══════════════════════════════════════
           VISTA DESKTOP — solo >768px
