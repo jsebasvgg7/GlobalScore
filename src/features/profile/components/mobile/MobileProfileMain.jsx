@@ -576,20 +576,7 @@ function EditTab({
           placeholder="Cuéntanos sobre ti..."
         />
       </div>
-
-      <div className="mpm-form-actions mpm-form-actions--bento">
-        <button className="mpm-save-btn" onClick={handleSave} disabled={loading}>
-          {loading ? <Activity size={14} className="spinner" /> : <Save size={14} />}
-          {loading ? "Guardando..." : "Guardar Cambios"}
-        </button>
-        <button
-          className="mpm-cancel-btn"
-          onClick={() => { loadUserData(); onBack(); }}
-        >
-          <X size={14} />Cancelar
-        </button>
       </div>
-    </div>
   );
 }
 
