@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
 import { supabase } from '@/shared/services/supabase/client';
+import TurnstileWidget, { CAPTCHA_ENABLED } from "../components/TurnstileWidget";
 import "./Auth.css";
 
 function LoadingDots() {
@@ -17,6 +18,8 @@ function LoadingDots() {
 
 function ForgotForm() {
   const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const [captchaReset, setCaptchaReset] = useState(0);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -26,10 +29,12 @@ function ForgotForm() {
     setLoading(true); setMessage(""); setError("");
 
     if (!email) { setError("Por favor ingresa tu correo electrónico"); setLoading(false); return; }
+    if (CAPTCHA_ENABLED && !captchaToken) { setError("Completa la verificación de seguridad"); setLoading(false); return; }
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
+        captchaToken,
       });
       if (error) throw error;
       setMessage("¡Revisa tu correo! Te enviamos el enlace para restablecer tu contraseña.");
@@ -38,6 +43,7 @@ function ForgotForm() {
       setError(err.message || "Ocurrió un error. Intenta de nuevo.");
     } finally {
       setLoading(false);
+      setCaptchaReset((n) => n + 1);
     }
   };
 
@@ -97,11 +103,13 @@ function ForgotForm() {
           {message && <div className="auth-message auth-message--success">{message}</div>}
           {error && <div className="auth-message auth-message--error">{error}</div>}
 
+          <TurnstileWidget onToken={setCaptchaToken} resetKey={captchaReset} />
+
           <div className="auth-cta">
             <button
               className="auth-cta-btn"
               type="submit"
-              disabled={loading || !email}
+              disabled={loading || !email || (CAPTCHA_ENABLED && !captchaToken)}
             >
               {loading
                 ? <><LoadingDots /> Enviando</>

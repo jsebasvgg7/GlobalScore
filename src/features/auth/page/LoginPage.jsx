@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { supabase } from '@/shared/services/supabase/client';
+import TurnstileWidget, { CAPTCHA_ENABLED } from "../components/TurnstileWidget";
 import "./Auth.css";
 
 let _welcomeDone = false;
@@ -21,6 +22,8 @@ function LoadingDots() {
 function LoginForm() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const [captchaReset, setCaptchaReset] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -35,12 +38,14 @@ function LoginForm() {
     if (!validateEmail(email)) return setError("Correo electrónico inválido");
     if (!password) return setError("Por favor ingresa tu contraseña");
     if (password.length < 6) return setError("La contraseña debe tener al menos 6 caracteres");
+    if (CAPTCHA_ENABLED && !captchaToken) return setError("Completa la verificación de seguridad");
 
     setLoading(true);
     try {
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email: email.trim().toLowerCase(),
         password,
+        options: { captchaToken },
       });
 
       if (signInError) {
@@ -107,6 +112,7 @@ function LoginForm() {
       setError("Ocurrió un error inesperado");
     } finally {
       setLoading(false);
+      setCaptchaReset((n) => n + 1);
     }
   };
 
@@ -179,11 +185,13 @@ function LoginForm() {
           <div className="auth-message auth-message--error">{error}</div>
         )}
 
+        <TurnstileWidget onToken={setCaptchaToken} resetKey={captchaReset} />
+
         <div className="auth-cta">
           <button
             className="auth-cta-btn"
             type="submit"
-            disabled={loading || !email || !password}
+            disabled={loading || !email || !password || (CAPTCHA_ENABLED && !captchaToken)}
           >
             {loading ? (
               <><LoadingDots /> Entrando</>
