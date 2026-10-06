@@ -68,8 +68,8 @@ export default function MobileHeader({ currentUser }) {
             aria-label="Cambiar tema"
           >
             {theme === "light"
-              ? <Moon size={15} strokeWidth={2} />
-              : <Sun size={15} strokeWidth={2} />
+              ? <Moon size={17} strokeWidth={2} fill="currentColor" />
+              : <Sun size={17} strokeWidth={2} fill="currentColor" />
             }
           </button>
 
@@ -79,8 +79,7 @@ export default function MobileHeader({ currentUser }) {
             onClick={() => navigate("/notifications")}
             aria-label="Notificaciones"
           >
-            <Bell size={15} strokeWidth={2} />
-            <span className="mhd-notif-dot" aria-hidden="true" />
+            <Bell size={17} strokeWidth={2} fill="currentColor" />
           </button>
 
           {/* Avatar */}
@@ -119,7 +118,7 @@ export default function MobileHeader({ currentUser }) {
             aria-current={isActive(path) ? "page" : undefined}
           >
             <div className="mhd-nav-icon-wrap">
-              <Icon size={19} strokeWidth={isActive(path) ? 2.2 : 1.8} />
+              <Icon size={22} strokeWidth={isActive(path) ? 2.2 : 1.8} />
             </div>
             <span className="mhd-nav-label">{label}</span>
           </button>
@@ -148,7 +147,7 @@ export default function MobileHeader({ currentUser }) {
             aria-current={isActive(path) ? "page" : undefined}
           >
             <div className="mhd-nav-icon-wrap">
-              <Icon size={19} strokeWidth={isActive(path) ? 2.2 : 1.8} />
+              <Icon size={22} strokeWidth={isActive(path) ? 2.2 : 1.8} />
             </div>
             <span className="mhd-nav-label">{label}</span>
           </button>

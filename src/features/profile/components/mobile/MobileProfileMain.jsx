@@ -8,7 +8,7 @@ import {
   Heart, Globe, Activity, Shield, Gamepad2,
   Calendar, CheckCircle2, XCircle, Clock,
   ArrowUpDown, Image, Check, Save, X,
-  Filter,
+  Filter, LogOut,
 } from "lucide-react";
 import AvatarUpload from "../AvatarUpload";
 import { MobileNotes } from '@/features/notes';
@@ -41,6 +41,7 @@ function getBentoClass(index) {
 const TAB_LABELS = {
   overview: "Estadísticas",
   achievements: "Logros",
+  titles: "Títulos",
   championships: "Campeonatos",
   history: "Historial",
   edit: "Editar Perfil",
@@ -68,29 +69,18 @@ function Avatar({ user, size = 64 }) {
   );
 }
 
-/* ── Stat chip ── */
-function StatChip({ value, label }) {
-  return (
-    <div className="mpm-stat">
-      <span className="mpm-stat-val">{value}</span>
-      <span className="mpm-stat-lbl">{label}</span>
-    </div>
-  );
-}
-
 /* ── Nav row ── */
-function NavRow({ icon: Icon, label, desc, color, onClick, right, className = "" }) {
-  const isTile = className.includes("mpm-row--tile");
+function NavRow({ icon: Icon, label, desc, onClick, right, className = "" }) {
   return (
     <button className={`mpm-row ${className}`.trim()} onClick={onClick}>
-      <div className="mpm-row-icon" style={{ background: color }}>
-        <Icon size={isTile ? 16 : 17} color="#fff" />
+      <div className="mpm-row-icon">
+        <Icon size={16} color="#fff" />
       </div>
       <div className="mpm-row-body">
         <span className="mpm-row-lbl">{label}</span>
         {desc && <span className="mpm-row-desc">{desc}</span>}
       </div>
-      {!isTile && (right || <ChevronRight size={15} className="mpm-row-arrow" />)}
+      {right || <ChevronRight size={15} className="mpm-row-arrow" />}
     </button>
   );
 }
@@ -101,7 +91,7 @@ function NavRow({ icon: Icon, label, desc, color, onClick, right, className = ""
 function MobileSubView({ tabId, onBack, children }) {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
-    const header = document.querySelector(".gs-mobile-header");
+    const header = document.querySelector(".mhd-header");
     if (header) header.style.display = "none";
     return () => {
       if (header) header.style.display = "";
@@ -193,12 +183,9 @@ function OverviewTab({ userData, currentUser, userRanking }) {
 }
 
 /* ══════════════════════════════════════════
-   TAB: ACHIEVEMENTS
+   TAB: TITLES
 ══════════════════════════════════════════ */
-function AchievementsTab({
-  activeTitle, userTitles, userAchievements,
-  availableAchievements, achievementsLoading,
-}) {
+function TitlesTab({ activeTitle, userTitles, achievementsLoading }) {
   return (
     <div className="mpm-tab-content">
       {activeTitle && (
@@ -236,8 +223,17 @@ function AchievementsTab({
           ))}
         </div>
       )}
+    </div>
+  );
+}
 
-      <div className="mpm-section-hdr" style={{ marginTop: 16 }}>
+/* ══════════════════════════════════════════
+   TAB: ACHIEVEMENTS
+══════════════════════════════════════════ */
+function AchievementsTab({ userAchievements, availableAchievements, achievementsLoading }) {
+  return (
+    <div className="mpm-tab-content">
+      <div className="mpm-section-hdr">
         <span>LOGROS</span>
         <span className="mpm-count-badge">
           {userAchievements.length}/{availableAchievements.length}
@@ -273,8 +269,8 @@ function ChampionshipsTab({ userData, crownHistory }) {
   return (
     <div className="mpm-tab-content">
       <div className="mpm-crowns-hero">
-        <Crown size={40} style={{ color: "#c9a227" }} />
-        <div className="mpm-crowns-num" style={{ color: "#c9a227" }}>{total}</div>
+        <Crown size={40} style={{ color: "var(--mpm-accent)" }} />
+        <div className="mpm-crowns-num" style={{ color: "var(--mpm-accent)" }}>{total}</div>
         <div className="mpm-crowns-lbl">CAMPEONATOS GANADOS</div>
       </div>
 
@@ -304,7 +300,7 @@ function ChampionshipsTab({ userData, crownHistory }) {
                 <div
                   className="mpm-crown-rank"
                   style={{
-                    background: i === 0 ? "#c9a227" : i === 1 ? "#8a8a8a" : "#a0652a",
+                    background: i === 0 ? "var(--mpm-accent-deep)" : i === 1 ? "var(--mpm-accent)" : "var(--mpm-accent-soft)",
                   }}
                 >
                   #{i + 1}
@@ -313,7 +309,7 @@ function ChampionshipsTab({ userData, crownHistory }) {
                   <div className="mpm-crown-month">{c.month_year}</div>
                   <div className="mpm-crown-pts">{fmt(c.points)} pts</div>
                 </div>
-                <Crown size={14} style={{ color: "#c9a227", marginLeft: "auto" }} />
+                <Crown size={14} style={{ color: "var(--mpm-accent)", marginLeft: "auto" }} />
               </div>
             ))}
           </div>
@@ -777,8 +773,6 @@ export default function MobileProfileMain({
   const [mobileView, setMobileView] = useState("main");
   const [showMobileNotes, setShowMobileNotes] = useState(false);
 
- const accuracy = calculateAccuracy(currentUser);
-
   const isAdmin =
     currentUser?.role === "admin" || currentUser?.email === "tian@admin.com";
 
@@ -812,10 +806,16 @@ export default function MobileProfileMain({
       case "achievements":
         return (
           <AchievementsTab
-            activeTitle={activeTitle}
-            userTitles={userTitles}
             userAchievements={userAchievements}
             availableAchievements={availableAchievements}
+            achievementsLoading={achievementsLoading}
+          />
+        );
+      case "titles":
+        return (
+          <TitlesTab
+            activeTitle={activeTitle}
+            userTitles={userTitles}
             achievementsLoading={achievementsLoading}
           />
         );
@@ -854,36 +854,37 @@ export default function MobileProfileMain({
   const isMobileSub = mobileView.startsWith("tab:");
   const currentMobileTab = isMobileSub ? mobileView.replace("tab:", "") : null;
 
-  /* ── Nav groups ── */
-  const ACTIVITY_HERO = { id: "overview", icon: BarChart2, label: "Estadísticas", desc: "Ver tu rendimiento", color: "#5b4fd8" };
-  const ACTIVITY_PAIR = [
-    { id: "achievements", icon: Award, label: "Logros", desc: `${currentUser?.achievements?.length || 0} items`, color: "#c9a227" },
-    { id: "championships", icon: Crown, label: "Campeonatos", desc: `${currentUser?.monthly_championships || 0} items`, color: "#8b7fc7" },
-  ];
+  /* ── Secciones de la vista principal (orden del mockup) ── */
+  const toggleDark = onToggleDark;
 
-  const NAV_GROUPS = [
+  const NAV_SECTIONS = [
     {
-      label: "Mi actividad",
+      label: "Progreso",
       items: [
-        { id: "history", icon: FileText, label: "Historial", desc: "Todas tus predicciones", color: "#60a5fa" },
-        { id: "notes", icon: NotebookPen, label: "Mis Notas", desc: "Bloc de notas cifrado", color: "#5b4fd8" },
+        { id: "overview", icon: BarChart2, label: "Estadísticas", desc: "verificación de rendimiento" },
+      ],
+      pair: [
+        { id: "achievements", icon: Award, label: "Logros", desc: `${userAchievements?.length || 0} items` },
+        { id: "titles", icon: Trophy, label: "Títulos", desc: `${userTitles?.length || 0} items` },
+      ],
+    },
+    {
+      label: "Mi Actividad",
+      items: [
+        { id: "history", icon: FileText, label: "Historial", desc: "todas tus predicciones" },
+        { id: "notes", icon: NotebookPen, label: "Mis notas", desc: "bloc de notas cifrado" },
+        { id: "championships", icon: Crown, label: "Campeonatos", desc: `${currentUser?.monthly_championships || 0} items` },
       ],
     },
     {
       label: "Cuenta",
       items: [
-        { id: "edit", icon: Edit2, label: "Editar Perfil", desc: null, color: "#6b7280" },
-        { id: "settings-account", icon: User, label: "Cuenta", desc: null, color: "#60519b" },
-        {
-          id: "notifications", icon: Bell, label: "Notificaciones", desc: null, color: "#f97316",
-          action: () => navigate("/notifications")
-        },
+        { id: "edit", icon: Edit2, label: "Editar perfil", desc: "personalización de tu info." },
+        { id: "settings-account", icon: User, label: "Cuenta", desc: "configuración y gestión" },
         ...(isAdmin
-          ? [{
-            id: "admin", icon: Lock, label: "Admin", desc: "Panel de administración", color: "#e11d48",
-            action: () => navigate("/admin")
-          }]
+          ? [{ id: "admin", icon: Lock, label: "Admin", desc: "panel de administración", action: () => navigate("/admin") }]
           : []),
+        { id: "logout", icon: LogOut, label: "Cerrar sesión", desc: "salir de tu cuenta de GL", action: onLogout },
       ],
     },
   ];
@@ -910,132 +911,93 @@ export default function MobileProfileMain({
   }
 
   /* Main profile list */
+  const bannerSrc = currentUser?.equipped_banner_url || currentUser?.banner_url;
+
   return (
     <div className="mpm-root">
 
-      {/* ── BANNER ── */}
-      <div className="mpm-banner">
-        {(currentUser?.equipped_banner_url || currentUser?.banner_url) ? (
-          <img
-            src={currentUser.equipped_banner_url || currentUser.banner_url}
-            alt=""
-            className="mpm-banner-img"
-          />
-        ) : (
-          <div className="mpm-banner-gradient" />
-        )}
-        <div className="mpm-banner-overlay" />
-        <span className="mpm-banner-tag">PERFIL · GlobalScore</span>
-      </div>
-
-      {/* ── USER ROW ── */}
-      <div className="mpm-user-row" onClick={() => handleNavigate("edit")}>
-        <div
-          className="mpm-avatar-wrap"
-          onClick={(e) => { e.stopPropagation(); handleNavigate("edit"); }}
-        >
-          <Avatar user={currentUser} size={56} />
+      {/* ── HERO: banner + bloque de identidad ── */}
+      <div className="mpm-hero">
+        <div className="mpm-banner">
+          {bannerSrc ? (
+            <img src={bannerSrc} alt="" className="mpm-banner-img" />
+          ) : (
+            <div className="mpm-banner-gradient" />
+          )}
         </div>
-        <div className="mpm-user-info">
+        <div className="mpm-hero-id">
+          <button
+            className="mpm-avatar-wrap"
+            onClick={() => handleNavigate("edit")}
+            aria-label="Editar perfil"
+          >
+            <Avatar user={currentUser} size={72} />
+          </button>
           <span className="mpm-user-name">{currentUser?.name || "Usuario"}</span>
-          <span className="mpm-user-sub">
-            {currentUser?.country || "Global"} · Niv.{currentUser?.level || 1}
-          </span>
-        </div>
-        <ChevronRight size={16} className="mpm-user-arrow" />
-      </div>
-
-      {/* ── STATS (bento: hero + 2 chicas apiladas) ── */}
-      <div className="mpm-stats-row">
-        <div className="mpm-stat-hero">
-          <StatChip value={fmt(currentUser?.points)} label="Puntos" />
-        </div>
-        <div className="mpm-stats-side">
-          <StatChip value={fmt(currentUser?.correct)} label="Aciertos" />
-          <StatChip value={`${accuracy}%`} label="Precisión" />
+          <span className="mpm-user-sub">nivel {currentUser?.level || 1}</span>
         </div>
       </div>
 
-      {/* ── PREFERENCIAS ── */}
-      <div className="mpm-section-label">Preferencias</div>
+      {/* ── GENERAL ── */}
+      <div className="mpm-section-label">General</div>
       <div className="mpm-group">
-
-        {/* Dark mode toggle */}
-      <div className="mpm-row mpm-row--toggle">
-          <div className="mpm-row-icon" style={{ background: "#6366f1" }}>
-            {isDark ? <Moon size={17} color="#fff" /> : <Sun size={17} color="#fff" />}
+        <div
+          className="mpm-row mpm-row--toggle"
+          role="button"
+          tabIndex={0}
+          onClick={toggleDark}
+          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") toggleDark(); }}
+        >
+          <div className="mpm-row-icon">
+            {isDark ? <Moon size={16} color="#fff" /> : <Sun size={16} color="#fff" />}
           </div>
           <div className="mpm-row-body">
-            <span className="mpm-row-lbl">Dark Mode</span>
+            <span className="mpm-row-lbl">Modo oscuro</span>
+            <span className="mpm-row-desc">apariencia de la página</span>
           </div>
-          <button
-            className={`mpm-toggle${isDark ? " mpm-toggle--on" : ""}`}
-            onClick={onToggleDark}
-          >
-            <div className="mpm-toggle-knob" />
-          </button>
+          <span className={`mpm-toggle${isDark ? " mpm-toggle--on" : ""}`} aria-hidden="true">
+            <span className="mpm-toggle-knob" />
+          </span>
         </div>
-
-      </div>
-
-      {/* ── MI ACTIVIDAD (bento: hero + par) ── */}
-      <div className="mpm-section-label">Mi actividad</div>
-      <div className="mpm-group">
         <NavRow
-          icon={ACTIVITY_HERO.icon}
-          label={ACTIVITY_HERO.label}
-          desc={ACTIVITY_HERO.desc}
-          color={ACTIVITY_HERO.color}
-          onClick={() => handleNavigate(ACTIVITY_HERO.id)}
-          className="mpm-row--hero"
+          icon={Bell}
+          label="Notificaciones"
+          desc="centro de avisos e info."
+          onClick={() => navigate("/notifications")}
         />
-        <div className="mpm-activity-pair">
-          {ACTIVITY_PAIR.map((item) => (
-            <NavRow
-              key={item.id}
-              icon={item.icon}
-              label={item.label}
-              desc={item.desc}
-              color={item.color}
-              onClick={() => handleNavigate(item.id)}
-              className="mpm-row--tile"
-            />
-          ))}
-        </div>
       </div>
 
-      {/* ── GRUPOS DE NAV ── */}
-      {NAV_GROUPS.map((group) => (
-        <React.Fragment key={group.label}>
-          <div className="mpm-section-label">{group.label}</div>
+      {/* ── SECCIONES ── */}
+      {NAV_SECTIONS.map((section) => (
+        <React.Fragment key={section.label}>
+          <div className="mpm-section-label">{section.label}</div>
           <div className="mpm-group">
-            {group.items.map((item) => (
+            {section.items.map((item) => (
               <NavRow
                 key={item.id}
                 icon={item.icon}
                 label={item.label}
                 desc={item.desc}
-                color={item.color}
                 onClick={item.action || (() => handleNavigate(item.id))}
               />
             ))}
+            {section.pair && (
+              <div className="mpm-activity-pair">
+                {section.pair.map((item) => (
+                  <NavRow
+                    key={item.id}
+                    icon={item.icon}
+                    label={item.label}
+                    desc={item.desc}
+                    onClick={() => handleNavigate(item.id)}
+                    className="mpm-row--tile"
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </React.Fragment>
       ))}
-
-      {/* ── LOGOUT ── */}
-      <div className="mpm-section-label">Salir</div>
-      <div className="mpm-logout-wrap">
-        <button className="mpm-logout" onClick={onLogout}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-            <polyline points="16 17 21 12 16 7" />
-            <line x1="21" y1="12" x2="9" y2="12" />
-          </svg>
-          <span className="mpm-logout-lbl">Cerrar sesión</span>
-          <ChevronRight size={14} className="mpm-logout-arrow" />
-        </button>
-      </div>
 
     </div>
   );
