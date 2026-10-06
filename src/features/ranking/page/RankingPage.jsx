@@ -90,7 +90,7 @@ export default function RankingPage({ currentUser }) {
 
       const { data: usersData } = await supabase
         .from('users')
-        .select('id, name, avatar_url, best_streak, correct, predictions')
+        .select('id, name, avatar_url, equipped_banner_url, best_streak, correct, predictions')
         .in('id', Object.keys(map));
       if (!usersData?.length) { setChampions([]); return; }
 
@@ -134,7 +134,7 @@ export default function RankingPage({ currentUser }) {
 
       const { data: usersData } = await supabase
         .from('users')
-        .select('id, name, avatar_url, best_streak, correct, predictions')
+        .select('id, name, avatar_url, equipped_banner_url, best_streak, correct, predictions')
         .in('id', Object.keys(map));
       if (!usersData?.length) { setGlobalChampions([]); return; }
 

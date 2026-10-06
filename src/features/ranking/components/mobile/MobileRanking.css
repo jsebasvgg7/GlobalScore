@@ -207,24 +207,32 @@
   }
 }
 
-/* ── ZONA HOF: fondo con luz dorada sutil, da identidad a toda la sección ── */
+/* ── ZONA HOF: morado y blanco del mockup ──
+   Papel blanco para filas y bloques; el fondo de la página no cambia.
+   En oscuro el "papel" pasa a la superficie del tema. */
 .mrk-hof-zone {
+  --sal-paper: #fff;
+  --sal-fill: var(--mrk-brand-fill);
+  --sal-on-fill-soft: #CFC9FA;
+  --sal-gold-fill: #E3C47A;
+  --sal-gold-line: var(--mrk-gold-text);
+  --sal-lift: 0 10px 18px -12px var(--mrk-glow-strong);
   position: relative;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(201, 162, 39, .10) 0%, rgba(201, 162, 39, 0) 55%),
-    var(--mrk-bg);
+  background: var(--mrk-bg);
   padding-bottom: 4px;
-  overflow: hidden;
 }
 
-/* ── Segmented control: Mensual / Global, mismo lenguaje que mrk-tabs ── */
+[data-theme="dark"] .mrk-hof-zone {
+  --sal-paper: var(--mrk-surface);
+  --sal-gold-fill: #f0c040;
+}
+
+/* ── Segmented control Mensual / Global: mismo lenguaje que mrk-tabs ── */
 .mrk-hof-switch {
-  position: relative;
   display: flex;
-  margin: 12px 16px 0;
-  border: 1px solid var(--mrk-border-hard);
-  box-shadow: 2px 2px 0px var(--mrk-shadow-color);
-  background: var(--mrk-surface);
+  margin: 8px 16px 0;
+  border: 1.5px solid var(--mrk-accent);
+  background: var(--sal-paper);
 }
 
 .mrk-hof-switch button {
@@ -232,27 +240,69 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  height: 34px;
-  font-size: 9px;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 13px;
   font-weight: 700;
   font-family: var(--mrk-mono);
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: var(--mrk-muted);
+  letter-spacing: -.01em;
+  color: var(--mrk-accent);
   background: transparent;
-  border: none;
+  border: 0;
   cursor: pointer;
-  transition: color .15s, background .15s;
+  transition: color .2s ease, background .2s ease, transform .2s cubic-bezier(.34, 1.56, .64, 1);
 }
 
-.mrk-hof-switch button:first-child {
-  border-right: 1px solid var(--mrk-border-hard);
+.mrk-hof-switch button:active {
+  transform: scale(.98);
 }
 
 .mrk-hof-switch button.active {
   color: #fff;
-  background: var(--mrk-accent);
+  background: var(--sal-fill);
+}
+
+.mrk-hof-switch button:focus-visible {
+  outline: 2px solid var(--mrk-accent);
+  outline-offset: -4px;
+}
+
+.mrk-hof-switch button.active:focus-visible {
+  outline-color: #fff;
+}
+
+@media (hover: hover) {
+  .mrk-hof-switch button:not(.active):hover {
+    background: var(--mrk-accent-subtle);
+  }
+}
+
+/* ── Stats del Salón: dos bloques blancos con número grande ── */
+.mrk-stats-row--hof {
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.mrk-stats-row--hof .mrk-stat-block {
+  gap: 0;
+  padding: 8px 8px 10px;
+  background: var(--sal-paper);
+  border: 1.5px solid var(--mrk-accent);
+  box-shadow: var(--sal-lift);
+}
+
+.mrk-stats-row--hof .mrk-stat-num {
+  font-size: 28px;
+  letter-spacing: -.04em;
+  color: var(--mrk-accent);
+}
+
+.mrk-stats-row--hof .mrk-stat-lbl {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--mrk-lilac);
 }
 
 /* ════════════════════════════════════════════════
@@ -1064,577 +1114,405 @@
 }
 
 /* ════════════════════════════════════════════════
-   HOF SALÓN — medallón (identidad) + grid + hitos + tabla
-   Bordes y sombras livianos en todo, salvo el medallón
-   que conserva un poco más de peso por ser la pieza focal
+   SALÓN DE LA FAMA — mockup de Niel (morado y blanco)
+   medallón con banner · leyendas en filas · tabla compacta · hitos
 ════════════════════════════════════════════════ */
 
 .mrk-salon {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding: 14px 16px 24px;
-  position: relative;
+  gap: 28px;
+  padding: 20px 16px 28px;
   animation: mrk-fade-up .25s ease both;
 }
 
-.mrk-salon-section-lbl {
+.sal-title {
   display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 11px;
-  font-weight: 700;
-  font-family: var(--mrk-mono);
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: var(--mrk-text);
-}
-
-.mrk-salon-section-lbl::before {
-  content: "";
-  width: 4px;
-  height: 14px;
-  background: var(--mrk-accent);
-  flex-shrink: 0;
-}
-
-.mrk-salon-section-count {
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--mrk-accent);
-}
-
-/* ── EL MEDALLÓN: pieza de identidad única del Salón ──
-   Cinta morada arriba (como una medalla real), fondo dorado
-   radial saturado, coronas grandes semitransparentes de fondo.
-   Es la única pieza de toda la app con esta forma — por diseño. */
-.mrk-medallion-wrap {
-  position: relative;
-  padding-top: 14px;
-}
-
-.mrk-medallion-ribbon {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 46px;
-  height: 34px;
-  z-index: 0;
-}
-
-.mrk-medallion-ribbon::before,
-.mrk-medallion-ribbon::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 20px;
-  height: 34px;
-  background: var(--mrk-accent);
-}
-
-.mrk-medallion-ribbon::before {
-  left: 1px;
-  transform: skewX(8deg);
-  clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
-}
-
-.mrk-medallion-ribbon::after {
-  right: 1px;
-  transform: skewX(-8deg);
-  clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
-}
-
-.mrk-medallion {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  border: 1px solid var(--mrk-border-hard);
-  background: radial-gradient(circle at 32% 26%, #FFDE7A 0%, var(--mrk-gold) 42%, #C9860A 100%);
-  box-shadow: 3px 3px 0px var(--mrk-shadow-color);
-  padding: 20px 18px 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  overflow: hidden;
-  cursor: pointer;
-  font-family: var(--mrk-mono);
-  transition: transform .12s;
-}
-
-.mrk-medallion:active {
-  transform: scale(.99);
-}
-
-.mrk-medallion-crownfield {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  align-content: center;
-  opacity: .14;
-  color: #5c3d05;
-  pointer-events: none;
-  transform: rotate(-8deg) scale(1.3);
-}
-
-.mrk-medallion-tag {
-  position: relative;
-  z-index: 1;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: #5c3d05;
-  margin-bottom: 8px;
-}
-
-.mrk-medallion-av {
-  position: relative;
-  z-index: 1;
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  border: 3px solid var(--mrk-border-hard);
-  background: var(--mrk-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  box-shadow: 2px 2px 0px rgba(0, 0, 0, .22);
-}
-
-.mrk-medallion-av img,
-.mrk-medallion-av .mrk-av {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  border: none;
-}
-
-.mrk-medallion-name {
-  position: relative;
-  z-index: 1;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--mrk-border-hard);
-  margin-top: 10px;
-  line-height: 1.05;
-  max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.mrk-medallion-title {
-  position: relative;
-  z-index: 1;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: #5c3d05;
-  margin-top: 4px;
-}
-
-.mrk-medallion-crowns {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  gap: 3px;
-  margin-top: 8px;
-}
-
-.mrk-medallion-stats {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  margin-top: 14px;
-  width: 100%;
-  border-top: 1px solid rgba(26, 26, 46, .22);
-  padding-top: 10px;
-}
-
-.mrk-medallion-stat {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.mrk-medallion-stat + .mrk-medallion-stat {
-  border-left: 1px solid rgba(26, 26, 46, .22);
-}
-
-.mrk-medallion-stat-val {
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 12px 2px;
   font-size: 17px;
   font-weight: 700;
-  color: var(--mrk-border-hard);
-  line-height: 1;
   letter-spacing: -.02em;
+  line-height: 1.1;
+  color: var(--mrk-accent);
 }
 
-.mrk-medallion-stat-lbl {
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: #5c3d05;
-  opacity: .85;
-}
-
-.mrk-medallion-bar-wrap {
-  position: relative;
-  z-index: 1;
-  margin-top: 12px;
-  width: 100%;
-}
-
-.mrk-medallion-bar-lbl {
-  display: flex;
-  justify-content: space-between;
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: #5c3d05;
-  margin-bottom: 3px;
-}
-
-.mrk-medallion-bar-track {
-  height: 5px;
-  border: 1px solid var(--mrk-border-hard);
-  background: rgba(26, 26, 46, .12);
-}
-
-.mrk-medallion-bar-fill {
-  height: 100%;
-  background: var(--mrk-accent);
-}
-
-/* ── Grid 2x2: leyendas del salón (#2 a #5) ── */
-.mrk-salon-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.mrk-salon-card {
-  position: relative;
-  border: 1px solid var(--mrk-border-hard);
-  border-left: 4px solid var(--mrk-border-hard);
-  background: var(--mrk-card);
-  box-shadow: 2px 2px 0px var(--mrk-shadow-color);
-  padding: 10px 10px 11px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  cursor: pointer;
-  font-family: var(--mrk-mono);
-  text-align: left;
-  transition: transform .12s;
-}
-
-.mrk-salon-card:active {
-  transform: scale(.98);
-}
-
-.mrk-salon-card--2 {
-  border-left-color: var(--mrk-silver);
-}
-
-.mrk-salon-card--3 {
-  border-left-color: var(--mrk-bronze);
-}
-
-.mrk-salon-card-pos {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 18px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  font-weight: 700;
-  border: 1px solid var(--mrk-border-hard);
-  background: var(--mrk-bg);
-  color: var(--mrk-muted);
-}
-
-.mrk-salon-card--2 .mrk-salon-card-pos {
-  background: var(--mrk-silver);
-  color: #fff;
-}
-
-.mrk-salon-card--3 .mrk-salon-card-pos {
-  background: var(--mrk-bronze);
-  color: #fff;
-}
-
-.mrk-salon-card-name {
+.sal-title-count {
   font-size: 12px;
   font-weight: 700;
-  color: var(--mrk-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
+  color: var(--mrk-lilac);
 }
 
-.mrk-salon-card-crown {
+/* chip "#N": cuadrado, relleno morado */
+.sal-chip {
+  display: inline-block;
+  padding: 2px 6px 1px;
+  background: var(--sal-fill);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.sal-chip--sm {
+  padding: 1px 5px;
+  font-size: 10px;
+}
+
+/* tamaños de avatar del Salón (cuadrados, como el resto del ranking) */
+.mrk-av--sal { width: 68px; height: 68px; font-size: 24px; border: 2px solid #fff; }
+.mrk-av--row { width: 48px; height: 48px; font-size: 17px; border: 1.5px solid var(--mrk-accent); }
+.mrk-av--rowc { width: 36px; height: 36px; font-size: 14px; border: 1.5px solid var(--mrk-accent); }
+.mrk-av--hito { width: 76px; height: 76px; font-size: 26px; border: 2px solid #fff; }
+
+/* ── Leyenda suprema ── */
+.sal-medal {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--sal-lift);
+  transition: transform .2s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+.sal-medal-banner {
+  position: relative;
+  display: block;
+  height: 112px;
+  border: 1.5px solid var(--mrk-accent);
+  border-bottom: 0;
+  background-color: var(--sal-fill);
+  background-image: var(--banner, repeating-linear-gradient(135deg, rgba(255, 255, 255, .09) 0 2px, transparent 2px 11px));
+  background-size: cover;
+  background-position: center;
+}
+
+/* velo para que el avatar y el chip se lean sobre cualquier banner */
+.sal-medal-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(30, 26, 77, .28), rgba(30, 26, 77, .55));
+}
+
+.sal-medal-av {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.sal-medal-av .mrk-av { display: flex; }
+
+.sal-medal-av .sal-chip {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.sal-medal-body {
+  display: grid;
+  grid-template-columns: minmax(0, .42fr) minmax(0, 1fr);
+}
+
+.sal-medal-id {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 8px;
+  background: var(--sal-fill);
+  color: #fff;
+  text-align: center;
+}
+
+.sal-medal-name {
+  max-width: 100%;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.sal-medal-role {
+  font-size: 11px;
+  color: var(--sal-on-fill-soft);
+}
+
+.sal-medal-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  background: var(--sal-paper);
+  border: 1.5px solid var(--mrk-accent);
+  border-left: 0;
+}
+
+.sal-medal-stat {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 3px;
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--mrk-gold-text);
-}
-
-.mrk-salon-card-pts {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--mrk-text);
-  line-height: 1;
-  letter-spacing: -.02em;
-  margin-top: 2px;
-}
-
-.mrk-salon-card-pts-lbl {
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: var(--mrk-muted);
-}
-
-.mrk-salon-card-period {
-  font-size: 8px;
-  font-weight: 600;
-  color: var(--mrk-muted);
-  margin-top: 4px;
-  border-top: 1px solid var(--mrk-border);
-  padding-top: 5px;
-  width: 100%;
-}
-
-/* ── Hitos del Salón: 2x2, ícono + número grande ── */
-.mrk-salon-hitos-bento {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 8px;
-}
-
-.mrk-salon-hito-bento-side {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.mrk-salon-hito,
-.mrk-salon-hito-bento {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  border: 1px solid var(--mrk-border-hard);
-  background: var(--mrk-surface);
-  box-shadow: 2px 2px 0px var(--mrk-shadow-color);
-  padding: 11px;
-  font-family: var(--mrk-mono);
-}
-
-.mrk-salon-hito-bento--main {
-  justify-content: center;
-  padding: 14px 12px;
-}
-
-.mrk-salon-hito-val--lg {
-  font-size: 26px;
-}
-
-.mrk-salon-hito-top {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.mrk-salon-hito-icon {
-  flex-shrink: 0;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--mrk-border-hard);
-  background: var(--mrk-accent-subtle);
-  color: var(--mrk-accent);
-}
-
-.mrk-salon-hito--gold {
-  background: var(--mrk-accent);
-}
-
-.mrk-salon-hito--gold .mrk-salon-hito-icon {
-  background: var(--mrk-border-hard);
-  color: #fff;
-}
-
-.mrk-salon-hito--gold .mrk-salon-hito-lbl,
-.mrk-salon-hito--gold .mrk-salon-hito-val,
-.mrk-salon-hito--gold .mrk-salon-hito-name {
-  color: #fff;
-}
-
-.mrk-salon-hito--fire {
-  background: var(--mrk-gold);
-}
-
-.mrk-salon-hito--fire .mrk-salon-hito-icon {
-  background: var(--mrk-border-hard);
-  color: #fff;
-}
-
-.mrk-salon-hito--fire .mrk-salon-hito-lbl,
-.mrk-salon-hito--fire .mrk-salon-hito-val,
-.mrk-salon-hito--fire .mrk-salon-hito-name {
-  color: var(--mrk-border-hard);
-}
-
-.mrk-salon-hito--target {
-  background: var(--mrk-surface);
-  border-width: 2px;
-}
-
-.mrk-salon-hito--target .mrk-salon-hito-icon {
-  background: var(--mrk-border-hard);
-  color: #fff;
-}
-
-.mrk-salon-hito--target .mrk-salon-hito-lbl,
-.mrk-salon-hito--target .mrk-salon-hito-val,
-.mrk-salon-hito--target .mrk-salon-hito-name {
-  color: var(--mrk-text);
-}
-
-.mrk-salon-hito-lbl {
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--mrk-muted);
-}
-
-.mrk-salon-hito-val {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--mrk-text);
-  line-height: 1;
-  letter-spacing: -.02em;
-}
-
-.mrk-salon-hito-name {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--mrk-accent);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* ── Tabla final: resto de campeones (la más liviana de todas) ── */
-.mrk-salon-table {
-  border-top: 1px solid var(--mrk-border);
-}
-
-.mrk-salon-table-head {
-  display: flex;
-  align-items: center;
-  padding: 6px 2px 8px;
-  font-size: 7px;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--mrk-muted);
-  font-family: var(--mrk-mono);
-}
-
-.mrk-salon-table-head span:first-child {
-  width: 26px;
-}
-
-.mrk-salon-table-head .mrk-salon-th-user {
-  flex: 1;
-}
-
-.mrk-salon-table-head .mrk-salon-th-num {
-  width: 52px;
-  text-align: right;
-}
-
-.mrk-salon-trow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 2px;
-  border-bottom: 1px solid var(--mrk-border);
-  cursor: pointer;
-  background: none;
-  border-left: none;
-  border-right: none;
-  border-top: none;
-  width: 100%;
-  text-align: left;
-  font-family: var(--mrk-mono);
-}
-
-.mrk-salon-trow:last-child {
-  border-bottom: none;
-}
-
-.mrk-salon-trow:active {
-  background: var(--mrk-accent-subtle);
-}
-
-.mrk-salon-trow-pos {
-  width: 26px;
-  flex-shrink: 0;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--mrk-muted);
-}
-
-.mrk-salon-trow-name {
-  flex: 1;
   min-width: 0;
-  font-size: 11px;
+}
+
+.sal-medal-stat b {
+  max-width: 100%;
+  font-size: 20px;
   font-weight: 700;
-  color: var(--mrk-text);
+  letter-spacing: -.04em;
+  line-height: 1;
+  color: var(--mrk-accent);
   white-space: nowrap;
+}
+
+.sal-medal-stat i {
+  font-size: 11px;
+  font-style: normal;
+  color: var(--mrk-lilac);
+  white-space: nowrap;
+}
+
+/* ── Filas: leyendas y tabla compacta ── */
+.sal-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sal-rows > li,
+.sal-hitos > li {
+  animation: mrk-fade-up .4s cubic-bezier(.2, .8, .2, 1) both;
+  animation-delay: calc(var(--i, 0) * 55ms + 120ms);
+}
+
+.sal-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) repeat(3, 54px);
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px 8px 8px;
+  background: var(--sal-paper);
+  border: 1.5px solid var(--mrk-accent);
+  color: var(--mrk-accent);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--sal-lift);
+  transition: transform .2s cubic-bezier(.34, 1.56, .64, 1), box-shadow .2s ease;
+}
+
+.sal-row--compact {
+  grid-template-columns: 36px minmax(0, 1fr) repeat(2, 54px);
+  padding: 6px 10px 6px 6px;
+}
+
+.sal-row-id {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.sal-row-name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.1;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.mrk-salon-trow-num {
-  width: 52px;
-  flex-shrink: 0;
-  text-align: right;
-  font-size: 11px;
+.sal-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
   font-weight: 700;
-  color: var(--mrk-text);
+  line-height: 1;
 }
 
-/* Stats row — variante liviana solo para HOF */
-.mrk-stats-row--hof {
-  margin-top: 10px;
+.sal-row-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
 }
 
-.mrk-stats-row--hof .mrk-stat-block {
-  border: 1px solid var(--mrk-border-hard);
-  box-shadow: 2px 2px 0px var(--mrk-shadow-color);
+.sal-row-stat b {
+  max-width: 100%;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sal-row-stat i {
+  font-size: 10px;
+  font-style: normal;
+  color: var(--mrk-lilac);
+  white-space: nowrap;
+}
+
+/* ── Hitos: filas alternadas, avatar del titular asomando por arriba ── */
+.sal-hitos {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin: 0;
+  padding: 12px 0 0;
+  list-style: none;
+}
+
+.sal-hito {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 88px;
+  padding: 10px 14px 10px 112px;
+  border: 1.5px solid var(--mrk-accent);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .2s cubic-bezier(.34, 1.56, .64, 1), box-shadow .2s ease;
+}
+
+.sal-hito--fill {
+  background: var(--sal-fill);
+  color: #fff;
+  box-shadow: var(--sal-lift);
+}
+
+.sal-hito--line {
+  background: var(--sal-paper);
+  color: var(--mrk-accent);
+}
+
+.sal-hito-av {
+  position: absolute;
+  top: -10px;
+  left: 20px;
+}
+
+.sal-hito-av .mrk-av {
+  display: flex;
+  box-shadow: 0 8px 14px -8px var(--mrk-glow-strong);
+}
+
+.sal-hito--line .mrk-av--hito {
+  border-color: var(--mrk-accent);
+}
+
+/* insignia del hito: se invierte respecto a la fila */
+.sal-hito-badge {
+  position: absolute;
+  right: -12px;
+  bottom: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.sal-hito--fill .sal-hito-badge {
+  background: #fff;
+  color: var(--mrk-gold);
+}
+
+.sal-hito--line .sal-hito-badge {
+  background: var(--sal-fill);
+  color: var(--sal-gold-fill);
+}
+
+.sal-hito-id {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.sal-hito-name {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1.05;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sal-hito-lbl {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sal-hito--fill .sal-hito-lbl { color: var(--sal-gold-fill); }
+.sal-hito--line .sal-hito-lbl { color: var(--sal-gold-line); }
+
+.sal-hito-val {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.sal-hito-val b {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sal-hito-val i {
+  font-size: 12px;
+  font-style: normal;
+  white-space: nowrap;
+}
+
+.sal-hito--fill .sal-hito-val i { color: var(--sal-on-fill-soft); }
+.sal-hito--line .sal-hito-val i { color: var(--mrk-lilac); }
+
+/* ── Estados: foco, presión y hover ── */
+.sal-medal:focus-visible,
+.sal-row:focus-visible,
+.sal-hito:focus-visible {
+  outline: 2px solid var(--mrk-accent);
+  outline-offset: 3px;
+}
+
+.sal-medal:active,
+.sal-row:active,
+.sal-hito:active {
+  transform: scale(.985);
+}
+
+@media (hover: hover) {
+  .sal-medal:hover,
+  .sal-row:hover,
+  .sal-hito:hover {
+    transform: translateY(-2px);
+  }
 }
 
 /* Empty HOF */
@@ -1680,13 +1558,24 @@
     font-size: 22px;
   }
 
-  .mrk-medallion-name {
-    font-size: 17px;
+  .sal-medal-name { font-size: 16px; }
+  .sal-medal-stat b { font-size: 17px; }
+
+  .sal-row {
+    grid-template-columns: 44px minmax(0, 1fr) repeat(3, 48px);
+    gap: 6px;
   }
 
-  .mrk-medallion-stat-val {
-    font-size: 15px;
-  }
+  .sal-row--compact { grid-template-columns: 36px minmax(0, 1fr) repeat(2, 48px); }
+  .sal-row-stat b { font-size: 15px; }
+
+  .mrk-av--row { width: 44px; height: 44px; }
+
+  .sal-hito { padding-left: 98px; }
+  .sal-hito-av { left: 16px; }
+  .mrk-av--hito { width: 68px; height: 68px; }
+  .sal-hito-name { font-size: 16px; }
+  .sal-hito-val b { font-size: 21px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1696,13 +1585,20 @@
 
   .mrk-pod,
   .mrk-item-li,
-  .mrk-stats-row {
+  .mrk-stats-row,
+  .mrk-salon,
+  .sal-rows > li,
+  .sal-hitos > li {
     animation: none;
   }
 
   .mrk-tab,
   .mrk-pod-who,
-  .mrk-item {
+  .mrk-item,
+  .mrk-hof-switch button,
+  .sal-medal,
+  .sal-row,
+  .sal-hito {
     transition: none;
   }
 }

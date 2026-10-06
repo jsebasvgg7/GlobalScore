@@ -17,6 +17,27 @@ const HOF_TYPE_CONFIG = {
   global: { Icon: Trophy, color: "#0ea5a8", unitLabel: "trofeos", periodLabel: "Edición" },
 };
 
+const MONTHS_ES = [
+  "enero", "febrero", "marzo", "abril", "mayo", "junio",
+  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+];
+
+/* "2026-01" → "26-01" (formato corto del mockup); otros formatos pasan tal cual */
+const shortPeriod = (p) => {
+  if (!p) return "—";
+  const m = /^(\d{4})-(\d{2})$/.exec(p);
+  return m ? `${m[1].slice(2)}-${m[2]}` : p;
+};
+
+/* Valor + unidad del hito "Primer campeón":
+   mensual "2026-01" → 2026 / enero · global "25/26" → 25/26 / temp. */
+const hitoPeriod = (p, hofType) => {
+  if (!p) return { big: "—", unit: "" };
+  const m = /^(\d{4})-(\d{2})$/.exec(p);
+  if (m) return { big: m[1], unit: MONTHS_ES[Number(m[2]) - 1] || "" };
+  return { big: p, unit: hofType === "global" ? "temp." : "" };
+};
+
 /* ── Avatar genérico ── */
 function MobAvatar({ user, size = "md" }) {
   const cls = `mrk-av mrk-av--${size}`;
@@ -119,6 +140,7 @@ function RankItem({ user, pos, isMe, index, onSelect }) {
      id             ← user_id
      name           ← join con public.users
      avatar_url     ← join con public.users
+     equipped_banner_url ← join con public.users (banner del medallón #1; opcional)
      points         ← MAX(points) del histórico de títulos de ese usuario
      period         ← month_year del título que se muestre
      championships  ← COUNT(*) de filas en monthly_championship_history
@@ -141,11 +163,10 @@ function MobSalonDeLaFama({ champions, onSelect, hofType }) {
 
   const leader = champions[0];
   const runnersUp = champions.slice(1, 5); // #2 a #5
-  const rest = champions.slice(5);
+  const rest = champions.slice(5); //          #6 en adelante
 
   if (!leader) return null;
 
-  /* accuracy real: misma fórmula que PanelStats / UserProfilePanel */
   const withStreak = champions.filter((c) => (c.best_streak || 0) > 0);
   const bestStreak = withStreak.length
     ? withStreak.reduce((best, c) => (c.best_streak > best.best_streak ? c : best))
@@ -160,140 +181,154 @@ function MobSalonDeLaFama({ champions, onSelect, hofType }) {
     ? withPeriod.reduce((first, c) => (c.period < first.period ? c : first))
     : null;
 
+  /* Hitos: filas alternadas relleno / contorno, siempre al final del Salón */
+  const hitos = [
+    firstChamp && {
+      key: "first", holder: firstChamp, Icon: Crown, label: "1er Campeón",
+      ...hitoPeriod(firstChamp.period, hofType),
+    },
+    bestStreak && {
+      key: "streak", holder: bestStreak, Icon: Flame, label: "Mejor Racha",
+      big: String(bestStreak.best_streak), unit: "pred.",
+    },
+    topScorer && {
+      key: "points", holder: topScorer, Icon: Target, label: "Máx puntos",
+      big: fmt(topScorer.points), unit: "pts",
+    },
+  ].filter(Boolean);
+
+  const bannerStyle = leader.equipped_banner_url
+    ? { "--banner": `url("${leader.equipped_banner_url}")` }
+    : undefined;
+
   return (
     <div className="mrk-salon">
 
-      {/* ── EL MEDALLÓN: pieza de identidad del Salón, no una card más ── */}
-      <div className="mrk-medallion-wrap">
-        <div className="mrk-medallion-ribbon" />
-        <button className="mrk-medallion" onClick={() => onSelect(leader.id)}>
-          <span className="mrk-medallion-tag">Leyenda suprema · #1</span>
-          <div className="mrk-medallion-av">
-            <MobAvatar user={leader} size="hof" />
-          </div>
-          <span className="mrk-medallion-name">{leader.name}</span>
-          <span className="mrk-medallion-title">El dominador</span>
-          <div className="mrk-medallion-crowns">
-            {Array.from({ length: Math.min(leader.championships || 0, 6) }).map((_, i) => (
-              <TypeIcon key={i} size={14} color="#1A1A2E" />
-            ))}
-          </div>
-          <div className="mrk-medallion-stats">
-            <div className="mrk-medallion-stat">
-              <span className="mrk-medallion-stat-val">{leader.championships || 0}</span>
-              <span className="mrk-medallion-stat-lbl">{cfg.unitLabel}</span>
-            </div>
-            <div className="mrk-medallion-stat">
-              <span className="mrk-medallion-stat-val">{fmt(leader.points)}</span>
-              <span className="mrk-medallion-stat-lbl">Max pts</span>
-            </div>
-            <div className="mrk-medallion-stat">
-              <span className="mrk-medallion-stat-val">{leader.period || "—"}</span>
-              <span className="mrk-medallion-stat-lbl">{cfg.periodLabel}</span>
-            </div>
-          </div>
+      {/* ── Leyenda suprema: banner + avatar + stats ── */}
+      <section aria-labelledby="sal-hero-title">
+        <h3 id="sal-hero-title" className="sal-title">Leyenda Suprema</h3>
+        <button className="sal-medal" onClick={() => onSelect(leader.id)}>
+          <span className="sal-medal-banner" style={bannerStyle}>
+            <span className="sal-medal-av">
+              <MobAvatar user={leader} size="sal" />
+              <span className="sal-chip">#1</span>
+            </span>
+          </span>
+          <span className="sal-medal-body">
+            <span className="sal-medal-id">
+              <span className="sal-medal-name">{leader.name}</span>
+              <span className="sal-medal-role">el dominador</span>
+            </span>
+            <span className="sal-medal-stats">
+              <span className="sal-medal-stat">
+                <b>{leader.championships || 0}</b>
+                <i>{cfg.unitLabel}</i>
+              </span>
+              <span className="sal-medal-stat">
+                <b>{fmt(leader.points)}</b>
+                <i>pts max</i>
+              </span>
+              <span className="sal-medal-stat">
+                <b>{shortPeriod(leader.period)}</b>
+                <i>{cfg.periodLabel}</i>
+              </span>
+            </span>
+          </span>
         </button>
-      </div>
+      </section>
 
-      {/* ── Grid 2x2: leyendas del salón (#2 a #5) ── */}
+      {/* ── Leyendas del salón (#2 a #5): filas horizontales ── */}
       {runnersUp.length > 0 && (
-        <div>
-          <div className="mrk-salon-section-lbl">
-            Leyendas del salón
-            <span className="mrk-salon-section-count">{runnersUp.length}</span>
-          </div>
-          <div className="mrk-salon-grid" style={{ marginTop: 10 }}>
-            {runnersUp.map((u, i) => {
-              const rank = i + 2;
-              const mod = rank === 2 ? "--2" : rank === 3 ? "--3" : "";
-              return (
-                <button
-                  key={u.id}
-                  className={`mrk-salon-card mrk-salon-card${mod}`}
-                  onClick={() => onSelect(u.id)}
-                >
-                  <span className="mrk-salon-card-pos">{rank}</span>
-                  <MobAvatar user={u} size="sm" />
-                  <span className="mrk-salon-card-name">{u.name}</span>
-                  <span className="mrk-salon-card-crown">
-                    <TypeIcon size={10} /> {u.championships || 0} {cfg.unitLabel}
+        <section aria-labelledby="sal-legends-title">
+          <h3 id="sal-legends-title" className="sal-title">Leyendas Del Salón</h3>
+          <ul className="sal-rows">
+            {runnersUp.map((u, i) => (
+              <li key={u.id} style={{ "--i": i }}>
+                <button className="sal-row" onClick={() => onSelect(u.id)}>
+                  <MobAvatar user={u} size="row" />
+                  <span className="sal-row-id">
+                    <span className="sal-row-name">{u.name}</span>
+                    <span className="sal-row-meta">
+                      <span className="sal-chip sal-chip--sm">#{i + 2}</span>
+                      <TypeIcon size={13} strokeWidth={1.75} aria-hidden="true" />
+                      {u.championships || 0}
+                    </span>
                   </span>
-                  <span className="mrk-salon-card-pts">{fmt(u.points)}</span>
-                  <span className="mrk-salon-card-pts-lbl">Max pts</span>
-                  <span className="mrk-salon-card-period">{cfg.periodLabel}: {u.period || "—"}</span>
+                  <span className="sal-row-stat">
+                    <b>{u.championships || 0}</b><i>{cfg.unitLabel}</i>
+                  </span>
+                  <span className="sal-row-stat">
+                    <b>{fmt(u.points)}</b><i>pts max</i>
+                  </span>
+                  <span className="sal-row-stat">
+                    <b>{shortPeriod(u.period)}</b><i>{cfg.periodLabel}</i>
+                  </span>
                 </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* ── Hitos del Salón: bento (primero destacado + 2 minis) ── */}
-      {(firstChamp || bestStreak || topScorer) && (
-        <div>
-          <div className="mrk-salon-section-lbl">Hitos del salón</div>
-          <div className="mrk-salon-hitos-bento" style={{ marginTop: 10 }}>
-            {firstChamp && (
-              <div className="mrk-salon-hito-bento mrk-salon-hito-bento--main mrk-salon-hito--gold">
-                <div className="mrk-salon-hito-top">
-                  <div className="mrk-salon-hito-icon"><Crown size={14} /></div>
-                  <span className="mrk-salon-hito-lbl">Primer campeón</span>
-                </div>
-                <span className="mrk-salon-hito-val mrk-salon-hito-val--lg">{firstChamp.period}</span>
-                <span className="mrk-salon-hito-name">{firstChamp.name}</span>
-              </div>
-            )}
-            <div className="mrk-salon-hito-bento-side">
-              {bestStreak && (
-                <div className="mrk-salon-hito-bento mrk-salon-hito--fire">
-                  <div className="mrk-salon-hito-top">
-                    <div className="mrk-salon-hito-icon"><Flame size={12} /></div>
-                    <span className="mrk-salon-hito-lbl">Mejor racha</span>
-                  </div>
-                  <span className="mrk-salon-hito-val">{bestStreak.best_streak}</span>
-                  <span className="mrk-salon-hito-name">{bestStreak.name}</span>
-                </div>
-              )}
-              {topScorer && (
-                <div className="mrk-salon-hito-bento mrk-salon-hito--target">
-                  <div className="mrk-salon-hito-top">
-                    <div className="mrk-salon-hito-icon"><Target size={12} /></div>
-                    <span className="mrk-salon-hito-lbl">Máx. puntuación</span>
-                  </div>
-                  <span className="mrk-salon-hito-val">{fmt(topScorer.points)}</span>
-                  <span className="mrk-salon-hito-name">{topScorer.name}</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── Tabla final: resto de campeones ── */}
-      {rest.length > 0 && (
-        <div>
-          <div className="mrk-salon-section-lbl">
-            Todos los campeones
-            <span className="mrk-salon-section-count">{rest.length}</span>
-          </div>
-          <div className="mrk-salon-table" style={{ marginTop: 10 }}>
-            <div className="mrk-salon-table-head">
-              <span />
-              <span className="mrk-salon-th-user">Jugador</span>
-              <span className="mrk-salon-th-num">Coronas</span>
-              <span className="mrk-salon-th-num">Max pts</span>
-            </div>
-            {rest.map((u, i) => (
-              <button key={u.id} className="mrk-salon-trow" onClick={() => onSelect(u.id)}>
-                <span className="mrk-salon-trow-pos">{i + 6}</span>
-                <MobAvatar user={u} size="sm" />
-                <span className="mrk-salon-trow-name">{u.name}</span>
-                <span className="mrk-salon-trow-num">{u.championships || 0}</span>
-                <span className="mrk-salon-trow-num">{fmt(u.points)}</span>
-              </button>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </section>
+      )}
+
+      {/* ── Resto de campeones: versión compacta de la misma fila ── */}
+      {rest.length > 0 && (
+        <section aria-labelledby="sal-rest-title">
+          <h3 id="sal-rest-title" className="sal-title">
+            Todos Los Campeones
+            <span className="sal-title-count">{rest.length}</span>
+          </h3>
+          <ul className="sal-rows">
+            {rest.map((u, i) => (
+              <li key={u.id} style={{ "--i": i }}>
+                <button className="sal-row sal-row--compact" onClick={() => onSelect(u.id)}>
+                  <MobAvatar user={u} size="rowc" />
+                  <span className="sal-row-id">
+                    <span className="sal-row-name">{u.name}</span>
+                    <span className="sal-row-meta">
+                      <span className="sal-chip sal-chip--sm">#{i + 6}</span>
+                    </span>
+                  </span>
+                  <span className="sal-row-stat">
+                    <b>{u.championships || 0}</b><i>{cfg.unitLabel}</i>
+                  </span>
+                  <span className="sal-row-stat">
+                    <b>{fmt(u.points)}</b><i>pts max</i>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* ── Hitos del salón: al final, filas alternadas con avatar del titular ── */}
+      {hitos.length > 0 && (
+        <section aria-labelledby="sal-hitos-title">
+          <h3 id="sal-hitos-title" className="sal-title">Hitos Del Salón</h3>
+          <ul className="sal-hitos">
+            {hitos.map(({ key, holder, Icon, label, big, unit }, i) => (
+              <li key={key} style={{ "--i": i }}>
+                <button
+                  className={`sal-hito ${i % 2 === 0 ? "sal-hito--fill" : "sal-hito--line"}`}
+                  onClick={() => onSelect(holder.id)}
+                >
+                  <span className="sal-hito-av">
+                    <MobAvatar user={holder} size="hito" />
+                    <span className="sal-hito-badge"><Icon size={15} strokeWidth={1.75} aria-hidden="true" /></span>
+                  </span>
+                  <span className="sal-hito-id">
+                    <span className="sal-hito-name">{holder.name}</span>
+                    <span className="sal-hito-lbl">{label}</span>
+                  </span>
+                  <span className="sal-hito-val">
+                    <b>{big}</b>
+                    {unit && <i>{unit}</i>}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
     </div>
   );
@@ -373,13 +408,13 @@ export default function MobileRanking({
               className={hofType === "monthly" ? "active" : ""}
               onClick={() => setHofType("monthly")}
             >
-              <Crown size={11} /><span>Mensual</span>
+              <Crown size={16} strokeWidth={1.75} /><span>Mensual</span>
             </button>
             <button
               className={hofType === "global" ? "active" : ""}
               onClick={() => setHofType("global")}
             >
-              <Trophy size={11} /><span>Global</span>
+              <Trophy size={16} strokeWidth={1.75} /><span>Global</span>
             </button>
           </div>
 
@@ -387,13 +422,13 @@ export default function MobileRanking({
           <div className="mrk-stats-row mrk-stats-row--hof">
             <div className="mrk-stat-block">
               <span className="mrk-stat-num">{activeChampions.length}</span>
-              <span className="mrk-stat-lbl">Campeones</span>
+              <span className="mrk-stat-lbl">campeones</span>
             </div>
             <div className="mrk-stat-block">
               <span className="mrk-stat-num">
                 {activeChampions.reduce((acc, c) => acc + (c.championships || 0), 0)}
               </span>
-              <span className="mrk-stat-lbl">{hofCfg.unitLabel.charAt(0).toUpperCase() + hofCfg.unitLabel.slice(1)}</span>
+              <span className="mrk-stat-lbl">{hofCfg.unitLabel}</span>
             </div>
           </div>
 
