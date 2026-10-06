@@ -10,15 +10,15 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap');
 
 .mst-root {
-  --m-bg: #F0EDE8;
-  --m-card: #EAE7E1;
-  --m-surface: #F5F2EC;
-  --m-border: #1A1A2E;
-  --m-border-hard: #1A1A2E;
-  --m-accent: #5b4fd8;
-  --m-accent-l: #8b7fc7;
-  --m-text: #1A1A2E;
-  --m-muted: #6B6580;
+  --m-bg: var(--gs-surface, #fff);
+  --m-card: var(--gs-surface, #fff);
+  --m-surface: var(--gs-surface, #fff);
+  --m-border: var(--gs-brand, #5b49ed);
+  --m-border-hard: var(--gs-brand, #5b49ed);
+  --m-accent: var(--gs-brand, #5b49ed);
+  --m-accent-l: var(--gs-brand-soft, #7c6ff0);
+  --m-text: var(--gs-brand, #5b49ed);
+  --m-muted: var(--gs-brand-soft, #7c6ff0);
   --m-mono: 'DM Mono', 'Courier New', monospace;
   --m-green: #1D9E75;
   --m-amber: #f59e0b;
@@ -108,7 +108,7 @@
   height: 5px;
   background: var(--m-accent);
   flex-shrink: 0;
-  box-shadow: 1px 1px 0 var(--m-accent-l);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .mst-range-pills {
@@ -312,7 +312,7 @@
   height: 5px;
   background: var(--m-accent);
   flex-shrink: 0;
-  box-shadow: 1px 1px 0 var(--m-accent-l);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .mst-sec-title {

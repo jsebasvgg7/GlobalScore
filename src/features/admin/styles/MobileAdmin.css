@@ -32,7 +32,7 @@
 }
 
 .mba-sheet {
-  background: #f0ede8;
+  background: var(--gs-surface, #fff);
   ;
   border-top: 3px solid var(--accent);
   max-height: 92dvh;
@@ -822,12 +822,12 @@
   transition: transform 0.15s, box-shadow 0.15s;
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
   -webkit-tap-highlight-color: transparent;
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .mba-fab:active {
   transform: translate(3px, 3px);
-  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .mba-color-grid {

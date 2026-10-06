@@ -14,15 +14,15 @@
 ════════════════════════════════════════════════ */
 
 .msp-page {
-  --msp-bg: #F0EDE8;
-  --msp-card: #EAE7E1;
-  --msp-surface: #F5F2EC;
-  --msp-border: #1A1A2E;
-  --msp-border-dark: #1A1A2E;
-  --msp-accent: #5b4fd8;
-  --msp-accent-l: #8b7fc7;
-  --msp-text: #1A1A2E;
-  --msp-muted: #6B6580;
+  --msp-bg: var(--gs-surface, #fff);
+  --msp-card: var(--gs-surface, #fff);
+  --msp-surface: var(--gs-surface, #fff);
+  --msp-border: var(--gs-brand, #5b49ed);
+  --msp-border-dark: var(--gs-brand, #5b49ed);
+  --msp-accent: var(--gs-brand, #5b49ed);
+  --msp-accent-l: var(--gs-brand-soft, #7c6ff0);
+  --msp-text: var(--gs-brand, #5b49ed);
+  --msp-muted: var(--gs-brand-soft, #7c6ff0);
   --msp-glass: rgba(91, 79, 216, .08);
   --msp-font: 'DM Mono', 'Courier New', monospace;
   --msp-sans: 'DM Mono', 'Courier New', monospace;
@@ -371,7 +371,7 @@
 .msp-cards-col .lc-card,
 .msp-cards-col .ac-card {
   width: 100% !important;
-  box-shadow: 2.5px 2.5px 0px var(--msp-shadow-color) !important;
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 /* ════════════════════════════════════════════════

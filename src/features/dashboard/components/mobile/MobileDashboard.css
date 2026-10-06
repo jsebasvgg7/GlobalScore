@@ -70,15 +70,15 @@
 ════════════════════════════════════════════════ */
 
 .mob2-root {
-  --m-bg: #F0EDE8;
-  --m-card: #EAE7E1;
-  --m-surface: #F5F2EC;
-  --m-border: #1A1A2E;
-  --m-border-hard: #1A1A2E;
-  --m-accent: #5b4fd8;
-  --m-accent-l: #8b7fc7;
-  --m-text: #1A1A2E;
-  --m-muted: #6B6580;
+  --m-bg: var(--gs-surface, #fff);
+  --m-card: var(--gs-surface, #fff);
+  --m-surface: var(--gs-surface, #fff);
+  --m-border: var(--gs-brand, #5b49ed);
+  --m-border-hard: var(--gs-brand, #5b49ed);
+  --m-accent: var(--gs-brand, #5b49ed);
+  --m-accent-l: var(--gs-brand-soft, #7c6ff0);
+  --m-text: var(--gs-brand, #5b49ed);
+  --m-muted: var(--gs-brand-soft, #7c6ff0);
   --m-glass: rgba(91, 79, 216, .08);
   --m-mono: 'DM Mono', 'Courier New', monospace;
   --m-green: #1D9E75;
@@ -441,7 +441,7 @@
   height: 5px;
   background: var(--m-accent);
   flex-shrink: 0;
-  box-shadow: 1px 1px 0 var(--m-accent-l);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .mob2-sec-all {
@@ -888,7 +888,7 @@
 .mob2-lc-input {
   background: var(--m-bg);
   border: 1px solid var(--m-border-hard);
-  box-shadow: inset 1px 1px 0px rgba(0, 0, 0, .07);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
   padding: 6px 9px;
   font-family: var(--m-mono);
   font-size: 9px;
@@ -905,14 +905,14 @@
   border-left: 2.5px solid var(--m-accent);
   color: var(--m-accent);
   font-weight: 700;
-  box-shadow: inset 1px 1px 0px rgba(91, 79, 216, .1);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .mob2-status-dot {
   width: 7px;
   height: 7px;
   flex-shrink: 0;
-  box-shadow: 1px 1px 0 rgba(0, 0, 0, .2);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 /* ── Carrusel full-width (Partidos/Ligas/Premios) ── */
@@ -978,7 +978,7 @@
 .mob2-fw-card--hero-amber .mob2-hero-tag,
 .mob2-fw-card--hero-amber .mob2-hero-meta,
 .mob2-fw-card--hero-amber .mob2-hero-date {
-  color: rgba(26, 26, 46, .65);
+  color: rgba(91, 73, 237, .65);
 }
 
 .mob2-fw-card--hero-amber .mob2-hero-tname,
@@ -1015,7 +1015,7 @@
 }
 
 .mob2-fw-card--small.mob2-fw-card--tint-amber .mob2-sm-tag {
-  color: rgba(26, 26, 46, .65);
+  color: rgba(91, 73, 237, .65);
 }
 
 .mob2-fw-card--small.mob2-fw-card--tint-amber .mob2-sm-title {
@@ -1023,7 +1023,7 @@
 }
 
 .mob2-fw-card--small.mob2-fw-card--tint-amber .mob2-sm-meta {
-  color: rgba(26, 26, 46, .55);
+  color: rgba(91, 73, 237, .55);
 }
 
 /* Card fantasma — placeholder decorativo, sin hover ni acción */
@@ -1536,7 +1536,7 @@
   font-size: 17px;
   border: 2px solid var(--m-gold);
   background: var(--m-accent);
-  box-shadow: 3px 3px 0 rgba(0, 0, 0, .2);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .mob2-pod-col--2nd .mob2-pod-av {
@@ -1545,7 +1545,7 @@
   font-size: 14px;
   border: 1.5px solid var(--m-silver);
   background: var(--m-accent-l);
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, .2);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .mob2-pod-col--3rd .mob2-pod-av {
@@ -1554,7 +1554,7 @@
   font-size: 12px;
   border: 1.5px solid var(--m-bronze);
   background: var(--m-accent-l);
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, .2);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .mob2-pod-name {
@@ -1596,7 +1596,7 @@
   background: var(--m-glass);
   padding: 1px 4px;
   letter-spacing: .1em;
-  box-shadow: 1px 1px 0 rgba(91, 79, 216, .3);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .mob2-pod-step {
@@ -1660,7 +1660,7 @@
   height: 3px;
   background: var(--m-bg);
   border: 1px solid var(--m-border-hard);
-  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .08);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
   margin-top: 6px;
 }
 
@@ -1775,7 +1775,7 @@
   height: 4px;
   background: var(--m-bg);
   border: 1px solid var(--m-border-hard);
-  box-shadow: inset 1px 1px 0 rgba(0,0,0,.08);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
   position: relative;
   overflow: visible;
 }
@@ -1795,7 +1795,7 @@
   height: 8px;
   border-radius: 0;
   background: var(--m-accent-l);
-  box-shadow: 2px 2px 0 var(--bru-shadow-color);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
   transition: left .7s cubic-bezier(.34,1.56,.64,1);
   pointer-events: none;
 }
@@ -2017,7 +2017,7 @@
   background: #fff;
   border-radius: 50%;
   border: 2px solid #fff;
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, .25);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
   overflow: hidden;
 }
 

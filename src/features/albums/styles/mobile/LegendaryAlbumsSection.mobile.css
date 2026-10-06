@@ -41,13 +41,7 @@
   .las2-card:not(:disabled):not(.las2-card--locked):hover {
     transform: none;
     box-shadow:
-      inset 18px 0 0 0 var(--spine, #5b4fd8),
-      inset 19px 0 0 0 color-mix(in srgb, var(--spine, #5b4fd8) 60%, black),
-      inset 22px 0 12px -10px rgba(0, 0, 0, 0.55),
-      inset 5px 0 4px -2px rgba(255, 255, 255, 0.12),
-      4px 8px 0 rgba(0, 0, 0, 0.35),
-      8px 18px 30px rgba(0, 0, 0, 0.28),
-      inset -2px 0 0 0 rgba(var(--acc-rgb, 165, 153, 217), 0.45);
+      inset 18px 0 0 0 var(--spine, #5b4fd8), inset 19px 0 0 0 color-mix(in srgb, var(--spine, #5b4fd8) 60%, black), inset 22px 0 12px -10px rgba(0, 0, 0, 0.55), inset 5px 0 4px -2px rgba(255, 255, 255, 0.12), 0 3px 8px rgba(91, 73, 237, .16), 8px 18px 30px rgba(0, 0, 0, 0.28), inset -2px 0 0 0 rgba(var(--acc-rgb, 165, 153, 217), 0.45);
   }
 
   .las2-card-number {

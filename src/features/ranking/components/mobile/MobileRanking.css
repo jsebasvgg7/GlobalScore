@@ -49,18 +49,18 @@
 ════════════════════════════════════════════════ */
 
 .mrk-root {
-  --mrk-bg: #F0EDE8;
-  --mrk-card: #EAE7E1;
-  --mrk-stats-row: #F5F2EC;
-  --mrk-surface: #F5F2EC;
-  --mrk-border: #5b4fd8;
-  --mrk-border-hard: #5b4fd8;
-  --mrk-accent: #5b4fd8;
-  --mrk-accent-light: #8b7fc7;
+  --mrk-bg: var(--gs-surface, #fff);
+  --mrk-card: var(--gs-surface, #fff);
+  --mrk-stats-row: var(--gs-surface, #fff);
+  --mrk-surface: var(--gs-surface, #fff);
+  --mrk-border: var(--gs-brand, #5b49ed);
+  --mrk-border-hard: var(--gs-brand, #5b49ed);
+  --mrk-accent: var(--gs-brand, #5b49ed);
+  --mrk-accent-light: var(--gs-brand-soft, #7c6ff0);
   --mrk-accent-subtle: rgba(91, 79, 216, .08);
   --mrk-accent-border: rgba(91, 79, 216, .35);
-  --mrk-text: #1E1A4D;
-  --mrk-muted: #6A60B5;
+  --mrk-text: var(--gs-brand, #5b49ed);
+  --mrk-muted: var(--gs-brand-soft, #7c6ff0);
   --mrk-mono: 'Space Mono', 'DM Mono', 'Courier New', monospace;
   --mrk-sans: var(--mrk-mono);
   --mrk-gold: #c9a227;
@@ -77,14 +77,14 @@
   --mrk-shadow: 2.5px 2.5px 0px var(--mrk-shadow-color);
   --mrk-shadow-sm: 1.5px 1.5px 0px var(--mrk-shadow-color);
   --mrk-shadow-card: 3px 3px 0px var(--mrk-shadow-color);
-  --mrk-border-soft: rgba(91, 79, 216, .30);
+  --mrk-border-soft: rgba(91, 73, 237, .22);
   --mrk-brand-fill: #5b4fd8;
 
   /* nuevos — podio y lista */
   --mrk-line: #5b4fd8;
   --mrk-row-line: #5b4fd8;
   --mrk-lilac: #6F63D1;
-  --mrk-sheet-bg: #F5F2EC;
+  --mrk-sheet-bg: var(--gs-surface, #fff);
   --mrk-glow: rgba(91, 79, 216, .22);
   --mrk-glow-strong: rgba(91, 79, 216, .70);
 }
@@ -151,8 +151,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 16px 8px;
+  padding: 12px 16px 12px;
   background: var(--mrk-bg);
+  border-bottom: 1px solid var(--gs-brand, #5b49ed);
   flex-shrink: 0;
   position: sticky;
   top: 60px;
@@ -173,7 +174,7 @@
   letter-spacing: -.01em;
   color: var(--mrk-lilac);
   background: var(--mrk-surface);
-  border: 0;
+  border: 1px solid var(--mrk-border);
   border-radius: 0;
   box-shadow: 0 8px 16px -10px var(--mrk-glow);
   cursor: pointer;
@@ -211,7 +212,7 @@
    Papel blanco para filas y bloques; el fondo de la página no cambia.
    En oscuro el "papel" pasa a la superficie del tema. */
 .mrk-hof-zone {
-  --sal-paper: #fff;
+  --sal-paper: var(--gs-surface, #fff);
   --sal-fill: var(--mrk-brand-fill);
   --sal-on-fill-soft: #CFC9FA;
   --sal-gold-fill: #E3C47A;

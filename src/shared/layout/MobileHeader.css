@@ -23,8 +23,8 @@
   --mhd-red: #E24B4A;
   --mhd-mono: var(--gs-font, 'Space Mono', ui-monospace, monospace);
   --mhd-r: 0px;
-  --mhd-lift: 0 4px 14px rgba(91, 73, 237, .14);
-  --mhd-lift-up: 0 -4px 14px rgba(91, 73, 237, .12);
+  --mhd-lift: 0 1px 6px rgba(91, 73, 237, .10);
+  --mhd-lift-up: 0 -1px 6px rgba(91, 73, 237, .10);
   --mhd-shadow: 0 4px 10px rgba(91, 73, 237, .35);
   --mhd-shadow-sm: none;
   --mhd-shadow-active: none;

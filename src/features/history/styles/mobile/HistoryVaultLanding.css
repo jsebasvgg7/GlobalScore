@@ -9,14 +9,14 @@
 
 /* ── Tokens locales ──── */
 .hvl {
-    --hvl-cream: #F5F0E8;
-    --hvl-black: #1A1A1A;
+    --hvl-cream: var(--gs-surface, #fff);
+    --hvl-black: var(--gs-brand, #5b49ed);
     --hvl-purple: #6C5CE7;
     --hvl-gold: #F4B942;
     --hvl-green: #00B894;
-    --hvl-border: 1.5px solid rgba(26, 26, 26, 0.65);
-    --hvl-shadow: 2px 2px 0 rgba(26, 26, 26, 0.18);
-    --hvl-shadow-card: 2px 2px 0 rgba(26, 26, 26, 0.14);
+    --hvl-border: 1.5px solid var(--gs-brand, #5b49ed);
+    --hvl-shadow: 2px 2px 0 rgba(91, 73, 237, 0.18);
+    --hvl-shadow-card: 2px 2px 0 rgba(91, 73, 237, 0.14);
     --hvl-radius: 0;
 
     font-family: 'DM Mono', 'Courier New', monospace;
@@ -44,7 +44,7 @@
     display: inline-block;
     width: 32px;
     height: 32px;
-    border: 2px solid rgba(26, 26, 26, 0.15);
+    border: 2px solid rgba(91, 73, 237, 0.15);
     border-top-color: #6C5CE7;
     border-right-color: #6C5CE7;
     border-radius: 0;
@@ -56,7 +56,7 @@
     font-size: 0.7rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(26, 26, 26, 0.5);
+    color: rgba(91, 73, 237, 0.5);
     animation: hvl-label-fade 1.2s ease-in-out infinite;
 }
 
@@ -98,7 +98,7 @@
     background: var(--hvl-purple);
     color: #fff;
     padding: 0.2rem 0.5rem;
-    border: 1.5px solid rgba(26, 26, 26, 0.65);
+    border: 1.5px solid rgba(91, 73, 237, 0.65);
 }
 
 .hvl__breadcrumb-sep {
@@ -334,7 +334,7 @@
     width: 24px;
     height: 5px;
     background: rgba(0, 0, 0, 0.1);
-    border: 1.5px solid rgba(26, 26, 26, 0.3);
+    border: 1.5px solid rgba(91, 73, 237, 0.3);
     cursor: pointer;
     padding: 0;
     transition: background 0.2s, width 0.2s;
@@ -407,7 +407,7 @@
 
 .hvl__section-card:active {
     transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0 rgba(26, 26, 26, 0.2);
+    box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .hvl__section-icon {
@@ -500,7 +500,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1.5px solid rgba(26, 26, 26, 0.5);
+    border: 1.5px solid rgba(91, 73, 237, 0.5);
 }
 
 .hvl__teams-see-all-icon svg {
@@ -583,7 +583,7 @@
 @media (prefers-reduced-motion: reduce) {
     .hvl-loading__spinner {
         animation: none;
-        border-top-color: rgba(26, 26, 26, 0.5);
+        border-top-color: rgba(91, 73, 237, 0.5);
     }
 
     .hvl-loading__text {
@@ -604,9 +604,9 @@
     width: 36px;
     height: 14px;
     background: linear-gradient(90deg,
-            rgba(26, 26, 26, 0.08) 25%,
-            rgba(26, 26, 26, 0.14) 50%,
-            rgba(26, 26, 26, 0.08) 75%);
+            rgba(91, 73, 237, 0.08) 25%,
+            rgba(91, 73, 237, 0.14) 50%,
+            rgba(91, 73, 237, 0.08) 75%);
     background-size: 200% 100%;
     animation: hvl-shimmer 1.2s ease-in-out infinite;
     margin-bottom: 2px;
@@ -625,6 +625,6 @@
 @media (prefers-reduced-motion: reduce) {
     .hvl__stat-skeleton {
         animation: none;
-        background: rgba(26, 26, 26, 0.1);
+        background: rgba(91, 73, 237, 0.1);
     }
 }

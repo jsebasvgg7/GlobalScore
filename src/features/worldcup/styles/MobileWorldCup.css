@@ -10,15 +10,15 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 .mwc-root {
-  --mwc-bg: #f0ede8;
-  --mwc-card: #e8e4de;
-  --mwc-surface: #fff;
-  --mwc-border: rgba(196, 191, 184, .55);
-  --mwc-border-h: #c4bfb8;
-  --mwc-text: #1a1a2e;
-  --mwc-muted: #888780;
-  --mwc-accent: #5b4fd8;
-  --mwc-accent-l: #8b7fc7;
+  --mwc-bg: var(--gs-surface, #fff);
+  --mwc-card: var(--gs-surface, #fff);
+  --mwc-surface: var(--gs-surface, #fff);
+  --mwc-border: var(--gs-brand, #5b49ed);
+  --mwc-border-h: var(--gs-brand, #5b49ed);
+  --mwc-text: var(--gs-brand, #5b49ed);
+  --mwc-muted: var(--gs-brand-soft, #7c6ff0);
+  --mwc-accent: var(--gs-brand, #5b49ed);
+  --mwc-accent-l: var(--gs-brand-soft, #7c6ff0);
   --mwc-glass: rgba(91, 79, 216, .08);
   --mwc-accent-border: rgba(91, 79, 216, .25);
   --mwc-gold: #c9a227;
@@ -130,7 +130,7 @@
   height: 50px;
   min-height: 50px;
   background: var(--mwc-card);
-  border-bottom: 0.5px solid var(--mwc-border);
+  border-bottom: 1px solid var(--gs-brand, #5b49ed);
   position: sticky;
   top: 56px;
   z-index: 50;
@@ -197,7 +197,7 @@
   gap: 7px;
   padding: 10px 20px;
   background: var(--mwc-accent);
-  border: 1px solid var(--mwc-border-h, #1A1A2E);
+  border: 1px solid var(--mwc-border-h, var(--gs-brand, #5b49ed));
   box-shadow: var(--mwc-shadow-sm);
   font-size: 11px;
   font-weight: 700;
@@ -286,7 +286,7 @@
   width: 31px;
   height: 31px;
   background: var(--mwc-accent);
-  border: 1px solid var(--mwc-border-h, #1A1A2E);
+  border: 1px solid var(--mwc-border-h, var(--gs-brand, #5b49ed));
   box-shadow: var(--mwc-shadow-sm);
   color: #fff;
   display: flex;
@@ -312,7 +312,7 @@
   font-size: 14px;
   font-weight: 800;
   font-family: var(--mwc-mono);
-  border: 1px solid var(--mwc-border-h, #1A1A2E);
+  border: 1px solid var(--mwc-border-h, var(--gs-brand, #5b49ed));
   background: var(--mwc-card);
   color: var(--mwc-text);
   outline: none;
@@ -627,7 +627,7 @@
 
 .mwc-rnk-sm--q {
   background: var(--mwc-green);
-  border: 1px solid var(--mwc-border-h, #1A1A2E);
+  border: 1px solid var(--mwc-border-h, var(--gs-brand, #5b49ed));
   box-shadow: var(--mwc-shadow-sm);
   color: #fff;
 }
@@ -815,7 +815,7 @@
 
 .mwc-award-input:focus {
   background: var(--mwc-accent-subtle, rgba(91, 79, 216, .06));
-  box-shadow: inset 2px 2px 0px var(--mwc-shadow-color);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .mwc-award-input::placeholder {

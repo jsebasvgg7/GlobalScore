@@ -42,14 +42,14 @@
 ════════════════════════════════════════════════ */
 
 .mnv-root {
-  --mnv-bg: #F0EDE8;
-  --mnv-card: #EAE7E1;
-  --mnv-surface: #F5F2EC;
-  --mnv-border-hard: #1A1A2E;
-  --mnv-accent: #5b4fd8;
-  --mnv-accent-l: #8b7fc7;
-  --mnv-text: #1A1A2E;
-  --mnv-muted: #6B6580;
+  --mnv-bg: var(--gs-surface, #fff);
+  --mnv-card: var(--gs-surface, #fff);
+  --mnv-surface: var(--gs-surface, #fff);
+  --mnv-border-hard: var(--gs-brand, #5b49ed);
+  --mnv-accent: var(--gs-brand, #5b49ed);
+  --mnv-accent-l: var(--gs-brand-soft, #7c6ff0);
+  --mnv-text: var(--gs-brand, #5b49ed);
+  --mnv-muted: var(--gs-brand-soft, #7c6ff0);
   --mnv-glass: rgba(91, 79, 216, .08);
   --mnv-mono: 'DM Mono', 'Courier New', monospace;
   --mnv-green: #1D9E75;

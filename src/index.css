@@ -6957,3 +6957,34 @@ button {
 [data-theme="dark"] * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+/* ================================================================
+   ORIGINS (mobile) — fondo blanco + líneas moradas
+   Solo ≤768px y solo tema claro: desktop y dark no cambian.
+   Cubre pantallas que usan los tokens globales (--bg, --card, …).
+================================================================ */
+@media (max-width: 768px) {
+  [data-theme="light"] {
+    --bg: var(--gs-surface, #fff);
+    --card: var(--gs-surface, #fff);
+    --input-bg: var(--gs-surface, #fff);
+    --input-border: rgba(91, 73, 237, .35);
+    --border: rgba(91, 73, 237, .22);
+    --text-primary: var(--gs-brand, #5b49ed);
+    --text-secondary: var(--gs-brand-soft, #7c6ff0);
+    --muted: var(--gs-brand-soft, #7c6ff0);
+    --accent: var(--gs-brand, #5b49ed);
+    --accent-light: var(--gs-brand-soft, #7c6ff0);
+    --shadow: 0 4px 10px rgba(91, 73, 237, .16);
+    --small-shadow: 0 2px 6px rgba(91, 73, 237, .14);
+  }
+
+  [data-theme="light"] body,
+  [data-theme="light"] #root,
+  [data-theme="light"] .db-root,
+  [data-theme="light"] .alp-root,
+  [data-theme="light"] .apn-root,
+  [data-theme="light"] .np-page {
+    background: var(--gs-surface, #fff);
+  }
+}

@@ -48,14 +48,14 @@
 ════════════════════════════════════════════════ */
 
 .mn-root {
-  --mn-bg: #F0EDE8;
-  --mn-card: #EAE7E1;
-  --mn-surface: #F5F2EC;
-  --mn-border-hard: #1A1A2E;
-  --mn-accent: #5b4fd8;
-  --mn-accent-l: #8b7fc7;
-  --mn-text: #1A1A2E;
-  --mn-muted: #6B6580;
+  --mn-bg: var(--gs-surface, #fff);
+  --mn-card: var(--gs-surface, #fff);
+  --mn-surface: var(--gs-surface, #fff);
+  --mn-border-hard: var(--gs-brand, #5b49ed);
+  --mn-accent: var(--gs-brand, #5b49ed);
+  --mn-accent-l: var(--gs-brand-soft, #7c6ff0);
+  --mn-text: var(--gs-brand, #5b49ed);
+  --mn-muted: var(--gs-brand-soft, #7c6ff0);
   --mn-mono: 'DM Mono', 'Courier New', monospace;
   --mn-green: #1D9E75;
   --mn-red: #E24B4A;
@@ -239,7 +239,7 @@
   height: 32px;
   background: #fff;
   border: 1px solid var(--mn-border-hard);
-  box-shadow: 1.5px 1.5px 0px rgba(0, 0, 0, .35);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
   color: var(--mn-accent);
   display: flex;
   align-items: center;
@@ -250,7 +250,7 @@
 }
 
 .mn-new-btn:active {
-  box-shadow: 1px 1px 0px rgba(0, 0, 0, .35);
+  box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
   transform: translate(1px, 1px);
 }
 
@@ -749,7 +749,7 @@
 .mn-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(26, 26, 46, .55);
+  background: rgba(91, 73, 237, .55);
   z-index: 9999;
   display: flex;
   align-items: flex-end;

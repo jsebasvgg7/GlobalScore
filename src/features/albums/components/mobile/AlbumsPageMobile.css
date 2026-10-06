@@ -13,18 +13,18 @@
    TOKENS — dark (default)
 ══════════════════════════════════════════════ */
 .alb-mob-root {
-    --mob-bg: #13111A;
-    --mob-card: #1A1824;
-    --mob-card-alt: #1F1D2C;
-    --mob-surface: #221F2E;
-    --mob-border: #38334F;
-    --mob-border-soft: rgba(56, 51, 79, 0.55);
+    --mob-bg: var(--gs-surface, #fff);
+    --mob-card: var(--gs-surface, #fff);
+    --mob-card-alt: #f6f4ff;
+    --mob-surface: var(--gs-surface, #fff);
+    --mob-border: var(--gs-brand, #5b49ed);
+    --mob-border-soft: rgba(91, 73, 237, .22);
 
-    --mob-text: #F0EDF8;
-    --mob-text-sec: #B8B0D0;
-    --mob-muted: #6E6680;
+    --mob-text: var(--gs-brand, #5b49ed);
+    --mob-text-sec: var(--gs-brand-soft, #7c6ff0);
+    --mob-muted: var(--gs-brand-soft, #7c6ff0);
 
-    --mob-accent: #8B7FC7;
+    --mob-accent: var(--gs-brand, #5b49ed);
     --mob-accent-dim: #60519b;
     --mob-accent-pale: rgba(139, 127, 199, 0.12);
 
@@ -44,18 +44,18 @@
    Cuando el html/body tiene [data-theme="light"]
 ══════════════════════════════════════════════ */
 [data-theme="light"] .alb-mob-root {
-    --mob-bg: #f0ede8;
-    --mob-card: #ffffff;
-    --mob-card-alt: #f5f3ef;
-    --mob-surface: #eae7e0;
-    --mob-border: #d4cfc8;
-    --mob-border-soft: rgba(212, 207, 200, 0.7);
+    --mob-bg: var(--gs-surface, #fff);
+    --mob-card: var(--gs-surface, #fff);
+    --mob-card-alt: #f6f4ff;
+    --mob-surface: var(--gs-surface, #fff);
+    --mob-border: var(--gs-brand, #5b49ed);
+    --mob-border-soft: rgba(91, 73, 237, .22);
 
-    --mob-text: #1a1726;
-    --mob-text-sec: #4a4560;
-    --mob-muted: #9b96b0;
+    --mob-text: var(--gs-brand, #5b49ed);
+    --mob-text-sec: var(--gs-brand-soft, #7c6ff0);
+    --mob-muted: var(--gs-brand-soft, #7c6ff0);
 
-    --mob-accent: #5b4fd8;
+    --mob-accent: var(--gs-brand, #5b49ed);
     --mob-accent-dim: #3d34a5;
     --mob-accent-pale: rgba(91, 79, 216, 0.08);
 
@@ -93,7 +93,7 @@
     padding: 12px 16px;
     padding-top: calc(12px + env(safe-area-inset-top, 0px));
     background: var(--mob-bg);
-    border-bottom: 1px solid var(--mob-border);
+    border-bottom: 1px solid var(--gs-brand, #5b49ed);
     position: sticky;
     top: 0;
     z-index: 50;
@@ -157,7 +157,7 @@
 
 .alb-mob-open-btn:active {
     transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--mob-accent-dim);
+    box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 @keyframes alb-mob-pulse {
@@ -168,7 +168,7 @@
     }
 
     50% {
-        box-shadow: 3px 3px 0 var(--mob-accent-dim), 0 0 14px rgba(139, 127, 199, 0.2);
+        box-shadow: 0 3px 8px rgba(91, 73, 237, .16), 0 0 14px rgba(139, 127, 199, 0.2);
     }
 }
 
@@ -384,7 +384,7 @@
 
 .alb-mob-btn-primary:active {
     transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--mob-accent-dim);
+    box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .alb-mob-btn-secondary {
@@ -406,7 +406,7 @@
 
 .alb-mob-btn-secondary:active {
     transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--mob-border);
+    box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .alb-mob-scroll-handle {
@@ -534,7 +534,7 @@
 
 .alb-mob-packs-hero-btn:active {
     transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--mob-accent-dim);
+    box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 /* ══════════════════════════════════════════════
@@ -614,14 +614,14 @@
     background: var(--mob-accent-dim);
     border-color: var(--mob-accent);
     color: #fff;
-    box-shadow: 2px 2px 0 var(--mob-border);
+    box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .alb-mob-season-node--current {
     background: var(--mob-surface);
     border-color: var(--mob-accent);
     color: var(--mob-accent);
-    box-shadow: 2px 2px 0 var(--mob-accent-dim);
+    box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .alb-mob-season-node-label {
@@ -926,7 +926,7 @@
 
 .alb-mob-album-card:active {
     transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--mob-border);
+    box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
 }
 
 .alb-mob-album-card--locked {
@@ -1110,7 +1110,7 @@
 .alb-mob-snav {
     display: flex;
     background: var(--mob-bg);
-    border-bottom: 1px solid var(--mob-border);
+    border-bottom: 1px solid var(--gs-brand, #5b49ed);
     overflow-x: auto;
     scrollbar-width: none;
     flex-shrink: 0;

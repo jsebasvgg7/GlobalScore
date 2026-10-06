@@ -416,14 +416,14 @@
         cursor: pointer;
         max-width: none;
         width: 100%;
-        box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.25);
+        box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
         transition: background 0.12s, transform 0.10s, box-shadow 0.10s;
     }
 
     .pom2-btn-again:hover {
         background: var(--pom2-accent-dark);
         transform: translate(-1px, -1px);
-        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.30);
+        box-shadow: 0 3px 8px rgba(91, 73, 237, .16);
     }
 
     .pom2-btn-collection {
