@@ -1387,7 +1387,7 @@
   gap: 10px;
   width: 100%;
   min-height: 88px;
-  padding: 10px 14px 10px 112px;
+  padding: 10px 14px 10px 130px;
   border: 1.5px solid var(--mrk-accent);
   font: inherit;
   text-align: left;
@@ -1571,7 +1571,7 @@
 
   .mrk-av--row { width: 44px; height: 44px; }
 
-  .sal-hito { padding-left: 98px; }
+  .sal-hito { padding-left: 116px; }
   .sal-hito-av { left: 16px; }
   .mrk-av--hito { width: 68px; height: 68px; }
   .sal-hito-name { font-size: 16px; }
