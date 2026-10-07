@@ -857,10 +857,10 @@ El feature más ambicioso de GlobalScore: un sistema completo de figuritas colec
 
 ## 📞 Contacto
 
-**Hermanos Vega** — Desarrolladores
+**Hermanos Vega Gonzalez** — Desarrollador & Diseñador
 
 - 📧 Email: [globalscore.oficial@gmail.com](mailto:globalscore.oficial@gmail.com)
-- 🌐 Web: [https://globalscore.onrender.com/app](https://globalscore.onrender.com/app)
+- 🌐 Web: [https://globalscore.me/app](https://globalscore.me/app)
 
 **Repositorio**: [https://github.com/jsebasvgg7/GlobalScore](https://github.com/jsebasvgg7/GlobalScore)
 
@@ -868,7 +868,7 @@ El feature más ambicioso de GlobalScore: un sistema completo de figuritas colec
 
 ## 🫱🏼‍🫲🏼 Colaboradores
 
-- [The Brainy](https://www.instagram.com/brainy_bh) — Diseño y feedback
+- [The Brainy](https://www.instagram.com/brainy_bh) — feedback
 
 ---
 
