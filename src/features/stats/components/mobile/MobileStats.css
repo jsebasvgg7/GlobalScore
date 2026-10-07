@@ -33,6 +33,7 @@
 
   font-family: var(--m-mono);
   background: var(--m-bg);
+  container-type: inline-size;
   padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
 }
 
@@ -124,27 +125,36 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-wrap: nowrap;
+  gap: 8px;
   padding: 18px 20px 0;
 }
 
 .mst-title {
-  font-size: 17px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 15px;
+  font-size: clamp(14px, 4.4cqw, 17px);
   font-weight: 700;
   letter-spacing: -.01em;
 }
 
 .mst-range {
   display: flex;
-  gap: 5px;
+  flex-shrink: 0;
+  gap: 4px;
 }
 
 .mst-range-pill {
   font-family: var(--m-mono);
-  font-size: 11.5px;
+  font-size: 10.5px;
+  font-size: clamp(10px, 3cqw, 11.5px);
   font-weight: 700;
-  padding: 7px 9px;
+  padding: 7px 7px;
+  padding: 7px clamp(6px, 2.4cqw, 9px);
+  white-space: nowrap;
   border: 1.5px solid var(--m-border-hard);
   background: var(--m-card);
   color: var(--m-accent);
