@@ -8,7 +8,7 @@ import {
   Heart, Globe, Activity, Shield, Gamepad2,
   Calendar, CheckCircle2, XCircle, Clock,
   ArrowUpDown, Image, Check, Save, X,
-  Filter, LogOut,
+  Filter, LogOut, Flag, ChevronDown,
 } from "lucide-react";
 import AvatarUpload from "../AvatarUpload";
 import { MobileNotes } from '@/features/notes';
@@ -89,23 +89,30 @@ function NavRow({ icon: Icon, label, desc, onClick, right, className = "" }) {
    SUB-VIEW WRAPPER (header + body)
 ══════════════════════════════════════════ */
 function MobileSubView({ tabId, onBack, children }) {
+  /* "edit" conserva el header global (nombre, tema, notificaciones)
+     y no usa el sub-header propio con flecha/título. */
+  const keepGlobalHeader = tabId === "edit";
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
+    if (keepGlobalHeader) return undefined;
     const header = document.querySelector(".mhd-header");
     if (header) header.style.display = "none";
     return () => {
       if (header) header.style.display = "";
     };
-  }, []);
+  }, [keepGlobalHeader]);
 
   return (
-    <div className="mpm-sub">
-      <div className="mpm-sub-hdr">
-        <button className="mpm-sub-back" onClick={onBack}>
-          <ArrowLeft size={20} />
-        </button>
-        <h2 className="mpm-sub-title">{TAB_LABELS[tabId] || ""}</h2>
-      </div>
+    <div className={`mpm-sub${keepGlobalHeader ? " mpm-sub--edit" : ""}`}>
+      {!keepGlobalHeader && (
+        <div className="mpm-sub-hdr">
+          <button className="mpm-sub-back" onClick={onBack}>
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="mpm-sub-title">{TAB_LABELS[tabId] || ""}</h2>
+        </div>
+      )}
       <div className="mpm-sub-body">{children}</div>
     </div>
   );
@@ -445,6 +452,19 @@ function HistoryTab({ predictionHistory, historyLoading }) {
 /* ══════════════════════════════════════════
    TAB: EDIT
 ══════════════════════════════════════════ */
+/* Campo con bloque de ícono (mismo estilo para input, select y textarea) */
+function FieldBox({ id, label, icon: Icon, area = false, className = "", children }) {
+  return (
+    <div className={`mpm-field ${className}`.trim()}>
+      <label className="mpm-field-label" htmlFor={id}>{label}</label>
+      <div className={`mpm-field-box${area ? " mpm-field-box--area" : ""}`}>
+        <span className="mpm-field-icon"><Icon size={16} /></span>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function EditTab({
   userData, setUserData, currentUser,
   loading, handleSave, handleAvatarUpload,
@@ -469,31 +489,113 @@ function EditTab({
     finally { setBannersLoading(false); }
   };
 
-  const fields = [
-    { key: "name", label: "Nombre", icon: User, placeholder: "Tu nombre" },
-    { key: "favorite_team", label: "Equipo favorito", icon: Trophy, placeholder: "Ej: Real Madrid" },
-    { key: "favorite_player", label: "Jugador favorito", icon: Heart, placeholder: "Ej: Messi" },
-    { key: "nationality", label: "Nacionalidad", icon: Globe, placeholder: "Ej: Colombia" },
-  ];
+  const set = (key) => (e) => setUserData({ ...userData, [key]: e.target.value });
+  const handleBack = () => { loadUserData(); onBack(); };
+  const displayName = userData.name?.trim() || currentUser?.name || "Jugador";
 
   return (
-    <div className="mpm-tab-content">
+    <div className="mpm-tab-content mpm-edit">
+      <button
+        type="button"
+        className="mpm-edit-back"
+        onClick={handleBack}
+        aria-label="Volver"
+      >
+        <ArrowLeft size={18} />
+      </button>
+
       <div className="mpm-edit-avatar">
         <AvatarUpload
+          variant="field"
           currentUrl={userData.avatar_url}
           userId={currentUser.id}
           onUploadComplete={handleAvatarUpload}
           userLevel={userData.level}
         />
+        <h3 className="mpm-edit-username">{displayName}</h3>
       </div>
 
-      <div className="mpm-form-group">
-        <label className="mpm-form-label"><Image size={13} /> Banner de Perfil</label>
+      <FieldBox id="edit-name" label="Nombre" icon={User}>
+        <input
+          id="edit-name"
+          type="text"
+          className="mpm-field-input"
+          value={userData.name || ""}
+          onChange={set("name")}
+          placeholder="Ingresa tu alias"
+        />
+      </FieldBox>
+
+      <FieldBox id="edit-nationality" label="Nacionalidad" icon={Flag}>
+        <input
+          id="edit-nationality"
+          type="text"
+          className="mpm-field-input"
+          value={userData.nationality || ""}
+          onChange={set("nationality")}
+          placeholder="Ingresa tu país"
+        />
+      </FieldBox>
+
+      <div className="mpm-field-row">
+        <FieldBox id="edit-player" label="Jugador fav." icon={Heart}>
+          <input
+            id="edit-player"
+            type="text"
+            className="mpm-field-input"
+            value={userData.favorite_player || ""}
+            onChange={set("favorite_player")}
+            placeholder="Ej: Messi"
+          />
+        </FieldBox>
+        <FieldBox id="edit-team" label="Equipo fav." icon={Shield}>
+          <input
+            id="edit-team"
+            type="text"
+            className="mpm-field-input"
+            value={userData.favorite_team || ""}
+            onChange={set("favorite_team")}
+            placeholder="Ej: Barca"
+          />
+        </FieldBox>
+      </div>
+
+      <FieldBox id="edit-gender" label="Género" icon={User}>
+        <select
+          id="edit-gender"
+          className="mpm-field-input mpm-field-select"
+          data-empty={!userData.gender}
+          value={userData.gender || ""}
+          onChange={set("gender")}
+        >
+          <option value="">Seleccionar...</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+          <option value="Otro">Otro</option>
+          <option value="Prefiero no decir">Prefiero no decir</option>
+        </select>
+        <ChevronDown size={18} className="mpm-field-chevron" />
+      </FieldBox>
+
+      <FieldBox id="edit-bio" label="Biografía" icon={NotebookPen} area>
+        <textarea
+          id="edit-bio"
+          className="mpm-field-input mpm-field-textarea"
+          rows={3}
+          value={userData.bio || ""}
+          onChange={set("bio")}
+          placeholder="Ingresa una descripción..."
+        />
+      </FieldBox>
+
+      <div className="mpm-field">
+        <span className="mpm-field-label">Banner de perfil</span>
         {bannersLoading ? (
           <p className="mpm-form-note">Cargando banners...</p>
         ) : (
           <div className="mpm-banner-grid">
             <button
+              type="button"
               className={`mpm-banner-cell mpm-banner-cell--first${!userData.equipped_banner_url ? " active" : ""}`}
               onClick={() => setUserData({ ...userData, equipped_banner_url: null })}
             >
@@ -505,6 +607,7 @@ function EditTab({
             </button>
             {userBanners.map((b) => (
               <button
+                type="button"
                 key={b.id}
                 className={`mpm-banner-cell${userData.equipped_banner_url === b.image_url ? " active" : ""}`}
                 onClick={() =>
@@ -529,62 +632,18 @@ function EditTab({
         )}
       </div>
 
-      <div className="mpm-form-bento">
-        {fields.map((f) => {
-          const Icon = f.icon;
-          return (
-            <div key={f.key} className="mpm-form-group mpm-form-group--half">
-              <label className="mpm-form-label"><Icon size={13} /> {f.label}</label>
-              <input
-                type="text"
-                className="mpm-form-input"
-                value={userData[f.key] || ""}
-                onChange={(e) => setUserData({ ...userData, [f.key]: e.target.value })}
-                placeholder={f.placeholder}
-              />
-            </div>
-          );
-        })}
-
-        <div className="mpm-form-group mpm-form-group--half">
-          <label className="mpm-form-label"><User size={13} /> Género</label>
-          <select
-            className="mpm-form-input"
-            value={userData.gender || ""}
-            onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
-          >
-            <option value="">Seleccionar...</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Femenino">Femenino</option>
-            <option value="Otro">Otro</option>
-            <option value="Prefiero no decir">Prefiero no decir</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="mpm-form-group">
-        <label className="mpm-form-label"><Star size={13} /> Biografía</label>
-        <textarea
-          className="mpm-form-input mpm-form-textarea"
-          rows={3}
-          value={userData.bio || ""}
-          onChange={(e) => setUserData({ ...userData, bio: e.target.value })}
-          placeholder="Cuéntanos sobre ti..."
-        />
-      </div>
-
-      <div className="mpm-form-actions mpm-form-actions--bento">
-        <button className="mpm-save-btn" onClick={handleSave} disabled={loading}>
-          {loading ? <Activity size={14} className="spinner" /> : <Save size={14} />}
-          {loading ? "Guardando..." : "Guardar"}
-        </button>
-        <button
-          className="mpm-cancel-btn"
-          onClick={() => { loadUserData(); onBack(); }}
-        >
-          <X size={14} />Cancelar
-        </button>
-      </div>
+      <button
+        type="button"
+        className="mpm-save-field"
+        onClick={handleSave}
+        disabled={loading}
+      >
+        <span className="mpm-save-field-icon">
+          {loading ? <Activity size={16} className="spinner" /> : <Save size={16} />}
+        </span>
+        <span className="mpm-save-field-text">{loading ? "Guardando..." : "Guardar"}</span>
+        <span aria-hidden="true" />
+      </button>
     </div>
   );
 }

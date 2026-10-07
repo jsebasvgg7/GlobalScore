@@ -1744,3 +1744,336 @@
     transition: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   EDITAR PERFIL (mockup Niel) — campos con bloque de ícono, avatar
+   con botones en esquinas, banners en lista y botón Guardar simétrico.
+   Todo scoped a .mpm-edit / .mpm-av para no afectar otras sub-vistas.
+═══════════════════════════════════════════════════════════════ */
+.mpm-sub--edit .mpm-sub-body {
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+}
+
+.mpm-tab-content.mpm-edit {
+  position: relative;
+  padding: 16px 24px 32px;
+}
+
+/* Flecha de volver (mismo estilo que el botón de subir del avatar) */
+.mpm-edit-back {
+  position: absolute;
+  top: 16px;
+  left: 24px;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: var(--mpm-surface);
+  border: 2px solid var(--mpm-accent);
+  color: var(--mpm-accent);
+  box-shadow: var(--mpm-shadow-sm);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mpm-edit-back:active {
+  background: var(--mpm-tint);
+}
+
+/* ── Avatar + nombre ── */
+.mpm-edit .mpm-edit-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0 0;
+  margin: 0 0 12px;
+  border-bottom: none;
+}
+
+.mpm-av {
+  display: flex;
+  justify-content: center;
+}
+
+.mpm-av-frame {
+  position: relative;
+  width: 106px;
+  height: 106px;
+}
+
+.mpm-av-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  background: var(--mpm-surface);
+  border: 2px solid var(--mpm-accent);
+  box-shadow: var(--mpm-shadow-sm);
+  cursor: pointer;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mpm-av-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mpm-av-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--mpm-accent);
+}
+
+.mpm-av-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .7);
+  color: var(--mpm-accent);
+}
+
+.mpm-av-btn {
+  position: absolute;
+  bottom: -9px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: var(--mpm-surface);
+  border: 2px solid var(--mpm-accent);
+  color: var(--mpm-accent);
+  box-shadow: var(--mpm-shadow-sm);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mpm-av-btn--upload { right: -16px; }
+
+.mpm-av-btn--remove {
+  left: -16px;
+  border-color: #e5484d;
+  color: #e5484d;
+}
+
+.mpm-av-btn:active:not(:disabled) { background: var(--mpm-tint); }
+.mpm-av-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.mpm-edit-username {
+  margin: 22px 0 0;
+  font-family: var(--mpm-mono);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--mpm-accent);
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Campos ── */
+.mpm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+  min-width: 0;
+}
+
+.mpm-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 8px;
+}
+
+.mpm-field-label {
+  font-family: var(--mpm-mono);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--mpm-accent);
+}
+
+.mpm-field-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 57px;
+  padding: 0 12px;
+  background: var(--mpm-surface);
+  border: 2px solid var(--mpm-accent);
+  box-shadow: var(--mpm-shadow-sm);
+  box-sizing: border-box;
+}
+
+.mpm-field-box:focus-within {
+  box-shadow: 0 0 0 3px rgba(91, 73, 237, .18);
+}
+
+.mpm-field-icon {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mpm-accent);
+  color: #fff;
+}
+
+.mpm-field-input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--mpm-mono);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--mpm-text);
+}
+
+.mpm-field-input::placeholder {
+  color: var(--mpm-muted);
+  opacity: .55;
+  font-weight: 400;
+}
+
+.mpm-field-select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 28px;
+  cursor: pointer;
+}
+
+.mpm-field-select[data-empty="true"] {
+  color: var(--mpm-muted);
+  opacity: .75;
+}
+
+.mpm-field-chevron {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--mpm-accent);
+  pointer-events: none;
+}
+
+/* Textarea: ícono arriba, sin handle de resize */
+.mpm-field-box--area {
+  align-items: flex-start;
+  min-height: 100px;
+  padding: 12px;
+}
+
+.mpm-field-textarea {
+  align-self: stretch;
+  min-height: 74px;
+  padding-top: 6px;
+  resize: none;
+  line-height: 1.4;
+}
+
+/* ── Banners: lista de 1 columna, ancho completo ── */
+.mpm-edit .mpm-banner-grid {
+  grid-template-columns: 1fr;
+  grid-auto-rows: 57px;
+  gap: 8px;
+}
+
+.mpm-edit .mpm-banner-cell--first {
+  grid-column: auto;
+}
+
+.mpm-edit .mpm-banner-cell,
+.mpm-edit .mpm-banner-cell.active {
+  border-width: 2px;
+  border-color: var(--mpm-accent);
+}
+
+.mpm-edit .mpm-banner-cell-lbl {
+  left: 10px;
+  bottom: 6px;
+  font-family: var(--mpm-mono);
+  font-size: 13px;
+}
+
+.mpm-edit .mpm-banner-cell-check {
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+}
+
+/* ── Guardar: mismo lenguaje que los campos, simétrico (ícono | texto | espaciador) ── */
+.mpm-save-field {
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 57px;
+  margin-top: 12px;
+  padding: 0 12px;
+  background: var(--mpm-accent);
+  border: 2px solid var(--mpm-accent);
+  box-shadow: var(--mpm-shadow-sm);
+  box-sizing: border-box;
+  color: #fff;
+  font-family: var(--mpm-mono);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mpm-save-field-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .18);
+}
+
+.mpm-save-field-text { text-align: center; }
+.mpm-save-field:active:not(:disabled) { filter: brightness(.92); }
+.mpm-save-field:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ── Dark ── */
+[data-theme="dark"] .mpm-field-box,
+[data-theme="dark"] .mpm-av-img,
+[data-theme="dark"] .mpm-av-btn,
+[data-theme="dark"] .mpm-edit-back {
+  background: var(--mpm-card);
+}
+
+[data-theme="dark"] .mpm-field-box,
+[data-theme="dark"] .mpm-av-img {
+  border-color: var(--mpm-border);
+}
+
+[data-theme="dark"] .mpm-av-loading {
+  background: rgba(26, 24, 36, .7);
+}

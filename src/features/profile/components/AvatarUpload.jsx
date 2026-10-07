@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Camera, X, Loader2, Crown } from 'lucide-react';
+import { Upload, Share, Camera, X, Loader2, Crown } from 'lucide-react';
 import { supabase } from '@/shared/services/supabase/client';
 import { ImageViewer } from "@/shared/ui";
 import '../styles/ProfileBase.css';
 
-export default function AvatarUpload({ currentUrl, userId, onUploadComplete, userLevel }) {
+export default function AvatarUpload({ currentUrl, userId, onUploadComplete, userLevel, variant }) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(currentUrl);
   const [showImageViewer, setShowImageViewer] = useState(false);
@@ -107,6 +107,69 @@ export default function AvatarUpload({ currentUrl, userId, onUploadComplete, use
       fileInputRef.current?.click();
     }
   };
+
+  /* Variante mobile "field": avatar cuadrado + botones en esquinas opuestas
+     (eliminar abajo-izquierda, subir abajo-derecha). Misma lógica de arriba. */
+  if (variant === 'field') {
+    return (
+      <div className="mpm-av">
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileSelect}
+          accept="image/*"
+          style={{ display: 'none' }}
+          disabled={uploading}
+        />
+        <div className="mpm-av-frame">
+          <button
+            type="button"
+            className="mpm-av-img"
+            onClick={handlePreviewClick}
+            aria-label={preview ? 'Ver avatar' : 'Subir avatar'}
+          >
+            {preview ? (
+              <img src={preview} alt="Avatar" />
+            ) : (
+              <span className="mpm-av-ph"><Camera size={28} /></span>
+            )}
+            {uploading && (
+              <span className="mpm-av-loading"><Loader2 size={26} className="spinner" /></span>
+            )}
+          </button>
+
+          {preview && (
+            <button
+              type="button"
+              className="mpm-av-btn mpm-av-btn--remove"
+              onClick={handleRemoveAvatar}
+              disabled={uploading}
+              aria-label="Eliminar avatar"
+            >
+              <X size={16} />
+            </button>
+          )}
+          <button
+            type="button"
+            className="mpm-av-btn mpm-av-btn--upload"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            aria-label="Cambiar avatar"
+          >
+            <Share size={16} />
+          </button>
+        </div>
+
+        {showImageViewer && preview && (
+          <ImageViewer
+            imageUrl={preview}
+            userName="Vista Previa"
+            onClose={() => setShowImageViewer(false)}
+          />
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="avatar-upload-container">
