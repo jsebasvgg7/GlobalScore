@@ -2,45 +2,16 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   Target, CheckCircle2, XCircle, Star,
   Trophy, Award, Calendar, Zap, Activity,
-  Import
 } from 'lucide-react';
-import { supabase } from '@/shared/services/supabase/client';
+import {
+  fetchAllPredictions, fetchSpecialPredictions, fetchUserCounters, processStats, STATS_RANGES,
+} from '@/features/stats/services/stats.service';
 import StatsRightPanel from '@/features/stats/components/StatsRightPanel';
 import MobileStats from '@/features/stats/components/mobile/MobileStats';
 import { GlobalLoader } from "@/shared/ui";
 import './StatsPage.css';
 
 const fmt = (n) => Number(n || 0).toLocaleString('es-ES');
-
-/* ── Fetch paginado ──
-   Supabase/PostgREST limita cada request a un máximo de filas
-   (por defecto 1000, via db-max-rows). Sin .range() una query con
-   más de 1000 resultados se corta en silencio, sin lanzar error.
-   Esta función pagina con .range() hasta traer todas las filas. */
-const fetchAllPredictions = async (userId, dateLimit) => {
-  const pageSize = 1000;
-  let from = 0;
-  let all = [];
-
-  while (true) {
-    let q = supabase
-      .from('predictions')
-      .select('*, matches(id,league,home_team,away_team,result_home,result_away,status,date)')
-      .eq('user_id', userId)
-      .range(from, from + pageSize - 1);
-    if (dateLimit) q = q.gte('created_at', dateLimit);
-
-    const { data, error } = await q;
-    if (error) throw error;
-    if (!data || data.length === 0) break;
-
-    all = all.concat(data);
-    if (data.length < pageSize) break; // última página
-    from += pageSize;
-  }
-
-  return all;
-};
 
 /* ── Icono cuadrado de hero ── */
 function HeroIcon({ color, children }) {
@@ -55,133 +26,36 @@ function HeroIcon({ color, children }) {
 }
 
 export default function StatsPage({ currentUser }) {
-  const [stats, setStats] = useState(null);
+  const [raw, setRaw] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [timeRange, setTimeRange] = useState('all');
+  const [timeRange, setTimeRange] = useState('season');
 
+  /* Se descarga todo una sola vez; el cambio de rango se calcula en memoria. */
   useEffect(() => {
-    if (currentUser) loadStats();
-  }, [currentUser, timeRange]);
-
-  /* ────────────────────────────────────────────────────────────
-     DATA LOADING
-  ──────────────────────────────────────────────────────────── */
-  const loadStats = async () => {
-    try {
-      setLoading(true);
-
-      const now = new Date();
-      let dateLimit = null;
-      if (timeRange === 'month') {
-        // "Últ. 30 días": ventana móvil de 30 días desde ahora.
-        const d = new Date();
-        d.setDate(d.getDate() - 30);
-        dateLimit = d.toISOString();
+    if (!currentUser) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        setLoading(true);
+        const [predictions, special, counters] = await Promise.all([
+          fetchAllPredictions(currentUser.id),
+          fetchSpecialPredictions(currentUser.id),
+          fetchUserCounters(currentUser.id),
+        ]);
+        if (!cancelled) setRaw({ predictions, counters, ...special });
+      } catch (err) {
+        console.error('Error loading stats:', err);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
+    })();
+    return () => { cancelled = true; };
+  }, [currentUser]);
 
-      const [
-        predictions,
-        { data: leaguePredictions },
-        { data: awardPredictions },
-      ] = await Promise.all([
-        fetchAllPredictions(currentUser.id, dateLimit),
-        supabase.from('league_predictions').select('*, leagues(*)').eq('user_id', currentUser.id),
-        supabase.from('award_predictions').select('*, awards(*)').eq('user_id', currentUser.id),
-      ]);
-
-      setStats(processStats(predictions || [], leaguePredictions || [], awardPredictions || []));
-    } catch (err) {
-      console.error('Error loading stats:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /* ────────────────────────────────────────────────────────────
-     PROCESS
-     Lee result_type / points_earned / advancing_points directamente
-     de la tabla predictions (fuente de verdad, ya calculada por el
-     admin al finalizar el partido) en vez de recalcular a mano con
-     Math.sign(). Así Stats nunca se desincroniza si cambian las
-     reglas de puntos en otro lugar del código.
-  ──────────────────────────────────────────────────────────── */
-  const processStats = (predictions, leaguePreds, awardPreds) => {
-    // Solo predicciones ya puntuadas cuentan como "finalizadas" — una
-    // predicción de un partido finished pero sin result_type (caso que
-    // ya no debería ocurrir tras el fix del admin, pero por seguridad
-    // se trata igual que "pendiente" en vez de romper el cálculo).
-    const finished = predictions.filter(p => p.matches?.status === 'finished' && p.result_type != null);
-
-    let exact = 0, correctResult = 0, wrong = 0, totalPoints = 0, advancingPoints = 0, correctAdvancing = 0;
-
-    finished.forEach(pred => {
-      if (pred.result_type === 'exact') exact++;
-      else if (pred.result_type === 'result') correctResult++;
-      else wrong++;
-
-      totalPoints += pred.points_earned || 0;
-
-      if (pred.advancing_points > 0) {
-        advancingPoints += pred.advancing_points;
-        correctAdvancing++;
-      }
-    });
-
-    /* Estadísticas por liga */
-    const leagueMap = {};
-    finished.forEach(pred => {
-      const league = pred.matches?.league;
-      if (!league) return;
-      if (!leagueMap[league]) leagueMap[league] = { total: 0, correct: 0, exact: 0, points: 0 };
-      leagueMap[league].total++;
-      if (pred.result_type === 'exact') { leagueMap[league].exact++; leagueMap[league].correct++; }
-      else if (pred.result_type === 'result') { leagueMap[league].correct++; }
-      leagueMap[league].points += (pred.points_earned || 0) + (pred.advancing_points || 0);
-    });
-
-    /* Rachas */
-    const sorted = [...finished].sort((a, b) => new Date(b.matches.date) - new Date(a.matches.date));
-    let currentStreak = 0, bestStreak = 0, tempStreak = 0;
-    sorted.forEach((pred, i) => {
-      const ok = (pred.points_earned || 0) > 0;
-      if (ok) { tempStreak++; if (i === 0) currentStreak = tempStreak; bestStreak = Math.max(bestStreak, tempStreak); }
-      else { tempStreak = 0; if (i === 0) currentStreak = 0; }
-    });
-
-    /* Por día */
-    const dayStats = [0, 1, 2, 3, 4, 5, 6].map(d => ({ name: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][d], correct: 0, total: 0 }));
-    finished.forEach(pred => {
-      const day = new Date(pred.matches.date).getDay();
-      dayStats[day].total++;
-      if ((pred.points_earned || 0) > 0) dayStats[day].correct++;
-    });
-    /* Ordenar Lun→Dom */
-    const orderedDays = [...dayStats.slice(1), dayStats[0]];
-
-    const leaguePoints = (leaguePreds || []).reduce((s, lp) => s + (lp.points_earned || 0), 0);
-    const awardPoints = (awardPreds || []).reduce((s, ap) => s + (ap.points_earned || 0), 0);
-
-    return {
-      totalPredictions: finished.length,
-      pendingPredictions: predictions.length - finished.length,
-      exact, correctResult, wrong, totalPoints,
-      advancingPoints, correctAdvancing,
-      accuracy: finished.length > 0 ? Math.round(((exact + correctResult) / finished.length) * 100) : 0,
-      exactAccuracy: finished.length > 0 ? Math.round((exact / finished.length) * 100) : 0,
-      currentStreak, bestStreak,
-      leagueStats: Object.entries(leagueMap)
-        .map(([name, s]) => ({ name, ...s, accuracy: s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0 }))
-        .sort((a, b) => b.points - a.points)
-        .slice(0, 5),
-      dayStats: orderedDays,
-      leaguePredictions: (leaguePreds || []).length,
-      awardPredictions: (awardPreds || []).length,
-      leaguePoints, awardPoints,
-      pointsFromMatches: totalPoints + advancingPoints,
-      pointsFromLeagues: leaguePoints,
-      pointsFromAwards: awardPoints,
-    };
-  };
+  const stats = useMemo(
+    () => (raw ? processStats(raw.predictions, raw.leaguePreds, raw.awardPreds, timeRange, raw.counters) : null),
+    [raw, timeRange]
+  );
 
   /* ────────────────────────────────────────────────────────────
      RENDER — LOADING
@@ -234,10 +108,7 @@ export default function StatsPage({ currentUser }) {
                 Estadísticas
               </div>
               <div className="sp-range-pills">
-                {[
-                  { key: 'all', label: 'Todo' },
-                  { key: 'month', label: 'Últ. 30 días' },
-                ].map(({ key, label }) => (
+                {STATS_RANGES.map(({ key, label }) => (
                   <button
                     key={key}
                     className={`sp-range-pill${timeRange === key ? ' active' : ''}`}

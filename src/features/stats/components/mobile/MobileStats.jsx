@@ -1,12 +1,76 @@
-import React from "react";
-import { Target, Star, CheckCircle2, Zap } from "lucide-react";
+import React, { useState } from "react";
+import { Target, Star, CheckCircle2, XCircle, Zap, Trophy, Award } from "lucide-react";
 import { GlobalLoader } from "@/shared/ui";
+import { STATS_RANGES, getRangeCaption } from "@/features/stats/services/stats.service";
 import "./MobileStats.css";
 
+const TOTAL_SUB = {
+  season: "puntos del ranking global",
+  month: "puntos del ranking mensual",
+  all: "partidos, ligas y premios",
+};
+
 const fmt = (n) => Number(n || 0).toLocaleString("es-ES");
+const pct = (part, total) => (total > 0 ? Math.round((part / total) * 100) : 0);
+
+/* ── Logo de liga con fallback a iniciales ── */
+function LeagueLogo({ name, src }) {
+  const [failed, setFailed] = useState(false);
+  const initials = name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  return (
+    <div className="mst-logo" title={name}>
+      {src && !failed ? (
+        <img src={src} alt={name} loading="lazy" onError={() => setFailed(true)} />
+      ) : (
+        <span>{initials}</span>
+      )}
+    </div>
+  );
+}
+
+/* ── Línea de aciertos por liga ──
+   Escala dinámica (mín-máx con margen) para que la variación se lea;
+   el valor exacto va bajo cada logo. */
+function LeagueLine({ leagues }) {
+  const W = 300, H = 112, TOP = 12, BOT = 100;
+  const n = leagues.length;
+  const accs = leagues.map((l) => l.accuracy);
+  const lo = Math.max(0, Math.min(...accs) - 12);
+  const hi = Math.min(100, Math.max(...accs) + 12);
+  const span = Math.max(hi - lo, 1);
+  const xAt = (i) => ((i + 0.5) * W) / n;
+  const yAt = (v) => BOT - ((v - lo) / span) * (BOT - TOP);
+  const best = accs.indexOf(Math.max(...accs));
+  const path = leagues.map((l, i) => `${i ? "L" : "M"}${xAt(i).toFixed(1)} ${yAt(l.accuracy).toFixed(1)}`).join(" ");
+
+  return (
+    <>
+      <svg className="mst-line" viewBox={`0 0 ${W} ${H}`} role="img"
+        aria-label="Porcentaje de aciertos por competición">
+        {[0, 1, 2, 3, 4].map((g) => (
+          <line key={g} x1="0" x2={W} y1={TOP + (g * (BOT - TOP)) / 4} y2={TOP + (g * (BOT - TOP)) / 4}
+            className="mst-line-grid" />
+        ))}
+        {n > 1 && <path d={path} className="mst-line-path" />}
+        {leagues.map((l, i) => (
+          <rect key={l.name} x={xAt(i) - (i === best ? 4 : 3)} y={yAt(l.accuracy) - (i === best ? 4 : 3)}
+            width={i === best ? 8 : 6} height={i === best ? 8 : 6}
+            className={i === best ? "mst-line-dot mst-line-dot--best" : "mst-line-dot"} />
+        ))}
+      </svg>
+      <div className="mst-line-cols" style={{ gridTemplateColumns: `repeat(${n}, 1fr)` }}>
+        {leagues.map((l, i) => (
+          <div className="mst-line-col" key={l.name}>
+            <LeagueLogo name={l.name} src={l.logo} />
+            <b className={i === best ? "mst-line-val mst-line-val--best" : "mst-line-val"}>{l.accuracy}%</b>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
 
 export default function MobileStats({ stats, loading, timeRange, onTimeRangeChange }) {
-
   if (loading) {
     return (
       <div className="mst-root">
@@ -27,277 +91,137 @@ export default function MobileStats({ stats, loading, timeRange, onTimeRangeChan
     );
   }
 
-  const totalFinished = stats.totalPredictions || 0;
+  const total = stats.totalPredictions || 0;
+  const ptsAll = stats.totalPointsAll || 0;
+  const hasMatches = total > 0;
 
-  const totalPts =
-    (stats.pointsFromMatches || 0) +
-    (stats.pointsFromLeagues || 0) +
-    (stats.pointsFromAwards || 0);
-
-  const pctMatches = totalPts > 0 ? Math.round(((stats.pointsFromMatches || 0) / totalPts) * 100) : 0;
-  const pctLeagues = totalPts > 0 ? Math.round(((stats.pointsFromLeagues || 0) / totalPts) * 100) : 0;
-  const pctAwards = totalPts > 0 ? Math.round(((stats.pointsFromAwards || 0) / totalPts) * 100) : 0;
-
-  const orderedDays = stats.dayStats
-    ? [...stats.dayStats.slice(1), stats.dayStats[0]]
-    : [];
+  /* dayStats llega Lun→Dom; el diseño pide Dom→Sáb */
+  const days = stats.dayStats ? [stats.dayStats[6], ...stats.dayStats.slice(0, 6)] : [];
 
   return (
     <div className="mst-root">
 
-      {/* ══ TOPBAR — Todo / Mes ══ */}
+      {/* ── Título + rango ── */}
       <div className="mst-topbar">
-        <div className="mst-topbar-label">
-          <span className="mst-topbar-dot" />
-          Estadísticas
-        </div>
-        <div className="mst-range-pills">
-          {[
-            { key: "all", label: "Todo" },
-            { key: "month", label: "Últ. 30 días" },
-          ].map(({ key, label }) => (
-            <button
-              key={key}
+        <h1 className="mst-title">Estadísticas</h1>
+        <div className="mst-range" role="tablist">
+          {STATS_RANGES.map(({ key, label }) => (
+            <button key={key} role="tab" aria-selected={timeRange === key}
               className={`mst-range-pill${timeRange === key ? " active" : ""}`}
-              onClick={() => onTimeRangeChange?.(key)}
-            >
+              onClick={() => onTimeRangeChange?.(key)}>
               {label}
             </button>
           ))}
         </div>
       </div>
+      <p className="mst-caption">{getRangeCaption(timeRange, stats.windowFrom)}</p>
 
-      {/* ══ HERO BENTO — Precisión grande + Exactos/Correctos/Puntos ══ */}
-      <div className="mst-hero">
-        <div className="mst-hero-main">
-          <div className="mst-hero-icon"><Target size={13} /></div>
-          <div>
-            <div className="mst-hero-lbl">Precisión</div>
-            <div className="mst-hero-main-val">{stats.accuracy}%</div>
-            <div className="mst-hero-sub">{fmt(totalFinished)} finalizadas</div>
-          </div>
-        </div>
-
-        <div className="mst-hero-small mst-hero-small--gold" style={{ position: "relative" }}>
-          <div className="mst-hero-icon"><Star size={12} /></div>
-          <div className="mst-hero-lbl">Exactos</div>
-          <div className="mst-hero-small-val">{fmt(stats.exact)}</div>
-          <div className="mst-hero-sub">{stats.exactAccuracy}% exactitud</div>
-        </div>
-
-        <div className="mst-hero-small mst-hero-small--amber" style={{ position: "relative" }}>
-          <div className="mst-hero-icon"><CheckCircle2 size={12} /></div>
-          <div className="mst-hero-lbl">Correctos</div>
-          <div className="mst-hero-small-val">{fmt(stats.correctResult)}</div>
-          <div className="mst-hero-sub">+3 pts c/u</div>
-        </div>
-
-        <div className="mst-hero-small mst-hero-small--green" style={{ position: "relative" }}>
-          <div className="mst-hero-icon"><Zap size={14} /></div>
-          <div className="mst-hero-text">
-            <div className="mst-hero-lbl">Puntos</div>
-            <div className="mst-hero-small-val">{fmt(stats.pointsFromMatches)}</div>
-          </div>
-          <div className="mst-hero-sub">de partidos</div>
+      {/* ── Puntos totales ── */}
+      <div className="mst-total">
+        <div className="mst-total-icon"><Zap size={30} strokeWidth={1.6} /></div>
+        <div>
+          <div className="mst-total-val">{fmt(ptsAll)} <span>puntos</span></div>
+          <div className="mst-total-sub">{TOTAL_SUB[timeRange]}</div>
         </div>
       </div>
 
-      {/* ══ DESGLOSE DE RESULTADOS ══ */}
-      <div className="mst-sec-hdr">
-        <span className="mst-sec-sq" />
-        <span className="mst-sec-title">Desglose de resultados</span>
-      </div>
-      <div className="mst-results">
-
-        <div className="mst-result-item">
-          <div className="mst-result-top">
-            <div className="mst-result-left">
-              <div className="mst-result-num">{fmt(stats.exact)}</div>
-              <div className="mst-result-pts">+{fmt(stats.exact * 5)} pts</div>
-            </div>
-            <div className="mst-result-pct">
-              {totalFinished > 0 ? Math.round((stats.exact / totalFinished) * 100) : 0}%
-            </div>
-          </div>
-          <div className="mst-result-name">Exactos</div>
-          <div className="mst-result-bar-wrap">
-            <div
-              className="mst-result-bar"
-              style={{
-                width: `${totalFinished > 0 ? Math.round((stats.exact / totalFinished) * 100) : 0}%`,
-                background: "var(--m-accent)",
-              }}
-            />
-          </div>
+      {/* ── Precisión ── */}
+      <h2 className="mst-h2">Porcentaje</h2>
+      <div className="mst-card mst-acc">
+        <div className="mst-tile"><Target size={22} strokeWidth={1.8} /></div>
+        <div className="mst-acc-text">
+          <div className="mst-acc-name">Precisión</div>
+          <div className="mst-acc-sub">acierto en {fmt(total)} pred.</div>
         </div>
-
-        <div className="mst-result-item">
-          <div className="mst-result-top">
-            <div className="mst-result-left">
-              <div className="mst-result-num">{fmt(stats.correctResult)}</div>
-              <div className="mst-result-pts">+{fmt(stats.correctResult * 3)} pts</div>
-            </div>
-            <div className="mst-result-pct">
-              {totalFinished > 0 ? Math.round((stats.correctResult / totalFinished) * 100) : 0}%
-            </div>
-          </div>
-          <div className="mst-result-name">Correctos</div>
-          <div className="mst-result-bar-wrap">
-            <div
-              className="mst-result-bar"
-              style={{
-                width: `${totalFinished > 0 ? Math.round((stats.correctResult / totalFinished) * 100) : 0}%`,
-                background: "var(--m-amber)",
-              }}
-            />
-          </div>
-        </div>
-
-        <div className="mst-result-item">
-          <div className="mst-result-top">
-            <div className="mst-result-left">
-              <div className="mst-result-num">{fmt(stats.wrong)}</div>
-              <div className="mst-result-pts mst-result-pts--red">0 pts</div>
-            </div>
-            <div className="mst-result-pct">
-              {totalFinished > 0 ? Math.round((stats.wrong / totalFinished) * 100) : 0}%
-            </div>
-          </div>
-          <div className="mst-result-name">Incorrectos</div>
-          <div className="mst-result-bar-wrap">
-            <div
-              className="mst-result-bar"
-              style={{
-                width: `${totalFinished > 0 ? Math.round((stats.wrong / totalFinished) * 100) : 0}%`,
-                background: "var(--m-muted)",
-              }}
-            />
-          </div>
+        <div className="mst-acc-box" style={{ "--fill": `${stats.accuracy}%` }}>
+          <b>{stats.accuracy}</b><i>%</i>
         </div>
       </div>
 
-      {/* ══ LIGAS ══ */}
-      {stats.leagueStats?.length > 0 && (
-        <>
-          <div className="mst-sec-hdr">
-            <span className="mst-sec-sq" />
-            <span className="mst-sec-title">Rendimiento por liga</span>
-          </div>
-          <div className="mst-leagues">
-            <div className="mst-league-thead">
-              <span className="mst-lth-rank" />
-              <span className="mst-lth-name">Liga</span>
-              <span className="mst-lth-pts">Pts</span>
-              <span className="mst-lth-acc">Precisión</span>
-            </div>
-
-            {stats.leagueStats.map((league, i) => {
-              const badgeMod = i < 3 ? ` mst-rank-badge--${i + 1}` : "";
-              return (
-                <div className="mst-league-row" key={league.name}>
-                  <div className={`mst-rank-badge${badgeMod}`}>{i + 1}</div>
-                  <div className="mst-league-name">{league.name}</div>
-                  <div className="mst-league-pts">{fmt(league.points)}</div>
-                  <div className="mst-league-acc">
-                    <div className="mst-league-acc-bar">
-                      <div className="mst-league-acc-fill" style={{ width: `${league.accuracy}%` }} />
-                    </div>
-                    <span className="mst-league-acc-pct">{league.accuracy}%</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </>
-      )}
-
-      {/* ══ DÍAS ══ */}
-      <div className="mst-sec-hdr">
-        <span className="mst-sec-sq" />
-        <span className="mst-sec-title">Rendimiento por día</span>
+      {/* ── Desglose ── */}
+      <h2 className="mst-h2">Desglose de Puntos</h2>
+      <div className="mst-trio">
+        <div className="mst-card mst-stat">
+          <div className="mst-tile"><Star size={20} strokeWidth={1.8} /></div>
+          <div className="mst-stat-name">Exactos</div>
+          <div className="mst-stat-val">{fmt(stats.exact)}</div>
+          <div className="mst-stat-sub">{stats.exactAccuracy}% exactitud</div>
+        </div>
+        <div className="mst-card mst-stat">
+          <div className="mst-tile"><CheckCircle2 size={20} strokeWidth={1.8} /></div>
+          <div className="mst-stat-name">Correctos</div>
+          <div className="mst-stat-val">{fmt(stats.correctResult)}</div>
+          <div className="mst-stat-sub">+3 pts c/u</div>
+        </div>
+        <div className="mst-card mst-stat">
+          <div className="mst-tile"><XCircle size={20} strokeWidth={1.8} /></div>
+          <div className="mst-stat-name">Incorrectos</div>
+          <div className="mst-stat-val">{fmt(stats.wrong)}</div>
+          <div className="mst-stat-sub">+0 pts c/u</div>
+        </div>
       </div>
+
+      {/* ── Rendimiento por liga ── */}
+      <h2 className="mst-h2">Rendimiento Por Liga</h2>
+      <div className="mst-card mst-league">
+        <div className="mst-league-hdr">
+          <span>Competición</span>
+          <span>% de aciertos</span>
+        </div>
+        {stats.leagueChart?.length > 0
+          ? <LeagueLine leagues={stats.leagueChart} />
+          : <div className="mst-none">Sin partidos finalizados en este rango</div>}
+      </div>
+
+      {/* ── Rendimiento por día ── */}
+      <h2 className="mst-h2">Rendimiento Por Día</h2>
       <div className="mst-days">
-        {orderedDays.map((day) => {
-          const pct = day.total > 0 ? Math.round((day.correct / day.total) * 100) : 0;
-          const opacity = day.total > 0 ? 0.35 + (pct / 100) * 0.65 : 0.15;
+        {days.map((d) => {
+          const p = pct(d.correct, d.total);
           return (
-            <div className="mst-day" key={day.name}>
-              <div className="mst-day-lbl">{day.name}</div>
-              <div className="mst-day-pct">{pct}%</div>
-              <div className="mst-day-bar-wrap">
-                <div className="mst-day-fill" style={{ height: `${pct}%`, opacity }} />
-              </div>
-              <div className="mst-day-detail">{day.correct}/{day.total}</div>
+            <div className="mst-day" key={d.name} title={`${d.correct} de ${d.total} con puntos`}>
+              <b className="mst-day-pct">{d.total > 0 ? `${p}%` : "–"}</b>
+              <div className="mst-day-bar"><div className="mst-day-fill" style={{ height: `${p}%` }} /></div>
+              <span className="mst-day-name">{d.name}</span>
             </div>
           );
         })}
       </div>
 
-      {/* ══ DISTRIBUCIÓN DE PUNTOS ══ */}
-      <div className="mst-sec-hdr">
-        <span className="mst-sec-sq" />
-        <span className="mst-sec-title">Distribución de puntos</span>
-      </div>
-      <div className="mst-dist">
-        <div className="mst-dist-row">
-          <div className="mst-dist-top">
-            <span className="mst-dist-name">Partidos</span>
-            <span className="mst-dist-val">{fmt(stats.pointsFromMatches)}</span>
+      {/* ── Distribución ── */}
+      <h2 className="mst-h2">Distribución de Puntos</h2>
+      <div className="mst-card mst-dist">
+        {[
+          { name: "Partidos", val: stats.pointsFromMatches },
+          { name: "Ligas", val: stats.pointsFromLeagues },
+          { name: "Premios", val: stats.pointsFromAwards },
+        ].map((r) => (
+          <div className="mst-dist-row" key={r.name}>
+            <div className="mst-dist-top"><span>{r.name}</span><b>{fmt(r.val)}</b></div>
+            <div className="mst-dist-track">
+              <div className="mst-dist-fill" style={{ width: `${r.val > 0 ? Math.max(pct(r.val, ptsAll), 3) : 0}%` }} />
+            </div>
           </div>
-          <div className="mst-dist-track">
-            <div className="mst-dist-fill" style={{ width: `${pctMatches}%`, background: "var(--m-accent)" }} />
-          </div>
-        </div>
-        <div className="mst-dist-row">
-          <div className="mst-dist-top">
-            <span className="mst-dist-name">Ligas</span>
-            <span className="mst-dist-val">{fmt(stats.pointsFromLeagues)}</span>
-          </div>
-          <div className="mst-dist-track">
-            <div
-              className="mst-dist-fill"
-              style={{ width: `${Math.max(pctLeagues, pctLeagues > 0 ? 4 : 0)}%`, background: "var(--m-green)" }}
-            />
-          </div>
-        </div>
-        <div className="mst-dist-row">
-          <div className="mst-dist-top">
-            <span className="mst-dist-name">Premios</span>
-            <span className="mst-dist-val">{fmt(stats.pointsFromAwards)}</span>
-          </div>
-          <div className="mst-dist-track">
-            <div
-              className="mst-dist-fill"
-              style={{ width: `${Math.max(pctAwards, pctAwards > 0 ? 4 : 0)}%`, background: "var(--m-gold)" }}
-            />
-          </div>
-        </div>
+        ))}
       </div>
 
-      {/* ══ PRONÓSTICOS ESPECIALES ══ */}
-      <div className="mst-sec-hdr">
-        <span className="mst-sec-sq" />
-        <span className="mst-sec-title">Pronósticos especiales</span>
-      </div>
-      <div className="mst-forecast">
-        <div className="mst-forecast-item">
-          <div className="mst-forecast-val">{fmt(stats.leaguePredictions)}</div>
-          <div className="mst-forecast-lbl">Ligas pred.</div>
-        </div>
-        <div className="mst-forecast-item">
-          <div className="mst-forecast-val">{fmt(stats.awardPredictions)}</div>
-          <div className="mst-forecast-lbl">Premios pred.</div>
-        </div>
-        <div className="mst-forecast-item">
-          <div className="mst-forecast-val mst-forecast-val--green">{fmt(stats.pointsFromLeagues)}</div>
-          <div className="mst-forecast-lbl">Pts ligas</div>
-        </div>
-        <div className="mst-forecast-item">
-          <div className="mst-forecast-val mst-forecast-val--green">{fmt(stats.pointsFromAwards)}</div>
-          <div className="mst-forecast-lbl">Pts premios</div>
-        </div>
-      </div>
+      {timeRange === "season" && (
+        <p className="mst-note">Los puntos de ligas y premios no suman al ranking global.</p>
+      )}
 
+      {/* ── Pronósticos especiales ── */}
+      <h2 className="mst-h2">Pronósticos Especiales</h2>
+      <div className="mst-duo">
+        <div className="mst-card mst-fc">
+          <div className="mst-tile"><Trophy size={22} strokeWidth={1.8} /></div>
+          <div><b>{fmt(stats.leaguePredictions)}</b><span>ligas pred.</span></div>
+        </div>
+        <div className="mst-card mst-fc">
+          <div className="mst-tile"><Award size={22} strokeWidth={1.8} /></div>
+          <div><b>{fmt(stats.awardPredictions)}</b><span>premios pred.</span></div>
+        </div>
+      </div>
+      {!hasMatches && <p className="mst-caption mst-caption--foot">Aún no hay partidos finalizados en este rango.</p>}
     </div>
   );
 }
