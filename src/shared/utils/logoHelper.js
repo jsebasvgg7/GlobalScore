@@ -170,6 +170,7 @@ export const teamSlugMap = {
   'STU': 'sksturmgraz',
   'SPA': 'spartapraha',
   'PLZ': 'viktoriaplzen',
+  'SLB': 'slovanbratislava',
 };
 
 // Slugs que cambian segun la carpeta del bucket (el archivo se llama distinto
