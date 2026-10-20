@@ -147,7 +147,51 @@ export const teamSlugMap = {
   'OLI': 'olympiacos',
   'PSV': 'psv',
   'BOD': 'bodo_glimt',
+
+  // 🏆 Europa League (carpeta europa-league) - CODIGOS SUGERIDOS, ajustalos a los de tu BD
+  'AND': 'anderlecht',
+  'OMO': 'acomonia',
+  'ARA': 'ararat',
+  'AZA': 'azalkmaar',
+  'BES': 'besiktas',
+  'CLT': 'celtic',
+  'DZG': 'dinamozagreb',
+  'FTC': 'ferencvaros',
+  'HBS': 'hapoelbeersheva',
+  'JAG': 'jagiellonia',
+  'LPO': 'lechpoznan',
+  'LSO': 'levskisofia',
+  'LSK': 'lillestrom',
+  'NEC': 'necnijmegen',
+  'NKC': 'nkcelje',
+  'OFI': 'oficrete',
+  'RBS': 'salzburg',
+  'SCT': 'scutorreense',
+  'STU': 'sksturmgraz',
+  'SPA': 'spartapraha',
+  'PLZ': 'viktoriaplzen',
 };
+
+// Slugs que cambian segun la carpeta del bucket (el archivo se llama distinto
+// en la carpeta de la competicion que en la de la liga domestica)
+export const competitionSlugOverrides = {
+  'champions-league': {
+    // Completa aqui si algun archivo de champions-league se llama distinto
+    // al slug de teamSlugMap. Ej: 'MIL': 'acmilan',
+  },
+  'europa-league': {
+    'MIL': 'acmilan',               // domestica: milan
+    'CEL': 'celtavigo',             // domestica: celta
+    'OLY': 'lyon',                  // domestica: olimpiquelyon
+    'OGM': 'marseille',             // domestica: olimpiquemarsella
+    'REN': 'staderennais',          // domestica: rennais
+    'USG': 'unionsaintgilloise',    // antes: union_saint_gilloise
+  },
+};
+
+function resolveTeamSlug(teamCode, leagueSlug) {
+  return competitionSlugOverrides[leagueSlug]?.[teamCode] ?? teamSlugMap[teamCode];
+}
 
 // ============================================
 // MAPEO DE SELECCIONES NACIONALES (FIFA World Cup)
@@ -243,9 +287,10 @@ export const countrySlugMap = {
 // ============================================
 export const leagueMap = {
   // Competiciones Europeas
+  // Champions y Europa tienen su propia carpeta completa en el bucket
   'Champions League': 'champions-league',
-  'Europa League': 'champions-league',
-  'Conference League': 'champions-league',
+  'Europa League': 'europa-league',
+  // Conference aun no tiene carpeta propia -> se resuelve con el fallback de abajo
 
   // España
   'La Liga': 'la-liga',
@@ -365,11 +410,9 @@ const DOMESTIC_LEAGUE_SLUGS = [
   'ligue-1',
 ];
 
-// Competiciones europeas que no tienen carpeta propia —
-// sus equipos pertenecen a alguna liga domestica
-const EUROPEAN_COMPETITIONS = new Set([
-  'Champions League',
-  'Europa League',
+// Competiciones SIN carpeta propia — sus equipos se buscan en las ligas domesticas.
+// (Champions League y Europa League ya tienen carpeta propia, ya no van aqui)
+const FALLBACK_COMPETITIONS = new Set([
   'Conference League',
   'Club Friendly',
 ]);
@@ -410,15 +453,14 @@ export async function getLogoUrlByTeamName(supabase, teamName, leagueName) {
     return getCountryLogoUrl(supabase, teamName);
   }
 
-  const teamSlug = teamSlugMap[teamName];
-  if (!teamSlug) {
-    console.warn(`Logo de equipo no encontrado: "${teamName}"`);
-    return null;
-  }
-
-  // Para competiciones europeas / Club Friendly: el equipo no tiene carpeta
-  // propia, hay que verificar en cual liga domestica esta realmente el archivo
-  if (EUROPEAN_COMPETITIONS.has(leagueName)) {
+  // Conference / Club Friendly: no tienen carpeta propia, hay que verificar
+  // en cual liga domestica esta realmente el archivo
+  if (FALLBACK_COMPETITIONS.has(leagueName)) {
+    const teamSlug = teamSlugMap[teamName];
+    if (!teamSlug) {
+      console.warn(`Logo de equipo no encontrado: "${teamName}"`);
+      return null;
+    }
     const leagueSlug = await findTeamLeagueSlug(supabase, teamSlug);
     if (!leagueSlug) {
       console.warn(`No se encontro liga domestica para "${teamName}" en "${leagueName}"`);
@@ -427,10 +469,16 @@ export async function getLogoUrlByTeamName(supabase, teamName, leagueName) {
     return getTeamLogoUrl(supabase, leagueSlug, teamSlug);
   }
 
-  // Liga domestica normal
+  // Liga domestica o competicion con carpeta propia (champions-league, europa-league)
   const leagueSlug = leagueMap[leagueName];
   if (!leagueSlug) {
     console.warn(`Liga no encontrada: "${leagueName}"`);
+    return null;
+  }
+
+  const teamSlug = resolveTeamSlug(teamName, leagueSlug);
+  if (!teamSlug) {
+    console.warn(`Logo de equipo no encontrado: "${teamName}" en "${leagueName}"`);
     return null;
   }
 
