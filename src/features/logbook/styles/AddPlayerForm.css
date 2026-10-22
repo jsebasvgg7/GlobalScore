@@ -1,0 +1,11 @@
+.lb-add {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.lb-add__submit {
+  grid-column: 1 / -1;
+  min-height: 48px;
+}

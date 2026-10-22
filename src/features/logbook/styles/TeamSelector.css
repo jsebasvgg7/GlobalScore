@@ -1,0 +1,15 @@
+.lb-team-selector {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.lb-team-selector__field {
+  flex: 1;
+  min-width: 0;
+}
+
+.lb-team-selector__add {
+  flex-shrink: 0;
+  white-space: nowrap;
+}

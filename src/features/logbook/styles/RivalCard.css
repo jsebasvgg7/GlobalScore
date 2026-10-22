@@ -1,0 +1,31 @@
+.lb-rival {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  border: 2px solid var(--lb-line);
+  border-radius: 0;
+  background: var(--lb-soft);
+}
+
+.lb-rival__info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lb-rival__name {
+  margin: 0;
+  color: var(--lb-fg);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.lb-rival__hint {
+  margin-top: 2px;
+  color: var(--lb-ink2);
+  font-size: 12px;
+  line-height: 1.5;
+}

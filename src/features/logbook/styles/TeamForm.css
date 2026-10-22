@@ -1,0 +1,13 @@
+.lb-team-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+.lb-team-form__field {
+  min-width: 0;
+}
+
+.lb-team-form__field--wide {
+  grid-column: 1 / -1;
+}

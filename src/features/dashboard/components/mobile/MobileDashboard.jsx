@@ -7,6 +7,7 @@ import AlbumBookEntry from '@/features/albums/components/AlbumBookEntry';
 import { useAlbumPacks } from '@/features/albums/hooks/useAlbumPacks';
 import { useAlbumCollection } from '@/features/albums/hooks/useAlbumCollection';
 import { useAlbumProgress } from '@/features/albums/hooks/useAlbumProgress';
+import LogbookPanel from '@/features/logbook/components/LogbookPanel';
 import "./MobileDashboard.css";
 
 const ClockSVG = () => (
@@ -492,6 +493,7 @@ function BottomSection({ users, currentUser, allAchievements }) {
     { id: "stats", label: "Stats", count: 4 },
     { id: "ranking", label: "Ranking", count: 3 },
     { id: "albums", label: "Álbumes", count: null },
+    { id: "libreta", label: "Libreta", count: null, meta: "personal" },
   ];
 
   return (
@@ -505,7 +507,7 @@ function BottomSection({ users, currentUser, allAchievements }) {
               onPointerDown={() => setActiveTab(tab.id)}
             >
               <span className="mob2-tab-label">{tab.label}</span>
-              <span className="mob2-tab-count">{tab.count != null ? `${tab.count} items` : '25·26'}</span>
+              <span className="mob2-tab-count">{tab.meta ?? (tab.count != null ? `${tab.count} items` : '25·26')}</span>
             </button>
           ))}
         </div>
@@ -519,6 +521,9 @@ function BottomSection({ users, currentUser, allAchievements }) {
       )}
       {activeTab === "albums" && (
         <AlbumsPanel currentUser={currentUser} onNavigate={() => navigate('/albums')} />
+      )}
+      {activeTab === "libreta" && (
+        <LogbookPanel currentUser={currentUser} onNavigate={() => navigate('/libreta')} />
       )}
     </div>
   );

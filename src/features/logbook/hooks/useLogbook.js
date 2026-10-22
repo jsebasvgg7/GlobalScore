@@ -3,8 +3,11 @@ import * as service from '../services';
 import {
   DEFAULT_POSITION,
   getTeamStats,
+  isMigrated,
+  markMigrated,
   pickActiveTeam,
   readActiveTeamId,
+  readLegacyLogbook,
   writeActiveTeamId,
 } from '../utils/logbook.utils';
 
@@ -29,7 +32,16 @@ export function useLogbook(currentUser) {
     setLoading(true);
     setError(null);
     try {
-      commit(await service.fetchTeams(userId));
+      let data = await service.fetchTeams(userId);
+      if (!isMigrated(userId)) {
+        const legacy = data.length ? [] : readLegacyLogbook();
+        if (legacy.length) {
+          await service.importTeams(userId, legacy);
+          data = await service.fetchTeams(userId);
+        }
+        markMigrated(userId);
+      }
+      commit(data);
     } catch (e) {
       console.error(e);
       setError('No se pudieron cargar los equipos');
