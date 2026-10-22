@@ -1,6 +1,6 @@
 .lb-rival {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
   padding: 10px;
@@ -13,6 +13,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  gap: 2px;
   min-width: 0;
 }
 
@@ -24,8 +25,78 @@
 }
 
 .lb-rival__hint {
-  margin-top: 2px;
   color: var(--lb-ink2);
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.lb-rival__control {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.lb-rival__label {
+  color: var(--lb-ink2);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.lb-rival__box {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--lb-line);
+  border-radius: 0;
+  background: var(--lb-card);
+}
+
+.lb-rival__btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--lb-fg);
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.lb-rival__btn:hover:not(:disabled) {
+  background: var(--lb-soft);
+}
+
+.lb-rival__btn:active:not(:disabled) {
+  background: var(--lb-ink);
+  color: var(--lb-on);
+}
+
+.lb-rival__btn:focus-visible {
+  outline: 3px solid var(--lb-ink2);
+  outline-offset: -3px;
+}
+
+.lb-rival__btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.lb-rival__value {
+  min-width: 32px;
+  color: var(--lb-fg);
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-rival__btn {
+    transition: none;
+  }
 }

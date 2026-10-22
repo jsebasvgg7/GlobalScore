@@ -490,10 +490,10 @@ function BottomSection({ users, currentUser, allAchievements }) {
   const navigate = useNavigate();
 
   const bottomTabs = [
+    { id: "libreta", label: "Libreta", count: null, meta: "personal" },
     { id: "stats", label: "Stats", count: 4 },
     { id: "ranking", label: "Ranking", count: 3 },
     { id: "albums", label: "Álbumes", count: null },
-    { id: "libreta", label: "Libreta", count: null, meta: "personal" },
   ];
 
   return (
@@ -513,6 +513,9 @@ function BottomSection({ users, currentUser, allAchievements }) {
         </div>
       </div>
 
+      {activeTab === "libreta" && (
+        <LogbookPanel currentUser={currentUser} onNavigate={() => navigate('/libreta')} />
+      )}
       {activeTab === "stats" && (
         <StatsPanel currentUser={currentUser} />
       )}
@@ -522,9 +525,7 @@ function BottomSection({ users, currentUser, allAchievements }) {
       {activeTab === "albums" && (
         <AlbumsPanel currentUser={currentUser} onNavigate={() => navigate('/albums')} />
       )}
-      {activeTab === "libreta" && (
-        <LogbookPanel currentUser={currentUser} onNavigate={() => navigate('/libreta')} />
-      )}
+      
     </div>
   );
 }
