@@ -78,6 +78,35 @@ CREATE TABLE public.leagues (
   logo_url text,
   CONSTRAINT leagues_pkey PRIMARY KEY (id)
 );
+CREATE TABLE public.libreta_players (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  team_id uuid NOT NULL,
+  name text NOT NULL CHECK (char_length(btrim(name)) >= 1 AND char_length(btrim(name)) <= 24),
+  pos text NOT NULL DEFAULT 'Delantero'::text CHECK (pos = ANY (ARRAY['Portero'::text, 'Defensa'::text, 'Mediocampista'::text, 'Delantero'::text])),
+  g integer NOT NULL DEFAULT 0 CHECK (g >= 0),
+  a integer NOT NULL DEFAULT 0 CHECK (a >= 0),
+  mvp integer NOT NULL DEFAULT 0 CHECK (mvp >= 0),
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT libreta_players_pkey PRIMARY KEY (id),
+  CONSTRAINT libreta_players_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.libreta_teams(id)
+);
+CREATE TABLE public.libreta_teams (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
+  name text NOT NULL DEFAULT 'Mi equipo'::text CHECK (char_length(btrim(name)) >= 1 AND char_length(btrim(name)) <= 30),
+  game text NOT NULL DEFAULT 'FIFA'::text CHECK (game = ANY (ARRAY['FIFA'::text, 'EA FC'::text, 'PES'::text, 'eFootball'::text, 'Otro'::text])),
+  formation text NOT NULL DEFAULT '4-3-3'::text CHECK (formation = ANY (ARRAY['4-3-3'::text, '4-4-2'::text, '4-2-3-1'::text, '3-5-2'::text, '5-3-2'::text, '4-1-4-1'::text, '3-4-3'::text, '4-5-1'::text])),
+  gan integer NOT NULL DEFAULT 0 CHECK (gan >= 0),
+  emp integer NOT NULL DEFAULT 0 CHECK (emp >= 0),
+  per integer NOT NULL DEFAULT 0 CHECK (per >= 0),
+  gc integer NOT NULL DEFAULT 0 CHECK (gc >= 0),
+  rival integer NOT NULL DEFAULT 0 CHECK (rival >= 0),
+  archived integer NOT NULL DEFAULT 0 CHECK (archived >= 0),
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  updated_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT libreta_teams_pkey PRIMARY KEY (id),
+  CONSTRAINT libreta_teams_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
+);
 CREATE TABLE public.matches (
   id text NOT NULL,
   league text NOT NULL,
