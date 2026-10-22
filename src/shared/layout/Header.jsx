@@ -42,7 +42,7 @@ export default function Header({ currentUser, users = [], onProfileClick }) {
     { path: "/history", icon: History, label: "Histórico" },
     { path: "/profile", icon: User2, label: "Perfil" },
     { path: "/notes", icon: NotebookPen, label: "Notas" },
-    { path: "/libreta", icon: BookOpen, label: "Libreta" },
+    //{ path: "/libreta", icon: BookOpen, label: "Libreta" },
     ...(currentUser?.is_admin ? [{ path: "/admin", icon: Shield, label: "Admin" }] : []),
   ];
 
