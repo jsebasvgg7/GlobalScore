@@ -13,14 +13,33 @@ import {
 
 const TEAM_COUNTERS = ['wins', 'draws', 'losses', 'goalsAgainst', 'opponentOwnGoals'];
 const PLAYER_COUNTERS = ['goals', 'assists', 'mvp'];
+const SAVE_DELAY_MS = 350;
+const SAVE_ERROR = 'No se pudieron guardar los cambios';
+
+const patchTeam = (list, teamId, patch) =>
+  list.map((team) => (team.id === teamId ? { ...team, ...patch } : team));
+
+const patchPlayer = (list, teamId, playerId, patch) =>
+  list.map((team) =>
+    team.id === teamId
+      ? {
+          ...team,
+          players: team.players.map((player) =>
+            player.id === playerId ? { ...player, ...patch } : player
+          ),
+        }
+      : team
+  );
 
 export function useLogbook(currentUser) {
   const userId = currentUser?.id;
   const [teams, setTeams] = useState([]);
   const [activeId, setActiveId] = useState(readActiveTeamId);
   const [loading, setLoading] = useState(true);
+  const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(null);
   const teamsRef = useRef([]);
+  const queueRef = useRef(new Map());
 
   const commit = useCallback((next) => {
     teamsRef.current = next;
@@ -36,12 +55,14 @@ export function useLogbook(currentUser) {
       if (!isMigrated(userId)) {
         const legacy = data.length ? [] : readLegacyLogbook();
         if (legacy.length) {
-          await service.importTeams(userId, legacy);
+          await service.importTeams(legacy);
           data = await service.fetchTeams(userId);
         }
         markMigrated(userId);
       }
+      queueRef.current.clear();
       commit(data);
+      setLoaded(true);
     } catch (e) {
       console.error(e);
       setError('No se pudieron cargar los equipos');
@@ -73,14 +94,78 @@ export function useLogbook(currentUser) {
       setError(null);
       try {
         await request();
+        return true;
       } catch (e) {
         console.error(e);
         commit(snapshot);
-        setError('No se pudieron guardar los cambios');
+        setError(SAVE_ERROR);
+        return false;
       }
     },
     [commit]
   );
+
+  const flushEntry = useCallback(
+    (entry) => {
+      clearTimeout(entry.timer);
+      const job = entry.pending;
+      if (!job) return;
+      entry.pending = null;
+      entry.chain = entry.chain.then(async () => {
+        try {
+          await job.request(job.value);
+          entry.confirmed = job.value;
+        } catch (e) {
+          console.error(e);
+          commit(job.apply(teamsRef.current, entry.confirmed));
+          setError(SAVE_ERROR);
+        }
+      });
+    },
+    [commit]
+  );
+
+  const settle = useCallback(
+    async (prefix) => {
+      const entries = [...queueRef.current.entries()]
+        .filter(([key]) => key.startsWith(prefix))
+        .map(([, entry]) => entry);
+      entries.forEach(flushEntry);
+      await Promise.all(entries.map((entry) => entry.chain));
+    },
+    [flushEntry]
+  );
+
+  const queueChange = useCallback(
+    (key, current, value, apply, request) => {
+      let entry = queueRef.current.get(key);
+      if (!entry) {
+        entry = { confirmed: current, timer: null, chain: Promise.resolve(), pending: null };
+        queueRef.current.set(key, entry);
+      }
+      setError(null);
+      commit(apply(teamsRef.current, value));
+      entry.pending = { value, apply, request };
+      clearTimeout(entry.timer);
+      entry.timer = setTimeout(() => flushEntry(entry), SAVE_DELAY_MS);
+    },
+    [commit, flushEntry]
+  );
+
+  useEffect(() => {
+    const queue = queueRef.current;
+    const flushAll = () => queue.forEach(flushEntry);
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') flushAll();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('pagehide', flushAll);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('pagehide', flushAll);
+      flushAll();
+    };
+  }, [flushEntry]);
 
   const selectTeam = useCallback((teamId) => {
     setActiveId(teamId);
@@ -110,8 +195,8 @@ export function useLogbook(currentUser) {
   const removeTeam = useCallback(
     async (teamId) => {
       const id = teamId ?? getActive()?.id;
-      if (!id) return;
-      await run(
+      if (!id) return false;
+      return run(
         (list) => list.filter((team) => team.id !== id),
         () => service.deleteTeam(id)
       );
@@ -126,7 +211,7 @@ export function useLogbook(currentUser) {
       const next = { ...patch };
       if ('name' in next) next.name = next.name.trim().slice(0, 30) || 'Mi equipo';
       await run(
-        (list) => list.map((item) => (item.id === team.id ? { ...item, ...next } : item)),
+        (list) => patchTeam(list, team.id, next),
         () => service.updateTeam(team.id, next)
       );
     },
@@ -134,42 +219,42 @@ export function useLogbook(currentUser) {
   );
 
   const adjustTeamCounter = useCallback(
-    async (key, delta) => {
+    (key, delta) => {
       if (!TEAM_COUNTERS.includes(key)) return;
       const team = getActive();
       if (!team) return;
-      const value = Math.max(0, team[key] + delta);
-      if (value === team[key]) return;
-      await run(
-        (list) => list.map((item) => (item.id === team.id ? { ...item, [key]: value } : item)),
-        () => service.updateTeam(team.id, { [key]: value })
+      const current = team[key];
+      const value = Math.max(0, current + delta);
+      if (value === current) return;
+      queueChange(
+        `team:${team.id}:${key}`,
+        current,
+        value,
+        (list, next) => patchTeam(list, team.id, { [key]: next }),
+        (next) => service.updateTeam(team.id, { [key]: next })
       );
     },
-    [getActive, run]
+    [getActive, queueChange]
   );
 
   const adjustPlayerCounter = useCallback(
-    async (playerId, key, delta) => {
+    (playerId, key, delta) => {
       if (!PLAYER_COUNTERS.includes(key)) return;
       const team = getActive();
       const player = team?.players.find((item) => item.id === playerId);
       if (!player) return;
-      const value = Math.max(0, player[key] + delta);
-      if (value === player[key]) return;
-      await run(
-        (list) =>
-          list.map((item) =>
-            item.id === team.id
-              ? {
-                  ...item,
-                  players: item.players.map((p) => (p.id === playerId ? { ...p, [key]: value } : p)),
-                }
-              : item
-          ),
-        () => service.updatePlayer(playerId, { [key]: value })
+      const current = player[key];
+      const value = Math.max(0, current + delta);
+      if (value === current) return;
+      queueChange(
+        `player:${playerId}:${key}`,
+        current,
+        value,
+        (list, next) => patchPlayer(list, team.id, playerId, { [key]: next }),
+        (next) => service.updatePlayer(playerId, { [key]: next })
       );
     },
-    [getActive, run]
+    [getActive, queueChange]
   );
 
   const addPlayer = useCallback(
@@ -197,6 +282,7 @@ export function useLogbook(currentUser) {
 
   const removePlayer = useCallback(
     async (playerId) => {
+      await settle(`player:${playerId}:`);
       const team = getActive();
       const player = team?.players.find((item) => item.id === playerId);
       if (!player) return;
@@ -214,7 +300,7 @@ export function useLogbook(currentUser) {
         () => service.deletePlayer(playerId)
       );
     },
-    [getActive, run]
+    [getActive, run, settle]
   );
 
   return {
@@ -222,6 +308,7 @@ export function useLogbook(currentUser) {
     activeTeam,
     stats: activeTeam ? getTeamStats(activeTeam) : null,
     loading,
+    loaded,
     error,
     reload: load,
     selectTeam,

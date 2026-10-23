@@ -484,7 +484,7 @@ function AlbumsPanel({ currentUser, onNavigate }) {
   );
 }
 
-// ── Sección inferior (Stats · Ranking · Álbumes) ──────────────
+// ── Sección inferior (Libreta · Stats · Ranking · Álbumes) ──────────────
 function BottomSection({ users, currentUser, allAchievements }) {
   const [activeTab, setActiveTab] = useState("libreta");
   const navigate = useNavigate();

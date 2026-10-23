@@ -78,34 +78,42 @@ CREATE TABLE public.leagues (
   logo_url text,
   CONSTRAINT leagues_pkey PRIMARY KEY (id)
 );
-CREATE TABLE public.libreta_players (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  team_id uuid NOT NULL,
-  name text NOT NULL CHECK (char_length(btrim(name)) >= 1 AND char_length(btrim(name)) <= 24),
-  pos text NOT NULL DEFAULT 'Delantero'::text CHECK (pos = ANY (ARRAY['Portero'::text, 'Defensa'::text, 'Mediocampista'::text, 'Delantero'::text])),
-  g integer NOT NULL DEFAULT 0 CHECK (g >= 0),
-  a integer NOT NULL DEFAULT 0 CHECK (a >= 0),
-  mvp integer NOT NULL DEFAULT 0 CHECK (mvp >= 0),
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT libreta_players_pkey PRIMARY KEY (id),
-  CONSTRAINT libreta_players_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.libreta_teams(id)
+create table public.libreta_teams (
+  id uuid not null default gen_random_uuid(),
+  user_id uuid not null,
+  name text not null default 'Mi equipo',
+  game text not null default 'FIFA',
+  formation text not null default '4-3-3',
+  gan integer not null default 0,
+  emp integer not null default 0,
+  per integer not null default 0,
+  gc integer not null default 0,
+  rival integer not null default 0,
+  archived integer not null default 0,
+  created_at timestamp with time zone not null default now(),
+  updated_at timestamp with time zone not null default now(),
+  constraint libreta_teams_pkey primary key (id),
+  constraint libreta_teams_user_id_fkey foreign key (user_id) references public.users(id) on delete cascade,
+  constraint libreta_teams_name_check check (char_length(btrim(name)) between 1 and 30),
+  constraint libreta_teams_game_check check (game = any (array['FIFA', 'EA FC', 'PES', 'eFootball', 'Otro'])),
+  constraint libreta_teams_formation_check check (formation = any (array['4-3-3', '4-4-2', '4-2-3-1', '3-5-2', '5-3-2', '4-1-4-1', '3-4-3', '4-5-1'])),
+  constraint libreta_teams_counters_check check (gan >= 0 and emp >= 0 and per >= 0 and gc >= 0 and rival >= 0 and archived >= 0)
 );
-CREATE TABLE public.libreta_teams (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL,
-  name text NOT NULL DEFAULT 'Mi equipo'::text CHECK (char_length(btrim(name)) >= 1 AND char_length(btrim(name)) <= 30),
-  game text NOT NULL DEFAULT 'FIFA'::text CHECK (game = ANY (ARRAY['FIFA'::text, 'EA FC'::text, 'PES'::text, 'eFootball'::text, 'Otro'::text])),
-  formation text NOT NULL DEFAULT '4-3-3'::text CHECK (formation = ANY (ARRAY['4-3-3'::text, '4-4-2'::text, '4-2-3-1'::text, '3-5-2'::text, '5-3-2'::text, '4-1-4-1'::text, '3-4-3'::text, '4-5-1'::text])),
-  gan integer NOT NULL DEFAULT 0 CHECK (gan >= 0),
-  emp integer NOT NULL DEFAULT 0 CHECK (emp >= 0),
-  per integer NOT NULL DEFAULT 0 CHECK (per >= 0),
-  gc integer NOT NULL DEFAULT 0 CHECK (gc >= 0),
-  rival integer NOT NULL DEFAULT 0 CHECK (rival >= 0),
-  archived integer NOT NULL DEFAULT 0 CHECK (archived >= 0),
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  updated_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT libreta_teams_pkey PRIMARY KEY (id),
-  CONSTRAINT libreta_teams_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
+
+create table public.libreta_players (
+  id uuid not null default gen_random_uuid(),
+  team_id uuid not null,
+  name text not null,
+  pos text not null default 'Delantero',
+  g integer not null default 0,
+  a integer not null default 0,
+  mvp integer not null default 0,
+  created_at timestamp with time zone not null default now(),
+  constraint libreta_players_pkey primary key (id),
+  constraint libreta_players_team_id_fkey foreign key (team_id) references public.libreta_teams(id) on delete cascade,
+  constraint libreta_players_name_check check (char_length(btrim(name)) between 1 and 24),
+  constraint libreta_players_pos_check check (pos = any (array['Portero', 'Defensa', 'Mediocampista', 'Delantero'])),
+  constraint libreta_players_counters_check check (g >= 0 and a >= 0 and mvp >= 0)
 );
 CREATE TABLE public.matches (
   id text NOT NULL,
@@ -178,3 +186,137 @@ CREATE TABLE public.worldcup_predictions (
   CONSTRAINT worldcup_predictions_pkey PRIMARY KEY (id),
   CONSTRAINT worldcup_predictions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
 );
+
+create index libreta_teams_user_id_idx on public.libreta_teams (user_id);
+create index libreta_players_team_id_idx on public.libreta_players (team_id);
+
+create or replace function public.libreta_touch_updated_at()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+create trigger libreta_teams_touch_updated_at
+before update on public.libreta_teams
+for each row
+execute function public.libreta_touch_updated_at();
+
+alter table public.libreta_teams enable row level security;
+alter table public.libreta_players enable row level security;
+
+create policy libreta_teams_owner_all
+on public.libreta_teams
+for all
+to authenticated
+using (user_id in (select id from public.users where auth_id = auth.uid()))
+with check (user_id in (select id from public.users where auth_id = auth.uid()));
+
+create policy libreta_players_owner_all
+on public.libreta_players
+for all
+to authenticated
+using (
+  exists (
+    select 1
+    from public.libreta_teams t
+    where t.id = libreta_players.team_id
+      and t.user_id in (select id from public.users where auth_id = auth.uid())
+  )
+)
+with check (
+  exists (
+    select 1
+    from public.libreta_teams t
+    where t.id = libreta_players.team_id
+      and t.user_id in (select id from public.users where auth_id = auth.uid())
+  )
+);
+
+create or replace function public.libreta_delete_player(p_player_id uuid)
+returns void
+language plpgsql
+security invoker
+set search_path = public
+as $$
+declare
+  v_team uuid;
+  v_goals integer;
+begin
+  delete from public.libreta_players
+  where id = p_player_id
+  returning team_id, g into v_team, v_goals;
+
+  if v_team is null then
+    return;
+  end if;
+
+  update public.libreta_teams
+  set archived = archived + v_goals
+  where id = v_team;
+end;
+$$;
+
+revoke all on function public.libreta_delete_player(uuid) from public;
+grant execute on function public.libreta_delete_player(uuid) to authenticated;
+
+create or replace function public.libreta_import(p_teams jsonb)
+returns void
+language plpgsql
+security invoker
+set search_path = public
+as $$
+declare
+  v_owner uuid;
+  v_team jsonb;
+  v_player jsonb;
+  v_team_id uuid;
+begin
+  select id into v_owner from public.users where auth_id = auth.uid() limit 1;
+
+  if v_owner is null then
+    raise exception 'usuario no encontrado';
+  end if;
+
+  if exists (select 1 from public.libreta_teams where user_id = v_owner) then
+    return;
+  end if;
+
+  for v_team in select * from jsonb_array_elements(p_teams) loop
+    insert into public.libreta_teams (user_id, name, game, formation, gan, emp, per, gc, rival, archived, created_at)
+    values (
+      v_owner,
+      v_team->>'name',
+      v_team->>'game',
+      v_team->>'formation',
+      (v_team->>'gan')::integer,
+      (v_team->>'emp')::integer,
+      (v_team->>'per')::integer,
+      (v_team->>'gc')::integer,
+      (v_team->>'rival')::integer,
+      (v_team->>'archived')::integer,
+      clock_timestamp()
+    )
+    returning id into v_team_id;
+
+    for v_player in select * from jsonb_array_elements(coalesce(v_team->'players', '[]'::jsonb)) loop
+      insert into public.libreta_players (team_id, name, pos, g, a, mvp, created_at)
+      values (
+        v_team_id,
+        v_player->>'name',
+        v_player->>'pos',
+        (v_player->>'g')::integer,
+        (v_player->>'a')::integer,
+        (v_player->>'mvp')::integer,
+        clock_timestamp()
+      );
+    end loop;
+  end loop;
+end;
+$$;
+
+revoke all on function public.libreta_import(jsonb) from public;
+grant execute on function public.libreta_import(jsonb) to authenticated;

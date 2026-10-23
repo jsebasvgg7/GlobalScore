@@ -132,6 +132,20 @@
   transform: scale(0.9);
 }
 
+.lb-player__remove--confirm {
+  width: auto;
+  padding: 0 12px;
+  background: var(--lb-danger);
+  color: var(--lb-on);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.lb-player__remove--confirm:hover {
+  background: var(--lb-danger);
+}
+
 .lb-player__remove:focus-visible {
   outline: 3px solid var(--lb-ink2);
   outline-offset: -3px;

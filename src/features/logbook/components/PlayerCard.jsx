@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, Trash2 } from 'lucide-react';
 import VerticalCounter from './VerticalCounter';
 import '../styles/PlayerCard.css';
@@ -9,9 +9,26 @@ const COUNTERS = [
   { key: 'mvp', label: 'MVP', noun: 'MVP' },
 ];
 
+const CONFIRM_WINDOW_MS = 3000;
+
 export default function PlayerCard({ player, onAdjust, onRemove }) {
   const [open, setOpen] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const timer = useRef(null);
   const panelId = `lb-player-${player.id}`;
+
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const handleRemove = () => {
+    if (!confirming) {
+      setConfirming(true);
+      timer.current = setTimeout(() => setConfirming(false), CONFIRM_WINDOW_MS);
+      return;
+    }
+    clearTimeout(timer.current);
+    setConfirming(false);
+    onRemove(player.id);
+  };
 
   return (
     <article className={`lb-player${open ? ' lb-player--open' : ''}`}>
@@ -44,11 +61,15 @@ export default function PlayerCard({ player, onAdjust, onRemove }) {
         {open && (
           <button
             type="button"
-            className="lb-player__remove"
-            onClick={() => onRemove(player.id)}
-            aria-label={`Eliminar a ${player.name}`}
+            className={`lb-player__remove${confirming ? ' lb-player__remove--confirm' : ''}`}
+            onClick={handleRemove}
+            aria-label={confirming ? `Confirmar eliminar a ${player.name}` : `Eliminar a ${player.name}`}
           >
-            <Trash2 size={20} strokeWidth={2.5} aria-hidden="true" />
+            {confirming ? (
+              <span>¿Borrar?</span>
+            ) : (
+              <Trash2 size={20} strokeWidth={2.5} aria-hidden="true" />
+            )}
           </button>
         )}
       </div>

@@ -7,13 +7,28 @@ function formatDiff(value) {
 }
 
 export default function LogbookPanel({ currentUser, onNavigate }) {
-  const { loading, team, topScorer } = useLogbookSummary(currentUser);
+  const { loading, error, reload, team, topScorer } = useLogbookSummary(currentUser);
 
   if (loading) {
     return (
       <div className="mob2-bento-grid">
         <div className="mob2-fw-card mob2-bento-wide lb-panel__status" role="status">
           Cargando libreta…
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mob2-bento-grid">
+        <div className="mob2-fw-card mob2-bento-wide lb-panel__empty">
+          <span className="mob2-sm-tag">TU LIBRETA</span>
+          <p className="lb-panel__empty-text">No se pudo cargar tu libreta.</p>
+          <button type="button" className="mob2-alb-cta lb-panel__cta" onClick={reload}>
+            <span>Reintentar</span>
+            <ChevronRight size={14} className="mob2-alb-cta-arrow" />
+          </button>
         </div>
       </div>
     );

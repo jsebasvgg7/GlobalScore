@@ -17,6 +17,7 @@ export default function LogbookPage({ currentUser }) {
     activeTeam,
     stats,
     loading,
+    loaded,
     error,
     reload,
     selectTeam,
@@ -51,11 +52,11 @@ export default function LogbookPage({ currentUser }) {
     clearTimeout(timer.current);
     setConfirming(false);
     const wasLast = teams.length === 1;
-    await removeTeam(activeId);
-    if (wasLast) await createTeam();
+    const removed = await removeTeam(activeId);
+    if (removed && wasLast) await createTeam();
   };
 
-  const showEmpty = !loading && !activeTeam;
+  const showEmpty = loaded && !loading && !activeTeam;
   const showLoading = loading && !activeTeam;
   const topScorer = activeTeam ? getTopScorer(activeTeam) : null;
 

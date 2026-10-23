@@ -125,11 +125,13 @@ export async function deletePlayer(playerId) {
   if (error) throw error;
 }
 
-export async function importTeams(userId, teams) {
-  for (const { players, ...values } of teams) {
-    const team = await createTeam(userId, values);
-    for (const player of players) {
-      await addPlayer(team.id, player);
-    }
-  }
+export async function importTeams(teams) {
+  const payload = teams.map(({ players, ...values }) => ({
+    ...toRow(values, TEAM_COLUMNS),
+    players: players.map((player) => toRow(player, PLAYER_COLUMNS)),
+  }));
+
+  const { error } = await supabase.rpc('libreta_import', { p_teams: payload });
+
+  if (error) throw error;
 }
