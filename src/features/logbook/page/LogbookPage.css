@@ -60,6 +60,24 @@ html body:has(.lb-page) {
   }
 }
 
+@media (max-width: 768px) {
+  .lb-page {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    max-width: none;
+    margin: 0;
+    padding: 74px max(14px, calc((100% - 480px) / 2)) calc(84px + env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lb-page > * {
+    flex-shrink: 0;
+  }
+}
+
 .lb-page *,
 .lb-page *::before,
 .lb-page *::after {
