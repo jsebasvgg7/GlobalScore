@@ -147,23 +147,27 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
       (isSaved || isDisabled) ? "mc-score-box--done" : "",
     ].filter(Boolean).join(" ");
 
-    const nameEl = (
+    const sideTrend = trend ? trend[side] : null;
+    const TrendIcon = sideTrend === "up" ? TrendingUp : TrendingDown;
+
+    const nameText = (
       <span className={`mc-team-name mc-team-name--${isHome ? "top" : "bottom"}`}>
         {teamName}
       </span>
     );
 
-    const sideTrend = trend ? trend[side] : null;
-    const TrendIcon = sideTrend === "up" ? TrendingUp : TrendingDown;
+    const nameEl = showProb ? (
+      <div className={`mc-team-head mc-team-head--${isHome ? "top" : "bottom"}`}>
+        {nameText}
+        <span className={`mc-prob mc-prob--${sideTrend}`}>
+          <TrendIcon size={13} aria-hidden="true" />
+          {isHome ? match.prob_home : match.prob_away}%
+        </span>
+      </div>
+    ) : nameText;
 
     const rowEl = (
-      <div className={showProb ? "mc-team-row mc-team-row--prob" : "mc-team-row"}>
-        {showProb && (
-          <div className={`mc-prob mc-prob--${sideTrend}`}>
-            <TrendIcon size={15} aria-hidden="true" />
-            <span>{isHome ? match.prob_home : match.prob_away}%</span>
-          </div>
-        )}
+      <div className="mc-team-row">
         {/* ← onClick y clase --tap solo en el escudo */}
         <div
           className={shieldClasses}
@@ -242,15 +246,14 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
         <div className="mc-body">
           <TeamBlock side="home" />
 
-          <div className={showProb ? "mc-divider mc-divider--prob" : "mc-divider"}>
-            {showProb && (
-              <div className="mc-prob mc-prob--draw">
-                <Equal size={15} aria-hidden="true" />
-                <span>{match.prob_draw}%</span>
-              </div>
-            )}
+          <div className="mc-divider">
             <div className="mc-divider-line" />
-            {match.is_knockout && !isDisabled
+            {showProb ? (
+              <span className="mc-prob mc-prob--draw">
+                <Equal size={13} aria-hidden="true" />
+                {match.prob_draw}%
+              </span>
+            ) : match.is_knockout && !isDisabled
               ? <SwordsIcon className="mc-swords-icon" />
               : <span className="mc-vs-label">VS</span>
             }

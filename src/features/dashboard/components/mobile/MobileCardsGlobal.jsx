@@ -143,12 +143,6 @@ function TeamRow({ side, match, score, onInc, onDec, isDisabled, isSaved, isAdva
 
   return (
     <div className={["mcg-team-row", isAdvancing ? "mcg-team-row--adv" : ""].filter(Boolean).join(" ")}>
-      {probTrend && (
-        <div className={`mcg-prob mcg-prob--${probTrend}`}>
-          <TrendIcon size={16} aria-hidden="true" />
-          <span>{isHome ? match.prob_home : match.prob_away}%</span>
-        </div>
-      )}
       <div
         className={[
           "mcg-shield",
@@ -165,7 +159,15 @@ function TeamRow({ side, match, score, onInc, onDec, isDisabled, isSaved, isAdva
         )}
       </div>
 
-      <span className="mcg-team-name">{teamName}</span>
+      <div className="mcg-team-info">
+        <span className="mcg-team-name">{teamName}</span>
+        {probTrend && (
+          <span className={`mcg-prob mcg-prob--${probTrend}`}>
+            <TrendIcon size={14} aria-hidden="true" />
+            {isHome ? match.prob_home : match.prob_away}%
+          </span>
+        )}
+      </div>
 
       <div className="mcg-controls">
         <KeyBtn symbol="−" onPress={onDec} disabled={isDisabled || score <= 0 || score === ""} />
@@ -290,16 +292,17 @@ export function MatchCardMobile({ match, userPred, onPredict }) {
           probTrend={probTrend?.home} />
 
         <div className="mcg-vs-row">
-          {showProb && (
-            <div className="mcg-prob mcg-prob--draw">
-              <Equal size={16} aria-hidden="true" />
-              <span>{match.prob_draw}%</span>
-            </div>
-          )}
           <div className="mcg-vs-line" />
-          <span className="mcg-vs">
-            {match.is_knockout && !isDisabled ? <SwordsIcon /> : "VS"}
-          </span>
+          {showProb ? (
+            <span className="mcg-prob mcg-prob--draw">
+              <Equal size={14} aria-hidden="true" />
+              {match.prob_draw}%
+            </span>
+          ) : (
+            <span className="mcg-vs">
+              {match.is_knockout && !isDisabled ? <SwordsIcon /> : "VS"}
+            </span>
+          )}
           <div className="mcg-vs-line" />
         </div>
 
