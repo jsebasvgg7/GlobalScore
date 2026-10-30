@@ -17,7 +17,7 @@ const DEFAULT_PREFERENCES = {
   // Predicciones
   confirm_before_save: false,
   auto_save: true,
-  show_probabilities: false,
+  show_probabilities: true,
   predictions_public: true,
 
   // Privacidad

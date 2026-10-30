@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { ArrowLeft, Filter, ArrowUpDown, X, SlidersHorizontal } from "lucide-react";
 import { MatchCardMobile, LeagueCardMobile, AwardCardMobile } from '../../features/dashboard';
+import ProbabilityBar from "../ui/ProbabilityBar";
 import "../../features/dashboard/components/mobile/MobileCardsGlobal.css";
 import "./MobileSubPage.css";
 
@@ -120,6 +121,8 @@ function MatchesPage({ matches, currentUser, onPredict, onBack }) {
           </span>
         )}
       </div>
+
+      <ProbabilityBar currentUser={currentUser} />
 
       {/* ── CONTENIDO ── */}
       <div className="msp-body">

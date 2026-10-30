@@ -32,6 +32,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { ImageViewer } from "@/shared/ui";
 import { supabase } from '@/shared/services/supabase/client';
 import { useSettings } from '@/shared/hooks/useSettings';
+import { setProbabilityStore } from '@/shared/hooks/useProbabilityPreference';
 import {
   getPredictionResult,
   calculateAccuracy,
@@ -490,6 +491,11 @@ function SettingsSection({ section, preferences, saving, handleToggle, handleSel
               </select>
             </Row>
           </Card>
+          <Card title="Pronósticos">
+            <Row label="Mostrar pronósticos" desc="Porcentajes de victoria en los partidos. Son una guía estadística, no una certeza">
+              <Toggle checked={preferences.show_probabilities} onChange={() => handleToggle('show_probabilities')} />
+            </Row>
+          </Card>
         </div>
       );
     case 'notifications':
@@ -654,6 +660,7 @@ export default function ProfileSettingsPage({ currentUser, onBack }) {
   const handleToggle = async (key) => {
     const res = await updatePreference(key, !preferences[key]);
     if (!res.success) toast.error('Error al guardar');
+    else if (key === 'show_probabilities') setProbabilityStore(!preferences[key]);
   };
 
   const handleSelect = async (key, val) => { await updatePreference(key, val); };

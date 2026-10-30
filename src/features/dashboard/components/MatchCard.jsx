@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CheckCircle2, Equal, TrendingDown, TrendingUp } from "lucide-react";
 import { getProbabilityTrend, hasMatchProbability } from "@/shared/utils/matchProbability";
+import { useShowProbabilities } from "@/shared/hooks/useProbabilityPreference";
 import '../styles/MatchCard.css';
 
 // ── Icono espadas knockout ────────────────────────────────────
@@ -110,7 +111,8 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
           ? { label: "Guardado", mod: "saved" }
           : { label: "Pendiente", mod: "pending" };
 
-  const showProb = hasMatchProbability(match);
+  const probabilitiesEnabled = useShowProbabilities();
+  const showProb = probabilitiesEnabled && hasMatchProbability(match);
   const trend = showProb ? getProbabilityTrend(match) : null;
 
   // ── Clases raíz ───────────────────────────────────────────

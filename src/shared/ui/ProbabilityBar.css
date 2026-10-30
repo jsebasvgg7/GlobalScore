@@ -1,0 +1,71 @@
+.pb-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--gs-surface, #fff);
+  border-bottom: 1px solid var(--gs-brand, #5b49ed);
+  flex-shrink: 0;
+}
+
+.pb-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  min-width: 0;
+  font-family: var(--gs-font, 'DM Mono', monospace);
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--gs-brand-soft, #7c6ff0);
+}
+
+.pb-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--gs-brand-soft, #7c6ff0);
+}
+
+.pb-control {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.pb-switch {
+  position: relative;
+  width: 34px;
+  height: 18px;
+  padding: 0;
+  background: var(--gs-surface, #fff);
+  border: 1px solid var(--gs-brand, #5b49ed);
+  cursor: pointer;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pb-switch--on {
+  background: var(--gs-brand, #5b49ed);
+}
+
+.pb-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  background: var(--gs-brand, #5b49ed);
+  transition: transform 0.15s, background 0.15s;
+}
+
+.pb-switch--on .pb-knob {
+  transform: translateX(16px);
+  background: var(--gs-on-brand, #fff);
+}
+
+.pb-switch:focus-visible {
+  outline: 2px solid var(--gs-brand-soft, #7c6ff0);
+  outline-offset: 2px;
+}

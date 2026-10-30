@@ -722,6 +722,11 @@ function SettingsSection({
               </select>
             </Row>
           </Card>
+          <Card title="Pronósticos">
+            <Row label="Mostrar pronósticos" desc="Porcentajes de victoria en los partidos. Son una guía estadística, no una certeza">
+              <Toggle checked={preferences.show_probabilities} onChange={() => handleToggle("show_probabilities")} />
+            </Row>
+          </Card>
         </div>
       );
 

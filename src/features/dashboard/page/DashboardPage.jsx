@@ -17,6 +17,7 @@ import AlbumBookEntry from '@/features/albums/components/AlbumBookEntry';
 import { NavigationTabs } from "@/shared/layout";
 import { PageLoader, LoadingOverlay } from "@/shared/ui/LoadingStates";
 import { ToastContainer, useToast } from "@/shared/ui/Toast";
+import ProbabilityBar from "@/shared/ui/ProbabilityBar";
 import { useDataLoader } from "@/shared/hooks";
 
 import "./DashboardPage.css";
@@ -230,6 +231,8 @@ const activeAwards = awards.filter((a) => a.status !== "finished");
               leagueCount={activeLeagues.length}
               awardCount={activeAwards.length}
             />
+
+            {activeTab === "matches" && <ProbabilityBar currentUser={currentUser} />}
 
             {/* ════ PARTIDOS ════ */}
             {activeTab === "matches" && (

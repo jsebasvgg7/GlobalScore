@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CheckCircle2, Trophy, Target, Award, Star, Shield, Clock, Equal, TrendingDown, TrendingUp } from "lucide-react";
 import { getProbabilityTrend, hasMatchProbability } from "@/shared/utils/matchProbability";
+import { useShowProbabilities } from "@/shared/hooks/useProbabilityPreference";
 import './MobileCardsGlobal.css';
 // ── Icono espadas knockout ───────────────────────────────────────
 const SwordsIcon = () => (
@@ -198,7 +199,8 @@ export function MatchCardMobile({ match, userPred, onPredict }) {
   const isPastDeadline = deadline && now >= deadline;
   const isLive = match.status === "live";
   const isDisabled = isPastDeadline || match.status !== "pending";
-  const showProb = hasMatchProbability(match);
+  const probabilitiesEnabled = useShowProbabilities();
+  const showProb = probabilitiesEnabled && hasMatchProbability(match);
   const probTrend = showProb ? getProbabilityTrend(match) : null;
 
   const triggerSave = (home, away, adv) => {
