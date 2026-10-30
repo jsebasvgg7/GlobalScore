@@ -159,28 +159,6 @@ export default function LogbookDesktop({
               <em>Ordenado por goles</em>
             </div>
 
-            <div className="lgd-head">
-              <span>Rank</span>
-              <span>Jugador</span>
-              <span>Posición</span>
-              <span>Goles</span>
-              <span>Asist.</span>
-              <span>MVP</span>
-              <span />
-            </div>
-
-            {players.length === 0 && <p className="lgd-status">Aún no hay jugadores. Añade el primero abajo.</p>}
-
-            {players.map((player, index) => (
-              <PlayerRow
-                key={player.id}
-                rank={index + 1}
-                player={player}
-                onAdjust={onAdjustPlayer}
-                onRemove={onRemovePlayer}
-              />
-            ))}
-
             <form className="lgd-add" onSubmit={handleSubmit}>
               <label className="lgd-hidden" htmlFor="lgd-add-name">
                 Nombre del jugador
@@ -213,6 +191,28 @@ export default function LogbookDesktop({
                 Añadir
               </button>
             </form>
+
+            <div className="lgd-head">
+              <span>Rank</span>
+              <span>Jugador</span>
+              <span>Posición</span>
+              <span>Goles</span>
+              <span>Asist.</span>
+              <span>MVP</span>
+              <span />
+            </div>
+
+            {players.length === 0 && <p className="lgd-status">Aún no hay jugadores. Añade el primero abajo.</p>}
+
+            {players.map((player, index) => (
+              <PlayerRow
+                key={player.id}
+                rank={index + 1}
+                player={player}
+                onAdjust={onAdjustPlayer}
+                onRemove={onRemovePlayer}
+              />
+            ))}
 
             {activeTeam.archivedGoals > 0 && (
               <p className="lgd-note">
