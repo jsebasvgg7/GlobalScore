@@ -20,12 +20,12 @@ function Avatar({ user }) {
       <img
         src={user.avatar_url}
         alt={user.username}
-        className="hp-av hp-av--img"
+        className="rh-av rh-av--img"
       />
     );
   }
   return (
-    <div className="hp-av hp-av--ph">
+    <div className="rh-av rh-av--ph">
       {(user?.username || 'U')[0].toUpperCase()}
     </div>
   );
@@ -34,10 +34,10 @@ function Avatar({ user }) {
 /* ── Rank badge ── */
 function RankBadge({ rank }) {
   const cls =
-    rank === 1 ? 'hp-badge hp-badge--1' :
-      rank === 2 ? 'hp-badge hp-badge--2' :
-        rank === 3 ? 'hp-badge hp-badge--3' :
-          'hp-badge hp-badge--n';
+    rank === 1 ? 'rh-badge rh-badge--1' :
+      rank === 2 ? 'rh-badge rh-badge--2' :
+        rank === 3 ? 'rh-badge rh-badge--3' :
+          'rh-badge rh-badge--n';
   return <span className={cls}>{rank}</span>;
 }
 
@@ -111,19 +111,19 @@ export default function HistoryPanel() {
   if (months.length === 0) return <PanelEmpty />;
 
   return (
-    <aside className="hp-root">
+    <aside className="rh-root">
 
       {/* ── HEADER ── */}
-      <div className="hp-header">
-        <div className="hp-header-dot" />
-        <span className="hp-header-title">ARCHIVO · RANKINGS</span>
-        <div className="hp-header-dot" />
+      <div className="rh-header">
+        <div className="rh-header-dot" />
+        <span className="rh-header-title">ARCHIVO · RANKINGS</span>
+        <div className="rh-header-dot" />
       </div>
 
       {/* ── MONTH NAVIGATOR ── */}
-      <div className="hp-nav">
+      <div className="rh-nav">
         <button
-          className="hp-nav-btn"
+          className="rh-nav-btn"
           onClick={() => setSelectedIdx(i => i - 1)}
           disabled={!canPrev}
           aria-label="Mes anterior"
@@ -131,19 +131,19 @@ export default function HistoryPanel() {
           <ChevronLeft size={14} />
         </button>
 
-        <div className="hp-nav-center">
-          <span className="hp-nav-month">
+        <div className="rh-nav-center">
+          <span className="rh-nav-month">
             {MONTHS_ES[(current?.month ?? 1) - 1]}
           </span>
-          <span className="hp-nav-year">{current?.year}</span>
-          <span className="hp-nav-count">
+          <span className="rh-nav-year">{current?.year}</span>
+          <span className="rh-nav-count">
             <Users size={9} />
             {current?.participant_count ?? 0}
           </span>
         </div>
 
         <button
-          className="hp-nav-btn"
+          className="rh-nav-btn"
           onClick={() => setSelectedIdx(i => i + 1)}
           disabled={!canNext}
           aria-label="Mes siguiente"
@@ -153,11 +153,11 @@ export default function HistoryPanel() {
       </div>
 
       {/* ── MONTH PILLS ── */}
-      <div className="hp-pills">
+      <div className="rh-pills">
         {months.map((m, i) => (
           <button
             key={`${m.year}-${m.month}`}
-            className={`hp-pill${i === selectedIdx ? ' hp-pill--active' : ''}`}
+            className={`rh-pill${i === selectedIdx ? ' rh-pill--active' : ''}`}
             onClick={() => setSelectedIdx(i)}
           >
             {MONTHS_ES[m.month - 1]}{String(m.year).slice(2)}
@@ -166,54 +166,54 @@ export default function HistoryPanel() {
       </div>
 
       {/* ── SNAPSHOT LIST ── */}
-      <div className="hp-list-wrap">
+      <div className="rh-list-wrap">
         {loadingSnap ? (
-          <div className="hp-list-loader">
-            <Loader size={16} className="hp-spin" />
+          <div className="rh-list-loader">
+            <Loader size={16} className="rh-spin" />
           </div>
         ) : error ? (
-          <div className="hp-list-error">{error}</div>
+          <div className="rh-list-error">{error}</div>
         ) : snapshot.length === 0 ? (
-          <div className="hp-list-empty">Sin datos para este mes</div>
+          <div className="rh-list-empty">Sin datos para este mes</div>
         ) : (
           <>
             {/* thead */}
-            <div className="hp-thead">
-              <span className="hp-th hp-th--rank">#</span>
-              <span className="hp-th hp-th--user">Jugador</span>
-              <span className="hp-th hp-th--acc">Prec.</span>
-              <span className="hp-th hp-th--pts">Pts</span>
+            <div className="rh-thead">
+              <span className="rh-th rh-th--rank">#</span>
+              <span className="rh-th rh-th--user">Jugador</span>
+              <span className="rh-th rh-th--acc">Prec.</span>
+              <span className="rh-th rh-th--pts">Pts</span>
             </div>
 
             {/* rows */}
-            <div className="hp-tbody">
+            <div className="rh-tbody">
               {snapshot.map((row) => {
                 const acc = accuracy(row.correct, row.predictions);
                 const topMod =
-                  row.rank === 1 ? ' hp-row--gold' :
-                    row.rank === 2 ? ' hp-row--silver' :
-                      row.rank === 3 ? ' hp-row--bronze' : '';
+                  row.rank === 1 ? ' rh-row--gold' :
+                    row.rank === 2 ? ' rh-row--silver' :
+                      row.rank === 3 ? ' rh-row--bronze' : '';
 
                 return (
                   <div
                     key={row.id}
-                    className={`hp-row${topMod}`}
+                    className={`rh-row${topMod}`}
                     style={{ animationDelay: `${Math.min(row.rank - 1, 20) * 18}ms` }}
                   >
                     <RankBadge rank={row.rank} />
-                    <div className="hp-row-user">
+                    <div className="rh-row-user">
                       <Avatar user={row} />
-                      <div className="hp-row-info">
-                        <span className="hp-row-name">{row.username}</span>
-                        <span className="hp-row-sub">
+                      <div className="rh-row-info">
+                        <span className="rh-row-name">{row.username}</span>
+                        <span className="rh-row-sub">
                           {row.correct ?? 0} aciertos · {row.predictions ?? 0} pred.
                         </span>
                       </div>
                     </div>
-                    <span className="hp-row-acc">{acc}%</span>
-                    <span className="hp-row-pts">
+                    <span className="rh-row-acc">{acc}%</span>
+                    <span className="rh-row-pts">
                       {fmt(row.points)}
-                      <span className="hp-row-pts-lbl">p</span>
+                      <span className="rh-row-pts-lbl">p</span>
                     </span>
                   </div>
                 );
@@ -221,7 +221,7 @@ export default function HistoryPanel() {
             </div>
 
             {/* footer */}
-            <div className="hp-footer">
+            <div className="rh-footer">
               <Calendar size={10} />
               <span>
                 {MONTHS_ES[(current?.month ?? 1) - 1]} {current?.year}
@@ -238,18 +238,18 @@ export default function HistoryPanel() {
 /* ── Sub-components ── */
 function PanelLoader() {
   return (
-    <aside className="hp-root hp-root--center">
-      <Loader size={20} className="hp-spin" style={{ color: 'rgba(255,255,255,0.25)' }} />
+    <aside className="rh-root rh-root--center">
+      <Loader size={20} className="rh-spin" style={{ color: 'rgba(255,255,255,0.25)' }} />
     </aside>
   );
 }
 
 function PanelEmpty() {
   return (
-    <aside className="hp-root hp-root--center">
+    <aside className="rh-root rh-root--center">
       <Calendar size={28} style={{ color: 'rgba(255,255,255,0.1)', marginBottom: 10 }} />
-      <p className="hp-empty-msg">Sin historial disponible</p>
-      <p className="hp-empty-sub">
+      <p className="rh-empty-msg">Sin historial disponible</p>
+      <p className="rh-empty-sub">
         Los rankings se archivan automáticamente al final de cada mes.
       </p>
     </aside>
