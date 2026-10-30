@@ -77,8 +77,8 @@
 }
 
 .mc-league-icon {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   background: #f4f7fc;
   border: 0.5px solid #e8ecf4;
   display: flex;
@@ -93,8 +93,8 @@
 }
 
 .mc-league-logo {
-  width: 13px;
-  height: 13px;
+  width: 22px;
+  height: 22px;
   object-fit: contain;
 }
 
@@ -541,13 +541,13 @@
 }
 
 .mc-league-icon {
-  width: 25px !important;
-  height: 25px !important;
+  width: 32px !important;
+  height: 32px !important;
 }
 
 .mc-league-logo {
-  width: 16px !important;
-  height: 16px !important;
+  width: 26px !important;
+  height: 26px !important;
 }
 
 .mc-league-name {
