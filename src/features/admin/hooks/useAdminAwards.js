@@ -22,8 +22,11 @@ export const useAdminAwards = (loadData, toast) => {
 
   const handleFinishAward = async (awardId, winner) => {
     try {
-      await finishAward(awardId, winner);
+      const { failed } = await finishAward(awardId, winner);
       await loadData();
+      if (failed > 0) {
+        toast.error(`⚠️ Premio cerrado, pero ${failed} usuario(s) no se actualizaron. No lo cierres de nuevo.`);
+      }
       toast.success(`🏅 Premio finalizado. Ganador: ${winner}`, 4000);
     } catch (err) {
       console.error('Error finishing award:', err);

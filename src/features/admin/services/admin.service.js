@@ -117,6 +117,33 @@ export const insertLeague = async (league) => {
     if (error) throw error;
 };
 
+const STAT_COLUMNS = 'points, predictions, correct, monthly_points, monthly_predictions, monthly_correct, season_points, season_predictions, season_correct';
+
+const addUserStats = async (userId, pointsEarned, correctCount) => {
+    const { data: userData, error: userErr } = await supabase
+        .from('users')
+        .select(STAT_COLUMNS)
+        .eq('id', userId)
+        .single();
+    if (userErr || !userData) throw userErr || new Error('Usuario no encontrado');
+
+    const { error: updErr } = await supabase
+        .from('users')
+        .update({
+            points: (userData.points || 0) + pointsEarned,
+            predictions: (userData.predictions || 0) + 1,
+            correct: (userData.correct || 0) + correctCount,
+            monthly_points: (userData.monthly_points || 0) + pointsEarned,
+            monthly_predictions: (userData.monthly_predictions || 0) + 1,
+            monthly_correct: (userData.monthly_correct || 0) + correctCount,
+            season_points: (userData.season_points || 0) + pointsEarned,
+            season_predictions: (userData.season_predictions || 0) + 1,
+            season_correct: (userData.season_correct || 0) + correctCount,
+        })
+        .eq('id', userId);
+    if (updErr) throw updErr;
+};
+
 /**
  * Finaliza una liga, actualiza su estado y distribuye puntos a los usuarios.
  * 5 puntos por cada campo acertado (campeón, goleador, asistidor, MVP).
@@ -146,10 +173,12 @@ export const finishLeague = async (leagueId, results) => {
 
     if (!predictions || predictions.length === 0) {
         console.log('No hay predicciones para esta liga.');
-        return;
+        return { failed: 0 };
     }
 
     console.log(`📊 Procesando ${predictions.length} predicciones de liga...`);
+
+    let failed = 0;
 
     // 3. Calcular y distribuir puntos por cada predicción
     for (const prediction of predictions) {
@@ -182,39 +211,15 @@ export const finishLeague = async (leagueId, results) => {
             .eq('id', prediction.id);
         if (updPredErr) console.error('Error actualizando predicción:', updPredErr);
 
-        // Si no ganó puntos, no actualizar al usuario
-        if (pointsEarned === 0) continue;
-
-        // Obtener stats actuales del usuario
-        const { data: userData, error: userErr } = await supabase
-            .from('users')
-            .select('points, predictions, correct, monthly_points, monthly_predictions, monthly_correct')
-            .eq('id', prediction.user_id)
-            .single();
-
-        if (userErr || !userData) {
-            console.error(`Error obteniendo usuario ${prediction.user_id}:`, userErr);
-            continue;
+        try {
+            await addUserStats(prediction.user_id, pointsEarned, correctCount);
+        } catch (err) {
+            console.error(`Error actualizando usuario ${prediction.user_id}:`, err);
+            failed++;
         }
-
-        // Actualizar estadísticas globales y mensuales del usuario
-        const { error: updUserErr } = await supabase
-            .from('users')
-            .update({
-                points: (userData.points || 0) + pointsEarned,
-                predictions: (userData.predictions || 0) + 1,
-                correct: (userData.correct || 0) + correctCount,
-                monthly_points: (userData.monthly_points || 0) + pointsEarned,
-                monthly_predictions: (userData.monthly_predictions || 0) + 1,
-                monthly_correct: (userData.monthly_correct || 0) + correctCount,
-            })
-            .eq('id', prediction.user_id);
-
-        if (updUserErr) console.error(`Error actualizando usuario ${prediction.user_id}:`, updUserErr);
-        else console.log(`✅ Usuario ${prediction.user_id} actualizado: +${pointsEarned} pts`);
     }
 
-    console.log('✅ Liga finalizada y puntos distribuidos correctamente.');
+    return { failed };
 };
 
 export const deleteLeague = async (leagueId) => {
@@ -254,10 +259,12 @@ export const finishAward = async (awardId, winner) => {
 
     if (!predictions || predictions.length === 0) {
         console.log('No hay predicciones para este premio.');
-        return;
+        return { failed: 0 };
     }
 
     console.log(`📊 Procesando ${predictions.length} predicciones de premio...`);
+
+    let failed = 0;
 
     // 3. Calcular y distribuir puntos
     for (const prediction of predictions) {
@@ -274,39 +281,15 @@ export const finishAward = async (awardId, winner) => {
             .eq('id', prediction.id);
         if (updPredErr) console.error('Error actualizando predicción:', updPredErr);
 
-        // Si no ganó puntos, no actualizar al usuario
-        if (pointsEarned === 0) continue;
-
-        // Obtener stats actuales del usuario
-        const { data: userData, error: userErr } = await supabase
-            .from('users')
-            .select('points, predictions, correct, monthly_points, monthly_predictions, monthly_correct')
-            .eq('id', prediction.user_id)
-            .single();
-
-        if (userErr || !userData) {
-            console.error(`Error obteniendo usuario ${prediction.user_id}:`, userErr);
-            continue;
+        try {
+            await addUserStats(prediction.user_id, pointsEarned, pointsEarned > 0 ? 1 : 0);
+        } catch (err) {
+            console.error(`Error actualizando usuario ${prediction.user_id}:`, err);
+            failed++;
         }
-
-        // Actualizar estadísticas globales y mensuales del usuario
-        const { error: updUserErr } = await supabase
-            .from('users')
-            .update({
-                points: (userData.points || 0) + pointsEarned,
-                predictions: (userData.predictions || 0) + 1,
-                correct: (userData.correct || 0) + 1,
-                monthly_points: (userData.monthly_points || 0) + pointsEarned,
-                monthly_predictions: (userData.monthly_predictions || 0) + 1,
-                monthly_correct: (userData.monthly_correct || 0) + 1,
-            })
-            .eq('id', prediction.user_id);
-
-        if (updUserErr) console.error(`Error actualizando usuario ${prediction.user_id}:`, updUserErr);
-        else console.log(`✅ Usuario ${prediction.user_id} actualizado: +${pointsEarned} pts`);
     }
 
-    console.log('✅ Premio finalizado y puntos distribuidos correctamente.');
+    return { failed };
 };
 
 export const deleteAward = async (awardId) => {

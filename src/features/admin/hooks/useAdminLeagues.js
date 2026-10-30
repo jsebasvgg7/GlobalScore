@@ -22,8 +22,11 @@ export const useAdminLeagues = (loadData, toast) => {
 
   const handleFinishLeague = async (leagueId, results) => {
     try {
-      await finishLeague(leagueId, results);
+      const { failed } = await finishLeague(leagueId, results);
       await loadData();
+      if (failed > 0) {
+        toast.error(`⚠️ Liga cerrada, pero ${failed} usuario(s) no se actualizaron. No lo cierres de nuevo.`);
+      }
       toast.success('🏆 Liga finalizada y resultados guardados', 4000);
     } catch (err) {
       console.error('Error finishing league:', err);
