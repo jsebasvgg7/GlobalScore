@@ -5,6 +5,7 @@
 const TEAM_LOGOS_BUCKET = 'team-logos';
 const LEAGUE_LOGOS_BUCKET = 'league-logos';
 const AWARD_LOGOS_BUCKET = 'award-logos';
+const LEAGUE_LOGOS_BASE_URL = `https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/${LEAGUE_LOGOS_BUCKET}`;
 const WORLD_CUP_LOGOS_BUCKET = 'world-cup-logos';
 
 // ============================================
@@ -337,30 +338,30 @@ export const leagueLogoUrlMap = {
   'Conference League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/10216.png',
 
   // España
-  'La Liga': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/87.png',
+  'La Liga': `${LEAGUE_LOGOS_BASE_URL}/espana.png`,
   'Copa del Rey': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/138.png',
   'Supercopa de España': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/139.png',
 
   // Inglaterra
-  'Premier League': 'https://image-service.onefootball.com/transform?w=256&dpr=2&image=https://images.onefootball.com/icons/leagueColoredCompetition/128/9.png',
+  'Premier League': `${LEAGUE_LOGOS_BASE_URL}/inglaterra.png`,
   'FA Cup': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/132.png',
   'EFL Cup': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/133.png',
   'Carabao Cup': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/133.png',
   'Community Shield': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/247.png',
 
   // Italia
-  'Serie A': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/55.png',
+  'Serie A': `${LEAGUE_LOGOS_BASE_URL}/italia.png`,
   'Coppa Italia': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/141.png',
   'Supercoppa Italiana': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/222.png',
 
   // Alemania
-  'Bundesliga': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/54.png',
+  'Bundesliga': `${LEAGUE_LOGOS_BASE_URL}/alemania.png`,
   'DFB Pokal': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/209.png',
   'Copa de Alemania': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/209.png',
   'Supercopa de Alemania': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/8924.png',
 
   // Francia
-  'Ligue 1': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/53.png',
+  'Ligue 1': `${LEAGUE_LOGOS_BASE_URL}/francia.png`,
   'Coupe de France': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/134.png',
   'Supercopa de Francia': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/207.png',
 };
