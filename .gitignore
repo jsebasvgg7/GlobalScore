@@ -6,4 +6,6 @@ dist
 *.txt
 notas
 .gradle/
-random
+schema_completo.sql
+GLOBALSCORE-DOC.md
+schema.sql
