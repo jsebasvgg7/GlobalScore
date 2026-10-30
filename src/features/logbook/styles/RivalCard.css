@@ -1,15 +1,15 @@
-.lb-rival {
+.lg-rival {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
   padding: 10px;
-  border: 2px solid var(--lb-line);
+  border: 2px solid var(--lg-line);
   border-radius: 0;
-  background: var(--lb-soft);
+  background: var(--lg-soft);
 }
 
-.lb-rival__info {
+.lg-rival__info {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -17,20 +17,20 @@
   min-width: 0;
 }
 
-.lb-rival__name {
+.lg-rival__name {
   margin: 0;
-  color: var(--lb-fg);
+  color: var(--lg-fg);
   font-size: 15px;
   font-weight: 700;
 }
 
-.lb-rival__hint {
-  color: var(--lb-ink2);
+.lg-rival__hint {
+  color: var(--lg-ink2);
   font-size: 11px;
   line-height: 1.4;
 }
 
-.lb-rival__control {
+.lg-rival__control {
   display: flex;
   flex-shrink: 0;
   flex-direction: column;
@@ -38,28 +38,28 @@
   gap: 4px;
 }
 
-.lb-rival__label {
-  color: var(--lb-ink2);
+.lg-rival__label {
+  color: var(--lg-ink2);
   font-size: 11px;
   font-weight: 700;
 }
 
-.lb-rival__box {
+.lg-rival__box {
   display: flex;
   align-items: center;
-  border: 2px solid var(--lb-line);
+  border: 2px solid var(--lg-line);
   border-radius: 0;
-  background: var(--lb-card);
+  background: var(--lg-card);
 }
 
-.lb-rival__btn {
+.lg-rival__btn {
   width: 40px;
   height: 40px;
   padding: 0;
   border: 0;
   border-radius: 0;
   background: transparent;
-  color: var(--lb-fg);
+  color: var(--lg-fg);
   font-family: inherit;
   font-size: 20px;
   font-weight: 700;
@@ -67,28 +67,28 @@
   transition: background 0.12s ease;
 }
 
-.lb-rival__btn:hover:not(:disabled) {
-  background: var(--lb-soft);
+.lg-rival__btn:hover:not(:disabled) {
+  background: var(--lg-soft);
 }
 
-.lb-rival__btn:active:not(:disabled) {
-  background: var(--lb-ink);
-  color: var(--lb-on);
+.lg-rival__btn:active:not(:disabled) {
+  background: var(--lg-ink);
+  color: var(--lg-on);
 }
 
-.lb-rival__btn:focus-visible {
-  outline: 3px solid var(--lb-ink2);
+.lg-rival__btn:focus-visible {
+  outline: 3px solid var(--lg-ink2);
   outline-offset: -3px;
 }
 
-.lb-rival__btn:disabled {
+.lg-rival__btn:disabled {
   cursor: not-allowed;
   opacity: 0.3;
 }
 
-.lb-rival__value {
+.lg-rival__value {
   min-width: 32px;
-  color: var(--lb-fg);
+  color: var(--lg-fg);
   font-size: 18px;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
@@ -96,7 +96,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lb-rival__btn {
+  .lg-rival__btn {
     transition: none;
   }
 }

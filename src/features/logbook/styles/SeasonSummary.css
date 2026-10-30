@@ -1,10 +1,10 @@
-.lb-summary__row {
+.lg-summary__row {
   display: flex;
   align-items: flex-start;
   justify-content: center;
   gap: 8px;
 }
 
-.lb-summary .lb-summary__goals-title {
+.lg-summary .lg-summary__goals-title {
   margin-top: 20px;
 }

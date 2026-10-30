@@ -11,34 +11,34 @@ export default function VerticalCounter({
 }) {
   const name = ariaName ?? label;
   const className = [
-    'lb-counter',
-    size === 54 ? 'lb-counter--sm' : '',
-    readOnly ? 'lb-counter--readonly' : '',
+    'lg-counter',
+    size === 54 ? 'lg-counter--sm' : '',
+    readOnly ? 'lg-counter--readonly' : '',
   ]
     .filter(Boolean)
     .join(' ');
 
   return (
     <div className={className}>
-      <span className="lb-counter__label">{label}</span>
-      <div className="lb-counter__body">
+      <span className="lg-counter__label">{label}</span>
+      <div className="lg-counter__body">
         {!readOnly && (
           <button
             type="button"
-            className="lb-counter__btn"
+            className="lg-counter__btn"
             onClick={onIncrement}
             aria-label={`Sumar ${name}`}
           >
             +
           </button>
         )}
-        <span className="lb-counter__value" aria-live="polite" aria-atomic="true">
+        <span className="lg-counter__value" aria-live="polite" aria-atomic="true">
           {value}
         </span>
         {!readOnly && (
           <button
             type="button"
-            className="lb-counter__btn"
+            className="lg-counter__btn"
             onClick={onDecrement}
             disabled={Number(value) <= 0}
             aria-label={`Restar ${name}`}

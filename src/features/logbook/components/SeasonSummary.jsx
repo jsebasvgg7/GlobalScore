@@ -9,10 +9,10 @@ export default function SeasonSummary({ team, stats, onAdjust }) {
   const adjust = (key, delta) => () => onAdjust(key, delta);
 
   return (
-    <section className="lb-card lb-summary" aria-label="Resumen de temporada">
-      <h2 className="lb-section-title">Resumen de temporada</h2>
-      <p className="lb-hint">Los partidos se llevan a mano. JUG suma GAN, EMP y PER.</p>
-      <div className="lb-summary__row">
+    <section className="lg-card lg-summary" aria-label="Resumen de temporada">
+      <h2 className="lg-section-title">Resumen de temporada</h2>
+      <p className="lg-hint">Los partidos se llevan a mano. JUG suma GAN, EMP y PER.</p>
+      <div className="lg-summary__row">
         <VerticalCounter label="JUG" value={stats.played} readOnly ariaName="partidos jugados" />
         <VerticalCounter
           label="GAN"
@@ -36,9 +36,9 @@ export default function SeasonSummary({ team, stats, onAdjust }) {
           ariaName="partidos perdidos"
         />
       </div>
-      <h2 className="lb-section-title lb-summary__goals-title">Goles</h2>
-      <p className="lb-hint">GA se calcula con los goles de tus jugadores.</p>
-      <div className="lb-summary__row">
+      <h2 className="lg-section-title lg-summary__goals-title">Goles</h2>
+      <p className="lg-hint">GA se calcula con los goles de tus jugadores.</p>
+      <div className="lg-summary__row">
         <VerticalCounter label="GA" value={stats.goalsFor} readOnly ariaName="goles a favor" />
         <VerticalCounter
           label="GC"

@@ -15,7 +15,7 @@ export default function PlayerCard({ player, onAdjust, onRemove }) {
   const [open, setOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const timer = useRef(null);
-  const panelId = `lb-player-${player.id}`;
+  const panelId = `lg-player-${player.id}`;
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
@@ -31,28 +31,28 @@ export default function PlayerCard({ player, onAdjust, onRemove }) {
   };
 
   return (
-    <article className={`lb-player${open ? ' lb-player--open' : ''}`}>
-      <div className="lb-player__head">
+    <article className={`lg-player${open ? ' lg-player--open' : ''}`}>
+      <div className="lg-player__head">
         <button
           type="button"
-          className="lb-player__toggle"
+          className="lg-player__toggle"
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
           aria-controls={panelId}
         >
-          <span className="lb-player__chevron">
+          <span className="lg-player__chevron">
             <ChevronDown size={18} strokeWidth={3} aria-hidden="true" />
           </span>
-          <span className="lb-player__info">
-            <span className="lb-player__name">{player.name}</span>
-            <span className="lb-player__position">{player.position}</span>
+          <span className="lg-player__info">
+            <span className="lg-player__name">{player.name}</span>
+            <span className="lg-player__position">{player.position}</span>
           </span>
           {!open && (
-            <span className="lb-player__stats">
+            <span className="lg-player__stats">
               {COUNTERS.map(({ key, label }) => (
-                <span key={key} className="lb-player__stat">
-                  <span className="lb-player__stat-label">{label}</span>
-                  <span className="lb-player__stat-value">{player[key]}</span>
+                <span key={key} className="lg-player__stat">
+                  <span className="lg-player__stat-label">{label}</span>
+                  <span className="lg-player__stat-value">{player[key]}</span>
                 </span>
               ))}
             </span>
@@ -61,7 +61,7 @@ export default function PlayerCard({ player, onAdjust, onRemove }) {
         {open && (
           <button
             type="button"
-            className={`lb-player__remove${confirming ? ' lb-player__remove--confirm' : ''}`}
+            className={`lg-player__remove${confirming ? ' lg-player__remove--confirm' : ''}`}
             onClick={handleRemove}
             aria-label={confirming ? `Confirmar eliminar a ${player.name}` : `Eliminar a ${player.name}`}
           >
@@ -74,8 +74,8 @@ export default function PlayerCard({ player, onAdjust, onRemove }) {
         )}
       </div>
       {open && (
-        <div id={panelId} className="lb-player__panel">
-          <div className="lb-player__counters">
+        <div id={panelId} className="lg-player__panel">
+          <div className="lg-player__counters">
             {COUNTERS.map(({ key, label, noun }) => (
               <VerticalCounter
                 key={key}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLogbook } from '../hooks/useLogbook';
+import { useIsMobile } from '../hooks/useIsMobile';
 import { getTopScorer } from '../utils/logbook.utils';
 import TeamSelector from '../components/TeamSelector';
 import TeamForm from '../components/TeamForm';
@@ -7,6 +8,7 @@ import SeasonSummary from '../components/SeasonSummary';
 import PlayerCard from '../components/PlayerCard';
 import RivalCard from '../components/RivalCard';
 import AddPlayerForm from '../components/AddPlayerForm';
+import LogbookDesktop from './LogbookDesktop';
 import './LogbookPage.css';
 
 const CONFIRM_WINDOW_MS = 3000;
@@ -30,6 +32,7 @@ export default function LogbookPage({ currentUser }) {
     removePlayer,
   } = useLogbook(currentUser);
 
+  const isMobile = useIsMobile();
   const [confirming, setConfirming] = useState(false);
   const timer = useRef(null);
   const activeId = activeTeam?.id ?? null;
@@ -60,33 +63,56 @@ export default function LogbookPage({ currentUser }) {
   const showLoading = loading && !activeTeam;
   const topScorer = activeTeam ? getTopScorer(activeTeam) : null;
 
+  if (!isMobile) {
+    return (
+      <LogbookDesktop
+        teams={teams}
+        activeTeam={activeTeam}
+        stats={stats}
+        showEmpty={showEmpty}
+        showLoading={showLoading}
+        error={error}
+        reload={reload}
+        confirming={confirming}
+        onSelect={selectTeam}
+        onCreate={handleCreate}
+        onDelete={handleDelete}
+        onUpdateTeam={updateTeamInfo}
+        onAdjustTeam={adjustTeamCounter}
+        onAdjustPlayer={adjustPlayerCounter}
+        onAddPlayer={addPlayer}
+        onRemovePlayer={removePlayer}
+      />
+    );
+  }
+
   return (
-    <main className="lb-page">
-      <header className="lb-header">
-        <h1 className="lb-header__title">Mi Libreta Fútbolera</h1>
+    <main className="lg-page">
+      <header className="lg-header">
+        <h1 className="lg-header__title">Mi Libreta Fútbolera</h1>
         {activeTeam && (
-          <p className="lb-header__subtitle">
+          <p className="lg-header__subtitle">
             {activeTeam.name} · {activeTeam.game}
           </p>
         )}
       </header>
 
       {error && (
-        <div className="lb-banner" role="alert">
+        <div className="lg-banner" role="alert">
           <span>{error}</span>
-          <button type="button" className="lb-banner__retry" onClick={reload}>
+          <button type="button" className="lg-banner__retry" onClick={reload}>
             Reintentar
           </button>
         </div>
       )}
 
-      {showLoading && <p className="lb-status">Cargando libreta…</p>}
+      {showLoading && <p className="lg-status">Cargando libreta…</p>}
 
       {showEmpty && (
-        <section className="lb-card lb-empty">
-          <h2 className="lb-section-title">Crea tu primer equipo</h2>
-          <p className="lb-hint">Lleva tus partidos, goles y jugadores destacados en un solo lugar.</p>
-          <button type="button" className="lb-btn lb-btn--primary" onClick={handleCreate}>
+        <section className="lg-card lg-empty">
+          <h2 className="lg-section-title">Crea tu primer equipo</h2>
+          <p className="lg-hint">Lleva tus partidos, goles y jugadores destacados en un solo lugar.</p>
+          <button type="button" className="lg-btn lg-btn--primary" onClick={handleCreate}>
             Crear equipo
           </button>
         </section>
@@ -103,19 +129,19 @@ export default function LogbookPage({ currentUser }) {
           <TeamForm team={activeTeam} onChange={updateTeamInfo} />
           <SeasonSummary team={activeTeam} stats={stats} onAdjust={adjustTeamCounter} />
           {activeTeam.archivedGoals > 0 && (
-            <p className="lb-history">
+            <p className="lg-history">
               Incluye {activeTeam.archivedGoals}{' '}
               {activeTeam.archivedGoals === 1 ? 'gol' : 'goles'} de jugadores eliminados
             </p>
           )}
 
-          <section className="lb-card lb-players" aria-label="Jugadores destacados">
-            <h2 className="lb-section-title">Jugadores destacados</h2>
-            <p className="lb-hint">
+          <section className="lg-card lg-players" aria-label="Jugadores destacados">
+            <h2 className="lg-section-title">Jugadores destacados</h2>
+            <p className="lg-hint">
               Un gol aquí sube GA automáticamente.
               {topScorer && ` Máximo goleador: ${topScorer.name} (${topScorer.goals}).`}
             </p>
-            <div className="lb-players__list">
+            <div className="lg-players__list">
               {activeTeam.players.map((player) => (
                 <PlayerCard
                   key={player.id}
@@ -134,7 +160,7 @@ export default function LogbookPage({ currentUser }) {
 
           <button
             type="button"
-            className={`lb-btn lb-delete${confirming ? ' lb-delete--confirm' : ''}`}
+            className={`lg-btn lg-delete${confirming ? ' lg-delete--confirm' : ''}`}
             onClick={handleDelete}
           >
             {confirming ? 'Toca otra vez para borrar' : 'Borrar este equipo'}

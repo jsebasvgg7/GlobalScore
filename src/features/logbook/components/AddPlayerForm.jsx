@@ -18,25 +18,25 @@ export default function AddPlayerForm({ onAdd }) {
   };
 
   return (
-    <form className="lb-add" onSubmit={handleSubmit}>
-      <label className="lb-visually-hidden" htmlFor="lb-add-name">
+    <form className="lg-add" onSubmit={handleSubmit}>
+      <label className="lg-visually-hidden" htmlFor="lg-add-name">
         Nombre del jugador
       </label>
       <input
-        id="lb-add-name"
-        className="lb-input lb-add__name"
+        id="lg-add-name"
+        className="lg-input lg-add__name"
         type="text"
         maxLength={24}
         placeholder="Nombre del jugador"
         value={name}
         onChange={(event) => setName(event.target.value)}
       />
-      <label className="lb-visually-hidden" htmlFor="lb-add-position">
+      <label className="lg-visually-hidden" htmlFor="lg-add-position">
         Posición
       </label>
       <select
-        id="lb-add-position"
-        className="lb-input lb-add__position"
+        id="lg-add-position"
+        className="lg-input lg-add__position"
         value={position}
         onChange={(event) => setPosition(event.target.value)}
       >
@@ -48,7 +48,7 @@ export default function AddPlayerForm({ onAdd }) {
       </select>
       <button
         type="submit"
-        className="lb-btn lb-btn--primary lb-add__submit"
+        className="lg-btn lg-btn--primary lg-add__submit"
         disabled={!name.trim() || pending}
       >
         Añadir

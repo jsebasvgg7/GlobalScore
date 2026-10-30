@@ -12,7 +12,7 @@ export default function LogbookPanel({ currentUser, onNavigate }) {
   if (loading) {
     return (
       <div className="mob2-bento-grid">
-        <div className="mob2-fw-card mob2-bento-wide lb-panel__status" role="status">
+        <div className="mob2-fw-card mob2-bento-wide lg-panel__status" role="status">
           Cargando libreta…
         </div>
       </div>
@@ -22,10 +22,10 @@ export default function LogbookPanel({ currentUser, onNavigate }) {
   if (error) {
     return (
       <div className="mob2-bento-grid">
-        <div className="mob2-fw-card mob2-bento-wide lb-panel__empty">
+        <div className="mob2-fw-card mob2-bento-wide lg-panel__empty">
           <span className="mob2-sm-tag">TU LIBRETA</span>
-          <p className="lb-panel__empty-text">No se pudo cargar tu libreta.</p>
-          <button type="button" className="mob2-alb-cta lb-panel__cta" onClick={reload}>
+          <p className="lg-panel__empty-text">No se pudo cargar tu libreta.</p>
+          <button type="button" className="mob2-alb-cta lg-panel__cta" onClick={reload}>
             <span>Reintentar</span>
             <ChevronRight size={14} className="mob2-alb-cta-arrow" />
           </button>
@@ -37,10 +37,10 @@ export default function LogbookPanel({ currentUser, onNavigate }) {
   if (!team) {
     return (
       <div className="mob2-bento-grid">
-        <div className="mob2-fw-card mob2-bento-wide lb-panel__empty">
+        <div className="mob2-fw-card mob2-bento-wide lg-panel__empty">
           <span className="mob2-sm-tag">TU LIBRETA</span>
-          <p className="lb-panel__empty-text">Aún no tienes equipos. Lleva tus partidos y goles en un solo lugar.</p>
-          <button type="button" className="mob2-alb-cta lb-panel__cta" onClick={onNavigate}>
+          <p className="lg-panel__empty-text">Aún no tienes equipos. Lleva tus partidos y goles en un solo lugar.</p>
+          <button type="button" className="mob2-alb-cta lg-panel__cta" onClick={onNavigate}>
             <span>Crear mi primer equipo</span>
             <ChevronRight size={14} className="mob2-alb-cta-arrow" />
           </button>
@@ -55,7 +55,7 @@ export default function LogbookPanel({ currentUser, onNavigate }) {
         <div className="mob2-hero-body">
           <span className="mob2-hero-tag">TU LIBRETA · GA</span>
           <div className="mob2-bento-hero-val">{team.goalsFor}</div>
-          <span className="mob2-hero-meta lb-panel__meta">
+          <span className="mob2-hero-meta lg-panel__meta">
             {team.name} · {team.game}
           </span>
         </div>
@@ -77,12 +77,12 @@ export default function LogbookPanel({ currentUser, onNavigate }) {
       <div className="mob2-fw-card mob2-bento-wide">
         <div className="mob2-sm-body mob2-sm-body--row">
           <span className="mob2-sm-tag">MÁX. GOLEADOR</span>
-          <span className="mob2-sm-title lb-panel__scorer">
+          <span className="mob2-sm-title lg-panel__scorer">
             {topScorer ? `${topScorer.name} · ${topScorer.goals}` : '—'}
           </span>
         </div>
       </div>
-      <button type="button" className="mob2-alb-cta lb-panel__cta" onClick={onNavigate}>
+      <button type="button" className="mob2-alb-cta lg-panel__cta" onClick={onNavigate}>
         <span>Abrir Libreta</span>
         <ChevronRight size={14} className="mob2-alb-cta-arrow" />
       </button>
