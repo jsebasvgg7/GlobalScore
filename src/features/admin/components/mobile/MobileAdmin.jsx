@@ -13,7 +13,8 @@ import { getLogoUrlByTeamName, getLeagueLogoUrlDirect, getLogoUrlByLeagueName, g
 import { supabase } from '@/shared/services/supabase/client';
 
 const MBA_STYLES = {
-  form: 'mba-form', row2: 'mba-row-2', field: 'mba-field',
+  form: 'mba-form', row2: 'mba-row-2', row3: 'mba-row-3', field: 'mba-field',
+  probWrap: 'mba-prob-wrap', probSuffix: 'mba-prob-suffix',
   label: 'mba-label', req: 'mba-req', hint: 'mba-hint', input: 'mba-input',
   toggle: 'mba-toggle-row', toggleCheck: 'mba-toggle-check',
   toggleTrack: 'mba-toggle-track', toggleThumb: 'mba-toggle-thumb',

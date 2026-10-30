@@ -779,3 +779,40 @@
 [data-theme="dark"] .mc-metric-val {
   color: #4a5568;
 }
+
+.mc-team-row--prob {
+  position: relative;
+  width: 100%;
+}
+
+.mc-prob {
+  position: absolute;
+  left: 0;
+  width: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  font-family: var(--mc-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.mc-prob--up {
+  color: #1d9e75;
+}
+
+.mc-prob--down {
+  color: #e24b4a;
+}
+
+.mc-prob--draw {
+  position: static;
+  flex-shrink: 0;
+  color: var(--mc-accent-light);
+}
+
+.mc-divider--prob {
+  padding: 0 15px;
+}

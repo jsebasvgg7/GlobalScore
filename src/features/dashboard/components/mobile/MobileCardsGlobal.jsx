@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { CheckCircle2, Trophy, Target, Award, Star, Shield, Clock } from "lucide-react";
+import { CheckCircle2, Trophy, Target, Award, Star, Shield, Clock, Equal, TrendingDown, TrendingUp } from "lucide-react";
+import { getProbabilityTrend, hasMatchProbability } from "@/shared/utils/matchProbability";
 import './MobileCardsGlobal.css';
 // ── Icono espadas knockout ───────────────────────────────────────
 const SwordsIcon = () => (
@@ -133,14 +134,21 @@ function CardFooterMeta({ time, date, isLive, minute }) {
 // ════════════════════════════════════════════════════════════════
 //  1. MATCH CARD MOBILE
 // ════════════════════════════════════════════════════════════════
-function TeamRow({ side, match, score, onInc, onDec, isDisabled, isSaved, isAdvancing, onAdvClick }) {
+function TeamRow({ side, match, score, onInc, onDec, isDisabled, isSaved, isAdvancing, onAdvClick, probTrend }) {
   const isHome = side === "home";
+  const TrendIcon = probTrend === "up" ? TrendingUp : TrendingDown;
   const teamName = isHome ? match.home_team : match.away_team;
   const logoUrl = isHome ? match.home_team_logo_url : match.away_team_logo_url;
   const logoEmoji = isHome ? match.home_team_logo : match.away_team_logo;
 
   return (
     <div className={["mcg-team-row", isAdvancing ? "mcg-team-row--adv" : ""].filter(Boolean).join(" ")}>
+      {probTrend && (
+        <div className={`mcg-prob mcg-prob--${probTrend}`}>
+          <TrendIcon size={16} aria-hidden="true" />
+          <span>{isHome ? match.prob_home : match.prob_away}%</span>
+        </div>
+      )}
       <div
         className={[
           "mcg-shield",
@@ -188,6 +196,8 @@ export function MatchCardMobile({ match, userPred, onPredict }) {
   const isPastDeadline = deadline && now >= deadline;
   const isLive = match.status === "live";
   const isDisabled = isPastDeadline || match.status !== "pending";
+  const showProb = hasMatchProbability(match);
+  const probTrend = showProb ? getProbabilityTrend(match) : null;
 
   const triggerSave = (home, away, adv) => {
     const isValid = home !== "" && away !== "" && !isNaN(parseInt(home)) && !isNaN(parseInt(away));
@@ -276,9 +286,16 @@ export function MatchCardMobile({ match, userPred, onPredict }) {
         <TeamRow side="home" match={match} score={homeScore}
           onInc={() => handleInc("home")} onDec={() => handleDec("home")}
           isDisabled={isDisabled} isSaved={isSaved}
-          isAdvancing={advancingTeam === "home"} onAdvClick={handleAdvClick} />
+          isAdvancing={advancingTeam === "home"} onAdvClick={handleAdvClick}
+          probTrend={probTrend?.home} />
 
         <div className="mcg-vs-row">
+          {showProb && (
+            <div className="mcg-prob mcg-prob--draw">
+              <Equal size={16} aria-hidden="true" />
+              <span>{match.prob_draw}%</span>
+            </div>
+          )}
           <div className="mcg-vs-line" />
           <span className="mcg-vs">
             {match.is_knockout && !isDisabled ? <SwordsIcon /> : "VS"}
@@ -289,7 +306,8 @@ export function MatchCardMobile({ match, userPred, onPredict }) {
         <TeamRow side="away" match={match} score={awayScore}
           onInc={() => handleInc("away")} onDec={() => handleDec("away")}
           isDisabled={isDisabled} isSaved={isSaved}
-          isAdvancing={advancingTeam === "away"} onAdvClick={handleAdvClick} />
+          isAdvancing={advancingTeam === "away"} onAdvClick={handleAdvClick}
+          probTrend={probTrend?.away} />
       </div>
 
       <CardFooterMeta time={match.time} date={match.date} isLive={isLive} minute={match.minute} />

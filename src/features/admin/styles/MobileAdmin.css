@@ -153,6 +153,31 @@
   gap: 12px;
 }
 
+.mba-row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mba-prob-wrap {
+  position: relative;
+}
+
+.mba-prob-wrap .mba-input {
+  padding-right: 26px;
+}
+
+.mba-prob-suffix {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 13px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  pointer-events: none;
+}
+
 .mba-field {
   display: flex;
   flex-direction: column;

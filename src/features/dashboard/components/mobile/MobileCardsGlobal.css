@@ -812,3 +812,28 @@
     transition: none;
   }
 }
+
+.mcg-prob {
+  width: 40px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  font-family: var(--mcg-mono);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.mcg-prob--up {
+  color: var(--mcg-green);
+}
+
+.mcg-prob--down {
+  color: var(--mcg-red);
+}
+
+.mcg-prob--draw {
+  color: var(--mcg-muted);
+}

@@ -13,7 +13,8 @@ import { getLogoUrlByTeamName, getLeagueLogoUrlDirect, getLogoUrlByLeagueName, g
 import { supabase } from '@/shared/services/supabase/client';
 
 const ADM_STYLES = {
-  form: 'adm-form', row2: 'adm-row-2', field: 'adm-field',
+  form: 'adm-form', row2: 'adm-row-2', row3: 'adm-row-3', field: 'adm-field',
+  probWrap: 'adm-prob-wrap', probSuffix: 'adm-prob-suffix',
   label: 'adm-label', req: 'adm-req', hint: 'adm-hint', input: 'adm-input',
   toggle: 'adm-toggle', toggleCheck: 'adm-toggle-check',
   toggleTrack: 'adm-toggle-track', toggleThumb: 'adm-toggle-thumb',

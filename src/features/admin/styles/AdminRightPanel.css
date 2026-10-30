@@ -176,6 +176,31 @@
   gap: 8px;
 }
 
+.adm-row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.adm-prob-wrap {
+  position: relative;
+}
+
+.adm-prob-wrap .adm-input {
+  padding-right: 24px;
+}
+
+.adm-prob-suffix {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  pointer-events: none;
+}
+
 .adm-section-sep {
   font-size: 8px;
   font-weight: 700;

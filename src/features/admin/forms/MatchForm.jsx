@@ -9,9 +9,14 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
         home_team_logo: '🏠', away_team_logo: '✈️',
         date: '', time: '', deadLine: '', deadLine_time: '',
         is_knockout: false,
+        prob_home: '', prob_draw: '', prob_away: '',
     });
     const [sending, setSending] = useState(false);
     const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
+
+    const probValues = [form.prob_home, form.prob_draw, form.prob_away];
+    const probSum = probValues.reduce((total, v) => total + (parseInt(v, 10) || 0), 0);
+    const probReady = probValues.every(v => v !== '') && probSum === 100;
 
     const handleChange = async (e) => {
         const { name, value, type, checked } = e.target;
@@ -43,6 +48,12 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
             return;
         }
 
+        if (name.startsWith('prob_')) {
+            const n = parseInt(value, 10);
+            set(name, Number.isNaN(n) ? '' : Math.min(100, Math.max(0, n)));
+            return;
+        }
+
         set(name, type === 'checkbox' ? checked : value);
 
         if (name === 'home_team' && value && form.league) {
@@ -61,7 +72,7 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
 
     const submit = async () => {
         if (!form.id || !form.home_team || !form.away_team ||
-            !form.date || !form.time || !form.deadLine || !form.deadLine_time) return;
+            !form.date || !form.time || !form.deadLine || !form.deadLine_time || !probReady) return;
         setSending(true);
         try {
             const homeLogoUrl = await getLogoUrlByTeamName(supabase, form.home_team, form.league);
@@ -76,11 +87,15 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
                 date: form.date, time: form.time,
                 deadline: `${form.deadLine}T${form.deadLine_time}:00`,
                 status: 'pending', is_knockout: form.is_knockout,
+                prob_home: Number(form.prob_home),
+                prob_draw: Number(form.prob_draw),
+                prob_away: Number(form.prob_away),
             });
             setForm({
                 id: '', league: '', home_team: '', away_team: '',
                 home_team_logo: '🏠', away_team_logo: '✈️',
                 date: '', time: '', deadLine: '', deadLine_time: '', is_knockout: false,
+                prob_home: '', prob_draw: '', prob_away: '',
             });
             onClose?.();
         } finally { setSending(false); }
@@ -141,6 +156,24 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
                 </div>
             )}
 
+            <div className={s.sectionSep}>Probabilidades</div>
+            <div className={s.row3}>
+                {[
+                    { name: 'prob_home', label: 'Local' },
+                    { name: 'prob_draw', label: 'Empate' },
+                    { name: 'prob_away', label: 'Visitante' },
+                ].map(({ name, label }) => (
+                    <div className={s.field} key={name}>
+                        <label className={s.label}>{label}<span className={s.req}>*</span></label>
+                        <div className={s.probWrap}>
+                            <input className={s.input} type="number" min="0" max="100" name={name} placeholder="0" value={form[name]} onChange={handleChange} />
+                            <span className={s.probSuffix}>%</span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <span className={s.hint}>Suma: {probSum} / 100</span>
+
             <div className={s.sectionSep}>Fecha del partido</div>
             <div className={s.row2}>
                 <div className={s.field}>
@@ -165,7 +198,7 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
                 </div>
             </div>
 
-            <button className={s.submitBtn} onClick={submit} disabled={sending}>
+            <button className={s.submitBtn} onClick={submit} disabled={sending || !probReady}>
                 {sending ? <span className={s.spinner} /> : <Plus size={14} />}
                 <span>{sending ? 'Agregando...' : 'Agregar Partido'}</span>
             </button>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Equal, TrendingDown, TrendingUp } from "lucide-react";
+import { getProbabilityTrend, hasMatchProbability } from "@/shared/utils/matchProbability";
 import '../styles/MatchCard.css';
 
 // ── Icono espadas knockout ────────────────────────────────────
@@ -109,6 +110,9 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
           ? { label: "Guardado", mod: "saved" }
           : { label: "Pendiente", mod: "pending" };
 
+  const showProb = hasMatchProbability(match);
+  const trend = showProb ? getProbabilityTrend(match) : null;
+
   // ── Clases raíz ───────────────────────────────────────────
   const cardClasses = [
     "mc-card",
@@ -149,8 +153,17 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
       </span>
     );
 
+    const sideTrend = trend ? trend[side] : null;
+    const TrendIcon = sideTrend === "up" ? TrendingUp : TrendingDown;
+
     const rowEl = (
-      <div className="mc-team-row">
+      <div className={showProb ? "mc-team-row mc-team-row--prob" : "mc-team-row"}>
+        {showProb && (
+          <div className={`mc-prob mc-prob--${sideTrend}`}>
+            <TrendIcon size={15} aria-hidden="true" />
+            <span>{isHome ? match.prob_home : match.prob_away}%</span>
+          </div>
+        )}
         {/* ← onClick y clase --tap solo en el escudo */}
         <div
           className={shieldClasses}
@@ -229,7 +242,13 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
         <div className="mc-body">
           <TeamBlock side="home" />
 
-          <div className="mc-divider">
+          <div className={showProb ? "mc-divider mc-divider--prob" : "mc-divider"}>
+            {showProb && (
+              <div className="mc-prob mc-prob--draw">
+                <Equal size={15} aria-hidden="true" />
+                <span>{match.prob_draw}%</span>
+              </div>
+            )}
             <div className="mc-divider-line" />
             {match.is_knockout && !isDisabled
               ? <SwordsIcon className="mc-swords-icon" />
