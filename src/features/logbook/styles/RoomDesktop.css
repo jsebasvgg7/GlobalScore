@@ -125,6 +125,15 @@
     border-color: var(--lgr-banner);
   }
 
+  .lgr-star {
+    border-color: var(--lgr-line);
+  }
+
+  .lgr-star--bar {
+    border-width: 1px;
+    border-color: var(--lgr-banner);
+  }
+
   .lgr-waiting,
   .lgr-result,
   .lgr-block--points {

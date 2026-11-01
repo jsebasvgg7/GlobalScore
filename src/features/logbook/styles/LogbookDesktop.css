@@ -113,9 +113,53 @@
   box-shadow: inset 0 -2px 0 var(--lgd-accent-text);
 }
 
-.lgd-tab--add {
+.lgd-split {
+  display: flex;
+  flex-shrink: 0;
+  align-self: center;
   margin-left: auto;
+  margin-right: 8px;
+  border: 1px solid var(--lgd-accent-text);
+}
+
+.lgd-split__main,
+.lgd-split__add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
   color: var(--lgd-accent-text);
+  font-family: var(--lgd-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.lgd-split__main {
+  padding: 8px 16px;
+}
+
+.lgd-split__add {
+  padding: 8px 10px;
+  border-left: 1px solid var(--lgd-accent-text);
+}
+
+.lgd-split__main:hover,
+.lgd-split__add:hover {
+  background: var(--lgd-accent-text);
+  color: var(--lgd-surface);
+}
+
+.lgd-split__main:focus-visible,
+.lgd-split__add:focus-visible {
+  outline: 2px solid var(--lgd-accent-text);
+  outline-offset: -2px;
 }
 
 .lgd-tab--rooms-next {

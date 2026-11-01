@@ -102,6 +102,8 @@ const KNOWN_ROOM_ERRORS = [
   'La sala no está en juego',
   'Faltan equipos en la sala',
   'No se pudo generar el código de la sala',
+  'Solo puedes marcar salas en curso',
+  'Ya tienes otra sala marcada. Quita su estrella primero',
 ];
 
 export function roomErrorMessage(error, fallback) {
@@ -115,4 +117,11 @@ export function roomErrorMessage(error, fallback) {
     return 'Tu sesión expiró. Vuelve a iniciar sesión';
   }
   return fallback;
+}
+
+export const isRoomOngoing = (room) => room.status === 'waiting' || room.status === 'active';
+
+export function pickCurrentRoom(rooms) {
+  const ongoing = (rooms ?? []).filter(isRoomOngoing);
+  return ongoing.find((room) => room.pinned) ?? ongoing[0] ?? null;
 }

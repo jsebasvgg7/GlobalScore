@@ -97,6 +97,16 @@
   list-style: none;
 }
 
+.lgr-row {
+  display: flex;
+  align-items: stretch;
+}
+
+.lgr-row > .lgr-item {
+  flex: 1;
+  min-width: 0;
+}
+
 .lgr-item {
   display: flex;
   align-items: center;

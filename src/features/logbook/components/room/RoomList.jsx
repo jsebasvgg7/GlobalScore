@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { isRoomOngoing } from '../../utils/room.utils';
+import RoomPinButton from './RoomPinButton';
 
 const STATUS_LABEL = {
   waiting: 'Esperando rival',
@@ -18,13 +20,12 @@ const scoreOf = (room) =>
     ? `${room.myPoints} – ${room.rivalPoints}`
     : null;
 
-const isOngoing = (room) => room.status === 'waiting' || room.status === 'active';
-
-function Item({ room, userId }) {
+function Item({ room, userId, pinnedId, busy, onPin }) {
+  const ongoing = isRoomOngoing(room);
   const result = resultOf(room, userId);
   const score = scoreOf(room);
   return (
-    <li>
+    <li className="lgr-row">
       <Link className="lgr-item" to={`/libreta/salas/${room.id}`}>
         <span className="lgr-item__main">
           <b>{room.myTeamName ?? 'Equipo eliminado'}</b>
@@ -39,13 +40,21 @@ function Item({ room, userId }) {
           <span>{room.code}</span>
         </span>
       </Link>
+      {ongoing && (
+        <RoomPinButton
+          pinned={room.pinned}
+          blocked={Boolean(pinnedId) && pinnedId !== room.id}
+          disabled={busy}
+          onToggle={() => onPin(room.id, !room.pinned)}
+        />
+      )}
     </li>
   );
 }
 
-export default function RoomList({ rooms, userId }) {
-  const ongoing = rooms.filter(isOngoing);
-  const history = rooms.filter((room) => !isOngoing(room));
+export default function RoomList({ rooms, userId, pinnedId = null, busy = false, onPin }) {
+  const ongoing = rooms.filter(isRoomOngoing);
+  const history = rooms.filter((room) => !isRoomOngoing(room));
 
   return (
     <>
@@ -54,7 +63,14 @@ export default function RoomList({ rooms, userId }) {
         {ongoing.length === 0 && <p className="lgr-card__hint">No tienes salas en curso.</p>}
         <ul className="lgr-list">
           {ongoing.map((room) => (
-            <Item key={room.id} room={room} userId={userId} />
+            <Item
+              key={room.id}
+              room={room}
+              userId={userId}
+              pinnedId={pinnedId}
+              busy={busy}
+              onPin={onPin}
+            />
           ))}
         </ul>
       </section>

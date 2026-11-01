@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useLogbook } from '../hooks/useLogbook';
 import { useRoom } from '../hooks/useRoom';
+import { isRoomOngoing } from '../utils/room.utils';
 import RoomCreateForm from '../components/room/RoomCreateForm';
 import RoomJoinForm from '../components/room/RoomJoinForm';
 import RoomList from '../components/room/RoomList';
@@ -14,7 +15,8 @@ import '../styles/RoomDesktop.css';
 export default function RoomsPage({ currentUser }) {
   const navigate = useNavigate();
   const { teams } = useLogbook(currentUser);
-  const { rooms, loading, error, loadList, create, join } = useRoom(currentUser);
+  const { rooms, loading, error, loadList, create, join, pin } = useRoom(currentUser);
+  const pinnedId = rooms.find((room) => room.pinned && isRoomOngoing(room))?.id ?? null;
 
   useEffect(() => {
     loadList();
@@ -29,6 +31,8 @@ export default function RoomsPage({ currentUser }) {
     const result = await join(code, teamId);
     if (result) navigate(`/libreta/salas/${result.roomId}`);
   };
+
+  const handlePin = (id, pinned) => pin(pinned, id);
 
   return (
     <div className="lgr-page">
@@ -49,7 +53,13 @@ export default function RoomsPage({ currentUser }) {
         </div>
 
         <div className="lgr-lists">
-          <RoomList rooms={rooms} userId={currentUser?.id} />
+          <RoomList
+            rooms={rooms}
+            userId={currentUser?.id}
+            pinnedId={pinnedId}
+            busy={loading}
+            onPin={handlePin}
+          />
         </div>
       </div>
     </div>

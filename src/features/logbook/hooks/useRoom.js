@@ -14,6 +14,7 @@ export function useRoom(currentUser) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const requestRef = useRef(0);
+  const listedRef = useRef(false);
 
   const fetchRoom = useCallback(async (id) => {
     const request = ++requestRef.current;
@@ -66,7 +67,16 @@ export function useRoom(currentUser) {
     [roomId, fetchRoom]
   );
 
+  const refreshList = useCallback(async () => {
+    try {
+      setRooms(await service.listRooms());
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
   const loadList = useCallback(async () => {
+    listedRef.current = true;
     const data = await act(() => service.listRooms(), 'No se pudieron cargar las salas');
     if (data) setRooms(data);
     return data;
@@ -105,6 +115,21 @@ export function useRoom(currentUser) {
     return true;
   }, [roomId, act, fetchRoom]);
 
+  const pin = useCallback(
+    async (pinned, targetId = roomId) => {
+      if (!targetId) return false;
+      const fallback = pinned ? 'No se pudo marcar la sala' : 'No se pudo quitar la estrella';
+      const done = await act(async () => {
+        await service.pinRoom(targetId, pinned);
+        return true;
+      }, fallback);
+      if (done && roomId) await fetchRoom(roomId);
+      if (listedRef.current) await refreshList();
+      return Boolean(done);
+    },
+    [roomId, act, fetchRoom, refreshList]
+  );
+
   const members = room?.members ?? [];
   const me = members.find((member) => member.userId === userId) ?? null;
   const rival = members.find((member) => member.userId !== userId) ?? null;
@@ -142,6 +167,7 @@ export function useRoom(currentUser) {
     join,
     cancel,
     finish,
+    pin,
     clearError: () => setError(null),
   };
 }

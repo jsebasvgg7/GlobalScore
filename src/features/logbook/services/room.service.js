@@ -21,6 +21,7 @@ function fromRoomRow(row) {
     startedAt: row.started_at,
     finishedAt: row.finished_at,
     finalPoints: row.final_points ?? null,
+    myPinned: row.my_pinned ?? false,
     members: (row.members ?? []).map(fromMemberRow),
   };
 }
@@ -37,6 +38,7 @@ function fromRoomSummaryRow(row) {
     rivalName: row.rival_name,
     myPoints: row.my_points ?? null,
     rivalPoints: row.rival_points ?? null,
+    pinned: row.pinned ?? false,
   };
 }
 
@@ -74,4 +76,8 @@ export async function cancelRoom(roomId) {
 export async function finishRoom(roomId) {
   const data = await call('libreta_room_finish', { p_room_id: roomId });
   return { winnerUserId: data.winner_user_id, points: data.points };
+}
+
+export async function pinRoom(roomId, pinned) {
+  await call('libreta_room_pin', { p_room_id: roomId, p_pinned: pinned });
 }

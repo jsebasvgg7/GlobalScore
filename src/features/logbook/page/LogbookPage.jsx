@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLogbook } from '../hooks/useLogbook';
+import { useCurrentRoom } from '../hooks/useCurrentRoom';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { getTopScorer } from '../utils/logbook.utils';
 import TeamSelector from '../components/TeamSelector';
@@ -9,6 +10,7 @@ import SeasonSummary from '../components/SeasonSummary';
 import PlayerCard from '../components/PlayerCard';
 import RivalCard from '../components/RivalCard';
 import AddPlayerForm from '../components/AddPlayerForm';
+import RoomSplitButton from '../components/room/RoomSplitButton';
 import LogbookDesktop from './LogbookDesktop';
 import './LogbookPage.css';
 
@@ -35,6 +37,7 @@ export default function LogbookPage({ currentUser }) {
 
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const { path: currentRoomPath } = useCurrentRoom();
   const [confirming, setConfirming] = useState(false);
   const timer = useRef(null);
   const activeId = activeTeam?.id ?? null;
@@ -48,7 +51,9 @@ export default function LogbookPage({ currentUser }) {
 
   const handleCreate = () => createTeam();
 
-  const handleRooms = () => navigate('/libreta/salas');
+  const handleRooms = () => navigate(currentRoomPath);
+
+  const handleNewRoom = () => navigate('/libreta/salas');
 
   const handleDelete = async () => {
     if (!confirming) {
@@ -81,6 +86,7 @@ export default function LogbookPage({ currentUser }) {
         onSelect={selectTeam}
         onCreate={handleCreate}
         onRooms={handleRooms}
+        onNewRoom={handleNewRoom}
         onDelete={handleDelete}
         onUpdateTeam={updateTeamInfo}
         onAdjustTeam={adjustTeamCounter}
@@ -94,9 +100,7 @@ export default function LogbookPage({ currentUser }) {
   return (
     <main className="lg-page">
       <header className="lg-header">
-        <button type="button" className="lg-header__rooms" onClick={handleRooms}>
-          Salas
-        </button>
+        <RoomSplitButton prefix="lg" onRooms={handleRooms} onNewRoom={handleNewRoom} />
         <h1 className="lg-header__title">Mi Libreta Fútbolera</h1>
         {activeTeam && (
           <p className="lg-header__subtitle">

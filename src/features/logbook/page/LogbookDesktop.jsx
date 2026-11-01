@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
-import { Plus, Users } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { DEFAULT_POSITION, FORMATIONS, GAMES, POSITIONS, getTopScorer } from '../utils/logbook.utils';
 import StatBlock from '../components/desktop/StatBlock';
 import PlayerRow from '../components/desktop/PlayerRow';
 import Stepper from '../components/desktop/Stepper';
 import FormationPitch from '../components/desktop/FormationPitch';
+import RoomSplitButton from '../components/room/RoomSplitButton';
 import '../styles/LogbookDesktop.css';
 
 function formatDiff(value) {
@@ -29,6 +30,7 @@ export default function LogbookDesktop({
   onSelect,
   onCreate,
   onRooms,
+  onNewRoom,
   onDelete,
   onUpdateTeam,
   onAdjustTeam,
@@ -78,10 +80,7 @@ export default function LogbookDesktop({
               {team.name}
             </button>
           ))}
-          <button type="button" className="lgd-tab lgd-tab--add" onClick={onRooms}>
-            <Users size={13} aria-hidden="true" />
-            Salas
-          </button>
+          <RoomSplitButton prefix="lgd" onRooms={onRooms} onNewRoom={onNewRoom} />
           <button type="button" className="lgd-tab lgd-tab--rooms-next" onClick={onCreate}>
             <Plus size={13} aria-hidden="true" />
             Equipo

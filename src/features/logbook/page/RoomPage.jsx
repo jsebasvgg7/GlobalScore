@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { useRoom } from '../hooks/useRoom';
+import { useCurrentRoom } from '../hooks/useCurrentRoom';
 import RoomTable from '../components/room/RoomTable';
 import RoomWaiting from '../components/room/RoomWaiting';
 import RoomResult from '../components/room/RoomResult';
+import RoomPinButton from '../components/room/RoomPinButton';
 import '../styles/RoomTable.css';
 import '../styles/RoomPage.css';
 import '../styles/RoomDesktop.css';
@@ -14,8 +16,22 @@ const CONFIRM_WINDOW_MS = 3000;
 export default function RoomPage({ currentUser }) {
   const { roomId } = useParams();
   const navigate = useNavigate();
-  const { room, me, rival, standings, comparison, loading, error, open, close, refresh, cancel, finish } =
-    useRoom(currentUser);
+  const {
+    room,
+    me,
+    rival,
+    standings,
+    comparison,
+    loading,
+    error,
+    open,
+    close,
+    refresh,
+    cancel,
+    finish,
+    pin,
+  } = useRoom(currentUser);
+  const { pinnedId, reload: reloadPinned } = useCurrentRoom();
   const [confirming, setConfirming] = useState(null);
   const timer = useRef(null);
 
@@ -41,6 +57,11 @@ export default function RoomPage({ currentUser }) {
     await run();
   };
 
+  const handlePin = async () => {
+    await pin(!room.myPinned);
+    reloadPinned();
+  };
+
   const status = room?.status;
   const isOpen = status === 'waiting' || status === 'active';
   const isFinished = status === 'finished';
@@ -55,10 +76,19 @@ export default function RoomPage({ currentUser }) {
             Salas
           </button>
           {isOpen && (
-            <button type="button" className="lgr-btn" onClick={refresh} disabled={loading}>
-              <RefreshCw size={16} className={loading ? 'lgr-spin' : ''} />
-              Actualizar
-            </button>
+            <div className="lgr-page__actions">
+              <RoomPinButton
+                variant="bar"
+                pinned={room.myPinned}
+                blocked={Boolean(pinnedId) && pinnedId !== room.id}
+                disabled={loading}
+                onToggle={handlePin}
+              />
+              <button type="button" className="lgr-btn" onClick={refresh} disabled={loading}>
+                <RefreshCw size={16} className={loading ? 'lgr-spin' : ''} />
+                Actualizar
+              </button>
+            </div>
           )}
         </header>
 

@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import { ChevronRight } from 'lucide-react';
-import { listRooms } from '../../services';
+import { ChevronRight, Star } from 'lucide-react';
+import { useCurrentRoom } from '../../hooks/useCurrentRoom';
 
 const STATUS_LABEL = {
   waiting: 'Esperando rival',
@@ -8,28 +7,9 @@ const STATUS_LABEL = {
 };
 
 export default function RoomPanelCard({ onOpen }) {
-  const [room, setRoom] = useState(null);
-  const [ready, setReady] = useState(false);
+  const { room, path, loading } = useCurrentRoom();
 
-  useEffect(() => {
-    let alive = true;
-    listRooms()
-      .then((rooms) => {
-        if (!alive) return;
-        setRoom(rooms.find((item) => item.status === 'waiting' || item.status === 'active') ?? null);
-        setReady(true);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  if (!ready) return null;
-
-  const path = room ? `/libreta/salas/${room.id}` : '/libreta/salas';
+  if (loading) return null;
 
   return (
     <div className="mob2-fw-card mob2-bento-wide">
@@ -43,7 +23,12 @@ export default function RoomPanelCard({ onOpen }) {
               ? `${room.myTeamName ?? 'Tu equipo'} vs ${room.rivalName ?? 'por definir'}`
               : 'Crear o unirme a una sala'}
           </span>
-          {room && <span className="lg-panel__room-code">Código {room.code}</span>}
+          {room && (
+            <span className="lg-panel__room-code">
+              {room.pinned && <Star size={11} className="lg-panel__room-star" aria-label="Sala con estrella" />}
+              Código {room.code}
+            </span>
+          )}
         </span>
         <ChevronRight size={16} aria-hidden="true" />
       </button>

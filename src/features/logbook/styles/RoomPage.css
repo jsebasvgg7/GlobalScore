@@ -24,6 +24,58 @@
   gap: 8px;
 }
 
+.lgr-page__actions {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.lgr-star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  border: 1px solid var(--lgr-cell-line);
+  background: var(--lgr-cell);
+  color: var(--lgr-label);
+  cursor: pointer;
+}
+
+.lgr-star--item {
+  width: 44px;
+  border-left: none;
+}
+
+.lgr-star--bar {
+  width: 40px;
+  border: 2px solid var(--lgr-line);
+}
+
+.lgr-star:not(:disabled):not(.lgr-star--locked):hover,
+.lgr-star--on {
+  color: var(--lgr-win);
+}
+
+.lgr-star--on svg {
+  fill: currentColor;
+}
+
+.lgr-star--locked {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.lgr-star:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.lgr-star:focus-visible {
+  outline: 2px solid var(--lgr-win);
+  outline-offset: -2px;
+}
+
 .lgr-page__msg {
   margin: 0;
   color: var(--lgr-tie);

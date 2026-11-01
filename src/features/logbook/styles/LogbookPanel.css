@@ -70,3 +70,9 @@
   font-size: 11px;
   opacity: 0.8;
 }
+
+.lg-panel__room-star {
+  margin-right: 4px;
+  vertical-align: -1px;
+  fill: currentColor;
+}
