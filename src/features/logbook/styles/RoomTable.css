@@ -23,14 +23,14 @@
   --lgr-bg: #0e0c16;
   --lgr-card: #1a1825;
   --lgr-cell: #242136;
-  --lgr-line: #6d5ce8;
-  --lgr-cell-line: #3f3a66;
-  --lgr-win: #c9c2ff;
+  --lgr-line: #332f52;
+  --lgr-cell-line: #332f52;
+  --lgr-win: #e8e6f6;
   --lgr-tie: #9d94dc;
-  --lgr-lose: #5f5890;
-  --lgr-label: #a9a5c8;
-  --lgr-banner: #6d5ce8;
-  --lgr-banner-fg: #ffffff;
+  --lgr-lose: #6a6290;
+  --lgr-label: #9d94dc;
+  --lgr-banner: #8b7fd0;
+  --lgr-banner-fg: #14111f;
   --lgr-code-bg: #242136;
   --lgr-danger: #e86060;
 }
