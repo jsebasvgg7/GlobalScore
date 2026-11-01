@@ -27,11 +27,14 @@
 - [🖥️ Arquitectura Desktop vs Mobile](#️-arquitectura-desktop-vs-mobile)
 - [📜 Sistema de Historia](#-sistema-de-historia)
 - [📒 GlobalAlbums](#-globalalbums)
+- [📓 Libreta Fútbolera](#-libreta-fútbolera)
+- [⚔️ Salas 1 vs 1](#️-salas-1-vs-1)
 - [Tech Stack](#️-tech-stack)
 - [Instalación](#-instalación)
 - [Configuración](#️-configuración)
 - [Arquitectura Feature-Based](#-arquitectura-feature-based)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Novedades en v1.6](#-novedades-en-v16)
 - [Novedades en v1.5](#-novedades-en-v15)
 - [Roadmap](#-roadmap)
 - [Contribuir](#-contribuir)
@@ -56,7 +59,9 @@ Disponible como **PWA instalable** en Android e iOS, y como **app nativa en Goog
 - **Instalable**: Funciona como app nativa en Android (TWA) e iOS vía PWA
 - **Sistema de Notas**: Toma notas personales sobre predicciones y análisis
 - **Historia Completa**: Registro detallado de competiciones, equipos y eventos históricos
-- **GlobalAlbums**: Sistema de figuritas coleccionables vinculado a las predicciones ⭐ NUEVO
+- **GlobalAlbums**: Sistema de figuritas coleccionables vinculado a las predicciones
+- **Libreta Fútbolera**: Libreta personal de tus partidos de FIFA, EA FC, PES, eFootball y DLS ⭐ NUEVO
+- **Salas 1 vs 1**: Enfrenta tu equipo de la Libreta contra el de un amigo con un código ⭐ NUEVO
 - **Arquitectura Feature-Based**: Código organizado por dominio para máxima escalabilidad
 
 ---
@@ -148,13 +153,19 @@ Disponible como **PWA instalable** en Android e iOS, y como **app nativa en Goog
 ├── Historial completo de análisis personal
 └── Accesible desde página dedicada
 
-📒 GlobalAlbums  ⭐ NUEVO
+📒 GlobalAlbums
 ├── Sobres generados por resultados exactos (5 pts)
 ├── 4 figuritas por sobre (jugador, equipo, copa, evento)
 ├── Sistema de rareza en 5 niveles (1★ al GOAT 5★)
 ├── 13 álbumes coleccionables en 3 categorías
 ├── Boost automático cada 10 sobres abiertos
 └── Animación de apertura de sobre con flip de cartas
+
+📓 Libreta Fútbolera  ⭐ NUEVO
+├── Equipos propios con partidos ganados, empatados y perdidos
+├── Goles, asistencias y MVP por jugador
+├── Resumen de temporada con goleador del equipo
+└── Salas 1 vs 1 para comparar tu equipo con el de un amigo
 
 📜 Historia
 ├── Competiciones históricas con resultados completos
@@ -209,7 +220,7 @@ Sistema de Colección de Figuritas
 - **Historial Completo**: Todas tus predicciones con resultados detallados
 - **Análisis por Liga**: Rendimiento en cada competición
 - **Campeonatos Mensuales**: Historial de títulos ganados mes a mes
-- **Estadísticas Semanales**: Reset automático cada lunes con mini-ranking
+- **Ranking Mensual y de Temporada**: Snapshots del top 100 de cada mes y reinicio de temporada
 - **Gráficas Interactivas**: Precisión por día de la semana
 - **Hall of Fame**: Galería permanente de los mejores jugadores históricos
 - **Análisis de Notas**: Seguimiento de tus análisis personales
@@ -296,6 +307,7 @@ La versión desktop está diseñada para usuarios en computadoras y tablets gran
 - `DashboardPage.jsx`, `RankingPage.jsx`, `StatsPage.jsx`, `AdminPage.jsx`
 - `WorldCupPage.jsx`, `NotesPage.jsx`, `NotificationsPage.jsx`
 - `ProfileSettingsPage.jsx`, `HistoryPage.jsx`, `AlbumsPage.jsx`
+- `LogbookDesktop.jsx`, `RoomsPage.jsx`, `RoomPage.jsx`
 
 #### Características Desktop Exclusivas
 
@@ -359,7 +371,8 @@ La versión mobile está diseñada para usuarios en smartphones y tablets peque�
 - `MobileProfileMain.jsx` — Hero comprimido, tabs de overview/historial/logros
 - `MobileNotifications.jsx` — Toggle prominent, notificaciones por tipo
 - `MobileNotes.jsx` — Crear nota rápida, lista ordenada por fecha, búsqueda
-- `AlbumsPageMobile.jsx` — Header compacto, section nav, álbumes optimizados para touch ⭐ NUEVO
+- `AlbumsPageMobile.jsx` — Header compacto, section nav, álbumes optimizados para touch
+- `LogbookPage.jsx` — Libreta con tarjetas de jugador, contadores verticales y botón dividido de salas ⭐ NUEVO
 
 #### Características Mobile Exclusivas
 
@@ -497,6 +510,148 @@ El feature se integra en el Dashboard mediante `AlbumBookEntry.jsx` — un libro
 
 ---
 
+## 📓 Libreta Fútbolera
+
+La Libreta es el cuaderno personal para llevar las estadísticas de tus partidos de videojuego de fútbol. Cada usuario crea sus propios equipos y solo él puede verlos y editarlos.
+
+### 🗂️ Qué incluye
+
+```
+Libreta Fútbolera
+├── 🏟️ Equipos
+│   ├── Nombre, juego (FIFA, EA FC, PES, eFootball, DLS, Otro) y formación
+│   ├── 8 formaciones: 4-3-3, 4-4-2, 4-2-3-1, 3-5-2, 5-3-2, 4-1-4-1, 3-4-3, 4-5-1
+│   └── Varios equipos por usuario, con selector de equipo activo
+│
+├── 📊 Marcador del equipo
+│   ├── Ganados, empatados y perdidos
+│   ├── Goles en contra y autogoles del rival
+│   └── Goles archivados al borrar un jugador
+│
+├── 👤 Jugadores
+│   ├── Posición: Portero, Defensa, Mediocampista o Delantero
+│   └── Goles, asistencias y MVP con contadores verticales
+│
+├── 📈 Resumen de temporada
+│   └── Partidos jugados, goles a favor, diferencia de gol y goleador
+│
+└── 🔁 Migración
+    └── Importa una sola vez la libreta vieja guardada en el navegador
+```
+
+### 🧭 Rutas
+
+| Ruta | Pantalla |
+|---|---|
+| `/libreta` | Libreta del usuario (desktop y mobile) |
+| `/libreta/salas` | Crear sala, unirse con código y lista de salas |
+| `/libreta/salas/:roomId` | Una sala en particular |
+
+### 🖥️ Desktop y Mobile
+
+- **Desktop**: `LogbookDesktop.jsx` con campo de juego (`FormationPitch`), filas de jugadores, bloques de stats y estilo crema propio con modo oscuro.
+- **Mobile**: `LogbookPage.jsx` con tarjetas de jugador, contadores verticales y la misma gama de colores en modo oscuro.
+- **Dashboard mobile**: la pestaña "Libreta" del panel inferior muestra el resumen del equipo y la tarjeta de la sala en curso.
+
+### 🗃️ Estructura del Feature
+
+```
+src/features/logbook/
+├── index.js
+├── components/
+│   ├── AddPlayerForm.jsx · LogbookPanel.jsx · PlayerCard.jsx · RivalCard.jsx
+│   ├── SeasonSummary.jsx · TeamForm.jsx · TeamSelector.jsx · VerticalCounter.jsx
+│   ├── desktop/   (FormationPitch, PlayerRow, StatBlock, Stepper)
+│   └── room/      (RoomTable, RoomWaiting, RoomCreateForm, RoomJoinForm, RoomList,
+│                   RoomResult, RoomPanelCard, RoomPinButton, RoomSplitButton)
+├── hooks/
+│   ├── useLogbook.js · useLogbookSummary.js · useIsMobile.js
+│   └── useRoom.js · useCurrentRoom.js
+├── page/
+│   ├── LogbookPage.jsx · LogbookDesktop.jsx · LogbookPage.css
+│   └── RoomsPage.jsx · RoomPage.jsx
+├── services/
+│   ├── logbook.service.js   ← Equipos y jugadores (Supabase)
+│   └── room.service.js      ← Llamadas a las funciones SQL de las salas
+├── styles/                  ← CSS del feature (libreta y salas)
+└── utils/
+    ├── logbook.utils.js     ← Juegos, formaciones, posiciones y stats del equipo
+    └── room.utils.js        ← Comparación de equipos y mensajes de error
+```
+
+### 🔐 Seguridad
+
+Las tablas `libreta_teams` y `libreta_players` solo las lee y escribe el dueño (política `owner_all`). Nadie más puede ver tus equipos, salvo el rival dentro de una sala y solo a través de una función SQL.
+
+---
+
+## ⚔️ Salas 1 vs 1
+
+Dos usuarios, cada uno con un equipo de su Libreta, se enfrentan en una **sala**. Se comparan las stats de ambos equipos y cada stat ganada da 1 punto. Gana quien sume más puntos.
+
+### 🔄 Flujo
+
+```
+1. Creas la sala con uno de tus equipos y eliges el modo
+2. Recibes un código corto de 6 caracteres para compartir
+3. Tu rival entra con el código y elige su equipo
+4. Se muestra la tabla de posiciones con los puntos de cada lado
+5. Cualquiera de los dos finaliza la sala
+6. La sala queda congelada y pasa al historial
+```
+
+### 🎛️ Modos de sala
+
+| Modo | Qué pasa |
+|---|---|
+| Historial | Entra cualquier equipo con sus stats de siempre |
+| Desde 0 | Solo entran equipos sin stats. Si el tuyo ya tiene, creas otro con "+ Equipo" |
+
+### 🏁 Puntuación
+
+Son 9 stats que puntúan. Si una stat empata, nadie suma el punto. Partidos jugados y empates solo se muestran como información.
+
+| Stat | Gana | Desempate |
+|---|---|---|
+| Partidos ganados | Más | — |
+| Partidos perdidos | Menos | — |
+| % de victorias | Más | — |
+| Goles a favor | Más | — |
+| Goles en contra | Menos | — |
+| Diferencia de gol | Más | — |
+| Goleador | Más goles | Más asistencias |
+| Asistidor | Más asistencias | Más goles |
+| MVP | Más MVP | Más goles |
+
+### 📌 Reglas
+
+- Máximo 2 miembros por sala.
+- Un equipo solo puede estar en una sala en curso a la vez.
+- Cualquiera de los dos puede finalizar la sala. Si hay empate total, no hay ganador.
+- Al finalizar se guarda una foto de ambos equipos y los puntos finales: después no cambia aunque edites o borres tu equipo.
+- Si borras un equipo que está en una sala en curso, la sala se cancela.
+- **Sala favorita**: puedes marcar con una estrella una sola sala en curso. La marca se guarda en el servidor, te sigue entre dispositivos y se quita sola al finalizar o cancelar la sala.
+- El botón dividido "Salas" abre la sala con estrella (o la más reciente en curso) y el "+" abre siempre la pantalla de salas.
+- Sin tiempo real: la sala se actualiza al abrirla y con el botón "Actualizar".
+
+### 🧠 Dónde vive la lógica
+
+Todas las validaciones y escrituras están en funciones SQL de Supabase. El cliente solo tiene permiso de lectura sobre `libreta_rooms` y `libreta_room_members`.
+
+| Función SQL | Qué hace |
+|---|---|
+| `libreta_room_create` | Crea la sala y su código |
+| `libreta_room_join` | Une al rival y activa la sala |
+| `libreta_room_get` | Lee la sala con las stats de ambos equipos |
+| `libreta_room_list` | Lista tus salas con marcador y estrella |
+| `libreta_room_finish` | Calcula el ganador y congela la sala |
+| `libreta_room_cancel` | Cancela una sala en curso |
+| `libreta_room_pin` | Marca o quita la estrella |
+
+> ⚠️ La comparación de stats existe en dos lugares: `compareTeams` en `room.utils.js` y `libreta_compare_points` en SQL. Si cambias una regla de puntuación, cámbiala en los dos.
+
+---
+
 ## 🛡️ Panel de Administración
 
 ```
@@ -535,13 +690,13 @@ Admin Dashboard (Responsive: Desktop + Mobile)
 {
   "framework": "React 18.3.1",
   "buildTool": "Vite 5.4.11",
-  "routing": "React Router DOM 7.0.1",
-  "icons": "Lucide React 0.469.0",
+  "routing": "React Router DOM 6",
+  "icons": "Lucide React 0.555",
   "styling": "Tailwind CSS + Custom CSS",
   "stateManagement": "React Context API + Custom Hooks",
   "responsiveness": "CSS Media Queries + useMediaQuery Hook",
   "architecture": "Feature-Based (Domain-Driven)",
-  "animations": "Framer Motion (albums feature)"
+  "animations": "Framer Motion 12 (albums feature)"
 }
 ```
 
@@ -555,7 +710,8 @@ Admin Dashboard (Responsive: Desktop + Mobile)
   "storage": "Supabase Storage (Logos, Avatares)",
   "security": "Row Level Security (RLS)",
   "edgeFunctions": "Deno (Push Notifications)",
-  "triggers": "PostgreSQL Triggers (album_cards auto-sync)"
+  "triggers": "PostgreSQL Triggers (album_cards auto-sync, sala favorita, cancelación de salas)",
+  "rpc": "Funciones SQL SECURITY DEFINER (campeonatos, sobres, Salas 1 vs 1)"
 }
 ```
 
@@ -568,7 +724,7 @@ Admin Dashboard (Responsive: Desktop + Mobile)
   "android": "TWA (Trusted Web Activity) — APK firmado",
   "pushNotifications": "VAPID / Web Push API",
   "ci": "Git push → auto deploy",
-  "automation": "GitHub Actions (weekly stats reset)"
+  "automation": "GitHub Actions (registro de deployment)"
 }
 ```
 
@@ -632,15 +788,21 @@ La aplicación estará disponible en `http://localhost:5173`
 
 ### Configuración de Supabase
 
-Ejecuta el script SQL en tu proyecto de Supabase (ver `schema.sql` en el repositorio), luego crea los siguientes buckets en Supabase Storage:
+El esquema `public` vive en Supabase. Para obtener una copia actualizada, expórtala con:
+
+```bash
+pg_dump --schema-only --schema=public --no-owner --no-privileges "$SUPABASE_DB_URL" > schema_completo.sql
+```
+
+Ejecuta ese esquema en tu propio proyecto de Supabase y luego crea los buckets en Supabase Storage:
 
 ```
-team-logos/     league-logos/     award-logos/     avatars/     banners/
+banners/     historical/     world-cup-logos/     profiles/
 ```
 
 ### Schema de GlobalAlbums
 
-Las tablas necesarias para GlobalAlbums están en el mismo `schema.sql`:
+Tablas de GlobalAlbums:
 
 ```
 album_cards         ← Cartas del sistema (sync automático con Historia via triggers)
@@ -684,10 +846,11 @@ src/features/
 | Feature | Responsabilidad |
 |---------|----------------|
 | `admin` | Panel de administración completo |
-| `albums` | Sistema de figuritas GlobalAlbums ⭐ NUEVO |
+| `albums` | Sistema de figuritas GlobalAlbums |
 | `auth` | Login, registro, rutas protegidas |
 | `dashboard` | Feed de partidos, ligas y premios |
 | `history` | Módulo de historia: competiciones, equipos, eventos |
+| `logbook` | Libreta Fútbolera y Salas 1 vs 1 ⭐ NUEVO |
 | `notes` | Sistema de notas personales |
 | `notifications` | Push notifications, centro de notificaciones |
 | `profile` | Perfil público, estadísticas, logros |
@@ -717,7 +880,7 @@ globalscore/
 │   │
 │   └── features/
 │       ├── admin/
-│       ├── albums/           ← Feature GlobalAlbums ⭐ NUEVO
+│       ├── albums/           ← Feature GlobalAlbums
 │       │   ├── components/   (AlbumBookEntry, AlbumCard, PackOpeningModal...)
 │       │   ├── hooks/        (useAlbumPacks, useAlbumCollection, usePackOpening...)
 │       │   ├── motion/       (variants.js — Framer Motion)
@@ -728,6 +891,13 @@ globalscore/
 │       ├── auth/
 │       ├── dashboard/
 │       ├── history/
+│       ├── logbook/          ← Libreta Fútbolera y Salas 1 vs 1 ⭐ NUEVO
+│       │   ├── components/   (equipos, jugadores, desktop/, room/)
+│       │   ├── hooks/        (useLogbook, useRoom, useCurrentRoom...)
+│       │   ├── page/         (LogbookPage, LogbookDesktop, RoomsPage, RoomPage)
+│       │   ├── services/     (logbook.service.js, room.service.js)
+│       │   ├── styles/       (CSS de libreta y salas)
+│       │   └── utils/        (logbook.utils.js, room.utils.js)
 │       ├── notes/
 │       ├── notifications/
 │       ├── profile/
@@ -739,13 +909,35 @@ globalscore/
 │   └── functions/send-match-notification/
 │
 ├── .github/
-│   └── workflows/weekly-reset.yml
+│   └── workflows/            (deploy.yml, weekly-reset.yml)
 │
-├── schema.sql
 ├── twa-manifest.json
 ├── render.yaml
 └── vite.config.js
 ```
+
+---
+
+## ✨ Novedades en v1.6
+
+### 📓 Libreta Fútbolera y ⚔️ Salas 1 vs 1
+
+**Libreta:**
+- Equipos y jugadores propios en Supabase, con migración única desde la libreta vieja del navegador
+- Vista desktop con campo de formación y vista mobile con contadores verticales
+- Resumen de temporada y pestaña "Libreta" en el dashboard mobile
+
+**Salas 1 vs 1:**
+- Sala con código corto de 6 caracteres y modos Historial / Desde 0
+- Tabla de posiciones con 9 stats que puntúan y tonos de ganador, perdedor y empate
+- Finalizar sala con foto congelada de ambos equipos, modo espectador e historial
+- Sala favorita con estrella y botón dividido "Salas" + "+"
+- Mensajes de error siempre en español y cancelación automática si se borra un equipo
+
+**Base de datos:**
+- Tablas `libreta_rooms` y `libreta_room_members` con RLS de solo lectura para los miembros
+- Funciones `libreta_room_create`, `join`, `get`, `list`, `finish`, `cancel` y `pin`
+- Triggers que cancelan la sala si se borra un equipo y quitan la estrella al terminarla
 
 ---
 
@@ -804,7 +996,7 @@ El feature más ambicioso de GlobalScore: un sistema completo de figuritas colec
 - [x] Soporte offline con Service Worker
 - [x] PWA completa
 - [x] App Android compilada y firmada via TWA
-- [x] GitHub Actions para reset semanal
+- [x] GitHub Actions para el registro de deployments
 - [x] Sistema de Notas Personales
 - [x] Módulo de Historia completo
 - [x] Migración a arquitectura feature-based
@@ -814,12 +1006,16 @@ El feature más ambicioso de GlobalScore: un sistema completo de figuritas colec
 - [x] **Pack Opening Modal con animaciones Framer Motion** ⭐ NUEVO
 - [x] **Sistema de boost cada 10 sobres** ⭐ NUEVO
 - [x] **Integración Albums en Dashboard desktop y mobile** ⭐ NUEVO
+- [x] **Libreta Fútbolera con equipos, jugadores y resumen de temporada** ⭐ NUEVO
+- [x] **Salas 1 vs 1 con código, modo Desde 0 y sala favorita** ⭐ NUEVO
 
 ### 🚧 En Progreso (v1.6)
 
 - [ ] **Google Play Store**: Publicación oficial
 - [ ] **Indicador de álbumes en perfil público**
 - [ ] **Chat Global**: Comunidad integrada
+- [ ] **Libreta en el teléfono**: Mejor tabla de salas en 360 px y acciones al alcance del pulgar
+- [ ] **Modo rápido de la Libreta**: Actualizar stats sin salir del juego
 
 ### 📋 Planeado (v2.0)
 
@@ -829,6 +1025,8 @@ El feature más ambicioso de GlobalScore: un sistema completo de figuritas colec
 - [ ] **Torneos Personalizados**: Crea tus propias ligas
 - [ ] **Predicciones en Vivo**: Durante el partido
 - [ ] **Social Sharing**: Compartir predicciones en redes
+- [ ] **Notificación con botones**: Sumar stats de la Libreta desde la notificación
+- [ ] **App nativa**: Android e iOS con Kotlin Multiplatform, widgets y notificaciones nativas
 
 ---
 
