@@ -20,6 +20,8 @@ import WorldCupPage from "@/features/worldcup/page/WorldCupPage";
 import AlbumsPage from "@/features/albums/page/AlbumsPage";
 import NotesPage from "@/features/notes/page/NotesPage";
 import LogbookPage from "@/features/logbook/page/LogbookPage";
+import RoomsPage from "@/features/logbook/page/RoomsPage";
+import RoomPage from "@/features/logbook/page/RoomPage";
 import { PageLoader } from "@/shared/ui";
 import "./styles/layout.css";
 
@@ -279,6 +281,14 @@ export default function App() {
           <Route
             path="/libreta"
             element={session ? <LogbookPage currentUser={currentUser} /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/libreta/salas"
+            element={session ? <RoomsPage currentUser={currentUser} /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/libreta/salas/:roomId"
+            element={session ? <RoomPage currentUser={currentUser} /> : <Navigate to="/" replace />}
           />
           <Route
             path="/albums"

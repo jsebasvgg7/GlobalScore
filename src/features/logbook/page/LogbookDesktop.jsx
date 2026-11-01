@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Users } from 'lucide-react';
 import { DEFAULT_POSITION, FORMATIONS, GAMES, POSITIONS, getTopScorer } from '../utils/logbook.utils';
 import StatBlock from '../components/desktop/StatBlock';
 import PlayerRow from '../components/desktop/PlayerRow';
@@ -28,6 +28,7 @@ export default function LogbookDesktop({
   confirming,
   onSelect,
   onCreate,
+  onRooms,
   onDelete,
   onUpdateTeam,
   onAdjustTeam,
@@ -77,7 +78,11 @@ export default function LogbookDesktop({
               {team.name}
             </button>
           ))}
-          <button type="button" className="lgd-tab lgd-tab--add" onClick={onCreate}>
+          <button type="button" className="lgd-tab lgd-tab--add" onClick={onRooms}>
+            <Users size={13} aria-hidden="true" />
+            Salas
+          </button>
+          <button type="button" className="lgd-tab lgd-tab--rooms-next" onClick={onCreate}>
             <Plus size={13} aria-hidden="true" />
             Equipo
           </button>

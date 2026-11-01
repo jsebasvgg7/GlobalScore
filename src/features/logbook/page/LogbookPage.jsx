@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLogbook } from '../hooks/useLogbook';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { getTopScorer } from '../utils/logbook.utils';
@@ -33,6 +34,7 @@ export default function LogbookPage({ currentUser }) {
   } = useLogbook(currentUser);
 
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   const [confirming, setConfirming] = useState(false);
   const timer = useRef(null);
   const activeId = activeTeam?.id ?? null;
@@ -45,6 +47,8 @@ export default function LogbookPage({ currentUser }) {
   useEffect(() => () => clearTimeout(timer.current), []);
 
   const handleCreate = () => createTeam();
+
+  const handleRooms = () => navigate('/libreta/salas');
 
   const handleDelete = async () => {
     if (!confirming) {
@@ -76,6 +80,7 @@ export default function LogbookPage({ currentUser }) {
         confirming={confirming}
         onSelect={selectTeam}
         onCreate={handleCreate}
+        onRooms={handleRooms}
         onDelete={handleDelete}
         onUpdateTeam={updateTeamInfo}
         onAdjustTeam={adjustTeamCounter}
@@ -89,6 +94,9 @@ export default function LogbookPage({ currentUser }) {
   return (
     <main className="lg-page">
       <header className="lg-header">
+        <button type="button" className="lg-header__rooms" onClick={handleRooms}>
+          Salas
+        </button>
         <h1 className="lg-header__title">Mi Libreta Fútbolera</h1>
         {activeTeam && (
           <p className="lg-header__subtitle">

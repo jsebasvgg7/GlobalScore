@@ -86,6 +86,7 @@ html body:has(.lg-page) {
 }
 
 .lg-header {
+  position: relative;
   padding: 14px 12px;
   border: 2px solid var(--lg-hero);
   border-radius: 0;
@@ -94,8 +95,24 @@ html body:has(.lg-page) {
   color: var(--lg-hero-fg);
 }
 
+.lg-header__rooms {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px 12px;
+  border: 2px solid var(--lg-hero-fg);
+  border-radius: 0;
+  background: transparent;
+  color: var(--lg-hero-fg);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .lg-header__title {
   margin: 0 0 4px;
+  padding-right: 64px;
   font-size: 21px;
   font-weight: 700;
   line-height: 1.15;

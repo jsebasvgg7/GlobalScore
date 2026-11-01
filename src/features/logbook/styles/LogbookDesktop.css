@@ -118,6 +118,10 @@
   color: var(--lgd-accent-text);
 }
 
+.lgd-tab--rooms-next {
+  color: var(--lgd-accent-text);
+}
+
 .lgd-stats {
   display: grid;
   flex-shrink: 0;

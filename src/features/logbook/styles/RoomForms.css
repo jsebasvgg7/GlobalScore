@@ -1,0 +1,144 @@
+.lgr-page__title {
+  margin: 0;
+  color: var(--lgr-win);
+  font-size: 16px;
+}
+
+.lgr-forms {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.lgr-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 3px solid var(--lgr-line);
+  background: var(--lgr-card);
+}
+
+.lgr-card__title {
+  margin: 0;
+  color: var(--lgr-win);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.lgr-card__hint {
+  margin: 0;
+  color: var(--lgr-label);
+  font-size: 12px;
+}
+
+.lgr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--lgr-tie);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.lgr-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  border: 2px solid var(--lgr-line);
+  border-radius: 0;
+  background: var(--lgr-cell);
+  color: var(--lgr-win);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.lgr-input--code {
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.lgr-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border: 2px solid var(--lgr-line);
+}
+
+.lgr-toggle__option {
+  padding: 10px;
+  border: 0;
+  background: transparent;
+  color: var(--lgr-win);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lgr-toggle__option--on {
+  background: var(--lgr-banner);
+  color: var(--lgr-banner-fg);
+}
+
+.lgr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lgr-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--lgr-cell-line);
+  background: var(--lgr-cell);
+  color: var(--lgr-win);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.lgr-item__main,
+.lgr-item__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.lgr-item__main b {
+  overflow: hidden;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lgr-item__meta {
+  align-items: flex-end;
+  color: var(--lgr-label);
+}
+
+.lgr-tag {
+  color: var(--lgr-win);
+  font-weight: 700;
+}
+
+.lgr-tag--cancelled {
+  color: var(--lgr-danger);
+}
+
+.lgr-tag--finished {
+  color: var(--lgr-tie);
+}
+
+@media (min-width: 720px) {
+  .lgr-forms {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
