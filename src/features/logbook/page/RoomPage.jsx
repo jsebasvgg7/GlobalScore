@@ -7,6 +7,7 @@ import RoomWaiting from '../components/room/RoomWaiting';
 import RoomResult from '../components/room/RoomResult';
 import '../styles/RoomTable.css';
 import '../styles/RoomPage.css';
+import '../styles/RoomDesktop.css';
 
 const CONFIRM_WINDOW_MS = 3000;
 
@@ -47,60 +48,62 @@ export default function RoomPage({ currentUser }) {
 
   return (
     <div className="lgr-page">
-      <header className="lgr-page__bar">
-        <button type="button" className="lgr-btn lgr-btn--ghost" onClick={goBack}>
-          <ArrowLeft size={16} />
-          Salas
-        </button>
-        {isOpen && (
-          <button type="button" className="lgr-btn" onClick={refresh} disabled={loading}>
-            <RefreshCw size={16} className={loading ? 'lgr-spin' : ''} />
-            Actualizar
+      <div className="lgr-page__inner">
+        <header className="lgr-page__bar">
+          <button type="button" className="lgr-btn lgr-btn--ghost" onClick={goBack}>
+            <ArrowLeft size={16} />
+            Salas
+          </button>
+          {isOpen && (
+            <button type="button" className="lgr-btn" onClick={refresh} disabled={loading}>
+              <RefreshCw size={16} className={loading ? 'lgr-spin' : ''} />
+              Actualizar
+            </button>
+          )}
+        </header>
+
+        {error && <p className="lgr-page__error">{error}</p>}
+
+        {!room && loading && <p className="lgr-page__msg">Cargando sala...</p>}
+
+        {status === 'waiting' && <RoomWaiting code={room.code} fromZero={room.fromZero} />}
+
+        {isFinished && <RoomResult room={room} userId={currentUser?.id} me={me} rival={rival} />}
+
+        {comparison && <RoomTable code={room.code} standings={standings} comparison={comparison} />}
+
+        {status === 'cancelled' && (
+          <p className="lgr-page__msg">
+            {teamRemoved
+              ? 'La sala se canceló porque un equipo fue eliminado.'
+              : 'La sala fue cancelada.'}
+          </p>
+        )}
+
+        {isFinished && <p className="lgr-page__msg">Sala terminada · solo lectura</p>}
+
+        {status === 'active' && (
+          <button
+            type="button"
+            className={`lgr-btn lgr-btn--finish${confirming === 'finish' ? ' lgr-btn--armed-finish' : ''}`}
+            onClick={() => confirmThen('finish', finish)}
+            disabled={loading}
+          >
+            {confirming === 'finish' ? 'Toca de nuevo para finalizar' : 'Finalizar sala'}
           </button>
         )}
-      </header>
 
-      {error && <p className="lgr-page__error">{error}</p>}
-
-      {!room && loading && <p className="lgr-page__msg">Cargando sala...</p>}
-
-      {status === 'waiting' && <RoomWaiting code={room.code} fromZero={room.fromZero} />}
-
-      {isFinished && <RoomResult room={room} userId={currentUser?.id} me={me} rival={rival} />}
-
-      {comparison && <RoomTable code={room.code} standings={standings} comparison={comparison} />}
-
-      {status === 'cancelled' && (
-        <p className="lgr-page__msg">
-          {teamRemoved
-            ? 'La sala se canceló porque un equipo fue eliminado.'
-            : 'La sala fue cancelada.'}
-        </p>
-      )}
-
-      {isFinished && <p className="lgr-page__msg">Sala terminada · solo lectura</p>}
-
-      {status === 'active' && (
-        <button
-          type="button"
-          className={`lgr-btn lgr-btn--finish${confirming === 'finish' ? ' lgr-btn--armed-finish' : ''}`}
-          onClick={() => confirmThen('finish', finish)}
-          disabled={loading}
-        >
-          {confirming === 'finish' ? 'Toca de nuevo para finalizar' : 'Finalizar sala'}
-        </button>
-      )}
-
-      {isOpen && (
-        <button
-          type="button"
-          className={`lgr-btn lgr-btn--danger${confirming === 'cancel' ? ' lgr-btn--armed' : ''}`}
-          onClick={() => confirmThen('cancel', cancel)}
-          disabled={loading}
-        >
-          {confirming === 'cancel' ? 'Toca de nuevo para confirmar' : 'Cancelar sala'}
-        </button>
-      )}
+        {isOpen && (
+          <button
+            type="button"
+            className={`lgr-btn lgr-btn--danger${confirming === 'cancel' ? ' lgr-btn--armed' : ''}`}
+            onClick={() => confirmThen('cancel', cancel)}
+            disabled={loading}
+          >
+            {confirming === 'cancel' ? 'Toca de nuevo para confirmar' : 'Cancelar sala'}
+          </button>
+        )}
+      </div>
     </div>
   );
 }

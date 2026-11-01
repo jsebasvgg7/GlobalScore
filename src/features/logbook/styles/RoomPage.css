@@ -1,7 +1,4 @@
 .lgr-page {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
   box-sizing: border-box;
   width: 100%;
   min-height: 100vh;
@@ -12,6 +9,12 @@
   color: var(--lgr-win);
   font-family: var(--lgr-font);
   font-size: 14px;
+}
+
+.lgr-page__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .lgr-page__bar {
