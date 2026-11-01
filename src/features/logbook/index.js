@@ -9,5 +9,7 @@ export { default as AddPlayerForm } from './components/AddPlayerForm';
 export { default as VerticalCounter } from './components/VerticalCounter';
 export { useLogbook } from './hooks/useLogbook';
 export { useLogbookSummary } from './hooks/useLogbookSummary';
+export { useRoom } from './hooks/useRoom';
 export * from './services';
 export * from './utils/logbook.utils';
+export * from './utils/room.utils';

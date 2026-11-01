@@ -42,7 +42,7 @@ function fromPlayerRow(row) {
   };
 }
 
-function fromTeamRow(row) {
+export function fromTeamRow(row) {
   return {
     id: row.id,
     userId: row.user_id,
