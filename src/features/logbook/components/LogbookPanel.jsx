@@ -1,12 +1,13 @@
 import { ChevronRight } from 'lucide-react';
 import { useLogbookSummary } from '../hooks/useLogbookSummary';
+import RoomPanelCard from './room/RoomPanelCard';
 import '../styles/LogbookPanel.css';
 
 function formatDiff(value) {
   return value > 0 ? `+${value}` : String(value);
 }
 
-export default function LogbookPanel({ currentUser, onNavigate }) {
+export default function LogbookPanel({ currentUser, onNavigate, onOpenRoom }) {
   const { loading, error, reload, team, topScorer } = useLogbookSummary(currentUser);
 
   if (loading) {
@@ -82,6 +83,7 @@ export default function LogbookPanel({ currentUser, onNavigate }) {
           </span>
         </div>
       </div>
+      {onOpenRoom && <RoomPanelCard onOpen={onOpenRoom} />}
       <button type="button" className="mob2-alb-cta lg-panel__cta" onClick={onNavigate}>
         <span>Abrir Libreta</span>
         <ChevronRight size={14} className="mob2-alb-cta-arrow" />

@@ -514,7 +514,11 @@ function BottomSection({ users, currentUser, allAchievements }) {
       </div>
 
       {activeTab === "libreta" && (
-        <LogbookPanel currentUser={currentUser} onNavigate={() => navigate('/libreta')} />
+        <LogbookPanel
+          currentUser={currentUser}
+          onNavigate={() => navigate('/libreta')}
+          onOpenRoom={(path) => navigate(path)}
+        />
       )}
       {activeTab === "stats" && (
         <StatsPanel currentUser={currentUser} />
