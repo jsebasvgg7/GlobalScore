@@ -1,10 +1,10 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
 import * as service from '../services';
-import { compareTeams } from '../utils/room.utils';
+import { compareTeams, roomErrorMessage } from '../utils/room.utils';
 
 const COMPARABLE_STATUSES = ['active', 'finished'];
 
-const messageOf = (e, fallback) => e?.message || fallback;
+const messageOf = roomErrorMessage;
 
 export function useRoom(currentUser) {
   const userId = currentUser?.id;
@@ -73,26 +73,14 @@ export function useRoom(currentUser) {
   }, [act]);
 
   const create = useCallback(
-    async (teamId, fromZero = false) => {
-      const result = await act(
-        () => service.createRoom(teamId, fromZero),
-        'No se pudo crear la sala'
-      );
-      if (!result) return null;
-      await open(result.roomId);
-      return result;
-    },
-    [act, open]
+    (teamId, fromZero = false) =>
+      act(() => service.createRoom(teamId, fromZero), 'No se pudo crear la sala'),
+    [act]
   );
 
   const join = useCallback(
-    async (code, teamId) => {
-      const result = await act(() => service.joinRoom(code, teamId), 'No se pudo entrar a la sala');
-      if (!result) return null;
-      await open(result.roomId);
-      return result;
-    },
-    [act, open]
+    (code, teamId) => act(() => service.joinRoom(code, teamId), 'No se pudo entrar a la sala'),
+    [act]
   );
 
   const cancel = useCallback(async () => {

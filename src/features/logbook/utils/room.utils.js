@@ -87,3 +87,32 @@ export function compareTeams(a, b) {
     stats,
   };
 }
+
+const KNOWN_ROOM_ERRORS = [
+  'Usuario no encontrado',
+  'Equipo no válido',
+  'El equipo ya está en una sala activa',
+  'La sala es desde 0 y el equipo ya tiene stats',
+  'Sala no encontrada',
+  'La sala no está disponible',
+  'Ya estás en esta sala',
+  'La sala está llena',
+  'Sin acceso a la sala',
+  'La sala ya terminó',
+  'La sala no está en juego',
+  'Faltan equipos en la sala',
+  'No se pudo generar el código de la sala',
+];
+
+export function roomErrorMessage(error, fallback) {
+  const message = error?.message ?? '';
+  const known = KNOWN_ROOM_ERRORS.find((item) => message.includes(item));
+  if (known) return known;
+  if (/failed to fetch|network|load failed/i.test(message)) {
+    return 'Sin conexión. Revisa tu internet e inténtalo de nuevo';
+  }
+  if (/jwt|not authenticated|session/i.test(message)) {
+    return 'Tu sesión expiró. Vuelve a iniciar sesión';
+  }
+  return fallback;
+}

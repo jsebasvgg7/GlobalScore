@@ -43,6 +43,7 @@ export default function RoomPage({ currentUser }) {
   const status = room?.status;
   const isOpen = status === 'waiting' || status === 'active';
   const isFinished = status === 'finished';
+  const teamRemoved = status === 'cancelled' && room.members.some((member) => !member.team);
 
   return (
     <div className="lgr-page">
@@ -69,7 +70,13 @@ export default function RoomPage({ currentUser }) {
 
       {comparison && <RoomTable code={room.code} standings={standings} comparison={comparison} />}
 
-      {status === 'cancelled' && <p className="lgr-page__msg">La sala fue cancelada.</p>}
+      {status === 'cancelled' && (
+        <p className="lgr-page__msg">
+          {teamRemoved
+            ? 'La sala se canceló porque un equipo fue eliminado.'
+            : 'La sala fue cancelada.'}
+        </p>
+      )}
 
       {isFinished && <p className="lgr-page__msg">Sala terminada · solo lectura</p>}
 
