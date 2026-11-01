@@ -4,22 +4,18 @@ import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { useRoom } from '../hooks/useRoom';
 import RoomTable from '../components/room/RoomTable';
 import RoomWaiting from '../components/room/RoomWaiting';
+import RoomResult from '../components/room/RoomResult';
 import '../styles/RoomTable.css';
 import '../styles/RoomPage.css';
 
 const CONFIRM_WINDOW_MS = 3000;
 
-const STATUS_TEXT = {
-  cancelled: 'La sala fue cancelada.',
-  finished: 'La sala terminó.',
-};
-
 export default function RoomPage({ currentUser }) {
   const { roomId } = useParams();
   const navigate = useNavigate();
-  const { room, standings, comparison, loading, error, open, close, refresh, cancel } =
+  const { room, me, rival, standings, comparison, loading, error, open, close, refresh, cancel, finish } =
     useRoom(currentUser);
-  const [confirming, setConfirming] = useState(false);
+  const [confirming, setConfirming] = useState(null);
   const timer = useRef(null);
 
   useEffect(() => {
@@ -32,19 +28,21 @@ export default function RoomPage({ currentUser }) {
 
   const goBack = () => navigate('/libreta/salas');
 
-  const handleCancel = async () => {
-    if (!confirming) {
-      setConfirming(true);
-      timer.current = setTimeout(() => setConfirming(false), CONFIRM_WINDOW_MS);
+  const confirmThen = async (action, run) => {
+    if (confirming !== action) {
+      clearTimeout(timer.current);
+      setConfirming(action);
+      timer.current = setTimeout(() => setConfirming(null), CONFIRM_WINDOW_MS);
       return;
     }
     clearTimeout(timer.current);
-    setConfirming(false);
-    await cancel();
+    setConfirming(null);
+    await run();
   };
 
-  const isOpen = room && (room.status === 'waiting' || room.status === 'active');
-  const isWinner = room?.winnerUserId && room.winnerUserId === currentUser?.id;
+  const status = room?.status;
+  const isOpen = status === 'waiting' || status === 'active';
+  const isFinished = status === 'finished';
 
   return (
     <div className="lgr-page">
@@ -53,39 +51,47 @@ export default function RoomPage({ currentUser }) {
           <ArrowLeft size={16} />
           Salas
         </button>
-        <button
-          type="button"
-          className="lgr-btn"
-          onClick={refresh}
-          disabled={loading || !room}
-        >
-          <RefreshCw size={16} className={loading ? 'lgr-spin' : ''} />
-          Actualizar
-        </button>
+        {isOpen && (
+          <button type="button" className="lgr-btn" onClick={refresh} disabled={loading}>
+            <RefreshCw size={16} className={loading ? 'lgr-spin' : ''} />
+            Actualizar
+          </button>
+        )}
       </header>
 
       {error && <p className="lgr-page__error">{error}</p>}
 
       {!room && loading && <p className="lgr-page__msg">Cargando sala...</p>}
 
-      {room?.status === 'waiting' && <RoomWaiting code={room.code} fromZero={room.fromZero} />}
+      {status === 'waiting' && <RoomWaiting code={room.code} fromZero={room.fromZero} />}
+
+      {isFinished && <RoomResult room={room} userId={currentUser?.id} me={me} rival={rival} />}
 
       {comparison && <RoomTable code={room.code} standings={standings} comparison={comparison} />}
 
-      {room && STATUS_TEXT[room.status] && <p className="lgr-page__msg">{STATUS_TEXT[room.status]}</p>}
+      {status === 'cancelled' && <p className="lgr-page__msg">La sala fue cancelada.</p>}
 
-      {room?.status === 'finished' && room.winnerUserId && (
-        <p className="lgr-page__msg">{isWinner ? 'Ganaste la sala' : 'Ganó tu rival'}</p>
+      {isFinished && <p className="lgr-page__msg">Sala terminada · solo lectura</p>}
+
+      {status === 'active' && (
+        <button
+          type="button"
+          className={`lgr-btn lgr-btn--finish${confirming === 'finish' ? ' lgr-btn--armed-finish' : ''}`}
+          onClick={() => confirmThen('finish', finish)}
+          disabled={loading}
+        >
+          {confirming === 'finish' ? 'Toca de nuevo para finalizar' : 'Finalizar sala'}
+        </button>
       )}
 
       {isOpen && (
         <button
           type="button"
-          className={`lgr-btn lgr-btn--danger${confirming ? ' lgr-btn--armed' : ''}`}
-          onClick={handleCancel}
+          className={`lgr-btn lgr-btn--danger${confirming === 'cancel' ? ' lgr-btn--armed' : ''}`}
+          onClick={() => confirmThen('cancel', cancel)}
           disabled={loading}
         >
-          {confirming ? 'Toca de nuevo para confirmar' : 'Cancelar sala'}
+          {confirming === 'cancel' ? 'Toca de nuevo para confirmar' : 'Cancelar sala'}
         </button>
       )}
     </div>

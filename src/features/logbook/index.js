@@ -20,3 +20,4 @@ export { default as RoomsPage } from './page/RoomsPage';
 export { default as RoomCreateForm } from './components/room/RoomCreateForm';
 export { default as RoomJoinForm } from './components/room/RoomJoinForm';
 export { default as RoomList } from './components/room/RoomList';
+export { default as RoomResult } from './components/room/RoomResult';

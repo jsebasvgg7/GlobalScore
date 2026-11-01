@@ -20,6 +20,7 @@ function fromRoomRow(row) {
     createdAt: row.created_at,
     startedAt: row.started_at,
     finishedAt: row.finished_at,
+    finalPoints: row.final_points ?? null,
     members: (row.members ?? []).map(fromMemberRow),
   };
 }
@@ -34,6 +35,8 @@ function fromRoomSummaryRow(row) {
     winnerUserId: row.winner_user_id,
     myTeamName: row.my_team_name,
     rivalName: row.rival_name,
+    myPoints: row.my_points ?? null,
+    rivalPoints: row.rival_points ?? null,
   };
 }
 
@@ -66,4 +69,9 @@ export async function listRooms() {
 
 export async function cancelRoom(roomId) {
   await call('libreta_room_cancel', { p_room_id: roomId });
+}
+
+export async function finishRoom(roomId) {
+  const data = await call('libreta_room_finish', { p_room_id: roomId });
+  return { winnerUserId: data.winner_user_id, points: data.points };
 }

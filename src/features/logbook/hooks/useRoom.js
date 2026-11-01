@@ -106,6 +106,17 @@ export function useRoom(currentUser) {
     return true;
   }, [roomId, act, fetchRoom]);
 
+  const finish = useCallback(async () => {
+    if (!roomId) return false;
+    const done = await act(async () => {
+      await service.finishRoom(roomId);
+      return true;
+    }, 'No se pudo finalizar la sala');
+    if (!done) return false;
+    await fetchRoom(roomId);
+    return true;
+  }, [roomId, act, fetchRoom]);
+
   const members = room?.members ?? [];
   const me = members.find((member) => member.userId === userId) ?? null;
   const rival = members.find((member) => member.userId !== userId) ?? null;
@@ -142,6 +153,7 @@ export function useRoom(currentUser) {
     create,
     join,
     cancel,
+    finish,
     clearError: () => setError(null),
   };
 }
