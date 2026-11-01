@@ -4,7 +4,7 @@
   justify-content: space-between;
   gap: 10px;
   padding: 10px;
-  border: 2px solid var(--lg-line);
+  border: 1px solid var(--lg-line);
   border-radius: 0;
   background: var(--lg-soft);
 }
@@ -47,7 +47,7 @@
 .lg-rival__box {
   display: flex;
   align-items: center;
-  border: 2px solid var(--lg-line);
+  border: 1px solid var(--lg-line);
   border-radius: 0;
   background: var(--lg-card);
 }

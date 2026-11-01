@@ -1,5 +1,5 @@
 .lg-player {
-  border: 2px solid var(--lg-line);
+  border: 1px solid var(--lg-line);
   border-radius: 0;
   background: var(--lg-card);
 }
@@ -43,7 +43,7 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  border: 2px solid var(--lg-line);
+  border: 1.5px solid var(--lg-line);
   color: var(--lg-ink);
 }
 
@@ -106,7 +106,7 @@
   display: flex;
   justify-content: center;
   padding: 12px 10px;
-  border-top: 2px solid var(--lg-soft);
+  border-top: 1px solid var(--lg-soft);
 }
 
 .lg-player__remove {

@@ -79,19 +79,19 @@ html body:has(.lg-page) {
 
 .lg-card {
   padding: 12px;
-  border: 2px solid var(--lg-line);
+  border: 1px solid var(--lg-line);
   border-radius: 0;
   background: var(--lg-card);
-  box-shadow: 3px 3px 0 var(--lg-shadow);
+  box-shadow: 2.5px 2.5px 0 var(--lg-shadow);
 }
 
 .lg-header {
   position: relative;
   padding: 14px 12px;
-  border: 2px solid var(--lg-hero);
+  border: 1px solid var(--lg-hero);
   border-radius: 0;
   background: var(--lg-hero);
-  box-shadow: 3px 3px 0 var(--lg-shadow);
+  box-shadow: 2.5px 2.5px 0 var(--lg-shadow);
   color: var(--lg-hero-fg);
 }
 
@@ -176,7 +176,7 @@ html body:has(.lg-page) {
   min-width: 0;
   min-height: 44px;
   padding: 9px;
-  border: 2px solid var(--lg-line);
+  border: 1.5px solid var(--lg-line);
   border-radius: 0;
   background: var(--lg-soft);
   color: var(--lg-fg);
@@ -199,7 +199,7 @@ html body:has(.lg-page) {
 .lg-btn {
   min-height: 44px;
   padding: 8px 12px;
-  border: 2px solid var(--lg-line);
+  border: 1.5px solid var(--lg-line);
   border-radius: 0;
   background: var(--lg-card);
   box-shadow: 2px 2px 0 var(--lg-shadow);
@@ -258,10 +258,10 @@ html body:has(.lg-page) {
   justify-content: space-between;
   gap: 12px;
   padding: 10px 12px;
-  border: 2px solid var(--lg-danger);
+  border: 1px solid var(--lg-danger);
   border-radius: 0;
   background: var(--lg-card);
-  box-shadow: 3px 3px 0 var(--lg-danger);
+  box-shadow: 2.5px 2.5px 0 var(--lg-danger);
   color: var(--lg-fg);
   font-size: 13px;
 }
@@ -270,7 +270,7 @@ html body:has(.lg-page) {
   flex-shrink: 0;
   min-height: 36px;
   padding: 4px 12px;
-  border: 2px solid var(--lg-danger);
+  border: 1.5px solid var(--lg-danger);
   border-radius: 0;
   background: transparent;
   color: var(--lg-danger);

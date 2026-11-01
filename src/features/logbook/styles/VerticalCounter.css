@@ -23,7 +23,7 @@
   grid-template-rows: 40px 1fr 40px;
   width: 100%;
   min-height: 132px;
-  border: 2px solid var(--lg-line);
+  border: 1px solid var(--lg-line);
   border-radius: 0;
   background: var(--lg-card);
 }
