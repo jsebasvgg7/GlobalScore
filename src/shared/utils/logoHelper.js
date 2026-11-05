@@ -546,6 +546,10 @@ export function getCountryLogoUrlByName(supabase, countryName) {
 // FUNCIONES PARA LOGOS DE LIGAS
 // ============================================
 
+export function getLeagueOptions() {
+  return [...new Set([...Object.keys(leagueLogoUrlMap), ...Object.keys(leagueMap)])];
+}
+
 export function getLeagueLogoUrlDirect(leagueName) {
   const url = leagueLogoUrlMap[leagueName];
 

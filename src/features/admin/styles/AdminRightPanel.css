@@ -157,6 +157,56 @@
   opacity: 0.55;
 }
 
+.adm-combo-wrap {
+  position: relative;
+}
+
+.adm-combo-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 200px;
+  margin: 2px 0 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  border: 0.5px solid var(--accent);
+  background: var(--card);
+}
+
+.adm-combo-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.adm-combo-option--active {
+  background: var(--bg);
+  color: var(--accent);
+}
+
+.adm-combo-tag {
+  font-size: 8px;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.adm-combo-custom {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+}
+
 .adm-input[type="date"],
 .adm-input[type="time"],
 .adm-input[type="month"] {

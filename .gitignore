@@ -4,8 +4,5 @@ dist
 .vscode
 *.log
 *.txt
-notas
+doc/
 .gradle/
-schema_completo.sql
-GLOBALSCORE-DOC.md
-schema.sql

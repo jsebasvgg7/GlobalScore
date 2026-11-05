@@ -238,6 +238,56 @@
   font-size: 14px;
 }
 
+.mba-combo-wrap {
+  position: relative;
+}
+
+.mba-combo-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 240px;
+  margin: 2px 0 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  border: 1px solid var(--accent);
+  background: var(--card);
+}
+
+.mba-combo-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 13px 14px;
+  font-size: 15px;
+  font-family: 'Sora', sans-serif;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.mba-combo-option--active {
+  background: var(--bg);
+  color: var(--accent);
+}
+
+.mba-combo-tag {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.mba-combo-custom {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--accent);
+}
+
 .mba-input[type="date"],
 .mba-input[type="time"],
 .mba-input[type="month"] {

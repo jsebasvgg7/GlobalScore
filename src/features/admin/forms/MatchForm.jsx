@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { getLogoUrlByTeamName, getLeagueLogoUrlDirect } from '@/shared/utils/logoHelper.js';
 import { supabase } from '@/shared/services/supabase/client';
+import LeagueCombobox, { rememberLeague } from './LeagueCombobox';
 
 export default function MatchForm({ onAdd, onClose, styles: s }) {
     const [form, setForm] = useState({
@@ -91,6 +92,7 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
                 prob_draw: Number(form.prob_draw),
                 prob_away: Number(form.prob_away),
             });
+            rememberLeague(form.league);
             setForm({
                 id: '', league: '', home_team: '', away_team: '',
                 home_team_logo: '🏠', away_team_logo: '✈️',
@@ -111,8 +113,8 @@ export default function MatchForm({ onAdd, onClose, styles: s }) {
                 </div>
                 <div className={s.field}>
                     <label className={s.label}>Liga</label>
-                    <input className={s.input} name="league" placeholder="Premier League" value={form.league} onChange={handleChange} />
-                    <span className={s.hint}>Logo auto</span>
+                    <LeagueCombobox name="league" placeholder="Premier League" value={form.league} onChange={handleChange} styles={s} />
+                    <span className={s.hint}>Elige de la lista o escribe otra</span>
                 </div>
             </div>
 
