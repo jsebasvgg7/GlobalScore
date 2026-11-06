@@ -1,17 +1,72 @@
-export const getFilteredItems = (activeSection, searchTerm, filterStatus, data) => {
+export const NO_LEAGUE = '__none__';
+
+export const MATCH_SORT_OPTIONS = [
+  { value: 'recent', label: 'Más recientes' },
+  { value: 'oldest', label: 'Más antiguos' },
+  { value: 'league-asc', label: 'Liga A → Z' },
+  { value: 'league-desc', label: 'Liga Z → A' },
+];
+
+const compareText = (a, b) =>
+  a.localeCompare(b, 'es', { sensitivity: 'base' });
+
+const matchStamp = (m) => `${m.date || ''}T${m.time || '00:00'}`;
+
+const compareRecent = (a, b) => matchStamp(b).localeCompare(matchStamp(a));
+
+export const getMatchLeagueOptions = (matches) => {
+  const counts = new Map();
+  let withoutLeague = 0;
+  (matches || []).forEach((m) => {
+    const name = m.league?.trim();
+    if (!name) { withoutLeague += 1; return; }
+    counts.set(name, (counts.get(name) || 0) + 1);
+  });
+  const options = [...counts.entries()]
+    .map(([label, count]) => ({ value: label, label, count }))
+    .sort((a, b) => compareText(a.label, b.label));
+  if (withoutLeague) {
+    options.push({ value: NO_LEAGUE, label: 'Sin liga', count: withoutLeague });
+  }
+  return options;
+};
+
+const sortMatches = (list, sortBy) => {
+  const sorted = [...list];
+  const byLeague = (dir) => (a, b) => {
+    const la = a.league?.trim() || '';
+    const lb = b.league?.trim() || '';
+    if (!la && lb) return 1;
+    if (la && !lb) return -1;
+    return compareText(la, lb) * dir || compareRecent(a, b);
+  };
+  switch (sortBy) {
+    case 'oldest': return sorted.sort((a, b) => -compareRecent(a, b));
+    case 'league-asc': return sorted.sort(byLeague(1));
+    case 'league-desc': return sorted.sort(byLeague(-1));
+    default: return sorted.sort(compareRecent);
+  }
+};
+
+export const getFilteredItems = (activeSection, searchTerm, filterStatus, data, matchOptions = {}) => {
+  const { league: leagueFilter = 'all', sortBy = 'recent' } = matchOptions;
   const { matches, leagues, awards, achievements, titles, users, crownHistory, banners, globalUsers, trophyHistory, bots } = data;
   const term = searchTerm.toLowerCase();
 
   switch (activeSection) {
-    case 'matches':
-      return (matches || []).filter(m => {
+    case 'matches': {
+      const visible = (matches || []).filter(m => {
         const matchesSearch = !term ||
           m.home_team?.toLowerCase().includes(term) ||
           m.away_team?.toLowerCase().includes(term) ||
           m.league?.toLowerCase().includes(term);
         const matchesStatus = filterStatus === 'all' || m.status === filterStatus;
-        return matchesSearch && matchesStatus;
+        const matchesLeague = leagueFilter === 'all' ||
+          (leagueFilter === NO_LEAGUE ? !m.league?.trim() : m.league?.trim() === leagueFilter);
+        return matchesSearch && matchesStatus && matchesLeague;
       });
+      return sortMatches(visible, sortBy);
+    }
 
     case 'leagues':
       return (leagues || []).filter(l => {

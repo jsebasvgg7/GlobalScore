@@ -15,7 +15,7 @@ import {
 } from '@/features/admin';
 
 // Utils
-import { getFilteredItems, calculateStats } from '@/shared/utils/adminFilters';
+import { getFilteredItems, calculateStats, getMatchLeagueOptions } from '@/shared/utils/adminFilters';
 
 // Componentes
 import {
@@ -28,6 +28,7 @@ import {
   AdminStatsOverview,
   AdminNavigationTabs,
   AdminControls,
+  AdminMatchFilters,
   AdminMatchesList,
   AdminLeaguesList,
   AdminAwardsList,
@@ -59,6 +60,8 @@ export default function AdminPage({ currentUser }) {
   const [activeSection, setActiveSection] = useState('matches');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [filterLeague, setFilterLeague] = useState('all');
+  const [sortBy, setSortBy] = useState('recent');
 
   // ── Panel derecho ─────────────────────────────────────────────
   const [panelMode, setPanelMode] = useState('add');
@@ -193,10 +196,24 @@ export default function AdminPage({ currentUser }) {
   };
 
   // ── Filtered items ────────────────────────────────────────────
+  const matchLeagueOptions = getMatchLeagueOptions(matches);
+  const activeLeague = matchLeagueOptions.some(o => o.value === filterLeague) ? filterLeague : 'all';
+
   const filteredItems = getFilteredItems(
     activeSection, searchTerm, filterStatus,
-    { matches, leagues, awards, achievements, titles, users, crownHistory, banners, globalUsers, trophyHistory, bots }
+    { matches, leagues, awards, achievements, titles, users, crownHistory, banners, globalUsers, trophyHistory, bots },
+    { league: activeLeague, sortBy }
   );
+
+  const hasActiveMatchFilters =
+    filterStatus !== 'all' || activeLeague !== 'all' || sortBy !== 'recent' || searchTerm.trim() !== '';
+
+  const clearMatchFilters = () => {
+    setSearchTerm('');
+    setFilterStatus('all');
+    setFilterLeague('all');
+    setSortBy('recent');
+  };
 
   const stats = calculateStats({ matches, leagues, awards, achievements, titles, crownHistory, banners, trophyHistory, bots });
 
@@ -242,6 +259,19 @@ export default function AdminPage({ currentUser }) {
                 filterStatus={filterStatus}
                 setFilterStatus={setFilterStatus}
                 onAddNew={isMobile ? () => { resetPanel(); setMobileSheetOpen(true); } : resetPanel}
+              />
+            )}
+
+            {!isHistorical && activeSection === 'matches' && (
+              <AdminMatchFilters
+                total={Array.isArray(matches) ? matches.length : 0}
+                leagues={matchLeagueOptions}
+                league={activeLeague}
+                setLeague={setFilterLeague}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                hasActiveFilters={hasActiveMatchFilters}
+                onClear={clearMatchFilters}
               />
             )}
 

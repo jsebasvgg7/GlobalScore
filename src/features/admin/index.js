@@ -13,6 +13,7 @@ export { default as AdminDiagnosticPanel } from './components/AdminDiagnosticPan
 export { default as AdminLeagueModal } from './components/AdminLeagueModal'
 export { default as AdminLeaguesList } from './components/AdminLeaguesList'
 export { default as AdminMatchesList } from './components/AdminMatchesList'
+export { default as AdminMatchFilters } from './components/AdminMatchFilters'
 export { default as AdminModal } from './components/AdminModal'
 export { default as AdminModalsContainer } from './components/AdminModalsContainer'
 export { default as AdminNavigationTabs } from './components/AdminNavigationTabs'
