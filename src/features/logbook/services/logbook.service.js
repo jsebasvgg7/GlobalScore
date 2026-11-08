@@ -38,6 +38,7 @@ function fromPlayerRow(row) {
     goals: row.g,
     assists: row.a,
     mvp: row.mvp,
+    sortOrder: row.sort_order ?? 0,
     createdAt: row.created_at,
   };
 }
@@ -58,7 +59,7 @@ export function fromTeamRow(row) {
     createdAt: row.created_at,
     players: (row.libreta_players ?? [])
       .map(fromPlayerRow)
-      .sort((a, b) => a.createdAt.localeCompare(b.createdAt)),
+      .sort((a, b) => a.sortOrder - b.sortOrder || a.createdAt.localeCompare(b.createdAt)),
   };
 }
 
@@ -121,6 +122,15 @@ export async function updatePlayer(playerId, values) {
 
 export async function deletePlayer(playerId) {
   const { error } = await supabase.rpc('libreta_delete_player', { p_player_id: playerId });
+
+  if (error) throw error;
+}
+
+export async function reorderPlayers(teamId, playerIds) {
+  const { error } = await supabase.rpc('libreta_reorder_players', {
+    p_team_id: teamId,
+    p_ids: playerIds,
+  });
 
   if (error) throw error;
 }

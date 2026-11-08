@@ -9,6 +9,7 @@ import TeamForm from '../components/TeamForm';
 import SeasonSummary from '../components/SeasonSummary';
 import PlayerCard from '../components/PlayerCard';
 import RivalCard from '../components/RivalCard';
+import PlayerSortList from '../components/PlayerSortList';
 import AddPlayerForm from '../components/AddPlayerForm';
 import RoomSplitButton from '../components/room/RoomSplitButton';
 import LogbookDesktop from './LogbookDesktop';
@@ -33,17 +34,20 @@ export default function LogbookPage({ currentUser }) {
     adjustPlayerCounter,
     addPlayer,
     removePlayer,
+    reorderPlayers,
   } = useLogbook(currentUser);
 
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { path: currentRoomPath } = useCurrentRoom();
   const [confirming, setConfirming] = useState(false);
+  const [sorting, setSorting] = useState(false);
   const timer = useRef(null);
   const activeId = activeTeam?.id ?? null;
 
   useEffect(() => {
     setConfirming(false);
+    setSorting(false);
     clearTimeout(timer.current);
   }, [activeId]);
 
@@ -148,20 +152,36 @@ export default function LogbookPage({ currentUser }) {
           )}
 
           <section className="lg-card lg-players" aria-label="Jugadores destacados">
-            <h2 className="lg-section-title">Jugadores destacados</h2>
+            <div className="lg-players__head">
+              <h2 className="lg-section-title">Jugadores destacados</h2>
+              {activeTeam.players.length > 1 && (
+                <button
+                  type="button"
+                  className={`lg-btn lg-players__sort${sorting ? ' lg-btn--primary' : ''}`}
+                  onClick={() => setSorting((value) => !value)}
+                  aria-pressed={sorting}
+                >
+                  {sorting ? 'Listo' : 'Ordenar'}
+                </button>
+              )}
+            </div>
             <p className="lg-hint">
               Un gol aquí sube GA automáticamente.
               {topScorer && ` Máximo goleador: ${topScorer.name} (${topScorer.goals}).`}
             </p>
             <div className="lg-players__list">
-              {activeTeam.players.map((player) => (
-                <PlayerCard
-                  key={player.id}
-                  player={player}
-                  onAdjust={adjustPlayerCounter}
-                  onRemove={removePlayer}
-                />
-              ))}
+              {sorting ? (
+                <PlayerSortList players={activeTeam.players} onReorder={reorderPlayers} />
+              ) : (
+                activeTeam.players.map((player) => (
+                  <PlayerCard
+                    key={player.id}
+                    player={player}
+                    onAdjust={adjustPlayerCounter}
+                    onRemove={removePlayer}
+                  />
+                ))
+              )}
               <RivalCard
                 value={activeTeam.opponentOwnGoals}
                 onAdjust={(delta) => adjustTeamCounter('opponentOwnGoals', delta)}

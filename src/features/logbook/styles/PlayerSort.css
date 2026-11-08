@@ -1,0 +1,50 @@
+.lg-sort {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.lg-sort__item {
+  position: relative;
+  touch-action: pan-y;
+}
+
+.lg-sort__item--drag {
+  z-index: 2;
+  background: var(--lg-soft);
+  outline: 2px solid var(--lg-ink);
+}
+
+.lg-sort__row {
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 10px;
+}
+
+.lg-sort__handle {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1.5px solid var(--lg-line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--lg-ink);
+  cursor: grab;
+  touch-action: none;
+}
+
+.lg-sort__handle:active {
+  cursor: grabbing;
+}
+
+.lg-sort__handle:focus-visible {
+  outline: 3px solid var(--lg-ink2);
+  outline-offset: 2px;
+}

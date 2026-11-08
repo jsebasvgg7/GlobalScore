@@ -303,6 +303,24 @@ export function useLogbook(currentUser) {
     [getActive, run, settle]
   );
 
+  const reorderPlayers = useCallback(
+    async (orderedIds) => {
+      const team = getActive();
+      if (!team) return;
+      const byId = new Map(team.players.map((player) => [player.id, player]));
+      const ordered = orderedIds.map((id) => byId.get(id)).filter(Boolean);
+      if (ordered.length !== team.players.length) return;
+      await run(
+        (list) =>
+          patchTeam(list, team.id, {
+            players: ordered.map((player, index) => ({ ...player, sortOrder: index + 1 })),
+          }),
+        () => service.reorderPlayers(team.id, orderedIds)
+      );
+    },
+    [getActive, run]
+  );
+
   return {
     teams,
     activeTeam,
@@ -319,5 +337,6 @@ export function useLogbook(currentUser) {
     adjustPlayerCounter,
     addPlayer,
     removePlayer,
+    reorderPlayers,
   };
 }
