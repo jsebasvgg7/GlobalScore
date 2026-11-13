@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verificación de GlobalScore</title>
+  <style>
+    body { margin: 8px; font: 16px system-ui, sans-serif; }
+  </style>
+  <script src="/mobile-turnstile.js" defer></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=renderGlobalScoreChallenge&amp;render=explicit" defer></script>
+</head>
+<body>
+  <div id="challenge"></div>
+  <p id="status" role="status">Cargando verificación…</p>
+</body>
+</html>
