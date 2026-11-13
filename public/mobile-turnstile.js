@@ -11,6 +11,11 @@ window.renderGlobalScoreChallenge = () => {
     sitekey,
     size: window.innerWidth < 300 ? "compact" : "flexible",
     appearance: params.get("appearance") === "interaction-only" ? "interaction-only" : "always",
+    "before-interactive-callback"() {
+      if (params.get("native") === "1") {
+        location.assign("/mobile-turnstile-interaction");
+      }
+    },
     callback(token) {
       // El cliente móvil intercepta la navegación antes de enviar el token por red.
       location.assign("/mobile-turnstile-result#" + encodeURIComponent(token));
