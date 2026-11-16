@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { supabase } from '@/shared/services/supabase/client';
-import TurnstileWidget, { CAPTCHA_ENABLED } from "../components/TurnstileWidget";
 import "./Auth.css";
 
 function LoadingDots() {
@@ -48,8 +47,6 @@ function PasswordStrength({ value }) {
 function RegisterForm() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState(null);
-  const [captchaReset, setCaptchaReset] = useState(0);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -70,7 +67,6 @@ function RegisterForm() {
     if (!validateEmail(email)) return setError("Correo electrónico inválido");
     if (!password) return setError("Por favor ingresa una contraseña");
     if (password.length < 6) return setError("La contraseña debe tener al menos 6 caracteres");
-    if (CAPTCHA_ENABLED && !captchaToken) return setError("Completa la verificación de seguridad");
 
     setLoading(true);
     try {
@@ -82,7 +78,7 @@ function RegisterForm() {
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: email.trim().toLowerCase(),
         password,
-        options: { data: { name: name.trim(), display_name: name.trim() }, captchaToken },
+        options: { data: { name: name.trim(), display_name: name.trim() } },
       });
 
       if (signUpError) {
@@ -123,7 +119,6 @@ function RegisterForm() {
       setError("Ocurrió un error inesperado");
     } finally {
       setLoading(false);
-      setCaptchaReset((n) => n + 1);
     }
   };
 
@@ -209,7 +204,6 @@ function RegisterForm() {
             </div>
           </div>
 
-          <TurnstileWidget onToken={setCaptchaToken} resetKey={captchaReset} />
 
           <div className="auth-info-box">
             🔒 Tus datos están seguros y protegidos
@@ -222,7 +216,7 @@ function RegisterForm() {
             <button
               className="auth-cta-btn"
               type="submit"
-              disabled={loading || !name || !email || !password || (CAPTCHA_ENABLED && !captchaToken)}
+              disabled={loading || !name || !email || !password}
             >
               {loading ? <><LoadingDots /> Creando</> : <>Registrar <span className="auth-cta-arrow">→</span></>}
             </button>
