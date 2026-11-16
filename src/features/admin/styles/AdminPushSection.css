@@ -1,0 +1,214 @@
+.admin-push-history-toolbar {
+  justify-content: space-between;
+}
+
+.admin-push-history-toolbar h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font: 700 11px 'DM Mono', monospace;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.admin-push-history-toolbar h2 svg {
+  color: var(--accent);
+}
+
+.admin-push-composer .adm-panel-header-dot,
+.admin-push-list .mlr-league-bar {
+  background: var(--accent);
+}
+
+.admin-push-list .admin-push-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(120px, .5fr) minmax(130px, .45fr);
+  gap: 12px;
+}
+
+.admin-push-list article.admin-push-grid {
+  padding-block: 12px;
+}
+
+.admin-push-campaign,
+.admin-push-result {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.admin-push-campaign strong {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.admin-push-campaign small,
+.admin-push-result small {
+  font: 400 11px 'DM Mono', monospace;
+  color: var(--muted);
+}
+
+.admin-push-composer textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.admin-push-composer .admin-push-preview {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 0.5px solid var(--border);
+  border-left: 2px solid var(--accent);
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.admin-push-preview p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.admin-push-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-push-secondary {
+  justify-content: center;
+  min-height: 34px;
+}
+
+.admin-push-layout .adm-panel-back:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.admin-push-hint {
+  margin: 0 18px 16px;
+}
+
+.admin-push-feedback {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .admin-push-layout .admin-push-main {
+    display: contents;
+  }
+
+  .admin-push-layout .admin-push-composer {
+    display: flex;
+    width: 100%;
+    height: auto;
+    order: 1;
+    border-left: 0;
+  }
+
+  .admin-push-layout .admin-push-history {
+    order: 2;
+  }
+
+  .admin-push-layout .admin-push-history-toolbar {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .admin-push-list .match-list-header {
+    display: none;
+  }
+
+  .admin-push-list article.admin-push-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 12px;
+  }
+
+  .admin-push-list .mlr-date {
+    display: flex;
+    grid-row: 2;
+  }
+
+  .admin-push-result {
+    grid-area: 1 / 2 / 3;
+  }
+}
+
+.admin-push-templates {
+  display: grid;
+  gap: 12px;
+  padding: 16px 18px 20px;
+  border-top: 0.5px solid var(--border);
+}
+
+.admin-push-templates h3,
+.admin-push-template-list {
+  margin: 0;
+}
+
+.admin-push-template-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.admin-push-template-filters .adm-panel-back {
+  min-height: 28px;
+  justify-content: center;
+}
+
+.admin-push-template-filters [aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+}
+
+.admin-push-template-list {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-push-template {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0.5px solid var(--border);
+  border-left: 2px solid var(--border);
+  border-radius: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-push-template strong {
+  font-size: 12px;
+}
+
+.admin-push-template span {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.admin-push-template:hover:not(:disabled),
+.admin-push-template:focus-visible {
+  border-left-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg));
+}
+
+.admin-push-template:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}

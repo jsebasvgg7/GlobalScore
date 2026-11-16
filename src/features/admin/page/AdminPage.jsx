@@ -48,6 +48,7 @@ import {
   useToast
 } from '@/shared/ui/Toast';
 
+import AdminPushSection from '../components/AdminPushSection';
 import '../styles/AdminRightPanel.css';
 import '../styles/AdminBanners.css';
 import '../styles/AdminHistorical.css';
@@ -220,6 +221,12 @@ export default function AdminPage({ currentUser }) {
   // ── La sección histórica tiene su propio layout completo ──────
   // No necesita el panel derecho ni los controles normales
   const isHistorical = activeSection === 'historical';
+  const isPush = activeSection === 'push';
+  const hasStandaloneSection = isHistorical || isPush;
+
+  const navigationTabs = (
+    <AdminNavigationTabs activeSection={activeSection} setActiveSection={handleSetSection} stats={stats} />
+  );
 
   if (loading) {
     return (
@@ -236,146 +243,149 @@ export default function AdminPage({ currentUser }) {
 
         {/* ── Tabs de navegación — siempre visibles ── */}
         {/* Pasamos la sección histórica a AdminNavigationTabs */}
-        <div className={isHistorical ? 'admin-shell-historical' : 'admin-shell-row'}>
+        {isPush ? (
+          <div className="admin-shell-row admin-push-layout">
+            <AdminPushSection>
+              <AdminStatsOverview stats={stats} />
+              {navigationTabs}
+            </AdminPushSection>
+          </div>
+        ) : (
+          <div className={isHistorical ? 'admin-shell-historical' : 'admin-shell-row'}>
+            {/* ── Columna izquierda (solo en secciones normales) ── */}
+            <div className={isHistorical ? 'admin-hist-left' : 'admin-left-col'}>
 
-          {/* ── Columna izquierda (solo en secciones normales) ── */}
-          <div className={isHistorical ? 'admin-hist-left' : 'admin-left-col'}>
+              {/* Stats: ocultar en histórico para no confundir */}
+              {!isHistorical && <AdminStatsOverview stats={stats} />}
 
-            {/* Stats: ocultar en histórico para no confundir */}
-            {!isHistorical && <AdminStatsOverview stats={stats} />}
+              {navigationTabs}
 
-            <AdminNavigationTabs
-              activeSection={activeSection}
-              setActiveSection={handleSetSection}
-              stats={stats}
-            />
+              {/* Controles de búsqueda/filtro: solo en secciones normales */}
+              {!isHistorical && (
+                <AdminControls
+                  activeSection={activeSection}
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                  filterStatus={filterStatus}
+                  setFilterStatus={setFilterStatus}
+                  onAddNew={isMobile ? () => { resetPanel(); setMobileSheetOpen(true); } : resetPanel}
+                />
+              )}
 
-            {/* Controles de búsqueda/filtro: solo en secciones normales */}
-            {!isHistorical && (
-              <AdminControls
-                activeSection={activeSection}
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-                filterStatus={filterStatus}
-                setFilterStatus={setFilterStatus}
-                onAddNew={isMobile ? () => { resetPanel(); setMobileSheetOpen(true); } : resetPanel}
-              />
-            )}
+              {!isHistorical && activeSection === 'matches' && (
+                <AdminMatchFilters
+                  total={Array.isArray(matches) ? matches.length : 0}
+                  leagues={matchLeagueOptions}
+                  league={activeLeague}
+                  setLeague={setFilterLeague}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  hasActiveFilters={hasActiveMatchFilters}
+                  onClear={clearMatchFilters}
+                />
+              )}
 
-            {!isHistorical && activeSection === 'matches' && (
-              <AdminMatchFilters
-                total={Array.isArray(matches) ? matches.length : 0}
-                leagues={matchLeagueOptions}
-                league={activeLeague}
-                setLeague={setFilterLeague}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                hasActiveFilters={hasActiveMatchFilters}
-                onClear={clearMatchFilters}
-              />
-            )}
-
-            {/* ── Contenido principal ── */}
-            {isHistorical ? (
-              // La sección histórica maneja todo su estado internamente
-              <AdminHistorical />
-            ) : (
-              <div className="admin-content-area">
-                {activeSection === 'matches' && (
-                  <AdminMatchesList
-                    matches={Array.isArray(filteredItems) ? filteredItems : []}
-                    onFinish={handleFinishClick}
-                    onDelete={handleDeleteMatch}
-                  />
-                )}
-                {activeSection === 'leagues' && (
-                  <AdminLeaguesList
-                    leagues={Array.isArray(filteredItems) ? filteredItems : []}
-                    onFinish={handleFinishClick}
-                    onDelete={handleDeleteLeague}
-                  />
-                )}
-                {activeSection === 'awards' && (
-                  <AdminAwardsList
-                    awards={Array.isArray(filteredItems) ? filteredItems : []}
-                    onFinish={handleFinishClick}
-                    onDelete={handleDeleteAward}
-                  />
-                )}
-                {activeSection === 'achievements' && (
-                  <AdminAchievementsList
-                    achievements={Array.isArray(filteredItems) ? filteredItems : []}
-                    onEdit={handleEditClick}
-                    onDelete={handleDeleteAchievement}
-                  />
-                )}
-                {activeSection === 'titles' && (
-                  <AdminTitlesList
-                    titles={Array.isArray(filteredItems) ? filteredItems : []}
-                    onEdit={handleEditClick}
-                    onDelete={handleDeleteTitle}
-                  />
-                )}
-                {activeSection === 'crowns' && (
-                  <AdminCrownsSection
-                    top10={filteredItems.top10}
-                    history={filteredItems.history}
-                    onResetStats={handleResetMonthlyStats}
-                  />
-                )}
-                {activeSection === 'trophies' && (
-                  <AdminTrophiesSection
-                    top10={filteredItems.top10}
-                    history={filteredItems.history}
-                    onResetStats={handleResetGlobalStats}
-                  />
-                )}
-                {activeSection === 'banners' && (
-                  <AdminBannersList
-                    banners={Array.isArray(filteredItems) ? filteredItems : banners}
-                    onDelete={handleDeleteBanner}
-                    onAssign={handleAssignClick}
-                  />
-                )}
-                {activeSection === 'bots' && (
-                  <AdminBotsSection
-                    bots={Array.isArray(filteredItems) ? filteredItems : []}
-                    onEdit={handleEditClick}
-                  />
-                )}
-
-                {Array.isArray(filteredItems) && filteredItems.length === 0 &&
-                  activeSection !== 'crowns' && activeSection !== 'trophies' && activeSection !== 'bots' && (
-                    <div className="admin-empty-state">
-                      <AlertCircle size={40} />
-                      <p>No hay {activeSection} para mostrar</p>
-                    </div>
+              {/* ── Contenido principal ── */}
+              {isHistorical ? (
+                <AdminHistorical />
+              ) : (
+                <div className="admin-content-area">
+                  {activeSection === 'matches' && (
+                    <AdminMatchesList
+                      matches={Array.isArray(filteredItems) ? filteredItems : []}
+                      onFinish={handleFinishClick}
+                      onDelete={handleDeleteMatch}
+                    />
                   )}
-              </div>
+                  {activeSection === 'leagues' && (
+                    <AdminLeaguesList
+                      leagues={Array.isArray(filteredItems) ? filteredItems : []}
+                      onFinish={handleFinishClick}
+                      onDelete={handleDeleteLeague}
+                    />
+                  )}
+                  {activeSection === 'awards' && (
+                    <AdminAwardsList
+                      awards={Array.isArray(filteredItems) ? filteredItems : []}
+                      onFinish={handleFinishClick}
+                      onDelete={handleDeleteAward}
+                    />
+                  )}
+                  {activeSection === 'achievements' && (
+                    <AdminAchievementsList
+                      achievements={Array.isArray(filteredItems) ? filteredItems : []}
+                      onEdit={handleEditClick}
+                      onDelete={handleDeleteAchievement}
+                    />
+                  )}
+                  {activeSection === 'titles' && (
+                    <AdminTitlesList
+                      titles={Array.isArray(filteredItems) ? filteredItems : []}
+                      onEdit={handleEditClick}
+                      onDelete={handleDeleteTitle}
+                    />
+                  )}
+                  {activeSection === 'crowns' && (
+                    <AdminCrownsSection
+                      top10={filteredItems.top10}
+                      history={filteredItems.history}
+                      onResetStats={handleResetMonthlyStats}
+                    />
+                  )}
+                  {activeSection === 'trophies' && (
+                    <AdminTrophiesSection
+                      top10={filteredItems.top10}
+                      history={filteredItems.history}
+                      onResetStats={handleResetGlobalStats}
+                    />
+                  )}
+                  {activeSection === 'banners' && (
+                    <AdminBannersList
+                      banners={Array.isArray(filteredItems) ? filteredItems : banners}
+                      onDelete={handleDeleteBanner}
+                      onAssign={handleAssignClick}
+                    />
+                  )}
+                  {activeSection === 'bots' && (
+                    <AdminBotsSection
+                      bots={Array.isArray(filteredItems) ? filteredItems : []}
+                      onEdit={handleEditClick}
+                    />
+                  )}
+
+                  {Array.isArray(filteredItems) && filteredItems.length === 0 &&
+                    activeSection !== 'crowns' && activeSection !== 'trophies' && activeSection !== 'bots' && (
+                      <div className="admin-empty-state">
+                        <AlertCircle size={40} />
+                        <p>No hay {activeSection} para mostrar</p>
+                      </div>
+                    )}
+                </div>
+              )}
+            </div>
+
+            {/* ── Panel derecho: solo en secciones normales ── */}
+            {!isHistorical && (
+              <AdminRightPanel
+                activeSection={activeSection}
+                panelMode={panelMode}
+                panelItem={panelItem}
+                onAdd={handlePanelAdd}
+                onFinish={handlePanelFinish}
+                onSave={handlePanelSave}
+                onDelete={handlePanelDelete}
+                onResetPanel={resetPanel}
+                users={activeSection === 'trophies' ? globalUsers : users}
+                banners={banners}
+                onAssignBanner={handleAssignBanner}
+                onRevokeBanner={handleRevokeBanner}
+              />
             )}
           </div>
-
-          {/* ── Panel derecho: solo en secciones normales ── */}
-          {!isHistorical && (
-            <AdminRightPanel
-              activeSection={activeSection}
-              panelMode={panelMode}
-              panelItem={panelItem}
-              onAdd={handlePanelAdd}
-              onFinish={handlePanelFinish}
-              onSave={handlePanelSave}
-              onDelete={handlePanelDelete}
-              onResetPanel={resetPanel}
-              users={activeSection === 'trophies' ? globalUsers : users}
-              banners={banners}
-              onAssignBanner={handleAssignBanner}
-              onRevokeBanner={handleRevokeBanner}
-            />
-          )}
-        </div>
+        )}
 
         {/* ── FAB + BottomSheet mobile (solo en secciones normales) ── */}
-        {isMobile && !isHistorical && (
+        {isMobile && !hasStandaloneSection && (
           <>
             <MobileAdminFAB
               activeSection={activeSection}
