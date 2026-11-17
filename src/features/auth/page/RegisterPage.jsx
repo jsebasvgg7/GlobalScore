@@ -46,6 +46,7 @@ function PasswordStrength({ value }) {
 
 function RegisterForm() {
   const navigate = useNavigate();
+  const [adultConfirmed, setAdultConfirmed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -61,6 +62,7 @@ function RegisterForm() {
     e.preventDefault();
     setError(""); setSuccess("");
 
+    if (!adultConfirmed) return setError("Debes tener 18 años o más para registrarte");
     if (!name.trim()) return setError("Por favor ingresa tu nombre");
     if (!validateName(name)) return setError("El nombre debe tener entre 3 y 50 caracteres");
     if (!email.trim()) return setError("Por favor ingresa tu correo electrónico");
@@ -78,7 +80,7 @@ function RegisterForm() {
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: email.trim().toLowerCase(),
         password,
-        options: { data: { name: name.trim(), display_name: name.trim() } },
+        options: { data: { name: name.trim(), display_name: name.trim(), adult_confirmed: true } },
       });
 
       if (signUpError) {
@@ -113,7 +115,7 @@ function RegisterForm() {
           ? "Redirigiendo..."
           : "Revisa tu correo para verificar tu cuenta."
       ));
-      setName(""); setEmail(""); setPassword("");
+      setName(""); setEmail(""); setPassword(""); setAdultConfirmed(false);
       setTimeout(() => navigate(authData.user.identities?.length === 0 ? "/app" : "/"), 1500);
     } catch {
       setError("Ocurrió un error inesperado");
@@ -205,9 +207,10 @@ function RegisterForm() {
           </div>
 
 
-          <div className="auth-info-box">
-            🔒 Tus datos están seguros y protegidos
-          </div>
+          <label className="auth-info-box auth-age-confirmation">
+            <input type="checkbox" checked={adultConfirmed} onChange={(event) => setAdultConfirmed(event.target.checked)} disabled={loading} required />
+            Confirmo que tengo 18 años o más
+          </label>
 
           {error && <div className="auth-message auth-message--error">{error}</div>}
           {success && <div className="auth-message auth-message--success">{success}</div>}
@@ -216,7 +219,7 @@ function RegisterForm() {
             <button
               className="auth-cta-btn"
               type="submit"
-              disabled={loading || !name || !email || !password}
+              disabled={loading || !adultConfirmed || !name || !email || !password}
             >
               {loading ? <><LoadingDots /> Creando</> : <>Registrar <span className="auth-cta-arrow">→</span></>}
             </button>

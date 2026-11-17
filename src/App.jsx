@@ -6,6 +6,7 @@ import { resetWelcome } from "@/features/auth/page/LoginPage";
 
 import { Header } from "@/shared/layout";
 import LoginPage from "@/features/auth/page/LoginPage";
+import TermsGate, { termsVersion } from "@/features/auth/components/TermsGate";
 import RegisterPage from "@/features/auth/page/RegisterPage";
 import ForgotPasswordPage from "@/features/auth/page/ForgotPasswordPage";
 import ResetPasswordPage from "@/features/auth/page/ResetPasswordPage";
@@ -213,6 +214,19 @@ export default function App() {
 
   if (loading && initialLoad) {
     return <PageLoader />;
+  }
+
+  if (session && session.user.user_metadata?.terms_version !== termsVersion) {
+    return (
+      <ThemeProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="*" element={<TermsGate key={session.user.id} />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    );
   }
 
   return (
