@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>GlobalScore</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; }
+    body { font-family: system-ui, sans-serif; background: #fff; }
+    .features { display: none; }
+    .phone, .phone-screen, #globalscore-app { width: 100%; height: 100%; }
+    #globalscore-app { position: relative; overflow: hidden; }
+    html[data-theme="dark"] body { background: #141323; }
+
+    @media (min-width: 900px) {
+      body {
+        --paper: #f0ede7;
+        --ink: #1d2030;
+        --muted: #393545;
+        --accent: #593be9;
+        --grid: #1d203011;
+        display: grid;
+        grid-template-columns: minmax(300px, 460px) minmax(356px, 442px);
+        align-items: center;
+        justify-content: center;
+        gap: clamp(40px, 7vw, 128px);
+        min-height: 100dvh;
+        padding: 24px;
+        color: var(--ink);
+        background:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          var(--paper);
+        background-size: 40px 40px;
+      }
+      html[data-theme="dark"] body {
+        --paper: #1a1727;
+        --ink: #f5f1ff;
+        --muted: #cfcae0;
+        --accent: #b9aaff;
+        --grid: #ffffff12;
+      }
+      .features { display: block; }
+      .brand {
+        font: 700 16px ui-monospace, monospace;
+        letter-spacing: .1em;
+        color: var(--accent);
+      }
+      .message { min-height: 300px; padding-top: 24px; }
+      .message h1 {
+        margin: 0 0 20px;
+        font-size: clamp(46px, 5vw, 78px);
+        overflow-wrap: anywhere;
+        line-height: .98;
+        letter-spacing: -.055em;
+      }
+      .message p {
+        max-width: 34ch;
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(20px, 1.7vw, 25px);
+        line-height: 1.45;
+      }
+      .feature-dots { display: flex; align-items: center; }
+      .feature-dots button {
+        width: 44px;
+        height: 44px;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+      .feature-dots button::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border: 2px solid var(--accent);
+        border-radius: 50%;
+      }
+      .feature-dots button[aria-current="true"]::before {
+        background: var(--accent);
+      }
+      .feature-dots button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+      .phone {
+        position: relative;
+        width: min(100%, 424px);
+        height: min(850px, calc(100dvh - 48px));
+        justify-self: center;
+        padding: 9px;
+        border: 1px solid #4e4942;
+        border-radius: 60px;
+        background:
+          linear-gradient(#111012, #111012) padding-box,
+          linear-gradient(155deg, #e9dfcd, #645e54 32%, #bfb39e 60%, #514b42) border-box;
+        border-width: 3px;
+        box-shadow: inset 0 0 0 1px #c8bcaa80, 0 20px 40px #211a3026;
+      }
+      .phone-screen {
+        position: relative;
+        padding-top: 45px;
+        overflow: hidden;
+        border-radius: 47px;
+        background: #fff;
+      }
+      .phone-screen::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        width: 108px;
+        height: 26px;
+        border-radius: 999px;
+        background: #08080a;
+        transform: translateX(-50%);
+      }
+      html[data-theme="dark"] .phone-screen { background: #141323; }
+    }
+  </style>
+  <script defer src="./globalscore-native.js"></script>
+</head>
+<body>
+<aside class="features" aria-label="Funciones de GlobalScore">
+  <div class="brand">GLOBALSCORE</div>
+  <div class="message" id="feature-message">
+    <h1 id="feature-title">Pronósticos</h1>
+    <p id="feature-copy">Elige el marcador antes del pitazo inicial y suma puntos con cada acierto.</p>
+  </div>
+  <div class="feature-dots" id="feature-dots" role="group" aria-label="Elegir función"></div>
+</aside>
+
+<main class="phone" aria-label="App de GlobalScore">
+  <div class="phone-screen">
+    <div id="globalscore-app"></div>
+  </div>
+</main>
+
+<script>
+  const features = [
+    ["Pronósticos", "Elige el marcador antes del pitazo inicial y suma puntos con cada acierto."],
+    ["Ranking mensual", "Cada acierto te acerca a la cima. Compara tu posición con la de tus amigos."],
+    ["Libreta Futbolera", "Guarda tus equipos, plantillas y estadísticas en un mismo lugar."],
+    ["Salas 1 vs 1", "Crea una sala, comparte el código y compara tus resultados con un amigo."]
+  ];
+
+  const desktop = matchMedia("(min-width: 900px)");
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const message = document.getElementById("feature-message");
+  const title = document.getElementById("feature-title");
+  const copy = document.getElementById("feature-copy");
+  const dotGroup = document.getElementById("feature-dots");
+  const dots = features.map(([name], position) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.setAttribute("aria-label", name);
+    button.setAttribute("aria-current", String(position === 0));
+    button.addEventListener("click", () => {
+      showFeature(position);
+      syncTimer();
+    });
+    dotGroup.append(button);
+    return button;
+  });
+  let index = 0;
+  let timer;
+
+  function showFeature(position) {
+    dots[index].setAttribute("aria-current", "false");
+    index = position;
+    dots[index].setAttribute("aria-current", "true");
+    [title.textContent, copy.textContent] = features[index];
+    if (!reducedMotion.matches) {
+      message.animate([{ opacity: 0.35 }, { opacity: 1 }], { duration: 300 });
+    }
+  }
+
+  function syncTimer() {
+    clearInterval(timer);
+    if (desktop.matches && !reducedMotion.matches && !document.hidden) {
+      timer = setInterval(() => showFeature((index + 1) % features.length), 7000);
+    }
+  }
+
+  reducedMotion.addEventListener("change", syncTimer);
+  desktop.addEventListener("change", syncTimer);
+  document.addEventListener("visibilitychange", syncTimer);
+  syncTimer();
+</script>
+</body>
+</html>

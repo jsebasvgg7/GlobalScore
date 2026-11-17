@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "310843990602",
+    "project_id": "globalscore-e0e50",
+    "storage_bucket": "globalscore-e0e50.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310843990602:android:b8893219486131db7b7cb3",
+        "android_client_info": {
+          "package_name": "me.globalscore.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ77OfHZgaUNgKJl0XG4vwTBvy5wFZO0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

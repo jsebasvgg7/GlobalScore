@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GlobalScore</string>
+    <string name="push_channel_id" translatable="false">globalscore_push</string>
+    <string name="push_channel_name">Notificaciones de GlobalScore</string>
+</resources>

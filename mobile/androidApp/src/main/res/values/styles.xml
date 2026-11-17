@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.GlobalScore.Base" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+    <style name="Theme.GlobalScore" parent="Theme.GlobalScore.Base" />
+</resources>

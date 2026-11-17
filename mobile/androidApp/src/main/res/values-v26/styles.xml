@@ -1,0 +1,5 @@
+<resources>
+    <style name="Theme.GlobalScore" parent="Theme.GlobalScore.Base">
+        <item name="android:autofilledHighlight">@android:color/transparent</item>
+    </style>
+</resources>
