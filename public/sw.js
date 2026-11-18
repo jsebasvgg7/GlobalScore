@@ -3,7 +3,7 @@
 // Optimizado + Offline fallback real
 // ============================================
 
-const CACHE_VERSION = 'globalscore-v5'; 
+const CACHE_VERSION = 'globalscore-v6';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -125,12 +125,8 @@ async function networkFirst(req, cacheName, limit) {
 // ============================================
 async function networkFirstPage(req) {
   try {
-    const fresh = await fetch(req);
-
-    if (fresh && fresh.ok) return fresh;
-
-    throw new Error('Bad response');
-
+    // Preserve HTTP errors so routing and server failures remain visible.
+    return await fetch(req);
   } catch {
     console.log('📴 Mostrando offline.html');
 
