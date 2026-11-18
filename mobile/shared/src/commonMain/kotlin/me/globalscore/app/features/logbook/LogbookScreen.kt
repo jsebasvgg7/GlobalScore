@@ -107,7 +107,7 @@ internal fun LogbookScreen(database: SupabaseClient, userId: String, bottomPaddi
                             )
                         }
                         Column(Modifier.weight(1f)) {
-                            Text("Mi Libreta Futbolera", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                            Text("mi libreta futbolera", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                             active?.let { Text("${it.name} · ${it.game}", style = MaterialTheme.typography.bodyMedium) }
                         }
                         TextButton(
@@ -169,7 +169,7 @@ internal fun LogbookScreen(database: SupabaseClient, userId: String, bottomPaddi
                 }
                 item(key = "players:${active.id}") {
                     LogbookCard {
-                        Text("Jugadores destacados", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                        Text("jugadores destacados", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                         val top = active.players.maxByOrNull { it.count(LogbookCounter.Goals) }
                         Text(
                             top?.takeIf { it.count(LogbookCounter.Goals) > 0 }?.let {
@@ -285,7 +285,7 @@ private fun LogbookTeamFields(team: LogbookTeam, enabled: Boolean, onSave: (Stri
 @Composable
 private fun LogbookTeamSummary(team: LogbookTeam, enabled: Boolean, onChange: (LogbookCounter, Int) -> Unit) {
     LogbookCard {
-        Text("Resumen de temporada", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text("resumen de temporada", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         Text("JUG suma los partidos ganados, empatados y perdidos.", style = MaterialTheme.typography.bodySmall)
         Row(Modifier.align(Alignment.CenterHorizontally).widthIn(max = 296.dp).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             VerticalCounter("JUG", "Partidos jugados", team.played, Modifier.weight(1f))
@@ -300,7 +300,7 @@ private fun LogbookTeamSummary(team: LogbookTeam, enabled: Boolean, onChange: (L
             }
         }
         Spacer(Modifier.height(12.dp))
-        Text("Goles", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text("goles", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         Text("GA incluye los goles de tus jugadores y los autogoles del rival.", style = MaterialTheme.typography.bodySmall)
         Row(
             Modifier.align(Alignment.CenterHorizontally).widthIn(max = 220.dp).fillMaxWidth(),
@@ -446,7 +446,7 @@ private fun LogbookRival(value: Int, enabled: Boolean, onChange: (Int) -> Unit) 
             horizontalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             Column(Modifier.weight(1f)) {
-                Text("Rival (autogol)", fontWeight = FontWeight.Bold)
+                Text("rival (autogol)", fontWeight = FontWeight.Bold)
                 Text("Suma a GA sin asignar un jugador.", style = MaterialTheme.typography.bodySmall)
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {

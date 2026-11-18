@@ -104,7 +104,7 @@ internal fun CompetitionScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
             ) {
-                Text(kind.title.lowercase(), color = MaterialTheme.colorScheme.primary,
+                Text(kind.title, color = MaterialTheme.colorScheme.primary,
                     fontSize = 26.sp, fontWeight = FontWeight.Bold)
                 if (kind == CompetitionKind.League && data != null) {
                     Box(Modifier.semantics { stateDescription = "$activeCount ligas activas" }) {

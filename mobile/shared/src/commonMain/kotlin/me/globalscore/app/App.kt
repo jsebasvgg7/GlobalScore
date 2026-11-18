@@ -26,7 +26,7 @@ fun App() = AppWithPushSettings(null)
 @Composable
 fun AppWithPushSettings(
     pushSupport: NativePushSupport?,
-    openMatchesFromPush: Boolean = false,
+    pushDestination: String? = null,
     onPushOpened: () -> Unit = {},
 ) {
     var dark by rememberThemePreference()
@@ -34,7 +34,7 @@ fun AppWithPushSettings(
     MaterialTheme {
         AuthScreen(
             dark = dark, onToggleTheme = { dark = !dark }, pushSupport = pushSupport,
-            openMatchesFromPush = openMatchesFromPush, onPushOpened = onPushOpened,
+            pushDestination = pushDestination, onPushOpened = onPushOpened,
         )
     }
 }

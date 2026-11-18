@@ -10,12 +10,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.tooling.preview.Preview
 
 class MainActivity : ComponentActivity() {
-    private val openMatchesFromPush = mutableStateOf(false)
+    private val pushDestination = mutableStateOf<String?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        openMatchesFromPush.value = intent.getStringExtra("push_destination") == "matches"
+        pushDestination.value = intent.getStringExtra("push_destination")
 
         val device = AndroidPushDevice(this)
         val support = NativePushSupport(
@@ -27,9 +27,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppWithPushSettings(
                 support,
-                openMatchesFromPush = openMatchesFromPush.value,
+                pushDestination = pushDestination.value,
                 onPushOpened = {
-                    openMatchesFromPush.value = false
+                    pushDestination.value = null
                     intent.removeExtra("push_destination")
                 },
             )
@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        if (intent.getStringExtra("push_destination") == "matches") openMatchesFromPush.value = true
+        pushDestination.value = intent.getStringExtra("push_destination")
     }
 }
 

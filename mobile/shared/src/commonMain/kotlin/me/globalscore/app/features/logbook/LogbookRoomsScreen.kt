@@ -345,7 +345,7 @@ private fun RoomComparison(room: LogbookRoom) {
 
 @Composable
 private fun RoomHeading(text: String) {
-    Text(text, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+    Text(text.replaceFirstChar { it.lowercaseChar() }, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
 }
 
 @Composable

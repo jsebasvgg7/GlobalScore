@@ -21,8 +21,10 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/push_channel_id" />
         <activity
+            android:configChanges="uiMode"
             android:exported="true"
             android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize"
             android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

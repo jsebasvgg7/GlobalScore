@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,24 +38,23 @@ private val weekdays = listOf("dom", "lun", "mar", "mié", "jue", "vie", "sáb")
 @Composable
 internal fun StatsScreen(
     modifier: Modifier,
-    userId: String,
     bottomPadding: Dp,
     data: StatsData?,
     failed: Boolean,
+    range: StatsRange,
+    onRangeChange: (StatsRange) -> Unit,
     onRetry: () -> Unit,
     onOpenSpecial: (String) -> Unit,
 ) {
-    var rangeName by rememberSaveable(userId) { mutableStateOf(StatsRange.Global.name) }
-    val range = StatsRange.valueOf(rangeName)
     val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
     val colors = MaterialTheme.colorScheme
 
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
             Text("Estadísticas", Modifier.weight(1f), color = colors.primary, fontSize = 22.sp)
-            RankingSelector("Global", range == StatsRange.Global, RankingIcon.Globe) { rangeName = StatsRange.Global.name }
-            RankingSelector("Mes", range == StatsRange.Month, RankingIcon.Calendar) { rangeName = StatsRange.Month.name }
-            RankingSelector("Histórico", range == StatsRange.All, RankingIcon.Book) { rangeName = StatsRange.All.name }
+            RankingSelector("Global", range == StatsRange.Global, RankingIcon.Globe) { onRangeChange(StatsRange.Global) }
+            RankingSelector("Mes", range == StatsRange.Month, RankingIcon.Calendar) { onRangeChange(StatsRange.Month) }
+            RankingSelector("Histórico", range == StatsRange.All, RankingIcon.Book) { onRangeChange(StatsRange.All) }
         }
         if (failed) {
             Text(
@@ -89,10 +87,10 @@ internal fun StatsScreen(
                 }
                 StatsHeading("Desglose de puntos")
                 Row(Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Breakdown("Exactos", report.exact, "${percentage(report.exact, report.total)}% exactitud",
+                    Breakdown("exactos", report.exact, "${percentage(report.exact, report.total)}% exactitud",
                         Res.drawable.stats_star, Modifier.weight(1f).fillMaxHeight())
-                    Breakdown("Correctos", report.correct, "3 pts c/p", Res.drawable.stats_check, Modifier.weight(1f).fillMaxHeight())
-                    Breakdown("Errados", report.wrong, "0 pts c/p", Res.drawable.stats_x, Modifier.weight(1f).fillMaxHeight())
+                    Breakdown("correctos", report.correct, "3 pts c/p", Res.drawable.stats_check, Modifier.weight(1f).fillMaxHeight())
+                    Breakdown("errados", report.wrong, "0 pts c/p", Res.drawable.stats_x, Modifier.weight(1f).fillMaxHeight())
                 }
                 StatsHeading("Racha")
                 Row(Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(7.dp)) {

@@ -3,6 +3,7 @@ package me.globalscore.app.features.matches
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.serialization.json.*
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -26,11 +27,12 @@ internal data class Match(
     val deadline: String?,
     val knockout: Boolean,
 ) {
-    fun isClosed(): Boolean = deadline?.let { value ->
-        val instant = runCatching { Instant.parse(value) }.getOrNull()
+    fun deadlineInstant(): Instant? = deadline?.let { value ->
+        runCatching { Instant.parse(value) }.getOrNull()
             ?: runCatching { LocalDateTime.parse(value).toInstant(TimeZone.currentSystemDefault()) }.getOrNull()
-        instant == null || Clock.System.now() >= instant
-    } ?: false
+    }
+
+    fun isClosed(): Boolean = deadline != null && (deadlineInstant()?.let { Clock.System.now() >= it } ?: true)
 }
 
 internal data class Prediction(val home: Int, val away: Int, val advancing: String?)
@@ -47,6 +49,24 @@ private fun JsonObject.string(key: String) = (get(key) as? JsonPrimitive)?.conte
 private fun JsonObject.number(key: String) = (get(key) as? JsonPrimitive)?.doubleOrNull?.toInt()
 
 internal class MatchRepository(private val client: SupabaseClient) {
+    suspend fun loadProbabilityPreference(userId: String): Boolean {
+        val preference = client.from("user_preferences").select(Columns.list("show_probabilities")) {
+            filter { eq("user_id", userId) }
+            limit(1)
+        }.decodeList<JsonObject>().firstOrNull()
+        return (preference?.get("show_probabilities") as? JsonPrimitive)?.booleanOrNull ?: true
+    }
+
+    suspend fun saveProbabilityPreference(userId: String, show: Boolean) {
+        client.from("user_preferences").upsert(buildJsonObject {
+            put("user_id", userId)
+            put("show_probabilities", show)
+            put("updated_at", Clock.System.now().toString())
+        }) {
+            onConflict = "user_id"
+        }
+    }
+
     suspend fun load(authId: String): MatchDashboard {
         val user = client.from("users").select {
             filter { eq("auth_id", authId) }

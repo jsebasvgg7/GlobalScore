@@ -74,7 +74,7 @@ internal fun PublicProfileDialog(
                             .padding(start = 16.dp, end = 4.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text("info del perfil", Modifier.weight(1f), color = Color.White, style = MaterialTheme.typography.titleLarge)
+                        Text("Info del perfil", Modifier.weight(1f), color = Color.White, style = MaterialTheme.typography.titleLarge)
                         IconButton(onClick = onClose) {
                             Box(
                                 Modifier.size(36.dp).background(Color.White.copy(alpha = 0.22f), CircleShape),
@@ -459,7 +459,7 @@ private fun PublicChampionships(
 
 @Composable
 private fun ProfileHeading(label: String) {
-    Text(label, Modifier.padding(start = 10.dp), color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleMedium)
+    Text(label.replaceFirstChar { it.titlecaseChar() }, Modifier.padding(start = 10.dp), color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleMedium)
 }
 
 @Composable

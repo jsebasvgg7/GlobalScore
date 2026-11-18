@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -63,6 +64,7 @@ import me.globalscore.app.PushDeviceRegistration
 import me.globalscore.app.core.supabase.SUPABASE_PUBLIC_KEY
 import me.globalscore.app.features.home.HomeScreen
 import me.globalscore.app.features.home.TrophyLoading
+import kotlin.time.TimeSource
 import me.globalscore.app.features.profile.LegalDocument
 import me.globalscore.app.features.profile.termsSections
 import me.globalscore.app.core.supabase.SUPABASE_URL
@@ -89,13 +91,27 @@ internal fun AuthScreen(
     dark: Boolean,
     onToggleTheme: () -> Unit,
     pushSupport: NativePushSupport?,
-    openMatchesFromPush: Boolean,
+    pushDestination: String?,
     onPushOpened: () -> Unit,
 ) {
     val database = supabase
     val client = database?.auth
     val status = client?.sessionStatus?.collectAsState()?.value
+    val restoringSession = status == SessionStatus.Initializing || status is SessionStatus.Authenticated
+    val loadingStartedAt = remember(restoringSession) { TimeSource.Monotonic.markNow() }
     val scope = rememberCoroutineScope()
+    val authenticatedScreens = rememberSaveableStateHolder()
+    var retainedAccountId by rememberSaveable { mutableStateOf<String?>(null) }
+    val authenticatedAccountId = (status as? SessionStatus.Authenticated)?.session?.user?.id
+    LaunchedEffect(status, authenticatedAccountId) {
+        if (status is SessionStatus.NotAuthenticated || (
+                authenticatedAccountId != null && retainedAccountId != authenticatedAccountId
+            )
+        ) {
+            retainedAccountId?.let(authenticatedScreens::removeState)
+            retainedAccountId = authenticatedAccountId
+        }
+    }
     val focus = LocalFocusManager.current
     var page by rememberSaveable { mutableStateOf(AuthPage.Welcome) }
     var email by rememberSaveable { mutableStateOf("") }
@@ -170,7 +186,7 @@ internal fun AuthScreen(
             )
             return
         }
-        var profileReady by remember(user?.id) { mutableStateOf(false) }
+        var profileReady by rememberSaveable(user?.id) { mutableStateOf(false) }
         var profileFailed by remember(user?.id) { mutableStateOf(false) }
         var retry by remember(user?.id) { mutableStateOf(0) }
         LaunchedEffect(user?.id, retry) {
@@ -223,16 +239,19 @@ internal fun AuthScreen(
                 LocalPushSettings provides settings,
                 LocalPushInvitation provides showInvitation,
             ) {
-                HomeScreen(
-                    database = database, authId = user?.id.orEmpty(), signingOut = busy, signOutError = error,
-                    dark = dark, onToggleTheme = onToggleTheme,
-                    onSignOut = { submit({ "No se pudo cerrar la sesión. Inténtalo de nuevo." }) { signOut() } },
-                    openMatchesFromPush = openMatchesFromPush,
-                    onPushOpened = onPushOpened,
-                    syncPush = if (registration != null && pushSupport != null) {
-                        { pushSupport.sync(registration) }
-                    } else null,
-                )
+                authenticatedScreens.SaveableStateProvider(user?.id.orEmpty()) {
+                    HomeScreen(
+                        database = database, authId = user?.id.orEmpty(), signingOut = busy, signOutError = error,
+                        dark = dark, onToggleTheme = onToggleTheme,
+                        loadingStartedAt = loadingStartedAt,
+                        onSignOut = { submit({ "No se pudo cerrar la sesión. Inténtalo de nuevo." }) { signOut() } },
+                        pushDestination = pushDestination,
+                        onPushOpened = onPushOpened,
+                        syncPush = if (registration != null && pushSupport != null) {
+                            { pushSupport.sync(registration) }
+                        } else null,
+                    )
+                }
             }
         } else if (profileFailed) {
             Box(Modifier.fillMaxSize().safeContentPadding(), contentAlignment = Alignment.Center) {
@@ -246,7 +265,7 @@ internal fun AuthScreen(
                 }
             }
         } else {
-            TrophyLoading()
+            TrophyLoading(dark, loadingStartedAt)
         }
         return
     }
@@ -268,7 +287,7 @@ internal fun AuthScreen(
     }
 
     if (status == SessionStatus.Initializing) {
-        TrophyLoading()
+        TrophyLoading(dark, loadingStartedAt)
         return
     }
 

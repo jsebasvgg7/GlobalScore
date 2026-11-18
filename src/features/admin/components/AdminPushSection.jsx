@@ -5,8 +5,22 @@ import '../styles/AdminPushSection.css';
 
 const CATEGORIES = { notice: 'Aviso', update: 'Novedad', reminder: 'Recordatorio' };
 
+const DESTINATIONS = {
+  home: 'Inicio',
+  matches: 'Partidos',
+  ranking: 'Ranking',
+  stats: 'Estadísticas',
+  leagues: 'Ligas',
+  awards: 'Premios',
+};
+
 const PUSH_TEMPLATES = {
   notice: [
+    {
+      title: '¡Los pronósticos han finalizado!',
+      body: 'Ya puedes revisar tu posición en el ranking.',
+      destination: 'ranking',
+    },
     { title: 'Nueva jornada disponible', body: 'Ya puedes hacer tus pronósticos para los partidos de la próxima jornada. Encuéntralos en Partidos.' },
     { title: 'Se añadieron nuevos partidos', body: 'Agregamos más encuentros a la jornada. Entra a Partidos y marca tus resultados.' },
     { title: 'Ya puedes pronosticar el clásico', body: 'El clásico ya está disponible en Partidos. ¿Qué marcador esperas? Deja tu pronóstico.' },
@@ -37,6 +51,7 @@ async function invokePush(payload) {
 export default function AdminPushSection({ children }) {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [destination, setDestination] = useState('home');
   const [category, setCategory] = useState('notice');
   const [templateCategory, setTemplateCategory] = useState('notice');
   const [operation, setOperation] = useState(null);
@@ -53,6 +68,7 @@ export default function AdminPushSection({ children }) {
     setCategory(templateCategory);
     setTitle(template.title);
     setBody(template.body);
+    setDestination(template.destination ?? (templateCategory === 'update' ? 'home' : 'matches'));
     setFeedback(null);
     titleInput.current?.focus();
   }
@@ -88,7 +104,7 @@ export default function AdminPushSection({ children }) {
     event.preventDefault();
     if (!valid || confirmation) return;
     void run('test', async () => {
-      const result = await invokePush({ title: title.trim(), body: body.trim() });
+      const result = await invokePush({ title: title.trim(), body: body.trim(), destination });
       if (result?.accepted !== true) throw new Error('No se pudo confirmar el envío de prueba.');
       setFeedback({ text: 'Firebase aceptó la prueba. Revisa las notificaciones de tu teléfono.' });
     });
@@ -102,7 +118,7 @@ export default function AdminPushSection({ children }) {
         setFeedback({ text: 'Todavía no hay dispositivos Android suscritos.' });
         return;
       }
-      setConfirmation({ id: crypto.randomUUID(), count, title: title.trim(), body: body.trim(), category });
+      setConfirmation({ id: crypto.randomUUID(), count, title: title.trim(), body: body.trim(), category, destination });
     });
   }
 
@@ -176,7 +192,7 @@ export default function AdminPushSection({ children }) {
                       <span className="mlr-league-bar" />
                       <div className="admin-push-campaign">
                         <strong>{campaign.title}</strong>
-                        <small>{CATEGORIES[campaign.category]}</small>
+                        <small>{CATEGORIES[campaign.category]}{campaign.destination && ` · ${DESTINATIONS[campaign.destination]}`}</small>
                       </div>
                     </div>
                     <time className="mlr-date" dateTime={campaign.created_at}>
@@ -217,6 +233,12 @@ export default function AdminPushSection({ children }) {
               </select>
             </label>
             <label className="adm-field">
+              <span className="adm-label">Pantalla de destino</span>
+              <select className="adm-input" value={destination} disabled={busy || !!confirmation} onChange={(event) => setDestination(event.target.value)}>
+                {Object.entries(DESTINATIONS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+              </select>
+            </label>
+            <label className="adm-field">
               <span className="adm-label">Título</span>
               <input ref={titleInput} className="adm-input" required maxLength={80} value={title} disabled={busy || !!confirmation} onChange={(event) => setTitle(event.target.value)} />
             </label>
@@ -236,6 +258,7 @@ export default function AdminPushSection({ children }) {
             {confirmation ? (
               <div className="admin-push-preview">
                 <strong>Confirmar envío general</strong>
+                <p>Pantalla de destino · {DESTINATIONS[confirmation.destination]}</p>
                 <p>Hay {confirmation.count} Android suscritos. El aviso se enviará a los dispositivos activos al confirmar.</p>
                 <div className="admin-push-actions">
                   <button type="button" className="adm-submit-btn" disabled={busy} onClick={confirmBroadcast}>
@@ -261,7 +284,7 @@ export default function AdminPushSection({ children }) {
             {operation === 'broadcast' && !confirmation && <p role="status">Enviando avisos…</p>}
             {feedback && <p className={feedback.failed ? 'adm-error' : 'admin-push-feedback'} role={feedback.failed ? 'alert' : 'status'}>{feedback.text}</p>}
           </form>
-          <p className="adm-hint admin-push-hint">La prueba llega a tu Android registrado más recientemente. Los avisos abren Partidos.</p>
+          <p className="adm-hint admin-push-hint">La prueba llega a tu Android registrado más recientemente.</p>
           <section className="admin-push-templates" aria-labelledby="admin-push-templates-title">
             <h3 id="admin-push-templates-title" className="adm-panel-header-title">Plantillas</h3>
             <div className="admin-push-template-filters" role="group" aria-label="Filtrar plantillas por tipo">

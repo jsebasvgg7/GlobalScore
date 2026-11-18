@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,6 +28,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.Stroke
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
@@ -35,6 +38,7 @@ import kotlin.time.Clock
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.font.FontWeight
@@ -43,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import globalscore.shared.generated.resources.Res
 import globalscore.shared.generated.resources.huge_arrow_right_01
+import globalscore.shared.generated.resources.match_swords
+import globalscore.shared.generated.resources.stats_check
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import me.globalscore.app.features.home.RemoteImage
@@ -56,9 +62,13 @@ internal fun MatchesScreen(
     onBack: () -> Unit,
     autosave: PredictionAutosave,
     bottomPadding: Dp,
+    probabilities: Boolean,
+    probabilityToggleEnabled: Boolean,
+    probabilityPreferenceError: String?,
+    onRetryProbabilityPreference: () -> Unit,
+    onProbabilityChange: (Boolean) -> Unit,
 ) {
     var farthestFirst by rememberSaveable { mutableStateOf(false) }
-    var probabilities by rememberSaveable { mutableStateOf(true) }
     var league by rememberSaveable { mutableStateOf<String?>(null) }
     var filterOpen by remember { mutableStateOf(false) }
     var deadlineTick by remember { mutableStateOf(0) }
@@ -91,7 +101,7 @@ internal fun MatchesScreen(
                 horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text("partidos", fontSize = 26.sp, lineHeight = 30.sp, fontWeight = FontWeight.Bold,
+                Text("Partidos", fontSize = 26.sp, lineHeight = 30.sp, fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary, maxLines = 1)
                 RetroLabel(ordered.size.toString())
             }
@@ -148,10 +158,26 @@ internal fun MatchesScreen(
                     maxLines = 2, overflow = TextOverflow.Ellipsis,
                 )
                 Text("%", color = primary, fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                ProbabilityToggle(probabilities) { probabilities = it }
+                ProbabilityToggle(probabilities, probabilityToggleEnabled, onProbabilityChange)
             }
         }
-        if (ordered.isEmpty()) Text(if (league == null) "No hay partidos pendientes." else "No hay partidos en esta liga.")
+        probabilityPreferenceError?.let { message ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(message, Modifier.weight(1f), color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
+                if (!probabilityToggleEnabled) {
+                    TextButton(onClick = onRetryProbabilityPreference) { Text("Reintentar") }
+                }
+            }
+        }
+        if (ordered.isEmpty()) {
+            Box(
+                Modifier.weight(1f).fillMaxWidth().padding(bottom = bottomPadding),
+                contentAlignment = Alignment.Center,
+            ) {
+                EmptyMatches(filteredByLeague = league != null)
+            }
+            return@Column
+        }
         LazyColumn(
             Modifier.weight(1f),
             contentPadding = PaddingValues(bottom = bottomPadding + 16.dp),
@@ -181,6 +207,43 @@ internal fun MatchesScreen(
 }
 
 @Composable
+private fun EmptyMatches(filteredByLeague: Boolean) {
+    val primary = MaterialTheme.colorScheme.primary
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        Canvas(Modifier.size(width = 96.dp, height = 72.dp)) {
+            val line = 1.5.dp.toPx()
+            val markings = primary.copy(alpha = 0.55f)
+            drawRect(primary.copy(alpha = 0.05f))
+            drawRect(
+                markings, Offset(line, line),
+                Size(size.width - line * 2, size.height - line * 2),
+                style = Stroke(line),
+            )
+            drawLine(markings, Offset(center.x, line), Offset(center.x, size.height - line), line)
+            drawCircle(markings, size.height * 0.16f, style = Stroke(line))
+            val areaWidth = size.width * 0.16f
+            val areaHeight = size.height * 0.46f
+            val areaTop = center.y - areaHeight / 2
+            drawRect(markings, Offset(line, areaTop), Size(areaWidth, areaHeight), style = Stroke(line))
+            drawRect(
+                markings, Offset(size.width - line - areaWidth, areaTop),
+                Size(areaWidth, areaHeight), style = Stroke(line),
+            )
+        }
+        Text(
+            if (filteredByLeague) "No hay partidos en esta liga" else "No hay partidos disponibles",
+            color = primary,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
 private fun MatchCard(
     match: Match,
     saved: Prediction?,
@@ -194,9 +257,23 @@ private fun MatchCard(
     val failed = autosave.errors[match.id] == true
     val colors = MaterialTheme.colorScheme
     val canEdit = !closed
+    var showKnockoutHelp by remember(match.id) { mutableStateOf(false) }
     fun update(value: PredictionDraft) = autosave.update(match, value)
     val showProbabilities = probabilities && match.homeProbability != null &&
         match.drawProbability != null && match.awayProbability != null
+
+    if (match.knockout && showKnockoutHelp) {
+        AlertDialog(
+            onDismissRequest = { showKnockoutHelp = false },
+            title = { Text("Partido de eliminatoria") },
+            text = {
+                Text("Pronostica el marcador y toca el escudo del equipo que crees que avanzará. El check morado indica tu elección.")
+            },
+            confirmButton = {
+                TextButton(onClick = { showKnockoutHelp = false }) { Text("Entendido") }
+            },
+        )
+    }
 
     Surface(
         shape = CardShape,
@@ -221,6 +298,21 @@ private fun MatchCard(
                     color = colors.primary, fontSize = 14.sp, letterSpacing = 0.sp,
                     maxLines = 1, overflow = TextOverflow.Ellipsis,
                 )
+                if (match.knockout) {
+                    Row(
+                        Modifier.clip(PillShape)
+                            .background(colors.primary.copy(alpha = 0.10f))
+                            .clickable(role = Role.Button, onClickLabel = "Ver cómo funciona la eliminatoria") {
+                                showKnockoutHelp = true
+                            }
+                            .padding(horizontal = 6.dp, vertical = 3.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(3.dp),
+                    ) {
+                        KnockoutSwords(size = 12.dp)
+                        Text("KO", color = colors.primary, fontSize = 10.sp, lineHeight = 12.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
                 RetroLabel(when {
                     closed -> "cerrado"
                     saving -> "guardando"
@@ -230,25 +322,25 @@ private fun MatchCard(
                 })
             }
             HorizontalDivider(color = colors.primary.copy(alpha = 0.22f))
+            fun advancingAction(side: String): (() -> Unit)? = if (match.knockout) {
+                { update(draft.copy(advancing = side.takeUnless { draft.advancing == it })) }
+            } else null
             ScoreRow(match.home, match.homeLogo, match.homeProbability.takeIf { showProbabilities },
-                match.awayProbability, draft.home, canEdit, Modifier.padding(top = 4.dp)) { update(draft.copy(home = it)) }
+                match.awayProbability, draft.home, canEdit, Modifier.padding(top = 4.dp),
+                draft.advancing == "home", advancingAction("home")) { update(draft.copy(home = it)) }
             Row(verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 HorizontalDivider(Modifier.weight(1f), color = colors.primary.copy(alpha = 0.22f))
-                RetroLabel(if (showProbabilities) "= ${match.drawProbability}%" else "VS")
+                when {
+                    showProbabilities -> RetroLabel("= ${match.drawProbability}%")
+                    match.knockout -> KnockoutSwords()
+                    else -> RetroLabel("VS")
+                }
                 HorizontalDivider(Modifier.weight(1f), color = colors.primary.copy(alpha = 0.22f))
             }
             ScoreRow(match.away, match.awayLogo, match.awayProbability.takeIf { showProbabilities },
-                match.homeProbability, draft.away, canEdit, Modifier.padding(bottom = 4.dp)) { update(draft.copy(away = it)) }
-            if (match.knockout) {
-                Text("¿Quién avanza?")
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(draft.advancing == "home", { update(draft.copy(advancing = "home".takeUnless { draft.advancing == it })) },
-                        { Text(teamCode(match.home)) }, enabled = canEdit)
-                    FilterChip(draft.advancing == "away", { update(draft.copy(advancing = "away".takeUnless { draft.advancing == it })) },
-                        { Text(teamCode(match.away)) }, enabled = canEdit)
-                }
-            }
+                match.homeProbability, draft.away, canEdit, Modifier.padding(bottom = 4.dp),
+                draft.advancing == "away", advancingAction("away")) { update(draft.copy(away = it)) }
             HorizontalDivider(color = colors.primary.copy(alpha = 0.22f))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                 Text(match.time, fontSize = 11.sp, lineHeight = 14.sp)
@@ -290,23 +382,53 @@ internal fun RetroFilter(label: String, selected: Boolean, onClick: () -> Unit) 
 }
 
 @Composable
-private fun MatchLogo(url: String?, size: Int) {
-    Box(Modifier.size(size.dp)) {
-        RemoteImage(url, Modifier.fillMaxSize())
+private fun KnockoutSwords(size: Dp = 14.dp) {
+    Icon(painterResource(Res.drawable.match_swords), null, Modifier.size(size), tint = MaterialTheme.colorScheme.primary)
+}
+
+@Composable
+private fun MatchLogo(name: String, url: String?, selected: Boolean, enabled: Boolean, onAdvancing: (() -> Unit)?) {
+    val colors = MaterialTheme.colorScheme
+    val interaction = if (onAdvancing != null) {
+        Modifier.toggleable(selected, enabled = enabled, role = Role.Checkbox, onValueChange = { onAdvancing() })
+            .semantics { contentDescription = "$name avanza" }
+    } else Modifier
+    val hitSize = if (onAdvancing != null) 44.dp else 38.dp
+    Box(Modifier.size(hitSize).then(interaction), contentAlignment = Alignment.Center) {
+        Box(
+            Modifier.size(38.dp)
+                .then(if (selected) Modifier.border(2.dp, colors.primary, CircleShape).padding(3.dp) else Modifier),
+        ) {
+            RemoteImage(url, Modifier.fillMaxSize()) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(teamCode(name), color = colors.primary, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+        if (selected) {
+            Box(
+                Modifier.align(Alignment.TopEnd).size(15.dp).background(colors.primary, CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(painterResource(Res.drawable.stats_check), null, Modifier.size(10.dp),
+                    tint = colors.surface)
+            }
+        }
     }
 }
 
 @Composable
 private fun ScoreRow(
     name: String, logo: String?, probability: Int?, opponentProbability: Int?, score: Int?,
-    enabled: Boolean, modifier: Modifier, onScore: (Int) -> Unit,
+    enabled: Boolean, modifier: Modifier, advancing: Boolean, onAdvancing: (() -> Unit)?,
+    onScore: (Int) -> Unit,
 ) {
     val primary = MaterialTheme.colorScheme.primary
     Row(
         modifier.fillMaxWidth().heightIn(min = 40.dp), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        MatchLogo(logo, 38)
+        MatchLogo(name, logo, onAdvancing != null && advancing, enabled, onAdvancing)
         val showProbability = probability != null && opponentProbability != null
         val codeStyle = MaterialTheme.typography.bodyLarge.copy(
             fontSize = 15.sp, lineHeight = 17.sp, fontWeight = FontWeight.Bold,
@@ -418,11 +540,11 @@ internal fun RetroScoreButton(glyph: String, label: String, enabled: Boolean, fi
 }
 
 @Composable
-private fun ProbabilityToggle(checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+private fun ProbabilityToggle(checked: Boolean, enabled: Boolean, onCheckedChange: (Boolean) -> Unit) {
     val colors = MaterialTheme.colorScheme
     Box(
         Modifier.size(44.dp, 36.dp)
-            .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange)
+            .toggleable(value = checked, enabled = enabled, role = Role.Switch, onValueChange = onCheckedChange)
             .semantics { contentDescription = "Mostrar probabilidades" },
         contentAlignment = Alignment.Center,
     ) {

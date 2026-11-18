@@ -1,5 +1,7 @@
 package me.globalscore.app
 
+import android.app.UiModeManager
+import android.os.Build
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.*
 import androidx.core.view.WindowCompat
@@ -10,6 +12,14 @@ internal actual fun rememberThemePreference(): MutableState<Boolean> {
     val context = LocalContext.current.applicationContext
     val preferences = remember(context) { context.getSharedPreferences("globalscore_preferences", 0) }
     val state = remember(preferences) { mutableStateOf(preferences.getBoolean("dark_theme", false)) }
+    val dark = state.value
+    LaunchedEffect(context, dark) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            context.getSystemService(UiModeManager::class.java)?.setApplicationNightMode(
+                if (dark) UiModeManager.MODE_NIGHT_YES else UiModeManager.MODE_NIGHT_NO,
+            )
+        }
+    }
     return remember(preferences, state) {
         object : MutableState<Boolean> {
             override var value: Boolean

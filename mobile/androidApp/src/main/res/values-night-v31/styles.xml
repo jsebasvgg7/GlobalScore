@@ -1,0 +1,9 @@
+<resources>
+    <style name="Theme.GlobalScore" parent="Theme.GlobalScore.Base">
+        <item name="android:autofilledHighlight">@android:color/transparent</item>
+        <item name="android:windowBackground">#151024</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowSplashScreenBackground">#151024</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/globalscore_splash_trophy_dark</item>
+    </style>
+</resources>

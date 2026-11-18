@@ -167,7 +167,7 @@ private fun NoticeFilters(filter: NoticeFilter, counts: List<Int>, onSelect: (No
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
-                    Text(option.label, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center)
+                    Text(option.label.replaceFirstChar { it.lowercaseChar() }, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center)
                     Text(counts[index].toString(), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
                 }
             }

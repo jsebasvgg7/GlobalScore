@@ -19,13 +19,13 @@ internal enum class CompetitionKind(
     val fields: List<PredictionField>,
 ) {
     League("Ligas", "leagues", "league_id", listOf(
-        PredictionField("Campeón", "predicted_champion", "champion"),
-        PredictionField("Goleador", "predicted_top_scorer", "top_scorer"),
-        PredictionField("Asistidor", "predicted_top_assist", "top_assist"),
+        PredictionField("campeón", "predicted_champion", "champion"),
+        PredictionField("goleador", "predicted_top_scorer", "top_scorer"),
+        PredictionField("asistidor", "predicted_top_assist", "top_assist"),
         PredictionField("MVP", "predicted_mvp", "mvp_player"),
     )),
     Award("Premios", "awards", "award_id", listOf(
-        PredictionField("Ganador", "predicted_winner", "winner"),
+        PredictionField("ganador", "predicted_winner", "winner"),
     ));
 
     val predictionTable get() = "${foreignKey.removeSuffix("_id")}_predictions"

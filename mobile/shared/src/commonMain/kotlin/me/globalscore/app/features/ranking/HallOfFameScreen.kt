@@ -120,7 +120,7 @@ internal fun HallOfFameScreen(database: SupabaseClient, bottomPadding: Dp, onOpe
         if (monthly) {
             item {
                 Button(onClick = onOpenHistory, modifier = Modifier.fillMaxWidth()) {
-                    Text("Historial de rankings", Modifier.weight(1f))
+                    Text("historial de rankings", Modifier.weight(1f))
                     Icon(painterResource(Res.drawable.huge_arrow_right_01), null, Modifier.size(16.dp))
                 }
             }
@@ -288,10 +288,10 @@ private fun HallMilestones(champions: List<Champion>) {
             MilestoneTile(modifier, first?.firstEdition ?: "—", "1.er campeón", first?.name, Res.drawable.hall_crown, highlighted = true)
         },
         streak = { modifier ->
-            MilestoneTile(modifier, streak?.bestStreak?.toString() ?: "—", "Mejor racha", streak?.name, Res.drawable.hall_flame)
+            MilestoneTile(modifier, streak?.bestStreak?.toString() ?: "—", "mejor racha", streak?.name, Res.drawable.hall_flame)
         },
         points = { modifier ->
-            MilestoneTile(modifier, scorer?.bestPoints?.toString() ?: "—", "Máx. puntos", scorer?.name, Res.drawable.huge_target_02)
+            MilestoneTile(modifier, scorer?.bestPoints?.toString() ?: "—", "máx. puntos", scorer?.name, Res.drawable.huge_target_02)
         },
     )
 }

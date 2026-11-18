@@ -81,6 +81,15 @@ type CampaignDevice = {
 
 const categories = new Set(["notice", "reminder", "update"]);
 
+const destinations = new Set([
+  "home",
+  "matches",
+  "ranking",
+  "stats",
+  "leagues",
+  "awards",
+]);
+
 async function firebaseSender() {
   const secret = Deno.env.get("FIREBASE_SERVICE_ACCOUNT_JSON");
   if (!secret) return null;
@@ -90,7 +99,7 @@ async function firebaseSender() {
     !credential.private_key
   ) return null;
   const accessToken = await getGoogleAccessToken(credential);
-  return (token: string, title: string, body: string) =>
+  return (token: string, title: string, body: string, destination: string) =>
     fetch(
       `https://fcm.googleapis.com/v1/projects/${
         encodeURIComponent(credential.project_id)
@@ -105,7 +114,7 @@ async function firebaseSender() {
           message: {
             token,
             notification: { title, body },
-            data: { push_destination: "matches" },
+            data: { push_destination: destination },
             android: { ttl: "300s", priority: "HIGH" },
           },
         }),
@@ -117,7 +126,7 @@ async function firebaseSender() {
 async function campaignSummary(supabase: DatabaseClient, id: string) {
   const { data, error } = await supabase.from("android_push_campaign_history")
     .select(
-      "id,category,title,body,created_at,recipients,accepted,failed,skipped,pending,processing,unconfirmed",
+      "id,category,destination,title,body,created_at,recipients,accepted,failed,skipped,pending,processing,unconfirmed",
     )
     .eq("id", id).maybeSingle();
   if (error) throw error;
@@ -150,6 +159,7 @@ async function processBatch(supabase: DatabaseClient, id: string) {
             device.fcm_token,
             campaign.title,
             campaign.body,
+            campaign.destination,
           );
           state = response.ok
             ? "accepted"
@@ -222,7 +232,7 @@ Deno.serve(async (request) => {
         "android_push_campaign_history",
       )
         .select(
-          "id,category,title,created_at,recipients,accepted,failed,skipped,pending,processing,unconfirmed",
+          "id,category,destination,title,created_at,recipients,accepted,failed,skipped,pending,processing,unconfirmed",
         )
         .order("created_at", { ascending: false }).limit(20);
       if (error) throw error;
@@ -264,6 +274,13 @@ Deno.serve(async (request) => {
       });
     }
 
+    const destination = payload?.destination ?? "matches";
+    if (typeof destination !== "string" || !destinations.has(destination)) {
+      return reply(400, {
+        error: "Selecciona una pantalla de destino válida.",
+      });
+    }
+
     if (action === "start") {
       const category = payload?.category;
       if (!categories.has(category)) {
@@ -275,6 +292,7 @@ Deno.serve(async (request) => {
         p_category: category,
         p_title: title,
         p_body: body,
+        p_destination: destination,
       });
       if (error) throw error;
       return reply(200, { campaign: await campaignSummary(supabase, id) });
@@ -300,7 +318,7 @@ Deno.serve(async (request) => {
         error: "Configura la cuenta de servicio de Firebase en Supabase.",
       });
     }
-    const response = await send(device.fcm_token, title, body);
+    const response = await send(device.fcm_token, title, body, destination);
     if (!response.ok) {
       const result = await response.json().catch(() => null);
       if (

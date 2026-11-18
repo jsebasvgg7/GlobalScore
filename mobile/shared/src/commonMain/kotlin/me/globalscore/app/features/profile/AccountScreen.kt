@@ -141,20 +141,20 @@ internal fun AccountScreen(
                                 publicRepository.titles(userId, monthly = false).size
                         }
                         if (saved) Text("Perfil actualizado.", color = MaterialTheme.colorScheme.primary)
-                        ProfileMenuSection("general")
+                        ProfileMenuSection("General")
                         ProfileMenuLink("modo oscuro", "apariencia de la app", Res.drawable.huge_sun_01, action = onTheme)
                         ProfileMenuLink("notificaciones", "centro de avisos e info.", Res.drawable.huge_notification_01, action = onNotifications)
-                        ProfileMenuSection("progreso")
+                        ProfileMenuSection("Progreso")
                         ProfileMenuLink("estadísticas", "verificación de rendimiento", Res.drawable.huge_chart_bar_line) { open(AccountPage.Stats) }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             ProfileMenuLink("logros", progress?.first?.let { "$it items" }, Res.drawable.huge_medal_01, Modifier.weight(1f)) { open(AccountPage.Achievements) }
                             ProfileMenuLink("títulos", progress?.second?.let { "$it items" }, Res.drawable.huge_award_01, Modifier.weight(1f)) { open(AccountPage.Titles) }
                         }
-                        ProfileMenuSection("mi actividad")
+                        ProfileMenuSection("Mi actividad")
                         ProfileMenuLink("historial", "tus pronósticos de partidos", Res.drawable.huge_folder_01) { open(AccountPage.History) }
                         ProfileMenuLink("mis notas", "Tus notas personales", Res.drawable.huge_notebook_01) { open(AccountPage.Notes) }
                         ProfileMenuLink("campeonatos", championships?.let(::profileCount), Res.drawable.hall_crown) { open(AccountPage.Championships) }
-                        ProfileMenuSection("cuenta")
+                        ProfileMenuSection("Cuenta")
                         ProfileMenuLink("editar perfil", "personalización del perfil", Res.drawable.profile_pencil) { open(AccountPage.Edit) }
                         ProfileMenuLink("ajustes", "cuenta y preferencias", Res.drawable.huge_user) { open(AccountPage.Settings) }
                     }
@@ -304,7 +304,7 @@ private fun ProfileHeader(dark: Boolean, onExit: () -> Unit, onTheme: () -> Unit
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         TextButton(onClick = onExit, contentPadding = PaddingValues(horizontal = 8.dp)) {
-            Text("← salir", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleLarge)
+            Text("← Salir", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleLarge)
         }
         Spacer(Modifier.weight(1f))
         ProfileHeaderButton(if (dark) Res.drawable.huge_sun_01 else Res.drawable.hall_moon_filled, "Cambiar tema", onTheme)
@@ -409,7 +409,7 @@ private fun ProfileMenuLink(
             Icon(painterResource(glyph), null, Modifier.size(20.dp), tint = colors.onTertiary)
         }
         Column(Modifier.weight(1f)) {
-            Text(label, color = colors.primary, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(label.replaceFirstChar { it.lowercaseChar() }, color = colors.primary, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             description?.let {
                 Text(it, color = colors.primary.copy(alpha = 0.86f), style = MaterialTheme.typography.bodySmall)
             }

@@ -36,7 +36,7 @@ internal fun AccountStatsPreview(user: JsonObject, globalRank: Int?) {
             horizontalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Column {
-                Text("Nivel", style = MaterialTheme.typography.labelMedium)
+                Text("nivel", style = MaterialTheme.typography.labelMedium)
                 Text(level.toString(), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -89,7 +89,7 @@ internal fun AccountAchievements(progress: AccountProgress) {
     ProgressCard {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text("${unlockedIds.size}/${progress.catalog.size}", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-            Text("Logros desbloqueados", style = MaterialTheme.typography.bodySmall)
+            Text("logros desbloqueados", style = MaterialTheme.typography.bodySmall)
             if (progress.catalog.isNotEmpty()) ProgressTrack(unlockedIds.size.toFloat() / progress.catalog.size)
         }
     }
@@ -277,7 +277,7 @@ internal fun AccountChampionshipSummary(user: JsonObject) {
                 Icon(painterResource(Res.drawable.hall_crown), null, Modifier.size(28.dp), tint = colors.primary)
             }
             Text(user.count("monthly_championships").toString(), style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold)
-            Text("Campeonatos mensuales ganados", style = MaterialTheme.typography.labelLarge)
+            Text("campeonatos mensuales ganados", style = MaterialTheme.typography.labelLarge)
         }
     }
     ProgressCard(filled = true) {
@@ -286,9 +286,9 @@ internal fun AccountChampionshipSummary(user: JsonObject) {
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             listOf(
-                "Puntos del mes" to "monthly_points",
-                "Pronósticos" to "monthly_predictions",
-                "Aciertos" to "monthly_correct",
+                "puntos del mes" to "monthly_points",
+                "pronósticos" to "monthly_predictions",
+                "aciertos" to "monthly_correct",
             ).forEach { (label, field) ->
                 Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(user.count(field).toString(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)

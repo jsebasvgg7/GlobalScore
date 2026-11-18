@@ -34,6 +34,8 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -47,10 +49,13 @@ import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.TextUnit
 import coil3.compose.SubcomposeAsyncImage
 import io.github.jan.supabase.SupabaseClient
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
+import kotlin.time.Clock
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
 import kotlin.time.Duration.Companion.seconds
@@ -65,6 +70,7 @@ import me.globalscore.app.features.matches.teamCode
 import me.globalscore.app.features.predictions.CompetitionKind
 import me.globalscore.app.features.predictions.CompetitionScreen
 import me.globalscore.app.features.stats.StatsScreen
+import me.globalscore.app.features.stats.StatsRange
 import me.globalscore.app.features.stats.StatsData
 import me.globalscore.app.features.stats.StatsRepository
 import me.globalscore.app.features.notes.NotesScreen
@@ -78,6 +84,7 @@ import me.globalscore.app.features.ranking.Rankings
 import me.globalscore.app.features.ranking.logRankingError
 
 private val Violet = Color(0xFF664AF8)
+private val HomePurpleGradient = Brush.horizontalGradient(listOf(Violet, Color(0xFF4439B6)))
 private val Pale = Color(0xFFEFEAFF)
 private val Ink = Color(0xFFB9AAFF)
 private val CardShape = RoundedCornerShape(13.dp)
@@ -96,7 +103,8 @@ internal fun HomeScreen(
     database: SupabaseClient, authId: String, signingOut: Boolean,
     signOutError: String?, onSignOut: () -> Unit,
     dark: Boolean, onToggleTheme: () -> Unit,
-    openMatchesFromPush: Boolean, onPushOpened: () -> Unit,
+    loadingStartedAt: TimeMark,
+    pushDestination: String?, onPushOpened: () -> Unit,
     syncPush: (suspend () -> Unit)?,
 ) {
     val repository = remember(database) { MatchRepository(database) }
@@ -143,7 +151,7 @@ internal fun HomeScreen(
             }
         }
     }
-    var screen by rememberSaveable { mutableStateOf("Inicio") }
+    var screen by rememberSaveable(authId) { mutableStateOf("Inicio") }
     var profileOrigin by rememberSaveable(authId) { mutableStateOf("Inicio") }
     var notificationsOrigin by rememberSaveable(authId) { mutableStateOf("Inicio") }
     val openProfile: () -> Unit = {
@@ -185,6 +193,7 @@ internal fun HomeScreen(
             }
         }
     }
+    var statsRangeName by rememberSaveable(authId) { mutableStateOf(StatsRange.Global.name) }
     val statsRepository = remember(database) { StatsRepository(database) }
     val statsUserId = dashboard?.userId
     var statsData by remember(statsRepository, authId, statsUserId) { mutableStateOf<StatsData?>(null) }
@@ -192,6 +201,52 @@ internal fun HomeScreen(
     var statsFailed by remember(statsRepository, authId, statsUserId) { mutableStateOf(false) }
     var statsRetry by remember(authId, statsUserId) { mutableIntStateOf(0) }
     val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+    val preferenceUserId = dashboard?.userId
+    var showProbabilities by remember(repository, authId, preferenceUserId) { mutableStateOf<Boolean?>(null) }
+    var probabilityPreferenceBusy by remember(repository, authId, preferenceUserId) { mutableStateOf(false) }
+    var probabilityPreferenceError by remember(repository, authId, preferenceUserId) { mutableStateOf<String?>(null) }
+    fun refreshProbabilityPreference() {
+        val userId = preferenceUserId ?: return
+        if (probabilityPreferenceBusy) return
+        probabilityPreferenceBusy = true
+        probabilityPreferenceError = null
+        scope.launch {
+            try {
+                showProbabilities = repository.loadProbabilityPreference(userId)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                probabilityPreferenceError = "No se pudo cargar la preferencia de probabilidades."
+            } finally {
+                probabilityPreferenceBusy = false
+            }
+        }
+    }
+    fun saveProbabilityPreference(show: Boolean) {
+        val userId = preferenceUserId ?: return
+        val previous = showProbabilities ?: return
+        if (probabilityPreferenceBusy || show == previous) return
+        probabilityPreferenceBusy = true
+        probabilityPreferenceError = null
+        showProbabilities = show
+        scope.launch {
+            try {
+                repository.saveProbabilityPreference(userId, show)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                showProbabilities = previous
+                probabilityPreferenceError = "No se pudo guardar la preferencia de probabilidades."
+            } finally {
+                probabilityPreferenceBusy = false
+            }
+        }
+    }
+    LaunchedEffect(repository, authId, preferenceUserId, screen, lifecycleState) {
+        if (screen == "Partidos" && lifecycleState == Lifecycle.State.RESUMED) {
+            refreshProbabilityPreference()
+        }
+    }
     LaunchedEffect(repository, authId, screen, lifecycleState, hallOfFame) {
         if (lifecycleState != Lifecycle.State.RESUMED) return@LaunchedEffect
         if (dashboard == null || screen == "Inicio" || screen == "Partidos") refreshDashboard()
@@ -218,12 +273,21 @@ internal fun HomeScreen(
         }
     }
     var selectedMatch by rememberSaveable { mutableStateOf<String?>(null) }
-    LaunchedEffect(openMatchesFromPush) {
-        if (openMatchesFromPush) {
-            selectedMatch = null
-            screen = "Partidos"
-            onPushOpened()
+    LaunchedEffect(pushDestination) {
+        val destination = when (pushDestination) {
+            "home" -> "Inicio"
+            "matches" -> "Partidos"
+            "ranking" -> "Ranking"
+            "stats" -> "Estadísticas"
+            "leagues" -> "Ligas"
+            "awards" -> "Premios"
+            null -> return@LaunchedEffect
+            else -> "Inicio"
         }
+        if (destination == "Partidos") selectedMatch = null
+        if (destination == "Ranking") hallOfFame = false
+        screen = destination
+        onPushOpened()
     }
     LaunchedEffect(authId, lifecycleState, signingOut) {
         if (!signingOut && lifecycleState == Lifecycle.State.RESUMED) syncPush?.invoke()
@@ -264,14 +328,17 @@ internal fun HomeScreen(
 
     MaterialTheme(colorScheme = palette, typography = typography) {
         if (dashboard == null && !loadFailed) {
-            TrophyLoading()
+            TrophyLoading(dark, loadingStartedAt)
             return@MaterialTheme
         }
+        val density = LocalDensity.current
+        val keyboardVisible = WindowInsets.ime.getBottom(density) > 0
         val bottomInset = WindowInsets.safeDrawing.asPaddingValues().calculateBottomPadding()
-        val navigationClearance = 86.dp + bottomInset
+        val navigationClearance = if (keyboardVisible) 12.dp else 86.dp + bottomInset
         Box(
             Modifier.fillMaxSize().background(palette.background)
-                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)),
+                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))
+                .imePadding(),
         ) {
             AnimatedContent(
                 targetState = screen,
@@ -321,7 +388,12 @@ internal fun HomeScreen(
                                                     monthlyRanking = true
                                                     hallOfFame = false
                                                 }
-                                                screen = it
+                                                if (it == "Puntos") {
+                                                    statsRangeName = StatsRange.Month.name
+                                                    screen = "Estadísticas"
+                                                } else {
+                                                    screen = it
+                                                }
                                             },
                                         )
                                         else -> MatchesScreen(
@@ -331,6 +403,11 @@ internal fun HomeScreen(
                                             onBack = { screen = "Inicio" },
                                             autosave = autosave,
                                             bottomPadding = navigationClearance,
+                                            probabilities = showProbabilities == true,
+                                            probabilityToggleEnabled = showProbabilities != null && !probabilityPreferenceBusy,
+                                            probabilityPreferenceError = probabilityPreferenceError,
+                                            onRetryProbabilityPreference = ::refreshProbabilityPreference,
+                                            onProbabilityChange = ::saveProbabilityPreference,
                                         )
                                     }
                                 }
@@ -405,8 +482,9 @@ internal fun HomeScreen(
                                         )
                                     } else {
                                         StatsScreen(
-                                            Modifier.weight(1f), data.userId, navigationClearance,
-                                            statsData, statsFailed, onRetry = { statsRetry++ },
+                                            Modifier.weight(1f), navigationClearance,
+                                            statsData, statsFailed, StatsRange.valueOf(statsRangeName),
+                                            onRangeChange = { statsRangeName = it.name }, onRetry = { statsRetry++ },
                                         ) { screen = it }
                                     }
                                 }
@@ -452,14 +530,16 @@ internal fun HomeScreen(
                     }
                 }
             }
-            NavigationBar(
-                if (screen == "Historial de rankings") "Ranking" else screen,
-                onTab = {
-                    if (it == "Perfil") openProfile() else screen = it
-                },
-                onBall = { openMatches(null) },
-                modifier = Modifier.align(Alignment.BottomCenter),
-            )
+            if (!keyboardVisible) {
+                NavigationBar(
+                    if (screen == "Historial de rankings") "Ranking" else screen,
+                    onTab = {
+                        if (it == "Perfil") openProfile() else screen = it
+                    },
+                    onBall = { openMatches(null) },
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                )
+            }
         }
     }
 }
@@ -570,17 +650,18 @@ private fun HomeContent(
     onSection: (String) -> Unit,
 ) {
     val matches = data.matches
-    val featured = matches.firstOrNull()
+    val nextMatch = matches.firstOrNull()
+    val homeMatches = if (matches.size > 1) matches.drop(1) else matches
     Column(modifier.padding(bottom = 14.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        if (featured != null) {
-            UpcomingMatchBanner(featured) { openMatches(featured.id) }
+        if (nextMatch != null) {
+            UpcomingMatchBanner(nextMatch) { openMatches(nextMatch.id) }
         } else {
             EmptyUpcomingBanner()
         }
         Tile(Modifier.fillMaxWidth(), onClick = { openMatches(null) }) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 HomeIcon(Res.drawable.huge_target_02, size = 25)
-                Text("Predicciones", fontWeight = FontWeight.Bold, fontSize = 23.sp)
+                Text("predicciones", fontWeight = FontWeight.Bold, fontSize = 23.sp)
             }
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
@@ -591,6 +672,7 @@ private fun HomeContent(
             }
         }
         SectionTitle("Partidos")
+        val featured = homeMatches.firstOrNull()
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             val featuredTile = Modifier.weight(1.15f).height(169.dp)
             if (featured == null) {
@@ -598,37 +680,44 @@ private fun HomeContent(
             } else {
                 Tile(featuredTile, highlighted = true, onClick = { openMatches(featured.id) }) {
                     val prediction = data.predictions[featured.id]
-                    Text(
-                        featured.league, fontSize = 12.sp, fontWeight = FontWeight.Bold,
-                        maxLines = 1, overflow = TextOverflow.Ellipsis,
-                    )
-                    Row(
-                        Modifier.fillMaxWidth().weight(1f),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Team(featured.home, featured.homeLogo, compact = true)
+                    Box(Modifier.fillMaxSize()) {
                         Text(
-                            prediction?.let { "${it.home}-${it.away}" } ?: "VS",
-                            Modifier.weight(1f),
-                            fontSize = 16.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center,
+                            featured.league, modifier = Modifier.align(Alignment.TopStart),
+                            fontSize = 9.sp, lineHeight = 12.sp, letterSpacing = 0.7.sp,
+                            color = LocalContentColor.current.copy(alpha = 0.82f),
                             maxLines = 1, overflow = TextOverflow.Ellipsis,
                         )
-                        Team(featured.away, featured.awayLogo, compact = true)
-                    }
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(featured.date, Modifier.weight(1f), fontSize = 10.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        Text(featured.time, fontSize = 10.sp, maxLines = 1)
+                        Row(
+                            Modifier.fillMaxWidth().align(Alignment.Center),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            FeaturedTeam(featured.home, featured.homeLogo, Modifier.weight(1f))
+                            Text(
+                                prediction?.let { "${it.home}-${it.away}" } ?: "VS",
+                                Modifier.weight(1f),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold, textAlign = TextAlign.Center,
+                                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                            )
+                            FeaturedTeam(featured.away, featured.awayLogo, Modifier.weight(1f))
+                        }
+                        Row(
+                            Modifier.fillMaxWidth().align(Alignment.BottomCenter).offset(y = 5.dp),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(featured.date, Modifier.weight(1f),
+                                fontSize = 9.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(featured.time, fontWeight = FontWeight.Bold,
+                                fontSize = 9.sp, maxLines = 1)
+                        }
                     }
                 }
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                 repeat(2) { index ->
-                    val match = matches.getOrNull(index + 1)
+                    val match = homeMatches.getOrNull(index + 1)
                     val tile = Modifier.fillMaxWidth().height(81.dp)
                     if (match == null) {
                         GhostMatchTile(tile)
@@ -654,91 +743,124 @@ private fun HomeContent(
         Shortcut(Res.drawable.huge_medal_01, "Premios", "Predice los ganadores de los premios", onSection)
 
         SectionTitle("Mi temporada")
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             val rankLabel = monthlyRank?.let { "#$it" } ?: if (rankingLoaded) "Sin puesto" else "—"
-            SeasonCard(Modifier.weight(1f).heightIn(min = 150.dp), Res.drawable.huge_medal_01, "Ranking", rankLabel, "mensual", true, onSection)
-            SeasonCard(Modifier.weight(1f).heightIn(min = 150.dp), Res.drawable.huge_folder_01, "Puntos", data.monthlyPoints.toString(), "mensual", false, onSection)
+            SeasonCard(
+                Modifier.weight(1f).fillMaxHeight().heightIn(min = 150.dp), Res.drawable.huge_medal_01,
+                "Ranking", rankLabel, "mensual", true, onSection,
+                valueFontSize = if (rankingLoaded && monthlyRank == null) 18.sp else 30.sp,
+            )
+            SeasonCard(Modifier.weight(1f).fillMaxHeight().heightIn(min = 150.dp), Res.drawable.huge_folder_01, "Puntos", data.monthlyPoints.toString(), "mensual", false, onSection)
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             SeasonCard(Modifier.weight(1f).heightIn(min = 118.dp), Res.drawable.huge_notebook_01, "Libreta", null, "personal", false, onSection)
-            SeasonCard(Modifier.weight(1f).heightIn(min = 118.dp), Res.drawable.huge_folder_01, "Mis notas", null, "personal", false, onSection)
+            SeasonCard(Modifier.weight(1f).heightIn(min = 118.dp), Res.drawable.season_note, "Mis notas", null, "personal", false, onSection)
         }
     }
 }
 
 @Composable
 private fun UpcomingMatchBanner(match: Match, onClick: () -> Unit) {
-    val colors = MaterialTheme.colorScheme
-    Tile(
-        Modifier.fillMaxWidth().semantics { contentDescription = "Próximo partido: ${match.home} contra ${match.away}" },
-        highlighted = true,
-        onClick = onClick,
+    MatchBanner(
+        Modifier.clickable(onClickLabel = "Ver partido", onClick = onClick)
+            .semantics { contentDescription = "Próximo partido: ${match.home} contra ${match.away}" },
     ) {
         Row(
             Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text("Próximo partido", Modifier.weight(1f), fontSize = 11.sp, fontWeight = FontWeight.Bold)
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                HomeIcon(Res.drawable.home_calendar, size = 13)
-                Text(match.date, fontSize = 11.sp, maxLines = 1)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(9.dp),
+            ) {
+                BannerCrest(match.home, match.homeLogo)
+                Text("vs", fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                BannerCrest(match.away, match.awayLogo)
             }
-        }
-        Spacer(Modifier.height(14.dp))
-        Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                Team(match.home, match.homeLogo, featured = true)
-            }
-            Column(Modifier.weight(2f), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("VS", fontSize = 10.sp, lineHeight = 12.sp, color = colors.onTertiary.copy(alpha = 0.82f))
-                Text(match.time, fontSize = 28.sp, lineHeight = 32.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+            Column(Modifier.weight(1f)) {
                 Text(
-                    match.league,
-                    Modifier.offset(y = 4.dp)
-                        .border(1.dp, colors.onTertiary.copy(alpha = 0.7f), CircleShape).padding(horizontal = 7.dp),
-                    fontSize = 10.sp, lineHeight = 15.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    "${match.home} vs ${match.away}",
+                    fontSize = 15.sp, lineHeight = 18.sp, fontWeight = FontWeight.Bold,
+                    maxLines = 2, overflow = TextOverflow.Ellipsis,
                 )
+                Text(
+                    listOf(match.date, match.time).filter(String::isNotBlank).joinToString(" · "),
+                    fontSize = 12.sp, lineHeight = 16.sp,
+                )
+                BannerDeadline(match)
             }
-            Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                Team(match.away, match.awayLogo, featured = true)
-            }
-        }
-        Spacer(Modifier.height(12.dp))
-        Box(Modifier.fillMaxWidth()) {
-            Box(Modifier.align(Alignment.CenterStart)) {
-                HomeIcon(Res.drawable.huge_champion, tint = Color.White, size = 16)
-            }
-            Text(
-                "›", Modifier.align(Alignment.CenterEnd)
-                    .background(colors.onTertiary, RoundedCornerShape(6.dp)).widthIn(min = 26.dp),
-                color = colors.tertiary, fontSize = 16.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center,
-            )
         }
     }
 }
 
 @Composable
-private fun EmptyUpcomingBanner() {
-    val colors = MaterialTheme.colorScheme
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = CardShape,
-        color = colors.tertiary,
-        contentColor = colors.onTertiary,
-        shadowElevation = 1.dp,
+private fun BannerCrest(name: String, logo: String?) {
+    Box(
+        Modifier.size(46.dp).background(Color.White.copy(alpha = 0.18f), CircleShape)
+            .border(1.dp, Color.White.copy(alpha = 0.35f), CircleShape),
+        contentAlignment = Alignment.Center,
     ) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            DatePill("Próx. partido")
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                HomeIcon(Res.drawable.huge_football, size = 30)
-                Column(Modifier.weight(1f)) {
-                    Text("Sin partidos pendientes", fontSize = 19.sp, fontWeight = FontWeight.Bold)
-                    Text("Temporada al día", fontSize = 14.sp)
-                }
+        RemoteImage(logo, Modifier.fillMaxSize().padding(6.dp)) {
+            Text(teamCode(name), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
+@Composable
+private fun BannerDeadline(match: Match) {
+    val deadline = remember(match.deadline) { match.deadlineInstant() } ?: return
+    var milliseconds by remember(deadline) {
+        mutableLongStateOf((deadline - Clock.System.now()).inWholeMilliseconds)
+    }
+    LaunchedEffect(deadline) {
+        while (milliseconds > 0) {
+            delay(1_000)
+            milliseconds = (deadline - Clock.System.now()).inWholeMilliseconds
+        }
+    }
+    val remaining = (milliseconds.coerceAtLeast(0) + 999) / 1_000
+    val label = if (remaining <= 0) {
+        "pronósticos cerrados"
+    } else {
+        val hours = (remaining / 3600).toString().padStart(2, '0')
+        val minutes = (remaining / 60 % 60).toString().padStart(2, '0')
+        val seconds = (remaining % 60).toString().padStart(2, '0')
+        "cierra en $hours:$minutes:$seconds"
+    }
+    Text(label, fontSize = 12.sp, lineHeight = 16.sp, color = Color.White.copy(alpha = 0.9f))
+}
+
+@Composable
+private fun EmptyUpcomingBanner() {
+    MatchBanner {
+        Column(Modifier.padding(top = 6.dp)) {
+            Text("sin partidos pendientes", fontSize = 19.sp, lineHeight = 23.sp, fontWeight = FontWeight.Bold)
+            Text("temporada al día", fontSize = 13.sp, lineHeight = 17.sp)
+        }
+    }
+}
+
+@Composable
+private fun MatchBanner(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Box(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp))
+            .background(HomePurpleGradient)
+            .then(modifier),
+    ) {
+        Icon(
+            painterResource(Res.drawable.huge_football),
+            contentDescription = null,
+            modifier = Modifier.align(Alignment.CenterEnd).offset(x = 24.dp).size(124.dp),
+            tint = Color.White.copy(alpha = 0.15f),
+        )
+        CompositionLocalProvider(LocalContentColor provides Color.White) {
+            Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                DatePill("próx. partido")
+                content()
             }
         }
     }
@@ -769,7 +891,7 @@ private fun GhostMatchTile(modifier: Modifier, featured: Boolean = false) {
     ) {
         if (featured) HomeIcon(Res.drawable.huge_football, tint = colors.primary, size = 25)
         Text(
-            if (featured) "Sin partidos pendientes" else "Nuevo partido",
+            if (featured) "sin partidos pendientes" else "nuevo partido",
             color = colors.primary,
             fontWeight = FontWeight.Bold,
             fontSize = if (featured) 16.sp else 13.sp,
@@ -795,32 +917,36 @@ private fun Tile(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val palette = MaterialTheme.colorScheme
+    val tileBorder = if (highlighted) Modifier else Modifier.border(
+        1.dp, palette.primary.copy(alpha = 0.13f), CardShape,
+    )
+    val tileBackground = if (highlighted) Modifier.background(HomePurpleGradient) else Modifier
     Surface(
         onClick = onClick,
-        modifier = modifier.border(1.dp, if (highlighted) palette.tertiary else palette.primary.copy(alpha = 0.13f), CardShape),
+        modifier = modifier.then(tileBorder),
         shape = CardShape,
         color = if (highlighted) palette.tertiary else palette.surface,
         contentColor = if (highlighted) palette.onTertiary else palette.primary,
         shadowElevation = 1.dp,
     ) {
-        Column(Modifier.padding(if (compact) 9.dp else 14.dp), content = content)
+        Column(tileBackground.padding(if (compact) 9.dp else 14.dp), content = content)
     }
 }
 
 @Composable
-private fun Team(name: String, logo: String?, compact: Boolean = false, featured: Boolean = false) {
+private fun FeaturedTeam(name: String, logo: String?, modifier: Modifier) {
     val code = teamCode(name)
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Box(
-            Modifier.size(if (compact) 38.dp else 48.dp).background(Color.White.copy(alpha = 0.18f), CircleShape)
-                .then(if (featured) Modifier.border(1.dp, Color.White, CircleShape) else Modifier),
+            Modifier.size(40.dp).background(Color.White.copy(alpha = 0.14f), CircleShape)
+                .border(1.dp, Color.White.copy(alpha = 0.4f), CircleShape),
             contentAlignment = Alignment.Center,
         ) {
             RemoteImage(logo, Modifier.fillMaxSize().padding(3.dp)) {
                 Text(code.take(1), fontSize = 14.sp, fontWeight = FontWeight.Bold)
             }
         }
-        Text(code, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+        Text(code, fontSize = 10.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -843,8 +969,10 @@ internal fun RemoteImage(
 private fun DatePill(date: String) {
     Text(
         date,
-        Modifier.border(1.dp, Color.White.copy(alpha = 0.7f), CircleShape).padding(horizontal = 8.dp),
-        fontSize = 11.sp,
+        Modifier.background(Color.White.copy(alpha = 0.20f), CircleShape)
+            .border(1.dp, Color.White.copy(alpha = 0.38f), CircleShape)
+            .padding(horizontal = 11.dp, vertical = 3.dp),
+        fontSize = 11.sp, lineHeight = 14.sp, fontWeight = FontWeight.Bold,
     )
 }
 
@@ -873,7 +1001,7 @@ private fun Shortcut(icon: DrawableResource, title: String, detail: String, onSe
             Badge(icon, highlighted = true, background = MaterialTheme.colorScheme.tertiary)
             Column(Modifier.weight(1f)) {
                 Text(
-                    title, fontWeight = FontWeight.Bold, fontSize = 17.sp, lineHeight = 20.sp,
+                    title.replaceFirstChar { it.lowercaseChar() }, fontWeight = FontWeight.Bold, fontSize = 17.sp, lineHeight = 20.sp,
                     maxLines = 1, overflow = TextOverflow.Ellipsis,
                 )
                 Text(
@@ -890,11 +1018,15 @@ private fun Shortcut(icon: DrawableResource, title: String, detail: String, onSe
 private fun SeasonCard(
     modifier: Modifier, icon: DrawableResource, title: String, value: String?, subtitle: String,
     highlighted: Boolean, onSection: (String) -> Unit,
+    valueFontSize: TextUnit = 30.sp,
 ) {
     Tile(modifier, highlighted, onClick = { onSection(title) }) {
         Badge(icon, highlighted)
-        Text(title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        if (value != null) Text(value, fontSize = 30.sp, fontWeight = FontWeight.Bold)
+        Text(title.replaceFirstChar { it.lowercaseChar() }, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        if (value != null) {
+            Text(value, fontSize = valueFontSize, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Spacer(Modifier.weight(1f))
+        }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(subtitle, fontSize = 13.sp)
             HomeIcon(Res.drawable.huge_arrow_right_01, size = 16)

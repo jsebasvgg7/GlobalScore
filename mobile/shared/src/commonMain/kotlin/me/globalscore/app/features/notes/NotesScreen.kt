@@ -273,7 +273,7 @@ private fun NotesToolbar(count: Int, enabled: Boolean, onCreate: () -> Unit) {
                     contentColor = colors.tertiary,
                 ),
                 contentPadding = PaddingValues(horizontal = 12.dp),
-            ) { Text("+ Nueva nota") }
+            ) { Text("+ nueva nota") }
         }
     }
 }
