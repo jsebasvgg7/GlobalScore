@@ -7,3 +7,23 @@ dist
 doc/
 /mobile/androidApp/release/
 .gradle/
+
+# Compilaciones antiguas y archivos locales
+
+/.gradle/
+
+/build/
+
+/app/build/
+
+/app-release-bundle.aab
+
+/app-release-signed.apk
+
+/app-release-signed.apk.idsig
+
+/app-release-unsigned-aligned.apk
+
+/desktop.ini
+
+/src - Acceso directo.lnk
