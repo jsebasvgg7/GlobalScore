@@ -75,7 +75,7 @@ internal fun AccountScreen(
     signingOut: Boolean,
     signOutError: String?,
     onSignOut: () -> Unit,
-    onProfileSaved: (String, String?) -> Unit,
+    onProfileSaved: (String, String?, String?) -> Unit,
 ) {
     val repository = remember(database) { AccountRepository(database) }
     val publicRepository = remember(database) { PublicProfileRepository(database) }
@@ -159,8 +159,8 @@ internal fun AccountScreen(
                         ProfileMenuLink("ajustes", "cuenta y preferencias", Res.drawable.huge_user) { open(AccountPage.Settings) }
                     }
                     AccountPage.Edit -> ProfileLoad(userId, load = { repository.user(userId) }) { user ->
-                        AccountEditor(repository, userId, authId, user) { name, avatar ->
-                            onProfileSaved(name, avatar)
+                        AccountEditor(repository, userId, authId, user) { name, avatar, banner ->
+                            onProfileSaved(name, avatar, banner)
                             saved = true
                             revision++
                             open(AccountPage.valueOf(editOrigin))
@@ -427,7 +427,7 @@ private fun AccountEditor(
     userId: String,
     authId: String,
     user: JsonObject,
-    onSaved: (String, String?) -> Unit,
+    onSaved: (String, String?, String?) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     var saving by remember { mutableStateOf(false) }
@@ -597,7 +597,7 @@ private fun AccountEditor(
                         else uploadedUrl?.let { put("avatar_url", it) }
                     }
                     val updated = if (changes.isEmpty()) user else repository.saveProfile(userId, authId, changes)
-                    onSaved(updated.text("name").orEmpty(), updated.text("avatar_url"))
+                    onSaved(updated.text("name").orEmpty(), updated.text("avatar_url"), updated.text("equipped_banner_url"))
                 } catch (cancelled: CancellationException) {
                     throw cancelled
                 } catch (_: Exception) {

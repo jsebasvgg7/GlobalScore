@@ -40,6 +40,7 @@ internal data class MatchDashboard(
     val userId: String,
     val name: String,
     val avatar: String?,
+    val banner: String?,
     val monthlyPoints: Int,
     val matches: List<Match>,
     val predictions: Map<String, Prediction>,
@@ -114,7 +115,7 @@ internal class MatchRepository(private val client: SupabaseClient) {
         }.toMap()
         return MatchDashboard(
             userId, user.string("name").orEmpty().ifBlank { "GlobalScore" },
-            user.string("avatar_url"), user.number("monthly_points") ?: 0, matches, predictions,
+            user.string("avatar_url"), user.string("equipped_banner_url"), user.number("monthly_points") ?: 0, matches, predictions,
         )
     }
 

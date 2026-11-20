@@ -7,6 +7,7 @@ import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import me.globalscore.app.features.profile.count
@@ -30,6 +31,20 @@ internal class LogbookTeam(private val row: JsonObject) {
     val played = count(LogbookCounter.Wins).toLong() + count(LogbookCounter.Draws) + count(LogbookCounter.Losses)
     val goalsFor = players.sumOf { it.count(LogbookCounter.Goals).toLong() } + count(LogbookCounter.OwnGoals) + row.count("archived")
     val difference = goalsFor - count(LogbookCounter.Conceded)
+    fun withCounter(playerId: String?, counter: LogbookCounter, value: Int): LogbookTeam {
+        val updated = if (playerId == null) {
+            row + (counter.column to JsonPrimitive(value))
+        } else {
+            val players = (row["libreta_players"] as? JsonArray).orEmpty().map { player ->
+                if (player is JsonObject && player.text("id") == playerId) {
+                    JsonObject(player + (counter.column to JsonPrimitive(value)))
+                } else player
+            }
+            row + ("libreta_players" to JsonArray(players))
+        }
+        return LogbookTeam(JsonObject(updated))
+    }
+
     val empty = played == 0L && goalsFor == 0L && count(LogbookCounter.Conceded) == 0 &&
         players.all { it.count(LogbookCounter.Assists) == 0 && it.count(LogbookCounter.Mvp) == 0 }
 }
@@ -50,7 +65,7 @@ internal class LogbookRepository(private val client: SupabaseClient, private val
                 Columns.raw("id,name,game,formation,gan,emp,per,gc,rival,archived,libreta_players(id,name,pos,g,a,mvp,sort_order,created_at)"),
             ) {
                 filter { eq("user_id", userId) }
-                order("created_at", Order.ASCENDING)
+                order("created_at", Order.DESCENDING)
                 order("id", Order.ASCENDING)
                 range(start, start + pageSize - 1)
             }.decodeList<JsonObject>()
@@ -105,6 +120,13 @@ internal class LogbookRepository(private val client: SupabaseClient, private val
             }
             select(Columns.list("id"))
         }.decodeList<JsonObject>().single()
+    }
+
+    suspend fun reorderPlayers(teamId: String, ids: List<String>) {
+        client.postgrest.rpc("libreta_reorder_players", buildJsonObject {
+            put("p_team_id", teamId)
+            put("p_ids", JsonArray(ids.map { JsonPrimitive(it) }))
+        })
     }
 
     suspend fun deletePlayer(id: String) {

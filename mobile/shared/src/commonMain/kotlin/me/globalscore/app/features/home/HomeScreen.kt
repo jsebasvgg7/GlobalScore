@@ -54,6 +54,7 @@ import coil3.compose.SubcomposeAsyncImage
 import io.github.jan.supabase.SupabaseClient
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.delay
 import kotlin.time.Clock
 import kotlin.time.TimeMark
@@ -110,6 +111,7 @@ internal fun HomeScreen(
     val repository = remember(database) { MatchRepository(database) }
     var dashboard by remember(authId) { mutableStateOf<MatchDashboard?>(null) }
     val scope = rememberCoroutineScope()
+    val logbookWrites = remember(authId) { Mutex() }
     var predictionWrites by remember(repository, authId) { mutableLongStateOf(0L) }
     val autosave = remember(repository, authId, scope) {
         PredictionAutosave(scope) { match, prediction ->
@@ -353,7 +355,7 @@ internal fun HomeScreen(
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                         Column(Modifier.widthIn(max = 560.dp).fillMaxSize().padding(horizontal = 20.dp)) {
                             val data = dashboard
-                            if (page !in listOf("Partidos", "Ligas", "Premios", "Perfil", "Notificaciones", "Historial de rankings", "Libreta", "Mis notas")) {
+                            if (page !in listOf("Partidos", "Ligas", "Premios", "Perfil", "Notificaciones", "Historial de rankings", "Mis notas")) {
                                 HomeHeader(data?.name ?: "GlobalScore", data?.avatar, dark,
                                     onTheme = onToggleTheme, onNotifications = openNotifications,
                                     onProfile = openProfile)
@@ -380,6 +382,7 @@ internal fun HomeScreen(
                                         page == "Inicio" -> HomeContent(
                                             Modifier.fillMaxSize().verticalScroll(homeScroll).padding(bottom = navigationClearance),
                                             data,
+                                            dark = dark,
                                             monthlyRank = rankings?.monthly?.entries?.firstOrNull { it.id == data.userId }?.position,
                                             rankingLoaded = rankings != null,
                                             openMatches = openMatches,
@@ -476,8 +479,8 @@ internal fun HomeScreen(
                                             signingOut = signingOut,
                                             signOutError = signOutError,
                                             onSignOut = onSignOut,
-                                            onProfileSaved = { name, avatar ->
-                                                dashboard = dashboard?.copy(name = name, avatar = avatar)
+                                            onProfileSaved = { name, avatar, banner ->
+                                                dashboard = dashboard?.copy(name = name, avatar = avatar, banner = banner)
                                             },
                                         )
                                     } else {
@@ -501,7 +504,10 @@ internal fun HomeScreen(
                                 }
                                 "Libreta" -> {
                                     if (data != null) {
-                                        LogbookScreen(database, data.userId, navigationClearance, onBack = { screen = "Inicio" })
+                                        LogbookScreen(
+                                            database, data.userId, data.avatar, data.banner, navigationClearance,
+                                            scope, logbookWrites, dark = dark, onBack = { screen = "Inicio" },
+                                        )
                                     } else {
                                         AccountProgressHeader("Mi Libreta Futbolera") { screen = "Inicio" }
                                         Text("No se pudo cargar tu cuenta para abrir la libreta.")
@@ -644,6 +650,7 @@ private fun RoundAction(
 private fun HomeContent(
     modifier: Modifier,
     data: MatchDashboard,
+    dark: Boolean,
     monthlyRank: Int?,
     rankingLoaded: Boolean,
     openMatches: (String?) -> Unit,
@@ -688,14 +695,14 @@ private fun HomeContent(
                             maxLines = 1, overflow = TextOverflow.Ellipsis,
                         )
                         Row(
-                            Modifier.fillMaxWidth().align(Alignment.Center),
+                            Modifier.fillMaxWidth().align(Alignment.Center).offset(y = 7.dp),
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             FeaturedTeam(featured.home, featured.homeLogo, Modifier.weight(1f))
                             Text(
                                 prediction?.let { "${it.home}-${it.away}" } ?: "VS",
-                                Modifier.weight(1f),
+                                Modifier.widthIn(max = 48.dp),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold, textAlign = TextAlign.Center,
                                 maxLines = 1, overflow = TextOverflow.Ellipsis,
@@ -743,6 +750,7 @@ private fun HomeContent(
         Shortcut(Res.drawable.huge_medal_01, "Premios", "Predice los ganadores de los premios", onSection)
 
         SectionTitle("Mi temporada")
+        val seasonBadgeBackground = if (dark) Color(0xFF684FFF).copy(alpha = 0.10f) else Pale
         Row(Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             val rankLabel = monthlyRank?.let { "#$it" } ?: if (rankingLoaded) "Sin puesto" else "—"
             SeasonCard(
@@ -750,11 +758,23 @@ private fun HomeContent(
                 "Ranking", rankLabel, "mensual", true, onSection,
                 valueFontSize = if (rankingLoaded && monthlyRank == null) 18.sp else 30.sp,
             )
-            SeasonCard(Modifier.weight(1f).fillMaxHeight().heightIn(min = 150.dp), Res.drawable.huge_folder_01, "Puntos", data.monthlyPoints.toString(), "mensual", false, onSection)
+            SeasonCard(
+                Modifier.weight(1f).fillMaxHeight().heightIn(min = 150.dp), Res.drawable.huge_folder_01,
+                "Puntos", data.monthlyPoints.toString(), "mensual", false, onSection,
+                badgeBackground = seasonBadgeBackground,
+            )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            SeasonCard(Modifier.weight(1f).heightIn(min = 118.dp), Res.drawable.huge_notebook_01, "Libreta", null, "personal", false, onSection)
-            SeasonCard(Modifier.weight(1f).heightIn(min = 118.dp), Res.drawable.season_note, "Mis notas", null, "personal", false, onSection)
+            SeasonCard(
+                Modifier.weight(1f).heightIn(min = 118.dp), Res.drawable.huge_notebook_01,
+                "Libreta", null, "personal", false, onSection,
+                badgeBackground = seasonBadgeBackground,
+            )
+            SeasonCard(
+                Modifier.weight(1f).heightIn(min = 118.dp), Res.drawable.season_note,
+                "Mis notas", null, "personal", false, onSection,
+                badgeBackground = seasonBadgeBackground,
+            )
         }
     }
 }
@@ -797,11 +817,10 @@ private fun UpcomingMatchBanner(match: Match, onClick: () -> Unit) {
 @Composable
 private fun BannerCrest(name: String, logo: String?) {
     Box(
-        Modifier.size(46.dp).background(Color.White.copy(alpha = 0.18f), CircleShape)
-            .border(1.dp, Color.White.copy(alpha = 0.35f), CircleShape),
+        Modifier.size(60.dp),
         contentAlignment = Alignment.Center,
     ) {
-        RemoteImage(logo, Modifier.fillMaxSize().padding(6.dp)) {
+        RemoteImage(logo, Modifier.fillMaxSize()) {
             Text(teamCode(name), fontSize = 10.sp, fontWeight = FontWeight.Bold)
         }
     }
@@ -938,15 +957,14 @@ private fun FeaturedTeam(name: String, logo: String?, modifier: Modifier) {
     val code = teamCode(name)
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Box(
-            Modifier.size(40.dp).background(Color.White.copy(alpha = 0.14f), CircleShape)
-                .border(1.dp, Color.White.copy(alpha = 0.4f), CircleShape),
+            Modifier.widthIn(max = 56.dp).fillMaxWidth().aspectRatio(1f),
             contentAlignment = Alignment.Center,
         ) {
-            RemoteImage(logo, Modifier.fillMaxSize().padding(3.dp)) {
+            RemoteImage(logo, Modifier.fillMaxSize()) {
                 Text(code.take(1), fontSize = 14.sp, fontWeight = FontWeight.Bold)
             }
         }
-        Text(code, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+        Text(code, modifier = Modifier.offset(y = (-4).dp), fontSize = 10.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -1019,9 +1037,10 @@ private fun SeasonCard(
     modifier: Modifier, icon: DrawableResource, title: String, value: String?, subtitle: String,
     highlighted: Boolean, onSection: (String) -> Unit,
     valueFontSize: TextUnit = 30.sp,
+    badgeBackground: Color = Color.White.copy(alpha = 0.2f),
 ) {
     Tile(modifier, highlighted, onClick = { onSection(title) }) {
-        Badge(icon, highlighted)
+        Badge(icon, highlighted, background = badgeBackground)
         Text(title.replaceFirstChar { it.lowercaseChar() }, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         if (value != null) {
             Text(value, fontSize = valueFontSize, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -1038,7 +1057,7 @@ private fun SeasonCard(
 private fun Badge(
     glyph: DrawableResource,
     highlighted: Boolean,
-    background: Color = if (highlighted) Color.White.copy(alpha = 0.2f) else Pale,
+    background: Color,
 ) {
     Box(
         Modifier.size(37.dp).background(background, CircleShape),

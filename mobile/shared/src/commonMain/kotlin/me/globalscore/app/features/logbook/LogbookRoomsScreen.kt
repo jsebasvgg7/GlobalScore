@@ -27,6 +27,7 @@ internal fun LogbookRoomsScreen(
     userId: String,
     teams: List<LogbookTeam>,
     bottomPadding: Dp,
+    openFavorite: Boolean = false,
     onBack: () -> Unit,
 ) {
     val repository = remember(database) { LogbookRoomRepository(database) }
@@ -60,17 +61,37 @@ internal fun LogbookRoomsScreen(
         }
     }
 
+    var favoritePending by rememberSaveable { mutableStateOf(openFavorite) }
+
     fun refresh() = request {
         val id = roomId
-        if (id == null) rooms = repository.list() else room = repository.get(id)
+        if (id != null) {
+            room = repository.get(id)
+        } else {
+            val list = repository.list()
+            rooms = list
+            if (favoritePending) {
+                val favorite = list.firstOrNull { it.text("pinned") == "true" }?.text("id")
+                if (favorite != null) {
+                    room = repository.get(favorite)
+                    roomId = favorite
+                } else {
+                    error = "Todavía no tienes una sala favorita."
+                }
+                favoritePending = false
+            }
+        }
     }
 
     fun openRoom(id: String) {
         room = null
         roomId = id
+        favoritePending = false
     }
 
-    LaunchedEffect(repository, roomId) { refresh() }
+    LaunchedEffect(repository, roomId) {
+        if (roomId == null || room == null) refresh()
+    }
 
     Column(Modifier.fillMaxSize()) {
         AccountProgressHeader(if (roomId == null) "Salas 1 vs 1" else "Sala 1 vs 1") {
