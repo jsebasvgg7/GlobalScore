@@ -83,6 +83,7 @@ import me.globalscore.app.features.ranking.RankingScreen
 import me.globalscore.app.features.ranking.RankingHistoryScreen
 import me.globalscore.app.features.ranking.Rankings
 import me.globalscore.app.features.ranking.logRankingError
+import me.globalscore.app.ui.TeamCrest
 
 private val Violet = Color(0xFF664AF8)
 private val HomePurpleGradient = Brush.horizontalGradient(listOf(Violet, Color(0xFF4439B6)))
@@ -820,7 +821,7 @@ private fun BannerCrest(name: String, logo: String?) {
         Modifier.size(60.dp),
         contentAlignment = Alignment.Center,
     ) {
-        RemoteImage(logo, Modifier.fillMaxSize()) {
+        TeamCrest(logo, Modifier.size(48.dp)) {
             Text(teamCode(name), fontSize = 10.sp, fontWeight = FontWeight.Bold)
         }
     }
@@ -960,7 +961,7 @@ private fun FeaturedTeam(name: String, logo: String?, modifier: Modifier) {
             Modifier.widthIn(max = 56.dp).fillMaxWidth().aspectRatio(1f),
             contentAlignment = Alignment.Center,
         ) {
-            RemoteImage(logo, Modifier.fillMaxSize()) {
+            TeamCrest(logo, Modifier.size(44.dp)) {
                 Text(code.take(1), fontSize = 14.sp, fontWeight = FontWeight.Bold)
             }
         }

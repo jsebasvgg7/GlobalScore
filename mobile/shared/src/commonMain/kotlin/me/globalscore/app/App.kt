@@ -19,6 +19,7 @@ class NativePushSupport(
 
 internal val LocalPushSettings = staticCompositionLocalOf<(@Composable (Boolean) -> Unit)?> { null }
 internal val LocalPushInvitation = compositionLocalOf { false }
+internal val LocalDarkTheme = compositionLocalOf { false }
 
 @Composable
 fun App() = AppWithPushSettings(null)
@@ -31,10 +32,12 @@ fun AppWithPushSettings(
 ) {
     var dark by rememberThemePreference()
     ApplyStatusBarTheme(dark)
-    MaterialTheme {
-        AuthScreen(
-            dark = dark, onToggleTheme = { dark = !dark }, pushSupport = pushSupport,
-            pushDestination = pushDestination, onPushOpened = onPushOpened,
-        )
+    CompositionLocalProvider(LocalDarkTheme provides dark) {
+        MaterialTheme {
+            AuthScreen(
+                dark = dark, onToggleTheme = { dark = !dark }, pushSupport = pushSupport,
+                pushDestination = pushDestination, onPushOpened = onPushOpened,
+            )
+        }
     }
 }

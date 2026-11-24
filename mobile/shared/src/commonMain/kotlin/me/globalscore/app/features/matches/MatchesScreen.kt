@@ -51,7 +51,10 @@ import globalscore.shared.generated.resources.match_swords
 import globalscore.shared.generated.resources.stats_check
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import me.globalscore.app.LocalDarkTheme
 import me.globalscore.app.features.home.RemoteImage
+import me.globalscore.app.ui.TeamCrest
+import me.globalscore.app.ui.resolveLeagueLogoUrl
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -291,7 +294,8 @@ private fun MatchCard(
                         .border(1.dp, colors.primary.copy(alpha = 0.3f), RoundedCornerShape(6.dp))
                         .padding(3.dp),
                 ) {
-                    RemoteImage(match.leagueLogo, Modifier.fillMaxSize())
+                    val logo = resolveLeagueLogoUrl(match.league, LocalDarkTheme.current, match.leagueLogo)
+                    RemoteImage(logo, Modifier.fillMaxSize())
                 }
                 Text(
                     match.league, Modifier.weight(1f), fontWeight = FontWeight.Bold,
@@ -398,8 +402,9 @@ private fun MatchLogo(name: String, url: String?, selected: Boolean, enabled: Bo
         Box(
             Modifier.size(38.dp)
                 .then(if (selected) Modifier.border(2.dp, colors.primary, CircleShape).padding(3.dp) else Modifier),
+            contentAlignment = Alignment.Center,
         ) {
-            RemoteImage(url, Modifier.fillMaxSize()) {
+            TeamCrest(url, Modifier.size(30.dp)) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(teamCode(name), color = colors.primary, fontSize = 10.sp, fontWeight = FontWeight.Bold)
                 }

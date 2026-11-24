@@ -22,10 +22,12 @@ import androidx.compose.ui.unit.sp
 import globalscore.shared.generated.resources.*
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import me.globalscore.app.LocalDarkTheme
 import me.globalscore.app.features.home.RemoteImage
 import me.globalscore.app.features.ranking.RankingIcon
 import me.globalscore.app.features.ranking.RankingSelector
 import me.globalscore.app.ui.SkeletonBlock
+import me.globalscore.app.ui.resolveLeagueLogoUrl
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import org.jetbrains.compose.resources.DrawableResource
@@ -254,7 +256,8 @@ private fun LeaguePerformance(leagues: List<LeagueAccuracy>) {
                     leagues.forEach { league ->
                         Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                             Box(Modifier.size(24.dp).background(colors.tertiary, CircleShape), contentAlignment = Alignment.Center) {
-                                RemoteImage(league.logo, Modifier.size(16.dp)) {
+                                val logo = resolveLeagueLogoUrl(league.name, LocalDarkTheme.current, league.logo)
+                                RemoteImage(logo, Modifier.size(16.dp)) {
                                     Text(league.name.take(2).uppercase(), color = colors.onTertiary, fontSize = 9.sp)
                                 }
                             }

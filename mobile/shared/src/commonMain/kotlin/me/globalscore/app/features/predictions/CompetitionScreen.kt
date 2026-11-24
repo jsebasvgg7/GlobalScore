@@ -30,10 +30,12 @@ import io.github.jan.supabase.SupabaseClient
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.globalscore.app.LocalDarkTheme
 import me.globalscore.app.features.home.RemoteImage
 import me.globalscore.app.features.matches.MatchToolbarButton
 import me.globalscore.app.features.matches.RetroLabel
 import me.globalscore.app.features.matches.RetroFilter
+import me.globalscore.app.ui.resolveLeagueLogoUrl
 import org.jetbrains.compose.resources.painterResource
 
 private enum class CompetitionFilter(val label: String) {
@@ -219,7 +221,12 @@ private fun CompetitionCard(
                         .padding(3.dp),
                     contentAlignment = Alignment.Center,
                 ) {
-                    RemoteImage(competition.logo, Modifier.fillMaxSize()) {
+                    val logo = if (kind == CompetitionKind.League) {
+                        resolveLeagueLogoUrl(competition.name, LocalDarkTheme.current, competition.logo)
+                    } else {
+                        competition.logo
+                    }
+                    RemoteImage(logo, Modifier.fillMaxSize()) {
                         Icon(painterResource(fallback), null, Modifier.size(22.dp), tint = colors.primary)
                     }
                 }
