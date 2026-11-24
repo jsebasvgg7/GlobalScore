@@ -3,6 +3,8 @@ import { CheckCircle2, Equal, TrendingDown, TrendingUp } from "lucide-react";
 import { getProbabilityTrend, hasMatchProbability } from "@/shared/utils/matchProbability";
 import { useShowProbabilities } from "@/shared/hooks/useProbabilityPreference";
 import '../styles/MatchCard.css';
+import { useTheme } from '@/context/ThemeContext';
+import { resolveLeagueLogoUrl } from '@/shared/utils/logoHelper.js';
 
 // ── Icono espadas knockout ────────────────────────────────────
 const SwordsIcon = ({ className }) => (
@@ -38,6 +40,8 @@ const CalendarIcon = ({ className }) => (
 );
 
 export default function MatchCard({ match, userPred, onPredict, isActive = false }) {
+  const { theme } = useTheme();
+  const leagueLogoUrl = resolveLeagueLogoUrl(match.league, theme, match.league_logo_url);
   const [homeScore, setHomeScore] = useState(userPred?.home_score ?? "");
   const [awayScore, setAwayScore] = useState(userPred?.away_score ?? "");
   const [advancingTeam, setAdvancingTeam] = useState(userPred?.predicted_advancing_team ?? null);
@@ -221,9 +225,10 @@ export default function MatchCard({ match, userPred, onPredict, isActive = false
         <div className="mc-header">
           <div className="mc-header-left">
             <div className="mc-league-icon">
-              {match.league_logo_url ? (
+              {leagueLogoUrl ? (
                 <img
-                  src={match.league_logo_url}
+                  key={leagueLogoUrl}
+                  src={leagueLogoUrl}
                   alt={match.league}
                   className="mc-league-logo"
                   onError={(e) => (e.target.style.display = "none")}

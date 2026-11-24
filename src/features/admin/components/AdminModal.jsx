@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { X, Plus, Calendar, Clock, Shield, Zap, Home, Plane } from "lucide-react";
-import { getLogoUrlByTeamName, getLeagueLogoUrlDirect } from "@/shared/utils/logoHelper.js";
+import { getLogoUrlByTeamName, getLeagueLogoUrlDirect, resolveLeagueLogoUrl } from "@/shared/utils/logoHelper.js";
 import { supabase } from '@/shared/services/supabase/client';
 import "../styles/AdminModal.css";
+import { useTheme } from '@/context/ThemeContext';
 
 export default function AdminModal({ onAdd, onClose }) {
+  const { theme } = useTheme();
   const [form, setForm] = useState({
     id: "",
     league: "",
@@ -18,6 +20,7 @@ export default function AdminModal({ onAdd, onClose }) {
     deadLine_time: "",
     is_knockout: false,
   });
+  const previewLogoUrl = resolveLeagueLogoUrl(form.league, theme, form.league_logo_url);
   const [sending, setSending] = useState(false);
 
   const handleChange = async (e) => {
@@ -183,10 +186,10 @@ export default function AdminModal({ onAdd, onClose }) {
           </label>
 
           {/* Logo preview liga */}
-          {form.league && form.league_logo_url && (
+          {form.league && previewLogoUrl && (
             <div className="am2-logo-preview-row">
               <span className="am2-logo-preview-label">Liga:</span>
-              <img src={form.league_logo_url} alt="League" className="am2-logo-img" />
+              <img src={previewLogoUrl} alt="League" className="am2-logo-img" />
             </div>
           )}
 

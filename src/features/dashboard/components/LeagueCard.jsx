@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Trophy, Target, Award, Star, CheckCircle2, Shield, Clock } from 'lucide-react';
 import '../styles/LeagueCard.css';
+import { useTheme } from '@/context/ThemeContext';
+import { resolveLeagueLogoUrl } from '@/shared/utils/logoHelper.js';
 
 export default function LeagueCard({ league, userPrediction, onPredict }) {
+  const { theme } = useTheme();
+  const leagueLogoUrl = resolveLeagueLogoUrl(league.name, theme, league.logo_url);
   const [champion, setChampion] = useState(userPrediction?.predicted_champion ?? '');
   const [topScorer, setTopScorer] = useState(userPrediction?.predicted_top_scorer ?? '');
   const [topAssist, setTopAssist] = useState(userPrediction?.predicted_top_assist ?? '');
@@ -47,9 +51,10 @@ export default function LeagueCard({ league, userPrediction, onPredict }) {
       <div className="lc-header">
         <div className="lc-header-left">
           <div className="lc-logo-box">
-            {league.logo_url ? (
+            {leagueLogoUrl ? (
               <img
-                src={league.logo_url}
+                key={leagueLogoUrl}
+                src={leagueLogoUrl}
                 alt={league.name}
                 className="lc-logo-img"
                 onError={(e) => { e.target.style.display = 'none'; }}

@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Plus, CheckCircle } from 'lucide-react';
-import { getLogoUrlByLeagueName } from '@/shared/utils/logoHelper.js';
+import { getLogoUrlByLeagueName, resolveLeagueLogoUrl } from '@/shared/utils/logoHelper.js';
 import { supabase } from '@/shared/services/supabase/client';
+import { useTheme } from '@/context/ThemeContext';
 
 export function LeagueForm({ onAdd, onClose, styles: s }) {
+    const { theme } = useTheme();
     const [form, setForm] = useState({
         id: '', name: '', season: '', logo: '🏆', deadline: '', deadline_time: ''
     });
+    const previewLogoUrl = resolveLeagueLogoUrl(form.name, theme, form.logo_url);
     const [sending, setSending] = useState(false);
     const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
@@ -48,9 +51,9 @@ export function LeagueForm({ onAdd, onClose, styles: s }) {
                 <span className={s.hint}>Logo asignado automáticamente</span>
             </div>
 
-            {form.logo_url && (
+            {previewLogoUrl && (
                 <div className={s.logoPreviewSingle}>
-                    <img src={form.logo_url} alt="Logo" className={s.logoImgLg} />
+                    <img src={previewLogoUrl} alt="Logo" className={s.logoImgLg} />
                     <span className={s.logoName}>{form.name}</span>
                 </div>
             )}

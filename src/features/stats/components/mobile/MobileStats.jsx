@@ -3,6 +3,8 @@ import { Target, Star, CheckCircle2, XCircle, Zap, Trophy, Award } from "lucide-
 import { GlobalLoader } from "@/shared/ui";
 import { STATS_RANGES, getRangeCaption } from "@/features/stats/services/stats.service";
 import "./MobileStats.css";
+import { useTheme } from '@/context/ThemeContext';
+import { resolveLeagueLogoUrl } from '@/shared/utils/logoHelper.js';
 
 const TOTAL_SUB = {
   season: "puntos del ranking global",
@@ -15,12 +17,14 @@ const pct = (part, total) => (total > 0 ? Math.round((part / total) * 100) : 0);
 
 /* ── Logo de liga con fallback a iniciales ── */
 function LeagueLogo({ name, src }) {
-  const [failed, setFailed] = useState(false);
+  const { theme } = useTheme();
+  const logoUrl = resolveLeagueLogoUrl(name, theme, src);
+  const [failedSrc, setFailedSrc] = useState(null);
   const initials = name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
   return (
     <div className="mst-logo" title={name}>
-      {src && !failed ? (
-        <img src={src} alt={name} loading="lazy" onError={() => setFailed(true)} />
+      {logoUrl && failedSrc !== logoUrl ? (
+        <img src={logoUrl} alt={name} loading="lazy" onError={() => setFailedSrc(logoUrl)} />
       ) : (
         <span>{initials}</span>
       )}

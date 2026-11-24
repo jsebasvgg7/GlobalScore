@@ -326,6 +326,20 @@ export const leagueMap = {
 // ============================================
 // MAPEO DE LOGOS DE LIGAS (URLs directas)
 // ============================================
+const themedLeagueLogoSlugs = new Map([
+  ['Champions League', 'champions'],
+  ['Europa League', 'europa'],
+  ['Conference League', 'conference'],
+]);
+
+export function resolveLeagueLogoUrl(leagueName, theme, savedUrl) {
+  const slug = themedLeagueLogoSlugs.get(leagueName);
+  if (!slug) return savedUrl;
+
+  const variant = theme === 'dark' ? 'light' : 'dark';
+  return `${LEAGUE_LOGOS_BASE_URL}/${slug}_${variant}.png`;
+}
+
 export const leagueLogoUrlMap = {
   // FIFA
   'FIFA World Cup': 'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/FIFA World Cup.png',
@@ -333,9 +347,9 @@ export const leagueLogoUrlMap = {
   'Nations League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/9806.png',
   'Club Friendly': 'https://auquyjigjceqzwpjbbff.supabase.co/storage/v1/object/public/league-logos/clubfriendly.png',
   // Competiciones Europeas
-  'Champions League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/42.png',
-  'Europa League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/73.png',
-  'Conference League': 'https://images.fotmob.com/image_resources/logo/leaguelogo/dark/10216.png',
+  'Champions League': resolveLeagueLogoUrl('Champions League', 'light'),
+  'Europa League': resolveLeagueLogoUrl('Europa League', 'light'),
+  'Conference League': resolveLeagueLogoUrl('Conference League', 'light'),
 
   // España
   'La Liga': `${LEAGUE_LOGOS_BASE_URL}/espana.png`,

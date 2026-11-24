@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { X, Plus, Trophy, Calendar, Award, Target } from 'lucide-react';
-import { getLogoUrlByLeagueName } from '@/shared/utils/logoHelper.js';
+import { getLogoUrlByLeagueName, resolveLeagueLogoUrl } from '@/shared/utils/logoHelper.js';
 import { supabase } from '@/shared/services/supabase/client';
 import '../styles/AdminModal.css';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function AdminLeagueModal({ onAdd, onClose }) {
+  const { theme } = useTheme();
   const [form, setForm] = useState({
     id: '',
     name: '',
@@ -13,6 +15,7 @@ export default function AdminLeagueModal({ onAdd, onClose }) {
     deadline: '',
     deadline_time: ''
   });
+  const previewLogoUrl = resolveLeagueLogoUrl(form.name, theme, form.logo_url);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -128,8 +131,8 @@ export default function AdminLeagueModal({ onAdd, onClose }) {
             <div className="logo-preview-section">
               <div className="logo-preview-item">
                 <span className="logo-preview-label">Vista previa del logo:</span>
-                {form.logo_url ? (
-                  <img src={form.logo_url} alt="League logo" className="logo-preview-img" />
+                {previewLogoUrl ? (
+                  <img src={previewLogoUrl} alt="League logo" className="logo-preview-img" />
                 ) : (
                   <span className="logo-preview-emoji">{form.logo}</span>
                 )}

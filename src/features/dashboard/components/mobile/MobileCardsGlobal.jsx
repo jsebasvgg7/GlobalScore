@@ -3,6 +3,8 @@ import { CheckCircle2, Trophy, Target, Award, Star, Shield, Clock, Equal, Trendi
 import { getProbabilityTrend, hasMatchProbability } from "@/shared/utils/matchProbability";
 import { useShowProbabilities } from "@/shared/hooks/useProbabilityPreference";
 import './MobileCardsGlobal.css';
+import { useTheme } from '@/context/ThemeContext';
+import { resolveLeagueLogoUrl } from '@/shared/utils/logoHelper.js';
 // ── Icono espadas knockout ───────────────────────────────────────
 const SwordsIcon = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
@@ -84,13 +86,15 @@ function StatusPill({ mod, label, live = false, saving = false }) {
 // ────────────────────────────────────────────────────────────────
 //  SHARED: Header de tarjeta (logo liga + nombre + pill)
 // ────────────────────────────────────────────────────────────────
-function CardHeader({ logoUrl, logoEmoji, name, season, pillMod, pillLabel, live, saving, isKo }) {
+function CardHeader({ logoUrl, logoEmoji, name, season, pillMod, pillLabel, live, saving, isKo, isLeague }) {
+  const { theme } = useTheme();
+  const headerLogoUrl = isLeague ? resolveLeagueLogoUrl(name, theme, logoUrl) : logoUrl;
   return (
     <div className="mcg-header">
       <div className="mcg-header-left">
         <div className="mcg-league-ico">
-          {logoUrl
-            ? <img src={logoUrl} alt={name} onError={e => (e.target.style.display = "none")} />
+          {headerLogoUrl
+            ? <img key={headerLogoUrl} src={headerLogoUrl} alt={name} onError={e => (e.target.style.display = "none")} />
             : (logoEmoji || "🏆")}
         </div>
         <div className="mcg-title-group">
@@ -278,6 +282,7 @@ export function MatchCardMobile({ match, userPred, onPredict }) {
 
       <CardHeader
         logoUrl={match.league_logo_url}
+        isLeague
         name={match.league}
         pillMod={pillConfig.mod}
         pillLabel={pillConfig.label}
@@ -376,6 +381,7 @@ export function LeagueCardMobile({ league, userPrediction, onPredict }) {
 
       <CardHeader
         logoUrl={league.logo_url}
+        isLeague
         logoEmoji={league.logo}
         name={league.name}
         season={league.season}

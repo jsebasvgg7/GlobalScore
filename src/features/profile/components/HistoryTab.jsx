@@ -1,8 +1,11 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Activity, Gamepad2, CheckCircle2, XCircle, Clock, Trophy, Calendar, ArrowUpDown } from 'lucide-react';
 import { getPredictionResult } from '@/shared/utils/profileUtils';
+import { useTheme } from '@/context/ThemeContext';
+import { resolveLeagueLogoUrl } from '@/shared/utils/logoHelper.js';
 
 export default function HistoryTab({ predictionHistory, historyLoading }) {
+  const { theme } = useTheme();
   const [activeFilter, setActiveFilter] = useState('all');
   const [showSort, setShowSort] = useState(false);
   const sortRef = useRef(null);
@@ -77,6 +80,7 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
     if (logoUrl && logoUrl.startsWith('http')) {
       return (
         <img
+          key={logoUrl}
           src={logoUrl}
           alt="Team logo"
           className="history-team-logo"
@@ -284,6 +288,7 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
           {filteredHistory.map((pred) => {
             const result = getPredictionResult(pred);
             const match = pred.matches;
+            const leagueLogoUrl = resolveLeagueLogoUrl(match?.league, theme, match?.league_logo_url);
 
             return (
               <div key={pred.id} className={`history-match-card ${result.status}`}>
@@ -291,8 +296,8 @@ export default function HistoryTab({ predictionHistory, historyLoading }) {
                 {/* HEADER: Liga y Fecha */}
                 <div className="history-match-header">
                   <div className="history-league-info">
-                    {renderLeagueLogo(match?.league_logo_url)}
-                    <Trophy size={16} className="history-league-icon-fallback" style={{ display: match?.league_logo_url ? 'none' : 'flex' }} />
+                    {renderLeagueLogo(leagueLogoUrl)}
+                    <Trophy key={leagueLogoUrl ?? 'fallback'} size={16} className="history-league-icon-fallback" style={{ display: leagueLogoUrl ? 'none' : 'flex' }} />
                     <span className="history-league-name">{match?.league}</span>
                   </div>
 
